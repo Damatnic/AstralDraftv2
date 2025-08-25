@@ -1,0 +1,509 @@
+/**
+ * Mobile Search Interface
+ * Touch-optimized search with filters and quick actions for mobile devices
+ */
+
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Player, PlayerPosition } from '../../types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { 
+    SearchIcon,
+    FilterIcon,
+    XIcon,
+    ChevronDownIcon,
+    SortAscIcon,
+    SortDescIcon,
+    StarIcon,
+    TrendingUpIcon,
+    TrendingDownIcon
+} from 'lucide-react';
+
+interface MobileSearchInterfaceProps {
+    players: Player[];
+    onPlayerSelect?: (player: Player) => void;
+    onSearch?: (query: string) => void;
+    placeholder?: string;
+    showFilters?: boolean;
+    showSorting?: boolean;
+    className?: string;
+}
+
+interface SearchFilters {
+    positions: PlayerPosition[];
+    teams: string[];
+    minRank?: number;
+    maxRank?: number;
+    injured?: boolean;
+    available?: boolean;
+}
+
+interface SortOption {
+    id: string;
+    label: string;
+    key: keyof Player | 'projection';
+    direction: 'asc' | 'desc';
+}
+
+const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
+    players,
+    onPlayerSelect,
+    onSearch,
+    placeholder = "Search players...",
+    showFilters = true,
+    showSorting = true,
+    className = ''
+}) => {
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [showAdvancedFilters, setShowAdvancedFilters] = React.useState(false);
+    const [selectedSort, setSelectedSort] = React.useState<SortOption | null>(null);
+    const [filters, setFilters] = React.useState<SearchFilters>({
+        positions: [],
+        teams: [],
+        minRank: undefined,
+        maxRank: undefined,
+        injured: undefined,
+        available: undefined
+    });
+
+    const isMobile = useMediaQuery('(max-width: 768px)');
+
+    const sortOptions: SortOption[] = [
+        { id: 'rank', label: 'Overall Rank', key: 'rank', direction: 'asc' },
+        { id: 'name', label: 'Name', key: 'name', direction: 'asc' },
+        { id: 'position', label: 'Position', key: 'position', direction: 'asc' },
+        { id: 'team', label: 'Team', key: 'team', direction: 'asc' },
+        { id: 'projection', label: 'Projection', key: 'projection', direction: 'desc' },
+        { id: 'adp', label: 'ADP', key: 'adp', direction: 'asc' },
+        { id: 'age', label: 'Age', key: 'age', direction: 'asc' }
+    ];
+
+    const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
+    const teams = Array.from(new Set(players.map(p => p.team))).sort();
+
+    // Type-safe helper functions
+    const getInjuryStatus = (injuryHistory: string | undefined): boolean => {
+        if (!injuryHistory) return false;
+        return injuryHistory === 'moderate' || injuryHistory === 'extensive';
+    };
+
+    const getPositionColor = (position: PlayerPosition) => {
+        switch (position) {
+            case 'QB': return 'text-purple-400 bg-purple-500/20';
+            case 'RB': return 'text-green-400 bg-green-500/20';
+            case 'WR': return 'text-blue-400 bg-blue-500/20';
+            case 'TE': return 'text-orange-400 bg-orange-500/20';
+            case 'K': return 'text-yellow-400 bg-yellow-500/20';
+            case 'DST': return 'text-red-400 bg-red-500/20';
+            default: return 'text-gray-400 bg-gray-500/20';
+        }
+    };
+
+    const getPlayerValue = (player: Player, key: keyof Player | 'projection'): any => {
+        if (key === 'projection') {
+            return player.stats?.projection || 0;
+        }
+        return player[key as keyof Player];
+    };
+
+    // Filter and sort players
+    const filteredAndSortedPlayers = React.useMemo(() => {
+        let filtered = players.filter(player => {
+            // Text search
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                if (!player.name.toLowerCase().includes(query) && 
+                    !player.team.toLowerCase().includes(query) &&
+                    !player.position.toLowerCase().includes(query)) {
+                    return false;
+                }
+            }
+
+            // Position filter
+            if (filters.positions.length > 0 && !filters.positions.includes(player.position)) {
+                return false;
+            }
+
+            // Team filter
+            if (filters.teams.length > 0 && !filters.teams.includes(player.team)) {
+                return false;
+            }
+
+            // Rank filter
+            if (filters.minRank && player.rank < filters.minRank) {
+                return false;
+            }
+            if (filters.maxRank && player.rank > filters.maxRank) {
+                return false;
+            }
+
+            // Injury filter
+            if (filters.injured !== undefined) {
+                const isInjured = getInjuryStatus(player.injuryHistory);
+                if (filters.injured !== isInjured) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        // Sort players
+        if (selectedSort) {
+            filtered.sort((a, b) => {
+                const aValue = getPlayerValue(a, selectedSort.key);
+                const bValue = getPlayerValue(b, selectedSort.key);
+
+                if (aValue === undefined && bValue === undefined) return 0;
+                if (aValue === undefined) return 1;
+                if (bValue === undefined) return -1;
+
+                let comparison = 0;
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    comparison = aValue.localeCompare(bValue);
+                } else if (typeof aValue === 'number' && typeof bValue === 'number') {
+                    comparison = aValue - bValue;
+                } else {
+                    comparison = String(aValue).localeCompare(String(bValue));
+                }
+
+                return selectedSort.direction === 'desc' ? -comparison : comparison;
+            });
+        }
+
+        return filtered;
+    }, [players, searchQuery, filters, selectedSort]);
+
+    const handleSearchChange = (query: string) => {
+        setSearchQuery(query);
+        onSearch?.(query);
+    };
+
+    const togglePositionFilter = (position: PlayerPosition) => {
+        setFilters(prev => ({
+            ...prev,
+            positions: prev.positions.includes(position)
+                ? prev.positions.filter(p => p !== position)
+                : [...prev.positions, position]
+        }));
+    };
+
+    const toggleTeamFilter = (team: string) => {
+        setFilters(prev => ({
+            ...prev,
+            teams: prev.teams.includes(team)
+                ? prev.teams.filter(t => t !== team)
+                : [...prev.teams, team]
+        }));
+    };
+
+    const clearFilters = () => {
+        setFilters({
+            positions: [],
+            teams: [],
+            minRank: undefined,
+            maxRank: undefined,
+            injured: undefined,
+            available: undefined
+        });
+        setSelectedSort(null);
+        setSearchQuery('');
+    };
+
+    const hasActiveFilters = React.useMemo(() => {
+        return filters.positions.length > 0 || 
+               filters.teams.length > 0 || 
+               filters.minRank !== undefined || 
+               filters.maxRank !== undefined ||
+               filters.injured !== undefined ||
+               selectedSort !== null ||
+               searchQuery.length > 0;
+    }, [filters, selectedSort, searchQuery]);
+
+    return (
+        <div className={`bg-[var(--panel-bg)] border-b border-[var(--panel-border)] ${className}`}>
+            {/* Search Bar */}
+            <div className="p-4 pb-2">
+                <div className="relative">
+                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] w-4 h-4" />
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => handleSearchChange(e.target.value)}
+                        placeholder={placeholder}
+                        className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-blue-400"
+                    />
+                    {searchQuery && (
+                        <button
+                            onClick={() => handleSearchChange('')}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                        >
+                            <XIcon className="w-4 h-4" />
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            {/* Filter Controls */}
+            {(showFilters || showSorting) && (
+                <div className="px-4 pb-2">
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 overflow-x-auto">
+                            {showFilters && (
+                                <button
+                                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${
+                                        hasActiveFilters
+                                            ? 'bg-blue-500/20 border-blue-400/50 text-blue-400'
+                                            : 'bg-[var(--panel-bg)] border-[var(--panel-border)] text-[var(--text-secondary)]'
+                                    }`}
+                                >
+                                    <FilterIcon className="w-4 h-4" />
+                                    Filters
+                                    {hasActiveFilters && (
+                                        <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                                            {filters.positions.length + filters.teams.length + 
+                                             (selectedSort ? 1 : 0) + (searchQuery ? 1 : 0)}
+                                        </span>
+                                    )}
+                                    <ChevronDownIcon className={`w-4 h-4 transition-transform ${
+                                        showAdvancedFilters ? 'rotate-180' : ''
+                                    }`} />
+                                </button>
+                            )}
+
+                            {showSorting && (
+                                <div className="flex items-center gap-1">
+                                    <span className="text-xs text-[var(--text-secondary)] whitespace-nowrap">Sort by:</span>
+                                    <select
+                                        value={selectedSort?.id || ''}
+                                        onChange={(e) => {
+                                            const option = sortOptions.find(opt => opt.id === e.target.value);
+                                            setSelectedSort(option || null);
+                                        }}
+                                        className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-2 py-1 text-sm text-[var(--text-primary)]"
+                                    >
+                                        <option value="">Default</option>
+                                        {sortOptions.map(option => (
+                                            <option key={option.id} value={option.id}>
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+
+                        {hasActiveFilters && (
+                            <button
+                                onClick={clearFilters}
+                                className="text-xs text-red-400 hover:text-red-300 whitespace-nowrap"
+                            >
+                                Clear All
+                            </button>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Advanced Filters */}
+            <AnimatePresence>
+                {showAdvancedFilters && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="border-t border-[var(--panel-border)] px-4 py-3 overflow-hidden"
+                    >
+                        {/* Position Filters */}
+                        <div className="mb-3">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Positions</div>
+                            <div className="flex flex-wrap gap-2">
+                                {positions.map(position => (
+                                    <button
+                                        key={position}
+                                        onClick={() => togglePositionFilter(position)}
+                                        className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                                            filters.positions.includes(position)
+                                                ? getPositionColor(position)
+                                                : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
+                                        }`}
+                                    >
+                                        {position}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Team Filters */}
+                        <div className="mb-3">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Teams</div>
+                            <div className="max-h-24 overflow-y-auto">
+                                <div className="grid grid-cols-4 gap-1">
+                                    {teams.map(team => (
+                                        <button
+                                            key={team}
+                                            onClick={() => toggleTeamFilter(team)}
+                                            className={`px-2 py-1 rounded text-xs transition-colors ${
+                                                filters.teams.includes(team)
+                                                    ? 'bg-blue-500/20 text-blue-400'
+                                                    : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
+                                            }`}
+                                        >
+                                            {team}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Rank Range */}
+                        <div className="mb-3">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Rank Range</div>
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="number"
+                                    placeholder="Min"
+                                    value={filters.minRank || ''}
+                                    onChange={(e) => setFilters(prev => ({
+                                        ...prev,
+                                        minRank: e.target.value ? parseInt(e.target.value) : undefined
+                                    }))}
+                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm"
+                                />
+                                <span className="text-[var(--text-secondary)]">to</span>
+                                <input
+                                    type="number"
+                                    placeholder="Max"
+                                    value={filters.maxRank || ''}
+                                    onChange={(e) => setFilters(prev => ({
+                                        ...prev,
+                                        maxRank: e.target.value ? parseInt(e.target.value) : undefined
+                                    }))}
+                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Other Filters */}
+                        <div>
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Status</div>
+                            <div className="flex gap-2">
+                                <button
+                                    onClick={() => setFilters(prev => ({
+                                        ...prev,
+                                        injured: prev.injured === true ? undefined : true
+                                    }))}
+                                    className={`px-3 py-1 rounded text-xs transition-colors ${
+                                        filters.injured === true
+                                            ? 'bg-red-500/20 text-red-400'
+                                            : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
+                                    }`}
+                                >
+                                    Injured Only
+                                </button>
+                                <button
+                                    onClick={() => setFilters(prev => ({
+                                        ...prev,
+                                        injured: prev.injured === false ? undefined : false
+                                    }))}
+                                    className={`px-3 py-1 rounded text-xs transition-colors ${
+                                        filters.injured === false
+                                            ? 'bg-green-500/20 text-green-400'
+                                            : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
+                                    }`}
+                                >
+                                    Healthy Only
+                                </button>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Results Summary */}
+            {filteredAndSortedPlayers.length !== players.length && (
+                <div className="px-4 py-2 text-xs text-[var(--text-secondary)] border-t border-[var(--panel-border)]">
+                    Showing {filteredAndSortedPlayers.length} of {players.length} players
+                </div>
+            )}
+
+            {/* Player List */}
+            <div className="max-h-64 overflow-y-auto">
+                {filteredAndSortedPlayers.map((player, index) => (
+                    <motion.div
+                        key={player.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.02 }}
+                        className="border-b border-[var(--panel-border)] last:border-b-0"
+                    >
+                        <button
+                            onClick={() => onPlayerSelect?.(player)}
+                            className="w-full p-3 text-left hover:bg-[var(--panel-border)]/50 transition-colors"
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="font-medium text-[var(--text-primary)]">
+                                            {player.name}
+                                        </span>
+                                        {getInjuryStatus(player.injuryHistory) && (
+                                            <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs">
+                                                Injured
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
+                                        <span className="flex items-center gap-1">
+                                            <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                                                getPositionColor(player.position)
+                                            }`}>
+                                                {player.position}
+                                            </span>
+                                            {player.team}
+                                        </span>
+                                        {Boolean(player.rank) && (
+                                            <span>#{player.rank}</span>
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                <div className="text-right">
+                                    {Boolean(player.stats?.projection) && (
+                                        <div className="text-lg font-medium text-[var(--text-primary)]">
+                                            {player.stats.projection?.toFixed(1)}
+                                        </div>
+                                    )}
+                                    {player.adp && (
+                                        <div className="text-xs text-[var(--text-secondary)]">
+                                            ADP: {player.adp.toFixed(1)}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </button>
+                    </motion.div>
+                ))}
+            </div>
+
+            {filteredAndSortedPlayers.length === 0 && (
+                <div className="p-8 text-center text-[var(--text-secondary)]">
+                    <SearchIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <div className="text-sm">No players found</div>
+                    {hasActiveFilters && (
+                        <button
+                            onClick={clearFilters}
+                            className="text-xs text-blue-400 hover:text-blue-300 mt-1"
+                        >
+                            Clear filters to see all players
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default MobileSearchInterface;
