@@ -9,6 +9,12 @@
   # Ensure production mode
   NODE_ENV = "production"
   VITE_ENVIRONMENT = "production"
+  # Disable Ruby/gem detection
+  DISABLE_RUBY = "true"
+  DISABLE_BUNDLER = "true"
+  # Only use Node.js
+  NETLIFY_USE_YARN = "false"
+  NETLIFY_USE_PNPM = "false"
   # Ensure npm can find binaries
   PATH = "/opt/buildhome/.nvm/versions/node/v20.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 

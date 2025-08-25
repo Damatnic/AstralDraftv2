@@ -10,10 +10,28 @@ console.log('🚀 Starting Netlify build process...\n');
 const isNetlify = process.env.NETLIFY === 'true';
 console.log(`Environment: ${isNetlify ? 'Netlify' : 'Local'}`);
 
+// Debug environment variables
+console.log('🔍 Environment Debug:');
+console.log('NODE_VERSION:', process.env.NODE_VERSION);
+console.log('NPM_VERSION:', process.env.NPM_VERSION);
+console.log('DISABLE_RUBY:', process.env.DISABLE_RUBY);
+console.log('DISABLE_BUNDLER:', process.env.DISABLE_BUNDLER);
+console.log('PATH:', process.env.PATH?.split(':').slice(0, 3).join(':') + '...');
+
 // Verify package.json exists
 if (!fs.existsSync('package.json')) {
   console.error('❌ Error: package.json not found');
   process.exit(1);
+}
+
+// Verify package manager configuration
+if (fs.existsSync('scripts/verify-package-manager.cjs')) {
+  try {
+    console.log('\n📦 Verifying package manager...');
+    execSync('node scripts/verify-package-manager.cjs', { stdio: 'inherit' });
+  } catch (error) {
+    console.log('⚠️  Package manager verification failed, continuing...');
+  }
 }
 
 // Check if Vite is available

@@ -107,3 +107,15 @@ coverage/
 .local/
 temp/
 tmp/
+
+# Ruby/Gem files (explicitly excluded to prevent Netlify detection)
+Gemfile
+Gemfile.lock
+.ruby-version
+.rvmrc
+.rbenv-version
+vendor/bundle/
+.bundle/
+*.gem
+.mise.toml
+.tool-versions
