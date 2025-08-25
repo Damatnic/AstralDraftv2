@@ -1,6 +1,6 @@
 [build]
   publish = "dist"
-  command = "npm run build:prod"
+  command = "npm run build:netlify"
   functions = "netlify/functions"
 
 [build.environment]
@@ -9,6 +9,8 @@
   # Ensure production mode
   NODE_ENV = "production"
   VITE_ENVIRONMENT = "production"
+  # Ensure npm can find binaries
+  PATH = "/opt/buildhome/.nvm/versions/node/v20.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # Functions Configuration
 [functions]
