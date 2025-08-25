@@ -1,11 +1,14 @@
 [build]
   publish = "dist"
-  command = "npm run build"
+  command = "npm run build:prod"
   functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
+  # Ensure production mode
+  NODE_ENV = "production"
+  VITE_ENVIRONMENT = "production"
 
 # Functions Configuration
 [functions]
