@@ -1,119 +1,215 @@
-# Astral Draft - Fantasy Football Platform 2025
+# AstralDraft v2 🏈
 
-Next-generation fantasy football platform with AI-powered insights and real-time analytics.
+**Advanced Fantasy Football Draft Platform with AI Oracle**
 
-## Live Demo
+[![Netlify Status](https://api.netlify.com/api/v1/badges/your-badge-id/deploy-status)](https://app.netlify.com/sites/astraldraftv2/deploys)
 
-[https://astraldraft.netlify.app](https://astraldraft.netlify.app)
+## 🌟 Overview
 
-## Features
+AstralDraft v2 is a cutting-edge fantasy football platform that combines advanced analytics, AI-powered predictions, and real-time draft capabilities. Built with React, TypeScript, and modern web technologies, it offers an unparalleled fantasy football experience.
 
-- **AI-Powered Oracle**: Get predictions and insights powered by Gemini AI
-- **Real-Time Draft Room**: Live multiplayer drafting with analytics
-- **Advanced Analytics**: Deep stats, projections, and performance tracking
-- **Trade Analyzer**: AI-powered trade recommendations
-- **Waiver Wire Management**: FAAB bidding system
-- **Mobile-First PWA**: Install as app on any device
-- **Live Scoring**: Real-time game updates and scoring
+## ✨ Key Features
 
-## Test Accounts
+### 🤖 AI Oracle System
+- **Machine Learning Predictions**: Advanced ML models for player performance forecasting
+- **Real-time Analytics**: Live data integration and analysis
+- **Ensemble Modeling**: Multiple prediction algorithms working together
+- **Confidence Scoring**: Reliability metrics for all predictions
 
-For testing, use these pre-configured accounts:
+### 🎯 Draft Experience
+- **Live Snake Drafts**: Real-time multiplayer drafting
+- **Auction Drafts**: Dynamic bidding system
+- **AI Draft Coach**: Intelligent draft recommendations
+- **Mock Draft Simulator**: Practice with AI opponents
 
-- Email: `player1@astral.com` to `player10@astral.com`
-- Password: `test1234`
+### 📊 Advanced Analytics
+- **Player Comparison Tools**: Side-by-side statistical analysis
+- **Trade Analyzer**: Fair trade evaluation system
+- **Matchup Analytics**: Weekly opponent analysis
+- **Championship Probability**: Season-long projections
 
-## Tech Stack
+### 📱 Mobile-First Design
+- **Progressive Web App**: Install on any device
+- **Touch-Optimized Interface**: Gesture-based navigation
+- **Offline Capabilities**: Core features work without internet
+- **Responsive Design**: Seamless across all screen sizes
 
-- **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Tailwind CSS, Framer Motion
-- **State**: React Context API
-- **PWA**: Service Workers, Web App Manifest
-- **AI**: Google Gemini API, OpenAI API
-- **Deployment**: Netlify
+## 🚀 Quick Start
 
-## Local Development
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+- Modern web browser
 
-1. Clone the repository:
-```bash
-git clone https://github.com/Damatnic/Astral-Draft-2025.git
-cd Astral-Draft-2025
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Damatnic/AstralDraftv2.git
+   cd AstralDraftv2
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   cd server && npm install && cd ..
+   ```
+
+3. **Environment Setup**
+   ```bash
+   cp .env.example .env.local
+   cp server/.env.example server/.env
+   ```
+
+4. **Configure API Keys**
+   Edit `.env.local` and add your API keys:
+   ```env
+   VITE_GEMINI_API_KEY=your_gemini_api_key_here
+   VITE_OPENAI_API_KEY=your_openai_api_key_here
+   ```
+
+5. **Start Development Server**
+   ```bash
+   npm run dev:all
+   ```
+
+6. **Access the Application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:3001
+
+## 🏗️ Architecture
+
+### Frontend Stack
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **Zustand** for state management
+- **React Query** for data fetching
+
+### Backend Stack
+- **Node.js** with Express
+- **Socket.io** for real-time features
+- **MongoDB** for data persistence
+- **JWT** for authentication
+
+### AI/ML Integration
+- **Google Gemini AI** for natural language processing
+- **OpenAI GPT** for advanced analytics
+- **Custom ML Models** for player predictions
+- **Real-time Data APIs** for live statistics
+
+## 📁 Project Structure
+
+```
+AstralDraftv2/
+├── components/          # React components
+│   ├── analytics/       # Analytics dashboards
+│   ├── draft/          # Draft room components
+│   ├── oracle/         # AI Oracle interface
+│   └── mobile/         # Mobile-optimized components
+├── services/           # API and business logic
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── server/             # Backend API
+│   ├── routes/         # API endpoints
+│   ├── models/         # Database models
+│   └── services/       # Backend services
+└── public/             # Static assets
 ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+## 🔧 Configuration
 
-3. Create `.env.local` file with your API keys:
+### Environment Variables
+
+**Frontend (.env.local)**
 ```env
-VITE_GEMINI_API_KEY=your_gemini_api_key
-VITE_OPENAI_API_KEY=your_openai_api_key
+VITE_API_BASE_URL=http://localhost:3001/api
+VITE_WS_URL=http://localhost:3001
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+VITE_OPENAI_API_KEY=your_openai_api_key_here
+VITE_ENABLE_AI_FEATURES=true
 ```
 
-4. Run development server:
-```bash
-npm run dev
+**Backend (server/.env)**
+```env
+NODE_ENV=development
+PORT=3001
+MONGODB_URI=mongodb://localhost:27017/astraldraft
+JWT_SECRET=your_jwt_secret_here
 ```
 
-5. Build for production:
-```bash
-npm run build
-```
-
-## Deployment
+## 🚀 Deployment
 
 ### Netlify Deployment
 
-1. Fork this repository
-2. Connect to Netlify
-3. Add environment variables in Netlify dashboard:
-   - `VITE_GEMINI_API_KEY`
-   - `VITE_OPENAI_API_KEY`
-4. Deploy
+1. **Connect Repository**
+   - Link your GitHub repository to Netlify
+   - Set build command: `npm run build`
+   - Set publish directory: `dist`
 
-The project includes a `netlify.toml` configuration file with all necessary settings.
+2. **Environment Variables**
+   Add all required environment variables in Netlify dashboard
 
-## Project Structure
+3. **Deploy**
+   - Automatic deployments on push to main branch
+   - Preview deployments for pull requests
 
-```
-astral-draft/
-├── components/         # React components
-├── contexts/          # React context providers
-├── hooks/             # Custom React hooks
-├── services/          # API and business logic services
-├── utils/             # Utility functions
-├── views/             # Main application views
-├── styles/            # CSS and styling files
-├── data/              # Player and team data
-├── types.ts           # TypeScript definitions
-├── public/            # Static assets
-└── dist/              # Production build
+### Manual Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Deploy to your hosting provider
+# Upload the 'dist' folder contents
 ```
 
-## Scripts
+## 🧪 Testing
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Run TypeScript compiler
+```bash
+# Run unit tests
+npm test
 
-## Environment Variables
+# Run integration tests
+npm run test:integration
 
-Required environment variables for production:
+# Run mobile tests
+npm run test:mobile
+```
 
-- `VITE_GEMINI_API_KEY` - Google Gemini API key for AI features
-- `VITE_OPENAI_API_KEY` - OpenAI API key for advanced analytics
+## 📱 PWA Features
 
-## License
+- **Offline Support**: Core functionality works without internet
+- **Install Prompt**: Add to home screen on mobile devices
+- **Push Notifications**: Real-time updates and alerts
+- **Background Sync**: Data synchronization when back online
 
-MIT
+## 🤝 Contributing
 
-## Author
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Astral Draft Team
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **NFL API** for real-time statistics
+- **Fantasy Football Community** for feature inspiration
+- **Open Source Contributors** for various libraries and tools
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/Damatnic/AstralDraftv2/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Damatnic/AstralDraftv2/discussions)
+- **Email**: support@astraldraft.com
 
 ---
 
-Built with React, TypeScript, and AI-powered insights for the ultimate fantasy football experience.
+**Built with ❤️ for the Fantasy Football Community**
+
+[Live Demo](https://astraldraftv2.netlify.app) | [Documentation](https://docs.astraldraft.com) | [API Reference](https://api.astraldraft.com/docs)
