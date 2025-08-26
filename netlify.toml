@@ -1,78 +1,69 @@
 [build]
-  # Core build settings
   publish = "dist"
-  command = "npm ci && npm run build:simple"
+  command = "node build.cjs"
   functions = "netlify/functions"
-  
-  # Ignore any other build detection
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ."
 
 [build.environment]
-  # Node.js configuration
   NODE_VERSION = "20"
   NPM_VERSION = "10"
   NODE_ENV = "production"
   VITE_ENVIRONMENT = "production"
   
-  # Explicitly disable all other language detections
+  # Force npm usage
+  NPM_CONFIG_PACKAGE_MANAGER = "npm"
+  NETLIFY_USE_YARN = "false"
+  NETLIFY_USE_PNPM = "false"
+  YARN_ENABLED = "false"
+  PNPM_ENABLED = "false"
+  
+  # Disable all other language detections
   DISABLE_RUBY = "true"
   DISABLE_BUNDLER = "true"
   SKIP_RUBY = "true"
   SKIP_BUNDLER = "true"
   SKIP_GEM = "true"
   SKIP_MISE = "true"
-  
-  # Force npm only
-  NETLIFY_USE_YARN = "false"
-  NETLIFY_USE_PNPM = "false"
-  FORCE_NPM = "true"
-  
-  # Skip all other build tools
   SKIP_PYTHON = "true"
   SKIP_GO = "true"
   SKIP_RUST = "true"
   SKIP_PHP = "true"
-  
-  # Ensure npm can find binaries
-  PATH = "/opt/buildhome/.nvm/versions/node/v20.18.0/bin:/usr/local/bin:/usr/bin:/bin"
 
 # Functions Configuration
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@neondatabase/serverless", "pg", "pg-pool", "bcryptjs", "jsonwebtoken"]
-  included_files = ["backend/**", "netlify/functions/**"]
 
-# Context-specific settings
+# Context-specific settings - all use the same simple build script
 [context.production]
-  command = "npm ci && npm run build:simple"
+  command = "node build.cjs"
   
 [context.deploy-preview]
-  command = "npm ci && npm run build:simple"
+  command = "node build.cjs"
   
 [context.branch-deploy]
-  command = "npm ci && npm run build:simple"
+  command = "node build.cjs"
 
-# API Redirects - Route all API calls to Netlify Functions
+# API Redirects
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
   force = true
 
-# SPA fallback - everything else goes to index.html
+# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers for all JavaScript files
+# Headers for JavaScript files
 [[headers]]
   for = "/*.js"
   [headers.values]
     "Content-Type" = "application/javascript; charset=utf-8"
     "Cache-Control" = "public, max-age=31536000, immutable"
 
-# Headers for assets directory
+# Headers for assets
 [[headers]]
   for = "/assets/*"
   [headers.values]
@@ -95,7 +86,7 @@
     "Cache-Control" = "public, max-age=0, must-revalidate"
     "Service-Worker-Allowed" = "/"
 
-# Security headers for all routes
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -105,13 +96,3 @@
     "X-XSS-Protection" = "1; mode=block"
     "Referrer-Policy" = "strict-origin-when-cross-origin"
     "Permissions-Policy" = "camera=(), microphone=(), geolocation=()"
-
-# Forms handling
-[forms]
-  enabled = true
-
-# Dev server settings
-[dev]
-  command = "npm run dev"
-  port = 3000
-  publish = "dist"
