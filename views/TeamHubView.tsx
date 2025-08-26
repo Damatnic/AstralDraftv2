@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
@@ -251,7 +250,7 @@ const TeamHubView: React.FC = () => {
             {(!myTeam || !league) ? (
                 <div className="w-full h-full flex items-center justify-center">
                     <p>Team or League not found.</p>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary ml-4">
                         Back to Dashboard
                     </button>
                 </div>

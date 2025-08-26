@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
@@ -92,7 +90,7 @@ const TrophyRoomView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="back-btn">
                     Back to League Hub
                 </button>
             </header>
