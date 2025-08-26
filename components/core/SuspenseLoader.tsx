@@ -1,8 +1,8 @@
 /**
- * SuspenseLoader - A loading component for lazy-loaded components
+ * Simple Suspense Loader Component
  */
+
 import React from 'react';
-import { motion } from 'framer-motion';
 
 interface SuspenseLoaderProps {
   message?: string;
@@ -10,44 +10,21 @@ interface SuspenseLoaderProps {
 }
 
 const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({ 
-  message = 'Loading...', 
+  message = "Loading...", 
   size = 'md' 
 }) => {
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-12 w-12',
-    lg: 'h-16 w-16'
+    sm: 'w-6 h-6',
+    md: 'w-8 h-8', 
+    lg: 'w-12 h-12'
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900/50">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="flex flex-col items-center"
-      >
-        <div className={`${sizeClasses[size]} relative`}>
-          <motion.div
-            className="absolute inset-0 rounded-full border-4 border-blue-500/20"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          />
-          <motion.div
-            className="absolute inset-0 rounded-full border-4 border-t-blue-500 border-l-blue-500 border-r-transparent border-b-transparent"
-            animate={{ rotate: -360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          />
-        </div>
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mt-4 text-sm text-slate-300"
-        >
-          {message}
-        </motion.p>
-      </motion.div>
+    <div className="flex items-center justify-center min-h-[200px] p-8">
+      <div className="text-center">
+        <div className={`${sizeClasses[size]} border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4`}></div>
+        <p className="text-white">{message}</p>
+      </div>
     </div>
   );
 };
