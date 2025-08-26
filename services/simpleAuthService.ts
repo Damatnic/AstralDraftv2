@@ -3,6 +3,8 @@
  * Handles 10-player + admin login system with PIN authentication
  */
 
+import { LEAGUE_MEMBERS } from '../data/leagueData';
+
 export interface SimpleUser {
     id: string;
     username: string;
@@ -30,6 +32,21 @@ class SimpleAuthService {
     private static readonly SESSION_KEY = 'astral_draft_session';
     private static readonly SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
+    // Map player IDs to league member IDs
+    private static readonly PLAYER_MAPPING = {
+        'player1': 'user_1',  // Nick Damato
+        'player2': 'user_2',  // Jon Kornbeck
+        'player3': 'user_3',  // Cason Minor
+        'player4': 'user_4',  // Brittany Bergrum
+        'player5': 'user_5',  // Renee McCaigue
+        'player6': 'user_6',  // Jack McCaigue
+        'player7': 'user_7',  // Larry McCaigue
+        'player8': 'user_8',  // Kaity Lorbiecki
+        'player9': 'user_9',  // David Jarvey
+        'player10': 'user_10', // Nick Hartley
+        'admin': 'user_1'     // Nick Damato as admin
+    };
+
     // Default users: 10 players + 1 admin (Nick Damato is both admin and player1)
     private static readonly DEFAULT_USERS: SimpleUser[] = [
         // Admin user (Nick Damato)
@@ -38,6 +55,7 @@ class SimpleAuthService {
             username: 'admin',
             displayName: 'Nick Damato',
             pin: '7347',
+            email: LEAGUE_MEMBERS[0].email,
             isAdmin: true,
             customization: {
                 backgroundColor: '#3b82f6',
@@ -52,6 +70,7 @@ class SimpleAuthService {
             username: 'player1',
             displayName: 'Nick Damato',
             pin: '0000',
+            email: LEAGUE_MEMBERS[0].email,
             isAdmin: true, // Nick is also admin
             customization: {
                 backgroundColor: '#3b82f6',
@@ -65,6 +84,7 @@ class SimpleAuthService {
             username: 'player2',
             displayName: 'Jon Kornbeck',
             pin: '0000',
+            email: LEAGUE_MEMBERS[1].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#ef4444',
@@ -78,6 +98,7 @@ class SimpleAuthService {
             username: 'player3',
             displayName: 'Cason Minor',
             pin: '0000',
+            email: LEAGUE_MEMBERS[2].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#10b981',
@@ -91,6 +112,7 @@ class SimpleAuthService {
             username: 'player4',
             displayName: 'Brittany Bergrum',
             pin: '0000',
+            email: LEAGUE_MEMBERS[3].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#f59e0b',
@@ -104,6 +126,7 @@ class SimpleAuthService {
             username: 'player5',
             displayName: 'Renee McCaigue',
             pin: '0000',
+            email: LEAGUE_MEMBERS[4].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#8b5cf6',
@@ -117,6 +140,7 @@ class SimpleAuthService {
             username: 'player6',
             displayName: 'Jack McCaigue',
             pin: '0000',
+            email: LEAGUE_MEMBERS[5].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#06b6d4',
@@ -130,6 +154,7 @@ class SimpleAuthService {
             username: 'player7',
             displayName: 'Larry McCaigue',
             pin: '0000',
+            email: LEAGUE_MEMBERS[6].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#84cc16',
@@ -143,6 +168,7 @@ class SimpleAuthService {
             username: 'player8',
             displayName: 'Kaity Lorbiecki',
             pin: '0000',
+            email: LEAGUE_MEMBERS[7].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#f97316',
@@ -156,6 +182,7 @@ class SimpleAuthService {
             username: 'player9',
             displayName: 'David Jarvey',
             pin: '0000',
+            email: LEAGUE_MEMBERS[8].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#ec4899',
@@ -169,6 +196,7 @@ class SimpleAuthService {
             username: 'player10',
             displayName: 'Nick Hartley',
             pin: '0000',
+            email: LEAGUE_MEMBERS[9].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#6366f1',
@@ -211,7 +239,7 @@ class SimpleAuthService {
     }
 
     /**
-     * Authenticate user with PIN
+     * Authenticate user with PIN and return proper league member data
      */
     static async authenticateUser(userId: string, pin: string): Promise<AuthSession | null> {
         const users = this.getAllUsers();
@@ -225,9 +253,18 @@ class SimpleAuthService {
         user.lastLogin = new Date().toISOString();
         this.updateUser(user);
 
-        // Create session
+        // Map to league member ID
+        const leagueMemberId = this.PLAYER_MAPPING[userId as keyof typeof this.PLAYER_MAPPING];
+        const leagueMember = LEAGUE_MEMBERS.find(m => m.id === leagueMemberId);
+
+        // Create session with proper league member data
         const session: AuthSession = {
-            user,
+            user: {
+                ...user,
+                id: leagueMemberId || user.id,
+                displayName: leagueMember?.name || user.displayName,
+                email: leagueMember?.email || user.email
+            },
             sessionId: this.generateSessionId(),
             expiresAt: new Date(Date.now() + this.SESSION_DURATION).toISOString()
         };
@@ -277,54 +314,6 @@ class SimpleAuthService {
     }
 
     /**
-     * Update user email
-     */
-    static updateUserEmail(userId: string, email: string): boolean {
-        const users = this.getAllUsers();
-        const userIndex = users.findIndex(u => u.id === userId);
-        
-        if (userIndex === -1) return false;
-
-        users[userIndex].email = email;
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
-        
-        return true;
-    }
-
-    /**
-     * Update user customization
-     */
-    static updateUserCustomization(userId: string, customization: Partial<SimpleUser['customization']>): boolean {
-        const users = this.getAllUsers();
-        const userIndex = users.findIndex(u => u.id === userId);
-        
-        if (userIndex === -1) return false;
-
-        users[userIndex].customization = {
-            ...users[userIndex].customization,
-            ...customization
-        };
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
-        
-        return true;
-    }
-
-    /**
-     * Update user display name
-     */
-    static updateUserDisplayName(userId: string, displayName: string): boolean {
-        const users = this.getAllUsers();
-        const userIndex = users.findIndex(u => u.id === userId);
-        
-        if (userIndex === -1) return false;
-
-        users[userIndex].displayName = displayName;
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
-        
-        return true;
-    }
-
-    /**
      * Update user data
      */
     private static updateUser(updatedUser: SimpleUser): void {
@@ -356,27 +345,6 @@ class SimpleAuthService {
      */
     static resetAllUsers(): void {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.DEFAULT_USERS));
-    }
-
-    /**
-     * Export user data for backup
-     */
-    static exportUserData(): string {
-        return JSON.stringify(this.getAllUsers(), null, 2);
-    }
-
-    /**
-     * Import user data from backup
-     */
-    static importUserData(data: string): boolean {
-        try {
-            const users = JSON.parse(data);
-            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
-            return true;
-        } catch (error) {
-            console.error('Failed to import user data:', error);
-            return false;
-        }
     }
 }
 
