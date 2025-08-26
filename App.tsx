@@ -16,6 +16,7 @@ const ModernDashboardView = React.lazy(() => import('./views/ModernDashboardView
 const DashboardView = React.lazy(() => import('./views/DashboardView'));
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
 const TeamHubView = React.lazy(() => import('./views/TeamHubView'));
+const EnhancedTeamHubView = React.lazy(() => import('./views/EnhancedTeamHubView'));
 const WaiverWireView = React.lazy(() => import('./views/WaiverWireView'));
 const PlayersView = React.lazy(() => import('./views/PlayersView'));
 const DraftPrepCenterView = React.lazy(() => import('./views/DraftPrepCenterView'));
@@ -68,7 +69,7 @@ const AppContent: React.FC = () => {
             case 'TEAM_HUB':
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Team Hub..." />}>
-                        <TeamHubView />
+                        <EnhancedTeamHubView />
                     </React.Suspense>
                 );
                 
