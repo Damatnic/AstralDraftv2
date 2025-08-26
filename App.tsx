@@ -1,15 +1,14 @@
 /**
- * Main App Component - Full Fantasy Football Application with Oracle Integration
+ * Main App Component - Full Fantasy Football Application with Simple Player Login
  */
 
 import React from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
-import { AuthProvider, AuthInitializer } from './contexts/AuthContext';
 // Import modern theme styles
 import './styles/theme.css';
 // Eager load only the most critical views that users will likely visit first
 import ModernDashboardView from './views/ModernDashboardView';
-import AuthView from './views/AuthView';
+import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 
 // Lazy load all other views for better initial bundle size
 const DashboardView = React.lazy(() => import('./views/DashboardView'));
@@ -116,34 +115,6 @@ const viewVariants = {
   }),
 };
 
-const SplashScreen: React.FC = () => (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900">
-        <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'spring', stiffness: 150, damping: 20 }}
-        >
-            <img src="/favicon.svg" alt="Astral Draft Logo" className="h-24 w-24 mx-auto mb-4" />
-        </motion.div>
-         <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-3xl font-bold text-white text-center"
-        >
-            Astral Draft
-        </motion.h1>
-        <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-lg text-slate-300 text-center mt-2"
-        >
-            Fantasy Football Evolved
-        </motion.p>
-    </div>
-);
-
 const useViewNavigation = (currentView: View, activeLeague: any, userId: string) => {
     const [direction, setDirection] = React.useState(0);
     const viewRef = React.useRef<View>('DASHBOARD');
@@ -165,10 +136,8 @@ const useViewNavigation = (currentView: View, activeLeague: any, userId: string)
 
     // Initialize performance monitoring
     React.useEffect(() => {
-        // Initialize performance monitoring on app load
         performanceMonitoringService.init();
         
-        // Log performance metrics after initial load
         const logInitialMetrics = () => {
             setTimeout(() => {
                 const report = performanceMonitoringService.generateReport();
@@ -182,7 +151,6 @@ const useViewNavigation = (currentView: View, activeLeague: any, userId: string)
             window.addEventListener('load', logInitialMetrics);
         }
 
-        // Cleanup on unmount
         return () => {
             performanceMonitoringService.destroy();
         };
@@ -227,17 +195,16 @@ const AppContent: React.FC = () => {
     React.useEffect(() => {
         initializeGlobalFormEnhancement();
         
-        // Start offline service for mobile
         if (isMobile) {
-            // Service is already started on instantiation
             console.log('Mobile offline service active');
         }
     }, [isMobile]);
 
     const direction = useViewNavigation(state.currentView, activeLeague, state.user?.id || 'guest');
 
+    // Show simple login if no user is logged in
     if (!state.user || state.user.id === 'guest') {
-        return <AuthView />;
+        return <SimplePlayerLogin />;
     }
 
     const handleViewChange = (view: View) => {
@@ -387,18 +354,13 @@ const AppContent: React.FC = () => {
     );
 }
 
-
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <AuthInitializer fallback={<div className="loading-screen">Initializing authentication...</div>}>
-        <AppProvider>
-          <ErrorBoundary>
-            <AppContent />
-          </ErrorBoundary>
-        </AppProvider>
-      </AuthInitializer>
-    </AuthProvider>
+    <AppProvider>
+      <ErrorBoundary>
+        <AppContent />
+      </ErrorBoundary>
+    </AppProvider>
   );
 };
 
