@@ -53,10 +53,10 @@ const EnhancedTeamHubView: React.FC = () => {
         
       case 'lineup':
         return (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-            <h3 className="text-xl font-bold text-white mb-4">Starting Lineup</h3>
-            <p className="text-slate-400">Set your starting lineup for the upcoming week.</p>
-            <div className="mt-6 text-center text-slate-500">
+          <div className="card">
+            <h3 className="card-title">Starting Lineup</h3>
+            <p className="text-secondary">Set your starting lineup for the upcoming week.</p>
+            <div className="mt-6 text-center text-secondary">
               <div className="text-4xl mb-4">⚡</div>
               <p>Lineup management coming soon!</p>
             </div>
@@ -67,39 +67,39 @@ const EnhancedTeamHubView: React.FC = () => {
         return (
           <div className="space-y-6">
             {/* Team Performance */}
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-bold text-white mb-4">Team Performance</h3>
+            <div className="card">
+              <h3 className="card-title">Team Performance</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-                  <div className="text-2xl font-bold text-white">
+                <div className="stat-item">
+                  <div className="stat-value text-2xl">
                     {userTeam.record.wins}-{userTeam.record.losses}
                   </div>
-                  <div className="text-sm text-slate-400">Record</div>
+                  <div className="stat-label">Record</div>
                 </div>
-                <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-                  <div className="text-2xl font-bold text-white">
+                <div className="stat-item">
+                  <div className="stat-value text-2xl">
                     {userTeam.roster.reduce((sum, player) => sum + player.projectedPoints, 0).toFixed(0)}
                   </div>
-                  <div className="text-sm text-slate-400">Projected Points</div>
+                  <div className="stat-label">Projected Points</div>
                 </div>
-                <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-                  <div className="text-2xl font-bold text-white">
+                <div className="stat-item">
+                  <div className="stat-value text-2xl">
                     ${userTeam.faab}
                   </div>
-                  <div className="text-sm text-slate-400">FAAB Remaining</div>
+                  <div className="stat-label">FAAB Remaining</div>
                 </div>
-                <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-                  <div className="text-2xl font-bold text-white">
+                <div className="stat-item">
+                  <div className="stat-value text-2xl">
                     {userTeam.roster.length}
                   </div>
-                  <div className="text-sm text-slate-400">Roster Size</div>
+                  <div className="stat-label">Roster Size</div>
                 </div>
               </div>
             </div>
 
             {/* Position Breakdown */}
-            <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-              <h3 className="text-xl font-bold text-white mb-4">Position Breakdown</h3>
+            <div className="card">
+              <h3 className="card-title">Position Breakdown</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {['QB', 'RB', 'WR', 'TE'].map(position => {
                   const positionPlayers = userTeam.roster.filter(p => p.position === position);
@@ -108,13 +108,13 @@ const EnhancedTeamHubView: React.FC = () => {
                     : 0;
                   
                   return (
-                    <div key={position} className="text-center p-4 bg-slate-700/50 rounded-lg">
-                      <div className="text-lg font-bold text-white">
+                    <div key={position} className="stat-item">
+                      <div className="stat-value text-lg">
                         {positionPlayers.length}
                       </div>
-                      <div className="text-sm text-slate-400 mb-1">{position}s</div>
+                      <div className="stat-label mb-1">{position}s</div>
                       {avgRank > 0 && (
-                        <div className="text-xs text-slate-500">
+                        <div className="text-xs text-muted">
                           Avg Rank: #{avgRank.toFixed(0)}
                         </div>
                       )}
@@ -128,10 +128,10 @@ const EnhancedTeamHubView: React.FC = () => {
         
       case 'schedule':
         return (
-          <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-            <h3 className="text-xl font-bold text-white mb-4">Schedule</h3>
-            <p className="text-slate-400">View your upcoming matchups and season schedule.</p>
-            <div className="mt-6 text-center text-slate-500">
+          <div className="card">
+            <h3 className="card-title">Schedule</h3>
+            <p className="text-secondary">View your upcoming matchups and season schedule.</p>
+            <div className="mt-6 text-center text-secondary">
               <div className="text-4xl mb-4">📅</div>
               <p>Schedule view coming soon!</p>
             </div>
@@ -144,14 +144,14 @@ const EnhancedTeamHubView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+    <div className="min-h-screen">
+      {/* Navigation Header */}
+      <div className="nav-header">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+              className="back-btn"
             >
               ← Back to Dashboard
             </button>
@@ -161,18 +161,18 @@ const EnhancedTeamHubView: React.FC = () => {
                 <span className="text-2xl">{userTeam.avatar}</span>
                 {userTeam.name}
               </h1>
-              <p className="text-slate-400">Managed by {userTeam.owner.name}</p>
+              <p className="text-secondary">Managed by {userTeam.owner.name}</p>
             </div>
             
             <div className="text-right">
               <div className="text-white font-semibold">
                 {userTeam.record.wins}-{userTeam.record.losses}
               </div>
-              <div className="text-sm text-slate-400">Record</div>
+              <div className="text-sm text-secondary">Record</div>
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Draft Countdown (if pre-draft) */}
