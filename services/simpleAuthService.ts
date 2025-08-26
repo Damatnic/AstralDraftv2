@@ -30,51 +30,154 @@ class SimpleAuthService {
     private static readonly SESSION_KEY = 'astral_draft_session';
     private static readonly SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-    // Default users: 10 players + 1 admin
+    // Default users: 10 players + 1 admin (Nick Damato is both admin and player1)
     private static readonly DEFAULT_USERS: SimpleUser[] = [
-        // Admin user
+        // Admin user (Nick Damato)
         {
             id: 'admin',
             username: 'admin',
-            displayName: 'League Admin',
+            displayName: 'Nick Damato',
             pin: '7347',
             isAdmin: true,
             customization: {
-                backgroundColor: '#1f2937',
-                textColor: '#f59e0b',
+                backgroundColor: '#3b82f6',
+                textColor: '#ffffff',
                 emoji: '👑'
             },
             createdAt: new Date().toISOString()
         },
-        // Player users (1-10)
-        ...Array.from({ length: 10 }, (_, i) => ({
-            id: `player${i + 1}`,
-            username: `player${i + 1}`,
-            displayName: `Player ${i + 1}`,
+        // Player users with actual names
+        {
+            id: 'player1',
+            username: 'player1',
+            displayName: 'Nick Damato',
+            pin: '0000',
+            isAdmin: true, // Nick is also admin
+            customization: {
+                backgroundColor: '#3b82f6',
+                textColor: '#ffffff',
+                emoji: '👑'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player2',
+            username: 'player2',
+            displayName: 'Jon Kornbeck',
             pin: '0000',
             isAdmin: false,
             customization: {
-                backgroundColor: this.getRandomPlayerColor(),
+                backgroundColor: '#ef4444',
                 textColor: '#ffffff',
-                emoji: this.getRandomPlayerEmoji()
+                emoji: '⚡'
             },
             createdAt: new Date().toISOString()
-        }))
+        },
+        {
+            id: 'player3',
+            username: 'player3',
+            displayName: 'Cason Minor',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#10b981',
+                textColor: '#ffffff',
+                emoji: '🔥'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player4',
+            username: 'player4',
+            displayName: 'Brittany Bergrum',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#f59e0b',
+                textColor: '#ffffff',
+                emoji: '💪'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player5',
+            username: 'player5',
+            displayName: 'Renee McCaigue',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#8b5cf6',
+                textColor: '#ffffff',
+                emoji: '🎯'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player6',
+            username: 'player6',
+            displayName: 'Jack McCaigue',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#06b6d4',
+                textColor: '#ffffff',
+                emoji: '🚀'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player7',
+            username: 'player7',
+            displayName: 'Larry McCaigue',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#84cc16',
+                textColor: '#ffffff',
+                emoji: '⭐'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player8',
+            username: 'player8',
+            displayName: 'Kaity Lorbiecki',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#f97316',
+                textColor: '#ffffff',
+                emoji: '💎'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player9',
+            username: 'player9',
+            displayName: 'David Jarvey',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#ec4899',
+                textColor: '#ffffff',
+                emoji: '🏆'
+            },
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 'player10',
+            username: 'player10',
+            displayName: 'Nick Hartley',
+            pin: '0000',
+            isAdmin: false,
+            customization: {
+                backgroundColor: '#6366f1',
+                textColor: '#ffffff',
+                emoji: '🎮'
+            },
+            createdAt: new Date().toISOString()
+        }
     ];
-
-    private static getRandomPlayerColor(): string {
-        const colors = [
-            '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
-            '#8b5cf6', '#06b6d4', '#84cc16', '#f97316',
-            '#ec4899', '#6366f1'
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    private static getRandomPlayerEmoji(): string {
-        const emojis = ['🏈', '⚡', '🔥', '💪', '🎯', '🚀', '⭐', '💎', '🏆', '🎮'];
-        return emojis[Math.floor(Math.random() * emojis.length)];
-    }
 
     /**
      * Initialize the authentication system
