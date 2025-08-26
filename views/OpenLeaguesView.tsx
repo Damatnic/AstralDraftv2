@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
@@ -26,7 +25,7 @@ const OpenLeaguesView: React.FC = () => {
                         Open Leagues
                     </h1>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="back-btn">
                     Back to Dashboard
                 </button>
             </header>
@@ -38,20 +37,20 @@ const OpenLeaguesView: React.FC = () => {
                                 <div key={league.id} className="p-3 bg-black/10 rounded-lg flex items-center justify-between hover:bg-black/20">
                                     <div>
                                         <p className="font-bold text-white">{league.name}</p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className="text-xs text-secondary">
                                             {league.settings.teamCount} Teams • {league.settings.draftFormat} • {league.settings.scoring}
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => handleJoin(league.id)}
-                                        className="px-4 py-2 bg-green-500 text-white font-bold text-sm rounded-md hover:bg-green-600"
+                                        className="btn btn-success text-sm"
                                     >
                                         Join
                                     </button>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-center text-sm text-gray-500 py-8">No open public leagues available right now.</p>
+                            <p className="text-center text-sm text-secondary py-8">No open public leagues available right now.</p>
                         )}
                     </div>
                 </Widget>
