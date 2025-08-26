@@ -57,7 +57,7 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
     const handleRetry = () => setRetryCount(c => c + 1);
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
              <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
@@ -65,7 +65,7 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} - {seasonYear} Season</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' })} className="glass-button">
                     Back to History
                 </button>
             </header>
@@ -92,7 +92,7 @@ const SeasonReviewView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a season to review from the League History.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>

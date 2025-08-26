@@ -51,7 +51,7 @@ const SeasonContestView: React.FC<SeasonContestViewProps> = ({ userId = 'user-12
     <div className="space-y-6">
       {/* Contest Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border">
+        <div className="glass-pane rounded-lg p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Active Contests</p>
@@ -468,7 +468,7 @@ const SeasonContestView: React.FC<SeasonContestViewProps> = ({ userId = 'user-12
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header */}
         <div className="mb-8">
