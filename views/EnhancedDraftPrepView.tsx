@@ -310,7 +310,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                     <div className="text-slate-400">16 rounds, 160 picks</div>
                   </div>
                 </div>
-                <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+                <button className="glass-button-primary px-6 py-3 font-semibold">
                   Start Mock Draft
                 </button>
               </div>
@@ -324,14 +324,14 @@ const EnhancedDraftPrepView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       {/* Header */}
       <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+              className="glass-button"
             >
               ← Back to Dashboard
             </button>

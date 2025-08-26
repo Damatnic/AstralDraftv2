@@ -51,7 +51,7 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
         <motion.div
             whileTap={{ scale: 0.95 }}
             onClick={onClick}
-            className={`bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors ${onClick ? 'active:bg-[var(--panel-hover)]' : ''}`}
+            className={`glass-pane rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors ${onClick ? 'active:bg-[var(--panel-hover)]' : ''}`}
         >
             <div className="flex items-center justify-between mb-2">
                 <div className={`p-2 rounded-lg ${color}`}>
@@ -92,7 +92,7 @@ const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }
     <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={onClick}
-        className={`flex flex-col items-center gap-2 p-4 rounded-lg border border-[var(--panel-border)] hover:border-blue-400/50 transition-colors ${color}`}
+        className={`glass-pane flex flex-col items-center gap-2 p-4 rounded-lg hover:border-blue-400/50 transition-colors ${color}`}
     >
         <div className="w-8 h-8 flex items-center justify-center">
             {icon}
@@ -128,7 +128,7 @@ const EnhancedDashboardView: React.FC = () => {
 
     if (isMobile) {
         return (
-            <div className="h-full bg-[var(--app-bg)]">
+            <div className="h-full bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
                 <MobilePullToRefresh onRefresh={handleRefresh}>
                     <div className="p-4 space-y-6">
                         {/* Header */}
@@ -242,7 +242,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 <motion.div
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleViewChange('LEAGUE_HUB')}
-                                    className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors"
+                                    className="glass-pane rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors"
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <h3 className="font-medium text-[var(--text-primary)]">
@@ -296,7 +296,7 @@ const EnhancedDashboardView: React.FC = () => {
                                     { text: "Trade proposal received", time: "1 hour ago", type: "trade" },
                                     { text: "Waiver claim processed", time: "3 hours ago", type: "waiver" }
                                 ].map((activity) => (
-                                    <div key={`${activity.type}-${activity.time}`} className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3">
+                                    <div key={`${activity.type}-${activity.time}`} className="glass-pane rounded-lg p-3">
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm text-[var(--text-primary)]">
                                                 {activity.text}
@@ -320,7 +320,7 @@ const EnhancedDashboardView: React.FC = () => {
 
     // Fallback to original dashboard for desktop
     return (
-        <div className="p-6">
+        <div className="p-6 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 min-h-screen">
             <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-6">
                 Dashboard
             </h1>
