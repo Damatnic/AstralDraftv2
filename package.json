@@ -12,6 +12,7 @@
     "build:prod": "node scripts/verify-env.js && npx vite build --mode production",
     "build:simple": "npx vite build --mode production",
     "build:netlify": "node scripts/netlify-build.cjs",
+    "build:ci": "npx vite build --mode production",
     "build:verify": "npm run build && node scripts/verify-production-build.cjs",
     "build:analyze": "vite build --mode analyze && npx rollup-plugin-visualizer dist --open",
     "preview": "vite preview",

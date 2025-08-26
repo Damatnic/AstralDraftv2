@@ -1,28 +1,56 @@
 [build]
+  # Core build settings
   publish = "dist"
-  command = "npm run build:netlify"
+  command = "npm ci && npm run build:simple"
   functions = "netlify/functions"
+  
+  # Ignore any other build detection
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ."
 
 [build.environment]
+  # Node.js configuration
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  # Ensure production mode
   NODE_ENV = "production"
   VITE_ENVIRONMENT = "production"
-  # Disable Ruby/gem detection
+  
+  # Explicitly disable all other language detections
   DISABLE_RUBY = "true"
   DISABLE_BUNDLER = "true"
-  # Only use Node.js
+  SKIP_RUBY = "true"
+  SKIP_BUNDLER = "true"
+  SKIP_GEM = "true"
+  SKIP_MISE = "true"
+  
+  # Force npm only
   NETLIFY_USE_YARN = "false"
   NETLIFY_USE_PNPM = "false"
+  FORCE_NPM = "true"
+  
+  # Skip all other build tools
+  SKIP_PYTHON = "true"
+  SKIP_GO = "true"
+  SKIP_RUST = "true"
+  SKIP_PHP = "true"
+  
   # Ensure npm can find binaries
-  PATH = "/opt/buildhome/.nvm/versions/node/v20.18.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+  PATH = "/opt/buildhome/.nvm/versions/node/v20.18.0/bin:/usr/local/bin:/usr/bin:/bin"
 
 # Functions Configuration
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@neondatabase/serverless", "pg", "pg-pool", "bcryptjs", "jsonwebtoken"]
   included_files = ["backend/**", "netlify/functions/**"]
+
+# Context-specific settings
+[context.production]
+  command = "npm ci && npm run build:simple"
+  
+[context.deploy-preview]
+  command = "npm ci && npm run build:simple"
+  
+[context.branch-deploy]
+  command = "npm ci && npm run build:simple"
 
 # API Redirects - Route all API calls to Netlify Functions
 [[redirects]]
@@ -44,7 +72,7 @@
     "Content-Type" = "application/javascript; charset=utf-8"
     "Cache-Control" = "public, max-age=31536000, immutable"
 
-# Headers for assets directory - immutable caching for built assets
+# Headers for assets directory
 [[headers]]
   for = "/assets/*"
   [headers.values]
