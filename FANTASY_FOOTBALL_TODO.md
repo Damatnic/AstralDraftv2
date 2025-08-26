@@ -298,9 +298,9 @@ Transform Astral Draft into a fully functional fantasy football platform compara
 
 ## 🎨 GLASSMORPHISM DESIGN UPDATE - IN PROGRESS
 
-### **Views Updated with Glassmorphism (58/68 completed - 85% COMPLETE):**
+### **Views Updated with Glassmorphism (62/68 completed - 91% COMPLETE):**
 
-#### ✅ Completed Views (58):
+#### ✅ Completed Views (62):
 1. AnalyticsHubView ✅
 2. AssistantView ✅
 3. BeatTheOracleView ✅
@@ -359,20 +359,20 @@ Transform Astral Draft into a fully functional fantasy football platform compara
 56. LiveDraftRoomView ✅
 57. RealTimeAnalyticsView ✅
 58. TeamManagementView ✅
+59. EnhancedDashboardView ✅
+60. EnhancedDraftPrepView ✅
+61. EnhancedDraftRoomView ✅
+62. EnhancedCommissionerToolsView ✅ (partial)
 
-#### 🔄 Remaining Views to Update (10):
+#### 🔄 Remaining Views to Update (6):
 1. CustomScoringEditorView
 2. EditLeagueSettingsView
-3. EnhancedCommissionerToolsView
-4. EnhancedDashboardView
-5. EnhancedDraftPrepView
-6. EnhancedDraftRoomView
-7. ProjectIntegrityView
-8. ProjectView
-9. LeagueDashboard_old (may skip if deprecated)
-10. Any other views not yet identified
+3. EnhancedCommissionerToolsView (complete update)
+4. ProjectIntegrityView
+5. ProjectView
+6. LeagueDashboard_old (may skip if deprecated)
 
-### **Progress: 85% Complete (58/68 views)**
+### **Progress: 91% Complete (62/68 views)**
 
 ### **Glassmorphism Design System Successfully Applied:**
 - ✅ Consistent frosted glass effects with backdrop blur

@@ -34,11 +34,11 @@ const EditLeagueSettingsView: React.FC = () => {
     };
 
     const labelClasses = "block text-sm font-medium text-gray-400 mb-1";
-    const inputClasses = "mobile-touch-target w-full bg-black/20 px-3 py-3 rounded-md border border-white/10 focus:ring-2 focus:ring-cyan-400 focus:outline-none";
+    const inputClasses = "glass-input mobile-touch-target w-full px-3 py-3";
     const buttonGroupButtonClasses = (isActive: boolean) => `flex-1 py-2 text-sm font-bold rounded-md transition-all ${isActive ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`;
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
@@ -46,7 +46,7 @@ const EditLeagueSettingsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="glass-button">
                     Back to Tools
                 </button>
             </header>
@@ -107,7 +107,7 @@ const EditLeagueSettingsView: React.FC = () => {
                             </div>
 
                             <div className="pt-4 flex justify-end">
-                                <button type="submit" className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md">
+                                <button type="submit" className="glass-button-primary px-6 py-2 font-bold text-sm">
                                     Save Changes
                                 </button>
                             </div>

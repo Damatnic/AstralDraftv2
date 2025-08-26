@@ -7,7 +7,7 @@ interface ProjectIntegrityViewProps {
 
 const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
   return (
-    <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8">
+    <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <header className="flex-shrink-0 mb-6">
         <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
           Project Integrity
@@ -19,7 +19,7 @@ const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
 
       <main className="flex-grow">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-[var(--surface-secondary)] rounded-lg p-6">
+          <div className="glass-pane rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4 text-[var(--text-primary)]">
               System Status
             </h2>
@@ -45,7 +45,7 @@ const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
             </div>
           </div>
 
-          <div className="bg-[var(--surface-secondary)] rounded-lg p-6">
+          <div className="glass-pane rounded-lg p-6">
             <h2 className="text-xl font-bold mb-4 text-[var(--text-primary)]">
               Integrity Metrics
             </h2>
@@ -66,7 +66,7 @@ const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
           </div>
         </div>
 
-        <div className="mt-6 bg-[var(--surface-secondary)] rounded-lg p-6">
+        <div className="mt-6 glass-pane rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4 text-[var(--text-primary)]">
             Recent Activity
           </h2>

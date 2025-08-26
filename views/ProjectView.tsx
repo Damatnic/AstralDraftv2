@@ -7,7 +7,7 @@ interface ProjectViewProps {
 
 const ProjectView: React.FC<ProjectViewProps> = () => {
   return (
-    <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8">
+    <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <header className="flex-shrink-0 mb-6">
         <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
           Oracle Project
@@ -126,13 +126,13 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                 Quick Actions
               </h2>
               <div className="space-y-2">
-                <button className="w-full px-4 py-2 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500/30 text-sm">
+                <button className="glass-button w-full px-4 py-2 text-sm">
                   View Analytics
                 </button>
-                <button className="w-full px-4 py-2 bg-green-500/20 text-green-400 rounded hover:bg-green-500/30 text-sm">
+                <button className="glass-button w-full px-4 py-2 text-sm">
                   Check Status
                 </button>
-                <button className="w-full px-4 py-2 bg-purple-500/20 text-purple-400 rounded hover:bg-purple-500/30 text-sm">
+                <button className="glass-button w-full px-4 py-2 text-sm">
                   Run Diagnostics
                 </button>
               </div>

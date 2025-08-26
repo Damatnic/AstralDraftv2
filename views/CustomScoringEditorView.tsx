@@ -13,7 +13,7 @@ const CustomScoringEditorView: React.FC = () => {
     }
 
     return (
-        <div className="space-y-6 p-6">
+        <div className="space-y-6 p-6 min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             <div className="flex items-center gap-3 mb-6">
                 <SettingsIcon className="w-8 h-8 text-blue-400" />
                 <h1 className="text-2xl font-bold">Custom Scoring Editor</h1>
@@ -51,7 +51,7 @@ const CustomScoringEditorView: React.FC = () => {
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-sm font-medium transition-colors"
+                                className="glass-button-primary px-4 py-2 text-sm font-medium"
                             >
                                 Edit Scoring
                             </motion.button>
