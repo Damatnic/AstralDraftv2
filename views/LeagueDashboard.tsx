@@ -81,9 +81,9 @@ const EnhancedLeagueDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      {/* Enhanced Header with Better Contrast */}
-      <header className="bg-slate-800/80 backdrop-blur-md border-b border-slate-600 shadow-xl">
+    <div className="min-h-screen">
+      {/* Enhanced Header with Glassmorphism */}
+      <header className="nav-header">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -91,19 +91,19 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 <span className="text-2xl">🏈</span>
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-white text-shadow-lg">{league.name}</h1>
-                <p className="text-slate-300 font-medium">Commissioner: Nick Damato</p>
+                <h1 className="text-3xl font-bold text-white">{league.name}</h1>
+                <p className="text-secondary font-medium">Commissioner: Nick Damato</p>
               </div>
             </div>
             
             <div className="flex items-center gap-6">
               <div className="text-right">
                 <p className="text-white font-bold text-lg">{state.user?.name}</p>
-                <p className="text-slate-300 font-medium">{userTeam?.name}</p>
+                <p className="text-secondary font-medium">{userTeam?.name}</p>
               </div>
               <button
                 onClick={() => dispatch({ type: 'LOGOUT' })}
-                className="btn btn-danger px-6 py-3 font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                className="btn btn-danger"
               >
                 Logout
               </button>

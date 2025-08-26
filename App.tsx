@@ -202,9 +202,11 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
-      <ErrorBoundary>
-        <AppContent />
-      </ErrorBoundary>
+      <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}>
+        <ErrorBoundary>
+          <AppContent />
+        </ErrorBoundary>
+      </div>
     </AppProvider>
   );
 };
