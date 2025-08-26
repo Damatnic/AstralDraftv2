@@ -47,112 +47,133 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
     const positions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        Waiver Wire
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
-                </div>
-                <div className="flex gap-2">
-                    <div className="px-4 py-2 bg-green-500/10 rounded-lg text-sm">
-                        <span className="text-green-300 font-bold">FAAB: ${myTeam.faab}</span>
+        <div className="min-h-screen">
+            {/* Navigation Header */}
+            <div className="nav-header">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1>Waiver Wire</h1>
+                        <p className="page-subtitle">{league.name}</p>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
-                        Back to Team
-                    </button>
+                    <div className="flex gap-2">
+                        <div className="px-4 py-2 bg-green-500/10 rounded-lg text-sm">
+                            <span className="text-green-300 font-bold">FAAB: ${myTeam.faab}</span>
+                        </div>
+                        <button 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                            className="back-btn"
+                        >
+                            Back to Team
+                        </button>
+                    </div>
                 </div>
-            </header>
-            <main className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
-                    <Widget title="Available Free Agents">
-                        <div className="flex-shrink-0 p-2 space-y-2 border-b border-[var(--panel-border)]">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Search player..."
-                                    value={search}
-                                    onChange={e => setSearch(e.target.value)}
-                                    className="w-full bg-black/10 dark:bg-gray-900/50 border border-[var(--panel-border)] rounded-md px-3 py-1.5 pl-8 text-sm placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                                />
-                                <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-secondary)]" />
+            </div>
+
+            <div className="max-w-7xl mx-auto p-4">
+                <main className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                        <div className="search-container">
+                            <h3 className="text-xl font-bold text-white mb-4">Available Free Agents</h3>
+                            
+                            <div className="search-row mb-4">
+                                <div className="input-group">
+                                    <input
+                                        type="text"
+                                        placeholder="Search player..."
+                                        value={search}
+                                        onChange={e => setSearch(e.target.value)}
+                                        className="search-input"
+                                    />
+                                </div>
                             </div>
-                            <div className="flex gap-1 justify-center flex-wrap">
+                            
+                            <div className="flex gap-1 justify-center flex-wrap mb-4">
                                 {positions.map(pos => (
                                     <button
                                         key={pos}
                                         onClick={() => setPositionFilter(pos)}
                                         className={`px-2.5 py-0.5 text-xs font-bold rounded-full transition-all
-                                            ${positionFilter === pos ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 text-[var(--text-secondary)] hover:bg-black/20 dark:hover:bg-gray-600/50'}
+                                            ${positionFilter === pos ? 'bg-cyan-400 text-black' : 'btn btn-secondary'}
                                         `}
                                     >
                                         {pos}
                                     </button>
                                 ))}
                             </div>
-                        </div>
-                        <div className="p-2 space-y-1 overflow-y-auto">
-                            {filteredPlayers.map(player => (
-                                <div key={player.id} className="flex items-center justify-between p-1 pr-2 bg-white/5 rounded-md hover:bg-white/10 transition-colors">
-                                    <button onClick={() => setSelectedPlayer(player)} className="flex-grow text-left p-1 flex items-center gap-2">
-                                        <div className="font-bold text-lg text-cyan-400 w-8 text-center">{player.rank}</div>
-                                        <div>
-                                            <p className="font-bold">{player.name}</p>
-                                            <p className="text-xs text-gray-400">{player.position} - {player.team}</p>
+                            
+                            <div className="space-y-2 max-h-96 overflow-y-auto">
+                                {filteredPlayers.map(player => (
+                                    <div key={player.id} className="player-card cursor-pointer">
+                                        <div className="player-header">
+                                            <div className="player-info" onClick={() => setSelectedPlayer(player)}>
+                                                <div className="position-badge">{player.position}</div>
+                                                <h3 className="player-name">{player.name}</h3>
+                                                <p className="player-team">{player.team} • Rank #{player.rank}</p>
+                                            </div>
+                                            <button 
+                                                onClick={() => handleOpenClaimModal(player)} 
+                                                className="btn btn-success"
+                                            >
+                                                Claim
+                                            </button>
                                         </div>
-                                    </button>
-                                    <button onClick={() => handleOpenClaimModal(player)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-green-500/10 text-green-300 rounded-md hover:bg-green-500/20">
-                                        <PlusCircleIcon />
-                                        Claim
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </Widget>
-                </div>
-                <div className="space-y-6">
-                    <Widget title="My Pending Claims">
-                        <div className="p-3 space-y-2">
-                            {myPendingClaims.length === 0 ? (
-                                <p className="text-center text-xs text-gray-400 py-4">You have no pending claims.</p>
-                            ) : myPendingClaims.map(claim => {
-                                const playerToAdd = players.find(p => p.id === claim.playerId);
-                                return (
-                                <div key={claim.id} className="p-2 bg-black/10 rounded-md">
-                                    <div className="flex justify-between items-center">
-                                        <p className="font-semibold text-sm">{playerToAdd?.name}</p>
-                                        <button onClick={() => handleCancelClaim(claim.id)} className="mobile-touch-target text-gray-500 hover:text-red-400 p-3 rounded-full" aria-label="Cancel claim"><CloseIcon className="w-3 h-3"/></button>
                                     </div>
-                                    <p className="text-xs text-gray-400">Bid: <span className="font-bold text-yellow-300">${claim.bid}</span></p>
-                                </div>
-                            )})}
+                                ))}
+                            </div>
                         </div>
-                    </Widget>
-                    <WaiverIntelligenceWidget league={league} />
-                </div>
-            </main>
-            <AnimatePresence>
-                {isClaimModalOpen && playerToClaim && (
-                    <PlaceClaimModal
-                        playerToAdd={playerToClaim}
-                        myTeam={myTeam}
-                        leagueId={league.id}
-                        dispatch={dispatch}
-                        onClose={() => setIsClaimModalOpen(false)}
-                    />
-                )}
-                {selectedPlayer && (
-                    <PlayerDetailModal
-                        player={selectedPlayer}
-                        onClose={() => setSelectedPlayer(null)}
-                        playerNotes={playerNotes}
-                        dispatch={dispatch}
-                        league={league}
-                        playerAvatars={playerAvatars}
-                    />
-                )}
-            </AnimatePresence>
+                    </div>
+                    
+                    <div className="space-y-6">
+                        <div className="card">
+                            <h3 className="card-title">My Pending Claims</h3>
+                            <div className="space-y-2">
+                                {myPendingClaims.length === 0 ? (
+                                    <p className="text-center text-secondary py-4">You have no pending claims.</p>
+                                ) : myPendingClaims.map(claim => {
+                                    const playerToAdd = players.find(p => p.id === claim.playerId);
+                                    return (
+                                        <div key={claim.id} className="p-3 bg-slate-700/30 rounded-lg">
+                                            <div className="flex justify-between items-center">
+                                                <p className="font-semibold text-white">{playerToAdd?.name}</p>
+                                                <button 
+                                                    onClick={() => handleCancelClaim(claim.id)} 
+                                                    className="text-red-400 hover:text-red-300"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                            <p className="text-sm text-secondary">Bid: <span className="font-bold text-yellow-300">${claim.bid}</span></p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        <WaiverIntelligenceWidget league={league} />
+                    </div>
+                </main>
+                
+                <AnimatePresence>
+                    {isClaimModalOpen && playerToClaim && (
+                        <PlaceClaimModal
+                            playerToAdd={playerToClaim}
+                            myTeam={myTeam}
+                            leagueId={league.id}
+                            dispatch={dispatch}
+                            onClose={() => setIsClaimModalOpen(false)}
+                        />
+                    )}
+                    {selectedPlayer && (
+                        <PlayerDetailModal
+                            player={selectedPlayer}
+                            onClose={() => setSelectedPlayer(null)}
+                            playerNotes={playerNotes}
+                            dispatch={dispatch}
+                            league={league}
+                            playerAvatars={playerAvatars}
+                        />
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 };

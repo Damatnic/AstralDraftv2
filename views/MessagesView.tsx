@@ -30,42 +30,51 @@ const MessagesView: React.FC = () => {
     }, []);
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase flex items-center gap-3">
-                        <MailIcon />
-                        MESSAGES
-                    </h1>
+        <div className="min-h-screen">
+            {/* Navigation Header */}
+            <div className="nav-header">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1 className="flex items-center gap-3">
+                            <MailIcon />
+                            MESSAGES
+                        </h1>
+                    </div>
+                    <button 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} 
+                        className="back-btn"
+                    >
+                        Back to Dashboard
+                    </button>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
-                    Back to Dashboard
-                </button>
-            </header>
-            <main className="flex-grow glass-pane rounded-2xl overflow-hidden flex">
-                <div className="w-1/3 border-r border-[var(--panel-border)] flex flex-col">
-                    <ConversationList 
-                        selectedUserId={selectedUserId} 
-                        onSelectUser={handleSelectUser}
-                        onStartNewMessage={handleStartNewMessage}
-                        isNewMessageActive={showNewMessage}
-                    />
-                </div>
-                <div className="w-2/3">
-                    {selectedUserId ? (
-                        <MessageThread userId={selectedUserId} />
-                    ) : showNewMessage ? (
-                         <MessageThread userId={null} onUserSelected={handleSelectUser}/>
-                    ) : (
-                        <div className="h-full flex items-center justify-center">
-                            <EmptyState 
-                                illustration={<InboxIcon />}
-                                message="Select a conversation or start a new one."
-                            />
-                        </div>
-                    )}
-                </div>
-            </main>
+            </div>
+
+            <div className="max-w-7xl mx-auto p-4">
+                <main className="card overflow-hidden flex" style={{ height: '80vh' }}>
+                    <div className="w-1/3 border-r border-slate-600 flex flex-col">
+                        <ConversationList 
+                            selectedUserId={selectedUserId} 
+                            onSelectUser={handleSelectUser}
+                            onStartNewMessage={handleStartNewMessage}
+                            isNewMessageActive={showNewMessage}
+                        />
+                    </div>
+                    <div className="w-2/3">
+                        {selectedUserId ? (
+                            <MessageThread userId={selectedUserId} />
+                        ) : showNewMessage ? (
+                             <MessageThread userId={null} onUserSelected={handleSelectUser}/>
+                        ) : (
+                            <div className="h-full flex items-center justify-center">
+                                <div className="text-center text-secondary">
+                                    <InboxIcon />
+                                    <p className="mt-4">Select a conversation or start a new one.</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </main>
+            </div>
         </div>
     );
 };
