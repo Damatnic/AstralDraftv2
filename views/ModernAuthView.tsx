@@ -172,9 +172,9 @@ const ModernAuthView: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       {/* Left Panel - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-primary)]">
+      <div className="flex-1 flex items-center justify-center p-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -235,9 +235,9 @@ const ModernAuthView: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 rounded-lg bg-[var(--surface-primary)] border ${
-                    errors.email ? 'border-red-500' : 'border-[var(--border-primary)]'
-                  } focus:border-[var(--primary)] focus:outline-none transition-colors`}
+                  className={`glass-input w-full pl-10 pr-4 py-3 ${
+                    errors.email ? 'border-red-500' : ''
+                  }`}
                   placeholder="Enter your email"
                 />
               </div>
@@ -338,7 +338,7 @@ const ModernAuthView: React.FC = () => {
               disabled={isLoading}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full py-3 px-4 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="glass-button-primary w-full py-3 px-4 font-semibold flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

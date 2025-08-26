@@ -78,7 +78,7 @@ const LiveDraftRoomView: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <div className="max-w-4xl mx-auto py-8 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,7 @@ const LiveDraftRoomView: React.FC = () => {
               <motion.div
                 key={league.id}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+                className="glass-pane rounded-lg p-6"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
@@ -124,7 +124,7 @@ const LiveDraftRoomView: React.FC = () => {
                     {league.draftStatus === 'ACTIVE' && (
                       <button
                         onClick={() => handleJoinDraft(league)}
-                        className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                        className="glass-button-primary px-6 py-2 font-medium"
                       >
                         Join Draft
                       </button>
@@ -133,7 +133,7 @@ const LiveDraftRoomView: React.FC = () => {
                     {league.draftStatus === 'SCHEDULED' && canJoinDraft(league) && (
                       <button
                         onClick={() => handleJoinDraft(league)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                        className="glass-button-primary px-6 py-2 font-medium"
                       >
                         Enter Draft Room
                       </button>
@@ -150,7 +150,7 @@ const LiveDraftRoomView: React.FC = () => {
                     
                     {league.draftStatus === 'COMPLETED' && (
                       <button
-                        className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                        className="glass-button px-6 py-2 font-medium"
                         onClick={() => {
                           // Navigate to draft results or league dashboard
                           console.log('View draft results for', league.id);
@@ -198,7 +198,7 @@ const LiveDraftRoomView: React.FC = () => {
                   You're not currently in any leagues with upcoming or active live drafts. 
                   Join a league to start real-time drafting!
                 </p>
-                <button className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                <button className="glass-button-primary mt-4 px-6 py-2 font-medium">
                   Find Leagues
                 </button>
               </div>

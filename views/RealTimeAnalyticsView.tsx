@@ -8,7 +8,7 @@ import RealTimeAnalyticsDashboard from '../components/analytics/RealTimeAnalytic
 
 const RealTimeAnalyticsView: React.FC = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <RealTimeAnalyticsDashboard />
     </div>
   );
