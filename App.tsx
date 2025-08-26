@@ -28,6 +28,7 @@ const TradesView = React.lazy(() => import('./views/TradesView'));
 const PlayoffBracketView = React.lazy(() => import('./views/PlayoffBracketView'));
 const ProfileView = React.lazy(() => import('./views/ProfileView'));
 const CommissionerToolsView = React.lazy(() => import('./views/CommissionerToolsView'));
+const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedCommissionerToolsView'));
 const DraftRoomView = React.lazy(() => import('./views/DraftRoomView'));
 
 // Simple loading component
@@ -139,7 +140,7 @@ const AppContent: React.FC = () => {
             case 'COMMISSIONER_TOOLS':
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Commissioner Tools..." />}>
-                        <CommissionerToolsView />
+                        <EnhancedCommissionerToolsView />
                     </React.Suspense>
                 );
                 
