@@ -31,6 +31,7 @@ const ProfileView = React.lazy(() => import('./views/ProfileView'));
 const CommissionerToolsView = React.lazy(() => import('./views/CommissionerToolsView'));
 const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedCommissionerToolsView'));
 const DraftRoomView = React.lazy(() => import('./views/DraftRoomView'));
+const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoomView'));
 
 // Simple loading component
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
@@ -148,7 +149,7 @@ const AppContent: React.FC = () => {
             case 'DRAFT_ROOM':
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Draft Room..." />}>
-                        <DraftRoomView />
+                        <EnhancedDraftRoomView />
                     </React.Suspense>
                 );
                 
