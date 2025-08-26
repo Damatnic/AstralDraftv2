@@ -61,10 +61,9 @@ const GamedayHostView: React.FC = () => {
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         AI Gameday Host
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
+                    </h1<p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
                     Back to Team Hub
                 </button>
             </header>
