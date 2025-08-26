@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Astral Draft Cache</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin: 0 0 20px;
+            font-size: 28px;
+            color: #60a5fa;
+        }
+        p {
+            color: #cbd5e1;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+        }
+        .success {
+            background: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        .warning {
+            background: #f59e0b;
+            color: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-item {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #60a5fa;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Clear Astral Draft Cache</h1>
+        
+        <div class="warning">
+            ⚠️ This will clear ALL stored data including login sessions and preferences!
+        </div>
+        
+        <p>If you're seeing old login screens or cached data, use this tool to completely reset the application.</p>
+        
+        <button onclick="clearAllData()">Clear All Data</button>
+        <button onclick="window.location.href='/'">Go to App</button>
+        
+        <div id="success" class="success">
+            ✅ All data cleared successfully! Redirecting to app...
+        </div>
+        
+        <div id="log" class="log" style="display: none;">
+            <strong>Cleared Items:</strong>
+            <div id="logItems"></div>
+        </div>
+    </div>
+
+    <script>
+        function clearAllData() {
+            const logItems = document.getElementById('logItems');
+            const log = document.getElementById('log');
+            const success = document.getElementById('success');
+            
+            logItems.innerHTML = '';
+            log.style.display = 'block';
+            
+            // Clear localStorage
+            const localStorageKeys = Object.keys(localStorage);
+            localStorageKeys.forEach(key => {
+                localStorage.removeItem(key);
+                addLogItem(`Removed localStorage: ${key}`);
+            });
+            
+            // Clear sessionStorage
+            const sessionStorageKeys = Object.keys(sessionStorage);
+            sessionStorageKeys.forEach(key => {
+                sessionStorage.removeItem(key);
+                addLogItem(`Removed sessionStorage: ${key}`);
+            });
+            
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                addLogItem(`Removed cookie: ${c.split('=')[0]}`);
+            });
+            
+            // Clear IndexedDB
+            if ('indexedDB' in window) {
+                indexedDB.databases().then(databases => {
+                    databases.forEach(db => {
+                        indexedDB.deleteDatabase(db.name);
+                        addLogItem(`Removed IndexedDB: ${db.name}`);
+                    });
+                }).catch(e => console.log('IndexedDB clear error:', e));
+            }
+            
+            // Clear cache storage
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                        addLogItem(`Removed cache: ${name}`);
+                    });
+                });
+            }
+            
+            // Unregister service workers
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(registration => {
+                        registration.unregister();
+                        addLogItem(`Unregistered service worker: ${registration.scope}`);
+                    });
+                });
+            }
+            
+            success.style.display = 'block';
+            
+            // Redirect after 3 seconds
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 3000);
+        }
+        
+        function addLogItem(text) {
+            const logItems = document.getElementById('logItems');
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.textContent = text;
+            logItems.appendChild(item);
+        }
+    </script>
+</body>
+</html>
