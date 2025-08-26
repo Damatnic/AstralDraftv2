@@ -146,9 +146,9 @@ const AuthView: React.FC<AuthViewProps> = () => {
     };
 
     return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gray-900 relative">
+        <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 relative bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             {/* Enhanced background */}
-            <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 via-gray-900 to-purple-900/20"></div>
+            <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 via-[var(--bg-primary)] to-purple-900/20"></div>
             <div className="fixed inset-0">
                 <div className="stars stars1"></div>
                 <div className="stars stars2"></div>
@@ -170,7 +170,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
 
             <motion.form
                 onSubmit={handleSubmit}
-                className="w-full max-w-md bg-gray-800/90 backdrop-blur-md p-6 sm:p-8 rounded-2xl shadow-2xl border border-cyan-500/30 relative z-10"
+                className="w-full max-w-md glass-pane p-6 sm:p-8 rounded-2xl shadow-2xl relative z-10"
                 {...{
                   initial: { opacity: 0, y: 20 },
                   animate: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.5 } },
@@ -330,7 +330,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full mt-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg shadow-lg hover:from-cyan-400 hover:to-blue-500 focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="glass-button-primary w-full mt-6 py-3 font-bold"
                 >
                     {isSubmitting ? (
                         <div className="flex items-center justify-center">

@@ -60,7 +60,7 @@ const LeagueNewspaperView: React.FC = () => {
     }
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
@@ -70,15 +70,15 @@ const LeagueNewspaperView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-4">
                      <div className="flex items-center gap-2">
-                        <button onClick={() => setSelectedWeek(w => w - 1)} disabled={selectedWeek <= 1} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
+                        <button onClick={() => setSelectedWeek(w => w - 1)} disabled={selectedWeek <= 1} className="glass-button px-3 py-1 text-sm">
                             &lt;
                         </button>
                         <span className="font-bold w-24 text-center">Week {selectedWeek} Issue</span>
-                        <button onClick={() => setSelectedWeek(w => w + 1)} disabled={selectedWeek >= maxWeek} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
+                        <button onClick={() => setSelectedWeek(w => w + 1)} disabled={selectedWeek >= maxWeek} className="glass-button px-3 py-1 text-sm">
                             &gt;
                         </button>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button">
                         Back to League Hub
                     </button>
                 </div>
