@@ -164,6 +164,93 @@ npm run build
 # Upload the 'dist' folder contents
 ```
 
+## 🎨 UI Design System Rules
+
+### Glassmorphism Design Standards
+
+All UI components and new features MUST follow these design rules to maintain consistency:
+
+#### Core Design Classes
+```css
+/* Background Gradients - Use on all main containers */
+.gradient-background {
+  @apply bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5;
+}
+
+/* Glass Panel - Use for all cards and containers */
+.glass-pane {
+  @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-lg shadow-lg;
+}
+
+/* Primary Button - Main actions */
+.glass-button-primary {
+  @apply bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] 
+         text-white font-semibold rounded-lg shadow-lg hover:shadow-xl 
+         transition-all backdrop-blur-sm;
+}
+
+/* Secondary Button - Secondary actions */
+.glass-button {
+  @apply bg-white/10 backdrop-blur-sm border border-white/20 
+         text-white rounded-lg hover:bg-white/20 transition-all;
+}
+
+/* Input Fields - All form inputs */
+.glass-input {
+  @apply bg-white/10 backdrop-blur-sm border border-white/20 
+         rounded-lg px-4 py-2 text-white placeholder-white/50 
+         focus:border-[var(--color-primary)] focus:outline-none;
+}
+```
+
+#### Design Rules for New Components
+
+1. **Backgrounds**: Always use gradient backgrounds on main views
+   ```jsx
+   <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
+   ```
+
+2. **Containers**: Use glass-pane for all content containers
+   ```jsx
+   <div className="glass-pane p-6">
+   ```
+
+3. **Buttons**: Use appropriate glass button classes
+   ```jsx
+   <button className="glass-button-primary">Primary Action</button>
+   <button className="glass-button">Secondary Action</button>
+   ```
+
+4. **Forms**: All inputs must use glass-input class
+   ```jsx
+   <input className="glass-input" />
+   ```
+
+5. **Colors**: Use CSS variables for consistency
+   - Primary: `var(--color-primary)`
+   - Secondary: `var(--color-secondary)`
+   - Text: `var(--text-primary)`, `var(--text-secondary)`
+
+6. **Spacing**: Maintain consistent padding/margins
+   - Container padding: `p-6`
+   - Section spacing: `space-y-6`
+   - Component gaps: `gap-4`
+
+7. **Animations**: Use Framer Motion for smooth transitions
+   ```jsx
+   <motion.div
+     initial={{ opacity: 0, y: 20 }}
+     animate={{ opacity: 1, y: 0 }}
+     transition={{ duration: 0.3 }}
+   >
+   ```
+
+#### Mobile Responsiveness Rules
+- All components must be mobile-first
+- Use responsive classes: `sm:`, `md:`, `lg:`, `xl:`
+- Touch targets minimum 44x44px
+- Ensure glassmorphism effects work on mobile
+
 ## 🧪 Testing
 
 ```bash

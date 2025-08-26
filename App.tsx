@@ -34,6 +34,7 @@ const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedC
 const DraftRoomView = React.lazy(() => import('./views/DraftRoomView'));
 const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoomView'));
 const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
+const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 
 // Simple loading component
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
@@ -173,6 +174,13 @@ const AppContent: React.FC = () => {
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Season Management..." />}>
                         <SeasonManagementView />
+                    </React.Suspense>
+                );
+                
+            case 'MOCK_DRAFT':
+                return (
+                    <React.Suspense fallback={<SimpleLoader message="Loading Mock Draft..." />}>
+                        <MockDraftView />
                     </React.Suspense>
                 );
                 

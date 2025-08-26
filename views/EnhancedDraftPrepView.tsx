@@ -291,27 +291,30 @@ const EnhancedDraftPrepView: React.FC = () => {
 
             <div className="bg-slate-800/50 rounded-lg p-8 border border-slate-700 text-center">
               <div className="text-6xl mb-6">🎮</div>
-              <h4 className="text-2xl font-bold text-white mb-4">Mock Draft Coming Soon!</h4>
+              <h4 className="text-2xl font-bold text-white mb-4">Practice Makes Perfect!</h4>
               <p className="text-slate-400 mb-6">
-                Practice your draft strategy with AI opponents before the real draft on August 31st.
+                Practice your draft strategy with our advanced mock draft simulator before the real draft on August 31st.
               </p>
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                   <div className="p-4 bg-slate-700/50 rounded-lg">
-                    <div className="text-white font-semibold mb-1">AI Opponents</div>
-                    <div className="text-slate-400">Draft against smart AI</div>
+                    <div className="text-white font-semibold mb-1">Smart AI Opponents</div>
+                    <div className="text-slate-400">4 difficulty levels</div>
                   </div>
                   <div className="p-4 bg-slate-700/50 rounded-lg">
-                    <div className="text-white font-semibold mb-1">Real Timer</div>
-                    <div className="text-slate-400">90 seconds per pick</div>
+                    <div className="text-white font-semibold mb-1">Real Draft Timer</div>
+                    <div className="text-slate-400">30-120 seconds per pick</div>
                   </div>
                   <div className="p-4 bg-slate-700/50 rounded-lg">
-                    <div className="text-white font-semibold mb-1">Full Draft</div>
-                    <div className="text-slate-400">16 rounds, 160 picks</div>
+                    <div className="text-white font-semibold mb-1">Full Features</div>
+                    <div className="text-slate-400">Search, filter, auto-pick</div>
                   </div>
                 </div>
-                <button className="glass-button-primary px-6 py-3 font-semibold">
-                  Start Mock Draft
+                <button 
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' })}
+                  className="glass-button-primary px-6 py-3 font-semibold"
+                >
+                  Start Mock Draft Now
                 </button>
               </div>
             </div>
