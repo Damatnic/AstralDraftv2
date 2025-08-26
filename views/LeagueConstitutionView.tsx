@@ -56,9 +56,8 @@ const LeagueConstitutionView: React.FC = () => {
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         League Constitution
                     </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
-                </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p</div>
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="back-btn">
                     Back to Tools
                 </button>
             </header>
@@ -80,9 +79,8 @@ const LeagueConstitutionView: React.FC = () => {
                                 </div>
                             </div>
                          ) : (
-                            <div className="text-center py-8">
-                                <p className="text-gray-400 mb-4">Generate a formal constitution for your league based on its current settings.</p>
-                                <button onClick={handleGenerate} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md">
+                            <div className="text-center py-8"<p className="text-gray-400 mb-4">Generate a formal constitution for your league based on its current settings.</p>
+                                <button onClick={handleGenerate} className="btn btn-primary">
                                     Generate Constitution
                                 </button>
                             </div>

@@ -33,7 +33,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p className="text-red-400">No league selected</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
@@ -85,13 +85,13 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
     };
 
     return (
-        <div className="w-full h-full flex flex-col p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto">
+        <div className="w-full h-full flex flex-col p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             {/* Header */}
             <header className="flex-shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
                     <button
                         onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                        className="glass-button p-2"
                         aria-label="Back to Team Hub"
                     >
                         <ChevronLeftIcon className="w-5 h-5" />
@@ -109,7 +109,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
                     <select
                         value={selectedTeamId || ''}
                         onChange={(e) => setSelectedTeamId(Number(e.target.value))}
-                        className="px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] text-sm"
+                        className="glass-input text-sm"
                     >
                         <option value="">Select Team...</option>
                         {league.teams.map((team) => (
@@ -123,7 +123,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
 
             {/* Access Control Notice */}
             {selectedTeam && !canManageTeam && (
-                <div className="mb-4 p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+                <div className="glass-pane mb-4 p-3 border-yellow-500/30">
                     <p className="text-yellow-300 text-sm">
                         <strong>View Only:</strong> You can view {selectedTeam.name}'s information but cannot make changes.
                         {!isCommissioner && " Only team owners and commissioners can edit team settings."}
@@ -154,7 +154,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
 
             {/* Tab Description */}
             {selectedTeam && (
-                <div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                <div className="glass-pane mb-4 p-3 border-blue-500/20">
                     <p className="text-blue-300 text-sm">
                         {tabs.find(tab => tab.id === activeTab)?.description}
                     </p>

@@ -151,7 +151,7 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
     const playerBProj = playerB?.stats.weeklyProjections[league.currentWeek];
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             <header className="flex-shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
                 <div>
                     <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
@@ -160,7 +160,7 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} - Week {league.currentWeek}</p>
                 </div>
                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
-                        className="w-full sm:w-auto px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20 min-h-[44px]">
+                        className="glass-button w-full sm:w-auto min-h-[44px]">
                     Back to Team Hub
                 </button>
             </header>
@@ -193,7 +193,7 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                     <button
                         onClick={handleGetAdvice}
                         disabled={!playerAId || !playerBId || isLoading}
-                        className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto min-h-[44px] justify-center"
+                        className="glass-button-primary w-full sm:w-auto px-8 py-3 flex items-center gap-2 mx-auto min-h-[44px] justify-center"
                     >
                         {isLoading ? (
                             <>
@@ -227,7 +227,7 @@ const StartSitToolView: React.FC = () => {
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load tool. Please select a league with an active season first.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary ml-4">
                     Back to Dashboard
                 </button>
             </div>

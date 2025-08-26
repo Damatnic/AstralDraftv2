@@ -49,7 +49,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
     }
 
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center p-4">
+        <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
             <div className="w-full max-w-4xl aspect-video bg-black rounded-2xl shadow-2xl shadow-black/50 overflow-hidden relative glass-pane">
                 {isLoading && <LoadingSpinner text="Generating your weekly highlight reel..." />}
                 {error && <ErrorDisplay message={error} />}
@@ -57,7 +57,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
             </div>
             <button
                 onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })}
-                className="mt-6 px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20"
+                className="glass-button mt-6"
             >
                 Back to Report
             </button>
