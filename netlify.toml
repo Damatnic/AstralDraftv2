@@ -6,7 +6,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_VERSION = "10"
-  NODE_ENV = "production"
+  NODE_ENV = "development"
   VITE_ENVIRONMENT = "production"
   
   # Force npm usage
@@ -15,6 +15,10 @@
   NETLIFY_USE_PNPM = "false"
   YARN_ENABLED = "false"
   PNPM_ENABLED = "false"
+  
+  # Ensure devDependencies are installed
+  NPM_CONFIG_PRODUCTION = "false"
+  NPM_CONFIG_ONLY = ""
   
   # Disable all other language detections
   DISABLE_RUBY = "true"
