@@ -218,7 +218,7 @@ export function HistoricalAnalyticsView({ className = '' }: HistoricalAnalyticsV
     }
 
     return (
-        <div className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 ${className}`}>
+        <div className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 min-h-screen ${className}`}>
             {/* Header */}
             <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
                 <div>
