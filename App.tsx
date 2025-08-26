@@ -17,6 +17,7 @@ const DashboardView = React.lazy(() => import('./views/DashboardView'));
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
 const TeamHubView = React.lazy(() => import('./views/TeamHubView'));
 const WaiverWireView = React.lazy(() => import('./views/WaiverWireView'));
+const PlayersView = React.lazy(() => import('./views/PlayersView'));
 const DraftPrepCenterView = React.lazy(() => import('./views/DraftPrepCenterView'));
 const LeagueStandingsView = React.lazy(() => import('./views/LeagueStandingsView'));
 const MessagesView = React.lazy(() => import('./views/MessagesView'));
@@ -73,8 +74,15 @@ const AppContent: React.FC = () => {
                 
             case 'WAIVER_WIRE':
                 return (
-                    <React.Suspense fallback={<SimpleLoader message="Loading Players..." />}>
+                    <React.Suspense fallback={<SimpleLoader message="Loading Waiver Wire..." />}>
                         <WaiverWireView />
+                    </React.Suspense>
+                );
+                
+            case 'PLAYERS':
+                return (
+                    <React.Suspense fallback={<SimpleLoader message="Loading Players..." />}>
+                        <PlayersView />
                     </React.Suspense>
                 );
                 

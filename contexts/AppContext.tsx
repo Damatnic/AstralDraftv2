@@ -1,7 +1,8 @@
 import React from 'react';
 import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Team, DraftPick, Notification, AuctionState, TradeOffer, WaiverClaim, CreateLeaguePayload, PlayerPosition, WatchlistInsight, Persona, CustomRanking, LeaguePoll, Announcement, Badge, TopRivalry, LeagueInvitation, DraftPickAsset, DraftCommentaryItem, RecapVideoScene, SideBet, SmartFaabAdvice, GamedayEvent, PlayerAwardType, PlayerAward, NewspaperContent, LeagueSettings } from '../types';
 import { players } from '../data/players';
-import { MAIN_LEAGUE, LEAGUE_MEMBERS } from '../data/leagueData';
+import { LEAGUE_MEMBERS } from '../data/leagueData';
+import { LEAGUE_WITH_PLAYERS } from '../data/leagueWithPlayers';
 
 type Action =
     | { type: 'SET_LOADING', payload: boolean }
@@ -27,14 +28,14 @@ type Action =
     
 const AppContext = React.createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 
-// Initialize with the main league data
+// Initialize with the main league data including NFL players
 const initialState: AppState = {
     theme: 'dark',
     isLoading: false,
     user: null, // Start with no user to show login
-    leagues: [MAIN_LEAGUE], // Initialize with our main league
+    leagues: [LEAGUE_WITH_PLAYERS], // Initialize with our main league including NFL players
     currentView: 'DASHBOARD',
-    activeLeagueId: MAIN_LEAGUE.id,
+    activeLeagueId: LEAGUE_WITH_PLAYERS.id,
     playerNotes: {},
     playerNicknames: {},
     playerVolatility: {},
