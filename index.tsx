@@ -1,16 +1,10 @@
-
 // Critical: Import React first to prevent Children undefined error
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 
 // Browser polyfills
 if (typeof globalThis === 'undefined') {
   (window as any).globalThis = window;
-}
-
-// Ensure React is available globally to prevent bundling issues
-if (typeof window !== 'undefined') {
-  (window as any).React = React;
 }
 
 // Import CSS after React is established
@@ -25,7 +19,6 @@ const initializeApp = () => {
   // Debug React availability
   console.log('React version:', React.version);
   console.log('React available:', !!React);
-  console.log('React.Children available:', !!React.Children);
   
   const rootElement = document.getElementById('root');
   if (!rootElement) {
@@ -37,25 +30,15 @@ const initializeApp = () => {
   }
 
   try {
-    // Validate React is properly loaded before creating root
-    if (!React || !React.Children || !ReactDOM) {
-      throw new Error('React is not properly loaded - this is the Children undefined issue');
-    }
-    
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
+    // Create root without StrictMode to avoid JSX runtime issues
+    const root = createRoot(rootElement);
+    root.render(React.createElement(App));
     
     console.log('✅ React app initialized successfully');
   } catch (error) {
     console.error('❌ Failed to render React app:', error);
     console.error('Error details:', {
       reactAvailable: !!React,
-      reactChildrenAvailable: !!(React && React.Children),
-      reactDomAvailable: !!ReactDOM,
       errorMessage: error instanceof Error ? error.message : String(error),
       errorStack: error instanceof Error ? error.stack : 'No stack trace available'
     });
