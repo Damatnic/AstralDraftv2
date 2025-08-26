@@ -48,39 +48,46 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
     };
 
     return (
-         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        Power Rankings
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} - Week {league.currentWeek}</p>
+        <div className="min-h-screen">
+            {/* Navigation Header */}
+            <div className="nav-header">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1>Power Rankings</h1>
+                        <p className="page-subtitle">{league.name} - Week {league.currentWeek}</p>
+                    </div>
+                    <button 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                        className="back-btn"
+                    >
+                        Back to My Team
+                    </button>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
-                    Back to My Team
-                </button>
-            </header>
-            <main className="flex-grow">
-                 <Widget title="The Oracle's Official Rankings" icon={<ChartBarIcon />}>
-                    {isLoading ? (
-                        <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {Array.from({ length: league.teams.length || 8 }).map((_, i) => <PowerRankingCardSkeleton key={i} />)}
-                        </div>
-                    ) :
-                     error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
-                     <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                         {rankings.map(ranking => (
-                             <PowerRankingCard 
-                                key={ranking.teamId} 
-                                ranking={ranking} 
-                                team={league.teams.find(t => t.id === ranking.teamId)}
-                                isMyTeam={ranking.teamId === myTeamId}
-                            />
-                         ))}
-                     </div>
-                    }
-                </Widget>
-            </main>
+            </div>
+
+            <div className="max-w-7xl mx-auto p-4">
+                <main>
+                     <Widget title="The Oracle's Official Rankings" icon={<ChartBarIcon />}>
+                        {isLoading ? (
+                            <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {Array.from({ length: league.teams.length || 8 }).map((_, i) => <PowerRankingCardSkeleton key={i} />)}
+                            </div>
+                        ) :
+                         error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
+                         <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                             {rankings.map(ranking => (
+                                 <PowerRankingCard 
+                                    key={ranking.teamId} 
+                                    ranking={ranking} 
+                                    team={league.teams.find(t => t.id === ranking.teamId)}
+                                    isMyTeam={ranking.teamId === myTeamId}
+                                />
+                             ))}
+                         </div>
+                        }
+                    </Widget>
+                </main>
+            </div>
         </div>
     );
 };
