@@ -99,31 +99,31 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
+    <div className="search-container">
       {/* Search Header */}
       <div className="mb-6">
         <h3 className="text-xl font-bold text-white mb-4">Player Search</h3>
         
         {/* Search Input */}
-        <div className="mb-4">
+        <div className="input-group mb-4">
           <input
             type="text"
             placeholder="Search players by name, team, or position..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+            className="search-input"
           />
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-4">
+        <div className="search-row">
           {/* Position Filter */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">Position</label>
+          <div className="input-group">
+            <label>Position</label>
             <select
               value={selectedPosition}
               onChange={(e) => setSelectedPosition(e.target.value)}
-              className="p-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-blue-400"
+              className="filter-select"
             >
               {positions.map(pos => (
                 <option key={pos} value={pos}>{pos}</option>
@@ -132,12 +132,12 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
           </div>
 
           {/* Sort By */}
-          <div>
-            <label className="block text-sm text-slate-400 mb-1">Sort By</label>
+          <div className="input-group">
+            <label>Sort By</label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
-              className="p-2 rounded-lg bg-slate-700 border border-slate-600 text-white focus:outline-none focus:border-blue-400"
+              className="filter-select"
             >
               <option value="rank">Fantasy Rank</option>
               <option value="name">Name</option>
@@ -158,61 +158,47 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.02 }}
               onClick={() => handlePlayerClick(player)}
-              className="flex items-center justify-between p-3 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg cursor-pointer transition-colors group"
+              className={`player-card ${player.position.toLowerCase()} cursor-pointer group`}
             >
-              <div className="flex items-center gap-4">
-                {/* Position Badge */}
-                <div className={`${getPositionColor(player.position)} text-white text-xs font-bold px-2 py-1 rounded`}>
-                  {player.position}
+              <div className="player-header">
+                <div className="player-info">
+                  <div className="position-badge">{player.position}</div>
+                  <h3 className="player-name group-hover:text-blue-400 transition-colors">
+                    {player.name}
+                  </h3>
+                  <p className="player-team">
+                    {NFL_TEAMS[player.team as keyof typeof NFL_TEAMS]?.name || player.team} • #{player.jerseyNumber}
+                    {player.age > 0 && ` • ${player.age}y`}
+                  </p>
                 </div>
-
-                {/* Player Info */}
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-white font-semibold group-hover:text-blue-400 transition-colors">
-                      {player.name}
-                    </h4>
-                    <span className={`text-xs ${getInjuryStatusColor(player.injuryStatus)}`}>
-                      ●
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-400">
-                    <span>{NFL_TEAMS[player.team as keyof typeof NFL_TEAMS]?.name || player.team}</span>
-                    <span>•</span>
-                    <span>#{player.jerseyNumber}</span>
-                    {player.age > 0 && (
-                      <>
-                        <span>•</span>
-                        <span>{player.age}y</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                {/* Fantasy Stats */}
-                <div className="text-right">
-                  <div className="text-white font-semibold">
-                    Rank #{player.fantasyRank}
-                  </div>
-                  <div className="text-sm text-slate-400">
-                    {player.projectedPoints.toFixed(1)} proj
-                  </div>
-                </div>
-
-                {/* Add Button */}
                 {showAddButton && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onPlayerSelect?.(player);
                     }}
-                    className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+                    className="add-btn"
                   >
                     Add
                   </button>
                 )}
+              </div>
+
+              <div className="player-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Rank</span>
+                  <span className="stat-value">#{player.fantasyRank}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Projection</span>
+                  <span className="stat-value">{player.projectedPoints.toFixed(1)}</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Status</span>
+                  <span className={`stat-value ${getInjuryStatusColor(player.injuryStatus)}`}>
+                    {player.injuryStatus}
+                  </span>
+                </div>
               </div>
             </motion.div>
           ))}

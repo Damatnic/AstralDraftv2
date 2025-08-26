@@ -112,7 +112,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-5xl">
         {/* Header */}
         <motion.div
@@ -121,11 +121,13 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
           className="text-center mb-8"
         >
           <div className="flex items-center justify-center mb-4">
-            <img src="/favicon.svg" alt="Astral Draft" className="h-16 w-16 mr-4" />
-            <h1 className="text-4xl font-bold text-white">ASTRAL DRAFT</h1>
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-3xl mr-4">
+              🏈
+            </div>
+            <h1>ASTRAL DRAFT</h1>
           </div>
-          <p className="text-xl text-blue-200">Your AI-Powered Fantasy Commissioner</p>
-          <p className="text-lg text-slate-300 mt-2">Select your player to continue</p>
+          <p className="page-subtitle">Your AI-Powered Fantasy Commissioner</p>
+          <p className="text-lg text-secondary mt-2">Select your player to continue</p>
         </motion.div>
 
         <AnimatePresence mode="wait">
@@ -145,30 +147,16 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   onClick={() => handlePlayerSelect(player.id)}
-                  className={`group relative p-4 rounded-xl border-2 hover:border-blue-400 bg-slate-800/50 hover:bg-slate-700/50 transition-all duration-300 transform hover:scale-105 ${
-                    player.isAdmin ? 'border-yellow-600 hover:border-yellow-400' : 'border-slate-600'
-                  }`}
-                  style={{ 
-                    background: player.isAdmin 
-                      ? `linear-gradient(135deg, ${player.color}20, #f59e0b20)` 
-                      : `linear-gradient(135deg, ${player.color}20, ${player.color}10)`,
-                    borderColor: player.isAdmin ? '#f59e0b60' : `${player.color}40`
-                  }}
+                  className="card group relative p-4 text-center transition-all duration-300 transform hover:scale-105"
                 >
-                  <div className="text-center">
-                    <div className="text-3xl mb-2">{player.emoji}</div>
-                    <div className={`font-semibold text-sm ${player.isAdmin ? 'text-yellow-200' : 'text-white'}`}>
-                      {player.name}
-                    </div>
-                    {player.isAdmin && (
-                      <div className="text-xs text-yellow-300 mt-1">League Admin</div>
-                    )}
-                    <div className="text-xs text-slate-300 mt-1">Click to login</div>
+                  <div className="text-3xl mb-2">{player.emoji}</div>
+                  <div className={`font-semibold text-sm ${player.isAdmin ? 'text-yellow-200' : 'text-white'}`}>
+                    {player.name}
                   </div>
-                  <div 
-                    className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"
-                    style={{ backgroundColor: player.isAdmin ? '#f59e0b' : player.color }}
-                  />
+                  {player.isAdmin && (
+                    <div className="text-xs text-yellow-300 mt-1">League Admin</div>
+                  )}
+                  <div className="text-xs text-secondary mt-1">Click to login</div>
                 </motion.button>
               ))}
             </motion.div>
@@ -181,41 +169,30 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
               exit={{ opacity: 0, x: -20 }}
               className="max-w-md mx-auto"
             >
-              <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-slate-600">
+              <div className="login-card">
                 {/* Selected Player Display */}
                 <div className="text-center mb-6">
-                  <div className="text-5xl mb-3">
+                  <div className="user-avatar">
                     {getSelectedPlayerData()?.emoji}
                   </div>
-                  <h2 className={`text-2xl font-bold mb-2 ${getSelectedPlayerData()?.isAdmin ? 'text-yellow-200' : 'text-white'}`}>
+                  <h2 className={`user-name ${getSelectedPlayerData()?.isAdmin ? 'text-yellow-200' : ''}`}>
                     {getSelectedPlayerData()?.name}
                   </h2>
                   {getSelectedPlayerData()?.isAdmin && (
-                    <p className="text-yellow-300 text-sm mb-2">League Admin</p>
+                    <p className="user-role">League Admin</p>
                   )}
-                  <p className="text-slate-300">Enter your 4-digit PIN</p>
+                  <p className="text-secondary">Enter your 4-digit PIN</p>
                 </div>
 
                 {/* PIN Input */}
                 <div className="mb-6">
-                  <div className="flex justify-center space-x-3 mb-4">
-                    {[0, 1, 2, 3].map((index) => (
-                      <div
-                        key={index}
-                        className="w-12 h-12 rounded-lg border-2 border-slate-600 bg-slate-700 flex items-center justify-center text-xl font-bold text-white"
-                      >
-                        {pin[index] ? '●' : ''}
-                      </div>
-                    ))}
-                  </div>
-                  
                   <input
                     type="password"
                     value={pin}
                     onChange={(e) => handlePinChange(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Enter PIN"
-                    className="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-white text-center text-lg tracking-widest focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+                    placeholder="Enter your 4-digit PIN"
+                    className="pin-input"
                     maxLength={4}
                     autoFocus
                   />
@@ -236,20 +213,20 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                 </AnimatePresence>
 
                 {/* Action Buttons */}
-                <div className="flex space-x-3">
+                <div className="login-buttons">
                   <button
                     onClick={handleBack}
-                    className="flex-1 py-3 px-4 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-700 transition-colors duration-200"
+                    className="btn btn-secondary"
                   >
                     Back
                   </button>
                   <button
                     onClick={handleLogin}
                     disabled={pin.length !== 4 || isLoading}
-                    className="flex-1 py-3 px-4 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white font-semibold transition-colors duration-200 flex items-center justify-center"
+                    className="btn"
                   >
                     {isLoading ? (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="spinner" />
                     ) : (
                       'Login'
                     )}
@@ -257,16 +234,18 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                 </div>
 
                 {/* PIN Hints */}
-                <div className="mt-6 text-center text-sm text-slate-400">
+                <div className="pin-info">
                   {selectedPlayer === 'player1' ? (
                     <>
-                      <p>Nick Damato PINs:</p>
-                      <p>Player: <span className="font-mono">0000</span> | Admin: <span className="font-mono">7347</span></p>
+                      <div className="pin-info">Nick Damato PINs:</div>
+                      <div className="pin-info">Player: 0000 | Admin: 7347</div>
                     </>
                   ) : (
-                    <p>Default PIN: <span className="font-mono">0000</span></p>
+                    <div className="pin-info">Default PIN: 0000</div>
                   )}
                 </div>
+                
+                <div className="app-info">Fantasy Football Evolved • Season 2024</div>
               </div>
             </motion.div>
           )}
