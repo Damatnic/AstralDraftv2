@@ -385,21 +385,21 @@ const BeatTheOracleView: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">
-            {/* Header */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center"
-            >
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-                    <ZapIcon className="text-yellow-400" />
-                    Beat The Oracle
-                </h1>
-                <p className="text-sm sm:text-base text-gray-400">
-                    Challenge the AI Oracle with your fantasy football predictions
-                </p>
-            </motion.div>
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6"{/* Header */}
+            <div className="nav-header">
+                <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <ZapIcon className="text-yellow-400" />
+                        <div>
+                            <h1>Beat The Oracle</h1>
+                            <p className="page-subtitle">Challenge the AI Oracle with your fantasy football predictions</p>
+                        </div>
+                    </div>
+                    <button onClick={() => window.history.back()} className="back-btn">
+                        Back
+                    </button>
+                </div>
+            </div>
 
             {/* Tab Navigation */}
             <div className="w-full overflow-x-auto">
