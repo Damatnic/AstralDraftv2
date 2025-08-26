@@ -22,6 +22,7 @@ const PlayersView = React.lazy(() => import('./views/PlayersView'));
 const DraftPrepCenterView = React.lazy(() => import('./views/DraftPrepCenterView'));
 const EnhancedDraftPrepView = React.lazy(() => import('./views/EnhancedDraftPrepView'));
 const LeagueStandingsView = React.lazy(() => import('./views/LeagueStandingsView'));
+const EnhancedLeagueStandingsView = React.lazy(() => import('./views/EnhancedLeagueStandingsView'));
 const MessagesView = React.lazy(() => import('./views/MessagesView'));
 const MatchupView = React.lazy(() => import('./views/MatchupView'));
 const PowerRankingsView = React.lazy(() => import('./views/PowerRankingsView'));
@@ -32,6 +33,7 @@ const CommissionerToolsView = React.lazy(() => import('./views/CommissionerTools
 const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedCommissionerToolsView'));
 const DraftRoomView = React.lazy(() => import('./views/DraftRoomView'));
 const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoomView'));
+const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
 
 // Simple loading component
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
@@ -100,7 +102,14 @@ const AppContent: React.FC = () => {
             case 'LEAGUE_STANDINGS':
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Standings..." />}>
-                        <LeagueStandingsView />
+                        <EnhancedLeagueStandingsView />
+                    </React.Suspense>
+                );
+                
+            case 'ENHANCED_LEAGUE_STANDINGS':
+                return (
+                    <React.Suspense fallback={<SimpleLoader message="Loading Enhanced Standings..." />}>
+                        <EnhancedLeagueStandingsView />
                     </React.Suspense>
                 );
                 
@@ -122,6 +131,13 @@ const AppContent: React.FC = () => {
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Power Rankings..." />}>
                         <PowerRankingsView />
+                    </React.Suspense>
+                );
+                
+            case 'TRADES':
+                return (
+                    <React.Suspense fallback={<SimpleLoader message="Loading Trades..." />}>
+                        <TradesView />
                     </React.Suspense>
                 );
                 
@@ -150,6 +166,13 @@ const AppContent: React.FC = () => {
                 return (
                     <React.Suspense fallback={<SimpleLoader message="Loading Draft Room..." />}>
                         <EnhancedDraftRoomView />
+                    </React.Suspense>
+                );
+                
+            case 'SEASON_MANAGEMENT':
+                return (
+                    <React.Suspense fallback={<SimpleLoader message="Loading Season Management..." />}>
+                        <SeasonManagementView />
                     </React.Suspense>
                 );
                 
