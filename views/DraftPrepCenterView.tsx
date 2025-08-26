@@ -33,38 +33,45 @@ const DraftPrepCenterView: React.FC = () => {
     ];
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 flex justify-between items-center mb-2">
-                <div>
-                    <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        Draft Prep Center
-                    </h1>
-                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
-                </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20">
-                    Back to League Hub
-                </button>
-            </header>
-            <div className="border-b border-[var(--panel-border)] mb-6">
-                <Tabs items={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-            </div>
-            <main className="flex-grow">
-                 <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeTab}
-                        {...{
-                            initial: { opacity: 0, y: 20 },
-                            animate: { opacity: 1, y: 0 },
-                            exit: { opacity: 0, y: -20 },
-                            transition: { duration: 0.2 },
-                        }}
+        <div className="min-h-screen">
+            {/* Navigation Header */}
+            <div className="nav-header">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <h1>Draft Prep Center</h1>
+                        <p className="page-subtitle">{league.name}</p>
+                    </div>
+                    <button 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} 
+                        className="back-btn"
                     >
-                        {activeTab === 'rankings' && <MyRankingsEditor leagueId={league.id} />}
-                        {activeTab === 'ai_simulation' && <DraftSimulationDemo />}
-                        {activeTab === 'mock_history' && <MockDraftHistory />}
-                    </motion.div>
-                </AnimatePresence>
-            </main>
+                        Back to League Hub
+                    </button>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto p-4">
+                <div className="border-b border-slate-600 mb-6">
+                    <Tabs items={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+                </div>
+                <main>
+                     <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeTab}
+                            {...{
+                                initial: { opacity: 0, y: 20 },
+                                animate: { opacity: 1, y: 0 },
+                                exit: { opacity: 0, y: -20 },
+                                transition: { duration: 0.2 },
+                            }}
+                        >
+                            {activeTab === 'rankings' && <MyRankingsEditor leagueId={league.id} />}
+                            {activeTab === 'ai_simulation' && <DraftSimulationDemo />}
+                            {activeTab === 'mock_history' && <MockDraftHistory />}
+                        </motion.div>
+                    </AnimatePresence>
+                </main>
+            </div>
         </div>
     );
 };

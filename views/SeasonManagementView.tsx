@@ -36,14 +36,14 @@ const SeasonManagementView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+    <div className="min-h-screen">
+      {/* Navigation Header */}
+      <div className="nav-header">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
-              className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+              className="back-btn"
             >
               ← Back to Dashboard
             </button>
@@ -53,7 +53,7 @@ const SeasonManagementView: React.FC = () => {
                 <span className="text-2xl">🏈</span>
                 Season Management
               </h1>
-              <p className="text-slate-400">{league?.name} • Week {currentWeek} of {quickStats.totalWeeks}</p>
+              <p className="text-secondary">{league?.name} • Week {currentWeek} of {quickStats.totalWeeks}</p>
             </div>
             
             <div className="text-right">
@@ -66,7 +66,7 @@ const SeasonManagementView: React.FC = () => {
             </div>
           </div>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Season Overview Cards */}
@@ -74,7 +74,7 @@ const SeasonManagementView: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+            className="card"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -82,7 +82,7 @@ const SeasonManagementView: React.FC = () => {
               </div>
               <div>
                 <div className="text-white font-semibold">Current Week</div>
-                <div className="text-sm text-slate-400">
+                <div className="text-sm text-secondary">
                   {currentWeek <= quickStats.regularSeasonWeeks ? 'Regular Season' : 'Playoffs'}
                 </div>
               </div>
@@ -93,7 +93,7 @@ const SeasonManagementView: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+            className="card"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -101,7 +101,7 @@ const SeasonManagementView: React.FC = () => {
               </div>
               <div>
                 <div className="text-white font-semibold">Next Matchup</div>
-                <div className="text-sm text-slate-400">{quickStats.nextMatchup}</div>
+                <div className="text-sm text-secondary">{quickStats.nextMatchup}</div>
               </div>
             </div>
           </motion.div>
@@ -110,7 +110,7 @@ const SeasonManagementView: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+            className="card"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center">
@@ -118,7 +118,7 @@ const SeasonManagementView: React.FC = () => {
               </div>
               <div>
                 <div className="text-white font-semibold">Waivers Process</div>
-                <div className="text-sm text-slate-400">{quickStats.waiverProcessing}</div>
+                <div className="text-sm text-secondary">{quickStats.waiverProcessing}</div>
               </div>
             </div>
           </motion.div>
@@ -127,7 +127,7 @@ const SeasonManagementView: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+            className="card"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
@@ -135,7 +135,7 @@ const SeasonManagementView: React.FC = () => {
               </div>
               <div>
                 <div className="text-white font-semibold">Playoff Weeks</div>
-                <div className="text-sm text-slate-400">Weeks 15-17</div>
+                <div className="text-sm text-secondary">Weeks 15-17</div>
               </div>
             </div>
           </motion.div>
