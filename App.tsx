@@ -233,8 +233,7 @@ const AppContent: React.FC = () => {
             </div>
         </div>
     );
-}
-}
+};
 
 const App: React.FC = () => {
   return (
