@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { getDaysUntilDraft, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
+import { Button } from '../components/ui/Button';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 
 const EnhancedLeagueDashboard: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -101,12 +103,12 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 <p className="text-white font-bold text-lg">{state.user?.name}</p>
                 <p className="text-secondary font-medium">{userTeam?.name}</p>
               </div>
-              <button
+              <Button
+                variant="danger"
                 onClick={() => dispatch({ type: 'LOGOUT' })}
-                className="btn btn-danger"
               >
                 Logout
-              </button>
+              </Button>
             </div>
           </div>
         </div>

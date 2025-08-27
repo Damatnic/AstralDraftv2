@@ -1,51 +1,67 @@
+import React, { useState } from 'react';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import useSound from '../../hooks/useSound';
-
-interface TabItem {
+interface Tab {
   id: string;
   label: string;
+  content: React.ReactNode;
+  disabled?: boolean;
 }
 
 interface TabsProps {
-  items: TabItem[];
-  activeTab: string;
-  onTabChange: (id: string) => void;
+  tabs: Tab[];
+  defaultTab?: string;
+  onChange?: (tabId: string) => void;
 }
 
-const Tabs: React.FC<TabsProps> = ({ items, activeTab, onTabChange }) => {
-  const playTabSound = useSound('tab', 0.1);
+export const Tabs: React.FC<TabsProps> = ({
+  tabs,
+  defaultTab,
+  onChange
+}) => {
+  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
 
-  const handleTabChange = (id: string) => {
-    playTabSound();
-    onTabChange(id);
-  }
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    onChange?.(tabId);
+  };
+
+  const activeTabContent = tabs.find(tab => tab.id === activeTab)?.content;
 
   return (
-    <div className="flex space-x-1 sm:space-x-2 border-b border-transparent">
-      {items.map((item: any) => (
-        <button
-          key={item.id}
-          onClick={() => handleTabChange(item.id)}
-          className={`${
-            activeTab === item.id ? 'text-white' : 'text-gray-400 hover:text-white'
-          } relative py-3 px-2 sm:px-4 text-sm sm:text-base font-medium transition-colors focus:outline-none`}
-        >
-          {item.label}
-          {activeTab === item.id && (
-            <motion.div
-              className="absolute bottom-[-1px] left-0 right-0 h-0.5 bg-cyan-400"
-              {...{
-                layoutId: "underline",
-                transition: { type: 'spring', stiffness: 380, damping: 30 },
-              }}
-            />
-          )}
-        </button>
-      ))}
+    <div className="w-full">
+      <div className="border-b border-white/20">
+        <nav className="flex space-x-8" role="tablist">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              aria-controls={`panel-${tab.id}`}
+              disabled={tab.disabled}
+              onClick={() => handleTabChange(tab.id)}
+              className={`
+                py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200
+                ${activeTab === tab.id
+                  ? 'border-[var(--color-primary)] text-[var(--color-primary)]'
+                  : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-white/30'
+                }
+                ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+              `}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </nav>
+      </div>
+      
+      <div
+        id={`panel-${activeTab}`}
+        role="tabpanel"
+        aria-labelledby={activeTab}
+        className="py-4"
+      >
+        {activeTabContent}
+      </div>
     </div>
   );
 };
-
-export default Tabs;

@@ -3,22 +3,58 @@ import React from 'react';
 interface ProgressProps {
   value: number;
   max?: number;
-  className?: string;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'success' | 'warning' | 'error';
+  showLabel?: boolean;
+  label?: string;
 }
 
-export const Progress: React.FC<ProgressProps> = ({ 
-  value, 
-  max = 100, 
-  className = '' 
+export const Progress: React.FC<ProgressProps> = ({
+  value,
+  max = 100,
+  size = 'md',
+  variant = 'default',
+  showLabel = false,
+  label
 }) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
-  
+
+  const sizeClasses = {
+    sm: 'h-2',
+    md: 'h-3',
+    lg: 'h-4'
+  };
+
+  const variantClasses = {
+    default: 'bg-[var(--color-primary)]',
+    success: 'bg-green-500',
+    warning: 'bg-yellow-500',
+    error: 'bg-red-500'
+  };
+
   return (
-    <div className={`relative h-2 w-full overflow-hidden rounded-full bg-white/10 backdrop-blur-sm ${className}`}>
-      <div
-        className="h-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] transition-all duration-300 ease-in-out"
-        style={{ width: `${percentage}%` }}
-      />
+    <div className="w-full">
+      {(showLabel || label) && (
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm font-medium text-[var(--text-primary)]">
+            {label || 'Progress'}
+          </span>
+          <span className="text-sm text-[var(--text-secondary)]">
+            {Math.round(percentage)}%
+          </span>
+        </div>
+      )}
+      
+      <div className={`w-full bg-gray-700 rounded-full overflow-hidden ${sizeClasses[size]}`}>
+        <div
+          className={`h-full transition-all duration-300 ease-out ${variantClasses[variant]}`}
+          style={{ width: `${percentage}%` }}
+          role="progressbar"
+          aria-valuenow={value}
+          aria-valuemin={0}
+          aria-valuemax={max}
+        />
+      </div>
     </div>
   );
 };

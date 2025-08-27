@@ -6,14 +6,39 @@
 @tailwind utilities;
 
 :root {
-  --background-start-rgb: 2, 6, 23;
-  --background-end-rgb: 2, 6, 23;
-  --glow-color-1: rgba(16, 185, 129, 0.4);
-  --glow-color-2: rgba(37, 99, 235, 0.4);
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --panel-bg: rgba(15, 23, 42, 0.4);
-  --panel-border: rgba(56, 189, 248, 0.2);
+  /* Background Colors */
+  --color-bg-primary: #1a1a2e;
+  --color-bg-secondary: #16213e;
+  --color-bg-tertiary: #0f172a;
+  
+  /* Glass System */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-hover: rgba(255, 255, 255, 0.15);
+  
+  /* Primary Colors */
+  --color-primary: #4ecdc4;
+  --color-secondary: #45b7d1;
+  --color-accent: #ff6b6b;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b8c5d6;
+  --text-muted: #7f8c8d;
+  
+  /* Position Colors */
+  --color-qb: #ff6b6b;
+  --color-rb: #4ecdc4;
+  --color-wr: #45b7d1;
+  --color-te: #f9ca24;
+  --color-k: #f0932b;
+  --color-def: #6c5ce7;
+  
+  /* Status Colors */
+  --color-success: #2ecc71;
+  --color-warning: #f39c12;
+  --color-error: #e74c3c;
+  --color-info: #3498db;
 }
 
 html.light {
@@ -33,10 +58,11 @@ html.light {
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: rgb(var(--background-start-rgb));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
   color: var(--text-primary);
-  overflow: hidden;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
 .font-display {
@@ -59,21 +85,115 @@ body {
   color: var(--text-primary);
 }
 
-/* Oracle interface optimizations */
-.oracle-glow {
-  filter: drop-shadow(0 0 20px var(--glow-color-1)) 
-          drop-shadow(0 0 40px var(--glow-color-2));
+/* Glassmorphism Design System */
+.gradient-background {
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
 }
 
-/* Mobile responsiveness */
+.glass-pane {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-button-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  padding: 12px 24px;
+  min-height: 44px;
+  box-shadow: 0 4px 16px rgba(78, 205, 196, 0.3);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.glass-button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
+}
+
+.glass-button {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 12px 24px;
+  min-height: 44px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.glass-button:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.glass-input {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 16px;
+  min-height: 44px;
+  transition: all 0.2s ease;
+}
+
+.glass-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.glass-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+}
+
+/* Mobile Optimizations */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 480px) {
+  :root {
+    --text-xs: 0.7rem;
+    --text-sm: 0.8rem;
+    --text-base: 0.9rem;
+  }
+  
+  .glass-pane {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   body {
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   
   #root {
     height: auto;
     min-height: 100vh;
     overflow: visible;
+    padding-bottom: 80px;
+  }
+  
+  .mobile-container {
+    padding: 1rem;
+    max-width: 100%;
   }
 }

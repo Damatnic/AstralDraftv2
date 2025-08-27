@@ -7,8 +7,13 @@ import { AppProvider, useAppState } from './contexts/AppContext';
 import './styles/theme.css';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import LeagueDashboard from './views/LeagueDashboard';
-import { ErrorBoundary } from './components/core/ErrorBoundary';
 import { AnimatePresence, motion } from 'framer-motion';
+import { SkipLink } from './components/ui/SkipLink';
+import { MobileBottomNav } from './components/ui/MobileBottomNav';
+import { PWAInstallButton } from './components/ui/PWAInstallButton';
+import { HighContrastMode } from './components/ui/HighContrastMode';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { useMediaQuery } from './hooks/useMediaQuery';
 import { View } from './types';
 
 // Lazy load secondary views
@@ -54,10 +59,16 @@ const viewVariants = {
 
 const AppContent: React.FC = () => {
     const { state, dispatch } = useAppState();
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     // Show login if no user is logged in
     if (!state.user) {
-        return <SimplePlayerLogin />;
+        return (
+            <>
+                <SkipLink />
+                <SimplePlayerLogin />
+            </>
+        );
     }
 
     const renderView = () => {
@@ -190,10 +201,12 @@ const AppContent: React.FC = () => {
     };
     
     return (
-        <div className="relative w-full h-full flex flex-col font-sans bg-transparent">
+        <div className="relative w-full h-full flex flex-col font-sans gradient-background">
+            <SkipLink />
             <AnimatePresence mode="wait">
                 <motion.div
                     key={state.currentView}
+                    id="main-content"
                     className="w-full h-full"
                     variants={viewVariants}
                     initial="initial"
@@ -203,8 +216,24 @@ const AppContent: React.FC = () => {
                     {renderView()}
                 </motion.div>
             </AnimatePresence>
+            
+            {isMobile && (
+                <>
+                    <MobileBottomNav
+                        activeView={state.currentView}
+                        onViewChange={(view) => dispatch({ type: 'SET_VIEW', payload: view as any })}
+                        notificationCount={0}
+                    />
+                    <PWAInstallButton />
+                </>
+            )}
+            
+            <div className="fixed top-4 right-4 z-50">
+                <HighContrastMode />
+            </div>
         </div>
     );
+}
 }
 
 const App: React.FC = () => {

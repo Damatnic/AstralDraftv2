@@ -1,25 +1,18 @@
 import React from 'react';
-
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<ErrorFallbackProps>;
-  onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
-}
-
-interface ErrorFallbackProps {
-  error: Error;
-  resetError: () => void;
-}
+import { Button } from './Button';
 
 interface ErrorBoundaryState {
   hasError: boolean;
-  error: Error | null;
+  error?: Error;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
+export class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  ErrorBoundaryState
+> {
+  constructor(props: { children: React.ReactNode }) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
@@ -27,40 +20,32 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    this.props.onError?.(error, errorInfo);
+    console.error('Error caught by boundary:', error, errorInfo);
   }
 
-  resetError = () => {
-    this.setState({ hasError: false, error: null });
-  };
-
   render() {
-    if (this.state.hasError && this.state.error) {
-      const FallbackComponent = this.props.fallback || DefaultErrorFallback;
-      return <FallbackComponent error={this.state.error} resetError={this.resetError} />;
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center gradient-background p-4">
+          <div className="glass-pane p-8 max-w-md w-full text-center">
+            <div className="text-6xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold mb-4 text-[var(--text-primary)]">
+              Something went wrong
+            </h2>
+            <p className="text-[var(--text-secondary)] mb-6">
+              We encountered an unexpected error. Please try refreshing the page.
+            </p>
+            <Button
+              variant="primary"
+              onClick={() => window.location.reload()}
+            >
+              Refresh Page
+            </Button>
+          </div>
+        </div>
+      );
     }
 
     return this.props.children;
   }
 }
-
-const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetError }) => (
-  <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
-    <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-6 max-w-md">
-      <h2 className="text-xl font-bold text-red-400 mb-4">Something went wrong</h2>
-      <p className="text-red-300 mb-4">
-        {error.message || 'An unexpected error occurred'}
-      </p>
-      <button
-        onClick={resetError}
-        className="px-4 py-2 bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition-colors"
-      >
-        Try again
-      </button>
-    </div>
-  </div>
-);
-
-export default ErrorBoundary;
-export type { ErrorBoundaryProps, ErrorFallbackProps };

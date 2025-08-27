@@ -1,6 +1,27 @@
 /* Astral Draft Theme - Modern Glassmorphism Design */
 
 :root {
+  /* Typography Scale */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  
   /* Primary Colors */
   --primary-bg: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   --secondary-bg: rgba(255, 255, 255, 0.1);
@@ -64,45 +85,54 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
   background: var(--primary-bg);
   color: var(--text-primary);
-  line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 /* Typography */
+/* Typography Hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: var(--spacing-md);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  margin-bottom: 1rem;
 }
 
 h1 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 4s ease-in-out infinite;
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
 }
 
 h2 {
-  font-size: 2rem;
-  color: var(--text-primary);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
 }
 
 h3 {
-  font-size: 1.5rem;
-  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+}
+
+h4 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+}
+
+h5 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-medium);
+}
+
+h6 {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
 }
 
 p {
@@ -756,6 +786,72 @@ p {
     --glass-border: rgba(255, 255, 255, 0.3);
     --text-secondary: #e2e8f0;
   }
+}
+
+.high-contrast {
+  --glass-bg: rgba(0, 0, 0, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --text-muted: #cccccc;
+  --color-primary: #00ffff;
+  --color-secondary: #ffff00;
+}
+
+.high-contrast .glass-pane {
+  border-width: 2px;
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.high-contrast button:focus,
+.high-contrast input:focus,
+.high-contrast select:focus {
+  outline: 3px solid #ffff00;
+  outline-offset: 2px;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus Management */
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Safe Areas */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Reduced Motion */

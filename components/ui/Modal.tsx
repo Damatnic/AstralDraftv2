@@ -1,119 +1,73 @@
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useFocusTrap, useAnnouncer } from '../../utils/accessibility';
-import useSound from '../../hooks/useSound';
+import { FocusTrap } from './FocusTrap';
 
 interface ModalProps {
+  isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
   title?: string;
-  description?: string;
+  children: React.ReactNode;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const backdropVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-  exit: { opacity: 0 },
-};
-
-const modalVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.98 },
-  visible: { 
-    opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring' as 'spring', damping: 25, stiffness: 200 } 
-  },
-  exit: { 
-    opacity: 0, y: 30, scale: 0.98,
-    transition: { duration: 0.2 } 
-  },
-};
-
-const Modal: React.FC<ModalProps> = ({ onClose, children, title, description }) => {
-  const { containerRef } = useFocusTrap(true);
-  const { announce } = useAnnouncer();
-  const playOpenSound = useSound('openModal', 0.3);
-  const playCloseSound = useSound('closeModal', 0.2);
-  const titleId = React.useId();
-  const descriptionId = React.useId();
-
-  React.useEffect(() => {
-    playOpenSound();
-    if (title) {
-      announce(`${title} dialog opened`, 'assertive');
-    }
-  }, [playOpenSound, announce, title]);
-
-  const handleClose = () => {
-    playCloseSound();
-    announce('Dialog closed', 'polite');
-    onClose();
+export const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  size = 'md'
+}) => {
+  const sizeClasses = {
+    sm: 'max-w-md',
+    md: 'max-w-lg',
+    lg: 'max-w-2xl',
+    xl: 'max-w-4xl'
   };
 
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
-    };
-    
-    const handleCustomEscape = () => {
-      handleClose();
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    
-    if (containerRef.current) {
-      containerRef.current.addEventListener('focustrap:escape', handleCustomEscape);
-    }
-
-    // Prevent body scroll
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (containerRef.current) {
-        containerRef.current.removeEventListener('focustrap:escape', handleCustomEscape);
-      }
-      document.body.style.overflow = originalStyle;
-    };
-  }, [handleClose, containerRef]);
-
   return (
-    <motion.div
-      className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
-      onClick={handleClose}
-      {...{
-        variants: backdropVariants,
-        initial: "hidden",
-        animate: "visible",
-        exit: "exit",
-      }}
-    >
-      <motion.div
-        ref={containerRef as React.RefObject<HTMLDivElement>}
-        className="w-full"
-        onClick={(e: any) => e.stopPropagation()}
-        role="dialog"
-        aria-modal={true}
-        aria-labelledby={title ? titleId : undefined}
-        aria-describedby={description ? descriptionId : undefined}
-        {...{
-            variants: modalVariants,
-            initial: "hidden",
-            animate: "visible",
-            exit: "exit",
-        }}
-      >
-        {/* Screen reader accessibility info */}
-        {title && <div id={titleId} className="sr-only">{title}</div>}
-        {description && <div id={descriptionId} className="sr-only">{description}</div>}
-        
-        {children}
-      </motion.div>
-    </motion.div>
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={onClose}
+          />
+          
+          <FocusTrap active={isOpen}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className={`relative glass-pane w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto`}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={title ? 'modal-title' : undefined}
+            >
+              {title && (
+                <div className="flex items-center justify-between p-6 border-b border-white/20">
+                  <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)]">
+                    {title}
+                  </h2>
+                  <button
+                    onClick={onClose}
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl"
+                    aria-label="Close modal"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              
+              <div className="p-6">
+                {children}
+              </div>
+            </motion.div>
+          </FocusTrap>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };
-
-export default Modal;

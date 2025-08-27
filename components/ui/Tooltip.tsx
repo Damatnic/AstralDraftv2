@@ -1,42 +1,65 @@
-
-
-
-
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface TooltipProps {
+  content: string;
   children: React.ReactNode;
-  text: string;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  delay?: number;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
-  const [isVisible, setIsVisible] = React.useState(false);
+export const Tooltip: React.FC<TooltipProps> = ({
+  content,
+  children,
+  position = 'top',
+  delay = 500
+}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+
+  const showTooltip = () => {
+    const id = setTimeout(() => setIsVisible(true), delay);
+    setTimeoutId(id);
+  };
+
+  const hideTooltip = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+    setIsVisible(false);
+  };
+
+  const positionClasses = {
+    top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
+    bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
+    left: 'right-full top-1/2 transform -translate-y-1/2 mr-2',
+    right: 'left-full top-1/2 transform -translate-y-1/2 ml-2'
+  };
 
   return (
-    <div 
-      className="relative flex items-center"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
+    <div
+      className="relative inline-block"
+      onMouseEnter={showTooltip}
+      onMouseLeave={hideTooltip}
+      onFocus={showTooltip}
+      onBlur={hideTooltip}
     >
       {children}
+      
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-max max-w-xs px-3 py-1.5 text-xs font-semibold text-white glass-pane rounded-md shadow-lg z-10"
-            {...{
-                initial: { opacity: 0, y: 10 },
-                animate: { opacity: 1, y: 0 },
-                exit: { opacity: 0, y: 10 },
-                transition: { duration: 0.2 },
-            }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className={`absolute z-50 px-2 py-1 text-sm text-white bg-black/90 rounded whitespace-nowrap ${positionClasses[position]}`}
+            role="tooltip"
           >
-            {text}
+            {content}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 };
-
-export default Tooltip;
