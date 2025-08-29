@@ -144,7 +144,7 @@ export const useOracleMobileState = (): MobileOracleState => {
 
         const handleOrientationChange = () => {
             // Use screen.orientation API or fallback
-            const angle = screen.orientation?.angle || (window as any).orientation || 0;
+            const angle = screen.orientation?.angle || (window as unknown as { orientation?: number }).orientation || 0;
             const orientation = Math.abs(angle) === 90 ? 'landscape' : 'portrait';
             
             setState(prev => ({
@@ -325,11 +325,13 @@ export const useOracleMobilePerformance = () => {
 
     useEffect(() => {
         // Detect low-end devices
-        const connection = (navigator as any).connection;
-        const memory = (performance as any).memory;
+        const connection = (navigator as unknown as { connection?: { effectiveType?: string } }).connection;
+        const memory = (performance as unknown as { memory?: { usedJSHeapSize?: number; jsHeapSizeLimit?: number } }).memory;
         
         const isSlowConnection = connection?.effectiveType === '2g' || connection?.effectiveType === 'slow-2g';
-        const isLowMemory = memory?.usedJSHeapSize > memory?.jsHeapSizeLimit * 0.8;
+        const isLowMemory = memory?.usedJSHeapSize && memory?.jsHeapSizeLimit 
+            ? memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.8 
+            : false;
         const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
         setIsLowEndDevice(isSlowConnection || isLowMemory);

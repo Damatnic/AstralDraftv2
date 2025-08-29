@@ -576,7 +576,7 @@ export class EnhancedDraftEngine {
   private async getAIPickRecommendation(
     team: Team,
     candidates: DraftRecommendation[],
-    config: AutoDraftConfig
+    _config: AutoDraftConfig
   ): Promise<DraftRecommendation | null> {
     try {
       const aiChoice = await getAiDraftPick(team, candidates.map(c => c.player));
@@ -592,7 +592,7 @@ export class EnhancedDraftEngine {
   /**
    * Fallback to best available player
    */
-  private getBestAvailablePlayer(availablePlayers: Player[], currentPick: number): DraftRecommendation | null {
+  private getBestAvailablePlayer(availablePlayers: Player[], _currentPick: number): DraftRecommendation | null {
     if (availablePlayers.length === 0) return null;
 
     const sortedPlayers = [...availablePlayers].sort((a, b) => (a.adp || 999) - (b.adp || 999));
@@ -902,7 +902,7 @@ export class EnhancedDraftEngine {
   calculateDraftAnalytics(
     team: Team,
     draftPicks: DraftPick[],
-    league: League
+    _league: League
   ): DraftAnalytics {
     const teamPicks = draftPicks.filter(pick => pick.teamId === team.id);
     const draftedPlayers = teamPicks

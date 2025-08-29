@@ -4,7 +4,7 @@
 
 import React from 'react';
 import type { LeagueSettings, User } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { motion } from 'framer-motion';
 
 interface MockDraftModalProps {
@@ -13,7 +13,7 @@ interface MockDraftModalProps {
     dispatch: React.Dispatch<any>;
 }
 
-const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch }) => {
+const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user: _user, dispatch }) => {
     const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
     const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
 
@@ -42,7 +42,7 @@ const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch
     const labelClasses = "block text-sm font-medium text-[var(--text-secondary)] mb-1";
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div 
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md"
                 role="dialog"

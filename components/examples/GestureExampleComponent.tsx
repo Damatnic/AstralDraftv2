@@ -82,7 +82,7 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
       setScale(prev => prev === 1 ? 1.5 : 1);
     });
 
-    onPinch((newScale, center) => {
+    onPinch((newScale, _center) => {
       addToLog(`Pinch Scale: ${newScale.toFixed(2)}`);
       setScale(newScale);
     });

@@ -62,7 +62,7 @@ export type VisualizationType =
 export interface ReportFilter {
     field: string;
     operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'in' | 'between';
-    value: any;
+    value: unknown;
     label: string;
 }
 
@@ -82,7 +82,7 @@ export interface GeneratedReport {
     description: string;
     generatedAt: Date;
     generatedBy: string;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
     data: ReportData;
     insights: AutomatedInsight[];
     exportFormats: ExportFormat[];
@@ -93,7 +93,7 @@ export interface GeneratedReport {
 
 export interface ReportData {
     headers: string[];
-    rows: any[][];
+    rows: unknown[][];
     metadata: {
         totalRows: number;
         generationTime: number;
@@ -104,14 +104,14 @@ export interface ReportData {
         sources: DataSource[];
     };
     charts?: ChartData[];
-    summary?: Record<string, any>;
+    summary?: Record<string, unknown>;
 }
 
 export interface ChartData {
     type: VisualizationType;
     title: string;
-    data: any;
-    options: Record<string, any>;
+    data: unknown;
+    options: Record<string, unknown>;
 }
 
 export interface AutomatedInsight {
@@ -123,7 +123,7 @@ export interface AutomatedInsight {
     confidence: number;
     actionable: boolean;
     recommendations?: string[];
-    data?: any;
+    data?: unknown;
 }
 
 export type InsightType = 
@@ -151,7 +151,7 @@ export interface ReportSchedule {
     nextRun: Date;
     recipients: string[]; // Email addresses
     exportFormat: ExportFormat;
-    parameters: Record<string, any>;
+    parameters: Record<string, unknown>;
 }
 
 export interface DashboardWidget {
@@ -164,7 +164,7 @@ export interface DashboardWidget {
     refreshInterval: number; // seconds
     filters: ReportFilter[];
     lastUpdated: Date;
-    data?: any;
+    data?: unknown;
 }
 
 export interface CustomDashboard {
@@ -242,7 +242,7 @@ export class AdvancedReportingService {
     async generateReport(
         templateId: string,
         userId: string,
-        parameters: Record<string, any> = {}
+        parameters: Record<string, unknown> = {}
     ): Promise<GeneratedReport> {
         const template = this.templates.get(templateId);
         if (!template) throw new Error('Template not found');
@@ -252,7 +252,6 @@ export class AdvancedReportingService {
         template.lastUsed = new Date();
 
         const reportId = `report_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-        const generationStart = Date.now();
 
         // Generate report data based on template
         const reportData = await this.generateReportData(template, parameters);
@@ -357,7 +356,7 @@ export class AdvancedReportingService {
 
         // Example insight generation logic
         if (template.category === 'player_performance' && data.rows.length > 0) {
-            const performanceScores = data.rows.map(row => parseFloat(row[2]) || 0);
+            const performanceScores = data.rows.map(row => parseFloat(String(row[2])) || 0);
             const avgScore = performanceScores.reduce((a, b) => a + b, 0) / performanceScores.length;
             const maxScore = Math.max(...performanceScores);
             const minScore = Math.min(...performanceScores);
@@ -420,11 +419,11 @@ export class AdvancedReportingService {
     // Report Data Generation
     private async generateReportData(
         template: ReportTemplate, 
-        parameters: Record<string, any>
+        parameters: Record<string, unknown>
     ): Promise<ReportData> {
         // Mock data generation based on template type
         let headers: string[] = [];
-        let rows: any[][] = [];
+        let rows: unknown[][] = [];
 
         switch (template.category) {
             case 'player_performance':
@@ -479,9 +478,9 @@ export class AdvancedReportingService {
         };
     }
 
-    private generatePlayerPerformanceData(): any[][] {
+    private generatePlayerPerformanceData(): unknown[][] {
         const players = ['Josh Allen', 'Lamar Jackson', 'Christian McCaffrey', 'Cooper Kupp', 'Travis Kelce'];
-        return players.map((player, i) => {
+        return players.map((player, _i) => {
             const points = Math.floor(Math.random() * 50) + 150;
             const games = 14;
             const avgPoints = (points / games).toFixed(1);
@@ -490,7 +489,7 @@ export class AdvancedReportingService {
         });
     }
 
-    private generateTeamComparisonData(): any[][] {
+    private generateTeamComparisonData(): unknown[][] {
         const teams = ['Team Alpha', 'Team Beta', 'Team Gamma', 'Team Delta', 'Team Epsilon'];
         return teams.map((team, i) => {
             const totalPoints = Math.floor(Math.random() * 500) + 1200;
@@ -501,7 +500,7 @@ export class AdvancedReportingService {
         });
     }
 
-    private generateLeagueAnalyticsData(): any[][] {
+    private generateLeagueAnalyticsData(): unknown[][] {
         return [
             ['Total Players Traded', '45', '38', '3', '85%'],
             ['Avg Points Per Week', '98.5', '92.1', '1', '95%'],
@@ -511,7 +510,7 @@ export class AdvancedReportingService {
         ];
     }
 
-    private generateTradeAnalysisData(): any[][] {
+    private generateTradeAnalysisData(): unknown[][] {
         const trades = [
             'McCaffrey for Kelce + WR',
             'QB Trade Package',
@@ -528,11 +527,11 @@ export class AdvancedReportingService {
     }
 
     private applyFilters(
-        rows: any[][], 
+        rows: unknown[][], 
         headers: string[], 
         filters: ReportFilter[], 
-        parameters: Record<string, any>
-    ): any[][] {
+        parameters: Record<string, unknown>
+    ): unknown[][] {
         return rows.filter(row => {
             return filters.every(filter => {
                 const columnIndex = headers.indexOf(filter.field);
@@ -557,7 +556,7 @@ export class AdvancedReportingService {
         });
     }
 
-    private generateChartData(visualization: VisualizationType, headers: string[], rows: any[][]): ChartData[] {
+    private generateChartData(visualization: VisualizationType, headers: string[], rows: unknown[][]): ChartData[] {
         const charts: ChartData[] = [];
 
         if (visualization === 'bar_chart' && rows.length > 0) {
@@ -584,7 +583,7 @@ export class AdvancedReportingService {
         return charts;
     }
 
-    private generateSummaryStats(headers: string[], rows: any[][]): Record<string, any> {
+    private generateSummaryStats(headers: string[], rows: unknown[][]): Record<string, unknown> {
         if (rows.length === 0) return {};
 
         return {
@@ -598,7 +597,7 @@ export class AdvancedReportingService {
         };
     }
 
-    private formatReportTitle(templateName: string, parameters: Record<string, any>): string {
+    private formatReportTitle(templateName: string, parameters: Record<string, unknown>): string {
         let title = templateName;
         
         if (parameters.week) {

@@ -109,7 +109,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 isLoading: false,
             };
 
-        case 'USER_UPDATE':
+        case 'USER_UPDATE': {
             const updatedUser = state.user ? { ...state.user, ...action.payload } : null;
             if (updatedUser) {
                 localStorage.setItem('user', JSON.stringify(updatedUser));
@@ -119,6 +119,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 ...state,
                 user: updatedUser,
             };
+        }
 
         default:
             return state;
@@ -180,7 +181,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                             localStorage.removeItem('user');
                             dispatch({ type: 'AUTH_INITIALIZED' });
                         }
-                    } catch (error) {
+                    } catch {
                         // Session validation failed, clear storage
                         localStorage.removeItem('sessionToken');
                         localStorage.removeItem('user');

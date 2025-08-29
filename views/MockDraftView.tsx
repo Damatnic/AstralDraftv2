@@ -16,10 +16,7 @@ import {
   SettingsIcon,
   TrophyIcon,
   ClockIcon,
-  UsersIcon,
-  ZapIcon,
   BrainIcon,
-  ChevronRightIcon,
   CheckCircleIcon,
   XCircleIcon
 } from 'lucide-react';

@@ -3,17 +3,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { generateTeamBranding } from '../services/geminiService';
-import { LazyImage } from '../components/ui/LazyImage';
 import { authService } from '../services/authService';
 import type { AuthResponse } from '../services/authService';
 import { SparklesIcon } from '../components/icons/SparklesIcon';
-import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 type AuthMode = 'login' | 'register';
 
-interface AuthViewProps {
-  // No props currently needed, but interface ready for future expansion
-}
+type AuthViewProps = Record<string, never>;
 
 const AuthView: React.FC<AuthViewProps> = () => {
     const { dispatch } = useAppState();
@@ -345,7 +342,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 <div className="mt-4 text-center text-sm text-gray-300">
                     {mode === 'login' ? (
                         <span>
-                            Don't have an account?{' '}
+                            Don&apos;t have an account?{' '}
                             <button
                                 type="button"
                                 onClick={switchMode}

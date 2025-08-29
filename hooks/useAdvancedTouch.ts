@@ -169,7 +169,7 @@ export const useAdvancedTouch = (
     }
   }, [isActive, getDistance, onGesture]);
 
-  const handleTouchEnd = useCallback((e: TouchEvent) => {
+  const handleTouchEnd = useCallback((_e: TouchEvent) => {
     if (!isActive || touchStartRef.current.length === 0) return;
 
     const endTime = Date.now();

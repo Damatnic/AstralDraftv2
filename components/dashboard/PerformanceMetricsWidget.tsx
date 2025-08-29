@@ -2,10 +2,9 @@
 import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
-import { ActivityIcon, TrophyIcon, UserIcon } from 'lucide-react'; // Assuming lucide-react is available or similar icons
+import { TrophyIcon } from 'lucide-react'; // Assuming lucide-react is available or similar icons
 import { FlameIcon } from '../icons/FlameIcon';
 import { StarIcon } from '../icons/StarIcon';
-import { BarChartIcon } from 'lucide-react';
 
 const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; color: string }> = ({ icon, label, value, color }) => (
     <div className="flex items-center gap-2">
@@ -21,8 +20,8 @@ const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string |
 
 const PerformanceMetricsWidget: React.FC = () => {
     const { state } = useAppState();
-    const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
-    const myTeam = activeLeague?.teams.find((t: any) => t.owner.id === state.user?.id);
+    const activeLeague = state.leagues.find((l: { id: string }) => l.id === state.activeLeagueId);
+    const myTeam = activeLeague?.teams.find((t: { owner: { id: string } }) => t.owner.id === state.user?.id);
 
     if (!myTeam || !activeLeague || activeLeague?.status === 'PRE_DRAFT' || activeLeague?.status === 'DRAFTING') {
         return (
@@ -36,13 +35,13 @@ const PerformanceMetricsWidget: React.FC = () => {
 
     const weeklyScores = activeLeague.schedule
         .filter(m => m.week < activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id))
-        .map((m: any) => m.teamA.teamId === myTeam.id ? m.teamA.score : m.teamB.score);
+        .map((m: { teamA: { teamId: number; score: number }; teamB: { teamId: number; score: number } }) => m.teamA.teamId === myTeam.id ? m.teamA.score : m.teamB.score);
     
     const bestWeek = weeklyScores.length > 0 ? Math.max(...weeklyScores).toFixed(2) : 'N/A';
     
     const teamMVP = myTeam.roster.length > 0 ? myTeam.roster.sort((a,b) => b.stats.projection - a.stats.projection)[0].name : 'N/A';
     
-    const rank = [...activeLeague.teams].sort((a, b) => b.record.wins - a.record.wins).findIndex((t: any) => t.id === myTeam.id) + 1;
+    const rank = [...activeLeague.teams].sort((a, b) => b.record.wins - a.record.wins).findIndex((t: { id: number }) => t.id === myTeam.id) + 1;
 
 
     return (

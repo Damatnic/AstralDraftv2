@@ -48,7 +48,7 @@ class PushNotificationService {
 
       // Register service worker
       this.registration = await navigator.serviceWorker.register('/sw.js');
-      console.log('Service worker registered:', this.registration);
+      // Service worker registered
 
       // Wait for service worker to be ready
       await navigator.serviceWorker.ready;
@@ -75,7 +75,7 @@ class PushNotificationService {
       permission = await Notification.requestPermission();
     }
 
-    console.log('Notification permission:', permission);
+    // Notification permission status
     return permission;
   }
 
@@ -92,7 +92,7 @@ class PushNotificationService {
       this.subscription = await this.registration.pushManager.getSubscription();
       
       if (this.subscription) {
-        console.log('Already subscribed to push notifications');
+        // Already subscribed to push notifications
         return this.subscription;
       }
 
@@ -102,7 +102,7 @@ class PushNotificationService {
         applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
       });
 
-      console.log('Subscribed to push notifications:', this.subscription);
+      // Subscribed to push notifications
 
       // Send subscription to server
       await this.sendSubscriptionToServer(this.subscription);
@@ -120,14 +120,14 @@ class PushNotificationService {
   async unsubscribe(): Promise<boolean> {
     try {
       if (!this.subscription) {
-        console.log('Not subscribed to push notifications');
+        // Not subscribed to push notifications
         return true;
       }
 
       const success = await this.subscription.unsubscribe();
       
       if (success) {
-        console.log('Unsubscribed from push notifications');
+        // Unsubscribed from push notifications
         this.subscription = null;
         
         // Remove subscription from server
@@ -136,7 +136,7 @@ class PushNotificationService {
 
       return success;
     } catch (error) {
-      console.error('Failed to unsubscribe from push notifications:', error);
+      // Failed to unsubscribe from push notifications
       return false;
     }
   }
@@ -165,9 +165,9 @@ class PushNotificationService {
       };
 
       await this.registration.showNotification(payload.title, options);
-      console.log('Local notification shown:', payload.title);
+      // Local notification shown
     } catch (error) {
-      console.error('Failed to show notification:', error);
+      // Failed to show notification
     }
   }
 
@@ -348,9 +348,9 @@ class PushNotificationService {
         throw new Error('Failed to save subscription');
       }
 
-      console.log('Subscription saved to server');
+      // Subscription saved to server
     } catch (error) {
-      console.error('Failed to send subscription to server:', error);
+      // Failed to send subscription to server
       // Store locally as fallback
       localStorage.setItem('push_subscription', JSON.stringify(subscription));
     }
@@ -371,9 +371,9 @@ class PushNotificationService {
         })
       });
 
-      console.log('Subscription removed from server');
+      // Subscription removed from server
     } catch (error) {
-      console.error('Failed to remove subscription from server:', error);
+      // Failed to remove subscription from server
       // Remove from local storage as fallback
       localStorage.removeItem('push_subscription');
     }

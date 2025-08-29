@@ -597,7 +597,7 @@ class PlayerResearchService {
         return factors.slice(0, Math.floor(Math.random() * 3) + 2);
     }
 
-    private generateMockHeadline(playerId: string): string {
+    private generateMockHeadline(_playerId: string): string {
         const headlines = [
             'Expected to have increased role this week',
             'Dealing with minor injury concerns',

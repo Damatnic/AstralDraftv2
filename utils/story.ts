@@ -1,5 +1,5 @@
 
-import type { Player, Team, League, Matchup, DraftPick } from '../types';
+import type { Player, Team, League, Matchup } from '../types';
 import { players } from '../data/players';
 
 export interface SeasonStoryData {

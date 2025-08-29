@@ -219,7 +219,7 @@ export const NotificationDemo: React.FC = () => {
                             <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
                             <div>
                                 <h4 className="font-medium text-white">Enable Browser Notifications</h4>
-                                <p className="text-sm text-gray-400">Click "Settings" and enable browser notifications for the full experience.</p>
+                                <p className="text-sm text-gray-400">Click &ldquo;Settings&rdquo; and enable browser notifications for the full experience.</p>
                             </div>
                         </div>
                         

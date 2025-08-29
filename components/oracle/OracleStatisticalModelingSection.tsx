@@ -764,7 +764,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           Statistical Modeling & Probability Calculations
         </h2>
         <p className="section-description">
-          Explore Oracle's sophisticated statistical foundation including regression models, probability 
+          Explore Oracle&apos;s sophisticated statistical foundation including regression models, probability 
           distributions, Bayesian inference, and confidence estimation techniques that power accurate 
           sports predictions with quantified uncertainty.
         </p>
@@ -1039,7 +1039,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
               </div>
               
               <div className="role-section">
-                <h5>Role in Oracle's System</h5>
+                <h5>Role in Oracle&apos;s System</h5>
                 <p className="role-description">{selectedBayesian.role}</p>
               </div>
               
@@ -1148,7 +1148,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           Interactive Statistical Demonstrations
         </h3>
         <p className="subsection-description">
-          See Oracle's statistical methods in action through step-by-step demonstrations of real prediction 
+          See Oracle&apos;s statistical methods in action through step-by-step demonstrations of real prediction 
           scenarios, complete with calculations, interpretations, and comparative analysis.
         </p>
 

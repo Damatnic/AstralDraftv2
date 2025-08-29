@@ -48,7 +48,7 @@ const AssistantView: React.FC = () => {
         try {
             const stream = await streamAssistantResponse(currentInput, state.leagues.filter(l => !l.isMock), state.user!);
             let fullText = "";
-            let collectedChunks: GroundingChunk[] = [];
+            const collectedChunks: GroundingChunk[] = [];
             for await (const chunk of stream) {
                 fullText += chunk.text;
                 const newChunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
@@ -86,7 +86,8 @@ const AssistantView: React.FC = () => {
     ];
 
     return (
-        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-hidden"<header className="flex-shrink-0 flex justify-between items-center mb-6">
+        <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-hidden">
+            <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase flex items-center gap-3">
                         <SparklesIcon />

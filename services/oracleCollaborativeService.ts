@@ -1,1129 +1,711 @@
 /**
- * Oracle Collaborative Interaction Service
- * Handles collaborative features for Oracle predictions including group discussions, shared insights, and community interactions
+ * Oracle Collaborative Service
+ * Manages collaborative features like group predictions, consensus building, and social interactions
  */
 
-import { EventEmitter } from 'events';
-import { oracleRealTimeService } from './oracleRealTimeService';
-// @ts-ignore - backend module
-import { getRow } from '../backend/db/index';
-
-export interface CollaborativeMessage {
-    id: string;
-    type: 'DISCUSSION' | 'INSIGHT' | 'QUESTION' | 'ANALYSIS' | 'PREDICTION_SHARE' | 'EMOJI_REACTION';
-    userId: string;
-    username: string;
-    predictionId: string;
-    content: string;
-    timestamp: string;
-    reactions?: MessageReaction[];
-    mentions?: string[];
-    attachments?: MessageAttachment[];
-    isEdited: boolean;
-    editedAt?: string;
+export interface CollaborativeSession {
+  id: string;
+  name: string;
+  description: string;
+  hostUserId: string;
+  participants: SessionParticipant[];
+  status: 'active' | 'paused' | 'completed' | 'cancelled';
+  createdAt: Date;
+  updatedAt: Date;
+  expiresAt?: Date;
+  settings: SessionSettings;
+  predictions: SessionPrediction[];
+  consensus?: ConsensusData;
 }
 
-export interface MessageReaction {
-    emoji: string;
-    userId: string;
-    username: string;
-    timestamp: string;
+export interface SessionParticipant {
+  userId: string;
+  username: string;
+  joinedAt: Date;
+  role: 'host' | 'participant' | 'observer';
+  isActive: boolean;
+  contributionScore: number;
+  lastActivity: Date;
 }
 
-export interface MessageAttachment {
-    type: 'IMAGE' | 'CHART' | 'LINK' | 'DATA';
-    url: string;
-    title?: string;
-    description?: string;
-    metadata?: any;
+export interface SessionSettings {
+  maxParticipants: number;
+  allowPublicJoin: boolean;
+  requireInvitation: boolean;
+  votingType: 'majority' | 'weighted' | 'consensus';
+  timeLimit?: number;
+  discussionEnabled: boolean;
+  anonymousVoting: boolean;
 }
 
-export interface SharedInsight {
-    id: string;
-    predictionId: string;
-    userId: string;
-    username: string;
-    title: string;
-    content: string;
-    type: 'STATISTICAL_ANALYSIS' | 'TREND_OBSERVATION' | 'EXPERT_OPINION' | 'DATA_POINT' | 'PREDICTION_STRATEGY';
-    confidence: number;
-    supportingData?: any[];
-    tags: string[];
-    votes: InsightVote[];
-    timestamp: string;
-    isVerified: boolean;
-    verifiedBy?: string;
+export interface SessionPrediction {
+  id: string;
+  sessionId: string;
+  predictionId: string;
+  question: string;
+  options: string[];
+  submissions: PredictionSubmission[];
+  consensus?: number;
+  confidence?: number;
+  discussionPoints: DiscussionPoint[];
+  status: 'open' | 'voting' | 'completed';
+  deadline?: Date;
 }
 
-export interface InsightVote {
-    userId: string;
-    username: string;
-    vote: 'HELPFUL' | 'NOT_HELPFUL' | 'MISLEADING';
-    timestamp: string;
-    comment?: string;
+export interface PredictionSubmission {
+  userId: string;
+  choice: number;
+  confidence: number;
+  reasoning?: string;
+  submittedAt: Date;
+  isPublic: boolean;
 }
 
-export interface CollaborativeRoom {
-    id: string;
-    predictionId: string;
-    week: number;
-    title: string;
-    description: string;
-    participants: CollaborativeParticipant[];
-    messages: CollaborativeMessage[];
-    sharedInsights: SharedInsight[];
-    polls: CommunityPoll[];
-    createdAt: string;
-    status: 'ACTIVE' | 'PAUSED' | 'CLOSED';
-    moderators: string[];
-    settings: RoomSettings;
-    analytics: RoomAnalytics;
+export interface DiscussionPoint {
+  id: string;
+  userId: string;
+  username: string;
+  message: string;
+  timestamp: Date;
+  likes: number;
+  replies: DiscussionReply[];
+  isHighlighted: boolean;
 }
 
-export interface CollaborativeParticipant {
-    userId: string;
-    username: string;
-    avatar?: string;
-    joinedAt: string;
-    lastActive: string;
-    role: 'PARTICIPANT' | 'MODERATOR' | 'EXPERT';
-    contributionScore: number;
-    isOnline: boolean;
-    currentlyTyping: boolean;
-    permissions: ParticipantPermissions;
+export interface DiscussionReply {
+  id: string;
+  userId: string;
+  username: string;
+  message: string;
+  timestamp: Date;
+  likes: number;
 }
 
-export interface ParticipantPermissions {
-    canMessage: boolean;
-    canShareInsights: boolean;
-    canCreatePolls: boolean;
-    canModerate: boolean;
-    canInviteOthers: boolean;
+export interface ConsensusData {
+  choice: number;
+  confidence: number;
+  agreement: number; // 0-1 scale
+  participantCount: number;
+  methodology: 'simple_majority' | 'weighted_average' | 'delphi_method';
+  convergenceMetrics: {
+    rounds: number;
+    finalVariance: number;
+    timeToConsensus: number;
+  };
 }
 
-export interface RoomSettings {
-    isPublic: boolean;
-    allowAnonymous: boolean;
-    moderationLevel: 'NONE' | 'LIGHT' | 'STRICT';
-    messageRetention: number; // days
-    insightVotingEnabled: boolean;
-    pollsEnabled: boolean;
-    maxParticipants: number;
+export interface CollaborativeInsight {
+  type: 'GROUP_THINK' | 'OUTLIER_VALUE' | 'EXPERTISE_ADVANTAGE' | 'CONSENSUS_STRENGTH';
+  title: string;
+  description: string;
+  score: number;
+  evidence: Record<string, unknown>;
+  recommendations: string[];
 }
 
-export interface RoomAnalytics {
-    totalMessages: number;
-    totalInsights: number;
-    totalPolls: number;
-    engagementScore: number;
-    consensusLevel: number;
-    averageParticipationTime: number;
-    topContributors: string[];
-    mostDiscussedTopics: string[];
-    lastUpdated: string;
+export interface GroupPerformanceMetrics {
+  sessionId: string;
+  accuracy: number;
+  consensusStrength: number;
+  participationRate: number;
+  diversityIndex: number;
+  expertiseDistribution: Record<string, number>;
+  decisionQuality: number;
+  timeEfficiency: number;
 }
 
-export interface CommunityPoll {
-    id: string;
-    predictionId: string;
-    createdBy: string;
-    title: string;
-    question: string;
-    options: PollOption[];
-    type: 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'RANKING' | 'CONFIDENCE_RANGE';
-    expiresAt: string;
-    isAnonymous: boolean;
-    responses: PollResponse[];
-    results?: PollResults;
-    status: 'ACTIVE' | 'CLOSED' | 'DRAFT';
-    createdAt: string;
+export interface InvitationRequest {
+  sessionId: string;
+  invitedUserId: string;
+  invitedBy: string;
+  message?: string;
+  expiresAt: Date;
 }
 
-export interface PollOption {
-    id: string;
-    text: string;
-    description?: string;
-    color?: string;
-}
+class OracleCollaborativeService {
+  private sessions = new Map<string, CollaborativeSession>();
+  private userSessions = new Map<string, string[]>(); // userId -> sessionIds
+  private invitations = new Map<string, InvitationRequest[]>(); // userId -> invitations
 
-export interface PollResponse {
-    userId: string;
-    username?: string;
-    choices: string[]; // option IDs
-    confidence?: number;
-    timestamp: string;
-    isAnonymous: boolean;
-}
-
-export interface PollResults {
-    totalResponses: number;
-    optionResults: Map<string, PollOptionResult>;
-    demographics?: any;
-    confidence?: {
-        average: number;
-        distribution: number[];
+  /**
+   * Create a new collaborative session
+   */
+  async createSession(
+    hostUserId: string,
+    name: string,
+    description: string,
+    settings: Partial<SessionSettings> = {}
+  ): Promise<CollaborativeSession> {
+    const sessionId = this.generateSessionId();
+    
+    const defaultSettings: SessionSettings = {
+      maxParticipants: 10,
+      allowPublicJoin: false,
+      requireInvitation: true,
+      votingType: 'majority',
+      discussionEnabled: true,
+      anonymousVoting: false,
+      ...settings
     };
-    completedAt: string;
+
+    const session: CollaborativeSession = {
+      id: sessionId,
+      name,
+      description,
+      hostUserId,
+      participants: [{
+        userId: hostUserId,
+        username: await this.getUserName(hostUserId),
+        joinedAt: new Date(),
+        role: 'host',
+        isActive: true,
+        contributionScore: 0,
+        lastActivity: new Date()
+      }],
+      status: 'active',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      settings: defaultSettings,
+      predictions: []
+    };
+
+    this.sessions.set(sessionId, session);
+    this.addUserToSession(hostUserId, sessionId);
+
+    return session;
+  }
+
+  /**
+   * Join an existing session
+   */
+  async joinSession(sessionId: string, userId: string): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+
+    // Check if user is already in the session
+    if (session.participants.some(p => p.userId === userId)) {
+      return true;
+    }
+
+    // Check constraints
+    if (session.participants.length >= session.settings.maxParticipants) {
+      return false;
+    }
+
+    if (session.settings.requireInvitation && !this.hasInvitation(userId, sessionId)) {
+      return false;
+    }
+
+    const participant: SessionParticipant = {
+      userId,
+      username: await this.getUserName(userId),
+      joinedAt: new Date(),
+      role: 'participant',
+      isActive: true,
+      contributionScore: 0,
+      lastActivity: new Date()
+    };
+
+    session.participants.push(participant);
+    session.updatedAt = new Date();
+
+    this.addUserToSession(userId, sessionId);
+    this.removeInvitation(userId, sessionId);
+
+    return true;
+  }
+
+  /**
+   * Leave a session
+   */
+  async leaveSession(sessionId: string, userId: string): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+
+    const participantIndex = session.participants.findIndex(p => p.userId === userId);
+    if (participantIndex === -1) return false;
+
+    // If host leaves, transfer to another participant or close session
+    if (session.participants[participantIndex].role === 'host') {
+      const activeParticipants = session.participants.filter(p => p.userId !== userId && p.isActive);
+      if (activeParticipants.length > 0) {
+        activeParticipants[0].role = 'host';
+      } else {
+        session.status = 'completed';
+      }
+    }
+
+    session.participants.splice(participantIndex, 1);
+    session.updatedAt = new Date();
+
+    this.removeUserFromSession(userId, sessionId);
+
+    return true;
+  }
+
+  /**
+   * Send invitation to join session
+   */
+  async sendInvitation(
+    sessionId: string,
+    invitedUserId: string,
+    invitedBy: string,
+    message?: string
+  ): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+
+    // Check if inviter has permission
+    const inviter = session.participants.find(p => p.userId === invitedBy);
+    if (!inviter || (inviter.role !== 'host' && inviter.role !== 'participant')) {
+      return false;
+    }
+
+    const invitation: InvitationRequest = {
+      sessionId,
+      invitedUserId,
+      invitedBy,
+      message,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
+    };
+
+    const userInvitations = this.invitations.get(invitedUserId) || [];
+    
+    // Remove existing invitation for same session
+    const filteredInvitations = userInvitations.filter(inv => inv.sessionId !== sessionId);
+    filteredInvitations.push(invitation);
+    
+    this.invitations.set(invitedUserId, filteredInvitations);
+
+    return true;
+  }
+
+  /**
+   * Add prediction to collaborative session
+   */
+  async addPredictionToSession(
+    sessionId: string,
+    predictionId: string,
+    question: string,
+    options: string[],
+    deadline?: Date
+  ): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+
+    const sessionPrediction: SessionPrediction = {
+      id: this.generatePredictionId(),
+      sessionId,
+      predictionId,
+      question,
+      options,
+      submissions: [],
+      discussionPoints: [],
+      status: 'open',
+      deadline
+    };
+
+    session.predictions.push(sessionPrediction);
+    session.updatedAt = new Date();
+
+    return true;
+  }
+
+  /**
+   * Submit prediction in collaborative session
+   */
+  async submitCollaborativePrediction(
+    sessionId: string,
+    sessionPredictionId: string,
+    userId: string,
+    choice: number,
+    confidence: number,
+    reasoning?: string,
+    isPublic: boolean = true
+  ): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+
+    const participant = session.participants.find(p => p.userId === userId);
+    if (!participant) return false;
+
+    const prediction = session.predictions.find(p => p.id === sessionPredictionId);
+    if (!prediction || prediction.status !== 'open') return false;
+
+    // Remove existing submission from same user
+    prediction.submissions = prediction.submissions.filter(s => s.userId !== userId);
+
+    const submission: PredictionSubmission = {
+      userId,
+      choice,
+      confidence,
+      reasoning,
+      submittedAt: new Date(),
+      isPublic
+    };
+
+    prediction.submissions.push(submission);
+    participant.contributionScore += 1;
+    participant.lastActivity = new Date();
+
+    // Calculate consensus if enough submissions
+    if (prediction.submissions.length >= Math.ceil(session.participants.length * 0.6)) {
+      this.calculateConsensus(prediction, session.settings.votingType);
+    }
+
+    session.updatedAt = new Date();
+    return true;
+  }
+
+  /**
+   * Add discussion point
+   */
+  async addDiscussion(
+    sessionId: string,
+    sessionPredictionId: string,
+    userId: string,
+    message: string
+  ): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session || !session.settings.discussionEnabled) return false;
+
+    const participant = session.participants.find(p => p.userId === userId);
+    if (!participant) return false;
+
+    const prediction = session.predictions.find(p => p.id === sessionPredictionId);
+    if (!prediction) return false;
+
+    const discussionPoint: DiscussionPoint = {
+      id: this.generateDiscussionId(),
+      userId,
+      username: participant.username,
+      message,
+      timestamp: new Date(),
+      likes: 0,
+      replies: [],
+      isHighlighted: false
+    };
+
+    prediction.discussionPoints.push(discussionPoint);
+    participant.contributionScore += 0.5;
+    participant.lastActivity = new Date();
+
+    session.updatedAt = new Date();
+    return true;
+  }
+
+  /**
+   * Get session details
+   */
+  getSession(sessionId: string): CollaborativeSession | null {
+    return this.sessions.get(sessionId) || null;
+  }
+
+  /**
+   * Get user's sessions
+   */
+  getUserSessions(userId: string): CollaborativeSession[] {
+    const sessionIds = this.userSessions.get(userId) || [];
+    return sessionIds
+      .map(id => this.sessions.get(id))
+      .filter((session): session is CollaborativeSession => session !== undefined);
+  }
+
+  /**
+   * Get user's invitations
+   */
+  getUserInvitations(userId: string): InvitationRequest[] {
+    const invitations = this.invitations.get(userId) || [];
+    const now = new Date();
+    
+    // Filter out expired invitations
+    const validInvitations = invitations.filter(inv => inv.expiresAt > now);
+    this.invitations.set(userId, validInvitations);
+    
+    return validInvitations;
+  }
+
+  /**
+   * Calculate group performance metrics
+   */
+  calculateGroupMetrics(sessionId: string): GroupPerformanceMetrics | null {
+    const session = this.sessions.get(sessionId);
+    if (!session) return null;
+
+    const completedPredictions = session.predictions.filter(p => p.status === 'completed');
+    if (completedPredictions.length === 0) {
+      return {
+        sessionId,
+        accuracy: 0,
+        consensusStrength: 0,
+        participationRate: 0,
+        diversityIndex: 0,
+        expertiseDistribution: {},
+        decisionQuality: 0,
+        timeEfficiency: 0
+      };
+    }
+
+    const accuracy = this.calculateGroupAccuracy(completedPredictions);
+    const consensusStrength = this.calculateConsensusStrength(completedPredictions);
+    const participationRate = this.calculateParticipationRate(session);
+    const diversityIndex = this.calculateDiversityIndex(session);
+    const expertiseDistribution = this.calculateExpertiseDistribution(session);
+    const decisionQuality = this.calculateDecisionQuality(completedPredictions);
+    const timeEfficiency = this.calculateTimeEfficiency(completedPredictions);
+
+    return {
+      sessionId,
+      accuracy,
+      consensusStrength,
+      participationRate,
+      diversityIndex,
+      expertiseDistribution,
+      decisionQuality,
+      timeEfficiency
+    };
+  }
+
+  /**
+   * Generate collaborative insights
+   */
+  generateCollaborativeInsights(sessionId: string): CollaborativeInsight[] {
+    const session = this.sessions.get(sessionId);
+    if (!session) return [];
+
+    const insights: CollaborativeInsight[] = [];
+    const metrics = this.calculateGroupMetrics(sessionId);
+    
+    if (!metrics) return insights;
+
+    // Group think detection
+    if (metrics.consensusStrength > 0.9 && metrics.diversityIndex < 0.3) {
+      insights.push({
+        type: 'GROUP_THINK',
+        title: 'Potential Groupthink Detected',
+        description: 'The group shows very high agreement with low diversity of perspectives.',
+        score: 0.8,
+        evidence: { consensusStrength: metrics.consensusStrength, diversityIndex: metrics.diversityIndex },
+        recommendations: [
+          'Encourage devil\'s advocate positions',
+          'Invite diverse perspectives',
+          'Consider anonymous voting'
+        ]
+      });
+    }
+
+    // Expertise advantage
+    if (Object.keys(metrics.expertiseDistribution).length > 0) {
+      const expertiseValues = Object.values(metrics.expertiseDistribution);
+      const avgExpertise = expertiseValues.reduce((sum, val) => sum + val, 0) / expertiseValues.length;
+      
+      if (avgExpertise > 0.7) {
+        insights.push({
+          type: 'EXPERTISE_ADVANTAGE',
+          title: 'High Expertise Group',
+          description: 'This group demonstrates strong domain expertise.',
+          score: avgExpertise,
+          evidence: { expertiseDistribution: metrics.expertiseDistribution },
+          recommendations: [
+            'Leverage expertise in complex decisions',
+            'Consider weighted voting',
+            'Document reasoning for future reference'
+          ]
+        });
+      }
+    }
+
+    return insights;
+  }
+
+  /**
+   * Private helper methods
+   */
+  private calculateConsensus(prediction: SessionPrediction, votingType: string): void {
+    const submissions = prediction.submissions;
+    if (submissions.length === 0) return;
+
+    let consensus: ConsensusData;
+
+    switch (votingType) {
+      case 'majority':
+        consensus = this.calculateMajorityConsensus(submissions);
+        break;
+      case 'weighted':
+        consensus = this.calculateWeightedConsensus(submissions);
+        break;
+      case 'consensus':
+        consensus = this.calculateDelphiConsensus(submissions);
+        break;
+      default:
+        consensus = this.calculateMajorityConsensus(submissions);
+    }
+
+    prediction.consensus = consensus.choice;
+    prediction.confidence = consensus.confidence;
+  }
+
+  private calculateMajorityConsensus(submissions: PredictionSubmission[]): ConsensusData {
+    const choiceCounts: Record<number, number> = {};
+    const confidences: number[] = [];
+
+    submissions.forEach(sub => {
+      choiceCounts[sub.choice] = (choiceCounts[sub.choice] || 0) + 1;
+      confidences.push(sub.confidence);
+    });
+
+    const majorityChoice = Object.entries(choiceCounts)
+      .reduce((a, b) => choiceCounts[parseInt(a[0])] > choiceCounts[parseInt(b[0])] ? a : b)[0];
+
+    const avgConfidence = confidences.reduce((sum, conf) => sum + conf, 0) / confidences.length;
+    const agreement = choiceCounts[parseInt(majorityChoice)] / submissions.length;
+
+    return {
+      choice: parseInt(majorityChoice),
+      confidence: avgConfidence,
+      agreement,
+      participantCount: submissions.length,
+      methodology: 'simple_majority',
+      convergenceMetrics: {
+        rounds: 1,
+        finalVariance: this.calculateVariance(confidences),
+        timeToConsensus: 0
+      }
+    };
+  }
+
+  private calculateWeightedConsensus(submissions: PredictionSubmission[]): ConsensusData {
+    let weightedSum = 0;
+    let totalWeight = 0;
+    let confidenceSum = 0;
+
+    submissions.forEach(sub => {
+      const weight = sub.confidence;
+      weightedSum += sub.choice * weight;
+      totalWeight += weight;
+      confidenceSum += sub.confidence;
+    });
+
+    const weightedChoice = Math.round(weightedSum / totalWeight);
+    const avgConfidence = confidenceSum / submissions.length;
+
+    return {
+      choice: weightedChoice,
+      confidence: avgConfidence,
+      agreement: 0.8, // Placeholder calculation
+      participantCount: submissions.length,
+      methodology: 'weighted_average',
+      convergenceMetrics: {
+        rounds: 1,
+        finalVariance: 0,
+        timeToConsensus: 0
+      }
+    };
+  }
+
+  private calculateDelphiConsensus(submissions: PredictionSubmission[]): ConsensusData {
+    // Simplified Delphi method - in real implementation would involve multiple rounds
+    return this.calculateWeightedConsensus(submissions);
+  }
+
+  private calculateGroupAccuracy(_predictions: SessionPrediction[]): number {
+    // Placeholder - would need actual results to compare
+    return 0.7;
+  }
+
+  private calculateConsensusStrength(predictions: SessionPrediction[]): number {
+    if (predictions.length === 0) return 0;
+    
+    const agreements = predictions
+      .filter(p => p.consensus !== undefined)
+      .map(p => p.consensus || 0);
+    
+    return agreements.length > 0 ? 
+      agreements.reduce((sum, agreement) => sum + agreement, 0) / agreements.length : 0;
+  }
+
+  private calculateParticipationRate(session: CollaborativeSession): number {
+    const activeParticipants = session.participants.filter(p => p.isActive).length;
+    return activeParticipants / session.participants.length;
+  }
+
+  private calculateDiversityIndex(session: CollaborativeSession): number {
+    // Simplified diversity calculation based on contribution patterns
+    const contributions = session.participants.map(p => p.contributionScore);
+    const variance = this.calculateVariance(contributions);
+    return Math.min(variance / 10, 1); // Normalize to 0-1
+  }
+
+  private calculateExpertiseDistribution(session: CollaborativeSession): Record<string, number> {
+    // Placeholder - would integrate with user expertise data
+    const distribution: Record<string, number> = {};
+    session.participants.forEach(p => {
+      distribution[p.userId] = Math.random() * 0.5 + 0.5; // Mock expertise 0.5-1.0
+    });
+    return distribution;
+  }
+
+  private calculateDecisionQuality(_predictions: SessionPrediction[]): number {
+    // Placeholder - would need actual outcome data
+    return 0.75;
+  }
+
+  private calculateTimeEfficiency(_predictions: SessionPrediction[]): number {
+    // Placeholder - calculate based on time to reach consensus
+    return 0.8;
+  }
+
+  private calculateVariance(values: number[]): number {
+    if (values.length === 0) return 0;
+    
+    const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+    const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
+    return squaredDiffs.reduce((sum, diff) => sum + diff, 0) / values.length;
+  }
+
+  private async getUserName(userId: string): Promise<string> {
+    // Placeholder - would integrate with user service
+    return `User_${userId.slice(-6)}`;
+  }
+
+  private hasInvitation(userId: string, sessionId: string): boolean {
+    const invitations = this.invitations.get(userId) || [];
+    return invitations.some(inv => inv.sessionId === sessionId && inv.expiresAt > new Date());
+  }
+
+  private removeInvitation(userId: string, sessionId: string): void {
+    const invitations = this.invitations.get(userId) || [];
+    const filtered = invitations.filter(inv => inv.sessionId !== sessionId);
+    this.invitations.set(userId, filtered);
+  }
+
+  private addUserToSession(userId: string, sessionId: string): void {
+    const userSessions = this.userSessions.get(userId) || [];
+    if (!userSessions.includes(sessionId)) {
+      userSessions.push(sessionId);
+      this.userSessions.set(userId, userSessions);
+    }
+  }
+
+  private removeUserFromSession(userId: string, sessionId: string): void {
+    const userSessions = this.userSessions.get(userId) || [];
+    const filtered = userSessions.filter(id => id !== sessionId);
+    this.userSessions.set(userId, filtered);
+  }
+
+  private generateSessionId(): string {
+    return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private generatePredictionId(): string {
+    return `pred_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  private generateDiscussionId(): string {
+    return `disc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
 }
 
-export interface PollOptionResult {
-    optionId: string;
-    votes: number;
-    percentage: number;
-    confidence?: number;
-}
-
-export interface TypingIndicator {
-    userId: string;
-    username: string;
-    predictionId: string;
-    timestamp: string;
-    isTyping: boolean;
-}
-
-export interface MentionNotification {
-    id: string;
-    messageId: string;
-    predictionId: string;
-    mentionedUserId: string;
-    mentionedByUserId: string;
-    mentionedByUsername: string;
-    content: string;
-    timestamp: string;
-    isRead: boolean;
-}
-
-export interface InsightCreationParams {
-    title: string;
-    content: string;
-    type: SharedInsight['type'];
-    confidence: number;
-    supportingData?: any[];
-    tags?: string[];
-}
-
-export interface PollCreationParams {
-    title: string;
-    question: string;
-    options: Omit<PollOption, 'id'>[];
-    type: CommunityPoll['type'];
-    expiresInHours: number;
-    isAnonymous: boolean;
-}
-
-class OracleCollaborativeService extends EventEmitter {
-    private readonly collaborativeRooms: Map<string, CollaborativeRoom> = new Map();
-    private readonly activeParticipants: Map<string, Set<string>> = new Map(); // predictionId -> userIds
-    private readonly typingIndicators: Map<string, TypingIndicator[]> = new Map(); // predictionId -> indicators
-    private readonly messageHistory: Map<string, CollaborativeMessage[]> = new Map(); // predictionId -> messages
-    private readonly sharedInsights: Map<string, SharedInsight[]> = new Map(); // predictionId -> insights
-    private readonly communityPolls: Map<string, CommunityPoll[]> = new Map(); // predictionId -> polls
-    private mentionNotifications: MentionNotification[] = [];
-
-    // Real-time features
-    private readonly typingTimeout = 3000; // 3 seconds
-    private readonly typingTimers: Map<string, NodeJS.Timeout> = new Map();
-    private readonly insightUpdateInterval = 5000; // 5 seconds
-    private readonly participantUpdateInterval = 10000; // 10 seconds
-
-    constructor() {
-        super();
-        this.setupEventHandlers();
-        this.startBackgroundProcesses();
-        console.log('🤝 Oracle Collaborative Service initialized');
-    }
-
-    /**
-     * Create or join a collaborative room for a prediction
-     */
-    async joinCollaborativeRoom(userId: string, predictionId: string, userInfo: any): Promise<CollaborativeRoom> {
-        let room = this.collaborativeRooms.get(predictionId);
-
-        if (!room) {
-            // Create new room
-            room = await this.createCollaborativeRoom(predictionId, userId, userInfo);
-        } else {
-            // Add participant to existing room
-            await this.addParticipantToRoom(room, userId, userInfo);
-        }
-
-        // Register user with real-time service
-        await oracleRealTimeService.subscribeToPrediction(userId, predictionId);
-
-        // Notify others of new participant
-        await this.broadcastRoomUpdate(predictionId, {
-            type: 'PARTICIPANT_JOINED',
-            userId,
-            username: userInfo.username,
-            timestamp: new Date().toISOString()
-        });
-
-        return room;
-    }
-
-    /**
-     * Create a new collaborative room
-     */
-    private async createCollaborativeRoom(
-        predictionId: string,
-        creatorId: string,
-        creatorInfo: any
-    ): Promise<CollaborativeRoom> {
-        const room: CollaborativeRoom = {
-            id: `room-${predictionId}`,
-            predictionId,
-            week: await this.getPredictionWeek(predictionId),
-            title: `Discussion: ${await this.getPredictionTitle(predictionId)}`,
-            description: 'Collaborative discussion and analysis for this Oracle prediction',
-            participants: [],
-            messages: [],
-            sharedInsights: [],
-            polls: [],
-            createdAt: new Date().toISOString(),
-            status: 'ACTIVE',
-            moderators: [creatorId],
-            settings: {
-                isPublic: true,
-                allowAnonymous: false,
-                moderationLevel: 'LIGHT',
-                messageRetention: 30,
-                insightVotingEnabled: true,
-                pollsEnabled: true,
-                maxParticipants: 100
-            },
-            analytics: {
-                totalMessages: 0,
-                totalInsights: 0,
-                totalPolls: 0,
-                engagementScore: 0,
-                consensusLevel: 0,
-                averageParticipationTime: 0,
-                topContributors: [],
-                mostDiscussedTopics: [],
-                lastUpdated: new Date().toISOString()
-            }
-        };
-
-        // Add creator as first participant
-        await this.addParticipantToRoom(room, creatorId, creatorInfo);
-
-        this.collaborativeRooms.set(predictionId, room);
-        
-        console.log(`🏠 Created collaborative room for prediction ${predictionId}`);
-        return room;
-    }
-
-    /**
-     * Add participant to room
-     */
-    private async addParticipantToRoom(
-        room: CollaborativeRoom,
-        userId: string,
-        userInfo: any
-    ): Promise<void> {
-        // Check if user already in room
-        const existingParticipant = room.participants.find(p => p.userId === userId);
-        if (existingParticipant) {
-            existingParticipant.isOnline = true;
-            existingParticipant.lastActive = new Date().toISOString();
-            return;
-        }
-
-        const participant: CollaborativeParticipant = {
-            userId,
-            username: userInfo.username || `User${userId}`,
-            avatar: userInfo.avatar,
-            joinedAt: new Date().toISOString(),
-            lastActive: new Date().toISOString(),
-            role: 'PARTICIPANT',
-            contributionScore: 0,
-            isOnline: true,
-            currentlyTyping: false,
-            permissions: {
-                canMessage: true,
-                canShareInsights: true,
-                canCreatePolls: true,
-                canModerate: false,
-                canInviteOthers: false
-            }
-        };
-
-        room.participants.push(participant);
-
-        // Add to active participants
-        if (!this.activeParticipants.has(room.predictionId)) {
-            this.activeParticipants.set(room.predictionId, new Set());
-        }
-        const activeParticipantsSet = this.activeParticipants.get(room.predictionId);
-        if (activeParticipantsSet) {
-            activeParticipantsSet.add(userId);
-        }
-
-        this.updateRoomAnalytics(room);
-    }
-
-    /**
-     * Send message to collaborative room
-     */
-    async sendMessage(
-        userId: string,
-        predictionId: string,
-        content: string,
-        type: CollaborativeMessage['type'] = 'DISCUSSION',
-        mentions?: string[],
-        attachments?: MessageAttachment[]
-    ): Promise<CollaborativeMessage> {
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) {
-            throw new Error('Collaborative room not found');
-        }
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant?.permissions?.canMessage) {
-            throw new Error('User not authorized to send messages');
-        }
-
-        const message: CollaborativeMessage = {
-            id: `msg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-            type,
-            userId,
-            username: participant.username,
-            predictionId,
-            content,
-            timestamp: new Date().toISOString(),
-            reactions: [],
-            mentions: mentions || [],
-            attachments: attachments || [],
-            isEdited: false
-        };
-
-        // Add to room messages
-        room.messages.push(message);
-        room.analytics.totalMessages++;
-
-        // Add to message history
-        if (!this.messageHistory.has(predictionId)) {
-            this.messageHistory.set(predictionId, []);
-        }
-        const messageHistoryArray = this.messageHistory.get(predictionId);
-        if (messageHistoryArray) {
-            messageHistoryArray.push(message);
-        }
-
-        // Update participant activity
-        participant.lastActive = new Date().toISOString();
-        participant.contributionScore += this.calculateMessageScore(message);
-
-        // Clear typing indicator
-        await this.setTypingIndicator(userId, predictionId, false);
-
-        // Process mentions
-        if (mentions && mentions.length > 0) {
-            await this.processMentions(message, mentions);
-        }
-
-        // Broadcast message to room participants
-        await this.broadcastToRoom(predictionId, {
-            type: 'NEW_MESSAGE',
-            message,
-            timestamp: new Date().toISOString()
-        });
-
-        this.updateRoomAnalytics(room);
-
-        console.log(`💬 Message sent to room ${predictionId} by ${userId}`);
-        return message;
-    }
-
-    /**
-     * Share insight in collaborative room
-     */
-    async shareInsight(
-        userId: string,
-        predictionId: string,
-        params: InsightCreationParams
-    ): Promise<SharedInsight> {
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) {
-            throw new Error('Collaborative room not found');
-        }
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant?.permissions?.canShareInsights) {
-            throw new Error('User not authorized to share insights');
-        }
-
-        const insight: SharedInsight = {
-            id: `insight-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-            predictionId,
-            userId,
-            username: participant.username,
-            title: params.title,
-            content: params.content,
-            type: params.type,
-            confidence: params.confidence,
-            supportingData: params.supportingData || [],
-            tags: params.tags || [],
-            votes: [],
-            timestamp: new Date().toISOString(),
-            isVerified: false
-        };
-
-        // Add to room insights
-        room.sharedInsights.push(insight);
-        room.analytics.totalInsights++;
-
-        // Add to shared insights history
-        if (!this.sharedInsights.has(predictionId)) {
-            this.sharedInsights.set(predictionId, []);
-        }
-        const sharedInsightsArray = this.sharedInsights.get(predictionId);
-        if (sharedInsightsArray) {
-            sharedInsightsArray.push(insight);
-        }
-
-        // Update participant contribution score
-        participant.contributionScore += this.calculateInsightScore(insight);
-
-        // Broadcast insight to room participants
-        await this.broadcastToRoom(predictionId, {
-            type: 'NEW_INSIGHT',
-            insight,
-            timestamp: new Date().toISOString()
-        });
-
-        this.updateRoomAnalytics(room);
-
-        console.log(`💡 Insight shared in room ${predictionId} by ${userId}`);
-        return insight;
-    }
-
-    /**
-     * Vote on shared insight
-     */
-    async voteOnInsight(
-        userId: string,
-        predictionId: string,
-        insightId: string,
-        vote: InsightVote['vote'],
-        comment?: string
-    ): Promise<void> {
-        const insights = this.sharedInsights.get(predictionId);
-        if (!insights) return;
-
-        const insight = insights.find(i => i.id === insightId);
-        if (!insight) return;
-
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room?.settings?.insightVotingEnabled) return;
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant) return;
-
-        // Remove existing vote if any
-        insight.votes = insight.votes.filter(v => v.userId !== userId);
-
-        // Add new vote
-        const newVote: InsightVote = {
-            userId,
-            username: participant.username,
-            vote,
-            timestamp: new Date().toISOString(),
-            comment
-        };
-
-        insight.votes.push(newVote);
-
-        // Broadcast vote update
-        await this.broadcastToRoom(predictionId, {
-            type: 'INSIGHT_VOTED',
-            insightId,
-            vote: newVote,
-            totalVotes: insight.votes.length,
-            timestamp: new Date().toISOString()
-        });
-
-        console.log(`👍 Vote cast on insight ${insightId} in room ${predictionId}`);
-    }
-
-    /**
-     * Create community poll
-     */
-    async createCommunityPoll(
-        userId: string,
-        predictionId: string,
-        params: {
-            title: string;
-            question: string;
-            options: Omit<PollOption, 'id'>[];
-            type?: CommunityPoll['type'];
-            expiresInHours?: number;
-            isAnonymous?: boolean;
-        }
-    ): Promise<CommunityPoll> {
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) {
-            throw new Error('Collaborative room not found');
-        }
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant?.permissions?.canCreatePolls) {
-            throw new Error('User not authorized to create polls');
-        }
-
-        const { title, question, options, type = 'SINGLE_CHOICE', expiresInHours = 24, isAnonymous = false } = params;
-
-        const poll: CommunityPoll = {
-            id: `poll-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-            predictionId,
-            createdBy: userId,
-            title,
-            question,
-            options: options.map((opt, index) => ({
-                id: `opt-${index}-${Math.random().toString(36).substring(2, 6)}`,
-                ...opt
-            })),
-            type,
-            expiresAt: new Date(Date.now() + expiresInHours * 60 * 60 * 1000).toISOString(),
-            isAnonymous,
-            responses: [],
-            status: 'ACTIVE',
-            createdAt: new Date().toISOString()
-        };
-
-        // Add to room polls
-        room.polls.push(poll);
-        room.analytics.totalPolls++;
-
-        // Add to community polls history
-        if (!this.communityPolls.has(predictionId)) {
-            this.communityPolls.set(predictionId, []);
-        }
-        const communityPollsArray = this.communityPolls.get(predictionId);
-        if (communityPollsArray) {
-            communityPollsArray.push(poll);
-        }
-
-        // Update participant contribution score
-        participant.contributionScore += 5; // Poll creation points
-
-        // Broadcast poll creation
-        await this.broadcastToRoom(predictionId, {
-            type: 'NEW_POLL',
-            poll,
-            timestamp: new Date().toISOString()
-        });
-
-        // Schedule poll expiration
-        setTimeout(() => {
-            this.closePoll(predictionId, poll.id);
-        }, expiresInHours * 60 * 60 * 1000);
-
-        this.updateRoomAnalytics(room);
-
-        console.log(`📊 Poll created in room ${predictionId} by ${userId}`);
-        return poll;
-    }
-
-    /**
-     * Respond to community poll
-     */
-    async respondToPoll(
-        userId: string,
-        predictionId: string,
-        pollId: string,
-        choices: string[],
-        confidence?: number
-    ): Promise<void> {
-        const polls = this.communityPolls.get(predictionId);
-        if (!polls) return;
-
-        const poll = polls.find(p => p.id === pollId);
-        if (!poll || poll.status !== 'ACTIVE') return;
-
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) return;
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant) return;
-
-        // Remove existing response if any
-        poll.responses = poll.responses.filter(r => r.userId !== userId);
-
-        // Add new response
-        const response: PollResponse = {
-            userId,
-            username: poll.isAnonymous ? undefined : participant.username,
-            choices,
-            confidence,
-            timestamp: new Date().toISOString(),
-            isAnonymous: poll.isAnonymous
-        };
-
-        poll.responses.push(response);
-
-        // Broadcast poll update
-        await this.broadcastToRoom(predictionId, {
-            type: 'POLL_RESPONSE',
-            pollId,
-            totalResponses: poll.responses.length,
-            timestamp: new Date().toISOString()
-        });
-
-        console.log(`📊 Poll response submitted by ${userId} for poll ${pollId}`);
-    }
-
-    /**
-     * Set typing indicator
-     */
-    async setTypingIndicator(userId: string, predictionId: string, isTyping: boolean): Promise<void> {
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) return;
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant) return;
-
-        participant.currentlyTyping = isTyping;
-
-        // Get current typing indicators for this prediction
-        let indicators = this.typingIndicators.get(predictionId) || [];
-
-        if (isTyping) {
-            // Add or update typing indicator
-            const existingIndex = indicators.findIndex(ind => ind.userId === userId);
-            const indicator: TypingIndicator = {
-                userId,
-                username: participant.username,
-                predictionId,
-                timestamp: new Date().toISOString(),
-                isTyping: true
-            };
-
-            if (existingIndex >= 0) {
-                indicators[existingIndex] = indicator;
-            } else {
-                indicators.push(indicator);
-            }
-
-            // Clear existing timer and set new one
-            const timerKey = `${userId}-${predictionId}`;
-            const existingTimer = this.typingTimers.get(timerKey);
-            if (existingTimer) {
-                clearTimeout(existingTimer);
-            }
-
-            const timer = setTimeout(() => {
-                this.setTypingIndicator(userId, predictionId, false);
-            }, this.typingTimeout);
-
-            this.typingTimers.set(timerKey, timer);
-
-        } else {
-            // Remove typing indicator
-            indicators = indicators.filter(ind => ind.userId !== userId);
-            
-            const timerKey = `${userId}-${predictionId}`;
-            const existingTimer = this.typingTimers.get(timerKey);
-            if (existingTimer) {
-                clearTimeout(existingTimer);
-                this.typingTimers.delete(timerKey);
-            }
-        }
-
-        this.typingIndicators.set(predictionId, indicators);
-
-        // Broadcast typing update to room participants
-        await this.broadcastToRoom(predictionId, {
-            type: 'TYPING_UPDATE',
-            typingUsers: indicators.filter(ind => ind.isTyping),
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    /**
-     * React to message
-     */
-    async reactToMessage(
-        userId: string,
-        predictionId: string,
-        messageId: string,
-        emoji: string
-    ): Promise<void> {
-        const messages = this.messageHistory.get(predictionId);
-        if (!messages) return;
-
-        const message = messages.find(m => m.id === messageId);
-        if (!message) return;
-
-        const room = this.collaborativeRooms.get(predictionId);
-        if (!room) return;
-
-        const participant = room.participants.find(p => p.userId === userId);
-        if (!participant) return;
-
-        // Initialize reactions array if needed
-        if (!message.reactions) {
-            message.reactions = [];
-        }
-
-        // Remove existing reaction from this user for this emoji
-        message.reactions = message.reactions.filter(r => !(r.userId === userId && r.emoji === emoji));
-
-        // Add new reaction
-        const reaction: MessageReaction = {
-            emoji,
-            userId,
-            username: participant.username,
-            timestamp: new Date().toISOString()
-        };
-
-        message.reactions.push(reaction);
-
-        // Broadcast reaction update
-        await this.broadcastToRoom(predictionId, {
-            type: 'MESSAGE_REACTION',
-            messageId,
-            reaction,
-            timestamp: new Date().toISOString()
-        });
-
-        console.log(`😀 Reaction ${emoji} added to message ${messageId} by ${userId}`);
-    }
-
-    /**
-     * Get collaborative room data
-     */
-    getCollaborativeRoom(predictionId: string): CollaborativeRoom | undefined {
-        return this.collaborativeRooms.get(predictionId);
-    }
-
-    /**
-     * Get room messages with pagination
-     */
-    getRoomMessages(predictionId: string, limit: number = 50, before?: string): CollaborativeMessage[] {
-        const messages = this.messageHistory.get(predictionId) || [];
-        
-        let filteredMessages = messages;
-        if (before) {
-            const beforeIndex = messages.findIndex(m => m.id === before);
-            if (beforeIndex > 0) {
-                filteredMessages = messages.slice(0, beforeIndex);
-            }
-        }
-
-        return filteredMessages.slice(-limit);
-    }
-
-    /**
-     * Get shared insights for prediction
-     */
-    getSharedInsights(predictionId: string): SharedInsight[] {
-        return this.sharedInsights.get(predictionId) || [];
-    }
-
-    /**
-     * Get community polls for prediction
-     */
-    getCommunityPolls(predictionId: string): CommunityPoll[] {
-        return this.communityPolls.get(predictionId) || [];
-    }
-
-    /**
-     * Get typing indicators for prediction
-     */
-    getTypingIndicators(predictionId: string): TypingIndicator[] {
-        return this.typingIndicators.get(predictionId) || [];
-    }
-
-    /**
-     * Close poll and calculate results
-     */
-    private async closePoll(predictionId: string, pollId: string): Promise<void> {
-        const polls = this.communityPolls.get(predictionId);
-        if (!polls) return;
-
-        const poll = polls.find(p => p.id === pollId);
-        if (!poll || poll.status !== 'ACTIVE') return;
-
-        poll.status = 'CLOSED';
-
-        // Calculate results
-        const optionResults = new Map<string, PollOptionResult>();
-        const totalResponses = poll.responses.length;
-
-        poll.options.forEach(option => {
-            const votes = poll.responses.filter(r => r.choices.includes(option.id)).length;
-            const percentage = totalResponses > 0 ? (votes / totalResponses) * 100 : 0;
-
-            optionResults.set(option.id, {
-                optionId: option.id,
-                votes,
-                percentage
-            });
-        });
-
-        poll.results = {
-            totalResponses,
-            optionResults,
-            completedAt: new Date().toISOString()
-        };
-
-        // Broadcast poll closure
-        await this.broadcastToRoom(predictionId, {
-            type: 'POLL_CLOSED',
-            pollId,
-            results: poll.results,
-            timestamp: new Date().toISOString()
-        });
-
-        console.log(`📊 Poll ${pollId} closed with ${totalResponses} responses`);
-    }
-
-    /**
-     * Broadcast message to all room participants
-     */
-    private async broadcastToRoom(predictionId: string, data: any): Promise<void> {
-        const activeUsers = this.activeParticipants.get(predictionId);
-        if (!activeUsers) return;
-
-        // Use real-time service for broadcasting
-        this.emit('room_broadcast', {
-            predictionId,
-            targetUsers: Array.from(activeUsers),
-            data
-        });
-    }
-
-    /**
-     * Broadcast room update
-     */
-    private async broadcastRoomUpdate(predictionId: string, update: any): Promise<void> {
-        await this.broadcastToRoom(predictionId, {
-            type: 'ROOM_UPDATE',
-            update,
-            timestamp: new Date().toISOString()
-        });
-    }
-
-    /**
-     * Process mentions in message
-     */
-    private async processMentions(message: CollaborativeMessage, mentions: string[]): Promise<void> {
-        for (const mentionedUserId of mentions) {
-            const notification: MentionNotification = {
-                id: `mention-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-                messageId: message.id,
-                predictionId: message.predictionId,
-                mentionedUserId,
-                mentionedByUserId: message.userId,
-                mentionedByUsername: message.username,
-                content: message.content,
-                timestamp: new Date().toISOString(),
-                isRead: false
-            };
-
-            this.mentionNotifications.push(notification);
-
-            // Send notification through real-time service
-            this.emit('mention_notification', notification);
-        }
-    }
-
-    /**
-     * Calculate message contribution score
-     */
-    private calculateMessageScore(message: CollaborativeMessage): number {
-        let score = 1; // Base score
-
-        // Higher score for insights and analysis
-        if (message.type === 'INSIGHT' || message.type === 'ANALYSIS') {
-            score += 2;
-        }
-
-        // Score based on content length (meaningful contributions)
-        if (message.content.length > 100) {
-            score += 1;
-        }
-
-        // Score for attachments
-        if (message.attachments && message.attachments.length > 0) {
-            score += message.attachments.length;
-        }
-
-        return score;
-    }
-
-    /**
-     * Calculate insight contribution score
-     */
-    private calculateInsightScore(insight: SharedInsight): number {
-        let score = 5; // Base score for sharing insight
-
-        // Score based on confidence
-        score += Math.floor(insight.confidence / 20);
-
-        // Score for supporting data
-        if (insight.supportingData && insight.supportingData.length > 0) {
-            score += insight.supportingData.length * 2;
-        }
-
-        // Score for tags
-        score += insight.tags.length;
-
-        return score;
-    }
-
-    /**
-     * Update room analytics
-     */
-    private updateRoomAnalytics(room: CollaborativeRoom): void {
-        const now = new Date().toISOString();
-        
-        // Calculate engagement score
-        const activeParticipants = room.participants.filter(p => p.isOnline).length;
-        const totalParticipants = room.participants.length;
-        room.analytics.engagementScore = totalParticipants > 0 
-            ? (activeParticipants / totalParticipants) * 100 
-            : 0;
-
-        // Update top contributors
-        const sortedParticipants = [...room.participants].sort((a, b) => b.contributionScore - a.contributionScore);
-        room.analytics.topContributors = sortedParticipants
-            .slice(0, 5)
-            .map(p => p.username);
-
-        room.analytics.lastUpdated = now;
-    }
-
-    /**
-     * Setup event handlers
-     */
-    private setupEventHandlers(): void {
-        // Handle real-time service events
-        this.on('room_broadcast', this.handleRoomBroadcast.bind(this));
-        this.on('mention_notification', this.handleMentionNotification.bind(this));
-
-        console.log('🔄 Collaborative service event handlers configured');
-    }
-
-    /**
-     * Start background processes
-     */
-    private startBackgroundProcesses(): void {
-        // Update participant activity status
-        setInterval(() => {
-            this.updateParticipantActivity();
-        }, this.participantUpdateInterval);
-
-        // Process insight ranking updates
-        setInterval(() => {
-            this.processInsightRankings();
-        }, this.insightUpdateInterval);
-
-        // Clean up old data
-        setInterval(() => {
-            this.cleanupOldData();
-        }, 60000 * 60); // Every hour
-
-        console.log('🔄 Collaborative background processes started');
-    }
-
-    /**
-     * Update participant activity status
-     */
-    private updateParticipantActivity(): void {
-        const fiveMinutesAgo = Date.now() - (5 * 60 * 1000);
-
-        this.collaborativeRooms.forEach(room => {
-            room.participants.forEach(participant => {
-                const lastActiveTime = new Date(participant.lastActive).getTime();
-                if (participant.isOnline && lastActiveTime < fiveMinutesAgo) {
-                    participant.isOnline = false;
-                    participant.currentlyTyping = false;
-                }
-            });
-
-            this.updateRoomAnalytics(room);
-        });
-    }
-
-    /**
-     * Process insight rankings based on votes
-     */
-    private processInsightRankings(): void {
-        this.sharedInsights.forEach(insights => {
-            insights.forEach(insight => {
-                // Calculate helpful vs not helpful ratio
-                const helpfulVotes = insight.votes.filter(v => v.vote === 'HELPFUL').length;
-                const totalVotes = insight.votes.length;
-                
-                // Verify insights with high helpful ratio
-                if (totalVotes >= 3 && (helpfulVotes / totalVotes) >= 0.8) {
-                    insight.isVerified = true;
-                }
-            });
-        });
-    }
-
-    /**
-     * Cleanup old data
-     */
-    private cleanupOldData(): void {
-        const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-
-        // Clean up old mention notifications
-        this.mentionNotifications = this.mentionNotifications.filter(notif => 
-            new Date(notif.timestamp).getTime() > thirtyDaysAgo
-        );
-
-        // Clean up old typing indicators
-        this.typingIndicators.forEach((indicators, predictionId) => {
-            const activeIndicators = indicators.filter(ind => 
-                new Date(ind.timestamp).getTime() > (Date.now() - this.typingTimeout)
-            );
-            this.typingIndicators.set(predictionId, activeIndicators);
-        });
-    }
-
-    // Event handlers
-    private handleRoomBroadcast(data: any): void {
-        // Handle room broadcast through real-time service
-        console.log('📢 Broadcasting to room:', data.predictionId);
-    }
-
-    private handleMentionNotification(notification: MentionNotification): void {
-        // Handle mention notification delivery
-        console.log('📢 Mention notification:', notification.mentionedUserId);
-    }
-
-    // Helper methods to get prediction data from database
-    private async getPredictionWeek(predictionId: string): Promise<number> {
-        try {
-            const result = await getRow(`
-                SELECT week FROM oracle_predictions WHERE id = ?
-            `, [predictionId]);
-            
-            return result ? Number(result.week) : 1;
-        } catch (error) {
-            console.error('Error getting prediction week:', error);
-            return 1;
-        }
-    }
-
-    private async getPredictionTitle(predictionId: string): Promise<string> {
-        try {
-            const result = await getRow(`
-                SELECT question FROM oracle_predictions WHERE id = ?
-            `, [predictionId]);
-            
-            return result ? result.question : `Prediction ${predictionId}`;
-        } catch (error) {
-            console.error('Error getting prediction title:', error);
-            return `Prediction ${predictionId}`;
-        }
-    }
-}
-
-// Create and export singleton instance
+// Export singleton instance
 export const oracleCollaborativeService = new OracleCollaborativeService();
 export default oracleCollaborativeService;

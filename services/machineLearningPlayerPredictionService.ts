@@ -4,6 +4,7 @@
  * Integrates regression models, feature engineering, and ensemble predictions
  */
 
+import { logger } from './loggingService';
 import { productionSportsDataService, type NFLPlayer } from './productionSportsDataService';
 import { oracleMachineLearningService, type FeatureVector, type MLTrainingData } from './oracleMachineLearningService';
 import { injuryTrackingService } from './injuryTrackingService';
@@ -322,7 +323,12 @@ class MachineLearningPlayerPredictionService {
         this.generatePlayerPrediction(playerId2, week, season)
       ]);
 
-      const comparison = this.analyzePlayerComparison(prediction1, prediction2);
+      const comparison = this.analyzePlayerComparison(prediction1, prediction2) as {
+        recommendation: string;
+        reasoning: string;
+        advantages: string[];
+        riskComparison: string;
+      };
 
       return {
         player1: prediction1,
@@ -334,7 +340,7 @@ class MachineLearningPlayerPredictionService {
       };
 
     } catch (error) {
-      console.error(`Failed to compare players ${playerId1} vs ${playerId2}:`, error);
+      logger.error(`Failed to compare players ${playerId1} vs ${playerId2}:`, error);
       throw error;
     }
   }
@@ -397,10 +403,10 @@ class MachineLearningPlayerPredictionService {
         );
       }
 
-      console.log(`✅ Updated ML models with ${outcomes.length} new outcomes`);
+      logger.info(`✅ Updated ML models with ${outcomes.length} new outcomes`);
 
     } catch (error) {
-      console.error('Failed to update model with outcomes:', error);
+      logger.error('Failed to update model with outcomes:', error);
     }
   }
 
@@ -427,35 +433,55 @@ class MachineLearningPlayerPredictionService {
       // Get weather data for upcoming game
       const weatherData = await this.getWeatherImpact(player.team, week, season);
 
+      // Cast matchupData to expected interface
+      const matchup = matchupData as {
+        difficulty: number;
+        positionRank: number;
+        targetShare: number;
+        redZoneTargets: number;
+        snapCount: number;
+        teamOffensiveRank: number;
+        teamPaceRank: number;
+        passingRatio: number;
+        gameScript: number;
+        venue: string;
+        restDays: number;
+        altitude: number;
+        airYards?: number;
+        separation?: number;
+        pressureRate?: number;
+        targetQuality?: number;
+      };
+
       return {
         recentPerformance,
         seasonAverage: player.stats.fantasyPoints || 0,
         carreerAverage: await this.getCareerAverage(player.id),
         consistencyScore: this.calculateConsistency(recentPerformance),
         trendDirection,
-        matchupDifficulty: matchupData.difficulty,
-        positionRank: matchupData.positionRank,
-        targetShare: matchupData.targetShare,
-        redZoneTargets: matchupData.redZoneTargets,
-        snapCountPercentage: matchupData.snapCount,
-        teamOffensiveRank: matchupData.teamOffensiveRank,
-        teamPaceRank: matchupData.teamPaceRank,
-        teamPassingRatio: matchupData.passingRatio,
-        gameScript: matchupData.gameScript,
+        matchupDifficulty: matchup.difficulty,
+        positionRank: matchup.positionRank,
+        targetShare: matchup.targetShare,
+        redZoneTargets: matchup.redZoneTargets,
+        snapCountPercentage: matchup.snapCount,
+        teamOffensiveRank: matchup.teamOffensiveRank,
+        teamPaceRank: matchup.teamPaceRank,
+        teamPassingRatio: matchup.passingRatio,
+        gameScript: matchup.gameScript,
         weather: weatherData,
-        venue: matchupData.venue,
-        restDays: matchupData.restDays,
-        altitude: matchupData.altitude,
+        venue: matchup.venue,
+        restDays: matchup.restDays,
+        altitude: matchup.altitude,
         injuryRisk: this.calculateInjuryRisk(injuryData),
         recoveryStatus: this.mapInjuryStatus(player.injuryStatus),
-        airYards: matchupData.airYards || 0,
-        separationScore: matchupData.separation || 0,
-        pressureRate: matchupData.pressureRate || 0,
-        targetQuality: matchupData.targetQuality || 0
+        airYards: matchup.airYards || 0,
+        separationScore: matchup.separation || 0,
+        pressureRate: matchup.pressureRate || 0,
+        targetQuality: matchup.targetQuality || 0
       };
 
     } catch (error) {
-      console.error(`Failed to extract features for player ${player.id}:`, error);
+      logger.error(`Failed to extract features for player ${player.id}:`, error);
       // Return default features if extraction fails
       return this.getDefaultFeatures(player);
     }
@@ -798,7 +824,7 @@ class MachineLearningPlayerPredictionService {
     return Array.from({ length: games }, () => Math.random() * 20 + 5);
   }
 
-  private async getMatchupAnalysis(player: NFLPlayer, week: number, season: number): Promise<any> {
+  private async getMatchupAnalysis(_player: NFLPlayer, _week: number, _season: number): Promise<unknown> {
     // Mock implementation - would use enhanced matchup analytics service
     return {
       difficulty: Math.random() * 10,
@@ -816,7 +842,7 @@ class MachineLearningPlayerPredictionService {
     };
   }
 
-  private async getWeatherImpact(team: string, week: number, season: number): Promise<WeatherImpact> {
+  private async getWeatherImpact(team: string, _week: number, _season: number): Promise<WeatherImpact> {
     // Mock implementation - would fetch weather data
     return {
       temperature: Math.random() * 40 + 40,
@@ -1026,15 +1052,16 @@ class MachineLearningPlayerPredictionService {
     }));
   }
 
-  private async getCareerAverage(playerId: string): Promise<number> {
+  private async getCareerAverage(_playerId: string): Promise<number> {
     // Mock implementation
     return Math.random() * 10 + 8;
   }
 
-  private calculateInjuryRisk(injuryData: any): number {
-    if (!injuryData?.status) return 0.1;
+  private calculateInjuryRisk(injuryData: unknown): number {
+    const injury = injuryData as {status?: string} | undefined;
+    if (!injury?.status) return 0.1;
     
-    switch (injuryData.status) {
+    switch (injury.status) {
       case 'out':
         return 0.8;
       case 'questionable':
@@ -1087,7 +1114,7 @@ class MachineLearningPlayerPredictionService {
     return 'limited';
   }
 
-  private prepareModelInput(features: PlayerPredictionFeatures, position: string): any {
+  private prepareModelInput(features: PlayerPredictionFeatures, _position: string): unknown {
     const recentAvg = features.recentPerformance.reduce((a, b) => a + b, 0) / features.recentPerformance.length;
     
     let weatherScore: number;
@@ -1116,7 +1143,7 @@ class MachineLearningPlayerPredictionService {
     return Math.max(0.5, avgConfidence - Math.sqrt(confidenceVariance));
   }
 
-  private analyzePlayerComparison(p1: PlayerPredictionResult, p2: PlayerPredictionResult): any {
+  private analyzePlayerComparison(p1: PlayerPredictionResult, p2: PlayerPredictionResult): unknown {
     const pointDiff = p1.fantasyPoints.expected - p2.fantasyPoints.expected;
     const confidenceDiff = p1.confidence - p2.confidence;
     
@@ -1183,7 +1210,7 @@ class MachineLearningPlayerPredictionService {
            `${upsideText}`;
   }
 
-  private async backtestWeek(week: number, season: number): Promise<BacktestResult[]> {
+  private async backtestWeek(week: number, _season: number): Promise<BacktestResult[]> {
     // Mock implementation for backtesting
     const results: BacktestResult[] = [];
     

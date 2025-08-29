@@ -50,12 +50,12 @@ interface LiveScoringProps {
 }
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
-  matchupId, 
+  matchupId: _matchupId, 
   teamId, 
   showProjections = true 
 }) => {
   const { state } = useAppState();
-  const [isLive, setIsLive] = useState(true);
+  const [isLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [selectedView, setSelectedView] = useState<'summary' | 'detailed'>('summary');
 
@@ -80,7 +80,6 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       ];
 
       const playerScores: PlayerScore[] = startingLineup.map((player, index) => {
-        const basePoints = Math.random() * 25; // 0-25 base points
         const projectedPoints = Math.random() * 20 + 10; // 10-30 projected
         const isPlaying = Math.random() > 0.1; // 90% chance playing
         

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Player, Team } from '../../types';
-import { POSITION_GROUPS, NFL_TEAMS } from '../../data/nflPlayers';
+import { NFL_TEAMS } from '../../data/nflPlayers';
 import PlayerSearch from '../players/PlayerSearch';
 
 interface RosterManagementProps {

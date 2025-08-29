@@ -34,7 +34,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
         const dashboardData = await response.json();
         setHistory(dashboardData.history || []);
         setMetrics(dashboardData.latestMetrics);
-      } catch (error) {
+      } catch {
         // Fallback to localStorage
         const historyData = accessibilityMonitoringService.getMetricsHistory();
         setHistory(historyData);
@@ -112,7 +112,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
               <select
                 id="timeRange"
                 value={selectedTimeRange}
-                onChange={(e: any) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
               >
                 <option value={7}>Last 7 days</option>
                 <option value={30}>Last 30 days</option>
@@ -124,10 +124,10 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
               <select
                 id="component"
                 value={selectedComponent}
-                onChange={(e: any) => setSelectedComponent(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedComponent(e.target.value)}
               >
                 <option value="all">All Components</option>
-                {metrics.componentMetrics.map((component: any) => (
+                {metrics.componentMetrics.map((component: ComponentAccessibilityMetric) => (
                   <option key={component.componentName} value={component.componentName}>
                     {component.componentName}
                   </option>
@@ -272,7 +272,7 @@ interface SimpleTrendChartProps {
 }
 
 const SimpleTrendChart: React.FC<SimpleTrendChartProps> = ({ data }) => {
-  const maxValue = Math.max(...data.map((d: any) => Math.max(d.critical, d.serious, d.moderate, d.minor, d.total)));
+  const maxValue = Math.max(...data.map((d: ViolationTrend) => Math.max(d.critical, d.serious, d.moderate, d.minor, d.total)));
   const chartHeight = 200;
   const chartWidth = 100;
 
@@ -400,12 +400,12 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
     { label: 'Serious', count: violationsByLevel.serious, color: '#fd7e14' },
     { label: 'Moderate', count: violationsByLevel.moderate, color: '#ffc107' },
     { label: 'Minor', count: violationsByLevel.minor, color: '#28a745' }
-  ].filter((item: any) => item.count > 0);
+  ].filter((item: { label: string; count: number; color: string }) => item.count > 0);
 
   return (
     <div className="violation-distribution">
       <div className="distribution-bars">
-        {items.map((item, index) => {
+        {items.map((item, _index) => {
           const percentage = (item.count / total) * 100;
           return (
             <div key={item.label} className="distribution-bar">
@@ -466,7 +466,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
           </tr>
         </thead>
         <tbody>
-          {components.map((component: any) => (
+          {components.map((component: ComponentAccessibilityMetric) => (
             <tr key={component.componentName} className={`status-${component?.status}`}>
               <td className="component-name">{component.componentName}</td>
               <td className="status-cell">
@@ -542,7 +542,7 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
 
   return (
     <div className="wcag-compliance-chart">
-      {levels.map((level, index) => (
+      {levels.map((level, _index) => (
         <div key={level.label} className="compliance-bar">
           <div className="compliance-label">
             <span className="label-text">{level.label}</span>

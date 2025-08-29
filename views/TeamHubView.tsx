@@ -3,8 +3,8 @@ import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import VisualRoster from '../components/team/VisualRoster';
 import type { League, Team, TradeSuggestion } from '../types';
-import TradeCenterWidget from '../components/team/TradeCenterWidget';
-import LeagueTeamsList from '../components/team/LeagueTeamsList';
+import { TradeCenterWidget } from '../components/team/TradeCenterWidget';
+import { LeagueTeamsList } from '../components/team/LeagueTeamsList';
 import { DailyBriefingWidget } from '../components/team/DailyBriefingWidget';
 import CurrentMatchupWidget from '../components/team/CurrentMatchupWidget';
 import TeamChemistryWidget from '../components/team/TeamChemistryWidget';
@@ -80,7 +80,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         {team.name}
                     </h1>
-                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">"{team.motto}"</p>}
+                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">&quot;{team.motto}&quot;</p>}
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">TEAM HUB • WEEK {league.currentWeek > 16 ? 'Post-Season' : league.currentWeek}</p>
                 </div>
                  <button onClick={() => setIsEditHeaderModalOpen(true)} 
@@ -241,7 +241,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
 };
 
 
-const TeamHubView: React.FC = () => {
+export const TeamHubView: React.FC = () => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
 
@@ -261,4 +261,3 @@ const TeamHubView: React.FC = () => {
     );
 };
 
-export default TeamHubView;

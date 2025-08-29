@@ -45,7 +45,7 @@ interface UseInjuryTrackingReturn {
   stopMonitoring: () => void;
   refreshData: () => Promise<void>;
   dismissAlert: (alertId: string) => void;
-  getFantasyImpact: (playerId: string) => Promise<any>;
+  getFantasyImpact: (playerId: string) => Promise<unknown>;
 
   // Computed values
   activeInjuries: InjuryStatus[];
@@ -160,6 +160,8 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
 
     // Initial data load
     loadDashboardData();
+    // Intentionally minimal dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoStart, loadDashboardData]);
 
   // Actions
@@ -237,7 +239,7 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
   const activeInjuries = useMemo(() => {
     return injuryTrackingService.getAllInjuryStatuses()
       .filter(status => status.status !== 'healthy');
-  }, [dashboardData]);
+  }, []);
 
   const criticalAlerts = useMemo(() => {
     return recentAlerts.filter(alert => 

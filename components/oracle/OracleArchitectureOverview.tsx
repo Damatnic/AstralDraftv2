@@ -376,7 +376,7 @@ const OracleArchitectureOverview: React.FC = () => {
             <div className="overview-header">
                 <h2>🏗️ Oracle Prediction Architecture</h2>
                 <p className="overview-description">
-                    Discover how Oracle's sophisticated AI-driven prediction system processes millions of data points 
+                    Discover how Oracle&apos;s sophisticated AI-driven prediction system processes millions of data points 
                     to generate accurate fantasy football predictions. This multi-layered architecture combines 
                     real-time data processing, advanced machine learning, and natural language AI to deliver 
                     insights that consistently outperform traditional analysis methods.
@@ -444,7 +444,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 <section className="architecture-section">
                     <h3>🏗️ Architecture Layers</h3>
                     <p className="section-description">
-                        Oracle's prediction system is built on five interconnected layers, each responsible 
+                        Oracle&apos;s prediction system is built on five interconnected layers, each responsible 
                         for specific aspects of data processing and analysis. Click on each layer to explore 
                         its components and data flow.
                     </p>
@@ -604,7 +604,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 <div className="next-steps">
                     <h4>🎓 Continue Learning</h4>
                     <p>
-                        Now that you understand Oracle's architecture, explore how each component works in detail:
+                        Now that you understand Oracle&apos;s architecture, explore how each component works in detail:
                     </p>
                     <div className="next-step-buttons">
                         <button className="next-step-btn">

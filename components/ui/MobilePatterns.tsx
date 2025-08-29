@@ -345,7 +345,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
 }) => {
   // Simple keyboard navigation implementation
   const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
-    const currentIndex = tabs.findIndex((tab: any) => tab.id === activeTab);
+    const currentIndex = tabs.findIndex((tab: { id: string; label: string; icon?: React.ReactNode; badge?: string | number }) => tab.id === activeTab);
     if (e.key === 'ArrowLeft' && currentIndex > 0) {
       onTabChange(tabs[currentIndex - 1].id);
     } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {

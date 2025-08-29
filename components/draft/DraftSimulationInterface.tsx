@@ -548,19 +548,19 @@ interface DraftBoardProps {
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ 
     draftBoard, 
-    currentPick, 
-    settings 
+    currentPick: _currentPick, 
+    settings: _settings 
 }) => {
     return (
         <Widget title="Draft Board" className="bg-gray-900/50">
             <div className="space-y-2">
                 {draftBoard.length === 0 ? (
                     <div className="text-center py-8 text-gray-400">
-                        Draft hasn't started yet
+                        Draft hasn&apos;t started yet
                     </div>
                 ) : (
                     <div className="space-y-1">
-                        {draftBoard.slice(-10).map((pick, index) => (
+                        {draftBoard.slice(-10).map((pick, _index) => (
                             <motion.div
                                 key={pick.overallPick}
                                 initial={{ opacity: 0, x: -20 }}

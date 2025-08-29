@@ -3,7 +3,6 @@ import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { motion } from 'framer-motion';
 import { ZapIcon } from '../components/icons/ZapIcon';
-import { Avatar } from '../components/ui/Avatar';
 import { oraclePredictionService, type OraclePrediction } from '../services/oraclePredictionService';
 import { realTimeDataService } from '../services/realTimeDataService';
 import { OracleAnalyticsDashboard } from '../components/oracle/OracleAnalyticsDashboard';
@@ -175,25 +174,6 @@ const ChallengeOptions: React.FC<{
         </>
     );
 };
-
-// Component for leaderboard entries
-const LeaderboardEntry: React.FC<{
-    rank: number;
-    name: string;
-    score: number;
-    isCurrentUser?: boolean;
-}> = ({ rank, name, score, isCurrentUser = false }) => (
-    <div className={`flex items-center justify-between p-3 rounded-lg ${
-        isCurrentUser ? 'bg-blue-500/20' : 'bg-gray-500/10'
-    }`}>
-        <div className="flex items-center space-x-3">
-            <span className="text-lg font-bold">{rank}</span>
-            <Avatar avatar="👤" className="w-6 h-6" />
-            <span>{name}</span>
-        </div>
-        <span className="font-bold">{score} pts</span>
-    </div>
-);
 
 const BeatTheOracleView: React.FC = () => {
     const { state } = useAppState();
@@ -385,7 +365,7 @@ const BeatTheOracleView: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6"{/* Header */}
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">{/* Header */}
             <div className="nav-header">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
@@ -624,13 +604,12 @@ const BeatTheOracleView: React.FC = () => {
                             </div>
                         </div>
                     </Widget>
-                        </div>
-
                         {/* Right Side - AI Ensemble ML Widget */}
                         <div className="lg:col-span-1">
                             <EnsembleMLWidget compact={true} />
                         </div>
                     </div>
+                </div> {/* This div needs to be closed */}
                 </>
             ) : null}
 

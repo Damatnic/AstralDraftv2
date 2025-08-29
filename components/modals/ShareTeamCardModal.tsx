@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Team } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { useAppState } from '../../contexts/AppContext';
 import { generateTeamSlogan } from '../../services/geminiService';
 import TeamBrandingCard from '../team/TeamBrandingCard';
@@ -47,7 +47,7 @@ const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md"
                 onClick={e => e.stopPropagation()}

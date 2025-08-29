@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Team, League, PlayerAwardType, Player } from '../../types';
-import Modal from '../ui/Modal';
+import type { Team, League, PlayerAwardType } from '../../types';
+// import type { Player } from '../../types';
+import { Modal } from '../ui/Modal';
 import { AwardIcon } from '../icons/AwardIcon';
 
 interface AssignAwardsModalProps {
@@ -57,7 +58,7 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
     const selectClasses = "w-full bg-black/20 p-2 rounded-md border border-white/10";
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
                 onClick={e => e.stopPropagation()}

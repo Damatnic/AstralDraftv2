@@ -3,7 +3,7 @@ import React from 'react';
 import type { League } from '../../types';
 import { Widget } from '../ui/Widget';
 import { ChartBarIcon } from '../icons/ChartBarIcon';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface PowerBalanceChartProps {
     leagues: League[];
@@ -38,12 +38,12 @@ const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
                                 <div className="relative w-full h-5 bg-black/20 rounded-full">
                                     {/* League Average Line */}
                                     <div className="absolute top-0 bottom-0 left-1/2 w-px bg-red-500/50"></div>
-                                    <Tooltip text={`League Average: 50%`}>
+                                    <Tooltip content={`League Average: 50%`}>
                                         <div className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] text-red-400">AVG</div>
                                     </Tooltip>
                                     
                                     {/* My Team Bar */}
-                                    <Tooltip text={`Your Win Pct: ${winPct.toFixed(0)}%`}>
+                                    <Tooltip content={`Your Win Pct: ${winPct.toFixed(0)}%`}>
                                         <div 
                                             className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
                                             style={{ width: `${winPct}%`}}

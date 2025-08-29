@@ -5,10 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
-import { generateGamedayHighlight } from '../services/geminiService';
 import { Avatar } from '../components/ui/Avatar';
 import { formatRelativeTime } from '../utils/time';
-import type { Player, GamedayEvent } from '../types';
 import { useLiveData } from '../hooks/useLiveData';
 
 const GamedayHostView: React.FC = () => {
@@ -29,18 +27,7 @@ const GamedayHostView: React.FC = () => {
     const latestEvent = events.length > 0 ? events[events.length - 1] : null;
 
     React.useEffect(() => {
-        // This effect will run when a new event is added from the live data hook
-        const processNewEvent = async (event: GamedayEvent) => {
-            if (!matchup || !myTeam || !opponentTeam) return;
-
-            const commentary = await generateGamedayHighlight({ teamA: myTeam, teamB: opponentTeam }, event.player);
-            if (commentary) {
-                // We can update the event with the commentary or handle it separately
-                // For simplicity, let's just log it for now but it could be displayed
-                console.log(`New commentary for ${event.player.name}: ${commentary}`);
-            }
-        };
-
+        // Live data processing effects can be added here
         if (latestEvent && !latestEvent.text.includes("commentary")) { // Simple check to avoid reprocessing
              // In a real app, you might have a better way to check if commentary exists
         }
@@ -61,7 +48,8 @@ const GamedayHostView: React.FC = () => {
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         AI Gameday Host
-                    </h1<p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
+                    </h1>
+                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
                 </div>
                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
                     Back to Team Hub

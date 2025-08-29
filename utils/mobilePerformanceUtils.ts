@@ -17,12 +17,10 @@ export function debounce<T extends (...args: any[]) => any>(
     immediate = false
 ): DebouncedFunction<T> {
     let timeout: NodeJS.Timeout | null = null;
-    let result: ReturnType<T>;
     let savedThis: any;
     let savedArgs: Parameters<T>;
 
     const debounced = function(this: any, ...args: Parameters<T>) {
-        savedThis = this;
         savedArgs = args;
         
         const later = () => {
@@ -70,6 +68,7 @@ export function throttle<T extends (...args: any[]) => any>(
     const { leading = true, trailing = true } = options;
 
     const throttled = function(this: any, ...args: Parameters<T>) {
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         savedThis = this;
         savedArgs = args;
         
@@ -365,7 +364,7 @@ export const usePWAInstall = (): PWAInstallPrompt => {
 
         try {
             const result = await installPrompt.prompt();
-            console.log('PWA install prompt result:', result);
+            // PWA install prompt result tracked
             
             if (result.outcome === 'accepted') {
                 setInstallPrompt(null);

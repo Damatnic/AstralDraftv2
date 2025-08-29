@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Team } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { CloseIcon } from '../icons/CloseIcon';
 
 interface ManageTradeBlockModalProps {
@@ -47,7 +47,7 @@ const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, lea
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col"
                 role="dialog"

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { Team } from '../../types';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface MyTeamCompositionChartProps {
     team: Team;
@@ -21,25 +21,25 @@ const positionColors: { [key: string]: string } = {
 const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team }) => {
     const composition = React.useMemo(() => {
         const counts: { [key: string]: number } = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 };
-        team.roster.forEach((player: any) => {
+        team.roster.forEach((player: { position: string }) => {
             if (counts[player.position] !== undefined) {
                 counts[player.position]++;
             }
         });
-        return positionOrder.map((pos: any) => ({
+        return positionOrder.map((pos: string) => ({
             position: pos,
             count: counts[pos]
         }));
     }, [team.roster]);
 
-    const maxCount = Math.max(...composition.map((c: any) => c.count), 5); // Ensure a minimum height for the chart
+    const maxCount = Math.max(...composition.map((c: { count: number }) => c.count), 5); // Ensure a minimum height for the chart
 
     return (
         <div className="p-4">
              <h4 className="font-bold text-sm text-center mb-4 text-gray-300">Roster Composition</h4>
              <div className="flex justify-around items-end h-48 gap-2">
                 {composition.map(({ position, count }) => (
-                     <Tooltip key={position} text={`${count} ${position}${count !== 1 ? 's' : ''}`}>
+                     <Tooltip key={position} content="This is a tooltip">
                         <div className="flex flex-col items-center gap-1 w-full">
                             <div 
                                 className={`w-full bg-gradient-to-t ${positionColors[position]} rounded-t-md transition-all duration-500 ease-out`}

@@ -3,7 +3,7 @@
  * Complete trade proposal, review, and management system
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -35,7 +35,6 @@ const TradingSystem: React.FC = () => {
   const [offeredPlayers, setOfferedPlayers] = useState<any[]>([]);
   const [requestedPlayers, setRequestedPlayers] = useState<any[]>([]);
   const [tradeMessage, setTradeMessage] = useState('');
-  const [showTradeAnalysis, setShowTradeAnalysis] = useState(false);
 
   const league = state.leagues[0];
   const currentUser = state.user;
@@ -140,27 +139,6 @@ const TradingSystem: React.FC = () => {
     }
 
     // Simulate trade proposal
-    const newTrade: TradeProposal = {
-      id: `trade-${Date.now()}`,
-      fromTeamId: userTeam?.id || '',
-      toTeamId: selectedTeam,
-      fromTeamName: userTeam?.name || '',
-      toTeamName: league?.teams?.find(t => t.id === selectedTeam)?.name || '',
-      playersOffered: offeredPlayers,
-      playersRequested: requestedPlayers,
-      status: 'pending',
-      createdAt: new Date(),
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      message: tradeMessage,
-      fairnessScore: Math.floor(Math.random() * 30) + 70, // 70-100
-      analysis: {
-        winner: Math.random() > 0.5 ? 'team_a' : 'team_b',
-        summary: 'Trade analysis will be generated based on player values and team needs.',
-        teamAGrade: 'B+',
-        teamBGrade: 'B+'
-      }
-    };
-
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
@@ -226,7 +204,7 @@ const TradingSystem: React.FC = () => {
 
               {/* Players to Offer */}
               <div className="mb-6">
-                <label className="block text-white font-semibold mb-3">Players You're Offering</label>
+                <label className="block text-white font-semibold mb-3">Players You&apos;re Offering</label>
                 <div className="bg-slate-700/30 rounded-lg p-4 min-h-[100px] border-2 border-dashed border-slate-600">
                   {offeredPlayers.length === 0 ? (
                     <p className="text-slate-400 text-center py-4">Select players from your roster to offer</p>

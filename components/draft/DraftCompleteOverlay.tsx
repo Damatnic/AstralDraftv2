@@ -47,7 +47,7 @@ const DraftCompleteOverlay: React.FC<DraftCompleteOverlayProps> = ({ league, dis
             >
                 <PartyPopperIcon className="h-16 w-16 text-yellow-300 mx-auto mb-4" />
                 <h1 className="font-display text-4xl font-bold text-white mb-2">Draft Complete!</h1>
-                <p className="text-gray-300 mb-6">Congratulations, your draft for "{league.name}" has concluded. Now it's time to see how you did.</p>
+                <p className="text-gray-300 mb-6">Congratulations, your draft for &ldquo;{league.name}&rdquo; has concluded. Now it&apos;s time to see how you did.</p>
                 <div className="flex justify-center gap-4">
                     <button
                         onClick={handleViewAnalytics}

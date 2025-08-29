@@ -13,7 +13,7 @@ interface ChatMessage {
   content: string;
   timestamp: Date;
   suggestions?: string[];
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 interface AIResponse {
@@ -21,11 +21,11 @@ interface AIResponse {
   confidence: number;
   suggestions: string[];
   actionable: boolean;
-  data?: any;
+  data?: Record<string, unknown>;
 }
 
 const AIFantasyAssistant: React.FC = () => {
-  const { state, dispatch } = useAppState();
+  const { state } = useAppState();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -34,7 +34,6 @@ const AIFantasyAssistant: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const currentUser = state.user;
-  const league = state.leagues[0];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

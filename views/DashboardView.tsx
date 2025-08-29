@@ -18,15 +18,13 @@ import PowerBalanceChart from '../components/dashboard/PowerBalanceChart';
 import CustomizeDashboardModal from '../components/dashboard/CustomizeDashboardModal';
 import WhatsNextWidget from '../components/dashboard/WhatsNextWidget';
 import PerformanceMetricsWidget from '../components/dashboard/PerformanceMetricsWidget';
-import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 import ActivityFeedWidget from '../components/dashboard/ActivityFeedWidget';
 import { LayoutIcon } from '../components/icons/LayoutIcon';
 import OnTheHotSeatWidget from '../components/dashboard/OnTheHotSeatWidget';
 import { GlobeIcon } from '../components/icons/GlobeIcon';
 
-interface DashboardViewProps {
-  // No props currently needed, but interface ready for future expansion
-}
+type DashboardViewProps = Record<string, never>;
 
 const DashboardView: React.FC<DashboardViewProps> = () => {
     const { state, dispatch } = useAppState();
@@ -53,7 +51,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                         <LeagueCard key={league.id} league={league} onJoin={() => handleJoinLeague(league.id)} />
                     )) : (
                         <div className="p-3 sm:p-4 text-center text-secondary">
-                            <p className="mb-4 text-sm sm:text-base">You haven't joined any leagues yet.</p>
+                            <p className="mb-4 text-sm sm:text-base">You haven&apos;t joined any leagues yet.</p>
                             <div className="flex flex-col gap-3 justify-center">
                                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <button 

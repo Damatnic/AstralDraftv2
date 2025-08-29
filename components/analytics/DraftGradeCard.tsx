@@ -63,7 +63,7 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
                     <span className="text-3xl font-bold font-display">{grade.overall}</span>
                 </div>
             </div>
-            <p className="text-xs italic text-gray-300">"{grade.narrative}"</p>
+            <p className="text-xs italic text-gray-300">&ldquo;{grade.narrative}&rdquo;</p>
             <div className="text-xs space-y-1">
                 <p><strong>Best Value:</strong> {grade.bestPick.name} ({grade.bestPick.position})</p>
                 <p><strong>Biggest Reach:</strong> {grade.biggestReach.name} ({grade.biggestReach.position})</p>

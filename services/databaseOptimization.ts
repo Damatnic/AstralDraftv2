@@ -3,13 +3,15 @@
  * Creates optimized indexes and analyzes query performance for Oracle system
  */
 
+import { logger } from './loggingService';
+
 // Mock database functions until backend is properly set up
-const getRows = async (query: string, params?: any[]) => {
+const getRows = async (_query: string, _params?: unknown[]) => {
     // TODO: Implement actual database call
     return [];
 };
 
-const runQuery = async (query: string, params?: any[]) => {
+const runQuery = async (_query: string, _params?: unknown[]) => {
     // TODO: Implement actual database call
     return { rows: [] };
 };
@@ -53,7 +55,7 @@ export class DatabaseOptimizationService {
      * Create all optimized indexes for Oracle system
      */
     async createOptimizedIndexes(): Promise<void> {
-        console.log('🗄️ Creating optimized database indexes for Oracle system...');
+        logger.info('🗄️ Creating optimized database indexes for Oracle system...');
 
         const indexes = [
             // Oracle predictions performance indexes
@@ -181,9 +183,6 @@ export class DatabaseOptimizationService {
             }
         ];
 
-        let created = 0;
-        let skipped = 0;
-
         for (const index of indexes) {
             try {
                 // Check if index already exists
@@ -193,8 +192,6 @@ export class DatabaseOptimizationService {
                 `, [index.name]);
 
                 if (existing.length > 0) {
-                    console.log(`⏭️ Index ${index.name} already exists, skipping`);
-                    skipped++;
                     continue;
                 }
 
@@ -203,25 +200,18 @@ export class DatabaseOptimizationService {
                 const sql = `CREATE INDEX ${index.name} ON ${index.table} (${columnList})`;
                 
                 await runQuery(sql);
-                console.log(`✅ Created ${index.type} index: ${index.name} on ${index.table}(${columnList})`);
-                created++;
 
             } catch (error) {
                 console.error(`❌ Failed to create index ${index.name}:`, error);
             }
         }
 
-        console.log(`\n📊 Index creation summary:`);
-        console.log(`   ✅ Created: ${created} indexes`);
-        console.log(`   ⏭️ Skipped: ${skipped} indexes`);
-        console.log(`   📈 Total: ${indexes.length} indexes processed`);
     }
 
     /**
      * Analyze database performance and gather statistics
      */
     async analyzeDatabasePerformance(): Promise<DatabaseStats> {
-        console.log('📊 Analyzing database performance...');
 
         const tableStats: { [tableName: string]: TableStats } = {};
         const indexStats: { [indexName: string]: IndexStats } = {};
@@ -248,7 +238,6 @@ export class DatabaseOptimizationService {
                     lastUpdated: new Date().toISOString()
                 };
 
-                console.log(`📋 Table ${tableName}: ${rowCount.toLocaleString()} rows`);
             } catch (error) {
                 console.error(`❌ Error analyzing table ${tableName}:`, error);
             }
@@ -273,7 +262,6 @@ export class DatabaseOptimizationService {
                 };
             }
 
-            console.log(`📑 Found ${indexes.length} custom indexes`);
         } catch (error) {
             console.error('❌ Error analyzing indexes:', error);
         }
@@ -351,18 +339,14 @@ export class DatabaseOptimizationService {
      * Run VACUUM to optimize database
      */
     async optimizeDatabase(): Promise<void> {
-        console.log('🔧 Running database optimization...');
         
         try {
             // Run VACUUM to reclaim space and optimize
             await runQuery('VACUUM');
-            console.log('✅ Database VACUUM completed');
             
             // Analyze tables for query optimizer
             await runQuery('ANALYZE');
-            console.log('✅ Database ANALYZE completed');
             
-            console.log('🎉 Database optimization complete!');
         } catch (error) {
             console.error('❌ Database optimization failed:', error);
             throw error;

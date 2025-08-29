@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { Player } from '../../types';
 import { 
-    StarIcon, 
+    // StarIcon, 
     TrendingUpIcon, 
     TrendingDownIcon,
     InfoIcon,

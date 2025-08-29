@@ -6,7 +6,7 @@
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import type { Player, League } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import PlayerProfileView from './PlayerProfileView';
 import { players } from '../../data/players';
 
@@ -56,7 +56,7 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
 
     return (
         <AnimatePresence>
-            <Modal onClose={onClose}>
+            <Modal isOpen={true} onClose={onClose}>
                 <PlayerProfileView 
                     player={player}
                     league={activeLeague}

@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { useLeague } from '../../hooks/useLeague';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { SwordsIcon } from '../icons/SwordsIcon';
 
 interface ProposeSideBetModalProps {
@@ -48,7 +48,7 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
     const inputClasses = "mobile-touch-target w-full bg-black/20 px-3 py-3 rounded-md border border-white/10";
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"

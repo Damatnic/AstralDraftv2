@@ -3,10 +3,9 @@
  * Creates 14-week regular season + 3-week playoff schedule
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import { Team } from '../../types';
 
 interface Matchup {
   week: number;

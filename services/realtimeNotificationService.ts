@@ -120,7 +120,7 @@ class RealtimeNotificationService {
    */
   public connect(userId: string): void {
     if (this.socket?.connected) {
-      console.log('Already connected to notification service');
+      // Already connected to notification service
       return;
     }
 
@@ -150,7 +150,7 @@ class RealtimeNotificationService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-      console.log('Connected to notification service');
+      // Connected to notification service
       this.isConnected = true;
       this.connectionRetries = 0;
       
@@ -162,7 +162,7 @@ class RealtimeNotificationService {
     });
 
     this.socket.on('disconnect', () => {
-      console.log('Disconnected from notification service');
+      // Disconnected from notification service
       this.isConnected = false;
       this.scheduleReconnect();
     });
@@ -340,7 +340,7 @@ class RealtimeNotificationService {
     this.connectionRetries++;
 
     this.reconnectTimeout = setTimeout(() => {
-      console.log(`Attempting to reconnect (${this.connectionRetries}/${this.maxRetries})...`);
+      // Attempting to reconnect
       if (this.userId) {
         this.connect(this.userId);
       }
@@ -388,10 +388,10 @@ class RealtimeNotificationService {
       });
 
       if (response.ok) {
-        console.log('Push subscription sent to server');
+        // Push subscription sent to server
       }
     } catch (error) {
-      console.error('Failed to send subscription to server:', error);
+      // Failed to send subscription to server
     }
   }
 

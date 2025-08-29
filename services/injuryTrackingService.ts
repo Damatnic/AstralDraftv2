@@ -6,6 +6,7 @@
 
 import { productionSportsDataService, NFLPlayer } from './productionSportsDataService';
 import { machineLearningPlayerPredictionService } from './machineLearningPlayerPredictionService';
+import { logger } from './loggingService';
 
 // Enhanced injury status interface
 export type RecommendedAction = 'hold' | 'trade' | 'waiver';
@@ -174,7 +175,7 @@ class InjuryTrackingService {
     if (this.isMonitoring) return;
 
     this.isMonitoring = true;
-    console.log('🏥 Starting injury tracking monitoring...');
+    logger.info('🏥 Starting injury tracking monitoring...');
 
     // Check for updates every 2 minutes
     this.monitoringInterval = setInterval(() => {
@@ -194,7 +195,7 @@ class InjuryTrackingService {
       this.monitoringInterval = undefined;
     }
     this.isMonitoring = false;
-    console.log('🛑 Injury tracking monitoring stopped');
+    logger.info('🛑 Injury tracking monitoring stopped');
   }
 
   /**
@@ -277,6 +278,7 @@ class InjuryTrackingService {
       activeInjuries: activeInjuries.length,
       recentAlerts: await this.getRecentAlerts(24), // Last 24 hours
       criticalUpdates: activeInjuries.filter(s => 
+        
         s.severity === 'SEVERE' || s.severity === 'SEASON_ENDING'
       ),
       weeklyImpact: this.calculateWeeklyImpact(),
@@ -376,7 +378,7 @@ class InjuryTrackingService {
     }
   ): Promise<ReplacementPlayer[]> {
     try {
-      console.log(`🔍 Finding ${count} replacement recommendations for ${position} player ${playerId}`);
+      logger.info(`🔍 Finding ${count} replacement recommendations for ${position} player ${playerId}`);
 
       // Get all available players at the position
       const availablePlayers = await this.getAvailablePlayersByPosition(position, rosterAnalysis?.availablePlayers);
@@ -416,7 +418,7 @@ class InjuryTrackingService {
       const sortedRecommendations = [...recommendations];
       sortedRecommendations.sort((a, b) => b.replacementScore - a.replacementScore);
 
-      console.log(`✅ Found ${sortedRecommendations.slice(0, count).length} replacement recommendations`);
+      logger.info(`✅ Found ${sortedRecommendations.slice(0, count).length} replacement recommendations`);
       return sortedRecommendations.slice(0, count);
 
     } catch (error) {
@@ -720,7 +722,7 @@ class InjuryTrackingService {
     };
   }
 
-  private async getHistoricalPattern(playerId: string): Promise<InjuryHistoricalPattern> {
+  private async getHistoricalPattern(_playerId: string): Promise<InjuryHistoricalPattern> {
     // Mock historical data - in production, this would query injury database
     return {
       totalInjuries: Math.floor(Math.random() * 5),
@@ -854,7 +856,7 @@ class InjuryTrackingService {
     return actions;
   }
 
-  private async getRecentAlerts(hours: number): Promise<InjuryAlert[]> {
+  private async getRecentAlerts(_hours: number): Promise<InjuryAlert[]> {
     // Mock implementation - in production, would query alert history
     return [];
   }
@@ -883,7 +885,7 @@ class InjuryTrackingService {
   private calculateInjuryTrends(): InjuryTrendData[] {
     return ['QB', 'RB', 'WR', 'TE'].map(position => ({
       position,
-      trend: ['INCREASING', 'DECREASING', 'STABLE'][Math.floor(Math.random() * 3)] as any,
+      trend: (['INCREASING', 'DECREASING', 'STABLE'] as const)[Math.floor(Math.random() * 3)],
       weeklyCount: Array.from({ length: 18 }, () => Math.floor(Math.random() * 5)),
       seasonTotal: Math.floor(Math.random() * 50),
       averageRecoveryTime: Math.floor(Math.random() * 21) + 7
@@ -978,7 +980,7 @@ class InjuryTrackingService {
 
   // Enhanced helper methods for improved functionality
 
-  private async getAvailablePlayersByPosition(position: string, availablePlayers?: string[]): Promise<NFLPlayer[]> {
+  private async getAvailablePlayersByPosition(position: string, _availablePlayers?: string[]): Promise<NFLPlayer[]> {
     // In a real implementation, this would query available players from league data
     // For now, mock some available players
     const mockPlayers: NFLPlayer[] = [];
@@ -998,7 +1000,7 @@ class InjuryTrackingService {
     return mockPlayers;
   }
 
-  private async getPlayerMLPrediction(playerId: string): Promise<any> {
+  private async getPlayerMLPrediction(playerId: string): Promise<Record<string, unknown> | null> {
     try {
       return await machineLearningPlayerPredictionService.generatePlayerPrediction(playerId, 1, 2024);
     } catch (error) {
@@ -1007,7 +1009,7 @@ class InjuryTrackingService {
     }
   }
 
-  private async calculateMatchupDifficulty(playerId: string): Promise<number> {
+  private async calculateMatchupDifficulty(_playerId: string): Promise<number> {
     // Mock implementation - would analyze opponent defense rankings
     return 0.3 + Math.random() * 0.7; // 0.3-1.0 scale
   }
@@ -1058,7 +1060,7 @@ class InjuryTrackingService {
     );
   }
 
-  private async getWeeklyProjections(playerId: string): Promise<{ week: number; projection: number }[]> {
+  private async getWeeklyProjections(_playerId: string): Promise<{ week: number; projection: number }[]> {
     // Mock weekly projections - would use ML service
     const projections = [];
     for (let week = 1; week <= 18; week++) {
@@ -1070,7 +1072,7 @@ class InjuryTrackingService {
     return projections;
   }
 
-  private async assessReplacementRisks(playerId: string): Promise<string[]> {
+  private async assessReplacementRisks(_playerId: string): Promise<string[]> {
     const risks = [];
     
     // Mock risk assessment
@@ -1082,7 +1084,7 @@ class InjuryTrackingService {
     return risks;
   }
 
-  private async getUpcomingSchedule(team: string): Promise<{ week: number; opponent: string; difficulty: number }[]> {
+  private async getUpcomingSchedule(_team: string): Promise<{ week: number; opponent: string; difficulty: number }[]> {
     // Mock schedule data
     const opponents = ['BUF', 'MIA', 'NE', 'NYJ', 'BAL', 'CIN', 'CLE', 'PIT'];
     const schedule = [];
@@ -1098,7 +1100,7 @@ class InjuryTrackingService {
     return schedule;
   }
 
-  private async analyzePlayerWorkload(playerId: string): Promise<{
+  private async analyzePlayerWorkload(_playerId: string): Promise<{
     snapsPercentage: number;
     touchesPerGame: number;
     redZoneTargets: number;
@@ -1113,7 +1115,7 @@ class InjuryTrackingService {
     };
   }
 
-  private calculateAgeFactor(player: NFLPlayer): { age: number; riskMultiplier: number } {
+  private calculateAgeFactor(_player: NFLPlayer): { age: number; riskMultiplier: number } {
     // Mock age calculation - would get real age from player data
     const age = 22 + Math.random() * 10; // 22-32 years old
     let riskMultiplier = 1.0;
@@ -1227,7 +1229,18 @@ class InjuryTrackingService {
     return { currentValue, injuredValue, recommendedAction };
   }
 
-  private calculatePositionScarcityImpact(analyses: any[]): number {
+  private calculatePositionScarcityImpact(analyses: Array<{
+    playerId: string;
+    playerName: string;
+    injuryDetails: InjuryStatus;
+    replacementOptions: ReplacementPlayer[];
+    weeklyImpact: { week: number; pointsLost: number }[];
+    tradeImplications: {
+      currentValue: number;
+      injuredValue: number;
+      recommendedAction: RecommendedAction;
+    };
+  }>): number {
     // Calculate how much the injuries affect position scarcity
     const positionCounts = analyses.reduce((acc, analysis) => {
       acc[analysis.injuryDetails.position] = (acc[analysis.injuryDetails.position] || 0) + 1;
@@ -1249,7 +1262,18 @@ class InjuryTrackingService {
     return totalImpact;
   }
 
-  private generateActionableRecommendations(analyses: any[]): {
+  private generateActionableRecommendations(analyses: Array<{
+    playerId: string;
+    playerName: string;
+    injuryDetails: InjuryStatus;
+    replacementOptions: ReplacementPlayer[];
+    weeklyImpact: { week: number; pointsLost: number }[];
+    tradeImplications: {
+      currentValue: number;
+      injuredValue: number;
+      recommendedAction: RecommendedAction;
+    };
+  }>): {
     immediate: string[];
     shortTerm: string[];
     longTerm: string[];

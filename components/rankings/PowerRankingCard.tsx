@@ -53,7 +53,7 @@ const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMy
                     </div>
                 </div>
                 <p className="text-xs text-gray-300 mt-2 italic">
-                    "{ranking.justification}"
+                    &quot;{ranking.justification}&quot;
                 </p>
             </div>
         </motion.div>

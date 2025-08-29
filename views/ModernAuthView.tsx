@@ -157,7 +157,7 @@ const ModernAuthView: React.FC = () => {
           setErrors({ general: result.error || 'Registration failed' });
         }
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred. Please try again.' });
     } finally {
       setIsLoading(false);

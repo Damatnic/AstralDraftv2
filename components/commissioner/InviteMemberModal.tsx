@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { UserPlusIcon } from '../icons/UserPlusIcon';
 import type { League } from '../../types';
 import { ClipboardIcon } from '../icons/ClipboardIcon';
@@ -36,7 +36,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
                 onClick={e => e.stopPropagation()}
@@ -66,7 +66,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
                     <h3 className="font-semibold text-sm mb-2">Pending Invitations</h3>
                     {league.invitations && league.invitations.length > 0 ? (
                         <div className="space-y-2">
-                            {league.invitations.map((inv: any) => (
+                            {league.invitations.map((inv: { id: string; email: string; link: string }) => (
                                 <div key={inv.id} className="p-2 bg-black/10 rounded-md flex justify-between items-center">
                                     <span className="text-sm text-gray-300">{inv.email}</span>
                                     <button onClick={() => handleCopy(inv.link)} className="flex items-center gap-1 text-xs text-cyan-300">

@@ -277,7 +277,7 @@ export const SubscriptionPayment: React.FC<{
         <p>You can cancel anytime. No commitments.</p>
         {trialDays > 0 && (
           <p className="mt-1">
-            Trial ends in {trialDays} days. You won't be charged until then.
+            Trial ends in {trialDays} days. You won&apos;t be charged until then.
           </p>
         )}
       </div>

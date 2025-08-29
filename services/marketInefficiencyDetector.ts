@@ -3,7 +3,7 @@
  * Identifies undervalued players, market trends, and timing opportunities
  */
 
-import { Player, Team, League } from '../types';
+import { Player, League } from '../types';
 
 export interface MarketInefficiency {
     id: string;
@@ -61,7 +61,7 @@ class MarketInefficiencyDetector {
     public detectInefficiencies(
         availablePlayers: Player[], 
         currentPick: number,
-        recentPicks: any[],
+        recentPicks: Record<string, unknown>[],
         context: {
             currentRound: number;
             league: League;
@@ -85,9 +85,9 @@ class MarketInefficiencyDetector {
         return inefficiencies.sort((a, b) => this.calculatePriority(b) - this.calculatePriority(a));
     }
 
-    private updateMarketState(recentPicks: any[], availablePlayers: Player[]): void {
+    private updateMarketState(recentPicks: Record<string, unknown>[], availablePlayers: Player[]): void {
         // Update recent picks history
-        this.recentPicks = recentPicks.slice(-10); // Keep last 10 picks
+        this.recentPicks = (recentPicks as unknown as { pickNumber: number; player: Player; adpDifference: number; timestamp: number; }[]).slice(-10); // Keep last 10 picks
 
         // Update position trends
         this.updatePositionTrends(availablePlayers);
@@ -161,7 +161,7 @@ class MarketInefficiencyDetector {
         return inefficiencies;
     }
 
-    private detectPositionalRuns(availablePlayers: Player[], currentPick: number, context: any): MarketInefficiency[] {
+    private detectPositionalRuns(_availablePlayers: Player[], _currentPick: number, _context: Record<string, unknown>): MarketInefficiency[] {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
@@ -198,7 +198,7 @@ class MarketInefficiencyDetector {
         return inefficiencies;
     }
 
-    private detectTierBreaks(availablePlayers: Player[], currentPick: number): MarketInefficiency[] {
+    private detectTierBreaks(availablePlayers: Player[], _currentPick: number): MarketInefficiency[] {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
@@ -243,7 +243,7 @@ class MarketInefficiencyDetector {
         return inefficiencies;
     }
 
-    private detectPositionalScarcity(availablePlayers: Player[], context: any): MarketInefficiency[] {
+    private detectPositionalScarcity(availablePlayers: Player[], _context: Record<string, unknown>): MarketInefficiency[] {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
@@ -283,11 +283,11 @@ class MarketInefficiencyDetector {
         return inefficiencies;
     }
 
-    private detectByeWeekOpportunities(availablePlayers: Player[], currentPick: number, context: any): MarketInefficiency[] {
+    private detectByeWeekOpportunities(availablePlayers: Player[], currentPick: number, _context: Record<string, unknown>): MarketInefficiency[] {
         const inefficiencies: MarketInefficiency[] = [];
 
         // Late round strategy - target players with favorable bye weeks
-        if (context.currentRound >= 8) {
+        if (((_context as Record<string, unknown>)?.currentRound as number) >= 8) {
             const byeWeekCounts = this.analyzeByeWeekDistribution(availablePlayers);
             const optimalByeWeeks = this.findOptimalByeWeeks(byeWeekCounts);
 
@@ -319,7 +319,7 @@ class MarketInefficiencyDetector {
         return inefficiencies;
     }
 
-    private detectMarketPanic(availablePlayers: Player[], currentPick: number): MarketInefficiency[] {
+    private detectMarketPanic(_availablePlayers: Player[], _currentPick: number): MarketInefficiency[] {
         const inefficiencies: MarketInefficiency[] = [];
 
         // Detect if recent picks show panic (multiple reaches in a row)
@@ -426,7 +426,7 @@ class MarketInefficiencyDetector {
         return 999;
     }
 
-    private analyzeWhyFalling(player: Player): string {
+    private analyzeWhyFalling(_player: Player): string {
         // Simplified analysis - would be more sophisticated
         const reasons = [
             'Market overreaction to recent performance',
@@ -472,7 +472,7 @@ class MarketInefficiencyDetector {
         const avgCount = Object.values(byeWeekCounts).reduce((sum, count) => sum + count, 0) / Object.keys(byeWeekCounts).length;
         
         return Object.entries(byeWeekCounts)
-            .filter(([week, count]) => count > avgCount * 1.2)
+            .filter(([_week, count]) => count > avgCount * 1.2)
             .map(([week]) => parseInt(week));
     }
 }

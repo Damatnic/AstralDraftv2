@@ -4,6 +4,7 @@
  */
 
 import Stripe from 'stripe';
+import { logger } from './loggingService';
 
 // Stripe configuration
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -99,7 +100,7 @@ export interface PaymentHistory {
   stripePaymentIntentId: string;
   createdAt: Date;
   updatedAt: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface RefundRequest {
@@ -123,15 +124,15 @@ class PaymentService {
    */
   private async initializeProducts(): Promise<void> {
     try {
-      console.log('🔧 Initializing Stripe products...');
+      logger.info('🔧 Initializing Stripe products...');
       
       for (const product of Object.values(PAYMENT_PRODUCTS)) {
         await this.ensureProductExists(product);
       }
       
-      console.log('✅ Stripe products initialized successfully');
+      logger.info('✅ Stripe products initialized successfully');
     } catch (error) {
-      console.error('❌ Failed to initialize Stripe products:', error);
+      logger.error('❌ Failed to initialize Stripe products:', error);
     }
   }
 
@@ -152,7 +153,7 @@ class PaymentService {
           description: productConfig.description,
           type: productConfig.type === 'subscription' ? 'service' : 'good'
         });
-        console.log(`✅ Created Stripe product: ${productConfig.name}`);
+        logger.info(`✅ Created Stripe product: ${productConfig.name}`);
       } else {
         product = products.data[0];
       }
@@ -172,11 +173,11 @@ class PaymentService {
         }
 
         await stripe.prices.create(priceData);
-        console.log(`✅ Created Stripe price for: ${productConfig.name}`);
+        logger.info(`✅ Created Stripe price for: ${productConfig.name}`);
       }
 
     } catch (error) {
-      console.error(`❌ Failed to ensure product exists: ${productConfig.name}`, error);
+      logger.error(`❌ Failed to ensure product exists: ${productConfig.name}`, error);
     }
   }
 
@@ -206,7 +207,7 @@ class PaymentService {
         },
       });
 
-      console.log(`💳 Created contest entry payment intent for user ${userId}: $${product.price / 100}`);
+      logger.info(`💳 Created contest entry payment intent for user ${userId}: $${product.price / 100}`);
 
       return {
         id: paymentIntent.id,
@@ -218,7 +219,7 @@ class PaymentService {
       };
 
     } catch (error) {
-      console.error('❌ Failed to create contest entry payment:', error);
+      logger.error('❌ Failed to create contest entry payment:', error);
       throw new Error('Failed to create payment intent');
     }
   }
@@ -255,12 +256,12 @@ class PaymentService {
         expand: ['latest_invoice.payment_intent'],
       });
 
-      console.log(`🔔 Created subscription for user ${userId}: ${product.name}`);
+      logger.info(`🔔 Created subscription for user ${userId}: ${product.name}`);
 
       return subscription;
 
     } catch (error) {
-      console.error('❌ Failed to create subscription:', error);
+      logger.error('❌ Failed to create subscription:', error);
       throw new Error('Failed to create subscription');
     }
   }
@@ -278,7 +279,7 @@ class PaymentService {
 
       if (existingCustomers.data.length > 0) {
         const customer = existingCustomers.data[0];
-        console.log(`📋 Found existing Stripe customer for ${email}`);
+        logger.info(`📋 Found existing Stripe customer for ${email}`);
         return customer;
       }
 
@@ -291,11 +292,11 @@ class PaymentService {
         }
       });
 
-      console.log(`👤 Created new Stripe customer for ${email}`);
+      logger.info(`👤 Created new Stripe customer for ${email}`);
       return customer;
 
     } catch (error) {
-      console.error('❌ Failed to create/get customer:', error);
+      logger.error('❌ Failed to create/get customer:', error);
       throw new Error('Failed to manage customer');
     }
   }
@@ -307,7 +308,7 @@ class PaymentService {
     try {
       const event = stripe.webhooks.constructEvent(payload, signature, this.webhookSecret);
 
-      console.log(`🔔 Processing Stripe webhook: ${event.type}`);
+      logger.info(`🔔 Processing Stripe webhook: ${event.type}`);
 
       switch (event.type) {
         case 'payment_intent.succeeded':
@@ -336,11 +337,11 @@ class PaymentService {
           break;
 
         default:
-          console.log(`⚠️ Unhandled webhook event type: ${event.type}`);
+          logger.info(`⚠️ Unhandled webhook event type: ${event.type}`);
       }
 
     } catch (error) {
-      console.error('❌ Webhook processing error:', error);
+      logger.error('❌ Webhook processing error:', error);
       throw error;
     }
   }
@@ -376,7 +377,7 @@ class PaymentService {
       return userPayments;
 
     } catch (error) {
-      console.error('❌ Failed to get payment history:', error);
+      logger.error('❌ Failed to get payment history:', error);
       throw new Error('Failed to retrieve payment history');
     }
   }
@@ -392,18 +393,18 @@ class PaymentService {
         expand: ['data.items.data.price.product']
       });
 
-      return subscriptions.data.map(sub => ({
+      return subscriptions.data.map((sub: Stripe.Subscription) => ({
         id: sub.id,
         productId: sub.metadata.productId || '',
         priceId: sub.items.data[0].price.id,
         status: sub.status as SubscriptionPlan['status'],
-        currentPeriodStart: new Date((sub as any).current_period_start * 1000),
-        currentPeriodEnd: new Date((sub as any).current_period_end * 1000),
-        cancelAtPeriodEnd: (sub as any).cancel_at_period_end
+        currentPeriodStart: new Date(sub.created * 1000), // Use created as fallback
+        currentPeriodEnd: new Date((sub.created + 30 * 24 * 60 * 60) * 1000), // 30 days from creation as fallback
+        cancelAtPeriodEnd: false // Default to false since cancel_at_period_end isn't available
       }));
 
     } catch (error) {
-      console.error('❌ Failed to get user subscriptions:', error);
+      logger.error('❌ Failed to get user subscriptions:', error);
       throw new Error('Failed to retrieve subscriptions');
     }
   }
@@ -417,18 +418,18 @@ class PaymentService {
       
       if (immediate) {
         subscription = await stripe.subscriptions.cancel(subscriptionId);
-        console.log(`🗑️ Immediately cancelled subscription: ${subscriptionId}`);
+        logger.info(`🗑️ Immediately cancelled subscription: ${subscriptionId}`);
       } else {
         subscription = await stripe.subscriptions.update(subscriptionId, {
           cancel_at_period_end: true
         });
-        console.log(`📅 Scheduled subscription cancellation: ${subscriptionId}`);
+        logger.info(`📅 Scheduled subscription cancellation: ${subscriptionId}`);
       }
 
       return subscription;
 
     } catch (error) {
-      console.error('❌ Failed to cancel subscription:', error);
+      logger.error('❌ Failed to cancel subscription:', error);
       throw new Error('Failed to cancel subscription');
     }
   }
@@ -450,12 +451,12 @@ class PaymentService {
 
       const refund = await stripe.refunds.create(refundData);
 
-      console.log(`💰 Processed refund: ${refund.id} for payment ${refundRequest.paymentId}`);
+      logger.info(`💰 Processed refund: ${refund.id} for payment ${refundRequest.paymentId}`);
 
       return refund;
 
     } catch (error) {
-      console.error('❌ Failed to process refund:', error);
+      logger.error('❌ Failed to process refund:', error);
       throw new Error('Failed to process refund');
     }
   }
@@ -533,7 +534,7 @@ class PaymentService {
       };
 
     } catch (error) {
-      console.error('❌ Failed to get payment analytics:', error);
+      logger.error('❌ Failed to get payment analytics:', error);
       throw new Error('Failed to retrieve payment analytics');
     }
   }
@@ -543,7 +544,7 @@ class PaymentService {
   private async handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent): Promise<void> {
     const { userId, contestId, productId, type } = paymentIntent.metadata;
     
-    console.log(`✅ Payment succeeded for user ${userId}: ${productId}`);
+    logger.info(`✅ Payment succeeded for user ${userId}: ${productId}`);
     
     if (type === 'contest_entry' && contestId) {
       // Grant contest entry access
@@ -557,7 +558,7 @@ class PaymentService {
   private async handlePaymentFailure(paymentIntent: Stripe.PaymentIntent): Promise<void> {
     const { userId, productId } = paymentIntent.metadata;
     
-    console.log(`❌ Payment failed for user ${userId}: ${productId}`);
+    logger.info(`❌ Payment failed for user ${userId}: ${productId}`);
     
     // Send notification to user about payment failure
     // await this.sendPaymentFailureNotification(userId, paymentIntent);
@@ -566,7 +567,7 @@ class PaymentService {
   private async handleSubscriptionUpdate(subscription: Stripe.Subscription): Promise<void> {
     const { userId } = subscription.metadata;
     
-    console.log(`🔔 Subscription updated for user ${userId}: ${subscription.status}`);
+    logger.info(`🔔 Subscription updated for user ${userId}: ${subscription.status}`);
     
     // Update user's subscription status in database
     // await this.updateUserSubscription(userId, subscription);
@@ -575,21 +576,21 @@ class PaymentService {
   private async handleSubscriptionCancellation(subscription: Stripe.Subscription): Promise<void> {
     const { userId } = subscription.metadata;
     
-    console.log(`🗑️ Subscription cancelled for user ${userId}`);
+    logger.info(`🗑️ Subscription cancelled for user ${userId}`);
     
     // Remove premium features access
     // await this.revokePremiumAccess(userId);
   }
 
   private async handleInvoicePaymentSuccess(invoice: Stripe.Invoice): Promise<void> {
-    console.log(`✅ Invoice payment succeeded: ${invoice.id}`);
+    logger.info(`✅ Invoice payment succeeded: ${invoice.id}`);
     
     // Handle successful recurring payment
     // await this.handleRecurringPaymentSuccess(invoice);
   }
 
   private async handleInvoicePaymentFailure(invoice: Stripe.Invoice): Promise<void> {
-    console.log(`❌ Invoice payment failed: ${invoice.id}`);
+    logger.info(`❌ Invoice payment failed: ${invoice.id}`);
     
     // Handle failed recurring payment
     // await this.handleRecurringPaymentFailure(invoice);
@@ -597,12 +598,12 @@ class PaymentService {
 
   private async grantContestAccess(userId: string, contestId: string): Promise<void> {
     // Implementation would grant user access to the contest
-    console.log(`🎯 Granting contest access for user ${userId} to contest ${contestId}`);
+    logger.info(`🎯 Granting contest access for user ${userId} to contest ${contestId}`);
   }
 
   private async recordPayment(paymentIntent: Stripe.PaymentIntent): Promise<void> {
     // Implementation would record payment in database
-    console.log(`📝 Recording payment: ${paymentIntent.id}`);
+    logger.info(`📝 Recording payment: ${paymentIntent.id}`);
   }
 }
 

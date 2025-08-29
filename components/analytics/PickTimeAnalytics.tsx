@@ -13,7 +13,7 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }) => {
         const pickTimes: { [teamId: number]: number[] } = {};
 
         const sortedPicks = [...league.draftPicks]
-            .filter((p: any) => p.timestamp)
+            .filter((p: { timestamp?: number }) => p.timestamp)
             .sort((a, b) => a.overall - b.overall);
 
         for (let i = 1; i < sortedPicks.length; i++) {
@@ -30,7 +30,7 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }) => {
             }
         }
         
-        return league.teams.map((team: any) => {
+        return league.teams.map((team: { id: number; name: string; avatar?: string }) => {
             const times = pickTimes[team.id] || [];
             const avgTime = times.length > 0 ? times.reduce((a, b) => a + b, 0) / times.length : 0;
             return {
@@ -50,7 +50,7 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }) => {
                         <div key={team.id} className="flex items-center justify-between p-2 bg-black/10 rounded-md">
                             <div className="flex items-center gap-3">
                                 <span className="font-bold text-lg w-6 text-center">{index + 1}</span>
-                                <Avatar avatar={team.avatar} className="w-8 h-8 rounded-md" />
+                                <Avatar avatar={team.avatar || ''} className="w-8 h-8 rounded-md" />
                                 <div>
                                     <p className="font-semibold text-sm">{team.name}</p>
                                 </div>

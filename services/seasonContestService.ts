@@ -472,7 +472,7 @@ class SeasonContestService {
       if (!weeklyPrediction) continue;
 
       let weeklyScore = 0;
-      let correctCount = 0;
+      // let correctCount = 0;
       let currentStreak = this.getCurrentStreak(participant, week - 1);
 
       // Score each prediction
@@ -499,7 +499,7 @@ class SeasonContestService {
           
           prediction.pointsEarned = points;
           weeklyScore += points;
-          correctCount++;
+          // correctCount++;
           currentStreak++;
         } else {
           prediction.pointsEarned = 0;
@@ -870,7 +870,7 @@ class SeasonContestService {
     return analysis;
   }
 
-  private awardWeeklyBadges(contestId: string, week: number): void {
+  private awardWeeklyBadges(_contestId: string, _week: number): void {
     // Implementation for awarding weekly badges
   }
 
@@ -962,7 +962,7 @@ class SeasonContestService {
     return longestStreak;
   }
 
-  private getStreakType(participant: ContestParticipant): 'WEEKLY_WINS' | 'CORRECT_PREDICTIONS' | 'TOP_10_FINISHES' {
+  private getStreakType(_participant: ContestParticipant): 'WEEKLY_WINS' | 'CORRECT_PREDICTIONS' | 'TOP_10_FINISHES' {
     // For now, default to correct predictions streak
     return 'CORRECT_PREDICTIONS';
   }

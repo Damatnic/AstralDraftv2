@@ -98,7 +98,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
     // Handle creating new league
     const handleCreateLeague = () => {
         // Show placeholder message - full implementation would show creation modal
-        console.log('Create league modal not yet implemented');
+        // TODO: Implement create league modal
     };
 
     // Handle invitation responses
@@ -254,14 +254,14 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     <div className="flex items-center space-x-4">
                         <select
                             value={league?.id || ''}
-                            onChange={(e: any) => {
-                                const selectedLeague = userLeagues.find((l: any) => l.id === e.target.value);
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                const selectedLeague = userLeagues.find((l: { id: string }) => l.id === e.target.value);
                                 setLeague(selectedLeague || null);
                             }}
                             className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
                         >
                             <option value="">Select a League</option>
-                            {userLeagues.map((l: any) => (
+                            {userLeagues.map((l: { id: string; name: string; commissionerId?: string }) => (
                                 <option key={l.id} value={l.id}>
                                     {l.name} {l.commissionerId === user?.id.toString() && '(Commissioner)'}
                                 </option>
@@ -299,7 +299,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             Pending Invitations ({invitations.length})
                         </h3>
                         <div className="space-y-2">
-                            {invitations.map((invitation: any) => (
+                            {invitations.map((invitation: LeagueInvitation) => (
                                 <InvitationCard
                                     key={invitation.id}
                                     invitation={invitation}
@@ -320,7 +320,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             { id: 'settings', label: 'Settings', icon: SettingsIcon },
                             { id: 'history', label: 'History', icon: CalendarIcon },
                             ...(isCommissioner ? [{ id: 'commissioner', label: 'Commissioner', icon: ShieldIcon }] : [])
-                        ].map((tab: any) => (
+                        ].map((tab: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as Tab)}
@@ -427,7 +427,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
             <Widget title="Current Standings" className="bg-gray-900/50">
                 <div className="space-y-2">
                     {league.members
-                        .filter((m: any) => m.record)
+                        .filter((m: { record?: unknown }) => m.record)
                         .sort((a, b) => (b.record?.wins || 0) - (a.record?.wins || 0))
                         .slice(0, 5)
                         .map((member, index) => (
@@ -455,7 +455,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
             {/* Recent Activity */}
             <Widget title="Recent Activity" className="bg-gray-900/50">
                 <div className="space-y-2">
-                    {league.history.slice(0, 5).map((event: any) => (
+                    {league.history.slice(0, 5).map((event: { id: string; type: string; description: string; timestamp: Date }) => (
                         <div key={event.id} className="py-2 border-b border-gray-700 last:border-b-0">
                             <div className="text-sm text-white">{event.description}</div>
                             <div className="text-xs text-gray-400">
@@ -504,9 +504,9 @@ const InvitationCard: React.FC<{
 };
 
 // Placeholder components for other tabs
-const MembersManagement: React.FC<any> = () => <div>Members Management - Coming Soon</div>;
-const LeagueSettingsPanel: React.FC<any> = () => <div>League Settings - Coming Soon</div>;
-const LeagueHistory: React.FC<any> = () => <div>League History - Coming Soon</div>;
-const CommissionerPanel: React.FC<any> = () => <div>Commissioner Panel - Coming Soon</div>;
+const MembersManagement: React.FC = () => <div>Members Management - Coming Soon</div>;
+const LeagueSettingsPanel: React.FC = () => <div>League Settings - Coming Soon</div>;
+const LeagueHistory: React.FC = () => <div>League History - Coming Soon</div>;
+const CommissionerPanel: React.FC = () => <div>Commissioner Panel - Coming Soon</div>;
 
 export default LeagueManagementInterface;

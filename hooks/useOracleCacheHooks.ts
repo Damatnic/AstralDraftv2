@@ -1,544 +1,459 @@
 /**
- * Oracle Cache Optimization Hooks
- * React hooks for intelligent caching of Oracle data
+ * Oracle Cache Hooks
+ * Specialized caching hooks for Oracle prediction system
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { oracleIntelligentCachingService } from '../services/oracleIntelligentCachingService';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
-interface CacheHookOptions {
-    strategy?: string;
-    ttl?: number;
-    tags?: string[];
-    forceFresh?: boolean;
-    enabled?: boolean;
-    dependencies?: any[];
-    background?: boolean;
+// Enhanced interfaces for type safety
+export interface CacheEntry<T = unknown> {
+  data: T;
+  timestamp: number;
+  ttl: number;
+  accessed: number;
+  version: string;
+  size: number;
 }
 
-interface CacheState<T> {
-    data: T | null;
-    loading: boolean;
-    error: Error | null;
-    lastUpdated: number | null;
-    fromCache: boolean;
-    cacheKey: string;
+export interface CacheStats {
+  hits: number;
+  misses: number;
+  evictions: number;
+  totalSize: number;
+  entryCount: number;
+  hitRatio: number;
 }
+
+export interface CacheConfig {
+  maxSize: number;
+  defaultTtl: number;
+  enableCompression: boolean;
+  enablePersistence: boolean;
+  storagePrefix: string;
+  evictionPolicy: 'lru' | 'fifo' | 'ttl';
+}
+
+export interface PredictionCacheData {
+  playerId: string;
+  week: number;
+  season: number;
+  projectedPoints: number;
+  confidence: number;
+  reasoning: string[];
+  modelVersion: string;
+  cachedAt: number;
+}
+
+export interface AnalyticsCacheData {
+  type: 'player_trends' | 'matchup_analysis' | 'injury_impact' | 'weather_impact';
+  playerId?: string;
+  teamId?: string;
+  week?: number;
+  season?: number;
+  data: Record<string, unknown>;
+  cachedAt: number;
+}
+
+export interface CacheHookState<T> {
+  data: T | null;
+  isLoading: boolean;
+  isCached: boolean;
+  cacheAge: number;
+  error: string | null;
+  stats: CacheStats;
+}
+
+export interface CacheHookActions<T> {
+  refresh: () => Promise<void>;
+  invalidate: () => void;
+  updateCache: (data: T) => void;
+  clearCache: () => void;
+  getCacheInfo: () => CacheEntry<T> | null;
+}
+
+// Default cache configuration
+const DEFAULT_CACHE_CONFIG: CacheConfig = {
+  maxSize: 50 * 1024 * 1024, // 50MB
+  defaultTtl: 300000, // 5 minutes
+  enableCompression: false,
+  enablePersistence: true,
+  storagePrefix: 'oracle_cache_',
+  evictionPolicy: 'lru'
+};
 
 /**
- * Hook for cached Oracle predictions with automatic background refresh
+ * Generic cache hook for Oracle predictions
  */
-export function useCachedOraclePredictions(
-    week: number,
-    userId?: string,
-    options: CacheHookOptions = {}
-) {
-    const cacheKey = `predictions:week:${week}:${userId || 'anonymous'}`;
-    const [state, setState] = useState<CacheState<any>>({
-        data: null,
-        loading: true,
-        error: null,
-        lastUpdated: null,
-        fromCache: false,
-        cacheKey
-    });
-
-    const fetchPredictions = useCallback(async () => {
-        if (!options.enabled && options.enabled !== undefined) return;
-
-        try {
-            setState(prev => ({ ...prev, loading: true, error: null }));
-
-            const predictions = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    // Simulate API call - replace with actual Oracle prediction API
-                    const response = await fetch(`/api/oracle/predictions/${week}?userId=${userId}`);
-                    if (!response.ok) throw new Error('Failed to fetch predictions');
-                    return response.json();
-                },
-                {
-                    strategy: 'predictions',
-                    tags: ['predictions', 'oracle', `week-${week}`, `user-${userId}`],
-                    forceFresh: options.forceFresh
-                }
-            );
-
-            setState(prev => ({
-                ...prev,
-                data: predictions,
-                loading: false,
-                lastUpdated: Date.now(),
-                fromCache: !options.forceFresh
-            }));
-        } catch (error) {
-            setState(prev => ({
-                ...prev,
-                error: error as Error,
-                loading: false
-            }));
-        }
-    }, [cacheKey, week, userId, options.forceFresh, options.enabled]);
-
-    // Auto-refresh effect
-    useEffect(() => {
-        fetchPredictions();
-    }, [fetchPredictions, ...(options.dependencies || [])]);
-
-    // Background refresh for predictions
-    useEffect(() => {
-        if (!options.background) return;
-
-        const interval = setInterval(() => {
-            fetchPredictions();
-        }, 2 * 60 * 1000); // Refresh every 2 minutes
-
-        return () => clearInterval(interval);
-    }, [fetchPredictions, options.background]);
-
-    const refresh = useCallback(() => {
-        return fetchPredictions();
-    }, [fetchPredictions]);
-
-    const invalidate = useCallback(() => {
-        oracleIntelligentCachingService.delete(cacheKey);
-        fetchPredictions();
-    }, [cacheKey, fetchPredictions]);
-
-    return {
-        ...state,
-        refresh,
-        invalidate,
-        isStale: state.lastUpdated && Date.now() - state.lastUpdated > 5 * 60 * 1000
-    };
-}
-
-/**
- * Hook for cached Oracle analytics with intelligent prefetching
- */
-export function useCachedOracleAnalytics(
-    userId: string,
-    timeRange: string = '7d',
-    options: CacheHookOptions = {}
-) {
-    const cacheKey = `analytics:${userId}:${timeRange}`;
-    const [state, setState] = useState<CacheState<any>>({
-        data: null,
-        loading: true,
-        error: null,
-        lastUpdated: null,
-        fromCache: false,
-        cacheKey
-    });
-
-    const fetchAnalytics = useCallback(async () => {
-        if (!options.enabled && options.enabled !== undefined) return;
-
-        try {
-            setState(prev => ({ ...prev, loading: true, error: null }));
-
-            const analytics = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    const response = await fetch(`/api/oracle/analytics/${userId}?range=${timeRange}`);
-                    if (!response.ok) throw new Error('Failed to fetch analytics');
-                    return response.json();
-                },
-                {
-                    strategy: 'analytics',
-                    tags: ['analytics', 'oracle', `user-${userId}`, `range-${timeRange}`],
-                    forceFresh: options.forceFresh
-                }
-            );
-
-            setState(prev => ({
-                ...prev,
-                data: analytics,
-                loading: false,
-                lastUpdated: Date.now(),
-                fromCache: !options.forceFresh
-            }));
-
-            // Prefetch related analytics
-            if (analytics && !options.forceFresh) {
-                prefetchRelatedAnalytics(userId, timeRange);
-            }
-        } catch (error) {
-            setState(prev => ({
-                ...prev,
-                error: error as Error,
-                loading: false
-            }));
-        }
-    }, [cacheKey, userId, timeRange, options.forceFresh, options.enabled]);
-
-    const prefetchRelatedAnalytics = useCallback(async (userId: string, currentRange: string) => {
-        const relatedRanges = ['1d', '7d', '30d'].filter(range => range !== currentRange);
-        
-        for (const range of relatedRanges) {
-            const prefetchKey = `analytics:${userId}:${range}`;
-            
-            // Only prefetch if not already cached
-            const cached = await oracleIntelligentCachingService.get(prefetchKey);
-            if (!cached) {
-                oracleIntelligentCachingService.set(
-                    prefetchKey,
-                    { prefetched: true, timestamp: Date.now() },
-                    { strategy: 'analytics', ttl: 30 * 60 * 1000 }
-                );
-            }
-        }
-    }, []);
-
-    useEffect(() => {
-        fetchAnalytics();
-    }, [fetchAnalytics, ...(options.dependencies || [])]);
-
-    const refresh = useCallback(() => {
-        return fetchAnalytics();
-    }, [fetchAnalytics]);
-
-    const invalidate = useCallback(() => {
-        oracleIntelligentCachingService.clearByTags([`user-${userId}`]);
-        fetchAnalytics();
-    }, [userId, fetchAnalytics]);
-
-    return {
-        ...state,
-        refresh,
-        invalidate,
-        isStale: state.lastUpdated && Date.now() - state.lastUpdated > 15 * 60 * 1000
-    };
-}
-
-/**
- * Hook for cached Oracle leaderboard with real-time updates
- */
-export function useCachedOracleLeaderboard(
-    category: string = 'overall',
-    options: CacheHookOptions = {}
-) {
-    const cacheKey = `leaderboard:${category}`;
-    const [state, setState] = useState<CacheState<any>>({
-        data: null,
-        loading: true,
-        error: null,
-        lastUpdated: null,
-        fromCache: false,
-        cacheKey
-    });
-
-    const fetchLeaderboard = useCallback(async () => {
-        if (!options.enabled && options.enabled !== undefined) return;
-
-        try {
-            setState(prev => ({ ...prev, loading: true, error: null }));
-
-            const leaderboard = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    const response = await fetch(`/api/oracle/leaderboard/${category}`);
-                    if (!response.ok) throw new Error('Failed to fetch leaderboard');
-                    return response.json();
-                },
-                {
-                    strategy: 'leaderboard',
-                    tags: ['leaderboard', 'oracle', `category-${category}`],
-                    forceFresh: options.forceFresh
-                }
-            );
-
-            setState(prev => ({
-                ...prev,
-                data: leaderboard,
-                loading: false,
-                lastUpdated: Date.now(),
-                fromCache: !options.forceFresh
-            }));
-        } catch (error) {
-            setState(prev => ({
-                ...prev,
-                error: error as Error,
-                loading: false
-            }));
-        }
-    }, [cacheKey, category, options.forceFresh, options.enabled]);
-
-    // Real-time updates for leaderboard
-    useEffect(() => {
-        fetchLeaderboard();
-
-        const interval = setInterval(fetchLeaderboard, 5 * 60 * 1000); // 5 minutes
-        return () => clearInterval(interval);
-    }, [fetchLeaderboard, ...(options.dependencies || [])]);
-
-    const refresh = useCallback(() => {
-        return fetchLeaderboard();
-    }, [fetchLeaderboard]);
-
-    const invalidate = useCallback(() => {
-        oracleIntelligentCachingService.clearByTags(['leaderboard']);
-        fetchLeaderboard();
-    }, [fetchLeaderboard]);
-
-    return {
-        ...state,
-        refresh,
-        invalidate,
-        isStale: state.lastUpdated && Date.now() - state.lastUpdated > 5 * 60 * 1000
-    };
-}
-
-/**
- * Hook for Oracle cache statistics and management
- */
-export function useOracleCacheManager() {
-    const [stats, setStats] = useState<any>(null);
-    const [isOptimizing, setIsOptimizing] = useState(false);
-
-    const refreshStats = useCallback(() => {
-        const cacheStats = oracleIntelligentCachingService.getStats();
-        setStats(cacheStats);
-    }, []);
-
-    const optimize = useCallback(async () => {
-        setIsOptimizing(true);
-        try {
-            const result = await oracleIntelligentCachingService.optimize();
-            refreshStats();
-            return result;
-        } finally {
-            setIsOptimizing(false);
-        }
-    }, [refreshStats]);
-
-    const warmCache = useCallback(async (userId: string, week?: number) => {
-        await oracleIntelligentCachingService.warmCache(userId, week);
-        refreshStats();
-    }, [refreshStats]);
-
-    const clearCache = useCallback((tags?: string[]) => {
-        if (tags) {
-            oracleIntelligentCachingService.clearByTags(tags);
-        } else {
-            // Clear all Oracle caches
-            oracleIntelligentCachingService.clearByTags(['oracle']);
-        }
-        refreshStats();
-    }, [refreshStats]);
-
-    useEffect(() => {
-        refreshStats();
-        const interval = setInterval(refreshStats, 30 * 1000); // Update every 30 seconds
-        return () => clearInterval(interval);
-    }, [refreshStats]);
-
-    return {
-        stats,
-        isOptimizing,
-        optimize,
-        warmCache,
-        clearCache,
-        refreshStats
-    };
-}
-
-/**
- * Hook for intelligent Oracle data prefetching
- */
-export function useOracleDataPrefetcher(
-    userId: string,
-    context: {
-        currentView?: string;
-        recentActions?: string[];
-        userPreferences?: Record<string, any>;
+export function useOraclePredictionCache<T = PredictionCacheData>(
+  cacheKey: string,
+  fetcher: () => Promise<T>,
+  config: Partial<CacheConfig> = {}
+): [CacheHookState<T>, CacheHookActions<T>] {
+  
+  const mergedConfig = useMemo(() => ({ ...DEFAULT_CACHE_CONFIG, ...config }), [config]);
+  
+  const [state, setState] = useState<CacheHookState<T>>({
+    data: null,
+    isLoading: false,
+    isCached: false,
+    cacheAge: 0,
+    error: null,
+    stats: {
+      hits: 0,
+      misses: 0,
+      evictions: 0,
+      totalSize: 0,
+      entryCount: 0,
+      hitRatio: 0
     }
-) {
-    const prefetchRef = useRef<Set<string>>(new Set());
+  });
 
-    const prefetchData = useCallback(async () => {
-        const prefetchKey = `prefetch:${userId}:${context.currentView}`;
-        
-        if (prefetchRef.current.has(prefetchKey)) return;
-        prefetchRef.current.add(prefetchKey);
+  // Storage key with prefix
+  const storageKey = `${mergedConfig.storagePrefix}${cacheKey}`;
 
-        try {
-            await oracleIntelligentCachingService.prefetchLikelyNeeded(userId, {
-                currentView: context.currentView,
-                recentActions: context.recentActions,
-                timeOfDay: new Date().getHours(),
-                userPreferences: context.userPreferences
-            });
+  const loadFromCache = useCallback(async () => {
+    try {
+      if (!mergedConfig.enablePersistence) return;
 
-            // Remove from prefetch set after 5 minutes
-            setTimeout(() => {
-                prefetchRef.current.delete(prefetchKey);
-            }, 5 * 60 * 1000);
-        } catch (error) {
-            console.error('Prefetch error:', error);
-            prefetchRef.current.delete(prefetchKey);
+      const cached = localStorage.getItem(storageKey);
+      if (!cached) {
+        setState(prev => ({ ...prev, stats: { ...prev.stats, misses: prev.stats.misses + 1 } }));
+        return;
+      }
+
+      const entry: CacheEntry<T> = JSON.parse(cached);
+      const now = Date.now();
+
+      // Check if expired
+      if (now - entry.timestamp > entry.ttl) {
+        localStorage.removeItem(storageKey);
+        setState(prev => ({ ...prev, stats: { ...prev.stats, misses: prev.stats.misses + 1 } }));
+        return;
+      }
+
+      // Update access time
+      entry.accessed = now;
+      localStorage.setItem(storageKey, JSON.stringify(entry));
+
+      setState(prev => ({
+        ...prev,
+        data: entry.data,
+        isCached: true,
+        cacheAge: now - entry.timestamp,
+        stats: {
+          ...prev.stats,
+          hits: prev.stats.hits + 1,
+          hitRatio: (prev.stats.hits + 1) / (prev.stats.hits + prev.stats.misses + 1)
         }
-    }, [userId, context.currentView, context.recentActions, context.userPreferences]);
+      }));
 
-    useEffect(() => {
-        const timer = setTimeout(prefetchData, 1000); // Delay prefetching
-        return () => clearTimeout(timer);
-    }, [prefetchData]);
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        error: `Cache load error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }));
+    }
+  }, [storageKey, mergedConfig.enablePersistence]);
 
-    return { prefetchData };
+  // Load from cache on mount
+  useEffect(() => {
+    loadFromCache();
+  }, [loadFromCache]);
+
+  const saveToCache = useCallback((data: T) => {
+    try {
+      if (!mergedConfig.enablePersistence) return;
+
+      const entry: CacheEntry<T> = {
+        data,
+        timestamp: Date.now(),
+        ttl: mergedConfig.defaultTtl,
+        accessed: Date.now(),
+        version: '1.0',
+        size: new Blob([JSON.stringify(data)]).size
+      };
+
+      localStorage.setItem(storageKey, JSON.stringify(entry));
+
+      setState(prev => ({
+        ...prev,
+        data,
+        isCached: true,
+        cacheAge: 0,
+        stats: {
+          ...prev.stats,
+          entryCount: prev.stats.entryCount + 1,
+          totalSize: prev.stats.totalSize + entry.size
+        }
+      }));
+
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        error: `Cache save error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }));
+    }
+  }, [storageKey, mergedConfig]);
+
+  const refresh = useCallback(async () => {
+    setState(prev => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      const data = await fetcher();
+      saveToCache(data);
+      
+      setState(prev => ({ 
+        ...prev, 
+        data, 
+        isLoading: false,
+        isCached: true,
+        cacheAge: 0
+      }));
+
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Fetch failed'
+      }));
+    }
+  }, [fetcher, saveToCache]);
+
+  const invalidate = useCallback(() => {
+    try {
+      localStorage.removeItem(storageKey);
+      setState(prev => ({
+        ...prev,
+        data: null,
+        isCached: false,
+        cacheAge: 0,
+        stats: {
+          ...prev.stats,
+          evictions: prev.stats.evictions + 1
+        }
+      }));
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        error: `Cache invalidation error: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }));
+    }
+  }, [storageKey]);
+
+  const updateCache = useCallback((data: T) => {
+    saveToCache(data);
+  }, [saveToCache]);
+
+  const clearCache = useCallback(() => {
+    invalidate();
+  }, [invalidate]);
+
+  const getCacheInfo = useCallback((): CacheEntry<T> | null => {
+    try {
+      const cached = localStorage.getItem(storageKey);
+      return cached ? JSON.parse(cached) : null;
+    } catch {
+      return null;
+    }
+  }, [storageKey]);
+
+  const actions: CacheHookActions<T> = {
+    refresh,
+    invalidate,
+    updateCache,
+    clearCache,
+    getCacheInfo
+  };
+
+  return [state, actions];
 }
 
 /**
- * Higher-order hook for cached Oracle data with advanced features
+ * Specialized hook for analytics caching
  */
-export function useAdvancedOracleCache<T>(
-    key: string,
-    fetcher: () => Promise<T>,
-    options: CacheHookOptions & {
-        revalidateOnFocus?: boolean;
-        revalidateOnReconnect?: boolean;
-        backgroundRevalidation?: boolean;
-        optimisticUpdates?: boolean;
-    } = {}
+export function useOracleAnalyticsCache(
+  playerId: string,
+  analyticsType: 'player_trends' | 'matchup_analysis' | 'injury_impact' | 'weather_impact',
+  config: Partial<CacheConfig> = {}
 ) {
-    const [state, setState] = useState<CacheState<T>>({
-        data: null,
-        loading: true,
-        error: null,
-        lastUpdated: null,
-        fromCache: false,
-        cacheKey: key
-    });
-
-    const fetchData = useCallback(async (skipCache = false) => {
-        try {
-            setState(prev => ({ ...prev, loading: true, error: null }));
-
-            const data = await oracleIntelligentCachingService.get(
-                key,
-                fetcher,
-                {
-                    strategy: options.strategy,
-                    tags: options.tags,
-                    forceFresh: skipCache || options.forceFresh
-                }
-            );
-
-            setState(prev => ({
-                ...prev,
-                data,
-                loading: false,
-                lastUpdated: Date.now(),
-                fromCache: !skipCache && !options.forceFresh
-            }));
-
-            return data;
-        } catch (error) {
-            setState(prev => ({
-                ...prev,
-                error: error as Error,
-                loading: false
-            }));
-            throw error;
-        }
-    }, [key, fetcher, options.strategy, options.tags, options.forceFresh]);
-
-    // Focus revalidation
-    useEffect(() => {
-        if (!options.revalidateOnFocus) return;
-
-        const handleFocus = () => {
-            if (state.lastUpdated && Date.now() - state.lastUpdated > 60 * 1000) {
-                fetchData();
-            }
-        };
-
-        window.addEventListener('focus', handleFocus);
-        return () => window.removeEventListener('focus', handleFocus);
-    }, [options.revalidateOnFocus, state.lastUpdated, fetchData]);
-
-    // Network reconnect revalidation
-    useEffect(() => {
-        if (!options.revalidateOnReconnect) return;
-
-        const handleOnline = () => fetchData();
-        
-        window.addEventListener('online', handleOnline);
-        return () => window.removeEventListener('online', handleOnline);
-    }, [options.revalidateOnReconnect, fetchData]);
-
-    // Background revalidation
-    useEffect(() => {
-        if (!options.backgroundRevalidation) return;
-
-        const interval = setInterval(() => {
-            if (!document.hidden) {
-                fetchData();
-            }
-        }, 5 * 60 * 1000); // Every 5 minutes
-
-        return () => clearInterval(interval);
-    }, [options.backgroundRevalidation, fetchData]);
-
-    // Initial fetch
-    useEffect(() => {
-        fetchData();
-    }, [fetchData, ...(options.dependencies || [])]);
-
-    const mutate = useCallback(async (
-        updater?: T | ((current: T | null) => T) | Promise<T>,
-        shouldRevalidate = true
-    ) => {
-        if (updater !== undefined) {
-            let newData: T;
-            
-            if (typeof updater === 'function') {
-                newData = (updater as (current: T | null) => T)(state.data);
-            } else if (updater instanceof Promise) {
-                newData = await updater;
-            } else {
-                newData = updater;
-            }
-
-            // Optimistic update
-            if (options.optimisticUpdates) {
-                setState(prev => ({
-                    ...prev,
-                    data: newData,
-                    lastUpdated: Date.now()
-                }));
-            }
-
-            // Update cache
-            await oracleIntelligentCachingService.set(key, newData, {
-                strategy: options.strategy,
-                tags: options.tags
-            });
-        }
-
-        if (shouldRevalidate) {
-            return fetchData(true);
-        }
-
-        return state.data;
-    }, [key, state.data, options.strategy, options.tags, options.optimisticUpdates, fetchData]);
-
+  const cacheKey = `analytics_${analyticsType}_${playerId}`;
+  
+  const fetcher = useCallback(async (): Promise<AnalyticsCacheData> => {
+    // Simulate analytics data fetching
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     return {
-        ...state,
-        mutate,
-        refresh: () => fetchData(true),
-        invalidate: () => {
-            oracleIntelligentCachingService.delete(key);
-            return fetchData(true);
-        }
+      type: analyticsType,
+      playerId,
+      data: {
+        [analyticsType]: `Mock data for ${playerId}`,
+        generated: Date.now()
+      },
+      cachedAt: Date.now()
     };
+  }, [playerId, analyticsType]);
+
+  return useOraclePredictionCache<AnalyticsCacheData>(cacheKey, fetcher, config);
+}
+
+/**
+ * Hook for batch cache operations
+ */
+export function useBatchCache() {
+  const [operations, setOperations] = useState<{
+    pending: number;
+    completed: number;
+    failed: number;
+  }>({
+    pending: 0,
+    completed: 0,
+    failed: 0
+  });
+
+  const batchInvalidate = useCallback(async (keys: string[]) => {
+    setOperations(prev => ({ ...prev, pending: keys.length }));
+    
+    let completed = 0;
+    let failed = 0;
+
+    for (const key of keys) {
+      try {
+        localStorage.removeItem(`oracle_cache_${key}`);
+        completed++;
+      } catch {
+        failed++;
+      }
+    }
+
+    setOperations({ pending: 0, completed, failed });
+  }, []);
+
+  const batchRefresh = useCallback(async (
+    refreshFunctions: Array<() => Promise<void>>
+  ) => {
+    setOperations(prev => ({ ...prev, pending: refreshFunctions.length }));
+    
+    let completed = 0;
+    let failed = 0;
+
+    for (const refresh of refreshFunctions) {
+      try {
+        await refresh();
+        completed++;
+      } catch {
+        failed++;
+      }
+    }
+
+    setOperations({ pending: 0, completed, failed });
+  }, []);
+
+  const clearAllCaches = useCallback(() => {
+    try {
+      const keys = Object.keys(localStorage).filter(key => 
+        key.startsWith('oracle_cache_')
+      );
+      
+      keys.forEach(key => localStorage.removeItem(key));
+      
+      setOperations({
+        pending: 0,
+        completed: keys.length,
+        failed: 0
+      });
+
+    } catch {
+      setOperations({
+        pending: 0,
+        completed: 0,
+        failed: 1
+      });
+    }
+  }, []);
+
+  return {
+    operations,
+    batchInvalidate,
+    batchRefresh,
+    clearAllCaches
+  };
+}
+
+/**
+ * Hook for cache analytics and monitoring
+ */
+export function useCacheMonitoring() {
+  const [metrics, setMetrics] = useState({
+    totalCaches: 0,
+    totalSize: 0,
+    oldestCache: 0,
+    newestCache: 0,
+    avgCacheAge: 0
+  });
+
+  const updateMetrics = useCallback(() => {
+    try {
+      const cacheKeys = Object.keys(localStorage).filter(key => 
+        key.startsWith('oracle_cache_')
+      );
+
+      let totalSize = 0;
+      let totalAge = 0;
+      let oldestCache = Date.now();
+      let newestCache = 0;
+
+      cacheKeys.forEach(key => {
+        try {
+          const item = localStorage.getItem(key);
+          if (item) {
+            const entry: CacheEntry = JSON.parse(item);
+            totalSize += entry.size || new Blob([item]).size;
+            
+            if (entry.timestamp < oldestCache) oldestCache = entry.timestamp;
+            if (entry.timestamp > newestCache) newestCache = entry.timestamp;
+            
+            totalAge += Date.now() - entry.timestamp;
+          }
+        } catch {
+          // Skip invalid entries
+        }
+      });
+
+      setMetrics({
+        totalCaches: cacheKeys.length,
+        totalSize,
+        oldestCache,
+        newestCache,
+        avgCacheAge: cacheKeys.length > 0 ? totalAge / cacheKeys.length : 0
+      });
+
+    } catch {
+      setMetrics({
+        totalCaches: 0,
+        totalSize: 0,
+        oldestCache: 0,
+        newestCache: 0,
+        avgCacheAge: 0
+      });
+    }
+  }, []);
+
+  // Update metrics periodically
+  useEffect(() => {
+    updateMetrics();
+    const interval = setInterval(updateMetrics, 30000); // Every 30 seconds
+    return () => clearInterval(interval);
+  }, [updateMetrics]);
+
+  return {
+    metrics,
+    updateMetrics
+  };
 }
 
 export default {
-    useCachedOraclePredictions,
-    useCachedOracleAnalytics,
-    useCachedOracleLeaderboard,
-    useOracleCacheManager,
-    useOracleDataPrefetcher,
-    useAdvancedOracleCache
+  useOraclePredictionCache,
+  useOracleAnalyticsCache,
+  useBatchCache,
+  useCacheMonitoring
 };

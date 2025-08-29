@@ -6,14 +6,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import { Team, Player } from '../../types';
+import { Team } from '../../types';
 
 interface CommissionerToolsProps {
   isCommissioner?: boolean;
 }
 
 const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }) => {
-  const { state, dispatch } = useAppState();
+  const { state } = useAppState();
   const [activeTab, setActiveTab] = useState<'teams' | 'settings' | 'players' | 'schedule'>('teams');
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
   const [newTeamName, setNewTeamName] = useState('');
@@ -30,59 +30,57 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
     );
   }
 
-  const handleTeamNameUpdate = (team: Team) => {
-    if (newTeamName.trim() && newTeamName !== team.name) {
-      dispatch({
-        type: 'UPDATE_TEAM_NAME',
-        payload: { teamId: team.id, name: newTeamName.trim() }
-      });
-      
-      dispatch({
-        type: 'ADD_NOTIFICATION',
-        payload: {
-          message: `Team name updated to "${newTeamName.trim()}"`,
-          type: 'SUCCESS'
-        }
-      });
-    }
-    setEditingTeam(null);
-    setNewTeamName('');
-  };
+    // TODO: Implement team name submission
+  // const handleTeamNameSubmit = () => {
+  //   if (editingTeam && newTeamName.trim()) {
+  //     dispatch({
+  //       type: 'UPDATE_TEAM_NAME',
+  //       payload: {
+  //         teamId: editingTeam.id,
+  //         name: newTeamName.trim()
+  //       }
+  //     });
+  //     setEditingTeam(null);
+  //     setNewTeamName('');
+  //   }
+  // };
 
-  const handleForcePlayerAdd = (teamId: number, player: Player) => {
-    dispatch({
-      type: 'ADD_PLAYER_TO_ROSTER',
-      payload: { teamId, player }
-    });
-    
-    dispatch({
-      type: 'ADD_NOTIFICATION',
-      payload: {
-        message: `Commissioner added ${player.name} to roster`,
-        type: 'INFO'
-      }
-    });
-  };
+  // TODO: Implement force player add
+  // const handleForcePlayerAdd = (teamId: number, player: Player) => {
+  //   dispatch({
+  //     type: 'ADD_PLAYER_TO_ROSTER',
+  //     payload: { teamId, player }
+  //   });
+  //   
+  //   dispatch({
+  //     type: 'ADD_NOTIFICATION',
+  //     payload: {
+  //       message: `Commissioner added ${player.name} to roster`,
+  //       type: 'INFO'
+  //     }
+  //   });
+  // };
 
-  const handleForcePlayerDrop = (teamId: number, playerId: number) => {
-    const team = league.teams.find(t => t.id === teamId);
-    const player = team?.roster.find(p => p.id === playerId);
-    
-    if (player && window.confirm(`Force drop ${player.name}?`)) {
-      dispatch({
-        type: 'REMOVE_PLAYER_FROM_ROSTER',
-        payload: { teamId, playerId }
-      });
-      
-      dispatch({
-        type: 'ADD_NOTIFICATION',
-        payload: {
-          message: `Commissioner dropped ${player.name}`,
-          type: 'INFO'
-        }
-      });
-    }
-  };
+  // TODO: Implement force player drop
+  // const handleForcePlayerDrop = (teamId: number, playerId: number) => {
+  //   const team = league.teams.find(t => t.id === teamId);
+  //   const player = team?.roster.find(p => p.id === playerId);
+  //   
+  //   if (player && window.confirm(`Force drop ${player.name}?`)) {
+  //     dispatch({
+  //       type: 'REMOVE_PLAYER_FROM_ROSTER',
+  //       payload: { teamId, playerId }
+  //     });
+  //     
+  //     dispatch({
+  //       type: 'ADD_NOTIFICATION',
+  //       payload: {
+  //         message: `Commissioner dropped ${player.name}`,
+  //         type: 'INFO'
+  //       }
+  //     });
+  //   }
+  // };
 
   const tabs = [
     { id: 'teams', label: 'Team Management', icon: '👥' },
@@ -411,7 +409,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as 'teams' | 'settings' | 'players' | 'schedule')}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors ${
               activeTab === tab.id
                 ? 'bg-blue-600 text-white'

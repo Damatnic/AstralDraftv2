@@ -7,14 +7,14 @@ import type { League, Team } from '../types';
 import DraftRecap from '../components/analytics/DraftRecap';
 import PositionalScarcityChart from '../components/analytics/PositionalScarcityChart';
 import { players } from '../data/players';
-import Tabs from '../components/ui/Tabs';
+import { Tabs } from '../components/ui/Tabs';
 import { AnimatePresence, motion } from 'framer-motion';
 import MyTeamCompositionChart from '../components/analytics/MyTeamCompositionChart';
 import TeamNeedsAnalysis from '../components/analytics/TeamNeedsAnalysis';
 import { useLeague } from '../hooks/useLeague';
 import PickTimeAnalytics from '../components/analytics/PickTimeAnalytics';
 import ChampionshipOddsPreview from '../components/analytics/ChampionshipOddsPreview';
-import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 import type { AnalyticsViewType } from '../types/viewTypes';
 
 interface AnalyticsHubViewProps {
@@ -101,7 +101,8 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                     <button 
                         onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' })} 
                         className="flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 transition-colors mobile-touch-target"
-                    <span>Historical Analytics</span>
+                    >
+                        <span>Historical Analytics</span>
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>

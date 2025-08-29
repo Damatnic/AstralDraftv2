@@ -9,14 +9,13 @@ import ProductionLoginInterface from '../components/auth/ProductionLoginInterfac
 import MobileOptimizedOracleInterface from '../components/oracle/MobileOptimizedOracleInterface';
 import NotificationDemo from '../components/oracle/NotificationDemo';
 import UserSettings from '../components/auth/UserSettings';
-import NotificationCenter from '../components/oracle/NotificationCenter';
 import OraclePerformanceDashboard from '../components/oracle/OraclePerformanceDashboard';
 import OracleCacheDashboard from '../components/oracle/OracleCacheDashboard';
 import { motion } from 'framer-motion';
 import { LogOutIcon, SettingsIcon, TestTubeIcon, ActivityIcon, DatabaseIcon } from 'lucide-react';
 
 // Memoized AppContent for better performance
-const OracleOnlyAppContent: React.FC = memo(() => {
+const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
     const { user, isAuthenticated, logout, isLoading } = useProductionAuth();
     const [showSettings, setShowSettings] = useState(false);
     const [showDemo, setShowDemo] = useState(false);

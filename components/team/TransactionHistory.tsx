@@ -15,9 +15,9 @@ import { UserRemoveIcon } from '../icons/UserRemoveIcon';
 import { DollarSignIcon } from '../icons/DollarSignIcon';
 
 interface TransactionHistoryProps {
-    team: Team;
-    league: League;
-    dispatch: React.Dispatch<any>;
+    _team: Team;
+    _league: League;
+    _dispatch: React.Dispatch<any>;
 }
 
 interface Transaction {
@@ -34,7 +34,7 @@ interface Transaction {
     details?: string;
 }
 
-const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }) => {
+const TransactionHistory: React.FC<TransactionHistoryProps> = ({ _team, _league, _dispatch }) => {
     const [filterType, setFilterType] = React.useState<'ALL' | Transaction['type']>('ALL');
     const [filterWeek, setFilterWeek] = React.useState<'ALL' | number>('ALL');
     const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(null);

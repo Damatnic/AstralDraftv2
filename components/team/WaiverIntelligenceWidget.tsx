@@ -74,7 +74,7 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
                             {currentIntel.type === 'STREAMING' && <TrendingUpIcon className="h-4 w-4 text-green-400" />}
                             <h4 className="font-bold text-sm text-cyan-300">{currentIntel.title}</h4>
                          </div>
-                        <p className="text-xs text-gray-300 italic">"{currentIntel.content}"</p>
+                        <p className="text-xs text-gray-300 italic">&quot;{currentIntel.content}&quot;</p>
                          <div className="mt-2 flex flex-wrap gap-1">
                             {currentIntel.players.map((name: any) => (
                                 <span key={name} className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded-full">{name}</span>

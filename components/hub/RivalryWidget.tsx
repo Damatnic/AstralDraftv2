@@ -9,7 +9,7 @@ import { Avatar } from '../ui/Avatar';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
 const RivalryWidget: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
 
@@ -53,7 +53,7 @@ const RivalryWidget: React.FC = () => {
                                 <p className="text-xs font-bold mt-1">{teamB.name}</p>
                             </div>
                         </div>
-                        <p className="text-xs italic text-gray-300">"{rivalry.narrative}"</p>
+                        <p className="text-xs italic text-gray-300">&ldquo;{rivalry.narrative}&rdquo;</p>
                     </div>
                 ) : (
                     <p className="text-center text-xs text-gray-400 py-2">No significant rivalries detected yet.</p>

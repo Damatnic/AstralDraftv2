@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { ClipboardListIcon } from '../icons/ClipboardListIcon';
 import { CloseIcon } from '../icons/CloseIcon';
 import { PlusCircleIcon } from '../icons/PlusCircleIcon';
@@ -38,7 +38,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!question.trim() || options.some((opt: any) => !opt.trim())) {
+        if (!question.trim() || options.some((opt: string) => !opt.trim())) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Question and all options must be filled out.", type: 'SYSTEM' } });
             return;
         }
@@ -49,7 +49,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
                 leagueId,
                 poll: {
                     question,
-                    options: options.map((opt: any) => ({ id: `opt_${Math.random()}`, text: opt, votes: [] })),
+                    options: options.map((opt: string) => ({ id: `opt_${Math.random()}`, text: opt, votes: [] })),
                     createdBy: state.user?.id || 'guest',
                     closesAt: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
                 },
@@ -60,7 +60,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"

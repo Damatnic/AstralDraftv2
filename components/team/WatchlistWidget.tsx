@@ -36,7 +36,7 @@ const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }
         <div className="pt-2 text-center">
             <h4 className="flex items-center justify-center gap-1.5 text-xs font-bold text-cyan-300 mb-1">
                 <EyeIcon />
-                ORACLE'S WATCH
+                ORACLE&apos;S WATCH
             </h4>
             <AnimatePresence mode="wait">
                 <motion.div
@@ -49,7 +49,7 @@ const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }
                     }}
                 >
                     <p className="text-xs text-gray-300 italic">
-                        <strong className="text-yellow-300">{player?.name}:</strong> "{currentInsight.insight}"
+                        <strong className="text-yellow-300">{player?.name}:</strong> &quot;{currentInsight.insight}&quot;
                     </p>
                 </motion.div>
             </AnimatePresence>

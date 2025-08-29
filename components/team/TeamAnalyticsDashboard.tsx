@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
 import { Team, League, Player } from '../../types';
@@ -15,8 +14,8 @@ import { TargetIcon } from '../icons/TargetIcon';
 
 interface TeamAnalyticsDashboardProps {
     team: Team;
-    league: League;
-    dispatch: React.Dispatch<any>;
+    _league: League;
+    _dispatch: React.Dispatch<any>;
 }
 
 interface WeeklyPerformance {
@@ -48,7 +47,7 @@ interface MatchupPreview {
     }[];
 }
 
-const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }) => {
+const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, _league, _dispatch }) => {
     const [selectedTab, setSelectedTab] = React.useState<'overview' | 'trends' | 'projections' | 'matchup'>('overview');
 
     // Mock data - in real app this would come from analytics service

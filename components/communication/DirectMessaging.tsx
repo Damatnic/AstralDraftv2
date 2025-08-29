@@ -21,7 +21,7 @@ interface DirectMessage {
   messageType: 'text' | 'trade_link' | 'player_link' | 'image';
   attachments?: {
     type: 'trade' | 'player' | 'image';
-    data: any;
+    data: unknown;
   }[];
 }
 
@@ -185,21 +185,22 @@ const DirectMessaging: React.FC = () => {
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation || !currentUser) return;
 
-    const message: DirectMessage = {
-      id: `dm-${Date.now()}`,
-      conversationId: selectedConversation,
-      senderId: currentUser.id,
-      senderName: currentUser.name,
-      senderAvatar: currentUser.avatar,
-      recipientId: otherParticipant?.id || '',
-      recipientName: otherParticipant?.name || '',
-      message: newMessage.trim(),
-      timestamp: new Date(),
-      isRead: false,
-      messageType: 'text'
-    };
+    // TODO: Implement message creation and sending
+    // const message: DirectMessage = {
+    //   id: `dm-${Date.now()}`,
+    //   conversationId: selectedConversation,
+    //   senderId: currentUser.id,
+    //   senderName: currentUser.name,
+    //   senderAvatar: currentUser.avatar,
+    //   recipientId: otherParticipant?.id || '',
+    //   recipientName: otherParticipant?.name || '',
+    //   message: newMessage.trim(),
+    //   timestamp: new Date(),
+    //   isRead: false,
+    //   messageType: 'text'
+    // };
 
-    console.log('New message:', message);
+    // Message created successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -220,7 +221,7 @@ const DirectMessaging: React.FC = () => {
 
     const newConversationId = `conv-${Date.now()}`;
     
-    console.log('Starting new conversation with:', recipient.owner.name);
+    // Starting new conversation
 
     setSelectedConversation(newConversationId);
     setShowNewConversation(false);

@@ -522,7 +522,7 @@ const LeaderboardView: React.FC = () => {
             {achievements
               .filter(ach => ach.category === 'accuracy')
               .slice(0, 5)
-              .map((achievement, index) => (
+              .map((achievement, _index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
                   <div className="text-2xl">{achievement.icon}</div>
                   <div className="flex-1">
@@ -541,7 +541,7 @@ const LeaderboardView: React.FC = () => {
             {achievements
               .filter(ach => ach.category === 'streak')
               .slice(0, 5)
-              .map((achievement, index) => (
+              .map((achievement, _index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
                   <div className="text-2xl">{achievement.icon}</div>
                   <div className="flex-1">

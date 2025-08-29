@@ -90,9 +90,9 @@ class ProductionOraclePredictionService {
       // Generate initial predictions for current week
       await this.generateWeeklyPredictions(this.currentWeek);
       
-      console.log('✅ Production Oracle Prediction Service initialized');
+      // Production Oracle Prediction Service initialized
     } catch (error) {
-      console.error('❌ Failed to initialize Oracle service:', error);
+      // Failed to initialize Oracle service
     }
   }
 
@@ -101,7 +101,7 @@ class ProductionOraclePredictionService {
    */
   async generateWeeklyPredictions(week: number, season: number = this.currentSeason): Promise<ProductionOraclePrediction[]> {
     try {
-      console.log(`🔮 Generating Oracle predictions for Week ${week}, ${season}...`);
+      // Generating Oracle predictions
 
       const games = await productionSportsDataService.getCurrentWeekGames(week, season);
       const newPredictions: ProductionOraclePrediction[] = [];
@@ -130,11 +130,11 @@ class ProductionOraclePredictionService {
         this.predictions.set(prediction.id, prediction);
       });
 
-      console.log(`✅ Generated ${newPredictions.length} predictions for Week ${week}`);
+      // Generated predictions for week
       return newPredictions;
 
     } catch (error) {
-      console.error('Failed to generate weekly predictions:', error);
+      // Failed to generate weekly predictions
       return [];
     }
   }
@@ -221,12 +221,12 @@ class ProductionOraclePredictionService {
       
       submissions.push(submission);
 
-      console.log(`📝 User ${userId} submitted prediction for ${predictionId}: choice ${choice} (${confidence}% confidence)`);
+      // User submitted prediction
 
       return { success: true, prediction };
 
     } catch (error) {
-      console.error('Failed to submit user prediction:', error);
+      // Failed to submit user prediction
       return { success: false, error: 'Failed to submit prediction' };
     }
   }
@@ -262,17 +262,17 @@ class ProductionOraclePredictionService {
               await this.calculateUserPoints(prediction);
               
               resolvedCount++;
-              console.log(`✅ Resolved prediction ${prediction.id}: ${resolution.explanation}`);
+              // Resolved prediction
             }
           }
         }
       }
 
-      console.log(`🎯 Resolved ${resolvedCount} predictions for Week ${week}`);
+      // Resolved predictions for week
       return resolvedCount;
 
     } catch (error) {
-      console.error('Failed to resolve predictions:', error);
+      // Failed to resolve predictions
       return 0;
     }
   }

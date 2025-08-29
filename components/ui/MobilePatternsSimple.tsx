@@ -261,7 +261,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
           aria-selected={activeTab === tab.id}
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
-          onKeyDown={(e: any) => handleKeyDown(e, tab.id)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => handleKeyDown(e, tab.id)}
           className={`
             relative flex-1 min-w-0 px-4 py-3 text-sm font-medium rounded-md transition-all duration-200 touch-manipulation
             ${activeTab === tab.id

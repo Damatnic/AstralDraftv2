@@ -30,9 +30,9 @@ interface PlayerSearchResult extends Player {
 const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
     league,
     currentTeam,
-    proposal,
+    proposal: _proposal,
     onProposalUpdate,
-    dispatch
+    dispatch: _dispatch
 }) => {
     const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
     const [fromPlayers, setFromPlayers] = React.useState<Player[]>([]);

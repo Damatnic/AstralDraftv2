@@ -26,7 +26,7 @@ const SideBetCard: React.FC<{ bet: SideBet; onRespond: (betId: string, response:
                 </div>
                 <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${bet?.status === 'PENDING' ? 'bg-yellow-500/20 text-yellow-300' : 'bg-green-500/20 text-green-300'}`}>{bet?.status}</span>
             </div>
-            <p className="text-sm font-semibold">"{bet.terms}"</p>
+            <p className="text-sm font-semibold">&ldquo;{bet.terms}&rdquo;</p>
             <p className="text-xs text-gray-400">Stakes: <span className="italic">{bet.stakes}</span></p>
             {bet?.status === 'PENDING' && isMyTurnToRespond && (
                  <div className="flex justify-end gap-2 mt-2">
@@ -45,7 +45,7 @@ const SideBetCard: React.FC<{ bet: SideBet; onRespond: (betId: string, response:
 };
 
 const SideBetsWidget: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [isModalOpen, setIsModalOpen] = React.useState(false);
 

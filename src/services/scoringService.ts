@@ -136,7 +136,7 @@ class ScoringService {
    * Handle matchup finalization
    */
   private handleMatchupFinalized(data: { matchupId: string; winner: any; finalizedBy: string }): void {
-    console.log(`Matchup ${data.matchupId} finalized by ${data.finalizedBy}`);
+    // Matchup finalized
     // Trigger UI updates for finalized matchup
   }
 

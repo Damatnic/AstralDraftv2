@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { IntegrityTask, IntegrityTaskStatus } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { CheckCircleIcon } from '../icons/CheckCircleIcon';
 import { XCircleIcon } from '../icons/XCircleIcon';
 
@@ -37,7 +37,7 @@ const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onCl
     const categories = Object.keys(groupedTasks);
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col"
                 onClick={e => e.stopPropagation()}

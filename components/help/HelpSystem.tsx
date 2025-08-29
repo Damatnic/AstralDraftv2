@@ -5,7 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
+// import { useAppState } from '../../contexts/AppContext';
 
 interface HelpArticle {
   id: string;
@@ -29,7 +29,7 @@ interface HelpCategory {
 }
 
 const HelpSystem: React.FC = () => {
-  const { state } = useAppState();
+  // const { state } = useAppState();
   const [isVisible, setIsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('getting-started');
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);

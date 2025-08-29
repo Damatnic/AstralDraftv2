@@ -1,525 +1,525 @@
 /**
  * Oracle Cache Integration Service
- * Centralized service for Oracle caching integration across the application
+ * Manages caching for Oracle predictions, analytics, and user data
  */
 
-import { oracleIntelligentCachingService } from './oracleIntelligentCachingService';
-
-interface CacheIntegrationOptions {
-    enableAutoWarmup?: boolean;
-    enableBackgroundSync?: boolean;
-    enablePredictivePrefetch?: boolean;
-    monitoringInterval?: number;
+export interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  expires: number;
+  hits: number;
+  size: number;
 }
 
-interface UserActivity {
-    action: string;
-    timestamp: number;
-    data?: any;
+export interface CacheOptions {
+  ttl?: number; // Time to live in milliseconds
+  maxSize?: number; // Maximum cache size in MB
+  maxEntries?: number; // Maximum number of entries
+  compression?: boolean;
+  encryption?: boolean;
 }
 
-interface CacheMetricsSnapshot {
-    timestamp: number;
-    hitRate: number;
-    memoryUsage: number;
-    responseTime: number;
-    healthScore: number;
+export interface CacheStats {
+  totalEntries: number;
+  totalSize: number; // in bytes
+  hitRate: number;
+  missRate: number;
+  totalHits: number;
+  totalMisses: number;
+  averageAccessTime: number;
+  oldestEntry: number;
+  newestEntry: number;
+}
+
+export interface CacheConfig {
+  defaultTTL: number;
+  maxCacheSize: number;
+  maxEntries: number;
+  cleanupInterval: number;
+  compressionThreshold: number;
+  enableMetrics: boolean;
+}
+
+export interface PredictionCacheData {
+  predictions: unknown[];
+  analytics: Record<string, unknown>;
+  userStats: Record<string, unknown>;
+  leaderboard: unknown[];
+  metadata: {
+    week: number;
+    season: number;
+    lastUpdated: number;
+  };
+}
+
+export interface UserCacheData {
+  profile: Record<string, unknown>;
+  predictions: unknown[];
+  stats: Record<string, unknown>;
+  preferences: Record<string, unknown>;
+  notifications: unknown[];
 }
 
 class OracleCacheIntegrationService {
-    private readonly options: CacheIntegrationOptions;
-    private userActivity: UserActivity[] = [];
-    private metricsHistory: CacheMetricsSnapshot[] = [];
-    private monitoringTimer: NodeJS.Timeout | null = null;
-    private backgroundSyncTimer: NodeJS.Timeout | null = null;
-    private isInitialized = false;
+  private cache = new Map<string, CacheEntry<unknown>>();
+  private stats = {
+    hits: 0,
+    misses: 0,
+    totalAccessTime: 0,
+    operations: 0
+  };
+  
+  private readonly config: CacheConfig = {
+    defaultTTL: 5 * 60 * 1000, // 5 minutes
+    maxCacheSize: 50 * 1024 * 1024, // 50MB
+    maxEntries: 1000,
+    cleanupInterval: 60 * 1000, // 1 minute
+    compressionThreshold: 1024, // 1KB
+    enableMetrics: true
+  };
 
-    constructor(options: CacheIntegrationOptions = {}) {
-        this.options = {
-            enableAutoWarmup: true,
-            enableBackgroundSync: true,
-            enablePredictivePrefetch: true,
-            monitoringInterval: 30 * 1000, // 30 seconds
-            ...options
-        };
+  private cleanupTimer: NodeJS.Timeout | null = null;
+
+  constructor(customConfig?: Partial<CacheConfig>) {
+    if (customConfig) {
+      Object.assign(this.config, customConfig);
     }
+    this.startCleanupTimer();
+  }
 
-    /**
-     * Initialize the cache integration service
-     */
-    async initialize(userId: string): Promise<void> {
-        if (this.isInitialized) return;
+  /**
+   * Get data from cache
+   */
+  get<T>(key: string): T | null {
+    const startTime = performance.now();
+    
+    try {
+      const entry = this.cache.get(key) as CacheEntry<T> | undefined;
+      
+      if (!entry) {
+        this.recordMiss();
+        return null;
+      }
 
-        console.log('🚀 Initializing Oracle Cache Integration Service...');
+      if (Date.now() > entry.expires) {
+        this.cache.delete(key);
+        this.recordMiss();
+        return null;
+      }
 
-        // Auto-warmup cache with user data
-        if (this.options.enableAutoWarmup) {
-            await this.performAutoWarmup(userId);
-        }
-
-        // Start monitoring
-        this.startMonitoring();
-
-        // Start background sync
-        if (this.options.enableBackgroundSync) {
-            this.startBackgroundSync(userId);
-        }
-
-        // Setup predictive prefetching
-        if (this.options.enablePredictivePrefetch) {
-            this.setupPredictivePrefetch(userId);
-        }
-
-        this.isInitialized = true;
-        console.log('✅ Oracle Cache Integration Service initialized');
+      entry.hits++;
+      this.recordHit();
+      
+      return entry.data;
+    } finally {
+      this.recordAccessTime(performance.now() - startTime);
     }
+  }
 
-    /**
-     * Track user activity for predictive caching
-     */
-    trackActivity(action: string, data?: any): void {
-        const activity: UserActivity = {
-            action,
+  /**
+   * Set data in cache
+   */
+  set<T>(key: string, data: T, options?: CacheOptions): boolean {
+    try {
+      const ttl = options?.ttl || this.config.defaultTTL;
+      const expires = Date.now() + ttl;
+      const serializedData = JSON.stringify(data);
+      const size = new Blob([serializedData]).size;
+
+      // Check if we have space
+      if (!this.hasSpaceFor(size)) {
+        this.evictLRU();
+      }
+
+      const entry: CacheEntry<T> = {
+        data,
+        timestamp: Date.now(),
+        expires,
+        hits: 0,
+        size
+      };
+
+      this.cache.set(key, entry as CacheEntry<unknown>);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Delete entry from cache
+   */
+  delete(key: string): boolean {
+    return this.cache.delete(key);
+  }
+
+  /**
+   * Clear all cache entries
+   */
+  clear(): void {
+    this.cache.clear();
+    this.resetStats();
+  }
+
+  /**
+   * Check if key exists and is not expired
+   */
+  has(key: string): boolean {
+    const entry = this.cache.get(key);
+    if (!entry) return false;
+    
+    if (Date.now() > entry.expires) {
+      this.cache.delete(key);
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * Get cache statistics
+   */
+  getStats(): CacheStats {
+    const entries = Array.from(this.cache.values());
+    const totalSize = entries.reduce((sum, entry) => sum + entry.size, 0);
+    const timestamps = entries.map(entry => entry.timestamp);
+    
+    return {
+      totalEntries: this.cache.size,
+      totalSize,
+      hitRate: this.stats.operations > 0 ? this.stats.hits / this.stats.operations : 0,
+      missRate: this.stats.operations > 0 ? this.stats.misses / this.stats.operations : 0,
+      totalHits: this.stats.hits,
+      totalMisses: this.stats.misses,
+      averageAccessTime: this.stats.operations > 0 ? this.stats.totalAccessTime / this.stats.operations : 0,
+      oldestEntry: timestamps.length > 0 ? Math.min(...timestamps) : 0,
+      newestEntry: timestamps.length > 0 ? Math.max(...timestamps) : 0
+    };
+  }
+
+  /**
+   * Cache Oracle predictions for a specific week
+   */
+  cachePredictions(week: number, season: number, data: PredictionCacheData): boolean {
+    const key = `predictions:${season}:${week}`;
+    return this.set(key, data, { ttl: 10 * 60 * 1000 }); // 10 minutes
+  }
+
+  /**
+   * Get cached Oracle predictions
+   */
+  getCachedPredictions(week: number, season: number): PredictionCacheData | null {
+    const key = `predictions:${season}:${week}`;
+    return this.get<PredictionCacheData>(key);
+  }
+
+  /**
+   * Cache user data
+   */
+  cacheUserData(userId: string, data: UserCacheData): boolean {
+    const key = `user:${userId}`;
+    return this.set(key, data, { ttl: 15 * 60 * 1000 }); // 15 minutes
+  }
+
+  /**
+   * Get cached user data
+   */
+  getCachedUserData(userId: string): UserCacheData | null {
+    const key = `user:${userId}`;
+    return this.get<UserCacheData>(key);
+  }
+
+  /**
+   * Cache Oracle analytics
+   */
+  cacheAnalytics(type: string, timeframe: string, data: Record<string, unknown>): boolean {
+    const key = `analytics:${type}:${timeframe}`;
+    return this.set(key, data, { ttl: 30 * 60 * 1000 }); // 30 minutes
+  }
+
+  /**
+   * Get cached analytics
+   */
+  getCachedAnalytics(type: string, timeframe: string): Record<string, unknown> | null {
+    const key = `analytics:${type}:${timeframe}`;
+    return this.get<Record<string, unknown>>(key);
+  }
+
+  /**
+   * Cache leaderboard data
+   */
+  cacheLeaderboard(week: number, season: number, data: unknown[]): boolean {
+    const key = `leaderboard:${season}:${week}`;
+    return this.set(key, data, { ttl: 5 * 60 * 1000 }); // 5 minutes
+  }
+
+  /**
+   * Get cached leaderboard
+   */
+  getCachedLeaderboard(week: number, season: number): unknown[] | null {
+    const key = `leaderboard:${season}:${week}`;
+    return this.get<unknown[]>(key);
+  }
+
+  /**
+   * Invalidate cache entries by pattern
+   */
+  invalidatePattern(pattern: string): number {
+    let count = 0;
+    const regex = new RegExp(pattern.replace(/\*/g, '.*'));
+    
+    for (const key of this.cache.keys()) {
+      if (regex.test(key)) {
+        this.cache.delete(key);
+        count++;
+      }
+    }
+    
+    return count;
+  }
+
+  /**
+   * Invalidate user-specific cache
+   */
+  invalidateUserCache(_userId: string): number {
+    return this.invalidatePattern(`user:${_userId}*`);
+  }
+
+  /**
+   * Invalidate predictions cache for a specific week
+   */
+  invalidatePredictionsCache(week?: number, season?: number): number {
+    if (week && season) {
+      return this.invalidatePattern(`predictions:${season}:${week}`);
+    } else if (season) {
+      return this.invalidatePattern(`predictions:${season}:*`);
+    } else {
+      return this.invalidatePattern('predictions:*');
+    }
+  }
+
+  /**
+   * Preload frequently accessed data
+   */
+  async preloadData(keys: string[]): Promise<void> {
+    // In a real implementation, this would fetch data from the API
+    // and populate the cache proactively
+    keys.forEach(key => {
+      if (!this.has(key)) {
+        // Placeholder for actual data loading logic
+        this.set(key, { placeholder: true }, { ttl: this.config.defaultTTL });
+      }
+    });
+  }
+
+  /**
+   * Warm up cache with common data
+   */
+  async warmupCache(): Promise<void> {
+    const currentWeek = this.getCurrentWeek();
+    const currentSeason = this.getCurrentSeason();
+    
+    // Preload current week predictions and analytics
+    await this.preloadData([
+      `predictions:${currentSeason}:${currentWeek}`,
+      `leaderboard:${currentSeason}:${currentWeek}`,
+      `analytics:weekly:${currentSeason}:${currentWeek}`,
+      'analytics:season:overall'
+    ]);
+  }
+
+  /**
+   * Export cache data for backup
+   */
+  exportCache(): string {
+    const exportData = {
+      timestamp: Date.now(),
+      config: this.config,
+      stats: this.getStats(),
+      entries: Array.from(this.cache.entries()).map(([key, entry]) => ({
+        key,
+        data: entry.data,
+        expires: entry.expires,
+        size: entry.size
+      }))
+    };
+    
+    return JSON.stringify(exportData);
+  }
+
+  /**
+   * Import cache data from backup
+   */
+  importCache(data: string): boolean {
+    try {
+      const importData = JSON.parse(data);
+      
+      if (!importData.entries) return false;
+      
+      this.cache.clear();
+      
+      importData.entries.forEach((item: {
+        key: string;
+        data: unknown;
+        expires: number;
+        size: number;
+      }) => {
+        if (Date.now() < item.expires) {
+          const entry: CacheEntry<unknown> = {
+            data: item.data,
             timestamp: Date.now(),
-            data
-        };
-
-        this.userActivity.push(activity);
-
-        // Keep only last 100 activities
-        if (this.userActivity.length > 100) {
-            this.userActivity = this.userActivity.slice(-100);
+            expires: item.expires,
+            hits: 0,
+            size: item.size
+          };
+          this.cache.set(item.key, entry);
         }
-
-        // Trigger predictive prefetch if enabled
-        if (this.options.enablePredictivePrefetch) {
-            this.handleActivityPrefetch(activity);
-        }
+      });
+      
+      return true;
+    } catch {
+      return false;
     }
+  }
 
-    /**
-     * Get Oracle predictions with intelligent caching
-     */
-    async getOraclePredictions(
-        week: number,
-        userId: string,
-        options?: {
-            forceFresh?: boolean;
-            background?: boolean;
-        }
-    ): Promise<any> {
-        const cacheKey = `predictions:week:${week}:${userId}`;
-        
-        this.trackActivity('view_predictions', { week, userId });
+  /**
+   * Get cache configuration
+   */
+  getConfig(): CacheConfig {
+    return { ...this.config };
+  }
 
-        try {
-            const predictions = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    // Simulate API call
-                    const response = await this.fetchFromAPI(`/api/oracle/predictions/${week}`, {
-                        userId
-                    });
-                    return response;
-                },
-                {
-                    strategy: 'predictions',
-                    tags: ['predictions', 'oracle', `week-${week}`, `user-${userId}`],
-                    forceFresh: options?.forceFresh
-                }
-            );
+  /**
+   * Update cache configuration
+   */
+  updateConfig(newConfig: Partial<CacheConfig>): void {
+    Object.assign(this.config, newConfig);
+  }
 
-            // Prefetch next week's predictions if current week is requested
-            if (!options?.forceFresh && this.isCurrentWeek(week)) {
-                this.prefetchNextWeekPredictions(week + 1, userId);
-            }
+  /**
+   * Memory optimization
+   */
+  optimize(): void {
+    this.cleanup();
+    this.compactCache();
+  }
 
-            return predictions;
-        } catch (error) {
-            console.error('Failed to get Oracle predictions:', error);
-            throw error;
-        }
+  /**
+   * Private methods
+   */
+  private startCleanupTimer(): void {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
     }
+    
+    this.cleanupTimer = setInterval(() => {
+      this.cleanup();
+    }, this.config.cleanupInterval);
+  }
 
-    /**
-     * Get Oracle analytics with intelligent caching
-     */
-    async getOracleAnalytics(
-        userId: string,
-        timeRange: string = '7d',
-        options?: { forceFresh?: boolean }
-    ): Promise<any> {
-        const cacheKey = `analytics:${userId}:${timeRange}`;
-        
-        this.trackActivity('view_analytics', { userId, timeRange });
-
-        try {
-            const analytics = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    const response = await this.fetchFromAPI(`/api/oracle/analytics/${userId}`, {
-                        range: timeRange
-                    });
-                    return response;
-                },
-                {
-                    strategy: 'analytics',
-                    tags: ['analytics', 'oracle', `user-${userId}`, `range-${timeRange}`],
-                    forceFresh: options?.forceFresh
-                }
-            );
-
-            // Prefetch related analytics ranges
-            this.prefetchRelatedAnalytics(userId, timeRange);
-
-            return analytics;
-        } catch (error) {
-            console.error('Failed to get Oracle analytics:', error);
-            throw error;
-        }
+  private cleanup(): void {
+    const now = Date.now();
+    const expiredKeys: string[] = [];
+    
+    for (const [key, entry] of this.cache.entries()) {
+      if (now > entry.expires) {
+        expiredKeys.push(key);
+      }
     }
+    
+    expiredKeys.forEach(key => this.cache.delete(key));
+  }
 
-    /**
-     * Get Oracle leaderboard with intelligent caching
-     */
-    async getOracleLeaderboard(
-        category: string = 'overall',
-        options?: { forceFresh?: boolean }
-    ): Promise<any> {
-        const cacheKey = `leaderboard:${category}`;
-        
-        this.trackActivity('view_leaderboard', { category });
+  private hasSpaceFor(size: number): boolean {
+    const currentSize = this.getCurrentCacheSize();
+    return (currentSize + size) <= this.config.maxCacheSize && 
+           this.cache.size < this.config.maxEntries;
+  }
 
-        try {
-            const leaderboard = await oracleIntelligentCachingService.get(
-                cacheKey,
-                async () => {
-                    const response = await this.fetchFromAPI(`/api/oracle/leaderboard/${category}`);
-                    return response;
-                },
-                {
-                    strategy: 'leaderboard',
-                    tags: ['leaderboard', 'oracle', `category-${category}`],
-                    forceFresh: options?.forceFresh
-                }
-            );
+  private getCurrentCacheSize(): number {
+    return Array.from(this.cache.values()).reduce((sum, entry) => sum + entry.size, 0);
+  }
 
-            return leaderboard;
-        } catch (error) {
-            console.error('Failed to get Oracle leaderboard:', error);
-            throw error;
-        }
+  private evictLRU(): void {
+    let oldestKey: string | null = null;
+    let oldestTime = Date.now();
+    
+    for (const [key, entry] of this.cache.entries()) {
+      if (entry.timestamp < oldestTime) {
+        oldestTime = entry.timestamp;
+        oldestKey = key;
+      }
     }
-
-    /**
-     * Submit Oracle prediction with cache invalidation
-     */
-    async submitOraclePrediction(
-        week: number,
-        userId: string,
-        prediction: any
-    ): Promise<any> {
-        this.trackActivity('submit_prediction', { week, userId, prediction });
-
-        try {
-            // Submit prediction
-            const result = await this.fetchFromAPI('/api/oracle/predictions', {
-                method: 'POST',
-                body: JSON.stringify({ week, userId, prediction })
-            });
-
-            // Invalidate related caches
-            await this.invalidateUserCaches(userId, week);
-
-            return result;
-        } catch (error) {
-            console.error('Failed to submit Oracle prediction:', error);
-            throw error;
-        }
+    
+    if (oldestKey) {
+      this.cache.delete(oldestKey);
     }
+  }
 
-    /**
-     * Invalidate caches related to user and week
-     */
-    private async invalidateUserCaches(userId: string, week?: number): Promise<void> {
-        const tagsToInvalidate = [`user-${userId}`];
-        
-        if (week) {
-            tagsToInvalidate.push(`week-${week}`);
-        }
-
-        // Also invalidate leaderboard
-        tagsToInvalidate.push('leaderboard');
-
-        oracleIntelligentCachingService.clearByTags(tagsToInvalidate);
-        
-        const weekInfo = week ? ` and week ${week}` : '';
-        console.log(`🗑️ Invalidated caches for user ${userId}${weekInfo}`);
+  private compactCache(): void {
+    // Remove entries with very low hit rates
+    const averageHits = Array.from(this.cache.values())
+      .reduce((sum, entry) => sum + entry.hits, 0) / this.cache.size;
+    
+    const lowPerformanceKeys: string[] = [];
+    
+    for (const [key, entry] of this.cache.entries()) {
+      if (entry.hits < averageHits * 0.1) { // Less than 10% of average hits
+        lowPerformanceKeys.push(key);
+      }
     }
+    
+    lowPerformanceKeys.forEach(key => this.cache.delete(key));
+  }
 
-    /**
-     * Perform auto-warmup of frequently accessed data
-     */
-    private async performAutoWarmup(userId: string): Promise<void> {
-        console.log('🔥 Starting auto-warmup process...');
+  private recordHit(): void {
+    this.stats.hits++;
+    this.stats.operations++;
+  }
 
-        try {
-            const currentWeek = this.getCurrentWeek();
-            
-            // Warmup current week predictions
-            await oracleIntelligentCachingService.warmCache(userId, currentWeek);
+  private recordMiss(): void {
+    this.stats.misses++;
+    this.stats.operations++;
+  }
 
-            // Warmup common analytics ranges
-            const commonRanges = ['1d', '7d', '30d'];
-            for (const range of commonRanges) {
-                const cacheKey = `analytics:${userId}:${range}`;
-                await oracleIntelligentCachingService.set(
-                    cacheKey,
-                    { warmed: true, timestamp: Date.now() },
-                    { 
-                        strategy: 'analytics',
-                        ttl: 60 * 1000 // Short TTL for warmup data
-                    }
-                );
-            }
+  private recordAccessTime(time: number): void {
+    this.stats.totalAccessTime += time;
+  }
 
-            // Warmup leaderboard
-            const cacheKey = 'leaderboard:overall';
-            await oracleIntelligentCachingService.set(
-                cacheKey,
-                { warmed: true, timestamp: Date.now() },
-                { 
-                    strategy: 'leaderboard',
-                    ttl: 60 * 1000
-                }
-            );
+  private resetStats(): void {
+    this.stats = {
+      hits: 0,
+      misses: 0,
+      totalAccessTime: 0,
+      operations: 0
+    };
+  }
 
-            console.log('✅ Auto-warmup completed');
-        } catch (error) {
-            console.error('Auto-warmup failed:', error);
-        }
+  private getCurrentWeek(): number {
+    // Simplified week calculation - in real app this would be more sophisticated
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 8, 1); // September 1st
+    const diff = now.getTime() - start.getTime();
+    return Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+  }
+
+  private getCurrentSeason(): number {
+    const now = new Date();
+    return now.getMonth() >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  }
+
+  /**
+   * Cleanup resources when service is destroyed
+   */
+  destroy(): void {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = null;
     }
-
-    /**
-     * Start cache monitoring
-     */
-    private startMonitoring(): void {
-        if (this.monitoringTimer) return;
-
-        this.monitoringTimer = setInterval(() => {
-            const stats = oracleIntelligentCachingService.getStats();
-            
-            const snapshot: CacheMetricsSnapshot = {
-                timestamp: Date.now(),
-                hitRate: stats.hitRate,
-                memoryUsage: stats.totalSize,
-                responseTime: stats.avgResponseTime,
-                healthScore: stats.healthScore
-            };
-
-            this.metricsHistory.push(snapshot);
-
-            // Keep only last 100 snapshots (50 minutes of data at 30s intervals)
-            if (this.metricsHistory.length > 100) {
-                this.metricsHistory = this.metricsHistory.slice(-100);
-            }
-
-            // Auto-optimize if health score is low
-            if (stats.healthScore < 60) {
-                console.log('⚠️ Low cache health score, triggering optimization...');
-                oracleIntelligentCachingService.optimize();
-            }
-        }, this.options.monitoringInterval);
-
-        console.log('📊 Cache monitoring started');
-    }
-
-    /**
-     * Start background sync for real-time data
-     */
-    private startBackgroundSync(userId: string): void {
-        if (this.backgroundSyncTimer) return;
-
-        this.backgroundSyncTimer = setInterval(async () => {
-            try {
-                const currentWeek = this.getCurrentWeek();
-                
-                // Sync current week predictions in background
-                await this.getOraclePredictions(currentWeek, userId, { background: true });
-                
-                // Sync leaderboard
-                await this.getOracleLeaderboard('overall');
-                
-            } catch (error) {
-                console.error('Background sync error:', error);
-            }
-        }, 2 * 60 * 1000); // Every 2 minutes
-
-        console.log('🔄 Background sync started');
-    }
-
-    /**
-     * Setup predictive prefetching based on user patterns
-     */
-    private setupPredictivePrefetch(userId: string): void {
-        // Analyze user patterns and prefetch likely needed data
-        console.log('🔮 Predictive prefetching enabled');
-    }
-
-    /**
-     * Handle activity-based prefetching
-     */
-    private async handleActivityPrefetch(activity: UserActivity): Promise<void> {
-        switch (activity.action) {
-            case 'view_predictions':
-                if (activity.data?.week) {
-                    // Prefetch next and previous weeks
-                    this.prefetchAdjacentWeeks(activity.data.week, activity.data.userId);
-                }
-                break;
-                
-            case 'view_analytics':
-                if (activity.data?.userId && activity.data?.timeRange) {
-                    // Prefetch other time ranges
-                    this.prefetchRelatedAnalytics(activity.data.userId, activity.data.timeRange);
-                }
-                break;
-                
-            case 'view_leaderboard':
-                // Prefetch other leaderboard categories
-                this.prefetchLeaderboardCategories(activity.data?.category);
-                break;
-        }
-    }
-
-    /**
-     * Prefetch adjacent weeks' predictions
-     */
-    private async prefetchAdjacentWeeks(week: number, userId: string): Promise<void> {
-        const weeksToPrefetch = [week - 1, week + 1].filter(w => w > 0 && w <= 18);
-        
-        for (const w of weeksToPrefetch) {
-            const cacheKey = `predictions:week:${w}:${userId}`;
-            const cached = await oracleIntelligentCachingService.get(cacheKey);
-            
-            if (!cached) {
-                // Prefetch in background
-                setTimeout(() => {
-                    this.getOraclePredictions(w, userId, { background: true });
-                }, 100);
-            }
-        }
-    }
-
-    /**
-     * Prefetch next week's predictions
-     */
-    private async prefetchNextWeekPredictions(week: number, userId: string): Promise<void> {
-        setTimeout(() => {
-            this.getOraclePredictions(week, userId, { background: true });
-        }, 1000);
-    }
-
-    /**
-     * Prefetch related analytics ranges
-     */
-    private async prefetchRelatedAnalytics(userId: string, currentRange: string): Promise<void> {
-        const allRanges = ['1d', '7d', '30d', '90d'];
-        const rangesToPrefetch = allRanges.filter(range => range !== currentRange);
-        
-        for (const range of rangesToPrefetch) {
-            setTimeout(() => {
-                this.getOracleAnalytics(userId, range);
-            }, Math.random() * 2000); // Stagger requests
-        }
-    }
-
-    /**
-     * Prefetch other leaderboard categories
-     */
-    private async prefetchLeaderboardCategories(currentCategory?: string): Promise<void> {
-        const categories = ['overall', 'weekly', 'accuracy', 'consistency'];
-        const categoriesToPrefetch = categories.filter(cat => cat !== currentCategory);
-        
-        for (const category of categoriesToPrefetch) {
-            setTimeout(() => {
-                this.getOracleLeaderboard(category);
-            }, Math.random() * 1500);
-        }
-    }
-
-    /**
-     * Get cache metrics history
-     */
-    getMetricsHistory(): CacheMetricsSnapshot[] {
-        return [...this.metricsHistory];
-    }
-
-    /**
-     * Get user activity history
-     */
-    getUserActivity(): UserActivity[] {
-        return [...this.userActivity];
-    }
-
-    /**
-     * Utility methods
-     */
-    private getCurrentWeek(): number {
-        const now = new Date();
-        const start = new Date(now.getFullYear(), 8, 1); // Sept 1st
-        const diff = now.getTime() - start.getTime();
-        return Math.ceil(diff / (7 * 24 * 60 * 60 * 1000));
-    }
-
-    private isCurrentWeek(week: number): boolean {
-        return week === this.getCurrentWeek();
-    }
-
-    private async fetchFromAPI(url: string, options: any = {}): Promise<any> {
-        // Simulate API call with delay
-        await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-        
-        // Return mock data based on URL
-        if (url.includes('/predictions/')) {
-            return { predictions: [], accuracy: 75.5, confidence: 0.85 };
-        } else if (url.includes('/analytics/')) {
-            return { stats: {}, trends: [], insights: [] };
-        } else if (url.includes('/leaderboard/')) {
-            return { rankings: [], userRank: 42, totalUsers: 1000 };
-        }
-        
-        return { success: true };
-    }
-
-    /**
-     * Cleanup resources
-     */
-    destroy(): void {
-        if (this.monitoringTimer) {
-            clearInterval(this.monitoringTimer);
-            this.monitoringTimer = null;
-        }
-
-        if (this.backgroundSyncTimer) {
-            clearInterval(this.backgroundSyncTimer);
-            this.backgroundSyncTimer = null;
-        }
-
-        this.userActivity = [];
-        this.metricsHistory = [];
-        this.isInitialized = false;
-
-        console.log('🧹 Oracle Cache Integration Service destroyed');
-    }
+    this.cache.clear();
+  }
 }
 
 // Export singleton instance
-export const oracleCacheIntegrationService = new OracleCacheIntegrationService({
-    enableAutoWarmup: true,
-    enableBackgroundSync: true,
-    enablePredictivePrefetch: true,
-    monitoringInterval: 30 * 1000
-});
-
+export const oracleCacheIntegrationService = new OracleCacheIntegrationService();
 export default oracleCacheIntegrationService;

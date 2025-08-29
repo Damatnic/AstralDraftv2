@@ -139,8 +139,14 @@ const MobileLayout: React.FC<Props> = ({
       {/* PWA Install Prompt */}
       {showPWAPrompt && isMobile && (
         <PWAInstallPrompt
-          onInstall={() => console.log('PWA installed')}
-          onDismiss={() => console.log('PWA prompt dismissed')}
+          onInstall={() => {
+            // TODO: Log PWA installation
+            // console.log('PWA installed');
+          }}
+          onDismiss={() => {
+            // TODO: Log PWA prompt dismissal
+            // console.log('PWA prompt dismissed');
+          }}
           className={isKeyboardOpen ? 'hidden' : ''}
         />
       )}

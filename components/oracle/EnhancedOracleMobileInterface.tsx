@@ -7,11 +7,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/SimpleAuthContext';
-import { Widget } from '../ui/Widget';
+// import { Widget } from '../ui/Widget';
 import { ZapIcon } from '../icons/ZapIcon';
 import { oracleApiClient } from '../../services/oracleApiClient';
 import { PredictionResponse } from '../../services/oracleApiClient';
-import { useOracleWebSocket, OracleWebSocketMessage } from '../../hooks/useOracleWebSocket';
+import { useOracleWebSocket } from '../../hooks/useOracleWebSocket';
+// import { OracleWebSocketMessage } from '../../hooks/useOracleWebSocket';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useOracleNotifications } from '../../hooks/useOracleNotifications';
 import { oracleMobileService } from '../../services/oracleMobileService';
@@ -19,16 +20,16 @@ import {
     BarChart3, 
     Target, 
     Settings, 
-    Menu, 
+    // Menu, 
     X, 
-    ChevronLeft, 
-    ChevronRight,
+    // ChevronLeft, 
+    // ChevronRight,
     TrendingUp,
     Users,
-    Clock,
+    // Clock,
     Zap,
     AlertCircle,
-    CheckCircle
+    // CheckCircle
 } from 'lucide-react';
 
 import UserStatsWidget, { UserStats } from './UserStatsWidget';
@@ -241,7 +242,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({
             const livePredictions: LivePrediction[] = response.data.map((p: PredictionResponse) => ({
                 id: p.id,
                 question: p.question,
-                options: p.options.map((opt: string, idx: number) => ({
+                options: p.options.map((opt: string, _idx: number) => ({
                     text: opt,
                     probability: 0.5 // Default probability
                 })),

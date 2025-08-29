@@ -5,7 +5,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import type { LeagueHistoryEntry, Team } from '../../types';
 import { Avatar } from '../ui/Avatar';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface ChampionChartProps {
     history: LeagueHistoryEntry[];
@@ -49,7 +49,7 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }) => {
                         transition: { delay: index * 0.1, type: 'spring' },
                     }}
                 >
-                    <Tooltip text={`${count} championship${count > 1 ? 's' : ''}`}>
+                    <Tooltip content={`${count} championship${count > 1 ? 's' : ''}`}>
                         <div
                             className="w-full bg-gradient-to-t from-yellow-500 to-yellow-300 rounded-t-md hover:shadow-lg hover:shadow-yellow-400/30 transition-shadow"
                             style={{ height: `${(count / maxCount) * 100}%` }}

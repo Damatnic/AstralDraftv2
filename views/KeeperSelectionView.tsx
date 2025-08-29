@@ -6,11 +6,9 @@ import { Widget } from '../components/ui/Widget';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { UsersIcon } from '../components/icons/UsersIcon';
 import { CheckCircleIcon, XCircleIcon, ShieldIcon, TrophyIcon } from 'lucide-react';
-import type { Player } from '../types';
-import { Avatar } from '../components/ui/Avatar';
 
 const KeeperSelectionView: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [selectedIds, setSelectedIds] = React.useState<Set<number>>(new Set(myTeam?.keepers || []));
     const [showConfirmation, setShowConfirmation] = React.useState(false);
@@ -95,7 +93,7 @@ const KeeperSelectionView: React.FC = () => {
                         </div>
                     </div>
                     <p className="text-sm text-[var(--text-secondary)] mt-4">
-                        Choose up to {keeperCount} players from your previous season's roster to keep for the upcoming draft. 
+                        Choose up to {keeperCount} players from your previous season&apos;s roster to keep for the upcoming draft. 
                         These picks will replace your first {keeperCount} round draft selections.
                     </p>
                 </motion.div>

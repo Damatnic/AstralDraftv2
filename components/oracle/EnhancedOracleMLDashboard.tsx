@@ -234,7 +234,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
 
             {/* Performance Trends */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {modelPerformance.map((model, index) => (
+                {modelPerformance.map((model, _index) => (
                     <div key={model.modelName} className="bg-white rounded-lg p-4 shadow-sm">
                         <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium text-gray-800">{model.modelName}</h4>
@@ -387,7 +387,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {recentPredictions.map((pred, index) => (
+                            {recentPredictions.map((pred, _index) => (
                                 <tr key={pred.id} className="border-b hover:bg-gray-50">
                                     <td className="py-2 text-sm text-gray-600">
                                         {new Date(pred.timestamp).toLocaleDateString()}

@@ -9,7 +9,6 @@ import { Widget } from '../../ui/Widget';
 import { Player, League } from '../../../types';
 import { TrophyIcon } from '../../icons/TrophyIcon';
 import { TrendingUpIcon } from '../../icons/TrendingUpIcon';
-import { AlertTriangleIcon } from '../../icons/AlertTriangleIcon';
 import { BarChartIcon } from '../../icons/BarChartIcon';
 import { FireIcon } from '../../icons/FireIcon';
 import { ShieldCheckIcon } from '../../icons/ShieldCheckIcon';
@@ -38,8 +37,8 @@ interface WeeklyProjection {
 
 const FantasyTab: React.FC<FantasyTabProps> = ({
     player,
-    league,
-    dispatch
+    league: _league,
+    dispatch: _dispatch
 }) => {
     // Helper function to safely handle injury history as string union type
     const getInjuryRisk = (injuryHistory: string | undefined): {

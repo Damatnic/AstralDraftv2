@@ -33,7 +33,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
   }
   
   const displayItems = draftFormat === 'AUCTION'
-    ? team.roster.map((player, index) => {
+    ? team.roster.map((player, _index) => {
         const pick = picks.find((p: any) => p.playerId === player.id);
         return {
             key: player.id,

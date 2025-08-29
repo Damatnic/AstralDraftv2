@@ -12,7 +12,7 @@ import { TelescopeIcon } from '../icons/TelescopeIcon';
 
 interface DraftRecapProps {
     league: League;
-    dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<{ type: string; payload?: unknown }>;
 }
 
 const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) => {
@@ -31,7 +31,7 @@ const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) 
                 <p className="text-xs sm:text-sm text-gray-300">
                     <span className="font-semibold text-yellow-300">{award.teamName}</span> - {award.playerName}
                 </p>
-                <p className="text-xs text-gray-400 mt-1 italic break-words">"{award.rationale}"</p>
+                <p className="text-xs text-gray-400 mt-1 italic break-words">&ldquo;{award.rationale}&rdquo;</p>
             </div>
         </div>
     );

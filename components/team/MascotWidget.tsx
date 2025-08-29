@@ -1,12 +1,11 @@
 
 import React from 'react';
-import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import { PawPrintIcon } from '../icons/PawPrintIcon';
 import { generateTeamMascot } from '../../services/geminiService';
 import type { League, Team } from '../../types';
 import LoadingSpinner from '../ui/LoadingSpinner';
-import LazyImage from '../ui/LazyImage';
+import { LazyImage } from '../ui/LazyImage';
 
 interface MascotWidgetProps {
     team: Team;
@@ -53,7 +52,7 @@ export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispat
                     />
                 ) : (
                     <div className="text-center">
-                        <p className="text-xs text-gray-400 mb-2">Your team doesn't have a mascot yet. Let the Oracle create one for you!</p>
+                        <p className="text-xs text-gray-400 mb-2">Your team doesn&apos;t have a mascot yet. Let the Oracle create one for you!</p>
                         <button
                             onClick={handleGenerate}
                             className="px-4 py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20"

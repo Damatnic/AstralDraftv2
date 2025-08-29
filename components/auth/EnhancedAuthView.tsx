@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { OAuthLoginComponent } from '../auth/oauth/OAuthLoginComponent';
 import { UserRoleBadge, PermissionList } from '../auth/ProtectedRoute';
-import { UserRole } from '../../services/rbacService';
 import { 
   EyeIcon, 
   EyeOffIcon, 
@@ -151,9 +150,10 @@ const EnhancedAuthView: React.FC = () => {
     }
   };
 
-  const handleOAuthSuccess = (oauthUser: any) => {
+  const handleOAuthSuccess = (_oauthUser: { id: string; username?: string; display_name?: string }) => {
     // OAuth success is handled by the auth context
-    console.log('OAuth login successful:', oauthUser);
+    // Successfully authenticated user
+    setAuthError('');
   };
 
   const handleOAuthError = (errorMessage: string) => {
@@ -178,7 +178,7 @@ const EnhancedAuthView: React.FC = () => {
                 Welcome back, {user?.display_name || user?.username}!
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                You're successfully authenticated and ready to use Astral Draft.
+                You&rsquo;re successfully authenticated and ready to use Astral Draft.
               </p>
             </div>
 

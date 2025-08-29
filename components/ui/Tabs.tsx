@@ -1,37 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Tab {
   id: string;
   label: string;
-  content: React.ReactNode;
   disabled?: boolean;
 }
 
 interface TabsProps {
-  tabs: Tab[];
-  defaultTab?: string;
-  onChange?: (tabId: string) => void;
+  items: Tab[];
+  activeTab: string;
+  onTabChange: (tabId: string) => void;
 }
 
 export const Tabs: React.FC<TabsProps> = ({
-  tabs,
-  defaultTab,
-  onChange
+  items,
+  activeTab,
+  onTabChange
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.id);
 
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
-    onChange?.(tabId);
+    onTabChange(tabId);
   };
-
-  const activeTabContent = tabs.find(tab => tab.id === activeTab)?.content;
 
   return (
     <div className="w-full">
       <div className="border-b border-white/20">
         <nav className="flex space-x-8" role="tablist">
-          {tabs.map((tab) => (
+          {items.map((tab) => (
             <button
               key={tab.id}
               role="tab"
@@ -52,15 +47,6 @@ export const Tabs: React.FC<TabsProps> = ({
             </button>
           ))}
         </nav>
-      </div>
-      
-      <div
-        id={`panel-${activeTab}`}
-        role="tabpanel"
-        aria-labelledby={activeTab}
-        className="py-4"
-      >
-        {activeTabContent}
       </div>
     </div>
   );

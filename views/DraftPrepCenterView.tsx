@@ -3,8 +3,7 @@
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import Tabs from '../components/ui/Tabs';
+import { Tabs } from '../components/ui/Tabs';
 import { AnimatePresence, motion } from 'framer-motion';
 import MyRankingsEditor from '../components/prep/MyRankingsEditor';
 import MockDraftHistory from '../components/prep/MockDraftHistory';

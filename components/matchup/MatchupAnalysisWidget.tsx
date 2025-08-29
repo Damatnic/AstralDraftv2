@@ -2,9 +2,9 @@
 import React from 'react';
 import type { Team, MatchupAnalysis } from '../../types';
 import { getMatchupAnalysis } from '../../services/geminiService';
-import { PercentIcon } from '../icons/PercentIcon';
+// import { PercentIcon } from '../icons/PercentIcon';
 import { CrosshairIcon } from '../icons/CrosshairIcon';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface MatchupAnalysisWidgetProps {
     myTeam: Team;
@@ -47,7 +47,7 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
                 <span className="text-cyan-300">My Win %</span>
                 <span>Opponent Win %</span>
             </div>
-            <Tooltip text={`The Oracle predicts a ${myWinPct}% chance for you to win.`}>
+            <Tooltip content={`The Oracle predicts a ${myWinPct}% chance for you to win.`}>
                 <div className="w-full h-4 bg-red-500/50 rounded-full flex overflow-hidden">
                     <div className="bg-cyan-500" style={{ width: `${myWinPct}%` }}></div>
                 </div>
@@ -61,7 +61,7 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
                     <CrosshairIcon /> My Key Player: <span className="text-white">{analysis.keyPlayerMyTeam}</span>
                 </div>
                 <div className="flex items-center gap-2 text-red-300 font-semibold">
-                     <CrosshairIcon /> Opponent's Key Player: <span className="text-white">{analysis.keyPlayerOpponent}</span>
+                     <CrosshairIcon /> Opponent&apos;s Key Player: <span className="text-white">{analysis.keyPlayerOpponent}</span>
                 </div>
             </div>
         </div>

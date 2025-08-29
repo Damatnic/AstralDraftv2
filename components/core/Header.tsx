@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
-import { motion } from 'framer-motion';
 import { Avatar } from '../ui/Avatar';
 import { LazyImage } from '../ui/LazyImage';
 import { MenuIcon } from '../icons/MenuIcon';
@@ -13,7 +12,7 @@ const Header: React.FC = () => {
     const { state, dispatch } = useAppState();
     const { user } = state;
 
-    const hasUnreadMessages = state.directMessages?.some((m: any) => m.toUserId === user?.id && !m.isRead);
+    const hasUnreadMessages = state.directMessages?.some((m: { toUserId: string; isRead: boolean }) => m.toUserId === user?.id && !m.isRead);
 
     return (
         <header className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 glass-pane border-b-0 rounded-b-xl mx-auto max-w-7xl mt-4">

@@ -85,7 +85,6 @@ class PerformanceMonitoringService {
       const fcp = entries.find(entry => entry.name === 'first-contentful-paint');
       if (fcp) {
         this.updateMetric('firstContentfulPaint', fcp.startTime);
-        console.log('FCP:', fcp.startTime);
       }
     });
     fcpObserver.observe({ entryTypes: ['paint'] });
@@ -96,7 +95,6 @@ class PerformanceMonitoringService {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
       this.updateMetric('largestContentfulPaint', lastEntry.startTime);
-      console.log('LCP:', lastEntry.startTime);
     });
     lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
   }
@@ -110,7 +108,6 @@ class PerformanceMonitoringService {
         }
       }
       this.updateMetric('cumulativeLayoutShift', clsValue);
-      console.log('CLS:', clsValue);
     });
     clsObserver.observe({ entryTypes: ['layout-shift'] });
   }
@@ -118,8 +115,8 @@ class PerformanceMonitoringService {
   private measureFID(): void {
     const fidObserver = new PerformanceObserver((list) => {
       for (const entry of list.getEntries() as any[]) {
-        this.updateMetric('firstInputDelay', entry.processingStart - entry.startTime);
-        console.log('FID:', entry.processingStart - entry.startTime);
+        const fid = entry.processingStart - entry.startTime;
+        this.updateMetric('firstInputDelay', fid);
       }
     });
     fidObserver.observe({ entryTypes: ['first-input'] });
@@ -131,7 +128,6 @@ class PerformanceMonitoringService {
     if (navigationEntry) {
       const tti = navigationEntry.domInteractive - navigationEntry.fetchStart;
       this.updateMetric('timeToInteractive', tti);
-      console.log('TTI:', tti);
     }
   }
 
@@ -143,7 +139,7 @@ class PerformanceMonitoringService {
       for (const entry of list.getEntries()) {
         const resource = entry as PerformanceResourceTiming;
         if (resource.initiatorType === 'script' || resource.initiatorType === 'link') {
-          console.log(`Resource: ${resource.name}, Duration: ${resource.duration}ms`);
+          // Track resource loading performance
         }
       }
     });
@@ -164,9 +160,8 @@ class PerformanceMonitoringService {
       
       try {
         longTaskObserver.observe({ entryTypes: ['longtask'] });
-      } catch (e) {
+      } catch {
         // Browser doesn't support longtask entries
-        console.log('Long task monitoring not supported');
       }
     }
   }
@@ -180,7 +175,6 @@ class PerformanceMonitoringService {
     const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     
     const jsResources = resources.filter(r => r.name.endsWith('.js'));
-    const cssResources = resources.filter(r => r.name.endsWith('.css'));
     
     const chunks: ChunkAnalysis[] = jsResources.map(resource => ({
       name: resource.name.split('/').pop() || 'unknown',

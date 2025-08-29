@@ -353,7 +353,7 @@ class DraftSimulationEngine {
     /**
      * Start a new draft simulation
      */
-    async startSimulation(settings: SimulationSettings, availablePlayers: Player[]): Promise<SimulationResult> {
+    async startSimulation(settings: SimulationSettings, _availablePlayers: Player[]): Promise<SimulationResult> {
         const teams = this.generateAITeams(settings);
         const userTeam = teams[settings.userPosition - 1];
         
@@ -389,7 +389,6 @@ class DraftSimulationEngine {
         currentRound: number, 
         settings: SimulationSettings
     ): DraftPick {
-        const startTime = Date.now();
         
         // Evaluate all available players
         const playerEvaluations = availablePlayers.map(player => ({
@@ -430,8 +429,6 @@ class DraftSimulationEngine {
         
         // Update team needs
         this.updateTeamNeeds(team, selectedPlayer.player);
-
-        console.log(`AI Draft Pick: ${team.name} selects ${selectedPlayer.player.name} (${selectedPlayer.player.position}) in round ${currentRound}`);
         
         return pick;
     }
@@ -495,7 +492,7 @@ class DraftSimulationEngine {
     private makeAIDecision(
         evaluations: Array<{player: Player, value: number}>, 
         team: DraftTeam, 
-        round: number
+        _round: number
     ): {player: Player, value: number} {
         if (evaluations.length === 0) {
             throw new Error('No players available for selection');
@@ -571,7 +568,7 @@ class DraftSimulationEngine {
         }
     }
 
-    private calculateRosterScore(team: DraftTeam, settings: SimulationSettings): number {
+    private calculateRosterScore(team: DraftTeam, _settings: SimulationSettings): number {
         // Simplified roster scoring algorithm
         let score = 0;
         
@@ -633,7 +630,7 @@ class DraftSimulationEngine {
             .slice(0, 3);
     }
 
-    private generateTradeSuggestions(userTeam: DraftTeam, allTeams: DraftTeam[]): TradeSuggestion[] {
+    private generateTradeSuggestions(_userTeam: DraftTeam, _allTeams: DraftTeam[]): TradeSuggestion[] {
         // Simplified trade suggestion generation
         return [];
     }

@@ -3,11 +3,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { getDaysUntilDraft, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
 import { Button } from '../components/ui/Button';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
+import { View } from '../types';
 
 const EnhancedLeagueDashboard: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -152,7 +152,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as any })}
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as View })}
                 className={`card bg-gradient-to-br ${item.gradient} hover:shadow-2xl text-white transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 p-6 min-h-[160px] flex flex-col justify-center items-center text-center group`}
               >
                 <div className="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">

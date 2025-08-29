@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { oauthService } from '../../../services/oauthService';
+import { oauthService, OAuthProvider, OAuthUser } from '../../../services/oauthService';
 import { useAuth } from '../../../contexts/AuthContext';
 import { CheckIcon, LinkIcon, UnlinkIcon, AlertCircleIcon } from 'lucide-react';
+
+interface LinkedAccount {
+  provider: string;
+  providerId: string;
+  email: string;
+  username: string;
+  displayName: string;
+  avatarUrl?: string;
+}
 
 interface OAuthButtonProps {
   provider: {
@@ -78,7 +87,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = ({
 };
 
 interface OAuthLoginComponentProps {
-  onSuccess?: (user: any) => void;
+  onSuccess?: (user: OAuthUser) => void;
   onError?: (error: string) => void;
   className?: string;
 }
@@ -89,7 +98,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
   className = ''
 }) => {
   const { isAuthenticated } = useAuth();
-  const [providers, setProviders] = useState<any[]>([]);
+  const [providers, setProviders] = useState<OAuthProvider[]>([]);
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -124,7 +133,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
           try {
             const result = await oauthService.handleCallback(provider, code, state);
             
-            if (result.success) {
+            if (result.success && result.user) {
               onSuccess?.(result.user);
               
               // Redirect to the page user was on before auth
@@ -135,7 +144,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
               setError(result.error || 'OAuth authentication failed');
               onError?.(result.error || 'OAuth authentication failed');
             }
-          } catch (err) {
+          } catch {
             const errorMessage = 'OAuth authentication failed';
             setError(errorMessage);
             onError?.(errorMessage);
@@ -224,8 +233,8 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
   className = ''
 }) => {
   const { isAuthenticated } = useAuth();
-  const [linkedAccounts, setLinkedAccounts] = useState<any[]>([]);
-  const [availableProviders, setAvailableProviders] = useState<any[]>([]);
+  const [linkedAccounts, setLinkedAccounts] = useState<LinkedAccount[]>([]);
+  const [availableProviders, setAvailableProviders] = useState<OAuthProvider[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -269,7 +278,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
     try {
       const result = await oauthService.unlinkAccount(providerId);
       if (result.success) {
-        setLinkedAccounts(prev => prev.filter((account: any) => account.provider !== providerId));
+        setLinkedAccounts(prev => prev.filter((account: LinkedAccount) => account.provider !== providerId));
       }
     } catch (error) {
       console.error('Failed to unlink account:', error);
@@ -286,7 +295,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
     return (
       <div className={`${className} animate-pulse`}>
         <div className="space-y-3">
-          {[1, 2, 3].map((i: any) => (
+          {[1, 2, 3].map((i: number) => (
             <div key={i} className="h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
           ))}
         </div>
@@ -302,7 +311,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
       
       <div className="space-y-3">
         {availableProviders.map((provider) => {
-          const linkedAccount = linkedAccounts.find((account: any) => account.provider === provider.id);
+          const linkedAccount = linkedAccounts.find((account: LinkedAccount) => account.provider === provider.id);
           const isLinked = !!linkedAccount;
           const isLoading = actionLoading === provider.id;
 

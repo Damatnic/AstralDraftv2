@@ -17,7 +17,6 @@ import { UserPlusIcon } from '../icons/UserPlusIcon';
 import { UserRemoveIcon } from '../icons/UserRemoveIcon';
 import { EyeIcon } from '../icons/EyeIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
-import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { StarIcon } from '../icons/StarIcon';
 
 interface EnhancedRosterManagerProps {
@@ -25,15 +24,6 @@ interface EnhancedRosterManagerProps {
     league: League;
     dispatch: React.Dispatch<any>;
     canEdit: boolean;
-}
-
-interface PlayerCardProps {
-    player: Player;
-    onView: () => void;
-    onEdit?: () => void;
-    onRemove?: () => void;
-    showActions: boolean;
-    isStarter?: boolean;
 }
 
 interface PositionGroupProps {
@@ -263,7 +253,6 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
             }));
 
             // Update global state with new lineup order
-            const newStarters = newArray.slice(0, positionRequirements[sourcePosition]);
             dispatch({
                 type: 'UPDATE_POSITION_DEPTH_CHART',
                 payload: {

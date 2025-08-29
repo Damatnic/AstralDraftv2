@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { 
     TrophyIcon, 
@@ -13,9 +12,7 @@ import {
     CheckCircleIcon,
     XCircleIcon,
     PlusCircleIcon,
-    MinusCircleIcon,
-    AwardIcon,
-    TrendingUpIcon
+    AwardIcon
 } from 'lucide-react';
 
 interface Contest {
@@ -37,7 +34,7 @@ interface Contest {
 
 const SeasonContestView: React.FC = () => {
     const { state, dispatch } = useAppState();
-    const { league, myTeam } = useLeague();
+    const { league } = useLeague();
     const [selectedContest, setSelectedContest] = useState<Contest | null>(null);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newContest, setNewContest] = useState({
@@ -113,7 +110,6 @@ const SeasonContestView: React.FC = () => {
 
     const handleCreateContest = () => {
         // Logic to create new contest
-        console.log('Creating contest:', newContest);
         setShowCreateModal(false);
         dispatch({ 
             type: 'ADD_NOTIFICATION', 
@@ -121,9 +117,8 @@ const SeasonContestView: React.FC = () => {
         });
     };
 
-    const handleJoinContest = (contestId: string) => {
+    const handleJoinContest = (_contestId: string) => {
         // Logic to join contest
-        console.log('Joining contest:', contestId);
         dispatch({ 
             type: 'ADD_NOTIFICATION', 
             payload: { message: 'You have joined the contest!', type: 'SYSTEM' }

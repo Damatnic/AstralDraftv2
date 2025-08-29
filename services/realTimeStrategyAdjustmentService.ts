@@ -322,24 +322,26 @@ class RealTimeStrategyAdjustmentService {
 
     private evaluateTriggerCondition(trigger: StrategyTrigger, context: DraftContext): boolean {
         switch (trigger.condition) {
-            case 'available_rb_tier1_count < 3':
+            case 'available_rb_tier1_count < 3': {
                 const tier1RBs = context.availablePlayers.filter(p => p.position === 'RB' && (p.tier || 10) <= 1);
                 return tier1RBs.length < trigger.threshold;
+            }
 
             case 'wr_consecutive_picks >= 4':
                 return (context.draftFlow.positionRuns['WR'] || 0) >= trigger.threshold;
 
-            case 'rb_adp_value > 10':
+            case 'rb_adp_value > 10': {
                 const topRBs = context.availablePlayers.filter(p => p.position === 'RB').slice(0, 3);
                 const avgValue = topRBs.reduce((sum, p) => sum + ((p.adp || 999) - context.currentPick), 0) / topRBs.length;
                 return avgValue > trigger.threshold;
+            }
 
             default:
                 return false;
         }
     }
 
-    private createTriggerAdjustment(trigger: StrategyTrigger, context: DraftContext): StrategyAdjustment {
+    private createTriggerAdjustment(trigger: StrategyTrigger, _context: DraftContext): StrategyAdjustment {
         const adjustment: StrategyAdjustment = {
             positionPriorityChanges: {},
             riskToleranceShift: 0,
@@ -451,7 +453,7 @@ class RealTimeStrategyAdjustmentService {
         return adjustment;
     }
 
-    private applyAdjustments(adjustments: StrategyAdjustment[], context: DraftContext): Map<string, DraftStrategy> {
+    private applyAdjustments(adjustments: StrategyAdjustment[], _context: DraftContext): Map<string, DraftStrategy> {
         const updatedStrategies = new Map<string, DraftStrategy>();
 
         this.activeStrategies.forEach((strategy, id) => {
@@ -549,7 +551,7 @@ class RealTimeStrategyAdjustmentService {
         return recommendations;
     }
 
-    private generateValueRecommendations(context: DraftContext, strategy: DraftStrategy): StrategyRecommendation[] {
+    private generateValueRecommendations(context: DraftContext, _strategy: DraftStrategy): StrategyRecommendation[] {
         const recommendations: StrategyRecommendation[] = [];
 
         // Find significant value opportunities

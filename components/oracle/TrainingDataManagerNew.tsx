@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 const TrainingDataManager = memo(() => {
     return (
@@ -8,5 +8,7 @@ const TrainingDataManager = memo(() => {
         </div>
     );
 });
+
+TrainingDataManager.displayName = 'TrainingDataManager';
 
 export default TrainingDataManager;

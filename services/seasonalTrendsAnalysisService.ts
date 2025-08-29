@@ -437,7 +437,7 @@ class SeasonalTrendsAnalysisService {
   /**
    * Generate reasoning for trend projections
    */
-  private generateTrendReasoning(patterns: SeasonalPattern[], trend: string): string[] {
+  private generateTrendReasoning(patterns: SeasonalPattern[], _trend: string): string[] {
     const reasoning: string[] = [];
     
     patterns.forEach(pattern => {
@@ -470,7 +470,7 @@ class SeasonalTrendsAnalysisService {
   private generateMockWeeklyData(playerId: string, seasons: number[]): WeeklyPlayerData[] {
     const data: WeeklyPlayerData[] = [];
     
-    seasons.forEach((_, seasonIndex) => {
+    seasons.forEach((_, _seasonIndex) => {
       // Simulate different performance patterns
       const basePoints = 12 + Math.random() * 8; // Base performance 12-20 points
       const seasonTrend = (Math.random() - 0.5) * 0.5; // -25% to +25% season trend
@@ -537,7 +537,7 @@ class SeasonalTrendsAnalysisService {
    */
   private initializeMockData(): void {
     // This can be expanded with more realistic mock data
-    console.log('Seasonal Trends Analysis Service initialized');
+    // Seasonal Trends Analysis Service initialized
   }
 }
 

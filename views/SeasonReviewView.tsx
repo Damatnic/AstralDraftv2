@@ -5,7 +5,6 @@ import { generateSeasonReview } from '../services/geminiService';
 import type { League, SeasonReviewData } from '../types';
 import SeasonReviewDisplay from '../components/reports/SeasonReviewDisplay';
 import { useLeague } from '../hooks/useLeague';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 
 const SeasonReviewLoader: React.FC = () => (

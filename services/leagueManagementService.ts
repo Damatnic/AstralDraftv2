@@ -154,7 +154,7 @@ export interface LeagueEvent {
     initiatedBy: string;
     affectedUsers?: string[];
     timestamp: Date;
-    data?: any;
+    data?: Record<string, unknown>;
 }
 
 export interface LeagueInvitation {
@@ -173,7 +173,7 @@ export interface LeagueInvitation {
 export interface CommissionerAction {
     type: 'force_trade' | 'reverse_trade' | 'move_player' | 'adjust_score' | 'change_lineup' | 'reset_waivers' | 'extend_deadline' | 'kick_member';
     targetUserId?: string;
-    data: any;
+    data: Record<string, unknown>;
     reason: string;
 }
 
@@ -186,11 +186,7 @@ export class LeagueManagementService {
     }
 
     // League Creation and Management
-    async createLeague(
-        commissionerId: string,
-        commissionerName: string,
-        leagueData: Partial<League>
-    ): Promise<League> {
+    async createLeague(_settings: Record<string, unknown>): Promise<string> {
         const leagueId = `league_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         
         const defaultSettings: LeagueSettings = {

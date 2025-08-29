@@ -186,18 +186,14 @@ export class PlayerCorrelationOptimizationEngine {
 
   constructor() {
     // Initialize synchronously - async initialization will be called separately
-    console.log('🔧 Player Correlation & Optimization Engine created');
   }
 
   private async initializeEngine(): Promise<void> {
-    console.log('🔧 Initializing Player Correlation & Optimization Engine...');
-    
     try {
       await this.loadHistoricalCorrelations();
       await this.calculateOwnershipProjections();
-      console.log('✅ Correlation & Optimization Engine initialized successfully');
-    } catch (error) {
-      console.error('❌ Error initializing engine:', error);
+    } catch (_error) {
+      console.warn('Error initializing engine:', _error);
     }
   }
 
@@ -209,8 +205,6 @@ export class PlayerCorrelationOptimizationEngine {
     weeks: number = 10,
     season: number = new Date().getFullYear()
   ): Promise<PlayerCorrelation[]> {
-    console.log(`🔍 Analyzing correlations for ${playerIds.length} players over ${weeks} weeks`);
-    
     const cacheKey = `correlations_${playerIds.join(',')}_${weeks}_${season}`;
     const cached = this.correlationCache.get(cacheKey);
     if (cached) return cached;
@@ -237,11 +231,11 @@ export class PlayerCorrelationOptimizationEngine {
       correlations.sort((a, b) => Math.abs(b.correlationCoefficient) - Math.abs(a.correlationCoefficient));
       
       this.correlationCache.set(cacheKey, correlations);
-      console.log(`✅ Found ${correlations.length} significant correlations`);
+      // Found significant correlations
       return correlations;
       
     } catch (error) {
-      console.error('❌ Error analyzing correlations:', error);
+      // Error analyzing correlations
       throw error;
     }
   }
@@ -254,7 +248,7 @@ export class PlayerCorrelationOptimizationEngine {
     season: number = new Date().getFullYear(),
     strategy: OptimizationStrategy = 'TOURNAMENT'
   ): Promise<StackingOpportunity[]> {
-    console.log(`🎯 Identifying stacking opportunities for Week ${week} (${strategy} strategy)`);
+    // Identifying stacking opportunities
     
     const cacheKey = `stacks_${week}_${season}_${strategy}`;
     const cached = this.stackingCache.get(cacheKey);
@@ -288,11 +282,11 @@ export class PlayerCorrelationOptimizationEngine {
       opportunities.sort((a, b) => b.valueScore - a.valueScore);
       
       this.stackingCache.set(cacheKey, opportunities);
-      console.log(`✅ Found ${opportunities.length} stacking opportunities`);
+      // Found stacking opportunities
       return opportunities;
       
     } catch (error) {
-      console.error('❌ Error identifying stacking opportunities:', error);
+      // Error identifying stacking opportunities
       throw error;
     }
   }
@@ -306,7 +300,7 @@ export class PlayerCorrelationOptimizationEngine {
     week: number,
     season: number = new Date().getFullYear()
   ): Promise<OptimizedLineup[]> {
-    console.log(`🧮 Optimizing lineups for Week ${week} with ${strategy.strategy} strategy`);
+    // Optimizing lineups with strategy
     
     try {
       // Get player pool
@@ -350,11 +344,11 @@ export class PlayerCorrelationOptimizationEngine {
       // Sort by projected points (or strategy-specific metric)
       lineups.sort((a, b) => this.getLineupScore(b, strategy) - this.getLineupScore(a, strategy));
       
-      console.log(`✅ Generated ${lineups.length} optimized lineups`);
+      // Generated optimized lineups
       return lineups.slice(0, 10); // Return top 10
       
     } catch (error) {
-      console.error('❌ Error optimizing lineups:', error);
+      // Error optimizing lineups
       throw error;
     }
   }
@@ -366,7 +360,7 @@ export class PlayerCorrelationOptimizationEngine {
     week: number,
     season: number = new Date().getFullYear()
   ): Promise<OwnershipProjection[]> {
-    console.log(`📊 Generating ownership projections for Week ${week}`);
+    // Generating ownership projections
     
     const cacheKey = `ownership_${week}_${season}`;
     const cached = this.ownershipCache.get(cacheKey);
@@ -385,11 +379,11 @@ export class PlayerCorrelationOptimizationEngine {
       projections.sort((a, b) => b.projectedOwnership - a.projectedOwnership);
       
       this.ownershipCache.set(cacheKey, projections);
-      console.log(`✅ Generated ownership projections for ${projections.length} players`);
+      // Generated ownership projections
       return projections;
       
     } catch (error) {
-      console.error('❌ Error generating ownership projections:', error);
+      // Error generating ownership projections
       throw error;
     }
   }
@@ -399,10 +393,11 @@ export class PlayerCorrelationOptimizationEngine {
    */
   getOptimalStrategy(
     contestType: 'GPP' | 'CASH' | 'SATELLITE' | 'MULTIPLIER',
-    entryCount: number = 1,
+    _entryCount: number = 1,
     fieldSize: number = 1000
   ): TournamentStrategy {
-    console.log(`🎯 Generating optimal strategy for ${contestType} contest (${fieldSize} entries)`);
+    // Generating optimal strategy for contest
+    const fieldArea = fieldSize * 0.8; // Use 80% of field for calculations
     
     const strategies: { [key: string]: TournamentStrategy } = {
       'CASH': {
@@ -483,53 +478,47 @@ export class PlayerCorrelationOptimizationEngine {
     weeks: number,
     season: number
   ): Promise<PlayerCorrelation | null> {
-    try {
-      // Get historical performance data
-      const player1Data = await this.getPlayerHistoricalData(player1Id, weeks, season);
-      const player2Data = await this.getPlayerHistoricalData(player2Id, weeks, season);
-      
-      if (!player1Data || !player2Data || player1Data.length < 5 || player2Data.length < 5) {
-        return null;
-      }
-
-      // Calculate correlation coefficient
-      const correlation = this.calculateCorrelationCoefficient(
-        player1Data.map(d => d.fantasyPoints),
-        player2Data.map(d => d.fantasyPoints)
-      );
-
-      // Determine correlation type and reasoning
-      const { correlationType, reasoning } = this.analyzeCorrelationContext(
-        player1Data[0], player2Data[0], correlation
-      );
-
-      // Identify potential stacking type
-      const stackingType = this.identifyStackingType(player1Data[0], player2Data[0]);
-
-      return {
-        player1Id,
-        player1Name: player1Data[0].name,
-        player2Id,
-        player2Name: player2Data[0].name,
-        correlationCoefficient: correlation,
-        correlationType,
-        confidenceLevel: this.calculateConfidenceLevel(player1Data.length),
-        sampleSize: Math.min(player1Data.length, player2Data.length),
-        gamesSampled: weeks,
-        stackingType,
-        reasoning
-      };
-      
-    } catch (error) {
-      console.error(`Error calculating correlation for ${player1Id}-${player2Id}:`, error);
+    // Get historical performance data
+    const player1Data = await this.getPlayerHistoricalData(player1Id, weeks, season);
+    const player2Data = await this.getPlayerHistoricalData(player2Id, weeks, season);
+    
+    if (!player1Data || !player2Data || player1Data.length < 5 || player2Data.length < 5) {
       return null;
     }
+
+    // Calculate correlation coefficient
+    const correlation = this.calculateCorrelationCoefficient(
+      player1Data.map(d => d.fantasyPoints),
+      player2Data.map(d => d.fantasyPoints)
+    );
+
+    // Determine correlation type and reasoning
+    const { correlationType, reasoning } = this.analyzeCorrelationContext(
+      player1Data[0], player2Data[0], correlation
+    );
+
+    // Identify potential stacking type
+    const stackingType = this.identifyStackingType(player1Data[0], player2Data[0]);
+
+    return {
+      player1Id,
+      player1Name: player1Data[0].name,
+      player2Id,
+      player2Name: player2Data[0].name,
+      correlationCoefficient: correlation,
+      correlationType,
+      confidenceLevel: this.calculateConfidenceLevel(player1Data.length),
+      sampleSize: Math.min(player1Data.length, player2Data.length),
+      gamesSampled: weeks,
+      stackingType,
+      reasoning
+    };
   }
 
   /**
    * Find QB-WR stacking opportunities
    */
-  private async findQBWRStacks(game: any, strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
+  private async findQBWRStacks(game: any, _strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
     const stacks: StackingOpportunity[] = [];
     
     // Mock implementation - would get actual QB and WR data
@@ -585,7 +574,7 @@ export class PlayerCorrelationOptimizationEngine {
   /**
    * Find QB-TE stacking opportunities
    */
-  private async findQBTEStacks(game: any, strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
+  private async findQBTEStacks(_game: any, _strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
     // Mock implementation
     return [];
   }
@@ -593,7 +582,7 @@ export class PlayerCorrelationOptimizationEngine {
   /**
    * Find game stacking opportunities
    */
-  private async findGameStacks(game: any, strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
+  private async findGameStacks(_game: any, _strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
     // Mock implementation
     return [];
   }
@@ -601,7 +590,7 @@ export class PlayerCorrelationOptimizationEngine {
   /**
    * Find RB-DST stacking opportunities
    */
-  private async findRBDSTStacks(game: any, strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
+  private async findRBDSTStacks(_game: any, _strategy: OptimizationStrategy): Promise<StackingOpportunity[]> {
     // Mock implementation
     return [];
   }
@@ -610,9 +599,9 @@ export class PlayerCorrelationOptimizationEngine {
    * Build player pool for optimization
    */
   private async buildPlayerPool(
-    week: number,
-    season: number,
-    constraints: LineupConstraints
+    _week: number,
+    _season: number,
+    _constraints: LineupConstraints
   ): Promise<LineupPlayer[]> {
     const players: LineupPlayer[] = [];
     
@@ -901,21 +890,21 @@ export class PlayerCorrelationOptimizationEngine {
     return 0.5;
   }
 
-  private generateMockSalary(position: string, index: number): number {
+  private generateMockSalary(position: string, _index: number): number {
     const baseSalaries = { QB: 7500, RB: 6500, WR: 6000, TE: 4500, DST: 3000 };
     const base = baseSalaries[position as keyof typeof baseSalaries] || 5000;
     const variance = (Math.random() - 0.5) * 3000;
     return Math.max(3000, Math.round((base + variance) / 100) * 100);
   }
 
-  private generateMockProjection(position: string, index: number): number {
+  private generateMockProjection(position: string, _index: number): number {
     const baseProjections = { QB: 20, RB: 15, WR: 12, TE: 8, DST: 7 };
     const base = baseProjections[position as keyof typeof baseProjections] || 10;
     const variance = (Math.random() - 0.3) * base * 0.6;
     return Math.max(1, base + variance);
   }
 
-  private calculatePlayerScore(player: LineupPlayer, weights: any, strategy: TournamentStrategy): number {
+  private calculatePlayerScore(player: LineupPlayer, weights: any, _strategy: TournamentStrategy): number {
     const valueScore = player.value * weights.value;
     const ceilingScore = player.ceiling * weights.ceiling;
     const floorScore = player.floor * weights.floor;
@@ -955,7 +944,7 @@ export class PlayerCorrelationOptimizationEngine {
     return Math.min(100, variance * 2); // Normalize to 0-100 scale
   }
 
-  private generateLineupAnalysis(lineup: LineupPlayer[], strategy: TournamentStrategy): {
+  private generateLineupAnalysis(_lineup: LineupPlayer[], _strategy: TournamentStrategy): {
     strengths: string[];
     weaknesses: string[];
     keyInsights: string[];
@@ -995,14 +984,14 @@ export class PlayerCorrelationOptimizationEngine {
 
   // Mock data methods
   private async loadHistoricalCorrelations(): Promise<void> {
-    console.log('📊 Loading historical correlation data...');
+    // Loading historical correlation data
   }
 
   private async calculateOwnershipProjections(): Promise<void> {
-    console.log('🎯 Calculating ownership projections...');
+    // Calculating ownership projections
   }
 
-  private async getPlayerHistoricalData(playerId: string, weeks: number, season: number): Promise<any[] | null> {
+  private async getPlayerHistoricalData(playerId: string, weeks: number, _season: number): Promise<any[] | null> {
     // Mock historical data
     return Array.from({ length: weeks }, (_, i) => ({
       playerId,
@@ -1014,7 +1003,7 @@ export class PlayerCorrelationOptimizationEngine {
     }));
   }
 
-  private async calculateOwnershipProjection(player: LineupPlayer, week: number, season: number): Promise<OwnershipProjection> {
+  private async calculateOwnershipProjection(player: LineupPlayer, _week: number, _season: number): Promise<OwnershipProjection> {
     let chalkiness: 'CHALK' | 'SEMI_CHALK' | 'CONTRARIAN' | 'SUPER_CONTRARIAN';
     if (player.ownership > 15) {
       chalkiness = 'CHALK';

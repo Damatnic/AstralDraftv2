@@ -3,181 +3,436 @@
  * Advanced roster editing, lineup optimization, and player transaction history
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import { ChevronLeftIcon } from '../components/icons/ChevronLeftIcon';
-import { UsersIcon } from '../components/icons/UsersIcon';
-import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
-import { ClockIcon } from '../components/icons/ClockIcon';
-import { BarChartIcon } from '../components/icons/BarChartIcon';
-import { Player, Team, League, PlayerPosition } from '../types';
-import EnhancedRosterManager from '../components/team/EnhancedRosterManager';
-import LineupOptimizer from '../components/team/LineupOptimizer';
-import TransactionHistory from '../components/team/TransactionHistory';
-import TeamAnalyticsDashboard from '../components/team/TeamAnalyticsDashboard';
+import { FiUsers, FiTrendingUp, FiClock, FiBarChart, FiChevronLeft } from 'react-icons/fi';
+import { logger } from '../services/loggingService';
 
-type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
+// Type definitions
+export interface Player {
+  id: string;
+  name: string;
+  position: string;
+  team: string;
+  projectedPoints: number;
+  averagePoints: number;
+  isStarting: boolean;
+  injuryStatus?: string;
+}
 
-interface TeamManagementViewProps {}
+export interface Team {
+  id: string;
+  name: string;
+  owner: string;
+  roster: Player[];
+  record: { wins: number; losses: number; ties: number };
+  totalPoints: number;
+}
 
-const TeamManagementView: React.FC<TeamManagementViewProps> = () => {
-    const { state, dispatch } = useAppState();
-    const { league } = useLeague();
-    const [activeTab, setActiveTab] = React.useState<TabType>('roster');
-    const [selectedTeamId, setSelectedTeamId] = React.useState<number | null>(null);
+export interface League {
+  id: string;
+  name: string;
+  teams: Team[];
+  currentWeek: number;
+  settings: Record<string, unknown>;
+}
 
-    if (!league) {
-        return (
-            <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
-                <p className="text-red-400">No league selected</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary mt-4">
-                    Back to Dashboard
-                </button>
-            </div>
-        );
-    }
+export interface Transaction {
+  id: string;
+  type: 'add' | 'drop' | 'trade' | 'waiver';
+  player: Player;
+  timestamp: string;
+  description: string;
+}
 
-    // Get user's team
-    const userTeam = league.teams.find(team => team.owner.id === state.user?.id);
-    
-    // Initialize selected team to user's team
-    React.useEffect(() => {
-        if (userTeam && !selectedTeamId) {
-            setSelectedTeamId(userTeam.id);
-        }
-    }, [userTeam, selectedTeamId]);
+export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
 
-    const selectedTeam = league.teams.find(team => team.id === selectedTeamId);
-    const isCommissioner = state.user?.id === league.commissionerId;
-    const canManageTeam = Boolean(selectedTeam && state.user && (selectedTeam.owner.id === state.user?.id || isCommissioner));
+interface TeamManagementViewProps {
+  onBack?: () => void;
+}
 
-    const tabs = [
-        { id: 'roster', label: 'Roster Management', icon: <UsersIcon className="w-4 h-4" />, description: 'Edit roster, manage positions, view player details' },
-        { id: 'lineup', label: 'Lineup Optimizer', icon: <TrendingUpIcon className="w-4 h-4" />, description: 'AI-powered lineup suggestions and optimization' },
-        { id: 'transactions', label: 'Transaction History', icon: <ClockIcon className="w-4 h-4" />, description: 'Complete history of adds, drops, trades, and waivers' },
-        { id: 'analytics', label: 'Team Analytics', icon: <BarChartIcon className="w-4 h-4" />, description: 'Performance metrics, trends, and insights' }
+const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }) => {
+  // State management
+  const [activeTab, setActiveTab] = useState<TabType>('roster');
+  const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const [league] = useState<League>({
+    id: 'league-1',
+    name: 'Sample League',
+    currentWeek: 1,
+    teams: generateMockTeams(),
+    settings: {}
+  });
+
+  // Get selected team
+  const selectedTeam = selectedTeamId 
+    ? league.teams.find(team => team.id === selectedTeamId)
+    : league.teams[0];
+
+  // Mock data generation
+  function generateMockTeams(): Team[] {
+    return [
+      {
+        id: 'team-1',
+        name: 'Team Alpha',
+        owner: 'User 1',
+        record: { wins: 3, losses: 1, ties: 0 },
+        totalPoints: 450.5,
+        roster: generateMockRoster()
+      },
+      {
+        id: 'team-2',
+        name: 'Team Beta',
+        owner: 'User 2',
+        record: { wins: 2, losses: 2, ties: 0 },
+        totalPoints: 425.0,
+        roster: generateMockRoster()
+      }
     ];
+  }
 
-    const renderTabContent = () => {
-        if (!selectedTeam) {
-            return (
-                <div className="p-8 text-center">
-                    <p className="text-gray-400">Please select a team to manage</p>
+  function generateMockRoster(): Player[] {
+    return [
+      {
+        id: 'player-1',
+        name: 'Josh Allen',
+        position: 'QB',
+        team: 'BUF',
+        projectedPoints: 24.5,
+        averagePoints: 22.3,
+        isStarting: true
+      },
+      {
+        id: 'player-2',
+        name: 'Christian McCaffrey',
+        position: 'RB',
+        team: 'SF',
+        projectedPoints: 18.2,
+        averagePoints: 19.1,
+        isStarting: true
+      },
+      {
+        id: 'player-3',
+        name: 'Cooper Kupp',
+        position: 'WR',
+        team: 'LAR',
+        projectedPoints: 15.8,
+        averagePoints: 16.5,
+        isStarting: true,
+        injuryStatus: 'Questionable'
+      },
+      {
+        id: 'player-4',
+        name: 'Travis Kelce',
+        position: 'TE',
+        team: 'KC',
+        projectedPoints: 14.2,
+        averagePoints: 13.8,
+        isStarting: true
+      }
+    ];
+  }
+
+  // Tab handlers
+  const handleTabChange = (tab: TabType): void => {
+    setActiveTab(tab);
+    logger.info(`Switched to ${tab} tab`);
+  };
+
+  const handleTeamSelect = (teamId: string): void => {
+    setSelectedTeamId(teamId);
+    logger.info(`Selected team: ${teamId}`);
+  };
+
+  // Render functions
+  const renderRosterTab = (): React.ReactNode => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+        <h3 className="text-xl font-bold text-white mb-4">Starting Lineup</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {selectedTeam?.roster.filter(player => player.isStarting).map(player => (
+            <div key={player.id} className="bg-gray-700/50 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-white font-medium">{player.name}</h4>
+                <span className="text-xs px-2 py-1 bg-blue-600 text-white rounded">
+                  {player.position}
+                </span>
+              </div>
+              <div className="text-sm text-gray-300 mb-2">{player.team}</div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-400">Proj: {player.projectedPoints}</span>
+                <span className="text-gray-400">Avg: {player.averagePoints}</span>
+              </div>
+              {player.injuryStatus && (
+                <div className="mt-2 text-xs text-yellow-400">
+                  {player.injuryStatus}
                 </div>
-            );
-        }
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
-        switch (activeTab) {
-            case 'roster':
-                return <EnhancedRosterManager team={selectedTeam} league={league} dispatch={dispatch} canEdit={canManageTeam} />;
-            case 'lineup':
-                return <LineupOptimizer team={selectedTeam} league={league} dispatch={dispatch} canEdit={canManageTeam} />;
-            case 'transactions':
-                return <TransactionHistory team={selectedTeam} league={league} dispatch={dispatch} />;
-            case 'analytics':
-                return <TeamAnalyticsDashboard team={selectedTeam} league={league} dispatch={dispatch} />;
-            default:
-                return null;
-        }
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+        <h3 className="text-xl font-bold text-white mb-4">Bench Players</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {selectedTeam?.roster.filter(player => !player.isStarting).map(player => (
+            <div key={player.id} className="bg-gray-700/50 rounded-lg p-3">
+              <div className="text-white font-medium text-sm">{player.name}</div>
+              <div className="text-xs text-gray-300">{player.position} - {player.team}</div>
+              <div className="text-xs text-gray-400">Proj: {player.projectedPoints}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const renderLineupTab = (): React.ReactNode => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700"
+    >
+      <h3 className="text-xl font-bold text-white mb-4">Lineup Optimizer</h3>
+      <p className="text-gray-300 mb-6">
+        Optimize your lineup for maximum points based on projections and matchups.
+      </p>
+      
+      <div className="space-y-4">
+        <button className="w-full px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+          Generate Optimal Lineup
+        </button>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-gray-700/50 rounded-lg p-4">
+            <h4 className="text-white font-medium mb-2">Current Projected Points</h4>
+            <div className="text-2xl font-bold text-white">
+              {selectedTeam?.roster
+                .filter(p => p.isStarting)
+                .reduce((sum, p) => sum + p.projectedPoints, 0)
+                .toFixed(1)}
+            </div>
+          </div>
+          
+          <div className="bg-gray-700/50 rounded-lg p-4">
+            <h4 className="text-white font-medium mb-2">Optimal Projected Points</h4>
+            <div className="text-2xl font-bold text-green-400">
+              {selectedTeam?.roster
+                .sort((a, b) => b.projectedPoints - a.projectedPoints)
+                .slice(0, 9)
+                .reduce((sum, p) => sum + p.projectedPoints, 0)
+                .toFixed(1)}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const renderTransactionsTab = (): React.ReactNode => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700"
+    >
+      <h3 className="text-xl font-bold text-white mb-4">Recent Transactions</h3>
+      <div className="space-y-3">
+        {generateMockTransactions().map(transaction => (
+          <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
+            <div>
+              <div className="text-white font-medium">{transaction.description}</div>
+              <div className="text-sm text-gray-400">
+                {new Date(transaction.timestamp).toLocaleDateString()}
+              </div>
+            </div>
+            <span className={`px-2 py-1 rounded text-xs ${
+              transaction.type === 'add' ? 'bg-green-600 text-white' :
+              transaction.type === 'drop' ? 'bg-red-600 text-white' :
+              transaction.type === 'trade' ? 'bg-blue-600 text-white' :
+              'bg-yellow-600 text-white'
+            }`}>
+              {transaction.type.toUpperCase()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+
+  const renderAnalyticsTab = (): React.ReactNode => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-6"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+          <h4 className="text-white font-medium mb-2">Team Record</h4>
+          <div className="text-2xl font-bold text-white">
+            {selectedTeam?.record.wins}-{selectedTeam?.record.losses}-{selectedTeam?.record.ties}
+          </div>
+        </div>
+        
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+          <h4 className="text-white font-medium mb-2">Total Points</h4>
+          <div className="text-2xl font-bold text-white">
+            {selectedTeam?.totalPoints.toFixed(1)}
+          </div>
+        </div>
+        
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+          <h4 className="text-white font-medium mb-2">Average Points</h4>
+          <div className="text-2xl font-bold text-white">
+            {((selectedTeam?.totalPoints || 0) / 4).toFixed(1)}
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+        <h3 className="text-xl font-bold text-white mb-4">Position Strength</h3>
+        <div className="space-y-3">
+          {['QB', 'RB', 'WR', 'TE'].map(position => {
+            const positionPlayers = selectedTeam?.roster.filter(p => p.position === position) || [];
+            const avgPoints = positionPlayers.reduce((sum, p) => sum + p.averagePoints, 0) / positionPlayers.length || 0;
+            
+            return (
+              <div key={position} className="flex items-center justify-between">
+                <span className="text-white font-medium">{position}</span>
+                <div className="flex items-center space-x-2">
+                  <div className="w-32 bg-gray-700 rounded-full h-2">
+                    <div 
+                      className="bg-purple-500 h-2 rounded-full"
+                      style={{ width: `${Math.min(100, (avgPoints / 20) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-gray-300 text-sm w-12">{avgPoints.toFixed(1)}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  function generateMockTransactions(): Transaction[] {
+    const mockPlayer: Player = {
+      id: 'temp-player',
+      name: 'Sample Player',
+      position: 'RB',
+      team: 'NYJ',
+      projectedPoints: 12.0,
+      averagePoints: 11.5,
+      isStarting: false
     };
 
-    return (
-        <div className="w-full h-full flex flex-col p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
-            {/* Header */}
-            <header className="flex-shrink-0 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
-                        className="glass-button p-2"
-                        aria-label="Back to Team Hub"
-                    >
-                        <ChevronLeftIcon className="w-5 h-5" />
-                    </button>
-                    <div>
-                        <h1 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)]">Team Management</h1>
-                        <p className="text-sm text-[var(--text-secondary)]">
-                            {selectedTeam ? `Managing ${selectedTeam.name}` : 'Advanced roster and lineup tools'}
-                        </p>
-                    </div>
-                </div>
+    return [
+      {
+        id: 'trans-1',
+        type: 'add',
+        player: mockPlayer,
+        timestamp: new Date(Date.now() - 86400000).toISOString(),
+        description: 'Added Sample Player from waivers'
+      },
+      {
+        id: 'trans-2',
+        type: 'drop',
+        player: mockPlayer,
+        timestamp: new Date(Date.now() - 172800000).toISOString(),
+        description: 'Dropped Sample Player to waivers'
+      }
+    ];
+  }
 
-                {/* Team Selector */}
-                <div className="flex items-center gap-3">
-                    <select
-                        value={selectedTeamId || ''}
-                        onChange={(e) => setSelectedTeamId(Number(e.target.value))}
-                        className="glass-input text-sm"
-                    >
-                        <option value="">Select Team...</option>
-                        {league.teams.map((team) => (
-                            <option key={team.id} value={team.id}>
-                                {team.name} {team.owner.id === state.user?.id ? '(You)' : ''}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </header>
+  // Tab configuration
+  const tabs = [
+    { id: 'roster' as TabType, label: 'Roster', icon: FiUsers },
+    { id: 'lineup' as TabType, label: 'Lineup', icon: FiTrendingUp },
+    { id: 'transactions' as TabType, label: 'Transactions', icon: FiClock },
+    { id: 'analytics' as TabType, label: 'Analytics', icon: FiBarChart }
+  ];
 
-            {/* Access Control Notice */}
-            {selectedTeam && !canManageTeam && (
-                <div className="glass-pane mb-4 p-3 border-yellow-500/30">
-                    <p className="text-yellow-300 text-sm">
-                        <strong>View Only:</strong> You can view {selectedTeam.name}'s information but cannot make changes.
-                        {!isCommissioner && " Only team owners and commissioners can edit team settings."}
-                    </p>
-                </div>
-            )}
-
-            {/* Tab Navigation */}
-            <div className="flex flex-col sm:flex-row border-b border-[var(--panel-border)] mb-6 overflow-x-auto">
-                <div className="flex min-w-max">
-                    {tabs.map((tab) => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id as TabType)}
-                            className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                                activeTab === tab.id
-                                    ? 'border-blue-500 text-blue-400'
-                                    : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                            }`}
-                        >
-                            {tab.icon}
-                            <span className="hidden sm:inline">{tab.label}</span>
-                            <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
-                        </button>
-                    ))}
-                </div>
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              {onBack && (
+                <button
+                  onClick={onBack}
+                  className="p-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  <FiChevronLeft className="w-6 h-6" />
+                </button>
+              )}
+              <div>
+                <h1 className="text-4xl font-bold text-white mb-2">
+                  Team Management
+                </h1>
+                <p className="text-gray-300">
+                  Manage your roster, optimize lineups, and track performance
+                </p>
+              </div>
             </div>
+            
+            {/* Team Selector */}
+            <select
+              value={selectedTeamId || league.teams[0]?.id || ''}
+              onChange={(e) => handleTeamSelect(e.target.value)}
+              className="bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
+            >
+              {league.teams.map(team => (
+                <option key={team.id} value={team.id}>
+                  {team.name} ({team.owner})
+                </option>
+              ))}
+            </select>
+          </div>
 
-            {/* Tab Description */}
-            {selectedTeam && (
-                <div className="glass-pane mb-4 p-3 border-blue-500/20">
-                    <p className="text-blue-300 text-sm">
-                        {tabs.find(tab => tab.id === activeTab)?.description}
-                    </p>
-                </div>
-            )}
+          {/* Navigation Tabs */}
+          <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-xl">
+            {tabs.map(tab => {
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-purple-600 text-white'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </motion.div>
 
-            {/* Tab Content */}
-            <main className="flex-1 overflow-y-auto">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeTab}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.2 }}
-                        className="h-full"
-                    >
-                        {renderTabContent()}
-                    </motion.div>
-                </AnimatePresence>
-            </main>
-        </div>
-    );
+        {/* Tab Content */}
+        <AnimatePresence mode="wait">
+          <div key={activeTab}>
+            {activeTab === 'roster' && renderRosterTab()}
+            {activeTab === 'lineup' && renderLineupTab()}
+            {activeTab === 'transactions' && renderTransactionsTab()}
+            {activeTab === 'analytics' && renderAnalyticsTab()}
+          </div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
 };
 
 export default TeamManagementView;

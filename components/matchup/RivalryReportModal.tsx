@@ -5,7 +5,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import type { Team } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { generateRivalryReport } from '../../services/geminiService';
 import LoadingSpinner from '../ui/LoadingSpinner';
 
@@ -26,7 +26,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
             try {
                 const result = await generateRivalryReport(myTeam, opponentTeam);
                 setReport(result);
-            } catch (e) {
+            } catch {
                 setError("The Oracle could not be reached for a report.");
             } finally {
                 setIsLoading(false);
@@ -36,7 +36,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
     }, [myTeam, opponentTeam]);
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col"
                 {...{
@@ -46,7 +46,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
                 }}
             >
                 <header className="p-6 border-b border-[var(--panel-border)] text-center">
-                    <h2 className="text-2xl font-bold font-display">Oracle's Rivalry Report</h2>
+                    <h2 className="text-2xl font-bold font-display">Oracle&apos;s Rivalry Report</h2>
                 </header>
 
                 <main className="p-6 overflow-y-auto">

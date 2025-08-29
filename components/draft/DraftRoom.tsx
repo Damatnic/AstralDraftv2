@@ -37,7 +37,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
     picks,
     chatMessages,
     connect,
-    disconnect,
+    // disconnect, // Commented out unused
     makePick,
     sendChatMessage,
     toggleTimer,
@@ -118,7 +118,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
     }
   };
 
-  const filteredPlayers = availablePlayers.filter((player: any) => {
+  const filteredPlayers = availablePlayers.filter((player: { position: string; name: string }) => {
     if (filterPosition === 'ALL') return true;
     return player.position === filterPosition;
   });
@@ -234,7 +234,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
               <h2 className="text-xl font-semibold">Available Players</h2>
               <select
                 value={filterPosition}
-                onChange={(e: any) => setFilterPosition(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterPosition(e.target.value)}
                 className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-1 text-sm"
               >
                 <option value="ALL">All Positions</option>
@@ -248,7 +248,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
             </div>
             
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {filteredPlayers.map((player: any) => (
+              {filteredPlayers.map((player: Player) => (
                 <motion.div
                   key={player.id}
                   whileHover={{ scale: 1.02 }}
@@ -304,7 +304,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
           <div className="bg-gray-800 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Picks</h2>
             <div className="space-y-2 max-h-64 overflow-y-auto">
-              {picks.slice(-10).reverse().map((pick, index) => (
+              {picks.slice(-10).reverse().map((pick, _index) => (
                 <motion.div
                   key={`${pick.pickNumber}-${pick.timestamp}`}
                   initial={{ opacity: 0, x: 20 }}
@@ -327,7 +327,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
           <div className="bg-gray-800 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Participants</h2>
             <div className="space-y-2">
-              {participants.map((participant: any) => (
+              {participants.map((participant: { teamId: number; userId: string; isOnline: boolean }) => (
                 <div
                   key={participant.userId}
                   className="flex items-center justify-between p-2 bg-gray-700 rounded-lg"
@@ -383,7 +383,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
               <input
                 type="text"
                 value={chatInput}
-                onChange={(e: any) => setChatInput(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChatInput(e.target.value)}
                 placeholder="Type a message..."
                 className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
               />

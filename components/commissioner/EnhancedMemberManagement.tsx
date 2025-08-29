@@ -14,17 +14,17 @@ import { ShieldCheckIcon } from '../icons/ShieldCheckIcon';
 import { PencilIcon } from '../icons/PencilIcon';
 import { XIcon } from '../icons/XIcon';
 import { CheckIcon } from '../icons/CheckIcon';
-import { League, User } from '../../types';
+import { League } from '../../types';
 
 interface EnhancedMemberManagementProps {
     league: League;
-    dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
 }
 
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';
     memberId: string;
-    data?: any;
+    data?: unknown;
 }
 
 const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }) => {
@@ -188,7 +188,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                     <input
                                                         type="text"
                                                         value={editValue}
-                                                        onChange={(e: any) => setEditValue(e.target.value)}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditValue(e.target.value)}
                                                         className="px-2 py-1 text-sm border border-[var(--panel-border)] rounded bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                                         autoFocus
                                                     />
@@ -323,7 +323,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
-                            onClick={(e: any) => e.target === e.currentTarget && setShowConfirmAction(null)}
+                            onClick={(e: React.MouseEvent<HTMLDivElement>) => e.target === e.currentTarget && setShowConfirmAction(null)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}

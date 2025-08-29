@@ -3,7 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { MegaphoneIcon } from '../icons/MegaphoneIcon';
 
 interface PostAnnouncementModalProps {
@@ -32,7 +32,7 @@ const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId,
     };
     
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"

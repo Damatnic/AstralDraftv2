@@ -61,7 +61,7 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                 } else {
                     setError("The Oracle couldn't find the story in this draft.");
                 }
-            } catch (e) {
+            } catch {
                 setError("An error occurred while consulting the Oracle.");
             } finally {
                 setIsLoading(false);

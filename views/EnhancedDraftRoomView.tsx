@@ -187,7 +187,7 @@ const EnhancedDraftRoomView: React.FC = () => {
             >
               {/* Draft Day Banner */}
               <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-6 text-white text-center">
-                <h2 className="text-3xl font-bold mb-2">🎉 It's Draft Day! 🎉</h2>
+                <h2 className="text-3xl font-bold mb-2">🎉 It&apos;s Draft Day! 🎉</h2>
                 <p className="text-lg">
                   Welcome to the {league?.name} live draft room
                 </p>
@@ -243,7 +243,7 @@ const EnhancedDraftRoomView: React.FC = () => {
                   <ul className="space-y-2 text-slate-300">
                     <li>• Have your player rankings ready</li>
                     <li>• Consider bye weeks in later rounds</li>
-                    <li>• Don't panic if you miss a player</li>
+                    <li>• Don&apos;t panic if you miss a player</li>
                     <li>• Stay flexible with your strategy</li>
                     <li>• Have fun and good luck!</li>
                   </ul>

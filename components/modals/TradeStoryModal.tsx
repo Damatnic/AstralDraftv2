@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { TradeOffer, League, TradeStory } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { generateTradeStory } from '../../services/geminiService';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import ReactMarkdown from 'react-markdown';
@@ -28,7 +28,7 @@ const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClos
     }, [offer, league]);
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col"
                 {...{

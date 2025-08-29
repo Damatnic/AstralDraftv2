@@ -35,7 +35,7 @@ interface WeeklyProjection {
     confidence: number;
 }
 
-const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }) => {
+const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league: _league }) => {
     // Mock advanced stats - in real app this would come from analytics service
     const statComparisons: StatComparison[] = [
         {
@@ -186,7 +186,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }) =
                                 </div>
                                 <div className="text-sm text-[var(--text-secondary)]">Snap Count %</div>
                                 <div className="text-xs text-[var(--text-secondary)] mt-1">
-                                    Share of team's offensive snaps
+                                    Share of team&apos;s offensive snaps
                                 </div>
                             </div>
                             

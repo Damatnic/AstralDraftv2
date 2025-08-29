@@ -29,7 +29,7 @@ const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }) => {
     >
       <div>
         <h3 className="font-bold text-lg text-cyan-300 mb-2">Scouting Summary</h3>
-        <p className="text-gray-300 text-sm italic">"{report.summary}"</p>
+        <p className="text-gray-300 text-sm italic">&quot;{report.summary}&quot;</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

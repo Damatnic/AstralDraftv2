@@ -4,22 +4,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { ChevronDownIcon } from '../icons/ChevronDownIcon';
 import { Avatar } from './Avatar';
+import type { League, Team } from '../../types';
 
 const TeamSwitcher: React.FC = () => {
     const { state, dispatch } = useAppState();
     const [isOpen, setIsOpen] = React.useState(false);
     const wrapperRef = React.useRef<HTMLDivElement>(null);
 
-    const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
-    const myActiveTeam = activeLeague?.teams.find((t: any) => t.owner.id === state.user?.id);
+    const activeLeague = state.leagues.find((l: League) => l.id === state.activeLeagueId);
+    const myActiveTeam = activeLeague?.teams.find((t: Team) => t.owner.id === state.user?.id);
     
     const otherTeams = state.leagues
-        .filter((l: any) => !l.isMock && l.id !== state.activeLeagueId)
-        .map((l: any) => ({
+        .filter((l: League) => !l.isMock && l.id !== state.activeLeagueId)
+        .map((l: League) => ({
             leagueId: l.id,
-            team: l.teams.find((t: any) => t.owner.id === state.user?.id)
+            team: l.teams.find((t: Team) => t.owner.id === state.user?.id)
         }))
-        .filter((item: any) => item.team);
+        .filter((item: { leagueId: string; team: Team | undefined }) => item.team);
 
     React.useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -63,7 +64,7 @@ const TeamSwitcher: React.FC = () => {
                             exit: { opacity: 0, y: -10 },
                         }}
                     >
-                        {otherTeams.map((item: any) => (
+                        {otherTeams.map((item: { leagueId: string; team: Team | undefined }) => (
                             item.team && (
                                 <button
                                     key={item.leagueId}

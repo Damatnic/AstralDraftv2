@@ -130,7 +130,7 @@ class EnhancedNotificationService {
     private offlineQueue: EnhancedNotification[] = [];
     private isOnline: boolean = navigator.onLine;
     private serviceWorker: ServiceWorkerRegistration | null = null;
-    private readonly eventListeners: Map<string, Function[]> = new Map();
+    private readonly eventListeners: Map<string, ((data: any) => void)[]> = new Map();
 
     constructor() {
         this.setupNetworkListeners();
@@ -154,9 +154,9 @@ class EnhancedNotificationService {
             // Setup periodic cleanup
             this.setupCleanupSchedule();
             
-            console.log('📱 Enhanced Notification Service initialized');
+            // Enhanced Notification Service initialized
         } catch (error) {
-            console.error('Failed to initialize notification service:', error);
+            console.warn('Failed to initialize notification service:', error);
         }
     }
 
@@ -164,9 +164,9 @@ class EnhancedNotificationService {
         if ('serviceWorker' in navigator) {
             try {
                 this.serviceWorker = await navigator.serviceWorker.ready;
-                console.log('🔧 Service Worker ready for notifications');
+                // Service Worker ready for notifications
             } catch (error) {
-                console.error('Service Worker setup failed:', error);
+                console.warn('Service Worker setup failed:', error);
             }
         }
     }
@@ -823,7 +823,7 @@ class EnhancedNotificationService {
     }
 
     // Event handling
-    addEventListener(event: string, callback: Function): void {
+    addEventListener(event: string, callback: (data: any) => void): void {
         if (!this.eventListeners.has(event)) {
             this.eventListeners.set(event, []);
         }
@@ -833,7 +833,7 @@ class EnhancedNotificationService {
         }
     }
 
-    removeEventListener(event: string, callback: Function): void {
+    removeEventListener(event: string, callback: (data: any) => void): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             const index = listeners.indexOf(callback);

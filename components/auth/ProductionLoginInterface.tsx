@@ -120,7 +120,7 @@ const ProductionLoginInterface: React.FC = () => {
       if (!result.success) {
         setErrors({ general: result.error || 'Login failed' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -170,7 +170,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Registration failed' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -197,7 +197,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Failed to send reset email' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -224,7 +224,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Verification failed' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -243,7 +243,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Failed to resend verification' });
       }
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -271,7 +271,7 @@ const ProductionLoginInterface: React.FC = () => {
           type={showPasswordToggle ? (showPassword ? 'text' : 'password') : type}
           placeholder={placeholder}
           value={value}
-          onChange={(e: any) => onChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           className={`
             w-full pl-10 pr-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400
             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
@@ -336,7 +336,7 @@ const ProductionLoginInterface: React.FC = () => {
           <input
             type="checkbox"
             checked={loginData.rememberMe}
-            onChange={(e: any) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
             className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800"
           />
           <span className="ml-2 text-sm text-gray-400">Remember me</span>
@@ -373,7 +373,7 @@ const ProductionLoginInterface: React.FC = () => {
       </button>
 
       <div className="text-center">
-        <span className="text-gray-400">Don't have an account? </span>
+        <span className="text-gray-400">Don&apos;t have an account? </span>
         <button
           type="button"
           onClick={() => setCurrentView('register')}
@@ -456,7 +456,7 @@ const ProductionLoginInterface: React.FC = () => {
         <input
           type="checkbox"
           checked={registerData.acceptTerms}
-          onChange={(e: any) => setRegisterData({ ...registerData, acceptTerms: e.target.checked })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterData({ ...registerData, acceptTerms: e.target.checked })}
           className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 mt-1"
         />
         <span className="text-sm text-gray-400">
@@ -589,7 +589,7 @@ const ProductionLoginInterface: React.FC = () => {
       </form>
 
       <div className="text-center">
-        <span className="text-gray-400">Didn't receive the email? </span>
+        <span className="text-gray-400">Didn&apos;t receive the email? </span>
         <button
           type="button"
           onClick={handleResendVerification}

@@ -95,10 +95,12 @@ const PWAInstallPrompt: React.FC<Props> = ({
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === 'accepted') {
-      console.log('PWA: User accepted the install prompt');
+      // TODO: Log PWA installation acceptance
+      // console.log('PWA: User accepted the install prompt');
       onInstall?.();
     } else {
-      console.log('PWA: User dismissed the install prompt');
+      // TODO: Log PWA installation dismissal
+      // console.log('PWA: User dismissed the install prompt');
     }
 
     // Clear the deferred prompt
@@ -239,7 +241,7 @@ const PWAInstallPrompt: React.FC<Props> = ({
                     <span className="text-white text-xs font-bold">2</span>
                   </div>
                   <div className="text-sm text-gray-300">
-                    Scroll down and tap <Plus className="inline w-4 h-4 mx-1" /> "Add to Home Screen"
+                    Scroll down and tap <Plus className="inline w-4 h-4 mx-1" /> &ldquo;Add to Home Screen&rdquo;
                   </div>
                 </div>
                 
@@ -248,7 +250,7 @@ const PWAInstallPrompt: React.FC<Props> = ({
                     <span className="text-white text-xs font-bold">3</span>
                   </div>
                   <div className="text-sm text-gray-300">
-                    Tap "Add" to install the app
+                    Tap &ldquo;Add&rdquo; to install the app
                   </div>
                 </div>
               </div>

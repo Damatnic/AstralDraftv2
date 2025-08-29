@@ -266,7 +266,7 @@ const OracleGeminiAISection: React.FC = () => {
                 <div className="header-content">
                     <h1>🤖 Gemini AI Integration</h1>
                     <p className="section-subtitle">
-                        Discover how Oracle harnesses Google's most advanced AI model for 
+                        Discover how Oracle harnesses Google&apos;s most advanced AI model for 
                         natural language processing and fantasy football analysis
                     </p>
                     <div className="progress-indicator">
@@ -305,7 +305,7 @@ const OracleGeminiAISection: React.FC = () => {
                     <div className="overview-card">
                         <h3>⚡ Real-Time Processing</h3>
                         <p>
-                            Oracle leverages Gemini's speed and efficiency to generate 
+                            Oracle leverages Gemini&apos;s speed and efficiency to generate 
                             comprehensive predictions in under 2 minutes, even with 
                             complex multi-factor analysis.
                         </p>
@@ -552,7 +552,7 @@ const OracleGeminiAISection: React.FC = () => {
                     <div className="benefits-grid">
                         <div className="benefit-card">
                             <h4>🚀 Enhanced Accuracy</h4>
-                            <p>Gemini's advanced reasoning improves prediction accuracy by 15-20% over traditional models</p>
+                            <p>Gemini&apos;s advanced reasoning improves prediction accuracy by 15-20% over traditional models</p>
                         </div>
                         <div className="benefit-card">
                             <h4>📖 Readable Insights</h4>
@@ -564,7 +564,7 @@ const OracleGeminiAISection: React.FC = () => {
                         </div>
                         <div className="benefit-card">
                             <h4>🔄 Continuous Learning</h4>
-                            <p>Gemini's adaptive capabilities improve with each prediction cycle</p>
+                            <p>Gemini&apos;s adaptive capabilities improve with each prediction cycle</p>
                         </div>
                     </div>
                 </div>
@@ -586,7 +586,7 @@ const OracleGeminiAISection: React.FC = () => {
                         <div className="insight-icon">⚡</div>
                         <h3>Real-time Processing Power</h3>
                         <p>
-                            Oracle leverages Gemini's speed to analyze massive datasets and generate 
+                            Oracle leverages Gemini&apos;s speed to analyze massive datasets and generate 
                             comprehensive predictions in under 2 minutes.
                         </p>
                     </div>
@@ -594,7 +594,7 @@ const OracleGeminiAISection: React.FC = () => {
                         <div className="insight-icon">🎯</div>
                         <h3>Fantasy-Specific Optimization</h3>
                         <p>
-                            Custom prompt engineering and domain expertise ensure Gemini's analysis 
+                            Custom prompt engineering and domain expertise ensure Gemini&apos;s analysis 
                             is perfectly tailored for fantasy football decisions.
                         </p>
                     </div>
@@ -612,7 +612,7 @@ const OracleGeminiAISection: React.FC = () => {
             {/* Next Steps */}
             <div className="next-steps">
                 <h3>🚀 Continue Learning</h3>
-                <p>Ready to explore more of Oracle's advanced capabilities?</p>
+                <p>Ready to explore more of Oracle&apos;s advanced capabilities?</p>
                 <div className="next-buttons">
                     <button className="next-btn primary">
                         📊 Explore Data Ingestion

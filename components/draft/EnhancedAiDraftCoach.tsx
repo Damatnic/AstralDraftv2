@@ -5,11 +5,9 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
 import { Player, League, Team } from '../../types';
 import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
-import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 import { CheckIcon } from '../icons/CheckIcon';
 import { BarChartIcon } from '../icons/BarChartIcon';
@@ -97,13 +95,13 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     timeRemaining,
     recentPicks,
     onPlayerSelect,
-    onStrategyUpdate
+    onStrategyUpdate: _onStrategyUpdate
 }) => {
     const [selectedTab, setSelectedTab] = React.useState<'recommendations' | 'opponents' | 'market' | 'strategy'>('recommendations');
     const [recommendations, setRecommendations] = React.useState<CoachRecommendation[]>([]);
     const [opponentModels, setOpponentModels] = React.useState<OpponentModel[]>([]);
     const [marketInefficiencies, setMarketInefficiencies] = React.useState<MarketInefficiency[]>([]);
-    const [currentStrategy, setCurrentStrategy] = React.useState<DraftStrategy>({
+    const [currentStrategy] = React.useState<DraftStrategy>({
         name: 'Balanced Value',
         description: 'Target best available value with positional balance',
         positionPriority: ['RB', 'WR', 'QB', 'TE', 'K', 'DST'],
@@ -134,8 +132,8 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
 
         // Get top available players by position
         const topRBs = availablePlayers.filter((p: any) => p.position === 'RB').slice(0, 3);
-        const topWRs = availablePlayers.filter((p: any) => p.position === 'WR').slice(0, 3);
-        const topQBs = availablePlayers.filter((p: any) => p.position === 'QB').slice(0, 2);
+        // const topWRs = availablePlayers.filter((p: any) => p.position === 'WR').slice(0, 3);
+        // const topQBs = availablePlayers.filter((p: any) => p.position === 'QB').slice(0, 2);
 
         // Primary pick recommendation
         const topPlayer = availablePlayers[0];
@@ -477,7 +475,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                     <div className="text-center py-8 text-[var(--text-secondary)]">
                                         <BrainCircuitIcon className="w-12 h-12 mx-auto mb-3 opacity-50" />
                                         <p>AI is analyzing the draft...</p>
-                                        <p className="text-sm">Recommendations will appear when it's your turn</p>
+                                        <p className="text-sm">Recommendations will appear when it&apos;s your turn</p>
                                     </div>
                                 )}
                             </div>

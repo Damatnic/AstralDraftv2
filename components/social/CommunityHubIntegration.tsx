@@ -60,9 +60,9 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     currentUser,
     teams,
     users,
-    players,
-    onTradeProposal,
-    onStoryPublish,
+    players: _players,
+    onTradeProposal: _onTradeProposal,
+    onStoryPublish: _onStoryPublish,
     onSocialInteraction,
     className = ''
 }) => {
@@ -242,7 +242,6 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     ], [teams, users]);
 
     const handleSocialAction = (action: string, data: any) => {
-        console.log('Social action:', action, data);
         onSocialInteraction(action, data);
         
         // Update activity feed
@@ -260,7 +259,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
         setRecentActivity(prev => [newActivity, ...prev.slice(0, 9)]);
     };
 
-    const getActivityDescription = (action: string, data: any): string => {
+    const getActivityDescription = (action: string, _data: any): string => {
         switch (action) {
             case 'trade_proposal':
                 return 'proposed a new trade';
@@ -416,7 +415,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                         onPin={(itemId) => handleSocialAction('feed_pin', { itemId })}
                         onReport={(itemId, reason) => handleSocialAction('feed_report', { itemId, reason })}
                         onVote={(pollId, optionId) => handleSocialAction('poll_vote', { pollId, optionId })}
-                        onFilter={(filter) => console.log('Filter changed:', filter)}
+                        onFilter={(_filter) => {/* Filter changed */}}
                     />
                 );
                 

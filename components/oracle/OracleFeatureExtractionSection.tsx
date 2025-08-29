@@ -545,7 +545,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           Feature Categories & Dimensions
         </h3>
         <p className="subsection-description">
-          Oracle's 18-dimensional feature space encompasses 5 major categories, each contributing critical 
+          Oracle&apos;s 18-dimensional feature space encompasses 5 major categories, each contributing critical 
           information for prediction accuracy and model performance.
         </p>
 
@@ -642,7 +642,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           Preprocessing Pipeline
         </h3>
         <p className="subsection-description">
-          Oracle's five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
+          Oracle&apos;s five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
           through systematic cleaning, engineering, and normalization processes.
         </p>
 
@@ -900,7 +900,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           <div className="insight-card">
             <h4>Dimensional Efficiency</h4>
             <p>
-              Oracle's 18-dimensional feature space represents an optimal balance between information richness 
+              Oracle&apos;s 18-dimensional feature space represents an optimal balance between information richness 
               and computational efficiency, capturing 95%+ of predictive variance in sports data.
             </p>
           </div>

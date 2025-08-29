@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Team, Player, League, ChampionshipOddsSimulation } from '../../types';
+import type { Player, League, ChampionshipOddsSimulation } from '../../types';
+// import type { Team } from '../../types';
 import { players } from '../../data/players';
-import Modal from '../ui/Modal';
-import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
+import { Modal } from '../ui/Modal';
+// import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { simulateTradeImpactOnOdds } from '../../services/geminiService';
 import { useLeague } from '../../hooks/useLeague';
@@ -117,7 +118,7 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
     };
     
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
                 {...{
@@ -126,7 +127,7 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
                 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] text-center">
-                    <h2 className="text-xl font-bold font-display">"What If?" Trade Simulator</h2>
+                    <h2 className="text-xl font-bold font-display">&ldquo;What If?&rdquo; Trade Simulator</h2>
                 </header>
 
                 <main className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,8 +1,9 @@
 
-import type { League, Team, GamedayEvent, LiveNewsItem, GamedayEventType } from '../types';
+import type { League, Team, GamedayEvent, LiveNewsItem, GamedayEventType, PlayerPosition } from '../types';
 import { realTimeNflDataService } from './realTimeNflDataService';
-import { oracleLiveDataIntegrationService } from './oracleLiveDataIntegrationService';
+import { oracleLiveDataIntegrationService, type OracleIntelligenceUpdate } from './oracleLiveDataIntegrationService';
 import type { RealTimeGameEvent, LivePlayerUpdate } from './realTimeNflDataService';
+import { logger } from './loggingService';
 
 // This is a singleton to provide live data integration across the application
 class LiveDataService {
@@ -61,7 +62,7 @@ class LiveDataService {
                 player: {
                     id: parseInt(update.playerId.replace(/\D/g, '') || '1'),
                     name: update.name,
-                    position: update.position as any || 'RB',
+                    position: (update.position as PlayerPosition) || 'RB',
                     team: update.team,
                     rank: 1,
                     adp: 1,
@@ -83,7 +84,14 @@ class LiveDataService {
         });
 
         // Listen to player injuries
-        realTimeNflDataService.subscribe('player_injury', (data: any) => {
+        realTimeNflDataService.subscribe('player_injury', (data: {
+            playerId: string;
+            name: string;
+            team: string;
+            oldStatus: string;
+            newStatus: string;
+            timestamp: number;
+        }) => {
             const gamedayEvent: GamedayEvent = {
                 id: `injury_${data.playerId}_${Date.now()}`,
                 type: 'FUMBLE', // Using closest available type for negative events
@@ -115,7 +123,7 @@ class LiveDataService {
         });
 
         // Listen to Oracle intelligence updates
-        oracleLiveDataIntegrationService.subscribe('intelligence_update', (update: any) => {
+        oracleLiveDataIntegrationService.subscribe('intelligence_update', (update: OracleIntelligenceUpdate) => {
             const newsItem: LiveNewsItem = {
                 id: `oracle_${Date.now()}`,
                 date: new Date(update.timestamp).toISOString(),
@@ -144,7 +152,7 @@ class LiveDataService {
         return eventTypeMap[eventType] || 'BIG_PLAY';
     }
 
-    start(league: League, myTeam: Team, opponentTeam: Team) {
+    start(_league: League, _myTeam: Team, _opponentTeam: Team) {
         if (this.intervalId) {
             this.stop();
         }
@@ -155,7 +163,7 @@ class LiveDataService {
         realTimeNflDataService.start();
         oracleLiveDataIntegrationService.start();
         
-        console.log('🚀 Live Data Service started with real-time integration');
+        logger.info('🚀 Live Data Service started with real-time integration');
         
         // Generate initial welcome event
         this.emit({
@@ -198,7 +206,7 @@ class LiveDataService {
         realTimeNflDataService.stop();
         oracleLiveDataIntegrationService.stop();
         
-        console.log('🛑 Live Data Service stopped');
+        logger.info('🛑 Live Data Service stopped');
     }
 
     subscribe(listener: (event: GamedayEvent | LiveNewsItem) => void) {

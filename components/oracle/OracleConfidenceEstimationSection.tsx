@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './OracleConfidenceEstimationSection.css';
 
 interface ConfidenceMethod {
@@ -443,7 +443,7 @@ function OracleConfidenceEstimationSection() {
         </div>
         
         <div className="overview-section">
-          <h4>Oracle's Confidence Framework</h4>
+          <h4>Oracle&apos;s Confidence Framework</h4>
           <div className="confidence-framework">
             <div className="framework-flow">
               <div className="flow-stage">
@@ -686,7 +686,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="uncertainty-framework">
-        <h4>🔬 Oracle's Uncertainty Decomposition</h4>
+        <h4>🔬 Oracle&apos;s Uncertainty Decomposition</h4>
         <div className="decomposition-formula">
           <div className="formula-card">
             <h6>Total Uncertainty Decomposition</h6>
@@ -793,7 +793,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="calibration-results">
-        <h4>📈 Oracle's Calibration Performance</h4>
+        <h4>📈 Oracle&apos;s Calibration Performance</h4>
         <div className="results-dashboard">
           <div className="calibration-score">
             <h5>Overall Calibration Score</h5>
@@ -838,7 +838,7 @@ function OracleConfidenceEstimationSection() {
         <h3>📊 Prediction Intervals</h3>
         <div className="intervals-intro">
           <p>
-            Prediction intervals provide a range of plausible values for Oracle's predictions, 
+            Prediction intervals provide a range of plausible values for Oracle&apos;s predictions, 
             giving you a complete picture of uncertainty rather than just point estimates.
           </p>
         </div>
@@ -1002,14 +1002,14 @@ function OracleConfidenceEstimationSection() {
           <div className="insight-card">
             <h5>Uncertainty as Information</h5>
             <p>
-              High uncertainty doesn't mean bad predictions - it indicates situations where 
+              High uncertainty doesn&apos;t mean bad predictions - it indicates situations where 
               multiple outcomes are plausible, creating opportunity for strategic advantage.
             </p>
           </div>
           <div className="insight-card">
             <h5>Dynamic Confidence</h5>
             <p>
-              Oracle's confidence adapts to changing conditions. Pre-game confidence may differ 
+              Oracle&apos;s confidence adapts to changing conditions. Pre-game confidence may differ 
               from in-game confidence as new information becomes available.
             </p>
           </div>
@@ -1029,7 +1029,7 @@ function OracleConfidenceEstimationSection() {
     <div className="oracle-confidence-section">
       <div className="section-header">
         <h2>🎯 Confidence Scores & Uncertainty Quantification</h2>
-        <p>Understanding prediction reliability and uncertainty bounds in Oracle's AI system</p>
+        <p>Understanding prediction reliability and uncertainty bounds in Oracle&apos;s AI system</p>
       </div>
       
       <div className="section-navigation">

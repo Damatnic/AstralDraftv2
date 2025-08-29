@@ -11,7 +11,7 @@ const NewsTicker: React.FC = () => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
 
     React.useEffect(() => {
-        if (latestNews && !headlines.some((h: any) => h.id === latestNews.id)) {
+        if (latestNews && !headlines.some((h: LiveNewsItem) => h.id === latestNews.id)) {
             setHeadlines(prev => [latestNews, ...prev].slice(0, 10)); // Keep last 10
         }
     }, [latestNews, headlines]);

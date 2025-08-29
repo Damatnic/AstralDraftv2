@@ -70,6 +70,32 @@ export const usePlayerComparison = (options: UsePlayerComparisonOptions = {}): U
   const [currentWeek, setCurrentWeek] = useState(defaultWeek);
   const [currentSeason, setCurrentSeason] = useState(defaultSeason);
 
+  // Comparison execution - defined early for use in effects
+  const compareNow = useCallback(async () => {
+    if (selectedPlayers.length < 2) {
+      setError('Please select at least 2 players to compare');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const comparisonResult = await playerComparisonService.comparePlayersFull(
+        selectedPlayers,
+        currentWeek,
+        currentSeason
+      );
+      
+      setComparison(comparisonResult);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to compare players';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedPlayers, currentWeek, currentSeason]);
+
   // Auto-compare when players or settings change
   useEffect(() => {
     if (autoCompare && selectedPlayers.length >= 2) {
@@ -77,7 +103,7 @@ export const usePlayerComparison = (options: UsePlayerComparisonOptions = {}): U
     } else if (selectedPlayers.length < 2) {
       setComparison(null);
     }
-  }, [selectedPlayers, currentWeek, currentSeason, autoCompare]);
+  }, [selectedPlayers, currentWeek, currentSeason, autoCompare, compareNow]);
 
   // Player management
   const addPlayer = useCallback((playerId: string) => {
@@ -130,18 +156,9 @@ export const usePlayerComparison = (options: UsePlayerComparisonOptions = {}): U
       );
       
       setComparison(comparisonResult);
-
-      // Log high-confidence comparisons
-      if (comparisonResult.analysis.confidence > 80) {
-        const winner = comparisonResult.players.find(p => p.id === comparisonResult.analysis.winner);
-        if (winner) {
-          console.log(`🎯 High confidence comparison: ${winner.name} recommended with ${comparisonResult.analysis.confidence}% confidence for Week ${currentWeek}`);
-        }
-      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to compare players';
       setError(errorMessage);
-      console.error('Player comparison error:', err);
     } finally {
       setLoading(false);
     }
@@ -159,8 +176,7 @@ export const usePlayerComparison = (options: UsePlayerComparisonOptions = {}): U
       setLoading(true);
       const result = await playerComparisonService.quickCompare(playerId1, playerId2, currentWeek);
       return result;
-    } catch (err) {
-      console.error('Quick comparison error:', err);
+    } catch {
       return null;
     } finally {
       setLoading(false);

@@ -18,7 +18,7 @@ import PredictionDetail from './PredictionDetail';
 import OracleErrorBoundary from './OracleErrorBoundary';
 import { OracleAnalyticsDashboard } from '../analytics/OracleAnalyticsDashboard';
 import { PredictionResponse } from '../../services/oracleApiClient';
-import { BarChart3, Target, Menu, Settings } from 'lucide-react';
+import { BarChart3, Target, Settings } from 'lucide-react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { NotificationCenter } from './NotificationCenter';
 import { NotificationPreferencesComponent } from './NotificationPreferences';
@@ -158,7 +158,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 break;
 
             default:
-                console.log('Unknown WebSocket message type:', data.type);
+                // Unknown WebSocket message type
         }
     }, [user]);
 

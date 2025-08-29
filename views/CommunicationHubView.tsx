@@ -115,7 +115,7 @@ const CommunicationHubView: React.FC = () => {
                     </div>
                     <h3 className="text-white font-bold mb-2">Week 8 Awards Announced</h3>
                     <p className="text-slate-300 mb-3">
-                      Congratulations to this week's award winners! 🎉
+                      Congratulations to this week&apos;s award winners! 🎉
                       <br />• <strong>Player of the Week:</strong> Josh Allen (Thunder Bolts) - 34.8 pts
                       <br />• <strong>Waiver Wire Hero:</strong> Gus Edwards (Lightning Strikes) - 18.4 pts
                       <br />• <strong>Biggest Bust:</strong> Cooper Kupp (Gridiron Giants) - 4.1 pts
@@ -316,7 +316,8 @@ const CommunicationHubView: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Header */}
-      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700"<div className="max-w-7xl mx-auto px-4 py-4">
+      <header className="bg-slate-800/50 backdrop-blur-sm border-b border-slate-700">
+        <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}

@@ -4,7 +4,6 @@ import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { UserIcon } from '../components/icons/UserIcon';
 import { Avatar } from '../components/ui/Avatar';
-import { TrophyIcon } from '../components/icons/TrophyIcon';
 import { BookOpenIcon } from '../components/icons/BookOpenIcon';
 import { calculateManagerStats, calculateCareerHistory } from '../utils/careerStats';
 import RivalryWidget from '../components/manager/RivalryWidget';
@@ -76,7 +75,7 @@ const ManagerView: React.FC = () => {
                                 <Avatar avatar={manager.avatar} className="w-28 h-28 text-7xl rounded-full mb-4 ring-4 ring-cyan-400/50" />
                                 <h2 className="text-2xl font-bold font-display">{manager.name}</h2>
                                 <p className="text-xs text-gray-400">Member since {memberSinceDate}</p>
-                                <p className="text-sm text-gray-300 mt-3 italic">"{manager.bio || 'No bio set.'}"</p>
+                                <p className="text-sm text-gray-300 mt-3 italic">&ldquo;{manager.bio || 'No bio set.'}&rdquo;</p>
                             </div>
                         </Widget>
                         {managerId && <RivalryWidget opponentManagerId={managerId} />}

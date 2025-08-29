@@ -616,11 +616,11 @@ const OracleNeuralNetworkSection: React.FC = () => {
     let converged = false;
     for (let sample = config.minSample; sample <= config.maxSample; sample += config.step) {
       // Simulate training/validation loss and accuracy
-      let progress = sample / config.expectedConvergence;
-      let trainLoss = Math.max(0.12, 2.5 * Math.exp(-progress * 2) + Math.random() * 0.1);
-      let valLoss = Math.max(0.15, 2.8 * Math.exp(-progress * 1.8) + Math.random() * 0.15);
-      let trainAccuracy = Math.min(0.95, 0.45 + progress * 0.45 + Math.random() * 0.05);
-      let valAccuracy = Math.min(0.92, 0.42 + progress * 0.42 + Math.random() * 0.05);
+      const progress = sample / config.expectedConvergence;
+      const trainLoss = Math.max(0.12, 2.5 * Math.exp(-progress * 2) + Math.random() * 0.1);
+      const valLoss = Math.max(0.15, 2.8 * Math.exp(-progress * 1.8) + Math.random() * 0.15);
+      const trainAccuracy = Math.min(0.95, 0.45 + progress * 0.45 + Math.random() * 0.05);
+      const valAccuracy = Math.min(0.92, 0.42 + progress * 0.42 + Math.random() * 0.05);
       if (sample >= config.expectedConvergence && Math.abs(trainLoss - valLoss) < config.convergenceThreshold) {
         converged = true;
       }
@@ -800,7 +800,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
         </div>
         
         <div className="overview-section">
-          <h4>Oracle's Deep Learning Architecture</h4>
+          <h4>Oracle&apos;s Deep Learning Architecture</h4>
           <div className="architecture-overview">
             <div className="architecture-flow">
               <div className="flow-stage">

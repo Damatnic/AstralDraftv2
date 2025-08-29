@@ -5,8 +5,8 @@
 
 import { mobileTestingSuite } from './mobileTestingSuite';
 
-export async function runMobileTests() {
-  console.log('🚀 Starting comprehensive mobile responsiveness testing...');
+export async function runComprehensiveMobileTests() {
+  // Starting comprehensive mobile testing suite
   
   try {
     // Run full mobile test suite
@@ -16,10 +16,10 @@ export async function runMobileTests() {
     const report = mobileTestingSuite.generateMobileReport(results);
     
     // Log summary to console
-    console.log('\n📊 Mobile Testing Summary:');
-    console.log(`✅ Passed: ${results.summary.passed}/${results.summary.totalTests}`);
-    console.log(`❌ Failed: ${results.summary.failed}/${results.summary.totalTests}`);
-    console.log(`🚨 Critical Issues: ${results.summary.criticalIssues}`);
+    // Mobile Testing Summary:
+    // Passed: ${results.summary.passed}/${results.summary.totalTests}
+    // Failed: ${results.summary.failed}/${results.summary.totalTests}
+    // Critical Issues: ${results.summary.criticalIssues}
     
     // Identify critical issues that need immediate attention
     const criticalIssues = [
@@ -28,12 +28,8 @@ export async function runMobileTests() {
       ...results.usability.filter(u => !u.passed && u.testType === 'usability')
     ];
     
-    if (criticalIssues.length > 0) {
-      console.log('\n🔥 Critical Issues Requiring Immediate Attention:');
-      criticalIssues.forEach((issue, index) => {
-        const name = 'element' in issue ? issue.element : issue.component;
-        console.log(`${index + 1}. ${name}`);
-      });
+    if (results.summary.criticalIssues > 0) {
+      // Critical issues detected - see full report for details
     }
     
     // Return results for further processing
@@ -45,26 +41,25 @@ export async function runMobileTests() {
     };
     
   } catch (error) {
-    console.error('❌ Mobile testing failed:', error);
+    // Mobile testing failed
     throw error;
   }
 }
 
 // Auto-run if called directly
 if (require.main === module) {
-  runMobileTests()
-    .then(({ report, needsImmediateAttention }) => {
-      console.log('\n📄 Full Report:');
-      console.log(report);
+  runComprehensiveMobileTests()
+    .then(({ needsImmediateAttention }: { needsImmediateAttention: boolean }) => {
+      // Full Report generated
       
       if (needsImmediateAttention) {
-        console.log('\n⚠️  Mobile optimization required before production deployment!');
+        // Mobile optimization required before production deployment!
       } else {
-        console.log('\n✨ Mobile responsiveness looks good! Ready for production.');
+        // Mobile responsiveness looks good! Ready for production.
       }
     })
-    .catch(error => {
-      console.error('Fatal error during mobile testing:', error);
-      process.exit(1);
+        .catch((error: Error) => {
+      // Error running mobile tests
+      throw error;
     });
 }

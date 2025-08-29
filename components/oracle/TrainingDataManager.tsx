@@ -3,7 +3,7 @@
  * Comprehensive interface for managing ML training data, datasets, model training, and performance monitoring
  */
 
-import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { 
     Database, 
@@ -33,14 +33,6 @@ import oracleEnsembleMLService, {
 } from '../../services/oracleEnsembleMachineLearningService';
 
 type TabType = 'overview' | 'datasets' | 'validation' | 'training' | 'performance' | 'config';
-
-interface TrainingMetrics {
-    accuracy: number;
-    loss: number;
-    epoch: number;
-    learningRate: number;
-    validationAccuracy: number;
-}
 
 const TrainingDataManager = memo(() => {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -90,7 +82,7 @@ const TrainingDataManager = memo(() => {
     });
     const [validationReport, setValidationReport] = useState<ValidationReport | null>(null);
     const [validationRules, setValidationRules] = useState<DataValidationRule[]>([]);
-    const [isValidating, setIsValidating] = useState(false);
+    const [isValidating] = useState(false);
     const [systemConfig, setSystemConfig] = useState({
         ensembleStrategy: 'weighted_average',
         predictionThreshold: 0.75,
@@ -104,7 +96,7 @@ const TrainingDataManager = memo(() => {
         alertOnAnomalies: true
     });
     const [configurationChanged, setConfigurationChanged] = useState(false);
-    const [savingConfiguration, setSavingConfiguration] = useState(false);
+    const [savingConfiguration] = useState(false);
     
     // Enhanced loading and error states
     const [isLoading, setIsLoading] = useState(true);
@@ -294,7 +286,7 @@ const TrainingDataManager = memo(() => {
                 return true;
             }
             return false;
-        } catch (error) {
+        } catch {
             setRealtimeConnected(false);
             setSpecificError('connection', 'Connection lost - attempting to reconnect...');
             return false;
@@ -563,8 +555,6 @@ const TrainingDataManager = memo(() => {
                 }
             );
 
-            console.log(`Training session started successfully: ${sessionId}`);
-            
             // Trigger immediate data refresh
             try {
                 await refreshDataSources();
@@ -600,7 +590,6 @@ const TrainingDataManager = memo(() => {
             // Attempt to cancel training session
             try {
                 oracleEnsembleMLService.cancelTrainingSession(currentSession.id);
-                console.log(`Training session ${currentSession.id} cancelled successfully`);
             } catch (error) {
                 console.warn('Failed to gracefully cancel training session:', error);
                 // Force stop the training state even if cancellation fails
@@ -683,9 +672,8 @@ const TrainingDataManager = memo(() => {
                 a.click();
                 URL.revokeObjectURL(url);
                 
-                console.log('Training data exported successfully');
                 return true;
-            } catch (error) {
+            } catch {
                 throw new Error('Failed to create or download export file');
             }
         }, 'export', 'general');
@@ -787,7 +775,6 @@ const TrainingDataManager = memo(() => {
                 // Don't fail the entire validation for this
             }
             
-            console.log('Data validation completed successfully');
             resetRetryAttempts('validation');
             return report;
         }, 'validation', 3, 1500);
@@ -920,7 +907,6 @@ const TrainingDataManager = memo(() => {
             
             if (success) {
                 setConfigurationChanged(false);
-                console.log('Configuration saved successfully');
                 
                 // Refresh data to reflect configuration changes
                 try {
@@ -957,7 +943,6 @@ const TrainingDataManager = memo(() => {
             
             setSystemConfig(defaultConfig);
             setConfigurationChanged(true);
-            console.log('Configuration reset to defaults');
             return defaultConfig;
         }, 'configuration', 'configuration');
     }, [withLoadingState]);
@@ -2093,7 +2078,7 @@ const TrainingDataManager = memo(() => {
 
                 <Widget title="Model Comparison" className="bg-gray-900/50">
                     <div className="space-y-3">
-                        {modelMetrics.models.slice(0, 4).map((model, idx) => (
+                        {modelMetrics.models.slice(0, 4).map((model, _idx) => (
                             <div key={model.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
                                 <div>
                                     <div className="text-white text-sm font-medium">{model.name}</div>
@@ -2704,7 +2689,6 @@ const TrainingDataManager = memo(() => {
                                 if (configurationChanged) {
                                     saveConfiguration().then(() => {
                                         // Apply configuration immediately after saving
-                                        console.log('Configuration applied');
                                     });
                                 }
                             }}

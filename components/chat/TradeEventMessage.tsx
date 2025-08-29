@@ -2,7 +2,7 @@
 
 
 import React from 'react';
-import type { ChatMessage, League, Player, DraftPickAsset } from '../../types';
+import type { ChatMessage, League, Player } from '../../types';
 import { players } from '../../data/players';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import ReactionPicker from './ReactionPicker';
@@ -19,14 +19,14 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
 
     if (!tradeEvent) return null;
 
-    const fromTeam = league.teams.find((t: any) => t.id === tradeEvent.fromTeamId);
-    const toTeam = league.teams.find((t: any) => t.id === tradeEvent.toTeamId);
+    const fromTeam = league.teams.find((t: { id: number }) => t.id === tradeEvent.fromTeamId);
+    const toTeam = league.teams.find((t: { id: number }) => t.id === tradeEvent.toTeamId);
     
     if (!fromTeam || !toTeam) return null;
 
-    const playerMap = new Map(players.map((p: any) => [p.id, p]));
-    const offeredPlayers = tradeEvent.playersOffered.map((id: any) => playerMap.get(id)).filter(Boolean) as Player[];
-    const requestedPlayers = tradeEvent.playersRequested.map((id: any) => playerMap.get(id)).filter(Boolean) as Player[];
+    const playerMap = new Map(players.map((p: { id: number }) => [p.id, p]));
+    const offeredPlayers = tradeEvent.playersOffered.map((id: number) => playerMap.get(id)).filter(Boolean) as Player[];
+    const requestedPlayers = tradeEvent.playersRequested.map((id: number) => playerMap.get(id)).filter(Boolean) as Player[];
     const offeredPicks = tradeEvent.draftPicksOffered || [];
     const requestedPicks = tradeEvent.draftPicksRequested || [];
 
@@ -63,9 +63,9 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
                 <div className="mt-2 pt-2 border-t border-white/10 text-center">
                     <p className="text-xs text-cyan-300/80 font-semibold flex items-center justify-center gap-1">
                         <SparklesIcon className="w-3 h-3" />
-                        Oracle's Take
+                        Oracle&apos;s Take
                     </p>
-                    <p className="text-xs italic text-gray-300">"{aiHotTake}"</p>
+                    <p className="text-xs italic text-gray-300">&ldquo;{aiHotTake}&rdquo;</p>
                 </div>
             )}
             

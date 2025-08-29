@@ -9,7 +9,7 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 interface TeamNeedsAnalysisProps {
     team: Team;
     league: League;
-    dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<{ type: string; payload?: unknown }>;
 }
 
 const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }) => {
@@ -49,7 +49,7 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
                         {needs.map((need, index) => (
                             <div key={index} className="bg-black/10 p-3 rounded-lg">
                                 <h4 className="font-bold text-red-400">{need.position}</h4>
-                                <p className="text-xs italic text-gray-300">"{need.rationale}"</p>
+                                <p className="text-xs italic text-gray-300">&ldquo;{need.rationale}&rdquo;</p>
                             </div>
                         ))}
                     </div>

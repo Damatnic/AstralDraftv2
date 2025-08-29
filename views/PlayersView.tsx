@@ -1,7 +1,6 @@
 /**
  * Players View - Browse and search all NFL players
  */
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
@@ -45,18 +44,6 @@ const PlayersView: React.FC = () => {
       case 'OUT': return 'text-red-400';
       case 'IR': return 'text-red-600';
       default: return 'text-gray-400';
-    }
-  };
-
-  const getPositionColor = (position: string) => {
-    switch (position) {
-      case 'QB': return 'bg-red-600';
-      case 'RB': return 'bg-green-600';
-      case 'WR': return 'bg-blue-600';
-      case 'TE': return 'bg-yellow-600';
-      case 'K': return 'bg-purple-600';
-      case 'DST': return 'bg-gray-600';
-      default: return 'bg-gray-500';
     }
   };
 

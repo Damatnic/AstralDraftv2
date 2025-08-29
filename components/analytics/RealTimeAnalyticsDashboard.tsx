@@ -14,10 +14,25 @@ import {
   RefreshCw, AlertTriangle, Lightbulb, Play, Pause
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { enhancedAnalyticsService, type RealTimeMetrics, type PredictiveInsight } from '../../services/enhancedAnalyticsService';
+import { enhancedAnalyticsService } from '../../services/enhancedAnalyticsService';
+
+// Mock types for demo
+type RealTimeMetrics = {
+  accuracy: { predictions: Array<{ accuracy: number }> };
+  insights: Array<{ id: string; message: string; severity: string; timestamp: number }>;
+  performance: { responseTime: number };
+  users: { activeCount: number };
+};
+
+type PredictiveInsight = {
+  id: string;
+  message: string;
+  severity: string;
+  timestamp: number;
+};
 
 // WebSocket hook with basic implementation for demo
-const useWebSocket = (url: string, options: any = {}) => {
+const useWebSocket = (url: string, _options: Record<string, unknown> = {}) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [lastMessage, setLastMessage] = React.useState<string | null>(null);
   
@@ -39,7 +54,9 @@ const useWebSocket = (url: string, options: any = {}) => {
   return {
     isConnected,
     lastMessage,
-    sendMessage: (message: string) => console.log('Sending:', message),
+    sendMessage: (_message: string) => {
+      // Send message via WebSocket
+    },
     connect: () => setIsConnected(true),
     disconnect: () => setIsConnected(false),
     reconnect: () => setIsConnected(true)
@@ -341,7 +358,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           <select
             value={state.selectedTimeframe}
-            onChange={(e: any) => handleStateChange({ selectedTimeframe: e.target.value as any })}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleStateChange({ selectedTimeframe: e.target.value })}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="1h">Last Hour</option>

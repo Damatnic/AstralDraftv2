@@ -4,16 +4,8 @@
  */
 
 import type { 
-  Player, Team, League, DraftRecapData, TradeAnalysis, WaiverWireAdvice, 
-  PowerRanking, StartSitAdvice, WeeklyReportData, AiLineupSuggestion, 
-  SeasonReviewData, DailyBriefingItem, User, DraftGrade, Persona, 
-  AiProfileData, DraftEvent, PlayerPosition, WatchlistInsight, 
-  WaiverIntelligence, MatchupAnalysis, PlayerStory, TradeOffer, 
-  TradeStory, SeasonStory, TeamComparison, ProjectedStanding, 
-  DraftPickAsset, RecapVideoScene, NewsItem, SideBet, SmartFaabAdvice, 
-  TradeSuggestion, NewspaperContent, TopRivalry 
+  Player, Team, User, League, PlayerPosition
 } from '../types';
-import { players } from "../data/players";
 import { geminiService, checkApiHealth } from './secureApiClient';
 
 /**
@@ -37,7 +29,7 @@ export const checkGeminiApiStatus = async (): Promise<{
                 : 'Gemini API is not configured on the backend. Contact administrator.',
             apiKeyPresent: geminiAvailable
         };
-    } catch (error) {
+    } catch {
         return {
             configured: false,
             available: false,
@@ -53,13 +45,6 @@ type OracleHistoryItem = {
     sender: 'user' | 'ai';
     text: string;
 };
-
-// Mock implementation helpers (same as before)
-const mockApiCall = <T,>(data: T, delay: number = 800): Promise<T | null> => {
-    return new Promise(resolve => setTimeout(() => resolve(data), delay + Math.random() * 500));
-};
-
-const getRandomElement = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 /**
  * Stream Oracle response using secure backend

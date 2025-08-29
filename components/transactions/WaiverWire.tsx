@@ -11,18 +11,8 @@ import { players } from '../../data/players';
 import { Player } from '../../types';
 import { Search, Plus, TrendingUp, Clock, DollarSign } from 'lucide-react';
 
-interface WaiverClaim {
-  id: string;
-  playerId: number;
-  teamId: number;
-  bidAmount: number;
-  priority: number;
-  status: 'pending' | 'processed' | 'failed';
-  timestamp: Date;
-}
-
 export const WaiverWire: React.FC = () => {
-  const { state, dispatch } = useAppState();
+  const { dispatch } = useAppState();
   const { league, myTeam } = useLeague();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);

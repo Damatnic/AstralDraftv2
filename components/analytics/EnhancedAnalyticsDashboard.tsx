@@ -3,7 +3,7 @@
  * Comprehensive analytics dashboard with performance metrics, predictive insights, and advanced visualization
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   LineChart, Line, BarChart, Bar,
@@ -18,32 +18,13 @@ import {
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';
-import { Progress } from '../ui/Progress';
 import { Badge } from '../ui/Badge';
 import { useAuth } from '../../contexts/AuthContext';
 import { useEnhancedAnalytics } from '../../hooks/useEnhancedAnalytics';
 
 interface EnhancedAnalyticsDashboardProps {
   className?: string;
-  onExport?: (data: any) => void;
-}
-
-interface PerformanceMetric {
-  id: string;
-  name: string;
-  value: number;
-  change: number;
-  trend: 'up' | 'down' | 'stable';
-  format: 'percentage' | 'number' | 'currency' | 'time';
-  color: string;
-  description?: string;
-}
-
-interface ChartConfig {
-  type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter';
-  title: string;
-  data: any[];
-  config: any;
+  onExport?: (data: Record<string, unknown>) => void;
 }
 
 const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
@@ -52,7 +33,6 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
 }) => {
   const { isAuthenticated } = useAuth();
   const {
-    report,
     metrics,
     insights,
     charts,
@@ -157,7 +137,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         <div className="flex items-center gap-3">
           <select 
             value={timeRange} 
-            onChange={(e: any) => setTimeRange(parseInt(e.target.value))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTimeRange(parseInt(e.target.value))}
             className="w-32 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value={1}>24 Hours</option>
@@ -456,7 +436,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                           {insight.title}
                         </CardTitle>
                         <Badge
-                          variant={insight.confidence > 80 ? 'default' : 'secondary'}
+                          variant={insight.confidence > 80 ? 'default' : 'warning'}
                         >
                           {insight.confidence}% confident
                         </Badge>
@@ -467,7 +447,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                         <div className="flex items-center gap-2">
                           <Target className="w-4 h-4 text-blue-500" />
                           <span className="text-sm font-medium">Impact:</span>
-                          <Badge variant="outline" className={
+                          <Badge variant="default" className={
                             insight.impact === 'high' ? 'border-red-300 text-red-700' :
                             insight.impact === 'medium' ? 'border-yellow-300 text-yellow-700' :
                             'border-green-300 text-green-700'
@@ -541,7 +521,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                     <div className="pt-4 border-t">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium">Your Percentile</span>
-                        <Badge variant={metrics.comparative.userPercentile > 75 ? 'default' : 'secondary'}>
+                        <Badge variant={metrics.comparative.userPercentile > 75 ? 'default' : 'warning'}>
                           {metrics.comparative.userPercentile}th
                         </Badge>
                       </div>

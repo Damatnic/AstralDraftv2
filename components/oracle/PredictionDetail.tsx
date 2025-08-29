@@ -145,7 +145,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-2">
                             <BrainIcon className="w-6 h-6 md:w-5 md:h-5 text-blue-400" />
-                            <span className="text-sm md:text-xs font-medium text-blue-400">Oracle's Prediction</span>
+                            <span className="text-sm md:text-xs font-medium text-blue-400">Oracle&apos;s Prediction</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-sm md:text-xs text-gray-400">{prediction.confidence}% confident</span>

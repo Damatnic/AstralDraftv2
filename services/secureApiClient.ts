@@ -149,7 +149,7 @@ export const geminiService = {
     try {
       const response = await apiClient.get('/health');
       return response.data.apis?.gemini || false;
-    } catch (error) {
+    } catch {
       return false;
     }
   }
@@ -223,7 +223,7 @@ export const sportsDataService = {
     try {
       const response = await apiClient.get('/health');
       return response.data.apis || {};
-    } catch (error) {
+    } catch {
       return {};
     }
   }

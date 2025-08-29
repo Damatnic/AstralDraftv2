@@ -19,7 +19,8 @@ const EditRosterView: React.FC = () => {
 
     if (!league || state.user?.id !== league.commissionerId) {
         return (
-            <div className="p-8 text-center"<p className="text-red-400">Access Denied. You are not the commissioner of this league.</p>
+            <div className="p-8 text-center">
+                <p className="text-red-400">Access Denied. You are not the commissioner of this league.</p>
                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>
@@ -43,7 +44,8 @@ const EditRosterView: React.FC = () => {
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         Edit Rosters
-                    </h1<p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
+                    </h1>
+                    <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="back-btn">
                     Back to Tools

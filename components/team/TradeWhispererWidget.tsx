@@ -49,7 +49,7 @@ const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }
                                 animate: { opacity: 1, y: 0 },
                             }}
                         >
-                            <p className="text-xs italic text-gray-300 mb-2">"{suggestion.rationale}"</p>
+                            <p className="text-xs italic text-gray-300 mb-2">&quot;{suggestion.rationale}&quot;</p>
                             <div className="text-center text-xs font-bold text-gray-400 mb-2">Trade with {opponent.name}</div>
                             
                             <div className="flex justify-end gap-2 mt-2">

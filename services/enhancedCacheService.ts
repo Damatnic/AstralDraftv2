@@ -94,9 +94,9 @@ class EnhancedCacheService {
             // Schedule periodic cleanup
             this.scheduleCleanup();
 
-            console.log('Enhanced Cache Service initialized successfully');
+            // Enhanced Cache Service initialized successfully
         } catch (error) {
-            console.error('Failed to initialize cache service:', error);
+            console.warn('Failed to initialize cache service:', error);
             // Fallback to memory-only cache
         }
     }

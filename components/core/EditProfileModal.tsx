@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { User } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { PencilIcon } from '../icons/PencilIcon';
 import { Avatar } from '../ui/Avatar';
 
@@ -35,7 +35,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onC
   const labelClasses = "block text-sm font-medium text-[var(--text-secondary)] mb-1";
 
   return (
-    <Modal onClose={onClose}>
+    <Modal isOpen={true} onClose={onClose}>
       <motion.div
         className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
         onClick={(e: any) => e.stopPropagation()}

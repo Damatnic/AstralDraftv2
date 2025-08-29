@@ -3,7 +3,7 @@
  * Advanced AI with opponent modeling and market analysis
  */
 
-import { Player, Team, League } from '../types';
+import { Player, Team } from '../types';
 
 export interface EnhancedAiPersonality {
     id: string;
@@ -446,7 +446,7 @@ class EnhancedDraftSimulationEngine {
         return Math.min(1, risk);
     }
 
-    private getRecentPerformanceScore(player: Player): number {
+    private getRecentPerformanceScore(_player: Player): number {
         // Simulate recent performance score
         return (Math.random() - 0.5) * 2; // -1 to 1
     }
@@ -474,7 +474,7 @@ class EnhancedDraftSimulationEngine {
         return reasoning;
     }
 
-    private calculatePickRisk(player: Player, model: OpponentBehaviorModel, context: DraftContext): number {
+    private calculatePickRisk(player: Player, _model: OpponentBehaviorModel, _context: DraftContext): number {
         return this.calculatePlayerRisk(player);
     }
 
@@ -620,7 +620,7 @@ class StrategyAdvisor {
         return Math.min(1, confidence);
     }
 
-    private calculatePlayerRisk(player: Player): number {
+    private calculatePlayerRisk(_player: Player): number {
         // Reuse risk calculation from main engine
         return Math.random() * 0.5 + 0.2; // Simplified for now
     }

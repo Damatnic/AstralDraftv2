@@ -10,7 +10,7 @@ import { Widget } from '../ui/Widget';
 import ManageTradeBlockModal from './ManageTradeBlockModal';
 import { CloseIcon } from '../icons/CloseIcon';
 import { ScalesIcon } from '../icons/ScalesIcon';
-import Tabs from '../ui/Tabs';
+import { Tabs } from '../ui/Tabs';
 import TradeOfferCard from './TradeOfferCard';
 import useSound from '../../hooks/useSound';
 import EmptyState from '../ui/EmptyState';
@@ -18,13 +18,12 @@ import { InboxIcon } from '../icons/InboxIcon';
 import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 import { EmptyTumbleweedIcon } from '../icons/EmptyTumbleweedIcon';
 
-const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
+export const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
     const [isBlockModalOpen, setIsBlockModalOpen] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('incoming');
     
     const incomingOffers = league.tradeOffers.filter((o: any) => o.toTeamId === team.id && o?.status === 'PENDING');
     const outgoingOffers = league.tradeOffers.filter((o: any) => o.fromTeamId === team.id);
-    const completedOffers = league.tradeOffers.filter((o: any) => o?.status !== 'PENDING' && (o.toTeamId === team.id || o.fromTeamId === team.id));
 
     const playTradeSound = useSound('tradeOffer', 0.5);
     const prevIncomingOffersCount = React.useRef(incomingOffers.length);
@@ -120,4 +119,3 @@ const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch: React.
         </>
     );
 };
-export default TradeCenterWidget;

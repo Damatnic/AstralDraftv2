@@ -3,8 +3,8 @@ import { useAppState } from '../../contexts/AppContext';
 import { Avatar } from '../ui/Avatar';
 import { SendIcon } from '../icons/SendIcon';
 import type { User } from '../../types';
-import EmptyState from '../ui/EmptyState';
-import { UsersIcon } from 'lucide-react';
+// import EmptyState from '../ui/EmptyState';
+// import { UsersIcon } from 'lucide-react';
 
 interface MessageThreadProps {
     userId: string | null;
@@ -14,11 +14,11 @@ interface MessageThreadProps {
 const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }) => {
     const { state, dispatch } = useAppState();
     const [text, setText] = React.useState('');
-    const [tempUser, setTempUser] = React.useState<User | null>(null);
+    // const [tempUser, setTempUser] = React.useState<User | null>(null);
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
     const otherUser = userId ? state.leagues.flatMap(l => l.members).find((m: any) => m.id === userId) : null;
-    const finalUser = otherUser || tempUser;
+    const finalUser = otherUser;
 
     React.useEffect(() => {
         if (userId) {

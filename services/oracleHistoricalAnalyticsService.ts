@@ -1,1614 +1,1235 @@
 /**
  * Oracle Historical Analytics Service
- * Advanced historical prediction tracking, trend analysis, and performance metrics
- * Extends the base OracleAnalyticsService with comprehensive historical data management
+ * Advanced analytics for historical prediction data, trends, and performance insights
  */
 
-import { OracleAnalytics, AccuracyTrend, PredictionTypeStats, UserInsight } from './oracleAnalyticsService';
-import { OraclePrediction, PredictionType } from './oraclePredictionService';
-
-export interface HistoricalPredictionRecord {
-    id: string;
-    predictionId: string;
-    week: number;
-    season: string;
-    type: PredictionType;
-    question: string;
-    oracleChoice: number;
-    confidence: number;
-    actualResult?: number;
-    isCorrect?: boolean;
-    userPrediction?: number;
-    userCorrect?: boolean;
-    recordedAt: string;
-    completedAt?: string;
-    reasoning: string;
-    dataPoints: string[];
-    metadata: PredictionMetadata;
+export interface HistoricalAnalytics {
+  userId: string;
+  timeRange: TimeRange;
+  totalPredictions: number;
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  streakAnalysis: StreakAnalysis;
+  trendAnalysis: TrendAnalysis;
+  categoryPerformance: CategoryPerformance[];
+  seasonalPatterns: SeasonalPattern[];
+  competitorComparison: CompetitorComparison;
+  improvementSuggestions: ImprovementSuggestion[];
+  generatedAt: Date;
 }
 
-export interface PredictionMetadata {
-    gameWeather?: string;
-    injuryReport?: string[];
-    lineMovement?: number;
-    publicBetting?: number;
-    expertConsensus?: number;
-    marketSentiment?: 'bullish' | 'bearish' | 'neutral';
-    contextualFactors?: string[];
-}
-
-export interface HistoricalTrendAnalysis {
-    timeframe: 'weekly' | 'monthly' | 'seasonal' | 'yearly';
-    accuracyTrend: TrendPoint[];
-    confidenceTrend: TrendPoint[];
-    typesPerformance: TypePerformanceTrend[];
-    seasonalPatterns: SeasonalPattern[];
-    improvementMetrics: ImprovementMetrics;
-    predictionVolume: VolumeMetrics;
-}
-
-export interface TrendPoint {
-    period: string;
-    value: number;
-    count: number;
-    change?: number;
-    percentChange?: number;
-}
-
-export interface TypePerformanceTrend {
-    type: PredictionType;
-    periods: TrendPoint[];
-    overallTrend: 'improving' | 'declining' | 'stable';
-    trendStrength: number;
-    bestPeriod: string;
-    worstPeriod: string;
-}
-
-export interface SeasonalPattern {
-    pattern: 'early_season' | 'mid_season' | 'late_season' | 'playoffs';
-    averageAccuracy: number;
-    predictionVolume: number;
-    confidenceLevel: number;
-    strongestTypes: PredictionType[];
-    insights: string[];
-}
-
-export interface ImprovementMetrics {
-    accuracyImprovement: number;
-    confidenceCalibration: number;
-    streakLength: number;
-    consistencyScore: number;
-    adaptabilityIndex: number;
-    learningVelocity: number;
-}
-
-export interface VolumeMetrics {
-    totalPredictions: number;
-    dailyAverage: number;
-    weeklyAverage: number;
-    peakPeriods: string[];
-    lowPeriods: string[];
-    volumeTrend: 'increasing' | 'decreasing' | 'stable';
-}
-
-export interface AccuracyBreakdown {
-    overall: AccuracyStats;
-    byType: Record<PredictionType, AccuracyStats>;
-    byConfidence: Record<string, AccuracyStats>;
-    byTimeframe: Record<string, AccuracyStats>;
-    byWeek: Record<number, AccuracyStats>;
-    contextual: ContextualAccuracy[];
-}
-
-export interface AccuracyStats {
-    accuracy: number;
-    totalPredictions: number;
-    correctPredictions: number;
-    averageConfidence: number;
-    confidenceRange: [number, number];
-    calibrationScore: number;
-}
-
-export interface ContextualAccuracy {
-    context: string;
-    factor: string;
-    accuracy: number;
-    sampleSize: number;
-    significance: number;
-}
-
-export interface PerformanceComparison {
-    timeframePrevious: string;
-    timeframeCurrent: string;
-    accuracyChange: number;
-    confidenceChange: number;
-    volumeChange: number;
-    typeChanges: Record<PredictionType, number>;
-    significantImprovements: string[];
-    areasOfConcern: string[];
-}
-
-export interface AdvancedInsights {
-    streakAnalysis: StreakAnalysis;
-    confidenceAnalysis: ConfidenceAnalysis;
-    typeSpecialization: TypeSpecializationAnalysis;
-    contextualFactors: ContextualFactorAnalysis;
-    predictivePatterns: PredictivePatterns;
-    recommendations: AdvancedRecommendation[];
+export interface TimeRange {
+  start: Date;
+  end: Date;
+  period: 'daily' | 'weekly' | 'monthly' | 'seasonal' | 'yearly' | 'custom';
+  duration: number; // in days
 }
 
 export interface StreakAnalysis {
-    currentStreak: number;
-    longestStreak: number;
-    streakType: 'correct' | 'incorrect' | 'mixed';
-    streakProbability: number;
-    breakPatterns: string[];
-    maintainanceStrategies: string[];
+  currentStreak: StreakInfo;
+  bestStreak: StreakInfo;
+  worstStreak: StreakInfo;
+  streakHistory: StreakInfo[];
+  averageStreakLength: number;
+  streakDistribution: StreakDistribution;
+  streakPredictability: number;
 }
 
-export interface ConfidenceAnalysis {
-    overconfidenceIndex: number;
-    underconfidenceIndex: number;
-    calibrationCurve: CalibrationPoint[];
-    optimalConfidenceRange: [number, number];
-    confidenceDistribution: Record<string, number>;
-    reliabilityScore: number;
+export interface StreakInfo {
+  type: 'winning' | 'losing';
+  length: number;
+  startDate: Date;
+  endDate: Date;
+  accuracy: number;
+  predictions: HistoricalPrediction[];
+  confidence: number;
 }
 
-export interface CalibrationPoint {
-    confidenceRange: [number, number];
-    expectedAccuracy: number;
-    actualAccuracy: number;
-    sampleSize: number;
+export interface StreakDistribution {
+  winningStreaks: StreakBucket[];
+  losingStreaks: StreakBucket[];
+  neutralPeriods: StreakBucket[];
 }
 
-export interface TypeSpecializationAnalysis {
-    strongestTypes: PredictionType[];
-    weakestTypes: PredictionType[];
-    specializationIndex: number;
-    consistencyAcrossTypes: number;
-    typeProgressions: Record<PredictionType, number>;
-    crossTypeCorrelations: Record<string, number>;
+export interface StreakBucket {
+  range: string; // e.g., "1-3", "4-7", "8-15"
+  count: number;
+  percentage: number;
+  averageAccuracy: number;
 }
 
-export interface ContextualFactorAnalysis {
-    weatherImpact: FactorImpact;
-    injuryImpact: FactorImpact;
-    lineMovementImpact: FactorImpact;
-    publicBettingImpact: FactorImpact;
-    sentimentImpact: FactorImpact;
-    combinedFactorEffects: CombinedFactorEffect[];
+export interface TrendAnalysis {
+  overallTrend: 'improving' | 'declining' | 'stable' | 'volatile';
+  trendStrength: number; // 0-1
+  movingAverages: MovingAverage[];
+  volatility: number;
+  momentum: number;
+  regressionAnalysis: RegressionResult;
+  cyclicalPatterns: CyclicalPattern[];
+  changePoints: ChangePoint[];
 }
 
-export interface FactorImpact {
-    positiveCorrelation: boolean;
-    impactStrength: number;
-    significanceLevel: number;
-    optimalConditions: string[];
-    avoidanceConditions: string[];
+export interface MovingAverage {
+  period: number; // days
+  values: TimeSeriesPoint[];
+  slope: number;
+  correlation: number;
 }
 
-export interface CombinedFactorEffect {
-    factors: string[];
-    combinedImpact: number;
-    frequency: number;
-    accuracy: number;
-    recommendation: string;
+export interface TimeSeriesPoint {
+  date: Date;
+  value: number;
+  confidence?: number;
 }
 
-export interface PredictivePatterns {
-    timeBasedPatterns: TimePattern[];
-    sequencePatterns: SequencePattern[];
-    contextPatterns: ContextPattern[];
-    emergingPatterns: EmergingPattern[];
+export interface RegressionResult {
+  slope: number;
+  intercept: number;
+  rSquared: number;
+  pValue: number;
+  significance: 'high' | 'medium' | 'low' | 'none';
+  equation: string;
 }
 
-export interface TimePattern {
-    pattern: string;
-    frequency: number;
-    accuracy: number;
-    confidence: number;
-    nextOccurrence?: string;
+export interface CyclicalPattern {
+  period: number; // days
+  amplitude: number;
+  phase: number;
+  strength: number;
+  description: string;
 }
 
-export interface SequencePattern {
-    sequence: string[];
-    frequency: number;
-    nextLikelyOutcome: string;
-    confidence: number;
+export interface ChangePoint {
+  date: Date;
+  type: 'improvement' | 'decline' | 'regime_change';
+  magnitude: number;
+  confidence: number;
+  description: string;
+  context: string[];
 }
 
-export interface ContextPattern {
-    context: Record<string, any>;
-    accuracy: number;
-    frequency: number;
-    significance: number;
+export interface CategoryPerformance {
+  category: string;
+  subcategory?: string;
+  totalPredictions: number;
+  accuracy: number;
+  confidence: number;
+  trend: 'improving' | 'declining' | 'stable';
+  rank: number;
+  percentile: number;
+  strengthAreas: string[];
+  weaknessAreas: string[];
+  recommendations: string[];
 }
 
-export interface EmergingPattern {
-    pattern: string;
-    strength: number;
-    recency: number;
-    potential: number;
-    description: string;
+export interface SeasonalPattern {
+  season: 'spring' | 'summer' | 'fall' | 'winter' | 'playoffs' | 'offseason';
+  period: TimeRange;
+  performance: PerformanceMetrics;
+  characteristics: SeasonalCharacteristics;
+  factors: SeasonalFactor[];
+  predictions: SeasonalPrediction[];
 }
 
-export interface AdvancedRecommendation {
-    type: 'STRATEGY' | 'FOCUS_AREA' | 'IMPROVEMENT' | 'WARNING' | 'OPPORTUNITY';
-    priority: 'high' | 'medium' | 'low';
-    title: string;
-    description: string;
-    actionItems: string[];
-    expectedImpact: number;
-    timeframe: string;
-    metrics: string[];
-    supportingData: any;
+export interface PerformanceMetrics {
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+  consistency: number;
+  improvement: number;
+  volatility: number;
+}
+
+export interface SeasonalCharacteristics {
+  peakPerformanceDays: string[];
+  lowPerformanceDays: string[];
+  averageConfidence: number;
+  predictionVolume: number;
+  difficultyLevel: 'easy' | 'medium' | 'hard' | 'expert';
+}
+
+export interface SeasonalFactor {
+  factor: string;
+  impact: number; // -1 to 1
+  confidence: number;
+  description: string;
+  evidence: string[];
+}
+
+export interface SeasonalPrediction {
+  nextSeason: string;
+  expectedAccuracy: number;
+  confidenceInterval: {
+    lower: number;
+    upper: number;
+  };
+  factors: string[];
+  recommendations: string[];
+}
+
+export interface CompetitorComparison {
+  userRank: number;
+  totalUsers: number;
+  percentile: number;
+  competitorStats: CompetitorStats[];
+  strengthsVsCompetitors: string[];
+  improvementAreas: string[];
+  benchmarkAnalysis: BenchmarkAnalysis;
+}
+
+export interface CompetitorStats {
+  rank: number;
+  accuracy: number;
+  totalPredictions: number;
+  specialty: string[];
+  anonymous: boolean;
+}
+
+export interface BenchmarkAnalysis {
+  aboveAverage: boolean;
+  gapToLeader: number;
+  gapToAverage: number;
+  improvementNeeded: number;
+  achievableRank: number;
+  timeline: string;
+}
+
+export interface ImprovementSuggestion {
+  category: 'accuracy' | 'consistency' | 'volume' | 'specialization' | 'timing';
+  priority: 'high' | 'medium' | 'low';
+  suggestion: string;
+  expectedImpact: string;
+  effort: 'low' | 'medium' | 'high';
+  timeline: string;
+  resources: Resource[];
+  successMetrics: string[];
+}
+
+export interface Resource {
+  type: 'article' | 'video' | 'tool' | 'community' | 'practice';
+  title: string;
+  description: string;
+  url?: string;
+  estimatedTime: string;
+}
+
+export interface HistoricalPrediction {
+  id: string;
+  userId: string;
+  predictionType: string;
+  category: string;
+  subcategory?: string;
+  question: string;
+  prediction: PredictionDetails;
+  actualOutcome: OutcomeDetails;
+  accuracy: number;
+  confidence: number;
+  difficulty: number;
+  timestamp: Date;
+  resolvedAt: Date;
+  factors: PredictionFactor[];
+  context: PredictionContext;
+}
+
+export interface PredictionDetails {
+  value: number | string;
+  probability?: number;
+  reasoning?: string;
+  confidence: number;
+  source: string;
+}
+
+export interface OutcomeDetails {
+  value: number | string;
+  probability?: number;
+  source: string;
+  verified: boolean;
+  delay?: number; // days until resolution
+}
+
+export interface PredictionFactor {
+  name: string;
+  value: number | string;
+  weight: number;
+  impact: 'positive' | 'negative' | 'neutral';
+}
+
+export interface PredictionContext {
+  gameWeek?: number;
+  season?: string;
+  weather?: string;
+  injuries?: string[];
+  trends?: string[];
+  marketConditions?: string[];
+}
+
+export interface AnalyticsQuery {
+  userId?: string;
+  timeRange: TimeRange;
+  categories?: string[];
+  minConfidence?: number;
+  includeComparison?: boolean;
+  includeProjections?: boolean;
+  aggregationLevel: 'daily' | 'weekly' | 'monthly';
+  filters?: QueryFilter[];
+}
+
+export interface QueryFilter {
+  field: string;
+  operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'between';
+  value: unknown;
+}
+
+export interface AnalyticsInsight {
+  type: 'trend' | 'anomaly' | 'pattern' | 'opportunity' | 'warning';
+  title: string;
+  description: string;
+  significance: 'low' | 'medium' | 'high' | 'critical';
+  evidence: InsightEvidence;
+  actionable: boolean;
+  recommendations: string[];
+  impact: string;
+  confidence: number;
+}
+
+export interface InsightEvidence {
+  metrics: Record<string, number>;
+  dataPoints: TimeSeriesPoint[];
+  comparisons: string[];
+  statistical: StatisticalEvidence;
+}
+
+export interface StatisticalEvidence {
+  sampleSize: number;
+  significance: number;
+  confidenceInterval: {
+    lower: number;
+    upper: number;
+    level: number;
+  };
+  testStatistic?: number;
+  pValue?: number;
+}
+
+export interface ReportConfiguration {
+  includeStreaks: boolean;
+  includeTrends: boolean;
+  includeSeasonalAnalysis: boolean;
+  includeCompetitorComparison: boolean;
+  includeProjections: boolean;
+  detailLevel: 'summary' | 'detailed' | 'comprehensive';
+  visualizations: string[];
+  format: 'json' | 'pdf' | 'html' | 'csv';
 }
 
 class OracleHistoricalAnalyticsService {
-    private readonly HISTORICAL_DATA_KEY = 'oracleHistoricalData';
-    private readonly TREND_CACHE_KEY = 'oracleTrendCache';
-    private readonly CACHE_DURATION = 1000 * 60 * 60; // 1 hour
+  private predictionHistory = new Map<string, HistoricalPrediction[]>();
+  private analyticsCache = new Map<string, HistoricalAnalytics>();
+  private insights = new Map<string, AnalyticsInsight[]>();
+  private benchmarkData = new Map<string, CompetitorStats[]>();
 
-    /**
-     * Store historical prediction record
-     */
-    async storeHistoricalRecord(
-        prediction: OraclePrediction,
-        actualResult?: number,
-        userPrediction?: number,
-        metadata?: Partial<PredictionMetadata>
-    ): Promise<void> {
-        const records = await this.getHistoricalRecords();
-        
-        const historicalRecord: HistoricalPredictionRecord = {
-            id: `hist_${prediction.id}_${Date.now()}`,
-            predictionId: prediction.id,
-            week: prediction.week,
-            season: new Date().getFullYear().toString(),
-            type: prediction.type,
-            question: prediction.question,
-            oracleChoice: prediction.oracleChoice,
-            confidence: prediction.confidence,
-            actualResult,
-            isCorrect: actualResult !== undefined ? prediction.oracleChoice === actualResult : undefined,
-            userPrediction,
-            userCorrect: userPrediction !== undefined && actualResult !== undefined 
-                ? userPrediction === actualResult : undefined,
-            recordedAt: prediction.timestamp,
-            completedAt: actualResult !== undefined ? new Date().toISOString() : undefined,
-            reasoning: prediction.reasoning,
-            dataPoints: prediction.dataPoints,
-            metadata: {
-                gameWeather: metadata?.gameWeather,
-                injuryReport: metadata?.injuryReport || [],
-                lineMovement: metadata?.lineMovement,
-                publicBetting: metadata?.publicBetting,
-                expertConsensus: metadata?.expertConsensus,
-                marketSentiment: metadata?.marketSentiment,
-                contextualFactors: metadata?.contextualFactors || []
-            }
-        };
+  /**
+   * Generate comprehensive historical analytics for a user
+   */
+  async generateAnalytics(
+    userId: string,
+    timeRange: TimeRange,
+    config: Partial<ReportConfiguration> = {}
+  ): Promise<HistoricalAnalytics> {
+    const cacheKey = this.generateCacheKey(userId, timeRange, config);
+    const cached = this.analyticsCache.get(cacheKey);
+    
+    if (cached && this.isCacheValid(cached.generatedAt)) {
+      return cached;
+    }
 
-        const existingIndex = records.findIndex(r => r.predictionId === prediction.id);
-        if (existingIndex >= 0) {
-            records[existingIndex] = historicalRecord;
-        } else {
-            records.push(historicalRecord);
+    const predictions = await this.getUserPredictions(userId, timeRange);
+    if (predictions.length === 0) {
+      return this.generateEmptyAnalytics(userId, timeRange);
+    }
+
+    const analytics: HistoricalAnalytics = {
+      userId,
+      timeRange,
+      totalPredictions: predictions.length,
+      accuracy: this.calculateOverallAccuracy(predictions),
+      precision: this.calculatePrecision(predictions),
+      recall: this.calculateRecall(predictions),
+      f1Score: this.calculateF1Score(predictions),
+      streakAnalysis: await this.analyzeStreaks(predictions),
+      trendAnalysis: await this.analyzeTrends(predictions),
+      categoryPerformance: await this.analyzeCategoryPerformance(predictions),
+      seasonalPatterns: await this.analyzeSeasonalPatterns(predictions),
+      competitorComparison: await this.generateCompetitorComparison(userId, predictions),
+      improvementSuggestions: await this.generateImprovementSuggestions(userId, predictions),
+      generatedAt: new Date()
+    };
+
+    this.analyticsCache.set(cacheKey, analytics);
+    return analytics;
+  }
+
+  /**
+   * Analyze prediction streaks
+   */
+  async analyzeStreaks(predictions: HistoricalPrediction[]): Promise<StreakAnalysis> {
+    const streaks = this.identifyStreaks(predictions);
+    const winningStreaks = streaks.filter(s => s.type === 'winning');
+    const losingStreaks = streaks.filter(s => s.type === 'losing');
+
+    const currentStreak = this.getCurrentStreak(predictions);
+    const bestStreak = winningStreaks.length > 0 ? 
+      winningStreaks.reduce((best, current) => current.length > best.length ? current : best) :
+      this.createEmptyStreak();
+    const worstStreak = losingStreaks.length > 0 ?
+      losingStreaks.reduce((worst, current) => current.length > worst.length ? current : worst) :
+      this.createEmptyStreak();
+
+    return {
+      currentStreak,
+      bestStreak,
+      worstStreak,
+      streakHistory: streaks,
+      averageStreakLength: streaks.length > 0 ? 
+        streaks.reduce((sum, s) => sum + s.length, 0) / streaks.length : 0,
+      streakDistribution: this.calculateStreakDistribution(streaks),
+      streakPredictability: this.calculateStreakPredictability(streaks)
+    };
+  }
+
+  /**
+   * Analyze prediction trends over time
+   */
+  async analyzeTrends(predictions: HistoricalPrediction[]): Promise<TrendAnalysis> {
+    const timeSeriesData = this.createTimeSeriesData(predictions);
+    const regression = this.performLinearRegression(timeSeriesData);
+    
+    return {
+      overallTrend: this.determineTrendDirection(regression.slope),
+      trendStrength: Math.abs(regression.slope),
+      movingAverages: this.calculateMovingAverages(timeSeriesData),
+      volatility: this.calculateVolatility(timeSeriesData),
+      momentum: this.calculateMomentum(timeSeriesData),
+      regressionAnalysis: regression,
+      cyclicalPatterns: this.identifyCyclicalPatterns(timeSeriesData),
+      changePoints: this.identifyChangePoints(timeSeriesData)
+    };
+  }
+
+  /**
+   * Analyze performance by category
+   */
+  async analyzeCategoryPerformance(predictions: HistoricalPrediction[]): Promise<CategoryPerformance[]> {
+    const categoryGroups = this.groupPredictionsByCategory(predictions);
+    const categoryPerformance: CategoryPerformance[] = [];
+
+    for (const [category, categoryPredictions] of categoryGroups.entries()) {
+      const accuracy = this.calculateOverallAccuracy(categoryPredictions);
+      const confidence = this.calculateAverageConfidence(categoryPredictions);
+      const trend = this.calculateCategoryTrend(categoryPredictions);
+
+      categoryPerformance.push({
+        category,
+        totalPredictions: categoryPredictions.length,
+        accuracy,
+        confidence,
+        trend,
+        rank: 0, // Will be calculated after all categories
+        percentile: 0, // Will be calculated after all categories
+        strengthAreas: this.identifyStrengthAreas(categoryPredictions),
+        weaknessAreas: this.identifyWeaknessAreas(categoryPredictions),
+        recommendations: this.generateCategoryRecommendations(category, categoryPredictions)
+      });
+    }
+
+    // Calculate ranks and percentiles
+    this.calculateCategoryRanks(categoryPerformance);
+    return categoryPerformance.sort((a, b) => b.accuracy - a.accuracy);
+  }
+
+  /**
+   * Analyze seasonal patterns
+   */
+  async analyzeSeasonalPatterns(predictions: HistoricalPrediction[]): Promise<SeasonalPattern[]> {
+    const seasonalGroups = this.groupPredictionsBySeason(predictions);
+    const patterns: SeasonalPattern[] = [];
+
+    for (const [season, seasonPredictions] of seasonalGroups.entries()) {
+      const performance = this.calculateSeasonalPerformance(seasonPredictions);
+      const characteristics = this.analyzeSeasonalCharacteristics(seasonPredictions);
+      const factors = this.identifySeasonalFactors(season, seasonPredictions);
+
+      patterns.push({
+        season: season as SeasonalPattern['season'],
+        period: this.getSeasonPeriod(season),
+        performance,
+        characteristics,
+        factors,
+        predictions: this.generateSeasonalPredictions(season, performance)
+      });
+    }
+
+    return patterns;
+  }
+
+  /**
+   * Generate competitor comparison
+   */
+  async generateCompetitorComparison(
+    userId: string, 
+    predictions: HistoricalPrediction[]
+  ): Promise<CompetitorComparison> {
+    const userAccuracy = this.calculateOverallAccuracy(predictions);
+    const competitorStats = await this.getCompetitorStats(userId);
+    
+    const userRank = this.calculateUserRank(userAccuracy, competitorStats);
+    const percentile = this.calculatePercentile(userRank, competitorStats.length);
+
+    return {
+      userRank,
+      totalUsers: competitorStats.length,
+      percentile,
+      competitorStats: competitorStats.slice(0, 10), // Top 10
+      strengthsVsCompetitors: this.identifyCompetitiveStrengths(userId, predictions, competitorStats),
+      improvementAreas: this.identifyCompetitiveWeaknesses(userId, predictions, competitorStats),
+      benchmarkAnalysis: this.generateBenchmarkAnalysis(userAccuracy, userRank, competitorStats)
+    };
+  }
+
+  /**
+   * Generate improvement suggestions
+   */
+  async generateImprovementSuggestions(
+    userId: string,
+    predictions: HistoricalPrediction[]
+  ): Promise<ImprovementSuggestion[]> {
+    const suggestions: ImprovementSuggestion[] = [];
+    const accuracy = this.calculateOverallAccuracy(predictions);
+    const consistency = this.calculateConsistency(predictions);
+    const categoryPerformance = await this.analyzeCategoryPerformance(predictions);
+
+    // Accuracy improvement suggestions
+    if (accuracy < 0.7) {
+      suggestions.push({
+        category: 'accuracy',
+        priority: 'high',
+        suggestion: 'Focus on improving prediction accuracy through better research and analysis',
+        expectedImpact: 'Increase accuracy by 10-15%',
+        effort: 'medium',
+        timeline: '4-6 weeks',
+        resources: this.getAccuracyResources(),
+        successMetrics: ['Accuracy > 70%', 'Confidence interval narrowing']
+      });
+    }
+
+    // Consistency improvement
+    if (consistency < 0.6) {
+      suggestions.push({
+        category: 'consistency',
+        priority: 'medium',
+        suggestion: 'Develop a systematic approach to maintain consistent performance',
+        expectedImpact: 'Reduce performance volatility by 20%',
+        effort: 'low',
+        timeline: '2-3 weeks',
+        resources: this.getConsistencyResources(),
+        successMetrics: ['Volatility < 0.15', 'Streak length improvement']
+      });
+    }
+
+    // Category-specific suggestions
+    const weakCategories = categoryPerformance
+      .filter(cat => cat.accuracy < 0.6)
+      .sort((a, b) => a.accuracy - b.accuracy)
+      .slice(0, 3);
+
+    for (const category of weakCategories) {
+      suggestions.push({
+        category: 'specialization',
+        priority: 'medium',
+        suggestion: `Improve performance in ${category.category} predictions`,
+        expectedImpact: `Increase ${category.category} accuracy by 15-20%`,
+        effort: 'medium',
+        timeline: '3-4 weeks',
+        resources: this.getCategoryResources(category.category),
+        successMetrics: [`${category.category} accuracy > 60%`]
+      });
+    }
+
+    return suggestions.sort((a, b) => this.getPriorityScore(a.priority) - this.getPriorityScore(b.priority));
+  }
+
+  /**
+   * Get historical predictions for a user
+   */
+  async getUserPredictions(userId: string, timeRange: TimeRange): Promise<HistoricalPrediction[]> {
+    const userPredictions = this.predictionHistory.get(userId) || [];
+    
+    return userPredictions.filter(prediction => 
+      prediction.timestamp >= timeRange.start && 
+      prediction.timestamp <= timeRange.end
+    );
+  }
+
+  /**
+   * Generate insights from analytics data
+   */
+  async generateInsights(analytics: HistoricalAnalytics): Promise<AnalyticsInsight[]> {
+    const insights: AnalyticsInsight[] = [];
+
+    // Trend insights
+    if (analytics.trendAnalysis.overallTrend === 'improving') {
+      insights.push({
+        type: 'trend',
+        title: 'Improving Performance Trend',
+        description: 'Your prediction accuracy has been steadily improving over time',
+        significance: 'high',
+        evidence: {
+          metrics: { 
+            trendStrength: analytics.trendAnalysis.trendStrength,
+            slope: analytics.trendAnalysis.regressionAnalysis.slope
+          },
+          dataPoints: [],
+          comparisons: ['Previous month performance'],
+          statistical: {
+            sampleSize: analytics.totalPredictions,
+            significance: analytics.trendAnalysis.regressionAnalysis.pValue,
+            confidenceInterval: { lower: 0.85, upper: 0.95, level: 0.95 }
+          }
+        },
+        actionable: true,
+        recommendations: ['Continue current approach', 'Focus on maintaining consistency'],
+        impact: 'Continued improvement expected',
+        confidence: 0.85
+      });
+    }
+
+    // Streak insights
+    if (analytics.streakAnalysis.currentStreak.type === 'winning' && 
+        analytics.streakAnalysis.currentStreak.length > 5) {
+      insights.push({
+        type: 'pattern',
+        title: 'Strong Winning Streak',
+        description: `You're currently on a ${analytics.streakAnalysis.currentStreak.length}-prediction winning streak`,
+        significance: 'medium',
+        evidence: {
+          metrics: { 
+            streakLength: analytics.streakAnalysis.currentStreak.length,
+            streakAccuracy: analytics.streakAnalysis.currentStreak.accuracy
+          },
+          dataPoints: [],
+          comparisons: ['Historical streak performance'],
+          statistical: {
+            sampleSize: analytics.streakAnalysis.currentStreak.length,
+            significance: 0.05,
+            confidenceInterval: { lower: 0.7, upper: 0.9, level: 0.95 }
+          }
+        },
+        actionable: true,
+        recommendations: ['Stay focused', 'Don\'t let confidence lead to overconfidence'],
+        impact: 'Maintain current performance level',
+        confidence: 0.9
+      });
+    }
+
+    return insights;
+  }
+
+  /**
+   * Private helper methods
+   */
+  private generateEmptyAnalytics(userId: string, timeRange: TimeRange): HistoricalAnalytics {
+    return {
+      userId,
+      timeRange,
+      totalPredictions: 0,
+      accuracy: 0,
+      precision: 0,
+      recall: 0,
+      f1Score: 0,
+      streakAnalysis: {
+        currentStreak: this.createEmptyStreak(),
+        bestStreak: this.createEmptyStreak(),
+        worstStreak: this.createEmptyStreak(),
+        streakHistory: [],
+        averageStreakLength: 0,
+        streakDistribution: {
+          winningStreaks: [],
+          losingStreaks: [],
+          neutralPeriods: []
+        },
+        streakPredictability: 0
+      },
+      trendAnalysis: this.createEmptyTrendAnalysis(),
+      categoryPerformance: [],
+      seasonalPatterns: [],
+      competitorComparison: this.createEmptyCompetitorComparison(),
+      improvementSuggestions: [],
+      generatedAt: new Date()
+    };
+  }
+
+  private createEmptyStreak(): StreakInfo {
+    return {
+      type: 'winning',
+      length: 0,
+      startDate: new Date(),
+      endDate: new Date(),
+      accuracy: 0,
+      predictions: [],
+      confidence: 0
+    };
+  }
+
+  private createEmptyTrendAnalysis(): TrendAnalysis {
+    return {
+      overallTrend: 'stable',
+      trendStrength: 0,
+      movingAverages: [],
+      volatility: 0,
+      momentum: 0,
+      regressionAnalysis: {
+        slope: 0,
+        intercept: 0,
+        rSquared: 0,
+        pValue: 1,
+        significance: 'none',
+        equation: 'y = 0x + 0'
+      },
+      cyclicalPatterns: [],
+      changePoints: []
+    };
+  }
+
+  private createEmptyCompetitorComparison(): CompetitorComparison {
+    return {
+      userRank: 0,
+      totalUsers: 0,
+      percentile: 0,
+      competitorStats: [],
+      strengthsVsCompetitors: [],
+      improvementAreas: [],
+      benchmarkAnalysis: {
+        aboveAverage: false,
+        gapToLeader: 0,
+        gapToAverage: 0,
+        improvementNeeded: 0,
+        achievableRank: 0,
+        timeline: '0 weeks'
+      }
+    };
+  }
+
+  private calculateOverallAccuracy(predictions: HistoricalPrediction[]): number {
+    if (predictions.length === 0) return 0;
+    return predictions.reduce((sum, p) => sum + p.accuracy, 0) / predictions.length;
+  }
+
+  private calculatePrecision(predictions: HistoricalPrediction[]): number {
+    // Simplified precision calculation
+    const positiveCorrect = predictions.filter(p => p.accuracy > 0.5 && p.prediction.value === p.actualOutcome.value).length;
+    const totalPositive = predictions.filter(p => p.prediction.value === p.actualOutcome.value).length;
+    return totalPositive > 0 ? positiveCorrect / totalPositive : 0;
+  }
+
+  private calculateRecall(predictions: HistoricalPrediction[]): number {
+    // Simplified recall calculation
+    const positiveCorrect = predictions.filter(p => p.accuracy > 0.5 && p.prediction.value === p.actualOutcome.value).length;
+    const totalActualPositive = predictions.filter(p => p.actualOutcome.value === p.prediction.value).length;
+    return totalActualPositive > 0 ? positiveCorrect / totalActualPositive : 0;
+  }
+
+  private calculateF1Score(predictions: HistoricalPrediction[]): number {
+    const precision = this.calculatePrecision(predictions);
+    const recall = this.calculateRecall(predictions);
+    return precision + recall > 0 ? 2 * (precision * recall) / (precision + recall) : 0;
+  }
+
+  private identifyStreaks(predictions: HistoricalPrediction[]): StreakInfo[] {
+    const streaks: StreakInfo[] = [];
+    if (predictions.length === 0) return streaks;
+
+    const sortedPredictions = [...predictions].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    let currentStreak: HistoricalPrediction[] = [sortedPredictions[0]];
+    let currentType: 'winning' | 'losing' = sortedPredictions[0].accuracy > 0.5 ? 'winning' : 'losing';
+
+    for (let i = 1; i < sortedPredictions.length; i++) {
+      const prediction = sortedPredictions[i];
+      const type: 'winning' | 'losing' = prediction.accuracy > 0.5 ? 'winning' : 'losing';
+
+      if (type === currentType) {
+        currentStreak.push(prediction);
+      } else {
+        // Streak ended, save it
+        if (currentStreak.length >= 2) {
+          streaks.push({
+            type: currentType,
+            length: currentStreak.length,
+            startDate: currentStreak[0].timestamp,
+            endDate: currentStreak[currentStreak.length - 1].timestamp,
+            accuracy: this.calculateOverallAccuracy(currentStreak),
+            predictions: currentStreak,
+            confidence: this.calculateAverageConfidence(currentStreak)
+          });
         }
 
-        await this.storeHistoricalRecords(records);
-        await this.invalidateTrendCache();
+        // Start new streak
+        currentStreak = [prediction];
+        currentType = type;
+      }
     }
 
-    /**
-     * Get comprehensive historical trend analysis
-     */
-    async getHistoricalTrendAnalysis(
-        timeframe: 'weekly' | 'monthly' | 'seasonal' | 'yearly' = 'monthly'
-    ): Promise<HistoricalTrendAnalysis> {
-        const cacheKey = `${this.TREND_CACHE_KEY}_${timeframe}`;
-        const cached = this.getCachedData(cacheKey);
-        if (cached) return cached;
-
-        const records = await this.getCompletedHistoricalRecords();
-        
-        const analysis: HistoricalTrendAnalysis = {
-            timeframe,
-            accuracyTrend: await this.calculateAccuracyTrend(records, timeframe),
-            confidenceTrend: await this.calculateConfidenceTrend(records, timeframe),
-            typesPerformance: await this.calculateTypePerformanceTrends(records, timeframe),
-            seasonalPatterns: await this.analyzeSeasonalPatterns(records),
-            improvementMetrics: await this.calculateImprovementMetrics(records),
-            predictionVolume: await this.calculateVolumeMetrics(records, timeframe)
-        };
-
-        this.setCachedData(cacheKey, analysis);
-        return analysis;
+    // Don't forget the last streak
+    if (currentStreak.length >= 2) {
+      streaks.push({
+        type: currentType,
+        length: currentStreak.length,
+        startDate: currentStreak[0].timestamp,
+        endDate: currentStreak[currentStreak.length - 1].timestamp,
+        accuracy: this.calculateOverallAccuracy(currentStreak),
+        predictions: currentStreak,
+        confidence: this.calculateAverageConfidence(currentStreak)
+      });
     }
 
-    /**
-     * Get detailed accuracy breakdown
-     */
-    async getAccuracyBreakdown(): Promise<AccuracyBreakdown> {
-        const records = await this.getCompletedHistoricalRecords();
-        
-        return {
-            overall: this.calculateAccuracyStats(records),
-            byType: this.calculateAccuracyByType(records),
-            byConfidence: this.calculateAccuracyByConfidence(records),
-            byTimeframe: this.calculateAccuracyByTimeframe(records),
-            byWeek: this.calculateAccuracyByWeek(records),
-            contextual: await this.calculateContextualAccuracy(records)
-        };
+    return streaks;
+  }
+
+  private getCurrentStreak(predictions: HistoricalPrediction[]): StreakInfo {
+    if (predictions.length === 0) return this.createEmptyStreak();
+
+    const sortedPredictions = [...predictions].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    const latestType: 'winning' | 'losing' = sortedPredictions[0].accuracy > 0.5 ? 'winning' : 'losing';
+    const currentStreak: HistoricalPrediction[] = [sortedPredictions[0]];
+
+    for (let i = 1; i < sortedPredictions.length; i++) {
+      const prediction = sortedPredictions[i];
+      const type: 'winning' | 'losing' = prediction.accuracy > 0.5 ? 'winning' : 'losing';
+
+      if (type === latestType) {
+        currentStreak.push(prediction);
+      } else {
+        break;
+      }
     }
 
-    /**
-     * Compare performance between timeframes
-     */
-    async getPerformanceComparison(
-        currentPeriod: string,
-        previousPeriod: string
-    ): Promise<PerformanceComparison> {
-        const records = await this.getCompletedHistoricalRecords();
-        
-        const currentRecords = this.filterRecordsByPeriod(records, currentPeriod);
-        const previousRecords = this.filterRecordsByPeriod(records, previousPeriod);
+    return {
+      type: latestType,
+      length: currentStreak.length,
+      startDate: currentStreak[currentStreak.length - 1].timestamp,
+      endDate: currentStreak[0].timestamp,
+      accuracy: this.calculateOverallAccuracy(currentStreak),
+      predictions: currentStreak,
+      confidence: this.calculateAverageConfidence(currentStreak)
+    };
+  }
 
-        const currentStats = this.calculateAccuracyStats(currentRecords);
-        const previousStats = this.calculateAccuracyStats(previousRecords);
+  private calculateStreakDistribution(streaks: StreakInfo[]): StreakDistribution {
+    const winningStreaks = streaks.filter(s => s.type === 'winning');
+    const losingStreaks = streaks.filter(s => s.type === 'losing');
 
-        return {
-            timeframePrevious: previousPeriod,
-            timeframeCurrent: currentPeriod,
-            accuracyChange: currentStats.accuracy - previousStats.accuracy,
-            confidenceChange: currentStats.averageConfidence - previousStats.averageConfidence,
-            volumeChange: currentRecords.length - previousRecords.length,
-            typeChanges: this.calculateTypeChanges(currentRecords, previousRecords),
-            significantImprovements: this.identifySignificantImprovements(currentStats, previousStats),
-            areasOfConcern: this.identifyAreasOfConcern(currentStats, previousStats)
-        };
+    return {
+      winningStreaks: this.createStreakBuckets(winningStreaks),
+      losingStreaks: this.createStreakBuckets(losingStreaks),
+      neutralPeriods: [] // Simplified for now
+    };
+  }
+
+  private createStreakBuckets(_streaks: StreakInfo[]): StreakBucket[] {
+    // Simplified implementation
+    return [
+      { range: '2-3', count: 5, percentage: 50, averageAccuracy: 0.75 },
+      { range: '4-7', count: 3, percentage: 30, averageAccuracy: 0.8 },
+      { range: '8+', count: 2, percentage: 20, averageAccuracy: 0.85 }
+    ];
+  }
+
+  private calculateStreakPredictability(streaks: StreakInfo[]): number {
+    if (streaks.length < 3) return 0;
+    
+    // Simplified predictability calculation based on streak patterns
+    const avgLength = streaks.reduce((sum, s) => sum + s.length, 0) / streaks.length;
+    const variance = streaks.reduce((sum, s) => sum + Math.pow(s.length - avgLength, 2), 0) / streaks.length;
+    
+    return Math.max(0, 1 - (variance / (avgLength * avgLength)));
+  }
+
+  private createTimeSeriesData(predictions: HistoricalPrediction[]): TimeSeriesPoint[] {
+    const groupedByDay = new Map<string, HistoricalPrediction[]>();
+    
+    predictions.forEach(prediction => {
+      const day = prediction.timestamp.toISOString().split('T')[0];
+      if (!groupedByDay.has(day)) {
+        groupedByDay.set(day, []);
+      }
+      groupedByDay.get(day)!.push(prediction);
+    });
+
+    const timeSeriesData: TimeSeriesPoint[] = [];
+    for (const [day, dayPredictions] of groupedByDay.entries()) {
+      timeSeriesData.push({
+        date: new Date(day),
+        value: this.calculateOverallAccuracy(dayPredictions),
+        confidence: this.calculateAverageConfidence(dayPredictions)
+      });
     }
 
-    /**
-     * Generate advanced insights from historical data
-     */
-    async getAdvancedInsights(): Promise<AdvancedInsights> {
-        const records = await this.getCompletedHistoricalRecords();
-        
-        return {
-            streakAnalysis: await this.analyzeStreaks(records),
-            confidenceAnalysis: await this.analyzeConfidence(records),
-            typeSpecialization: await this.analyzeTypeSpecialization(records),
-            contextualFactors: await this.analyzeContextualFactors(records),
-            predictivePatterns: await this.analyzePredictivePatterns(records),
-            recommendations: await this.generateAdvancedRecommendations(records)
-        };
+    return timeSeriesData.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
+
+  private performLinearRegression(data: TimeSeriesPoint[]): RegressionResult {
+    if (data.length < 2) {
+      return {
+        slope: 0,
+        intercept: 0,
+        rSquared: 0,
+        pValue: 1,
+        significance: 'none',
+        equation: 'y = 0x + 0'
+      };
     }
 
-    /**
-     * Export historical data for analysis
-     */
-    async exportHistoricalData(
-        format: 'json' | 'csv' = 'json',
-        filters?: {
-            startDate?: string;
-            endDate?: string;
-            types?: PredictionType[];
-            minConfidence?: number;
-        }
-    ): Promise<string> {
-        let records = await this.getHistoricalRecords();
-        
-        // Apply filters
-        if (filters) {
-            records = records.filter(record => {
-                if (filters.startDate && record.recordedAt < filters.startDate) return false;
-                if (filters.endDate && record.recordedAt > filters.endDate) return false;
-                if (filters.types && !filters.types.includes(record.type)) return false;
-                if (filters.minConfidence && record.confidence < filters.minConfidence) return false;
-                return true;
-            });
-        }
+    const n = data.length;
+    const x = data.map((_, i) => i);
+    const y = data.map(d => d.value);
 
-        if (format === 'csv') {
-            return this.convertToCSV(records);
-        }
-        
-        return JSON.stringify(records, null, 2);
-    }
+    const sumX = x.reduce((a, b) => a + b, 0);
+    const sumY = y.reduce((a, b) => a + b, 0);
+    const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+    const sumXX = x.reduce((sum, xi) => sum + xi * xi, 0);
 
-    /**
-     * Import historical data from external source
-     */
-    async importHistoricalData(
-        data: string,
-        format: 'json' | 'csv' = 'json',
-        merge: boolean = true
-    ): Promise<{ imported: number; errors: string[] }> {
-        try {
-            let newRecords: HistoricalPredictionRecord[];
-            
-            if (format === 'csv') {
-                newRecords = this.parseCSV(data);
-            } else {
-                newRecords = JSON.parse(data);
-            }
+    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
 
-            const errors: string[] = [];
-            const validRecords: HistoricalPredictionRecord[] = [];
+    const yMean = sumY / n;
+    const totalSumSquares = y.reduce((sum, yi) => sum + Math.pow(yi - yMean, 2), 0);
+    const residualSumSquares = y.reduce((sum, yi, i) => sum + Math.pow(yi - (slope * x[i] + intercept), 2), 0);
+    const rSquared = 1 - (residualSumSquares / totalSumSquares);
 
-            // Validate records
-            for (const record of newRecords) {
-                const validation = this.validateHistoricalRecord(record);
-                if (validation.isValid) {
-                    validRecords.push(record);
-                } else {
-                    errors.push(`Invalid record ${record.id}: ${validation.errors.join(', ')}`);
-                }
-            }
+    return {
+      slope,
+      intercept,
+      rSquared,
+      pValue: 0.05, // Simplified
+      significance: rSquared > 0.5 ? 'high' : rSquared > 0.25 ? 'medium' : 'low',
+      equation: `y = ${slope.toFixed(4)}x + ${intercept.toFixed(4)}`
+    };
+  }
 
-            if (merge) {
-                const existingRecords = await this.getHistoricalRecords();
-                const mergedRecords = this.mergeRecords(existingRecords, validRecords);
-                await this.storeHistoricalRecords(mergedRecords);
-            } else {
-                await this.storeHistoricalRecords(validRecords);
-            }
+  private determineTrendDirection(slope: number): 'improving' | 'declining' | 'stable' | 'volatile' {
+    if (Math.abs(slope) < 0.001) return 'stable';
+    return slope > 0 ? 'improving' : 'declining';
+  }
 
-            await this.invalidateTrendCache();
+  private calculateMovingAverages(data: TimeSeriesPoint[]): MovingAverage[] {
+    const periods = [7, 14, 30]; // 7, 14, 30 day moving averages
+    const movingAverages: MovingAverage[] = [];
 
-            return {
-                imported: validRecords.length,
-                errors
-            };
-        } catch (error) {
-            throw new Error(`Import failed: ${error instanceof Error ? error.message : String(error)}`);
-        }
-    }
+    for (const period of periods) {
+      if (data.length < period) continue;
 
-    // Private helper methods
-    private async getHistoricalRecords(): Promise<HistoricalPredictionRecord[]> {
-        try {
-            const data = localStorage.getItem(this.HISTORICAL_DATA_KEY);
-            return data ? JSON.parse(data) : [];
-        } catch (error) {
-            console.error('Error loading historical records:', error);
-            return [];
-        }
-    }
-
-    private async getCompletedHistoricalRecords(): Promise<HistoricalPredictionRecord[]> {
-        const records = await this.getHistoricalRecords();
-        return records.filter(record => record.actualResult !== undefined);
-    }
-
-    private async storeHistoricalRecords(records: HistoricalPredictionRecord[]): Promise<void> {
-        try {
-            localStorage.setItem(this.HISTORICAL_DATA_KEY, JSON.stringify(records));
-        } catch (error) {
-            console.error('Error storing historical records:', error);
-            throw new Error('Failed to store historical data');
-        }
-    }
-
-    private getCachedData(key: string): any {
-        try {
-            const cached = localStorage.getItem(key);
-            if (!cached) return null;
-            
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp > this.CACHE_DURATION) {
-                localStorage.removeItem(key);
-                return null;
-            }
-            
-            return data;
-        } catch {
-            return null;
-        }
-    }
-
-    private setCachedData(key: string, data: any): void {
-        try {
-            const cacheItem = {
-                data,
-                timestamp: Date.now()
-            };
-            localStorage.setItem(key, JSON.stringify(cacheItem));
-        } catch (error) {
-            console.warn('Failed to cache data:', error);
-        }
-    }
-
-    private async invalidateTrendCache(): Promise<void> {
-        const keys = ['weekly', 'monthly', 'seasonal', 'yearly'];
-        keys.forEach(timeframe => {
-            localStorage.removeItem(`${this.TREND_CACHE_KEY}_${timeframe}`);
+      const values: TimeSeriesPoint[] = [];
+      for (let i = period - 1; i < data.length; i++) {
+        const window = data.slice(i - period + 1, i + 1);
+        const average = window.reduce((sum, point) => sum + point.value, 0) / window.length;
+        values.push({
+          date: data[i].date,
+          value: average
         });
-    }
-
-    private async calculateAccuracyTrend(
-        records: HistoricalPredictionRecord[],
-        timeframe: string
-    ): Promise<TrendPoint[]> {
-        const groupedRecords = this.groupRecordsByTimeframe(records, timeframe);
-        const trendPoints: TrendPoint[] = [];
-
-        Object.entries(groupedRecords).forEach(([period, periodRecords]) => {
-            const correct = periodRecords.filter(r => r.isCorrect).length;
-            const total = periodRecords.length;
-            const accuracy = total > 0 ? correct / total : 0;
-
-            trendPoints.push({
-                period,
-                value: accuracy,
-                count: total
-            });
-        });
-
-        // Calculate changes
-        for (let i = 1; i < trendPoints.length; i++) {
-            const current = trendPoints[i];
-            const previous = trendPoints[i - 1];
-            current.change = current.value - previous.value;
-            current.percentChange = previous.value > 0 
-                ? (current.change / previous.value) * 100 
-                : 0;
-        }
-
-        return trendPoints.sort((a, b) => a.period.localeCompare(b.period));
-    }
-
-    private async calculateConfidenceTrend(
-        records: HistoricalPredictionRecord[],
-        timeframe: string
-    ): Promise<TrendPoint[]> {
-        const groupedRecords = this.groupRecordsByTimeframe(records, timeframe);
-        const trendPoints: TrendPoint[] = [];
-
-        Object.entries(groupedRecords).forEach(([period, periodRecords]) => {
-            const avgConfidence = periodRecords.reduce((sum, r) => sum + r.confidence, 0) / periodRecords.length;
-
-            trendPoints.push({
-                period,
-                value: avgConfidence,
-                count: periodRecords.length
-            });
-        });
-
-        return trendPoints.sort((a, b) => a.period.localeCompare(b.period));
-    }
-
-    private groupRecordsByTimeframe(
-        records: HistoricalPredictionRecord[],
-        timeframe: string
-    ): Record<string, HistoricalPredictionRecord[]> {
-        const grouped: Record<string, HistoricalPredictionRecord[]> = {};
-
-        records.forEach(record => {
-            const date = new Date(record.recordedAt);
-            let period: string;
-
-            switch (timeframe) {
-                case 'weekly':
-                    period = `${date.getFullYear()}-W${this.getWeekNumber(date)}`;
-                    break;
-                case 'monthly':
-                    period = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                    break;
-                case 'seasonal':
-                    period = `${date.getFullYear()}-${this.getSeason(date)}`;
-                    break;
-                case 'yearly':
-                    period = date.getFullYear().toString();
-                    break;
-                default:
-                    period = date.toISOString().split('T')[0];
-            }
-
-            if (!grouped[period]) {
-                grouped[period] = [];
-            }
-            grouped[period].push(record);
-        });
-
-        return grouped;
-    }
-
-    private getWeekNumber(date: Date): number {
-        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000;
-        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-    }
-
-    private getSeason(date: Date): string {
-        const month = date.getMonth() + 1;
-        if (month >= 9 && month <= 12) return 'Fall';
-        if (month >= 1 && month <= 2) return 'Winter';
-        if (month >= 3 && month <= 5) return 'Spring';
-        return 'Summer';
-    }
-
-    private calculateAccuracyStats(records: HistoricalPredictionRecord[]): AccuracyStats {
-        const correctPredictions = records.filter(r => r.isCorrect).length;
-        const totalPredictions = records.length;
-        const accuracy = totalPredictions > 0 ? correctPredictions / totalPredictions : 0;
-        
-        const confidences = records.map(r => r.confidence);
-        const averageConfidence = confidences.reduce((sum, c) => sum + c, 0) / confidences.length || 0;
-        const confidenceRange: [number, number] = [
-            Math.min(...confidences) || 0,
-            Math.max(...confidences) || 0
-        ];
-
-        const calibrationScore = this.calculateCalibrationScore(records);
-
-        return {
-            accuracy,
-            totalPredictions,
-            correctPredictions,
-            averageConfidence,
-            confidenceRange,
-            calibrationScore
-        };
-    }
-
-    private calculateCalibrationScore(records: HistoricalPredictionRecord[]): number {
-        // Group predictions by confidence ranges
-        const confidenceBuckets: Record<string, HistoricalPredictionRecord[]> = {};
-        
-        records.forEach(record => {
-            const bucket = Math.floor(record.confidence / 10) * 10;
-            const bucketKey = `${bucket}-${bucket + 10}`;
-            if (!confidenceBuckets[bucketKey]) {
-                confidenceBuckets[bucketKey] = [];
-            }
-            confidenceBuckets[bucketKey].push(record);
-        });
-
-        // Calculate calibration error
-        let totalError = 0;
-        let totalRecords = 0;
-
-        Object.entries(confidenceBuckets).forEach(([bucket, bucketRecords]) => {
-            const avgConfidence = bucketRecords.reduce((sum, r) => sum + r.confidence, 0) / bucketRecords.length;
-            const actualAccuracy = bucketRecords.filter(r => r.isCorrect).length / bucketRecords.length;
-            const error = Math.abs((avgConfidence / 100) - actualAccuracy);
-            
-            totalError += error * bucketRecords.length;
-            totalRecords += bucketRecords.length;
-        });
-
-        const calibrationError = totalRecords > 0 ? totalError / totalRecords : 0;
-        return Math.max(0, 1 - calibrationError); // Convert to score (higher is better)
-    }
-
-    private async calculateTypePerformanceTrends(
-        records: HistoricalPredictionRecord[],
-        timeframe: string
-    ): Promise<TypePerformanceTrend[]> {
-        const types = Array.from(new Set(records.map(r => r.type)));
-        const trends: TypePerformanceTrend[] = [];
-
-        for (const type of types) {
-            const typeRecords = records.filter(r => r.type === type);
-            const groupedRecords = this.groupRecordsByTimeframe(typeRecords, timeframe);
-            
-            const periods: TrendPoint[] = Object.entries(groupedRecords).map(([period, periodRecords]) => {
-                const correct = periodRecords.filter(r => r.isCorrect).length;
-                const total = periodRecords.length;
-                const accuracy = total > 0 ? correct / total : 0;
-
-                return {
-                    period,
-                    value: accuracy,
-                    count: total
-                };
-            }).sort((a, b) => a.period.localeCompare(b.period));
-
-            // Calculate trend
-            const values = periods.map(p => p.value);
-            const trendStrength = this.calculateTrendStrength(values);
-            const overallTrend = this.determineTrendDirection(values);
-            
-            const bestPeriod = periods.reduce((best, current) => 
-                current.value > best.value ? current : best, periods[0]);
-            const worstPeriod = periods.reduce((worst, current) => 
-                current.value < worst.value ? current : worst, periods[0]);
-
-            trends.push({
-                type,
-                periods,
-                overallTrend,
-                trendStrength,
-                bestPeriod: bestPeriod?.period || '',
-                worstPeriod: worstPeriod?.period || ''
-            });
-        }
-
-        return trends;
-    }
-
-    private async analyzeSeasonalPatterns(
-        records: HistoricalPredictionRecord[]
-    ): Promise<SeasonalPattern[]> {
-        const patterns: SeasonalPattern[] = [];
-        const seasonMap = {
-            'early_season': (week: number) => week >= 1 && week <= 6,
-            'mid_season': (week: number) => week >= 7 && week <= 12,
-            'late_season': (week: number) => week >= 13 && week <= 17,
-            'playoffs': (week: number) => week >= 18
-        };
-
-        for (const [pattern, weekFilter] of Object.entries(seasonMap)) {
-            const seasonRecords = records.filter(r => weekFilter(r.week));
-            
-            if (seasonRecords.length === 0) continue;
-
-            const stats = this.calculateAccuracyStats(seasonRecords);
-            const typeStats = this.calculateAccuracyByType(seasonRecords);
-            const strongestTypes = Object.entries(typeStats)
-                .sort(([,a], [,b]) => b.accuracy - a.accuracy)
-                .slice(0, 3)
-                .map(([type]) => type as PredictionType);
-
-            patterns.push({
-                pattern: pattern as any,
-                averageAccuracy: stats.accuracy,
-                predictionVolume: seasonRecords.length,
-                confidenceLevel: stats.averageConfidence,
-                strongestTypes,
-                insights: this.generateSeasonalInsights(pattern, stats, strongestTypes)
-            });
-        }
-
-        return patterns;
-    }
-
-    private async calculateImprovementMetrics(
-        records: HistoricalPredictionRecord[]
-    ): Promise<ImprovementMetrics> {
-        const sortedRecords = [...records].sort((a, b) => 
-            new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
-        );
-
-        const earlyRecords = sortedRecords.slice(0, Math.floor(sortedRecords.length / 3));
-        const recentRecords = sortedRecords.slice(-Math.floor(sortedRecords.length / 3));
-
-        const earlyStats = this.calculateAccuracyStats(earlyRecords);
-        const recentStats = this.calculateAccuracyStats(recentRecords);
-
-        const accuracyImprovement = recentStats.accuracy - earlyStats.accuracy;
-        const confidenceCalibration = recentStats.calibrationScore - earlyStats.calibrationScore;
-        
-        const streakLength = this.calculateCurrentStreak(sortedRecords);
-        const consistencyScore = this.calculateConsistencyScore(records);
-        const adaptabilityIndex = this.calculateAdaptabilityIndex(records);
-        const learningVelocity = this.calculateLearningVelocity(sortedRecords);
-
-        return {
-            accuracyImprovement,
-            confidenceCalibration,
-            streakLength,
-            consistencyScore,
-            adaptabilityIndex,
-            learningVelocity
-        };
-    }
-
-    private async calculateVolumeMetrics(
-        records: HistoricalPredictionRecord[],
-        timeframe: string
-    ): Promise<VolumeMetrics> {
-        const groupedRecords = this.groupRecordsByTimeframe(records, timeframe);
-        const volumeByPeriod = Object.entries(groupedRecords).map(([period, periodRecords]) => ({
-            period,
-            count: periodRecords.length
-        }));
-
-        const totalPredictions = records.length;
-        const periods = volumeByPeriod.length;
-        const dailyAverage = totalPredictions / (periods || 1);
-        const weeklyAverage = dailyAverage * 7;
-
-        const sortedByVolume = volumeByPeriod.sort((a, b) => b.count - a.count);
-        const peakPeriods = sortedByVolume.slice(0, 3).map(p => p.period);
-        const lowPeriods = sortedByVolume.slice(-3).map(p => p.period);
-
-        const volumes = volumeByPeriod.map(p => p.count);
-        const volumeTrendDirection = this.determineTrendDirection(volumes);
-        let volumeTrend: 'increasing' | 'decreasing' | 'stable';
-        if (volumeTrendDirection === 'improving') {
-            volumeTrend = 'increasing';
-        } else if (volumeTrendDirection === 'declining') {
-            volumeTrend = 'decreasing';
-        } else {
-            volumeTrend = 'stable';
-        }
-
-        return {
-            totalPredictions,
-            dailyAverage,
-            weeklyAverage,
-            peakPeriods,
-            lowPeriods,
-            volumeTrend
-        };
-    }
-
-    private calculateAccuracyByType(
-        records: HistoricalPredictionRecord[]
-    ): Record<PredictionType, AccuracyStats> {
-        const result: Record<string, AccuracyStats> = {};
-        const types = Array.from(new Set(records.map(r => r.type)));
-
-        for (const type of types) {
-            const typeRecords = records.filter(r => r.type === type);
-            result[type] = this.calculateAccuracyStats(typeRecords);
-        }
-
-        return result as Record<PredictionType, AccuracyStats>;
-    }
-
-    private calculateAccuracyByConfidence(
-        records: HistoricalPredictionRecord[]
-    ): Record<string, AccuracyStats> {
-        const result: Record<string, AccuracyStats> = {};
-        const confidenceRanges = ['0-60', '60-70', '70-80', '80-90', '90-100'];
-
-        for (const range of confidenceRanges) {
-            const [min, max] = range.split('-').map(Number);
-            const rangeRecords = records.filter(r => r.confidence >= min && r.confidence < max);
-            result[range] = this.calculateAccuracyStats(rangeRecords);
-        }
-
-        return result;
-    }
-
-    private calculateAccuracyByTimeframe(
-        records: HistoricalPredictionRecord[]
-    ): Record<string, AccuracyStats> {
-        const result: Record<string, AccuracyStats> = {};
-        const groupedRecords = this.groupRecordsByTimeframe(records, 'monthly');
-
-        for (const [period, periodRecords] of Object.entries(groupedRecords)) {
-            result[period] = this.calculateAccuracyStats(periodRecords);
-        }
-
-        return result;
-    }
-
-    private calculateAccuracyByWeek(
-        records: HistoricalPredictionRecord[]
-    ): Record<number, AccuracyStats> {
-        const result: Record<number, AccuracyStats> = {};
-        const weeks = Array.from(new Set(records.map(r => r.week)));
-
-        for (const week of weeks) {
-            const weekRecords = records.filter(r => r.week === week);
-            result[week] = this.calculateAccuracyStats(weekRecords);
-        }
-
-        return result;
-    }
-
-    private async calculateContextualAccuracy(
-        records: HistoricalPredictionRecord[]
-    ): Promise<ContextualAccuracy[]> {
-        const contextualFactors: ContextualAccuracy[] = [];
-
-        // Weather impact
-        const weatherRecords = records.filter(r => r.metadata.gameWeather);
-        if (weatherRecords.length > 0) {
-            const goodWeatherRecords = weatherRecords.filter(r => 
-                !r.metadata.gameWeather?.toLowerCase().includes('rain') &&
-                !r.metadata.gameWeather?.toLowerCase().includes('snow')
-            );
-            const badWeatherRecords = weatherRecords.filter(r => 
-                r.metadata.gameWeather?.toLowerCase().includes('rain') ||
-                r.metadata.gameWeather?.toLowerCase().includes('snow')
-            );
-
-            if (goodWeatherRecords.length > 5) {
-                const goodWeatherStats = this.calculateAccuracyStats(goodWeatherRecords);
-                contextualFactors.push({
-                    context: 'Weather',
-                    factor: 'Good Weather',
-                    accuracy: goodWeatherStats.accuracy,
-                    sampleSize: goodWeatherRecords.length,
-                    significance: this.calculateSignificance(goodWeatherRecords.length)
-                });
-            }
-
-            if (badWeatherRecords.length > 5) {
-                const badWeatherStats = this.calculateAccuracyStats(badWeatherRecords);
-                contextualFactors.push({
-                    context: 'Weather',
-                    factor: 'Bad Weather',
-                    accuracy: badWeatherStats.accuracy,
-                    sampleSize: badWeatherRecords.length,
-                    significance: this.calculateSignificance(badWeatherRecords.length)
-                });
-            }
-        }
-
-        // Line movement impact
-        const lineMovementRecords = records.filter(r => r.metadata.lineMovement !== undefined);
-        if (lineMovementRecords.length > 10) {
-            const favorableMovement = lineMovementRecords.filter(r => r.metadata.lineMovement !== undefined && r.metadata.lineMovement > 0);
-            const unfavorableMovement = lineMovementRecords.filter(r => r.metadata.lineMovement !== undefined && r.metadata.lineMovement < 0);
-
-            if (favorableMovement.length > 5) {
-                const favorableStats = this.calculateAccuracyStats(favorableMovement);
-                contextualFactors.push({
-                    context: 'Line Movement',
-                    factor: 'Favorable',
-                    accuracy: favorableStats.accuracy,
-                    sampleSize: favorableMovement.length,
-                    significance: this.calculateSignificance(favorableMovement.length)
-                });
-            }
-
-            if (unfavorableMovement.length > 5) {
-                const unfavorableStats = this.calculateAccuracyStats(unfavorableMovement);
-                contextualFactors.push({
-                    context: 'Line Movement',
-                    factor: 'Unfavorable',
-                    accuracy: unfavorableStats.accuracy,
-                    sampleSize: unfavorableMovement.length,
-                    significance: this.calculateSignificance(unfavorableMovement.length)
-                });
-            }
-        }
-
-        return contextualFactors;
-    }
-
-    private filterRecordsByPeriod(
-        records: HistoricalPredictionRecord[],
-        period: string
-    ): HistoricalPredictionRecord[] {
-        const [year, month] = period.split('-').map(Number);
-        return records.filter(record => {
-            const recordDate = new Date(record.recordedAt);
-            return recordDate.getFullYear() === year && recordDate.getMonth() + 1 === month;
-        });
-    }
-
-    private calculateTypeChanges(
-        currentRecords: HistoricalPredictionRecord[],
-        previousRecords: HistoricalPredictionRecord[]
-    ): Record<PredictionType, number> {
-        const currentStats = this.calculateAccuracyByType(currentRecords);
-        const previousStats = this.calculateAccuracyByType(previousRecords);
-        const changes: Record<string, number> = {};
-
-        const allTypes = new Set([
-            ...Object.keys(currentStats),
-            ...Object.keys(previousStats)
-        ]);
-
-        for (const type of allTypes) {
-            const currentAcc = (currentStats as any)[type]?.accuracy || 0;
-            const previousAcc = (previousStats as any)[type]?.accuracy || 0;
-            changes[type] = currentAcc - previousAcc;
-        }
-
-        return changes as Record<PredictionType, number>;
-    }
-
-    private identifySignificantImprovements(
-        currentStats: AccuracyStats,
-        previousStats: AccuracyStats
-    ): string[] {
-        const improvements: string[] = [];
-        const accuracyImprovement = currentStats.accuracy - previousStats.accuracy;
-        const confidenceImprovement = currentStats.averageConfidence - previousStats.averageConfidence;
-        const calibrationImprovement = currentStats.calibrationScore - previousStats.calibrationScore;
-
-        if (accuracyImprovement > 0.05) {
-            improvements.push(`Accuracy improved by ${(accuracyImprovement * 100).toFixed(1)}%`);
-        }
-        if (calibrationImprovement > 0.1) {
-            improvements.push(`Confidence calibration improved significantly`);
-        }
-        if (confidenceImprovement > 5 && accuracyImprovement > 0) {
-            improvements.push(`Increased confidence with maintained accuracy`);
-        }
-
-        return improvements;
-    }
-
-    private identifyAreasOfConcern(
-        currentStats: AccuracyStats,
-        previousStats: AccuracyStats
-    ): string[] {
-        const concerns: string[] = [];
-        const accuracyChange = currentStats.accuracy - previousStats.accuracy;
-        const calibrationChange = currentStats.calibrationScore - previousStats.calibrationScore;
-
-        if (accuracyChange < -0.05) {
-            concerns.push(`Accuracy declined by ${Math.abs(accuracyChange * 100).toFixed(1)}%`);
-        }
-        if (calibrationChange < -0.1) {
-            concerns.push(`Confidence calibration worsened`);
-        }
-        if (currentStats.accuracy < 0.5) {
-            concerns.push(`Overall accuracy below 50%`);
-        }
-
-        return concerns;
-    }
-
-    private async analyzeStreaks(
-        records: HistoricalPredictionRecord[]
-    ): Promise<StreakAnalysis> {
-        const sortedRecords = [...records].sort((a, b) => 
-            new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
-        );
-
-        const currentStreak = this.calculateCurrentStreak(sortedRecords);
-        const longestStreak = this.calculateLongestStreak(sortedRecords);
-        const streakType = this.determineStreakType(sortedRecords);
-        const streakProbability = this.calculateStreakProbability(sortedRecords);
-
-        return {
-            currentStreak,
-            longestStreak,
-            streakType,
-            streakProbability,
-            breakPatterns: this.identifyBreakPatterns(sortedRecords),
-            maintainanceStrategies: this.generateMaintainanceStrategies(streakType, currentStreak)
-        };
-    }
-
-    private async analyzeConfidence(
-        records: HistoricalPredictionRecord[]
-    ): Promise<ConfidenceAnalysis> {
-        const calibrationCurve = this.calculateCalibrationCurve(records);
-        const overconfidenceIndex = this.calculateOverconfidenceIndex(records);
-        const underconfidenceIndex = this.calculateUnderconfidenceIndex(records);
-        const optimalConfidenceRange = this.findOptimalConfidenceRange(records);
-        const confidenceDistribution = this.calculateConfidenceDistribution(records);
-        const reliabilityScore = this.calculateReliabilityScore(records);
-
-        return {
-            overconfidenceIndex,
-            underconfidenceIndex,
-            calibrationCurve,
-            optimalConfidenceRange,
-            confidenceDistribution,
-            reliabilityScore
-        };
-    }
-
-    private async analyzeTypeSpecialization(
-        records: HistoricalPredictionRecord[]
-    ): Promise<TypeSpecializationAnalysis> {
-        const typeStats = this.calculateAccuracyByType(records);
-        const sortedTypes = Object.entries(typeStats).sort(([,a], [,b]) => b.accuracy - a.accuracy);
-        
-        const strongestTypes = sortedTypes.slice(0, 3).map(([type]) => type as PredictionType);
-        const weakestTypes = sortedTypes.slice(-3).map(([type]) => type as PredictionType);
-        
-        const specializationIndex = this.calculateSpecializationIndex(typeStats);
-        const consistencyAcrossTypes = this.calculateTypeConsistency(typeStats);
-        const typeProgressions = this.calculateTypeProgressions(records);
-        const crossTypeCorrelations = this.calculateCrossTypeCorrelations(records);
-
-        return {
-            strongestTypes,
-            weakestTypes,
-            specializationIndex,
-            consistencyAcrossTypes,
-            typeProgressions,
-            crossTypeCorrelations
-        };
-    }
-
-    private async analyzeContextualFactors(
-        records: HistoricalPredictionRecord[]
-    ): Promise<ContextualFactorAnalysis> {
-        return {
-            weatherImpact: this.analyzeWeatherImpact(records),
-            injuryImpact: this.analyzeInjuryImpact(records),
-            lineMovementImpact: this.analyzeLineMovementImpact(records),
-            publicBettingImpact: this.analyzePublicBettingImpact(records),
-            sentimentImpact: this.analyzeSentimentImpact(records),
-            combinedFactorEffects: this.analyzeCombinedFactorEffects(records)
-        };
-    }
-
-    private async analyzePredictivePatterns(
-        records: HistoricalPredictionRecord[]
-    ): Promise<PredictivePatterns> {
-        return {
-            timeBasedPatterns: this.identifyTimeBasedPatterns(records),
-            sequencePatterns: this.identifySequencePatterns(records),
-            contextPatterns: this.identifyContextPatterns(records),
-            emergingPatterns: this.identifyEmergingPatterns(records)
-        };
-    }
-
-    private async generateAdvancedRecommendations(
-        records: HistoricalPredictionRecord[]
-    ): Promise<AdvancedRecommendation[]> {
-        const recommendations: AdvancedRecommendation[] = [];
-        const stats = this.calculateAccuracyStats(records);
-        const typeStats = this.calculateAccuracyByType(records);
-
-        // Accuracy-based recommendations
-        if (stats.accuracy < 0.6) {
-            recommendations.push({
-                type: 'IMPROVEMENT',
-                priority: 'high',
-                title: 'Focus on Prediction Accuracy',
-                description: 'Current accuracy is below optimal threshold. Consider reviewing prediction methodology.',
-                actionItems: [
-                    'Review recent incorrect predictions for patterns',
-                    'Consider reducing confidence levels',
-                    'Focus on strongest prediction types'
-                ],
-                expectedImpact: 0.15,
-                timeframe: '2-4 weeks',
-                metrics: ['accuracy', 'calibration'],
-                supportingData: { currentAccuracy: stats.accuracy }
-            });
-        }
-
-        // Type specialization recommendations
-        const sortedTypes = Object.entries(typeStats).sort(([,a], [,b]) => b.accuracy - a.accuracy);
-        const strongestType = sortedTypes[0];
-        const weakestType = sortedTypes[sortedTypes.length - 1];
-
-        if (strongestType && strongestType[1].accuracy > 0.7) {
-            recommendations.push({
-                type: 'OPPORTUNITY',
-                priority: 'medium',
-                title: `Leverage Strength in ${strongestType[0]}`,
-                description: `You show exceptional performance in ${strongestType[0]} predictions.`,
-                actionItems: [
-                    `Increase focus on ${strongestType[0]} predictions`,
-                    'Analyze what makes these predictions successful',
-                    'Apply similar methodology to other types'
-                ],
-                expectedImpact: 0.08,
-                timeframe: '1-2 weeks',
-                metrics: ['type_accuracy', 'overall_confidence'],
-                supportingData: { 
-                    type: strongestType[0],
-                    accuracy: strongestType[1].accuracy
-                }
-            });
-        }
-
-        if (weakestType && weakestType[1].accuracy < 0.5 && weakestType[1].totalPredictions > 10) {
-            recommendations.push({
-                type: 'WARNING',
-                priority: 'high',
-                title: `Address Weakness in ${weakestType[0]}`,
-                description: `Performance in ${weakestType[0]} predictions needs attention.`,
-                actionItems: [
-                    `Reduce volume of ${weakestType[0]} predictions temporarily`,
-                    'Study successful patterns in this category',
-                    'Consider lower confidence levels for this type'
-                ],
-                expectedImpact: 0.12,
-                timeframe: '2-3 weeks',
-                metrics: ['type_accuracy', 'overall_accuracy'],
-                supportingData: { 
-                    type: weakestType[0],
-                    accuracy: weakestType[1].accuracy
-                }
-            });
-        }
-
-        return recommendations;
-    }
-
-    // Additional helper methods for calculations
-    private calculateTrendStrength(values: number[]): number {
-        if (values.length < 2) return 0;
-        
-        const firstHalf = values.slice(0, Math.floor(values.length / 2));
-        const secondHalf = values.slice(Math.floor(values.length / 2));
-        
-        const firstAvg = firstHalf.reduce((sum, val) => sum + val, 0) / firstHalf.length;
-        const secondAvg = secondHalf.reduce((sum, val) => sum + val, 0) / secondHalf.length;
-        
-        return Math.abs(secondAvg - firstAvg);
-    }
-
-    private determineTrendDirection(values: number[]): 'improving' | 'declining' | 'stable' {
-        if (values.length < 2) return 'stable';
-        
-        const firstHalf = values.slice(0, Math.floor(values.length / 2));
-        const secondHalf = values.slice(Math.floor(values.length / 2));
-        
-        const firstAvg = firstHalf.reduce((sum, val) => sum + val, 0) / firstHalf.length;
-        const secondAvg = secondHalf.reduce((sum, val) => sum + val, 0) / secondHalf.length;
-        
-        const change = secondAvg - firstAvg;
-        
-        if (Math.abs(change) < 0.05) return 'stable';
-        return change > 0 ? 'improving' : 'declining';
-    }
-
-    private generateSeasonalInsights(
-        pattern: string,
-        stats: AccuracyStats,
-        strongestTypes: PredictionType[]
-    ): string[] {
-        const insights: string[] = [];
-        
-        if (stats.accuracy > 0.7) {
-            insights.push(`Strong performance during ${pattern.replace('_', ' ')} period`);
-        }
-        
-        if (strongestTypes.length > 0) {
-            insights.push(`Best prediction types: ${strongestTypes.join(', ')}`);
-        }
-        
-        if (stats.calibrationScore > 0.8) {
-            insights.push(`Well-calibrated confidence levels during this period`);
-        }
-        
-        return insights;
-    }
-
-    private calculateCurrentStreak(records: HistoricalPredictionRecord[]): number {
-        if (records.length === 0) return 0;
-        
-        let streak = 0;
-        for (let i = records.length - 1; i >= 0; i--) {
-            if (records[i].isCorrect) {
-                streak++;
-            } else {
-                break;
-            }
-        }
-        return streak;
-    }
-
-    private calculateLongestStreak(records: HistoricalPredictionRecord[]): number {
-        let maxStreak = 0;
-        let currentStreak = 0;
-        
-        for (const record of records) {
-            if (record.isCorrect) {
-                currentStreak++;
-                maxStreak = Math.max(maxStreak, currentStreak);
-            } else {
-                currentStreak = 0;
-            }
-        }
-        
-        return maxStreak;
-    }
-
-    private determineStreakType(records: HistoricalPredictionRecord[]): 'correct' | 'incorrect' | 'mixed' {
-        if (records.length === 0) return 'mixed';
-        
-        const recentRecords = records.slice(-10);
-        const correctCount = recentRecords.filter(r => r.isCorrect).length;
-        
-        if (correctCount >= 8) return 'correct';
-        if (correctCount <= 2) return 'incorrect';
-        return 'mixed';
-    }
-
-    private calculateStreakProbability(records: HistoricalPredictionRecord[]): number {
-        const overallAccuracy = this.calculateAccuracyStats(records).accuracy;
-        const recentAccuracy = this.calculateAccuracyStats(records.slice(-20)).accuracy;
-        
-        // Weighted probability based on overall and recent performance
-        return (overallAccuracy * 0.3) + (recentAccuracy * 0.7);
-    }
-
-    private identifyBreakPatterns(records: HistoricalPredictionRecord[]): string[] {
-        const patterns: string[] = [];
-        
-        // Analyze when streaks tend to break
-        const streakBreaks = this.findStreakBreaks(records);
-        const contextAnalysis = this.analyzeBreakContexts(streakBreaks);
-        
-        if (contextAnalysis.commonFactors.length > 0) {
-            patterns.push(`Streaks often break during: ${contextAnalysis.commonFactors.join(', ')}`);
-        }
-        
-        return patterns;
-    }
-
-    private generateMaintainanceStrategies(streakType: string, currentStreak: number): string[] {
-        const strategies: string[] = [];
-        
-        if (streakType === 'correct' && currentStreak > 5) {
-            strategies.push('Maintain consistent methodology');
-            strategies.push('Avoid overconfidence');
-            strategies.push('Continue systematic approach');
-        } else if (streakType === 'incorrect') {
-            strategies.push('Review recent prediction methodology');
-            strategies.push('Consider reducing prediction volume');
-            strategies.push('Focus on strongest categories');
-        }
-        
-        return strategies;
-    }
-
-    // Additional calculation helper methods (simplified implementations)
-    private calculateConsistencyScore(records: HistoricalPredictionRecord[]): number {
-        const weeklyAccuracy = this.calculateAccuracyByWeek(records);
-        const accuracyValues = Object.values(weeklyAccuracy).map(stats => stats.accuracy);
-        
-        if (accuracyValues.length === 0) return 0;
-        
-        const mean = accuracyValues.reduce((sum, val) => sum + val, 0) / accuracyValues.length;
-        const variance = accuracyValues.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / accuracyValues.length;
-        
-        return Math.max(0, 1 - Math.sqrt(variance));
-    }
-
-    private calculateAdaptabilityIndex(records: HistoricalPredictionRecord[]): number {
-        // Simplified: measure how well performance adapts to different contexts
-        const contextualAccuracy = records.filter(r => r.metadata.contextualFactors?.length).length;
-        return Math.min(1, contextualAccuracy / records.length);
-    }
-
-    private calculateLearningVelocity(records: HistoricalPredictionRecord[]): number {
-        if (records.length < 10) return 0;
-        
-        const segments = Math.floor(records.length / 5);
-        const segmentAccuracies: number[] = [];
-        
-        for (let i = 0; i < 5; i++) {
-            const start = i * segments;
-            const end = (i + 1) * segments;
-            const segmentRecords = records.slice(start, end);
-            segmentAccuracies.push(this.calculateAccuracyStats(segmentRecords).accuracy);
-        }
-        
-        // Calculate improvement rate
-        let totalImprovement = 0;
-        for (let i = 1; i < segmentAccuracies.length; i++) {
-            totalImprovement += segmentAccuracies[i] - segmentAccuracies[i - 1];
-        }
-        
-        return totalImprovement / (segmentAccuracies.length - 1);
-    }
-
-    private calculateSignificance(sampleSize: number): number {
-        // Simple significance calculation based on sample size
-        if (sampleSize < 5) return 0.1;
-        if (sampleSize < 20) return 0.5;
-        if (sampleSize < 50) return 0.8;
-        return 0.95;
-    }
-
-    // Complex analysis methods
-    private calculateCalibrationCurve(records: HistoricalPredictionRecord[]): CalibrationPoint[] {
-        // Calculate calibration curve points (confidence vs. accuracy)
-        const bins: { [bin: string]: { total: number; correct: number } } = {};
-        for (const record of records) {
-            const binStart = Math.floor((record.confidence ?? 0) / 10) * 10;
-            const binEnd = binStart + 9;
-            const binKey = `${binStart}-${binEnd}`;
-            if (!bins[binKey]) bins[binKey] = { total: 0, correct: 0 };
-            bins[binKey].total++;
-            if (record.isCorrect) bins[binKey].correct++;
-        }
-        return Object.entries(bins).map(([binKey, stats]) => {
-            const [start, end] = binKey.split('-').map(Number);
-            return {
-                confidenceRange: [start, end],
-                expectedAccuracy: (start + end) / 200, // expected: midpoint as percent
-                actualAccuracy: stats.total ? stats.correct / stats.total : 0,
-                sampleSize: stats.total
-            };
-        });
-    }
-
-    private calculateOverconfidenceIndex(records: HistoricalPredictionRecord[]): number {
-        // Overconfidence: high confidence, low accuracy
-        let overconfident = 0;
-        let total = 0;
-        for (const record of records) {
-            if ((record.confidence ?? 0) >= 80) {
-                total++;
-                if (!record.isCorrect) overconfident++;
-            }
-        }
-        return total ? overconfident / total : 0;
-    }
-
-    private calculateUnderconfidenceIndex(records: HistoricalPredictionRecord[]): number {
-        // Underconfidence: low confidence, high accuracy
-        let underconfident = 0;
-        let total = 0;
-        for (const record of records) {
-            if ((record.confidence ?? 0) <= 40) {
-                total++;
-                if (record.isCorrect) underconfident++;
-            }
-        }
-        return total ? underconfident / total : 0;
-    }
-
-    private findOptimalConfidenceRange(records: HistoricalPredictionRecord[]): [number, number] {
-        return [70, 85];
-    }
-
-    private calculateConfidenceDistribution(records: HistoricalPredictionRecord[]): Record<string, number> {
-        return {};
-    }
-
-    private calculateReliabilityScore(records: HistoricalPredictionRecord[]): number {
-        return 0.8;
-    }
-
-    private calculateSpecializationIndex(typeStats: Record<string, AccuracyStats>): number {
-        return 0.7;
-    }
-
-    private calculateTypeConsistency(typeStats: Record<string, AccuracyStats>): number {
-        return 0.8;
-    }
-
-    private calculateTypeProgressions(records: HistoricalPredictionRecord[]): Record<PredictionType, number> {
-        return {} as Record<PredictionType, number>;
-    }
-
-    private calculateCrossTypeCorrelations(records: HistoricalPredictionRecord[]): Record<string, number> {
-        return {};
-    }
-
-    // Factor analysis methods (simplified)
-    private analyzeWeatherImpact(records: HistoricalPredictionRecord[]): FactorImpact {
-        return {
-            positiveCorrelation: true,
-            impactStrength: 0.3,
-            significanceLevel: 0.7,
-            optimalConditions: ['Clear skies', 'Mild temperature'],
-            avoidanceConditions: ['Heavy rain', 'Snow']
-        };
-    }
-
-    private analyzeInjuryImpact(records: HistoricalPredictionRecord[]): FactorImpact {
-        return {
-            positiveCorrelation: false,
-            impactStrength: 0.4,
-            significanceLevel: 0.8,
-            optimalConditions: ['No key injuries'],
-            avoidanceConditions: ['Star player injured']
-        };
-    }
-
-    private analyzeLineMovementImpact(records: HistoricalPredictionRecord[]): FactorImpact {
-        return {
-            positiveCorrelation: true,
-            impactStrength: 0.25,
-            significanceLevel: 0.6,
-            optimalConditions: ['Favorable line movement'],
-            avoidanceConditions: ['Sharp reverse line movement']
-        };
-    }
-
-    private analyzePublicBettingImpact(records: HistoricalPredictionRecord[]): FactorImpact {
-        return {
-            positiveCorrelation: false,
-            impactStrength: 0.2,
-            significanceLevel: 0.5,
-            optimalConditions: ['Contrarian position'],
-            avoidanceConditions: ['Heavy public favorite']
-        };
-    }
-
-    private analyzeSentimentImpact(records: HistoricalPredictionRecord[]): FactorImpact {
-        return {
-            positiveCorrelation: true,
-            impactStrength: 0.15,
-            significanceLevel: 0.4,
-            optimalConditions: ['Positive market sentiment'],
-            avoidanceConditions: ['Extreme negative sentiment']
-        };
-    }
-
-    private analyzeCombinedFactorEffects(records: HistoricalPredictionRecord[]): CombinedFactorEffect[] {
-        return [];
-    }
-
-    // Pattern identification methods (simplified)
-    private identifyTimeBasedPatterns(records: HistoricalPredictionRecord[]): TimePattern[] {
-        return [];
-    }
-
-    private identifySequencePatterns(records: HistoricalPredictionRecord[]): SequencePattern[] {
-        return [];
-    }
-
-    private identifyContextPatterns(records: HistoricalPredictionRecord[]): ContextPattern[] {
-        return [];
-    }
-
-    private identifyEmergingPatterns(records: HistoricalPredictionRecord[]): EmergingPattern[] {
-        return [];
-    }
-
-    private findStreakBreaks(records: HistoricalPredictionRecord[]): any[] {
-        return [];
-    }
-
-    private analyzeBreakContexts(streakBreaks: any[]): { commonFactors: string[] } {
-        return { commonFactors: [] };
-    }
-
-    private convertToCSV(records: HistoricalPredictionRecord[]): string {
-        if (records.length === 0) return '';
-        
-        const headers = Object.keys(records[0]).join(',');
-        const rows = records.map(record => {
-            return Object.values(record).map(value => {
-                if (typeof value === 'object' && value !== null) {
-                    return JSON.stringify(value).replace(/"/g, '""');
-                }
-                return String(value).replace(/"/g, '""');
-            }).join(',');
-        });
-        
-        return [headers, ...rows].join('\n');
-    }
-
-    private parseCSV(csvData: string): HistoricalPredictionRecord[] {
-        // Simplified CSV parser - in production, use a proper CSV library
-        const lines = csvData.split('\n');
-        const headers = lines[0].split(',');
-        const records: HistoricalPredictionRecord[] = [];
-        
-        for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',');
-            const record: any = {};
-            
-            headers.forEach((header, index) => {
-                record[header] = values[index];
-            });
-            
-            records.push(record as HistoricalPredictionRecord);
-        }
-        
-        return records;
-    }
-
-    private validateHistoricalRecord(record: any): { isValid: boolean; errors: string[] } {
-        const errors: string[] = [];
-        
-        if (!record.id) errors.push('Missing id');
-        if (!record.predictionId) errors.push('Missing predictionId');
-        if (typeof record.confidence !== 'number') errors.push('Invalid confidence');
-        if (!record.type) errors.push('Missing type');
-        
-        return {
-            isValid: errors.length === 0,
-            errors
-        };
-    }
-
-    private mergeRecords(
-        existing: HistoricalPredictionRecord[],
-        newRecords: HistoricalPredictionRecord[]
-    ): HistoricalPredictionRecord[] {
-        const merged = [...existing];
-        
-        for (const newRecord of newRecords) {
-            const existingIndex = merged.findIndex(r => r.id === newRecord.id);
-            if (existingIndex >= 0) {
-                merged[existingIndex] = newRecord;
-            } else {
-                merged.push(newRecord);
-            }
-        }
-        
-        return merged;
-    }
+      }
+
+      const regression = this.performLinearRegression(values);
+      
+      movingAverages.push({
+        period,
+        values,
+        slope: regression.slope,
+        correlation: regression.rSquared
+      });
+    }
+
+    return movingAverages;
+  }
+
+  private calculateVolatility(data: TimeSeriesPoint[]): number {
+    if (data.length < 2) return 0;
+
+    const values = data.map(d => d.value);
+    const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+    const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+    
+    return Math.sqrt(variance);
+  }
+
+  private calculateMomentum(data: TimeSeriesPoint[]): number {
+    if (data.length < 10) return 0;
+
+    const recent = data.slice(-5);
+    const earlier = data.slice(-10, -5);
+    
+    const recentAvg = recent.reduce((sum, d) => sum + d.value, 0) / recent.length;
+    const earlierAvg = earlier.reduce((sum, d) => sum + d.value, 0) / earlier.length;
+    
+    return recentAvg - earlierAvg;
+  }
+
+  private identifyCyclicalPatterns(_data: TimeSeriesPoint[]): CyclicalPattern[] {
+    // Simplified implementation
+    return [
+      {
+        period: 7,
+        amplitude: 0.1,
+        phase: 0,
+        strength: 0.6,
+        description: 'Weekly performance cycle'
+      }
+    ];
+  }
+
+  private identifyChangePoints(_data: TimeSeriesPoint[]): ChangePoint[] {
+    // Simplified implementation
+    return [
+      {
+        date: new Date(),
+        type: 'improvement',
+        magnitude: 0.15,
+        confidence: 0.8,
+        description: 'Significant improvement in accuracy',
+        context: ['Strategy change', 'New data source']
+      }
+    ];
+  }
+
+  private groupPredictionsByCategory(predictions: HistoricalPrediction[]): Map<string, HistoricalPrediction[]> {
+    const groups = new Map<string, HistoricalPrediction[]>();
+    
+    predictions.forEach(prediction => {
+      const category = prediction.category;
+      if (!groups.has(category)) {
+        groups.set(category, []);
+      }
+      groups.get(category)!.push(prediction);
+    });
+
+    return groups;
+  }
+
+  private calculateAverageConfidence(predictions: HistoricalPrediction[]): number {
+    if (predictions.length === 0) return 0;
+    return predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length;
+  }
+
+  private calculateCategoryTrend(predictions: HistoricalPrediction[]): 'improving' | 'declining' | 'stable' {
+    if (predictions.length < 5) return 'stable';
+
+    const timeSeriesData = this.createTimeSeriesData(predictions);
+    const regression = this.performLinearRegression(timeSeriesData);
+    
+    return this.determineTrendDirection(regression.slope) as 'improving' | 'declining' | 'stable';
+  }
+
+  private identifyStrengthAreas(_predictions: HistoricalPrediction[]): string[] {
+    return ['High accuracy on favorites', 'Consistent weekend performance'];
+  }
+
+  private identifyWeaknessAreas(_predictions: HistoricalPrediction[]): string[] {
+    return ['Underdog predictions', 'Late-season games'];
+  }
+
+  private generateCategoryRecommendations(_category: string, _predictions: HistoricalPrediction[]): string[] {
+    return ['Research more team statistics', 'Consider injury reports'];
+  }
+
+  private calculateCategoryRanks(categoryPerformance: CategoryPerformance[]): void {
+    categoryPerformance.sort((a, b) => b.accuracy - a.accuracy);
+    categoryPerformance.forEach((category, index) => {
+      category.rank = index + 1;
+      category.percentile = ((categoryPerformance.length - index) / categoryPerformance.length) * 100;
+    });
+  }
+
+  private groupPredictionsBySeason(predictions: HistoricalPrediction[]): Map<string, HistoricalPrediction[]> {
+    const groups = new Map<string, HistoricalPrediction[]>();
+    
+    predictions.forEach(prediction => {
+      const month = prediction.timestamp.getMonth();
+      let season: string;
+      
+      if (month >= 2 && month <= 4) season = 'spring';
+      else if (month >= 5 && month <= 7) season = 'summer';
+      else if (month >= 8 && month <= 10) season = 'fall';
+      else season = 'winter';
+
+      if (!groups.has(season)) {
+        groups.set(season, []);
+      }
+      groups.get(season)!.push(prediction);
+    });
+
+    return groups;
+  }
+
+  private calculateSeasonalPerformance(predictions: HistoricalPrediction[]): PerformanceMetrics {
+    return {
+      accuracy: this.calculateOverallAccuracy(predictions),
+      precision: this.calculatePrecision(predictions),
+      recall: this.calculateRecall(predictions),
+      f1Score: this.calculateF1Score(predictions),
+      consistency: this.calculateConsistency(predictions),
+      improvement: 0.05, // Simplified
+      volatility: this.calculateVolatility(this.createTimeSeriesData(predictions))
+    };
+  }
+
+  private analyzeSeasonalCharacteristics(_predictions: HistoricalPrediction[]): SeasonalCharacteristics {
+    return {
+      peakPerformanceDays: ['Saturday', 'Sunday'],
+      lowPerformanceDays: ['Wednesday', 'Thursday'],
+      averageConfidence: 0.75,
+      predictionVolume: 50,
+      difficultyLevel: 'medium'
+    };
+  }
+
+  private identifySeasonalFactors(_season: string, _predictions: HistoricalPrediction[]): SeasonalFactor[] {
+    return [
+      {
+        factor: 'Weather conditions',
+        impact: 0.3,
+        confidence: 0.8,
+        description: 'Weather significantly impacts game outcomes',
+        evidence: ['Rain games show different patterns', 'Cold weather affects scoring']
+      }
+    ];
+  }
+
+  private generateSeasonalPredictions(_season: string, performance: PerformanceMetrics): SeasonalPrediction[] {
+    return [
+      {
+        nextSeason: 'Next year same season',
+        expectedAccuracy: performance.accuracy * 1.05,
+        confidenceInterval: {
+          lower: performance.accuracy * 0.95,
+          upper: performance.accuracy * 1.15
+        },
+        factors: ['Improved experience', 'Better data'],
+        recommendations: ['Focus on consistency', 'Analyze successful patterns']
+      }
+    ];
+  }
+
+  private getSeasonPeriod(_season: string): TimeRange {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    
+    return {
+      start: new Date(currentYear, 0, 1),
+      end: new Date(currentYear, 11, 31),
+      period: 'seasonal',
+      duration: 365
+    };
+  }
+
+  private async getCompetitorStats(_userId: string): Promise<CompetitorStats[]> {
+    // Simulate competitor data
+    return Array.from({ length: 100 }, (_, i) => ({
+      rank: i + 1,
+      accuracy: 0.9 - (i * 0.005),
+      totalPredictions: 100 + Math.random() * 500,
+      specialty: [['NFL'], ['NBA'], ['MLB']][Math.floor(Math.random() * 3)],
+      anonymous: Math.random() > 0.3
+    }));
+  }
+
+  private calculateUserRank(userAccuracy: number, competitorStats: CompetitorStats[]): number {
+    const betterPerformers = competitorStats.filter(comp => comp.accuracy > userAccuracy).length;
+    return betterPerformers + 1;
+  }
+
+  private calculatePercentile(rank: number, totalUsers: number): number {
+    return ((totalUsers - rank + 1) / totalUsers) * 100;
+  }
+
+  private identifyCompetitiveStrengths(_userId: string, _predictions: HistoricalPrediction[], _competitors: CompetitorStats[]): string[] {
+    return ['Above average consistency', 'Strong in NFL predictions'];
+  }
+
+  private identifyCompetitiveWeaknesses(_userId: string, _predictions: HistoricalPrediction[], _competitors: CompetitorStats[]): string[] {
+    return ['Lower accuracy than top 10%', 'Needs more volume'];
+  }
+
+  private generateBenchmarkAnalysis(userAccuracy: number, userRank: number, _competitors: CompetitorStats[]): BenchmarkAnalysis {
+    return {
+      aboveAverage: userAccuracy > 0.65,
+      gapToLeader: 0.9 - userAccuracy,
+      gapToAverage: 0.65 - userAccuracy,
+      improvementNeeded: Math.max(0, 0.7 - userAccuracy),
+      achievableRank: Math.max(1, userRank - 10),
+      timeline: '6-8 weeks'
+    };
+  }
+
+  private calculateConsistency(predictions: HistoricalPrediction[]): number {
+    if (predictions.length < 2) return 0;
+    
+    const accuracies = predictions.map(p => p.accuracy);
+    const mean = accuracies.reduce((sum, acc) => sum + acc, 0) / accuracies.length;
+    const variance = accuracies.reduce((sum, acc) => sum + Math.pow(acc - mean, 2), 0) / accuracies.length;
+    
+    return Math.max(0, 1 - Math.sqrt(variance));
+  }
+
+  private getAccuracyResources(): Resource[] {
+    return [
+      {
+        type: 'article',
+        title: 'Advanced Sports Analytics',
+        description: 'Learn statistical analysis for better predictions',
+        url: 'https://example.com/analytics',
+        estimatedTime: '2 hours'
+      }
+    ];
+  }
+
+  private getConsistencyResources(): Resource[] {
+    return [
+      {
+        type: 'tool',
+        title: 'Prediction Framework',
+        description: 'Systematic approach to making predictions',
+        estimatedTime: '30 minutes'
+      }
+    ];
+  }
+
+  private getCategoryResources(_category: string): Resource[] {
+    return [
+      {
+        type: 'video',
+        title: 'Category-specific strategies',
+        description: 'Learn advanced techniques for this category',
+        estimatedTime: '45 minutes'
+      }
+    ];
+  }
+
+  private getPriorityScore(priority: string): number {
+    const scores = { high: 1, medium: 2, low: 3 };
+    return scores[priority as keyof typeof scores] || 2;
+  }
+
+  private generateCacheKey(userId: string, timeRange: TimeRange, config: Partial<ReportConfiguration>): string {
+    return `${userId}_${timeRange.start.getTime()}_${timeRange.end.getTime()}_${JSON.stringify(config)}`;
+  }
+
+  private isCacheValid(generatedAt: Date): boolean {
+    const oneHour = 60 * 60 * 1000;
+    return Date.now() - generatedAt.getTime() < oneHour;
+  }
 }
 
-export default new OracleHistoricalAnalyticsService();
+// Export singleton instance
+export const oracleHistoricalAnalyticsService = new OracleHistoricalAnalyticsService();
+export default oracleHistoricalAnalyticsService;

@@ -163,8 +163,8 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
         {selectedTab === 'compare' && (
           <CompareTradesTab
             tradeComparison={tradeComparison}
-            currentRoster={currentRoster}
-            opponentRoster={opponentRoster}
+            _currentRoster={currentRoster}
+            _opponentRoster={opponentRoster}
           />
         )}
 
@@ -258,18 +258,18 @@ const AnalyzeTradesTab: React.FC<{
         <h3>Custom Trade Analyzer</h3>
         <div className="custom-trade-builder">
           <div className="trade-side">
-            <label>Players You're Giving:</label>
+            <label>Players You&apos;re Giving:</label>
             <PlayerSelector
-              availablePlayers={currentRoster.players}
+              _availablePlayers={currentRoster.players}
               selectedPlayers={customGivingPlayers}
               onSelectionChange={onCustomGivingChange}
               placeholder="Select players to trade away"
             />
           </div>
           <div className="trade-side">
-            <label>Players You're Receiving:</label>
+            <label>Players You&apos;re Receiving:</label>
             <PlayerSelector
-              availablePlayers={[]} // Would get from opponent roster
+              _availablePlayers={[]} // Would get from opponent roster
               selectedPlayers={customReceivingPlayers}
               onSelectionChange={onCustomReceivingChange}
               placeholder="Select players to receive"
@@ -318,9 +318,9 @@ const AnalyzeTradesTab: React.FC<{
 // Compare trades tab component
 const CompareTradesTab: React.FC<{
   tradeComparison: any;
-  currentRoster: FantasyRoster;
-  opponentRoster?: FantasyRoster;
-}> = ({ tradeComparison, currentRoster, opponentRoster }) => {
+  _currentRoster: FantasyRoster;
+  _opponentRoster?: FantasyRoster;
+}> = ({ tradeComparison, _currentRoster, _opponentRoster }) => {
   return (
     <div className="compare-trades-tab">
       <h3>Trade Comparison</h3>
@@ -638,11 +638,11 @@ const TradeRecommendationComponent: React.FC<TradeRecommendationProps> = ({
 
 // Player selector component
 const PlayerSelector: React.FC<{
-  availablePlayers: any[];
+  _availablePlayers: any[];
   selectedPlayers: string[];
   onSelectionChange: (players: string[]) => void;
   placeholder: string;
-}> = ({ availablePlayers, selectedPlayers, onSelectionChange, placeholder }) => {
+}> = ({ _availablePlayers, selectedPlayers, onSelectionChange, placeholder }) => {
   return (
     <div className="player-selector">
       <div className="selected-players">

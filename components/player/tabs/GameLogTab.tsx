@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Player, League, MatchupPlayer } from '../../../types';
+import type { Player } from '../../../types';
 import { useLeague } from '../../../hooks/useLeague';
 import { Avatar } from '../../ui/Avatar';
 

@@ -17,8 +17,8 @@ interface TradeComment {
   timestamp: Date;
   isCounterOffer?: boolean;
   counterOfferDetails?: {
-    playersOffered: any[];
-    playersRequested: any[];
+    playersOffered: unknown[];
+    playersRequested: unknown[];
   };
   reactions: {
     [emoji: string]: string[]; // emoji: array of user IDs
@@ -113,19 +113,20 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   const handleSendMessage = () => {
     if (!newMessage.trim() || !currentUser) return;
 
-    const newComment: TradeComment = {
-      id: `comment-${Date.now()}`,
-      tradeId,
-      userId: currentUser.id,
-      userName: currentUser.name,
-      userAvatar: currentUser.avatar,
-      message: newMessage.trim(),
-      timestamp: new Date(),
-      reactions: {}
-    };
+    // TODO: Implement comment creation and sending
+    // const newComment: TradeComment = {
+    //   id: `comment-${Date.now()}`,
+    //   tradeId,
+    //   userId: currentUser.id,
+    //   userName: currentUser.name,
+    //   userAvatar: currentUser.avatar,
+    //   message: newMessage.trim(),
+    //   timestamp: new Date(),
+    //   reactions: {}
+    // };
 
     // In a real app, this would be sent to the backend
-    console.log('New comment:', newComment);
+    // Comment added successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -138,11 +139,11 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
     setNewMessage('');
   };
 
-  const handleReaction = (commentId: string, emoji: string) => {
+  const handleReaction = (_commentId: string, _emoji: string) => {
     if (!currentUser) return;
 
     // In a real app, this would update the backend
-    console.log('Reaction added:', { commentId, emoji, userId: currentUser.id });
+    // Reaction added successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',

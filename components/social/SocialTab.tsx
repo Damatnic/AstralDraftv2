@@ -363,7 +363,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }) => {
                             <div className="text-center py-8">
                                 <div className="text-4xl mb-4">🏆</div>
                                 <p className="text-gray-600 dark:text-gray-400">
-                                    You haven't joined any leagues yet. Create one or browse public leagues below!
+                                    You haven&apos;t joined any leagues yet. Create one or browse public leagues below!
                                 </p>
                             </div>
                         ) : (
@@ -740,8 +740,8 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                                 onAddReaction={onAddReaction}
                                 debatePostContent={debatePostContent}
                                 onUpdateDebatePostContent={onUpdateDebatePostContent}
-                                selectedSide={selectedSide}
-                                onUpdateSelectedSide={onUpdateSelectedSide}
+                                _selectedSide={selectedSide}
+                                _onUpdateSelectedSide={onUpdateSelectedSide}
                                 isExpanded={selectedDebate?.id === debate.id}
                                 getDebateStatusColor={getDebateStatusColor}
                                 getSideColor={getSideColor}
@@ -765,8 +765,8 @@ interface DebateCardProps {
     onAddReaction: (postId: string, reaction: ReactionType) => void;
     debatePostContent: string;
     onUpdateDebatePostContent: (content: string) => void;
-    selectedSide: DebateSide;
-    onUpdateSelectedSide: (side: DebateSide) => void;
+    _selectedSide: DebateSide;
+    _onUpdateSelectedSide: (side: DebateSide) => void;
     isExpanded: boolean;
     getDebateStatusColor: (status: string) => string;
     getSideColor: (side: DebateSide) => string;
@@ -782,8 +782,8 @@ const DebateCard: React.FC<DebateCardProps> = ({
     onAddReaction,
     debatePostContent,
     onUpdateDebatePostContent,
-    selectedSide,
-    onUpdateSelectedSide,
+    _selectedSide,
+    _onUpdateSelectedSide,
     isExpanded,
     getDebateStatusColor,
     getSideColor,

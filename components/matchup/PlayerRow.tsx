@@ -5,7 +5,7 @@ import { motion, useAnimation } from 'framer-motion';
 import type { MatchupPlayer, GamedayEvent } from '../../types';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import { FlameIcon } from '../icons/FlameIcon';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface PlayerRowProps {
     playerData: MatchupPlayer;
@@ -34,7 +34,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent
             <span className="font-bold text-cyan-300">{position}</span>
             <div className="flex items-center gap-2">
                 {isHot && (
-                    <Tooltip text={`${player.name} is in the RedZone!`}>
+                    <Tooltip content={`${player.name} is in the RedZone!`}>
                         <FlameIcon className="h-4 w-4 text-red-500 animate-pulse" />
                     </Tooltip>
                 )}

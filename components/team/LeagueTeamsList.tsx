@@ -6,7 +6,7 @@ import type { League, Team } from '../../types';
 import { Widget } from '../ui/Widget';
 import ProposeTradeModal from './ProposeTradeModal';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface LeagueTeamsListProps {
     league: League;
@@ -14,7 +14,7 @@ interface LeagueTeamsListProps {
     dispatch: React.Dispatch<any>;
 }
 
-const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }) => {
+export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }) => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [selectedOpponent, setSelectedOpponent] = React.useState<Team | null>(null);
 
@@ -46,7 +46,7 @@ const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dis
                                     <p className="text-xs text-gray-400">{team.owner.name}</p>
                                 </div>
                             </div>
-                            <Tooltip text={isTradeDeadlinePassed ? `The trade deadline (Week ${league.settings.tradeDeadline}) has passed.` : `Propose trade to ${team.name}`}>
+                            <Tooltip content={isTradeDeadlinePassed ? `The trade deadline (Week ${league.settings.tradeDeadline}) has passed.` : `Propose trade to ${team.name}`}>
                                 <button 
                                     onClick={() => handleProposeTrade(team)}
                                     disabled={isTradeDeadlinePassed}
@@ -73,5 +73,3 @@ const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dis
         </>
     );
 };
-
-export default LeagueTeamsList;

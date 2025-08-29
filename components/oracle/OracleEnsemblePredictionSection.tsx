@@ -372,7 +372,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
         </div>
         
         <div className="overview-section">
-          <h4>Oracle's Ensemble Architecture</h4>
+          <h4>Oracle&apos;s Ensemble Architecture</h4>
           <div className="architecture-diagram">
             <div className="model-layer">
               <h5>Base Models</h5>
@@ -426,7 +426,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
 
   const renderModels = () => (
     <div className="ensemble-models">
-      <h3>🤖 Base Models in Oracle's Ensemble</h3>
+      <h3>🤖 Base Models in Oracle&apos;s Ensemble</h3>
       <div className="models-grid">
         {ensembleModels.map((model) => (
           <div 
@@ -786,7 +786,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       </div>
       
       <div className="optimization-process">
-        <h4>🔄 Oracle's Optimization Process</h4>
+        <h4>🔄 Oracle&apos;s Optimization Process</h4>
         <div className="process-flow">
           <div className="process-step">
             <div className="step-number">1</div>

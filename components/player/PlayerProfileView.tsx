@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
-import { Player, League, NewsItem } from '../../types';
+import { Player, League } from '../../types';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
@@ -259,7 +259,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
 };
 
 // Overview Section Component
-const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }) => {
+const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league: _league }) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Player Bio & Info */}

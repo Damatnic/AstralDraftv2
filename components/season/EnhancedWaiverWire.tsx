@@ -6,7 +6,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import PlayerSearch from '../PlayerSearch';
 
 interface WaiverClaim {
   id: string;
@@ -31,7 +30,7 @@ interface WaiverPeriod {
 }
 
 const EnhancedWaiverWire: React.FC = () => {
-  const { state, dispatch } = useAppState();
+  const { state } = useAppState();
   const [selectedTab, setSelectedTab] = useState<'available' | 'claims' | 'faab'>('available');
   const [showBidModal, setShowBidModal] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
@@ -128,23 +127,11 @@ const EnhancedWaiverWire: React.FC = () => {
     if (!selectedPlayer || !userTeam) return;
 
     // Simulate placing a waiver claim
-    const newClaim: WaiverClaim = {
-      id: `claim-${Date.now()}`,
-      playerId: selectedPlayer.id,
-      playerName: selectedPlayer.name,
-      position: selectedPlayer.position,
-      team: selectedPlayer.team,
-      claimingTeamId: userTeam.id,
-      claimingTeamName: userTeam.name,
-      bidAmount,
-      dropPlayerId: dropPlayer?.id,
-      dropPlayerName: dropPlayer?.name,
-      priority: waiverClaims.length + 1,
-      status: 'pending'
-    };
-
     // In a real app, this would be sent to the backend
-    console.log('Placing waiver claim:', newClaim);
+    
+    setShowBidModal(false);
+    setSelectedPlayer(null);
+    setBidAmount(0);    // In a real app, this would be sent to the backend
     
     setShowBidModal(false);
     setSelectedPlayer(null);

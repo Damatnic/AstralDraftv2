@@ -5,11 +5,11 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import SimpleAuthService from '../../services/simpleAuthService';
+import SimpleAuthService, { SimpleUser } from '../../services/simpleAuthService';
 import { useAppState } from '../../contexts/AppContext';
 
 interface SimplePlayerLoginProps {
-  onLogin?: (user: any) => void;
+  onLogin?: (user: SimpleUser) => void;
 }
 
 const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {

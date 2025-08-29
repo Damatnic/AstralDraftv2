@@ -8,7 +8,7 @@ interface GroundingCitationsProps {
 }
 
 const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }) => {
-    const webChunks = chunks.filter((c: any) => c.web && c.web.uri && c.web.title);
+    const webChunks = chunks.filter((c: GroundingChunk) => c.web && c.web.uri && c.web.title);
 
     if (webChunks.length === 0) {
         return null;

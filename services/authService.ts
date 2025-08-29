@@ -38,7 +38,7 @@ class AuthService {
   };
 
   constructor() {
-    this.baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001';
+    this.baseUrl = (import.meta as unknown as { env: Record<string, unknown> }).env?.VITE_API_BASE_URL as string || 'http://localhost:3001';
     this.loadFromStorage();
   }
 
@@ -73,11 +73,11 @@ class AuthService {
           session_token: result.token
         }
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error);
       return {
         success: false,
-        error: error.message || 'Login failed. Please check your connection and try again.'
+        error: (error as Error).message || 'Login failed. Please check your connection and try again.'
       };
     }
   }

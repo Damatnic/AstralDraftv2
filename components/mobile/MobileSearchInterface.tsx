@@ -5,18 +5,18 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, PlayerPosition } from '../../types';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { Player } from '../../types';
+// import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
     SearchIcon,
     FilterIcon,
     XIcon,
-    ChevronDownIcon,
-    SortAscIcon,
-    SortDescIcon,
-    StarIcon,
-    TrendingUpIcon,
-    TrendingDownIcon
+    ChevronDownIcon
+    // SortAscIcon,
+    // SortDescIcon,
+    // StarIcon,
+    // TrendingUpIcon,
+    // TrendingDownIcon
 } from 'lucide-react';
 
 interface MobileSearchInterfaceProps {
@@ -66,7 +66,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
         available: undefined
     });
 
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    // const isMobile = useMediaQuery('(max-width: 768px)');
 
     const sortOptions: SortOption[] = [
         { id: 'rank', label: 'Overall Rank', key: 'rank', direction: 'asc' },
@@ -108,7 +108,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
 
     // Filter and sort players
     const filteredAndSortedPlayers = React.useMemo(() => {
-        let filtered = players.filter(player => {
+        const filtered = players.filter(player => {
             // Text search
             if (searchQuery) {
                 const query = searchQuery.toLowerCase();

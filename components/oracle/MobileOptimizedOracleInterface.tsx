@@ -184,7 +184,6 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                 onViewChange={setActiveView}
                 onSettingsOpen={() => {
                     // Future: Open settings modal
-                    console.log('Settings tapped');
                 }}
             />
 
@@ -203,7 +202,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                         exit={{ y: "100%" }}
                         className="w-full bg-gray-800 rounded-t-3xl p-6"
                         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-                        onClick={(e: any) => e.stopPropagation()}
+                        onClick={(e: React.MouseEvent) => e.stopPropagation()}
                     >
                         <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6"></div>
                         

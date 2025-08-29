@@ -92,23 +92,27 @@ const crisisResources: CrisisResource[] = [
 export const CrisisInterventionWidget: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [lastInteraction, setLastInteraction] = useState<Date | null>(null);
+  // TODO: Track user interaction for analytics
+  // const [lastInteraction, setLastInteraction] = useState<Date | null>(null);
 
   // Track user interaction for analytics (privacy-focused)
   useEffect(() => {
     if (isExpanded) {
-      setLastInteraction(new Date());
+      // TODO: Implement interaction tracking
+      // setLastInteraction(new Date());
       // Log anonymous usage for improvement purposes
-      console.log('Crisis resources accessed - anonymous event');
+      // TODO: Log analytics event
+      // console.log('Crisis resources accessed - anonymous event');
     }
   }, [isExpanded]);
 
-  const handleResourceClick = (resource: CrisisResource, action: 'call' | 'text' | 'web') => {
+  const handleResourceClick = (_resource: CrisisResource, _action: 'call' | 'text' | 'web') => {
     setShowConfirmation(true);
     setTimeout(() => setShowConfirmation(false), 3000);
 
     // Track which type of resource was accessed (no personal data)
-    console.log(`Crisis resource accessed: ${action} - ${resource.priority} priority`);
+    // TODO: Log analytics event
+    // console.log(`Crisis resource accessed: ${action} - ${resource.priority} priority`);
   };
 
   const getPriorityColor = (priority: string) => {
@@ -161,7 +165,7 @@ export const CrisisInterventionWidget: React.FC = () => {
                   <div>
                     <h2 className="text-2xl font-bold">Crisis Support Resources</h2>
                     <p className="text-purple-100 text-sm mt-1">
-                      You're not alone. Help is available 24/7.
+                      You&apos;re not alone. Help is available 24/7.
                     </p>
                   </div>
                 </div>
@@ -181,7 +185,7 @@ export const CrisisInterventionWidget: React.FC = () => {
                 <AlertTriangleIcon className="w-5 h-5 text-red-500 mt-0.5" />
                 <div>
                   <p className="text-sm font-medium text-red-800">
-                    If you're in immediate danger, call 911 or your local emergency services
+                    If you&apos;re in immediate danger, call 911 or your local emergency services
                   </p>
                 </div>
               </div>
@@ -279,7 +283,7 @@ export const CrisisInterventionWidget: React.FC = () => {
       {/* Confirmation Toast */}
       {showConfirmation && (
         <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
-          <p className="text-sm font-medium">Resource opened. You're taking a positive step.</p>
+          <p className="text-sm font-medium">Resource opened. You&apos;re taking a positive step.</p>
         </div>
       )}
     </>

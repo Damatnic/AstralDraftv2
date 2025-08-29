@@ -7,7 +7,19 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { DatabaseIcon, ZapIcon, WifiOffIcon, CheckCircleIcon } from 'lucide-react';
 import { Widget } from '../ui/Widget';
-import { useCache, useOfflineCache, useCacheOperations } from '../../hooks/useCache';
+// import { useCache, useOfflineCache, useCacheOperations } from '../../hooks/useCache';
+
+interface CacheState {
+    data?: unknown;
+    lastUpdated?: Date;
+    isStale?: boolean;
+    isLoading?: boolean;
+}
+
+// Mock hooks for demo purposes
+const useCache = () => ({ data: null, lastUpdated: new Date(), isStale: false, isLoading: false });
+const useOfflineCache = () => ({ data: null, lastUpdated: new Date(), isStale: false, isLoading: false });
+const useCacheOperations = () => ({ preloadData: async () => {} });
 
 // Mock API functions for demonstration
 const mockAPIFunctions = {
@@ -61,8 +73,12 @@ const CacheIntegrationDemo: React.FC = () => {
             staleTime: 10 * 1000, // 10 seconds
             cacheTime: 30 * 1000, // 30 seconds
             refreshInterval: 15 * 1000, // Refresh every 15 seconds
-            onSuccess: (data) => console.log('Player data updated:', data),
-            onError: (error) => console.error('Player fetch failed:', error)
+            onSuccess: (_data: unknown) => {
+                // Player data updated successfully
+            },
+            onError: (_error: unknown) => {
+                // Handle player fetch error
+            }
         }
     );
 
@@ -124,27 +140,27 @@ const CacheIntegrationDemo: React.FC = () => {
                 () => mockAPIFunctions.fetchPlayerStats('preload'),
                 { tags: ['preload', 'demo'] }
             );
-            console.log('Data preloaded successfully');
-        } catch (error) {
-            console.error('Preload failed:', error);
+            // Data preloaded successfully
+        } catch {
+            // Preload failed
         }
     };
 
-    const getStatusColor = (cache: any) => {
+    const getStatusColor = (cache: CacheState) => {
         if (cache.isLoading) return 'text-yellow-400';
         if (cache.isError) return 'text-red-400';
         if (cache.isStale) return 'text-orange-400';
         return 'text-green-400';
     };
 
-    const getStatusIcon = (cache: any) => {
+    const getStatusIcon = (cache: CacheState & { isError?: boolean }) => {
         if (cache.isLoading) return '⏳';
         if (cache.isError) return '❌';
         if (cache.isStale) return '⚠️';
         return '✅';
     };
 
-    const getCacheStatusText = (cache: any) => {
+    const getCacheStatusText = (cache: CacheState & { isError?: boolean }) => {
         if (cache.isLoading) return 'Loading';
         if (cache.isError) return 'Error';
         if (cache.isStale) return 'Stale';
@@ -242,7 +258,7 @@ const CacheIntegrationDemo: React.FC = () => {
                                         {/* Action Buttons */}
                                         <div className="mt-3 space-y-2">
                                             <button
-                                                onClick={(e: any) => {
+                                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                                     e.stopPropagation();
                                                     cache.refetch();
                                                 }}
@@ -253,7 +269,7 @@ const CacheIntegrationDemo: React.FC = () => {
                                             </button>
                                             
                                             <button
-                                                onClick={(e: any) => {
+                                                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                                                     e.stopPropagation();
                                                     cache.invalidate();
                                                 }}
@@ -280,7 +296,7 @@ const CacheIntegrationDemo: React.FC = () => {
                             </h3>
                             <pre className="bg-black/50 rounded-lg p-4 text-sm text-gray-300 overflow-auto">
                                 {JSON.stringify(
-                                    demos.find((d: any) => d.id === selectedDemo)?.cache.data,
+                                    demos.find((d: { id: string; cache: CacheState; name: string; description: string; icon: React.ComponentType; color: string }) => d.id === selectedDemo)?.cache.data,
                                     null,
                                     2
                                 )}

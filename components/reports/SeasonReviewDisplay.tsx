@@ -9,11 +9,11 @@ interface SeasonReviewDisplayProps {
     teams: Team[];
 }
 
-const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team }) => (
+const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team: _team }) => (
     <div className="bg-white/5 p-4 rounded-lg">
         <h4 className="font-bold text-white">{superlative.title}</h4>
         <p className="text-sm text-yellow-300 font-semibold">{superlative.teamName}</p>
-        <p className="text-xs text-gray-400 mt-1 italic">"{superlative.rationale}"</p>
+        <p className="text-xs text-gray-400 mt-1 italic">&quot;{superlative.rationale}&quot;</p>
     </div>
 );
 
@@ -28,7 +28,7 @@ const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams
 
              <div className="max-w-4xl mx-auto space-y-8">
                  <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap text-center italic">
-                    "{review.summary}"
+                    &quot;{review.summary}&quot;
                 </p>
 
                 <div>

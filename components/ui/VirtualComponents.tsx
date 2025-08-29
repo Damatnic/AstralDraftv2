@@ -106,7 +106,7 @@ interface VirtualGridProps<T> {
     className?: string;
 }
 
-export const VirtualGrid = React.memo(<T,>({
+const VirtualGrid = React.memo(<T,>({
     items,
     itemWidth,
     itemHeight,
@@ -198,4 +198,8 @@ export const VirtualGrid = React.memo(<T,>({
             </div>
         </div>
     );
-}) as <T>(props: VirtualGridProps<T>) => React.ReactElement;
+});
+
+VirtualGrid.displayName = 'VirtualGrid';
+
+export { VirtualGrid };

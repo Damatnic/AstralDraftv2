@@ -30,8 +30,8 @@ const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () 
                 exit: { opacity: 0, height: 0 },
             }}
         >
-            <h5 className="font-bold text-sm text-cyan-300">Oracle's Suggested Lineup</h5>
-            <p className="text-xs italic text-gray-400 mt-1 mb-2">"{suggestion.reasoning}"</p>
+            <h5 className="font-bold text-sm text-cyan-300">Oracle&apos;s Suggested Lineup</h5>
+            <p className="text-xs italic text-gray-400 mt-1 mb-2">&quot;{suggestion.reasoning}&quot;</p>
             <div className="flex flex-wrap gap-1 text-xs mb-3">
                 {suggestedPlayers.map((p: any) => (
                     <div key={p.id} className="bg-black/20 px-1.5 py-0.5 rounded-full flex items-center gap-1">

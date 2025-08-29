@@ -219,7 +219,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
           <ScheduleGenerator 
             isCommissioner={isCommissioner}
             onScheduleGenerated={(schedule) => {
-              console.log('Schedule generated:', schedule);
+              // Schedule generated
             }}
           />
         );

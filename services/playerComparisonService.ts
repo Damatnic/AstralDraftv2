@@ -273,7 +273,7 @@ class PlayerComparisonService {
   /**
    * Get trending players based on recent performance
    */
-  async getTrendingPlayers(position?: string, limit: number = 10): Promise<{
+  async getTrendingPlayers(position?: string, _limit: number = 10): Promise<{
     trending: ComparisonPlayer[];
     declining: ComparisonPlayer[];
     breakout: ComparisonPlayer[];
@@ -290,7 +290,7 @@ class PlayerComparisonService {
   /**
    * Generate player ranking for position
    */
-  async generatePositionRankings(position: string, week: number): Promise<ComparisonPlayer[]> {
+  async generatePositionRankings(_position: string, _week: number): Promise<ComparisonPlayer[]> {
     // This would rank all players at a position based on projections
     // For now, returning empty array
     return [];
@@ -523,7 +523,7 @@ class PlayerComparisonService {
     return Number((passingPoints + rushingPoints + receivingPoints).toFixed(1));
   }
 
-  private getMatchupModifier(player: NFLPlayer, game: NFLGame): number {
+  private getMatchupModifier(_player: NFLPlayer, _game: NFLGame): number {
     // This would analyze opponent defensive rankings and player performance against similar defenses
     // For now, using simplified calculation
     const baseModifier = Math.random() * 0.4 + 0.8; // 0.8 - 1.2
@@ -552,7 +552,7 @@ class PlayerComparisonService {
     return Math.max(0.5, modifier);
   }
 
-  private getRecentFormModifier(player: NFLPlayer): number {
+  private getRecentFormModifier(_player: NFLPlayer): number {
     // This would analyze recent game performance trends
     // For now, using random factor with slight bias
     return Math.random() * 0.3 + 0.85; // 0.85 - 1.15
@@ -573,7 +573,7 @@ class PlayerComparisonService {
     return Math.max(10, Math.min(95, Math.round(totalConfidence)));
   }
 
-  private calculateDifficultyScore(defensiveRank: number, position: string): number {
+  private calculateDifficultyScore(defensiveRank: number, _position: string): number {
     // Invert rank so lower rank = easier matchup
     const baseScore = (33 - defensiveRank) / 32 * 10;
     return Math.max(1, Math.min(10, Math.round(baseScore)));
@@ -632,13 +632,13 @@ class PlayerComparisonService {
     return riskFactors[player.injuryStatus || 'healthy'];
   }
 
-  private async getHistoricalMatchups(playerId: string, opponent: string): Promise<HistoricalMatchup[]> {
+  private async getHistoricalMatchups(_playerId: string, _opponent: string): Promise<HistoricalMatchup[]> {
     // This would fetch historical performance against this opponent
     // For now, returning empty array
     return [];
   }
 
-  private identifyKeyFactors(player: NFLPlayer, game: NFLGame, opponent: any): string[] {
+  private identifyKeyFactors(player: NFLPlayer, game: NFLGame, opponent: unknown): string[] {
     const factors = [];
 
     if (game.weather?.windSpeed && game.weather.windSpeed > 15) {
@@ -658,7 +658,7 @@ class PlayerComparisonService {
     return factors;
   }
 
-  private calculateTrend(player: NFLPlayer): PlayerTrend {
+  private calculateTrend(_player: NFLPlayer): PlayerTrend {
     // This would analyze week-over-week performance
     // For now, using random assignment
     const trends: PlayerTrend[] = ['improving', 'declining', 'stable'];
@@ -721,7 +721,7 @@ class PlayerComparisonService {
     };
   }
 
-  private async getOracleAccuracy(playerId: string): Promise<OraclePlayerAccuracy | undefined> {
+  private async getOracleAccuracy(_playerId: string): Promise<OraclePlayerAccuracy | undefined> {
     // This would fetch Oracle prediction accuracy for this specific player
     // For now, returning mock data
     return {
@@ -735,8 +735,7 @@ class PlayerComparisonService {
 
   private initializeProjectionModels(): void {
     // This would load ML models for projections
-    // For now, just logging initialization
-    console.log('🤖 Player comparison projection models initialized');
+    // Initialize projection models
   }
 
   private async notifyHighConfidenceComparison(comparison: PlayerComparison): Promise<void> {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { seasonContestService, SeasonContest, BracketPick, AwardPick } from '../services/seasonContestService';
+import { seasonContestService, SeasonContest, BracketPick, AwardPick, PredictionSubmission } from '../services/seasonContestService';
 
 export interface UseSeasonContestOptions {
   userId: string;
@@ -20,7 +20,7 @@ export interface SeasonContestHookReturn {
   // Actions
   selectContest: (contestId: string) => void;
   joinContest: (contestId: string) => Promise<boolean>;
-  submitWeeklyPredictions: (week: number, predictions: { [categoryId: string]: any }) => Promise<boolean>;
+  submitWeeklyPredictions: (week: number, predictions: { [categoryId: string]: PredictionSubmission }) => Promise<boolean>;
   submitBracketPredictions: (picks: BracketPick[]) => Promise<boolean>;
   submitAwardPredictions: (picks: AwardPick[]) => Promise<boolean>;
   
@@ -143,7 +143,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
   // Submit weekly predictions
   const submitWeeklyPredictions = useCallback(async (
     week: number, 
-    predictions: { [categoryId: string]: any }
+    predictions: { [categoryId: string]: PredictionSubmission }
   ): Promise<boolean> => {
     if (!selectedContest) {
       setError('No contest selected');

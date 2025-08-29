@@ -2,8 +2,8 @@
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import type { Player, PlayerNote, League } from '../../types';
-import Modal from '../ui/Modal';
-import Tabs from '../ui/Tabs';
+import { Modal } from '../ui/Modal';
+import { Tabs } from '../ui/Tabs';
 import OverviewTab from './tabs/OverviewTab';
 import ScoutingTab from './tabs/ScoutingTab';
 import FantasyTab from './tabs/FantasyTab';
@@ -219,7 +219,7 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
 
   return (
     <>
-      <Modal onClose={onClose}>
+      <Modal isOpen={true} onClose={onClose}>
           <div className={`glass-pane bg-[var(--panel-bg)] backdrop-blur-xl border-[var(--panel-border)] rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col`}>
               {/* Header */}
               <div className={`p-4 sm:p-6 border-b border-[var(--panel-border)] bg-gradient-to-br ${positionColor[player.position]} to-transparent flex items-start justify-between`}>

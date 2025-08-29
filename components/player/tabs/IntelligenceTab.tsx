@@ -6,7 +6,6 @@ import { NewsIcon } from '../../icons/NewsIcon';
 import { useAppState } from '../../../contexts/AppContext';
 import { generatePlayerNickname, summarizeFantasyImpact } from '../../../services/geminiService';
 import { SparklesIcon } from '../../icons/SparklesIcon';
-import LoadingSpinner from '../../ui/LoadingSpinner';
 
 interface IntelligenceTabProps {
   player: Player;
@@ -42,9 +41,9 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
                  <div className="mt-2 pt-2 border-t border-white/10">
                     <p className="text-xs text-cyan-300/80 font-semibold flex items-center gap-1">
                         <SparklesIcon className="w-3 h-3" />
-                        Oracle's Take
+                        Oracle&apos;s Take
                     </p>
-                    <p className="text-xs italic text-gray-300">"{analysis}"</p>
+                    <p className="text-xs italic text-gray-300">&quot;{analysis}&quot;</p>
                 </div>
             ) : (
                 <div className="mt-2">

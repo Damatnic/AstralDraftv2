@@ -9,14 +9,12 @@ import axios from 'axios';
 // API Configuration
 const ESPN_API_BASE = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl';
 const ODDS_API_BASE = 'https://api.the-odds-api.com/v4/sports/americanfootball_nfl';
-const NFL_API_BASE = 'https://api.nfl.com/v1';
 
 // API Keys from environment variables
 const ODDS_API_KEY = process.env.VITE_ODDS_API_KEY || process.env.ODDS_API_KEY || '';
-const RAPID_API_KEY = process.env.VITE_RAPID_API_KEY || process.env.RAPID_API_KEY || '';
 
 // Rate limiting and caching
-const cache = new Map<string, { data: any; expires: number }>();
+const cache = new Map<string, { data: unknown; expires: number }>();
 const rateLimits = new Map<string, { count: number; resetTime: number }>();
 
 // Cache TTL (Time To Live) in milliseconds
@@ -204,7 +202,7 @@ class ProductionSportsDataService {
     return data;
   }
 
-  private async makeAPIRequest(url: string, headers: Record<string, string> = {}): Promise<any> {
+  private async makeAPIRequest(url: string, headers: Record<string, string> = {}): Promise<unknown> {
     try {
       this.apiRequestCount++;
       
@@ -249,7 +247,7 @@ class ProductionSportsDataService {
           return [];
         }
 
-        return data.events.map((event: any) => this.parseESPNGame(event));
+        return (data as { events: unknown[] }).events.map((event: unknown) => this.parseESPNGame(event));
       },
       CACHE_TTL.games
     );
@@ -275,11 +273,11 @@ class ProductionSportsDataService {
 
         // Filter for live and recently completed games
         return data.events
-          .filter((event: any) => {
+          .filter((event: unknown) => {
             const status = event.competitions[0].status.type.name;
             return ['STATUS_IN_PROGRESS', 'STATUS_HALFTIME', 'STATUS_END_PERIOD', 'STATUS_FINAL'].includes(status);
           })
-          .map((event: any) => this.parseESPNGame(event));
+          .map((event: unknown) => this.parseESPNGame(event));
       },
       60000 // 1 minute cache for live data
     );
@@ -409,7 +407,7 @@ class ProductionSportsDataService {
         }
 
         const data = await this.makeAPIRequest(`${url}?${params}`);
-        return data.map((game: any) => this.parseOddsData(game));
+        return (data as unknown[]).map((game: unknown) => this.parseOddsData(game));
       },
       CACHE_TTL.odds
     );
@@ -502,10 +500,10 @@ class ProductionSportsDataService {
 
   // Private helper methods
 
-  private parseESPNGame(event: any): NFLGame {
+  private parseESPNGame(event: unknown): NFLGame {
     const competition = event.competitions[0];
-    const homeTeam = competition.competitors.find((c: any) => c.homeAway === 'home');
-    const awayTeam = competition.competitors.find((c: any) => c.homeAway === 'away');
+    const homeTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'home');
+    const awayTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'away');
 
     return {
       id: event.id,
@@ -690,7 +688,7 @@ class ProductionSportsDataService {
     }
   }
 
-  private async createPlayerPropPredictions(game: NFLGame): Promise<RealPrediction[]> {
+  private async createPlayerPropPredictions(_game: NFLGame): Promise<RealPrediction[]> {
     // This would create player prop predictions based on player stats and projections
     // For now, returning empty array - can be expanded based on available data
     return [];
@@ -704,17 +702,17 @@ class ProductionSportsDataService {
     }
   }
 
-  private async getPredictionById(predictionId: string): Promise<RealPrediction | null> {
+  private async getPredictionById(_predictionId: string): Promise<RealPrediction | null> {
     // This would fetch from database - mock implementation for now
     return null;
   }
 
-  private async getGameById(gameId: string): Promise<NFLGame | null> {
+  private async getGameById(_gameId: string): Promise<NFLGame | null> {
     // This would fetch specific game data - mock implementation for now
     return null;
   }
 
-  private calculatePredictionResult(prediction: RealPrediction, game: NFLGame): { winningOption: number; actualValue?: number } {
+  private calculatePredictionResult(_prediction: RealPrediction, _game: NFLGame): { winningOption: number; actualValue?: number } {
     // This would calculate the actual result based on game outcome
     // Mock implementation for now
     return { winningOption: 0 };

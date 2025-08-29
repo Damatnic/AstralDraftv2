@@ -125,11 +125,7 @@ class MobileOfflineService {
             this.offlineState.lastSync = new Date();
             this.saveOfflineState();
             
-            console.log('✅ Draft data cached for offline use', {
-                players: players.length,
-                leagues: leagues.length,
-                teams: teams.length
-            });
+            // Draft data cached for offline use
         } catch (error) {
             console.error('❌ Failed to cache draft data:', error);
         }
@@ -191,7 +187,7 @@ class MobileOfflineService {
         this.offlineState.pendingActions.push(action);
         this.savePendingActions();
         
-        console.log('📋 Queued offline action:', action.type, action.id);
+        // Queued offline action
         return action.id;
     }
 
@@ -223,7 +219,7 @@ class MobileOfflineService {
                 timestamp: draftPick.timestamp
             });
 
-            console.log('✅ Player drafted offline:', { playerId, teamId, pick });
+            // Player drafted offline
             return true;
         } catch (error) {
             console.error('❌ Failed to draft player offline:', error);
@@ -272,10 +268,7 @@ class MobileOfflineService {
             this.savePendingActions();
             this.offlineState.lastSync = new Date();
             
-            console.log('✅ Sync completed:', {
-                synced: successfulActions.length,
-                remaining: this.offlineState.pendingActions.length
-            });
+            // Sync completed
         } catch (error) {
             console.error('❌ Sync failed:', error);
         } finally {
@@ -309,10 +302,10 @@ class MobileOfflineService {
     /**
      * Sync draft player action
      */
-    private async syncDraftPlayer(payload: any): Promise<boolean> {
+    private async syncDraftPlayer(_payload: any): Promise<boolean> {
         try {
             // Replace with actual API call
-            console.log('🔄 Syncing draft player:', payload);
+            // Syncing draft player
             
             // Simulate API call delay
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -328,9 +321,9 @@ class MobileOfflineService {
     /**
      * Sync roster update action
      */
-    private async syncRosterUpdate(payload: any): Promise<boolean> {
+    private async syncRosterUpdate(_payload: any): Promise<boolean> {
         try {
-            console.log('🔄 Syncing roster update:', payload);
+            // Syncing roster update
             await new Promise(resolve => setTimeout(resolve, 500));
             return true;
         } catch (error) {
@@ -342,9 +335,9 @@ class MobileOfflineService {
     /**
      * Sync trade proposal action
      */
-    private async syncTradeProposal(payload: any): Promise<boolean> {
+    private async syncTradeProposal(_payload: any): Promise<boolean> {
         try {
-            console.log('🔄 Syncing trade proposal:', payload);
+            // Syncing trade proposal
             await new Promise(resolve => setTimeout(resolve, 800));
             return true;
         } catch (error) {
@@ -478,7 +471,7 @@ class MobileOfflineService {
                 syncInProgress: false
             };
             
-            console.log('✅ Offline data cleared');
+            // Offline data cleared
         } catch (error) {
             console.error('❌ Failed to clear offline data:', error);
         }

@@ -43,7 +43,7 @@ interface OracleLeaderboardProps {
 
 const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     currentUserId,
-    showAchievements = true,
+    showAchievements: _showAchievements = true,
     compact = false
 }) => {
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);

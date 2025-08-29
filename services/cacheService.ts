@@ -19,7 +19,7 @@ interface CacheConfig {
 }
 
 class CacheService {
-  private readonly cache: Map<string, CacheItem<any>> = new Map();
+  private readonly cache: Map<string, CacheItem<unknown>> = new Map();
   private readonly config: CacheConfig;
   private cleanupInterval: NodeJS.Timeout | null = null;
   private hitCount: number = 0;
@@ -249,7 +249,7 @@ class CacheService {
           
           // Check if item is still valid
           if (now - parsed.timestamp < parsed.ttl) {
-            const item: CacheItem<any> = {
+            const item: CacheItem<unknown> = {
               data: parsed.data,
               timestamp: parsed.timestamp,
               ttl: parsed.ttl,
@@ -281,7 +281,7 @@ class CacheService {
   /**
    * Memoization helper for functions
    */
-  memoize<T extends (...args: any[]) => any>(
+  memoize<T extends (...args: unknown[]) => unknown>(
     fn: T,
     keyGenerator?: (...args: Parameters<T>) => string,
     ttl?: number

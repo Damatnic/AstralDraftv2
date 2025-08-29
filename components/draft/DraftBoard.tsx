@@ -16,7 +16,7 @@ interface DraftBoardProps {
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }) => {
   const { state } = useAppState();
-  const myTeamId = teams.find((t: any) => t.owner.id === state.user?.id)?.id;
+  const myTeamId = teams.find((t: Team) => t.owner.id === state.user?.id)?.id;
   const rounds = draftFormat === 'SNAKE' ? 16 : teams[0]?.roster.length || 16;
   
   return (
@@ -39,11 +39,11 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
                 ))}
             </div>
           )}
-          {teams.map((team: any) => (
+          {teams.map((team: Team) => (
             <TeamColumn
               key={team.id}
               team={team}
-              picks={draftPicks.filter((p: any) => p.teamId === team.id)}
+              picks={draftPicks.filter((p: DraftPick) => p.teamId === team.id)}
               currentPick={currentPick}
               onPlayerSelect={onPlayerSelect}
               draftFormat={draftFormat}

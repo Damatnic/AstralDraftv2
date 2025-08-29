@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { getDaysUntilDraft, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
 
@@ -123,7 +123,7 @@ const LeagueDashboard: React.FC = () => {
           >
             <h3 className="text-xl font-bold text-white mb-4">League Members</h3>
             <div className="space-y-3">
-              {league.teams.map((team, index) => (
+              {league.teams.map((team, _index) => (
                 <div
                   key={team.id}
                   className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg"

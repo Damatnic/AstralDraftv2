@@ -5,8 +5,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, Team, User } from '../../types';
+import { Player, Team } from '../../types';
 import { 
     PenToolIcon, 
     ImageIcon, 
@@ -20,8 +19,6 @@ import {
     TrophyIcon,
     CalendarIcon,
     UsersIcon,
-    PlayIcon,
-    PauseIcon,
     UploadIcon,
     TypeIcon,
     LayoutIcon,
@@ -158,10 +155,10 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
         }
     );
 
-    const [selectedTemplate, setSelectedTemplate] = React.useState<StoryTemplate | null>(null);
+    const [,] = React.useState<StoryTemplate | null>(null);
     const [activeSection, setActiveSection] = React.useState<string | null>(null);
     const [showTemplates, setShowTemplates] = React.useState(!story);
-    const [showPreview, setShowPreview] = React.useState(false);
+    const [,] = React.useState(false);
     const [editorMode, setEditorMode] = React.useState<'write' | 'design' | 'media'>('write');
 
     const predefinedThemes: StoryTheme[] = [
@@ -295,7 +292,6 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             title: `${template.name} Story`
         }));
 
-        setSelectedTemplate(template);
         setShowTemplates(false);
     };
 
@@ -312,7 +308,6 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     const handlePreview = () => {
         if (currentStory.content) {
             onPreview(currentStory.content);
-            setShowPreview(true);
         }
     };
 

@@ -5,6 +5,7 @@
  */
 
 import { productionSportsDataService, type NFLGame } from './productionSportsDataService';
+import { logger } from './loggingService';
 
 // Contest Types
 export interface Contest {
@@ -255,7 +256,7 @@ class ContestScoringService {
   }
 
   private initializeService(): void {
-    console.log('Initializing Contest Scoring Service...');
+    logger.info('Initializing Contest Scoring Service...');
     
     // Set up periodic game result fetching
     setInterval(() => {
@@ -289,7 +290,7 @@ class ContestScoringService {
     }
 
     this.contests.set(contest.id, contest);
-    console.log(`Created contest: ${contest.name} (${contest.id})`);
+    logger.info(`Created contest: ${contest.name} (${contest.id})`);
     return contest;
   }
 
@@ -344,7 +345,7 @@ class ContestScoringService {
     contest.participants.push(participant);
     contest.updatedAt = new Date().toISOString();
 
-    console.log(`Registered participant ${username} for contest ${contest.name}`);
+    logger.info(`Registered participant ${username} for contest ${contest.name}`);
     return true;
   }
 
@@ -405,7 +406,7 @@ class ContestScoringService {
     }
 
     contest.updatedAt = new Date().toISOString();
-    console.log(`User ${userId} submitted prediction for ${predictionData.predictionId}`);
+    logger.info(`User ${userId} submitted prediction for ${predictionData.predictionId}`);
     return true;
   }
 
@@ -447,7 +448,7 @@ class ContestScoringService {
           };
 
           this.gameResults.set(game.id, gameResult);
-          console.log(`Updated result for game ${game.id}: ${game.awayTeam.name} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name}`);
+          logger.info(`Updated result for game ${game.id}: ${game.awayTeam.name} ${game.awayScore} - ${game.homeScore} ${game.homeTeam.name}`);
         }
       }
     } catch (error) {
@@ -488,7 +489,7 @@ class ContestScoringService {
           prediction.actualResult = resolution.correctAnswer;
           hasNewResolutions = true;
 
-          console.log(`Resolved prediction ${prediction.id}: Answer ${resolution.correctAnswer} - ${resolution.explanation}`);
+          logger.info(`Resolved prediction ${prediction.id}: Answer ${resolution.correctAnswer} - ${resolution.explanation}`);
         }
       }
     }
@@ -869,7 +870,7 @@ class ContestScoringService {
     contest.status = 'completed';
     contest.updatedAt = new Date().toISOString();
 
-    console.log(`Contest ${contest.name} finalized with ${payouts.length} payouts`);
+    logger.info(`Contest ${contest.name} finalized with ${payouts.length} payouts`);
   }
 
   // Prediction evaluation methods
@@ -918,7 +919,7 @@ class ContestScoringService {
     };
   }
 
-  private async evaluatePlayerPropPrediction(prediction: ContestPrediction, gameResult: GameResult): Promise<PredictionResolution> {
+  private async evaluatePlayerPropPrediction(prediction: ContestPrediction, _gameResult: GameResult): Promise<PredictionResolution> {
     // Would need to fetch player stats for the specific game
     // This is a simplified implementation
     return {
@@ -929,7 +930,7 @@ class ContestScoringService {
     };
   }
 
-  private evaluateTeamStatPrediction(prediction: ContestPrediction, gameResult: GameResult): PredictionResolution {
+  private evaluateTeamStatPrediction(prediction: ContestPrediction, _gameResult: GameResult): PredictionResolution {
     // Implementation would depend on specific team stat being predicted
     return {
       correctAnswer: Math.floor(Math.random() * prediction.options.length),
@@ -993,27 +994,27 @@ class ContestScoringService {
     }
   }
 
-  private async generateSeasonPredictions(season: number): Promise<ContestPrediction[]> {
+  private async generateSeasonPredictions(_season: number): Promise<ContestPrediction[]> {
     // Would generate season-long predictions like division winners, playoff teams, etc.
     return [];
   }
 
-  private calculateSpreadCovered(game: NFLGame): boolean {
+  private calculateSpreadCovered(_game: NFLGame): boolean {
     // This would need the actual spread data
     return Math.random() > 0.5; // Simplified
   }
 
-  private calculateOverHit(game: NFLGame): boolean {
+  private calculateOverHit(_game: NFLGame): boolean {
     // This would need the actual total data
     return Math.random() > 0.5; // Simplified
   }
 
-  private extractSpreadFromPrediction(prediction: ContestPrediction): number {
+  private extractSpreadFromPrediction(_prediction: ContestPrediction): number {
     // Extract spread value from prediction structure
     return 3.5; // Simplified
   }
 
-  private extractTotalFromPrediction(prediction: ContestPrediction): number {
+  private extractTotalFromPrediction(_prediction: ContestPrediction): number {
     // Extract total value from prediction structure
     return 47.5; // Simplified
   }

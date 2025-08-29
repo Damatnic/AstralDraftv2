@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { LeagueSettings, User, CreateLeaguePayload, AiProfileData } from '../../types';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { motion } from 'framer-motion';
 import { generateTeamBranding, generateAiTeamProfile } from '../../services/geminiService';
 import { SparklesIcon } from '../icons/SparklesIcon';
@@ -23,9 +23,10 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
     const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
     const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
     const [scoring, setScoring] = React.useState<LeagueSettings['scoring']>('PPR');
-    const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings['tradeDeadline']>(10);
+    // TODO: Implement trade deadline and waiver rule settings
+    // const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings['tradeDeadline']>(10);
     const [playoffFormat, setPlayoffFormat] = React.useState<LeagueSettings['playoffFormat']>('4_TEAM');
-    const [waiverRule, setWaiverRule] = React.useState<LeagueSettings['waiverRule']>('FAAB');
+    // const [waiverRule, setWaiverRule] = React.useState<LeagueSettings['waiverRule']>('FAAB');
     const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings['aiAssistanceLevel']>('FULL');
 
 
@@ -62,9 +63,9 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                     teamCount,
                     scoring,
                     rosterSize: 16, // Hardcode for now
-                    tradeDeadline,
+                    tradeDeadline: 10, // Default value
                     playoffFormat,
-                    waiverRule,
+                    waiverRule: 'FAAB' as const, // Default value
                     aiAssistanceLevel,
                 },
                 status: 'PRE_DRAFT' as const,
@@ -91,7 +92,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
 
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div 
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl"
                 role="dialog"

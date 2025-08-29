@@ -6,7 +6,7 @@ import { useAppState } from '../contexts/AppContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import MatchupScoreboard from '../components/matchup/MatchupScoreboard';
 import MatchupRosterView from '../components/matchup/MatchupRosterView';
-import type { League, Team, Matchup } from '../types';
+import type { League, Team } from '../types';
 import RivalryReportModal from '../components/matchup/RivalryReportModal';
 import { NewspaperIcon } from '../components/icons/NewspaperIcon';
 import { useLeague } from '../hooks/useLeague';

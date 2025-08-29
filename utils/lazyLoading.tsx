@@ -25,7 +25,7 @@ export function withLazyLoading<T extends Record<string, any>>(
     retryCount = 3
   } = options;
 
-  return React.forwardRef<any, T>((props, ref) => {
+  const LazyWrapper = React.forwardRef<any, T>((props, ref) => {
     const [showSkeleton, setShowSkeleton] = React.useState(true);
     const [retries, setRetries] = React.useState(0);
 
@@ -59,6 +59,10 @@ export function withLazyLoading<T extends Record<string, any>>(
       </ErrorBoundary>
     );
   });
+
+  LazyWrapper.displayName = `LazyWrapper(${LazyComponent.displayName || LazyComponent.name || 'Component'})`;
+  
+  return LazyWrapper;
 }
 
 /**

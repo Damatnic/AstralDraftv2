@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { 
     ArchiveIcon, 
     TrophyIcon, 
-    CalendarIcon,
-    UsersIcon,
     AwardIcon,
     ChevronDownIcon,
     ChevronUpIcon,
@@ -54,7 +51,7 @@ interface SeasonRecord {
 }
 
 const SeasonArchiveView: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league } = useLeague();
     const [expandedYear, setExpandedYear] = useState<number | null>(null);
 

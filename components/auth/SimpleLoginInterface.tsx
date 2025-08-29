@@ -82,7 +82,7 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }) => {
                     <input
                         type="password"
                         value={pin}
-                        onChange={(e: any) => handlePinChange(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handlePinChange(e.target.value)}
                         placeholder="••••"
                         className="w-full bg-gray-700 text-white text-center text-2xl tracking-[0.5em] rounded-lg px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         maxLength={4}
@@ -203,7 +203,7 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }) => {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-                    {users.filter((user: any) => !user.isAdmin).map((user, index) => (
+                    {users.filter((user: SimpleUser) => !user.isAdmin).map((user, index) => (
                         <motion.button
                             key={user.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -228,7 +228,7 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }) => {
                         <p className="text-gray-500 text-sm">League Administration</p>
                     </div>
                     
-                    {users.filter((user: any) => user.isAdmin).map((admin) => (
+                    {users.filter((user: SimpleUser) => user.isAdmin).map((admin) => (
                         <motion.button
                             key={admin.id}
                             initial={{ opacity: 0, y: 20 }}

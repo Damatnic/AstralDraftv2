@@ -2,7 +2,7 @@
 
 
 import React from 'react';
-import type { League, Team, Player, User, AuctionState } from '../types';
+import type { League, Player, User } from '../types';
 import { getAiNomination, getAiBid } from '../services/geminiService';
 import { players } from '../data/players';
 import useSound from './useSound';
@@ -14,14 +14,14 @@ export const useRealtimeAuction = (
     league: League | undefined,
     isPaused: boolean,
     user: User,
-    dispatch: React.Dispatch<any>
+    dispatch: React.Dispatch<{ type: string; payload?: unknown }>
 ) => {
     const playNominationSound = useSound('yourTurn', 0.4);
     const playBidSound = useSound('bid', 0.5);
     const playSoldSound = useSound('sold', 0.6);
 
     const auctionState = league?.auctionState;
-    const teams = league?.teams ?? [];
+    const teams = React.useMemo(() => league?.teams ?? [], [league?.teams]);
     const draftedPlayerIds = new Set(league?.draftPicks.map(p => p.playerId));
     const availablePlayers = players.filter(p => !draftedPlayerIds.has(p.id));
     
@@ -74,7 +74,7 @@ export const useRealtimeAuction = (
             const aiTeamsToAct = teams.filter(t => t.owner.id.startsWith('ai_') && t.id !== auctionState.highBidderId && t.budget > auctionState.currentBid);
 
             aiTeamsToAct.forEach(aiTeam => {
-                const bidTimer = setTimeout(async () => {
+                setTimeout(async () => {
                     const latestAuctionState = league?.auctionState; // Get latest state
                     if (!latestAuctionState || latestAuctionState.highBidderId === aiTeam.id || isPaused) return;
 
@@ -88,7 +88,7 @@ export const useRealtimeAuction = (
             });
         }
 
-    }, [auctionState, isPaused, league, availablePlayers, dispatch, playBidSound, playNominationSound]);
+    }, [auctionState, isPaused, league, availablePlayers, dispatch, playBidSound, playNominationSound, teams]);
     
     const myTeam = teams.find(t => t.owner.id === user.id);
     const nominatedPlayer = auctionState?.nominatedPlayerId ? players.find(p => p.id === auctionState.nominatedPlayerId) : null;

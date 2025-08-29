@@ -4,34 +4,32 @@ import './OracleCalibrationValidationSection.css';
 
 // ===== TYPE ALIASES =====
 
-type ComplexityLevel = 'low' | 'medium' | 'high';
-type ValidationMethodType = 'cross_validation' | 'holdout' | 'time_series' | 'bootstrap' | 'monte_carlo';
+// type ComplexityLevel = 'low' | 'medium' | 'high';
+// type ValidationMethodType = 'cross_validation' | 'holdout' | 'time_series' | 'bootstrap' | 'monte_carlo';
 type CrossValidationType = 'k_fold' | 'stratified_k_fold' | 'time_series_split' | 'group_k_fold' | 'nested_cv' | 'leave_one_out';
 type HoldoutType = 'simple_holdout' | 'stratified_holdout' | 'temporal_holdout' | 'grouped_holdout';
 type TimeSeriesValidationType = 'walk_forward' | 'expanding_window' | 'rolling_window' | 'blocked_time_series' | 'purged_group_time_series';
-type CalibrationMethodType = 'parametric' | 'non_parametric' | 'bayesian' | 'ensemble';
+// type CalibrationMethodType = 'parametric' | 'non_parametric' | 'bayesian' | 'ensemble';
 type MetricCategory = 'classification' | 'regression' | 'ranking' | 'calibration' | 'fairness' | 'custom';
-type TargetType = 'classification' | 'regression';
-type ExperimentStatus = 'pending' | 'running' | 'completed' | 'failed';
-type CalibrationQuality = 'poor' | 'fair' | 'good' | 'excellent';
+// type ExperimentStatus = 'pending' | 'running' | 'completed' | 'failed';
 type ActiveTab = 'overview' | 'crossval' | 'holdout' | 'timeseries' | 'bootstrap' | 'calibration' | 'metrics' | 'biasvariance' | 'demo';
-type BinStrategy = 'uniform' | 'quantile' | 'kmeans';
-type VotingStrategy = 'soft' | 'hard' | 'weighted';
+// type BinStrategy = 'uniform' | 'quantile' | 'kmeans';
+// type VotingStrategy = 'soft' | 'hard' | 'weighted';
 
 // ===== VALIDATION METHOD INTERFACES =====
 
-interface ValidationMethod {
-  id: string;
-  name: string;
-  type: ValidationMethodType;
-  description: string;
-  advantages: string[];
-  disadvantages: string[];
-  useCases: string[];
-  complexity: ComplexityLevel;
-  computationalCost: ComplexityLevel;
-  reliability: ComplexityLevel;
-}
+// interface ValidationMethod {
+//   id: string;
+//   name: string;
+//   type: ValidationMethodType;
+//   description: string;
+//   advantages: string[];
+//   disadvantages: string[];
+//   useCases: string[];
+//   complexity: ComplexityLevel;
+//   computationalCost: ComplexityLevel;
+//   reliability: ComplexityLevel;
+// }
 
 // Cross-Validation Interfaces
 interface CrossValidationConfig {
@@ -125,56 +123,36 @@ interface BootstrapConfig {
   useCases: string[];
 }
 
-interface TimeSeriesValidationResult {
-  method: string;
-  windows: number;
-  scores: number[];
-  meanScore: number;
-  stdScore: number;
-  temporalStability: number;
-  degenerationRate: number;
-  forecastAccuracy: number[];
-  details: {
-    window: number;
-    trainStart: string;
-    trainEnd: string;
-    testStart: string;
-    testEnd: string;
-    score: number;
-    metrics: Record<string, number>;
-  }[];
-}
-
 // ===== CALIBRATION METHOD INTERFACES =====
 
-interface CalibrationMethod {
-  id: string;
-  name: string;
-  type: CalibrationMethodType;
-  description: string;
-  formula: string;
-  advantages: string[];
-  disadvantages: string[];
-  complexity: ComplexityLevel;
-  accuracy: ComplexityLevel;
-  interpretability: ComplexityLevel;
-  scalability: ComplexityLevel;
-  robustness: ComplexityLevel;
-}
+// interface CalibrationMethod {
+//   id: string;
+//   name: string;
+//   type: CalibrationMethodType;
+//   description: string;
+//   formula: string;
+//   advantages: string[];
+//   disadvantages: string[];
+//   complexity: ComplexityLevel;
+//   accuracy: ComplexityLevel;
+//   interpretability: ComplexityLevel;
+//   scalability: ComplexityLevel;
+//   robustness: ComplexityLevel;
+// }
 
-interface CalibrationConfig {
-  method: string;
-  parameters: Record<string, any>;
-  cvFolds?: number;
-  binStrategy?: BinStrategy;
-  nBins?: number;
-  smoothingParameter?: number;
-  ensemble?: {
-    methods: string[];
-    weights?: number[];
-    voting: VotingStrategy;
-  };
-}
+// interface CalibrationConfig {
+//   method: string;
+//   parameters: Record<string, unknown>;
+//   cvFolds?: number;
+//   binStrategy?: BinStrategy;
+//   nBins?: number;
+//   smoothingParameter?: number;
+//   ensemble?: {
+//     methods: string[];
+//     weights?: number[];
+//     voting: VotingStrategy;
+//   };
+// }
 
 // ===== PERFORMANCE METRICS INTERFACES =====
 
@@ -265,139 +243,120 @@ interface ComprehensiveMetrics {
 
 // ===== EXPERIMENT AND EVALUATION INTERFACES =====
 
-interface ValidationExperiment {
-  id: string;
-  name: string;
-  description: string;
-  model: string;
-  dataset: {
-    name: string;
-    size: number;
-    features: number;
-    target: string;
-    timeRange?: [string, string];
-  };
-  validationConfig: {
-    method: string;
-    config: CrossValidationConfig | HoldoutConfig | TimeSeriesValidationConfig;
-  };
-  calibrationConfig?: CalibrationConfig;
-  metrics: string[];
-  status: ExperimentStatus;
-  startTime?: string;
-  endTime?: string;
-  duration?: number;
-}
+// interface ValidationExperiment {
+//   id: string;
+//   name: string;
+//   description: string;
+//   model: string;
+//   dataset: {
+//     name: string;
+//     size: number;
+//     features: number;
+//     target: string;
+//     timeRange?: [string, string];
+//   };
+//   validationConfig: {
+//     method: string;
+//     config: CrossValidationConfig | HoldoutConfig | TimeSeriesValidationConfig;
+//   };
+//   calibrationConfig?: CalibrationConfig;
+//   metrics: string[];
+//   status: ExperimentStatus;
+//   startTime?: string;
+//   endTime?: string;
+//   duration?: number;
+// }
 
-interface ExperimentResult {
-  experimentId: string;
-  validationResults: CrossValidationResult | HoldoutResult | TimeSeriesValidationResult;
-  calibrationResults?: CalibrationResult;
-  metrics: ComprehensiveMetrics;
-  modelPerformance: {
-    trainingTime: number;
-    inferenceTime: number;
-    memoryUsage: number;
-    modelSize: number;
-  };
-  insights: {
-    strengths: string[];
-    weaknesses: string[];
-    recommendations: string[];
-    riskAssessment: string;
-  };
-}
-
-interface ValidationReport {
-  summary: {
-    totalExperiments: number;
-    completedExperiments: number;
-    averageScore: number;
-    bestMethod: string;
-    recommendedApproach: string;
-  };
-  methodComparison: {
-    method: string;
-    score: number;
-    rank: number;
-    reliability: number;
-    computationalCost: number;
-    interpretability: number;
-  }[];
-  calibrationAnalysis: {
-    uncalibratedScore: number;
-    calibratedScore: number;
-    improvement: number;
-    bestCalibrationMethod: string;
-    calibrationQuality: CalibrationQuality;
-  };
-  recommendations: {
-    productionMethod: string;
-    alternativeMethod: string;
-    calibrationStrategy: string;
-    monitoringMetrics: string[];
-    revalidationFrequency: string;
-  };
-}
+// interface ValidationReport {
+//   summary: {
+//     totalExperiments: number;
+//     completedExperiments: number;
+//     averageScore: number;
+//     bestMethod: string;
+//     recommendedApproach: string;
+//   };
+//   methodComparison: {
+//     method: string;
+//     score: number;
+//     rank: number;
+//     reliability: number;
+//     computationalCost: number;
+//     interpretability: number;
+//   }[];
+//   calibrationAnalysis: {
+//     uncalibratedScore: number;
+//     calibratedScore: number;
+//     improvement: number;
+//     bestCalibrationMethod: string;
+//     calibrationQuality: CalibrationQuality;
+//   };
+//   recommendations: {
+//     productionMethod: string;
+//     alternativeMethod: string;
+//     calibrationStrategy: string;
+//     monitoringMetrics: string[];
+//     revalidationFrequency: string;
+//   };
+// }
 
 // ===== DEMO AND INTERACTION INTERFACES =====
 
-interface ValidationDemoConfig {
-  selectedMethod: string;
-  selectedCalibration: string;
-  selectedMetrics: string[];
-  datasetSize: number;
-  noiseLevel: number;
-  featureCount: number;
-  targetType: TargetType;
-  temporalData: boolean;
-  realTimeMode: boolean;
-}
+// interface ValidationDemoConfig {
+//   selectedMethod: string;
+//   selectedCalibration: string;
+//   selectedMetrics: string[];
+//   datasetSize: number;
+//   noiseLevel: number;
+//   featureCount: number;
+//   targetType: TargetType;
+//   temporalData: boolean;
+//   realTimeMode: boolean;
+// }
 
-interface ValidationDemoState {
-  isRunning: boolean;
-  progress: number;
-  currentStage: string;
-  results?: ExperimentResult;
-  visualizations: {
-    calibrationCurve?: any;
-    reliabilityDiagram?: any;
-    learningCurve?: any;
-    validationCurve?: any;
-    residualPlot?: any;
-    featureImportance?: any;
-  };
-}
+// interface ValidationDemoState {
+//   isRunning: boolean;
+//   progress: number;
+//   currentStage: string;
+//   results?: ExperimentResult;
+//   visualizations: {
+//     calibrationCurve?: unknown;
+//     reliabilityDiagram?: unknown;
+//     learningCurve?: unknown;
+//     validationCurve?: unknown;
+//     residualPlot?: unknown;
+//     featureImportance?: unknown;
+//   };
+// }
 
 // ===== UTILITY INTERFACES =====
 
-interface ValidationConfig {
-  seed: number;
-  verbose: boolean;
-  nJobs: number;
-  backend: 'sklearn' | 'custom' | 'distributed';
-  cachePredictions: boolean;
-  saveIntermediateResults: boolean;
-}
+// interface ValidationConfig {
+//   seed: number;
+//   verbose: boolean;
+//   nJobs: number;
+//   backend: 'sklearn' | 'custom' | 'distributed';
+//   cachePredictions: boolean;
+//   saveIntermediateResults: boolean;
+// }
 
-interface ModelMetadata {
-  name: string;
-  version: string;
-  type: TargetType | 'ranking';
-  algorithm: string;
-  hyperparameters: Record<string, any>;
-  trainingData: {
-    size: number;
-    features: string[];
-    target: string;
-    timeRange?: [string, string];
-  };
-  performance: {
-    training: number;
-    validation: number;
-    test?: number;
-  };
-}
+// interface ModelMetadata {
+//   name: string;
+//   version: string;
+//   type: TargetType | 'ranking';
+//   algorithm: string;
+//   hyperparameters: Record<string, unknown>;
+//   trainingData: {
+//     size: number;
+//     features: string[];
+//     target: string;
+//     timeRange?: [string, string];
+//   };
+//   performance: {
+//     training: number;
+//     validation: number;
+//     test?: number;
+//   };
+// }
 
 // ===== BIAS-VARIANCE ANALYSIS INTERFACES =====
 
@@ -460,86 +419,23 @@ interface ModelComplexityConfig {
   crossValidation: boolean;
 }
 
-// ===== LEARNING CURVE ANALYSIS INTERFACES =====
-
-interface LearningCurveExperiment {
-  id: string;
-  name: string;
-  description: string;
-  modelType: string;
-  sampleSizeRange: [number, number];
-  stepSize: number;
-  convergenceThreshold: number;
-  expectedConvergencePoint: number;
-  dataEfficiency: 'low' | 'medium' | 'high';
-  convergenceRate: 'slow' | 'medium' | 'fast';
-}
-
-interface LearningCurveResult {
-  sampleSize: number;
-  trainScore: number;
-  validationScore: number;
-  testScore?: number;
-  trainingTime: number;
-  convergenceIndicator: number;
-  dataEfficiency: number;
-  overfittingGap: number;
-  generalizationError: number;
-  confidenceInterval: [number, number];
-  isConverged: boolean;
-}
-
-interface LearningCurveVisualization {
-  sampleSizes: number[];
-  trainScores: number[];
-  validationScores: number[];
-  testScores: number[];
-  convergencePoint: number;
-  plateauStart: number;
-  dataEfficiencyScore: number;
-  recommendedSampleSize: number;
-  convergenceAnalysis: {
-    hasConverged: boolean;
-    convergenceRate: 'slow' | 'medium' | 'fast';
-    plateauDetected: boolean;
-    optimalDataSize: number;
-  };
-  insights: {
-    dataEfficiency: string;
-    convergenceBehavior: string;
-    recommendations: string[];
-  };
-}
-
-interface DataSizeConfig {
-  id: string;
-  name: string;
-  description: string;
-  minSamples: number;
-  maxSamples: number;
-  stepStrategy: 'linear' | 'logarithmic' | 'exponential';
-  validationRatio: number;
-  crossValidationFolds: number;
-  randomState: number;
-}
-
-interface FantasyContext {
-  league: {
-    type: 'standard' | 'ppr' | 'half_ppr' | 'dynasty' | 'redraft';
-    size: number;
-    scoringSystem: Record<string, number>;
-  };
-  season: {
-    year: number;
-    week?: number;
-    phase: 'preseason' | 'regular' | 'playoffs';
-  };
-  playerPool: {
-    positions: string[];
-    totalPlayers: number;
-    activeRosters: number;
-  };
-}
+// interface FantasyContext {
+//   league: {
+//     type: 'standard' | 'ppr' | 'half_ppr' | 'dynasty' | 'redraft';
+//     size: number;
+//     scoringSystem: Record<string, number>;
+//   };
+//   season: {
+//     year: number;
+//     week?: number;
+//     phase: 'preseason' | 'regular' | 'playoffs';
+//   };
+//   playerPool: {
+//     positions: string[];
+//     totalPlayers: number;
+//     activeRosters: number;
+//   };
+// }
 
 // Component placeholder for the main section
 const OracleCalibrationValidationSection: React.FC = () => {
@@ -589,13 +485,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
   const [decompositionMethod, setDecompositionMethod] = useState<string>('bootstrap');
 
   // Learning curve analysis state
-  const [selectedLearningModel, setSelectedLearningModel] = useState<string>('neural_network');
-  const [learningCurveExperimentRunning, setLearningCurveExperimentRunning] = useState<boolean>(false);
-  const [learningCurveResults, setLearningCurveResults] = useState<LearningCurveResult[] | null>(null);
-  const [learningCurveProgress, setLearningCurveProgress] = useState<number>(0);
-  const [selectedSampleRange, setSelectedSampleRange] = useState<[number, number]>([100, 5000]);
-  const [learningCurveVisualization, setLearningCurveVisualization] = useState<LearningCurveVisualization | null>(null);
-  const [dataSizeStrategy, setDataSizeStrategy] = useState<string>('logarithmic');
+  // const [selectedLearningModel] = useState<string>('neural_network');
+
+  // const [selectedSampleRange] = useState<[number, number]>([100, 5000]);
+  // const [dataSizeStrategy] = useState<string>('logarithmic');
 
   // Cross-validation method configurations
   const crossValidationMethods: CrossValidationConfig[] = [
@@ -1299,106 +1192,42 @@ const OracleCalibrationValidationSection: React.FC = () => {
     }
   ];
 
-  // Learning curve experiments
-  const learningCurveExperiments: LearningCurveExperiment[] = [
-    {
-      id: 'neural_network_learning',
-      name: 'Neural Network Convergence',
-      description: 'Analyze how neural network performance improves with training data size',
-      modelType: 'neural_network',
-      sampleSizeRange: [100, 5000],
-      stepSize: 100,
-      convergenceThreshold: 0.01,
-      expectedConvergencePoint: 2500,
-      dataEfficiency: 'medium',
-      convergenceRate: 'medium'
-    },
-    {
-      id: 'random_forest_learning',
-      name: 'Random Forest Data Scaling',
-      description: 'Study random forest performance scaling with dataset size',
-      modelType: 'random_forest',
-      sampleSizeRange: [50, 3000],
-      stepSize: 50,
-      convergenceThreshold: 0.005,
-      expectedConvergencePoint: 1500,
-      dataEfficiency: 'high',
-      convergenceRate: 'fast'
-    },
-    {
-      id: 'linear_regression_learning',
-      name: 'Linear Model Efficiency',
-      description: 'Examine linear regression data efficiency and convergence patterns',
-      modelType: 'linear_regression',
-      sampleSizeRange: [50, 2000],
-      stepSize: 50,
-      convergenceThreshold: 0.02,
-      expectedConvergencePoint: 800,
-      dataEfficiency: 'high',
-      convergenceRate: 'fast'
-    },
-    {
-      id: 'gradient_boosting_learning',
-      name: 'Gradient Boosting Scaling',
-      description: 'Analyze gradient boosting performance with increasing data volumes',
-      modelType: 'gradient_boosting',
-      sampleSizeRange: [100, 4000],
-      stepSize: 100,
-      convergenceThreshold: 0.008,
-      expectedConvergencePoint: 2000,
-      dataEfficiency: 'medium',
-      convergenceRate: 'medium'
-    },
-    {
-      id: 'ensemble_learning',
-      name: 'Ensemble Learning Curves',
-      description: 'Study ensemble method convergence and data requirements',
-      modelType: 'ensemble',
-      sampleSizeRange: [200, 6000],
-      stepSize: 200,
-      convergenceThreshold: 0.005,
-      expectedConvergencePoint: 3500,
-      dataEfficiency: 'low',
-      convergenceRate: 'slow'
-    }
-  ];
-
   // Data size configurations
-  const dataSizeConfigs: DataSizeConfig[] = [
-    {
-      id: 'logarithmic',
-      name: 'Logarithmic Scaling',
-      description: 'Sample sizes increase logarithmically for efficient exploration',
-      minSamples: 50,
-      maxSamples: 5000,
-      stepStrategy: 'logarithmic',
-      validationRatio: 0.2,
-      crossValidationFolds: 5,
-      randomState: 42
-    },
-    {
-      id: 'linear',
-      name: 'Linear Scaling',
-      description: 'Sample sizes increase linearly for detailed analysis',
-      minSamples: 100,
-      maxSamples: 3000,
-      stepStrategy: 'linear',
-      validationRatio: 0.25,
-      crossValidationFolds: 5,
-      randomState: 42
-    },
-    {
-      id: 'exponential',
-      name: 'Exponential Scaling',
-      description: 'Sample sizes increase exponentially for rapid exploration',
-      minSamples: 100,
-      maxSamples: 8000,
-      stepStrategy: 'exponential',
-      validationRatio: 0.2,
-      crossValidationFolds: 3,
-      randomState: 42
-    }
-  ];
+  // const dataSizeConfigs: DataSizeConfig[] = [
+  //   {
+  //     id: 'logarithmic',
+  //     name: 'Logarithmic Scaling',
+  //     description: 'Sample sizes increase logarithmically for efficient exploration',
+  //     minSamples: 50,
+  //     maxSamples: 5000,
+  //     stepStrategy: 'logarithmic',
+  //     validationRatio: 0.2,
+  //     crossValidationFolds: 5,
+  //     randomState: 42
+  //   },
+  //   {
+  //     id: 'linear',
+  //     name: 'Linear Scaling',
+  //     description: 'Sample sizes increase linearly for detailed analysis',
+  //     minSamples: 100,
+  //     maxSamples: 3000,
+  //     stepStrategy: 'linear',
+  //     validationRatio: 0.25,
+  //     crossValidationFolds: 5,
+  //     randomState: 42
+  //   },
+  //   {
+  //     id: 'exponential',
+  //     name: 'Exponential Scaling',
+  //     description: 'Sample sizes increase exponentially for rapid exploration',
+  //     minSamples: 100,
+  //     maxSamples: 8000,
+  //     stepStrategy: 'exponential',
+  //     validationRatio: 0.2,
+  //     crossValidationFolds: 3,
+  //     randomState: 42
+  //   }
+  // ];
 
   // Helper functions for cross-validation analysis
   const getCVComplexityScore = (methodId: string): string => {
@@ -1511,7 +1340,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     setHoldoutExperimentRunning(true);
     setHoldoutProgress(0);
 
-    const selectedMethod = holdoutMethods.find((m: any) => m.id === selectedHoldoutMethod);
+    const selectedMethod = holdoutMethods.find((m: HoldoutConfig) => m.id === selectedHoldoutMethod);
     if (!selectedMethod) return;
 
     // Simulate experiment progress
@@ -1873,56 +1702,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
   };
 
   // Helper functions for learning curve analysis
-  const getDataEfficiencyScore = (experimentId: string): string => {
-    const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
-    };
-    return scores[experimentId] || '⭐';
-  };
 
-  const getConvergenceSpeedScore = (experimentId: string): string => {
-    const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
-    };
-    return scores[experimentId] || '⭐';
-  };
-
-  const getScalabilityScore = (experimentId: string): string => {
-    const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
-    };
-    return scores[experimentId] || '⭐';
-  };
-
-  const getMemoryEfficiencyScore = (experimentId: string): string => {
-    const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐',
-      'random_forest_learning': '⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
-    };
-    return scores[experimentId] || '⭐';
-  };
 
   // Simulate time series validation experiment
   const runTimeSeriesExperiment = async () => {
     setTimeSeriesExperimentRunning(true);
     setTimeSeriesProgress(0);
 
-    const selectedMethod = timeSeriesMethods.find((m: any) => m.id === selectedTimeSeriesMethod);
+    const selectedMethod = timeSeriesMethods.find((m: TimeSeriesValidationConfig) => m.id === selectedTimeSeriesMethod);
     if (!selectedMethod) return;
 
     // Simulate experiment progress
@@ -1939,7 +1726,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const windowSize = selectedMethod.windowSize;
     const stepSize = selectedMethod.stepSize;
     
-    let splits = [];
+    const splits = [];
     let currentStart = 0;
     let splitIndex = 0;
 
@@ -2032,7 +1819,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     setBootstrapExperimentRunning(true);
     setBootstrapProgress(0);
 
-    const selectedMethod = bootstrapMethods.find((m: any) => m.id === selectedBootstrapMethod);
+    const selectedMethod = bootstrapMethods.find((m: BootstrapConfig) => m.id === selectedBootstrapMethod);
     if (!selectedMethod) return;
 
     // Simulate experiment progress
@@ -2049,7 +1836,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const baseScore = 0.78 + Math.random() * 0.15;
     
     // Generate bootstrap scores with method-specific characteristics
-    const bootstrapScores = Array.from({ length: nBootstraps }, (_, i) => {
+    const bootstrapScores = Array.from({ length: nBootstraps }, (_, _i) => {
       let score = baseScore;
       
       if (selectedMethod.type === 'basic') {
@@ -2134,7 +1921,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     setCalibrationExperimentRunning(true);
     setCalibrationProgress(0);
 
-    const selectedMethod = calibrationMethods.find((m: any) => m.id === selectedCalibrationMethod);
+    const selectedMethod = calibrationMethods.find((m: { id: string }) => m.id === selectedCalibrationMethod);
     if (!selectedMethod) return;
 
     // Simulate experiment progress
@@ -2165,36 +1952,42 @@ const OracleCalibrationValidationSection: React.FC = () => {
     });
 
     // Generate true labels based on predictions with realistic miscalibration
-    const trueLabels = uncalibratedPredictions.map((pred: any) => {
-      const actualProb = selectedMethod.id === 'bayesian_calibration' 
+    const trueLabels = uncalibratedPredictions.map((pred: number) => {
+      const actualProb = selectedMethod?.id === 'bayesian_calibration' 
         ? pred * 0.9 + 0.05  // Bayesian more accurate
         : pred * 0.85 + 0.075; // Others show overconfidence
       return Math.random() < actualProb ? 1 : 0;
     });
 
     // Generate calibrated predictions based on method characteristics
-    const calibratedPredictions = uncalibratedPredictions.map((pred: any) => {
+    const calibratedPredictions = uncalibratedPredictions.map((pred: number) => {
       let calibrated = pred;
       
-      switch (selectedMethod.id) {
-        case 'temperature_scaling':
+      switch (selectedMethod?.id) {
+        case 'temperature_scaling': {
           // Temperature scaling with T > 1 reduces confidence
           const temperature = 1.5 + Math.random() * 0.5;
           calibrated = 1 / (1 + Math.exp(-Math.log(pred / (1 - pred)) / temperature));
           break;
-        case 'platt_scaling':
+        }
+        case 'platt_scaling': {
           // Platt scaling with learned parameters
           const A = -0.8 + Math.random() * 0.4;
           const B = 0.2 + Math.random() * 0.3;
           calibrated = 1 / (1 + Math.exp(A * pred + B));
           break;
-        case 'isotonic_regression':
+        }
+        case 'isotonic_regression': {
           // Isotonic regression - non-parametric mapping
           calibrated = Math.pow(pred, 0.9 + Math.random() * 0.2);
           break;
-        case 'bayesian_calibration':
+        }
+        case 'bayesian_calibration': {
           // Bayesian calibration with uncertainty
           calibrated = pred * (0.95 + Math.random() * 0.1) + (Math.random() - 0.5) * 0.05;
+          break;
+        }
+        default:
           break;
       }
       
@@ -2255,8 +2048,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const calBrierScore = calibratedPredictions.reduce((sum, pred, idx) => 
       sum + Math.pow(pred - trueLabels[idx], 2), 0) / nSamples;
     
-    const uncalECE = reliabilityDiagram.reduce((sum, bin) => 
-      sum + (bin.uncalibrated.count / nSamples) * bin.uncalibrated.calibrationError, 0);
     const calECE = reliabilityDiagram.reduce((sum, bin) => 
       sum + (bin.calibrated.count / nSamples) * bin.calibrated.calibrationError, 0);
 
@@ -2347,7 +2138,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
     }
 
     // Generate realistic performance metrics based on selected model
-    const selectedModelType = modelTypes.find((m: any) => m.id === selectedModel);
     const nSamples = 1000;
     
     // Generate predictions and ground truth
@@ -2600,7 +2390,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
       const mse = predictions.reduce((sum, pred, i) => sum + Math.pow(pred - trueValues[i], 2), 0) / sampleSize;
       const mae = predictions.reduce((sum, pred, i) => sum + Math.abs(pred - trueValues[i]), 0) / sampleSize;
       const meanTrue = trueValues.reduce((sum, val) => sum + val, 0) / sampleSize;
-      const meanPred = predictions.reduce((sum, val) => sum + val, 0) / sampleSize;
       const ssTotal = trueValues.reduce((sum, val) => sum + Math.pow(val - meanTrue, 2), 0);
       const ssRes = predictions.reduce((sum, pred, i) => sum + Math.pow(trueValues[i] - pred, 2), 0);
       const r2 = 1 - (ssRes / ssTotal);
@@ -2651,87 +2440,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
     setBiasVarianceVisualization(visualization);
     setBiasVarianceExperimentRunning(false);
   };
-
-  // Learning Curve Experiment Simulation
-  const runLearningCurveExperiment = async (experimentId: string) => {
-    setLearningCurveExperimentRunning(true);
-    setLearningCurveProgress(0);
-
-    const selectedExperiment = learningCurveExperiments.find((e: any) => e.id === experimentId);
-    if (!selectedExperiment) return;
-
-    // Simulate experiment progress
-    const steps = ['Data Generation', 'Model Training', 'Sample Size Scaling', 'Performance Measurement', 'Visualization Generation'];
-    for (let step = 0; step < steps.length; step++) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setLearningCurveProgress((step + 1) / steps.length * 100);
-    }
-
-    // Generate learning curve results across sample size range
-    const sampleStart = selectedExperiment.sampleSizeRange[0];
-    const sampleEnd = selectedExperiment.sampleSizeRange[1];
-    const sampleStep = selectedExperiment.stepSize;
-
-    const results: LearningCurveResult[] = [];
-    const sampleSizes: number[] = [];
-    const performanceValues: number[] = [];
-    let convergencePoint = selectedExperiment.expectedConvergencePoint;
-    let converged = false;
-
-    for (let sampleSize = sampleStart; sampleSize <= sampleEnd; sampleSize += sampleStep) {
-      // Simulate performance improvement with increasing sample size
-      let noise = Math.random() * 0.02 - 0.01;
-      let basePerformance = 0.5 + (sampleSize / (convergencePoint * 2));
-      if (sampleSize >= convergencePoint) {
-        basePerformance = 0.95 + noise;
-        converged = true;
-      } else {
-        basePerformance += noise;
-      }
-      basePerformance = Math.min(1, Math.max(0, basePerformance));
-      results.push({
-        sampleSize,
-        trainScore: basePerformance,
-        validationScore: basePerformance * 0.95, // Slightly lower validation score
-        trainingTime: Math.random() * 100 + 50,
-        convergenceIndicator: converged ? 1 : 0,
-        dataEfficiency: basePerformance / (sampleSize / 1000),
-        overfittingGap: basePerformance * 0.05,
-        generalizationError: (1 - basePerformance) * 0.1,
-        confidenceInterval: [basePerformance - 0.02, basePerformance + 0.02] as [number, number],
-        isConverged: converged
-      });
-      sampleSizes.push(sampleSize);
-      performanceValues.push(basePerformance);
-    }
-
-    // Visualization object
-    const visualization: LearningCurveVisualization = {
-      sampleSizes,
-      trainScores: performanceValues,
-      validationScores: performanceValues.map((val: any) => val * 0.95),
-      testScores: performanceValues.map((val: any) => val * 0.93),
-      convergencePoint,
-      plateauStart: convergencePoint * 0.8,
-      dataEfficiencyScore: 0.85,
-      recommendedSampleSize: Math.max(...sampleSizes),
-      convergenceAnalysis: {
-        hasConverged: converged,
-        convergenceRate: 'medium' as const,
-        plateauDetected: true,
-        optimalDataSize: Math.max(...sampleSizes)
-      },
-      insights: {
-        dataEfficiency: 'Good data efficiency achieved',
-        convergenceBehavior: 'Stable convergence pattern',
-        recommendations: ['Continue with current approach', 'Monitor performance']
-      }
-    };
-    setLearningCurveResults(results);
-    setLearningCurveVisualization(visualization);
-    setLearningCurveExperimentRunning(false);
-    setLearningCurveProgress(100);
-  }
 
   // Helper function to render fold blocks
   const renderFoldBlocks = (method: CrossValidationConfig, foldIndex: number) => (
@@ -2898,7 +2606,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       <div className="overview-section">
         <h4>Why Validation Matters in Fantasy Sports</h4>
         <p>
-          Proper validation ensures Oracle's predictions generalize to unseen games and players, 
+          Proper validation ensures Oracle&apos;s predictions generalize to unseen games and players, 
           preventing overfitting to historical data and providing reliable performance estimates.
         </p>
         
@@ -3429,7 +3137,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </div>
           
           <div className="practice-card">
-            <h5>❌ Don't</h5>
+            <h5>❌ Don&apos;t</h5>
             <ul>
               <li>Use holdout with small datasets (&lt;1000 samples)</li>
               <li>Ignore class imbalance in splits</li>
@@ -3760,7 +3468,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </div>
           
           <div className="practice-card">
-            <h5>❌ Don't</h5>
+            <h5>❌ Don&apos;t</h5>
             <ul>
               <li>Shuffle time series data randomly</li>
               <li>Use future information in training sets</li>
@@ -4583,7 +4291,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <div className="insight-item">
             <h5>Model Trust</h5>
             <p>
-              Calibration builds trust in Oracle's predictions by ensuring confidence levels accurately 
+              Calibration builds trust in Oracle&apos;s predictions by ensuring confidence levels accurately 
               reflect prediction quality. This transparency helps users understand when to rely heavily 
               on predictions versus when to consider additional factors.
             </p>
@@ -5353,7 +5061,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {biasVarianceResults.slice(0, 8).map((result, index) => (
+                    {biasVarianceResults.slice(0, 8).map((result, _index) => (
                       <tr key={`result-${result.modelComplexity}`} className={
                         Math.abs(result.modelComplexity - biasVarianceVisualization.optimalComplexity) < 1 ? 'optimal-row' : ''
                       }>
@@ -5462,7 +5170,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     <div className="oracle-calibration-validation-section">
       <div className="section-header">
         <h2>🎯 Prediction Calibration & Validation</h2>
-        <p>Ensuring accuracy, reliability, and trustworthiness in Oracle's predictions</p>
+        <p>Ensuring accuracy, reliability, and trustworthiness in Oracle&apos;s predictions</p>
       </div>
       
       <div className="section-navigation">

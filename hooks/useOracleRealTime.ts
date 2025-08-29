@@ -1,399 +1,525 @@
 /**
- * Custom React hooks for Oracle real-time and collaborative features
- * Provides clean interfaces for components to interact with Oracle services
+ * Oracle Real-Time Hook
+ * Real-time Oracle predictions and fantasy football updates
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { oracleRealTimeService, LivePredictionUpdate } from '../services/oracleRealTimeService';
-import oracleCollaborativeService, { 
-    CollaborativeMessage, 
-    SharedInsight, 
-    CollaborativeRoom
-} from '../services/oracleCollaborativeServiceMock';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
-/**
- * Hook for Oracle real-time functionality
- */
-export const useOracleRealTime = (userId: string, predictionId: string) => {
-    const [isConnected, setIsConnected] = useState(false);
-    const [lastUpdate] = useState<LivePredictionUpdate | null>(null);
-    const [connectionError, setConnectionError] = useState<string | null>(null);
+// Enhanced interfaces for real-time Oracle functionality
+export interface OracleRealTimeState {
+  isConnected: boolean;
+  connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
+  lastUpdateAt: number;
+  pendingUpdates: number;
+  latency: number;
+  activeSubscriptions: string[];
+}
 
-    const connect = useCallback(async () => {
-        try {
-            await oracleRealTimeService.subscribeToPrediction(userId, predictionId);
-            setIsConnected(true);
-            setConnectionError(null);
-        } catch (error) {
-            setConnectionError(error instanceof Error ? error.message : 'Connection failed');
-            setIsConnected(false);
-        }
-    }, [userId, predictionId]);
+export interface PredictionUpdate {
+  id: string;
+  playerId: string;
+  week: number;
+  season: number;
+  prediction: {
+    projectedPoints: number;
+    confidence: number;
+    reasoning: string[];
+    updatedAt: number;
+  };
+  metadata: {
+    source: string;
+    version: string;
+    priority: 'low' | 'medium' | 'high';
+  };
+}
 
-    const disconnect = useCallback(() => {
-        // Disconnect if method exists
-        if ('unsubscribeFromPrediction' in oracleRealTimeService) {
-            (oracleRealTimeService as any).unsubscribeFromPrediction(userId, predictionId);
-        }
-        setIsConnected(false);
-    }, [userId, predictionId]);
+export interface MarketUpdate {
+  id: string;
+  playerId: string;
+  marketData: {
+    ownership: number;
+    salaryChange: number;
+    projectionChange: number;
+    trendDirection: 'up' | 'down' | 'stable';
+    volume: number;
+  };
+  timestamp: number;
+}
 
-    useEffect(() => {
-        connect();
-        return () => disconnect();
-    }, [connect, disconnect]);
+export interface InjuryUpdate {
+  id: string;
+  playerId: string;
+  injuryData: {
+    status: 'healthy' | 'questionable' | 'doubtful' | 'out' | 'ir';
+    description: string;
+    expectedReturn: string | null;
+    severity: 'minor' | 'moderate' | 'major';
+    affectedGames: number[];
+  };
+  timestamp: number;
+}
 
-    return {
-        isConnected,
-        lastUpdate,
-        connectionError,
-        connect,
-        disconnect
-    };
+export interface WeatherUpdate {
+  id: string;
+  gameId: string;
+  weatherData: {
+    temperature: number;
+    windSpeed: number;
+    precipitation: number;
+    conditions: string;
+    domeGame: boolean;
+    impact: 'positive' | 'negative' | 'neutral';
+  };
+  timestamp: number;
+}
+
+export interface NewsUpdate {
+  id: string;
+  playerId: string;
+  newsData: {
+    headline: string;
+    summary: string;
+    impact: 'positive' | 'negative' | 'neutral';
+    reliability: number;
+    tags: string[];
+  };
+  timestamp: number;
+}
+
+export interface SubscriptionConfig {
+  predictions: boolean;
+  injuries: boolean;
+  weather: boolean;
+  market: boolean;
+  news: boolean;
+  playerIds: string[];
+  teamIds: string[];
+}
+
+export interface UserInfo {
+  id: string;
+  username: string;
+  preferences: {
+    notifications: boolean;
+    autoRefresh: boolean;
+    updateFrequency: number;
+  };
+}
+
+// Default subscription configuration
+const DEFAULT_SUBSCRIPTION_CONFIG: SubscriptionConfig = {
+  predictions: true,
+  injuries: true,
+  weather: true,
+  market: false,
+  news: false,
+  playerIds: [],
+  teamIds: []
 };
 
 /**
- * Hook for Oracle collaborative features
+ * Main Oracle real-time hook
  */
-export const useOracleCollaborative = (userId: string, predictionId: string, userInfo?: { username?: string }) => {
-    const [room, setRoom] = useState<CollaborativeRoom | null>(null);
-    const [messages, setMessages] = useState<CollaborativeMessage[]>([]);
-    const [insights, setInsights] = useState<SharedInsight[]>([]);
-    const [polls, setPolls] = useState<any[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export function useOracleRealTime(
+  userInfo: UserInfo | null,
+  config: Partial<SubscriptionConfig> = {}
+) {
+  const mergedConfig = useMemo(() => ({ 
+    ...DEFAULT_SUBSCRIPTION_CONFIG, 
+    ...config 
+  }), [config]);
 
-    // Initialize room
-    useEffect(() => {
-        const initializeRoom = async () => {
-            try {
-                setIsLoading(true);
-                const collaborativeRoom = await oracleCollaborativeService.joinCollaborativeRoom(
-                    predictionId,
-                    userId
-                );
-                
-                setRoom(collaborativeRoom);
-                setMessages(collaborativeRoom.messages || []);
-                setInsights(collaborativeRoom.sharedInsights || []);
-                setPolls(collaborativeRoom.polls || []);
-                setError(null);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to join room');
-            } finally {
-                setIsLoading(false);
-            }
-        };
+  const [state, setState] = useState<OracleRealTimeState>({
+    isConnected: false,
+    connectionStatus: 'disconnected',
+    lastUpdateAt: 0,
+    pendingUpdates: 0,
+    latency: 0,
+    activeSubscriptions: []
+  });
 
-        initializeRoom();
-    }, [userId, predictionId, userInfo]);
+  const [recentUpdates, setRecentUpdates] = useState<{
+    predictions: PredictionUpdate[];
+    injuries: InjuryUpdate[];
+    weather: WeatherUpdate[];
+    market: MarketUpdate[];
+    news: NewsUpdate[];
+  }>({
+    predictions: [],
+    injuries: [],
+    weather: [],
+    market: [],
+    news: []
+  });
 
-    // Send message
-    const sendMessage = useCallback(async (
-        content: string,
-        type: CollaborativeMessage['type'] = 'DISCUSSION',
-        mentions?: string[]
-    ) => {
-        try {
-            const message = await oracleCollaborativeService.sendMessage(
-                userId,
-                predictionId,
-                content,
-                mentions
-            );
-            setMessages(prev => [...prev, message]);
-            return message;
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to send message');
-        }
-    }, [userId, predictionId]);
+  const wsRef = useRef<WebSocket | null>(null);
+  const heartbeatRef = useRef<NodeJS.Timeout | null>(null);
+  const subscriptionsRef = useRef<Set<string>>(new Set());
 
-    // Share insight
-    const shareInsight = useCallback(async (params: any) => {
-        try {
-            // For now, create a mock insight since the method doesn't exist yet
-            const insight: SharedInsight = {
-                id: `insight-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-                predictionId,
-                userId,
-                username: userInfo?.username || `User${userId}`,
-                content: params.content,
-                votes: [],
-                timestamp: new Date().toISOString()
-            };
-            
-            setInsights(prev => [...prev, insight]);
-            return insight;
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to share insight');
-        }
-    }, [userId, predictionId, userInfo]);
+  // Connection management
+  const connect = useCallback(() => {
+    if (!userInfo) return;
 
-    // Create poll
-    const createPoll = useCallback(async (params: any) => {
-        try {
-            // For now, create a mock poll since the method might not be implemented
-            const poll: any = {
-                id: `poll-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-                predictionId,
-                createdBy: userId,
-                title: params.title,
-                question: params.question,
-                options: params.options.map((opt: any, index: number) => ({
-                    id: `opt-${index}-${Math.random().toString(36).substring(2, 6)}`,
-                    ...opt
-                })),
-                type: params.type,
-                expiresAt: new Date(Date.now() + params.expiresInHours * 60 * 60 * 1000).toISOString(),
-                isAnonymous: params.isAnonymous,
-                responses: [],
-                status: 'ACTIVE',
-                createdAt: new Date().toISOString()
-            };
-            
-            setPolls(prev => [...prev, poll]);
-            return poll;
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to create poll');
-        }
-    }, [userId, predictionId]);
+    setState(prev => ({ ...prev, connectionStatus: 'connecting' }));
 
-    // Vote on insight
-    const voteOnInsight = useCallback(async (insightId: string, voteType: 'upvote' | 'downvote') => {
-        try {
-            const updatedInsights = insights.map(i => {
-                if (i.id === insightId) {
-                    const existingVoteIndex = i.votes.findIndex(v => v.userId === userId);
-                    const newVotes = [...i.votes];
-                    
-                    if (existingVoteIndex >= 0) {
-                        if (newVotes[existingVoteIndex].vote === voteType) {
-                            // Remove vote if clicking same type
-                            newVotes.splice(existingVoteIndex, 1);
-                        } else {
-                            // Change vote type
-                            newVotes[existingVoteIndex].vote = voteType;
-                        }
-                    } else {
-                        // Add new vote
-                        newVotes.push({ userId, vote: voteType });
-                    }
-                    
-                    return { ...i, votes: newVotes };
-                }
-                return i;
-            });
-            
-            setInsights(updatedInsights);
-            
-            // Calculate new score
-            const insight = updatedInsights.find(i => i.id === insightId);
-            const score = insight?.votes.reduce((acc, v) => 
-                acc + (v.vote === 'upvote' ? 1 : -1), 0
-            ) || 0;
-            
-            return { success: true, newScore: score };
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to vote on insight');
-        }
-    }, [userId, insights]);
+    try {
+      const wsEndpoint = process.env.REACT_APP_ORACLE_WS_ENDPOINT || 'ws://localhost:8080/oracle';
+      wsRef.current = new WebSocket(`${wsEndpoint}?userId=${userInfo.id}`);
 
-    // Get community analytics
-    const getCommunityAnalytics = useCallback(() => {
-        return {
-            totalMessages: messages.length,
-            averageEngagement: messages.length > 0 ? messages.length / (room?.participants?.length || 1) : 0,
-            consensusLevel: calculateConsensusLevel(insights),
-            topContributors: getTopContributors(messages, insights)
-        };
-    }, [messages, insights, room]);
+      wsRef.current.onopen = () => {
+        setState(prev => ({
+          ...prev,
+          isConnected: true,
+          connectionStatus: 'connected',
+          lastUpdateAt: Date.now()
+        }));
 
-    // Helper function to calculate consensus
-    const calculateConsensusLevel = (insights: SharedInsight[]) => {
-        if (insights.length === 0) return 0;
+        // Start heartbeat
+        startHeartbeat();
         
-        const averageConfidence = insights.reduce((acc, i) => 
-            acc + (i.confidence || 50), 0
-        ) / insights.length;
+        // Subscribe to configured channels
+        setupSubscriptions();
+      };
+
+      wsRef.current.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data) as {
+            type: string;
+            payload: Record<string, unknown>;
+            timestamp: number;
+          };
+          
+          handleMessage(data.type, data.payload, data.timestamp);
+        } catch {
+          // Invalid message format
+        }
+      };
+
+      wsRef.current.onclose = () => {
+        setState(prev => ({
+          ...prev,
+          isConnected: false,
+          connectionStatus: 'disconnected'
+        }));
         
-        return Math.round(averageConfidence);
+        stopHeartbeat();
+      };
+
+      wsRef.current.onerror = () => {
+        setState(prev => ({
+          ...prev,
+          connectionStatus: 'error'
+        }));
+      };
+
+    } catch {
+      setState(prev => ({
+        ...prev,
+        connectionStatus: 'error'
+      }));
+    }
+  }, [handleMessage, setupSubscriptions, startHeartbeat, stopHeartbeat, userInfo]);
+
+  const disconnect = useCallback(() => {
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    
+    stopHeartbeat();
+    subscriptionsRef.current.clear();
+    
+    setState(prev => ({
+      ...prev,
+      isConnected: false,
+      connectionStatus: 'disconnected',
+      activeSubscriptions: []
+    }));
+  }, [stopHeartbeat]);
+
+  // Heartbeat management
+  const startHeartbeat = useCallback(() => {
+    if (heartbeatRef.current) {
+      clearInterval(heartbeatRef.current);
+      heartbeatRef.current = null;
+    }
+    
+    heartbeatRef.current = setInterval(() => {
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        wsRef.current.send(JSON.stringify({
+          type: 'heartbeat',
+          timestamp: Date.now()
+        }));
+      }
+    }, 30000);
+  }, []);
+
+  const stopHeartbeat = useCallback(() => {
+    if (heartbeatRef.current) {
+      clearInterval(heartbeatRef.current);
+      heartbeatRef.current = null;
+    }
+  }, []);
+
+  // Subscription management
+  const setupSubscriptions = useCallback(() => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+
+    const subscriptions: string[] = [];
+
+    if (mergedConfig.predictions) subscriptions.push('predictions');
+    if (mergedConfig.injuries) subscriptions.push('injuries');
+    if (mergedConfig.weather) subscriptions.push('weather');
+    if (mergedConfig.market) subscriptions.push('market');
+    if (mergedConfig.news) subscriptions.push('news');
+
+    // Add player-specific subscriptions
+    mergedConfig.playerIds.forEach(playerId => {
+      subscriptions.push(`player:${playerId}`);
+    });
+
+    // Add team-specific subscriptions
+    mergedConfig.teamIds.forEach(teamId => {
+      subscriptions.push(`team:${teamId}`);
+    });
+
+    wsRef.current.send(JSON.stringify({
+      type: 'subscribe',
+      subscriptions,
+      timestamp: Date.now()
+    }));
+
+    subscriptions.forEach(sub => subscriptionsRef.current.add(sub));
+    
+    setState(prev => ({
+      ...prev,
+      activeSubscriptions: Array.from(subscriptionsRef.current)
+    }));
+  }, [mergedConfig]);
+
+  const subscribe = useCallback((channel: string) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+
+    if (!subscriptionsRef.current.has(channel)) {
+      wsRef.current.send(JSON.stringify({
+        type: 'subscribe',
+        subscriptions: [channel],
+        timestamp: Date.now()
+      }));
+
+      subscriptionsRef.current.add(channel);
+      
+      setState(prev => ({
+        ...prev,
+        activeSubscriptions: Array.from(subscriptionsRef.current)
+      }));
+    }
+  }, []);
+
+  const unsubscribe = useCallback((channel: string) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+
+    if (subscriptionsRef.current.has(channel)) {
+      wsRef.current.send(JSON.stringify({
+        type: 'unsubscribe',
+        subscriptions: [channel],
+        timestamp: Date.now()
+      }));
+
+      subscriptionsRef.current.delete(channel);
+      
+      setState(prev => ({
+        ...prev,
+        activeSubscriptions: Array.from(subscriptionsRef.current)
+      }));
+    }
+  }, []);
+
+  // Message handling
+  const handleMessage = useCallback((messageType: string, payload: Record<string, unknown>, timestamp: number) => {
+    const latency = Date.now() - timestamp;
+    
+    setState(prev => ({
+      ...prev,
+      lastUpdateAt: Date.now(),
+      latency: Math.round((prev.latency + latency) / 2)
+    }));
+
+    switch (messageType) {
+      case 'prediction_update':
+        handlePredictionUpdate(payload as unknown as PredictionUpdate);
+        break;
+      case 'injury_update':
+        handleInjuryUpdate(payload as unknown as InjuryUpdate);
+        break;
+      case 'weather_update':
+        handleWeatherUpdate(payload as unknown as WeatherUpdate);
+        break;
+      case 'market_update':
+        handleMarketUpdate(payload as unknown as MarketUpdate);
+        break;
+      case 'news_update':
+        handleNewsUpdate(payload as unknown as NewsUpdate);
+        break;
+      case 'heartbeat_response':
+        // Heartbeat acknowledged
+        break;
+      default:
+        // Unknown message type
+        break;
+    }
+  }, [handleInjuryUpdate, handleMarketUpdate, handleNewsUpdate, handlePredictionUpdate, handleWeatherUpdate]);
+
+  const handlePredictionUpdate = useCallback((update: PredictionUpdate) => {
+    setRecentUpdates(prev => ({
+      ...prev,
+      predictions: [update, ...prev.predictions.slice(0, 49)]
+    }));
+
+    setState(prev => ({
+      ...prev,
+      pendingUpdates: prev.pendingUpdates + 1
+    }));
+  }, []);
+
+  const handleInjuryUpdate = useCallback((update: InjuryUpdate) => {
+    setRecentUpdates(prev => ({
+      ...prev,
+      injuries: [update, ...prev.injuries.slice(0, 49)]
+    }));
+  }, []);
+
+  const handleWeatherUpdate = useCallback((update: WeatherUpdate) => {
+    setRecentUpdates(prev => ({
+      ...prev,
+      weather: [update, ...prev.weather.slice(0, 49)]
+    }));
+  }, []);
+
+  const handleMarketUpdate = useCallback((update: MarketUpdate) => {
+    setRecentUpdates(prev => ({
+      ...prev,
+      market: [update, ...prev.market.slice(0, 49)]
+    }));
+  }, []);
+
+  const handleNewsUpdate = useCallback((update: NewsUpdate) => {
+    setRecentUpdates(prev => ({
+      ...prev,
+      news: [update, ...prev.news.slice(0, 49)]
+    }));
+  }, []);
+
+  // Player-specific operations
+  const subscribeToPlayer = useCallback((playerId: string) => {
+    subscribe(`player:${playerId}`);
+  }, [subscribe]);
+
+  const unsubscribeFromPlayer = useCallback((playerId: string) => {
+    unsubscribe(`player:${playerId}`);
+  }, [unsubscribe]);
+
+  const requestPlayerUpdate = useCallback((_playerId: string) => {
+    if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return;
+
+    // Request specific player update
+    wsRef.current.send(JSON.stringify({
+      type: 'request_update',
+      playerId: _playerId,
+      timestamp: Date.now()
+    }));
+  }, []);
+
+  // Team operations
+  const subscribeToTeam = useCallback((teamId: string) => {
+    subscribe(`team:${teamId}`);
+  }, [subscribe]);
+
+  // Clear processed updates
+  const clearProcessedUpdates = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      pendingUpdates: 0
+    }));
+  }, []);
+
+  // Initialize connection
+  useEffect(() => {
+    if (userInfo) {
+      connect();
+    }
+    
+    return () => {
+      disconnect();
     };
+  }, [userInfo, connect, disconnect]);
 
-    // Helper function to get top contributors
-    const getTopContributors = (messages: CollaborativeMessage[], insights: SharedInsight[]) => {
-        const contributions = new Map<string, { username: string; count: number }>();
-        
-        messages.forEach(m => {
-            const existing = contributions.get(m.userId) || { username: m.username, count: 0 };
-            contributions.set(m.userId, { ...existing, count: existing.count + 1 });
-        });
-        
-        insights.forEach(i => {
-            const existing = contributions.get(i.userId) || { username: i.username, count: 0 };
-            contributions.set(i.userId, { ...existing, count: existing.count + 2 }); // Insights worth more
-        });
-        
-        return Array.from(contributions.entries())
-            .map(([userId, data]) => ({ userId, ...data }))
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 5);
-    };
+  // Update subscriptions when config changes
+  useEffect(() => {
+    if (state.isConnected) {
+      setupSubscriptions();
+    }
+  }, [state.isConnected, mergedConfig, setupSubscriptions]);
 
-    // React to message
-    const reactToMessage = useCallback(async (messageId: string, reaction: 'HELPFUL' | 'NOT_HELPFUL' | 'MISLEADING') => {
-        try {
-            const reactionMap: Record<string, 'upvote' | 'downvote'> = {
-                'HELPFUL': 'upvote',
-                'NOT_HELPFUL': 'downvote',
-                'MISLEADING': 'downvote'
-            };
-
-            const reactionType = reactionMap[reaction];
-            
-            const updatedMessages = messages.map(m => {
-                if (m.id === messageId) {
-                    const reactions = m.reactions || [];
-                    const existingIndex = reactions.findIndex(r => r.userId === userId);
-                    
-                    if (existingIndex >= 0) {
-                        reactions[existingIndex] = { 
-                            emoji: reaction,
-                            userId,
-                            username: userInfo?.username || `User${userId}`,
-                            timestamp: new Date().toISOString()
-                        };
-                    } else {
-                        reactions.push({ 
-                            emoji: reaction,
-                            userId,
-                            username: userInfo?.username || `User${userId}`,
-                            timestamp: new Date().toISOString()
-                        });
-                    }
-                    
-                    return { ...m, reactions };
-                }
-                return m;
-            });
-            
-            setMessages(updatedMessages);
-            return { success: true };
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to react to message');
-        }
-    }, [userId, messages]);
-
-    // Vote on poll
-    const voteOnPoll = useCallback(async (pollId: string, optionId: string) => {
-        try {
-            const updatedPolls = polls.map((poll: any) => {
-                if (poll.id === pollId) {
-                    const responses = poll.responses || [];
-                    const existingResponseIndex = responses.findIndex((r: any) => r.userId === userId);
-                    
-                    if (existingResponseIndex >= 0) {
-                        // Update existing response
-                        responses[existingResponseIndex] = {
-                            userId,
-                            optionId,
-                            timestamp: new Date().toISOString()
-                        };
-                    } else {
-                        // Add new response
-                        responses.push({
-                            userId,
-                            optionId,
-                            timestamp: new Date().toISOString()
-                        });
-                    }
-                    
-                    // Update option vote counts
-                    const updatedOptions = poll.options.map((option: any) => {
-                        const votes = responses.filter((r: any) => r.optionId === option.id).length;
-                        return { ...option, votes };
-                    });
-                    
-                    return {
-                        ...poll,
-                        responses,
-                        options: updatedOptions,
-                        totalVotes: responses.length
-                    };
-                }
-                return poll;
-            });
-            
-            setPolls(updatedPolls);
-            
-            // Calculate results
-            const poll = updatedPolls.find((p: any) => p.id === pollId);
-            if (poll) {
-                const results = poll.options.map((option: any) => ({
-                    optionId: option.id,
-                    text: option.text,
-                    votes: option.votes,
-                    percentage: poll.totalVotes > 0 ? (option.votes / poll.totalVotes) * 100 : 0
-                }));
-                
-                return { success: true, results };
-            }
-            
-            return { success: false, error: 'Poll not found' };
-        } catch (err) {
-            throw new Error(err instanceof Error ? err.message : 'Failed to vote on poll');
-        }
-    }, [userId, polls]);
-
-    return {
-        room,
-        messages,
-        insights,
-        polls,
-        isLoading,
-        error,
-        sendMessage,
-        shareInsight,
-        createPoll,
-        voteOnInsight,
-        reactToMessage,
-        voteOnPoll,
-        getCommunityAnalytics
-    };
-};
+  return {
+    state,
+    recentUpdates,
+    connect,
+    disconnect,
+    subscribe,
+    unsubscribe,
+    subscribeToPlayer,
+    unsubscribeFromPlayer,
+    subscribeToTeam,
+    requestPlayerUpdate,
+    clearProcessedUpdates,
+    isConnected: state.isConnected,
+    connectionStatus: state.connectionStatus,
+    activeSubscriptions: state.activeSubscriptions
+  };
+}
 
 /**
- * Hook for Oracle notifications
+ * Hook for Oracle prediction reactions
  */
-export const useOracleNotifications = (userId: string) => {
-    const [notifications, setNotifications] = useState<any[]>([]);
-    const [unreadCount, setUnreadCount] = useState(0);
-
-    useEffect(() => {
-        // This would connect to a notification service
-        // For now, just track locally
-        const unread = notifications.filter(n => !n.read).length;
-        setUnreadCount(unread);
-    }, [notifications]);
-
-    const markAsRead = useCallback((notificationId: string) => {
-        setNotifications(prev => 
-            prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
-        );
-    }, []);
-
-    const markAllAsRead = useCallback(() => {
-        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    }, []);
-
-    const clearAll = useCallback(() => {
-        setNotifications([]);
-    }, []);
-
-    return {
-        notifications,
-        unreadCount,
-        markAsRead,
-        markAllAsRead,
-        clearAll
+export function useOracleReactions() {
+  const [reactions, setReactions] = useState<{
+    [predictionId: string]: {
+      likes: number;
+      dislikes: number;
+      userReaction: 'like' | 'dislike' | null;
     };
+  }>({});
+
+  const addReaction = useCallback((predictionId: string, _reactionType: 'like' | 'dislike') => {
+    setReactions(prev => ({
+      ...prev,
+      [predictionId]: {
+        likes: 5,
+        dislikes: 2,
+        userReaction: _reactionType
+      }
+    }));
+  }, []);
+
+  const removeReaction = useCallback((predictionId: string) => {
+    setReactions(prev => ({
+      ...prev,
+      [predictionId]: {
+        ...prev[predictionId],
+        userReaction: null
+      }
+    }));
+  }, []);
+
+  return {
+    reactions,
+    addReaction,
+    removeReaction
+  };
+}
+
+export default {
+  useOracleRealTime,
+  useOracleReactions
 };

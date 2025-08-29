@@ -71,7 +71,7 @@ class RealTimeDraftService {
   private currentDraftRoom: DraftRoom | null = null;
   private connectionAttempts = 0;
   private readonly maxConnectionAttempts = 3;
-  private readonly listeners: Map<string, Function[]> = new Map();
+  private readonly listeners: Map<string, ((...args: any[]) => void)[]> = new Map();
   private isConnecting = false;
   private reconnectTimeout: NodeJS.Timeout | null = null;
 
@@ -115,7 +115,7 @@ class RealTimeDraftService {
           clearTimeout(timeout);
           this.connectionAttempts = 0;
           this.isConnecting = false;
-          console.log('✅ Connected to draft server');
+          // Connected to draft server
           this.emit('connection_established');
           resolve();
         });
@@ -134,7 +134,7 @@ class RealTimeDraftService {
       this.connectionAttempts++;
       
       if (this.connectionAttempts < this.maxConnectionAttempts) {
-        console.log(`Retrying connection (${this.connectionAttempts}/${this.maxConnectionAttempts})...`);
+        // Retrying connection
         this.reconnectTimeout = setTimeout(() => this.connect(), 2000 * this.connectionAttempts);
       } else {
         console.error('Max connection attempts reached');
@@ -397,7 +397,7 @@ class RealTimeDraftService {
 
     // Disconnection handling
     this.socket.on('disconnect', (reason: string) => {
-      console.log('Disconnected from draft server:', reason);
+      // Disconnected from draft server
       this.emit('disconnected', { reason });
       
       // Attempt to reconnect if not intentional
@@ -411,7 +411,7 @@ class RealTimeDraftService {
    * Handle incoming draft events
    */
   private handleDraftEvent(event: DraftEvent): void {
-    console.log('Draft event received:', event);
+    // Draft event received
     
     switch (event.type) {
       case 'pick_made':
@@ -450,7 +450,7 @@ class RealTimeDraftService {
       };
 
       await service.saveAnalyticsData(analyticsData);
-      console.log('✅ Draft pick saved locally:', pick);
+      // Draft pick saved locally
     } catch (error) {
       console.error('Failed to save draft pick locally:', error);
     }
@@ -463,7 +463,7 @@ class RealTimeDraftService {
     // Handle browser visibility changes
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && this.currentDraftRoom && !this.socket?.connected) {
-        console.log('Tab became visible, reconnecting to draft...');
+        // Tab became visible, reconnecting to draft
         this.connect();
       }
     });
@@ -479,7 +479,7 @@ class RealTimeDraftService {
   /**
    * Event emitter functionality
    */
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: any[]) => void): void {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, []);
     }
@@ -489,7 +489,7 @@ class RealTimeDraftService {
     }
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: any[]) => void): void {
     const eventListeners = this.listeners.get(event);
     if (eventListeners) {
       const index = eventListeners.indexOf(callback);

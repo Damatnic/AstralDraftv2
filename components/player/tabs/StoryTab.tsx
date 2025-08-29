@@ -23,7 +23,7 @@ const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
             try {
                 const result = await generatePlayerStory(player, league);
                 setStory(result);
-            } catch (e) {
+            } catch {
                 setError("The Oracle couldn't write this player's story.");
             } finally {
                 setIsLoading(false);

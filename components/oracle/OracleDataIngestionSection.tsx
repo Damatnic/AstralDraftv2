@@ -360,7 +360,7 @@ const OracleDataIngestionSection: React.FC = () => {
           Data Ingestion & Validation Workflows
         </h2>
         <p className="section-description">
-          Explore Oracle's sophisticated data pipeline that processes millions of data points from live sports feeds, 
+          Explore Oracle&apos;s sophisticated data pipeline that processes millions of data points from live sports feeds, 
           validates information in real-time, and ensures prediction-ready data quality through comprehensive validation workflows.
         </p>
       </div>
@@ -441,7 +441,7 @@ const OracleDataIngestionSection: React.FC = () => {
           Data Ingestion Pipeline
         </h3>
         <p className="subsection-description">
-          Oracle's five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
+          Oracle&apos;s five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
         </p>
 
         <div className="pipeline-demo-controls">

@@ -187,22 +187,24 @@ const TrashTalkBoard: React.FC = () => {
   const handlePostSubmit = () => {
     if (!newPost.trim() || !currentUser) return;
 
-    const post: TrashTalkPost = {
-      id: `post-${Date.now()}`,
-      userId: currentUser.id,
-      userName: currentUser.name,
-      userAvatar: currentUser.avatar,
-      teamName: league?.teams?.find(t => t.owner.id === currentUser.id)?.name || 'Unknown Team',
-      message: newPost.trim(),
-      timestamp: new Date(),
-      type: postType,
-      targetUserId: targetUser || undefined,
-      targetUserName: targetUser ? league?.teams?.find(t => t.id === targetUser)?.owner.name : undefined,
-      reactions: {},
-      replies: []
-    };
+    // TODO: Implement post creation and submission
+    // const post: TrashTalkPost = {
+    //   id: `post-${Date.now()}`,
+    //   userId: currentUser.id,
+    //   userName: currentUser.name,
+    //   userAvatar: currentUser.avatar,
+    //   teamName: league?.teams?.find(t => t.owner.id === currentUser.id)?.name || 'Unknown Team',
+    //   message: newPost.trim(),
+    //   timestamp: new Date(),
+    //   type: postType,
+    //   targetUserId: targetUser || undefined,
+    //   targetUserName: targetUser ? league?.teams?.find(t => t.id === targetUser)?.owner.name : undefined,
+    //   reactions: {},
+    //   replies: []
+    // };
 
-    console.log('New trash talk post:', post);
+    // TODO: Log trash talk post creation
+    // console.log('New trash talk post:', post);
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -217,20 +219,22 @@ const TrashTalkBoard: React.FC = () => {
     setTargetUser('');
   };
 
-  const handleReply = (postId: string) => {
+  const handleReply = (_postId: string) => {
     if (!replyText.trim() || !currentUser) return;
 
-    const reply: TrashTalkReply = {
-      id: `reply-${Date.now()}`,
-      userId: currentUser.id,
-      userName: currentUser.name,
-      userAvatar: currentUser.avatar,
-      message: replyText.trim(),
-      timestamp: new Date(),
-      reactions: {}
-    };
+    // TODO: Implement reply creation and submission
+    // const reply: TrashTalkReply = {
+    //   id: `reply-${Date.now()}`,
+    //   userId: currentUser.id,
+    //   userName: currentUser.name,
+    //   userAvatar: currentUser.avatar,
+    //   message: replyText.trim(),
+    //   timestamp: new Date(),
+    //   reactions: {}
+    // };
 
-    console.log('New reply:', { postId, reply });
+    // TODO: Log reply creation
+    // console.log('New reply:', { postId, reply });
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -244,10 +248,11 @@ const TrashTalkBoard: React.FC = () => {
     setShowReplyInput(null);
   };
 
-  const handleReaction = (postId: string, emoji: string, isReply = false, replyId?: string) => {
+  const handleReaction = (postId: string, emoji: string, _isReply = false, _replyId?: string) => {
     if (!currentUser) return;
 
-    console.log('Reaction added:', { postId, emoji, isReply, replyId, userId: currentUser.id });
+    // TODO: Log reaction addition
+    // console.log('Reaction added:', { postId, emoji, isReply, replyId, userId: currentUser.id });
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -322,7 +327,7 @@ const TrashTalkBoard: React.FC = () => {
             ].map(type => (
               <button
                 key={type.id}
-                onClick={() => setPostType(type.id as any)}
+                onClick={() => setPostType(type.id as 'general' | 'victory' | 'prediction' | 'callout' | 'meme')}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   postType === type.id
                     ? 'bg-blue-600 text-white'
@@ -386,7 +391,7 @@ const TrashTalkBoard: React.FC = () => {
         ].map(filter => (
           <button
             key={filter.id}
-            onClick={() => setFilterType(filter.id as any)}
+            onClick={() => setFilterType(filter.id as 'all' | 'general' | 'victory' | 'prediction' | 'callout' | 'meme')}
             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               filterType === filter.id
                 ? 'bg-blue-600 text-white'

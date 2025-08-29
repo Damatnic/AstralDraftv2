@@ -20,9 +20,9 @@ import {
 } from 'lucide-react';
 
 interface MobileAnalyticsDashboardProps {
-    team: Team;
-    players: Player[];
-    leagueStats?: any;
+    _team: Team,
+    _players: Player[],
+    _leagueStats: any
     onRefresh?: () => Promise<void>;
     className?: string;
 }
@@ -45,9 +45,9 @@ interface ChartData {
 }
 
 const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
-    team,
-    players,
-    leagueStats,
+    team: _team,
+    players: _players,
+    leagueStats: _leagueStats,
     onRefresh,
     className = ''
 }) => {

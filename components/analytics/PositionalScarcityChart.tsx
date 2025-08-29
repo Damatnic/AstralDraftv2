@@ -2,7 +2,7 @@
 import React from 'react';
 import { Player, PlayerPosition } from '../../types';
 import { players as allPlayers } from '../../data/players';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface PositionalScarcityChartProps {
     availablePlayers: Player[];
@@ -37,7 +37,7 @@ const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ avail
             <p className="text-xs text-center mb-4 text-gray-500">Percentage of Tiers 1-3 players remaining.</p>
             <div className="space-y-3">
                 {scarcityData.map((data) => (
-                    <Tooltip key={data.pos} text={data.tooltipText}>
+                    <Tooltip key={data.pos} content="This is a tooltip">
                         <div className="flex items-center gap-2 text-xs">
                             <span className="w-8 font-bold text-gray-400">{data.pos}</span>
                             <div className="flex-grow bg-black/20 h-5 rounded-full overflow-hidden">

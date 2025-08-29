@@ -25,7 +25,7 @@ interface LiveDraftRoomProps {
 }
 
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ 
-  isActive = false, 
+  isActive: _isActive = false, 
   onDraftComplete 
 }) => {
   const { state, dispatch } = useAppState();
@@ -34,10 +34,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
   const [isDraftStarted, setIsDraftStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [draftPicks, setDraftPicks] = useState<DraftPick[]>([]);
-  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  // const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
-  const [autoDraftEnabled, setAutoDraftEnabled] = useState<{[teamId: number]: boolean}>({});
+  // const [autoDraftEnabled, setAutoDraftEnabled] = useState<{[teamId: number]: boolean}>({});
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -221,7 +221,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
     }
   };
 
-  const advanceToNextPick = (selectedPlayer: Player) => {
+  const advanceToNextPick = (_selectedPlayer: Player) => {
     playSound('pick');
     
     if (currentPick >= totalPicks) {
@@ -359,7 +359,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
               .filter(pick => pick.isComplete)
               .slice(-10)
               .reverse()
-              .map((pick, index) => {
+              .map((pick, _index) => {
                 const team = draftOrder.find(t => t.id === pick.teamId);
                 return (
                   <motion.div

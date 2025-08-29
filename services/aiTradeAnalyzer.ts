@@ -3,6 +3,8 @@
  * Provides intelligent trade analysis and recommendations using machine learning algorithms
  */
 
+import { logger } from './loggingService';
+
 interface Player {
   id: string;
   name: string;
@@ -104,13 +106,14 @@ interface SmartTradeTarget {
 
 class AITradeAnalyzer {
   private playerDatabase: Map<string, Player> = new Map();
-  private leagueContext: any = null;
+  private leagueContext: unknown = null;
   private seasonWeek: number = 8;
 
   /**
    * Initialize the AI analyzer with player data and league context
    */
-  initialize(players: Player[], leagueData: any, currentWeek: number = 8) {
+  initialize(players: Player[], leagueData: unknown, currentWeek: number = 8) {
+    logger.info('🤖 Initializing AI Trade Analyzer with player database');
     this.playerDatabase.clear();
     players.forEach(player => {
       this.playerDatabase.set(player.id, player);
@@ -125,8 +128,8 @@ class AITradeAnalyzer {
   analyzeTrade(
     teamAPlayers: Player[], 
     teamBPlayers: Player[], 
-    teamAContext: any, 
-    teamBContext: any
+    teamAContext: unknown, 
+    teamBContext: unknown
   ): TradeAnalysis {
     // Calculate player values using multiple factors
     const teamAValue = this.calculateTeamValue(teamAPlayers, teamAContext);
@@ -198,12 +201,13 @@ class AITradeAnalyzer {
   /**
    * Get smart trade targets for a team
    */
-  getSmartTradeTargets(teamRoster: Player[], teamNeeds: string[], leagueTeams: any[]): SmartTradeTarget[] {
+  getSmartTradeTargets(teamRoster: Player[], teamNeeds: string[], leagueTeams: unknown[]): SmartTradeTarget[] {
     const targets: SmartTradeTarget[] = [];
     
     // Analyze each team for potential trade partners
     leagueTeams.forEach(team => {
-      if (team.id === teamRoster[0]?.id) return; // Skip own team
+      const teamObj = team as {id: string; name: string};
+      if (teamObj.id === teamRoster[0]?.id) return; // Skip own team
       
       // Find players that match team needs
       const availablePlayers = this.getAvailablePlayersFromTeam(team, teamNeeds);
@@ -216,7 +220,7 @@ class AITradeAnalyzer {
         if (likelihood > 30) { // Only suggest realistic trades
           targets.push({
             player,
-            targetTeam: team.name,
+            targetTeam: teamObj.name,
             likelihood,
             reasoning: this.generateTradeReasoning(player, team, teamRoster),
             suggestedOffer,
@@ -331,7 +335,14 @@ class AITradeAnalyzer {
     expectedValue: number;
     dropCandidate?: Player;
   }[] {
-    const recommendations: any[] = [];
+    const recommendations: {
+      player: Player;
+      priority: 'high' | 'medium' | 'low';
+      bidAmount: number;
+      reasoning: string;
+      expectedValue: number;
+      dropCandidate?: Player;
+    }[] = [];
     
     availablePlayers.forEach(player => {
       const value = this.calculateWaiverValue(player, teamRoster);
@@ -359,7 +370,7 @@ class AITradeAnalyzer {
 
   // Private helper methods
 
-  private calculateTeamValue(players: Player[], teamContext: any): number {
+  private calculateTeamValue(players: Player[], _teamContext: unknown): number {
     return players.reduce((total, player) => {
       const baseValue = player.projectedPoints * (18 - this.seasonWeek); // Remaining season value
       const consistencyBonus = player.consistency * 0.1;
@@ -379,7 +390,7 @@ class AITradeAnalyzer {
     return Math.min(95, 50 + avgConsistency * 0.3 + dataQuality * 0.2);
   }
 
-  private calculateGrade(teamValue: number, opponentValue: number, team: string): string {
+  private calculateGrade(teamValue: number, opponentValue: number, _team: string): string {
     const difference = teamValue - opponentValue;
     const percentage = (difference / opponentValue) * 100;
     
@@ -394,7 +405,7 @@ class AITradeAnalyzer {
     return 'C-';
   }
 
-  private analyzePositionalImpact(playersOut: Player[], playersIn: Player[], teamContext: any): PositionalImpact[] {
+  private analyzePositionalImpact(playersOut: Player[], playersIn: Player[], _teamContext: unknown): PositionalImpact[] {
     const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
     return positions.map(position => {
       const outValue = playersOut.filter(p => p.position === position).reduce((sum, p) => sum + p.projectedPoints, 0);
@@ -411,7 +422,7 @@ class AITradeAnalyzer {
     });
   }
 
-  private analyzeScheduleImpact(players: Player[], teamContext: any): ScheduleImpact {
+  private analyzeScheduleImpact(players: Player[], _teamContext: unknown): ScheduleImpact {
     const avgScheduleStrength = players.reduce((sum, p) => sum + p.scheduleStrength, 0) / players.length;
     const playoffStrength = avgScheduleStrength * 0.8; // Simplified playoff schedule
     const byeWeekImpact = players.filter(p => p.byeWeek > this.seasonWeek).length;
@@ -444,10 +455,10 @@ class AITradeAnalyzer {
 
   private generateRecommendations(
     fairnessScore: number, 
-    winner: string, 
-    analysis: any, 
-    teamAContext: any, 
-    teamBContext: any
+    _winner: string, 
+    _analysis: unknown, 
+    _teamAContext: unknown, 
+    _teamBContext: unknown
   ): TradeRecommendation[] {
     const recommendations: TradeRecommendation[] = [];
     
@@ -487,8 +498,8 @@ class AITradeAnalyzer {
   private generateAlternativeOffers(
     teamAPlayers: Player[], 
     teamBPlayers: Player[], 
-    teamAContext: any, 
-    teamBContext: any
+    _teamAContext: unknown, 
+    _teamBContext: unknown
   ): AlternativeOffer[] {
     // Simplified alternative generation
     return [
@@ -501,7 +512,7 @@ class AITradeAnalyzer {
     ];
   }
 
-  private generateSummary(fairnessScore: number, winner: string, analysis: any): string {
+  private generateSummary(fairnessScore: number, winner: string, _analysis: unknown): string {
     const fairnessText = fairnessScore > 85 ? 'very fair' : 
                         fairnessScore > 70 ? 'reasonably fair' : 
                         fairnessScore > 50 ? 'somewhat imbalanced' : 'heavily imbalanced';
@@ -513,17 +524,17 @@ class AITradeAnalyzer {
     return `This trade is ${fairnessText} and ${winnerText}. The analysis considers player values, schedule strength, injury risk, and positional impact.`;
   }
 
-  private getAvailablePlayersFromTeam(team: any, needs: string[]): Player[] {
+  private getAvailablePlayersFromTeam(_team: unknown, _needs: string[]): Player[] {
     // Simplified - would analyze team's depth and surplus
     return [];
   }
 
-  private calculateTradeLikelihood(player: Player, team: any, roster: Player[]): number {
+  private calculateTradeLikelihood(_player: Player, _team: unknown, _roster: Player[]): number {
     // AI model to predict trade likelihood
     return Math.random() * 100; // Simplified
   }
 
-  private generateTradeOffer(targetPlayer: Player, roster: Player[], targetTeam: any): Player[] {
+  private generateTradeOffer(targetPlayer: Player, roster: Player[], _targetTeam: unknown): Player[] {
     // AI-generated fair trade offer
     return roster.slice(0, 1); // Simplified
   }
@@ -534,8 +545,8 @@ class AITradeAnalyzer {
     return playerValue - offerValue;
   }
 
-  private generateTradeReasoning(player: Player, team: any, roster: Player[]): string {
-    return `${team.name} has depth at ${player.position} and may be willing to trade for positional needs.`;
+  private generateTradeReasoning(player: Player, team: unknown, _roster: Player[]): string {
+    return `${(team as {name: string}).name} has depth at ${player.position} and may be willing to trade for positional needs.`;
   }
 
   private generateInjuryRecommendation(valueChange: number, weeks: number, player: Player): string {
@@ -571,13 +582,13 @@ class AITradeAnalyzer {
     return lineup;
   }
 
-  private calculateLineupConfidence(lineup: Map<string, Player>, allPlayers: Player[]): number {
+  private calculateLineupConfidence(lineup: Map<string, Player>, _allPlayers: Player[]): number {
     const lineupPlayers = Array.from(lineup.values());
     const avgConsistency = lineupPlayers.reduce((sum, p) => sum + p.consistency, 0) / lineupPlayers.length;
     return Math.min(95, 60 + avgConsistency * 0.35);
   }
 
-  private generateLineupReasoning(player: Player, position: string, available: Player[]): string {
+  private generateLineupReasoning(player: Player, position: string, _available: Player[]): string {
     return `${player.name} selected for ${position} based on projected points (${player.projectedPoints}) and consistency (${player.consistency}%).`;
   }
 

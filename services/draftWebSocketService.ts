@@ -312,8 +312,7 @@ class DraftWebSocketService {
     });
   }
 
-  private handleOpen(event: Event): void {
-    console.log('Connected to draft room WebSocket');
+  private handleOpen(_event: Event): void {
     this.isConnecting = false;
     this.reconnectAttempts = 0;
     this.startHeartbeat();
@@ -342,7 +341,6 @@ class DraftWebSocketService {
   }
 
   private handleClose(event: CloseEvent): void {
-    console.log('Draft room WebSocket closed:', event.code, event.reason);
     this.isConnecting = false;
     
     if (this.heartbeatInterval) {
@@ -490,8 +488,6 @@ class DraftWebSocketService {
 
     this.reconnectAttempts++;
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-    
-    console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
     
     setTimeout(() => {
       if (this.roomState) {

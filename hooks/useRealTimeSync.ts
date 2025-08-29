@@ -1,599 +1,476 @@
 /**
- * Enhanced Real-Time Sync Hook
- * React hook for managing real-time data synchronization with WebSocket connections
+ * Real-Time Sync Hook
+ * Advanced real-time synchronization system for multiplayer fantasy football
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { authService } from '../services/authService';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
-interface SyncConnection {
-    id: string;
-    isConnected: boolean;
-    isAuthenticated: boolean;
-    latency: number;
-    reconnectCount: number;
-    lastUpdate: number;
+// Enhanced interfaces for real-time synchronization
+export interface SyncState {
+  isConnected: boolean;
+  isReconnecting: boolean;
+  connectionAttempts: number;
+  lastSyncAt: number;
+  pendingChanges: number;
+  syncStatus: 'idle' | 'syncing' | 'error' | 'offline';
+  latency: number;
 }
 
-interface SyncMetrics {
-    eventsReceived: number;
-    eventsSent: number;
-    conflictsDetected: number;
-    offlineEventsQueued: number;
-    dataVolume: number;
-    connectionUptime: number;
+export interface SyncMessage {
+  id: string;
+  type: 'sync' | 'heartbeat' | 'update' | 'conflict' | 'initial';
+  timestamp: number;
+  userId: string;
+  data: Record<string, unknown>;
+  priority: 'low' | 'medium' | 'high';
 }
 
-interface RealTimeSyncOptions {
-    leagueId: string;
-    userId: string;
-    autoReconnect?: boolean;
-    reconnectDelay?: number;
-    maxReconnectAttempts?: number;
-    subscriptions?: string[];
-    enableOfflineSync?: boolean;
-    enableMetrics?: boolean;
+export interface ConflictResolution {
+  strategy: 'last_write_wins' | 'merge' | 'manual';
+  localVersion: number;
+  remoteVersion: number;
+  resolvedData: Record<string, unknown>;
 }
 
-interface UseRealTimeSyncReturn {
-    // Connection state
-    connection: SyncConnection;
-    isConnecting: boolean;
-    isOffline: boolean;
-    error: string | null;
-    
-    // Data state
-    syncVersion: number;
-    lastSync: number;
-    pendingEvents: any[];
-    conflicts: any[];
-    
-    // Metrics
-    metrics: SyncMetrics;
-    
-    // Actions
-    connect: () => Promise<void>;
-    disconnect: () => void;
-    subscribe: (channels: string[]) => void;
-    unsubscribe: (channels: string[]) => void;
-    sendEvent: (eventType: string, data: any, priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL') => void;
-    resolveConflict: (conflictId: string, resolution: any) => void;
-    forceSync: () => void;
-    
-    // Event handlers
-    onScoreUpdate: (callback: (update: any) => void) => void;
-    onPlayerUpdate: (callback: (update: any) => void) => void;
-    onLineupChange: (callback: (change: any) => void) => void;
-    onTradeProposal: (callback: (trade: any) => void) => void;
-    onInjuryAlert: (callback: (alert: any) => void) => void;
+export interface OfflineChange {
+  id: string;
+  action: 'create' | 'update' | 'delete';
+  resourceType: string;
+  resourceId: string;
+  data: Record<string, unknown>;
+  timestamp: number;
+  retryCount: number;
 }
 
-export function useRealTimeSync(options: RealTimeSyncOptions): UseRealTimeSyncReturn {
-    const wsRef = useRef<WebSocket | null>(null);
-    const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const heartbeatIntervalRef = useRef<NodeJS.Timeout | null>(null);
-    const eventCallbacksRef = useRef<Map<string, ((data: any) => void)[]>>(new Map());
-    
-    // State management
-    const [connection, setConnection] = useState<SyncConnection>({
-        id: '',
-        isConnected: false,
-        isAuthenticated: false,
-        latency: 0,
-        reconnectCount: 0,
-        lastUpdate: 0
-    });
-    
-    const [isConnecting, setIsConnecting] = useState(false);
-    const [isOffline, setIsOffline] = useState(!navigator.onLine);
-    const [error, setError] = useState<string | null>(null);
-    const [syncVersion, setSyncVersion] = useState(1);
-    const [lastSync, setLastSync] = useState(Date.now());
-    const [pendingEvents, setPendingEvents] = useState<any[]>([]);
-    const [conflicts, setConflicts] = useState<any[]>([]);
-    
-    const [metrics, setMetrics] = useState<SyncMetrics>({
-        eventsReceived: 0,
-        eventsSent: 0,
-        conflictsDetected: 0,
-        offlineEventsQueued: 0,
-        dataVolume: 0,
-        connectionUptime: 0
-    });
+export interface SyncConfig {
+  endpoint: string;
+  heartbeatInterval: number;
+  reconnectDelay: number;
+  maxReconnectAttempts: number;
+  enableOfflineMode: boolean;
+  conflictResolution: 'last_write_wins' | 'merge' | 'manual';
+  batchSize: number;
+}
 
-    const {
-        leagueId,
-        userId,
-        autoReconnect = true,
-        reconnectDelay = 5000,
-        maxReconnectAttempts = 10,
-        subscriptions = ['*'],
-        enableOfflineSync = true,
-        enableMetrics = true
-    } = options;
+// Default configuration
+const DEFAULT_SYNC_CONFIG: SyncConfig = {
+  endpoint: process.env.REACT_APP_WS_ENDPOINT || 'ws://localhost:8080',
+  heartbeatInterval: 30000,
+  reconnectDelay: 1000,
+  maxReconnectAttempts: 5,
+  enableOfflineMode: true,
+  conflictResolution: 'last_write_wins',
+  batchSize: 10
+};
 
-    // WebSocket connection management
-    const connect = useCallback(async (): Promise<void> => {
-        if (isConnecting || connection.isConnected) {
-            return;
-        }
+/**
+ * Main real-time sync hook
+ */
+export function useRealTimeSync(config: Partial<SyncConfig> = {}) {
+  const mergedConfig = useMemo(() => ({ 
+    ...DEFAULT_SYNC_CONFIG, 
+    ...config 
+  }), [config]);
 
-        setIsConnecting(true);
-        setError(null);
+  const [state, setState] = useState<SyncState>({
+    isConnected: false,
+    isReconnecting: false,
+    connectionAttempts: 0,
+    lastSyncAt: 0,
+    pendingChanges: 0,
+    syncStatus: 'idle',
+    latency: 0
+  });
 
+  const [offlineChanges, setOfflineChanges] = useState<OfflineChange[]>([]);
+  const wsRef = useRef<WebSocket | null>(null);
+  const heartbeatRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectRef = useRef<NodeJS.Timeout | null>(null);
+  const messageQueueRef = useRef<SyncMessage[]>([]);
+
+  // Connection management
+  const connect = useCallback(() => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) return;
+
+    setState(prev => ({ 
+      ...prev, 
+      isReconnecting: true,
+      syncStatus: 'syncing'
+    }));
+
+    try {
+      wsRef.current = new WebSocket(mergedConfig.endpoint);
+
+      wsRef.current.onopen = () => {
+        setState(prev => ({
+          ...prev,
+          isConnected: true,
+          isReconnecting: false,
+          connectionAttempts: 0,
+          syncStatus: 'idle'
+        }));
+
+        // Start heartbeat
+        startHeartbeat();
+        
+        // Process offline changes
+        processOfflineChanges();
+      };
+
+      wsRef.current.onmessage = (event) => {
         try {
-            const wsUrl = new URL('ws://localhost:3002');
-            wsUrl.searchParams.set('leagueId', leagueId);
-            wsUrl.searchParams.set('userId', userId);
-            wsUrl.searchParams.set('token', authService.getSessionToken() || '');
-
-            const ws = new WebSocket(wsUrl.toString());
-            wsRef.current = ws;
-
-            ws.onopen = () => {
-                console.log('🔗 Real-time sync connected');
-                setIsConnecting(false);
-                setConnection(prev => ({
-                    ...prev,
-                    isConnected: true,
-                    lastUpdate: Date.now()
-                }));
-                
-                // Subscribe to channels
-                if (subscriptions.length > 0) {
-                    subscribe(subscriptions);
-                }
-                
-                // Start heartbeat
-                startHeartbeat();
-                
-                // Process offline events if enabled
-                if (enableOfflineSync && pendingEvents.length > 0) {
-                    processOfflineEvents();
-                }
-            };
-
-            ws.onmessage = (event) => {
-                try {
-                    const message = JSON.parse(event.data);
-                    handleMessage(message);
-                } catch (error) {
-                    console.error('Failed to parse WebSocket message:', error);
-                }
-            };
-
-            ws.onclose = (event) => {
-                console.log('🔌 Real-time sync disconnected:', event.code, event.reason);
-                setConnection(prev => ({
-                    ...prev,
-                    isConnected: false,
-                    isAuthenticated: false
-                }));
-                
-                stopHeartbeat();
-                
-                if (autoReconnect && connection.reconnectCount < maxReconnectAttempts) {
-                    scheduleReconnect();
-                }
-            };
-
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-                setError('Connection error occurred');
-                setIsConnecting(false);
-            };
-
-        } catch (error) {
-            console.error('Failed to connect to real-time sync:', error);
-            setError('Failed to establish connection');
-            setIsConnecting(false);
-        }
-    }, [isConnecting, connection.isConnected, leagueId, userId, authService.getSessionToken(), subscriptions, autoReconnect, connection.reconnectCount, maxReconnectAttempts, enableOfflineSync, pendingEvents.length]);
-
-    const disconnect = useCallback(() => {
-        if (wsRef.current) {
-            wsRef.current.close(1000, 'User disconnected');
-            wsRef.current = null;
-        }
-        
-        stopHeartbeat();
-        
-        if (reconnectTimeoutRef.current) {
-            clearTimeout(reconnectTimeoutRef.current);
-            reconnectTimeoutRef.current = null;
-        }
-        
-        setConnection(prev => ({
+          const message: SyncMessage = JSON.parse(event.data);
+          handleMessage(message);
+        } catch {
+          setState(prev => ({
             ...prev,
-            isConnected: false,
-            isAuthenticated: false
+            syncStatus: 'error'
+          }));
+        }
+      };
+
+      wsRef.current.onclose = () => {
+        setState(prev => ({
+          ...prev,
+          isConnected: false,
+          syncStatus: 'offline'
         }));
-    }, []);
 
-    // Message handling
-    const handleMessage = useCallback((message: any) => {
-        setConnection(prev => ({ ...prev, lastUpdate: Date.now() }));
-        
-        if (enableMetrics) {
-            setMetrics(prev => ({
-                ...prev,
-                eventsReceived: prev.eventsReceived + 1,
-                dataVolume: prev.dataVolume + JSON.stringify(message).length
-            }));
-        }
+        stopHeartbeat();
+        scheduleReconnect();
+      };
 
-        switch (message.type) {
-            case 'INITIAL_SYNC':
-                handleInitialSync(message);
-                break;
-            case 'SYNC_EVENT':
-                handleSyncEvent(message);
-                break;
-            case 'CONFLICT_NOTIFICATION':
-                handleConflictNotification(message);
-                break;
-            case 'OFFLINE_SYNC':
-                handleOfflineSync(message);
-                break;
-            case 'PONG':
-                handlePong(message);
-                break;
-            case 'SUBSCRIPTION_CONFIRMED':
-                console.log('Subscriptions confirmed:', message.channels);
-                break;
-            case 'ERROR':
-                setError(message.error);
-                break;
-            default:
-                console.warn('Unknown message type:', message.type);
-        }
-    }, [enableMetrics]);
-
-    const handleInitialSync = useCallback((message: any) => {
-        console.log('📥 Received initial sync data');
-        setSyncVersion(message.version);
-        setLastSync(message.timestamp);
-        
-        // Process initial data and update app state
-        if (message.data) {
-            // Update scores
-            if (message.data.scores) {
-                Object.values(message.data.scores).forEach((score: any) => {
-                    console.log('📊 Score update received:', { leagueId, score });
-                    // Real-time score updates will be handled by event callbacks
-                });
-            }
-            
-            // Update player data
-            if (message.data.players) {
-                Object.values(message.data.players).forEach((player: any) => {
-                    console.log('👤 Player update received:', { leagueId, player });
-                    // Real-time player updates will be handled by event callbacks
-                });
-            }
-            
-            // Update lineups
-            if (message.data.lineups) {
-                Object.values(message.data.lineups).forEach((lineup: any) => {
-                    console.log('📋 Lineup update received:', { leagueId, lineup });
-                    // Real-time lineup updates will be handled by event callbacks
-                });
-            }
-        }
-    }, [leagueId]);
-
-    const handleSyncEvent = useCallback((message: any) => {
-        const event = message.event;
-        setSyncVersion(event.version);
-        setLastSync(message.timestamp);
-        
-        // Trigger event-specific callbacks
-        const eventType = event.type;
-        const callbacks = eventCallbacksRef.current.get(eventType) || [];
-        callbacks.forEach(callback => {
-            try {
-                callback(event.data);
-            } catch (error) {
-                console.error('Event callback error:', error);
-            }
-        });
-        
-        // Update app state based on event type
-        switch (eventType) {
-            case 'SCORE_UPDATE':
-                console.log('📊 Live score update:', { leagueId, score: event.data });
-                // Real-time score updates handled via callbacks
-                break;
-            case 'PLAYER_UPDATE':
-                console.log('👤 Player status update:', { leagueId, player: event.data });
-                // Real-time player updates handled via callbacks
-                break;
-            case 'LINEUP_CHANGE':
-                console.log('📋 Lineup change:', { leagueId, lineup: event.data });
-                // Real-time lineup updates handled via callbacks
-                break;
-            case 'TRADE_PROPOSAL':
-                console.log('🔄 Trade proposal:', { leagueId, trade: event.data });
-                // Real-time trade proposals handled via callbacks
-                break;
-            case 'INJURY_ALERT':
-                console.log('🚨 Injury alert:', { leagueId, alert: event.data });
-                // Real-time injury alerts handled via callbacks
-                break;
-        }
-    }, [leagueId]);
-
-    const handleConflictNotification = useCallback((message: any) => {
-        console.log('⚠️ Conflict detected:', message.conflict);
-        setConflicts(prev => [...prev, message.conflict]);
-        
-        if (enableMetrics) {
-            setMetrics(prev => ({
-                ...prev,
-                conflictsDetected: prev.conflictsDetected + 1
-            }));
-        }
-    }, [enableMetrics]);
-
-    const handleOfflineSync = useCallback((message: any) => {
-        console.log('📤 Processing offline sync:', message.events.length, 'events');
-        
-        // Process offline events
-        message.events.forEach((event: any) => {
-            handleSyncEvent({ event, timestamp: Date.now() });
-        });
-        
-        // Clear pending events
-        setPendingEvents([]);
-    }, [handleSyncEvent]);
-
-    const handlePong = useCallback((message: any) => {
-        const latency = Date.now() - message.timestamp;
-        setConnection(prev => ({ ...prev, latency }));
-    }, []);
-
-    // Subscription management
-    const subscribe = useCallback((channels: string[]) => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-            return;
-        }
-
-        wsRef.current.send(JSON.stringify({
-            type: 'SUBSCRIBE',
-            channels
+      wsRef.current.onerror = () => {
+        setState(prev => ({
+          ...prev,
+          syncStatus: 'error'
         }));
-    }, []);
+      };
 
-    const unsubscribe = useCallback((channels: string[]) => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-            return;
-        }
+    } catch {
+      setState(prev => ({
+        ...prev,
+        isReconnecting: false,
+        syncStatus: 'error'
+      }));
+    }
+  }, []);
 
-        wsRef.current.send(JSON.stringify({
-            type: 'UNSUBSCRIBE',
-            channels
-        }));
-    }, []);
+  const disconnect = useCallback(() => {
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
+    
+    stopHeartbeat();
+    clearReconnectTimer();
+    
+    setState(prev => ({
+      ...prev,
+      isConnected: false,
+      isReconnecting: false,
+      syncStatus: 'offline'
+    }));
+  }, []);
 
-    // Event sending
-    const sendEvent = useCallback((eventType: string, data: any, priority: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' = 'MEDIUM') => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-            // Queue for offline sync if enabled
-            if (enableOfflineSync) {
-                const offlineEvent = {
-                    eventType,
-                    data,
-                    priority,
-                    timestamp: Date.now(),
-                    version: syncVersion + 1
-                };
-                setPendingEvents(prev => [...prev, offlineEvent]);
-                
-                if (enableMetrics) {
-                    setMetrics(prev => ({
-                        ...prev,
-                        offlineEventsQueued: prev.offlineEventsQueued + 1
-                    }));
-                }
-            }
-            return;
-        }
-
-        const message = {
-            type: 'SYNC_EVENT',
-            eventType,
-            data,
-            priority,
-            version: syncVersion + 1,
-            requiresAck: priority === 'CRITICAL'
+  // Heartbeat management
+  const startHeartbeat = useCallback(() => {
+    stopHeartbeat();
+    
+    heartbeatRef.current = setInterval(() => {
+      if (wsRef.current?.readyState === WebSocket.OPEN) {
+        const heartbeat: SyncMessage = {
+          id: `heartbeat_${Date.now()}`,
+          type: 'heartbeat',
+          timestamp: Date.now(),
+          userId: 'current_user',
+          data: {},
+          priority: 'low'
         };
-
-        wsRef.current.send(JSON.stringify(message));
         
-        if (enableMetrics) {
-            setMetrics(prev => ({
-                ...prev,
-                eventsSent: prev.eventsSent + 1,
-                dataVolume: prev.dataVolume + JSON.stringify(message).length
-            }));
-        }
-    }, [enableOfflineSync, syncVersion, enableMetrics]);
+        sendMessage(heartbeat);
+      }
+    }, mergedConfig.heartbeatInterval);
+  }, []);
 
-    // Conflict resolution
-    const resolveConflict = useCallback((conflictId: string, resolution: any) => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-            return;
-        }
+  const stopHeartbeat = useCallback(() => {
+    if (heartbeatRef.current) {
+      clearInterval(heartbeatRef.current);
+      heartbeatRef.current = null;
+    }
+  }, []);
 
-        wsRef.current.send(JSON.stringify({
-            type: 'CONFLICT_RESOLUTION',
-            conflictId,
-            resolution
-        }));
-        
-        // Remove from local conflicts
-        setConflicts(prev => prev.filter(c => c.conflictId !== conflictId));
-    }, []);
+  // Reconnection management
+  const scheduleReconnect = useCallback(() => {
+    if (state.connectionAttempts >= mergedConfig.maxReconnectAttempts) {
+      setState(prev => ({ ...prev, syncStatus: 'error' }));
+      return;
+    }
 
-    // Force sync
-    const forceSync = useCallback(() => {
-        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
-            return;
-        }
+    const delay = mergedConfig.reconnectDelay * Math.pow(2, state.connectionAttempts);
+    
+    reconnectRef.current = setTimeout(() => {
+      setState(prev => ({
+        ...prev,
+        connectionAttempts: prev.connectionAttempts + 1
+      }));
+      
+      connect();
+    }, delay);
+  }, [state.connectionAttempts, mergedConfig.maxReconnectAttempts, mergedConfig.reconnectDelay, connect]);
 
-        wsRef.current.send(JSON.stringify({
-            type: 'FORCE_SYNC',
-            timestamp: Date.now()
-        }));
-    }, []);
+  const clearReconnectTimer = useCallback(() => {
+    if (reconnectRef.current) {
+      clearTimeout(reconnectRef.current);
+      reconnectRef.current = null;
+    }
+  }, []);
 
-    // Event callback registration
-    const registerEventCallback = useCallback((eventType: string, callback: (data: any) => void) => {
-        const callbacks = eventCallbacksRef.current.get(eventType) || [];
-        callbacks.push(callback);
-        eventCallbacksRef.current.set(eventType, callbacks);
-        
-        // Return unsubscribe function
-        return () => {
-            const updatedCallbacks = eventCallbacksRef.current.get(eventType)?.filter(cb => cb !== callback) || [];
-            if (updatedCallbacks.length > 0) {
-                eventCallbacksRef.current.set(eventType, updatedCallbacks);
-            } else {
-                eventCallbacksRef.current.delete(eventType);
-            }
-        };
-    }, []);
+  // Message handling
+  const handleMessage = useCallback((message: SyncMessage) => {
+    const latency = Date.now() - message.timestamp;
+    
+    setState(prev => ({
+      ...prev,
+      lastSyncAt: Date.now(),
+      latency: Math.round((prev.latency + latency) / 2) // Moving average
+    }));
 
-    // Event handler functions
-    const onScoreUpdate = useCallback((callback: (update: any) => void) => {
-        return registerEventCallback('SCORE_UPDATE', callback);
-    }, [registerEventCallback]);
+    switch (message.type) {
+      case 'initial':
+        handleInitialSync(message);
+        break;
+      case 'update':
+        handleSyncEvent(message);
+        break;
+      case 'conflict':
+        handleConflictNotification(message);
+        break;
+      case 'heartbeat':
+        handlePong(message);
+        break;
+      case 'sync':
+        handleOfflineSync(message);
+        break;
+      default:
+        // Unknown message type
+        break;
+    }
+  }, []);
 
-    const onPlayerUpdate = useCallback((callback: (update: any) => void) => {
-        return registerEventCallback('PLAYER_UPDATE', callback);
-    }, [registerEventCallback]);
+  const handleInitialSync = useCallback((_message: SyncMessage) => {
+    // Handle initial sync data
+    setState(prev => ({
+      ...prev,
+      syncStatus: 'idle',
+      lastSyncAt: Date.now()
+    }));
+  }, []);
 
-    const onLineupChange = useCallback((callback: (change: any) => void) => {
-        return registerEventCallback('LINEUP_CHANGE', callback);
-    }, [registerEventCallback]);
+  const handleSyncEvent = useCallback((_message: SyncMessage) => {
+    // Handle real-time updates
+    setState(prev => ({
+      ...prev,
+      lastSyncAt: Date.now()
+    }));
+  }, []);
 
-    const onTradeProposal = useCallback((callback: (trade: any) => void) => {
-        return registerEventCallback('TRADE_PROPOSAL', callback);
-    }, [registerEventCallback]);
-
-    const onInjuryAlert = useCallback((callback: (alert: any) => void) => {
-        return registerEventCallback('INJURY_ALERT', callback);
-    }, [registerEventCallback]);
-
-    // Utility functions
-    const startHeartbeat = useCallback(() => {
-        heartbeatIntervalRef.current = setInterval(() => {
-            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-                wsRef.current.send(JSON.stringify({
-                    type: 'PING',
-                    timestamp: Date.now()
-                }));
-            }
-        }, 30000); // 30 seconds
-    }, []);
-
-    const stopHeartbeat = useCallback(() => {
-        if (heartbeatIntervalRef.current) {
-            clearInterval(heartbeatIntervalRef.current);
-            heartbeatIntervalRef.current = null;
-        }
-    }, []);
-
-    const scheduleReconnect = useCallback(() => {
-        if (reconnectTimeoutRef.current) {
-            clearTimeout(reconnectTimeoutRef.current);
-        }
-        
-        const delay = reconnectDelay * Math.pow(2, connection.reconnectCount); // Exponential backoff
-        
-        reconnectTimeoutRef.current = setTimeout(() => {
-            setConnection(prev => ({ ...prev, reconnectCount: prev.reconnectCount + 1 }));
-            connect();
-        }, delay);
-    }, [reconnectDelay, connection.reconnectCount, connect]);
-
-    const processOfflineEvents = useCallback(() => {
-        pendingEvents.forEach(event => {
-            sendEvent(event.eventType, event.data, event.priority);
-        });
-        setPendingEvents([]);
-    }, [pendingEvents, sendEvent]);
-
-    // Network status monitoring
-    useEffect(() => {
-        const handleOnline = () => {
-            setIsOffline(false);
-            if (autoReconnect && !connection.isConnected) {
-                connect();
-            }
-        };
-
-        const handleOffline = () => {
-            setIsOffline(true);
-        };
-
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
-
-        return () => {
-            window.removeEventListener('online', handleOnline);
-            window.removeEventListener('offline', handleOffline);
-        };
-    }, [autoReconnect, connection.isConnected, connect]);
-
-    // Auto-connect on mount
-    useEffect(() => {
-        if (!isOffline) {
-            connect();
-        }
-
-        return () => {
-            disconnect();
-        };
-    }, [leagueId, userId]); // Only reconnect when core params change
-
-    // Cleanup on unmount
-    useEffect(() => {
-        return () => {
-            disconnect();
-        };
-    }, [disconnect]);
-
-    return {
-        // Connection state
-        connection,
-        isConnecting,
-        isOffline,
-        error,
-        
-        // Data state
-        syncVersion,
-        lastSync,
-        pendingEvents,
-        conflicts,
-        
-        // Metrics
-        metrics,
-        
-        // Actions
-        connect,
-        disconnect,
-        subscribe,
-        unsubscribe,
-        sendEvent,
-        resolveConflict,
-        forceSync,
-        
-        // Event handlers
-        onScoreUpdate,
-        onPlayerUpdate,
-        onLineupChange,
-        onTradeProposal,
-        onInjuryAlert
+  const handleConflictNotification = useCallback((message: SyncMessage) => {
+    // Handle conflict resolution
+    const resolution: ConflictResolution = {
+      strategy: mergedConfig.conflictResolution,
+      localVersion: 1,
+      remoteVersion: 2,
+      resolvedData: message.data
     };
+
+    // Apply conflict resolution strategy
+    if (resolution.strategy === 'last_write_wins') {
+      // Accept remote changes
+      setState(prev => ({
+        ...prev,
+        lastSyncAt: Date.now()
+      }));
+    }
+  }, [mergedConfig.conflictResolution]);
+
+  const handlePong = useCallback((message: SyncMessage) => {
+    // Handle heartbeat response
+    const latency = Date.now() - message.timestamp;
+    setState(prev => ({
+      ...prev,
+      latency: latency
+    }));
+  }, []);
+
+  const handleOfflineSync = useCallback((_message: SyncMessage) => {
+    // Handle offline sync completion
+    setState(prev => ({
+      ...prev,
+      pendingChanges: Math.max(0, prev.pendingChanges - 1),
+      lastSyncAt: Date.now()
+    }));
+  }, []);
+
+  // Message sending
+  const sendMessage = useCallback((message: SyncMessage) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      try {
+        wsRef.current.send(JSON.stringify(message));
+        return true;
+      } catch {
+        // Message send failed
+        return false;
+      }
+    }
+    
+    // Queue message for later
+    messageQueueRef.current.push(message);
+    return false;
+  }, []);
+
+  const queueChange = useCallback((change: Omit<OfflineChange, 'id' | 'timestamp' | 'retryCount'>) => {
+    const offlineChange: OfflineChange = {
+      ...change,
+      id: `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      timestamp: Date.now(),
+      retryCount: 0
+    };
+
+    setOfflineChanges(prev => [...prev, offlineChange]);
+    
+    setState(prev => ({
+      ...prev,
+      pendingChanges: prev.pendingChanges + 1
+    }));
+  }, []);
+
+  const syncChange = useCallback((change: OfflineChange) => {
+    const message: SyncMessage = {
+      id: change.id,
+      type: 'sync',
+      timestamp: Date.now(),
+      userId: 'current_user',
+      data: {
+        action: change.action,
+        resourceType: change.resourceType,
+        resourceId: change.resourceId,
+        data: change.data
+      },
+      priority: 'medium'
+    };
+
+    const sent = sendMessage(message);
+    
+    if (sent) {
+      // Remove from offline queue
+      setOfflineChanges(prev => prev.filter(c => c.id !== change.id));
+    } else {
+      // Increment retry count
+      setOfflineChanges(prev => 
+        prev.map(c => 
+          c.id === change.id 
+            ? { ...c, retryCount: c.retryCount + 1 }
+            : c
+        )
+      );
+    }
+  }, [sendMessage]);
+
+  const processOfflineChanges = useCallback(() => {
+    if (!state.isConnected || offlineChanges.length === 0) return;
+
+    // Process changes in batches
+    const batch = offlineChanges.slice(0, mergedConfig.batchSize);
+    
+    batch.forEach(change => {
+      if (change.retryCount < 3) {
+        syncChange(change);
+      } else {
+        // Remove failed changes after 3 retries
+        setOfflineChanges(prev => prev.filter(c => c.id !== change.id));
+        setState(prev => ({
+          ...prev,
+          pendingChanges: Math.max(0, prev.pendingChanges - 1)
+        }));
+      }
+    });
+  }, [state.isConnected, offlineChanges, mergedConfig.batchSize, syncChange]);
+
+  // Sync operations
+  const forceSync = useCallback(() => {
+    if (!state.isConnected) {
+      connect();
+      return;
+    }
+
+    processOfflineChanges();
+    
+    // Send sync request
+    const syncMessage: SyncMessage = {
+      id: `sync_${Date.now()}`,
+      type: 'sync',
+      timestamp: Date.now(),
+      userId: 'current_user',
+      data: { force: true },
+      priority: 'high'
+    };
+    
+    sendMessage(syncMessage);
+  }, [state.isConnected, connect, processOfflineChanges, sendMessage]);
+
+  // Initialize connection
+  useEffect(() => {
+    connect();
+    
+    return () => {
+      disconnect();
+    };
+  }, []);
+
+  // Process offline changes when connection is restored
+  useEffect(() => {
+    if (state.isConnected && offlineChanges.length > 0) {
+      processOfflineChanges();
+    }
+  }, [state.isConnected, offlineChanges.length]);
+
+  return {
+    state,
+    offlineChanges: offlineChanges.length,
+    connect,
+    disconnect,
+    sendMessage,
+    queueChange,
+    forceSync,
+    isOnline: state.isConnected,
+    isPending: state.pendingChanges > 0
+  };
 }
+
+/**
+ * Hook for offline detection
+ */
+export function useOfflineDetection() {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  return isOffline;
+}
+
+export default {
+  useRealTimeSync,
+  useOfflineDetection
+};

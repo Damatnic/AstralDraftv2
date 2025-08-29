@@ -522,7 +522,6 @@ class DraftPreparationService {
             };
 
             // In production, this would save to database
-            console.log('Created custom rankings:', newRankings);
             
             return newRankings;
         } catch (error) {
@@ -753,7 +752,7 @@ class DraftPreparationService {
     /**
      * Generate mock draft analysis
      */
-    private generateMockDraftAnalysis(userTeam: DraftedPlayer[], allPicks: DraftPick[]): MockDraftAnalysis {
+    private generateMockDraftAnalysis(userTeam: DraftedPlayer[], _allPicks: DraftPick[]): MockDraftAnalysis {
         const positionCounts: Record<string, number> = {};
         let totalProjectedPoints = 0;
 

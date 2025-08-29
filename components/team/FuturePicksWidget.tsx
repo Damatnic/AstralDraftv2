@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Team, DraftPickAsset } from '../../types';
+import type { Team } from '../../types';
 import { Widget } from '../ui/Widget';
 import { ArchiveIcon } from '../icons/ArchiveIcon';
 

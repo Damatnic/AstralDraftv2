@@ -20,10 +20,8 @@ export const TestEnvironmentSetup: React.FC = () => {
       localStorage.setItem('testEnvironmentInitialized', '2025');
       setIsInitialized(true);
       
-      console.log('✅ Test environment ready with:');
-      console.log('- 10 test users available');
-      console.log('- Login with player1@astral.com to player10@astral.com');
-      console.log('- Password: test1234');
+      // Test environment ready with 10 test users
+      // Login with player1@astral.com to player10@astral.com, password: test1234
     } else {
       setIsInitialized(true);
     }
@@ -35,7 +33,7 @@ export const TestEnvironmentSetup: React.FC = () => {
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
       dispatch({ type: 'SET_USER', payload: user });
-      console.log(`Switched to user: ${user.name}`);
+      // Switched to user: ${user.name}
     }
   };
 

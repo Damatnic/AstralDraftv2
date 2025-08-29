@@ -6,10 +6,10 @@ import { TrophyIcon } from '../icons/TrophyIcon';
 
 interface TrophyCaseWidgetProps {
     team: Team;
-    league: League;
+    _league: League;
 }
 
-const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, league }) => {
+const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, _league }) => {
     const awards = team.awards || [];
 
     return (

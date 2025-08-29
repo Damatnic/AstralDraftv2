@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { generateTeamChemistryReport } from '../../services/geminiService';
@@ -36,7 +35,9 @@ const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, leagu
         <Widget title="Team Chemistry" icon={<SparklesIcon />}>
             <div className="p-4">
                 {report ? (
-                     <p className="text-sm text-gray-300 italic">"{report}"</p>
+                                     (
+                     <p className="text-sm text-gray-300 italic">&quot;{report}&quot;</p>
+                )
                 ) : (
                     <p className="text-center text-sm text-gray-400">The Oracle can analyze your roster for strategic balance and player synergy.</p>
                 )}

@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import Tabs from '../ui/Tabs';
+import { Tabs } from '../ui/Tabs';
 import {
   Activity,
   AlertTriangle,
@@ -87,7 +87,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
     });
   };
 
-  const handleAddPlayer = (playerId: string, playerName: string, position: string) => {
+  const handleAddPlayer = (playerId: string, playerName: string, _position: string) => {
     injuryTrackingService.addMonitoredPlayer(
       playerId,
       playerName,
@@ -477,7 +477,10 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                             <div className="flex items-center gap-2">
                               <button
                                 type="button"
-                                onClick={() => console.log('Open player details for', player.playerId)}
+                                onClick={() => {
+                                  // TODO: Open player details
+                                  // console.log('Open player details for', player.playerId);
+                                }}
                                 className="p-2 text-blue-600 hover:bg-blue-50 rounded"
                               >
                                 <Settings className="h-4 w-4" />

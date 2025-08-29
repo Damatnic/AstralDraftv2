@@ -3,7 +3,7 @@
  * Catches and handles errors in Oracle prediction components
  */
 
-import React, { Component, ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { AlertTriangleIcon, RefreshCwIcon, HomeIcon } from 'lucide-react';
 import { Widget } from '../ui/Widget';
 

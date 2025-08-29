@@ -6,6 +6,7 @@ import type { Player, Team, GroundingChunk } from '../../types';
 import { streamOracleResponse } from '../../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import GroundingCitations from '../ui/GroundingCitations';
+import { logger } from '../../services/loggingService';
 
 interface Message {
     id: number;
@@ -43,38 +44,37 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
         const userMessage: Message = { id: Date.now(), sender: 'user', text: input };
         const aiMessagePlaceholder: Message = { id: Date.now() + 1, sender: 'ai', text: '', isLoading: true, groundingChunks: [] };
 
-        const currentMessages = [...messages, userMessage];
-        setMessages([...currentMessages, aiMessagePlaceholder]);
+        setMessages([...messages, userMessage, aiMessagePlaceholder]);
         setInput('');
         setIsSending(true);
 
         try {
             // Prepare history for the API call, excluding the initial welcome message
-            const historyForApi = currentMessages.slice(1).map((m: any) => ({ sender: m.sender, text: m.text }));
+            const historyForApi = messages.slice(1).map((m: Message) => ({ sender: m.sender, text: m.text }));
 
             const stream = await streamOracleResponse(historyForApi, input, myTeam, availablePlayers);
             let fullText = "";
-            let collectedChunks: GroundingChunk[] = [];
+            const collectedChunks: GroundingChunk[] = [];
             for await (const chunk of stream) {
                 fullText += chunk.text;
                 const newChunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
                 if (newChunks) {
                     collectedChunks.push(...newChunks);
                 }
-                setMessages(prev => prev.map((msg: any) => 
+                setMessages(prev => prev.map((msg: Message) => 
                     msg.id === aiMessagePlaceholder.id ? { ...msg, text: fullText } : msg
                 ));
             }
 
-            const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: any) => c.web && c.web.uri).map((item: any) => [item.web!.uri!, item])).values());
+            const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: GroundingChunk) => c.web && c.web.uri).map((item: GroundingChunk) => [item.web!.uri!, item])).values());
 
-            setMessages(prev => prev.map((msg: any) => 
+            setMessages(prev => prev.map((msg: Message) => 
                 msg.id === aiMessagePlaceholder.id ? { ...msg, isLoading: false, groundingChunks: uniqueChunks } : msg
             ));
 
         } catch (error) {
-            console.error("Error calling Gemini API:", error);
-            setMessages(prev => prev.map((msg: any) => 
+            logger.error("Error calling Gemini API:", error);
+            setMessages(prev => prev.map((msg: Message) => 
                 msg.id === aiMessagePlaceholder.id 
                 ? { ...msg, text: "My apologies, I'm having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
                 : msg

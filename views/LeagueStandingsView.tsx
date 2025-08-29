@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
-import type { Team, League } from '../types';
+import type { League } from '../types';
 import { Avatar } from '../components/ui/Avatar';
 import { useLeague } from '../hooks/useLeague';
 import { calculateStreak } from '../utils/streaks';

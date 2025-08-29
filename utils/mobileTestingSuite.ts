@@ -55,7 +55,7 @@ class MobileTestingSuite {
       criticalIssues: number;
     };
   }> {
-    console.log('🔍 Starting comprehensive mobile testing suite...');
+    // Starting comprehensive mobile testing suite
 
     const touchTargets = await this.testTouchTargets();
     const viewports = await this.testViewportResponsiveness();
@@ -78,7 +78,7 @@ class MobileTestingSuite {
       criticalIssues: allTests.filter(t => !t.passed && (t.testType === 'accessibility' || t.testType === 'critical')).length
     };
 
-    console.log(`✅ Mobile testing complete: ${summary.passed}/${summary.totalTests} tests passed`);
+    // Mobile testing completed
 
     return {
       touchTargets,
@@ -364,7 +364,7 @@ class MobileTestingSuite {
   generateMobileReport(results: any): string {
     const { touchTargets, viewports, accessibility, performance, usability, summary } = results;
 
-    let report = `
+    const report = `
 # Mobile Responsiveness Testing Report
 Generated: ${new Date().toISOString()}
 

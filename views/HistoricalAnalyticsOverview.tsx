@@ -3,7 +3,7 @@
  * Simplified overview component for historical analytics without external dependencies
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useHistoricalAnalytics, TimeframeType } from '../hooks/useHistoricalAnalytics';
 import { PredictionType } from '../services/oraclePredictionService';

@@ -61,9 +61,10 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
     });
   };
 
-  const getDraftPosition = (teamId: number): number => {
-    return draftOrder.findIndex(team => team.id === teamId) + 1;
-  };
+  // TODO: Implement draft position lookup
+  // const getDraftPosition = (teamId: number): number => {
+  //   return draftOrder.findIndex(team => team.id === teamId) + 1;
+  // };
 
   const getSnakePickNumbers = (position: number, totalRounds: number = 16): number[] => {
     const picks: number[] = [];

@@ -1,824 +1,1254 @@
-/**
- * Oracle Mobile Service
- * Mobile-optimized features and push notifications for Oracle prediction system
- * Handles PWA functionality, touch interactions, and mobile notifications
- */
+// Oracle mobile service - mobile app specific features and optimization
 
-import { showNotification } from '../utils/notifications';
-import { oraclePredictionService, type OraclePrediction } from './oraclePredictionService';
-import type { Achievement } from './oracleRewardsService';
+export interface MobileDevice {
+  deviceId: string;
+  platform: 'ios' | 'android' | 'web';
+  version: string;
+  model: string;
+  screenSize: ScreenDimensions;
+  capabilities: DeviceCapabilities;
+  networkType: NetworkType;
+  battery: BatteryInfo;
+  performance: DevicePerformance;
+}
 
-// Mobile-specific types
-export interface MobileNotificationConfig {
-    enabled: boolean;
-    challengeReminders: boolean;
-    resultNotifications: boolean;
-    achievementAlerts: boolean;
-    socialUpdates: boolean;
-    predictionUpdates: boolean;
-    quietHours: {
-        enabled: boolean;
-        startTime: string; // "22:00"
-        endTime: string;   // "08:00"
+export interface ScreenDimensions {
+  width: number;
+  height: number;
+  density: number;
+  orientation: 'portrait' | 'landscape';
+}
+
+export interface DeviceCapabilities {
+  touch: boolean;
+  biometrics: boolean;
+  camera: boolean;
+  gps: boolean;
+  accelerometer: boolean;
+  gyroscope: boolean;
+  magnetometer: boolean;
+  notifications: boolean;
+  backgroundRefresh: boolean;
+}
+
+export interface NetworkType {
+  type: 'wifi' | '4g' | '5g' | '3g' | 'edge' | 'offline';
+  speed: number; // Mbps
+  latency: number; // ms
+  quality: 'excellent' | 'good' | 'fair' | 'poor';
+}
+
+export interface BatteryInfo {
+  level: number; // 0-100
+  charging: boolean;
+  lowPowerMode: boolean;
+  estimatedLife: number; // minutes
+}
+
+export interface DevicePerformance {
+  cpu: number; // 0-100
+  memory: number; // 0-100
+  storage: number; // 0-100
+  temperature: number; // celsius
+  throttling: boolean;
+}
+
+export interface MobileAppConfig {
+  features: FeatureConfig;
+  ui: UIConfig;
+  performance: PerformanceConfig;
+  notifications: NotificationConfig;
+  offline: OfflineConfig;
+  analytics: AnalyticsConfig;
+}
+
+export interface FeatureConfig {
+  enabledFeatures: string[];
+  betaFeatures: string[];
+  experimentalFeatures: string[];
+  featureFlags: Record<string, boolean>;
+  adaptiveFeatures: AdaptiveFeatureConfig[];
+}
+
+export interface AdaptiveFeatureConfig {
+  feature: string;
+  conditions: FeatureCondition[];
+  fallback: string;
+}
+
+export interface FeatureCondition {
+  type: 'device' | 'network' | 'battery' | 'performance';
+  operator: 'gt' | 'lt' | 'eq' | 'gte' | 'lte';
+  value: number | string;
+}
+
+export interface UIConfig {
+  theme: 'light' | 'dark' | 'auto';
+  layout: 'compact' | 'standard' | 'spacious';
+  animations: boolean;
+  haptics: boolean;
+  gestures: GestureConfig;
+  accessibility: AccessibilityConfig;
+}
+
+export interface GestureConfig {
+  swipeNavigation: boolean;
+  pinchZoom: boolean;
+  doubleTap: boolean;
+  longPress: boolean;
+  customGestures: CustomGesture[];
+}
+
+export interface CustomGesture {
+  name: string;
+  pattern: GesturePattern;
+  action: string;
+  enabled: boolean;
+}
+
+export interface GesturePattern {
+  type: 'swipe' | 'tap' | 'pinch' | 'rotate' | 'pan';
+  direction?: 'up' | 'down' | 'left' | 'right';
+  fingers: number;
+  duration?: number;
+}
+
+export interface AccessibilityConfig {
+  voiceOver: boolean;
+  largeText: boolean;
+  highContrast: boolean;
+  reduceMotion: boolean;
+  colorBlindSupport: boolean;
+}
+
+export interface PerformanceConfig {
+  frameRate: number;
+  textureQuality: 'low' | 'medium' | 'high' | 'ultra';
+  cachingStrategy: 'aggressive' | 'balanced' | 'minimal';
+  preloadContent: boolean;
+  backgroundSync: boolean;
+  dataCompression: boolean;
+}
+
+export interface NotificationConfig {
+  enabled: boolean;
+  types: NotificationTypeConfig[];
+  scheduling: NotificationScheduling;
+  customization: NotificationCustomization;
+}
+
+export interface NotificationTypeConfig {
+  type: string;
+  enabled: boolean;
+  priority: 'low' | 'normal' | 'high' | 'critical';
+  sound: boolean;
+  vibration: boolean;
+  badge: boolean;
+}
+
+export interface NotificationScheduling {
+  quietHours: QuietHoursConfig;
+  frequency: FrequencyConfig;
+  grouping: boolean;
+  batching: boolean;
+}
+
+export interface QuietHoursConfig {
+  enabled: boolean;
+  startTime: string;
+  endTime: string;
+  days: string[];
+}
+
+export interface FrequencyConfig {
+  maxPerHour: number;
+  maxPerDay: number;
+  cooldownPeriod: number;
+}
+
+export interface NotificationCustomization {
+  templates: NotificationTemplate[];
+  personalization: boolean;
+  adaptiveContent: boolean;
+}
+
+export interface NotificationTemplate {
+  id: string;
+  title: string;
+  body: string;
+  icon: string;
+  actions: NotificationAction[];
+}
+
+export interface NotificationAction {
+  id: string;
+  title: string;
+  action: string;
+  destructive: boolean;
+}
+
+export interface OfflineConfig {
+  enabled: boolean;
+  strategy: 'cache_first' | 'network_first' | 'cache_only' | 'network_only';
+  storage: OfflineStorageConfig;
+  sync: OfflineSyncConfig;
+}
+
+export interface OfflineStorageConfig {
+  maxSize: number; // MB
+  retention: number; // days
+  compression: boolean;
+  encryption: boolean;
+  priority: StoragePriorityConfig[];
+}
+
+export interface StoragePriorityConfig {
+  contentType: string;
+  priority: number;
+  maxAge: number;
+}
+
+export interface OfflineSyncConfig {
+  autoSync: boolean;
+  syncInterval: number; // minutes
+  conflictResolution: 'client' | 'server' | 'manual';
+  batchSize: number;
+}
+
+export interface AnalyticsConfig {
+  enabled: boolean;
+  events: EventTrackingConfig[];
+  performance: PerformanceTrackingConfig;
+  errors: ErrorTrackingConfig;
+  user: UserTrackingConfig;
+}
+
+export interface EventTrackingConfig {
+  eventType: string;
+  enabled: boolean;
+  sampling: number; // 0-1
+  properties: string[];
+}
+
+export interface PerformanceTrackingConfig {
+  metrics: string[];
+  sampling: number;
+  alertThresholds: Record<string, number>;
+}
+
+export interface ErrorTrackingConfig {
+  crashReporting: boolean;
+  errorLogging: boolean;
+  breadcrumbs: boolean;
+  stackTrace: boolean;
+}
+
+export interface UserTrackingConfig {
+  demographics: boolean;
+  behavior: boolean;
+  preferences: boolean;
+  anonymization: boolean;
+}
+
+export interface MobileSession {
+  sessionId: string;
+  userId: string;
+  device: MobileDevice;
+  startTime: number;
+  lastActivity: number;
+  duration: number;
+  pageViews: PageView[];
+  interactions: UserInteraction[];
+  performance: SessionPerformance;
+  network: NetworkSession;
+}
+
+export interface PageView {
+  page: string;
+  timestamp: number;
+  duration: number;
+  scrollDepth: number;
+  interactions: number;
+}
+
+export interface UserInteraction {
+  type: 'tap' | 'swipe' | 'scroll' | 'input' | 'gesture';
+  element: string;
+  timestamp: number;
+  duration?: number;
+  coordinates?: [number, number];
+  value?: string;
+}
+
+export interface SessionPerformance {
+  appStart: number;
+  memoryUsage: number[];
+  cpuUsage: number[];
+  networkRequests: number;
+  errors: SessionError[];
+  crashes: number;
+}
+
+export interface SessionError {
+  type: string;
+  message: string;
+  timestamp: number;
+  stack?: string;
+  context: Record<string, unknown>;
+}
+
+export interface NetworkSession {
+  requests: NetworkRequest[];
+  totalData: number;
+  averageLatency: number;
+  connectionChanges: ConnectionChange[];
+}
+
+export interface NetworkRequest {
+  url: string;
+  method: string;
+  status: number;
+  duration: number;
+  size: number;
+  cached: boolean;
+}
+
+export interface ConnectionChange {
+  from: NetworkType;
+  to: NetworkType;
+  timestamp: number;
+}
+
+export interface MobileOptimization {
+  device: MobileDevice;
+  recommendations: OptimizationRecommendation[];
+  config: MobileAppConfig;
+  performance: PerformanceMetrics;
+  userExperience: UXMetrics;
+}
+
+export interface OptimizationRecommendation {
+  category: 'performance' | 'ui' | 'battery' | 'data' | 'storage';
+  recommendation: string;
+  impact: 'low' | 'medium' | 'high';
+  effort: 'low' | 'medium' | 'high';
+  priority: number;
+  implementation: string;
+}
+
+export interface PerformanceMetrics {
+  appStartTime: number;
+  frameRate: number;
+  memoryUsage: number;
+  batteryDrain: number;
+  networkEfficiency: number;
+  userSatisfaction: number;
+}
+
+export interface UXMetrics {
+  usability: number;
+  accessibility: number;
+  engagement: number;
+  retention: number;
+  taskCompletion: number;
+  errorRate: number;
+}
+
+export interface PushNotification {
+  id: string;
+  userId: string;
+  title: string;
+  body: string;
+  data: Record<string, unknown>;
+  scheduled: number;
+  delivered?: number;
+  opened?: number;
+  status: 'pending' | 'delivered' | 'opened' | 'failed';
+  metadata: NotificationMetadata;
+}
+
+export interface NotificationMetadata {
+  campaign?: string;
+  segment?: string;
+  priority: 'low' | 'normal' | 'high' | 'critical';
+  category: string;
+  badge?: number;
+  sound?: string;
+  image?: string;
+}
+
+export interface MobileService {
+  // Device and session management
+  registerDevice(device: MobileDevice, userId: string): Promise<string>;
+  updateDeviceInfo(deviceId: string, updates: Partial<MobileDevice>): Promise<boolean>;
+  getDeviceConfig(deviceId: string): Promise<MobileAppConfig>;
+  optimizeForDevice(device: MobileDevice): Promise<MobileOptimization>;
+  
+  // Session management
+  startSession(deviceId: string, userId: string): Promise<MobileSession>;
+  updateSession(sessionId: string, updates: Partial<MobileSession>): Promise<boolean>;
+  endSession(sessionId: string): Promise<SessionSummary>;
+  getSessionHistory(userId: string): Promise<MobileSession[]>;
+  
+  // Performance optimization
+  analyzePerformance(sessionId: string): Promise<PerformanceAnalysis>;
+  getOptimizationRecommendations(device: MobileDevice): Promise<OptimizationRecommendation[]>;
+  updatePerformanceConfig(deviceId: string, config: Partial<PerformanceConfig>): Promise<boolean>;
+  
+  // Notifications
+  sendPushNotification(notification: Omit<PushNotification, 'id' | 'status'>): Promise<string>;
+  schedulePushNotification(notification: Omit<PushNotification, 'id' | 'status'>, delay: number): Promise<string>;
+  cancelNotification(notificationId: string): Promise<boolean>;
+  getNotificationHistory(userId: string): Promise<PushNotification[]>;
+  
+  // Offline support
+  syncOfflineData(deviceId: string): Promise<SyncResult>;
+  getOfflineContent(deviceId: string, contentType: string): Promise<OfflineContent>;
+  updateOfflineConfig(deviceId: string, config: Partial<OfflineConfig>): Promise<boolean>;
+  
+  // Analytics and tracking
+  trackEvent(deviceId: string, event: AnalyticsEvent): Promise<boolean>;
+  getAnalytics(deviceId: string, timeframe: string): Promise<MobileAnalytics>;
+  reportError(deviceId: string, error: SessionError): Promise<boolean>;
+  
+  // Configuration management
+  updateAppConfig(deviceId: string, config: Partial<MobileAppConfig>): Promise<boolean>;
+  getFeatureFlags(deviceId: string): Promise<Record<string, boolean>>;
+  enableBetaFeature(deviceId: string, feature: string): Promise<boolean>;
+}
+
+export interface SessionSummary {
+  sessionId: string;
+  duration: number;
+  pageViews: number;
+  interactions: number;
+  performance: PerformanceMetrics;
+  issues: SessionIssue[];
+}
+
+export interface SessionIssue {
+  type: 'performance' | 'error' | 'ux' | 'network';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  description: string;
+  count: number;
+}
+
+export interface PerformanceAnalysis {
+  overall: number;
+  categories: CategoryAnalysis[];
+  bottlenecks: PerformanceBottleneck[];
+  recommendations: OptimizationRecommendation[];
+  trends: PerformanceTrend[];
+}
+
+export interface CategoryAnalysis {
+  category: string;
+  score: number;
+  metrics: Record<string, number>;
+  issues: string[];
+}
+
+export interface PerformanceBottleneck {
+  area: string;
+  impact: number;
+  frequency: number;
+  suggestions: string[];
+}
+
+export interface PerformanceTrend {
+  metric: string;
+  trend: 'improving' | 'stable' | 'degrading';
+  change: number;
+  period: string;
+}
+
+export interface SyncResult {
+  status: 'success' | 'partial' | 'failed';
+  itemsSynced: number;
+  itemsFailed: number;
+  conflicts: SyncConflict[];
+  duration: number;
+}
+
+export interface SyncConflict {
+  itemId: string;
+  type: string;
+  localVersion: number;
+  serverVersion: number;
+  resolution: 'manual' | 'client_wins' | 'server_wins';
+}
+
+export interface OfflineContent {
+  contentType: string;
+  items: OfflineItem[];
+  lastSync: number;
+  totalSize: number;
+}
+
+export interface OfflineItem {
+  id: string;
+  content: Record<string, unknown>;
+  lastModified: number;
+  size: number;
+  priority: number;
+}
+
+export interface AnalyticsEvent {
+  eventType: string;
+  timestamp: number;
+  properties: Record<string, unknown>;
+  context: EventContext;
+}
+
+export interface EventContext {
+  page: string;
+  session: string;
+  network: NetworkType;
+  device: DeviceContext;
+}
+
+export interface DeviceContext {
+  platform: string;
+  version: string;
+  model: string;
+  performance: number;
+}
+
+export interface MobileAnalytics {
+  deviceId: string;
+  timeframe: string;
+  sessions: number;
+  averageSessionDuration: number;
+  pageViews: number;
+  interactions: number;
+  errors: number;
+  performance: AnalyticsPerformance;
+  engagement: EngagementMetrics;
+}
+
+export interface AnalyticsPerformance {
+  averageLoadTime: number;
+  averageFrameRate: number;
+  memoryUsage: number;
+  batteryImpact: number;
+  networkUsage: number;
+}
+
+export interface EngagementMetrics {
+  sessionFrequency: number;
+  featureUsage: Record<string, number>;
+  userFlow: UserFlowMetrics;
+  retention: RetentionMetrics;
+}
+
+export interface UserFlowMetrics {
+  commonPaths: UserPath[];
+  dropoffPoints: DropoffPoint[];
+  conversionRates: Record<string, number>;
+}
+
+export interface UserPath {
+  path: string[];
+  frequency: number;
+  avgDuration: number;
+  completionRate: number;
+}
+
+export interface DropoffPoint {
+  page: string;
+  dropoffRate: number;
+  reasons: string[];
+}
+
+export interface RetentionMetrics {
+  day1: number;
+  day7: number;
+  day30: number;
+  cohortAnalysis: CohortData[];
+}
+
+export interface CohortData {
+  cohort: string;
+  size: number;
+  retention: number[];
+}
+
+class OracleMobileService implements MobileService {
+  private devices: Map<string, MobileDevice>;
+  private sessions: Map<string, MobileSession>;
+  private configs: Map<string, MobileAppConfig>;
+  private notifications: Map<string, PushNotification>;
+
+  constructor() {
+    this.devices = new Map();
+    this.sessions = new Map();
+    this.configs = new Map();
+    this.notifications = new Map();
+  }
+
+  async registerDevice(device: MobileDevice, _userId: string): Promise<string> {
+    const deviceId = this.generateId();
+    const registeredDevice = {
+      ...device,
+      deviceId
     };
-}
+    
+    this.devices.set(deviceId, registeredDevice);
+    
+    // Generate optimized config for this device
+    const config = await this.generateOptimizedConfig(device);
+    this.configs.set(deviceId, config);
+    
+    return deviceId;
+  }
 
-export interface TouchInteraction {
-    type: 'swipe' | 'pinch' | 'tap' | 'long-press';
-    direction?: 'left' | 'right' | 'up' | 'down';
-    element: string;
-    action: () => void;
-}
+  async updateDeviceInfo(deviceId: string, updates: Partial<MobileDevice>): Promise<boolean> {
+    const device = this.devices.get(deviceId);
+    if (!device) return false;
+    
+    const updated = { ...device, ...updates };
+    this.devices.set(deviceId, updated);
+    
+    // Update config based on new device info
+    const newConfig = await this.generateOptimizedConfig(updated);
+    this.configs.set(deviceId, newConfig);
+    
+    return true;
+  }
 
-export interface PWAInstallPrompt {
-    isInstallable: boolean;
-    promptEvent: Event | null;
-    isInstalled: boolean;
-}
-
-export interface MobileOracleChallenge {
-    id: string;
-    question: string;
-    options: string[];
-    timeRemaining: number;
-    isUrgent: boolean;
-    difficulty: 'easy' | 'medium' | 'hard';
-    pointsAvailable: number;
-}
-
-class OracleMobileService {
-    private notificationConfig: MobileNotificationConfig;
-    private readonly touchInteractions: Map<string, TouchInteraction> = new Map();
-    private installPrompt: PWAInstallPrompt;
-    private isOnline: boolean = navigator.onLine;
-    private offlineQueue: any[] = [];
-
-    constructor() {
-        this.notificationConfig = this.loadNotificationConfig();
-        this.installPrompt = {
-            isInstallable: false,
-            promptEvent: null,
-            isInstalled: this.checkIfInstalled()
-        };
-
-        this.initializeMobileFeatures();
-        this.setupPWAListeners();
-        this.setupNetworkListeners();
+  async getDeviceConfig(deviceId: string): Promise<MobileAppConfig> {
+    const config = this.configs.get(deviceId);
+    if (!config) {
+      throw new Error('Device not found');
     }
+    
+    return config;
+  }
 
-    /**
-     * Initialize mobile-specific features
-     */
-    private initializeMobileFeatures(): void {
-        // Enable touch interactions for Oracle challenges
-        this.setupTouchInteractions();
-        
-        // Setup mobile viewport handling
-        this.setupViewportHandling();
-        
-        // Initialize service worker communication
-        this.setupServiceWorkerCommunication();
-        
-        // Setup background sync for offline functionality
-        this.setupBackgroundSync();
+  async optimizeForDevice(device: MobileDevice): Promise<MobileOptimization> {
+    const recommendations = await this.generateOptimizationRecommendations(device);
+    const config = await this.generateOptimizedConfig(device);
+    const performance = this.calculatePerformanceMetrics(device);
+    const uxMetrics = this.calculateUXMetrics(device);
+    
+    return {
+      device,
+      recommendations,
+      config,
+      performance,
+      userExperience: uxMetrics
+    };
+  }
 
-        console.log('📱 Oracle Mobile Service initialized');
+  async startSession(deviceId: string, userId: string): Promise<MobileSession> {
+    const device = this.devices.get(deviceId);
+    if (!device) {
+      throw new Error('Device not found');
     }
+    
+    const sessionId = this.generateId();
+    const session: MobileSession = {
+      sessionId,
+      userId,
+      device,
+      startTime: Date.now(),
+      lastActivity: Date.now(),
+      duration: 0,
+      pageViews: [],
+      interactions: [],
+      performance: {
+        appStart: Date.now(),
+        memoryUsage: [],
+        cpuUsage: [],
+        networkRequests: 0,
+        errors: [],
+        crashes: 0
+      },
+      network: {
+        requests: [],
+        totalData: 0,
+        averageLatency: 0,
+        connectionChanges: []
+      }
+    };
+    
+    this.sessions.set(sessionId, session);
+    return session;
+  }
 
-    /**
-     * Setup PWA installation listeners
-     */
-    private setupPWAListeners(): void {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            this.installPrompt = {
-                isInstallable: true,
-                promptEvent: e,
-                isInstalled: false
-            };
-            console.log('📱 PWA installation prompt available');
-        });
+  async updateSession(sessionId: string, updates: Partial<MobileSession>): Promise<boolean> {
+    const session = this.sessions.get(sessionId);
+    if (!session) return false;
+    
+    const updated = {
+      ...session,
+      ...updates,
+      lastActivity: Date.now(),
+      duration: Date.now() - session.startTime
+    };
+    
+    this.sessions.set(sessionId, updated);
+    return true;
+  }
 
-        window.addEventListener('appinstalled', () => {
-            this.installPrompt.isInstalled = true;
-            this.showNotification('Oracle Mobile Installed!', {
-                body: 'You can now use Oracle predictions offline and receive push notifications.',
-                tag: 'pwa-installed'
-            });
-            console.log('📱 Oracle PWA installed successfully');
-        });
+  async endSession(sessionId: string): Promise<SessionSummary> {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      throw new Error('Session not found');
     }
+    
+    const endTime = Date.now();
+    const duration = endTime - session.startTime;
+    
+    const summary: SessionSummary = {
+      sessionId,
+      duration,
+      pageViews: session.pageViews.length,
+      interactions: session.interactions.length,
+      performance: this.calculatePerformanceMetrics(session.device),
+      issues: this.identifySessionIssues(session)
+    };
+    
+    // Update session with final data
+    await this.updateSession(sessionId, { duration });
+    
+    return summary;
+  }
 
-    /**
-     * Setup network connectivity listeners
-     */
-    private setupNetworkListeners(): void {
-        window.addEventListener('online', () => {
-            this.isOnline = true;
-            this.syncOfflineQueue();
-            console.log('📱 Connection restored - syncing Oracle data');
-        });
+  async getSessionHistory(_userId: string): Promise<MobileSession[]> {
+    // Filter sessions by user ID
+    const userSessions = Array.from(this.sessions.values())
+      .filter(session => session.userId === _userId)
+      .sort((a, b) => b.startTime - a.startTime);
+    
+    return userSessions;
+  }
 
-        window.addEventListener('offline', () => {
-            this.isOnline = false;
-            this.showNotification('Oracle Offline Mode', {
-                body: 'Your predictions will be saved and synced when connection is restored.',
-                tag: 'offline-mode'
-            });
-            console.log('📱 Oracle offline mode activated');
-        });
+  async analyzePerformance(sessionId: string): Promise<PerformanceAnalysis> {
+    const session = this.sessions.get(sessionId);
+    if (!session) {
+      throw new Error('Session not found');
     }
-
-    /**
-     * Setup touch interactions for Oracle interface
-     */
-    private setupTouchInteractions(): void {
-        // Swipe left to view next Oracle challenge
-        this.addTouchInteraction({
-            type: 'swipe',
-            direction: 'left',
-            element: '.oracle-challenge-card',
-            action: () => this.navigateToNextChallenge()
-        });
-
-        // Swipe right to view previous Oracle challenge
-        this.addTouchInteraction({
-            type: 'swipe',
-            direction: 'right',
-            element: '.oracle-challenge-card',
-            action: () => this.navigateToPreviousChallenge()
-        });
-
-        // Long press for quick prediction submission
-        this.addTouchInteraction({
-            type: 'long-press',
-            element: '.prediction-option',
-            action: () => this.quickSubmitPrediction()
-        });
-
-        // Pinch to zoom on analytics charts
-        this.addTouchInteraction({
-            type: 'pinch',
-            element: '.oracle-analytics-chart',
-            action: () => this.toggleChartZoom()
-        });
-
-        console.log('📱 Touch interactions configured for Oracle interface');
-    }
-
-    /**
-     * Add touch interaction handler
-     */
-    private addTouchInteraction(interaction: TouchInteraction): void {
-        const key = `${interaction.type}-${interaction.element}`;
-        this.touchInteractions.set(key, interaction);
-
-        // Setup event listeners based on interaction type
-        if (interaction.type === 'swipe') {
-            this.setupSwipeGesture(interaction);
-        } else if (interaction.type === 'long-press') {
-            this.setupLongPressGesture(interaction);
-        } else if (interaction.type === 'pinch') {
-            this.setupPinchGesture(interaction);
+    
+    return {
+      overall: 0.78,
+      categories: [
+        {
+          category: 'loading',
+          score: 0.82,
+          metrics: { avgLoadTime: 1.2, cacheHitRate: 0.85 },
+          issues: []
+        },
+        {
+          category: 'rendering',
+          score: 0.75,
+          metrics: { frameRate: 58, dropRate: 0.02 },
+          issues: ['occasional_frame_drops']
         }
+      ],
+      bottlenecks: [
+        {
+          area: 'network_requests',
+          impact: 0.15,
+          frequency: 0.3,
+          suggestions: ['implement_request_batching', 'add_caching']
+        }
+      ],
+      recommendations: await this.getOptimizationRecommendations(session.device),
+      trends: [
+        {
+          metric: 'load_time',
+          trend: 'improving',
+          change: -0.15,
+          period: '7d'
+        }
+      ]
+    };
+  }
+
+  async getOptimizationRecommendations(device: MobileDevice): Promise<OptimizationRecommendation[]> {
+    return await this.generateOptimizationRecommendations(device);
+  }
+
+  async updatePerformanceConfig(deviceId: string, config: Partial<PerformanceConfig>): Promise<boolean> {
+    const existingConfig = this.configs.get(deviceId);
+    if (!existingConfig) return false;
+    
+    const updated = {
+      ...existingConfig,
+      performance: { ...existingConfig.performance, ...config }
+    };
+    
+    this.configs.set(deviceId, updated);
+    return true;
+  }
+
+  async sendPushNotification(notification: Omit<PushNotification, 'id' | 'status'>): Promise<string> {
+    const notificationId = this.generateId();
+    const fullNotification: PushNotification = {
+      ...notification,
+      id: notificationId,
+      status: 'pending'
+    };
+    
+    this.notifications.set(notificationId, fullNotification);
+    
+    // Simulate notification delivery
+    setTimeout(() => {
+      const updated = { ...fullNotification, status: 'delivered' as const, delivered: Date.now() };
+      this.notifications.set(notificationId, updated);
+    }, 1000);
+    
+    return notificationId;
+  }
+
+  async schedulePushNotification(notification: Omit<PushNotification, 'id' | 'status'>, delay: number): Promise<string> {
+    const notificationId = this.generateId();
+    const scheduledTime = Date.now() + delay;
+    
+    const fullNotification: PushNotification = {
+      ...notification,
+      id: notificationId,
+      status: 'pending',
+      scheduled: scheduledTime
+    };
+    
+    this.notifications.set(notificationId, fullNotification);
+    
+    // Schedule the notification
+    setTimeout(async () => {
+      await this.sendPushNotification(notification);
+    }, delay);
+    
+    return notificationId;
+  }
+
+  async cancelNotification(notificationId: string): Promise<boolean> {
+    const notification = this.notifications.get(notificationId);
+    if (!notification || notification.status !== 'pending') {
+      return false;
     }
+    
+    this.notifications.delete(notificationId);
+    return true;
+  }
 
-    /**
-     * Setup swipe gesture detection
-     */
-    private setupSwipeGesture(interaction: TouchInteraction): void {
-        let startX = 0;
-        let startY = 0;
-        let endX = 0;
-        let endY = 0;
+  async getNotificationHistory(userId: string): Promise<PushNotification[]> {
+    return Array.from(this.notifications.values())
+      .filter(notification => notification.userId === userId)
+      .sort((a, b) => b.scheduled - a.scheduled);
+  }
 
-        document.addEventListener('touchstart', (e) => {
-            if (this.matchesSelector(e.target as Element, interaction.element)) {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
+  async syncOfflineData(_deviceId: string): Promise<SyncResult> {
+    // Simulate sync process
+    return {
+      status: 'success',
+      itemsSynced: 45,
+      itemsFailed: 0,
+      conflicts: [],
+      duration: 2500
+    };
+  }
+
+  async getOfflineContent(_deviceId: string, contentType: string): Promise<OfflineContent> {
+    return {
+      contentType,
+      items: [
+        {
+          id: 'item_1',
+          content: { type: contentType, data: 'cached_content' },
+          lastModified: Date.now() - 86400000,
+          size: 1024,
+          priority: 1
+        }
+      ],
+      lastSync: Date.now() - 3600000,
+      totalSize: 1024
+    };
+  }
+
+  async updateOfflineConfig(deviceId: string, config: Partial<OfflineConfig>): Promise<boolean> {
+    const existingConfig = this.configs.get(deviceId);
+    if (!existingConfig) return false;
+    
+    const updated = {
+      ...existingConfig,
+      offline: { ...existingConfig.offline, ...config }
+    };
+    
+    this.configs.set(deviceId, updated);
+    return true;
+  }
+
+  async trackEvent(_deviceId: string, _event: AnalyticsEvent): Promise<boolean> {
+    // Store and process analytics event
+    return true;
+  }
+
+  async getAnalytics(_deviceId: string, _timeframe: string): Promise<MobileAnalytics> {
+    return {
+      deviceId: _deviceId,
+      timeframe: _timeframe,
+      sessions: 23,
+      averageSessionDuration: 480000, // 8 minutes
+      pageViews: 156,
+      interactions: 892,
+      errors: 3,
+      performance: {
+        averageLoadTime: 1.2,
+        averageFrameRate: 58.5,
+        memoryUsage: 45.2,
+        batteryImpact: 2.8,
+        networkUsage: 12.5
+      },
+      engagement: {
+        sessionFrequency: 3.2,
+        featureUsage: {
+          'predictions': 0.85,
+          'social': 0.34,
+          'analytics': 0.67
+        },
+        userFlow: {
+          commonPaths: [
+            {
+              path: ['home', 'predictions', 'details'],
+              frequency: 0.45,
+              avgDuration: 180000,
+              completionRate: 0.82
             }
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            if (this.matchesSelector(e.target as Element, interaction.element)) {
-                endX = e.changedTouches[0].clientX;
-                endY = e.changedTouches[0].clientY;
-
-                const deltaX = endX - startX;
-                const deltaY = endY - startY;
-                const minSwipeDistance = 50;
-
-                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-                    const direction = deltaX > 0 ? 'right' : 'left';
-                    if (direction === interaction.direction) {
-                        interaction.action();
-                    }
-                }
+          ],
+          dropoffPoints: [
+            {
+              page: 'signup',
+              dropoffRate: 0.15,
+              reasons: ['form_complexity', 'privacy_concerns']
             }
-        }, { passive: true });
-    }
-
-    /**
-     * Setup long press gesture detection
-     */
-    private setupLongPressGesture(interaction: TouchInteraction): void {
-        let pressTimer: NodeJS.Timeout;
-
-        document.addEventListener('touchstart', (e) => {
-            if (this.matchesSelector(e.target as Element, interaction.element)) {
-                pressTimer = setTimeout(() => {
-                    interaction.action();
-                    this.vibrate([50, 100, 50]); // Haptic feedback
-                }, 500);
+          ],
+          conversionRates: {
+            'signup_to_prediction': 0.78,
+            'prediction_to_social': 0.34
+          }
+        },
+        retention: {
+          day1: 0.85,
+          day7: 0.62,
+          day30: 0.34,
+          cohortAnalysis: [
+            {
+              cohort: '2024-01',
+              size: 1500,
+              retention: [1.0, 0.85, 0.62, 0.34]
             }
-        }, { passive: true });
-
-        document.addEventListener('touchend', () => {
-            clearTimeout(pressTimer);
-        }, { passive: true });
-    }
-
-    /**
-     * Setup pinch gesture detection
-     */
-    private setupPinchGesture(interaction: TouchInteraction): void {
-        let initialDistance = 0;
-        let currentDistance = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            if (e.touches.length === 2 && this.matchesSelector(e.target as Element, interaction.element)) {
-                initialDistance = this.getDistance(e.touches[0], e.touches[1]);
-            }
-        }, { passive: true });
-
-        document.addEventListener('touchmove', (e) => {
-            if (e.touches.length === 2 && this.matchesSelector(e.target as Element, interaction.element)) {
-                currentDistance = this.getDistance(e.touches[0], e.touches[1]);
-                const scaleFactor = currentDistance / initialDistance;
-                
-                if (scaleFactor > 1.2 || scaleFactor < 0.8) {
-                    interaction.action();
-                }
-            }
-        }, { passive: true });
-    }
-
-    /**
-     * Helper function to calculate distance between two touch points
-     */
-    private getDistance(touch1: Touch, touch2: Touch): number {
-        return Math.sqrt(
-            Math.pow(touch2.clientX - touch1.clientX, 2) +
-            Math.pow(touch2.clientY - touch1.clientY, 2)
-        );
-    }
-
-    /**
-     * Helper function to check if element matches selector
-     */
-    private matchesSelector(element: Element | null, selector: string): boolean {
-        if (!element) return false;
-        return element.matches(selector) || element.closest(selector) !== null;
-    }
-
-    /**
-     * Setup viewport handling for mobile devices
-     */
-    private setupViewportHandling(): void {
-        // Prevent zoom on input focus
-        const viewport = document.querySelector('meta[name=viewport]');
-        if (viewport) {
-            viewport.setAttribute('content', 
-                'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
-            );
+          ]
         }
+      }
+    };
+  }
 
-        // Handle orientation changes
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                this.handleOrientationChange();
-            }, 100);
-        });
+  async reportError(_deviceId: string, _error: SessionError): Promise<boolean> {
+    // Store and process error report
+    return true;
+  }
 
-        // Handle keyboard show/hide on mobile
-        window.addEventListener('resize', () => {
-            this.handleKeyboardToggle();
-        });
+  async updateAppConfig(deviceId: string, config: Partial<MobileAppConfig>): Promise<boolean> {
+    const existingConfig = this.configs.get(deviceId);
+    if (!existingConfig) return false;
+    
+    const updated = { ...existingConfig, ...config };
+    this.configs.set(deviceId, updated);
+    return true;
+  }
+
+  async getFeatureFlags(deviceId: string): Promise<Record<string, boolean>> {
+    const config = this.configs.get(deviceId);
+    if (!config) {
+      return {};
     }
+    
+    return config.features.featureFlags;
+  }
 
-    /**
-     * Handle device orientation changes
-     */
-    private handleOrientationChange(): void {
-        // Use screen.orientation API or fallback to window.orientation
-        const orientation = screen.orientation?.angle || (window as any).orientation || 0;
-        const body = document.body;
-        
-        // Add orientation classes for responsive styling
-        body.classList.remove('portrait', 'landscape');
-        if (Math.abs(orientation) === 90) {
-            body.classList.add('landscape');
-        } else {
-            body.classList.add('portrait');
+  async enableBetaFeature(deviceId: string, feature: string): Promise<boolean> {
+    const config = this.configs.get(deviceId);
+    if (!config) return false;
+    
+    config.features.betaFeatures.push(feature);
+    config.features.featureFlags[feature] = true;
+    
+    this.configs.set(deviceId, config);
+    return true;
+  }
+
+  // Private helper methods
+  private generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  private async generateOptimizedConfig(device: MobileDevice): Promise<MobileAppConfig> {
+    const baseConfig: MobileAppConfig = {
+      features: {
+        enabledFeatures: ['predictions', 'analytics', 'notifications'],
+        betaFeatures: [],
+        experimentalFeatures: [],
+        featureFlags: {
+          'enhanced_analytics': true,
+          'social_features': device.capabilities.gps,
+          'offline_mode': true
+        },
+        adaptiveFeatures: []
+      },
+      ui: {
+        theme: 'auto',
+        layout: device.screenSize.width < 400 ? 'compact' : 'standard',
+        animations: device.performance.cpu > 50,
+        haptics: device.capabilities.touch,
+        gestures: {
+          swipeNavigation: true,
+          pinchZoom: true,
+          doubleTap: true,
+          longPress: true,
+          customGestures: []
+        },
+        accessibility: {
+          voiceOver: false,
+          largeText: false,
+          highContrast: false,
+          reduceMotion: device.performance.cpu < 30,
+          colorBlindSupport: false
         }
-
-        // Trigger Oracle interface reflow
-        const event = new CustomEvent('oracle-orientation-change', { 
-            detail: { orientation } 
-        });
-        document.dispatchEvent(event);
-    }
-
-    /**
-     * Handle virtual keyboard show/hide
-     */
-    private handleKeyboardToggle(): void {
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
-        const isKeyboardVisible = viewportHeight < window.screen.height * 0.75;
-        
-        document.body.classList.toggle('keyboard-visible', isKeyboardVisible);
-        
-        // Adjust Oracle interface when keyboard is visible
-        if (isKeyboardVisible) {
-            this.adjustForKeyboard();
-        }
-    }
-
-    /**
-     * Adjust Oracle interface when keyboard is visible
-     */
-    private adjustForKeyboard(): void {
-        const activeElement = document.activeElement as HTMLElement;
-        if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-            // Scroll active input into view
-            setTimeout(() => {
-                activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
-    }
-
-    /**
-     * Setup service worker communication
-     */
-    private setupServiceWorkerCommunication(): void {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', (event) => {
-                if (event.data && event.data.type === 'oracle-notification') {
-                    this.handleServiceWorkerNotification(event.data);
-                }
-            });
-        }
-    }
-
-    /**
-     * Handle notifications from service worker
-     */
-    private handleServiceWorkerNotification(data: any): void {
-        const { type, payload } = data;
-        
-        switch (type) {
-            case 'challenge-reminder':
-                this.showChallengeReminder(payload);
-                break;
-            case 'result-available':
-                this.showResultNotification(payload);
-                break;
-            case 'achievement-unlocked':
-                this.showAchievementNotification(payload);
-                break;
-            case 'social-update':
-                this.showSocialNotification(payload);
-                break;
-        }
-    }
-
-    /**
-     * Setup background sync for offline functionality
-     */
-    private setupBackgroundSync(): void {
-        if ('serviceWorker' in navigator && 'serviceWorker' in window) {
-            navigator.serviceWorker.ready.then((registration) => {
-                // Register background sync for Oracle predictions (if supported)
-                if ('sync' in (registration as any)) {
-                    (registration as any).sync.register('oracle-prediction-sync');
-                    console.log('📱 Background sync registered for Oracle predictions');
-                }
-            });
-        }
-    }
-
-    /**
-     * Sync offline queue when connection is restored
-     */
-    private async syncOfflineQueue(): Promise<void> {
-        if (this.offlineQueue.length === 0) return;
-
-        console.log(`📱 Syncing ${this.offlineQueue.length} offline Oracle actions`);
-        
-        for (const action of this.offlineQueue) {
-            try {
-                await this.executeOfflineAction(action);
-            } catch (error) {
-                console.error('Failed to sync offline action:', error);
-            }
-        }
-
-        this.offlineQueue = [];
-        this.showNotification('Oracle Sync Complete', {
-            body: 'All offline predictions have been synchronized.',
-            tag: 'sync-complete'
-        });
-    }
-
-    /**
-     * Execute offline action
-     */
-    private async executeOfflineAction(action: any): Promise<void> {
-        switch (action.type) {
-            case 'submit-prediction':
-                // Re-submit prediction
-                break;
-            case 'update-settings':
-                // Update settings
-                break;
-            case 'social-action':
-                // Execute social action
-                break;
-        }
-    }
-
-    /**
-     * Navigation methods for touch interactions
-     */
-    private navigateToNextChallenge(): void {
-        const event = new CustomEvent('oracle-navigate', { 
-            detail: { direction: 'next' } 
-        });
-        document.dispatchEvent(event);
-        this.vibrate([25]); // Light haptic feedback
-    }
-
-    private navigateToPreviousChallenge(): void {
-        const event = new CustomEvent('oracle-navigate', { 
-            detail: { direction: 'previous' } 
-        });
-        document.dispatchEvent(event);
-        this.vibrate([25]); // Light haptic feedback
-    }
-
-    private quickSubmitPrediction(): void {
-        const event = new CustomEvent('oracle-quick-submit');
-        document.dispatchEvent(event);
-        this.vibrate([50, 100, 50]); // Confirmation haptic feedback
-    }
-
-    private toggleChartZoom(): void {
-        const event = new CustomEvent('oracle-chart-zoom');
-        document.dispatchEvent(event);
-    }
-
-    /**
-     * PWA Installation methods
-     */
-    async promptInstall(): Promise<boolean> {
-        if (!this.installPrompt.isInstallable || !this.installPrompt.promptEvent) {
-            return false;
-        }
-
-        try {
-            const promptEvent = this.installPrompt.promptEvent as any;
-            promptEvent.prompt();
-            const result = await promptEvent.userChoice;
-            
-            if (result.outcome === 'accepted') {
-                this.installPrompt.isInstallable = false;
-                this.installPrompt.promptEvent = null;
-                return true;
-            }
-            return false;
-        } catch (error) {
-            console.error('PWA installation failed:', error);
-            return false;
-        }
-    }
-
-    isInstallable(): boolean {
-        return this.installPrompt.isInstallable;
-    }
-
-    isInstalled(): boolean {
-        return this.installPrompt.isInstalled;
-    }
-
-    private checkIfInstalled(): boolean {
-        return window.matchMedia('(display-mode: standalone)').matches ||
-               (window.navigator as any).standalone === true;
-    }
-
-    /**
-     * Notification methods
-     */
-    async requestNotificationPermission(): Promise<boolean> {
-        if (!('Notification' in window)) {
-            console.warn('This browser does not support notifications');
-            return false;
-        }
-
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-            this.notificationConfig.enabled = true;
-            this.saveNotificationConfig();
-            return true;
-        }
-        return false;
-    }
-
-    updateNotificationConfig(config: Partial<MobileNotificationConfig>): void {
-        this.notificationConfig = { ...this.notificationConfig, ...config };
-        this.saveNotificationConfig();
-    }
-
-    getNotificationConfig(): MobileNotificationConfig {
-        return { ...this.notificationConfig };
-    }
-
-    private isQuietHours(): boolean {
-        if (!this.notificationConfig.quietHours.enabled) return false;
-
-        const now = new Date();
-        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-        
-        const start = this.notificationConfig.quietHours.startTime;
-        const end = this.notificationConfig.quietHours.endTime;
-        
-        if (start <= end) {
-            return currentTime >= start && currentTime <= end;
-        } else {
-            // Quiet hours span midnight
-            return currentTime >= start || currentTime <= end;
-        }
-    }
-
-    /**
-     * Show Oracle challenge reminder
-     */
-    showChallengeReminder(challenge: MobileOracleChallenge): void {
-        if (!this.notificationConfig.challengeReminders || this.isQuietHours()) return;
-
-        const urgencyText = challenge.isUrgent ? '⚡ URGENT: ' : '';
-        const difficultyEmoji = {
-            easy: '🟢',
-            medium: '🟡',
-            hard: '🔴'
-        }[challenge.difficulty];
-
-        this.showNotification(`${urgencyText}Oracle Challenge Available`, {
-            body: `${difficultyEmoji} ${challenge.question}\n💰 ${challenge.pointsAvailable} points available`,
-            tag: `challenge-${challenge.id}`,
-            icon: '/icons/oracle-challenge.png',
-            actions: [
-                { action: 'view', title: 'View Challenge' },
-                { action: 'dismiss', title: 'Dismiss' }
-            ]
-        });
-    }
-
-    /**
-     * Show result notification
-     */
-    showResultNotification(result: any): void {
-        if (!this.notificationConfig.resultNotifications || this.isQuietHours()) return;
-
-        const isWin = result.userWon;
-        const emoji = isWin ? '🎉' : '😔';
-        const title = isWin ? 'Oracle Challenge Won!' : 'Oracle Challenge Result';
-        
-        this.showNotification(title, {
-            body: `${emoji} ${result.challengeName}\n${isWin ? '✅' : '❌'} ${result.outcomeText}`,
-            tag: `result-${result.challengeId}`,
-            icon: '/icons/oracle-result.png'
-        });
-    }
-
-    /**
-     * Show achievement notification
-     */
-    showAchievementNotification(achievement: Achievement): void {
-        if (!this.notificationConfig.achievementAlerts || this.isQuietHours()) return;
-
-        // Use default emoji since Achievement type doesn't have rarity property
-        const rarityEmoji = '🏆';
-
-        this.showNotification('Achievement Unlocked! 🎯', {
-            body: `${rarityEmoji} ${achievement.id}\n${achievement.description || 'New achievement earned!'}`,
-            tag: `achievement-${achievement.id}`,
-            icon: '/icons/oracle-achievement.png'
-        });
-    }
-
-    /**
-     * Show social notification
-     */
-    showSocialNotification(notification: any): void {
-        if (!this.notificationConfig.socialUpdates || this.isQuietHours()) return;
-
-        this.showNotification(notification.title, {
-            body: notification.message,
-            tag: `social-${notification.id}`,
-            icon: '/icons/oracle-social.png'
-        });
-    }
-
-    /**
-     * Show prediction update notification
-     */
-    showPredictionUpdateNotification(update: any): void {
-        if (!this.notificationConfig.predictionUpdates || this.isQuietHours()) return;
-
-        this.showNotification('Oracle Prediction Updated', {
-            body: `Confidence changed: ${update.oldConfidence}% → ${update.newConfidence}%\n${update.reasoning}`,
-            tag: `prediction-${update.predictionId}`,
-            icon: '/icons/oracle-update.png'
-        });
-    }
-
-    /**
-     * Generic notification method
-     */
-    private showNotification(title: string, options: NotificationOptions & { actions?: { action: string; title: string }[] } = {}): void {
-        if (!this.notificationConfig.enabled) return;
-
-        // Use browser notification API
-        showNotification(title, {
-            ...options,
-            icon: options.icon || '/favicon.svg',
-            badge: '/icons/oracle-badge.png',
-            requireInteraction: false,
-            silent: this.isQuietHours()
-        });
-
-        // Separate vibration API call
-        if (!this.isQuietHours()) {
-            this.vibrate([200, 100, 200]);
-        }
-    }
-
-    /**
-     * Haptic feedback
-     */
-    vibrate(pattern: number[]): void {
-        if ('vibrate' in navigator) {
-            navigator.vibrate(pattern);
-        }
-    }
-
-    /**
-     * Storage methods
-     */
-    private loadNotificationConfig(): MobileNotificationConfig {
-        try {
-            const stored = localStorage.getItem('oracle-mobile-config');
-            if (stored) {
-                return JSON.parse(stored);
-            }
-        } catch (error) {
-            console.error('Failed to load notification config:', error);
-        }
-
-        // Default configuration
-        return {
+      },
+      performance: {
+        frameRate: device.performance.cpu > 70 ? 60 : 30,
+        textureQuality: this.getTextureQuality(device),
+        cachingStrategy: device.performance.memory > 70 ? 'aggressive' : 'balanced',
+        preloadContent: device.networkType.type === 'wifi',
+        backgroundSync: !device.battery.lowPowerMode,
+        dataCompression: device.networkType.type !== 'wifi'
+      },
+      notifications: {
+        enabled: device.capabilities.notifications,
+        types: [
+          {
+            type: 'prediction_ready',
+            enabled: true,
+            priority: 'normal',
+            sound: true,
+            vibration: true,
+            badge: true
+          }
+        ],
+        scheduling: {
+          quietHours: {
             enabled: false,
-            challengeReminders: true,
-            resultNotifications: true,
-            achievementAlerts: true,
-            socialUpdates: true,
-            predictionUpdates: false,
-            quietHours: {
-                enabled: true,
-                startTime: '22:00',
-                endTime: '08:00'
+            startTime: '22:00',
+            endTime: '07:00',
+            days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+          },
+          frequency: {
+            maxPerHour: 5,
+            maxPerDay: 20,
+            cooldownPeriod: 300000 // 5 minutes
+          },
+          grouping: true,
+          batching: true
+        },
+        customization: {
+          templates: [],
+          personalization: true,
+          adaptiveContent: true
+        }
+      },
+      offline: {
+        enabled: true,
+        strategy: device.networkType.quality === 'poor' ? 'cache_first' : 'network_first',
+        storage: {
+          maxSize: device.performance.storage > 50 ? 500 : 100, // MB
+          retention: 7, // days
+          compression: true,
+          encryption: true,
+          priority: [
+            {
+              contentType: 'predictions',
+              priority: 1,
+              maxAge: 86400000 // 1 day
             }
-        };
-    }
-
-    private saveNotificationConfig(): void {
-        try {
-            localStorage.setItem('oracle-mobile-config', JSON.stringify(this.notificationConfig));
-        } catch (error) {
-            console.error('Failed to save notification config:', error);
+          ]
+        },
+        sync: {
+          autoSync: device.networkType.type === 'wifi',
+          syncInterval: 15, // minutes
+          conflictResolution: 'server',
+          batchSize: 50
         }
-    }
-
-    /**
-     * Get mobile challenges optimized for mobile display
-     */
-    async getMobileChallenges(week: number): Promise<MobileOracleChallenge[]> {
-        try {
-            const predictions = await oraclePredictionService.generateWeeklyPredictions(week);
-            
-            return predictions.map(prediction => ({
-                id: prediction.id,
-                question: prediction.question,
-                options: prediction.options.map(opt => opt.text),
-                timeRemaining: this.calculateTimeRemaining(prediction.timestamp),
-                isUrgent: this.isUrgentChallenge(prediction),
-                difficulty: this.calculateDifficulty(prediction.confidence),
-                pointsAvailable: this.calculatePoints(prediction.confidence, prediction.type)
-            }));
-        } catch (error) {
-            console.error('Failed to get mobile challenges:', error);
-            return [];
+      },
+      analytics: {
+        enabled: true,
+        events: [
+          {
+            eventType: 'prediction_view',
+            enabled: true,
+            sampling: 1.0,
+            properties: ['prediction_type', 'confidence']
+          }
+        ],
+        performance: {
+          metrics: ['load_time', 'frame_rate', 'memory_usage'],
+          sampling: 0.1,
+          alertThresholds: {
+            'load_time': 3000,
+            'frame_rate': 30,
+            'memory_usage': 80
+          }
+        },
+        errors: {
+          crashReporting: true,
+          errorLogging: true,
+          breadcrumbs: true,
+          stackTrace: true
+        },
+        user: {
+          demographics: false,
+          behavior: true,
+          preferences: true,
+          anonymization: true
         }
+      }
+    };
+
+    return baseConfig;
+  }
+
+  private getTextureQuality(device: MobileDevice): 'low' | 'medium' | 'high' | 'ultra' {
+    if (device.performance.cpu > 80 && device.performance.memory > 80) return 'ultra';
+    if (device.performance.cpu > 60 && device.performance.memory > 60) return 'high';
+    if (device.performance.cpu > 40 && device.performance.memory > 40) return 'medium';
+    return 'low';
+  }
+
+  private async generateOptimizationRecommendations(device: MobileDevice): Promise<OptimizationRecommendation[]> {
+    const recommendations: OptimizationRecommendation[] = [];
+
+    // Performance recommendations
+    if (device.performance.cpu < 50) {
+      recommendations.push({
+        category: 'performance',
+        recommendation: 'Reduce animation complexity and frame rate',
+        impact: 'high',
+        effort: 'low',
+        priority: 1,
+        implementation: 'Update performance config to reduce animations and target 30fps'
+      });
     }
 
-    private calculateTimeRemaining(timestamp: string): number {
-        // Calculate time remaining until prediction closes (typically 24-48 hours)
-        const created = new Date(timestamp);
-        const deadline = new Date(created.getTime() + 48 * 60 * 60 * 1000); // 48 hours from creation
-        return Math.max(0, deadline.getTime() - Date.now());
+    // Battery recommendations
+    if (device.battery.lowPowerMode || device.battery.level < 20) {
+      recommendations.push({
+        category: 'battery',
+        recommendation: 'Enable aggressive power saving mode',
+        impact: 'high',
+        effort: 'low',
+        priority: 2,
+        implementation: 'Disable background sync, reduce refresh rates, limit notifications'
+      });
     }
 
-    private isUrgentChallenge(prediction: OraclePrediction): boolean {
-        const timeRemaining = this.calculateTimeRemaining(prediction.timestamp);
-        return timeRemaining < 6 * 60 * 60 * 1000; // Urgent if less than 6 hours remaining
+    // Network recommendations
+    if (device.networkType.quality === 'poor') {
+      recommendations.push({
+        category: 'data',
+        recommendation: 'Optimize for low bandwidth usage',
+        impact: 'medium',
+        effort: 'medium',
+        priority: 3,
+        implementation: 'Enable data compression, reduce image quality, cache aggressively'
+      });
     }
 
-    private calculateDifficulty(confidence: number): 'easy' | 'medium' | 'hard' {
-        if (confidence >= 80) return 'easy';
-        if (confidence >= 60) return 'medium';
-        return 'hard';
+    // Storage recommendations
+    if (device.performance.storage > 80) {
+      recommendations.push({
+        category: 'storage',
+        recommendation: 'Implement more aggressive cache cleanup',
+        impact: 'medium',
+        effort: 'low',
+        priority: 4,
+        implementation: 'Reduce cache retention period and implement LRU eviction'
+      });
     }
 
-    private calculatePoints(confidence: number, type: string): number {
-        const basePoints = {
-            'PLAYER_PERFORMANCE': 10,
-            'GAME_OUTCOME': 15,
-            'WEEKLY_SCORING': 20,
-            'WEATHER_IMPACT': 12,
-            'INJURY_IMPACT': 18
-        }[type] || 10;
+    return recommendations;
+  }
 
-        // Higher points for lower confidence (harder predictions)
-        let difficultyMultiplier = 1;
-        if (confidence < 60) {
-            difficultyMultiplier = 2;
-        } else if (confidence < 80) {
-            difficultyMultiplier = 1.5;
-        }
-        
-        return Math.round(basePoints * difficultyMultiplier);
-    }
+  private calculatePerformanceMetrics(device: MobileDevice): PerformanceMetrics {
+    return {
+      appStartTime: 1.2 + (device.performance.cpu < 50 ? 0.8 : 0),
+      frameRate: device.performance.cpu > 70 ? 60 : (device.performance.cpu > 40 ? 45 : 30),
+      memoryUsage: device.performance.memory,
+      batteryDrain: device.battery.lowPowerMode ? 0.5 : 1.0,
+      networkEfficiency: device.networkType.quality === 'excellent' ? 0.95 : 0.75,
+      userSatisfaction: this.calculateUserSatisfaction(device)
+    };
+  }
 
-    /**
-     * Mobile analytics optimized for touch and smaller screens
-     */
-    getMobileAnalytics(): any {
-        return {
-            quickStats: this.getQuickStats(),
-            touchOptimizedCharts: this.getTouchOptimizedCharts(),
-            compactInsights: this.getCompactInsights()
-        };
-    }
+  private calculateUXMetrics(device: MobileDevice): UXMetrics {
+    return {
+      usability: device.capabilities.touch ? 0.9 : 0.7,
+      accessibility: 0.8, // Base accessibility score
+      engagement: device.performance.cpu > 50 ? 0.85 : 0.65,
+      retention: 0.75, // Average retention
+      taskCompletion: device.networkType.quality === 'excellent' ? 0.9 : 0.7,
+      errorRate: device.performance.cpu < 30 ? 0.15 : 0.05
+    };
+  }
 
-    private getQuickStats(): any {
-        return {
-            todaysChallenges: 3,
-            weeklyAccuracy: 78,
-            totalPoints: 1250,
-            currentStreak: 5,
-            nextReward: 'Oracle Master',
-            rewardProgress: 0.65
-        };
-    }
+  private calculateUserSatisfaction(device: MobileDevice): number {
+    let satisfaction = 0.7; // Base satisfaction
+    
+    if (device.performance.cpu > 70) satisfaction += 0.1;
+    if (device.performance.memory > 70) satisfaction += 0.1;
+    if (device.networkType.quality === 'excellent') satisfaction += 0.1;
+    if (!device.battery.lowPowerMode) satisfaction += 0.05;
+    
+    return Math.min(satisfaction, 1.0);
+  }
 
-    private getTouchOptimizedCharts(): any {
-        return {
-            weeklyTrend: 'simplified-line-chart',
-            accuracyByType: 'donut-chart',
-            pointsProgression: 'area-chart',
-            socialComparison: 'horizontal-bar-chart'
-        };
+  private identifySessionIssues(session: MobileSession): SessionIssue[] {
+    const issues: SessionIssue[] = [];
+    
+    // Check for performance issues
+    if (session.performance.errors.length > 0) {
+      issues.push({
+        type: 'error',
+        severity: 'high',
+        description: 'Errors occurred during session',
+        count: session.performance.errors.length
+      });
     }
-
-    private getCompactInsights(): string[] {
-        return [
-            '🎯 You\'re 22% more accurate on game outcomes',
-            '⚡ Best prediction time: 2-4 hours before games',
-            '📈 Your accuracy improves 15% when Oracle confidence is <70%',
-            '🏆 You\'re in the top 25% of Oracle challengers'
-        ];
+    
+    // Check for network issues
+    if (session.network.averageLatency > 1000) {
+      issues.push({
+        type: 'network',
+        severity: 'medium',
+        description: 'High network latency detected',
+        count: 1
+      });
     }
-
-    /**
-     * Cleanup method
-     */
-    destroy(): void {
-        this.touchInteractions.clear();
-        this.offlineQueue = [];
-        console.log('📱 Oracle Mobile Service destroyed');
+    
+    // Check for performance degradation
+    const avgCpu = session.performance.cpuUsage.reduce((a, b) => a + b, 0) / session.performance.cpuUsage.length;
+    if (avgCpu > 80) {
+      issues.push({
+        type: 'performance',
+        severity: 'medium',
+        description: 'High CPU usage detected',
+        count: session.performance.cpuUsage.filter(cpu => cpu > 80).length
+      });
     }
+    
+    return issues;
+  }
 }
 
-// Export singleton instance
 export const oracleMobileService = new OracleMobileService();
 export default oracleMobileService;

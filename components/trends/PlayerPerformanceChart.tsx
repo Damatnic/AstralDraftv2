@@ -1,7 +1,7 @@
 
 import React from 'react';
 import type { Player, League } from '../../types';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 interface PlayerPerformanceChartProps {
     player: Player;
@@ -37,7 +37,7 @@ const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player,
                 {chartData.map(({ week, actualScore, projectedScore }) => (
                     <div key={week} className="flex-1 h-full flex flex-col justify-end items-center">
                         <div className="relative w-full h-full flex items-end justify-center">
-                            <Tooltip text={`Actual: ${actualScore.toFixed(2)}`}>
+                            <Tooltip content="This is a tooltip">
                                 <div
                                     className="w-1/2 bg-cyan-500 rounded-t-md"
                                     style={{ height: `${(actualScore / maxScore) * 100}%` }}

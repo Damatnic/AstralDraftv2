@@ -221,7 +221,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                                     <div className="p-8 text-center text-gray-400">
                                         <Bell className="w-12 h-12 mx-auto mb-4 opacity-50" />
                                         <p>No notifications yet</p>
-                                        <p className="text-sm mt-1">We'll notify you about prediction updates</p>
+                                        <p className="text-sm mt-1">We&apos;ll notify you about prediction updates</p>
                                     </div>
                                 )}
                             </div>

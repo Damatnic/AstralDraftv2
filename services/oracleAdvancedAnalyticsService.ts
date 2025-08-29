@@ -1,857 +1,1044 @@
-/**
- * Oracle Advanced Analytics Service
- * Advanced statistical modeling with external data sources for enhanced predictions
- * Incorporates player efficiency ratings, team chemistry, coaching tendencies, and market data
- */
+// Advanced analytics service for Oracle prediction system
 
-import oracleEnsembleMachineLearningService, { 
-    EnsemblePredictionDetail,
-    FeatureVector 
-} from './oracleEnsembleMachineLearningService';
-
-export interface AdvancedPlayerMetrics {
-    // Player Efficiency Metrics
-    playerEfficiencyRating: number; // PER-like metric for fantasy football
-    targetShare: number;
-    redZoneTargetShare: number;
-    snapCountPercentage: number;
-    airyardsPerTarget: number;
-    separationRating: number;
-    catchRateOverExpected: number;
-    yardsAfterContact: number;
-    brokenTackleRate: number;
-    pressureRate: number; // For QBs
-    timeToThrow: number; // For QBs
-    completionPercentageOverExpected: number; // For QBs
-    
-    // Situation-Specific Metrics
-    redZoneEfficiency: number;
-    thirdDownConversionRate: number;
-    fourthQuarterPerformance: number;
-    primeTimePerformance: number;
-    domeVsOutdoorPerformance: number;
-    
-    // Advanced Receiving Metrics
-    contestedCatchRate: number;
-    dropsPerTarget: number;
-    averageTargetDepth: number;
-    slotVsOutsidePerformance: number;
-    
-    // Running Back Metrics
-    ellusiveness: number;
-    breakawaySpeed: number;
-    stuffedRunRate: number;
-    goalLineEfficiency: number;
+export interface AdvancedAnalytics {
+  predictionAccuracy: PredictionAccuracyMetrics;
+  userBehaviorAnalytics: UserBehaviorMetrics;
+  marketTrendAnalysis: MarketTrendMetrics;
+  performanceInsights: PerformanceInsights;
+  competitiveAnalysis: CompetitiveAnalysis;
+  riskAssessment: RiskAssessment;
 }
 
-export interface TeamAdvancedMetrics {
-    // Offensive Analytics
-    offensiveEfficiency: number;
-    passingEpa: number; // Expected Points Added
-    rushingEpa: number;
-    redZoneEfficiency: number;
-    thirdDownConversionRate: number;
-    playActionSuccessRate: number;
-    blitzRateAgainst: number;
-    timeOfPossession: number;
-    
-    // Defensive Analytics
-    defensiveEfficiency: number;
-    passRushWinRate: number;
-    coverageGrade: number;
-    runStopRate: number;
-    blitzRate: number;
-    pressureRate: number;
-    interceptionRate: number;
-    
-    // Special Teams
-    specialTeamsEfficiency: number;
-    kickReturnAverage: number;
-    puntReturnAverage: number;
-    fieldGoalAccuracy: number;
-    
-    // Team Chemistry Indicators
-    teamChemistryScore: number;
-    offlineChemistry: number;
-    passingChemistry: number;
-    runBlockingChemistry: number;
-    defensiveChemistry: number;
-    locker_roomMorale: number;
-    coachingStability: number;
-    
-    // Situational Performance
-    homeFieldAdvantage: number;
-    divisionGamePerformance: number;
-    conferenceGamePerformance: number;
-    playoffExperience: number;
+export interface PredictionAccuracyMetrics {
+  overallAccuracy: number;
+  accuracyByType: Record<string, number>;
+  accuracyByWeek: Record<number, number>;
+  accuracyTrends: AccuracyTrend[];
+  confidenceCalibration: ConfidenceCalibration;
+  errorAnalysis: ErrorAnalysis;
 }
 
-export interface CoachingTendencies {
-    // Offensive Tendencies
-    passingPlayPercentage: number;
-    rushingPlayPercentage: number;
-    playActionUsage: number;
-    redZonePlayCalling: number;
-    fourthDownAggression: number;
-    blitzFrequency: number;
-    
-    // Game Management
-    timeoutUsage: number;
-    challengeSuccessRate: number;
-    clockManagement: number;
-    halftimeAdjustments: number;
-    
-    // Personnel Usage
-    personnelGroupUsage: Record<string, number>; // "11", "12", "21", etc.
-    rotationTendencies: number;
-    rookieUtilization: number;
-    veteranReliance: number;
-    
-    // Situational Coaching
-    leadGameManagement: number;
-    deficitGameManagement: number;
-    weatherGameAdjustments: number;
-    divisionalGameStrategy: number;
+export interface AccuracyTrend {
+  period: string;
+  accuracy: number;
+  confidence: number;
+  sampleSize: number;
+  trend: 'improving' | 'stable' | 'declining';
 }
 
-export interface MarketData {
-    // Betting Market Indicators
-    spreadMovement: number[];
-    totalMovement: number[];
-    publicBettingPercentage: number;
-    sharpMoneyIndicators: number;
-    
-    // DFS Market Data
-    dfsOwnershipProjections: Record<string, number>;
-    dfsProjectedScores: Record<string, number>;
-    dfsPriceValue: Record<string, number>;
-    
-    // Fantasy Market
-    waiversAddDropRate: Record<string, number>;
-    tradeValue: Record<string, number>;
-    rosterPercentage: Record<string, number>;
-    
-    // Media Sentiment
-    mediaSentimentScore: number;
-    socialMediaBuzz: number;
-    injuryReportSentiment: number;
-    beatReporterConfidence: number;
+export interface ConfidenceCalibration {
+  bins: CalibrationBin[];
+  overallCalibration: number;
+  reliabilityDiagram: ReliabilityPoint[];
 }
 
-export interface ExternalDataSources {
-    // Weather and Environmental
-    detailedWeather: {
-        temperature: number;
-        humidity: number;
-        windSpeed: number;
-        windDirection: number;
-        precipitation: number;
-        visibility: number;
-        pressure: number;
-        uvIndex: number;
+export interface CalibrationBin {
+  confidenceRange: [number, number];
+  averageConfidence: number;
+  actualAccuracy: number;
+  sampleCount: number;
+}
+
+export interface ReliabilityPoint {
+  predictedProbability: number;
+  actualFrequency: number;
+  count: number;
+}
+
+export interface ErrorAnalysis {
+  systematicErrors: SystematicError[];
+  randomErrors: RandomError;
+  biasAnalysis: BiasAnalysis;
+  rootCauses: RootCause[];
+}
+
+export interface SystematicError {
+  type: string;
+  description: string;
+  frequency: number;
+  impact: number;
+  patterns: string[];
+  correction: string;
+}
+
+export interface RandomError {
+  variance: number;
+  standardDeviation: number;
+  distribution: string;
+  outliers: OutlierData[];
+}
+
+export interface BiasAnalysis {
+  overconfidenceBias: number;
+  anchoring: number;
+  availabilityHeuristic: number;
+  confirmationBias: number;
+  recommendations: string[];
+}
+
+export interface RootCause {
+  factor: string;
+  impact: number;
+  frequency: number;
+  mitigation: string;
+  priority: 'low' | 'medium' | 'high' | 'critical';
+}
+
+export interface OutlierData {
+  predictionId: string;
+  expectedValue: number;
+  actualValue: number;
+  deviation: number;
+  factors: string[];
+}
+
+export interface UserBehaviorMetrics {
+  engagementPatterns: EngagementPattern[];
+  predictionFrequency: FrequencyMetrics;
+  confidenceLevels: ConfidenceLevelMetrics;
+  timePatterns: TimePatternMetrics;
+  decisionFactors: DecisionFactor[];
+}
+
+export interface EngagementPattern {
+  userId: string;
+  sessionsPerWeek: number;
+  avgSessionDuration: number;
+  predictionsPerSession: number;
+  peakActivityHours: number[];
+  engagementScore: number;
+}
+
+export interface FrequencyMetrics {
+  dailyPredictions: Record<string, number>;
+  weeklyPredictions: Record<string, number>;
+  monthlyPredictions: Record<string, number>;
+  seasonalVariations: SeasonalVariation[];
+}
+
+export interface SeasonalVariation {
+  period: string;
+  multiplier: number;
+  confidence: number;
+  factors: string[];
+}
+
+export interface ConfidenceLevelMetrics {
+  averageConfidence: number;
+  confidenceDistribution: Record<string, number>;
+  confidenceVsAccuracy: ConfidenceAccuracyPoint[];
+  calibrationMetrics: CalibrationMetrics;
+}
+
+export interface ConfidenceAccuracyPoint {
+  confidenceLevel: number;
+  actualAccuracy: number;
+  sampleSize: number;
+}
+
+export interface CalibrationMetrics {
+  brierScore: number;
+  logLoss: number;
+  calibrationError: number;
+  sharpness: number;
+}
+
+export interface TimePatternMetrics {
+  hourlyActivity: Record<number, number>;
+  dayOfWeekActivity: Record<string, number>;
+  seasonalActivity: Record<string, number>;
+  streakAnalysis: StreakAnalysis;
+}
+
+export interface StreakAnalysis {
+  longestStreak: number;
+  currentStreak: number;
+  averageStreak: number;
+  streakDistribution: Record<number, number>;
+}
+
+export interface DecisionFactor {
+  factor: string;
+  weight: number;
+  impact: number;
+  reliability: number;
+  userPreference: number;
+}
+
+export interface MarketTrendMetrics {
+  consensusAnalysis: ConsensusAnalysis;
+  volatilityMetrics: VolatilityMetrics;
+  momentumIndicators: MomentumIndicator[];
+  predictionVolumeAnalysis: VolumeAnalysis;
+}
+
+export interface ConsensusAnalysis {
+  consensusAccuracy: number;
+  wisdomOfCrowds: number;
+  expertVsConsensus: ExpertConsensusComparison;
+  contrarian: ContrarianAnalysis;
+}
+
+export interface ExpertConsensusComparison {
+  expertAccuracy: number;
+  consensusAccuracy: number;
+  expertAdvantage: number;
+  situationsWhereExpertsBetter: string[];
+}
+
+export interface ContrarianAnalysis {
+  contrarianSuccessRate: number;
+  optimalContrarianThreshold: number;
+  marketInefficiencies: MarketInefficiency[];
+}
+
+export interface MarketInefficiency {
+  type: string;
+  frequency: number;
+  profitPotential: number;
+  persistence: number;
+  exploitability: number;
+}
+
+export interface VolatilityMetrics {
+  predictionVolatility: number;
+  consensusVolatility: number;
+  impliedVolatility: number;
+  volatilityPremium: number;
+}
+
+export interface MomentumIndicator {
+  name: string;
+  value: number;
+  direction: 'up' | 'down' | 'sideways';
+  strength: number;
+  reliability: number;
+}
+
+export interface VolumeAnalysis {
+  predictionVolume: Record<string, number>;
+  volumeTrends: VolumeTrend[];
+  volumeVsAccuracy: VolumeAccuracyRelation;
+}
+
+export interface VolumeTrend {
+  period: string;
+  volume: number;
+  change: number;
+  significance: number;
+}
+
+export interface VolumeAccuracyRelation {
+  correlation: number;
+  optimalVolumeRange: [number, number];
+  volumeQualityScore: number;
+}
+
+export interface PerformanceInsights {
+  userRankings: UserRanking[];
+  skillAssessment: SkillAssessment;
+  improvementOpportunities: ImprovementOpportunity[];
+  benchmarking: BenchmarkingMetrics;
+}
+
+export interface UserRanking {
+  userId: string;
+  rank: number;
+  score: number;
+  accuracy: number;
+  consistency: number;
+  tier: 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond';
+}
+
+export interface SkillAssessment {
+  overallSkill: number;
+  skillByCategory: Record<string, number>;
+  skillProgression: SkillProgression[];
+  strengthsAndWeaknesses: SkillAnalysis;
+}
+
+export interface SkillProgression {
+  timestamp: number;
+  skillLevel: number;
+  category: string;
+  improvement: number;
+}
+
+export interface SkillAnalysis {
+  strengths: string[];
+  weaknesses: string[];
+  recommendations: string[];
+  trainingAreas: string[];
+}
+
+export interface ImprovementOpportunity {
+  area: string;
+  currentPerformance: number;
+  potentialImprovement: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  timeframe: string;
+  actions: string[];
+}
+
+export interface BenchmarkingMetrics {
+  industryBenchmarks: Record<string, number>;
+  peerComparison: PeerComparison;
+  competitivePosition: CompetitivePosition;
+}
+
+export interface PeerComparison {
+  averagePeerPerformance: number;
+  userPerformance: number;
+  percentileRank: number;
+  gapAnalysis: string[];
+}
+
+export interface CompetitivePosition {
+  marketShare: number;
+  competitiveAdvantage: string[];
+  threats: string[];
+  opportunities: string[];
+}
+
+export interface CompetitiveAnalysis {
+  competitorMetrics: CompetitorMetric[];
+  marketPositioning: MarketPositioning;
+  benchmarkComparison: BenchmarkComparison;
+  strategicInsights: StrategicInsight[];
+}
+
+export interface CompetitorMetric {
+  competitorId: string;
+  accuracy: number;
+  volume: number;
+  userSatisfaction: number;
+  marketShare: number;
+  strengths: string[];
+  weaknesses: string[];
+}
+
+export interface MarketPositioning {
+  positionMap: PositionMap;
+  differentiators: string[];
+  valueProposition: string;
+  targetSegments: string[];
+}
+
+export interface PositionMap {
+  xAxis: string;
+  yAxis: string;
+  userPosition: [number, number];
+  competitorPositions: Record<string, [number, number]>;
+}
+
+export interface BenchmarkComparison {
+  metrics: Record<string, BenchmarkMetric>;
+  overallScore: number;
+  rankings: Record<string, number>;
+}
+
+export interface BenchmarkMetric {
+  value: number;
+  benchmark: number;
+  percentile: number;
+  trend: 'improving' | 'stable' | 'declining';
+}
+
+export interface StrategicInsight {
+  insight: string;
+  category: 'opportunity' | 'threat' | 'strength' | 'weakness';
+  impact: 'low' | 'medium' | 'high';
+  urgency: 'low' | 'medium' | 'high';
+  recommendations: string[];
+}
+
+export interface RiskAssessment {
+  overallRisk: number;
+  riskFactors: RiskFactor[];
+  riskMitigation: RiskMitigation[];
+  scenarioAnalysis: ScenarioAnalysis;
+}
+
+export interface RiskFactor {
+  factor: string;
+  probability: number;
+  impact: number;
+  riskScore: number;
+  category: 'operational' | 'market' | 'technical' | 'regulatory';
+}
+
+export interface RiskMitigation {
+  risk: string;
+  strategy: string;
+  effectiveness: number;
+  cost: number;
+  timeframe: string;
+}
+
+export interface ScenarioAnalysis {
+  scenarios: Scenario[];
+  probabilityWeightedOutcome: number;
+  worstCase: ScenarioOutcome;
+  bestCase: ScenarioOutcome;
+  mostLikely: ScenarioOutcome;
+}
+
+export interface Scenario {
+  name: string;
+  probability: number;
+  outcome: ScenarioOutcome;
+  assumptions: string[];
+}
+
+export interface ScenarioOutcome {
+  accuracy: number;
+  volume: number;
+  revenue: number;
+  userSatisfaction: number;
+  risks: string[];
+}
+
+export interface AdvancedAnalyticsConfig {
+  analysisDepth: 'basic' | 'standard' | 'advanced' | 'comprehensive';
+  updateFrequency: 'realtime' | 'hourly' | 'daily' | 'weekly';
+  metricsToTrack: string[];
+  alertThresholds: Record<string, number>;
+  reportingPreferences: ReportingPreferences;
+}
+
+export interface ReportingPreferences {
+  format: 'json' | 'csv' | 'pdf' | 'dashboard';
+  visualization: 'charts' | 'tables' | 'infographics';
+  detail: 'summary' | 'detailed' | 'comprehensive';
+  frequency: 'daily' | 'weekly' | 'monthly';
+}
+
+export interface AdvancedAnalyticsService {
+  // Core analytics
+  generateAnalytics(timeframe: string, config?: AdvancedAnalyticsConfig): Promise<AdvancedAnalytics>;
+  getPredictionAccuracy(filters?: AnalyticsFilter): Promise<PredictionAccuracyMetrics>;
+  getUserBehaviorAnalytics(userId?: string): Promise<UserBehaviorMetrics>;
+  getMarketTrends(timeframe: string): Promise<MarketTrendMetrics>;
+
+  // Performance analysis
+  analyzePerformance(userId: string, timeframe: string): Promise<PerformanceInsights>;
+  benchmarkPerformance(userId: string, peerGroup?: string): Promise<BenchmarkingMetrics>;
+  identifyImprovementOpportunities(userId: string): Promise<ImprovementOpportunity[]>;
+
+  // Risk and competitive analysis
+  assessRisk(scope: string): Promise<RiskAssessment>;
+  analyzeCompetition(timeframe: string): Promise<CompetitiveAnalysis>;
+  generateInsights(analysisType: string): Promise<StrategicInsight[]>;
+
+  // Reporting and visualization
+  generateReport(reportType: string, config: ReportingPreferences): Promise<AnalyticsReport>;
+  exportAnalytics(format: string, filters?: AnalyticsFilter): Promise<string>;
+  getVisualization(metricType: string, config: VisualizationConfig): Promise<Visualization>;
+}
+
+export interface AnalyticsFilter {
+  dateRange: [string, string];
+  userIds?: string[];
+  predictionTypes?: string[];
+  confidenceRange?: [number, number];
+  accuracyRange?: [number, number];
+}
+
+export interface AnalyticsReport {
+  id: string;
+  title: string;
+  summary: string;
+  data: AdvancedAnalytics;
+  insights: string[];
+  recommendations: string[];
+  generatedAt: number;
+}
+
+export interface VisualizationConfig {
+  chartType: 'line' | 'bar' | 'pie' | 'scatter' | 'heatmap';
+  timeframe: string;
+  aggregation: 'hour' | 'day' | 'week' | 'month';
+  styling: VisualizationStyling;
+}
+
+export interface VisualizationStyling {
+  colors: string[];
+  theme: 'light' | 'dark' | 'auto';
+  showLabels: boolean;
+  showLegend: boolean;
+  showGrid: boolean;
+}
+
+export interface Visualization {
+  type: string;
+  data: unknown;
+  config: VisualizationConfig;
+  metadata: VisualizationMetadata;
+}
+
+export interface VisualizationMetadata {
+  title: string;
+  description: string;
+  lastUpdated: number;
+  dataPoints: number;
+  sourceMetrics: string[];
+}
+
+class OracleAdvancedAnalyticsService implements AdvancedAnalyticsService {
+  private analyticsCache: Map<string, AdvancedAnalytics>;
+  private config: AdvancedAnalyticsConfig;
+  private metricsHistory: Map<string, unknown[]>;
+
+  constructor() {
+    this.analyticsCache = new Map();
+    this.metricsHistory = new Map();
+    this.config = this.initializeConfig();
+  }
+
+  private initializeConfig(): AdvancedAnalyticsConfig {
+    return {
+      analysisDepth: 'advanced',
+      updateFrequency: 'hourly',
+      metricsToTrack: [
+        'prediction_accuracy',
+        'user_engagement', 
+        'market_trends',
+        'risk_factors',
+        'competitive_position'
+      ],
+      alertThresholds: {
+        accuracy_drop: 0.05,
+        engagement_drop: 0.1,
+        risk_increase: 0.2
+      },
+      reportingPreferences: {
+        format: 'json',
+        visualization: 'charts',
+        detail: 'detailed',
+        frequency: 'daily'
+      }
     };
+  }
+
+  async generateAnalytics(timeframe: string, config?: AdvancedAnalyticsConfig): Promise<AdvancedAnalytics> {
+    const cacheKey = `analytics_${timeframe}_${JSON.stringify(config)}`;
+    const cached = this.analyticsCache.get(cacheKey);
     
-    // Travel and Rest
-    travelDistance: number;
-    timeZoneChanges: number;
-    restDays: number;
-    backToBackGames: boolean;
-    thursdayNightGame: boolean;
-    mondayNightGame: boolean;
+    if (cached && this.isCacheValid(cacheKey)) {
+      return cached;
+    }
+
+    const analytics: AdvancedAnalytics = {
+      predictionAccuracy: await this.generatePredictionAccuracy(timeframe),
+      userBehaviorAnalytics: await this.generateUserBehaviorAnalytics(timeframe),
+      marketTrendAnalysis: await this.generateMarketTrendAnalysis(timeframe),
+      performanceInsights: await this.generatePerformanceInsights(timeframe),
+      competitiveAnalysis: await this.generateCompetitiveAnalysis(timeframe),
+      riskAssessment: await this.generateRiskAssessment(timeframe)
+    };
+
+    this.analyticsCache.set(cacheKey, analytics);
+    return analytics;
+  }
+
+  async getPredictionAccuracy(_filters?: AnalyticsFilter): Promise<PredictionAccuracyMetrics> {
+    return {
+      overallAccuracy: 0.752,
+      accuracyByType: {
+        'passing_yards': 0.781,
+        'rushing_yards': 0.723,
+        'receiving_yards': 0.745,
+        'touchdowns': 0.689
+      },
+      accuracyByWeek: {
+        1: 0.745,
+        2: 0.758,
+        3: 0.751,
+        4: 0.769
+      },
+      accuracyTrends: [
+        {
+          period: 'last_week',
+          accuracy: 0.758,
+          confidence: 0.89,
+          sampleSize: 1247,
+          trend: 'improving'
+        }
+      ],
+      confidenceCalibration: {
+        bins: [
+          {
+            confidenceRange: [0.8, 0.9],
+            averageConfidence: 0.85,
+            actualAccuracy: 0.82,
+            sampleCount: 234
+          }
+        ],
+        overallCalibration: 0.91,
+        reliabilityDiagram: [
+          {
+            predictedProbability: 0.85,
+            actualFrequency: 0.82,
+            count: 234
+          }
+        ]
+      },
+      errorAnalysis: {
+        systematicErrors: [
+          {
+            type: 'weather_underestimation',
+            description: 'Underestimating weather impact on outdoor games',
+            frequency: 0.15,
+            impact: 0.08,
+            patterns: ['cold_weather', 'high_wind'],
+            correction: 'Enhanced weather modeling'
+          }
+        ],
+        randomErrors: {
+          variance: 0.023,
+          standardDeviation: 0.152,
+          distribution: 'normal',
+          outliers: []
+        },
+        biasAnalysis: {
+          overconfidenceBias: 0.07,
+          anchoring: 0.04,
+          availabilityHeuristic: 0.03,
+          confirmationBias: 0.02,
+          recommendations: ['Improve calibration training', 'Regular bias audits']
+        },
+        rootCauses: [
+          {
+            factor: 'incomplete_injury_data',
+            impact: 0.12,
+            frequency: 0.08,
+            mitigation: 'Enhanced injury tracking',
+            priority: 'high'
+          }
+        ]
+      }
+    };
+  }
+
+  async getUserBehaviorAnalytics(_userId?: string): Promise<UserBehaviorMetrics> {
+    return {
+      engagementPatterns: [
+        {
+          userId: 'user_123',
+          sessionsPerWeek: 4.2,
+          avgSessionDuration: 18.5,
+          predictionsPerSession: 3.1,
+          peakActivityHours: [19, 20, 21],
+          engagementScore: 0.78
+        }
+      ],
+      predictionFrequency: {
+        dailyPredictions: { 'monday': 15, 'tuesday': 18, 'wednesday': 12 },
+        weeklyPredictions: { 'week1': 89, 'week2': 94, 'week3': 87 },
+        monthlyPredictions: { 'january': 245, 'february': 267, 'march': 289 },
+        seasonalVariations: [
+          {
+            period: 'nfl_season',
+            multiplier: 2.3,
+            confidence: 0.94,
+            factors: ['regular_season', 'playoffs']
+          }
+        ]
+      },
+      confidenceLevels: {
+        averageConfidence: 0.73,
+        confidenceDistribution: { 'low': 0.15, 'medium': 0.62, 'high': 0.23 },
+        confidenceVsAccuracy: [
+          {
+            confidenceLevel: 0.8,
+            actualAccuracy: 0.76,
+            sampleSize: 456
+          }
+        ],
+        calibrationMetrics: {
+          brierScore: 0.187,
+          logLoss: 0.623,
+          calibrationError: 0.045,
+          sharpness: 0.234
+        }
+      },
+      timePatterns: {
+        hourlyActivity: { 19: 23, 20: 28, 21: 25 },
+        dayOfWeekActivity: { 'sunday': 35, 'monday': 18, 'tuesday': 15 },
+        seasonalActivity: { 'fall': 45, 'winter': 38, 'spring': 22, 'summer': 15 },
+        streakAnalysis: {
+          longestStreak: 12,
+          currentStreak: 4,
+          averageStreak: 3.2,
+          streakDistribution: { 1: 45, 2: 23, 3: 15, 4: 12 }
+        }
+      },
+      decisionFactors: [
+        {
+          factor: 'player_form',
+          weight: 0.35,
+          impact: 0.78,
+          reliability: 0.82,
+          userPreference: 0.89
+        }
+      ]
+    };
+  }
+
+  async getMarketTrends(_timeframe: string): Promise<MarketTrendMetrics> {
+    return {
+      consensusAnalysis: {
+        consensusAccuracy: 0.734,
+        wisdomOfCrowds: 0.789,
+        expertVsConsensus: {
+          expertAccuracy: 0.798,
+          consensusAccuracy: 0.734,
+          expertAdvantage: 0.064,
+          situationsWhereExpertsBetter: ['injury_situations', 'weather_games']
+        },
+        contrarian: {
+          contrarianSuccessRate: 0.623,
+          optimalContrarianThreshold: 0.15,
+          marketInefficiencies: [
+            {
+              type: 'overreaction_to_news',
+              frequency: 0.12,
+              profitPotential: 0.08,
+              persistence: 0.67,
+              exploitability: 0.45
+            }
+          ]
+        }
+      },
+      volatilityMetrics: {
+        predictionVolatility: 0.234,
+        consensusVolatility: 0.189,
+        impliedVolatility: 0.267,
+        volatilityPremium: 0.033
+      },
+      momentumIndicators: [
+        {
+          name: 'prediction_momentum',
+          value: 0.67,
+          direction: 'up',
+          strength: 0.78,
+          reliability: 0.84
+        }
+      ],
+      predictionVolumeAnalysis: {
+        predictionVolume: { 'week1': 1247, 'week2': 1356, 'week3': 1189 },
+        volumeTrends: [
+          {
+            period: 'weekly',
+            volume: 1264,
+            change: 0.087,
+            significance: 0.78
+          }
+        ],
+        volumeVsAccuracy: {
+          correlation: 0.34,
+          optimalVolumeRange: [800, 1500],
+          volumeQualityScore: 0.72
+        }
+      }
+    };
+  }
+
+  async analyzePerformance(_userId: string, _timeframe: string): Promise<PerformanceInsights> {
+    return {
+      userRankings: [
+        {
+          userId: 'user_123',
+          rank: 47,
+          score: 892.3,
+          accuracy: 0.781,
+          consistency: 0.74,
+          tier: 'gold'
+        }
+      ],
+      skillAssessment: {
+        overallSkill: 0.78,
+        skillByCategory: {
+          'passing_predictions': 0.82,
+          'rushing_predictions': 0.74,
+          'defensive_predictions': 0.71
+        },
+        skillProgression: [
+          {
+            timestamp: Date.now() - 86400000,
+            skillLevel: 0.76,
+            category: 'overall',
+            improvement: 0.02
+          }
+        ],
+        strengthsAndWeaknesses: {
+          strengths: ['weather_analysis', 'injury_assessment'],
+          weaknesses: ['defensive_stats', 'special_teams'],
+          recommendations: ['Focus on defensive metrics', 'Study special teams impact'],
+          trainingAreas: ['defensive_analytics', 'situational_football']
+        }
+      },
+      improvementOpportunities: [
+        {
+          area: 'defensive_predictions',
+          currentPerformance: 0.67,
+          potentialImprovement: 0.15,
+          difficulty: 'medium',
+          timeframe: '4-6 weeks',
+          actions: ['Study defensive metrics', 'Analyze coaching tendencies']
+        }
+      ],
+      benchmarking: {
+        industryBenchmarks: { 'overall_accuracy': 0.72, 'consistency': 0.68 },
+        peerComparison: {
+          averagePeerPerformance: 0.74,
+          userPerformance: 0.78,
+          percentileRank: 72,
+          gapAnalysis: ['Above average in accuracy', 'Room for consistency improvement']
+        },
+        competitivePosition: {
+          marketShare: 0.023,
+          competitiveAdvantage: ['superior_analysis', 'data_integration'],
+          threats: ['new_algorithms', 'market_saturation'],
+          opportunities: ['mobile_expansion', 'social_features']
+        }
+      }
+    };
+  }
+
+  async benchmarkPerformance(_userId: string, _peerGroup?: string): Promise<BenchmarkingMetrics> {
+    return {
+      industryBenchmarks: {
+        'accuracy': 0.72,
+        'engagement': 0.65,
+        'retention': 0.78
+      },
+      peerComparison: {
+        averagePeerPerformance: 0.74,
+        userPerformance: 0.78,
+        percentileRank: 72,
+        gapAnalysis: ['Strong analytical skills', 'Good consistency']
+      },
+      competitivePosition: {
+        marketShare: 0.023,
+        competitiveAdvantage: ['data_quality', 'algorithm_sophistication'],
+        threats: ['competitor_innovation', 'market_changes'],
+        opportunities: ['feature_expansion', 'user_acquisition']
+      }
+    };
+  }
+
+  async identifyImprovementOpportunities(_userId: string): Promise<ImprovementOpportunity[]> {
+    return [
+      {
+        area: 'prediction_accuracy',
+        currentPerformance: 0.76,
+        potentialImprovement: 0.08,
+        difficulty: 'medium',
+        timeframe: '6-8 weeks',
+        actions: ['Improve data quality', 'Enhance algorithms', 'Better feature engineering']
+      }
+    ];
+  }
+
+  async assessRisk(_scope: string): Promise<RiskAssessment> {
+    return {
+      overallRisk: 0.34,
+      riskFactors: [
+        {
+          factor: 'algorithm_accuracy',
+          probability: 0.15,
+          impact: 0.78,
+          riskScore: 0.117,
+          category: 'technical'
+        }
+      ],
+      riskMitigation: [
+        {
+          risk: 'accuracy_degradation',
+          strategy: 'continuous_monitoring',
+          effectiveness: 0.85,
+          cost: 0.12,
+          timeframe: 'ongoing'
+        }
+      ],
+      scenarioAnalysis: {
+        scenarios: [
+          {
+            name: 'base_case',
+            probability: 0.6,
+            outcome: {
+              accuracy: 0.75,
+              volume: 1200,
+              revenue: 45000,
+              userSatisfaction: 0.78,
+              risks: []
+            },
+            assumptions: ['normal_market_conditions', 'stable_user_base']
+          }
+        ],
+        probabilityWeightedOutcome: 0.74,
+        worstCase: {
+          accuracy: 0.65,
+          volume: 800,
+          revenue: 28000,
+          userSatisfaction: 0.62,
+          risks: ['accuracy_drop', 'user_churn']
+        },
+        bestCase: {
+          accuracy: 0.83,
+          volume: 1800,
+          revenue: 67000,
+          userSatisfaction: 0.89,
+          risks: []
+        },
+        mostLikely: {
+          accuracy: 0.75,
+          volume: 1200,
+          revenue: 45000,
+          userSatisfaction: 0.78,
+          risks: ['minor_accuracy_variance']
+        }
+      }
+    };
+  }
+
+  async analyzeCompetition(_timeframe: string): Promise<CompetitiveAnalysis> {
+    return {
+      competitorMetrics: [
+        {
+          competitorId: 'competitor_a',
+          accuracy: 0.73,
+          volume: 1500,
+          userSatisfaction: 0.76,
+          marketShare: 0.15,
+          strengths: ['large_user_base', 'marketing'],
+          weaknesses: ['lower_accuracy', 'poor_ui']
+        }
+      ],
+      marketPositioning: {
+        positionMap: {
+          xAxis: 'accuracy',
+          yAxis: 'user_experience',
+          userPosition: [0.78, 0.82],
+          competitorPositions: {
+            'competitor_a': [0.73, 0.71],
+            'competitor_b': [0.75, 0.69]
+          }
+        },
+        differentiators: ['superior_accuracy', 'better_ux', 'advanced_analytics'],
+        valueProposition: 'Most accurate predictions with superior user experience',
+        targetSegments: ['serious_analysts', 'casual_fans', 'fantasy_players']
+      },
+      benchmarkComparison: {
+        metrics: {
+          'accuracy': {
+            value: 0.78,
+            benchmark: 0.72,
+            percentile: 85,
+            trend: 'improving'
+          }
+        },
+        overallScore: 0.82,
+        rankings: {
+          'accuracy': 1,
+          'user_experience': 2,
+          'market_share': 4
+        }
+      },
+      strategicInsights: [
+        {
+          insight: 'Market opportunity in mobile segment',
+          category: 'opportunity',
+          impact: 'high',
+          urgency: 'medium',
+          recommendations: ['Develop mobile app', 'Mobile-first features']
+        }
+      ]
+    };
+  }
+
+  async generateInsights(_analysisType: string): Promise<StrategicInsight[]> {
+    return [
+      {
+        insight: 'User engagement peaks during prime time hours',
+        category: 'opportunity',
+        impact: 'medium',
+        urgency: 'low',
+        recommendations: ['Optimize content delivery', 'Schedule key updates']
+      }
+    ];
+  }
+
+  async generateReport(_reportType: string, _config: ReportingPreferences): Promise<AnalyticsReport> {
+    const analytics = await this.generateAnalytics('last_30_days');
     
-    // Stadium Factors
-    stadiumType: 'DOME' | 'OUTDOOR' | 'RETRACTABLE';
-    fieldType: 'GRASS' | 'ARTIFICIAL';
-    elevation: number;
-    crowdNoise: number;
-    stadiumCapacity: number;
-    
-    // Officiating
-    refereeTeam: string;
-    averagePenaltiesPerGame: number;
-    holdingCallTendency: number;
-    passInterferenceTendency: number;
+    return {
+      id: `report_${Date.now()}`,
+      title: 'Advanced Analytics Report',
+      summary: 'Comprehensive analysis of prediction performance and user behavior',
+      data: analytics,
+      insights: [
+        'Prediction accuracy is above industry average',
+        'User engagement shows strong seasonal patterns',
+        'Risk factors are within acceptable ranges'
+      ],
+      recommendations: [
+        'Focus on improving defensive predictions',
+        'Enhance mobile user experience',
+        'Expand social features'
+      ],
+      generatedAt: Date.now()
+    };
+  }
+
+  async exportAnalytics(_format: string, _filters?: AnalyticsFilter): Promise<string> {
+    return 'exported_analytics_data';
+  }
+
+  async getVisualization(_metricType: string, _config: VisualizationConfig): Promise<Visualization> {
+    return {
+      type: 'line_chart',
+      data: { /* chart data */ },
+      config: _config,
+      metadata: {
+        title: 'Prediction Accuracy Trend',
+        description: 'Accuracy over time with trend analysis',
+        lastUpdated: Date.now(),
+        dataPoints: 120,
+        sourceMetrics: ['daily_accuracy', 'rolling_average']
+      }
+    };
+  }
+
+  private async generatePredictionAccuracy(_timeframe: string): Promise<PredictionAccuracyMetrics> {
+    return await this.getPredictionAccuracy();
+  }
+
+  private async generateUserBehaviorAnalytics(_timeframe: string): Promise<UserBehaviorMetrics> {
+    return await this.getUserBehaviorAnalytics();
+  }
+
+  private async generateMarketTrendAnalysis(_timeframe: string): Promise<MarketTrendMetrics> {
+    return await this.getMarketTrends(_timeframe);
+  }
+
+  private async generatePerformanceInsights(_timeframe: string): Promise<PerformanceInsights> {
+    return await this.analyzePerformance('default_user', _timeframe);
+  }
+
+  private async generateCompetitiveAnalysis(_timeframe: string): Promise<CompetitiveAnalysis> {
+    return await this.analyzeCompetition(_timeframe);
+  }
+
+  private async generateRiskAssessment(_timeframe: string): Promise<RiskAssessment> {
+    return await this.assessRisk(_timeframe);
+  }
+
+  private isCacheValid(_cacheKey: string): boolean {
+    return true; // Simplified cache validation
+  }
 }
 
-export interface AdvancedStatisticalModel {
-    modelName: string;
-    modelType: 'REGRESSION' | 'CLASSIFICATION' | 'ENSEMBLE' | 'NEURAL_NETWORK';
-    features: string[];
-    weights: Record<string, number>;
-    accuracy: number;
-    confidence: number;
-    lastUpdated: string;
-}
-
-export interface PredictionFactors {
-    playerMetrics: AdvancedPlayerMetrics;
-    teamMetrics: TeamAdvancedMetrics;
-    coachingFactors: CoachingTendencies;
-    marketData: MarketData;
-    externalFactors: ExternalDataSources;
-    historicalComparisons: HistoricalComparison[];
-    regressionAnalysis: RegressionResult;
-    ensemblePrediction: EnsemblePredictionResult;
-}
-
-export interface HistoricalComparison {
-    scenario: string;
-    similarGames: number;
-    averageOutcome: number;
-    confidenceInterval: [number, number];
-    keyFactors: string[];
-    weight: number;
-}
-
-export interface RegressionResult {
-    predictedValue: number;
-    standardError: number;
-    confidenceInterval: [number, number];
-    rSquared: number;
-    significantFactors: Array<{
-        factor: string;
-        coefficient: number;
-        pValue: number;
-        impact: 'POSITIVE' | 'NEGATIVE' | 'NEUTRAL';
-    }>;
-}
-
-export interface EnsemblePredictionResult {
-    prediction: number;
-    modelPredictions: Array<{
-        model: string;
-        prediction: number;
-        weight: number;
-        confidence: number;
-    }>;
-    consensusConfidence: number;
-    predictionRange: [number, number];
-    keyDrivers: string[];
-}
-
-class OracleAdvancedAnalyticsService {
-    private readonly ADVANCED_DATA_KEY = 'oracleAdvancedData';
-    private readonly MODELS_KEY = 'oracleAdvancedModels';
-    private readonly MARKET_DATA_KEY = 'oracleMarketData';
-    private readonly EXTERNAL_DATA_KEY = 'oracleExternalData';
-
-    /**
-     * Generate advanced statistical prediction using multiple data sources
-     */
-    async generateAdvancedPrediction(
-        playerId: string,
-        week: number,
-        predictionType: string,
-        basicPrediction: any
-    ): Promise<PredictionFactors> {
-        try {
-            // Gather all data sources
-            const [
-                playerMetrics,
-                teamMetrics,
-                coachingFactors,
-                marketData,
-                externalFactors
-            ] = await Promise.all([
-                this.getAdvancedPlayerMetrics(playerId),
-                this.getTeamAdvancedMetrics(playerId),
-                this.getCoachingTendencies(playerId),
-                this.getMarketData(playerId, week),
-                this.getExternalDataFactors(week)
-            ]);
-
-            // Perform historical comparisons
-            const historicalComparisons = await this.performHistoricalComparison(
-                playerId, 
-                predictionType, 
-                { playerMetrics, teamMetrics, externalFactors }
-            );
-
-            // Run regression analysis
-            const regressionAnalysis = await this.performRegressionAnalysis(
-                playerId,
-                predictionType,
-                { playerMetrics, teamMetrics, coachingFactors, marketData, externalFactors }
-            );
-
-            // Generate ensemble prediction
-            const ensemblePrediction = await this.generateEnsemblePrediction(
-                playerId,
-                predictionType,
-                { playerMetrics, teamMetrics, coachingFactors, marketData, regressionAnalysis }
-            );
-
-            return {
-                playerMetrics,
-                teamMetrics,
-                coachingFactors,
-                marketData,
-                externalFactors,
-                historicalComparisons,
-                regressionAnalysis,
-                ensemblePrediction
-            };
-
-        } catch (error) {
-            console.error('Failed to generate advanced prediction:', error);
-            throw error;
-        }
-    }
-
-    /**
-     * Get advanced player efficiency metrics
-     */
-    private async getAdvancedPlayerMetrics(playerId: string): Promise<AdvancedPlayerMetrics> {
-        // In a real implementation, this would call multiple APIs
-        // For now, we'll simulate advanced metrics
-        return {
-            playerEfficiencyRating: this.generateMetric(50, 150),
-            targetShare: this.generateMetric(0.1, 0.35),
-            redZoneTargetShare: this.generateMetric(0.05, 0.4),
-            snapCountPercentage: this.generateMetric(0.4, 1.0),
-            airyardsPerTarget: this.generateMetric(5, 15),
-            separationRating: this.generateMetric(1, 5),
-            catchRateOverExpected: this.generateMetric(-0.1, 0.15),
-            yardsAfterContact: this.generateMetric(2, 8),
-            brokenTackleRate: this.generateMetric(0.05, 0.25),
-            pressureRate: this.generateMetric(0.2, 0.4),
-            timeToThrow: this.generateMetric(2.3, 3.2),
-            completionPercentageOverExpected: this.generateMetric(-0.05, 0.1),
-            redZoneEfficiency: this.generateMetric(0.4, 0.8),
-            thirdDownConversionRate: this.generateMetric(0.3, 0.6),
-            fourthQuarterPerformance: this.generateMetric(0.8, 1.3),
-            primeTimePerformance: this.generateMetric(0.7, 1.4),
-            domeVsOutdoorPerformance: this.generateMetric(0.85, 1.2),
-            contestedCatchRate: this.generateMetric(0.4, 0.7),
-            dropsPerTarget: this.generateMetric(0.02, 0.08),
-            averageTargetDepth: this.generateMetric(6, 16),
-            slotVsOutsidePerformance: this.generateMetric(0.9, 1.2),
-            ellusiveness: this.generateMetric(20, 100),
-            breakawaySpeed: this.generateMetric(18, 23),
-            stuffedRunRate: this.generateMetric(0.1, 0.3),
-            goalLineEfficiency: this.generateMetric(0.5, 0.9)
-        };
-    }
-
-    /**
-     * Get team advanced metrics including chemistry indicators
-     */
-    private async getTeamAdvancedMetrics(playerId: string): Promise<TeamAdvancedMetrics> {
-        return {
-            offensiveEfficiency: this.generateMetric(0.3, 0.7),
-            passingEpa: this.generateMetric(-0.2, 0.4),
-            rushingEpa: this.generateMetric(-0.1, 0.3),
-            redZoneEfficiency: this.generateMetric(0.4, 0.8),
-            thirdDownConversionRate: this.generateMetric(0.3, 0.55),
-            playActionSuccessRate: this.generateMetric(0.5, 0.8),
-            blitzRateAgainst: this.generateMetric(0.15, 0.35),
-            timeOfPossession: this.generateMetric(26, 34),
-            defensiveEfficiency: this.generateMetric(0.3, 0.7),
-            passRushWinRate: this.generateMetric(0.3, 0.6),
-            coverageGrade: this.generateMetric(60, 90),
-            runStopRate: this.generateMetric(0.4, 0.7),
-            blitzRate: this.generateMetric(0.15, 0.4),
-            pressureRate: this.generateMetric(0.2, 0.45),
-            interceptionRate: this.generateMetric(0.01, 0.04),
-            specialTeamsEfficiency: this.generateMetric(0.4, 0.7),
-            kickReturnAverage: this.generateMetric(20, 28),
-            puntReturnAverage: this.generateMetric(7, 15),
-            fieldGoalAccuracy: this.generateMetric(0.75, 0.95),
-            teamChemistryScore: this.generateMetric(60, 95),
-            offlineChemistry: this.generateMetric(65, 90),
-            passingChemistry: this.generateMetric(60, 95),
-            runBlockingChemistry: this.generateMetric(55, 90),
-            defensiveChemistry: this.generateMetric(60, 88),
-            locker_roomMorale: this.generateMetric(50, 95),
-            coachingStability: this.generateMetric(40, 100),
-            homeFieldAdvantage: this.generateMetric(1, 7),
-            divisionGamePerformance: this.generateMetric(0.8, 1.3),
-            conferenceGamePerformance: this.generateMetric(0.85, 1.2),
-            playoffExperience: this.generateMetric(0, 10)
-        };
-    }
-
-    /**
-     * Get coaching tendencies and game management patterns
-     */
-    private async getCoachingTendencies(playerId: string): Promise<CoachingTendencies> {
-        return {
-            passingPlayPercentage: this.generateMetric(0.55, 0.75),
-            rushingPlayPercentage: this.generateMetric(0.25, 0.45),
-            playActionUsage: this.generateMetric(0.15, 0.35),
-            redZonePlayCalling: this.generateMetric(0.4, 0.8),
-            fourthDownAggression: this.generateMetric(0.3, 0.8),
-            blitzFrequency: this.generateMetric(0.15, 0.4),
-            timeoutUsage: this.generateMetric(0.6, 0.9),
-            challengeSuccessRate: this.generateMetric(0.3, 0.7),
-            clockManagement: this.generateMetric(0.5, 0.9),
-            halftimeAdjustments: this.generateMetric(0.4, 0.8),
-            personnelGroupUsage: {
-                "11": this.generateMetric(0.5, 0.8),
-                "12": this.generateMetric(0.1, 0.3),
-                "21": this.generateMetric(0.05, 0.2),
-                "22": this.generateMetric(0.02, 0.1)
-            },
-            rotationTendencies: this.generateMetric(0.3, 0.8),
-            rookieUtilization: this.generateMetric(0.1, 0.6),
-            veteranReliance: this.generateMetric(0.4, 0.9),
-            leadGameManagement: this.generateMetric(0.5, 0.9),
-            deficitGameManagement: this.generateMetric(0.4, 0.8),
-            weatherGameAdjustments: this.generateMetric(0.3, 0.8),
-            divisionalGameStrategy: this.generateMetric(0.5, 0.9)
-        };
-    }
-
-    /**
-     * Get market data including betting lines and DFS data
-     */
-    private async getMarketData(playerId: string, week: number): Promise<MarketData> {
-        return {
-            spreadMovement: [this.generateMetric(-14, 14), this.generateMetric(-14, 14)],
-            totalMovement: [this.generateMetric(35, 65), this.generateMetric(35, 65)],
-            publicBettingPercentage: this.generateMetric(0.2, 0.8),
-            sharpMoneyIndicators: this.generateMetric(-2, 2),
-            dfsOwnershipProjections: {
-                [playerId]: this.generateMetric(0.05, 0.4)
-            },
-            dfsProjectedScores: {
-                [playerId]: this.generateMetric(8, 25)
-            },
-            dfsPriceValue: {
-                [playerId]: this.generateMetric(0.6, 1.5)
-            },
-            waiversAddDropRate: {
-                [playerId]: this.generateMetric(0.01, 0.3)
-            },
-            tradeValue: {
-                [playerId]: this.generateMetric(0.5, 2.0)
-            },
-            rosterPercentage: {
-                [playerId]: this.generateMetric(0.1, 0.95)
-            },
-            mediaSentimentScore: this.generateMetric(-1, 1),
-            socialMediaBuzz: this.generateMetric(0, 100),
-            injuryReportSentiment: this.generateMetric(-1, 1),
-            beatReporterConfidence: this.generateMetric(0.3, 0.9)
-        };
-    }
-
-    /**
-     * Get external environmental and situational factors
-     */
-    private async getExternalDataFactors(week: number): Promise<ExternalDataSources> {
-        return {
-            detailedWeather: {
-                temperature: this.generateMetric(20, 85),
-                humidity: this.generateMetric(30, 90),
-                windSpeed: this.generateMetric(0, 25),
-                windDirection: this.generateMetric(0, 360),
-                precipitation: this.generateMetric(0, 0.5),
-                visibility: this.generateMetric(5, 10),
-                pressure: this.generateMetric(29.5, 30.5),
-                uvIndex: this.generateMetric(1, 10)
-            },
-            travelDistance: this.generateMetric(0, 3000),
-            timeZoneChanges: Math.floor(this.generateMetric(0, 3)),
-            restDays: Math.floor(this.generateMetric(3, 10)),
-            backToBackGames: Math.random() > 0.9,
-            thursdayNightGame: Math.random() > 0.85,
-            mondayNightGame: Math.random() > 0.85,
-            stadiumType: ['DOME', 'OUTDOOR', 'RETRACTABLE'][Math.floor(Math.random() * 3)] as any,
-            fieldType: Math.random() > 0.7 ? 'ARTIFICIAL' : 'GRASS',
-            elevation: this.generateMetric(0, 5280),
-            crowdNoise: this.generateMetric(60, 140),
-            stadiumCapacity: this.generateMetric(50000, 82000),
-            refereeTeam: `Referee Team ${Math.floor(Math.random() * 17) + 1}`,
-            averagePenaltiesPerGame: this.generateMetric(8, 16),
-            holdingCallTendency: this.generateMetric(0.1, 0.4),
-            passInterferenceTendency: this.generateMetric(0.05, 0.2)
-        };
-    }
-
-    /**
-     * Perform historical comparison analysis
-     */
-    private async performHistoricalComparison(
-        playerId: string,
-        predictionType: string,
-        factors: any
-    ): Promise<HistoricalComparison[]> {
-        const scenarios = [
-            'Similar weather conditions',
-            'Similar opponent defensive ranking',
-            'Similar rest days',
-            'Similar team chemistry score',
-            'Similar coaching tendencies',
-            'Similar market sentiment'
-        ];
-
-        return scenarios.map(scenario => ({
-            scenario,
-            similarGames: Math.floor(this.generateMetric(3, 20)),
-            averageOutcome: this.generateMetric(8, 25),
-            confidenceInterval: [this.generateMetric(6, 12), this.generateMetric(18, 30)] as [number, number],
-            keyFactors: [
-                'Weather conditions',
-                'Opponent strength',
-                'Team chemistry',
-                'Rest advantage'
-            ].slice(0, Math.floor(Math.random() * 4) + 1),
-            weight: this.generateMetric(0.1, 0.3)
-        }));
-    }
-
-    /**
-     * Perform advanced regression analysis
-     */
-    private async performRegressionAnalysis(
-        playerId: string,
-        predictionType: string,
-        allFactors: any
-    ): Promise<RegressionResult> {
-        const factors = [
-            { factor: 'Player Efficiency Rating', coefficient: 0.15, pValue: 0.001, impact: 'POSITIVE' as const },
-            { factor: 'Target Share', coefficient: 12.5, pValue: 0.01, impact: 'POSITIVE' as const },
-            { factor: 'Weather Conditions', coefficient: -0.08, pValue: 0.05, impact: 'NEGATIVE' as const },
-            { factor: 'Opponent Defense Ranking', coefficient: -0.12, pValue: 0.02, impact: 'NEGATIVE' as const },
-            { factor: 'Team Chemistry Score', coefficient: 0.06, pValue: 0.03, impact: 'POSITIVE' as const },
-            { factor: 'Rest Days', coefficient: 0.4, pValue: 0.08, impact: 'POSITIVE' as const }
-        ];
-
-        return {
-            predictedValue: this.generateMetric(10, 20),
-            standardError: this.generateMetric(1.5, 3.5),
-            confidenceInterval: [this.generateMetric(8, 12), this.generateMetric(18, 25)] as [number, number],
-            rSquared: this.generateMetric(0.65, 0.85),
-            significantFactors: factors.filter(f => f.pValue < 0.05)
-        };
-    }
-
-    /**
-     * Generate ensemble prediction using multiple models
-     */
-    private async generateEnsemblePrediction(
-        playerId: string,
-        predictionType: string,
-        factors: any
-    ): Promise<EnsemblePredictionResult> {
-        try {
-            // Convert factors to FeatureVector for advanced ensemble prediction
-            const features: FeatureVector = this.convertFactorsToFeatureVector(factors);
-            
-            // Get advanced ensemble prediction with detailed analysis
-            const ensembleDetail: EnsemblePredictionDetail = await oracleEnsembleMachineLearningService
-                .generateEnsemblePrediction(features, predictionType);
-
-            // Convert to existing EnsemblePredictionResult format for backward compatibility
-            return {
-                prediction: ensembleDetail.prediction,
-                modelPredictions: ensembleDetail.modelPredictions.map(mp => ({
-                    model: mp.modelName,
-                    prediction: mp.prediction,
-                    weight: mp.weight,
-                    confidence: mp.confidence
-                })),
-                consensusConfidence: ensembleDetail.confidence,
-                predictionRange: ensembleDetail.consensusMetrics.confidenceInterval,
-                keyDrivers: ensembleDetail.explanability.primaryDrivers
-            };
-        } catch (error) {
-            console.warn('Advanced ensemble prediction failed, falling back to basic ensemble:', error);
-            
-            // Fallback to original implementation
-            const models = [
-                { model: 'Random Forest', prediction: this.generateMetric(12, 18), weight: 0.3, confidence: 0.82 },
-                { model: 'Neural Network', prediction: this.generateMetric(11, 19), weight: 0.25, confidence: 0.78 },
-                { model: 'Linear Regression', prediction: this.generateMetric(10, 20), weight: 0.2, confidence: 0.75 },
-                { model: 'Gradient Boosting', prediction: this.generateMetric(13, 17), weight: 0.25, confidence: 0.85 }
-            ];
-
-            const weightedPrediction = models.reduce((sum, model) => 
-                sum + model.prediction * model.weight, 0
-            );
-
-            const consensusConfidence = models.reduce((sum, model) => 
-                sum + model.confidence * model.weight, 0
-            );
-
-            return {
-                prediction: weightedPrediction,
-                modelPredictions: models,
-                consensusConfidence,
-                predictionRange: [weightedPrediction - 2.5, weightedPrediction + 2.5] as [number, number],
-                keyDrivers: [
-                    'Advanced player efficiency metrics',
-                    'Team chemistry indicators',
-                    'Historical performance patterns',
-                    'Market sentiment analysis',
-                    'Environmental factors'
-                ]
-            };
-        }
-    }
-
-    /**
-     * Convert prediction factors to FeatureVector for ensemble ML
-     */
-    private convertFactorsToFeatureVector(factors: any): FeatureVector {
-        const playerMetrics = factors.playerMetrics || {};
-        const teamMetrics = factors.teamMetrics || {};
-        const externalFactors = factors.externalFactors || {};
-        
-        return {
-            // Player-based features
-            playerRecentPerformance: playerMetrics.recentPerformance || [15, 14, 16],
-            playerPositionRank: playerMetrics.positionRank || 15,
-            playerInjuryRisk: playerMetrics.injuryRisk || 0.1,
-            playerMatchupDifficulty: playerMetrics.matchupDifficulty || 0.5,
-            playerTargetShare: playerMetrics.targetShare || 0.2,
-            
-            // Team-based features
-            teamOffensiveRank: teamMetrics.offensiveRank || 15,
-            teamDefensiveRank: teamMetrics.defensiveRank || 15,
-            teamHomeAdvantage: teamMetrics.homeAdvantage || 0.5,
-            teamRecentForm: teamMetrics.recentForm || [1, 0, 1],
-            
-            // Game-based features
-            weatherConditions: externalFactors.weather || [70, 0, 5], // temp, precip, wind
-            gameImportance: externalFactors.gameImportance || 0.5,
-            restDays: externalFactors.restDays || 7,
-            travelDistance: externalFactors.travelDistance || 500,
-            
-            // Historical patterns
-            headToHeadRecord: teamMetrics.headToHead || [0.5],
-            seasonalTrends: playerMetrics.seasonalTrends || [0.0],
-            venuePerformance: playerMetrics.venuePerformance || [0.0],
-            
-            // Meta features
-            timeOfSeason: externalFactors.timeOfSeason || 0.5,
-            weekType: externalFactors.weekType || 'REGULAR',
-            marketConfidence: externalFactors.marketConfidence || 0.7
-        };
-    }
-
-    /**
-     * Calculate composite advanced score
-     */
-    async calculateAdvancedCompositeScore(factors: PredictionFactors): Promise<{
-        score: number;
-        confidence: number;
-        breakdown: Record<string, number>;
-        reasoning: string[];
-    }> {
-        const breakdown = {
-            playerMetrics: this.scorePlayerMetrics(factors.playerMetrics),
-            teamMetrics: this.scoreTeamMetrics(factors.teamMetrics),
-            coachingFactors: this.scoreCoachingFactors(factors.coachingFactors),
-            marketData: this.scoreMarketData(factors.marketData),
-            externalFactors: this.scoreExternalFactors(factors.externalFactors),
-            historicalComparisons: this.scoreHistoricalComparisons(factors.historicalComparisons),
-            regressionAnalysis: factors.regressionAnalysis.predictedValue / 20, // Normalize to 0-1
-            ensembleModel: factors.ensemblePrediction.prediction / 20 // Normalize to 0-1
-        };
-
-        const weights = {
-            playerMetrics: 0.25,
-            teamMetrics: 0.15,
-            coachingFactors: 0.1,
-            marketData: 0.1,
-            externalFactors: 0.1,
-            historicalComparisons: 0.1,
-            regressionAnalysis: 0.1,
-            ensembleModel: 0.1
-        };
-
-        const score = Object.entries(breakdown).reduce((sum, [key, value]) => 
-            sum + value * weights[key as keyof typeof weights], 0
-        );
-
-        const confidence = factors.ensemblePrediction.consensusConfidence;
-
-        const reasoning = this.generateAdvancedReasoning(factors, breakdown);
-
-        return { score, confidence, breakdown, reasoning };
-    }
-
-    // Helper methods
-    private generateMetric(min: number, max: number): number {
-        return Math.random() * (max - min) + min;
-    }
-
-    private scorePlayerMetrics(metrics: AdvancedPlayerMetrics): number {
-        // Composite scoring based on multiple efficiency metrics
-        return (
-            (metrics.playerEfficiencyRating / 150) * 0.3 +
-            metrics.targetShare * 0.2 +
-            metrics.redZoneEfficiency * 0.2 +
-            (metrics.catchRateOverExpected + 0.1) / 0.25 * 0.1 +
-            metrics.fourthQuarterPerformance / 1.3 * 0.1 +
-            metrics.primeTimePerformance / 1.4 * 0.1
-        );
-    }
-
-    private scoreTeamMetrics(metrics: TeamAdvancedMetrics): number {
-        return (
-            metrics.offensiveEfficiency * 0.3 +
-            (metrics.passingEpa + 0.2) / 0.6 * 0.2 +
-            metrics.teamChemistryScore / 95 * 0.2 +
-            metrics.redZoneEfficiency * 0.15 +
-            (metrics.homeFieldAdvantage - 1) / 6 * 0.15
-        );
-    }
-
-    private scoreCoachingFactors(factors: CoachingTendencies): number {
-        return (
-            factors.halftimeAdjustments * 0.3 +
-            factors.clockManagement * 0.2 +
-            factors.fourthDownAggression * 0.2 +
-            factors.leadGameManagement * 0.15 +
-            factors.weatherGameAdjustments * 0.15
-        );
-    }
-
-    private scoreMarketData(data: MarketData): number {
-        return (
-            (data.mediaSentimentScore + 1) / 2 * 0.3 +
-            data.socialMediaBuzz / 100 * 0.2 +
-            (data.injuryReportSentiment + 1) / 2 * 0.2 +
-            data.beatReporterConfidence * 0.3
-        );
-    }
-
-    private scoreExternalFactors(factors: ExternalDataSources): number {
-        let weatherScore = 1.0;
-        
-        // Weather impact scoring
-        if (factors.detailedWeather.windSpeed > 15) weatherScore -= 0.2;
-        if (factors.detailedWeather.precipitation > 0.1) weatherScore -= 0.3;
-        if (factors.detailedWeather.temperature < 32 || factors.detailedWeather.temperature > 85) weatherScore -= 0.1;
-        
-        // Rest and travel impact
-        const restScore = Math.min(factors.restDays / 7, 1);
-        const travelScore = 1 - (factors.travelDistance / 3000);
-        
-        return (weatherScore * 0.4 + restScore * 0.3 + travelScore * 0.3);
-    }
-
-    private scoreHistoricalComparisons(comparisons: HistoricalComparison[]): number {
-        return comparisons.reduce((sum, comp) => 
-            sum + (comp.averageOutcome / 25) * comp.weight, 0
-        ) / comparisons.length;
-    }
-
-    private generateAdvancedReasoning(factors: PredictionFactors, breakdown: Record<string, number>): string[] {
-        const reasoning: string[] = [];
-
-        // Player metrics reasoning
-        if (breakdown.playerMetrics > 0.75) {
-            reasoning.push("🔥 Elite player efficiency metrics indicate strong performance potential");
-        } else if (breakdown.playerMetrics < 0.4) {
-            reasoning.push("⚠️ Player efficiency metrics suggest below-average performance risk");
-        }
-
-        // Team chemistry reasoning
-        if (factors.teamMetrics.teamChemistryScore > 85) {
-            reasoning.push("🤝 Excellent team chemistry provides significant performance boost");
-        }
-
-        // Weather reasoning
-        if (factors.externalFactors.detailedWeather.windSpeed > 15) {
-            reasoning.push("🌪️ High wind conditions may negatively impact passing game");
-        }
-
-        // Rest advantage reasoning
-        if (factors.externalFactors.restDays > 7) {
-            reasoning.push("😴 Extended rest provides recovery advantage");
-        }
-
-        // Market sentiment reasoning
-        if (factors.marketData.mediaSentimentScore > 0.5) {
-            reasoning.push("📺 Positive media sentiment suggests confidence in performance");
-        }
-
-        // Ensemble model reasoning
-        if (factors.ensemblePrediction.consensusConfidence > 0.8) {
-            reasoning.push("🎯 High model consensus indicates reliable prediction");
-        }
-
-        return reasoning;
-    }
-
-    // Storage methods for advanced data
-    private storeAdvancedData(key: string, data: any): void {
-        try {
-            localStorage.setItem(`${this.ADVANCED_DATA_KEY}_${key}`, JSON.stringify(data));
-        } catch (error) {
-            console.error('Failed to store advanced data:', error);
-        }
-    }
-
-    private getStoredAdvancedData(key: string): any {
-        try {
-            const stored = localStorage.getItem(`${this.ADVANCED_DATA_KEY}_${key}`);
-            return stored ? JSON.parse(stored) : null;
-        } catch (error) {
-            console.error('Failed to load advanced data:', error);
-            return null;
-        }
-    }
-
-    /**
-     * Train ensemble models with historical data
-     */
-    async trainEnsembleModels(historicalData: any[]): Promise<void> {
-        try {
-            // Convert historical prediction data to MLTrainingData format
-            const trainingData = historicalData.map((data, index) => ({
-                id: `training-${data.predictionId || index}`, // Add the required id field
-                predictionId: `historical_${index}`,
-                week: data.week || Math.floor(Math.random() * 17) + 1,
-                type: data.predictionType || 'fantasy_points',
-                confidence: data.confidence || 0.7,
-                oracleChoice: data.prediction || 15,
-                actualResult: data.actualResult || data.prediction + (Math.random() - 0.5) * 4,
-                isCorrect: Math.abs((data.prediction || 15) - (data.actualResult || 15)) <= 2,
-                features: this.convertFactorsToFeatureVector(data.factors || {}),
-                timestamp: data.timestamp || new Date().toISOString()
-            }));
-
-            // Train the ensemble models
-            await oracleEnsembleMachineLearningService.trainEnsembleModels(trainingData);
-            
-            console.log(`Successfully trained ensemble models with ${trainingData.length} data points`);
-        } catch (error) {
-            console.error('Failed to train ensemble models:', error);
-        }
-    }
-
-    /**
-     * Get ensemble model performance metrics
-     */
-    async getEnsembleModelMetrics(): Promise<any> {
-        try {
-            // This would typically retrieve model performance from the ensemble service
-            return {
-                totalModels: 6,
-                averageAccuracy: 0.83,
-                lastTrainingDate: new Date().toISOString(),
-                trainingDataSize: 1000,
-                modelWeights: {
-                    randomForest: 0.25,
-                    gradientBoosting: 0.25,
-                    neuralNetwork: 0.20,
-                    linearRegression: 0.15,
-                    svm: 0.10,
-                    stackedEnsemble: 0.05
-                }
-            };
-        } catch (error) {
-            console.error('Failed to get ensemble metrics:', error);
-            return null;
-        }
-    }
-}
-
-// Export singleton instance
 export const oracleAdvancedAnalyticsService = new OracleAdvancedAnalyticsService();
 export default oracleAdvancedAnalyticsService;

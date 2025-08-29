@@ -3,7 +3,7 @@
 
 import React from 'react';
 import type { Player, Team, AuctionState } from '../../types';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 import { Avatar } from '../ui/Avatar';
 
 interface AuctionPanelProps {
@@ -72,7 +72,7 @@ const AuctionPanel: React.FC<AuctionPanelProps> = ({ nominatingTeam, nominatedPl
                         </div>
                         <form onSubmit={handleBidSubmit} className="flex items-center gap-4">
                             <div className="flex items-center gap-2">
-                                <Tooltip text={isMyBidTooHigh ? "Bid exceeds your budget!" : `Your Budget: $${myBudget}`}>
+                                <Tooltip content={isMyBidTooHigh ? "Bid exceeds your budget!" : `Your Budget: ${myBudget}`}>
                                     <input 
                                         type="number" 
                                         value={myBidString}

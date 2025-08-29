@@ -73,26 +73,25 @@ class RealTimeDataService {
      */
     async startRealTimeUpdates(): Promise<void> {
         if (this.isActive) {
-            console.log('Real-time updates already active');
+            // Real-time updates already active
             return;
         }
 
         this.isActive = true;
-        console.log('🚀 Starting real-time sports data monitoring...');
+        // Starting real-time sports data monitoring
 
         // Initialize with current game state
         await this.initializeGameState();
 
-        // Set up periodic updates
+        // Setup automated data fetching
         this.setupGameUpdates();
-        this.setupPlayerUpdates();
-        this.setupInjuryMonitoring();
+        this.setupPlayerTracking();
         this.setupPredictionRefresh();
 
         // Start comprehensive injury tracking
         injuryTrackingService.startMonitoring();
 
-        console.log('✅ Real-time monitoring active');
+        // Real-time monitoring active
     }
 
     /**
@@ -106,7 +105,7 @@ class RealTimeDataService {
         // Stop injury tracking
         injuryTrackingService.stopMonitoring();
         
-        console.log('🛑 Real-time updates stopped');
+        // Real-time updates stopped
     }
 
     /**
@@ -143,9 +142,9 @@ class RealTimeDataService {
                 }
             });
 
-            console.log(`📊 Initialized with ${games.length} games, ${this.activeGames.size} active`);
+            // Initialized with games
         } catch (error) {
-            console.error('Failed to initialize game state:', error);
+            // Failed to initialize game state
         }
     }
 
@@ -418,7 +417,7 @@ class RealTimeDataService {
     }
 
     private async triggerPredictionUpdate(trigger: string, data: any): Promise<void> {
-        console.log(`🔄 Prediction update triggered: ${trigger}`, data);
+        // Prediction update triggered
         // Could regenerate specific predictions here
     }
 

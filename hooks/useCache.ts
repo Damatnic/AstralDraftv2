@@ -1,348 +1,499 @@
-/**
- * Enhanced Cache Hook
- * React hook for intelligent cache management and offline functionality
- */
+import { useState, useCallback, useEffect, useRef } from 'react';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { cacheService } from '../services/enhancedCacheService';
-
-interface CacheHookOptions {
-    enabled?: boolean;
-    refreshInterval?: number;
-    staleTime?: number;
-    cacheTime?: number;
-    retry?: number;
-    retryDelay?: number;
-    onSuccess?: (data: any) => void;
-    onError?: (error: Error) => void;
-    onSettled?: (data: any, error: Error | null) => void;
+export interface CacheEntry<T = unknown> {
+  data: T;
+  timestamp: number;
+  ttl: number;
+  accessCount: number;
+  lastAccessed: number;
 }
 
-interface CacheState<T> {
-    data: T | null;
-    error: Error | null;
-    isLoading: boolean;
-    isFetching: boolean;
-    isStale: boolean;
-    isError: boolean;
-    isSuccess: boolean;
-    lastUpdated: number | null;
+export interface CacheConfig {
+  maxSize: number;
+  defaultTtl: number;
+  enablePersistence: boolean;
+  storageKey: string;
+  evictionPolicy: 'lru' | 'lfu' | 'ttl';
 }
 
-interface CacheActions<T> {
-    refetch: () => Promise<T | null>;
-    invalidate: () => Promise<void>;
-    setData: (data: T | ((prev: T | null) => T)) => void;
-    reset: () => void;
+export interface CacheStats {
+  size: number;
+  hitRate: number;
+  missRate: number;
+  totalRequests: number;
+  totalHits: number;
+  totalMisses: number;
+  evictions: number;
+  lastUpdated: number;
 }
 
-export function useCache<T = any>(
-    cacheType: string,
-    cacheKey: string,
-    fetcher: () => Promise<T>,
-    options: CacheHookOptions = {}
-): CacheState<T> & CacheActions<T> {
-    const {
-        enabled = true,
-        refreshInterval,
-        staleTime = 5 * 60 * 1000, // 5 minutes
-        cacheTime = 30 * 60 * 1000, // 30 minutes
-        retry = 3,
-        retryDelay = 1000,
-        onSuccess,
-        onError,
-        onSettled
-    } = options;
-
-    const [state, setState] = useState<CacheState<T>>({
-        data: null,
-        error: null,
-        isLoading: true,
-        isFetching: false,
-        isStale: false,
-        isError: false,
-        isSuccess: false,
-        lastUpdated: null
-    });
-
-    const retryCount = useRef(0);
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
-    const mounted = useRef(true);
-
-    // Fetch data with retry logic
-    const fetchData = useCallback(async (isRefetch = false): Promise<T | null> => {
-        if (!enabled) return null;
-
-        setState(prev => ({ 
-            ...prev, 
-            isFetching: true,
-            isLoading: !isRefetch,
-            error: isRefetch ? null : prev.error 
-        }));
-
-        try {
-            // First try to get from cache
-            let data = await cacheService.get<T>(cacheType, cacheKey);
-            let fromCache = data !== null;
-
-            if (!data || isRefetch) {
-                // Fetch fresh data
-                data = await fetcher();
-                fromCache = false;
-
-                // Cache the fresh data
-                if (data !== null) {
-                    await cacheService.set(cacheType, cacheKey, data, {
-                        customTTL: cacheTime
-                    });
-                }
-            }
-
-            if (!mounted.current) return data;
-
-            const now = Date.now();
-            const isStale = fromCache && (now - (state.lastUpdated || 0)) > staleTime;
-
-            setState({
-                data,
-                error: null,
-                isLoading: false,
-                isFetching: false,
-                isStale,
-                isError: false,
-                isSuccess: true,
-                lastUpdated: fromCache ? state.lastUpdated : now
-            });
-
-            retryCount.current = 0;
-            onSuccess?.(data);
-            onSettled?.(data, null);
-
-            return data;
-        } catch (error) {
-            const err = error as Error;
-            
-            if (!mounted.current) return null;
-
-            // Retry logic
-            if (retryCount.current < retry) {
-                retryCount.current++;
-                setTimeout(() => {
-                    if (mounted.current) {
-                        fetchData(isRefetch);
-                    }
-                }, retryDelay * retryCount.current);
-                return null;
-            }
-
-            // Try to get stale data from cache as fallback
-            const staleData = await cacheService.get<T>(cacheType, cacheKey);
-
-            setState(prev => ({
-                ...prev,
-                data: staleData || prev.data,
-                error: err,
-                isLoading: false,
-                isFetching: false,
-                isStale: Boolean(staleData),
-                isError: true,
-                isSuccess: Boolean(staleData)
-            }));
-
-            retryCount.current = 0;
-            onError?.(err);
-            onSettled?.(staleData, err);
-
-            return staleData;
-        }
-    }, [enabled, cacheType, cacheKey, fetcher, cacheTime, staleTime, retry, retryDelay, onSuccess, onError, onSettled]);
-
-    // Refetch data
-    const refetch = useCallback(async (): Promise<T | null> => {
-        return fetchData(true);
-    }, [fetchData]);
-
-    // Invalidate cache
-    const invalidate = useCallback(async (): Promise<void> => {
-        await cacheService.delete(cacheType, cacheKey);
-        setState(prev => ({ ...prev, isStale: true }));
-    }, [cacheType, cacheKey]);
-
-    // Set data manually
-    const setData = useCallback((data: T | ((prev: T | null) => T)): void => {
-        setState(prev => {
-            const newData = typeof data === 'function' ? (data as (prev: T | null) => T)(prev.data) : data;
-            
-            // Update cache
-            cacheService.set(cacheType, cacheKey, newData, { customTTL: cacheTime });
-            
-            return {
-                ...prev,
-                data: newData,
-                isSuccess: true,
-                isError: false,
-                lastUpdated: Date.now()
-            };
-        });
-    }, [cacheType, cacheKey, cacheTime]);
-
-    // Reset state
-    const reset = useCallback((): void => {
-        setState({
-            data: null,
-            error: null,
-            isLoading: true,
-            isFetching: false,
-            isStale: false,
-            isError: false,
-            isSuccess: false,
-            lastUpdated: null
-        });
-        retryCount.current = 0;
-    }, []);
-
-    // Initial fetch and cleanup
-    useEffect(() => {
-        if (enabled) {
-            fetchData();
-        }
-
-        return () => {
-            mounted.current = false;
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-            }
-        };
-    }, [enabled, fetchData]);
-
-    // Set up refresh interval
-    useEffect(() => {
-        if (refreshInterval && enabled && state.isSuccess) {
-            intervalRef.current = setInterval(() => {
-                refetch();
-            }, refreshInterval);
-
-            return () => {
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                }
-            };
-        }
-    }, [refreshInterval, enabled, state.isSuccess, refetch]);
-
-    return {
-        ...state,
-        refetch,
-        invalidate,
-        setData,
-        reset
-    };
+export interface CacheState<T = unknown> {
+  cache: Map<string, CacheEntry<T>>;
+  stats: CacheStats;
+  config: CacheConfig;
+  lastUpdated: number;
 }
 
-/**
- * Hook for cache statistics
- */
-export function useCacheStats() {
-    const [stats, setStats] = useState(cacheService.getStats());
-
-    useEffect(() => {
-        const updateStats = () => {
-            setStats(cacheService.getStats());
-        };
-
-        // Update stats every 5 seconds
-        const interval = setInterval(updateStats, 5000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    return stats;
+export interface CacheActions<T = unknown> {
+  get: (key: string) => T | null;
+  set: (key: string, value: T, ttl?: number) => void;
+  has: (key: string) => boolean;
+  delete: (key: string) => boolean;
+  clear: () => void;
+  invalidate: (pattern?: string | RegExp) => number;
+  getStats: () => CacheStats;
+  updateConfig: (newConfig: Partial<CacheConfig>) => void;
+  preload: (data: Record<string, T>) => void;
+  export: () => string;
+  import: (data: string) => void;
 }
 
-/**
- * Hook for cache operations
- */
-export function useCacheOperations() {
-    const clearCache = useCallback(async (type?: string) => {
-        await cacheService.clear(type);
-    }, []);
+const DEFAULT_CONFIG: CacheConfig = {
+  maxSize: 1000,
+  defaultTtl: 300000, // 5 minutes
+  enablePersistence: false,
+  storageKey: 'app-cache',
+  evictionPolicy: 'lru'
+};
 
-    const invalidateByTags = useCallback(async (tags: string[]) => {
-        await cacheService.invalidateByTags(tags);
-    }, []);
+const DEFAULT_STATS: CacheStats = {
+  size: 0,
+  hitRate: 0,
+  missRate: 0,
+  totalRequests: 0,
+  totalHits: 0,
+  totalMisses: 0,
+  evictions: 0,
+  lastUpdated: Date.now()
+};
 
-    const preloadData = useCallback(async <T>(
-        cacheType: string,
-        cacheKey: string,
-        fetcher: () => Promise<T>,
-        options?: { tags?: string[]; customTTL?: number }
-    ) => {
-        try {
-            const data = await fetcher();
-            await cacheService.set(cacheType, cacheKey, data, options);
-            return data;
-        } catch (error) {
-            console.error('Preload failed:', error);
-            throw error;
-        }
-    }, []);
+export function useCache<T = unknown>(initialConfig: Partial<CacheConfig> = {}): [CacheState<T>, CacheActions<T>] {
+  const config = { ...DEFAULT_CONFIG, ...initialConfig };
+  
+  const [state, setState] = useState<CacheState<T>>(() => ({
+    cache: new Map(),
+    stats: { ...DEFAULT_STATS },
+    config,
+    lastUpdated: Date.now()
+  }));
 
-    return {
-        clearCache,
-        invalidateByTags,
-        preloadData
-    };
-}
+  const cleanupTimerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const lastCleanupRef = useRef<number>(Date.now());
 
-/**
- * Hook for offline status and cache-aware fetching
- */
-export function useOfflineCache<T = any>(
-    cacheType: string,
-    cacheKey: string,
-    fetcher: () => Promise<T>,
-    options: CacheHookOptions = {}
-) {
-    const [isOnline, setIsOnline] = useState(navigator.onLine);
+  // Cleanup expired entries
+  const cleanup = useCallback(() => {
+    const now = Date.now();
     
-    useEffect(() => {
-        const handleOnline = () => setIsOnline(true);
-        const handleOffline = () => setIsOnline(false);
+    setState(prevState => {
+      const newCache = new Map(prevState.cache);
+      let evicted = 0;
 
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
-
-        return () => {
-            window.removeEventListener('online', handleOnline);
-            window.removeEventListener('offline', handleOffline);
-        };
-    }, []);
-
-    // Modify fetcher to handle offline scenario
-    const offlineAwareFetcher = useCallback(async (): Promise<T> => {
-        if (!isOnline) {
-            // When offline, try to get from cache only
-            const cachedData = await cacheService.get<T>(cacheType, cacheKey);
-            if (cachedData !== null) {
-                return cachedData;
-            }
-            throw new Error('No cached data available offline');
+      for (const [key, entry] of newCache.entries()) {
+        if (now - entry.timestamp > entry.ttl) {
+          newCache.delete(key);
+          evicted++;
         }
-        
-        return fetcher();
-    }, [isOnline, fetcher, cacheType, cacheKey]);
+      }
 
-    const cacheResult = useCache(cacheType, cacheKey, offlineAwareFetcher, {
-        ...options,
-        enabled: options.enabled !== false, // Default to enabled
-        staleTime: isOnline ? options.staleTime : Infinity, // Don't consider stale when offline
+      if (evicted > 0) {
+        return {
+          ...prevState,
+          cache: newCache,
+          stats: {
+            ...prevState.stats,
+            size: newCache.size,
+            evictions: prevState.stats.evictions + evicted,
+            lastUpdated: now
+          },
+          lastUpdated: now
+        };
+      }
+
+      return prevState;
     });
 
-    return {
-        ...cacheResult,
-        isOnline,
-        isOfflineError: !isOnline && cacheResult.isError
+    lastCleanupRef.current = now;
+  }, []);
+
+  // Start cleanup timer
+  useEffect(() => {
+    cleanupTimerRef.current = setInterval(cleanup, 60000); // Cleanup every minute
+    return () => {
+      if (cleanupTimerRef.current) {
+        clearInterval(cleanupTimerRef.current);
+      }
     };
+  }, [cleanup]);
+
+  // Evict entries based on policy
+  const evictEntries = useCallback((currentCache: Map<string, CacheEntry<T>>, targetSize: number) => {
+    const entries = Array.from(currentCache.entries());
+    const policy = state.config.evictionPolicy;
+
+    if (policy === 'lru') {
+      entries.sort(([, a], [, b]) => a.lastAccessed - b.lastAccessed);
+    } else if (policy === 'lfu') {
+      entries.sort(([, a], [, b]) => a.accessCount - b.accessCount);
+    } else if (policy === 'ttl') {
+      const now = Date.now();
+      entries.sort(([, a], [, b]) => {
+        const remainingA = a.ttl - (now - a.timestamp);
+        const remainingB = b.ttl - (now - b.timestamp);
+        return remainingA - remainingB;
+      });
+    }
+
+    const toEvict = entries.length - targetSize;
+    const evictedKeys = entries.slice(0, toEvict).map(([key]) => key);
+    
+    evictedKeys.forEach(key => currentCache.delete(key));
+    
+    return evictedKeys.length;
+  }, [state.config.evictionPolicy]);
+
+  // Cache actions
+  const get = useCallback((key: string): T | null => {
+    const now = Date.now();
+    
+    setState(prevState => {
+      const entry = prevState.cache.get(key);
+      
+      if (!entry) {
+        // Cache miss
+        return {
+          ...prevState,
+          stats: {
+            ...prevState.stats,
+            totalRequests: prevState.stats.totalRequests + 1,
+            totalMisses: prevState.stats.totalMisses + 1,
+            missRate: ((prevState.stats.totalMisses + 1) / (prevState.stats.totalRequests + 1)) * 100,
+            hitRate: (prevState.stats.totalHits / (prevState.stats.totalRequests + 1)) * 100,
+            lastUpdated: now
+          },
+          lastUpdated: now
+        };
+      }
+
+      // Check if expired
+      if (now - entry.timestamp > entry.ttl) {
+        const newCache = new Map(prevState.cache);
+        newCache.delete(key);
+        
+        return {
+          ...prevState,
+          cache: newCache,
+          stats: {
+            ...prevState.stats,
+            size: newCache.size,
+            totalRequests: prevState.stats.totalRequests + 1,
+            totalMisses: prevState.stats.totalMisses + 1,
+            missRate: ((prevState.stats.totalMisses + 1) / (prevState.stats.totalRequests + 1)) * 100,
+            hitRate: (prevState.stats.totalHits / (prevState.stats.totalRequests + 1)) * 100,
+            evictions: prevState.stats.evictions + 1,
+            lastUpdated: now
+          },
+          lastUpdated: now
+        };
+      }
+
+      // Cache hit - update access info
+      const newCache = new Map(prevState.cache);
+      const updatedEntry: CacheEntry<T> = {
+        ...entry,
+        accessCount: entry.accessCount + 1,
+        lastAccessed: now
+      };
+      newCache.set(key, updatedEntry);
+
+      return {
+        ...prevState,
+        cache: newCache,
+        stats: {
+          ...prevState.stats,
+          totalRequests: prevState.stats.totalRequests + 1,
+          totalHits: prevState.stats.totalHits + 1,
+          hitRate: ((prevState.stats.totalHits + 1) / (prevState.stats.totalRequests + 1)) * 100,
+          missRate: (prevState.stats.totalMisses / (prevState.stats.totalRequests + 1)) * 100,
+          lastUpdated: now
+        },
+        lastUpdated: now
+      };
+    });
+
+    const entry = state.cache.get(key);
+    if (entry && Date.now() - entry.timestamp <= entry.ttl) {
+      return entry.data;
+    }
+    
+    return null;
+  }, [state.cache]);
+
+  const set = useCallback((key: string, value: T, ttl?: number) => {
+    const now = Date.now();
+    const entryTtl = ttl || state.config.defaultTtl;
+
+    setState(prevState => {
+      const newCache = new Map(prevState.cache);
+      
+      // Check if we need to evict entries
+      let evicted = 0;
+      if (newCache.size >= prevState.config.maxSize && !newCache.has(key)) {
+        evicted = evictEntries(newCache, prevState.config.maxSize - 1);
+      }
+
+      const newEntry: CacheEntry<T> = {
+        data: value,
+        timestamp: now,
+        ttl: entryTtl,
+        accessCount: 0,
+        lastAccessed: now
+      };
+
+      newCache.set(key, newEntry);
+
+      return {
+        ...prevState,
+        cache: newCache,
+        stats: {
+          ...prevState.stats,
+          size: newCache.size,
+          evictions: prevState.stats.evictions + evicted,
+          lastUpdated: now
+        },
+        lastUpdated: now
+      };
+    });
+  }, [state.config.defaultTtl, evictEntries]);
+
+  const has = useCallback((key: string): boolean => {
+    const entry = state.cache.get(key);
+    if (!entry) return false;
+    
+    const now = Date.now();
+    return now - entry.timestamp <= entry.ttl;
+  }, [state.cache]);
+
+  const deleteEntry = useCallback((key: string): boolean => {
+    let deleted = false;
+    
+    setState(prevState => {
+      if (prevState.cache.has(key)) {
+        const newCache = new Map(prevState.cache);
+        newCache.delete(key);
+        deleted = true;
+        
+        return {
+          ...prevState,
+          cache: newCache,
+          stats: {
+            ...prevState.stats,
+            size: newCache.size,
+            lastUpdated: Date.now()
+          },
+          lastUpdated: Date.now()
+        };
+      }
+      
+      return prevState;
+    });
+    
+    return deleted;
+  }, []);
+
+  const clear = useCallback(() => {
+    setState(prevState => ({
+      ...prevState,
+      cache: new Map(),
+      stats: {
+        ...DEFAULT_STATS,
+        totalRequests: prevState.stats.totalRequests,
+        totalHits: prevState.stats.totalHits,
+        totalMisses: prevState.stats.totalMisses,
+        evictions: prevState.stats.evictions,
+        lastUpdated: Date.now()
+      },
+      lastUpdated: Date.now()
+    }));
+  }, []);
+
+  const invalidate = useCallback((pattern?: string | RegExp): number => {
+    let invalidated = 0;
+    
+    setState(prevState => {
+      const newCache = new Map(prevState.cache);
+      
+      if (!pattern) {
+        invalidated = newCache.size;
+        newCache.clear();
+      } else {
+        for (const key of newCache.keys()) {
+          let shouldDelete = false;
+          
+          if (typeof pattern === 'string') {
+            shouldDelete = key.includes(pattern);
+          } else {
+            shouldDelete = pattern.test(key);
+          }
+          
+          if (shouldDelete) {
+            newCache.delete(key);
+            invalidated++;
+          }
+        }
+      }
+      
+      return {
+        ...prevState,
+        cache: newCache,
+        stats: {
+          ...prevState.stats,
+          size: newCache.size,
+          evictions: prevState.stats.evictions + invalidated,
+          lastUpdated: Date.now()
+        },
+        lastUpdated: Date.now()
+      };
+    });
+    
+    return invalidated;
+  }, []);
+
+  const getStats = useCallback((): CacheStats => {
+    return { ...state.stats };
+  }, [state.stats]);
+
+  const updateConfig = useCallback((newConfig: Partial<CacheConfig>) => {
+    setState(prevState => ({
+      ...prevState,
+      config: { ...prevState.config, ...newConfig },
+      lastUpdated: Date.now()
+    }));
+  }, []);
+
+  const preload = useCallback((data: Record<string, T>) => {
+    const now = Date.now();
+    
+    setState(prevState => {
+      const newCache = new Map(prevState.cache);
+      
+      for (const [key, value] of Object.entries(data)) {
+        if (!newCache.has(key)) {
+          const entry: CacheEntry<T> = {
+            data: value,
+            timestamp: now,
+            ttl: prevState.config.defaultTtl,
+            accessCount: 0,
+            lastAccessed: now
+          };
+          
+          newCache.set(key, entry);
+          
+          // Check size limit
+          if (newCache.size >= prevState.config.maxSize) {
+            break;
+          }
+        }
+      }
+      
+      return {
+        ...prevState,
+        cache: newCache,
+        stats: {
+          ...prevState.stats,
+          size: newCache.size,
+          lastUpdated: now
+        },
+        lastUpdated: now
+      };
+    });
+  }, []);
+
+  const exportCache = useCallback((): string => {
+    const exportData = {
+      cache: Array.from(state.cache.entries()),
+      stats: state.stats,
+      config: state.config,
+      exportedAt: Date.now()
+    };
+    
+    return JSON.stringify(exportData);
+  }, [state.cache, state.stats, state.config]);
+
+  const importCache = useCallback((data: string) => {
+    try {
+      const imported = JSON.parse(data) as {
+        cache: [string, CacheEntry<T>][];
+        stats: CacheStats;
+        config: CacheConfig;
+        exportedAt: number;
+      };
+      
+      const now = Date.now();
+      const newCache = new Map<string, CacheEntry<T>>();
+      
+      // Filter out expired entries during import
+      for (const [key, entry] of imported.cache) {
+        if (now - entry.timestamp <= entry.ttl) {
+          newCache.set(key, entry);
+        }
+      }
+      
+      setState({
+        cache: newCache,
+        stats: {
+          ...imported.stats,
+          size: newCache.size,
+          lastUpdated: now
+        },
+        config: { ...state.config, ...imported.config },
+        lastUpdated: now
+      });
+    } catch {
+      // Import failed - ignore and keep current state
+    }
+  }, [state.config]);
+
+  // Persistence effect
+  useEffect(() => {
+    if (state.config.enablePersistence) {
+      try {
+        const exported = exportCache();
+        localStorage.setItem(state.config.storageKey, exported);
+      } catch {
+        // Persistence failed - continue without it
+      }
+    }
+  }, [state.cache, state.config.enablePersistence, state.config.storageKey, exportCache]);
+
+  // Load from persistence on mount
+  useEffect(() => {
+    if (config.enablePersistence) {
+      try {
+        const stored = localStorage.getItem(config.storageKey);
+        if (stored) {
+          importCache(stored);
+        }
+      } catch {
+        // Load failed - start with empty cache
+      }
+    }
+  }, [config.enablePersistence, config.storageKey, importCache]);
+
+  const actions: CacheActions<T> = {
+    get,
+    set,
+    has,
+    delete: deleteEntry,
+    clear,
+    invalidate,
+    getStats,
+    updateConfig,
+    preload,
+    export: exportCache,
+    import: importCache
+  };
+
+  return [state, actions];
 }
 
 export default useCache;

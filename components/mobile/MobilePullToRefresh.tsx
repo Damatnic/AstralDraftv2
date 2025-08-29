@@ -84,7 +84,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         }
     };
 
-    const handlePanStart = (event: any, info: PanInfo) => {
+    const handlePanStart = (_event: any, _info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         const container = containerRef.current;
@@ -123,7 +123,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         }
     }, 16); // ~60fps throttling
 
-    const handlePanEnd = async (event: any, info: PanInfo) => {
+    const handlePanEnd = async (_event: any, _info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         if (pullState === 'ready') {

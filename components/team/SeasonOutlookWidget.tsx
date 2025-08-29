@@ -46,14 +46,14 @@ const SeasonOutlookWidget: React.FC<SeasonOutlookWidgetProps> = ({ myTeam, leagu
                     <LoadingSpinner size="sm" text="Peering into the future..." />
                 ) : outlook ? (
                     <div className="space-y-2 text-sm text-center">
-                        <p className="italic text-gray-300">"{outlook.prediction}"</p>
+                        <p className="italic text-gray-300">&quot;{outlook.prediction}&quot;</p>
                         <p className="text-xs text-gray-400 pt-2 border-t border-white/10">
                             <strong className="text-yellow-300">Key Player:</strong> {outlook.keyPlayer}
                         </p>
                     </div>
                 ) : (
                     <p className="text-center text-sm text-gray-400">
-                        The Oracle will reveal your season's fate after the draft is complete.
+                        The Oracle will reveal your season&apos;s fate after the draft is complete.
                     </p>
                 )}
             </div>

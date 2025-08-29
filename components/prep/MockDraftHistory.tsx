@@ -3,20 +3,15 @@ import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 
 const MockDraftHistory: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { state } = useAppState();
 
     const mockDrafts = state.leagues.filter((l: any) => l.isMock);
-
-    const handleViewDraft = (leagueId: string) => {
-        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: leagueId });
-        dispatch({ type: 'SET_VIEW', payload: 'DRAFT_ROOM' });
-    }
 
     return (
         <div className="glass-pane p-4 rounded-xl">
             <h3 className="font-bold mb-2">My Mock Drafts</h3>
             {mockDrafts.length === 0 ? (
-                <p className="text-sm text-gray-400 text-center py-8">You haven't completed any mock drafts yet.</p>
+                <p className="text-sm text-gray-400 text-center py-8">You haven&apos;t completed any mock drafts yet.</p>
             ) : (
                 <div className="space-y-2">
                     {mockDrafts.map((league: any) => (

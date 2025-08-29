@@ -70,7 +70,6 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
       refreshIntervalRef.current = setInterval(() => {
         // Re-analyze current trade if we have one
         if (state.currentAnalysis) {
-          console.log('🔄 Auto-refreshing trade analysis...');
           // Would trigger re-analysis here
         }
       }, refreshInterval);
@@ -112,8 +111,6 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
     }));
 
     try {
-      console.log(`🔍 Analyzing trade proposal: ${proposal.id}`);
-      
       const analysis = await tradeAnalysisService.analyzeTradeProposal(
         proposal,
         proposerRoster,
@@ -135,7 +132,6 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
         error: null
       }));
 
-      console.log(`✅ Trade analysis completed: ${analysis.recommendation} (${analysis.fairnessScore}% fair)`);
       return analysis;
 
     } catch (error) {
@@ -417,9 +413,9 @@ export function useTradeRecommendations() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateRecommendations = useCallback(async (
-    roster: FantasyRoster,
-    leagueSettings: any,
-    currentWeek: number
+    _roster: FantasyRoster,
+    _leagueSettings: Record<string, unknown>,
+    _currentWeek: number
   ): Promise<void> => {
     setIsGenerating(true);
 

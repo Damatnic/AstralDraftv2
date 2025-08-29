@@ -53,7 +53,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update display name');
             }
-        } catch (err) {
+        } catch {
             setError('Failed to update display name');
         } finally {
             setIsLoading(false);
@@ -74,7 +74,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update email');
             }
-        } catch (err) {
+        } catch {
             setError('Failed to update email');
         } finally {
             setIsLoading(false);
@@ -106,7 +106,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update PIN');
             }
-        } catch (err) {
+        } catch {
             setError('Failed to update PIN');
         } finally {
             setIsLoading(false);
@@ -124,7 +124,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update appearance');
             }
-        } catch (err) {
+        } catch {
             setError('Failed to update appearance');
         } finally {
             setIsLoading(false);
@@ -205,7 +205,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     <input
                                         type="text"
                                         value={displayName}
-                                        onChange={(e: any) => setDisplayName(e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDisplayName(e.target.value)}
                                         placeholder="Enter display name"
                                         className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         maxLength={50}
@@ -230,7 +230,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     <input
                                         type="email"
                                         value={email}
-                                        onChange={(e: any) => setEmail(e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                                         placeholder="Enter email address"
                                         className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
@@ -270,7 +270,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                         <input
                                             type="password"
                                             value={newPin}
-                                            onChange={(e: any) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                                             placeholder="••••"
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             maxLength={4}
@@ -283,7 +283,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                         <input
                                             type="password"
                                             value={confirmPin}
-                                            onChange={(e: any) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                                             placeholder="••••"
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             maxLength={4}

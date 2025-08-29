@@ -4,7 +4,7 @@ import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { Widget } from '../components/ui/Widget';
-import type { Team, TeamComparison } from '../types';
+import type { TeamComparison } from '../types';
 import { generateTeamComparison } from '../services/geminiService';
 import TeamComparisonCard from '../components/comparison/TeamComparisonCard';
 import LoadingSpinner from '../components/ui/LoadingSpinner';

@@ -3,6 +3,8 @@
  * Handles all external API calls and data fetching
  */
 
+import { logger } from './loggingService';
+
 // SportsIO API Interfaces
 interface SportsIOGame {
   game_id: string;
@@ -39,7 +41,7 @@ interface ESPNPlayer {
   fullName: string;
   defaultPositionId: number;
   proTeamId: number;
-  stats?: any[];
+  stats?: unknown[];
   ownership?: {
     percentOwned: number;
     percentStarted: number;
@@ -63,7 +65,7 @@ interface Player {
     percentOwned: number;
     percentStarted: number;
   };
-  stats?: any;
+  stats?: unknown;
 }
 
 class ApiClient {
@@ -73,14 +75,15 @@ class ApiClient {
   private readonly yahooApiKey?: string;
   private readonly sportsIOApiKey?: string;
   private readonly rateLimiter: Map<string, number> = new Map();
-  private readonly requestQueue: Array<() => Promise<any>> = [];
+  private readonly requestQueue: Array<() => Promise<unknown>> = [];
 
   constructor() {
-    this.baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001';
-    this.espnApiKey = (import.meta as any).env?.VITE_ESPN_API_KEY;
-    this.nflApiKey = (import.meta as any).env?.VITE_NFL_API_KEY;
-    this.yahooApiKey = (import.meta as any).env?.VITE_YAHOO_API_KEY;
-    this.sportsIOApiKey = (import.meta as any).env?.VITE_SPORTSIO_API_KEY;
+    const env = (import.meta as unknown as { env: Record<string, unknown> }).env;
+    this.baseUrl = env?.VITE_API_BASE_URL as string || 'http://localhost:3001';
+    this.espnApiKey = env?.VITE_ESPN_API_KEY as string;
+    this.nflApiKey = env?.VITE_NFL_API_KEY as string;
+    this.yahooApiKey = env?.VITE_YAHOO_API_KEY as string;
+    this.sportsIOApiKey = env?.VITE_SPORTSIO_API_KEY as string;
   }
 
   /**
@@ -242,7 +245,7 @@ class ApiClient {
     }
   }
 
-  async getESPNLeagueInfo(leagueId: string): Promise<any> {
+  async getESPNLeagueInfo(leagueId: string): Promise<unknown> {
     try {
       const url = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/2024/segments/0/leagues/${leagueId}`;
       
@@ -329,7 +332,7 @@ class ApiClient {
   /**
    * Real-time data polling
    */
-  async startLiveUpdates(callback: (data: any) => void): Promise<void> {
+  async startLiveUpdates(callback: (data: unknown) => void): Promise<void> {
     const updateInterval = 30000; // 30 seconds
 
     const pollUpdates = async () => {
@@ -359,7 +362,7 @@ class ApiClient {
   /**
    * Oracle Predictions API Integration (Production)
    */
-  async getProductionOraclePredictions(week?: number, season?: number): Promise<any> {
+  async getProductionOraclePredictions(week?: number, season?: number): Promise<unknown> {
     try {
       const cacheKey = `oracle_predictions_${week || 'current'}_${season || 2024}`;
       const cached = this.getCachedData(cacheKey);
@@ -382,7 +385,7 @@ class ApiClient {
 
       if (data.success) {
         this.setCachedData(cacheKey, data);
-        console.log(`✅ Fetched ${data.data.predictions.length} production Oracle predictions`);
+        logger.info(`✅ Fetched ${data.data.predictions.length} production Oracle predictions`);
         return data;
       } else {
         throw new Error(data.error || 'Failed to fetch Oracle predictions');
@@ -397,7 +400,7 @@ class ApiClient {
     predictionId: string, 
     userChoice: number, 
     confidence: number
-  ): Promise<any> {
+  ): Promise<unknown> {
     try {
       const url = `/api/oracle/predictions/production/${predictionId}/submit`;
       
@@ -412,7 +415,7 @@ class ApiClient {
       const data = await response.json();
 
       if (data.success) {
-        console.log(`✅ Successfully submitted production Oracle prediction: ${predictionId}`);
+        logger.info(`✅ Successfully submitted production Oracle prediction: ${predictionId}`);
         return data;
       } else {
         throw new Error(data.error || 'Failed to submit prediction');
@@ -423,7 +426,7 @@ class ApiClient {
     }
   }
 
-  async generateProductionOraclePredictions(week: number, season?: number): Promise<any> {
+  async generateProductionOraclePredictions(week: number, season?: number): Promise<unknown> {
     try {
       const url = '/api/oracle/predictions/production/generate';
       
@@ -438,7 +441,7 @@ class ApiClient {
       const data = await response.json();
 
       if (data.success) {
-        console.log(`✅ Generated ${data.data.predictions.length} production Oracle predictions`);
+        logger.info(`✅ Generated ${data.data.predictions.length} production Oracle predictions`);
         return data;
       } else {
         throw new Error(data.error || 'Failed to generate predictions');
@@ -449,7 +452,7 @@ class ApiClient {
     }
   }
 
-  async resolveProductionOraclePredictions(week: number, season?: number): Promise<any> {
+  async resolveProductionOraclePredictions(week: number, season?: number): Promise<unknown> {
     try {
       const url = '/api/oracle/predictions/production/resolve';
       
@@ -464,7 +467,7 @@ class ApiClient {
       const data = await response.json();
 
       if (data.success) {
-        console.log(`✅ Resolved ${data.data.resolvedCount} production Oracle predictions`);
+        logger.info(`✅ Resolved ${data.data.resolvedCount} production Oracle predictions`);
         return data;
       } else {
         throw new Error(data.error || 'Failed to resolve predictions');

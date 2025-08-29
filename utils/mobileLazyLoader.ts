@@ -23,7 +23,7 @@ export function withMobileLazyLoading<P extends object>(
     loadDelay = 0
   } = options;
 
-  return React.forwardRef<any, P>((props, ref) => {
+  const LazyComponent = React.forwardRef<HTMLDivElement, Props>((_props, _ref) => {
     const { isMobile } = useResponsiveBreakpoint();
     const [shouldLoad, setShouldLoad] = React.useState(!loadOnMobile || !isMobile);
 
@@ -41,8 +41,12 @@ export function withMobileLazyLoading<P extends object>(
       return fallback;
     }
 
-    return React.createElement(Component, props as any);
+    return React.createElement(Component, _props as any);
   });
+
+  LazyComponent.displayName = `MobileLazy(${Component.displayName || Component.name || 'Component'})`;
+  
+  return LazyComponent;
 }
 
 /**
@@ -223,7 +227,7 @@ export class BundleSizeMonitor {
           toJSON: () => ({ name: bundleName, duration, startTime })
         } as PerformanceEntry);
 
-        console.log(`Bundle ${bundleName} loaded in ${duration.toFixed(2)}ms`);
+        // Bundle loaded successfully
       }
     };
   }

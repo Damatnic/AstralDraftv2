@@ -5,16 +5,6 @@
 
 import React from 'react';
 
-// Web Vitals types (define locally since package may not be installed)
-interface WebVitalMetric {
-    name: string;
-    value: number;
-    delta: number;
-    id: string;
-    rating: 'good' | 'needs-improvement' | 'poor';
-    navigationType?: string;
-}
-
 export interface PerformanceMetric {
     name: string;
     value: number;
@@ -138,7 +128,7 @@ class MobilePerformanceMonitor {
         this.metrics.set(metric.name, performanceMetric);
 
         if (this.config.enableLogging) {
-            console.log(`Performance Metric: ${metric.name}`, performanceMetric);
+            // Performance metric tracked: ${metric.name}
         }
 
         if (this.config.enableReporting && Math.random() < (this.config.sampleRate || 1)) {
@@ -183,7 +173,7 @@ class MobilePerformanceMonitor {
         const duration = entry.responseEnd - entry.requestStart;
         
         if (this.config.enableLogging && duration > 100) {
-            console.log(`Slow resource: ${entry.name} took ${duration}ms`);
+            // Slow resource detected: ${entry.name} took ${duration}ms
         }
 
         // Track large resources
@@ -192,18 +182,9 @@ class MobilePerformanceMonitor {
         }
     }
 
-    private trackNavigation(entry: PerformanceNavigationTiming) {
-        const metrics = {
-            'DNS Lookup': entry.domainLookupEnd - entry.domainLookupStart,
-            'TCP Connect': entry.connectEnd - entry.connectStart,
-            'Request': entry.responseStart - entry.requestStart,
-            'Response': entry.responseEnd - entry.responseStart,
-            'DOM Processing': entry.domContentLoadedEventStart - entry.responseEnd,
-            'Load Complete': entry.loadEventEnd - entry.loadEventStart
-        };
-
+    private trackNavigation(_entry: PerformanceNavigationTiming) {
         if (this.config.enableLogging) {
-            console.log('Navigation Timing:', metrics);
+            // Navigation timing metrics gathered
         }
     }
 
@@ -239,7 +220,7 @@ class MobilePerformanceMonitor {
         
         const measure = performance.getEntriesByName(name, 'measure')[0];
         if (measure && this.config.enableLogging) {
-            console.log(`Custom Metric: ${name} took ${measure.duration}ms`);
+            // Custom metric tracked: ${name} took ${measure.duration}ms
         }
         
         return measure?.duration || 0;

@@ -40,10 +40,10 @@ const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }
                 >
                     <div className="mx-4 mb-4 glass-pane p-2 rounded-xl flex items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
-                             {players.map((player: any) => (
+                             {players.map((player) => (
                                 <div key={player.id} className="relative group">
                                     <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-12 h-12 text-2xl rounded-lg" alt={player.name} />
-                                    <button onClick={(e: any) => handleRemovePlayer(e, player)} className="absolute -top-1 -right-1 p-0.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onClick={(e: React.MouseEvent) => handleRemovePlayer(e, player)} className="absolute -top-1 -right-1 p-0.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity">
                                         <CloseIcon className="w-3 h-3" />
                                     </button>
                                 </div>

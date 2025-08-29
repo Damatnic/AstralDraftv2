@@ -19,7 +19,8 @@ import {
     useOraclePerformanceMonitoring,
     useMemoryEfficientState
 } from '../../hooks/useOraclePerformanceOptimization';
-import oraclePerformanceOptimizationService, { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
+// import oraclePerformanceOptimizationService, { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
+import { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
 
 // Memoized components for better performance
 const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmit }: {
@@ -79,6 +80,8 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
         </motion.div>
     );
 });
+
+MemoizedPredictionCard.displayName = 'MemoizedPredictionCard';
 
 // Memoized prediction submission form
 const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
@@ -142,6 +145,8 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
     );
 });
 
+PredictionSubmissionForm.displayName = 'PredictionSubmissionForm';
+
 // Virtualized prediction list component
 const VirtualizedPredictionList = memo(({ 
     predictions, 
@@ -202,6 +207,8 @@ const VirtualizedPredictionList = memo(({
         </div>
     );
 });
+
+VirtualizedPredictionList.displayName = 'VirtualizedPredictionList';
 
 // Main optimized interface component
 const OptimizedOracleRealTimePredictionInterface: React.FC<{

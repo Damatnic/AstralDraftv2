@@ -121,7 +121,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       try {
         const stripeInstance = await stripePromise;
         setStripe(stripeInstance);
-        console.log('✅ Stripe initialized');
       } catch (error) {
         console.error('❌ Failed to initialize Stripe:', error);
       }
@@ -140,7 +139,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
         
         if (data.success) {
           setProducts(data.data.products);
-          console.log('✅ Loaded payment products');
         }
       } catch (error) {
         console.error('❌ Failed to load payment products:', error);
@@ -175,7 +173,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       const paymentIntent = data.data.paymentIntent;
       setCurrentPaymentIntent(paymentIntent);
       
-      console.log('💳 Created contest entry payment intent');
       return paymentIntent;
 
     } catch (error) {
@@ -209,7 +206,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       // Refresh subscriptions
       await refreshSubscriptions();
       
-      console.log('🔔 Created subscription');
       return data.data;
 
     } catch (error) {
@@ -240,8 +236,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
 
       // Refresh subscriptions
       await refreshSubscriptions();
-      
-      console.log('🗑️ Cancelled subscription');
 
     } catch (error) {
       console.error('❌ Failed to cancel subscription:', error);

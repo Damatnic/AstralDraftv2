@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { motion, Reorder } from 'framer-motion';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { useAppState } from '../../contexts/AppContext';
 import { LayoutIcon } from '../icons/LayoutIcon';
 import { DragHandleIcon } from '../icons/DragHandleIcon';
@@ -35,7 +35,7 @@ const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClo
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md"
                 {...{

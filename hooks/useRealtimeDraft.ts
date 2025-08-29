@@ -14,7 +14,7 @@ export const useRealtimeDraft = (
     league: League | undefined, 
     isPaused: boolean,
     user: User, 
-    dispatch: React.Dispatch<any>
+    dispatch: React.Dispatch<{ type: string; payload?: unknown }>
 ) => {
     const { state } = useAppState();
     const playDraftSound = useSound('draft', 0.5);

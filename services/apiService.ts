@@ -3,9 +3,9 @@
  * Handles all HTTP requests to the backend API
  */
 
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-interface ApiResponse<T = any> {
+interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: string;
@@ -31,12 +31,12 @@ interface League {
   inviteCode: string;
   status: 'DRAFT' | 'ACTIVE' | 'COMPLETED' | 'ARCHIVED';
   season: number;
-  settings: any;
+  settings: unknown;
   currentWeek: number;
   isPublic: boolean;
   createdAt: string;
-  userTeam?: any;
-  teams?: any[];
+  userTeam?: unknown;
+  teams?: unknown[];
   isCommissioner?: boolean;
 }
 
@@ -60,8 +60,8 @@ interface Player {
     adp?: number;
     tier?: number;
   };
-  projections: any;
-  stats: any;
+  projections: unknown;
+  stats: unknown;
   photoUrl?: string;
 }
 
@@ -231,7 +231,7 @@ class ApiService {
     draftType?: string;
     isPublic?: boolean;
     password?: string;
-    settings?: any;
+    settings?: unknown;
   }): Promise<League> {
     const response = await this.client.post<ApiResponse<{ league: League }>>('/leagues', leagueData);
     
@@ -242,8 +242,8 @@ class ApiService {
     throw new Error(response.data.error || 'Failed to create league');
   }
 
-  async joinLeague(inviteCode: string, teamName: string, password?: string): Promise<{ league: League; team: any }> {
-    const response = await this.client.post<ApiResponse<{ league: League; team: any }>>('/leagues/join', {
+  async joinLeague(inviteCode: string, teamName: string, password?: string): Promise<{ league: League; team: unknown }> {
+    const response = await this.client.post<ApiResponse<{ league: League; team: unknown }>>('/leagues/join', {
       inviteCode,
       teamName,
       password,
@@ -292,8 +292,8 @@ class ApiService {
     }
   }
 
-  async getLeagueStandings(leagueId: string): Promise<any[]> {
-    const response = await this.client.get<ApiResponse<{ standings: any[] }>>(`/leagues/${leagueId}/standings`);
+  async getLeagueStandings(leagueId: string): Promise<unknown[]> {
+    const response = await this.client.get<ApiResponse<{ standings: unknown[] }>>(`/leagues/${leagueId}/standings`);
     
     if (response.data.success && response.data.data) {
       return response.data.data.standings;
@@ -302,8 +302,8 @@ class ApiService {
     return [];
   }
 
-  async getPublicLeagues(page = 1, limit = 20): Promise<{ leagues: League[]; pagination: any }> {
-    const response = await this.client.get<ApiResponse<{ leagues: League[]; pagination: any }>>('/leagues/public', {
+  async getPublicLeagues(page = 1, limit = 20): Promise<{ leagues: League[]; pagination: unknown }> {
+    const response = await this.client.get<ApiResponse<{ leagues: League[]; pagination: unknown }>>('/leagues/public', {
       params: { page, limit },
     });
     
@@ -349,8 +349,8 @@ class ApiService {
     throw new Error(response.data.error || 'Failed to get player');
   }
 
-  async getPlayerStats(playerId: string, week: number): Promise<any> {
-    const response = await this.client.get<ApiResponse<{ stats: any }>>(`/players/${playerId}/stats/${week}`);
+  async getPlayerStats(playerId: string, week: number): Promise<unknown> {
+    const response = await this.client.get<ApiResponse<{ stats: unknown }>>(`/players/${playerId}/stats/${week}`);
     
     if (response.data.success && response.data.data) {
       return response.data.data.stats;
@@ -393,8 +393,8 @@ class ApiService {
     return [];
   }
 
-  async getPlayerNews(playerId: string, limit = 10): Promise<any[]> {
-    const response = await this.client.get<ApiResponse<{ news: any[] }>>(`/players/news/${playerId}`, {
+  async getPlayerNews(playerId: string, limit = 10): Promise<unknown[]> {
+    const response = await this.client.get<ApiResponse<{ news: unknown[] }>>(`/players/news/${playerId}`, {
       params: { limit },
     });
     
@@ -406,7 +406,7 @@ class ApiService {
   }
 
   // Health check
-  async healthCheck(): Promise<any> {
+  async healthCheck(): Promise<unknown> {
     const response = await this.client.get('/health');
     return response.data;
   }

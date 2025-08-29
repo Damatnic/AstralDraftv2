@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import type { Team, League, Player } from '../../types';
 import { players } from '../../data/players';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { CloseIcon } from '../icons/CloseIcon';
 import { SearchIcon } from '../icons/SearchIcon';
 import { Avatar } from '../ui/Avatar';
@@ -12,17 +12,17 @@ import { Avatar } from '../ui/Avatar';
 interface AddPlayerModalProps {
     league: League;
     team: Team;
-    dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
     onClose: () => void;
 }
 
 const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }) => {
     const [search, setSearch] = React.useState('');
 
-    const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: any) => p.id)));
-    const freeAgents = players.filter((p: any) => !rosteredPlayerIds.has(p.id));
+    const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: { id: number }) => p.id)));
+    const freeAgents = players.filter((p: { id: number }) => !rosteredPlayerIds.has(p.id));
 
-    const filteredPlayers = freeAgents.filter((p: any) => p.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
+    const filteredPlayers = freeAgents.filter((p: { name: string }) => p.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
 
     const handleAddPlayer = (player: Player) => {
         dispatch({
@@ -34,7 +34,7 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md max-h-[80vh] flex flex-col"
                 onClick={e => e.stopPropagation()}
@@ -63,7 +63,7 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
                 </div>
 
                 <main className="flex-grow p-2 overflow-y-auto">
-                    {filteredPlayers.map((player: any) => (
+                    {filteredPlayers.map((player: Player) => (
                         <button
                             key={player.id}
                             onClick={() => handleAddPlayer(player)}

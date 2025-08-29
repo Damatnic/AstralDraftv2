@@ -125,7 +125,7 @@ const ScheduleManagementView: React.FC = () => {
 
     const handleSwapMatchup = (index: number) => {
         // Logic to swap teams in a matchup
-        console.log('Swapping matchup at index:', index);
+        // Swapping matchup at index
     };
 
     return (
@@ -197,7 +197,7 @@ const ScheduleManagementView: React.FC = () => {
                                     className="glass-input px-4 py-2"
                                 >
                                     {Array.from({ length: maxWeek }, (_, i) => i + 1).map(week => (
-                                        <option key={week} value={week}>
+                                        <option key={`game-${index}`} value={week}>
                                             Week {week} {week >= 15 ? '(Playoffs)' : ''}
                                         </option>
                                     ))}
@@ -243,7 +243,7 @@ const ScheduleManagementView: React.FC = () => {
                     {/* Matchups List */}
                     <div className="p-4 space-y-3">
                         <AnimatePresence mode="wait">
-                            {weeklyMatchups.map((matchup, index) => (
+                            {weeklyMatchups.map((game, index) => (
                                 <MatchupCard 
                                     key={`${matchup.week}-${index}`}
                                     matchup={matchup} 

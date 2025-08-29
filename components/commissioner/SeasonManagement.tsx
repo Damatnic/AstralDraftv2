@@ -8,7 +8,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { CalendarIcon } from '../icons/CalendarIcon';
 import { PlayIcon } from '../icons/PlayIcon';
-import { PauseIcon } from '../icons/PauseIcon';
 import { StopIcon } from '../icons/StopIcon';
 import { RefreshIcon } from '../icons/RefreshIcon';
 import { AdjustmentsIcon } from '../icons/AdjustmentsIcon';
@@ -16,12 +15,18 @@ import { League } from '../../types';
 
 interface SeasonManagementProps {
     league: League;
-    dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
 }
 
 interface SeasonAction {
     type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';
-    data?: any;
+    data?: { 
+        teamId?: string; 
+        adjustment?: number; 
+        reason?: string; 
+        week?: number; 
+        matchupId?: string; 
+    };
 }
 
 const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }) => {
@@ -272,7 +277,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
-                            onClick={(e: any) => e.target === e.currentTarget && setManualScoreMode(false)}
+                            onClick={(e: React.MouseEvent<HTMLDivElement>) => e.target === e.currentTarget && setManualScoreMode(false)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
@@ -291,11 +296,11 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
                                         </label>
                                         <select
                                             value={scoreAdjustment.teamId}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }))}
+                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
                                             <option value="">Choose team...</option>
-                                            <option value="team1">Alice's Aces</option>
+                                            <option value="team1">Alice&apos;s Aces</option>
                                             <option value="team2">Smithtown Stallions</option>
                                             <option value="team3">Thunder Bolts</option>
                                             <option value="team4">Wilson Warriors</option>
@@ -310,7 +315,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
                                             type="number"
                                             step="0.1"
                                             value={scoreAdjustment.adjustment}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }))}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                             placeholder="Enter adjustment (+ or -)"
                                         />
@@ -322,7 +327,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
                                         </label>
                                         <textarea
                                             value={scoreAdjustment.reason}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }))}
+                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }))}
                                             rows={3}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                             placeholder="Explain the reason for this adjustment..."
@@ -358,7 +363,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
-                            onClick={(e: any) => e.target === e.currentTarget && setShowConfirmAction(null)}
+                            onClick={(e: React.MouseEvent<HTMLDivElement>) => e.target === e.currentTarget && setShowConfirmAction(null)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}

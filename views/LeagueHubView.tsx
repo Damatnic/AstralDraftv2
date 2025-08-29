@@ -25,7 +25,6 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
     const isCommissioner = user.id === league.commissionerId;
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
     const isDraftComplete = league.status === 'DRAFT_COMPLETE';
-    const isPreDraft = league.status === 'PRE_DRAFT';
     const isHistoryAvailable = league.history && league.history.length > 0;
     const [slogan, setSlogan] = React.useState<string | null>(null);
 
@@ -91,7 +90,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                         <h1>{league.name}</h1>
                         <p className="page-subtitle">{league.status.replace('_', ' ')}</p>
                         {slogan && (
-                            <p className="text-sm text-cyan-300/80 font-semibold italic mt-1">"{slogan}"</p>
+                            <p className="text-sm text-cyan-300/80 font-semibold italic mt-1">&quot;{slogan}&quot;</p>
                         )}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-end">

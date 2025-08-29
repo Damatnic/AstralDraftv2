@@ -132,10 +132,10 @@ export const populateSampleAnalyticsData = () => {
     localStorage.setItem('oraclePredictions', JSON.stringify(samplePredictions));
     localStorage.setItem('userChallenges', JSON.stringify(sampleUserChallenges));
 
-    console.log('✅ Sample Oracle analytics data populated!');
-    console.log('🎯 Oracle Accuracy: 66.7% (4/6 predictions correct)');
-    console.log('👤 User Win Rate: 60% (3/5 challenges won)');
-    console.log('📊 Analytics Dashboard now has data to display');
+    // Sample Oracle analytics data populated
+    // Oracle Accuracy: 66.7% (4/6 predictions correct)
+    // User Win Rate: 60% (3/5 challenges won)
+    // Analytics Dashboard now has data to display
     
     return {
         predictions: samplePredictions,
@@ -153,7 +153,7 @@ export const populateSampleAnalyticsData = () => {
 export const clearSampleData = () => {
     localStorage.removeItem('oraclePredictions');
     localStorage.removeItem('userChallenges');
-    console.log('🧹 Sample data cleared');
+    // Sample data cleared
 };
 
 // Function to check if sample data exists
@@ -163,7 +163,7 @@ export const hasSampleData = (): boolean => {
     return !!(predictions && challenges);
 };
 
-console.log('📊 Oracle Analytics Demo Utils Loaded');
-console.log('💡 Use populateSampleAnalyticsData() to add demo data');
-console.log('🧹 Use clearSampleData() to remove demo data');
-console.log('❓ Use hasSampleData() to check if demo data exists');
+// Oracle Analytics Demo Utils Loaded
+// Use populateSampleAnalyticsData() to add demo data
+// Use clearSampleData() to remove demo data
+// Use hasSampleData() to check if demo data exists

@@ -165,7 +165,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
         {isOffline ? (
           <>
             <span className="pwa-status-banner__icon" aria-hidden="true">📱</span>
-            <span>You're offline. Some features may be limited.</span>
+            <span>You&apos;re offline. Some features may be limited.</span>
           </>
         ) : (
           <>

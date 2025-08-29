@@ -66,7 +66,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                 <Widget title="Communication">
                     <div className="p-3 sm:p-4 space-y-3 sm:space-y-4">
                         <button onClick={() => setIsPollModalOpen(true)} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
-                            <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><ClipboardListIcon /> Create Poll</h3>
+                                                    <h3 className="text-lg font-semibold mb-2">Commissioner&apos;s Best Practices</h3>
                             <p className="text-xs text-gray-400 mt-1">Poll league members on important decisions.</p>
                         </button>
                         <button onClick={() => setIsAnnouncementModalOpen(true)} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
@@ -88,7 +88,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                         </button>
                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'EDIT_SCORING' })} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PencilIcon /> Edit Scoring Rules</h3>
-                            <p className="text-xs text-gray-400 mt-1">Customize your league's scoring system.</p>
+                            <p className="text-xs text-gray-400 mt-1">Customize your league&apos;s scoring system.</p>
                         </button>
                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'SCHEDULE_MANAGEMENT' })} disabled={!isPostDraft} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><CalendarIcon /> Edit Schedule</h3>
@@ -111,7 +111,7 @@ const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispa
                         </button>
                          <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'EDIT_ROSTER' })} disabled={!isPostDraft} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PencilIcon /> Edit Rosters</h3>
-                            <p className="text-xs text-gray-400 mt-1">Manually add or remove players from any team's roster.</p>
+                            <p className="text-xs text-gray-400 mt-1">Manually add or remove players from any team&apos;s roster.</p>
                         </button>
                          <button onClick={() => dispatch({ type: 'PAUSE_DRAFT', payload: !state.isDraftPaused })} disabled={!isDrafting} className="w-full p-3 bg-white/5 rounded-lg text-left hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target">
                             <h3 className="font-semibold text-white flex items-center gap-2 text-sm sm:text-base"><PauseIcon /> {state.isDraftPaused ? 'Resume Draft' : 'Pause Draft'}</h3>

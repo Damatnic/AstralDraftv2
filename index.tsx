@@ -16,10 +16,6 @@ import App from './App';
 
 // Initialize with enhanced error handling
 const initializeApp = () => {
-  // Debug React availability
-  console.log('React version:', React.version);
-  console.log('React available:', !!React);
-  
   const rootElement = document.getElementById('root');
   if (!rootElement) {
     console.error("Could not find root element to mount to");
@@ -34,7 +30,6 @@ const initializeApp = () => {
     const root = createRoot(rootElement);
     root.render(React.createElement(App));
     
-    console.log('✅ React app initialized successfully');
   } catch (error) {
     console.error('❌ Failed to render React app:', error);
     console.error('Error details:', {

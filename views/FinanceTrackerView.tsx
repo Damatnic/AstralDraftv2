@@ -29,7 +29,7 @@ const FinanceTrackerView: React.FC = () => {
                         <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 p-6 rounded-lg">
                             <h3 className="text-lg font-semibold mb-2">League Financial Summary</h3>
                             <p className="text-gray-300 mb-4">
-                                Track your league's financial health and budget allocations.
+                                Track your league&apos;s financial health and budget allocations.
                             </p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="text-center">

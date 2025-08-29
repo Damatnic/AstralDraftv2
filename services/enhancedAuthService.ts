@@ -4,11 +4,12 @@
  */
 
 import { SimpleUser } from './simpleAuthService';
+import { logger } from './loggingService';
 // Mock imports until backend is properly set up
 const databaseService = {
-    createUser: async (data: any) => ({ success: true, user: data }),
-    getUser: async (id: string) => null,
-    updateUser: async (id: string, data: any) => ({ success: true }),
+    createUser: async (data: Record<string, unknown>) => ({ success: true, user: data }),
+    getUser: async (_id: string) => null,
+    updateUser: async (_id: string, _data: Record<string, unknown>) => ({ success: true }),
     authenticateUser: async (playerNumber: number, pin: string) => {
         // Mock authentication
         if (playerNumber === 1 && pin === '1234') {
@@ -25,8 +26,8 @@ const databaseService = {
         }
         return null;
     },
-    updateLastLogin: async (userId: number) => ({ success: true }),
-    createSession: async (sessionData: any) => ({ success: true, sessionId: sessionData.sessionId }),
+    updateLastLogin: async (_userId: number) => ({ success: true }),
+    createSession: async (sessionData: Record<string, unknown>) => ({ success: true, sessionId: sessionData.sessionId }),
     getSessionByRefreshToken: async (token: string) => {
         // Mock session
         return {
@@ -51,36 +52,36 @@ const databaseService = {
             lastLoginAt: new Date().toISOString()
         };
     },
-    updateSessionToken: async (sessionId: string, accessToken: string, expiresAt: string) => ({ success: true }),
-    deleteSessionByToken: async (token: string) => ({ success: true }),
-    deleteAllUserSessions: async (userId: number) => ({ success: true }),
-    getSessionByAccessToken: async (token: string) => {
+    updateSessionToken: async (_sessionId: string, _accessToken: string, _expiresAt: string) => ({ success: true }),
+    deleteSessionByToken: async (_token: string) => ({ success: true }),
+    deleteAllUserSessions: async (_userId: number) => ({ success: true }),
+    getSessionByAccessToken: async (_token: string) => {
         // Mock session
         return {
             sessionId: 'mock-session-id',
             userId: 1,
-            accessToken: token,
+            accessToken: _token,
             refreshToken: 'mock-refresh-token',
             expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
             refreshExpiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         };
     },
-    validateUserPin: async (userId: number, pin: string) => {
+    validateUserPin: async (_userId: number, _pin: string) => {
         // Mock validation
         return true;
     },
-    updateUserPin: async (userId: number, newPin: string) => ({ success: true }),
+    updateUserPin: async (_userId: number, _newPin: string) => ({ success: true }),
     deleteExpiredSessions: async () => ({ deleted: 0 }),
     getActiveSessionCount: async () => 0,
     getFailedAttemptsToday: async () => 0
 };
 
-const getRow = async (query: string, params?: any[]) => null;
+const getRow = async (_query: string, _params?: unknown[]) => null;
 
-const recordSecurityAttempt = async (req: any, type: string, success: boolean, userId?: number) => {};
-const isAccountLocked = (userId: number): boolean => false;
-const lockAccount = async (userId: number, reason?: string) => {};
-const unlockAccount = async (userId: number) => {};
+const recordSecurityAttempt = async (_req: Record<string, unknown>, _type: string, _success: boolean, _userId?: number) => {};
+const isAccountLocked = (_userId: number): boolean => false;
+const lockAccount = async (_userId: number, _reason?: string) => {};
+const unlockAccount = async (_userId: number) => {};
 const validatePinSecurity = (pin: string): { valid: boolean; errors: string[] } => {
     const errors: string[] = [];
     
@@ -111,7 +112,7 @@ export interface SecureSession {
     sessionId: string;
     accessToken: string;
     refreshToken: string;
-    user: SimpleUser;
+    user: Record<string, unknown>;
     expiresAt: number;
     refreshExpiresAt: number;
 }
@@ -145,7 +146,7 @@ class EnhancedAuthService {
             // Check for account lockout
             if (isAccountLocked(attempt.playerNumber)) {
                 await recordSecurityAttempt(
-                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as any,
+                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
                     'login',
                     false,
                     attempt.playerNumber
@@ -174,7 +175,7 @@ class EnhancedAuthService {
             if (!user) {
                 // Record failed attempt
                 await recordSecurityAttempt(
-                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as any,
+                    { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
                     'login',
                     false,
                     attempt.playerNumber
@@ -198,7 +199,7 @@ class EnhancedAuthService {
 
             // Record successful login
             await recordSecurityAttempt(
-                { ip: attempt.ipAddress, get: () => attempt.userAgent } as any,
+                { ip: attempt.ipAddress, get: () => attempt.userAgent } as Record<string, unknown>,
                 'login',
                 true,
                 attempt.playerNumber
@@ -216,7 +217,7 @@ class EnhancedAuthService {
             };
 
         } catch (error) {
-            console.error('Secure login error:', error);
+            logger.error('Secure login error:', error);
             return {
                 success: false,
                 error: 'Authentication service error',
@@ -229,7 +230,7 @@ class EnhancedAuthService {
      * Create a secure session with access and refresh tokens
      */
     private static async createSecureSession(
-        user: any, 
+        user: Record<string, unknown>, 
         rememberMe: boolean = false
     ): Promise<SecureSession> {
         const sessionId = this.generateSecureId();
@@ -319,14 +320,14 @@ class EnhancedAuthService {
                     sessionId: session.sessionId,
                     accessToken: newAccessToken,
                     refreshToken: session.refreshToken,
-                    user: simpleUser,
+                    user: simpleUser as unknown as Record<string, unknown>,
                     expiresAt: newExpiresAt,
                     refreshExpiresAt: new Date(session.refreshExpiresAt).getTime()
                 }
             };
 
         } catch (error) {
-            console.error('Refresh session error:', error);
+            logger.error('Refresh session error:', error);
             return {
                 success: false,
                 error: 'Session refresh failed',
@@ -343,7 +344,7 @@ class EnhancedAuthService {
             await databaseService.deleteSessionByToken(accessToken);
             return { success: true };
         } catch (error) {
-            console.error('Logout error:', error);
+            logger.error('Logout error:', error);
             return { success: false };
         }
     }
@@ -356,7 +357,7 @@ class EnhancedAuthService {
             await databaseService.deleteAllUserSessions(userId);
             return { success: true };
         } catch (error) {
-            console.error('Logout all devices error:', error);
+            logger.error('Logout all devices error:', error);
             return { success: false };
         }
     }
@@ -364,7 +365,7 @@ class EnhancedAuthService {
     /**
      * Validate access token and get user
      */
-    static async validateToken(accessToken: string): Promise<{ valid: boolean; user?: any }> {
+    static async validateToken(accessToken: string): Promise<{ valid: boolean; user?: Record<string, unknown> }> {
         try {
             const session = await databaseService.getSessionByAccessToken(accessToken);
             
@@ -379,7 +380,7 @@ class EnhancedAuthService {
             };
 
         } catch (error) {
-            console.error('Token validation error:', error);
+            logger.error('Token validation error:', error);
             return { valid: false };
         }
     }
@@ -408,7 +409,7 @@ class EnhancedAuthService {
             const isCurrentPinValid = await databaseService.validateUserPin(userId, currentPin);
             if (!isCurrentPinValid) {
                 recordSecurityAttempt(
-                    { ip: ipAddress, get: () => userAgent } as any,
+                    { ip: ipAddress, get: () => userAgent } as Record<string, unknown>,
                     'pin_change',
                     false,
                     userId
@@ -436,7 +437,7 @@ class EnhancedAuthService {
             
             if (success) {
                 await recordSecurityAttempt(
-                    { ip: ipAddress, get: () => userAgent } as any,
+                    { ip: ipAddress, get: () => userAgent } as Record<string, unknown>,
                     'pin_change',
                     true,
                     userId
@@ -457,7 +458,7 @@ class EnhancedAuthService {
             }
 
         } catch (error) {
-            console.error('Change PIN error:', error);
+            logger.error('Change PIN error:', error);
             return {
                 success: false,
                 error: 'PIN change failed',
@@ -479,9 +480,9 @@ class EnhancedAuthService {
                 AND created_at >= datetime('now', '-1 hour')
             `, [playerNumber.toString()]);
             
-            return result ? Number((result as any).failed_count) : 0;
+            return result ? Number((result as Record<string, unknown>).failed_count) : 0;
         } catch (error) {
-            console.error('Error getting failed login attempts:', error);
+            logger.error('Error getting failed login attempts:', error);
             return 0;
         }
     }
@@ -507,7 +508,7 @@ class EnhancedAuthService {
         try {
             await databaseService.deleteExpiredSessions();
         } catch (error) {
-            console.error('Session cleanup error:', error);
+            logger.error('Session cleanup error:', error);
         }
     }
 
@@ -529,7 +530,7 @@ class EnhancedAuthService {
                 lockedAccounts: 0 // Would come from accountLocks map in enhanced security middleware
             };
         } catch (error) {
-            console.error('Security stats error:', error);
+            logger.error('Security stats error:', error);
             return {
                 activeSessions: 0,
                 failedAttemptsToday: 0,

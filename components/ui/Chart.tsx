@@ -9,7 +9,7 @@ interface ChartProps {
 
 export const Chart: React.FC<ChartProps> = ({ 
   data, 
-  type = 'bar', 
+  type: _type = 'bar', 
   height = 200,
   loading = false 
 }) => {

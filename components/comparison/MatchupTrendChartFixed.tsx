@@ -22,7 +22,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import Tabs from '../ui/Tabs';
+import { Tabs } from '../ui/Tabs';
 import { 
   TrendingUp, 
   TrendingDown, 

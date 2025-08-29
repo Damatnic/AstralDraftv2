@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Avatar } from '../ui/Avatar';
-import Tabs from '../ui/Tabs';
+import { Tabs } from '../ui/Tabs';
 import { Progress } from '../ui/Progress';
 import { 
     TrendingUp, 
@@ -53,7 +53,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     predictionId,
     userId,
     userInfo,
-    onPredictionUpdate
+    onPredictionUpdate: _onPredictionUpdate
 }) => {
     // State management
     const [predictionUpdate] = useState<LivePredictionUpdate | null>(null);
@@ -375,7 +375,6 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                     <button 
                         onClick={() => {
                             // Handle insight sharing when method is available
-                            console.log('Insight sharing not yet implemented');
                         }}
                         disabled={!insightTitle.trim() || !insightContent.trim()}
                         className="w-full px-4 py-2 bg-purple-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"

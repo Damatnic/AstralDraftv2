@@ -3,8 +3,8 @@
  * Graceful error handling with beautiful UI
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangleIcon, RefreshCwIcon, HomeIcon, MessageCircleIcon } from 'lucide-react';
+import { Component, ErrorInfo, ReactNode } from 'react';
+import { AlertTriangleIcon, RefreshCwIcon, HomeIcon } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
@@ -29,7 +29,7 @@ class ModernErrorBoundary extends Component<Props, State> {
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
+  static getDerivedStateFromError(_error: Error): Partial<State> {
     return { hasError: true };
   }
 
@@ -46,7 +46,7 @@ class ModernErrorBoundary extends Component<Props, State> {
     this.logErrorToService(error, errorInfo);
   }
 
-  logErrorToService = (error: Error, errorInfo: ErrorInfo) => {
+  logErrorToService = (_error: Error, _errorInfo: ErrorInfo) => {
     // In production, send to error tracking service like Sentry
     if (process.env.NODE_ENV === 'production') {
       // Example: Sentry.captureException(error, { extra: errorInfo });
@@ -91,7 +91,7 @@ class ModernErrorBoundary extends Component<Props, State> {
                   <div>
                     <h1 className="text-2xl font-bold text-white">Oops! Something went wrong</h1>
                     <p className="text-gray-300 mt-1">
-                      Don't worry, our team has been notified and is working on it.
+                      Don&apos;t worry, our team has been notified and is working on it.
                     </p>
                   </div>
                 </div>

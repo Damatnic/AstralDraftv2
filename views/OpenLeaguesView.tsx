@@ -2,7 +2,6 @@ import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { GlobeIcon } from '../components/icons/GlobeIcon';
-import type { League } from '../types';
 
 const OpenLeaguesView: React.FC = () => {
     const { state, dispatch } = useAppState();

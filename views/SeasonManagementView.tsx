@@ -16,7 +16,6 @@ const SeasonManagementView: React.FC = () => {
   const [currentWeek] = useState(8); // Simulated current week
 
   const league = state.leagues[0];
-  const currentUser = state.user;
 
   const tabs = [
     { id: 'matchups', label: 'Matchups', icon: '⚔️', description: 'Weekly head-to-head matchups' },

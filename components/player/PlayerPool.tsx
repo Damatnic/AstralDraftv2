@@ -2,7 +2,7 @@
 import React from 'react';
 import type { Player } from '../../types';
 import PlayerCard from './PlayerCard';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { SearchIcon } from '../icons/SearchIcon';
 import { StarFilledIcon } from '../icons/StarFilledIcon';
 import { useAppState } from '../../contexts/AppContext';
@@ -28,7 +28,7 @@ const LOAD_MORE_COUNT = 50;
 const PlayerPool: React.FC<PlayerPoolProps> = ({ 
     players, onPlayerSelect, onAddToQueue, onDraftPlayer, onNominatePlayer,
     onAddNote, isMyTurn, playersToCompare, onToggleCompare, queuedPlayerIds,
-    draftFormat, isNominationTurn 
+    draftFormat: _draftFormat, isNominationTurn 
 }) => {
   const { state } = useAppState();
   const [search, setSearch] = React.useState('');
@@ -38,9 +38,9 @@ const PlayerPool: React.FC<PlayerPoolProps> = ({
   const [visibleCount, setVisibleCount] = React.useState(INITIAL_LOAD_COUNT);
 
   const filteredPlayers = React.useMemo(() => {
-    let initialPool = showWatchlistOnly ? players.filter((p: any) => state.watchlist.includes(p.id)) : players;
+    const initialPool = showWatchlistOnly ? players.filter((p: any) => state.watchlist.includes(p.id)) : players;
 
-    let sortedPool = [...initialPool];
+    const sortedPool = [...initialPool];
     if (sortBy === 'custom' && state.activeLeagueId && state.customRankings[state.activeLeagueId]) {
       const customRanks = state.customRankings[state.activeLeagueId];
       sortedPool.sort((a, b) => {

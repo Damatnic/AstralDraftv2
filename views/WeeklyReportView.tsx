@@ -55,7 +55,7 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
             <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        The Oracle's Report
+                        The Oracle&apos;s Report
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
@@ -73,7 +73,8 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
                         <span className="font-bold w-24 text-center">Week {selectedWeek}</span>
                         <button onClick={() => setSelectedWeek(w => w + 1)} disabled={selectedWeek >= maxWeek} className="px-3 py-1 bg-white/10 rounded-lg text-sm hover:bg-white/20 disabled:opacity-50">
                             &gt;
-                        </button</div>
+                        </button>
+                    </div>
                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
                         Back to Team
                     </button>
@@ -112,7 +113,8 @@ export const WeeklyReportView: React.FC = () => {
     
     if (!league) {
         return (
-            <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center"<p>Please select a league to view reports.</p>
+            <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
+                <p>Please select a league to view reports.</p>
                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>

@@ -138,7 +138,6 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.setupEventHandlers();
             
             this.isRunning = true;
-            console.log(`🚀 Enhanced Real-Time Sync Service started on port ${this.config.port}`);
             
             this.emit('service:started', { port: this.config.port });
         } catch (error) {
@@ -171,7 +170,6 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.wss.close();
         }
         
-        console.log('🛑 Enhanced Real-Time Sync Service stopped');
         this.emit('service:stopped');
     }
 
@@ -278,7 +276,6 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         // Process offline events if any
         this.processOfflineEvents(userId, leagueId);
         
-        console.log(`✅ Client connected: ${userId} to league ${leagueId}`);
         this.emit('client:connected', { connectionId, userId, leagueId });
     }
 
@@ -640,7 +637,6 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         this.clientConnections.delete(connectionId);
         this.metrics.activeConnections--;
 
-        console.log(`❌ Client disconnected: ${connection.userId} (${code}: ${reason})`);
         this.emit('client:disconnected', { connectionId, userId: connection.userId, code, reason });
     }
 
@@ -721,7 +717,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         return `event_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
 
-    private authenticateConnection(userId: string, token?: string | null): boolean {
+    private authenticateConnection(userId: string, _token?: string | null): boolean {
         // Simplified authentication - in production, validate JWT token
         return !!(userId && userId.length > 0);
     }
@@ -874,9 +870,8 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         };
     }
 
-    private handleAcknowledgment(connectionId: string, message: any): void {
+    private handleAcknowledgment(_connectionId: string, _message: any): void {
         // Handle event acknowledgments for reliable delivery
-        console.log(`Received ACK from ${connectionId} for event ${message.eventId}`);
     }
 
     private handleUnsubscription(connectionId: string, message: any): void {

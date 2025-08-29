@@ -12,7 +12,6 @@ import { CompareIcon } from '../icons/CompareIcon';
 import { SearchIcon } from '../icons/SearchIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
-import { BarChartIcon } from '../icons/BarChartIcon';
 import { useAppState } from '../../contexts/AppContext';
 
 interface PlayerComparisonTabProps {
@@ -32,7 +31,7 @@ interface ComparisonMetric {
 const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     player,
     league,
-    dispatch
+    dispatch: _dispatch
 }) => {
     const { state } = useAppState();
     const [comparePlayer, setComparePlayer] = React.useState<Player | null>(null);

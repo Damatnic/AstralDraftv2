@@ -4,7 +4,6 @@ import { useAppState } from '../contexts/AppContext';
 
 import PlayerPool from '../components/player/PlayerPool';
 import DraftBoard from '../components/draft/DraftBoard';
-import PlayerDetailModal from '../components/player/PlayerDetailModal';
 import PlayerCompareTool from '../components/analytics/PlayerCompareTool';
 import { Player, League, User, AppState } from '../types';
 import { AnimatePresence } from 'framer-motion';
@@ -33,7 +32,7 @@ interface DraftRoomContainerProps {
     playerQueues: AppState['playerQueues'];
 }
 
-const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }) => {
+const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes: _playerNotes, playerQueues }) => {
     const [playersToCompare, setPlayersToCompare] = React.useState<Player[]>([]);
     const [isCompareModalOpen, setIsCompareModalOpen] = React.useState(false);
     const [activeSideTab, setActiveSideTab] = React.useState('co-pilot');

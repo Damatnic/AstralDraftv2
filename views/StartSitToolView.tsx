@@ -110,7 +110,7 @@ const AdviceDisplay: React.FC<{
                         )}
                         <RecommendedPlayerCard player={playerB} isRecommended={!isPlayerARecommended} weeklyProjection={playerBProj}/>
                     </div>
-                    <p className="text-sm text-gray-300 italic text-center mt-4 pt-4 border-t border-white/10">"{advice.summary}"</p>
+                    <p className="text-sm text-gray-300 italic text-center mt-4 pt-4 border-t border-white/10">&quot;{advice.summary}&quot;</p>
                 </div>
             </Widget>
         </motion.div>

@@ -21,17 +21,17 @@ let performanceMetrics = {
  */
 export async function initializeOraclePerformance() {
     try {
-        console.log('🚀 Initializing Oracle Performance Services...');
+        // Initializing Oracle Performance Services
 
-        console.log('✅ Oracle Performance Cache initialized');
-        console.log('✅ Oracle Database Optimization Service initialized');
+        // Oracle Performance Cache initialized
+        // Oracle Database Optimization Service initialized
 
         // Warm up cache with current week data
         const currentWeek = Math.ceil(Date.now() / (7 * 24 * 60 * 60 * 1000)) % 18 + 1;
         await oracleDatabaseService.warmupCache(currentWeek, 2024);
-        console.log(`✅ Cache warmed up for Week ${currentWeek}`);
+        // Cache warmed up for current week
 
-        console.log('🎯 Oracle Performance Services fully initialized');
+        // Oracle Performance Services fully initialized
         return true;
 
     } catch (error) {
@@ -109,7 +109,7 @@ export function resetPerformanceMetrics() {
         averageResponseTime: 0,
         errors: 0
     };
-    console.log('📊 Performance metrics reset');
+    // Performance metrics reset
 }
 
 /**
@@ -180,13 +180,13 @@ export async function performHealthCheck() {
  */
 export async function shutdownOraclePerformance() {
     try {
-        console.log('🛑 Shutting down Oracle Performance Services...');
+        // Shutting down Oracle Performance Services
         
         // Clear all caches
         oraclePerformanceCache.clearAllCache();
-        console.log('✅ Cache cleared');
+        // Cache cleared
 
-        console.log('✅ Oracle Performance Services shutdown complete');
+        // Oracle Performance Services shutdown complete
 
     } catch (error) {
         console.error('❌ Error during Oracle Performance Services shutdown:', error);

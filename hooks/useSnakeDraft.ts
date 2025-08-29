@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Player, DraftPick, League, PlayerPosition } from '../types';
+import { Player, League, PlayerPosition } from '../types';
 import { players } from '../data/players';
 import { 
   enhancedDraftEngine, 
@@ -220,31 +220,16 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
       return;
     }
 
-    // Create draft pick
-    const draftPick: DraftPick = {
-      overall: currentPick,
-      round: currentRound,
-      pickInRound,
-      teamId: currentTeamId,
-      playerId,
-      timestamp: Date.now()
-    };
-
-    // Dispatch pick - using a more general action type
+    // Dispatch pick
     dispatch({
       type: 'SET_LOADING',
       payload: false
     });
 
-    console.log('Draft pick made:', draftPick, player);
-    
-    // Note: In a real implementation, you would dispatch to a draft management system
-    // For now, we'll just log and update local state
-
     // Remove from queue if present
     setDraftQueue(prev => prev.filter(id => id !== playerId));
     setWatchlist(prev => prev.filter(id => id !== playerId));
-  }, [currentTeamId, userTeamId, isComplete, currentPick, currentRound, pickInRound, league.id, dispatch]);
+  }, [currentTeamId, userTeamId, isComplete, dispatch]);
 
   const enableAutoDraft = useCallback((configOverrides?: Partial<AutoDraftConfig>) => {
     setAutoDraftConfig(prev => ({ ...prev, enabled: true, ...configOverrides }));

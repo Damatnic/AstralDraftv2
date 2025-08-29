@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { Avatar } from '../ui/Avatar';
 import { generateTeamBranding, generateAiTeamProfile } from '../../services/geminiService';
@@ -560,7 +560,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   );
 
   return (
-    <Modal onClose={onClose}>
+    <Modal isOpen={true} onClose={onClose}>
       <motion.div 
         className="glass-pane rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
         initial={{ opacity: 0, y: -20, scale: 0.95 }}

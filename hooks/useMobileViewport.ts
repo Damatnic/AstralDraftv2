@@ -3,7 +3,7 @@
  * Handles mobile viewport optimization, orientation changes, and safe areas
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 export interface ViewportInfo {
   width: number;
@@ -45,7 +45,7 @@ export const useMobileViewport = (config: Partial<MobileViewportConfig> = {}) =>
     touchCapable: 'ontouchstart' in window
   });
 
-  const mergedConfig = { ...DEFAULT_CONFIG, ...config };
+  const mergedConfig = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
 
   // Get safe area insets from CSS environment variables
   const getSafeAreaInsets = useCallback(() => {
@@ -135,7 +135,7 @@ export const useMobileViewport = (config: Partial<MobileViewportConfig> = {}) =>
 
     // Home indicator auto-hidden
     if (mergedConfig.homeIndicatorAutoHidden) {
-      let indicatorMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]') as HTMLMetaElement;
+      const indicatorMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]') as HTMLMetaElement;
       if (indicatorMeta) {
         indicatorMeta.content = 'black-translucent';
       }

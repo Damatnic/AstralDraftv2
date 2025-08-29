@@ -3,7 +3,7 @@
  * Complete rosters for fantasy football drafting
  */
 
-import { Player, PlayerPosition } from '../types';
+import { Player } from '../types';
 
 // Top 200 fantasy-relevant players for 2025 season
 export const nflPlayers2025: Player[] = [

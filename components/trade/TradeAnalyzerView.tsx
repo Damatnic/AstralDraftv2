@@ -5,8 +5,6 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Avatar } from '../ui/Avatar';
 import { Player, League, Team } from '../../types';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { BarChartIcon } from '../icons/BarChartIcon';
@@ -329,8 +327,8 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                             <FairnessAnalysisTab
                                 proposal={currentProposal}
                                 analysis={analysis}
-                                league={league}
-                                dispatch={dispatch}
+                                _league={league}
+                                _dispatch={dispatch}
                             />
                         )}
                         
@@ -339,8 +337,8 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                                 proposal={currentProposal}
                                 analysis={analysis}
                                 league={league}
-                                currentTeam={currentTeam}
-                                dispatch={dispatch}
+                                _currentTeam={currentTeam}
+                                _dispatch={dispatch}
                             />
                         )}
                         
@@ -362,7 +360,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
 };
 
 // Mock analysis generator for demonstration
-const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league: League): TradeAnalysis => {
+const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, _league: League): TradeAnalysis => {
     const fromValue = proposal.fromPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const toValue = proposal.toPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const valueDiff = toValue - fromValue;

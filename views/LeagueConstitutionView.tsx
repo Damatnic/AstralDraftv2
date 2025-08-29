@@ -11,7 +11,6 @@ import {
     FileTextIcon,
     ShieldIcon,
     GavelIcon,
-    AlertCircleIcon,
     CheckCircleIcon
 } from 'lucide-react';
 

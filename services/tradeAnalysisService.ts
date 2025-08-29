@@ -206,8 +206,6 @@ class TradeAnalysisService {
   }
 
   private initializeService(): void {
-    console.log('🔄 Initializing Trade Analysis Service...');
-    
     // Clean up expired cache entries every 15 minutes
     setInterval(() => {
       const now = Date.now();
@@ -228,8 +226,6 @@ class TradeAnalysisService {
     receiverRoster: FantasyRoster
   ): Promise<TradeAnalysis> {
     try {
-      console.log(`🔍 Analyzing trade proposal: ${tradeProposal.id}`);
-
       const cacheKey = `trade_analysis_${tradeProposal.id}_${tradeProposal.proposedAt}`;
       const cached = this.cache.get(cacheKey);
       
@@ -324,7 +320,6 @@ class TradeAnalysisService {
       // Cache the result
       this.cache.set(cacheKey, { data: analysis, expires: Date.now() + this.CACHE_TTL });
 
-      console.log(`✅ Trade analysis completed for ${tradeProposal.id}: ${recommendation} (${fairnessScore}% fair)`);
       return analysis;
 
     } catch (error) {
@@ -377,7 +372,7 @@ class TradeAnalysisService {
   private async calculatePlayerValue(
     playerId: string,
     playerData?: NFLPlayer,
-    scoring?: ScoringSettings
+    _scoring?: ScoringSettings
   ): Promise<PlayerValue> {
     if (!playerData) {
       return {
@@ -673,7 +668,7 @@ class TradeAnalysisService {
     return Math.min(1, Math.max(0, recentAvg / Math.max(seasonAvg, 1)));
   }
 
-  private async calculateScheduleStrength(team: string): Promise<number> {
+  private async calculateScheduleStrength(_team: string): Promise<number> {
     // Mock calculation - would analyze remaining opponent defenses
     return 0.5 + (Math.random() - 0.5) * 0.3;
   }
@@ -690,7 +685,7 @@ class TradeAnalysisService {
     return scarcityMap[position] || 0.5;
   }
 
-  private async calculateTeamOffenseStrength(team: string): Promise<number> {
+  private async calculateTeamOffenseStrength(_team: string): Promise<number> {
     // Mock calculation - would use team offensive metrics
     return 0.4 + Math.random() * 0.6;
   }
@@ -742,10 +737,10 @@ class TradeAnalysisService {
   }
 
   private calculateRosterImpact(
-    incomingPlayerIds: string[],
-    outgoingPlayerIds: string[],
-    roster: FantasyRoster,
-    playerData: Map<string, NFLPlayer>
+    _incomingPlayerIds: string[],
+    _outgoingPlayerIds: string[],
+    _roster: FantasyRoster,
+    _playerData: Map<string, NFLPlayer>
   ): { overallImprovement: number; startingLineupImpact: number; benchDepthImpact: number } {
     // Mock calculation - would analyze actual roster spots and improvements
     return {
@@ -770,7 +765,7 @@ class TradeAnalysisService {
     playerIds: string[],
     weeks: number[],
     season: number,
-    playerData: Map<string, NFLPlayer>
+    _playerData: Map<string, NFLPlayer>
   ): Promise<WeeklyProjection[]> {
     const projections: WeeklyProjection[] = [];
 
@@ -826,7 +821,7 @@ class TradeAnalysisService {
     return { scenarios, averageImpact };
   }
 
-  private assessPerformanceDeclineRisk(player: NFLPlayer, currentWeek: number): RiskFactor {
+  private assessPerformanceDeclineRisk(player: NFLPlayer, _currentWeek: number): RiskFactor {
     // Mock assessment - would analyze age, usage trends, team changes, etc.
     const riskLevel = Math.random();
     
@@ -849,7 +844,7 @@ class TradeAnalysisService {
     };
   }
 
-  private async assessScheduleRisk(team: string, currentWeek: number): Promise<Omit<RiskFactor, 'player'>> {
+  private async assessScheduleRisk(_team: string, _currentWeek: number): Promise<Omit<RiskFactor, 'player'>> {
     // Mock assessment - would analyze remaining schedule difficulty
     return {
       type: 'schedule',

@@ -85,7 +85,7 @@ export class MobileCSSOptimizer {
    */
   static createLazyMobileComponent<T>(
     importFn: () => Promise<{ default: React.ComponentType<T> }>,
-    fallback?: React.ComponentType
+    _fallback?: React.ComponentType
   ) {
     return React.lazy(async () => {
       // Only load on mobile if needed
@@ -109,7 +109,9 @@ export class MobileCSSOptimizer {
       const entries = list.getEntries();
       entries.forEach((entry) => {
         if (entry.entryType === 'measure' && entry.name.includes('mobile')) {
-          console.log(`Mobile Performance: ${entry.name} took ${entry.duration}ms`);
+                  performance.getEntriesByType('navigation').forEach((_entry: PerformanceEntry) => {
+          // Track mobile performance
+        });
         }
       });
     });

@@ -1,19 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Team, Player, TradeAnalysis, DraftPickAsset, TradeSuggestion } from '../../types';
+import type { Team, TradeAnalysis, DraftPickAsset } from '../../types';
+// import type { Player } from '../../types';
 import { players } from '../../data/players';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { analyzeTrade } from '../../services/geminiService';
 
 interface ProposeTradeModalProps {
-    myTeam: Team;
-    otherTeam: Team;
-    leagueId: string;
-    dispatch: React.Dispatch<any>;
+    isOpen: boolean;
     onClose: () => void;
-    initialOffer?: Omit<TradeSuggestion, 'toTeamId' | 'rationale'>;
+    userTeam: Team;
+    targetTeam: Team;
+    league: League;
+    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
 }
 
 const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }) => (
@@ -109,7 +110,7 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
     const winnerStyle = getWinnerStyling();
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col"
                 {...{
@@ -161,13 +162,13 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
                 
                  {(analysis || isAnalyzing) && (
                     <div className="p-4 border-t border-[var(--panel-border)]">
-                         <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle's Analysis</h3>
+                         <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle&apos;s Analysis</h3>
                          {isAnalyzing ? (
                              <div className="h-20 flex items-center justify-center text-sm text-gray-400">Consulting the cosmos...</div>
                          ) : analysis && (
                             <div className="text-center">
                                 <p className={`font-bold text-lg ${winnerStyle.color}`}>{winnerStyle.text}</p>
-                                <p className="text-xs text-gray-300 italic mt-1">"{analysis.summary}"</p>
+                                <p className="text-xs text-gray-300 italic mt-1">&ldquo;{analysis.summary}&rdquo;</p>
                             </div>
                          )}
                     </div>

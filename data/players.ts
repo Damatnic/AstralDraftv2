@@ -1,5 +1,5 @@
 // Player data and types for Astral Draft
-import { Player as MainPlayer, PlayerPosition } from '../types';
+import { Player as MainPlayer } from '../types';
 
 // Re-export the main Player type
 export type Player = MainPlayer;

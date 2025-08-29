@@ -14,7 +14,7 @@ import TradeScenarioModal from '../components/modals/TradeScenarioModal';
 import { FlaskConicalIcon } from '../components/icons/FlaskConicalIcon';
 
 const ChampionshipOddsView: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
     const [isSimModalOpen, setIsSimModalOpen] = React.useState(false);
@@ -68,7 +68,8 @@ const ChampionshipOddsView: React.FC = () => {
                         className="px-4 py-2 bg-purple-500/20 text-purple-300 rounded-lg text-sm hover:bg-purple-500/30 flex items-center gap-2"
                     >
                         <FlaskConicalIcon /> Run Trade Scenario
-                    </button<button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="back-btn">
+                    </button>
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="back-btn">
                         Back to Analytics Hub
                     </button>
                 </div>

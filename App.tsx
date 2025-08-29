@@ -14,19 +14,14 @@ import { PWAInstallButton } from './components/ui/PWAInstallButton';
 import { HighContrastMode } from './components/ui/HighContrastMode';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { useMediaQuery } from './hooks/useMediaQuery';
-import { View } from './types';
+import type { View } from './types';
 
 // Lazy load secondary views
-const ModernDashboardView = React.lazy(() => import('./views/ModernDashboardView'));
-const DashboardView = React.lazy(() => import('./views/DashboardView'));
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
-const TeamHubView = React.lazy(() => import('./views/TeamHubView'));
 const EnhancedTeamHubView = React.lazy(() => import('./views/EnhancedTeamHubView'));
 const WaiverWireView = React.lazy(() => import('./views/WaiverWireView'));
 const PlayersView = React.lazy(() => import('./views/PlayersView'));
-const DraftPrepCenterView = React.lazy(() => import('./views/DraftPrepCenterView'));
 const EnhancedDraftPrepView = React.lazy(() => import('./views/EnhancedDraftPrepView'));
-const LeagueStandingsView = React.lazy(() => import('./views/LeagueStandingsView'));
 const EnhancedLeagueStandingsView = React.lazy(() => import('./views/EnhancedLeagueStandingsView'));
 const MessagesView = React.lazy(() => import('./views/MessagesView'));
 const MatchupView = React.lazy(() => import('./views/MatchupView'));
@@ -34,9 +29,7 @@ const PowerRankingsView = React.lazy(() => import('./views/PowerRankingsView'));
 const TradesView = React.lazy(() => import('./views/TradesView'));
 const PlayoffBracketView = React.lazy(() => import('./views/PlayoffBracketView'));
 const ProfileView = React.lazy(() => import('./views/ProfileView'));
-const CommissionerToolsView = React.lazy(() => import('./views/CommissionerToolsView'));
 const EnhancedCommissionerToolsView = React.lazy(() => import('./views/EnhancedCommissionerToolsView'));
-const DraftRoomView = React.lazy(() => import('./views/DraftRoomView'));
 const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoomView'));
 const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
@@ -221,7 +214,7 @@ const AppContent: React.FC = () => {
                 <>
                     <MobileBottomNav
                         activeView={state.currentView}
-                        onViewChange={(view) => dispatch({ type: 'SET_VIEW', payload: view as any })}
+                        onViewChange={(view) => dispatch({ type: 'SET_VIEW', payload: view as View })}
                         notificationCount={0}
                     />
                     <PWAInstallButton />

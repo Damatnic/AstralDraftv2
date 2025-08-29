@@ -20,10 +20,10 @@ interface MobileOracleInterfaceProps {
     onViewRewards: () => void;
 }
 
-interface SwipeDirection {
-    deltaX: number;
-    deltaY: number;
-}
+// interface SwipeDirection {
+//     deltaX: number;
+//     deltaY: number;
+// }
 
 const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
     week,

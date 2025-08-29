@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
 import { League, Team, Player } from '../../types';
-import { TradeProposal, TradeAnalysis, ImprovementSuggestion, AlternativeOffer } from './TradeAnalyzerView';
+import { TradeProposal, TradeAnalysis, AlternativeOffer } from './TradeAnalyzerView';
 import { SearchIcon } from '../icons/SearchIcon';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
@@ -18,10 +18,10 @@ import { CheckIcon } from '../icons/CheckIcon';
 interface AutomatedSuggestionsTabProps {
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
-    league: League;
-    currentTeam: Team;
+    _league: League;
+    _currentTeam: Team;
     onProposalUpdate: (proposal: TradeProposal) => void;
-    dispatch: React.Dispatch<any>;
+    _dispatch: React.Dispatch<any>;
 }
 
 interface SmartSuggestion {
@@ -38,12 +38,11 @@ interface SmartSuggestion {
 const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
     proposal,
     analysis,
-    league,
-    currentTeam,
+    _league,
+    _currentTeam,
     onProposalUpdate,
-    dispatch
+    _dispatch
 }) => {
-    const [selectedSuggestion, setSelectedSuggestion] = React.useState<SmartSuggestion | null>(null);
     const [showAlternatives, setShowAlternatives] = React.useState(false);
 
     // Generate smart suggestions based on analysis
@@ -154,10 +153,8 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
         }
     };
 
-    const applySuggestion = (suggestion: SmartSuggestion) => {
+    const applySuggestion = (_suggestion: SmartSuggestion) => {
         // Mock implementation - in real app would modify the proposal
-        console.log('Applying suggestion:', suggestion);
-        setSelectedSuggestion(suggestion);
     };
 
     const selectAlternativeOffer = (offer: AlternativeOffer) => {

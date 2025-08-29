@@ -10,7 +10,7 @@ import { Player, Team, League } from '../types';
 interface OfflineState {
     isOffline: boolean;
     hasOfflineData: boolean;
-    pendingActions: any[];
+    pendingActions: Array<{ type: string; payload: unknown; id: string }>;
     lastSync: Date | null;
     syncInProgress: boolean;
 }
@@ -20,7 +20,7 @@ interface OfflineActions {
     getCachedPlayers: () => Player[];
     getCachedLeagues: () => League[];
     draftPlayerOffline: (playerId: number, teamId: number, pick: number) => Promise<boolean>;
-    queueAction: (type: string, payload: any) => string;
+    queueAction: (type: "DRAFT_PLAYER" | "UPDATE_ROSTER" | "TRADE_PROPOSAL" | "WAIVER_CLAIM" | "SETTINGS_UPDATE", payload: unknown) => string;
     syncPendingActions: () => Promise<void>;
     clearOfflineData: () => void;
 }
@@ -53,8 +53,8 @@ export const useMobileOffline = (): [OfflineState, OfflineActions] => {
             return await mobileOfflineService.draftPlayerOffline(playerId, teamId, pick);
         },
         
-        queueAction: (type: string, payload: any) => {
-            return mobileOfflineService.queueOfflineAction(type as any, payload);
+        queueAction: (type: "DRAFT_PLAYER" | "UPDATE_ROSTER" | "TRADE_PROPOSAL" | "WAIVER_CLAIM" | "SETTINGS_UPDATE", payload: unknown) => {
+            return mobileOfflineService.queueOfflineAction(type, payload);
         },
         
         syncPendingActions: async () => {

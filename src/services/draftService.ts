@@ -281,7 +281,7 @@ class DraftService {
   /**
    * Resume draft (commissioner only)
    */
-  async resumeDraft(draftId: string): Promise<void> {
+  async resumeDraft(_draftId: string): Promise<void> {
     socketService.emit('draft:resume');
   }
 

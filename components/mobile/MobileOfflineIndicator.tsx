@@ -339,7 +339,7 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({
                         <div className="mt-4 pt-3 border-t border-[var(--panel-border)]">
                             <h5 className="font-medium text-[var(--text-primary)] mb-2">Pending Actions:</h5>
                             <div className="space-y-1 text-xs">
-                                {offlineState.pendingActions.map((action, index) => (
+                                {offlineState.pendingActions.map((action, _index) => (
                                     <div key={action.id} className="flex justify-between text-[var(--text-secondary)]">
                                         <span>{action.type}</span>
                                         <span>Retry {action.retryCount}/{action.maxRetries}</span>

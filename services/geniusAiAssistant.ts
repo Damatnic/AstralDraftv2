@@ -3,7 +3,7 @@
  * Advanced fantasy football draft intelligence with natural language understanding
  */
 
-import { Player, PlayerPosition, Team, League } from '../types';
+import { Player, PlayerPosition } from '../types';
 
 export interface AssistantQuery {
   question: string;

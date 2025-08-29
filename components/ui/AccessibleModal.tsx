@@ -57,7 +57,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   React.useEffect(() => {
     if (!isOpen) return;
 
-    const handleCustomEscape = (e: CustomEvent) => {
+    const handleCustomEscape = (_e: CustomEvent) => {
       if (closeOnEscape) {
         onClose();
         announce('Modal closed', 'polite');

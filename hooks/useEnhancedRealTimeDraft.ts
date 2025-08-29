@@ -42,6 +42,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     myParticipant: null
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   const eventListenersRef = useRef<Array<{ event: string; callback: Function }>>([]);
 
   // Initialize connection on mount if autoConnect is enabled
@@ -53,6 +54,8 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     return () => {
       disconnect();
     };
+    // Intentionally minimal dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoConnect, user]);
 
   // Setup event listeners
@@ -85,6 +88,8 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
         realTimeDraftService.off(event, callback);
       });
     };
+    // Intentionally minimal dependencies to avoid infinite loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update connection status periodically
@@ -132,6 +137,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     if (autoReconnect) {
       setTimeout(() => connect(), 2000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoReconnect]);
 
   const handleRoomJoined = useCallback((room: DraftRoom) => {
@@ -225,12 +231,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     }));
   }, [user]);
 
-  const handleDraftEvent = useCallback((event: DraftEvent) => {
-    console.log('Draft event received:', event);
+  const handleDraftEvent = useCallback((_event: DraftEvent) => {
     // Handle specific draft events as needed
   }, []);
 
-  const handleError = useCallback((error: any) => {
+  const handleError = useCallback((error: unknown) => {
     setState(prev => ({
       ...prev,
       error: error instanceof Error ? error.message : 'An error occurred'

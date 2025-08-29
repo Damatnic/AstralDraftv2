@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { MicrophoneIcon } from '../icons/MicrophoneIcon';
 import { players } from '../../data/players';
-import type { Player } from '../../types';
 
 // Web Speech API might be vendor-prefixed
 const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;

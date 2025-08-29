@@ -5,10 +5,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BrainCircuit, TrendingUp, Trophy, Sparkles, AlertTriangle } from 'lucide-react';
+import { BrainCircuit, TrendingUp, Sparkles, AlertTriangle } from 'lucide-react';
 import { useAppState } from '../../hooks/useAppState';
-import { useLeague } from '../../hooks/useLeague';
-import { Player } from '../../types';
 
 interface OraclePrediction {
   id: string;
@@ -20,12 +18,11 @@ interface OraclePrediction {
 }
 
 export const OraclePanel: React.FC = () => {
-  const { state, dispatch } = useAppState();
-  const { league, myTeam } = useLeague();
+  const { dispatch } = useAppState();
   const [activeTab, setActiveTab] = React.useState<'predictions' | 'insights' | 'challenge'>('predictions');
   const [userPrediction, setUserPrediction] = React.useState('');
-  const [oracleScore, setOracleScore] = React.useState(0);
-  const [userScore, setUserScore] = React.useState(0);
+  const [oracleScore] = React.useState(0);
+  const [userScore] = React.useState(0);
   
   // Mock predictions
   const predictions: OraclePrediction[] = [

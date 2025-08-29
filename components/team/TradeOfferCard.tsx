@@ -132,7 +132,7 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
                  <div className="text-xs mt-2 pt-2 border-t border-white/10 flex items-center justify-center gap-2">
                     <SparklesIcon className={`w-3 h-3 ${winnerStyle.color}`} />
                     <span className={`font-bold ${winnerStyle.color}`}>{winnerStyle.text}:</span>
-                    <span className="italic text-gray-400">"{offer.tradeAnalysis.summary}"</span>
+                    <span className="italic text-gray-400">&quot;{offer.tradeAnalysis.summary}&quot;</span>
                 </div>
             )}
 

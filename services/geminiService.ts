@@ -444,7 +444,7 @@ export const generateTeamBranding = async (userName: string): Promise<{ teamName
     } catch (e) {
         console.error("Error generating team branding:", e);
         return null;
-    };
+    }
 }
 export const generateAiTeamProfile = async (leagueName: string): Promise<AiProfileData | null> => {
     if (!ai) return null;
@@ -547,7 +547,7 @@ export const generateTrashTalk = async (myTeam: Team, opponentTeam: Team): Promi
     return mockApiCall(getRandomElement(lines));
 };
 
-export const analyzeTrade = async (teamAName: string, teamBName: string, playersToA: Player[], playersToB: Player[], picksToA: DraftPickAsset[], picksToB: DraftPickAsset[]): Promise<TradeAnalysis | null> => {
+export const analyzeTrade = async (teamAName: string, teamBName: string, playersToA: Player[], playersToB: Player[], _picksToA: DraftPickAsset[], _picksToB: DraftPickAsset[]): Promise<TradeAnalysis | null> => {
     const valueA = playersToA.reduce((sum, p) => sum + (300 - p.rank), 0);
     const valueB = playersToB.reduce((sum, p) => sum + (300 - p.rank), 0);
     
@@ -687,7 +687,7 @@ export const generateLeagueNewspaperContent = async (league: League, week: numbe
     return mockApiCall(content);
 };
 
-export const getWaiverIntelligence = async (league: League): Promise<WaiverIntelligence[] | null> => {
+export const getWaiverIntelligence = async (_league: League): Promise<WaiverIntelligence[] | null> => {
     const players = ["Player A", "Player B", "Player C"];
     const intel: WaiverIntelligence[] = [
         { type: 'BREAKOUT', title: "Breakout Candidate Alert", content: "This player's usage is trending up, and they could be a league winner down the stretch.", players },
@@ -712,7 +712,7 @@ export const getMatchupAnalysis = async (myTeam: Team, opponentTeam: Team): Prom
     return mockApiCall(analysis);
 };
 
-export const generateWatchlistInsights = async (watchlist: Player[], league: League): Promise<WatchlistInsight[] | null> => {
+export const generateWatchlistInsights = async (watchlist: Player[], _league: League): Promise<WatchlistInsight[] | null> => {
     if(watchlist.length === 0) return [];
     const insights: WatchlistInsight[] = watchlist.map(player => ({
         playerId: player.id,
@@ -760,13 +760,13 @@ export const proactivelySuggestTrade = async (myTeam: Team, league: League): Pro
 };
 
 // --- Other Mocks (less complex) ---
-export const getAiOptimalLineup = async (team: Team, league: League): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0, 9).map(p => p.id), reasoning: "This lineup maximizes your weekly projections against your opponent's weaknesses." });
-export const generateDraftGrade = async (team: Team, league: League): Promise<DraftGrade | null> => mockApiCall({ overall: getRandomElement(['A', 'A-', 'B+', 'B', 'B-']), value: 85, need: 92, bestPick: team.roster[0], biggestReach: team.roster[team.roster.length-1], narrative: "A very solid draft, addressing key needs while also securing great value in the middle rounds." });
+export const getAiOptimalLineup = async (team: Team, _league: League): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0, 9).map(p => p.id), reasoning: "This lineup maximizes your weekly projections against your opponent's weaknesses." });
+export const generateDraftGrade = async (team: Team, _league: League): Promise<DraftGrade | null> => mockApiCall({ overall: getRandomElement(['A', 'A-', 'B+', 'B', 'B-']), value: 85, need: 92, bestPick: team.roster[0], biggestReach: team.roster[team.roster.length-1], narrative: "A very solid draft, addressing key needs while also securing great value in the middle rounds." });
 export const generateDailyBriefing = async (league: League, team: Team): Promise<DailyBriefingItem[] | null> => mockApiCall([{ type: 'MATCHUP_PREVIEW', title: 'Tough Week Ahead', summary: 'You are projected to lose by a small margin. You will need a big game from your stars.', relatedPlayerIds: [team.roster[0].id] }]);
-export const generateTeamChemistryReport = async (team: Team): Promise<string | null> => mockApiCall("This roster shows a good mix of high-floor veterans and high-upside young players, creating a balanced attack.");
+export const generateTeamChemistryReport = async (_team: Team): Promise<string | null> => mockApiCall("This roster shows a good mix of high-floor veterans and high-upside young players, creating a balanced attack.");
 export const generateSeasonOutlook = async (team: Team): Promise<{ prediction: string; keyPlayer: string; } | null> => mockApiCall({ prediction: "This team has the talent to make a deep playoff run if they can avoid major injuries.", keyPlayer: team.roster[0].name });
 export const detectTopRivalry = async (league: League): Promise<TopRivalry | null> => mockApiCall({ teamAId: league.teams[0].id, teamBId: league.teams[1].id, narrative: "A bitter history and several close matchups make this the rivalry to watch this season." });
-export const generateDraftPickCommentary = async (player: Player, team: Team, pick: number, round: number, league: League): Promise<string | null> => mockApiCall(`${team.name} gets a great value pick with ${player.name}. The Oracle approves.`);
+export const generateDraftPickCommentary = async (player: Player, team: Team, _pick: number, _round: number, _league: League): Promise<string | null> => mockApiCall(`${team.name} gets a great value pick with ${player.name}. The Oracle approves.`);
 export const generateProjectedStandings = async (league: League): Promise<ProjectedStanding[] | null> => mockApiCall(league.teams.map(t => ({ teamId: t.id, projectedWins: 8, projectedLosses: 6, projectedTies: 0, narrative: "Projected to be a solid playoff contender." })));
 export const generateChampionshipProbabilities = async (league: League): Promise<{ teamId: number; probability: number; }[] | null> => mockApiCall(league.teams.map(t => ({ teamId: t.id, probability: parseFloat((100 / league.teams.length + (Math.random() - 0.5) * 5).toFixed(1)) })));
 export const generateWeeklyRecapVideoScript = async (league: League, week: number): Promise<RecapVideoScene[] | null> => {
@@ -792,30 +792,30 @@ export const generateWeeklyRecapVideoScript = async (league: League, week: numbe
 // ... other mocks, returning plausible data structures
 export const generateSeasonReview = async (league: League, seasonYear: number): Promise<SeasonReviewData | null> => mockApiCall({ title: `${seasonYear} Season in Review`, summary: "A season of legends!", superlatives: [{title: 'Best Manager', teamName: league.teams[0].name, rationale: 'Dominated from start to finish.'}], finalPowerRanking: [{teamName: league.teams[0].name, rank: 1}] });
 export const generateAiChatMessage = async (myTeam: Team, opponentTeam: Team, myScore: number, oppScore: number): Promise<string | null> => mockApiCall(myScore > oppScore ? "Easy win!" : "You got lucky this time...");
-export const generateEventHotTake = async (eventDescription: string): Promise<string | null> => mockApiCall("This is a league-altering move that will have massive ripple effects!");
+export const generateEventHotTake = async (_eventDescription: string): Promise<string | null> => mockApiCall("This is a league-altering move that will have massive ripple effects!");
 export const generateDraftStoryHighlights = async (league: League): Promise<DraftEvent[] | null> => mockApiCall([{id: '1', type: 'DRAFT_STEAL', timestamp: 10, content: "A huge steal in the 2nd round!", teamId: league.teams[0].id, playerId: players[10].id }]);
-export const generateTeamNeedsAnalysis = async (team: Team): Promise<{ position: PlayerPosition; rationale: string; }[] | null> => mockApiCall([{ position: 'RB', rationale: "Lacks a true workhorse back." }]);
-export const summarizeFantasyImpact = async (headline: string): Promise<string | null> => mockApiCall("This is a major development. Expect this player's fantasy value to skyrocket.");
-export const generateLeagueSlogan = async (leagueName: string, teamNames: string[]): Promise<string | null> => mockApiCall("Where Champions Are Forged.");
-export const getWaiverWireAdvice = async (team: Team, playerToAdd: Player, availablePlayers: Player[] | undefined): Promise<WaiverWireAdvice | null> => mockApiCall({ summary: "This is a must-add player with league-winning upside.", suggestedBid: Math.floor(team.faab * 0.2), optimalDropPlayerId: team.roster[team.roster.length-1].id });
-export const getLineupSolution = async (team: Team, league: League, playerId: number): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0,9).map(p=>p.id), reasoning: "This optimized lineup gives you the best chance to win." });
-export const generateWeeklyPowerPlay = async (league: League, week: number): Promise<{ teamName: string; move: string; rationale: string; } | null> => mockApiCall({teamName: league.teams[0].name, move: "Traded for a superstar", rationale: "A bold move to push for the championship."});
+export const generateTeamNeedsAnalysis = async (_team: Team): Promise<{ position: PlayerPosition; rationale: string; }[] | null> => mockApiCall([{ position: 'RB', rationale: "Lacks a true workhorse back." }]);
+export const summarizeFantasyImpact = async (_headline: string): Promise<string | null> => mockApiCall("This is a major development. Expect this player's fantasy value to skyrocket.");
+export const generateLeagueSlogan = async (_leagueName: string, _teamNames: string[]): Promise<string | null> => mockApiCall("Where Champions Are Forged.");
+export const getWaiverWireAdvice = async (team: Team, _playerToAdd: Player, _availablePlayers: Player[] | undefined): Promise<WaiverWireAdvice | null> => mockApiCall({ summary: "This is a must-add player with league-winning upside.", suggestedBid: Math.floor(team.faab * 0.2), optimalDropPlayerId: team.roster[team.roster.length-1].id });
+export const getLineupSolution = async (team: Team, _league: League, _playerId: number): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0,9).map(p=>p.id), reasoning: "This optimized lineup gives you the best chance to win." });
+export const generateWeeklyPowerPlay = async (league: League, _week: number): Promise<{ teamName: string; move: string; rationale: string; } | null> => mockApiCall({teamName: league.teams[0].name, move: "Traded for a superstar", rationale: "A bold move to push for the championship."});
 export const generateRivalryReport = async (teamA: Team, teamB: Team): Promise<string | null> => mockApiCall(`## Head-to-Head Breakdown\n\nThis is a classic rivalry. ${teamA.name} holds the slight edge in past matchups, but ${teamB.name} is looking strong this season.`);
-export const generatePlayerStory = async (player: Player, league: League): Promise<PlayerStory | null> => mockApiCall({ title: `The Rise of ${player.name}`, narrative: `${player.name} has been a revelation this season, consistently outperforming expectations and becoming a cornerstone of their team.`});
-export const generateTradeStory = async (offer: TradeOffer, league: League): Promise<TradeStory | null> => mockApiCall({ title: "A Blockbuster Deal", narrative: "This trade sends shockwaves through the league...", winnerDeclared: "Both teams win." });
-export const generateNarrativeSeasonStory = async (team: Team, league: League): Promise<SeasonStory | null> => mockApiCall({ title: `The Story of the ${new Date().getFullYear()} ${team.name}`, narrative: "It was a season of highs and lows, but ultimately a memorable journey for this squad."});
-export const generateTeamComparison = async (teamA: Team, teamB: Team, league: League): Promise<TeamComparison | null> => mockApiCall({ strengthsA: ["Strong RBs"], weaknessesA: ["Weak WR depth"], strengthsB: ["Elite QB"], weaknessesB: ["Inconsistent TEs"], analysis: "A very close matchup.", prediction: `${teamA.name} is slightly favored.` });
+export const generatePlayerStory = async (player: Player, _league: League): Promise<PlayerStory | null> => mockApiCall({ title: `The Rise of ${player.name}`, narrative: `${player.name} has been a revelation this season, consistently outperforming expectations and becoming a cornerstone of their team.`});
+export const generateTradeStory = async (_offer: TradeOffer, _league: League): Promise<TradeStory | null> => mockApiCall({ title: "A Blockbuster Deal", narrative: "This trade sends shockwaves through the league...", winnerDeclared: "Both teams win." });
+export const generateNarrativeSeasonStory = async (team: Team, _league: League): Promise<SeasonStory | null> => mockApiCall({ title: `The Story of the ${new Date().getFullYear()} ${team.name}`, narrative: "It was a season of highs and lows, but ultimately a memorable journey for this squad."});
+export const generateTeamComparison = async (teamA: Team, _teamB: Team, _league: League): Promise<TeamComparison | null> => mockApiCall({ strengthsA: ["Strong RBs"], weaknessesA: ["Weak WR depth"], strengthsB: ["Elite QB"], weaknessesB: ["Inconsistent TEs"], analysis: "A very close matchup.", prediction: `${teamA.name} is slightly favored.` });
 export const generateLeagueConstitution = async (league: League): Promise<string | null> => mockApiCall(`# ${league.name} Constitution\n\n## Article 1: Fun\n\nEveryone must have fun.`);
-export const setSmartFaabAdvice = async (playerId: number, advice: SmartFaabAdvice): Promise<void> => Promise.resolve();
-export const generateSmartFaabAdvice = async (player: Player, league: League): Promise<SmartFaabAdvice | null> => mockApiCall({ narrative: "A high-priority add.", aggressiveBid: 25, valueBid: 15 });
+export const setSmartFaabAdvice = async (_playerId: number, _advice: SmartFaabAdvice): Promise<void> => Promise.resolve();
+export const generateSmartFaabAdvice = async (_player: Player, _league: League): Promise<SmartFaabAdvice | null> => mockApiCall({ narrative: "A high-priority add.", aggressiveBid: 25, valueBid: 15 });
 export const generateGamedayHighlight = async (matchup: { teamA: Team; teamB: Team; }, scoringPlayer: Player): Promise<string | null> => mockApiCall(`${scoringPlayer.name} with a massive play! What a game-changer!`);
-export const getSideBetResolution = async (bet: SideBet, league: League): Promise<number | null> => mockApiCall(bet.proposerId);
-export const createSideBet = async (bet: Omit<SideBet, 'id' | 'status'>, league: League): Promise<SideBet | null> => mockApiCall({ ...bet, id: `bet_${Date.now()}`, status: 'PENDING' });
+export const getSideBetResolution = async (bet: SideBet, _league: League): Promise<number | null> => mockApiCall(bet.proposerId);
+export const createSideBet = async (bet: Omit<SideBet, 'id' | 'status'>, _league: League): Promise<SideBet | null> => mockApiCall({ ...bet, id: `bet_${Date.now()}`, status: 'PENDING' });
 
 /**
  * Generate Oracle prediction analysis using AI
  */
-export const generateOraclePrediction = async (prompt: string): Promise<string> => {
+export const generateOraclePrediction = async (_prompt: string): Promise<string> => {
     try {
         // For now, use mock response until GoogleGenAI is properly configured
         // This ensures the Oracle system works while API integration is refined

@@ -3,7 +3,6 @@ import { useAppState } from '../contexts/AppContext';
 import { MailIcon } from '../components/icons/MailIcon';
 import ConversationList from '../components/messages/ConversationList';
 import MessageThread from '../components/messages/MessageThread';
-import EmptyState from '../components/ui/EmptyState';
 import { InboxIcon } from '../components/icons/InboxIcon';
 
 const MessagesView: React.FC = () => {

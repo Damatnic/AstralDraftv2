@@ -1,25 +1,38 @@
 /**
- * Premium Feature Access Control Service
+ * Premconst getUserBilling = async (_userId: string) => {
+    // TODO: Implement actual database call
+    return null;
+};
+
+const runQuery = async (_query: string, _params?: any[]) => {
+    // TODO: Implement actual database call
+    return null;
+};
+
+const getRow = async (_query: string, _params?: any[]) => {
+    // TODO: Implement actual database call
+    return null;
+};cess Control Service
  * Manages subscription-based feature access and usage limits
  */
 
 // Mock functions until backend is properly set up
-const getUserSubscription = async (userId: string) => {
+const getUserSubscription = async (_userId: string) => {
     // TODO: Implement actual database call
     return null;
 };
 
-const getUserBilling = async (userId: string) => {
+const getUserBilling = async (_userId: string) => {
     // TODO: Implement actual database call
     return null;
 };
 
-const runQuery = async (query: string, params?: any[]) => {
+const runQuery = async (_query: string, _params?: any[]) => {
     // TODO: Implement actual database call
     return { rows: [] };
 };
 
-const getRow = async (query: string, params?: any[]) => {
+const getRow = async (_query: string, _params?: any[]) => {
     // TODO: Implement actual database call
     return null;
 };
@@ -224,10 +237,10 @@ export class PremiumFeatureService {
             `, [userId, featureName]);
             
             const usage = result ? Number((result as any).total_usage) : 0;
-            console.log(`Getting usage for user ${userId}, feature ${featureName}: ${usage}`);
+            // Getting usage for user and feature
             return usage;
         } catch (error) {
-            console.error('Error getting feature usage:', error);
+            // Error getting feature usage
             return 0;
         }
     }
@@ -254,11 +267,11 @@ export class PremiumFeatureService {
                 VALUES (?, ?, ?, datetime('now'))
             `, [userId, featureName, amount]);
             
-            console.log(`Recording usage: User ${userId} used ${amount} of ${featureName}`);
+            // Recording usage
             
             return true;
         } catch (error) {
-            console.error('Error recording feature usage:', error);
+            // Error recording feature usage
             return false;
         }
     }

@@ -60,7 +60,7 @@ const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ sc
                 </motion.div>
             </div>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.8 } }} className="mt-8 text-lg text-gray-300 text-center italic">
-                "{scene.narration}"
+                &quot;{scene.narration}&quot;
             </motion.p>
         </motion.div>
     )
@@ -85,7 +85,7 @@ const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = 
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.4 } }} className="text-3xl font-bold">{scene.playerName}</motion.p>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.6 } }} className="text-5xl font-display font-bold text-yellow-300 my-2">{scene.playerScore?.toFixed(2)} PTS</motion.p>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.8 } }} className="mt-4 text-lg text-gray-300 text-center italic">
-                "{scene.narration}"
+                &quot;{scene.narration}&quot;
             </motion.p>
         </motion.div>
     )

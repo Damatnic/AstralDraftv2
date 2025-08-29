@@ -6,7 +6,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TrophyIcon, TargetIcon, ZapIcon, TrendingUpIcon } from 'lucide-react';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 export interface UserStats {
     totalPredictions: number;
@@ -27,8 +26,6 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
     className = '',
     compact = false 
 }) => {
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    
     const statItems = [
         {
             label: 'Accuracy',

@@ -11,7 +11,7 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { Avatar } from '../components/ui/Avatar';
 
 const ProjectedStandingsView: React.FC = () => {
-    const { state, dispatch } = useAppState();
+    const { dispatch } = useAppState();
     const { league } = useLeague();
     const [standings, setStandings] = React.useState<ProjectedStanding[] | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -69,7 +69,7 @@ const ProjectedStandingsView: React.FC = () => {
                                         <th className="p-3">Rank</th>
                                         <th className="p-3">Team</th>
                                         <th className="p-3 text-center">Projected Record</th>
-                                        <th className="p-3">Oracle's Outlook</th>
+                                        <th className="p-3">Oracle&apos;s Outlook</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,7 +93,7 @@ const ProjectedStandingsView: React.FC = () => {
                                                     {standing.projectedWins}-{standing.projectedLosses}-{standing.projectedTies}
                                                 </td>
                                                 <td className="p-3 text-xs italic text-gray-300">
-                                                    "{standing.narrative}"
+                                                    &quot;{standing.narrative}&quot;
                                                 </td>
                                             </tr>
                                         );

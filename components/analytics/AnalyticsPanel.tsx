@@ -5,7 +5,7 @@ import AnimatedNumber from '../ui/AnimatedNumber';
 import { ZapIcon } from '../icons/ZapIcon';
 import { FlameIcon } from '../icons/FlameIcon';
 import { TrophyIcon } from '../icons/TrophyIcon';
-import Tooltip from '../ui/Tooltip';
+import { Tooltip } from '../ui/Tooltip';
 
 
 interface AnalyticsPanelProps {
@@ -14,7 +14,7 @@ interface AnalyticsPanelProps {
 
 const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }) => (
     <div className={`p-2 bg-gray-800/50 rounded-lg flex items-center gap-3`}>
-        <Tooltip text={tooltip}>
+        <Tooltip content={tooltip}>
             <div className={`w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-900/50 ${color}`}>
                 {icon}
             </div>

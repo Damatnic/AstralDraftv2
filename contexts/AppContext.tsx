@@ -1,6 +1,5 @@
 import React from 'react';
-import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Team, DraftPick, Notification, AuctionState, TradeOffer, WaiverClaim, CreateLeaguePayload, PlayerPosition, WatchlistInsight, Persona, CustomRanking, LeaguePoll, Announcement, Badge, TopRivalry, LeagueInvitation, DraftPickAsset, DraftCommentaryItem, RecapVideoScene, SideBet, SmartFaabAdvice, GamedayEvent, PlayerAwardType, PlayerAward, NewspaperContent, LeagueSettings } from '../types';
-import { players } from '../data/players';
+import type { League, User, View, AppState, Player, Notification } from '../types';
 import { LEAGUE_MEMBERS } from '../data/leagueData';
 import { LEAGUE_WITH_PLAYERS } from '../data/leagueWithPlayers';
 
@@ -149,8 +148,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 notifications: [...state.notifications, {
                     id: Date.now(),
                     message: action.payload.message,
-                    type: action.payload.type,
-                    timestamp: new Date().toISOString()
+                    type: action.payload.type
                 }]
             };
             
@@ -217,7 +215,6 @@ const appReducer = (state: AppState, action: Action): AppState => {
         }
         
         case 'SET_LINEUP': {
-            const { teamId, starters, bench } = action.payload;
             // Implementation for setting lineup
             return state;
         }
@@ -237,7 +234,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const user = JSON.parse(savedUser);
         dispatch({ type: 'LOGIN', payload: user });
-      } catch (error) {
+      } catch {
         console.error('Failed to load saved user session');
       }
     }

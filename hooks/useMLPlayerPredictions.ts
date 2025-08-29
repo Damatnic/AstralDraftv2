@@ -3,7 +3,7 @@
  * Provides comprehensive ML-based player performance predictions with real-time updates
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { machineLearningPlayerPredictionService, type PlayerPredictionResult, type WeeklyRankings, type PlayerComparison, type ModelPerformanceMetrics } from '../services/machineLearningPlayerPredictionService';
 
 export interface UseMLPlayerPredictionsState {
@@ -90,8 +90,15 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
   });
 
   // Cache for predictions if enabled
-  const predictionCache = cacheResults ? new Map<string, PlayerPredictionResult>() : null;
-  const rankingsCache = cacheResults ? new Map<string, WeeklyRankings>() : null;
+  const predictionCache = useMemo(() => 
+    cacheResults ? new Map<string, PlayerPredictionResult>() : null,
+    [cacheResults]
+  );
+  
+  const rankingsCache = useMemo(() => 
+    cacheResults ? new Map<string, WeeklyRankings>() : null,
+    [cacheResults]
+  );
 
   /**
    * Generate ML prediction for a specific player

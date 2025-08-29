@@ -4,7 +4,7 @@
 
 
 import React from 'react';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import { useAppState } from '../../contexts/AppContext';
 import ToggleSwitch from '../ui/ToggleSwitch';
@@ -41,7 +41,7 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }) =
 
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <div className="glass-pane p-6 rounded-2xl w-full max-w-md">
                 <h2 className="font-display text-2xl font-bold mb-4">Preferences</h2>
                 

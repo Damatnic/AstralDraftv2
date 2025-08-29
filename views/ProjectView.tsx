@@ -1,9 +1,7 @@
 import React from 'react';
-import ErrorBoundary from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
-interface ProjectViewProps {
-  // No props currently needed, but interface ready for future expansion
-}
+type ProjectViewProps = Record<string, never>;
 
 const ProjectView: React.FC<ProjectViewProps> = () => {
   return (

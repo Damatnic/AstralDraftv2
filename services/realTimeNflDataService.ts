@@ -117,7 +117,7 @@ class RealTimeNflDataService {
   private initializeConnection(): void {
     // In production, this would connect to a real WebSocket server
     // For now, we'll use polling as a fallback with simulation of WebSocket events
-    console.log('🔄 Initializing real-time NFL data connection...');
+    // Initializing real-time NFL data connection
     
     // Simulate WebSocket connection
     this.wsConnection.isConnected = true;
@@ -476,7 +476,7 @@ class RealTimeNflDataService {
     if (!this.wsConnection.isConnected) {
       this.initializeConnection();
     }
-    console.log('🚀 Real-time NFL data service started');
+    // Real-time NFL data service started
   }
 
   /**
@@ -496,7 +496,7 @@ class RealTimeNflDataService {
     }
     
     this.wsConnection.isConnected = false;
-    console.log('🛑 Real-time NFL data service stopped');
+    // Real-time NFL data service stopped
   }
 
   /**

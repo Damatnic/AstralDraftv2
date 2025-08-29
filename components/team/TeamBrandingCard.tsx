@@ -23,7 +23,7 @@ const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }) => 
                  <Avatar avatar={avatar} className="w-16 h-16 text-4xl rounded-lg flex-shrink-0" />
             </div>
             <div className="text-center">
-                 <p className="font-display text-lg italic text-cyan-200">"{slogan}"</p>
+                 <p className="font-display text-lg italic text-cyan-200">&quot;{slogan}&quot;</p>
             </div>
             <div className="flex justify-between items-center text-xs text-gray-500">
                 <span className="font-display font-bold">ASTRAL DRAFT</span>

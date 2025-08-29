@@ -25,11 +25,10 @@ interface WeeklyMatchupsProps {
 
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 
-  showAllWeeks = false 
+  showAllWeeks: _showAllWeeks = false 
 }) => {
   const { state } = useAppState();
   const [currentWeek, setCurrentWeek] = useState(selectedWeek);
-  const [viewMode, setViewMode] = useState<'current' | 'all'>('current');
 
   const league = state.leagues[0];
 

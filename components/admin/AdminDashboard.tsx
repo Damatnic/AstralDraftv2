@@ -105,21 +105,22 @@ const UserManagement: React.FC = () => {
     searchTerm: ''
   });
 
-  useEffect(() => {
-    loadUsers();
-  }, [filters]);
-
-  const loadUsers = async () => {
+  const loadUsers = React.useCallback(async () => {
     setLoading(true);
     try {
       const result = await adminService.getAllUsers(1, 50, filters);
       setUsers(result.users);
+      setTotalUsers(result.total);
     } catch (error) {
-      console.error('Failed to load users:', error);
+      logger.error('Failed to load users:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
 
   const handleStatusChange = async (userId: string, status: 'active' | 'suspended' | 'banned') => {
     try {
@@ -159,12 +160,12 @@ const UserManagement: React.FC = () => {
             type="text"
             placeholder="Search users..."
             value={filters.searchTerm}
-            onChange={(e: any) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilters(prev => ({ ...prev, searchTerm: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={filters?.status}
-            onChange={(e: any) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, status: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Statuses</option>
@@ -174,7 +175,7 @@ const UserManagement: React.FC = () => {
           </select>
           <select
             value={filters.riskLevel}
-            onChange={(e: any) => setFilters(prev => ({ ...prev, riskLevel: e.target.value }))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, riskLevel: e.target.value }))}
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Risk Levels</option>
@@ -632,7 +633,7 @@ const AdminDashboard: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'overview' | 'users' | 'contests' | 'payments' | 'oracle' | 'system')}
                 className={`${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'

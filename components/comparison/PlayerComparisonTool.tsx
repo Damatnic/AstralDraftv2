@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
-import Tabs from '../ui/Tabs';
+import { Tabs } from '../ui/Tabs';
 import { Loader2, TrendingUp, TrendingDown, Activity, Target, Shield, AlertTriangle } from 'lucide-react';
 import { 
   playerComparisonService, 

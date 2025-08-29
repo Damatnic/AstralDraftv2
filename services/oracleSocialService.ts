@@ -188,7 +188,7 @@ export interface SocialNotification {
     type: 'LEAGUE_INVITE' | 'GROUP_PREDICTION' | 'DEBATE_MENTION' | 'CHALLENGE_RESULT' | 'LEAGUE_UPDATE';
     title: string;
     message: string;
-    data: any;
+    data: Record<string, unknown>;
     isRead: boolean;
     createdAt: string;
     expiresAt?: string;

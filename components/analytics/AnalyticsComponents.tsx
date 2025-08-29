@@ -207,8 +207,8 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
         );
     }
 
-    const maxValue = Math.max(...data.map((d: any) => d.value));
-    const minValue = Math.min(...data.map((d: any) => d.value));
+    const maxValue = Math.max(...data.map((d: { value: number }) => d.value));
+    const minValue = Math.min(...data.map((d: { value: number }) => d.value));
     const range = maxValue - minValue || 1;
     
     const width = 400;
@@ -284,7 +284,7 @@ interface SimpleBarChartProps {
     height?: number;
 }
 
-export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartProps>) {
+export function SimpleBarChart({ data, height: _height = 200 }: Readonly<SimpleBarChartProps>) {
     if (!data || data.length === 0) {
         return (
             <div className="flex items-center justify-center h-48 text-gray-500">
@@ -293,7 +293,7 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
         );
     }
 
-    const maxValue = Math.max(...data.map((d: any) => d.value));
+    const maxValue = Math.max(...data.map((d: { value: number }) => d.value));
     
     return (
         <div className="space-y-3">

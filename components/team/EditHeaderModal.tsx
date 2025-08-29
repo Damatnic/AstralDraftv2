@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import Modal from '../ui/Modal';
+import { Modal } from '../ui/Modal';
 import { ImageIcon } from '../icons/ImageIcon';
 
 interface EditHeaderModalProps {
@@ -23,7 +23,7 @@ const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, cur
     };
 
     return (
-        <Modal onClose={onClose}>
+        <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md"
                 {...{

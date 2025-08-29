@@ -252,8 +252,8 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
 
             {/* Feature Categories Breakdown */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                {['PLAYER', 'TEAM', 'GAME', 'HISTORICAL', 'META'].map((category: any) => {
-                    const categoryFeatures = featureImportance.filter((f: any) => f.category === category);
+                {['PLAYER', 'TEAM', 'GAME', 'HISTORICAL', 'META'].map((category: string) => {
+                    const categoryFeatures = featureImportance.filter((f: { category: string; importance: number }) => f.category === category);
                     const avgImportance = categoryFeatures.length > 0 
                         ? categoryFeatures.reduce((sum, f) => sum + f.importance, 0) / categoryFeatures.length 
                         : 0;
@@ -431,10 +431,10 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
                         { id: 'features', label: 'Feature Importance', icon: '🎯' },
                         { id: 'patterns', label: 'Patterns', icon: '🔍' },
                         { id: 'insights', label: 'ML Insights', icon: '💡' }
-                    ].map((tab: any) => (
+                    ].map((tab: { id: string; label: string; icon: React.ReactNode }) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
+                            onClick={() => setActiveTab(tab.id as 'performance' | 'features' | 'patterns' | 'insights')}
                             className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
                                 activeTab === tab.id
                                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
