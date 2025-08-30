@@ -197,8 +197,10 @@ const AppContent: React.FC = () => {
         const originalConsoleWarn = console.warn;
         const originalConsoleLog = console.log;
         
-        // Ultra-aggressive extension error filter
+        // Ultra-aggressive extension error filter with safety checks
         const isExtensionNoise = (message: string): boolean => {
+            if (!message || typeof message !== 'string') return false;
+            
             const lowerMessage = message.toLowerCase();
             
             // Specific browser extension signatures
@@ -217,28 +219,44 @@ const AppContent: React.FC = () => {
                 'safari-extension'
             ];
             
-            return extensionSignatures.some(sig => lowerMessage.includes(sig)) ||
-                   GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => lowerMessage.includes(pattern.toLowerCase()));
+            try {
+                return extensionSignatures.some(sig => lowerMessage.includes(sig)) ||
+                       (GLOBAL_SUPPRESSED_ERROR_PATTERNS && GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => lowerMessage.includes(pattern.toLowerCase())));
+            } catch (e) {
+                return false;
+            }
         };
         
-        // Override console methods
+        // Override console methods with safety checks
         console.error = (...args) => {
-            const message = args.join(' ');
-            if (!isExtensionNoise(message)) {
+            try {
+                const message = (args && args.length > 0) ? args.join(' ') : '';
+                if (!isExtensionNoise(message)) {
+                    originalConsoleError.apply(console, args);
+                }
+            } catch (e) {
                 originalConsoleError.apply(console, args);
             }
         };
         
         console.warn = (...args) => {
-            const message = args.join(' ');
-            if (!isExtensionNoise(message)) {
+            try {
+                const message = (args && args.length > 0) ? args.join(' ') : '';
+                if (!isExtensionNoise(message)) {
+                    originalConsoleWarn.apply(console, args);
+                }
+            } catch (e) {
                 originalConsoleWarn.apply(console, args);
             }
         };
         
         console.log = (...args) => {
-            const message = args.join(' ');
-            if (!isExtensionNoise(message)) {
+            try {
+                const message = (args && args.length > 0) ? args.join(' ') : '';
+                if (!isExtensionNoise(message)) {
+                    originalConsoleLog.apply(console, args);
+                }
+            } catch (e) {
                 originalConsoleLog.apply(console, args);
             }
         };
