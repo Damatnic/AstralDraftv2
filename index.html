@@ -7,6 +7,9 @@
     <title>Astral Draft - Elite Fantasy Football</title>
     <link rel="manifest" href="/manifest.json" />
     
+    <!-- Development CSP for local WebSocket connections -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' ws://localhost:* http://localhost:* https://astraldraft.netlify.app wss://astraldraft.netlify.app https://fonts.googleapis.com https://fonts.gstatic.com https://api.gemini.com https://generativelanguage.googleapis.com https://*.espn.com https://api.the-odds-api.com https://api.sportsdata.io; img-src 'self' data: https:; manifest-src 'self'">
+    
     <!-- DNS prefetch and preconnect for critical resources -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">

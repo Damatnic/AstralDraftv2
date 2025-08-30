@@ -111,7 +111,8 @@ class ApiClient {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'User-Agent': 'AstralDraft/1.0',
+        'X-App-Name': 'AstralDraft',
+        'X-App-Version': '1.0',
         ...options.headers
       },
       ...options

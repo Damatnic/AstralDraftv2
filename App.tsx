@@ -93,14 +93,23 @@ const AppContent: React.FC = () => {
     // Initialize real-time services (disabled for frontend-only mode)
     useEffect(() => {
         const initializeRealTimeServices = async () => {
-            // Skip WebSocket initialization if no backend server
+            // Skip WebSocket initialization if no backend server or in production without WebSocket config
             if (process.env.NODE_ENV === 'development' && !process.env.VITE_WS_URL) {
+                console.log('ℹ️ Real-time services disabled - backend server not configured');
+                console.log('  Start backend server on port 3001 to enable WebSocket features');
                 return;
             }
             
             try {
-                // Initialize WebSocket connection
-                await enhancedWebSocketService.connect();
+                // Initialize WebSocket connection with timeout for development
+                const connectionTimeout = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('WebSocket connection timeout')), 3000)
+                );
+                
+                await Promise.race([
+                    enhancedWebSocketService.connect(),
+                    connectionTimeout
+                ]);
                 
                 // Setup notification system
                 await realtimeNotificationServiceV2.initialize(state.user?.id || '');
@@ -111,9 +120,15 @@ const AppContent: React.FC = () => {
                     dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
                 });
                 
+                console.log('✅ Real-time services connected successfully');
+                
             } catch (error) {
-                // Failed to initialize real-time services
-                loggingService.error('Real-time services initialization failed', error, 'app-initialization');
+                // Failed to initialize real-time services - graceful degradation
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('ℹ️ WebSocket connection unavailable - continuing without real-time features');
+                } else {
+                    loggingService.error('Real-time services initialization failed', error, 'app-initialization');
+                }
             }
             
             // Initialize mobile optimizations

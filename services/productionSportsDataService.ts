@@ -209,7 +209,8 @@ class ProductionSportsDataService {
       const response = await axios.get(url, {
         headers: {
           'Accept': 'application/json',
-          'User-Agent': 'AstralDraft/1.0',
+          'X-App-Name': 'AstralDraft',
+          'X-App-Version': '1.0',
           ...headers
         },
         timeout: 10000 // 10 second timeout
