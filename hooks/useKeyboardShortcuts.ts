@@ -1,31 +1,43 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from "react";
 
-interface KeyboardShortcut {
+export interface KeyboardShortcut {
   key: string;
   ctrlKey?: boolean;
   altKey?: boolean;
   shiftKey?: boolean;
+  metaKey?: boolean;
   action: () => void;
   description: string;
+  category?: string;
 }
 
 export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const shortcut = shortcuts.find((s: any) => 
-        s.key.toLowerCase() === event.key.toLowerCase() &&
-        !!s.ctrlKey === event.ctrlKey &&
-        !!s.altKey === event.altKey &&
-        !!s.shiftKey === event.shiftKey
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.contentEditable === "true") {
+      return;
+    }
+
+    const matchingShortcut = shortcuts.find(shortcut => {
+      return (
+        shortcut.key.toLowerCase() === event.key.toLowerCase() &&
+        \!\!shortcut.ctrlKey === event.ctrlKey &&
+        \!\!shortcut.altKey === event.altKey &&
+        \!\!shortcut.shiftKey === event.shiftKey &&
+        \!\!shortcut.metaKey === event.metaKey
       );
+    });
 
-      if (shortcut) {
-        event.preventDefault();
-        shortcut.action();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    if (matchingShortcut) {
+      event.preventDefault();
+      matchingShortcut.action();
+    }
   }, [shortcuts]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 };
+
+export default useKeyboardShortcuts;

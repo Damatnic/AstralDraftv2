@@ -11,6 +11,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { enhancedWebSocketService } from './services/enhancedWebSocketService';
 import { realtimeNotificationServiceV2 } from './services/realtimeNotificationServiceV2';
+import { performanceMonitor } from './services/performanceMonitor';
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import type { View } from './types';
 
 // Import UI components
@@ -39,15 +41,23 @@ const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoom
 const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 
-// Modern loading component
+// Enhanced loading component with better visuals and performance
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }: any) => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="text-center space-y-4">
+  <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
+    <div className="text-center space-y-6">
       <div className="relative inline-flex">
-        <div className="w-12 h-12 border-4 border-primary-500/30 rounded-full"></div>
-        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
+        <div className="w-16 h-16 border-4 border-primary-500/20 rounded-full"></div>
+        <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0 shadow-glow-md"></div>
+        <div className="w-12 h-12 border-2 border-accent-400/40 border-r-transparent rounded-full animate-spin absolute inset-2 animation-delay-75"></div>
       </div>
-      <p className="text-lg font-medium text-gray-300 animate-pulse">{message}</p>
+      <div className="space-y-2">
+        <p className="text-xl font-bold text-white tracking-wide">{message}</p>
+        <div className="flex justify-center space-x-1">
+          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce"></div>
+          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce animation-delay-100"></div>
+          <div className="w-2 h-2 bg-primary-400 rounded-full animate-bounce animation-delay-200"></div>
+        </div>
+      </div>
     </div>
   </div>
 );

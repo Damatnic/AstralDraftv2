@@ -41,6 +41,10 @@ export default defineConfig(({ mode }: { mode: string }) => {
             manualChunks: {
               vendor: ['react', 'react-dom'],
               motion: ['framer-motion'],
+              ai: ['@google/genai'],
+              charts: ['recharts', 'chart.js', 'react-chartjs-2'],
+              icons: ['lucide-react', 'react-icons'],
+              utils: ['lodash', 'axios']
             },
             entryFileNames: 'assets/[name]-[hash].js',
             chunkFileNames: 'assets/[name]-[hash].js',
@@ -53,9 +57,12 @@ export default defineConfig(({ mode }: { mode: string }) => {
         include: [
           'react',
           'react-dom',
-          'react-dom/client'
+          'react-dom/client',
+          'framer-motion',
+          'lodash',
+          'axios'
         ],
-        exclude: ['@types/node']
+        exclude: ['@types/node', '@google/genai']
       },
       esbuild: {
         // Use classic JSX transform

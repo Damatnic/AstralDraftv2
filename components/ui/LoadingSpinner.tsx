@@ -17,9 +17,14 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', text }: an
         <div className="flex flex-col items-center justify-center gap-4 py-8">
             <div className={`
                 ${sizeClasses[size]}
-                border-4 border-[var(--panel-border)] border-t-cyan-400 rounded-full animate-spin
+                border-4 border-gray-300/20 border-t-primary-400 rounded-full animate-spin
+                shadow-glow-sm
             `}></div>
-            {text && <p className="text-sm text-[var(--text-secondary)]">{text}</p>}
+            {text && (
+                <p className="text-sm text-gray-300 animate-pulse font-medium tracking-wide">
+                    {text}
+                </p>
+            )}
         </div>
     );
 };

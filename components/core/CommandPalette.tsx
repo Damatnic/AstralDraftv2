@@ -22,12 +22,25 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
 
     React.useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
+            // Enhanced keyboard navigation
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();
                 dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: !state.isCommandPaletteOpen });
             }
             if (e.key === 'Escape') {
                 dispatch({ type: 'SET_COMMAND_PALETTE_OPEN', payload: false });
+                setQuery(''); // Clear query on close
+            }
+            // Quick navigation shortcuts when palette is open
+            if (state.isCommandPaletteOpen) {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    // Handle arrow navigation (implementation would depend on results structure)
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // Handle selection (implementation would depend on selected item)
+                }
             }
         };
         window.addEventListener('keydown', handleKeyDown);

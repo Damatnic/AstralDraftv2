@@ -293,6 +293,9 @@ export default {
       
       // Add custom utility classes
       addUtilities({
+        '.bg-glass': {
+          background: 'rgba(255, 255, 255, 0.08)',
+        },
         '.glass': {
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(12px)',

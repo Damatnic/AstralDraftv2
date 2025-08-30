@@ -140,7 +140,6 @@
   },
   "devDependencies": {
     "@axe-core/puppeteer": "^4.10.2",
-    "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
@@ -181,7 +180,7 @@
     "rollup-plugin-visualizer": "^6.0.3",
     "stream-browserify": "^3.0.0",
     "supertest": "^7.1.4",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "3.4.17",
     "tough-cookie": "^5.1.2",
     "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2",
