@@ -133,15 +133,17 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
           </p>
           <div className="flex space-x-4">
             <button
-              onClick={connect}
-              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              type="button"
+              onClick={(e) => { e.preventDefault(); connect(); }}
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors min-h-[44px]"
             >
               Retry Connection
             </button>
             {onExitDraft && (
               <button
-                onClick={onExitDraft}
-                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                type="button"
+                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors min-h-[44px]"
               >
                 Exit Draft
               </button>
@@ -188,16 +190,18 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
             
             {/* Timer controls */}
             <button
-              onClick={toggleTimer}
-              className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors"
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleTimer(); }}
+              className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               {isPaused ? 'Resume' : 'Pause'}
             </button>
             
             {onExitDraft && (
               <button
-                onClick={onExitDraft}
-                className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors"
+                type="button"
+                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 Exit Draft
               </button>
@@ -217,8 +221,9 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
           >
             <span>{error}</span>
             <button
-              onClick={clearError}
-              className="ml-4 underline hover:no-underline"
+              type="button"
+              onClick={(e) => { e.preventDefault(); clearError(); }}
+              className="ml-4 underline hover:no-underline min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               Dismiss
             </button>
@@ -257,7 +262,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
                       ? 'border-blue-400 bg-blue-900/30'
                       : `${getTierColor(player?.tier)} bg-gray-700 border-gray-600 hover:border-gray-500`
                   }`}
-                  onClick={() => setSelectedPlayer(player)}
+                  onClick={(e) => { e.preventDefault(); setSelectedPlayer(player); }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -282,9 +287,10 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
             {/* Draft Button */}
             <div className="mt-4">
               <button
-                onClick={handleMakePick}
+                type="button"
+                onClick={(e) => { e.preventDefault(); handleMakePick(); }}
                 disabled={!selectedPlayer || !isMyTurn}
-                className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+                className={`w-full py-3 rounded-lg font-semibold transition-colors min-h-[44px] ${
                   selectedPlayer && isMyTurn
                     ? 'bg-green-600 hover:bg-green-700 text-white'
                     : 'bg-gray-600 text-gray-400 cursor-not-allowed'
@@ -303,7 +309,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
           {/* Draft Board */}
           <div className="bg-gray-800 rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Picks</h2>
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="space-y-2 max-h-64 overflow-y-auto mobile-scroll custom-scrollbar">
               {picks.slice(-10).reverse().map((pick, index) => (
                 <motion.div
                   key={`${pick.pickNumber}-${pick.timestamp}`}
@@ -354,7 +360,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
             <h2 className="text-xl font-semibold mb-4">Chat</h2>
             <div
               ref={chatContainerRef}
-              className="space-y-2 max-h-48 overflow-y-auto mb-4"
+              className="space-y-2 max-h-48 overflow-y-auto mb-4 mobile-scroll custom-scrollbar"
             >
               {chatMessages.map((message, index) => (
                 <div
@@ -385,11 +391,13 @@ const DraftRoom: React.FC<DraftRoomProps> = ({
                 value={chatInput}
                 onChange={(e: any) => setChatInput(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"
+                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 min-h-[44px]"
+                autocomplete="off"
+                data-form-type="chat"
               />
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm transition-colors"
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               >
                 Send
               </button>

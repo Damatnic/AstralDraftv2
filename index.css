@@ -162,6 +162,19 @@ body {
   justify-content: center;
 }
 
+/* Enhanced Mobile Touch Scrolling */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Modal Body Scroll Prevention */
+body.modal-open {
+  overflow: hidden !important;
+  padding-right: 15px;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 480px) {
   :root {
@@ -180,6 +193,7 @@ body {
   body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
   }
   
   #root {
@@ -187,18 +201,62 @@ body {
     min-height: 100vh;
     overflow: visible;
     padding-bottom: 80px;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
   }
   
   .mobile-container {
     padding: 1rem;
     max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
   }
+  
+  /* Ensure all scrollable elements use touch scrolling */
+  .overflow-y-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+  
+  /* Prevent zoom on mobile form inputs */
+  input, select, textarea {
+    font-size: 16px; /* Prevents iOS zoom */
+  }
+  
+  /* Mobile button improvements */
+  button, [role="button"] {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+}
+
+/* Form Security & UX Enhancements */
+input[type="text"]:not([data-form-type="password"]),
+input[type="search"],
+input[type="email"],
+textarea,
+select {
+  -webkit-text-security: none;
+}
+
+/* Ensure all buttons have proper touch targets */
+button:not(.custom-size) {
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* Enhanced Draft Room Styles */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
 }
 
 .custom-scrollbar::-webkit-scrollbar {

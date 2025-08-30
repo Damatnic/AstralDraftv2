@@ -36,7 +36,10 @@
       "Bash(npx tsx:*)",
       "Bash(cat:*)",
       "WebSearch",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "Bash(git rm:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm ls:*)"
     ],
     "deny": [],
     "ask": [],

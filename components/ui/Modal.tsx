@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FocusTrap } from './FocusTrap';
 
@@ -24,6 +24,22 @@ export const Modal: React.FC<ModalProps> = ({
     xl: 'max-w-4xl'
   };
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = '15px'; // Prevent layout shift from scrollbar
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -41,7 +57,11 @@ export const Modal: React.FC<ModalProps> = ({
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className={`relative glass-pane w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto`}
+              className={`relative glass-pane w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto custom-scrollbar`}
+              style={{
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'thin'
+              }}
               role="dialog"
               aria-modal="true"
               aria-labelledby={title ? 'modal-title' : undefined}
@@ -52,8 +72,9 @@ export const Modal: React.FC<ModalProps> = ({
                     {title}
                   </h2>
                   <button
+                    type="button"
                     onClick={onClose}
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl"
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl min-h-[44px] min-w-[44px] flex items-center justify-center"
                     aria-label="Close modal"
                   >
                     ✕

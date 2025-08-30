@@ -86,6 +86,8 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
                         className="w-full bg-gray-700 text-white text-center text-2xl tracking-[0.5em] rounded-lg px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         maxLength={4}
                         autoFocus
+                        autocomplete="off"
+                        data-form-type="other"
                     />
                     {pin.length > 0 && (
                         <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -116,8 +118,8 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
                 <div className="flex space-x-3">
                     <button
                         type="button"
-                        onClick={onBack}
-                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg transition-colors"
+                        onClick={(e) => { e.preventDefault(); onBack(); }}
+                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg transition-colors min-h-[44px]"
                     >
                         Back
                     </button>
@@ -210,8 +212,8 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => handleUserSelect(user)}
-                            className="btn-primary p-6 rounded-xl text-white font-medium transition-all duration-200 hover:shadow-lg"
+                            onClick={(e) => { e.preventDefault(); handleUserSelect(user); }}
+                            className="btn-primary p-6 rounded-xl text-white font-medium transition-all duration-200 hover:shadow-lg min-h-[44px]"
                             style={{ backgroundColor: user.customization.backgroundColor }}
                         >
                             <div className="text-3xl mb-2">{user.customization.emoji}</div>
@@ -235,8 +237,8 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                             transition={{ delay: 1.0 }}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            onClick={() => handleUserSelect(admin)}
-                            className="w-full max-w-md mx-auto block p-4 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white transition-all duration-200"
+                            onClick={(e) => { e.preventDefault(); handleUserSelect(admin); }}
+                            className="w-full max-w-md mx-auto block p-4 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white transition-all duration-200 min-h-[44px]"
                         >
                             <div className="flex items-center justify-center space-x-3">
                                 <div 

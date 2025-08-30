@@ -115,7 +115,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                         <div className="space-y-4">
                             <div>
                                 <label htmlFor="league-name" className={labelClasses}>League Name</label>
-                                <input id="league-name" type="text" value={name} onChange={e => setName(e.target.value)} className={inputClasses} required />
+                                <input id="league-name" type="text" value={name} onChange={e => setName(e.target.value)} className={inputClasses} required autocomplete="off" />
                             </div>
                             
                             <div className="p-3 bg-black/10 rounded-lg space-y-2 border border-cyan-400/20">
@@ -123,7 +123,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                                 <div className="flex items-center gap-3">
                                     <Avatar avatar={userTeamAvatar} className="w-16 h-16 text-4xl rounded-lg flex-shrink-0" />
                                     <div className="flex-grow space-y-2">
-                                        <input id="team-name" type="text" value={userTeamName} onChange={e => setUserTeamName(e.target.value)} className={inputClasses} required />
+                                        <input id="team-name" type="text" value={userTeamName} onChange={e => setUserTeamName(e.target.value)} className={inputClasses} required autocomplete="off" />
                                         <p className="text-xs text-gray-500 px-1">Enter a team name above, or generate one with AI.</p>
                                     </div>
                                 </div>
@@ -154,32 +154,32 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                                 <div>
                                     <label className={labelClasses}>AI Assistance</label>
                                     <div className="flex gap-2">
-                                        <button type="button" onClick={() => setAiAssistanceLevel('FULL')} className={buttonGroupButtonClasses(aiAssistanceLevel === 'FULL')}>Full</button>
-                                        <button type="button" onClick={() => setAiAssistanceLevel('BASIC')} className={buttonGroupButtonClasses(aiAssistanceLevel === 'BASIC')}>Basic</button>
+                                        <button type="button" onClick={(e) => { e.preventDefault(); setAiAssistanceLevel('FULL'); }} className={buttonGroupButtonClasses(aiAssistanceLevel === 'FULL')}>Full</button>
+                                        <button type="button" onClick={(e) => { e.preventDefault(); setAiAssistanceLevel('BASIC'); }} className={buttonGroupButtonClasses(aiAssistanceLevel === 'BASIC')}>Basic</button>
                                     </div>
                                 </div>
                                 <div>
                                     <label className={labelClasses}>Draft Format</label>
                                     <div className="flex gap-2">
-                                        <button type="button" onClick={() => setDraftFormat('SNAKE')} className={buttonGroupButtonClasses(draftFormat === 'SNAKE')}>SNAKE</button>
-                                        <button type="button" onClick={() => setDraftFormat('AUCTION')} className={buttonGroupButtonClasses(draftFormat === 'AUCTION')}>AUCTION</button>
+                                        <button type="button" onClick={(e) => { e.preventDefault(); setDraftFormat('SNAKE'); }} className={buttonGroupButtonClasses(draftFormat === 'SNAKE')}>SNAKE</button>
+                                        <button type="button" onClick={(e) => { e.preventDefault(); setDraftFormat('AUCTION'); }} className={buttonGroupButtonClasses(draftFormat === 'AUCTION')}>AUCTION</button>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                <label className={labelClasses}>Scoring</label>
                                 <div className="flex gap-2">
-                                    <button type="button" onClick={() => setScoring('PPR')} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>PPR</button>
-                                    <button type="button" onClick={() => setScoring('Half-PPR')} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Half-PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Half-PPR</button>
-                                    <button type="button" onClick={() => setScoring('Standard')} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Standard' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Standard</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setScoring('PPR'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>PPR</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setScoring('Half-PPR'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Half-PPR' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Half-PPR</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setScoring('Standard'); }} className={`flex-1 px-1 py-2 text-xs font-bold rounded-md transition-all ${scoring === 'Standard' ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>Standard</button>
                                 </div>
                             </div>
 
                              <div>
                                 <label className={labelClasses}>Playoff Format</label>
                                 <div className="flex gap-2">
-                                    <button type="button" onClick={() => setPlayoffFormat('4_TEAM')} className={buttonGroupButtonClasses(playoffFormat === '4_TEAM')}>4 Teams</button>
-                                    <button type="button" onClick={() => setPlayoffFormat('6_TEAM')} className={buttonGroupButtonClasses(playoffFormat === '6_TEAM')}>6 Teams</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setPlayoffFormat('4_TEAM'); }} className={buttonGroupButtonClasses(playoffFormat === '4_TEAM')}>4 Teams</button>
+                                    <button type="button" onClick={(e) => { e.preventDefault(); setPlayoffFormat('6_TEAM'); }} className={buttonGroupButtonClasses(playoffFormat === '6_TEAM')}>6 Teams</button>
                                 </div>
                             </div>
 
@@ -192,7 +192,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                     </main>
 
                     <footer className="p-6 flex justify-end gap-4 border-t border-[var(--panel-border)]">
-                        <button type="button" onClick={onClose} className="mobile-touch-target px-4 py-3 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors">
+                        <button type="button" onClick={(e) => { e.preventDefault(); onClose(); }} className="mobile-touch-target px-4 py-3 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors">
                             Cancel
                         </button>
                         <button

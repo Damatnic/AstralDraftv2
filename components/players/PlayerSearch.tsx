@@ -107,11 +107,13 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
         {/* Search Input */}
         <div className="input-group mb-4">
           <input
-            type="text"
+            type="search"
             placeholder="Search players by name, team, or position..."
             value={searchQuery}
             onChange={(e: any) => setSearchQuery(e.target.value)}
-            className="search-input"
+            className="search-input mobile-scroll"
+            autocomplete="off"
+            data-form-type="search"
           />
         </div>
 
@@ -123,7 +125,8 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
             <select
               value={selectedPosition}
               onChange={(e: any) => setSelectedPosition(e.target.value)}
-              className="filter-select"
+              className="filter-select mobile-scroll"
+              autocomplete="off"
             >
               {positions.map((pos: any) => (
                 <option key={pos} value={pos}>{pos}</option>
@@ -137,7 +140,8 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
-              className="filter-select"
+              className="filter-select mobile-scroll"
+              autocomplete="off"
             >
               <option value="rank">Fantasy Rank</option>
               <option value="name">Name</option>
@@ -148,7 +152,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       </div>
 
       {/* Results */}
-      <div className="space-y-2 max-h-96 overflow-y-auto">
+      <div className="space-y-2 max-h-96 overflow-y-auto mobile-scroll custom-scrollbar">
         <AnimatePresence>
           {filteredPlayers.map((player, index) => (
             <motion.div
@@ -157,7 +161,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.02 }}
-              onClick={() => handlePlayerClick(player)}
+              onClick={(e) => { e.preventDefault(); handlePlayerClick(player); }}
               className={`player-card ${player.position.toLowerCase()} cursor-pointer group`}
             >
               <div className="player-header">
@@ -174,10 +178,11 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
                 {showAddButton && (
                   <button
                     onClick={(e: any) => {
+                      e.preventDefault();
                       e.stopPropagation();
                       onPlayerSelect?.(player);
                     }}
-                    className="add-btn"
+                    className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center"
                   >
                     Add
                   </button>

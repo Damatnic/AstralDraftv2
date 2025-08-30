@@ -35,7 +35,7 @@ const PlayerCompareTool: React.FC<PlayerCompareToolProps> = ({ players, onClose 
         <Modal isOpen={true} onClose={onClose}>
             <div className="glass-pane p-4 sm:p-6 rounded-2xl w-full max-w-5xl max-h-[85vh] flex flex-col">
                 <h2 className="font-display text-2xl font-bold mb-4 text-center">Player Comparison</h2>
-                <div className="overflow-y-auto">
+                <div className="overflow-y-auto mobile-scroll custom-scrollbar">
                     <table className="w-full min-w-max text-sm border-separate border-spacing-0">
                         <thead>
                             <tr>
@@ -89,7 +89,7 @@ const PlayerCompareTool: React.FC<PlayerCompareToolProps> = ({ players, onClose 
                     </table>
                 </div>
                  <div className="mt-6 text-center">
-                    <button onClick={onClose} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md">
+                    <button type="button" onClick={(e) => { e.preventDefault(); onClose(); }} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md min-h-[44px] min-w-[88px] flex items-center justify-center mx-auto">
                         Done
                     </button>
                 </div>
