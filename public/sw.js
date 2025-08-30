@@ -46,7 +46,14 @@ self.addEventListener('install', (event) => {
     caches.open(STATIC_CACHE_NAME)
       .then((cache) => {
         console.log('[SW] Caching static files');
-        return cache.addAll(STATIC_FILES);
+        // Only cache existing files, don't fail if some are missing
+        return Promise.allSettled(
+          STATIC_FILES.map(url => 
+            cache.add(url).catch(err => {
+              console.warn(`[SW] Failed to cache ${url}:`, err);
+            })
+          )
+        );
       })
       .then(() => {
         console.log('[SW] Static files cached successfully');
@@ -54,6 +61,8 @@ self.addEventListener('install', (event) => {
       })
       .catch((error) => {
         console.error('[SW] Failed to cache static files:', error);
+        // Don't fail installation even if caching fails
+        return self.skipWaiting();
       })
   );
 });

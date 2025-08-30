@@ -388,18 +388,62 @@ class ProductionSportsDataService {
    * Fetch current NFL games for a specific week
    */
   async getCurrentWeekGames(week: number = 1, season: number = 2024): Promise<NFLGame[]> {
-    // ESPN API disabled - return SportsData.io data instead
-    console.log('ℹ️ ESPN API disabled, using SportsData.io for game data');
-    return this.getSportsDataIOEquivalent('getCurrentWeekGames') as Promise<NFLGame[]>;
+    try {
+      // ESPN API disabled - return SportsData.io data instead
+      console.log('ℹ️ ESPN API disabled, using SportsData.io for game data');
+      const result = await this.getSportsDataIOEquivalent('getCurrentWeekGames');
+      
+      // Ensure we always return an array
+      if (!result || typeof result !== 'object') {
+        return [];
+      }
+      
+      // Parse ESPN-like response structure if present
+      if ('events' in result && Array.isArray(result.events)) {
+        return this.parseESPNGamesToNFLGames(result.events);
+      }
+      
+      // If already an array of games, return it
+      if (Array.isArray(result)) {
+        return result;
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching current week games:', error);
+      return [];
+    }
   }
 
   /**
    * Fetch live game scores and updates
    */
   async getLiveScores(): Promise<NFLGame[]> {
-    // ESPN API disabled - return SportsData.io data instead
-    console.log('ℹ️ ESPN API disabled, using SportsData.io for live scores');
-    return this.getSportsDataIOEquivalent('getLiveScores') as Promise<NFLGame[]>;
+    try {
+      // ESPN API disabled - return SportsData.io data instead
+      console.log('ℹ️ ESPN API disabled, using SportsData.io for live scores');
+      const result = await this.getSportsDataIOEquivalent('getLiveScores');
+      
+      // Ensure we always return an array
+      if (!result || typeof result !== 'object') {
+        return [];
+      }
+      
+      // Parse ESPN-like response structure if present
+      if ('events' in result && Array.isArray(result.events)) {
+        return this.parseESPNGamesToNFLGames(result.events);
+      }
+      
+      // If already an array of games, return it
+      if (Array.isArray(result)) {
+        return result;
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching live scores:', error);
+      return [];
+    }
   }
 
   /**
@@ -604,7 +648,27 @@ class ProductionSportsDataService {
 
   // Private helper methods
 
-  private parseESPNGame(event: unknown): NFLGame {
+  private parseESPNGamesToNFLGames(events: any[]): NFLGame[] {
+    try {
+      if (!Array.isArray(events)) {
+        return [];
+      }
+      
+      return events.map(event => {
+        try {
+          return this.parseESPNGame(event);
+        } catch (error) {
+          console.warn('Failed to parse individual game:', error);
+          return null;
+        }
+      }).filter((game): game is NFLGame => game !== null);
+    } catch (error) {
+      console.error('Failed to parse ESPN games:', error);
+      return [];
+    }
+  }
+
+  private parseESPNGame(event: any): NFLGame {
     const competition = event.competitions[0];
     const homeTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'home');
     const awayTeam = (competition as { competitors: unknown[] }).competitors.find((c: unknown) => (c as { homeAway: string }).homeAway === 'away');

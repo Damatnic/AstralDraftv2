@@ -154,6 +154,12 @@ class RealTimeNflDataService {
     try {
       const liveGames = await productionSportsDataService.getLiveScores();
       
+      // Ensure liveGames is iterable (array) before processing
+      if (!Array.isArray(liveGames)) {
+        console.warn('getLiveScores did not return an array:', liveGames);
+        return;
+      }
+      
       for (const game of liveGames) {
         const cachedGame = this.gameDataCache.get(game.id);
         
@@ -197,6 +203,12 @@ class RealTimeNflDataService {
   private async pollPlayerUpdates(): Promise<void> {
     try {
       const playerUpdates = await productionSportsDataService.getPlayerUpdates();
+      
+      // Ensure playerUpdates is iterable (array) before processing
+      if (!Array.isArray(playerUpdates)) {
+        console.warn('getPlayerUpdates did not return an array:', playerUpdates);
+        return;
+      }
       
       for (const player of playerUpdates) {
         const cached = this.playerDataCache.get(player.id);
@@ -250,6 +262,12 @@ class RealTimeNflDataService {
   private async pollOddsUpdates(): Promise<void> {
     try {
       const games = await productionSportsDataService.getCurrentWeekGames();
+      
+      // Ensure games is iterable (array) before processing
+      if (!Array.isArray(games)) {
+        console.warn('getCurrentWeekGames did not return an array:', games);
+        return;
+      }
       
       for (const game of games) {
         if (game.odds) {
