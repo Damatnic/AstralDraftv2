@@ -57,7 +57,32 @@ app.use(helmet({
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:", "https:"],
       scriptSrc: ["'self'"],
-      connectSrc: ["'self'", "wss:", "https://api.sportsdata.io", "https://api.openai.com", "https://generativelanguage.googleapis.com"]
+      connectSrc: [
+        "'self'", 
+        "wss:", 
+        "ws:",
+        // Development WebSocket connections
+        ...(process.env.NODE_ENV === 'development' ? [
+          "ws://localhost:*",
+          "http://localhost:*",
+          "ws://127.0.0.1:*",
+          "http://127.0.0.1:*"
+        ] : []),
+        // Production WebSocket connections
+        ...(process.env.NODE_ENV === 'production' ? [
+          "wss://astraldraft.netlify.app",
+          "https://astraldraft.netlify.app"
+        ] : []),
+        // External APIs
+        "https://fonts.googleapis.com",
+        "https://fonts.gstatic.com",
+        "https://api.gemini.com",
+        "https://generativelanguage.googleapis.com",
+        "https://*.espn.com",
+        "https://api.the-odds-api.com",
+        "https://api.sportsdata.io",
+        "https://api.openai.com"
+      ].filter(Boolean)
     }
   }
 }));

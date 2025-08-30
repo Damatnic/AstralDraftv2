@@ -218,32 +218,50 @@ export class RealTimeNotificationService extends EventEmitter {
 
     this.userId = userId;
 
-    // Connect to WebSocket
-    if (!this.ws.isConnected()) {
-      await this.ws.connect();
+    try {
+      // Connect to WebSocket with timeout
+      if (!this.ws.isConnected()) {
+        console.log('🔗 Connecting to WebSocket for notifications...');
+        await this.ws.connect();
+      }
+
+      // Enable notifications on WebSocket
+      this.ws.enableNotifications(this.settings);
+
+      // Load stored notifications
+      await this.loadStoredNotifications();
+
+      // Register for push notifications if enabled
+      if (this.settings.pushNotifications) {
+        await this.registerPushNotifications();
+      }
+
+      // Subscribe to notification events
+      this.subscribeToNotificationEvents();
+
+      this.isInitialized = true;
+
+      console.log('✅ Notification service initialized successfully');
+
+      this.emit('initialized', {
+        userId,
+        notificationCount: this.notifications.size,
+        unreadCount: this.getUnreadCount()
+      });
+    } catch (error) {
+      console.error('❌ Failed to initialize notification service:', error);
+      
+      // Set up fallback mode - notifications will work without WebSocket
+      this.isInitialized = true;
+      
+      this.emit('initialized', {
+        userId,
+        notificationCount: this.notifications.size,
+        unreadCount: this.getUnreadCount(),
+        fallbackMode: true,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
-
-    // Enable notifications on WebSocket
-    this.ws.enableNotifications(this.settings);
-
-    // Load stored notifications
-    await this.loadStoredNotifications();
-
-    // Register for push notifications if enabled
-    if (this.settings.pushNotifications) {
-      await this.registerPushNotifications();
-    }
-
-    // Subscribe to notification events
-    this.subscribeToNotificationEvents();
-
-    this.isInitialized = true;
-
-    this.emit('initialized', {
-      userId,
-      notificationCount: this.notifications.size,
-      unreadCount: this.getUnreadCount()
-    });
   }
 
   // Send Notification
@@ -1048,7 +1066,7 @@ export class RealTimeNotificationService extends EventEmitter {
   }
 
   getInitializationStatus(): boolean {
-    return this.initialized;
+    return this.isInitialized;
   }
 
   // Cleanup
