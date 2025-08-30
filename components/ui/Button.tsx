@@ -23,56 +23,73 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   ...props
 }: any) => {
-  // Base classes with modern styling
+  // Premium base classes with enhanced styling
   const baseClasses = `
     relative inline-flex items-center justify-center gap-2 
     font-semibold tracking-wide rounded-xl 
-    transition-all duration-300 ease-out
+    transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-900
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none
+    disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none
+    overflow-hidden isolate
     ${fullWidth ? 'w-full' : ''}
   `;
   
-  // Modern variant styles with improved contrast and effects
+  // Premium variant styles with enhanced gradients and effects
   const variantClasses = {
     primary: `
-      bg-gradient-to-br from-primary-500 to-primary-700 
-      text-white shadow-lg shadow-primary-500/25
-      hover:from-primary-600 hover:to-primary-800 hover:shadow-xl hover:shadow-primary-500/30
-      hover:-translate-y-0.5 active:translate-y-0
-      focus-visible:ring-blue-500
+      bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 
+      text-white shadow-xl shadow-primary-500/30
+      hover:from-primary-400 hover:via-primary-500 hover:to-primary-600
+      hover:shadow-2xl hover:shadow-primary-500/40
+      hover:-translate-y-1 hover:scale-[1.02]
+      active:translate-y-0 active:scale-[0.98]
+      focus-visible:ring-primary-400
+      before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+      before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
     `,
     secondary: `
-      bg-white/10 backdrop-blur-md
-      text-white border border-white/20
-      hover:bg-white/15 hover:border-white/30 hover:shadow-lg
-      hover:-translate-y-0.5 active:translate-y-0
+      glass-card
+      text-white border border-white/15
+      hover:bg-white/10 hover:border-white/25 hover:shadow-xl
+      hover:-translate-y-1 hover:scale-[1.02]
+      active:translate-y-0 active:scale-[0.98]
       focus-visible:ring-white/50
     `,
     danger: `
-      bg-gradient-to-br from-danger-500 to-danger-700
-      text-white shadow-lg shadow-danger-500/25
-      hover:from-danger-600 hover:to-danger-800 hover:shadow-xl hover:shadow-danger-500/30
-      hover:-translate-y-0.5 active:translate-y-0
-      focus-visible:ring-danger-500
+      bg-gradient-to-r from-red-500 via-red-600 to-red-700
+      text-white shadow-xl shadow-red-500/30
+      hover:from-red-400 hover:via-red-500 hover:to-red-600
+      hover:shadow-2xl hover:shadow-red-500/40
+      hover:-translate-y-1 hover:scale-[1.02]
+      active:translate-y-0 active:scale-[0.98]
+      focus-visible:ring-red-400
+      before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+      before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
     `,
     success: `
-      bg-gradient-to-br from-secondary-500 to-secondary-700
-      text-white shadow-lg shadow-secondary-500/25
-      hover:from-secondary-600 hover:to-secondary-800 hover:shadow-xl hover:shadow-secondary-500/30
-      hover:-translate-y-0.5 active:translate-y-0
-      focus-visible:ring-secondary-500
+      bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700
+      text-white shadow-xl shadow-emerald-500/30
+      hover:from-emerald-400 hover:via-emerald-500 hover:to-emerald-600
+      hover:shadow-2xl hover:shadow-emerald-500/40
+      hover:-translate-y-1 hover:scale-[1.02]
+      active:translate-y-0 active:scale-[0.98]
+      focus-visible:ring-emerald-400
+      before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent
+      before:translate-x-[-200%] hover:before:translate-x-[200%] before:transition-transform before:duration-700
     `,
     ghost: `
       bg-transparent text-gray-300
-      hover:bg-white/10 hover:text-white
-      focus-visible:ring-white/50
+      hover:bg-white/5 hover:text-white hover:backdrop-blur-sm
+      focus-visible:ring-white/30
+      transition-all duration-200
     `,
     outline: `
-      bg-transparent border-2 border-primary-500 text-primary-400
-      hover:bg-primary-500/10 hover:text-primary-300 hover:border-primary-400
-      hover:shadow-lg hover:shadow-primary-500/20
-      focus-visible:ring-blue-500
+      bg-transparent border-2 border-primary-400/50 text-primary-300
+      hover:bg-primary-500/10 hover:text-primary-200 hover:border-primary-400
+      hover:shadow-xl hover:shadow-primary-500/20
+      hover:backdrop-blur-sm
+      focus-visible:ring-primary-400
+      transition-all duration-200
     `
   };
   
@@ -92,14 +109,24 @@ export const Button: React.FC<ButtonProps> = ({
     </div>
   );
 
-  // Shimmer effect for primary buttons
-  const ShimmerEffect = () => (
-    variant === 'primary' && !disabled && !loading ? (
-      <div className="absolute inset-0 -top-px rounded-xl overflow-hidden">
-        <div className="absolute inset-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                        transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-      </div>
-    ) : null
+  // Premium shimmer and glow effects
+  const PremiumEffects = () => (
+    <>
+      {/* Shimmer effect */}
+      {(variant === 'primary' || variant === 'success' || variant === 'danger') && !disabled && !loading && (
+        <div className="absolute inset-0 -top-px rounded-xl overflow-hidden -z-10">
+          <div className="absolute inset-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/15 to-transparent 
+                          transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+        </div>
+      )}
+      
+      {/* Glow effect on hover */}
+      {variant === 'primary' && !disabled && !loading && (
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-20">
+          <div className="absolute inset-0 rounded-xl bg-primary-500/20 blur-xl" />
+        </div>
+      )}
+    </>
   );
 
   return (
@@ -110,7 +137,7 @@ export const Button: React.FC<ButtonProps> = ({
       whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
       {...props}
     >
-      <ShimmerEffect />
+      <PremiumEffects />
       
       <span className={`relative flex items-center gap-2 ${loading ? 'opacity-0' : ''}`}>
         {icon && iconPosition === 'left' && (

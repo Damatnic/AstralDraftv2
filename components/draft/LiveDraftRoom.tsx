@@ -1,6 +1,6 @@
 /**
  * Live Draft Room Component
- * Real-time draft interface for all 10 league members
+ * Premium real-time draft interface with advanced visuals
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -38,9 +38,13 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
   const [autoDraftEnabled, setAutoDraftEnabled] = useState<{[teamId: number]: boolean}>({});
+  const [showParticles, setShowParticles] = useState(false);
+  const [recentPick, setRecentPick] = useState<Player | null>(null);
+  const [isTimerCritical, setIsTimerCritical] = useState(false);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const draftRoomRef = useRef<HTMLDivElement>(null);
 
   const league = state.leagues[0];
   const currentUser = state.user;
@@ -95,6 +99,23 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
       }
     };
   }, [isDraftStarted, isPaused, timeRemaining]);
+
+  // Timer critical state
+  useEffect(() => {
+    setIsTimerCritical(timeRemaining <= 15 && isDraftStarted && !isPaused);
+  }, [timeRemaining, isDraftStarted, isPaused]);
+
+  // Pick celebration effect
+  useEffect(() => {
+    if (recentPick) {
+      setShowParticles(true);
+      const timer = setTimeout(() => {
+        setShowParticles(false);
+        setRecentPick(null);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [recentPick]);
 
   // Sound notifications
   useEffect(() => {
@@ -259,103 +280,309 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
   const isMyTurn = isUserTurn();
 
   return (
-    <div className="space-y-6">
-      {/* Draft Header */}
-      <div className="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-slate-700">
-        <div className="flex items-center justify-between mb-4">
+    <motion.div 
+      ref={draftRoomRef}
+      className="relative min-h-screen space-y-8 p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Premium Background Effects */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,110,247,0.15),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(16,185,129,0.12),transparent_50%)]" />
+        {showParticles && (
+          <div className="absolute inset-0 overflow-hidden">
+            {[...Array(20)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-2 h-2 bg-primary-400 rounded-full"
+                initial={{
+                  x: Math.random() * window.innerWidth,
+                  y: window.innerHeight + 50,
+                  scale: 0,
+                  opacity: 0
+                }}
+                animate={{
+                  y: -50,
+                  scale: [0, 1, 0],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{
+                  duration: 3,
+                  delay: i * 0.1,
+                  ease: "easeOut"
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Premium Draft Header */}
+      <motion.div 
+        className="glass-panel-premium p-8 border border-white/10"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-white">Live Draft Room</h2>
-            <p className="text-slate-400">
+            <motion.h1 
+              className="text-4xl font-bold text-gradient mb-2"
+              initial={{ x: -30 }}
+              animate={{ x: 0 }}
+            >
+              Live Draft Room
+            </motion.h1>
+            <p className="text-slate-300 text-lg">
               Round {pickInfo?.pick.round || 1} • Pick {currentPick} of {totalPicks}
             </p>
           </div>
           
           <div className="flex items-center gap-4">
-            {!isDraftStarted ? (
-              <button
-                onClick={handleStartDraft}
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                🚀 Start Draft
-              </button>
-            ) : (
-              <button
-                onClick={handlePauseDraft}
-                className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                  isPaused 
-                    ? 'bg-green-600 hover:bg-green-700 text-white' 
-                    : 'bg-yellow-600 hover:bg-yellow-700 text-white'
-                }`}
-              >
-                {isPaused ? '▶️ Resume' : '⏸️ Pause'}
-              </button>
-            )}
+            <AnimatePresence mode="wait">
+              {!isDraftStarted ? (
+                <motion.button
+                  key="start"
+                  onClick={handleStartDraft}
+                  className="btn-success px-8 py-4 text-lg font-bold shadow-[0_0_30px_rgba(16,185,129,0.5)]"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, rotate: 180 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  🚀 Start Draft
+                </motion.button>
+              ) : (
+                <motion.button
+                  key="pause"
+                  onClick={handlePauseDraft}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    isPaused 
+                      ? 'btn-success shadow-[0_0_20px_rgba(16,185,129,0.4)]' 
+                      : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-105'
+                  }`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                </motion.button>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
-        {/* Current Pick Info */}
-        {pickInfo && (
-          <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-            <div className="flex items-center gap-4">
-              <span className="text-3xl">{pickInfo.team?.avatar}</span>
-              <div>
-                <h3 className="text-xl font-bold text-white">
-                  {pickInfo.team?.name}
-                </h3>
-                <p className="text-slate-400">{pickInfo.team?.owner.name}</p>
-              </div>
-              {isMyTurn && (
-                <div className="px-3 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full">
-                  YOUR TURN
+        {/* Premium Current Pick Display */}
+        <AnimatePresence>
+          {pickInfo && (
+            <motion.div 
+              className="glass-card p-6 border-l-4 border-primary-500 relative overflow-hidden"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              layout
+            >
+              {/* Animated background for current pick */}
+              <motion.div 
+                className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-cyan-400/10 to-transparent"
+                animate={isMyTurn ? {
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                } : {}}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
+              <div className="relative flex items-center justify-between">
+                <div className="flex items-center gap-6">
+                  <motion.div 
+                    className="text-5xl"
+                    animate={isMyTurn ? {
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0]
+                    } : {}}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    {pickInfo.team?.avatar}
+                  </motion.div>
+                  
+                  <div>
+                    <motion.h3 
+                      className="text-2xl font-bold text-white mb-1"
+                      animate={isMyTurn ? { color: ['#ffffff', '#4facfe', '#ffffff'] } : {}}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      {pickInfo.team?.name}
+                    </motion.h3>
+                    <p className="text-slate-300 text-lg">{pickInfo.team?.owner.name}</p>
+                    
+                    <AnimatePresence>
+                      {isMyTurn && (
+                        <motion.div 
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-cyan-400 text-white text-sm font-bold rounded-full shadow-[0_0_20px_rgba(79,110,247,0.5)] mt-2"
+                          initial={{ scale: 0, x: -50 }}
+                          animate={{ 
+                            scale: 1, 
+                            x: 0,
+                            boxShadow: [
+                              '0_0_20px_rgba(79,110,247,0.5)',
+                              '0_0_30px_rgba(79,110,247,0.8)',
+                              '0_0_20px_rgba(79,110,247,0.5)'
+                            ]
+                          }}
+                          exit={{ scale: 0, x: 50 }}
+                          transition={{ 
+                            scale: { type: 'spring', stiffness: 500 },
+                            boxShadow: { duration: 2, repeat: Infinity }
+                          }}
+                        >
+                          <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                          YOUR TURN
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
-              )}
-            </div>
-            
-            {/* Timer */}
-            <div className="text-center">
-              <div className={`text-4xl font-bold ${
-                timeRemaining <= 10 ? 'text-red-400' : 'text-white'
-              }`}>
-                {timeRemaining}s
+                
+                {/* Premium Timer */}
+                <div className="text-center relative">
+                  <motion.div 
+                    className={`text-6xl font-bold relative ${
+                      isTimerCritical 
+                        ? 'text-red-400' 
+                        : timeRemaining <= 30 
+                          ? 'text-amber-400' 
+                          : 'text-white'
+                    }`}
+                    animate={isTimerCritical ? {
+                      scale: [1, 1.1, 1],
+                      textShadow: [
+                        '0_0_10px_rgba(239,68,68,0.5)',
+                        '0_0_20px_rgba(239,68,68,0.8)',
+                        '0_0_10px_rgba(239,68,68,0.5)'
+                      ]
+                    } : {}}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
+                    {timeRemaining}
+                    {isTimerCritical && (
+                      <motion.div
+                        className="absolute -inset-4 border-2 border-red-500 rounded-full"
+                        animate={{
+                          scale: [1, 1.2, 1],
+                          opacity: [0.5, 1, 0.5]
+                        }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      />
+                    )}
+                  </motion.div>
+                  <div className="text-sm text-slate-400 font-medium mt-1">seconds left</div>
+                  
+                  {/* Timer progress bar */}
+                  <div className="w-20 h-1 bg-slate-600 rounded-full mt-2 mx-auto overflow-hidden">
+                    <motion.div
+                      className={`h-full rounded-full ${
+                        isTimerCritical ? 'bg-red-500' : timeRemaining <= 30 ? 'bg-amber-500' : 'bg-primary-500'
+                      }`}
+                      animate={{ width: `${(timeRemaining / 90) * 100}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-slate-400">Time Remaining</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Premium Draft Actions */}
+      <AnimatePresence>
+        {isMyTurn && isDraftStarted && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -30, scale: 0.95 }}
+            className="glass-panel-premium border-2 border-primary-500/30 shadow-[0_0_40px_rgba(79,110,247,0.2)]"
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            <div className="p-8">
+              <motion.h3 
+                className="text-2xl font-bold text-gradient mb-6 flex items-center gap-3"
+                animate={{
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+                }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <div className="w-3 h-3 bg-primary-500 rounded-full animate-pulse" />
+                Make Your Pick
+              </motion.h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <motion.button
+                  onClick={() => setShowPlayerSearch(true)}
+                  className="group relative p-6 glass-card border border-primary-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(79,110,247,0.3)]"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="text-3xl group-hover:scale-110 transition-transform">🔍</div>
+                    <div>
+                      <div className="text-lg font-bold text-white group-hover:text-primary-300 transition-colors">
+                        Search Players
+                      </div>
+                      <div className="text-sm text-slate-400">Browse available talent</div>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 group-hover:from-primary-500/10 to-transparent rounded-xl transition-all duration-300" />
+                </motion.button>
+                
+                <motion.button
+                  onClick={handleAutoDraft}
+                  className="group relative p-6 glass-card border border-slate-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(100,116,139,0.3)]"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="text-3xl group-hover:scale-110 transition-transform">🤖</div>
+                    <div>
+                      <div className="text-lg font-bold text-white group-hover:text-slate-300 transition-colors">
+                        Auto Draft
+                      </div>
+                      <div className="text-sm text-slate-400">Let AI pick for you</div>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-500/0 group-hover:from-slate-500/10 to-transparent rounded-xl transition-all duration-300" />
+                </motion.button>
+              </div>
             </div>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
 
-      {/* Draft Actions */}
-      {isMyTurn && isDraftStarted && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-blue-900/20 border border-blue-600 rounded-xl p-6"
+      {/* Premium Draft Board */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        {/* Recent Picks with Premium Styling */}
+        <motion.div 
+          className="glass-panel p-6"
+          initial={{ x: -50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
         >
-          <h3 className="text-xl font-bold text-white mb-4">Make Your Pick</h3>
-          <div className="flex gap-4">
-            <button
-              onClick={() => setShowPlayerSearch(true)}
-              className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              🔍 Search Players
-            </button>
-            <button
-              onClick={handleAutoDraft}
-              className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              🤖 Auto Draft
-            </button>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="text-2xl">🎯</div>
+            <h3 className="text-xl font-bold text-white">Recent Picks</h3>
+            <div className="flex-1 h-px bg-gradient-to-r from-primary-500/50 to-transparent" />
           </div>
-        </motion.div>
-      )}
-
-      {/* Draft Board */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Picks */}
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-          <h3 className="text-xl font-bold text-white mb-4">Recent Picks</h3>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
-            {draftPicks
+          
+          <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin">
+            <AnimatePresence>
+              {draftPicks
               .filter((pick: any) => pick.isComplete)
               .slice(-10)
               .reverse()

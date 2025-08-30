@@ -27,13 +27,43 @@ interface PlayerCardProps {
   isInQueue: boolean;
 }
 
-const positionColor: Record<string, string> = {
-    QB: 'border-red-400/50',
-    RB: 'border-green-400/50',
-    WR: 'border-blue-400/50',
-    TE: 'border-orange-400/50',
-    DST: 'border-purple-400/50',
-    K: 'border-yellow-400/50'
+const positionStyles: Record<string, { border: string; bg: string; glow: string; badge: string }> = {
+    QB: {
+        border: 'border-l-4 border-red-500',
+        bg: 'bg-gradient-to-r from-red-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(239,68,68,0.3)]',
+        badge: 'bg-gradient-to-r from-red-500 to-red-600'
+    },
+    RB: {
+        border: 'border-l-4 border-emerald-500',
+        bg: 'bg-gradient-to-r from-emerald-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]',
+        badge: 'bg-gradient-to-r from-emerald-500 to-emerald-600'
+    },
+    WR: {
+        border: 'border-l-4 border-blue-500',
+        bg: 'bg-gradient-to-r from-blue-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]',
+        badge: 'bg-gradient-to-r from-blue-500 to-blue-600'
+    },
+    TE: {
+        border: 'border-l-4 border-amber-500',
+        bg: 'bg-gradient-to-r from-amber-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]',
+        badge: 'bg-gradient-to-r from-amber-500 to-amber-600'
+    },
+    DST: {
+        border: 'border-l-4 border-purple-500',
+        bg: 'bg-gradient-to-r from-purple-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(139,92,246,0.3)]',
+        badge: 'bg-gradient-to-r from-purple-500 to-purple-600'
+    },
+    K: {
+        border: 'border-l-4 border-pink-500',
+        bg: 'bg-gradient-to-r from-pink-500/10 via-transparent to-transparent',
+        glow: 'hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]',
+        badge: 'bg-gradient-to-r from-pink-500 to-pink-600'
+    }
 };
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ 
@@ -55,17 +85,30 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
     }
   };
 
+  const positionStyle = positionStyles[player.position] || positionStyles.WR;
+  
   return (
     <motion.div
-      className={`group w-full text-left p-1.5 sm:p-2 bg-slate-300/20 dark:bg-gray-800/40 rounded-lg border-l-4 ${positionColor[player.position]} ${isSelectedForCompare ? 'ring-2 ring-cyan-400' : 'hover:ring-2 hover:ring-cyan-400/50'} transition-all flex items-center gap-1.5 sm:gap-2`}
+      className={`
+        group relative w-full text-left
+        glass-card p-3 sm:p-4
+        ${positionStyle.border} ${positionStyle.bg} ${positionStyle.glow}
+        ${isSelectedForCompare ? 'ring-2 ring-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]' : ''}
+        transition-all duration-300 hover:scale-[1.02]
+        overflow-hidden
+      `}
       {...{
         layout: true,
-        initial: { opacity: 0, x: -20 },
-        animate: { opacity: 1, x: 0 },
-        exit: { opacity: 0, x: 20 },
+        initial: { opacity: 0, y: 20, scale: 0.95 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: -20, scale: 0.95 },
         transition: { duration: 0.3, type: 'spring', stiffness: 200, damping: 25 },
       }}
     >
+      {/* Premium gradient overlay on hover */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      </div>
         <div className="flex flex-col gap-0.5 sm:gap-1">
             <button
                 onClick={handleToggleWatchlist}
@@ -92,24 +135,50 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
 
         <button onClick={onSelect} className="flex-grow flex items-center justify-between overflow-hidden mobile-touch-target">
             <div className="flex-grow overflow-hidden">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                    <p className="font-bold text-xs sm:text-sm text-[var(--text-primary)] truncate">{player.name}</p>
+                <div className="flex items-center gap-2">
+                    <p className="font-bold text-sm sm:text-base text-white truncate">{player.name}</p>
                     {isValuePick && (
-                        <div className="flex-shrink-0 flex items-center gap-1 px-1 sm:px-1.5 py-0.5 bg-green-500/20 text-green-300 text-[8px] sm:text-[10px] font-bold rounded-full">
+                        <div className="flex-shrink-0 flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg shadow-emerald-500/30">
                             <GemIcon /> <span className="hidden sm:inline">VALUE</span>
                         </div>
                     )}
-                    {hasNews && <NewsIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cyan-400 flex-shrink-0" />}
-                    {hasInjury && <InjuryIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-400 flex-shrink-0" />}
+                    {hasNews && (
+                        <div className="relative flex-shrink-0">
+                            <NewsIcon className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
+                            <div className="absolute inset-0 blur-sm bg-cyan-400/50 animate-pulse" />
+                        </div>
+                    )}
+                    {hasInjury && (
+                        <div className="relative flex-shrink-0">
+                            <InjuryIcon className="w-3 h-3 sm:w-4 sm:h-4 text-red-400 animate-pulse" />
+                            <div className="absolute inset-0 blur-sm bg-red-400/50 animate-pulse" />
+                        </div>
+                    )}
                 </div>
-                <p className="text-[10px] sm:text-xs text-[var(--text-secondary)]">{player.position} - {player.team}</p>
+                <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <span className={`px-2 py-0.5 rounded-md ${positionStyle.badge} text-white font-bold shadow-lg`}>
+                        {player.position}
+                    </span>
+                    <span className="text-gray-400">{player.team}</span>
+                </div>
             </div>
-            <div className="text-right flex-shrink-0 ml-1 sm:ml-2">
-                <p className="font-bold text-lg sm:text-xl text-cyan-400 dark:text-cyan-300">{player.rank}</p>
-                <p className="text-[8px] sm:text-[10px] text-gray-400 dark:text-gray-500">
-                    <span className="hidden sm:inline">ADP: {player?.adp ?? 'N/A'} | Bye: {player.bye}</span>
-                    <span className="sm:hidden">{player?.adp ?? 'N/A'}</span>
-                </p>
+            <div className="text-right flex-shrink-0 ml-2 sm:ml-4">
+                <div className="relative">
+                    <p className="font-bold text-2xl sm:text-3xl bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                        {player.rank}
+                    </p>
+                    <div className="absolute inset-0 blur-md bg-gradient-to-r from-cyan-400/30 to-blue-400/30 -z-10" />
+                </div>
+                <div className="space-y-0.5 text-[10px] sm:text-xs">
+                    <p className="text-gray-400">
+                        <span className="hidden sm:inline">ADP: </span>
+                        <span className="font-semibold text-gray-300">{player?.adp ?? 'N/A'}</span>
+                    </p>
+                    <p className="text-gray-400">
+                        <span className="hidden sm:inline">Bye: </span>
+                        <span className="font-semibold text-gray-300">{player.bye}</span>
+                    </p>
+                </div>
             </div>
         </button>
 
