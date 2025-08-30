@@ -206,6 +206,11 @@ class ProductionSportsDataService {
     try {
       this.apiRequestCount++;
       
+      // Check if this is an ESPN API call and use proxy
+      if (url.includes('site.api.espn.com')) {
+        return await this.makeESPNProxyRequest(url);
+      }
+      
       const response = await axios.get(url, {
         headers: {
           'Accept': 'application/json',
@@ -226,6 +231,37 @@ class ProductionSportsDataService {
         });
         throw new Error(`API Error: ${error.response?.status} - ${error.response?.statusText}`);
       }
+      throw error;
+    }
+  }
+
+  private async makeESPNProxyRequest(espnUrl: string): Promise<unknown> {
+    try {
+      // Extract the ESPN path from the full URL
+      const espnPath = espnUrl.replace('https://site.api.espn.com/apis/site/v2/sports/football/nfl', '');
+      
+      // Use the Netlify function proxy
+      const proxyUrl = `/.netlify/functions/espn-proxy?path=${encodeURIComponent(espnPath)}`;
+      
+      console.log(`Using ESPN proxy: ${proxyUrl} for ${espnUrl}`);
+      
+      const response = await axios.get(proxyUrl, {
+        headers: {
+          'Accept': 'application/json',
+          'X-App-Name': 'AstralDraft',
+          'X-App-Version': '1.0',
+        },
+        timeout: 15000 // 15 second timeout for proxy
+      });
+
+      // The proxy returns { data, cached, timestamp }
+      if (response.data && response.data.data) {
+        return response.data.data;
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('ESPN Proxy request failed:', error);
       throw error;
     }
   }

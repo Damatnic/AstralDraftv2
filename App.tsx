@@ -77,16 +77,48 @@ const AppContent: React.FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
-    // Initialize performance monitoring
+    // Initialize performance monitoring and error handling
     useEffect(() => {
         if (process.env.NODE_ENV === 'production') {
             performanceMonitor.recordMetric('app_start', performance.now());
         }
         
+        // Suppress browser extension errors
+        const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+            const error = event.reason;
+            if (typeof error === 'object' && error !== null && 'message' in error) {
+                const message = (error as Error).message;
+                // Suppress common browser extension errors
+                if (message.includes('message port closed') || 
+                    message.includes('Extension context invalidated') ||
+                    message.includes('chrome-extension://')) {
+                    event.preventDefault();
+                    return;
+                }
+            }
+        };
+
+        const handleError = (event: ErrorEvent) => {
+            const message = event.message;
+            // Suppress browser extension console errors
+            if (message.includes('Unchecked runtime.lastError') ||
+                message.includes('message port closed') ||
+                message.includes('chrome-extension://')) {
+                event.preventDefault();
+                return;
+            }
+        };
+
+        // Add global error handlers
+        window.addEventListener('unhandledrejection', handleUnhandledRejection);
+        window.addEventListener('error', handleError);
+        
         return () => {
             if (process.env.NODE_ENV === 'production') {
                 performanceMonitor.destroy();
             }
+            window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+            window.removeEventListener('error', handleError);
         };
     }, []);
 
