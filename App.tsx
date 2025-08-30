@@ -12,7 +12,10 @@ import { useMediaQuery } from './hooks/useMediaQuery';
 import { enhancedWebSocketService } from './services/enhancedWebSocketService';
 import { realtimeNotificationServiceV2 } from './services/realtimeNotificationServiceV2';
 import { performanceMonitor } from './services/performanceMonitor';
-import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
+import { logger as loggingService } from './services/loggingService';
+import { mobilePerformanceOptimizer } from './utils/mobilePerformanceOptimizer';
+import { touchEnhancer } from './utils/mobileTouchEnhancer';
+import { productionOptimizer } from './utils/productionOptimizer';
 import type { View } from './types';
 
 // Import UI components
@@ -72,6 +75,19 @@ const AppContent: React.FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
+    // Initialize performance monitoring
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'production') {
+            performanceMonitor.recordMetric('app_start', performance.now());
+        }
+        
+        return () => {
+            if (process.env.NODE_ENV === 'production') {
+                performanceMonitor.destroy();
+            }
+        };
+    }, []);
+
     // Initialize real-time services
     useEffect(() => {
         const initializeRealTimeServices = async () => {
@@ -89,8 +105,51 @@ const AppContent: React.FC = () => {
                 });
                 
             } catch (error) {
-                // Failed to initialize real-time services in production
-                console.error('Real-time services initialization failed:', error);
+                // Failed to initialize real-time services
+                loggingService.error('Real-time services initialization failed', error, 'app-initialization');
+            }
+            
+            // Initialize mobile optimizations
+            try {
+                mobilePerformanceOptimizer.updateConfig({
+                    enableImageOptimization: true,
+                    enableLazyLoading: true,
+                    networkAwareLoading: true,
+                    batteryOptimization: true
+                });
+                
+                touchEnhancer.enableHapticFeedback(true);
+                
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('✅ Mobile optimizations initialized');
+                }
+            } catch (error) {
+                loggingService.error('Mobile optimization initialization failed', error, 'mobile-init');
+            }
+            
+            // Initialize production optimizations
+            try {
+                const envInfo = productionOptimizer.getEnvironmentInfo();
+                
+                if (process.env.NODE_ENV === 'development') {
+                    console.log('🎯 Environment initialized:', envInfo);
+                }
+                
+                // Track app initialization performance
+                const startTime = performance.now();
+                const initComplete = () => {
+                    const duration = performance.now() - startTime;
+                    performanceMonitor.recordMetric('app_initialization', duration);
+                    
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log(`⚡ App initialized in ${duration.toFixed(2)}ms`);
+                    }
+                };
+                
+                requestIdleCallback(initComplete, { timeout: 1000 });
+                
+            } catch (error) {
+                loggingService.error('Production optimizer initialization failed', error, 'production-init');
             }
         };
 

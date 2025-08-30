@@ -35,7 +35,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
       build: {
         target: 'es2020',
         minify: isProduction ? ('esbuild' as const) : false,
-        sourcemap: false,
+        sourcemap: isProduction ? false : true,
         rollupOptions: {
           output: {
             manualChunks: {
@@ -49,9 +49,17 @@ export default defineConfig(({ mode }: { mode: string }) => {
             entryFileNames: 'assets/[name]-[hash].js',
             chunkFileNames: 'assets/[name]-[hash].js',
             assetFileNames: 'assets/[name]-[hash].[ext]'
-          }
+          },
+          // Production optimizations
+          external: isProduction ? [] : undefined,
+          treeshake: isProduction ? {
+            moduleSideEffects: false,
+            propertyReadSideEffects: false,
+            unknownGlobalSideEffects: false
+          } : undefined
         },
-        emptyOutDir: true
+        emptyOutDir: true,
+        chunkSizeWarningLimit: 1000
       },
       optimizeDeps: {
         include: [

@@ -171,23 +171,108 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Enhanced Touch Feedback System */
+.touch-active {
+  transform: scale(0.98);
+  opacity: 0.8;
+  transition: all 0.1s ease-out;
+}
+
+.touch-long-press {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  transition: all 0.2s ease-out;
+}
+
+.touch-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple 0.3s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes ripple {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Advanced Touch Targets */
+.mobile-touch-target-enhanced {
+  min-height: 48px !important;
+  min-width: 48px !important;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+}
+
+/* Better focus indicators for touch devices */
+.mobile-focus-ring:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Smooth scroll for mobile */
+.smooth-scroll-mobile {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Modal Body Scroll Prevention */
 body.modal-open {
   overflow: hidden !important;
   padding-right: 15px;
 }
 
-/* Responsive Breakpoints */
+/* Advanced Mobile-First Responsive System */
+@media (max-width: 320px) {
+  :root {
+    --text-xs: 0.65rem;
+    --text-sm: 0.75rem;
+    --text-base: 0.85rem;
+    --spacing-unit: 0.75rem;
+  }
+  
+  .glass-pane {
+    padding: 0.75rem;
+    margin: 0.25rem;
+    border-radius: 8px;
+  }
+}
+
 @media (max-width: 480px) {
   :root {
     --text-xs: 0.7rem;
     --text-sm: 0.8rem;
     --text-base: 0.9rem;
+    --spacing-unit: 1rem;
   }
   
   .glass-pane {
     padding: 1rem;
     margin: 0.5rem;
+  }
+  
+  /* Ultra-responsive text scaling */
+  .responsive-text {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+  
+  .responsive-heading {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
   }
 }
 
@@ -226,7 +311,7 @@ body.modal-open {
     font-size: 16px; /* Prevents iOS zoom */
   }
   
-  /* Mobile button improvements */
+  /* Enhanced Mobile button improvements */
   button, [role="button"] {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -235,6 +320,51 @@ body.modal-open {
     -ms-user-select: none;
     user-select: none;
     touch-action: manipulation;
+  }
+  
+  /* Advanced Mobile Grid System */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .mobile-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Safe Area Handling */
+  .mobile-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .mobile-safe-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .mobile-safe-right {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Performance optimizations for mobile */
+  .reduce-animations * {
+    animation-duration: 0.1s !important;
+    transition-duration: 0.1s !important;
+  }
+  
+  .reduced-render-frequency {
+    will-change: auto;
+  }
+  
+  .reduced-render-frequency * {
+    will-change: auto;
   }
 }
 

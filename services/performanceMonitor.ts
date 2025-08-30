@@ -15,7 +15,7 @@ class PerformanceMonitor {
         const longTaskObserver = new PerformanceObserver((list) => {
           for (const entry of list.getEntries()) {
             this.recordMetric('longTask', entry.duration);
-            if (entry.duration > 50) {
+            if (entry.duration > 50 && process.env.NODE_ENV === 'development') {
               console.warn(`Long task detected: ${entry.duration}ms`, entry);
             }
           }
@@ -48,8 +48,8 @@ class PerformanceMonitor {
             const resource = entry as PerformanceResourceTiming;
             this.recordMetric('resourceLoad', resource.duration);
             
-            // Flag slow resources
-            if (resource.duration > 1000) {
+            // Flag slow resources in development
+            if (resource.duration > 1000 && process.env.NODE_ENV === 'development') {
               console.warn(`Slow resource: ${resource.name} took ${resource.duration}ms`);
             }
           }
@@ -115,7 +115,7 @@ class PerformanceMonitor {
       
       this.recordMetric(`component_${componentName}`, end - start);
       
-      if (end - start > 16) { // Warn if render takes longer than one frame
+      if (end - start > 16 && process.env.NODE_ENV === 'development') { // Warn if render takes longer than one frame
         console.warn(`Slow render: ${componentName} took ${(end - start).toFixed(2)}ms`);
       }
       
