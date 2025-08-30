@@ -46,7 +46,7 @@ export const Card: React.FC<CardProps> = ({
   glowColor = 'primary',
   interactive = false,
   ...props
-}) => {
+}: any) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Mouse tracking for interactive glow effect
@@ -186,7 +186,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   className = '', 
   separated = false,
   ...props 
-}) => {
+}: any) => {
   return (
     <div 
       className={`
@@ -207,7 +207,7 @@ export const CardTitle: React.FC<CardTitleProps> = ({
   className = '',
   size = 'lg',
   ...props 
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'text-base',
     md: 'text-lg',
@@ -234,7 +234,7 @@ export const CardDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement
   children, 
   className = '',
   ...props 
-}) => {
+}: any) => {
   return (
     <p 
       className={`text-sm text-gray-400 ${className}`} 
@@ -250,7 +250,7 @@ export const CardContent: React.FC<CardContentProps> = ({
   children, 
   className = '', 
   ...props 
-}) => {
+}: any) => {
   return (
     <div className={`${className}`} {...props}>
       {children}
@@ -264,7 +264,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   className = '',
   separated = false,
   ...props 
-}) => {
+}: any) => {
   return (
     <div 
       className={`

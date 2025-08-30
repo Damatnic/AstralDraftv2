@@ -308,7 +308,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                       { name: 'Google', icon: '🔍', color: 'hover:bg-red-500/10 hover:border-red-500/30' },
                       { name: 'Apple', icon: '🍎', color: 'hover:bg-gray-500/10 hover:border-gray-500/30' },
                       { name: 'Yahoo', icon: '📧', color: 'hover:bg-purple-500/10 hover:border-purple-500/30' }
-                    ].map((provider) => (
+                    ].map((provider: any) => (
                       <Button
                         key={provider.name}
                         variant="outline"

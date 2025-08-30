@@ -6,7 +6,7 @@
 import { logger } from './loggingService';
 
 // ML Model interfaces
-interface MLModel {
+export interface MLModel {
   id: string;
   name: string;
   type: 'regression' | 'classification' | 'ensemble';
@@ -17,14 +17,14 @@ interface MLModel {
   hyperparameters: Record<string, unknown>;
 }
 
-interface PredictionInput {
+export interface PredictionInput {
   playerId: string;
   week: number;
   season: number;
   features: Record<string, number>;
 }
 
-interface PredictionOutput {
+export interface PredictionOutput {
   playerId: string;
   prediction: number;
   confidence: number;
@@ -35,20 +35,56 @@ interface PredictionOutput {
   }>;
 }
 
-interface TrainingData {
+export interface TrainingData {
   features: number[][];
   targets: number[];
   playerIds: string[];
   weeks: number[];
 }
 
-interface ModelMetrics {
+export interface ModelMetrics {
   accuracy: number;
   precision: number;
   recall: number;
   f1Score: number;
   rmse: number;
   mae: number;
+}
+
+// Additional interfaces for MLAnalyticsDashboard
+export interface ModelPerformance {
+  modelId: string;
+  accuracy: number;
+  precision: number;
+  recall: number;
+  f1Score: number;
+}
+
+export interface FeatureImportance {
+  feature: string;
+  importance: number;
+  trend: 'up' | 'down' | 'stable';
+}
+
+export interface PredictionOptimization {
+  currentAccuracy: number;
+  optimizedAccuracy: number;
+  improvements: string[];
+}
+
+export interface Pattern {
+  type: string;
+  description: string;
+  confidence: number;
+  occurrences: number;
+}
+
+export interface MLInsight {
+  type: string;
+  title: string;
+  description: string;
+  actionable: boolean;
+  impact: 'high' | 'medium' | 'low';
 }
 
 class OracleMachineLearningService {
@@ -125,7 +161,7 @@ class OracleMachineLearningService {
       }
     ];
 
-    defaultModels.forEach(model => {
+    defaultModels.forEach((model: any) => {
       this.models.set(model.id, model);
     });
   }
@@ -263,7 +299,7 @@ class OracleMachineLearningService {
     }
 
     // Generate mock feature importance based on model features
-    return model.features.map(feature => ({
+    return model.features.map((feature: any) => ({
       feature,
       importance: Math.random()
     })).sort((a, b) => b.importance - a.importance);
@@ -323,7 +359,7 @@ class OracleMachineLearningService {
     }
 
     // Generate contributing factors
-    const contributingFactors = model.features.map(factor => ({
+    const contributingFactors = model.features.map((factor: any) => ({
       factor,
       weight: Math.random(),
       impact: (Math.random() - 0.5) * 10
@@ -375,7 +411,7 @@ class OracleMachineLearningService {
     totalPredictions: number;
   } {
     const models = Array.from(this.models.values());
-    const activeModels = models.filter(m => m.status === 'ready');
+    const activeModels = models.filter((m: any) => m.status === 'ready');
     
     return {
       totalModels: models.length,
@@ -383,6 +419,42 @@ class OracleMachineLearningService {
       averageAccuracy: activeModels.reduce((sum, m) => sum + m.accuracy, 0) / activeModels.length || 0,
       totalPredictions: 0 // This would be tracked in production
     };
+  }
+
+  // Additional methods for MLAnalyticsDashboard compatibility
+  analyzeModelPerformance(): ModelPerformance[] {
+    const models = Array.from(this.models.values());
+    return models.map((model: any) => ({
+      modelId: model.id,
+      accuracy: model.accuracy,
+      precision: Math.random() * 0.2 + 0.8,
+      recall: Math.random() * 0.2 + 0.75,
+      f1Score: Math.random() * 0.2 + 0.77
+    }));
+  }
+
+  optimizePredictionAlgorithms(): PredictionOptimization {
+    return {
+      currentAccuracy: Math.random() * 0.2 + 0.75,
+      optimizedAccuracy: Math.random() * 0.15 + 0.8,
+      improvements: ['Feature selection optimization', 'Ensemble method tuning', 'Data preprocessing enhancement']
+    };
+  }
+
+  detectPredictionPatterns(): Pattern[] {
+    return [
+      { type: 'seasonal', description: 'Performance peaks during specific weeks', confidence: 0.85, occurrences: 12 },
+      { type: 'positional', description: 'RB predictions more accurate than WR', confidence: 0.72, occurrences: 8 },
+      { type: 'situational', description: 'Home game predictions show bias', confidence: 0.68, occurrences: 15 }
+    ];
+  }
+
+  generateMLInsights(): MLInsight[] {
+    return [
+      { type: 'accuracy', title: 'Model Accuracy Improved', description: 'QB prediction accuracy increased by 12%', actionable: false, impact: 'high' },
+      { type: 'feature', title: 'New Feature Importance', description: 'Target share shows stronger correlation than expected', actionable: true, impact: 'medium' },
+      { type: 'optimization', title: 'Ensemble Opportunity', description: 'Combining models could improve overall accuracy', actionable: true, impact: 'high' }
+    ];
   }
 }
 

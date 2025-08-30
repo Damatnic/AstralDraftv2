@@ -29,7 +29,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
   currentView = 'DASHBOARD' as View,
   onViewChange,
   onLogout
-}) => {
+}: any) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -111,7 +111,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((item) => (
+              {navItems.map((item: any) => (
                 <NavButton
                   key={item.id}
                   item={item}
@@ -152,7 +152,7 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
               className="lg:hidden border-t border-white/10 bg-dark-900/95 backdrop-blur-xl"
             >
               <div className="px-4 py-4 space-y-1">
-                {navItems.map((item) => (
+                {navItems.map((item: any) => (
                   <MobileNavButton
                     key={item.id}
                     item={item}
@@ -180,7 +180,7 @@ const NavButton: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }) => {
+}> = ({ item, isActive, onClick }: any) => {
   return (
     <motion.button
       onClick={onClick}
@@ -222,7 +222,7 @@ const MobileNavButton: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }) => {
+}> = ({ item, isActive, onClick }: any) => {
   return (
     <motion.button
       onClick={onClick}
@@ -252,7 +252,7 @@ const UserMenu: React.FC<{
   userName: string;
   teamName: string;
   onLogout?: () => void;
-}> = ({ userName, teamName, onLogout }) => {
+}> = ({ userName, teamName, onLogout }: any) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -339,7 +339,7 @@ const MenuButton: React.FC<{
   label: string;
   onClick: () => void;
   variant?: 'default' | 'danger';
-}> = ({ icon, label, onClick, variant = 'default' }) => {
+}> = ({ icon, label, onClick, variant = 'default' }: any) => {
   const variantClasses = {
     default: 'hover:bg-white/10 text-gray-300 hover:text-white',
     danger: 'hover:bg-danger-500/20 text-gray-300 hover:text-danger-400'

@@ -102,7 +102,7 @@ class AIDraftAnalysisService {
     // Update team analysis
     const teamAnalysis = await this.updateTeamAnalysis(
       pick.teamId,
-      draftState.filter(p => p.teamId === pick.teamId),
+      draftState.filter((p: any) => p.teamId === pick.teamId),
       availablePlayers,
       settings
     );
@@ -191,13 +191,13 @@ class AIDraftAnalysisService {
   ): Promise<OpportunityCost> {
     // Find best available alternatives
     const alternatives = availablePlayers
-      .filter(p => p.position === pick.player.position)
+      .filter((p: any) => p.position === pick.player.position)
       .sort((a, b) => b.projectedPoints - a.projectedPoints)
       .slice(0, 5);
     
     // Calculate expected value lost
     const nextPickEstimate = pick.pick + 20; // Assuming snake draft
-    const survivingAlternatives = alternatives.filter(p => 
+    const survivingAlternatives = alternatives.filter((p: any) => 
       this.estimateSurvivalProbability(p, nextPickEstimate) > 0.5
     );
     
@@ -295,7 +295,7 @@ class AIDraftAnalysisService {
     
     // Value grade - how well did they maximize value
     grades.value = this.calculateValueGrade(
-      teamPicks.map(p => p.player.adp - p.pick)
+      teamPicks.map((p: any) => p.player.adp - p.pick)
         .reduce((sum, diff) => sum + diff, 0) / teamPicks.length
     );
     
@@ -386,8 +386,8 @@ class AIDraftAnalysisService {
     const recentPicks = draftState.slice(-5);
     
     for (const position of ['QB', 'RB', 'WR', 'TE']) {
-      const recentPositionPicks = recentPicks.filter(p => p.player.position === position);
-      const availableAtPosition = availablePlayers.filter(p => p.position === position);
+      const recentPositionPicks = recentPicks.filter((p: any) => p.player.position === position);
+      const availableAtPosition = availablePlayers.filter((p: any) => p.position === position);
       const topAvailable = availableAtPosition.slice(0, 10);
       
       // Calculate run probability
@@ -422,8 +422,8 @@ class AIDraftAnalysisService {
     availablePlayers: Player[],
     rosteredPlayers: DraftPick[]
   ): any {
-    const available = availablePlayers.filter(p => p.position === position);
-    const rostered = rosteredPlayers.filter(p => p.player.position === position);
+    const available = availablePlayers.filter((p: any) => p.position === position);
+    const rostered = rosteredPlayers.filter((p: any) => p.player.position === position);
     
     // Tier analysis
     const tiers = this.groupIntoTiers(available);
@@ -528,7 +528,7 @@ class AIDraftAnalysisService {
     pick: DraftPick,
     draftState: DraftPick[]
   ): Promise<any> {
-    const teamPicks = draftState.filter(p => p.teamId === pick.teamId);
+    const teamPicks = draftState.filter((p: any) => p.teamId === pick.teamId);
     const recentPicks = draftState.slice(-5);
     
     return {
@@ -542,7 +542,7 @@ class AIDraftAnalysisService {
 
   private checkForPositionalRun(picks: DraftPick[], position: string): boolean {
     const recentPicks = picks.slice(-8);
-    const positionCount = recentPicks.filter(p => p.player.position === position).length;
+    const positionCount = recentPicks.filter((p: any) => p.player.position === position).length;
     return positionCount >= 4;
   }
 
@@ -556,7 +556,7 @@ class AIDraftAnalysisService {
     availablePlayers: Player[],
     draftState: DraftPick[]
   ): string {
-    const available = availablePlayers.filter(p => p.position === position);
+    const available = availablePlayers.filter((p: any) => p.position === position);
     const quality = available.slice(0, 5);
     
     if (quality.length === 0) {
@@ -596,7 +596,7 @@ class AIDraftAnalysisService {
   }
 
   private checkTierBreak(position: string, players: Player[]): any {
-    const positionPlayers = players.filter(p => p.position === position);
+    const positionPlayers = players.filter((p: any) => p.position === position);
     const tiers = this.groupIntoTiers(positionPlayers);
     
     if (tiers[0] && tiers[0].length <= 2) {
@@ -637,8 +637,8 @@ class AIDraftAnalysisService {
     const firstHalf = picks.slice(0, Math.floor(picks.length / 2));
     const secondHalf = picks.slice(Math.floor(picks.length / 2));
     
-    const firstHalfRBs = firstHalf.filter(p => p.player.position === 'RB').length;
-    const secondHalfRBs = secondHalf.filter(p => p.player.position === 'RB').length;
+    const firstHalfRBs = firstHalf.filter((p: any) => p.player.position === 'RB').length;
+    const secondHalfRBs = secondHalf.filter((p: any) => p.player.position === 'RB').length;
     
     if (firstHalfRBs > secondHalfRBs * 2) {
       return {
@@ -656,7 +656,7 @@ class AIDraftAnalysisService {
   private detectValueCorrection(picks: DraftPick[]): DraftTrend | null {
     const recentPicks = picks.slice(-10);
     const avgDifference = recentPicks
-      .map(p => p.pick - p.player.adp)
+      .map((p: any) => p.pick - p.player.adp)
       .reduce((sum, diff) => sum + diff, 0) / recentPicks.length;
     
     if (Math.abs(avgDifference) > 10) {
@@ -676,10 +676,10 @@ class AIDraftAnalysisService {
     const position = pick.player.position;
     const recentPositionPicks = draftState
       .slice(-20)
-      .filter(p => p.player.position === position);
+      .filter((p: any) => p.player.position === position);
     
     const avgADPDiff = recentPositionPicks
-      .map(p => p.pick - p.player.adp)
+      .map((p: any) => p.pick - p.player.adp)
       .reduce((sum, diff) => sum + diff, 0) / (recentPositionPicks.length || 1);
     
     return {
@@ -732,7 +732,7 @@ class AIDraftAnalysisService {
     const positions = ['QB', 'RB', 'WR', 'TE'];
     
     for (const position of positions) {
-      const positionPicks = picks.filter(p => p.player.position === position);
+      const positionPicks = picks.filter((p: any) => p.player.position === position);
       const score = positionPicks.length * 20 + Math.random() * 30 + 50;
       grades.set(position, this.convertToLetterGrade(Math.min(100, score)));
     }
@@ -796,7 +796,7 @@ class AIDraftAnalysisService {
     const recommendations = new Map<string, any>();
     
     for (const teamId of this.getUniqueTeamIds(draftState)) {
-      const teamPicks = draftState.filter(p => p.teamId === teamId);
+      const teamPicks = draftState.filter((p: any) => p.teamId === teamId);
       const needs = await this.identifyUpcomingNeeds(teamPicks, available);
       const targets = await this.identifyTargets(needs, available, teamPicks);
       
@@ -812,7 +812,7 @@ class AIDraftAnalysisService {
   }
 
   private getUniqueTeamIds(picks: DraftPick[]): string[] {
-    return Array.from(new Set(picks.map(p => p.teamId)));
+    return Array.from(new Set(picks.map((p: any) => p.teamId)));
   }
 
   private async identifyTargets(
@@ -824,7 +824,7 @@ class AIDraftAnalysisService {
     
     for (const need of needs) {
       const needPlayers = available
-        .filter(p => p.position === need)
+        .filter((p: any) => p.position === need)
         .sort((a, b) => b.projectedPoints - a.projectedPoints)
         .slice(0, 3);
       targets.push(...needPlayers);
@@ -834,12 +834,12 @@ class AIDraftAnalysisService {
   }
 
   private recommendStrategy(picks: DraftPick[], available: Player[]): string {
-    const rbCount = picks.filter(p => p.player.position === 'RB').length;
-    const wrCount = picks.filter(p => p.player.position === 'WR').length;
+    const rbCount = picks.filter((p: any) => p.player.position === 'RB').length;
+    const wrCount = picks.filter((p: any) => p.player.position === 'WR').length;
     
     if (rbCount < 2) return 'Focus on securing RB depth';
     if (wrCount < 3) return 'Target WR talent';
-    if (!picks.some(p => p.player.position === 'QB')) return 'Consider QB soon';
+    if (!picks.some((p: any) => p.player.position === 'QB')) return 'Consider QB soon';
     
     return 'Best player available approach';
   }
@@ -847,14 +847,14 @@ class AIDraftAnalysisService {
   private generateWarnings(picks: DraftPick[], available: Player[]): string[] {
     const warnings: string[] = [];
     
-    if (!picks.some(p => p.player.position === 'QB')) {
-      const qbs = available.filter(p => p.position === 'QB');
+    if (!picks.some((p: any) => p.player.position === 'QB')) {
+      const qbs = available.filter((p: any) => p.position === 'QB');
       if (qbs.length < 10) {
         warnings.push('QB pool thinning - act soon');
       }
     }
     
-    const byeWeeks = picks.map(p => p.player.byeWeek);
+    const byeWeeks = picks.map((p: any) => p.player.byeWeek);
     const byeWeekCounts = new Map<number, number>();
     for (const bye of byeWeeks) {
       if (bye) {
@@ -944,14 +944,14 @@ class AIDraftAnalysisService {
   }
 
   private assessPositionalNeed(position: string, teamPicks: DraftPick[]): string {
-    const count = teamPicks.filter(p => p.player.position === position).length;
+    const count = teamPicks.filter((p: any) => p.player.position === position).length;
     if (count === 0) return 'critical';
     if (count === 1 && ['RB', 'WR'].includes(position)) return 'high';
     return 'low';
   }
 
   private isPartOfRun(position: string, recentPicks: DraftPick[]): boolean {
-    return recentPicks.filter(p => p.player.position === position).length >= 3;
+    return recentPicks.filter((p: any) => p.player.position === position).length >= 3;
   }
 
   private async assessTierTiming(player: Player, draftState: DraftPick[]): Promise<string> {
@@ -960,13 +960,13 @@ class AIDraftAnalysisService {
 
   private checkStackPotential(player: Player, teamPicks: DraftPick[]): boolean {
     if (player.position === 'WR' || player.position === 'TE') {
-      return teamPicks.some(p => p.player.position === 'QB' && p.player.team === player.team);
+      return teamPicks.some((p: any) => p.player.position === 'QB' && p.player.team === player.team);
     }
     return false;
   }
 
   private checkByeWeekConflict(player: Player, teamPicks: DraftPick[]): boolean {
-    const sameByeCount = teamPicks.filter(p => p.player.byeWeek === player.byeWeek).length;
+    const sameByeCount = teamPicks.filter((p: any) => p.player.byeWeek === player.byeWeek).length;
     return sameByeCount >= 3;
   }
 
@@ -1053,8 +1053,8 @@ class AIDraftAnalysisService {
     pick: DraftPick,
     draftState: DraftPick[]
   ): Promise<number> {
-    const teamPicks = draftState.filter(p => p.teamId === pick.teamId);
-    const positionCount = teamPicks.filter(p => p.player.position === pick.player.position).length;
+    const teamPicks = draftState.filter((p: any) => p.teamId === pick.teamId);
+    const positionCount = teamPicks.filter((p: any) => p.player.position === pick.player.position).length;
     
     if (positionCount === 1 && ['RB', 'WR'].includes(pick.player.position)) {
       return 0.9; // High need fit

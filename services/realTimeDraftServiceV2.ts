@@ -255,7 +255,7 @@ export class RealTimeDraftService extends EventEmitter {
       throw new Error('Not your turn to pick');
     }
 
-    const player = this.state.availablePlayers.find(p => p.id === playerId);
+    const player = this.state.availablePlayers.find((p: any) => p.id === playerId);
     if (!player) {
       throw new Error('Player not available');
     }
@@ -526,13 +526,13 @@ export class RealTimeDraftService extends EventEmitter {
   // Private Helper Methods
   private subscribeToDraftEvents(draftId: string): void {
     // Subscribe to draft-specific WebSocket events
-    this.ws.on('draft:started', (data) => this.handleDraftStarted(data));
-    this.ws.on('draft:pick:made', (data) => this.handlePickMade(data));
-    this.ws.on('draft:timer:update', (data) => this.handleTimerUpdate(data));
-    this.ws.on('draft:turn:change', (data) => this.handleTurnChange(data));
-    this.ws.on('draft:chat:message', (data) => this.handleChatMessage(data));
-    this.ws.on('draft:participant:update', (data) => this.handleParticipantUpdate(data));
-    this.ws.on('draft:completed', (data) => this.handleDraftCompleted(data));
+    this.ws.on('draft:started', (data: any) => this.handleDraftStarted(data));
+    this.ws.on('draft:pick:made', (data: any) => this.handlePickMade(data));
+    this.ws.on('draft:timer:update', (data: any) => this.handleTimerUpdate(data));
+    this.ws.on('draft:turn:change', (data: any) => this.handleTurnChange(data));
+    this.ws.on('draft:chat:message', (data: any) => this.handleChatMessage(data));
+    this.ws.on('draft:participant:update', (data: any) => this.handleParticipantUpdate(data));
+    this.ws.on('draft:completed', (data: any) => this.handleDraftCompleted(data));
   }
 
   private setupEventHandlers(): void {
@@ -546,7 +546,7 @@ export class RealTimeDraftService extends EventEmitter {
       this.emit('draft:disconnected');
     });
 
-    this.ws.on('error', (error) => {
+    this.ws.on('error', (error: any) => {
       console.error('Draft service WebSocket error:', error);
       this.emit('draft:error', error);
     });
@@ -666,7 +666,7 @@ export class RealTimeDraftService extends EventEmitter {
 
   private checkAutoDraft(): void {
     const teamId = this.state.currentTeam;
-    const participant = this.chat.participants.find(p => p.userId === teamId);
+    const participant = this.chat.participants.find((p: any) => p.userId === teamId);
     
     if (participant?.autoDraftEnabled || participant?.status === 'offline') {
       // Trigger auto-draft after a short delay
@@ -686,7 +686,7 @@ export class RealTimeDraftService extends EventEmitter {
     const queue = this.queuedPicks.get(teamId);
     if (queue && queue.length > 0) {
       for (const playerId of queue) {
-        const player = available.find(p => p.id === playerId);
+        const player = available.find((p: any) => p.id === playerId);
         if (player) {
           return player;
         }
@@ -718,7 +718,7 @@ export class RealTimeDraftService extends EventEmitter {
       const max = strategy.maxPlayersPerPosition?.[position] || 5;
       
       if (count < max) {
-        const players = available.filter(p => p.position === position);
+        const players = available.filter((p: any) => p.position === position);
         if (players.length > 0) {
           return players.sort((a, b) => a.adp - b.adp)[0];
         }
@@ -732,7 +732,7 @@ export class RealTimeDraftService extends EventEmitter {
     const needs = this.calculateTeamNeeds(roster);
     
     // Score each available player based on team needs
-    const scoredPlayers = available.map(player => ({
+    const scoredPlayers = available.map((player: any) => ({
       player,
       score: this.scorePlayerForTeam(player, needs)
     }));
@@ -744,13 +744,13 @@ export class RealTimeDraftService extends EventEmitter {
 
   private selectCustom(available: Player[], roster: DraftPick[], strategy: AutoDraftStrategy): Player | null {
     // Filter out avoided players
-    let filtered = available.filter(p => 
+    let filtered = available.filter((p: any) => 
       !strategy.avoidPlayers?.includes(p.id)
     );
     
     // Prioritize target players
     if (strategy.targetPlayers && strategy.targetPlayers.length > 0) {
-      const targets = filtered.filter(p => 
+      const targets = filtered.filter((p: any) => 
         strategy.targetPlayers!.includes(p.id)
       );
       if (targets.length > 0) {
@@ -760,7 +760,7 @@ export class RealTimeDraftService extends EventEmitter {
     
     // Filter by preferred teams
     if (strategy.preferredTeams && strategy.preferredTeams.length > 0) {
-      const preferred = filtered.filter(p => 
+      const preferred = filtered.filter((p: any) => 
         strategy.preferredTeams!.includes(p.team)
       );
       if (preferred.length > 0) {
@@ -907,7 +907,7 @@ export class RealTimeDraftService extends EventEmitter {
   private findBestPicks(): DraftPick[] {
     // Find picks that exceeded expectations
     return this.state.picks
-      .filter(pick => {
+      .filter((pick: any) => {
         const player = this.findPlayerById(pick.playerId);
         return player && pick.pickNumber > player.adp + 10;
       })
@@ -917,7 +917,7 @@ export class RealTimeDraftService extends EventEmitter {
   private findWorstPicks(): DraftPick[] {
     // Find picks that were reaches
     return this.state.picks
-      .filter(pick => {
+      .filter((pick: any) => {
         const player = this.findPlayerById(pick.playerId);
         return player && pick.pickNumber < player.adp - 20;
       })
@@ -927,7 +927,7 @@ export class RealTimeDraftService extends EventEmitter {
   private findSteals(): DraftPick[] {
     // Players drafted well below ADP
     return this.state.picks
-      .filter(pick => {
+      .filter((pick: any) => {
         const player = this.findPlayerById(pick.playerId);
         return player && pick.pickNumber > player.adp + 30;
       })
@@ -937,7 +937,7 @@ export class RealTimeDraftService extends EventEmitter {
   private findReaches(): DraftPick[] {
     // Players drafted well above ADP
     return this.state.picks
-      .filter(pick => {
+      .filter((pick: any) => {
         const player = this.findPlayerById(pick.playerId);
         return player && pick.pickNumber < player.adp - 30;
       })
@@ -946,7 +946,7 @@ export class RealTimeDraftService extends EventEmitter {
 
   private findPlayerById(playerId: string): Player | undefined {
     // Search in available players and drafted players
-    return this.state.availablePlayers.find(p => p.id === playerId);
+    return this.state.availablePlayers.find((p: any) => p.id === playerId);
   }
 
   private sendSystemMessage(message: string): void {

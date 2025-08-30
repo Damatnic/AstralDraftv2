@@ -466,7 +466,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                         <div className="flex items-center gap-2">
                           <Target className="w-4 h-4 text-blue-500" />
                           <span className="text-sm font-medium">Impact:</span>
-                          <Badge variant="outline" className={
+                          <Badge variant="default" className={
                             insight.impact === 'high' ? 'border-red-300 text-red-700' :
                             insight.impact === 'medium' ? 'border-yellow-300 text-yellow-700' :
                             'border-green-300 text-green-700'

@@ -616,7 +616,7 @@ export class AdvancedAiDraftCoach {
 
   private findAlternatives(player: Player, availablePlayers: Player[], vbd: VBDCalculation): Player[] {
     return availablePlayers
-      .filter(p => p.position === player.position && p.id !== player.id)
+      .filter((p: any) => p.position === player.position && p.id !== player.id)
       .slice(0, 3);
   }
 

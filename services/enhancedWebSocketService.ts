@@ -178,7 +178,7 @@ class ConnectionPool {
   }
 
   closeAll(): void {
-    this.connections.forEach(socket => socket.disconnect());
+    this.connections.forEach((socket: any) => socket.disconnect());
     this.connections.clear();
   }
 }
@@ -257,7 +257,7 @@ export class EnhancedWebSocketService extends EventEmitter {
         resolve();
       });
 
-      this.socket.once('connect_error', (error) => {
+      this.socket.once('connect_error', (error: any) => {
         clearTimeout(timeout);
         this.updateConnectionState('error', error.message);
         reject(error);
@@ -338,10 +338,10 @@ export class EnhancedWebSocketService extends EventEmitter {
     this.emit('draft:join', { draftId });
     
     // Set up draft-specific handlers
-    this.on(`${room}:pick`, (data) => this.handleDraftPick(data));
-    this.on(`${room}:timer`, (data) => this.handleDraftTimer(data));
-    this.on(`${room}:turn`, (data) => this.handleDraftTurn(data));
-    this.on(`${room}:chat`, (data) => this.handleDraftChat(data));
+    this.on(`${room}:pick`, (data: any) => this.handleDraftPick(data));
+    this.on(`${room}:timer`, (data: any) => this.handleDraftTimer(data));
+    this.on(`${room}:turn`, (data: any) => this.handleDraftTurn(data));
+    this.on(`${room}:chat`, (data: any) => this.handleDraftChat(data));
   }
 
   leaveDraftRoom(draftId: string): void {
@@ -368,7 +368,7 @@ export class EnhancedWebSocketService extends EventEmitter {
       this.updateLocalScoreCache(update);
     });
 
-    this.on(`${channel}:final`, (data) => {
+    this.on(`${channel}:final`, (data: any) => {
       this.emit('scoring:final', data);
     });
   }
@@ -377,9 +377,9 @@ export class EnhancedWebSocketService extends EventEmitter {
     const channel = `player:${playerId}`;
     this.subscribe(channel);
     
-    this.on(`${channel}:stats`, (data) => this.emit('player:stats', data));
-    this.on(`${channel}:injury`, (data) => this.emit('player:injury', data));
-    this.on(`${channel}:news`, (data) => this.emit('player:news', data));
+    this.on(`${channel}:stats`, (data: any) => this.emit('player:stats', data));
+    this.on(`${channel}:injury`, (data: any) => this.emit('player:injury', data));
+    this.on(`${channel}:news`, (data: any) => this.emit('player:news', data));
   }
 
   // Real-Time Notifications
@@ -438,9 +438,9 @@ export class EnhancedWebSocketService extends EventEmitter {
     const room = `trade:${tradeId}`;
     this.subscribe(room);
     
-    this.on(`${room}:update`, (data) => this.emit('trade:update', data));
-    this.on(`${room}:message`, (data) => this.emit('trade:message', data));
-    this.on(`${room}:counter`, (data) => this.emit('trade:counter', data));
+    this.on(`${room}:update`, (data: any) => this.emit('trade:update', data));
+    this.on(`${room}:message`, (data: any) => this.emit('trade:message', data));
+    this.on(`${room}:counter`, (data: any) => this.emit('trade:counter', data));
   }
 
   sendTradeOffer(tradeData: any): void {
@@ -449,7 +449,7 @@ export class EnhancedWebSocketService extends EventEmitter {
 
   // Data Synchronization
   subscribeToDataSync(entities: string[]): void {
-    entities.forEach(entity => {
+    entities.forEach((entity: any) => {
       const channel = `sync:${entity}`;
       this.subscribe(channel);
       
@@ -482,7 +482,7 @@ export class EnhancedWebSocketService extends EventEmitter {
   }
 
   subscribeToPresence(userIds: string[]): void {
-    userIds.forEach(userId => {
+    userIds.forEach((userId: any) => {
       this.subscribe(`presence:${userId}`);
     });
     
@@ -535,7 +535,7 @@ export class EnhancedWebSocketService extends EventEmitter {
 
   // Reconnection & Recovery
   private setupAutoReconnection(): void {
-    this.on('disconnect', (reason) => {
+    this.on('disconnect', (reason: any) => {
       console.log(`📡 Disconnected: ${reason}`);
       
       if (reason === 'io server disconnect') {
@@ -571,7 +571,7 @@ export class EnhancedWebSocketService extends EventEmitter {
   }
 
   private resubscribe(): void {
-    this.subscriptions.forEach(channel => {
+    this.subscriptions.forEach((channel: any) => {
       this.socket?.emit('subscribe', { channel });
     });
   }
@@ -661,18 +661,18 @@ export class EnhancedWebSocketService extends EventEmitter {
 
     // Re-register all stored handlers
     this.messageHandlers.forEach((handlers, event) => {
-      handlers.forEach(handler => {
+      handlers.forEach((handler: any) => {
         this.socket!.on(event, handler as any);
       });
     });
 
     // Core event handlers
-    this.socket.on('disconnect', (reason) => {
+    this.socket.on('disconnect', (reason: any) => {
       this.updateConnectionState('disconnected', reason);
       this.emit('disconnected', reason);
     });
 
-    this.socket.on('error', (error) => {
+    this.socket.on('error', (error: any) => {
       console.error('❌ WebSocket error:', error);
       this.emit('error', error);
     });

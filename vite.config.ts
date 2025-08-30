@@ -34,7 +34,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
       },
       build: {
         target: 'es2020',
-        minify: isProduction ? 'esbuild' : false,
+        minify: isProduction ? ('esbuild' as const) : false,
         sourcemap: false,
         rollupOptions: {
           output: {

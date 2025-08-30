@@ -305,7 +305,7 @@ class AIRecommendationEngine {
     context: any
   ): Promise<number> {
     const availableAtPosition = context.availablePlayers
-      .filter(p => p.position === player.position)
+      .filter((p: any) => p.position === player.position)
       .sort((a, b) => b.projectedPoints - a.projectedPoints);
     
     const playerRank = availableAtPosition.findIndex(p => p.id === player.id) + 1;
@@ -330,7 +330,7 @@ class AIRecommendationEngine {
    */
   private async calculateTeamNeed(player: Player, team: Team): Promise<number> {
     const roster = team.roster || [];
-    const positionCount = roster.filter(p => p.position === player.position).length;
+    const positionCount = roster.filter((p: any) => p.position === player.position).length;
     
     const idealCounts = {
       'QB': 2,
@@ -353,7 +353,7 @@ class AIRecommendationEngine {
    */
   private async calculateByeWeekFit(player: Player, team: Team): Promise<number> {
     const roster = team.roster || [];
-    const sameByeCount = roster.filter(p => 
+    const sameByeCount = roster.filter((p: any) => 
       p.byeWeek === player.byeWeek && 
       p.position === player.position
     ).length;
@@ -435,7 +435,7 @@ class AIRecommendationEngine {
       return 50; // Neutral if no data
     }
     
-    const scores = player.gameLog.map(g => g.fantasyPoints);
+    const scores = player.gameLog.map((g: any) => g.fantasyPoints);
     const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
     const variance = scores.reduce((sum, score) => sum + Math.pow(score - mean, 2), 0) / scores.length;
     const stdDev = Math.sqrt(variance);
@@ -491,7 +491,7 @@ class AIRecommendationEngine {
     
     // QB-WR/TE stack
     if (player.position === 'WR' || player.position === 'TE') {
-      const qb = roster.find(p => p.position === 'QB' && p.team === player.team);
+      const qb = roster.find((p: any) => p.position === 'QB' && p.team === player.team);
       if (qb) {
         stackScore = 80;
         // Boost for high-powered offenses
@@ -500,7 +500,7 @@ class AIRecommendationEngine {
         }
       }
     } else if (player.position === 'QB') {
-      const receivers = roster.filter(p => 
+      const receivers = roster.filter((p: any) => 
         (p.position === 'WR' || p.position === 'TE') && 
         p.team === player.team
       );
@@ -519,10 +519,10 @@ class AIRecommendationEngine {
     if (player.position !== 'RB') return 0;
     
     const roster = team.roster || [];
-    const teamRBs = roster.filter(p => p.position === 'RB' && p.team === player.team);
+    const teamRBs = roster.filter((p: any) => p.position === 'RB' && p.team === player.team);
     
     // Check if this is a handcuff to owned starter
-    const starter = teamRBs.find(p => p.depthChart === 1);
+    const starter = teamRBs.find((p: any) => p.depthChart === 1);
     if (starter && player.depthChart === 2) {
       // High value handcuff
       let value = 70;
@@ -737,7 +737,7 @@ class AIRecommendationEngine {
     const recommendations = new Map<string, any[]>();
     
     for (const position of ['QB', 'RB', 'WR', 'TE', 'K', 'DST']) {
-      const positionPlayers = scoredPlayers.filter(sp => sp.player.position === position);
+      const positionPlayers = scoredPlayers.filter((sp: any) => sp.player.position === position);
       recommendations.set(position, positionPlayers.slice(0, 5));
     }
     
@@ -756,9 +756,9 @@ class AIRecommendationEngine {
     const roster = team.roster || [];
     
     // Find QB-WR/TE stacks
-    const qbs = roster.filter(p => p.position === 'QB');
+    const qbs = roster.filter((p: any) => p.position === 'QB');
     for (const qb of qbs) {
-      const teammates = players.filter(p => 
+      const teammates = players.filter((p: any) => 
         (p.position === 'WR' || p.position === 'TE') && 
         p.team === qb.team
       );
@@ -791,10 +791,10 @@ class AIRecommendationEngine {
     const roster = team.roster || [];
     
     // Find RB1s and their handcuffs
-    const rbs = roster.filter(p => p.position === 'RB' && p.depthChart === 1);
+    const rbs = roster.filter((p: any) => p.position === 'RB' && p.depthChart === 1);
     
     for (const rb of rbs) {
-      const handcuff = players.find(p => 
+      const handcuff = players.find((p: any) => 
         p.position === 'RB' && 
         p.team === rb.team && 
         p.depthChart === 2
@@ -984,8 +984,8 @@ class AIRecommendationEngine {
   ): Promise<Player[]> {
     // Create round-by-round target list
     return scoredPlayers
-      .filter(sp => sp.score > 70)
-      .map(sp => sp.player)
+      .filter((sp: any) => sp.score > 70)
+      .map((sp: any) => sp.player)
       .slice(0, 20);
   }
 

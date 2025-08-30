@@ -40,7 +40,7 @@ const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementVi
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 
 // Modern loading component
-const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
+const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }: any) => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="text-center space-y-4">
       <div className="relative inline-flex">
@@ -73,7 +73,7 @@ const AppContent: React.FC = () => {
                 await realtimeNotificationServiceV2.initialize(state.user?.id || '');
                 
                 // Listen for notifications using EventEmitter pattern
-                realtimeNotificationServiceV2.on('notification', (notification) => {
+                realtimeNotificationServiceV2.on('notification', (notification: any) => {
                     // Handle real-time notifications
                     dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
                 });

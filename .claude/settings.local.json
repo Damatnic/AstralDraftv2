@@ -35,7 +35,8 @@
       "Bash(npx ts-node:*)",
       "Bash(npx tsx:*)",
       "Bash(cat:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npx vite:*)"
     ],
     "deny": [],
     "ask": [],

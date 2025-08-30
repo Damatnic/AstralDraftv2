@@ -25,7 +25,7 @@ import { SparklesIcon } from '../components/icons/SparklesIcon';
 import { BrainCircuitIcon } from '../components/icons/BrainCircuitIcon';
 
 // Icon for back navigation
-const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }) => (
+const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }: any) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
   </svg>
@@ -204,7 +204,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   Optimize Lineup
                 </Button>
                 <Button 
-                  variant="secondary" 
+                  variant="default" 
                   fullWidth 
                   icon={<TrendingUpIcon className="w-4 h-4" />}
                   onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
@@ -440,7 +440,7 @@ const EnhancedTeamHubView: React.FC = () => {
                         { label: 'Defense', value: 78, color: 'from-primary-500 to-primary-600' },
                         { label: 'Depth', value: 85, color: 'from-secondary-500 to-secondary-600' },
                         { label: 'Upside', value: 88, color: 'from-accent-500 to-accent-600' }
-                      ].map((stat) => (
+                      ].map((stat: any) => (
                         <div key={stat.label}>
                           <div className="flex justify-between text-xs mb-1">
                             <span className="text-gray-500">{stat.label}</span>
@@ -564,7 +564,7 @@ const EnhancedTeamHubView: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {[1, 2, 3].map((week) => {
+                  {[1, 2, 3].map((week: any) => {
                     const opponent = league.teams[week % league.teams.length];
                     const isHome = week % 2 === 0;
                     return (
@@ -615,7 +615,7 @@ const EnhancedTeamHubView: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {Array.from({ length: 14 }, (_, i) => i + 1).map((week) => {
+                  {Array.from({ length: 14 }, (_, i) => i + 1).map((week: any) => {
                     const isPast = week <= 12;
                     const isWin = isPast && Math.random() > 0.4;
                     const opponent = league.teams[week % league.teams.length];
@@ -894,7 +894,7 @@ const EnhancedTeamHubView: React.FC = () => {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <Card variant="elevated" className="relative">
                 <button

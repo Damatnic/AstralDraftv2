@@ -551,7 +551,7 @@ export class LiveScoringService extends EventEmitter {
       const allPlayers = [
         ...matchup.team1.lineup,
         ...matchup.team2.lineup
-      ].filter(p => !p.isEmpty);
+      ].filter((p: any) => !p.isEmpty);
       
       const highest = allPlayers.reduce((max, player) => 
         player.points > (max?.points || 0) ? player : max, 
@@ -582,7 +582,7 @@ export class LiveScoringService extends EventEmitter {
     team.playersComplete = 0;
 
     // Update lineup scores
-    [...team.lineup, ...team.benchPlayers].forEach(slot => {
+    [...team.lineup, ...team.benchPlayers].forEach((slot: any) => {
       if (!slot.isEmpty && slot.playerId) {
         const stats = this.getPlayerStats(slot.playerId);
         
@@ -641,8 +641,8 @@ export class LiveScoringService extends EventEmitter {
       
       // Check for changes
       if (this.standings) {
-        standings.standings.forEach(entry => {
-          const prev = this.standings!.standings.find(s => s.teamId === entry.teamId);
+        standings.standings.forEach((entry: any) => {
+          const prev = this.standings!.standings.find((s: any) => s.teamId === entry.teamId);
           if (prev) {
             entry.lastWeekRank = prev.rank;
             entry.rankChange = prev.rank - entry.rank;
@@ -738,11 +738,11 @@ export class LiveScoringService extends EventEmitter {
     this.ws.subscribeToPlayer(playerId);
     
     // Set up player-specific handlers
-    this.ws.on(`player:${playerId}:stats`, (data) => {
+    this.ws.on(`player:${playerId}:stats`, (data: any) => {
       this.handlePlayerStatUpdate(playerId, data);
     });
     
-    this.ws.on(`player:${playerId}:injury`, (data) => {
+    this.ws.on(`player:${playerId}:injury`, (data: any) => {
       this.handlePlayerInjury(playerId, data);
     });
   }
@@ -756,19 +756,19 @@ export class LiveScoringService extends EventEmitter {
 
   // WebSocket Event Handlers
   private setupEventHandlers(): void {
-    this.ws.on('scoring:update', (update) => {
+    this.ws.on('scoring:update', (update: any) => {
       this.handleScoringUpdate(update);
     });
 
-    this.ws.on('scoring:final', (data) => {
+    this.ws.on('scoring:final', (data: any) => {
       this.handleScoringFinal(data);
     });
 
-    this.ws.on('player:stats', (data) => {
+    this.ws.on('player:stats', (data: any) => {
       this.handlePlayerStatUpdate(data.playerId, data);
     });
 
-    this.ws.on('player:injury', (data) => {
+    this.ws.on('player:injury', (data: any) => {
       this.handlePlayerInjury(data.playerId, data);
     });
   }
@@ -819,7 +819,7 @@ export class LiveScoringService extends EventEmitter {
   private async loadInitialData(): Promise<void> {
     // Load games
     const games = await this.fetchGameUpdates();
-    games.forEach(game => this.activeGames.set(game.gameId, game));
+    games.forEach((game: any) => this.activeGames.set(game.gameId, game));
     
     // Load matchups
     const matchupsResponse = await fetch(
@@ -830,7 +830,7 @@ export class LiveScoringService extends EventEmitter {
     
     // Load initial stats
     const stats = await this.fetchPlayerStats();
-    stats.forEach(stat => {
+    stats.forEach((stat: any) => {
       const key = `${stat.playerId}-${stat.gameId}`;
       this.playerStats.set(key, stat);
     });
@@ -891,9 +891,9 @@ export class LiveScoringService extends EventEmitter {
   private getAffectedTeams(playerId: string): string[] {
     const teams: string[] = [];
     
-    this.matchups.forEach(matchup => {
-      const inTeam1 = matchup.team1.lineup.some(s => s.playerId === playerId);
-      const inTeam2 = matchup.team2.lineup.some(s => s.playerId === playerId);
+    this.matchups.forEach((matchup: any) => {
+      const inTeam1 = matchup.team1.lineup.some((s: any) => s.playerId === playerId);
+      const inTeam2 = matchup.team2.lineup.some((s: any) => s.playerId === playerId);
       
       if (inTeam1) teams.push(matchup.team1.teamId);
       if (inTeam2) teams.push(matchup.team2.teamId);

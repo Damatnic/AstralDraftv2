@@ -69,7 +69,7 @@ class OracleLiveDataIntegrationService {
    */
   async analyzePlayerTrends(playerId: string): Promise<OracleIntelligenceUpdate[]> {
     // Mock implementation - would connect to real analytics
-    return this.updates.filter(u => u.playerId === playerId);
+    return this.updates.filter((u: any) => u.playerId === playerId);
   }
 
   /**
@@ -98,7 +98,7 @@ class OracleLiveDataIntegrationService {
    */
   clearOldUpdates(hoursToKeep = 24): void {
     const cutoff = new Date(Date.now() - hoursToKeep * 60 * 60 * 1000);
-    this.updates = this.updates.filter(u => u.timestamp > cutoff);
+    this.updates = this.updates.filter((u: any) => u.timestamp > cutoff);
   }
 
   private analyzeEvent(event: any): OracleIntelligenceUpdate | null {
@@ -167,7 +167,7 @@ class OracleLiveDataIntegrationService {
   }
 
   private notifySubscribers(update: OracleIntelligenceUpdate): void {
-    this.subscribers.forEach(callback => {
+    this.subscribers.forEach((callback: any) => {
       try {
         callback(update);
       } catch (error) {

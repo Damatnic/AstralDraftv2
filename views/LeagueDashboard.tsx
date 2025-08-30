@@ -239,7 +239,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                       Prepare for Draft
                     </Button>
                     <Button 
-                      variant="secondary" 
+                      variant="default" 
                       size="lg"
                       onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' as View })}
                     >

@@ -43,13 +43,13 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
             x: e.clientX - svgRect.left,
             y: e.clientY - svgRect.top,
             content: (
-                <div className="p-2 bg-gray-900/80 rounded-lg text-xs">
-                    <p className="font-bold mb-1">Week {week}</p>
+                <div className="glass-card-sm">
+                    <p className="text-body-sm font-bold mb-2 text-white">Week {week}</p>
                     {dataForWeek.map((d: any) => (
-                        <div key={d.name} className="flex items-center gap-2">
+                        <div key={d.name} className="flex items-center gap-2 mb-1">
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></div>
-                            <span>{d.name}:</span>
-                            <span className="font-bold">{d.prob?.toFixed(1)}%</span>
+                            <span className="text-caption text-gray-300">{d.name}:</span>
+                            <span className="text-body-sm font-bold text-white">{d.prob?.toFixed(1)}%</span>
                         </div>
                     ))}
                 </div>

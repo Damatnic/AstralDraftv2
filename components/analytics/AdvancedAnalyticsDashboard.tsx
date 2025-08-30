@@ -26,7 +26,7 @@ interface AdvancedAnalyticsDashboardProps {
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     predictionFactors,
     onRefresh
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [compositeScore, setCompositeScore] = useState<CompositeScore | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -657,25 +657,25 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div className="text-center">
                                     <div className="text-lg font-bold">
-                                        {predictionFactors.marketData.spreadMovement[0] >= 0 ? '+' : ''}{predictionFactors.marketData.spreadMovement[0].toFixed(1)}
+                                        {predictionFactors.marketData.spreadMovement >= 0 ? '+' : ''}{predictionFactors.marketData.spreadMovement.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Opening Spread</div>
+                                    <div className="text-sm text-gray-600">Spread Movement</div>
                                 </div>
                                 <div className="text-center">
                                     <div className="text-lg font-bold">
-                                        {predictionFactors.marketData.spreadMovement[1] >= 0 ? '+' : ''}{predictionFactors.marketData.spreadMovement[1].toFixed(1)}
+                                        {predictionFactors.marketData.totalMovement >= 0 ? '+' : ''}{predictionFactors.marketData.totalMovement.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Current Spread</div>
+                                    <div className="text-sm text-gray-600">Total Movement</div>
                                 </div>
                                 <div className="text-center">
                                     <div className="text-lg font-bold">
-                                        {predictionFactors.marketData.totalMovement[0].toFixed(1)}
+                                        {predictionFactors.marketData.publicBettingPercentage.toFixed(1)}%
                                     </div>
-                                    <div className="text-sm text-gray-600">Opening Total</div>
+                                    <div className="text-sm text-gray-600">Public Betting %</div>
                                 </div>
                                 <div className="text-center">
                                     <div className="text-lg font-bold">
-                                        {predictionFactors.marketData.totalMovement[1].toFixed(1)}
+                                        {predictionFactors.marketData.socialMediaBuzz.toFixed(2)}
                                     </div>
                                     <div className="text-sm text-gray-600">Current Total</div>
                                 </div>
@@ -732,13 +732,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 <div className="space-y-4">
                                     <div className="flex justify-between">
                                         <span>Stadium Type</span>
-                                        <Badge variant="outline">
+                                        <Badge variant="default">
                                             {predictionFactors.externalFactors.stadiumType}
                                         </Badge>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Field Type</span>
-                                        <Badge variant="outline">
+                                        <Badge variant="default">
                                             {predictionFactors.externalFactors.fieldType}
                                         </Badge>
                                     </div>

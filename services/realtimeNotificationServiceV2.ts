@@ -359,7 +359,7 @@ export class RealTimeNotificationService extends EventEmitter {
           type: notification.type,
           data: notification.data
         },
-        actions: notification.actions?.slice(0, 2).map(a => ({
+        actions: notification.actions?.slice(0, 2).map((a: any) => ({
           action: a.id,
           title: a.label,
           icon: a.icon
@@ -403,7 +403,7 @@ export class RealTimeNotificationService extends EventEmitter {
 
   // Mark All as Read
   markAllAsRead(category?: NotificationCategory): void {
-    this.notifications.forEach(notification => {
+    this.notifications.forEach((notification: any) => {
       if (!category || notification.category === category) {
         if (!notification.read) {
           notification.read = true;
@@ -444,8 +444,8 @@ export class RealTimeNotificationService extends EventEmitter {
   clearAll(category?: NotificationCategory): void {
     if (category) {
       Array.from(this.notifications.values())
-        .filter(n => n.category === category)
-        .forEach(n => this.deleteNotification(n.id));
+        .filter((n: any) => n.category === category)
+        .forEach((n: any) => this.deleteNotification(n.id));
     } else {
       this.notifications.clear();
       this.groups.clear();
@@ -763,14 +763,14 @@ export class RealTimeNotificationService extends EventEmitter {
         
         // Filter out expired notifications
         const now = Date.now();
-        const valid = notifications.filter(n => 
+        const valid = notifications.filter((n: any) => 
           !n.expiresAt || n.expiresAt > now
         );
         
-        valid.forEach(n => this.notifications.set(n.id, n));
+        valid.forEach((n: any) => this.notifications.set(n.id, n));
         
         // Rebuild groups and threads
-        valid.forEach(n => {
+        valid.forEach((n: any) => {
           if (n.groupId) this.addToGroup(n);
           if (n.threadId) this.addToThread(n);
         });
@@ -806,19 +806,19 @@ export class RealTimeNotificationService extends EventEmitter {
 
   // WebSocket Event Handlers
   private setupEventHandlers(): void {
-    this.ws.on('notification', (notification) => {
+    this.ws.on('notification', (notification: any) => {
       this.handleIncomingNotification(notification);
     });
 
-    this.ws.on('notification:trade', (data) => {
+    this.ws.on('notification:trade', (data: any) => {
       this.handleTradeNotification(data);
     });
 
-    this.ws.on('notification:injury', (data) => {
+    this.ws.on('notification:injury', (data: any) => {
       this.handleInjuryNotification(data);
     });
 
-    this.ws.on('notification:score', (data) => {
+    this.ws.on('notification:score', (data: any) => {
       this.handleScoreNotification(data);
     });
   }
@@ -845,7 +845,7 @@ export class RealTimeNotificationService extends EventEmitter {
       title: template.title,
       message: this.interpolateTemplate(template.message, data),
       icon: template.icon,
-      actions: template.actions.map(a => ({
+      actions: template.actions.map((a: any) => ({
         ...a,
         action: this.interpolateTemplate(a.action, data)
       })),
@@ -863,7 +863,7 @@ export class RealTimeNotificationService extends EventEmitter {
       title: template.title,
       message: this.interpolateTemplate(template.message, data),
       icon: template.icon,
-      actions: template.actions.map(a => ({
+      actions: template.actions.map((a: any) => ({
         ...a,
         action: this.interpolateTemplate(a.action, data)
       })),
@@ -881,7 +881,7 @@ export class RealTimeNotificationService extends EventEmitter {
       title: template.title,
       message: this.interpolateTemplate(template.message, data),
       icon: template.icon,
-      actions: template.actions.map(a => ({
+      actions: template.actions.map((a: any) => ({
         ...a,
         action: this.interpolateTemplate(a.action, data)
       })),
@@ -966,11 +966,11 @@ export class RealTimeNotificationService extends EventEmitter {
     let notifications = Array.from(this.notifications.values());
     
     if (filter?.category) {
-      notifications = notifications.filter(n => n.category === filter.category);
+      notifications = notifications.filter((n: any) => n.category === filter.category);
     }
     
     if (filter?.unreadOnly) {
-      notifications = notifications.filter(n => !n.read);
+      notifications = notifications.filter((n: any) => !n.read);
     }
     
     // Sort by timestamp descending
@@ -1018,25 +1018,25 @@ export class RealTimeNotificationService extends EventEmitter {
       low: 0
     };
     
-    notifications.forEach(n => {
+    notifications.forEach((n: any) => {
       byCategory[n.category]++;
       byPriority[n.priority]++;
     });
     
     return {
       total: notifications.length,
-      unread: notifications.filter(n => !n.read).length,
-      unseen: notifications.filter(n => !n.seen).length,
+      unread: notifications.filter((n: any) => !n.read).length,
+      unseen: notifications.filter((n: any) => !n.seen).length,
       byCategory,
       byPriority,
-      todayCount: notifications.filter(n => n.timestamp > dayAgo).length,
-      weekCount: notifications.filter(n => n.timestamp > weekAgo).length
+      todayCount: notifications.filter((n: any) => n.timestamp > dayAgo).length,
+      weekCount: notifications.filter((n: any) => n.timestamp > weekAgo).length
     };
   }
 
   getUnreadCount(): number {
     return Array.from(this.notifications.values())
-      .filter(n => !n.read && !n.dismissed).length;
+      .filter((n: any) => !n.read && !n.dismissed).length;
   }
 
   getSettings(): NotificationSettings {

@@ -4,7 +4,7 @@ interface AdjustmentsIconProps {
   className?: string;
 }
 
-export const AdjustmentsIcon: React.FC<AdjustmentsIconProps> = ({ className }: any) => (
+const AdjustmentsIcon: React.FC<AdjustmentsIconProps> = ({ className }: any) => (
   <svg
     className={className}
     fill="none"
@@ -20,3 +20,6 @@ export const AdjustmentsIcon: React.FC<AdjustmentsIconProps> = ({ className }: a
     />
   </svg>
 );
+
+export { AdjustmentsIcon };
+export default AdjustmentsIcon;

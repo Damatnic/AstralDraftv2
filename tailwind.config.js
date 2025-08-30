@@ -239,7 +239,14 @@ export default {
   },
   plugins: [
     require('@tailwindcss/typography'),
-    function({ addUtilities, addComponents, theme }) {
+    function({ addUtilities, addComponents, theme, addBase }) {
+      // Add base group functionality
+      addBase({
+        '.group': {
+          /* Base group class */
+        }
+      })
+      
       // Add custom utility classes
       addUtilities({
         '.glass': {
@@ -265,7 +272,30 @@ export default {
           '&::-webkit-scrollbar': {
             display: 'none'
           }
-        }
+        },
+        /* Group hover utilities */
+        '.group:hover .group-hover\\:opacity-100': { opacity: '1' },
+        '.group:hover .group-hover\\:opacity-20': { opacity: '0.2' },
+        '.group:hover .group-hover\\:opacity-30': { opacity: '0.3' },
+        '.group:hover .group-hover\\:opacity-50': { opacity: '0.5' },
+        '.group:hover .group-hover\\:scale-110': { transform: 'scale(1.1)' },
+        '.group:hover .group-hover\\:flex': { display: 'flex' },
+        '.group:hover .group-hover\\:text-white': { color: 'white' },
+        '.group:hover .group-hover\\:text-blue-400': { color: 'rgb(96 165 250)' },
+        '.group:hover .group-hover\\:text-blue-300': { color: 'rgb(147 197 253)' },
+        '.group:hover .group-hover\\:text-primary-400': { color: 'rgb(127 145 255)' },
+        '.group:hover .group-hover\\:text-red-500': { color: 'rgb(239 68 68)' },
+        '.group:hover .group-hover\\:text-transparent': { color: 'transparent' },
+        '.group:hover .group-hover\\:bg-gradient-to-r': { 
+          backgroundImage: 'linear-gradient(to right, var(--tw-gradient-stops))' 
+        },
+        '.group:hover .group-hover\\:bg-clip-text': { 
+          backgroundClip: 'text',
+          WebkitBackgroundClip: 'text'
+        },
+        '.group:hover .group-hover\\:-translate-x-1': { transform: 'translateX(-0.25rem)' },
+        '.group:hover .group-hover\\:text-gray-300': { color: 'rgb(209 213 219)' },
+        '.group:hover .group-hover\\:text-gray-500': { color: 'rgb(107 114 128)' }
       })
 
       // Add custom component classes

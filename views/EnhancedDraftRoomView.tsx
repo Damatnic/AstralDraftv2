@@ -130,7 +130,7 @@ const EnhancedDraftRoomView: React.FC = () => {
       }));
       
       setTeams(draftTeams);
-      setUserTeam(draftTeams.find(t => t.name === state.user?.displayName) || draftTeams[0]);
+      setUserTeam(draftTeams.find((t: any) => t.name === state.user?.displayName) || draftTeams[0]);
     }
   }, [league, state.user]);
 
@@ -150,12 +150,12 @@ const EnhancedDraftRoomView: React.FC = () => {
         }
         
         // Listen for draft updates
-        realTimeDraftServiceV2.onDraftUpdate((update) => {
+        realTimeDraftServiceV2.onDraftUpdate((update: any) => {
           switch (update.type) {
             case 'pick':
               // Handle live pick updates
               setDraftHistory(prev => [...prev, update.data]);
-              setAvailablePlayers(prev => prev.filter(p => p.id !== update.data.playerId));
+              setAvailablePlayers(prev => prev.filter((p: any) => p.id !== update.data.playerId));
               break;
             case 'timer':
               // Sync timer across all clients
@@ -170,7 +170,7 @@ const EnhancedDraftRoomView: React.FC = () => {
         });
         
         // Listen for connection status changes
-        enhancedWebSocketService.onConnectionChange((status) => {
+        enhancedWebSocketService.onConnectionChange((status: any) => {
           setConnectionStatus(status.status === 'connected' ? 'connected' : 
                             status.status === 'connecting' ? 'connecting' : 'disconnected');
         });
@@ -245,7 +245,7 @@ const EnhancedDraftRoomView: React.FC = () => {
     
     try {
       // Convert to typed format for AI coach
-      const typedPlayers: TypedPlayer[] = availablePlayers.map(p => ({
+      const typedPlayers: TypedPlayer[] = availablePlayers.map((p: any) => ({
         ...p,
         id: parseInt(p.id),
         position: p.position as any,
@@ -255,7 +255,7 @@ const EnhancedDraftRoomView: React.FC = () => {
         bye: p.byeWeek
       }));
       
-      const userRoster: TypedPlayer[] = userTeam.picks.map(p => ({
+      const userRoster: TypedPlayer[] = userTeam.picks.map((p: any) => ({
         ...p,
         id: parseInt(p.id),
         position: p.position as any,
@@ -280,14 +280,14 @@ const EnhancedDraftRoomView: React.FC = () => {
       );
       
       // Convert back to component format
-      const componentRecommendations: AIRecommendation[] = recommendations.map(rec => ({
+      const componentRecommendations: AIRecommendation[] = recommendations.map((rec: any) => ({
         ...rec,
         player: {
           ...rec.player,
           id: rec.player.id.toString(),
           byeWeek: rec.player.bye || 4
         } as Player,
-        alternativeOptions: rec.alternativeOptions.map(alt => ({
+        alternativeOptions: rec.alternativeOptions.map((alt: any) => ({
           ...alt,
           id: alt.id.toString(),
           byeWeek: alt.bye || 4
@@ -297,7 +297,7 @@ const EnhancedDraftRoomView: React.FC = () => {
       setAIRecommendations(componentRecommendations);
     } catch (error) {
       // Fallback to simple recommendations
-      const fallbackRecs: AIRecommendation[] = availablePlayers.slice(0, 3).map(player => ({
+      const fallbackRecs: AIRecommendation[] = availablePlayers.slice(0, 3).map((player: any) => ({
         player,
         confidence: 75,
         reasoning: ['Best available player', 'Good value pick'],
@@ -314,7 +314,7 @@ const EnhancedDraftRoomView: React.FC = () => {
   const calculatePositionNeed = (position: string): number => {
     if (!userTeam) return 50;
     
-    const positionCount = userTeam.picks.filter(p => p.position === position).length;
+    const positionCount = userTeam.picks.filter((p: any) => p.position === position).length;
     const idealCounts: { [key: string]: number } = {
       'QB': 1, 'RB': 2, 'WR': 3, 'TE': 1, 'K': 1, 'DEF': 1
     };
@@ -338,7 +338,7 @@ const EnhancedDraftRoomView: React.FC = () => {
     
     try {
       const context = {
-        availablePlayers: availablePlayers.map(p => ({
+        availablePlayers: availablePlayers.map((p: any) => ({
           ...p,
           id: parseInt(p.id),
           position: p.position as any,
@@ -347,7 +347,7 @@ const EnhancedDraftRoomView: React.FC = () => {
           tier: p.tier || 1,
           bye: p.byeWeek
         })) as TypedPlayer[],
-        userRoster: userTeam?.picks.map(p => ({
+        userRoster: userTeam?.picks.map((p: any) => ({
           ...p,
           id: parseInt(p.id),
           position: p.position as any,
@@ -392,7 +392,7 @@ const EnhancedDraftRoomView: React.FC = () => {
     currentTeam.isOnTheClock = false;
     
     // Remove player from available
-    setAvailablePlayers(prev => prev.filter(p => p.id !== player.id));
+    setAvailablePlayers(prev => prev.filter((p: any) => p.id !== player.id));
     setDraftedPlayers(prev => [...prev, player]);
     
     // Add to draft history
@@ -466,13 +466,13 @@ const EnhancedDraftRoomView: React.FC = () => {
     
     // Apply position filter
     if (positionFilter !== 'ALL') {
-      filtered = filtered.filter(p => p.position === positionFilter);
+      filtered = filtered.filter((p: any) => p.position === positionFilter);
     }
     
     // Apply search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter((p: any) => 
         p.name.toLowerCase().includes(query) ||
         p.team.toLowerCase().includes(query) ||
         p.position.toLowerCase().includes(query)
@@ -487,7 +487,7 @@ const EnhancedDraftRoomView: React.FC = () => {
     if (!userTeam) return {};
     
     const counts: { [key: string]: number } = {};
-    userTeam.picks.forEach(player => {
+    userTeam.picks.forEach((player: any) => {
       counts[player.position] = (counts[player.position] || 0) + 1;
     });
     
@@ -510,7 +510,7 @@ const EnhancedDraftRoomView: React.FC = () => {
 
   // Handle player selection for comparison
   const handlePlayerSelect = (player: Player) => {
-    if (comparisonPlayers.length < 3 && !comparisonPlayers.find(p => p.id === player.id)) {
+    if (comparisonPlayers.length < 3 && !comparisonPlayers.find((p: any) => p.id === player.id)) {
       setComparisonPlayers(prev => [...prev, player]);
     }
     setSelectedPlayer(player);
@@ -587,14 +587,14 @@ const EnhancedDraftRoomView: React.FC = () => {
               className="glass-card p-4 border border-yellow-500/30"
               animate={boardControls}
             >
-              {teams.find(t => t.isOnTheClock) && (
+              {teams.find((t: any) => t.isOnTheClock) && (
                 <div className="flex items-center gap-4">
                   <div className="text-4xl">
-                    {teams.find(t => t.isOnTheClock)?.avatar}
+                    {teams.find((t: any) => t.isOnTheClock)?.avatar}
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white">
-                      {teams.find(t => t.isOnTheClock)?.name}
+                      {teams.find((t: any) => t.isOnTheClock)?.name}
                     </h3>
                     <p className="text-yellow-400 font-semibold">ON THE CLOCK</p>
                     <div className="flex items-center gap-2 mt-1">
@@ -676,14 +676,14 @@ const EnhancedDraftRoomView: React.FC = () => {
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e: any) => setSearchQuery(e.target.value)}
                     placeholder="Search players..."
                     className="glass-input w-full px-4 py-2 text-white placeholder-white/40"
                   />
                 </div>
                 <select
                   value={positionFilter}
-                  onChange={(e) => setPositionFilter(e.target.value)}
+                  onChange={(e: any) => setPositionFilter(e.target.value)}
                   className="glass-input px-4 py-2 text-white"
                 >
                   <option value="ALL">All Positions</option>
@@ -703,7 +703,7 @@ const EnhancedDraftRoomView: React.FC = () => {
                   { id: 'rankings', label: 'Rankings', icon: '📊' },
                   { id: 'team', label: 'My Team', icon: '🏆' },
                   { id: 'history', label: 'Draft Log', icon: '📝' }
-                ].map(tab => (
+                ].map((tab: any) => (
                   <button
                     key={tab.id}
                     onClick={() => setSelectedTab(tab.id as any)}
@@ -798,10 +798,10 @@ const EnhancedDraftRoomView: React.FC = () => {
                     </div>
                     
                     {/* Draft Button for User's Turn */}
-                    {teams.find(t => t.isOnTheClock)?.id === userTeam?.id && (
+                    {teams.find((t: any) => t.isOnTheClock)?.id === userTeam?.id && (
                       <div className="mt-3 pt-3 border-t border-white/10">
                         <button
-                          onClick={(e) => {
+                          onClick={(e: any) => {
                             e.stopPropagation();
                             handleDraftPlayer(player);
                           }}
@@ -849,8 +849,8 @@ const EnhancedDraftRoomView: React.FC = () => {
                 {selectedTab === 'history' && (
                   <div className="space-y-2">
                     {draftHistory.slice().reverse().map((pick, index) => {
-                      const team = teams.find(t => t.id === pick.teamId);
-                      const player = [...availablePlayers, ...draftedPlayers].find(p => p.id === pick.playerId);
+                      const team = teams.find((t: any) => t.id === pick.teamId);
+                      const player = [...availablePlayers, ...draftedPlayers].find((p: any) => p.id === pick.playerId);
                       
                       return (
                         <motion.div
@@ -1008,8 +1008,8 @@ const EnhancedDraftRoomView: React.FC = () => {
                 <input
                   type="text"
                   value={aiChatInput}
-                  onChange={(e) => setAiChatInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleAiChatSubmit()}
+                  onChange={(e: any) => setAiChatInput(e.target.value)}
+                  onKeyPress={(e: any) => e.key === 'Enter' && handleAiChatSubmit()}
                   placeholder="Ask about players, strategy, or your team..."
                   className="glass-input flex-1 px-3 py-2 text-sm text-white placeholder-white/40"
                   disabled={isAiThinking}
@@ -1109,7 +1109,7 @@ const EnhancedDraftRoomView: React.FC = () => {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {comparisonPlayers.map(player => (
+                {comparisonPlayers.map((player: any) => (
                   <div key={player.id} className="glass-card-secondary p-4">
                     <div className="text-center mb-4">
                       <h4 className="text-xl font-bold text-white">{player.name}</h4>
@@ -1140,7 +1140,7 @@ const EnhancedDraftRoomView: React.FC = () => {
                         handleDraftPlayer(player);
                         setShowPlayerComparison(false);
                       }}
-                      disabled={!teams.find(t => t.isOnTheClock && t.id === userTeam?.id)}
+                      disabled={!teams.find((t: any) => t.isOnTheClock && t.id === userTeam?.id)}
                       className="glass-button-primary w-full mt-4 py-2 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       DRAFT

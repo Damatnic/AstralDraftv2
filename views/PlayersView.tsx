@@ -164,8 +164,8 @@ const PlayersView: React.FC = () => {
 
   const handlePlayerSelect = (player: Player) => {
     if (compareMode) {
-      if (comparePlayers.find(p => p.id === player.id)) {
-        setComparePlayers(comparePlayers.filter(p => p.id !== player.id));
+      if (comparePlayers.find((p: any) => p.id === player.id)) {
+        setComparePlayers(comparePlayers.filter((p: any) => p.id !== player.id));
       } else if (comparePlayers.length < 3) {
         setComparePlayers([...comparePlayers, player]);
       }
@@ -197,7 +197,7 @@ const PlayersView: React.FC = () => {
     const injuryConfig = getInjuryConfig(player.injuryStatus);
     const trendingScore = getTrendingScore(player);
     const isSelected = selectedPlayer?.id === player.id;
-    const isComparing = comparePlayers.find(p => p.id === player.id);
+    const isComparing = comparePlayers.find((p: any) => p.id === player.id);
 
     return (
       <motion.div
@@ -323,7 +323,7 @@ const PlayersView: React.FC = () => {
               {/* Quick Actions */}
               <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-slate-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
-                  onClick={(e) => {
+                  onClick={(e: any) => {
                     e.stopPropagation();
                     handleAddToRoster(player);
                   }}
@@ -377,7 +377,7 @@ const PlayersView: React.FC = () => {
 
               {/* Actions */}
               <button
-                onClick={(e) => {
+                onClick={(e: any) => {
                   e.stopPropagation();
                   handleAddToRoster(player);
                 }}
@@ -447,7 +447,7 @@ const PlayersView: React.FC = () => {
                 type="text"
                 placeholder="Search by name, team, college, or position..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: any) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all text-lg"
               />
               {searchQuery && (
@@ -465,11 +465,11 @@ const PlayersView: React.FC = () => {
               {/* Position Filter */}
               <select
                 value={selectedPosition}
-                onChange={(e) => setSelectedPosition(e.target.value)}
+                onChange={(e: any) => setSelectedPosition(e.target.value)}
                 className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Positions</option>
-                {Object.keys(positionConfig).map(pos => (
+                {Object.keys(positionConfig).map((pos: any) => (
                   <option key={pos} value={pos}>{pos}</option>
                 ))}
               </select>
@@ -477,7 +477,7 @@ const PlayersView: React.FC = () => {
               {/* Team Filter */}
               <select
                 value={selectedTeam}
-                onChange={(e) => setSelectedTeam(e.target.value)}
+                onChange={(e: any) => setSelectedTeam(e.target.value)}
                 className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Teams</option>
@@ -489,7 +489,7 @@ const PlayersView: React.FC = () => {
               {/* Injury Filter */}
               <select
                 value={injuryFilter}
-                onChange={(e) => setInjuryFilter(e.target.value)}
+                onChange={(e: any) => setInjuryFilter(e.target.value)}
                 className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Status</option>
@@ -503,7 +503,7 @@ const PlayersView: React.FC = () => {
               {/* Sort By */}
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e: any) => setSortBy(e.target.value as any)}
                 className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="rank">Fantasy Rank</option>
@@ -591,11 +591,11 @@ const PlayersView: React.FC = () => {
               <div className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl">
                 <h3 className="text-lg font-bold text-white mb-4">Player Comparison</h3>
                 <div className="flex items-center gap-4">
-                  {comparePlayers.map(player => (
+                  {comparePlayers.map((player: any) => (
                     <div key={player.id} className="flex items-center gap-2 px-3 py-2 bg-slate-800/50 rounded-lg">
                       <span className="text-white font-medium">{player.name}</span>
                       <button
-                        onClick={() => setComparePlayers(comparePlayers.filter(p => p.id !== player.id))}
+                        onClick={() => setComparePlayers(comparePlayers.filter((p: any) => p.id !== player.id))}
                         className="text-gray-400 hover:text-red-400 transition-colors"
                       >
                         ✕

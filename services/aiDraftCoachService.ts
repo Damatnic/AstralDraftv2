@@ -279,7 +279,7 @@ class AIDraftCoachService {
     const grades: Map<string, any> = new Map();
     
     for (const teamId of this.getUniqueTeamIds(picks)) {
-      const teamPicks = picks.filter(p => p.teamId === teamId);
+      const teamPicks = picks.filter((p: any) => p.teamId === teamId);
       const grade = await this.gradeTeamDraft(teamPicks, picks, leagueSettings);
       grades.set(teamId, grade);
     }
@@ -468,7 +468,7 @@ class AIDraftCoachService {
   ): Promise<any[]> {
     const bustCandidates = [];
     
-    for (const player of players.filter(p => p.adp <= adpThreshold)) {
+    for (const player of players.filter((p: any) => p.adp <= adpThreshold)) {
       const features = await this.extractBustFeatures(player);
       const prediction = await this.predictBust(features);
       
@@ -504,7 +504,7 @@ class AIDraftCoachService {
     
     // Calculate relative strength
     const leagueStrengths = await Promise.all(
-      leagueTeams.map(t => this.calculateTeamStrength(t))
+      leagueTeams.map((t: any) => this.calculateTeamStrength(t))
     );
     
     const relativeStrength = this.calculateRelativeStrength(
@@ -682,7 +682,7 @@ class AIDraftCoachService {
     const positions = ['QB', 'RB', 'WR', 'TE'];
     
     for (const position of positions) {
-      const positionPlayers = players.filter(p => p.position === position);
+      const positionPlayers = players.filter((p: any) => p.position === position);
       const topTier = positionPlayers.slice(0, 5);
       const averageTop = topTier.reduce((sum, p) => sum + p.projectedPoints, 0) / 5;
       const averageAll = positionPlayers.reduce((sum, p) => sum + p.projectedPoints, 0) / positionPlayers.length;
@@ -722,7 +722,7 @@ class AIDraftCoachService {
     for (let i = 0; i < players.length; i += batchSize) {
       const batch = players.slice(i, i + batchSize);
       const batchPredictions = await Promise.all(
-        batch.map(player => this.generatePrediction(player))
+        batch.map((player: any) => this.generatePrediction(player))
       );
       
       batch.forEach((player, index) => {
@@ -835,19 +835,19 @@ class AIDraftCoachService {
     
     // QB-WR/TE stack
     if (player.position === 'WR' || player.position === 'TE') {
-      const qb = roster.find(p => p.position === 'QB' && p.team === player.team);
+      const qb = roster.find((p: any) => p.position === 'QB' && p.team === player.team);
       if (qb) return 0.15;
     }
     
     // WR-WR stack (same team)
     if (player.position === 'WR') {
-      const teammate = roster.find(p => p.position === 'WR' && p.team === player.team);
+      const teammate = roster.find((p: any) => p.position === 'WR' && p.team === player.team);
       if (teammate) return 0.08;
     }
     
     // RB handcuff
     if (player.position === 'RB') {
-      const starter = roster.find(p => 
+      const starter = roster.find((p: any) => 
         p.position === 'RB' && 
         p.team === player.team && 
         p.depthChart === 1
@@ -863,14 +863,14 @@ class AIDraftCoachService {
     
     if (player.position === 'QB') {
       // Find WRs and TEs from same team
-      partners.push(...context.availablePlayers.filter(p => 
+      partners.push(...context.availablePlayers.filter((p: any) => 
         (p.position === 'WR' || p.position === 'TE') && 
         p.team === player.team &&
         p.projectedPoints > 100
       ).slice(0, 3));
     } else if (player.position === 'WR' || player.position === 'TE') {
       // Find QB from same team
-      const qb = context.availablePlayers.find(p => 
+      const qb = context.availablePlayers.find((p: any) => 
         p.position === 'QB' && 
         p.team === player.team
       );
@@ -907,7 +907,7 @@ class AIDraftCoachService {
   }
 
   private getUniqueTeamIds(picks: DraftPick[]): string[] {
-    return Array.from(new Set(picks.map(p => p.teamId)));
+    return Array.from(new Set(picks.map((p: any) => p.teamId)));
   }
 
   private convertScoreToGrade(score: number): string {
@@ -1002,8 +1002,8 @@ class AIDraftCoachService {
 
   private identifyReaches(picks: DraftPick[]): any[] {
     return picks
-      .filter(p => p.pick < p.player.adp - 10)
-      .map(p => ({
+      .filter((p: any) => p.pick < p.player.adp - 10)
+      .map((p: any) => ({
         player: p.player,
         pick: p.pick,
         adp: p.player.adp,
@@ -1013,8 +1013,8 @@ class AIDraftCoachService {
 
   private identifySteals(picks: DraftPick[]): any[] {
     return picks
-      .filter(p => p.pick > p.player.adp + 10)
-      .map(p => ({
+      .filter((p: any) => p.pick > p.player.adp + 10)
+      .map((p: any) => ({
         player: p.player,
         pick: p.pick,
         adp: p.player.adp,
