@@ -13,7 +13,7 @@ interface ManageTradeBlockModalProps {
     onClose: () => void;
 }
 
-const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, leagueId, dispatch, onClose }) => {
+const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, leagueId, dispatch, onClose }: any) => {
     const originalBlockedIds = React.useMemo(() => new Set(team.tradeBlock || []), [team.tradeBlock]);
     const [selectedIds, setSelectedIds] = React.useState<Set<number>>(originalBlockedIds);
 

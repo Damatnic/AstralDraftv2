@@ -117,12 +117,12 @@ export const populateSampleRewardsData = async () => {
     localStorage.setItem('oracleAchievements', JSON.stringify(sampleAchievements));
     localStorage.setItem('oracleBadges', JSON.stringify(sampleBadges));
 
-    // Sample Oracle rewards data populated
-    // Level 5 with 2,450 total points
-    // 5 achievements unlocked
-    // 3 badges earned
-    // 1.3x streak multiplier active
-    // Rewards Dashboard now has data to display
+    console.log('✅ Sample Oracle rewards data populated!');
+    console.log('🏆 Level 5 with 2,450 total points');
+    console.log('🎯 5 achievements unlocked');
+    console.log('🏅 3 badges earned');
+    console.log('🔥 1.3x streak multiplier active');
+    console.log('📊 Rewards Dashboard now has data to display');
     
     return {
         rewards: sampleRewards,
@@ -144,7 +144,7 @@ export const clearSampleRewardsData = () => {
     localStorage.removeItem('oracleRewards');
     localStorage.removeItem('oracleAchievements');
     localStorage.removeItem('oracleBadges');
-    // Sample rewards data cleared
+    console.log('🧹 Sample rewards data cleared');
 };
 
 // Function to check if sample rewards data exists
@@ -168,14 +168,17 @@ export const simulateRewardEarning = async (challengeType = 'PLAYER_PERFORMANCE'
 
         await oracleRewardsService.applyRewards(rewardCalc);
         
-        // Simulated reward earning
+        console.log('🎉 Simulated reward earning:');
+        console.log(`💰 ${rewardCalc.totalPoints} total points`);
+        console.log(`🔥 ${rewardCalc.streakBonus} streak bonus`);
+        console.log(`🎯 ${rewardCalc.accuracyBonus} Oracle beaten bonus`);
         
         if (rewardCalc.newAchievements.length > 0) {
-            // New achievements earned
+            console.log(`🏆 ${rewardCalc.newAchievements.length} new achievements`);
         }
         
         if (rewardCalc.levelUp) {
-            // Level up achieved
+            console.log('⬆️ Level up!');
         }
         
         return rewardCalc;
@@ -185,8 +188,8 @@ export const simulateRewardEarning = async (challengeType = 'PLAYER_PERFORMANCE'
     }
 };
 
-// Oracle Rewards Demo Utils Loaded
-// Use populateSampleRewardsData() to add demo data
-// Use clearSampleRewardsData() to remove demo data
-// Use hasSampleRewardsData() to check if demo data exists
-// Use simulateRewardEarning() to test reward notifications
+console.log('🎮 Oracle Rewards Demo Utils Loaded');
+console.log('💡 Use populateSampleRewardsData() to add demo data');
+console.log('🧹 Use clearSampleRewardsData() to remove demo data');
+console.log('❓ Use hasSampleRewardsData() to check if demo data exists');
+console.log('🎉 Use simulateRewardEarning() to test reward notifications');

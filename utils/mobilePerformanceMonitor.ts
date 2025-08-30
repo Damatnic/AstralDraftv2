@@ -5,6 +5,16 @@
 
 import React from 'react';
 
+// Web Vitals types (define locally since package may not be installed)
+interface WebVitalMetric {
+    name: string;
+    value: number;
+    delta: number;
+    id: string;
+    rating: 'good' | 'needs-improvement' | 'poor';
+    navigationType?: string;
+}
+
 export interface PerformanceMetric {
     name: string;
     value: number;
@@ -47,8 +57,8 @@ class MobilePerformanceMonitor {
     private observeBasicMetrics() {
         // Observe paint timing
         if ('PerformanceObserver' in window) {
-            const paintObserver = new PerformanceObserver((list) => {
-                list.getEntries().forEach((entry) => {
+            const paintObserver = new PerformanceObserver((list: any) => {
+                list.getEntries().forEach((entry: any) => {
                     if (entry.name === 'first-contentful-paint') {
                         this.handleMetric({
                             name: 'FCP',
@@ -63,7 +73,7 @@ class MobilePerformanceMonitor {
             paintObserver.observe({ entryTypes: ['paint'] });
 
             // Observe largest contentful paint
-            const lcpObserver = new PerformanceObserver((list) => {
+            const lcpObserver = new PerformanceObserver((list: any) => {
                 const entries = list.getEntries();
                 const lastEntry = entries[entries.length - 1];
                 if (lastEntry) {
@@ -79,7 +89,7 @@ class MobilePerformanceMonitor {
             lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
 
             // Observe layout shifts
-            const clsObserver = new PerformanceObserver((list) => {
+            const clsObserver = new PerformanceObserver((list: any) => {
                 let clsValue = 0;
                 list.getEntries().forEach((entry: any) => {
                     if (!entry.hadRecentInput) {
@@ -128,7 +138,7 @@ class MobilePerformanceMonitor {
         this.metrics.set(metric.name, performanceMetric);
 
         if (this.config.enableLogging) {
-            // Performance metric tracked: ${metric.name}
+            console.log(`Performance Metric: ${metric.name}`, performanceMetric);
         }
 
         if (this.config.enableReporting && Math.random() < (this.config.sampleRate || 1)) {
@@ -143,8 +153,8 @@ class MobilePerformanceMonitor {
 
     private setupResourceObserver() {
         if ('PerformanceObserver' in window) {
-            const observer = new PerformanceObserver((list) => {
-                list.getEntries().forEach((entry) => {
+            const observer = new PerformanceObserver((list: any) => {
+                list.getEntries().forEach((entry: any) => {
                     if (entry.entryType === 'resource') {
                         this.trackResourceLoading(entry as PerformanceResourceTiming);
                     }
@@ -157,8 +167,8 @@ class MobilePerformanceMonitor {
 
     private setupNavigationObserver() {
         if ('PerformanceObserver' in window) {
-            const observer = new PerformanceObserver((list) => {
-                list.getEntries().forEach((entry) => {
+            const observer = new PerformanceObserver((list: any) => {
+                list.getEntries().forEach((entry: any) => {
                     if (entry.entryType === 'navigation') {
                         this.trackNavigation(entry as PerformanceNavigationTiming);
                     }
@@ -173,7 +183,7 @@ class MobilePerformanceMonitor {
         const duration = entry.responseEnd - entry.requestStart;
         
         if (this.config.enableLogging && duration > 100) {
-            // Slow resource detected: ${entry.name} took ${duration}ms
+            console.log(`Slow resource: ${entry.name} took ${duration}ms`);
         }
 
         // Track large resources
@@ -182,9 +192,18 @@ class MobilePerformanceMonitor {
         }
     }
 
-    private trackNavigation(_entry: PerformanceNavigationTiming) {
+    private trackNavigation(entry: PerformanceNavigationTiming) {
+        const metrics = {
+            'DNS Lookup': entry.domainLookupEnd - entry.domainLookupStart,
+            'TCP Connect': entry.connectEnd - entry.connectStart,
+            'Request': entry.responseStart - entry.requestStart,
+            'Response': entry.responseEnd - entry.responseStart,
+            'DOM Processing': entry.domContentLoadedEventStart - entry.responseEnd,
+            'Load Complete': entry.loadEventEnd - entry.loadEventStart
+        };
+
         if (this.config.enableLogging) {
-            // Navigation timing metrics gathered
+            console.log('Navigation Timing:', metrics);
         }
     }
 
@@ -220,7 +239,7 @@ class MobilePerformanceMonitor {
         
         const measure = performance.getEntriesByName(name, 'measure')[0];
         if (measure && this.config.enableLogging) {
-            // Custom metric tracked: ${name} took ${measure.duration}ms
+            console.log(`Custom Metric: ${name} took ${measure.duration}ms`);
         }
         
         return measure?.duration || 0;
@@ -282,7 +301,7 @@ class MobilePerformanceMonitor {
         const metrics = this.getMetrics();
         let score = 100;
 
-        metrics.forEach(metric => {
+        metrics.forEach((metric: any) => {
             switch (metric.rating) {
                 case 'poor':
                     score -= 20;

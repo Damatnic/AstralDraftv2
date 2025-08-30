@@ -33,7 +33,7 @@ interface SimpleTradeAnalysis {
 
 export const TradeAnalysisInterface: React.FC<{
     className?: string;
-}> = ({ className = '' }) => {
+}> = ({ className = '' }: any) => {
     const [proposal, setProposal] = useState<SimpleTradeProposal>({
         fromPlayers: [],
         toPlayers: []
@@ -150,7 +150,6 @@ export const TradeAnalysisInterface: React.FC<{
             setAnalysis(mockAnalysis);
             setActiveTab('analysis');
         } catch (error) {
-            console.error('Trade analysis failed:', error);
         } finally {
             setIsAnalyzing(false);
         }
@@ -207,7 +206,7 @@ export const TradeAnalysisInterface: React.FC<{
                                         Trading Away
                                     </h3>
                                     <div className="space-y-2 mb-4">
-                                        {proposal.fromPlayers.map((player) => (
+                                        {proposal.fromPlayers.map((player: any) => (
                                             <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2">
                                                 <div>
                                                     <span className="text-white font-medium">{player.name}</span>
@@ -231,7 +230,7 @@ export const TradeAnalysisInterface: React.FC<{
                                         Receiving
                                     </h3>
                                     <div className="space-y-2 mb-4">
-                                        {proposal.toPlayers.map((player) => (
+                                        {proposal.toPlayers.map((player: any) => (
                                             <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2">
                                                 <div>
                                                     <span className="text-white font-medium">{player.name}</span>
@@ -253,7 +252,7 @@ export const TradeAnalysisInterface: React.FC<{
                             <div className="bg-gray-800/50 rounded-lg p-4">
                                 <h3 className="text-lg font-semibold text-white mb-4">Available Players</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                                    {availablePlayers.map((player) => (
+                                    {availablePlayers.map((player: any) => (
                                         <div key={player.id} className="bg-gray-700/50 rounded p-2 text-sm">
                                             <div className="flex items-center justify-between">
                                                 <div>

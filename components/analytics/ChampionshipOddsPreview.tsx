@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import type { League } from '../../types';
 import { Avatar } from '../ui/Avatar';
@@ -7,14 +8,14 @@ import { TrophyIcon } from '../icons/TrophyIcon';
 
 interface ChampionshipOddsPreviewProps {
     league: League;
-    dispatch: React.Dispatch<{ type: string; payload?: unknown }>;
+    dispatch: React.Dispatch<any>;
 }
 
-const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ league, dispatch }) => {
+const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ league, dispatch }: any) => {
     
     const topContenders = [...league.teams]
-        .map((team) => {
-            const history = (team as { championshipProbHistory?: Array<{ probability: number }> }).championshipProbHistory || [];
+        .map((team: any) => {
+            const history = team.championshipProbHistory || [];
             const currentProb = history.length > 0 ? history[history.length - 1].probability : 0;
             return {
                 ...team,
@@ -27,7 +28,7 @@ const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ leagu
     return (
         <Widget title="Championship Contenders" icon={<TrophyIcon />}>
             <div className="p-3 space-y-2">
-                {topContenders.map((team) => (
+                {topContenders.map((team: any) => (
                     <div key={team.id} className="flex items-center justify-between p-2 bg-black/10 rounded-md">
                         <div className="flex items-center gap-2">
                             <Avatar avatar={team.avatar} className="w-8 h-8 rounded-md" />

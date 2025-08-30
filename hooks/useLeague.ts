@@ -7,8 +7,8 @@ import { useAppState } from '../contexts/AppContext';
  */
 export const useLeague = () => {
     const { state } = useAppState();
-    const league = state.leagues.find(l => l.id === state.activeLeagueId);
-    const myTeam = league?.teams.find(t => t.owner.id === state.user?.id);
+    const league = state.leagues.find((l: any) => l.id === state.activeLeagueId);
+    const myTeam = league?.teams.find((t: any) => t.owner.id === state.user?.id);
 
     return { league, myTeam };
 };

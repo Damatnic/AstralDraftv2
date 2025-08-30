@@ -72,12 +72,12 @@ export const useWebSocket = (url: string, options: UseWebSocketOptions = {}): Us
         }
       };
 
-      ws.current.onerror = (error) => {
+      ws.current.onerror = (error: any) => {
         console.error('WebSocket error:', error);
         onError?.(error);
       };
 
-      ws.current.onmessage = (event) => {
+      ws.current.onmessage = (event: any) => {
         setLastMessage(event.data);
         onMessage?.(event.data);
       };

@@ -115,7 +115,7 @@ const CommunicationHubView: React.FC = () => {
                     </div>
                     <h3 className="text-white font-bold mb-2">Week 8 Awards Announced</h3>
                     <p className="text-slate-300 mb-3">
-                      Congratulations to this week&apos;s award winners! 🎉
+                      Congratulations to this week's award winners! 🎉
                       <br />• <strong>Player of the Week:</strong> Josh Allen (Thunder Bolts) - 34.8 pts
                       <br />• <strong>Waiver Wire Hero:</strong> Gus Edwards (Lightning Strikes) - 18.4 pts
                       <br />• <strong>Biggest Bust:</strong> Cooper Kupp (Gridiron Giants) - 4.1 pts
@@ -387,7 +387,7 @@ const CommunicationHubView: React.FC = () => {
 
         {/* Tab Navigation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2 mb-8">
-          {tabs.map((tab) => (
+          {tabs.map((tab: any) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}

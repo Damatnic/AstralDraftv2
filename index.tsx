@@ -16,9 +16,10 @@ import App from './App';
 
 // Initialize with enhanced error handling
 const initializeApp = () => {
+  // Debug React availability
+  
   const rootElement = document.getElementById('root');
   if (!rootElement) {
-    console.error("Could not find root element to mount to");
     const errorDiv = document.createElement('div');
     errorDiv.innerHTML = '<h1>Application Error</h1><p>Could not initialize the application. Please refresh the page.</p>';
     document.body.appendChild(errorDiv);
@@ -31,8 +32,7 @@ const initializeApp = () => {
     root.render(React.createElement(App));
     
   } catch (error) {
-    console.error('❌ Failed to render React app:', error);
-    console.error('Error details:', {
+    console.error('App initialization failed:', {
       reactAvailable: !!React,
       errorMessage: error instanceof Error ? error.message : String(error),
       errorStack: error instanceof Error ? error.stack : 'No stack trace available'

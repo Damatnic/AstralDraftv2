@@ -4,12 +4,13 @@ import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { UserIcon } from '../components/icons/UserIcon';
 import { Avatar } from '../components/ui/Avatar';
+import { TrophyIcon } from '../components/icons/TrophyIcon';
 import { BookOpenIcon } from '../components/icons/BookOpenIcon';
 import { calculateManagerStats, calculateCareerHistory } from '../utils/careerStats';
 import RivalryWidget from '../components/manager/RivalryWidget';
 import AchievementsWidget from '../components/profile/AchievementsWidget';
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center">
         <p className="text-sm text-gray-400">{label}</p>
         <p className="text-2xl font-bold text-white">{value}</p>
@@ -24,7 +25,7 @@ const ManagerView: React.FC = () => {
     const manager = React.useMemo(() => {
         if (!managerId) return null;
         for (const league of state.leagues) {
-            const member = league.members.find(m => m.id === managerId);
+            const member = league.members.find((m: any) => m.id === managerId);
             if (member) return member;
         }
         return null;
@@ -75,7 +76,7 @@ const ManagerView: React.FC = () => {
                                 <Avatar avatar={manager.avatar} className="w-28 h-28 text-7xl rounded-full mb-4 ring-4 ring-cyan-400/50" />
                                 <h2 className="text-2xl font-bold font-display">{manager.name}</h2>
                                 <p className="text-xs text-gray-400">Member since {memberSinceDate}</p>
-                                <p className="text-sm text-gray-300 mt-3 italic">&ldquo;{manager.bio || 'No bio set.'}&rdquo;</p>
+                                <p className="text-sm text-gray-300 mt-3 italic">"{manager.bio || 'No bio set.'}"</p>
                             </div>
                         </Widget>
                         {managerId && <RivalryWidget opponentManagerId={managerId} />}
@@ -92,7 +93,7 @@ const ManagerView: React.FC = () => {
                     <div className="lg:col-span-2 space-y-6">
                         <Widget title="League History" icon={<BookOpenIcon />}>
                              <div className="p-4 space-y-3">
-                                {careerHistory.map(entry => {
+                                {careerHistory.map((entry: any) => {
                                     const league = state.leagues.find(l=>l.id===entry.leagueId);
                                     return (
                                         <div key={entry.key} className="bg-black/10 p-3 rounded-lg flex items-center justify-between">

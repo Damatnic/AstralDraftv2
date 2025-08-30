@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import { StarIcon } from 'lucide-react';
 
 // Full Page Loader
-export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Loading...' }) => {
+export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Loading...' }: any) => {
   return (
     <div className="fixed inset-0 bg-[var(--bg-primary)] flex items-center justify-center z-50">
       <div className="text-center">
@@ -34,7 +34,7 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Load
         </div>
         
         <div className="mt-4 flex justify-center gap-1">
-          {[0, 1, 2].map((i) => (
+          {[0, 1, 2].map((i: any) => (
             <motion.div
               key={i}
               animate={{
@@ -59,7 +59,7 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Load
 export const Spinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }> = ({
   size = 'md',
   className = ''
-}) => {
+}: any) => {
   const sizes = {
     sm: 'w-4 h-4',
     md: 'w-6 h-6',
@@ -107,7 +107,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   width,
   height,
   animation = 'pulse'
-}) => {
+}: any) => {
   const variantClasses = {
     text: 'h-4 rounded',
     circular: 'rounded-full',
@@ -150,7 +150,7 @@ export const CardSkeleton: React.FC = () => {
 };
 
 // List Skeleton
-export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }) => {
+export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }: any) => {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
@@ -186,7 +186,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   color = 'primary',
   size = 'md',
   animated = true
-}) => {
+}: any) => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
   
   const colors = {
@@ -239,7 +239,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   disabled,
   className = '',
   ...props
-}) => {
+}: any) => {
   const variants = {
     primary: 'btn btn-primary',
     secondary: 'btn btn-secondary',

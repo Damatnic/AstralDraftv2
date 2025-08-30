@@ -3,25 +3,25 @@ import type { League, User } from '../types';
 
 export const calculateManagerStats = (manager: User, leagues: League[]) => {
     const managerId = manager.id;
-    const championships = manager.badges?.filter(b => b.type === 'CHAMPION').length || 0;
+    const championships = manager.badges?.filter((b: any) => b.type === 'CHAMPION').length || 0;
     
     return {
         championships,
-        leaguesJoined: leagues.filter(l => !l.isMock && l.teams.some(t => t.owner.id === managerId)).length,
-        trophies: manager.badges?.map(b => ({id: b.id, text: `🏅 ${b.text}`})) || [],
+        leaguesJoined: leagues.filter((l: any) => !l.isMock && l.teams.some((t: any) => t.owner.id === managerId)).length,
+        trophies: manager.badges?.map((b: any) => ({id: b.id, text: `🏅 ${b.text}`})) || [],
     };
 };
 
 export const calculateCareerHistory = (managerId: string, leagues: League[]) => {
     const historyEntries: any[] = [];
 
-    leagues.forEach(league => {
-        const myTeam = league.teams.find(t => t.owner.id === managerId);
+    leagues.forEach((league: any) => {
+        const myTeam = league.teams.find((t: any) => t.owner.id === managerId);
         if (!myTeam) return;
 
         if (league.history) {
-            league.history.forEach(seasonHistory => {
-                const myStanding = seasonHistory.finalStandings.find(s => s.teamId === myTeam.id);
+            league.history.forEach((seasonHistory: any) => {
+                const myStanding = seasonHistory.finalStandings.find((s: any) => s.teamId === myTeam.id);
                 if (myStanding) {
                     historyEntries.push({
                         key: `${league.id}-${seasonHistory.season}`,
@@ -62,14 +62,14 @@ export const calculateHeadToHeadRecord = (myUserId: string, opponentUserId: stri
         playoffs: { wins: 0, losses: 0, ties: 0 },
     };
 
-    leagues.forEach(league => {
-        const myTeam = league.teams.find(t => t.owner.id === myUserId);
-        const opponentTeam = league.teams.find(t => t.owner.id === opponentUserId);
+    leagues.forEach((league: any) => {
+        const myTeam = league.teams.find((t: any) => t.owner.id === myUserId);
+        const opponentTeam = league.teams.find((t: any) => t.owner.id === opponentUserId);
 
         if (!myTeam || !opponentTeam) return;
 
         // Regular season
-        league.schedule.forEach(matchup => {
+        league.schedule.forEach((matchup: any) => {
             const isH2H = (matchup.teamA.teamId === myTeam.id && matchup.teamB.teamId === opponentTeam.id) ||
                           (matchup.teamA.teamId === opponentTeam.id && matchup.teamB.teamId === myTeam.id);
 
@@ -85,7 +85,7 @@ export const calculateHeadToHeadRecord = (myUserId: string, opponentUserId: stri
 
         // Playoffs
         if (league.playoffBracket) {
-            Object.values(league.playoffBracket).flat().forEach(matchup => {
+            Object.values(league.playoffBracket).flat().forEach((matchup: any) => {
                  const isH2H = (matchup.teamA.teamId === myTeam.id && matchup.teamB.teamId === opponentTeam.id) ||
                                (matchup.teamA.teamId === opponentTeam.id && matchup.teamB.teamId === myTeam.id);
                 

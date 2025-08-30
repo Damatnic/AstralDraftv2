@@ -42,7 +42,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
   maxAlerts = 5,
   showSettings = true,
   onDismiss
-}) => {
+}: any) => {
   const [alerts, setAlerts] = useState<InjuryAlert[]>([]);
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
@@ -77,7 +77,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
         setSettings({ ...settings, ...JSON.parse(saved) });
       }
     } catch (error) {
-      console.error('Failed to load notification settings:', error);
     }
   };
 
@@ -86,7 +85,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       localStorage.setItem('injury_notification_settings', JSON.stringify(newSettings));
       setSettings(newSettings);
     } catch (error) {
-      console.error('Failed to save notification settings:', error);
     }
   };
 
@@ -137,7 +135,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.5);
     } catch (error) {
-      console.warn('Failed to play notification sound:', error);
     }
   };
 
@@ -314,7 +311,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
             )}
 
             {/* Individual alerts */}
-            {alerts.map((alert) => (
+            {alerts.map((alert: any) => (
               <Card
                 key={alert.id}
                 className={`border-l-4 shadow-lg animate-slide-in ${getSeverityColor(alert.severity)}`}
@@ -342,7 +339,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
                           <div className="mt-2">
                             <p className="text-xs font-medium text-gray-700 mb-1">Quick Actions:</p>
                             <ul className="text-xs text-gray-600 space-y-1">
-                              {alert.fantasyActions.slice(0, 2).map((action) => (
+                              {alert.fantasyActions.slice(0, 2).map((action: any) => (
                                 <li key={action} className="flex items-start gap-1">
                                   <span className="text-blue-600">•</span>
                                   {action}

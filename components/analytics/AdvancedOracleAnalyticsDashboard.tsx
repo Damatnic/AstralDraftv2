@@ -72,7 +72,7 @@ interface ReportFilters {
 const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     const [metrics, setMetrics] = useState<AdvancedAnalyticsMetrics | null>(null);
     const [loading, setLoading] = useState(true);
-    const [filters] = useState<ReportFilters>({
+    const [_filters, _setFilters] = useState<ReportFilters>({
         timeframe: 'season',
         predictionTypes: ['PLAYER_PERFORMANCE', 'GAME_OUTCOME', 'WEEKLY_SCORING'],
         confidenceRange: [0, 100],
@@ -82,60 +82,55 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     const [reportGenerating, setReportGenerating] = useState(false);
 
     useEffect(() => {
-        const loadAdvancedAnalytics = async () => {
-            setLoading(true);
-            try {
-                // Fetch comprehensive analytics data
-                const [oracleStats, userStats, comparativeStats] = await Promise.all([
-                    fetchOraclePerformanceData(),
-                    fetchUserPerformanceData(), 
-                    fetchComparativeAnalytics()
-                ]);
-
-                const insights = generateAdvancedInsights(oracleStats, userStats, comparativeStats);
-
-                setMetrics({
-                    ...generateMockAdvancedMetrics(),
-                    insights
-                });
-            } catch (error) {
-                console.error('Failed to load advanced analytics:', error);
-                // Use mock data for demo
-                setMetrics(generateMockAdvancedMetrics());
-            } finally {
-                setLoading(false);
-            }
-        };
-
         loadAdvancedAnalytics();
-    }, [filters]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const refreshAnalytics = () => {
+    const loadAdvancedAnalytics = async () => {
         setLoading(true);
-        // Use mock data for demo
-        setMetrics(generateMockAdvancedMetrics());
-        setLoading(false);
+        try {
+            // Fetch comprehensive analytics data
+            const [oracleStats, userStats, comparativeStats] = await Promise.all([
+                fetchOraclePerformanceData(),
+                fetchUserPerformanceData(), 
+                fetchComparativeAnalytics()
+            ]);
+
+            const insights = generateAdvancedInsights(oracleStats, userStats, comparativeStats);
+
+            setMetrics({
+                oracle: oracleStats,
+                users: userStats,
+                comparative: comparativeStats,
+                insights
+            });
+        } catch (error) {
+            // Use mock data for demo
+            setMetrics(generateMockAdvancedMetrics());
+        } finally {
+            setLoading(false);
+        }
     };
 
     const fetchOraclePerformanceData = async () => {
-        const response = await fetch(`/api/oracle/analytics/performance?season=${filters.season}&timeframe=${filters.timeframe}`);
+        const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season}&timeframe=${_filters.timeframe}`);
         return response.json();
     };
 
     const fetchUserPerformanceData = async () => {
-        const response = await fetch(`/api/oracle/analytics/users?season=${filters.season}&timeframe=${filters.timeframe}`);
+        const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season}&timeframe=${_filters.timeframe}`);
         return response.json();
     };
 
     const fetchComparativeAnalytics = async () => {
-        const response = await fetch(`/api/oracle/analytics/comparative?season=${filters.season}`);
+        const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season}`);
         return response.json();
     };
 
-    const generateAdvancedInsights = (oracle: Record<string, unknown>, users: Record<string, unknown>, _comparative: Record<string, unknown>) => {
+    const generateAdvancedInsights = (oracle: any, users: any, comparative: any) => {
         // Advanced AI-powered insight generation
         const performanceGaps = [
-            { metric: 'Overall Accuracy', gap: (oracle.overallAccuracy as number) - (users.averageAccuracy as number), trend: 'stable' as const },
+            { metric: 'Overall Accuracy', gap: oracle.overallAccuracy - users.averageAccuracy, trend: 'stable' as const },
             { metric: 'Confidence Calibration', gap: calculateCalibrationGap(oracle, users), trend: 'improving' as const },
             { metric: 'High-Confidence Predictions', gap: calculateHighConfidenceGap(oracle, users), trend: 'declining' as const }
         ];
@@ -161,13 +156,12 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
         return { performanceGaps, userBehaviors, marketInefficiencies, predictionPatterns };
     };
 
-    const calculateCalibrationGap = (oracle: Record<string, unknown>, _users: Record<string, unknown>): number => {
+    const calculateCalibrationGap = (oracle: any, users: any): number => {
         // Calculate how well-calibrated predictions are
-        const calibration = oracle.confidenceCalibration as Array<{ predicted: number; actual: number }>;
-        return Math.abs(calibration?.[0]?.predicted - calibration?.[0]?.actual) || 5;
+        return Math.abs(oracle.confidenceCalibration?.[0]?.predicted - oracle.confidenceCalibration?.[0]?.actual) || 5;
     };
 
-    const calculateHighConfidenceGap = (_oracle: Record<string, unknown>, _users: Record<string, unknown>): number => {
+    const calculateHighConfidenceGap = (oracle: any, users: any): number => {
         // Calculate performance gap in high confidence predictions
         return 12; // Mock calculation
     };
@@ -178,7 +172,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
         return {
             oracle: {
                 overallAccuracy: 78.5,
-                weeklyAccuracy: weeks.map((week: number) => ({
+                weeklyAccuracy: weeks.map((week: any) => ({
                     week,
                     accuracy: 65 + Math.random() * 30,
                     predictions: 3 + Math.floor(Math.random() * 4)
@@ -194,7 +188,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { range: '70-79%', predicted: 75, actual: 76 },
                     { range: '60-69%', predicted: 65, actual: 68 }
                 ],
-                predictionTrends: weeks.map((week: number) => ({
+                predictionTrends: weeks.map((week: any) => ({
                     date: `Week ${week}`,
                     accuracy: 65 + Math.random() * 25,
                     volume: 3 + Math.floor(Math.random() * 4)
@@ -203,7 +197,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             users: {
                 averageAccuracy: 64.2,
                 beatOracleRate: 28.5,
-                participationTrends: weeks.map((week: number) => ({
+                participationTrends: weeks.map((week: any) => ({
                     week,
                     users: 8 + Math.floor(Math.random() * 15),
                     predictions: 25 + Math.floor(Math.random() * 50)
@@ -224,7 +218,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 ]
             },
             comparative: {
-                weeklyComparison: weeks.map((week: number) => ({
+                weeklyComparison: weeks.map((week: any) => ({
                     week,
                     oracleAccuracy: 65 + Math.random() * 25,
                     userAccuracy: 55 + Math.random() * 25,
@@ -274,7 +268,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             // Generate comprehensive PDF report
             const reportData = {
                 metrics,
-                filters,
+                filters: _filters,
                 generatedAt: new Date().toISOString(),
                 insights: metrics?.insights
             };
@@ -288,7 +282,6 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             a.click();
             URL.revokeObjectURL(url);
         } catch (error) {
-            console.error('Failed to generate report:', error);
         } finally {
             setReportGenerating(false);
         }
@@ -346,7 +339,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                         <Activity className="w-12 h-12 text-gray-500 mx-auto mb-4" />
                         <p className="text-gray-400">Unable to load analytics data</p>
                         <button 
-                            onClick={refreshAnalytics}
+                            onClick={loadAdvancedAnalytics}
                             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                         >
                             Retry
@@ -368,7 +361,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 
                 <div className="flex space-x-3">
                     <button
-                        onClick={refreshAnalytics}
+                        onClick={loadAdvancedAnalytics}
                         className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
                     >
                         <RefreshCw className="w-4 h-4" />

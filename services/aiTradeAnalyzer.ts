@@ -115,7 +115,7 @@ class AITradeAnalyzer {
   initialize(players: Player[], leagueData: unknown, currentWeek: number = 8) {
     logger.info('🤖 Initializing AI Trade Analyzer with player database');
     this.playerDatabase.clear();
-    players.forEach(player => {
+    players.forEach((player: any) => {
       this.playerDatabase.set(player.id, player);
     });
     this.leagueContext = leagueData;
@@ -205,14 +205,14 @@ class AITradeAnalyzer {
     const targets: SmartTradeTarget[] = [];
     
     // Analyze each team for potential trade partners
-    leagueTeams.forEach(team => {
+    leagueTeams.forEach((team: any) => {
       const teamObj = team as {id: string; name: string};
       if (teamObj.id === teamRoster[0]?.id) return; // Skip own team
       
       // Find players that match team needs
       const availablePlayers = this.getAvailablePlayersFromTeam(team, teamNeeds);
       
-      availablePlayers.forEach(player => {
+      availablePlayers.forEach((player: any) => {
         const likelihood = this.calculateTradeLikelihood(player, team, teamRoster);
         const suggestedOffer = this.generateTradeOffer(player, teamRoster, team);
         const expectedValue = this.calculateExpectedValue(player, suggestedOffer);
@@ -344,7 +344,7 @@ class AITradeAnalyzer {
       dropCandidate?: Player;
     }[] = [];
     
-    availablePlayers.forEach(player => {
+    availablePlayers.forEach((player: any) => {
       const value = this.calculateWaiverValue(player, teamRoster);
       const bidAmount = this.calculateOptimalBid(player, budget, value);
       const priority = this.calculateWaiverPriority(player, teamRoster);
@@ -407,9 +407,9 @@ class AITradeAnalyzer {
 
   private analyzePositionalImpact(playersOut: Player[], playersIn: Player[], _teamContext: unknown): PositionalImpact[] {
     const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
-    return positions.map(position => {
-      const outValue = playersOut.filter(p => p.position === position).reduce((sum, p) => sum + p.projectedPoints, 0);
-      const inValue = playersIn.filter(p => p.position === position).reduce((sum, p) => sum + p.projectedPoints, 0);
+    return positions.map((position: any) => {
+      const outValue = playersOut.filter((p: any) => p.position === position).reduce((sum, p) => sum + p.projectedPoints, 0);
+      const inValue = playersIn.filter((p: any) => p.position === position).reduce((sum, p) => sum + p.projectedPoints, 0);
       const change = inValue - outValue;
       
       return {
@@ -425,7 +425,7 @@ class AITradeAnalyzer {
   private analyzeScheduleImpact(players: Player[], _teamContext: unknown): ScheduleImpact {
     const avgScheduleStrength = players.reduce((sum, p) => sum + p.scheduleStrength, 0) / players.length;
     const playoffStrength = avgScheduleStrength * 0.8; // Simplified playoff schedule
-    const byeWeekImpact = players.filter(p => p.byeWeek > this.seasonWeek).length;
+    const byeWeekImpact = players.filter((p: any) => p.byeWeek > this.seasonWeek).length;
     
     return {
       remainingStrength: avgScheduleStrength,
@@ -564,8 +564,8 @@ class AITradeAnalyzer {
     const usedPlayers = new Set<string>();
     
     // Simplified optimization - would use more advanced algorithms
-    slots.forEach(slot => {
-      const availableForSlot = players.filter(p => 
+    slots.forEach((slot: any) => {
+      const availableForSlot = players.filter((p: any) => 
         (slot === 'FLEX' ? ['RB', 'WR', 'TE'].includes(p.position) : p.position === slot) &&
         !usedPlayers.has(p.id)
       );
@@ -616,7 +616,7 @@ class AITradeAnalyzer {
   }
 
   private findBestDropCandidate(newPlayer: Player, roster: Player[]): Player | undefined {
-    const samePosition = roster.filter(p => p.position === newPlayer.position);
+    const samePosition = roster.filter((p: any) => p.position === newPlayer.position);
     if (samePosition.length > 0) {
       return samePosition.reduce((worst, current) => 
         current.projectedPoints < worst.projectedPoints ? current : worst
@@ -628,7 +628,7 @@ class AITradeAnalyzer {
   }
 
   private assessPositionalNeed(position: string, roster: Player[]): number {
-    const positionPlayers = roster.filter(p => p.position === position);
+    const positionPlayers = roster.filter((p: any) => p.position === position);
     const avgPoints = positionPlayers.reduce((sum, p) => sum + p.projectedPoints, 0) / positionPlayers.length;
     
     // Return need score (0-1, higher = more need)

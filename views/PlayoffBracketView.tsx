@@ -17,7 +17,7 @@ interface MatchupCardProps {
     isWinner?: boolean;
 }
 
-const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }) => {
+const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }: any) => {
     if (!matchupTeam || !team) {
         return <div className="h-10 flex items-center px-2 text-sm text-gray-500">TBD</div>;
     }
@@ -34,9 +34,9 @@ const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({
     );
 };
 
-const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }) => {
-    const teamA = teams.find(t => t.id === matchup.teamA.teamId);
-    const teamB = teams.find(t => t.id === matchup.teamB.teamId);
+const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }: any) => {
+    const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
+    const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
     const winnerId = matchup.teamA.score > matchup.teamB.score ? matchup.teamA.teamId : matchup.teamA.score < matchup.teamB.score ? matchup.teamB.teamId : undefined;
     
     return (
@@ -58,14 +58,14 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }) => {
     );
 };
 
-const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const semifinals = league.playoffBracket?.[15] || [];
     const championship = league.playoffBracket?.[16]?.[0];
 
     const championMatchup = league.status === 'COMPLETE' ? championship : undefined;
     const championId = championMatchup ? (championMatchup.teamA.score > championMatchup.teamB.score ? championMatchup.teamA.teamId : championMatchup.teamB.teamId) : undefined;
-    const champion = championId ? league.teams.find(t => t.id === championId) : undefined;
+    const champion = championId ? league.teams.find((t: any) => t.id === championId) : undefined;
 
     return (
         <div className="min-h-screen">
@@ -140,7 +140,7 @@ const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch
                                 {/* Semifinals */}
                                 <div className="flex flex-col justify-around h-80 gap-10 relative">
                                     <h3 className="text-center font-bold text-lg text-cyan-300 absolute -top-8 left-1/2 -translate-x-1/2">Semifinals (Week 15)</h3>
-                                    {semifinals.map(matchup => <MatchupCard key={matchup.teamA.teamId} matchup={matchup} teams={league.teams} />)}
+                                    {semifinals.map((matchup: any) => <MatchupCard key={matchup.teamA.teamId} matchup={matchup} teams={league.teams} />)}
                                 </div>
                                 {/* Connecting Lines */}
                                 {championship && (

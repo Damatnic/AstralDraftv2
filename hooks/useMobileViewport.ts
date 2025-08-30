@@ -3,7 +3,7 @@
  * Handles mobile viewport optimization, orientation changes, and safe areas
  */
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 export interface ViewportInfo {
   width: number;
@@ -45,7 +45,7 @@ export const useMobileViewport = (config: Partial<MobileViewportConfig> = {}) =>
     touchCapable: 'ontouchstart' in window
   });
 
-  const mergedConfig = useMemo(() => ({ ...DEFAULT_CONFIG, ...config }), [config]);
+  const mergedConfig = { ...DEFAULT_CONFIG, ...config };
 
   // Get safe area insets from CSS environment variables
   const getSafeAreaInsets = useCallback(() => {

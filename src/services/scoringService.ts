@@ -124,7 +124,7 @@ class ScoringService {
    */
   private handleScoreUpdate(update: ScoreUpdate): void {
     // Notify all registered callbacks
-    this.scoreUpdateCallbacks.forEach((callback) => {
+    this.scoreUpdateCallbacks.forEach((callback: any) => {
       callback(update);
     });
 
@@ -136,7 +136,7 @@ class ScoringService {
    * Handle matchup finalization
    */
   private handleMatchupFinalized(data: { matchupId: string; winner: any; finalizedBy: string }): void {
-    // Matchup finalized
+    console.log(`Matchup ${data.matchupId} finalized by ${data.finalizedBy}`);
     // Trigger UI updates for finalized matchup
   }
 

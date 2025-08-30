@@ -53,7 +53,7 @@ export const useVirtualScroll = ({
     const offsetY = visibleRange.start * itemHeight;
 
     // Handle scroll with optimization
-    useOptimizedScroll((_event) => {
+    useOptimizedScroll((event: any) => {
         const element = scrollElement || containerRef.current;
         if (element) {
             setScrollTop(element.scrollTop);

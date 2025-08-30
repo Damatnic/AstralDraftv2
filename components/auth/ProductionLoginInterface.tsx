@@ -120,7 +120,7 @@ const ProductionLoginInterface: React.FC = () => {
       if (!result.success) {
         setErrors({ general: result.error || 'Login failed' });
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -170,7 +170,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Registration failed' });
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -197,7 +197,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Failed to send reset email' });
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -224,7 +224,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Verification failed' });
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -243,7 +243,7 @@ const ProductionLoginInterface: React.FC = () => {
       } else {
         setErrors({ general: result.error || 'Failed to resend verification' });
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred' });
     }
 
@@ -261,7 +261,7 @@ const ProductionLoginInterface: React.FC = () => {
     showPasswordToggle?: boolean;
     onTogglePassword?: () => void;
     showPassword?: boolean;
-  }> = ({ type, placeholder, value, onChange, error, icon, showPasswordToggle, onTogglePassword, showPassword }) => (
+  }> = ({ type, placeholder, value, onChange, error, icon, showPasswordToggle, onTogglePassword, showPassword }: any) => (
     <div className="space-y-1">
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -271,7 +271,7 @@ const ProductionLoginInterface: React.FC = () => {
           type={showPasswordToggle ? (showPassword ? 'text' : 'password') : type}
           placeholder={placeholder}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          onChange={(e: any) => onChange(e.target.value)}
           className={`
             w-full pl-10 pr-4 py-3 bg-gray-800 border rounded-lg text-white placeholder-gray-400
             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
@@ -314,7 +314,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="email"
         placeholder="Email address"
         value={loginData.email}
-        onChange={(value) => setLoginData({ ...loginData, email: value })}
+        onChange={(value: any) => setLoginData({ ...loginData, email: value })}
         error={errors.email}
         icon={<MailIcon className="w-5 h-5" />}
       />
@@ -323,7 +323,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Password"
         value={loginData.password}
-        onChange={(value) => setLoginData({ ...loginData, password: value })}
+        onChange={(value: any) => setLoginData({ ...loginData, password: value })}
         error={errors.password}
         icon={<LockIcon className="w-5 h-5" />}
         showPasswordToggle
@@ -336,7 +336,7 @@ const ProductionLoginInterface: React.FC = () => {
           <input
             type="checkbox"
             checked={loginData.rememberMe}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
+            onChange={(e: any) => setLoginData({ ...loginData, rememberMe: e.target.checked })}
             className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800"
           />
           <span className="ml-2 text-sm text-gray-400">Remember me</span>
@@ -373,7 +373,7 @@ const ProductionLoginInterface: React.FC = () => {
       </button>
 
       <div className="text-center">
-        <span className="text-gray-400">Don&apos;t have an account? </span>
+        <span className="text-gray-400">Don't have an account? </span>
         <button
           type="button"
           onClick={() => setCurrentView('register')}
@@ -405,7 +405,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="email"
         placeholder="Email address"
         value={registerData.email}
-        onChange={(value) => setRegisterData({ ...registerData, email: value })}
+        onChange={(value: any) => setRegisterData({ ...registerData, email: value })}
         error={errors.email}
         icon={<MailIcon className="w-5 h-5" />}
       />
@@ -414,7 +414,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="text"
         placeholder="Username"
         value={registerData.username}
-        onChange={(value) => setRegisterData({ ...registerData, username: value })}
+        onChange={(value: any) => setRegisterData({ ...registerData, username: value })}
         error={errors.username}
         icon={<UserIcon className="w-5 h-5" />}
       />
@@ -423,7 +423,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="text"
         placeholder="Display name"
         value={registerData.displayName}
-        onChange={(value) => setRegisterData({ ...registerData, displayName: value })}
+        onChange={(value: any) => setRegisterData({ ...registerData, displayName: value })}
         error={errors.displayName}
         icon={<UserIcon className="w-5 h-5" />}
       />
@@ -432,7 +432,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Password"
         value={registerData.password}
-        onChange={(value) => setRegisterData({ ...registerData, password: value })}
+        onChange={(value: any) => setRegisterData({ ...registerData, password: value })}
         error={errors.password}
         icon={<LockIcon className="w-5 h-5" />}
         showPasswordToggle
@@ -444,7 +444,7 @@ const ProductionLoginInterface: React.FC = () => {
         type="password"
         placeholder="Confirm password"
         value={registerData.confirmPassword}
-        onChange={(value) => setRegisterData({ ...registerData, confirmPassword: value })}
+        onChange={(value: any) => setRegisterData({ ...registerData, confirmPassword: value })}
         error={errors.confirmPassword}
         icon={<LockIcon className="w-5 h-5" />}
         showPasswordToggle
@@ -456,7 +456,7 @@ const ProductionLoginInterface: React.FC = () => {
         <input
           type="checkbox"
           checked={registerData.acceptTerms}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRegisterData({ ...registerData, acceptTerms: e.target.checked })}
+          onChange={(e: any) => setRegisterData({ ...registerData, acceptTerms: e.target.checked })}
           className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 mt-1"
         />
         <span className="text-sm text-gray-400">
@@ -589,7 +589,7 @@ const ProductionLoginInterface: React.FC = () => {
       </form>
 
       <div className="text-center">
-        <span className="text-gray-400">Didn&apos;t receive the email? </span>
+        <span className="text-gray-400">Didn't receive the email? </span>
         <button
           type="button"
           onClick={handleResendVerification}

@@ -9,10 +9,10 @@ interface ChartProps {
 
 export const Chart: React.FC<ChartProps> = ({ 
   data, 
-  type: _type = 'bar', 
+  type = 'bar', 
   height = 200,
   loading = false 
-}) => {
+}: any) => {
   if (loading) {
     return (
       <div className="glass-pane p-4 animate-pulse" style={{ height }}>
@@ -26,7 +26,7 @@ export const Chart: React.FC<ChartProps> = ({
     );
   }
 
-  const maxValue = Math.max(...data.map(d => d.value));
+  const maxValue = Math.max(...data.map((d: any) => d.value));
 
   return (
     <div className="glass-pane p-4" style={{ height }}>

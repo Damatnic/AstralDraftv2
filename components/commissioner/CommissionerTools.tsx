@@ -6,14 +6,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import { Team } from '../../types';
+import { Team, Player } from '../../types';
 
 interface CommissionerToolsProps {
   isCommissioner?: boolean;
 }
 
-const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }) => {
-  const { state } = useAppState();
+const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }: any) => {
+  const { state, dispatch } = useAppState();
   const [activeTab, setActiveTab] = useState<'teams' | 'settings' | 'players' | 'schedule'>('teams');
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
   const [newTeamName, setNewTeamName] = useState('');
@@ -30,57 +30,59 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
     );
   }
 
-    // TODO: Implement team name submission
-  // const handleTeamNameSubmit = () => {
-  //   if (editingTeam && newTeamName.trim()) {
-  //     dispatch({
-  //       type: 'UPDATE_TEAM_NAME',
-  //       payload: {
-  //         teamId: editingTeam.id,
-  //         name: newTeamName.trim()
-  //       }
-  //     });
-  //     setEditingTeam(null);
-  //     setNewTeamName('');
-  //   }
-  // };
+  const handleTeamNameUpdate = (team: Team) => {
+    if (newTeamName.trim() && newTeamName !== team.name) {
+      dispatch({
+        type: 'UPDATE_TEAM_NAME',
+        payload: { teamId: team.id, name: newTeamName.trim() }
+      });
+      
+      dispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+          message: `Team name updated to "${newTeamName.trim()}"`,
+          type: 'SUCCESS'
+        }
+      });
+    }
+    setEditingTeam(null);
+    setNewTeamName('');
+  };
 
-  // TODO: Implement force player add
-  // const handleForcePlayerAdd = (teamId: number, player: Player) => {
-  //   dispatch({
-  //     type: 'ADD_PLAYER_TO_ROSTER',
-  //     payload: { teamId, player }
-  //   });
-  //   
-  //   dispatch({
-  //     type: 'ADD_NOTIFICATION',
-  //     payload: {
-  //       message: `Commissioner added ${player.name} to roster`,
-  //       type: 'INFO'
-  //     }
-  //   });
-  // };
+  const handleForcePlayerAdd = (teamId: number, player: Player) => {
+    dispatch({
+      type: 'ADD_PLAYER_TO_ROSTER',
+      payload: { teamId, player }
+    });
+    
+    dispatch({
+      type: 'ADD_NOTIFICATION',
+      payload: {
+        message: `Commissioner added ${player.name} to roster`,
+        type: 'INFO'
+      }
+    });
+  };
 
-  // TODO: Implement force player drop
-  // const handleForcePlayerDrop = (teamId: number, playerId: number) => {
-  //   const team = league.teams.find(t => t.id === teamId);
-  //   const player = team?.roster.find(p => p.id === playerId);
-  //   
-  //   if (player && window.confirm(`Force drop ${player.name}?`)) {
-  //     dispatch({
-  //       type: 'REMOVE_PLAYER_FROM_ROSTER',
-  //       payload: { teamId, playerId }
-  //     });
-  //     
-  //     dispatch({
-  //       type: 'ADD_NOTIFICATION',
-  //       payload: {
-  //         message: `Commissioner dropped ${player.name}`,
-  //         type: 'INFO'
-  //       }
-  //     });
-  //   }
-  // };
+  const handleForcePlayerDrop = (teamId: number, playerId: number) => {
+    const team = league.teams.find((t: any) => t.id === teamId);
+    const player = team?.roster.find((p: any) => p.id === playerId);
+    
+    if (player && window.confirm(`Force drop ${player.name}?`)) {
+      dispatch({
+        type: 'REMOVE_PLAYER_FROM_ROSTER',
+        payload: { teamId, playerId }
+      });
+      
+      dispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+          message: `Commissioner dropped ${player.name}`,
+          type: 'INFO'
+        }
+      });
+    }
+  };
 
   const tabs = [
     { id: 'teams', label: 'Team Management', icon: '👥' },
@@ -100,7 +102,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {league.teams.map((team) => (
+              {league.teams.map((team: any) => (
                 <motion.div
                   key={team.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -116,7 +118,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
                             <input
                               type="text"
                               value={newTeamName}
-                              onChange={(e) => setNewTeamName(e.target.value)}
+                              onChange={(e: any) => setNewTeamName(e.target.value)}
                               className="px-2 py-1 bg-slate-800 border border-slate-600 rounded text-white text-sm"
                               placeholder={team.name}
                               autoFocus
@@ -343,19 +345,19 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">
-                    {league.allPlayers.filter(p => p.position === 'QB').length}
+                    {league.allPlayers.filter((p: any) => p.position === 'QB').length}
                   </div>
                   <div className="text-sm text-slate-400">Quarterbacks</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">
-                    {league.allPlayers.filter(p => p.position === 'RB').length}
+                    {league.allPlayers.filter((p: any) => p.position === 'RB').length}
                   </div>
                   <div className="text-sm text-slate-400">Running Backs</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold text-white">
-                    {league.allPlayers.filter(p => p.position === 'WR').length}
+                    {league.allPlayers.filter((p: any) => p.position === 'WR').length}
                   </div>
                   <div className="text-sm text-slate-400">Wide Receivers</div>
                 </div>
@@ -406,10 +408,10 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
 
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1">
-        {tabs.map((tab) => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as 'teams' | 'settings' | 'players' | 'schedule')}
+            onClick={() => setActiveTab(tab.id as any)}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors ${
               activeTab === tab.id
                 ? 'bg-blue-600 text-white'

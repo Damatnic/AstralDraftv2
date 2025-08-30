@@ -43,7 +43,7 @@ interface NotificationProviderProps {
     children: React.ReactNode;
 }
 
-export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
+export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }: any) => {
     const { user, isAuthenticated } = useAuth();
     const [notifications, setNotifications] = useState<EnhancedNotification[]>([]);
     const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
@@ -52,7 +52,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
     // Helper functions for notification updates
     const markNotificationAsRead = useCallback((notificationId: string) => {
         setNotifications(current => {
-            return current.map(notification => {
+            return current.map((notification: any) => {
                 return notification.id === notificationId 
                     ? { ...notification, isRead: true }
                     : notification;
@@ -62,7 +62,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 
     const markNotificationAsArchived = useCallback((notificationId: string) => {
         setNotifications(current => {
-            return current.map(notification => {
+            return current.map((notification: any) => {
                 return notification.id === notificationId 
                     ? { ...notification, isArchived: true }
                     : notification;
@@ -72,7 +72,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 
     const removeNotificationFromList = useCallback((notificationId: string) => {
         setNotifications(current => {
-            return current.filter(notification => notification.id !== notificationId);
+            return current.filter((notification: any) => notification.id !== notificationId);
         });
     }, []);
 
@@ -129,7 +129,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
             );
             setNotifications(userNotifications);
         } catch (error) {
-            console.error('Failed to load notifications:', error);
         } finally {
             setLoading(false);
         }
@@ -144,7 +143,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
             );
             setPreferences(userPreferences);
         } catch (error) {
-            console.error('Failed to load notification preferences:', error);
         }
     }, [user]);
 
@@ -154,7 +152,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         try {
             await enhancedNotificationService.markAsRead(user.id.toString(), notificationId);
         } catch (error) {
-            console.error('Failed to mark notification as read:', error);
         }
     }, [user]);
 
@@ -164,7 +161,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         try {
             await enhancedNotificationService.markAllAsRead(user.id.toString(), category);
         } catch (error) {
-            console.error('Failed to mark all notifications as read:', error);
         }
     }, [user]);
 
@@ -174,7 +170,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         try {
             await enhancedNotificationService.archiveNotification(user.id.toString(), notificationId);
         } catch (error) {
-            console.error('Failed to archive notification:', error);
         }
     }, [user]);
 
@@ -184,7 +179,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         try {
             await enhancedNotificationService.deleteNotification(user.id.toString(), notificationId);
         } catch (error) {
-            console.error('Failed to delete notification:', error);
         }
     }, [user]);
 
@@ -195,7 +189,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
             await enhancedNotificationService.updateUserPreferences(user.id.toString(), updates);
             await loadPreferences();
         } catch (error) {
-            console.error('Failed to update notification preferences:', error);
         }
     }, [user, loadPreferences]);
 
@@ -216,7 +209,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
                 options
             );
         } catch (error) {
-            console.error('Failed to send notification:', error);
         }
     }, [user]);
 
@@ -226,7 +218,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         try {
             return await enhancedNotificationService.getNotificationStats(user.id.toString());
         } catch (error) {
-            console.error('Failed to get notification stats:', error);
             return null;
         }
     }, [user]);
@@ -235,10 +226,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         await loadNotifications();
     }, [loadNotifications]);
 
-    const unreadCount = notifications.filter(n => !n.isRead && !n.isArchived).length;
+    const unreadCount = notifications.filter((n: any) => !n.isRead && !n.isArchived).length;
 
     const contextValue = useMemo<NotificationContextValue>(() => ({
-        notifications: notifications.filter(n => !n.isArchived),
+        notifications: notifications.filter((n: any) => !n.isArchived),
         unreadCount,
         preferences,
         loading,

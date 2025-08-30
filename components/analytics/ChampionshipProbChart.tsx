@@ -11,7 +11,7 @@ const teamColors = [
     '#f472b6', '#38bdf8', '#a3e635', '#4ade80', '#c084fc', '#fb7185'
 ];
 
-const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }) => {
+const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }: any) => {
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
@@ -33,9 +33,9 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league })
         if (week === undefined) return;
 
         const dataForWeek = league.teams.map((team, i) => {
-            const prob = team.championshipProbHistory?.find((h: { week: number; probability: number }) => h.week === week)?.probability ?? null;
+            const prob = team.championshipProbHistory?.find((h: any) => h.week === week)?.probability ?? null;
             return { name: team.name, prob, color: teamColors[i % teamColors.length] };
-        }).filter((d: { name: string; prob: number | null; color: string }) => d.prob !== null).sort((a, b) => b.prob! - a.prob!);
+        }).filter((d: any) => d.prob !== null).sort((a, b) => b.prob! - a.prob!);
 
         if (dataForWeek.length === 0) return;
 
@@ -45,7 +45,7 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league })
             content: (
                 <div className="p-2 bg-gray-900/80 rounded-lg text-xs">
                     <p className="font-bold mb-1">Week {week}</p>
-                    {dataForWeek.map((d: { name: string; prob: number | null; color: string }) => (
+                    {dataForWeek.map((d: any) => (
                         <div key={d.name} className="flex items-center gap-2">
                             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></div>
                             <span>{d.name}:</span>
@@ -67,7 +67,7 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league })
                 <line x1={padding} y1={padding} x2={padding} y2={height - padding} stroke="#475569" />
                 
                 {/* Y-axis labels */}
-                {[0, 25, 50, 75, 100].map((p: number) => (
+                {[0, 25, 50, 75, 100].map((p: any) => (
                     <g key={p}>
                         <text x={padding - 10} y={yScale(p)} textAnchor="end" alignmentBaseline="middle" fill="#94a3b8" fontSize="12">{p}%</text>
                         <line x1={padding} y1={yScale(p)} x2={width - padding} y2={yScale(p)} stroke="#475569" strokeDasharray="2,2" opacity="0.5"/>
@@ -75,15 +75,15 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league })
                 ))}
                 
                  {/* X-axis labels */}
-                 {weeks.map((w: number) => (
+                 {weeks.map((w: any) => (
                      <text key={w} x={xScale(w)} y={height - padding + 20} textAnchor="middle" fill="#94a3b8" fontSize="12">{w}</text>
                  ))}
 
                 {/* Data lines */}
                 {league.teams.map((team, i) => {
-                    const history = team.championshipProbHistory?.filter(h => h.week <= league.currentWeek) || [];
+                    const history = team.championshipProbHistory?.filter((h: any) => h.week <= league.currentWeek) || [];
                     if (history.length < 2) return null;
-                    const pathData = history.map((h: { week: number; probability: number }) => `${xScale(h.week)},${yScale(h.probability)}`).join(' L ');
+                    const pathData = history.map((h: any) => `${xScale(h.week)},${yScale(h.probability)}`).join(' L ');
                     return (
                         <path key={team.id} d={`M ${pathData}`} fill="none" stroke={teamColors[i % teamColors.length]} strokeWidth="2" />
                     );

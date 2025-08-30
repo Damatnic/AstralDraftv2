@@ -359,7 +359,7 @@ class SeasonContestService {
     }
 
     // Check if user already joined
-    if (contest.participants.some(p => p.userId === userId)) {
+    if (contest.participants.some((p: any) => p.userId === userId)) {
       return false;
     }
 
@@ -399,18 +399,18 @@ class SeasonContestService {
     const contest = this.contests.get(contestId);
     if (!contest) return false;
 
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     if (!participant) return false;
 
-    const weeklyContest = contest.weeks?.find(w => w.week === week);
+    const weeklyContest = contest.weeks?.find((w: any) => w.week === week);
     if (!weeklyContest || weeklyContest.status !== 'OPEN') return false;
 
     // Validate predictions
     for (const prediction of Object.values(predictions)) {
-      const category = weeklyContest.predictions.find(p => p.id === prediction.categoryId);
+      const category = weeklyContest.predictions.find((p: any) => p.id === prediction.categoryId);
       if (!category) return false;
       
-      const option = category.options.find(o => o.id === prediction.selectedOptionId);
+      const option = category.options.find((o: any) => o.id === prediction.selectedOptionId);
       if (!option) return false;
     }
 
@@ -431,7 +431,7 @@ class SeasonContestService {
     const contest = this.contests.get(contestId);
     if (!contest?.bracket) return false;
 
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     if (!participant) return false;
 
     participant.bracketPicks = picks;
@@ -445,7 +445,7 @@ class SeasonContestService {
     const contest = this.contests.get(contestId);
     if (!contest?.awards) return false;
 
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     if (!participant) return false;
 
     participant.awardPicks = picks;
@@ -463,7 +463,7 @@ class SeasonContestService {
     const contest = this.contests.get(contestId);
     if (!contest) return;
 
-    const weeklyContest = contest.weeks?.find(w => w.week === week);
+    const weeklyContest = contest.weeks?.find((w: any) => w.week === week);
     if (!weeklyContest) return;
 
     // Score each participant's predictions
@@ -477,7 +477,7 @@ class SeasonContestService {
 
       // Score each prediction
       for (const [categoryId, prediction] of Object.entries(weeklyPrediction.predictions)) {
-        const category = weeklyContest.predictions.find(p => p.id === categoryId);
+        const category = weeklyContest.predictions.find((p: any) => p.id === categoryId);
         if (!category) continue;
 
         const correctAnswer = results[categoryId];
@@ -519,7 +519,7 @@ class SeasonContestService {
       }
 
       // Apply weekly bonuses
-      const weeklyBonuses = contest.scoring.weeklyBonuses.filter(b => b.week === week);
+      const weeklyBonuses = contest.scoring.weeklyBonuses.filter((b: any) => b.week === week);
       for (const bonus of weeklyBonuses) {
         if (this.evaluateBonusCondition(bonus.condition, participant, weeklyPrediction)) {
           weeklyScore += bonus.bonus;
@@ -560,14 +560,14 @@ class SeasonContestService {
    */
   getUserContests(userId: string): SeasonContest[] {
     const contestIds = this.userParticipation.get(userId) || [];
-    return contestIds.map(id => this.contests.get(id)).filter((contest): contest is SeasonContest => contest !== undefined);
+    return contestIds.map((id: any) => this.contests.get(id)).filter((contest): contest is SeasonContest => contest !== undefined);
   }
 
   /**
    * Get active contests
    */
   getActiveContests(): SeasonContest[] {
-    return Array.from(this.contests.values()).filter(contest => contest.status === 'ACTIVE');
+    return Array.from(this.contests.values()).filter((contest: any) => contest.status === 'ACTIVE');
   }
 
   /**
@@ -685,7 +685,7 @@ class SeasonContestService {
       const predictions = Object.values(weeklyPrediction.predictions);
       if (predictions.length === 0) break;
       
-      const allCorrect = predictions.every(p => p.isCorrect);
+      const allCorrect = predictions.every((p: any) => p.isCorrect);
       if (allCorrect) {
         streak++;
       } else {
@@ -701,15 +701,15 @@ class SeasonContestService {
     switch (condition.toLowerCase()) {
       case 'perfect_week':
         // All predictions correct for the week
-        return Object.values(prediction.predictions).every(p => p.isCorrect);
+        return Object.values(prediction.predictions).every((p: any) => p.isCorrect);
       
       case 'high_confidence':
         // All predictions made with high confidence (80%+)
-        return Object.values(prediction.predictions).every(p => (p.confidence || 0) >= 80);
+        return Object.values(prediction.predictions).every((p: any) => (p.confidence || 0) >= 80);
       
       case 'contrarian_pick': {
         // Made prediction against majority - simplified check for now
-        return Object.values(prediction.predictions).some(p => p.confidence != null && p.confidence < 60);
+        return Object.values(prediction.predictions).some((p: any) => p.confidence != null && p.confidence < 60);
       }
       
       case 'streak_active':
@@ -718,7 +718,7 @@ class SeasonContestService {
       
       case 'upset_special': {
         // Correctly predicted an upset (low confidence prediction that was correct)
-        return Object.values(prediction.predictions).some(p => 
+        return Object.values(prediction.predictions).some((p: any) => 
           p.isCorrect && p.confidence != null && p.confidence < 50
         );
       }
@@ -736,15 +736,15 @@ class SeasonContestService {
 
   private getWeeklyTopPerformers(contest: SeasonContest, week: number): string[] {
     return contest.participants
-      .filter(p => p.weeklyScores[week] !== undefined)
+      .filter((p: any) => p.weeklyScores[week] !== undefined)
       .sort((a, b) => (b.weeklyScores[week] || 0) - (a.weeklyScores[week] || 0))
       .slice(0, 3)
-      .map(p => p.userId);
+      .map((p: any) => p.userId);
   }
 
   private calculateWeeklyAverage(contest: SeasonContest, week?: number, userId?: string): number {
     if (userId) {
-      const participant = contest.participants.find(p => p.userId === userId);
+      const participant = contest.participants.find((p: any) => p.userId === userId);
       if (!participant) return 0;
       
       const scores = Object.values(participant.weeklyScores);
@@ -753,7 +753,7 @@ class SeasonContestService {
 
     if (week) {
       const weeklyScores = contest.participants
-        .map(p => p.weeklyScores[week])
+        .map((p: any) => p.weeklyScores[week])
         .filter((score): score is number => score !== undefined);
       
       return weeklyScores.length > 0 ? weeklyScores.reduce((a, b) => a + b, 0) / weeklyScores.length : 0;
@@ -853,7 +853,7 @@ class SeasonContestService {
     
     // Surprise analysis
     if (surprises.length > 0) {
-      const topSurprises = surprises.slice(0, 3).map(s => '• ' + s).join('\n');
+      const topSurprises = surprises.slice(0, 3).map((s: any) => '• ' + s).join('\n');
       analysis += '\n\nKey surprises:\n' + topSurprises;
     }
     
@@ -922,14 +922,14 @@ class SeasonContestService {
   private calculateStreakLeaders(contest: SeasonContest): StreakLeader[] {
     // Calculate streak leaders from participants
     return contest.participants
-      .map(participant => ({
+      .map((participant: any) => ({
         userId: participant.userId,
         userName: participant.userName || 'Unknown User',
         currentStreak: this.getCurrentStreak(participant),
         longestStreak: this.getLongestStreak(participant),
         streakType: this.getStreakType(participant)
       }))
-      .filter(leader => leader.currentStreak > 0)
+      .filter((leader: any) => leader.currentStreak > 0)
       .sort((a, b) => b.currentStreak - a.currentStreak)
       .slice(0, 10);
   }
@@ -950,7 +950,7 @@ class SeasonContestService {
       const predictions = Object.values(weeklyPrediction.predictions);
       if (predictions.length === 0) continue;
       
-      const allCorrect = predictions.every(p => p.isCorrect);
+      const allCorrect = predictions.every((p: any) => p.isCorrect);
       if (allCorrect) {
         currentStreak++;
         longestStreak = Math.max(longestStreak, currentStreak);
@@ -979,7 +979,7 @@ class SeasonContestService {
     const rankingChanges: RankingChange[] = [];
     
     for (const currentRanking of currentRankings) {
-      const previousRanking = previousRankings.find(p => p.userId === currentRanking.userId);
+      const previousRanking = previousRankings.find((p: any) => p.userId === currentRanking.userId);
       if (!previousRanking) continue;
       
       const change = previousRanking.rank - currentRanking.rank;
@@ -1002,7 +1002,7 @@ class SeasonContestService {
 
   private calculateCurrentRankings(contest: SeasonContest): ContestRanking[] {
     return contest.participants
-      .map(participant => {
+      .map((participant: any) => {
         const totalScore = Object.values(participant.weeklyScores).reduce((sum, score) => sum + score, 0);
         const weeklyAverage = this.calculateWeeklyAverage(contest, undefined, participant.userId);
         const accuracy = this.calculateAccuracy(participant);
@@ -1029,7 +1029,7 @@ class SeasonContestService {
   private calculateHistoricalRankings(contest: SeasonContest, week: number): ContestRanking[] {
     // Calculate rankings as they would have been at specified week
     return contest.participants
-      .map(participant => {
+      .map((participant: any) => {
         const totalScore = Object.entries(participant.weeklyScores)
           .filter(([w]) => parseInt(w) <= week)
           .reduce((sum, [, score]) => sum + score, 0);
@@ -1062,7 +1062,7 @@ class SeasonContestService {
     const remainingWeeks = totalWeeks - currentWeek;
     
     return currentRankings
-      .map(ranking => {
+      .map((ranking: any) => {
         // Project future performance based on recent trend
         let projectedChange = 0;
         

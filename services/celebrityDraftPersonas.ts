@@ -331,7 +331,7 @@ export class CelebrityPersonaEngine {
   private selectedPersona: CelebrityPersona | null = null;
 
   selectPersona(personaId: string): CelebrityPersona | null {
-    this.selectedPersona = CELEBRITY_PERSONAS.find(p => p.id === personaId) || null;
+    this.selectedPersona = CELEBRITY_PERSONAS.find((p: any) => p.id === personaId) || null;
     return this.selectedPersona;
   }
 
@@ -359,7 +359,7 @@ export class CelebrityPersonaEngine {
     }
 
     // Score each available player based on persona preferences
-    const scoredPlayers = availablePlayers.map(player => {
+    const scoredPlayers = availablePlayers.map((player: any) => {
       let score = 0;
       const reasons: string[] = [];
 
@@ -387,7 +387,7 @@ export class CelebrityPersonaEngine {
       }
 
       // Apply persona-specific factors
-      this.selectedPersona!.strategies.valuationFactors.forEach(factor => {
+      this.selectedPersona!.strategies.valuationFactors.forEach((factor: any) => {
         // Simplified scoring based on factor names
         switch (factor.factor) {
           case 'consistency':

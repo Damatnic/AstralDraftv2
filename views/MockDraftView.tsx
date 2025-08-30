@@ -16,7 +16,10 @@ import {
   SettingsIcon,
   TrophyIcon,
   ClockIcon,
+  UsersIcon,
+  ZapIcon,
   BrainIcon,
+  ChevronRightIcon,
   CheckCircleIcon,
   XCircleIcon
 } from 'lucide-react';
@@ -128,8 +131,8 @@ const MockDraftView: React.FC = () => {
                         settings.aiDifficulty === 'hard' ? 0.05 : 0;
     
     // Filter by team needs
-    const positionNeeds = team.needs.filter(need => 
-      !team.roster.some(p => p.position === need)
+    const positionNeeds = team.needs.filter((need: any) => 
+      !team.roster.some((p: any) => p.position === need)
     );
     
     // Get top available players
@@ -140,13 +143,13 @@ const MockDraftView: React.FC = () => {
     // Apply strategy
     switch (team.draftStrategy) {
       case 'rb-heavy':
-        selectedPlayer = topPlayers.find(p => p.position === 'RB') || topPlayers[0];
+        selectedPlayer = topPlayers.find((p: any) => p.position === 'RB') || topPlayers[0];
         break;
       case 'wr-heavy':
-        selectedPlayer = topPlayers.find(p => p.position === 'WR') || topPlayers[0];
+        selectedPlayer = topPlayers.find((p: any) => p.position === 'WR') || topPlayers[0];
         break;
       case 'balanced':
-        selectedPlayer = topPlayers.find(p => positionNeeds.includes(p.position)) || topPlayers[0];
+        selectedPlayer = topPlayers.find((p: any) => positionNeeds.includes(p.position)) || topPlayers[0];
         break;
       default:
         selectedPlayer = topPlayers[0];
@@ -177,10 +180,10 @@ const MockDraftView: React.FC = () => {
     setDraftHistory(prev => [...prev, pick]);
     
     // Remove player from available
-    setAvailablePlayers(prev => prev.filter(p => p.id !== player.id));
+    setAvailablePlayers(prev => prev.filter((p: any) => p.id !== player.id));
     
     // Add player to team roster
-    setTeams(prev => prev.map(t => 
+    setTeams(prev => prev.map((t: any) => 
       t.id === team.id 
         ? { ...t, roster: [...t.roster, player] }
         : t
@@ -189,7 +192,7 @@ const MockDraftView: React.FC = () => {
     // Update team needs
     const positionIndex = team.needs.indexOf(player.position);
     if (positionIndex > -1) {
-      setTeams(prev => prev.map(t => 
+      setTeams(prev => prev.map((t: any) => 
         t.id === team.id 
           ? { ...t, needs: t.needs.filter((_, i) => i !== positionIndex) }
           : t
@@ -318,7 +321,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.draftPosition}
-                    onChange={(e) => setSettings(prev => ({ ...prev, draftPosition: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftPosition: Number(e.target.value) }))}
                     className="glass-input w-full"
                   >
                     {Array.from({ length: settings.teamCount }, (_, i) => (
@@ -335,7 +338,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.teamCount}
-                    onChange={(e) => setSettings(prev => ({ ...prev, teamCount: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, teamCount: Number(e.target.value) }))}
                     className="glass-input w-full"
                   >
                     <option value={8}>8 Teams</option>
@@ -351,7 +354,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.rounds}
-                    onChange={(e) => setSettings(prev => ({ ...prev, rounds: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, rounds: Number(e.target.value) }))}
                     className="glass-input w-full"
                   >
                     <option value={10}>10 Rounds</option>
@@ -367,7 +370,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.scoringFormat}
-                    onChange={(e) => setSettings(prev => ({ ...prev, scoringFormat: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, scoringFormat: e.target.value as any }))}
                     className="glass-input w-full"
                   >
                     <option value="standard">Standard</option>
@@ -390,7 +393,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.aiDifficulty}
-                    onChange={(e) => setSettings(prev => ({ ...prev, aiDifficulty: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, aiDifficulty: e.target.value as any }))}
                     className="glass-input w-full"
                   >
                     <option value="easy">Easy - Random picks</option>
@@ -406,7 +409,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.draftSpeed}
-                    onChange={(e) => setSettings(prev => ({ ...prev, draftSpeed: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftSpeed: e.target.value as any }))}
                     className="glass-input w-full"
                   >
                     <option value="instant">Instant</option>
@@ -421,7 +424,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.timerSeconds}
-                    onChange={(e) => setSettings(prev => ({ ...prev, timerSeconds: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, timerSeconds: Number(e.target.value) }))}
                     className="glass-input w-full"
                   >
                     <option value={30}>30 seconds</option>
@@ -436,7 +439,7 @@ const MockDraftView: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={settings.enableTrades}
-                      onChange={(e) => setSettings(prev => ({ ...prev, enableTrades: e.target.checked }))}
+                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableTrades: e.target.checked }))}
                       className="rounded"
                     />
                     <span className="text-sm text-[var(--text-secondary)]">Enable Draft Pick Trades</span>
@@ -445,7 +448,7 @@ const MockDraftView: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={settings.enableKeepers}
-                      onChange={(e) => setSettings(prev => ({ ...prev, enableKeepers: e.target.checked }))}
+                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableKeepers: e.target.checked }))}
                       className="rounded"
                     />
                     <span className="text-sm text-[var(--text-secondary)]">Enable Keeper Players</span>
@@ -658,7 +661,7 @@ const MockDraftView: React.FC = () => {
                       <div>
                         <p className="font-medium text-white">{pick.player.name}</p>
                         <p className="text-xs text-[var(--text-secondary)]">
-                          {pick.player.team} • {teams.find(t => t.id === pick.teamId)?.name}
+                          {pick.player.team} • {teams.find((t: any) => t.id === pick.teamId)?.name}
                         </p>
                       </div>
                     </div>
@@ -677,7 +680,7 @@ const MockDraftView: React.FC = () => {
           <div className="glass-pane p-4">
             <h3 className="text-lg font-semibold text-white mb-4">Your Team</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {teams.find(t => t.isUser)?.roster.map((player, index) => (
+              {teams.find((t: any) => t.isUser)?.roster.map((player, index) => (
                 <div
                   key={player.id}
                   className="flex items-center gap-2 p-2 bg-white/5 rounded-lg"
@@ -742,7 +745,7 @@ const MockDraftView: React.FC = () => {
           <div className="glass-pane p-4">
             <h3 className="text-lg font-semibold text-white mb-4">Top Available</h3>
             <div className="space-y-2">
-              {availablePlayers.slice(0, 10).map((player) => (
+              {availablePlayers.slice(0, 10).map((player: any) => (
                 <div
                   key={player.id}
                   className="flex items-center justify-between p-2 bg-white/5 rounded-lg hover:bg-white/10 cursor-pointer"
@@ -791,7 +794,7 @@ const MockDraftView: React.FC = () => {
             </div>
             <PlayerSearch
               players={availablePlayers}
-              onSelectPlayer={(player) => {
+              onSelectPlayer={(player: any) => {
                 setSelectedPlayer(player);
                 setShowPlayerSearch(false);
               }}

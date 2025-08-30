@@ -22,7 +22,7 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
     onClose, 
     league,
     dispatch 
-}) => {
+}: any) => {
     // Fallback league if none provided
     const defaultLeague: League = {
         id: '1',

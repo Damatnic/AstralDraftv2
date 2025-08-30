@@ -33,10 +33,74 @@ interface Props {
 
 type SocialTab = 'feed' | 'messages' | 'forum' | 'comparisons' | 'trash_talk' | 'rivalries' | 'profile';
 
+// Helper functions for styling
+const getActivityTypeStyles = (activityType: string): string => {
+    switch (activityType) {
+        case 'message':
+            return 'bg-blue-500/20 text-blue-400';
+        case 'forum_post':
+            return 'bg-green-500/20 text-green-400';
+        case 'trash_talk':
+            return 'bg-orange-500/20 text-orange-400';
+        default:
+            return 'bg-gray-500/20 text-gray-400';
+    }
+};
+
+const getTopicCategoryStyles = (category: string): string => {
+    switch (category) {
+        case 'announcements':
+            return 'bg-red-500/20 text-red-400';
+        case 'trades':
+            return 'bg-green-500/20 text-green-400';
+        case 'trash_talk':
+            return 'bg-orange-500/20 text-orange-400';
+        default:
+            return 'bg-blue-500/20 text-blue-400';
+    }
+};
+
+const getSeverityStyles = (severity: string): string => {
+    switch (severity) {
+        case 'friendly':
+            return 'bg-green-500/20 text-green-400';
+        case 'competitive':
+            return 'bg-yellow-500/20 text-yellow-400';
+        default:
+            return 'bg-red-500/20 text-red-400';
+    }
+};
+
+const getRivalryLevelStyles = (level: string): string => {
+    switch (level) {
+        case 'legendary':
+            return 'text-purple-400';
+        case 'intense':
+            return 'text-red-400';
+        case 'moderate':
+            return 'text-orange-400';
+        default:
+            return 'text-yellow-400';
+    }
+};
+
+const getBadgeRarityStyles = (rarity: string): string => {
+    switch (rarity) {
+        case 'legendary':
+            return 'border-purple-500 bg-purple-500/20';
+        case 'epic':
+            return 'border-blue-500 bg-blue-500/20';
+        case 'rare':
+            return 'border-green-500 bg-green-500/20';
+        default:
+            return 'border-gray-500 bg-gray-500/20';
+    }
+};
+
 const SocialHub: React.FC<Props> = ({ 
-    leagueId,
+    leagueId, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<SocialTab>('feed');
     const [loading, setLoading] = useState(false);
@@ -115,7 +179,6 @@ const SocialHub: React.FC<Props> = ({
                 }
             }
         } catch (err) {
-            console.error('Failed to load social data:', err);
             setError('Failed to load social data');
         } finally {
             setLoading(false);
@@ -136,7 +199,6 @@ const SocialHub: React.FC<Props> = ({
             setNewMessage('');
             await loadSocialData(); // Refresh messages
         } catch (err) {
-            console.error('Failed to send message:', err);
             setError('Failed to send message');
         }
     };
@@ -158,9 +220,24 @@ const SocialHub: React.FC<Props> = ({
             setShowNewTopicModal(false);
             await loadSocialData(); // Refresh topics
         } catch (err) {
-            console.error('Failed to create topic:', err);
             setError('Failed to create forum topic');
         }
+    };
+
+    const handlePostTrashTalk = (content: string, targetId?: string, targetName?: string) => {
+        if (!user || !content.trim()) return;
+
+        socialInteractionService.postTrashTalk(
+            leagueId,
+            user.id.toString(),
+            user.username || 'User',
+            content,
+            { targetId, targetName, context: 'general', severity: 'friendly' }
+        ).then(() => {
+            loadSocialData(); // Refresh trash talk
+        }).catch(err => {
+            setError('Failed to post trash talk');
+        });
     };
 
     const handleReactToMessage = async (messageId: string, emoji: string) => {
@@ -175,7 +252,6 @@ const SocialHub: React.FC<Props> = ({
             );
             await loadSocialData(); // Refresh to show updated reactions
         } catch (err) {
-            console.error('Failed to add reaction:', err);
         }
     };
 

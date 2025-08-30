@@ -21,7 +21,7 @@ interface DirectMessage {
   messageType: 'text' | 'trade_link' | 'player_link' | 'image';
   attachments?: {
     type: 'trade' | 'player' | 'image';
-    data: unknown;
+    data: any;
   }[];
 }
 
@@ -124,14 +124,14 @@ const DirectMessaging: React.FC = () => {
   const conversations = useMemo((): Conversation[] => {
     const convMap = new Map<string, Conversation>();
 
-    directMessages.forEach(message => {
+    directMessages.forEach((message: any) => {
       if (!convMap.has(message.conversationId)) {
         const otherParticipant = message.senderId === currentUser?.id 
           ? { id: message.recipientId, name: message.recipientName, avatar: '👤', teamName: 'Unknown Team' }
           : { id: message.senderId, name: message.senderName, avatar: message.senderAvatar, teamName: 'Unknown Team' };
 
         // Find team name
-        const team = league?.teams?.find(t => t.owner.id === otherParticipant.id);
+        const team = league?.teams?.find((t: any) => t.owner.id === otherParticipant.id);
         if (team) {
           otherParticipant.teamName = team.name;
           otherParticipant.avatar = team.avatar;
@@ -144,7 +144,7 @@ const DirectMessaging: React.FC = () => {
               id: currentUser?.id || '',
               name: currentUser?.name || '',
               avatar: currentUser?.avatar || '👑',
-              teamName: league?.teams?.find(t => t.owner.id === currentUser?.id)?.name || 'Your Team'
+              teamName: league?.teams?.find((t: any) => t.owner.id === currentUser?.id)?.name || 'Your Team'
             },
             otherParticipant
           ],
@@ -171,12 +171,12 @@ const DirectMessaging: React.FC = () => {
   const selectedConversationMessages = useMemo(() => {
     if (!selectedConversation) return [];
     return directMessages
-      .filter(msg => msg.conversationId === selectedConversation)
+      .filter((msg: any) => msg.conversationId === selectedConversation)
       .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
   }, [directMessages, selectedConversation]);
 
-  const selectedConversationData = conversations.find(c => c.id === selectedConversation);
-  const otherParticipant = selectedConversationData?.participants.find(p => p.id !== currentUser?.id);
+  const selectedConversationData = conversations.find((c: any) => c.id === selectedConversation);
+  const otherParticipant = selectedConversationData?.participants.find((p: any) => p.id !== currentUser?.id);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -185,22 +185,20 @@ const DirectMessaging: React.FC = () => {
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation || !currentUser) return;
 
-    // TODO: Implement message creation and sending
-    // const message: DirectMessage = {
-    //   id: `dm-${Date.now()}`,
-    //   conversationId: selectedConversation,
-    //   senderId: currentUser.id,
-    //   senderName: currentUser.name,
-    //   senderAvatar: currentUser.avatar,
-    //   recipientId: otherParticipant?.id || '',
-    //   recipientName: otherParticipant?.name || '',
-    //   message: newMessage.trim(),
-    //   timestamp: new Date(),
-    //   isRead: false,
-    //   messageType: 'text'
-    // };
+    const message: DirectMessage = {
+      id: `dm-${Date.now()}`,
+      conversationId: selectedConversation,
+      senderId: currentUser.id,
+      senderName: currentUser.name,
+      senderAvatar: currentUser.avatar,
+      recipientId: otherParticipant?.id || '',
+      recipientName: otherParticipant?.name || '',
+      message: newMessage.trim(),
+      timestamp: new Date(),
+      isRead: false,
+      messageType: 'text'
+    };
 
-    // Message created successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -216,12 +214,11 @@ const DirectMessaging: React.FC = () => {
   const handleStartNewConversation = () => {
     if (!selectedRecipient || !currentUser) return;
 
-    const recipient = league?.teams?.find(t => t.id === selectedRecipient);
+    const recipient = league?.teams?.find((t: any) => t.id === selectedRecipient);
     if (!recipient) return;
 
     const newConversationId = `conv-${Date.now()}`;
     
-    // Starting new conversation
 
     setSelectedConversation(newConversationId);
     setShowNewConversation(false);
@@ -291,8 +288,8 @@ const DirectMessaging: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-1 p-2">
-              {conversations.map(conversation => {
-                const participant = conversation.participants.find(p => p.id !== currentUser?.id);
+              {conversations.map((conversation: any) => {
+                const participant = conversation.participants.find((p: any) => p.id !== currentUser?.id);
                 return (
                   <button
                     key={conversation.id}
@@ -351,7 +348,7 @@ const DirectMessaging: React.FC = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {selectedConversationMessages.map(message => (
+              {selectedConversationMessages.map((message: any) => (
                 <div
                   key={message.id}
                   className={`flex ${
@@ -383,10 +380,10 @@ const DirectMessaging: React.FC = () => {
                 <input
                   type="text"
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={(e: any) => setNewMessage(e.target.value)}
                   placeholder="Type a message..."
                   className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
-                  onKeyPress={(e) => {
+                  onKeyPress={(e: any) => {
                     if (e.key === 'Enter') {
                       handleSendMessage();
                     }
@@ -458,11 +455,11 @@ const DirectMessaging: React.FC = () => {
                   <label className="block text-white font-medium mb-2">Select Recipient</label>
                   <select
                     value={selectedRecipient}
-                    onChange={(e) => setSelectedRecipient(e.target.value)}
+                    onChange={(e: any) => setSelectedRecipient(e.target.value)}
                     className="form-input"
                   >
                     <option value="">Choose a league member...</option>
-                    {league?.teams?.filter(t => t.owner.id !== currentUser?.id).map(team => (
+                    {league?.teams?.filter((t: any) => t.owner.id !== currentUser?.id).map((team: any) => (
                       <option key={team.id} value={team.id}>
                         {team.avatar} {team.owner.name} ({team.name})
                       </option>

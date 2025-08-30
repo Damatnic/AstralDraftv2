@@ -13,7 +13,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   position = 'top',
   delay = 500
-}) => {
+}: any) => {
   const [isVisible, setIsVisible] = useState(false);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 

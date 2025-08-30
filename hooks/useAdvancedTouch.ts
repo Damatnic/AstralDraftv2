@@ -97,7 +97,7 @@ export const useAdvancedTouch = (
   }, []);
 
   const handleTouchStart = useCallback((e: TouchEvent) => {
-    const touches = Array.from(e.touches).map(touch => ({
+    const touches = Array.from(e.touches).map((touch: any) => ({
       x: touch.clientX,
       y: touch.clientY,
       timestamp: Date.now()
@@ -136,7 +136,7 @@ export const useAdvancedTouch = (
   const handleTouchMove = useCallback((e: TouchEvent) => {
     if (!isActive) return;
 
-    const touches = Array.from(e.touches).map(touch => ({
+    const touches = Array.from(e.touches).map((touch: any) => ({
       x: touch.clientX,
       y: touch.clientY,
       timestamp: Date.now()
@@ -169,7 +169,7 @@ export const useAdvancedTouch = (
     }
   }, [isActive, getDistance, onGesture]);
 
-  const handleTouchEnd = useCallback((_e: TouchEvent) => {
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
     if (!isActive || touchStartRef.current.length === 0) return;
 
     const endTime = Date.now();

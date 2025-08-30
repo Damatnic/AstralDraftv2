@@ -38,7 +38,7 @@ type PlayerDetailTab = 'overview' | 'stats' | 'projections' | 'news' | 'trends' 
 
 const PlayerResearchInterface: React.FC<Props> = ({ 
     className = '' 
-}) => {
+}: any) => {
     const { isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ResearchTab>('search');
     const [loading, setLoading] = useState(false);
@@ -90,7 +90,6 @@ const PlayerResearchInterface: React.FC<Props> = ({
 
             setSearchResults(filteredResults);
         } catch (err) {
-            console.error('Search failed:', err);
             setError('Failed to search players');
         } finally {
             setLoading(false);
@@ -117,7 +116,6 @@ const PlayerResearchInterface: React.FC<Props> = ({
             setPlayerTrends(trends);
             setPlayerInsights(insights);
         } catch (err) {
-            console.error('Failed to load player data:', err);
             setError('Failed to load player data');
         } finally {
             setLoading(false);
@@ -147,7 +145,6 @@ const PlayerResearchInterface: React.FC<Props> = ({
             const comparisonResult = await playerResearchService.comparePlayer(player1.id, player2.id);
             setComparison(comparisonResult);
         } catch (err) {
-            console.error('Comparison failed:', err);
             setError('Failed to compare players');
         } finally {
             setLoading(false);

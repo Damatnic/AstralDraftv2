@@ -17,7 +17,7 @@ interface SimilarPlayersPopupProps {
     onClose: () => void;
 }
 
-const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompare, onClose }) => {
+const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompare, onClose }: any) => {
     const [similarPlayerNames, setSimilarPlayerNames] = React.useState<string[] | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const { dispatch } = useAppState();

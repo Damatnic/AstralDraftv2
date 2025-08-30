@@ -510,7 +510,7 @@ class EnhancedMatchupAnalyticsService {
     return data;
   }
 
-  private async generateWeekTrend(player: NFLPlayer, week: number, _season: number): Promise<MatchupTrend | null> {
+  private async generateWeekTrend(player: NFLPlayer, week: number, season: number): Promise<MatchupTrend | null> {
     // Mock implementation - would fetch real game data
     const fantasyPoints = Math.random() * 25 + 5; // 5-30 points
     const touches = Math.floor(Math.random() * 20) + 10; // 10-30 touches
@@ -528,7 +528,7 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private async fetchDefensiveStats(_team: string, _position: string): Promise<any> {
+  private async fetchDefensiveStats(team: string, position: string): Promise<any> {
     // Mock implementation - would fetch real defensive statistics
     return {
       fantasyPointsAllowed: Math.random() * 20 + 10,
@@ -582,7 +582,7 @@ class EnhancedMatchupAnalyticsService {
   }
 
   // Mock data generators for fallback scenarios
-  private getMockMatchupTrends(_playerId: string): MatchupTrend[] {
+  private getMockMatchupTrends(playerId: string): MatchupTrend[] {
     return Array.from({ length: 34 }, (_, i) => ({
       week: (i % 17) + 1,
       fantasyPoints: Math.random() * 25 + 5,
@@ -842,12 +842,12 @@ class EnhancedMatchupAnalyticsService {
     return conditions[Math.floor(Math.random() * conditions.length)];
   }
 
-  private async fetchWeatherGameHistory(_playerId: string): Promise<WeatherGameData[]> {
+  private async fetchWeatherGameHistory(playerId: string): Promise<WeatherGameData[]> {
     // Mock implementation
     return [];
   }
 
-  private calculateTemperatureImpact(_games: WeatherGameData[]): TemperatureImpact {
+  private calculateTemperatureImpact(games: WeatherGameData[]): TemperatureImpact {
     return {
       optimalRange: { min: 65, max: 75 },
       coldWeatherPerformance: -8,
@@ -856,7 +856,7 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private calculateWindImpact(_games: WeatherGameData[], _position: string): WindImpact {
+  private calculateWindImpact(games: WeatherGameData[], position: string): WindImpact {
     return {
       passAttemptImpact: -2,
       passingAccuracyImpact: -1.5,
@@ -865,7 +865,7 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private calculatePrecipitationImpact(_games: WeatherGameData[], _position: string): PrecipitationImpact {
+  private calculatePrecipitationImpact(games: WeatherGameData[], position: string): PrecipitationImpact {
     return {
       fumblesIncreaseRate: 25,
       passingImpact: -12,
@@ -875,10 +875,10 @@ class EnhancedMatchupAnalyticsService {
   }
 
   private predictWeatherImpact(
-    _player: NFLPlayer,
-    _tempImpact: TemperatureImpact,
-    _windImpact: WindImpact,
-    _precipImpact: PrecipitationImpact
+    player: NFLPlayer,
+    tempImpact: TemperatureImpact,
+    windImpact: WindImpact,
+    precipImpact: PrecipitationImpact
   ): WeatherPrediction {
     return {
       expectedImpact: 'neutral',
@@ -888,27 +888,27 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private async generateTargetShareTrends(_playerId: string): Promise<TargetShareTrend[]> {
+  private async generateTargetShareTrends(playerId: string): Promise<TargetShareTrend[]> {
     return this.getMockTargetShareTrends();
   }
 
-  private async generateSnapCountAnalysis(_playerId: string): Promise<SnapCountAnalysis[]> {
+  private async generateSnapCountAnalysis(playerId: string): Promise<SnapCountAnalysis[]> {
     return this.getMockSnapCountAnalysis();
   }
 
-  private async fetchInjuryHistory(_playerId: string): Promise<InjuryRecord[]> {
+  private async fetchInjuryHistory(playerId: string): Promise<InjuryRecord[]> {
     return [];
   }
 
-  private analyzeRecoveryPatterns(_history: InjuryRecord[]): RecoveryPattern[] {
+  private analyzeRecoveryPatterns(history: InjuryRecord[]): RecoveryPattern[] {
     return [];
   }
 
-  private assessCurrentRiskFactors(_playerId: string, _history: InjuryRecord[]): RiskFactor[] {
+  private assessCurrentRiskFactors(playerId: string, history: InjuryRecord[]): RiskFactor[] {
     return [];
   }
 
-  private analyzeInjuryImpact(_history: InjuryRecord[], _riskFactors: RiskFactor[]): InjuryImpactAnalysis {
+  private analyzeInjuryImpact(history: InjuryRecord[], riskFactors: RiskFactor[]): InjuryImpactAnalysis {
     return {
       currentRiskScore: 25,
       expectedImpact: -3,
@@ -916,15 +916,15 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private async analyzeGameScriptFactors(_game: NFLGame): Promise<GameScriptFactor[]> {
+  private async analyzeGameScriptFactors(game: NFLGame): Promise<GameScriptFactor[]> {
     return [];
   }
 
-  private async findHistoricalAnalogies(_game: NFLGame, _playerId: string): Promise<HistoricalGameScript[]> {
+  private async findHistoricalAnalogies(game: NFLGame, playerId: string): Promise<HistoricalGameScript[]> {
     return [];
   }
 
-  private calculateGameScriptPlayerImpact(_factors: GameScriptFactor[], _playerId: string): GameScriptPlayerImpact {
+  private calculateGameScriptPlayerImpact(factors: GameScriptFactor[], playerId: string): GameScriptPlayerImpact {
     return {
       passingVolume: 5,
       rushingVolume: -3,
@@ -933,15 +933,15 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private predictScript(_factors: GameScriptFactor[]): GameScript {
+  private predictScript(factors: GameScriptFactor[]): GameScript {
     return 'positive';
   }
 
-  private calculateGameScriptConfidence(_factors: GameScriptFactor[], _analogies: HistoricalGameScript[]): number {
+  private calculateGameScriptConfidence(factors: GameScriptFactor[], analogies: HistoricalGameScript[]): number {
     return 72;
   }
 
-  private async calculateHistoricalCeilingFloor(_playerId: string): Promise<CeilingFloorData> {
+  private async calculateHistoricalCeilingFloor(playerId: string): Promise<CeilingFloorData> {
     return {
       ceiling: 28.5,
       floor: 4.2,
@@ -951,11 +951,11 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private identifyPerformanceRangeFactors(_playerId: string): PerformanceRangeFactor[] {
+  private identifyPerformanceRangeFactors(playerId: string): PerformanceRangeFactor[] {
     return [];
   }
 
-  private projectCeilingFloor(_historical: CeilingFloorData, _factors: PerformanceRangeFactor[]): CeilingFloorProjection {
+  private projectCeilingFloor(historical: CeilingFloorData, factors: PerformanceRangeFactor[]): CeilingFloorProjection {
     return {
       projectedCeiling: 26.8,
       projectedFloor: 5.1,
@@ -965,11 +965,11 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private generatePerformanceScenarios(_historical: CeilingFloorData, _factors: PerformanceRangeFactor[]): PerformanceScenario[] {
+  private generatePerformanceScenarios(historical: CeilingFloorData, factors: PerformanceRangeFactor[]): PerformanceScenario[] {
     return [];
   }
 
-  private async calculateRemainingScheduleStrength(_playerId: string): Promise<ScheduleStrength> {
+  private async calculateRemainingScheduleStrength(playerId: string): Promise<ScheduleStrength> {
     return {
       averageDefensiveRank: 18.5,
       strengthOfSchedule: 62,
@@ -979,7 +979,7 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private async calculateCompletedScheduleStrength(_playerId: string): Promise<ScheduleStrength> {
+  private async calculateCompletedScheduleStrength(playerId: string): Promise<ScheduleStrength> {
     return {
       averageDefensiveRank: 14.2,
       strengthOfSchedule: 58,
@@ -989,7 +989,7 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private compareScheduleStrength(_remaining: ScheduleStrength, _completed: ScheduleStrength): ScheduleComparison {
+  private compareScheduleStrength(remaining: ScheduleStrength, completed: ScheduleStrength): ScheduleComparison {
     return {
       vsLeagueAverage: 8,
       vsPosition: 12,
@@ -997,14 +997,14 @@ class EnhancedMatchupAnalyticsService {
     };
   }
 
-  private async generateFutureMatchupAnalysis(_playerId: string): Promise<FutureMatchup[]> {
+  private async generateFutureMatchupAnalysis(playerId: string): Promise<FutureMatchup[]> {
     return [];
   }
 }
 
 // Export singleton instance
 export const enhancedMatchupAnalyticsService = new EnhancedMatchupAnalyticsService(
-  productionSportsDataService
+  require('./productionSportsDataService').productionSportsDataService
 );
 
 export default enhancedMatchupAnalyticsService;

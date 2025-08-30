@@ -55,7 +55,7 @@ class MobileTestingSuite {
       criticalIssues: number;
     };
   }> {
-    // Starting comprehensive mobile testing suite
+    console.log('🔍 Starting comprehensive mobile testing suite...');
 
     const touchTargets = await this.testTouchTargets();
     const viewports = await this.testViewportResponsiveness();
@@ -64,8 +64,8 @@ class MobileTestingSuite {
     const usability = await this.testMobileUsability();
 
     const allTests = [
-      ...touchTargets.map(t => ({ passed: t.passed, testType: 'touch-target' })),
-      ...viewports.map(v => ({ passed: v.passed, testType: 'viewport' })),
+      ...touchTargets.map((t: any) => ({ passed: t.passed, testType: 'touch-target' })),
+      ...viewports.map((v: any) => ({ passed: v.passed, testType: 'viewport' })),
       ...accessibility,
       ...performance,
       ...usability
@@ -73,12 +73,12 @@ class MobileTestingSuite {
 
     const summary = {
       totalTests: allTests.length,
-      passed: allTests.filter(t => t.passed).length,
-      failed: allTests.filter(t => !t.passed).length,
-      criticalIssues: allTests.filter(t => !t.passed && (t.testType === 'accessibility' || t.testType === 'critical')).length
+      passed: allTests.filter((t: any) => t.passed).length,
+      failed: allTests.filter((t: any) => !t.passed).length,
+      criticalIssues: allTests.filter((t: any) => !t.passed && (t.testType === 'accessibility' || t.testType === 'critical')).length
     };
 
-    // Mobile testing completed
+    console.log(`✅ Mobile testing complete: ${summary.passed}/${summary.totalTests} tests passed`);
 
     return {
       touchTargets,
@@ -168,9 +168,9 @@ class MobileTestingSuite {
 
       // Test critical components at this viewport
       const componentTests = await this.testComponentsAtViewport(viewport);
-      test.components = componentTests.map(c => c.component);
-      test.issues = componentTests.filter(c => !c.passed).map(c => c.issues).flat();
-      test.passed = componentTests.every(c => c.passed);
+      test.components = componentTests.map((c: any) => c.component);
+      test.issues = componentTests.filter((c: any) => !c.passed).map((c: any) => c.issues).flat();
+      test.passed = componentTests.every((c: any) => c.passed);
 
       results.push(test);
     }
@@ -349,7 +349,7 @@ class MobileTestingSuite {
       'Settings Panel'
     ];
 
-    return components.map(component => ({
+    return components.map((component: any) => ({
       component,
       testType: 'viewport',
       passed: viewport.width >= 320, // Minimum supported width
@@ -402,7 +402,7 @@ ${usability.filter((u: MobileTestResult) => !u.passed).map((u: MobileTestResult)
 ## Recommendations
 ${[...accessibility, ...performance, ...usability]
   .flatMap(item => item.recommendations)
-  .map(rec => `- ${rec}`)
+  .map((rec: any) => `- ${rec}`)
   .join('\n')}
 `;
 

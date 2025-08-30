@@ -11,6 +11,7 @@ import {
     FileTextIcon,
     ShieldIcon,
     GavelIcon,
+    AlertCircleIcon,
     CheckCircleIcon
 } from 'lucide-react';
 
@@ -34,7 +35,7 @@ const LeagueConstitutionView: React.FC = () => {
 ## Article I: League Structure
 - League Name: ${league?.name || 'Fantasy Football League'}
 - Number of Teams: ${league?.settings.teamCount || 10}
-- Commissioner: ${league?.teams.find(t => t.owner.id === league?.commissionerId)?.owner.name || 'TBD'}
+- Commissioner: ${league?.teams.find((t: any) => t.owner.id === league?.commissionerId)?.owner.name || 'TBD'}
 
 ## Article II: Scoring System
 - Scoring Format: ${league?.settings.scoringFormat || 'PPR'}
@@ -211,7 +212,7 @@ const LeagueConstitutionView: React.FC = () => {
                         {isEditing ? (
                             <textarea
                                 value={constitution}
-                                onChange={(e) => setConstitution(e.target.value)}
+                                onChange={(e: any) => setConstitution(e.target.value)}
                                 className="glass-input w-full h-[600px] font-mono text-sm p-4"
                                 placeholder="Enter your league constitution..."
                             />

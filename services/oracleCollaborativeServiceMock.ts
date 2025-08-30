@@ -117,7 +117,7 @@ class OracleCollaborativeServiceMock extends EventEmitter {
         const room = this.rooms.get(predictionId);
         if (!room) return;
 
-        const existingParticipant = room.participants.find(p => p.userId === userId);
+        const existingParticipant = room.participants.find((p: any) => p.userId === userId);
         if (!existingParticipant) {
             room.participants.push({
                 userId,
@@ -134,7 +134,7 @@ class OracleCollaborativeServiceMock extends EventEmitter {
         const room = this.rooms.get(predictionId);
         if (!room) return;
 
-        const participant = room.participants.find(p => p.userId === userId);
+        const participant = room.participants.find((p: any) => p.userId === userId);
         if (participant) {
             participant.isOnline = false;
         }
@@ -212,11 +212,11 @@ class OracleCollaborativeServiceMock extends EventEmitter {
         const insights = this.insights.get(predictionId);
         if (!insights) return;
 
-        const insight = insights.find(i => i.id === insightId);
+        const insight = insights.find((i: any) => i.id === insightId);
         if (!insight) return;
 
         // Remove existing vote if any
-        insight.votes = insight.votes.filter(v => v.userId !== userId);
+        insight.votes = insight.votes.filter((v: any) => v.userId !== userId);
 
         // Add new vote
         insight.votes.push({ userId, vote });
@@ -250,7 +250,7 @@ class OracleCollaborativeServiceMock extends EventEmitter {
             totalMessages: Array.from(this.messages.values()).reduce((sum, msgs) => sum + msgs.length, 0),
             totalInsights: Array.from(this.insights.values()).reduce((sum, insights) => sum + insights.length, 0),
             activeParticipants: Array.from(this.rooms.values()).reduce(
-                (sum, room) => sum + room.participants.filter(p => p.isOnline).length, 
+                (sum, room) => sum + room.participants.filter((p: any) => p.isOnline).length, 
                 0
             )
         };

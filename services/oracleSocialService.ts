@@ -188,7 +188,7 @@ export interface SocialNotification {
     type: 'LEAGUE_INVITE' | 'GROUP_PREDICTION' | 'DEBATE_MENTION' | 'CHALLENGE_RESULT' | 'LEAGUE_UPDATE';
     title: string;
     message: string;
-    data: Record<string, unknown>;
+    data: any;
     isRead: boolean;
     createdAt: string;
     expiresAt?: string;
@@ -314,14 +314,14 @@ class OracleSocialService {
      */
     async joinLeague(leagueId: string, joinCode?: string): Promise<boolean> {
         const leagues = this.getStoredLeagues();
-        const league = leagues.find(l => l.id === leagueId || l.joinCode === joinCode);
+        const league = leagues.find((l: any) => l.id === leagueId || l.joinCode === joinCode);
         
         if (!league || league.currentMembers >= league.maxMembers) {
             return false;
         }
 
         // Check if user is already a member
-        const isAlreadyMember = league.members.some(m => m.userId === 'current-user');
+        const isAlreadyMember = league.members.some((m: any) => m.userId === 'current-user');
         if (isAlreadyMember) {
             return false;
         }
@@ -370,7 +370,7 @@ class OracleSocialService {
     async getUserLeagues(): Promise<OracleLeague[]> {
         const userLeagueIds = this.getUserLeagueIds();
         const allLeagues = this.getStoredLeagues();
-        return allLeagues.filter(league => userLeagueIds.includes(league.id));
+        return allLeagues.filter((league: any) => userLeagueIds.includes(league.id));
     }
 
     /**
@@ -379,7 +379,7 @@ class OracleSocialService {
     async getPublicLeagues(limit: number = 20): Promise<OracleLeague[]> {
         const allLeagues = this.getStoredLeagues();
         return allLeagues
-            .filter(league => league.isPublic && league.currentMembers < league.maxMembers)
+            .filter((league: any) => league.isPublic && league.currentMembers < league.maxMembers)
             .slice(0, limit);
     }
 
@@ -430,14 +430,14 @@ class OracleSocialService {
         reasoning?: string
     ): Promise<boolean> {
         const groupPredictions = this.getStoredGroupPredictions();
-        const groupPred = groupPredictions.find(gp => gp.id === groupPredictionId);
+        const groupPred = groupPredictions.find((gp: any) => gp.id === groupPredictionId);
 
         if (!groupPred || groupPred.status !== 'OPEN') {
             return false;
         }
 
         // Check if user already participated
-        const existingParticipant = groupPred.participants.find(p => p.userId === 'current-user');
+        const existingParticipant = groupPred.participants.find((p: any) => p.userId === 'current-user');
         if (existingParticipant) {
             // Update existing prediction
             existingParticipant.prediction = prediction;
@@ -467,7 +467,7 @@ class OracleSocialService {
      */
     async getLeagueGroupPredictions(leagueId: string): Promise<GroupPrediction[]> {
         const groupPredictions = this.getStoredGroupPredictions();
-        return groupPredictions.filter(gp => gp.leagueId === leagueId);
+        return groupPredictions.filter((gp: any) => gp.leagueId === leagueId);
     }
 
     // Debate System
@@ -510,14 +510,14 @@ class OracleSocialService {
      */
     async joinDebate(debateId: string, side: 'SIDE_A' | 'SIDE_B' | 'NEUTRAL'): Promise<boolean> {
         const debates = this.getStoredDebates();
-        const debate = debates.find(d => d.id === debateId);
+        const debate = debates.find((d: any) => d.id === debateId);
 
         if (!debate || debate.status !== 'ACTIVE') {
             return false;
         }
 
         // Check if user is already participating
-        const existingParticipant = debate.participants.find(p => p.userId === 'current-user');
+        const existingParticipant = debate.participants.find((p: any) => p.userId === 'current-user');
         if (existingParticipant) {
             existingParticipant.side = side;
         } else {
@@ -545,7 +545,7 @@ class OracleSocialService {
         side: 'SIDE_A' | 'SIDE_B' | 'NEUTRAL'
     ): Promise<DebatePost | null> {
         const debates = this.getStoredDebates();
-        const debate = debates.find(d => d.id === debateId);
+        const debate = debates.find((d: any) => d.id === debateId);
 
         if (!debate || debate.status !== 'ACTIVE') {
             return null;
@@ -577,7 +577,7 @@ class OracleSocialService {
      */
     async getLeagueDebates(leagueId: string): Promise<Debate[]> {
         const debates = this.getStoredDebates();
-        return debates.filter(d => d.leagueId === leagueId);
+        return debates.filter((d: any) => d.leagueId === leagueId);
     }
 
     /**
@@ -585,14 +585,14 @@ class OracleSocialService {
      */
     async voteInDebate(debateId: string, side: 'SIDE_A' | 'SIDE_B', reasoning?: string): Promise<boolean> {
         const debates = this.getStoredDebates();
-        const debate = debates.find(d => d.id === debateId);
+        const debate = debates.find((d: any) => d.id === debateId);
 
         if (!debate || debate.status !== 'ACTIVE') {
             return false;
         }
 
         // Remove existing vote if any
-        debate.votes = debate.votes.filter(v => v.userId !== 'current-user');
+        debate.votes = debate.votes.filter((v: any) => v.userId !== 'current-user');
 
         // Add new vote
         debate.votes.push({
@@ -613,7 +613,7 @@ class OracleSocialService {
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-            const post = debate.posts.find(p => p.id === postId);
+            const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
                 const reply: DebateReply = {
                     id: `reply-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
@@ -642,10 +642,10 @@ class OracleSocialService {
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-            const post = debate.posts.find(p => p.id === postId);
+            const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
                 // Remove existing reaction from this user
-                post.reactions = post.reactions.filter(r => r.userId !== 'current-user');
+                post.reactions = post.reactions.filter((r: any) => r.userId !== 'current-user');
                 
                 // Add new reaction
                 post.reactions.push({
@@ -673,7 +673,7 @@ class OracleSocialService {
         const debates = this.getStoredDebates();
         
         for (const debate of debates) {
-            const post = debate.posts.find(p => p.id === postId);
+            const post = debate.posts.find((p: any) => p.id === postId);
             if (post) {
                 const moderatorAction: ModeratorAction = {
                     id: `mod-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
@@ -691,7 +691,7 @@ class OracleSocialService {
                 // Apply the moderation action
                 switch (action) {
                     case 'DELETE_POST':
-                        debate.posts = debate.posts.filter(p => p.id !== postId);
+                        debate.posts = debate.posts.filter((p: any) => p.id !== postId);
                         break;
                     case 'PIN_POST':
                         post.isPinned = true;
@@ -718,7 +718,7 @@ class OracleSocialService {
         reasoning: string
     ): Promise<boolean> {
         const debates = this.getStoredDebates();
-        const debate = debates.find(d => d.id === debateId);
+        const debate = debates.find((d: any) => d.id === debateId);
 
         if (!debate) {
             return false;
@@ -748,7 +748,7 @@ class OracleSocialService {
         const invitation: LeagueInvitation = {
             id: `invite-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`,
             leagueId,
-            leagueName: this.getStoredLeagues().find(l => l.id === leagueId)?.name || 'Unknown League',
+            leagueName: this.getStoredLeagues().find((l: any) => l.id === leagueId)?.name || 'Unknown League',
             fromUserId: 'current-user',
             fromUsername: 'You',
             toUserId: 'target-user',
@@ -771,7 +771,7 @@ class OracleSocialService {
      */
     async getLeagueLeaderboard(leagueId: string): Promise<LeagueMember[]> {
         const leagues = this.getStoredLeagues();
-        const league = leagues.find(l => l.id === leagueId);
+        const league = leagues.find((l: any) => l.id === leagueId);
         
         if (!league) return [];
 

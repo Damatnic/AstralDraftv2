@@ -28,7 +28,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
     prediction, 
     onSubmit,
     className = ''
-}) => {
+}: any) => {
     const [selectedChoice, setSelectedChoice] = useState<number | null>(prediction.userChoice ?? null);
     const [confidence, setConfidence] = useState(prediction.userConfidence ?? 75);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,7 +73,6 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
         try {
             onSubmit(prediction.id, selectedChoice, confidence);
         } catch (error) {
-            console.error('Failed to submit prediction:', error);
             setValidationError('Failed to submit prediction. Please try again.');
         } finally {
             setIsSubmitting(false);
@@ -145,7 +144,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                     <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center space-x-2">
                             <BrainIcon className="w-6 h-6 md:w-5 md:h-5 text-blue-400" />
-                            <span className="text-sm md:text-xs font-medium text-blue-400">Oracle&apos;s Prediction</span>
+                            <span className="text-sm md:text-xs font-medium text-blue-400">Oracle's Prediction</span>
                         </div>
                         <div className="flex items-center space-x-2">
                             <span className="text-sm md:text-xs text-gray-400">{prediction.confidence}% confident</span>

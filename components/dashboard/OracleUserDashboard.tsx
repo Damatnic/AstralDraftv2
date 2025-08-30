@@ -338,7 +338,7 @@ const OracleUserDashboard: React.FC = () => {
             <Widget title="Performance by Category">
                 <div className="p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {userStats.categoryAccuracy.map((category) => {
+                        {userStats.categoryAccuracy.map((category: any) => {
                             const isSelected = selectedCategory === category.category;
                             const borderClass = isSelected 
                                 ? 'border-blue-500 bg-blue-500/10' 
@@ -376,7 +376,7 @@ const OracleUserDashboard: React.FC = () => {
             <Widget title="Weekly Accuracy Trend">
                 <div className="p-4">
                     <div className="flex items-end gap-2 h-32">
-                        {userStats.weeklyAccuracy.map((week) => {
+                        {userStats.weeklyAccuracy.map((week: any) => {
                             let bgColorClass = 'bg-red-500';
                             if (week.accuracy >= 70) {
                                 bgColorClass = 'bg-green-500';
@@ -402,7 +402,7 @@ const OracleUserDashboard: React.FC = () => {
             {/* Personalized Insights */}
             <Widget title="Personalized Insights">
                 <div className="p-4 space-y-3">
-                    {insights.map((insight) => {
+                    {insights.map((insight: any) => {
                         let borderClass = 'border-blue-500 bg-blue-500/10';
                         if (insight.priority === 'high') {
                             borderClass = 'border-red-500 bg-red-500/10';
@@ -444,7 +444,7 @@ const OracleUserDashboard: React.FC = () => {
             <Widget title={selectedCategory !== 'all' ? `Recent Predictions (${selectedCategory})` : 'Recent Predictions'}>
                 <div className="p-4">
                     <div className="space-y-3 max-h-96 overflow-y-auto">
-                        {filteredHistory.slice(0, 10).map((prediction) => (
+                        {filteredHistory.slice(0, 10).map((prediction: any) => (
                             <div 
                                 key={prediction.id}
                                 className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"

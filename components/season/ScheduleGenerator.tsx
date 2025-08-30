@@ -3,9 +3,10 @@
  * Creates 14-week regular season + 3-week playoff schedule
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
+import { Team } from '../../types';
 
 interface Matchup {
   week: number;
@@ -25,7 +26,7 @@ interface ScheduleGeneratorProps {
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   onScheduleGenerated,
   isCommissioner = false
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [schedule, setSchedule] = useState<Matchup[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -37,7 +38,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   // Generate regular season schedule (14 weeks)
   const generateRegularSeason = (): Matchup[] => {
     const matchups: Matchup[] = [];
-    const teamIds = teams.map(team => team.id);
+    const teamIds = teams.map((team: any) => team.id);
     
     // Round-robin with some randomization
     for (let week = 1; week <= 14; week++) {
@@ -143,15 +144,15 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   };
 
   const getTeamName = (teamId: number): string => {
-    return teams.find(team => team.id === teamId)?.name || `Team ${teamId}`;
+    return teams.find((team: any) => team.id === teamId)?.name || `Team ${teamId}`;
   };
 
   const getTeamAvatar = (teamId: number): string => {
-    return teams.find(team => team.id === teamId)?.avatar || '🏈';
+    return teams.find((team: any) => team.id === teamId)?.avatar || '🏈';
   };
 
   const getWeekMatchups = (week: number): Matchup[] => {
-    return schedule.filter(matchup => matchup.week === week);
+    return schedule.filter((matchup: any) => matchup.week === week);
   };
 
   const getWeekType = (week: number): string => {

@@ -18,7 +18,7 @@ import PredictionDetail from './PredictionDetail';
 import OracleErrorBoundary from './OracleErrorBoundary';
 import { OracleAnalyticsDashboard } from '../analytics/OracleAnalyticsDashboard';
 import { PredictionResponse } from '../../services/oracleApiClient';
-import { BarChart3, Target, Settings } from 'lucide-react';
+import { BarChart3, Target, Menu, Settings } from 'lucide-react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { NotificationCenter } from './NotificationCenter';
 import { NotificationPreferencesComponent } from './NotificationPreferences';
@@ -34,7 +34,7 @@ interface Props {
 const OracleRealTimePredictionInterface: React.FC<Props> = ({ 
     week = 1, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     
     // Media queries for responsive design
@@ -158,7 +158,6 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 break;
 
             default:
-                // Unknown WebSocket message type
         }
     }, [user]);
 
@@ -167,7 +166,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
         userId: user?.id?.toString() || '',
         week,
         onMessage: handleWebSocketMessage,
-        onError: (errorMsg) => setError(errorMsg)
+        onError: (errorMsg: any) => setError(errorMsg)
     });
 
     // Helper Functions
@@ -309,12 +308,10 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                         setUserStats(newStats);
                     }
                 } catch (statsError) {
-                    console.warn('Failed to load user stats:', statsError);
                     // Don't fail the whole component for stats
                 }
                 
             } catch (err) {
-                console.error('Failed to load predictions:', err);
                 setError(err instanceof Error ? err.message : 'Failed to load Oracle predictions');
             } finally {
                 setLoading(false);
@@ -390,7 +387,6 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
             }
 
         } catch (err) {
-            console.error('Failed to submit prediction:', err);
             setError(err instanceof Error ? err.message : 'Failed to submit prediction');
             
             // Revert optimistic update
@@ -562,7 +558,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                         </div>
                                         
                                         <div className="space-y-3 max-h-80 overflow-y-auto">
-                                            {predictions.map((prediction) => (
+                                            {predictions.map((prediction: any) => (
                                                 <motion.div
                                                     key={prediction.id}
                                                     initial={{ opacity: 0, y: 20 }}
@@ -604,7 +600,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                         </div>
                                         
                                         <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
-                                            {predictions.map((prediction) => (
+                                            {predictions.map((prediction: any) => (
                                                 <motion.div
                                                     key={prediction.id}
                                                     initial={{ opacity: 0, y: 20 }}

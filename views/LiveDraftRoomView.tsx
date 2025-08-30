@@ -88,7 +88,7 @@ const LiveDraftRoomView: React.FC = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Live Draft Rooms</h1>
           
           <div className="grid gap-6">
-            {leagues.map(league => (
+            {leagues.map((league: any) => (
               <motion.div
                 key={league.id}
                 whileHover={{ scale: 1.02 }}
@@ -153,7 +153,6 @@ const LiveDraftRoomView: React.FC = () => {
                         className="glass-button px-6 py-2 font-medium"
                         onClick={() => {
                           // Navigate to draft results or league dashboard
-                          // View draft results
                         }}
                       >
                         View Results
@@ -195,7 +194,7 @@ const LiveDraftRoomView: React.FC = () => {
                 <div className="text-6xl mb-4">🏈</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Live Draft Rooms Available</h3>
                 <p className="text-gray-600">
-                  You&apos;re not currently in any leagues with upcoming or active live drafts. 
+                  You're not currently in any leagues with upcoming or active live drafts. 
                   Join a league to start real-time drafting!
                 </p>
                 <button className="glass-button-primary mt-4 px-6 py-2 font-medium">

@@ -4,7 +4,7 @@ interface MusicIconProps {
   className?: string;
 }
 
-export const MusicIcon: React.FC<MusicIconProps> = ({ className = "w-5 h-5" }) => {
+export const MusicIcon: React.FC<MusicIconProps> = ({ className = "w-5 h-5" }: any) => {
   return (
     <svg 
       className={className} 

@@ -109,7 +109,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 isLoading: false,
             };
 
-        case 'USER_UPDATE': {
+        case 'USER_UPDATE':
             const updatedUser = state.user ? { ...state.user, ...action.payload } : null;
             if (updatedUser) {
                 localStorage.setItem('user', JSON.stringify(updatedUser));
@@ -119,7 +119,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 ...state,
                 user: updatedUser,
             };
-        }
 
         default:
             return state;
@@ -149,7 +148,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Provider component
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount
@@ -181,7 +180,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                             localStorage.removeItem('user');
                             dispatch({ type: 'AUTH_INITIALIZED' });
                         }
-                    } catch {
+                    } catch (error) {
                         // Session validation failed, clear storage
                         localStorage.removeItem('sessionToken');
                         localStorage.removeItem('user');
@@ -191,7 +190,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     dispatch({ type: 'AUTH_INITIALIZED' });
                 }
             } catch (error) {
-                console.error('Auth initialization error:', error);
                 dispatch({ type: 'AUTH_INITIALIZED' });
             }
         };
@@ -267,7 +265,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             await authService.logout();
         } catch (error) {
-            console.error('Logout error:', error);
         } finally {
             dispatch({ type: 'AUTH_LOGOUT' });
         }
@@ -327,7 +324,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 dispatch({ type: 'AUTH_LOGOUT' });
             }
         } catch (error) {
-            console.error('Auth check error:', error);
             dispatch({ type: 'AUTH_LOGOUT' });
         }
     };
@@ -390,7 +386,7 @@ export const usePermission = (permission?: string) => {
 export const AuthInitializer: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
     children,
     fallback = <div>Loading...</div>,
-}) => {
+}: any) => {
     const { isInitialized } = useAuth();
     
     if (!isInitialized) {

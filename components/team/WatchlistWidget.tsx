@@ -13,7 +13,7 @@ import { CloseIcon } from '../icons/CloseIcon';
 import { generateWatchlistInsights } from '../../services/geminiService';
 import { EyeIcon } from '../icons/EyeIcon';
 
-const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }) => {
+const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }: any) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
 
     React.useEffect(() => {
@@ -36,7 +36,7 @@ const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }
         <div className="pt-2 text-center">
             <h4 className="flex items-center justify-center gap-1.5 text-xs font-bold text-cyan-300 mb-1">
                 <EyeIcon />
-                ORACLE&apos;S WATCH
+                ORACLE'S WATCH
             </h4>
             <AnimatePresence mode="wait">
                 <motion.div
@@ -49,7 +49,7 @@ const InsightDisplay: React.FC<{ insights: WatchlistInsight[] }> = ({ insights }
                     }}
                 >
                     <p className="text-xs text-gray-300 italic">
-                        <strong className="text-yellow-300">{player?.name}:</strong> &quot;{currentInsight.insight}&quot;
+                        <strong className="text-yellow-300">{player?.name}:</strong> "{currentInsight.insight}"
                     </p>
                 </motion.div>
             </AnimatePresence>
@@ -78,7 +78,6 @@ const WatchlistWidget: React.FC = () => {
                         dispatch({ type: 'SET_WATCHLIST_INSIGHTS', payload: insights });
                     }
                 } catch (e) {
-                    console.error("Failed to fetch watchlist insights", e);
                 }
             };
             fetchInsights();

@@ -25,19 +25,19 @@ interface LiveDraftRoomProps {
 }
 
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ 
-  isActive: _isActive = false, 
+  isActive = false, 
   onDraftComplete 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [currentPick, setCurrentPick] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState(90);
   const [isDraftStarted, setIsDraftStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [draftPicks, setDraftPicks] = useState<DraftPick[]>([]);
-  // const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
-  // const [autoDraftEnabled, setAutoDraftEnabled] = useState<{[teamId: number]: boolean}>({});
+  const [autoDraftEnabled, setAutoDraftEnabled] = useState<{[teamId: number]: boolean}>({});
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -137,7 +137,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
     const pick = draftPicks[currentPick - 1];
     if (!pick) return null;
     
-    const team = draftOrder.find(t => t.id === pick.teamId);
+    const team = draftOrder.find((t: any) => t.id === pick.teamId);
     return { pick, team };
   };
 
@@ -202,8 +202,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
     if (!pickInfo) return;
 
     // Simple auto-draft logic - pick highest ranked available player
-    const availablePlayers = league.allPlayers.filter(player => 
-      !draftPicks.some(pick => pick.player?.id === player.id)
+    const availablePlayers = league.allPlayers.filter((player: any) => 
+      !draftPicks.some((pick: any) => pick.player?.id === player.id)
     );
     
     const bestAvailable = availablePlayers.sort((a, b) => a.fantasyRank - b.fantasyRank)[0];
@@ -221,7 +221,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
     }
   };
 
-  const advanceToNextPick = (_selectedPlayer: Player) => {
+  const advanceToNextPick = (selectedPlayer: Player) => {
     playSound('pick');
     
     if (currentPick >= totalPicks) {
@@ -356,11 +356,11 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
           <h3 className="text-xl font-bold text-white mb-4">Recent Picks</h3>
           <div className="space-y-3 max-h-96 overflow-y-auto">
             {draftPicks
-              .filter(pick => pick.isComplete)
+              .filter((pick: any) => pick.isComplete)
               .slice(-10)
               .reverse()
-              .map((pick, _index) => {
-                const team = draftOrder.find(t => t.id === pick.teamId);
+              .map((pick, index) => {
+                const team = draftOrder.find((t: any) => t.id === pick.teamId);
                 return (
                   <motion.div
                     key={pick.pick}
@@ -397,8 +397,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
           <h3 className="text-xl font-bold text-white mb-4">Team Rosters</h3>
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {draftOrder.map((team) => {
-              const teamPicks = draftPicks.filter(pick => 
+            {draftOrder.map((team: any) => {
+              const teamPicks = draftPicks.filter((pick: any) => 
                 pick.teamId === team.id && pick.isComplete
               );
               
@@ -414,7 +414,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {teamPicks.map((pick) => (
+                    {teamPicks.map((pick: any) => (
                       <span
                         key={pick.pick}
                         className={`${getPositionColor(pick.player?.position || '')} text-white text-xs px-2 py-1 rounded`}
@@ -445,7 +445,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-white">
@@ -462,8 +462,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
               <PlayerSearch
                 onPlayerSelect={handlePlayerSelect}
                 excludePlayerIds={draftPicks
-                  .filter(pick => pick.isComplete && pick.player)
-                  .map(pick => pick.player!.id)
+                  .filter((pick: any) => pick.isComplete && pick.player)
+                  .map((pick: any) => pick.player!.id)
                 }
                 showAddButton={false}
               />

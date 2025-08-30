@@ -8,14 +8,14 @@ interface ContractTabProps {
     player: Player;
 }
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-4 rounded-lg text-center flex-1">
         <p className="text-sm text-gray-400">{label}</p>
         <p className="text-2xl font-bold text-white">{value}</p>
     </div>
 );
 
-const ContractTab: React.FC<ContractTabProps> = ({ player }) => {
+const ContractTab: React.FC<ContractTabProps> = ({ player }: any) => {
     const { contract } = player;
 
     if (!contract) {

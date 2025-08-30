@@ -21,7 +21,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
     onOptimize,
     onWarmCache,
     onClearCache
-}) => {
+}: any) => {
     const [userId, setUserId] = useState('user123');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [optimizationResults, setOptimizationResults] = useState<any>(null);
@@ -32,7 +32,6 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
             setOptimizationResults(results);
             setTimeout(() => setOptimizationResults(null), 5000);
         } catch (error) {
-            console.error('Optimization failed:', error);
         }
     };
 

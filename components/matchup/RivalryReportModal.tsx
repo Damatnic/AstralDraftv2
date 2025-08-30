@@ -15,7 +15,7 @@ interface RivalryReportModalProps {
     onClose: () => void;
 }
 
-const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponentTeam, onClose }) => {
+const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponentTeam, onClose }: any) => {
     const [report, setReport] = React.useState<string | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -26,7 +26,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
             try {
                 const result = await generateRivalryReport(myTeam, opponentTeam);
                 setReport(result);
-            } catch {
+            } catch (e) {
                 setError("The Oracle could not be reached for a report.");
             } finally {
                 setIsLoading(false);
@@ -46,7 +46,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
                 }}
             >
                 <header className="p-6 border-b border-[var(--panel-border)] text-center">
-                    <h2 className="text-2xl font-bold font-display">Oracle&apos;s Rivalry Report</h2>
+                    <h2 className="text-2xl font-bold font-display">Oracle's Rivalry Report</h2>
                 </header>
 
                 <main className="p-6 overflow-y-auto">

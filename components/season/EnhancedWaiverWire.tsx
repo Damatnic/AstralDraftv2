@@ -6,6 +6,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
+import PlayerSearch from '../PlayerSearch';
 
 interface WaiverClaim {
   id: string;
@@ -30,7 +31,7 @@ interface WaiverPeriod {
 }
 
 const EnhancedWaiverWire: React.FC = () => {
-  const { state } = useAppState();
+  const { state, dispatch } = useAppState();
   const [selectedTab, setSelectedTab] = useState<'available' | 'claims' | 'faab'>('available');
   const [showBidModal, setShowBidModal] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
@@ -41,7 +42,7 @@ const EnhancedWaiverWire: React.FC = () => {
 
   const league = state.leagues[0];
   const currentUser = state.user;
-  const userTeam = league?.teams?.find(team => team.owner.id === currentUser?.id);
+  const userTeam = league?.teams?.find((team: any) => team.owner.id === currentUser?.id);
 
   // Simulate waiver period
   const waiverPeriod: WaiverPeriod = {
@@ -55,7 +56,7 @@ const EnhancedWaiverWire: React.FC = () => {
     if (!league?.teams) return {};
     
     const budgets: { [teamId: string]: { remaining: number; spent: number } } = {};
-    league.teams.forEach(team => {
+    league.teams.forEach((team: any) => {
       budgets[team.id] = {
         remaining: Math.floor(Math.random() * 50) + 50, // $50-$100 remaining
         spent: 100 - (Math.floor(Math.random() * 50) + 50)
@@ -84,7 +85,7 @@ const EnhancedWaiverWire: React.FC = () => {
       { id: 'waiver-15', name: 'Kendrick Bourne', position: 'WR', team: 'NE', projectedPoints: 3.5, addPercentage: 24, ownership: 76 }
     ];
 
-    return players.filter(player => {
+    return players.filter((player: any) => {
       const matchesSearch = player.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesPosition = positionFilter === 'ALL' || player.position === positionFilter;
       return matchesSearch && matchesPosition;
@@ -127,11 +128,22 @@ const EnhancedWaiverWire: React.FC = () => {
     if (!selectedPlayer || !userTeam) return;
 
     // Simulate placing a waiver claim
+    const newClaim: WaiverClaim = {
+      id: `claim-${Date.now()}`,
+      playerId: selectedPlayer.id,
+      playerName: selectedPlayer.name,
+      position: selectedPlayer.position,
+      team: selectedPlayer.team,
+      claimingTeamId: userTeam.id,
+      claimingTeamName: userTeam.name,
+      bidAmount,
+      dropPlayerId: dropPlayer?.id,
+      dropPlayerName: dropPlayer?.name,
+      priority: waiverClaims.length + 1,
+      status: 'pending'
+    };
+
     // In a real app, this would be sent to the backend
-    
-    setShowBidModal(false);
-    setSelectedPlayer(null);
-    setBidAmount(0);    // In a real app, this would be sent to the backend
     
     setShowBidModal(false);
     setSelectedPlayer(null);
@@ -214,7 +226,7 @@ const EnhancedWaiverWire: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1">
-        {tabs.map((tab) => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
             onClick={() => setSelectedTab(tab.id as any)}
@@ -247,14 +259,14 @@ const EnhancedWaiverWire: React.FC = () => {
                   type="text"
                   placeholder="Search players..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e: any) => setSearchTerm(e.target.value)}
                   className="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
                 />
               </div>
               
               <select
                 value={positionFilter}
-                onChange={(e) => setPositionFilter(e.target.value)}
+                onChange={(e: any) => setPositionFilter(e.target.value)}
                 className="px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
               >
                 <option value="ALL">All Positions</option>
@@ -323,11 +335,11 @@ const EnhancedWaiverWire: React.FC = () => {
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-bold text-white">My Waiver Claims</h3>
               <span className="text-sm text-slate-400">
-                {waiverClaims.filter(c => c.claimingTeamId === userTeam?.id).length} active claims
+                {waiverClaims.filter((c: any) => c.claimingTeamId === userTeam?.id).length} active claims
               </span>
             </div>
 
-            {waiverClaims.filter(c => c.claimingTeamId === userTeam?.id).length === 0 ? (
+            {waiverClaims.filter((c: any) => c.claimingTeamId === userTeam?.id).length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-slate-400">No active waiver claims</p>
                 <p className="text-sm text-slate-500 mt-2">
@@ -337,7 +349,7 @@ const EnhancedWaiverWire: React.FC = () => {
             ) : (
               <div className="space-y-3">
                 {waiverClaims
-                  .filter(c => c.claimingTeamId === userTeam?.id)
+                  .filter((c: any) => c.claimingTeamId === userTeam?.id)
                   .map((claim, index) => (
                     <motion.div
                       key={claim.id}
@@ -489,7 +501,7 @@ const EnhancedWaiverWire: React.FC = () => {
                   min="0"
                   max={userBudget.remaining}
                   value={bidAmount}
-                  onChange={(e) => setBidAmount(Number(e.target.value))}
+                  onChange={(e: any) => setBidAmount(Number(e.target.value))}
                   className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
                   placeholder="Enter bid amount"
                 />
@@ -502,14 +514,14 @@ const EnhancedWaiverWire: React.FC = () => {
                 </label>
                 <select
                   value={dropPlayer?.id || ''}
-                  onChange={(e) => {
-                    const player = userTeam?.roster?.find(p => p.id === e.target.value);
+                  onChange={(e: any) => {
+                    const player = userTeam?.roster?.find((p: any) => p.id === e.target.value);
                     setDropPlayer(player || null);
                   }}
                   className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
                 >
                   <option value="">Select player to drop</option>
-                  {userTeam?.roster?.map(player => (
+                  {userTeam?.roster?.map((player: any) => (
                     <option key={player.id} value={player.id}>
                       {player.name} ({player.position})
                     </option>

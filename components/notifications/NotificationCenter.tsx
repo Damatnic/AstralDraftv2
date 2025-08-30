@@ -6,9 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNotifications } from '../../contexts/NotificationContext';
-import { realtimeNotificationService } from '../../services/realtimeNotificationService';
-import { NotificationPreferences } from '../../services/enhancedNotificationService';
-// import { RealtimeNotification } from '../../services/realtimeNotificationService';
+import { realtimeNotificationService, RealtimeNotification } from '../../services/realtimeNotificationService';
 import { 
     BellIcon, 
     CheckIcon, 
@@ -16,13 +14,13 @@ import {
     TrashIcon, 
     SettingsIcon,
     FilterIcon,
-    CheckCheckIcon
-    // Star,
-    // Trophy,
-    // Users,
-    // Zap,
-    // AlertCircle,
-    // Info
+    CheckCheckIcon,
+    Star,
+    Trophy,
+    Users,
+    Zap,
+    AlertCircle,
+    Info
 } from 'lucide-react';
 
 interface NotificationCenterProps {
@@ -35,7 +33,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     isOpen, 
     onClose, 
     className = '' 
-}) => {
+}: any) => {
     const {
         notifications,
         unreadCount,
@@ -60,7 +58,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     // Setup real-time notification listener
     useEffect(() => {
-        const handleRealtimeNotification = (_notification: unknown) => {
+        const handleRealtimeNotification = (notification: any) => {
             // Trigger refresh to get new notifications
             refreshNotifications();
             
@@ -78,7 +76,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
         };
     }, [refreshNotifications, preferences]);
 
-    const filteredNotifications = notifications.filter((notification: { type: string; category: string; isRead: boolean }) => {
+    const filteredNotifications = notifications.filter((notification: any) => {
         if (filter === 'unread') return !notification.isRead;
         if (filter === 'draft') return notification.category === 'draft';
         if (filter === 'oracle') return notification.category === 'oracle';
@@ -172,7 +170,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                     <FilterIcon className="w-4 h-4 text-gray-400 mt-1" />
                     <select
                         value={filter}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value as 'all' | 'unread' | 'draft' | 'oracle' | 'league')}
+                        onChange={(e: any) => setFilter(e.target.value as any)}
                         className="bg-gray-800 text-white text-sm rounded px-2 py-1 border border-gray-600"
                     >
                         <option value="all">All</option>
@@ -239,7 +237,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 {!loading && filteredNotifications.length > 0 && (
                     <div className="p-4 space-y-3">
                         <AnimatePresence>
-                            {filteredNotifications.map((notification) => (
+                            {filteredNotifications.map((notification: any) => (
                                 <NotificationItem
                                     key={notification.id}
                                     notification={notification}
@@ -261,7 +259,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
 // Notification Item Component
 interface NotificationItemProps {
-    notification: { id: string; title: string; message: string; timestamp: number; isRead: boolean; type: string; priority: string };
+    notification: any;
     onMarkAsRead: (id: string) => void;
     onArchive: (id: string) => void;
     onDelete: (id: string) => void;
@@ -278,7 +276,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     getIcon,
     getPriorityColor,
     formatTimeAgo
-}) => {
+}: any) => {
     const [showActions, setShowActions] = useState(false);
 
     const handleAction = (actionFn: () => void) => {
@@ -376,17 +374,17 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 
 // Notification Settings Component
 interface NotificationSettingsProps {
-    preferences: NotificationPreferences | null;
+    preferences: any;
     onClose: () => void;
 }
 
-const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }) => {
+const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }: any) => {
     const { updatePreferences } = useNotifications();
-    const [localPreferences, setLocalPreferences] = useState<NotificationPreferences>(preferences || {} as NotificationPreferences);
+    const [localPreferences, setLocalPreferences] = useState(preferences || {});
 
     const handleToggle = (path: string, value: boolean) => {
         const keys = path.split('.');
-        const updated = { ...localPreferences } as any;
+        const updated = { ...localPreferences };
         let current = updated;
         
         for (let i = 0; i < keys.length - 1; i++) {
@@ -416,7 +414,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.enablePushNotifications || false}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleToggle('enablePushNotifications', e.target.checked)}
+                        onChange={(e: any) => handleToggle('enablePushNotifications', e.target.checked)}
                         className="accent-blue-500"
                     />
                 </div>
@@ -426,7 +424,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.enableSoundNotifications || false}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleToggle('enableSoundNotifications', e.target.checked)}
+                        onChange={(e: any) => handleToggle('enableSoundNotifications', e.target.checked)}
                         className="accent-blue-500"
                     />
                 </div>
@@ -442,7 +440,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.draft?.enabled || false}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleToggle('categories.draft.enabled', e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.draft.enabled', e.target.checked)}
                         className="accent-blue-500"
                     />
                 </div>
@@ -452,7 +450,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.oracle?.enabled || false}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleToggle('categories.oracle.enabled', e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.oracle.enabled', e.target.checked)}
                         className="accent-blue-500"
                     />
                 </div>
@@ -462,7 +460,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.league?.enabled || false}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleToggle('categories.league.enabled', e.target.checked)}
+                        onChange={(e: any) => handleToggle('categories.league.enabled', e.target.checked)}
                         className="accent-blue-500"
                     />
                 </div>

@@ -2,19 +2,24 @@
  * Main App Component - Fantasy Football League Application
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
-import './styles/theme.css';
+import './styles/globals.css';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import LeagueDashboard from './views/LeagueDashboard';
 import { AnimatePresence, motion } from 'framer-motion';
-import { SkipLink } from './components/ui/SkipLink';
-import { MobileBottomNav } from './components/ui/MobileBottomNav';
-import { PWAInstallButton } from './components/ui/PWAInstallButton';
-import { HighContrastMode } from './components/ui/HighContrastMode';
-import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { useMediaQuery } from './hooks/useMediaQuery';
+import { enhancedWebSocketService } from './services/enhancedWebSocketService';
+import { realtimeNotificationServiceV2 } from './services/realtimeNotificationServiceV2';
 import type { View } from './types';
+
+// Import UI components
+import SkipLink from './components/ui/SkipLink';
+import PWAInstallButton from './components/ui/PWAInstallButton';
+import HighContrastMode from './components/ui/HighContrastMode';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import ModernNavigation from './components/ui/ModernNavigation';
+import MobileLayoutWrapper from './components/mobile/MobileLayoutWrapper';
 
 // Lazy load secondary views
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
@@ -34,12 +39,15 @@ const EnhancedDraftRoomView = React.lazy(() => import('./views/EnhancedDraftRoom
 const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementView'));
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 
-// Simple loading component
+// Modern loading component
 const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
-  <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-    <div className="text-center">
-      <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-      <p className="text-white">{message}</p>
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-center space-y-4">
+      <div className="relative inline-flex">
+        <div className="w-12 h-12 border-4 border-primary-500/30 rounded-full"></div>
+        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
+      </div>
+      <p className="text-lg font-medium text-gray-300 animate-pulse">{message}</p>
     </div>
   </div>
 );
@@ -53,6 +61,38 @@ const viewVariants = {
 const AppContent: React.FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
+
+    // Initialize real-time services
+    useEffect(() => {
+        const initializeRealTimeServices = async () => {
+            try {
+                // Initialize WebSocket connection
+                await enhancedWebSocketService.connect();
+                
+                // Setup notification system
+                await realtimeNotificationServiceV2.initialize(state.user?.id || '');
+                
+                // Listen for notifications using EventEmitter pattern
+                realtimeNotificationServiceV2.on('notification', (notification) => {
+                    // Handle real-time notifications
+                    dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
+                });
+                
+            } catch (error) {
+                // Failed to initialize real-time services in production
+                console.error('Real-time services initialization failed:', error);
+            }
+        };
+
+        if (state.user) {
+            initializeRealTimeServices();
+        }
+
+        return () => {
+            enhancedWebSocketService.disconnect();
+            realtimeNotificationServiceV2.removeAllListeners();
+        };
+    }, [state.user]);
 
     // Show login if no user is logged in
     if (!state.user) {
@@ -194,34 +234,49 @@ const AppContent: React.FC = () => {
     };
     
     return (
-        <div className="relative w-full h-full flex flex-col font-sans gradient-background">
+        <div className="relative w-full min-h-screen flex flex-col font-sans bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
             <SkipLink />
+            
+            {/* Modern Navigation Header */}
+            {!isMobile && (
+                <ModernNavigation 
+                    user={state.user}
+                    currentView={state.currentView}
+                    onViewChange={(view: View) => dispatch({ type: 'SET_VIEW', payload: view })}
+                    onLogout={() => dispatch({ type: 'LOGOUT' })}
+                />
+            )}
+            
+            {/* Main Content Area */}
             <AnimatePresence mode="wait">
                 <motion.div
                     key={state.currentView}
                     id="main-content"
-                    className="w-full h-full"
+                    className={`flex-1 w-full ${!isMobile ? 'pt-16' : ''}`}
                     variants={viewVariants}
                     initial="initial"
                     animate="animate"
                     exit="exit"
                 >
-                    {renderView()}
+                    {isMobile ? (
+                        <MobileLayoutWrapper
+                            currentView={state.currentView}
+                            onViewChange={(view: View) => dispatch({ type: 'SET_VIEW', payload: view })}
+                            showBottomNav={true}
+                        >
+                            {renderView()}
+                        </MobileLayoutWrapper>
+                    ) : (
+                        renderView()
+                    )}
                 </motion.div>
             </AnimatePresence>
             
-            {isMobile && (
-                <>
-                    <MobileBottomNav
-                        activeView={state.currentView}
-                        onViewChange={(view) => dispatch({ type: 'SET_VIEW', payload: view as View })}
-                        notificationCount={0}
-                    />
-                    <PWAInstallButton />
-                </>
-            )}
+            {/* PWA Install Button - Always available */}
+            <PWAInstallButton />
             
-            <div className="fixed top-4 right-4 z-50">
+            {/* Accessibility Controls */}
+            <div className="fixed top-20 right-4 z-[1080]">
                 <HighContrastMode />
             </div>
         </div>
@@ -231,7 +286,7 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
-      <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' }}>
+      <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950">
         <ErrorBoundary>
           <AppContent />
         </ErrorBoundary>

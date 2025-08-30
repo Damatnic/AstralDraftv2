@@ -9,15 +9,15 @@ interface SeasonReviewDisplayProps {
     teams: Team[];
 }
 
-const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team: _team }) => (
+const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team }: any) => (
     <div className="bg-white/5 p-4 rounded-lg">
         <h4 className="font-bold text-white">{superlative.title}</h4>
         <p className="text-sm text-yellow-300 font-semibold">{superlative.teamName}</p>
-        <p className="text-xs text-gray-400 mt-1 italic">&quot;{superlative.rationale}&quot;</p>
+        <p className="text-xs text-gray-400 mt-1 italic">"{superlative.rationale}"</p>
     </div>
 );
 
-const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams }) => {
+const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams }: any) => {
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -28,14 +28,14 @@ const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams
 
              <div className="max-w-4xl mx-auto space-y-8">
                  <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap text-center italic">
-                    &quot;{review.summary}&quot;
+                    "{review.summary}"
                 </p>
 
                 <div>
                     <h3 className="font-bold text-lg text-cyan-300 mb-3 flex items-center gap-2"><SparklesIcon /> Season Superlatives</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {review.superlatives.map((sup, i) => (
-                            <SuperlativeCard key={i} superlative={sup} team={teams.find(t => t.name === sup.teamName)} />
+                            <SuperlativeCard key={i} superlative={sup} team={teams.find((t: any) => t.name === sup.teamName)} />
                         ))}
                     </div>
                 </div>

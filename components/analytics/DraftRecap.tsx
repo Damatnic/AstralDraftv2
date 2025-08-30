@@ -12,10 +12,10 @@ import { TelescopeIcon } from '../icons/TelescopeIcon';
 
 interface DraftRecapProps {
     league: League;
-    dispatch: React.Dispatch<{ type: string; payload?: unknown }>;
+    dispatch: React.Dispatch<any>;
 }
 
-const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) => {
+const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }: any) => {
     const getIcon = (title: string) => {
         const lowerTitle = title.toLowerCase();
         if (lowerTitle.includes('steal') || lowerTitle.includes('value')) return <GemIcon />;
@@ -31,13 +31,13 @@ const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) 
                 <p className="text-xs sm:text-sm text-gray-300">
                     <span className="font-semibold text-yellow-300">{award.teamName}</span> - {award.playerName}
                 </p>
-                <p className="text-xs text-gray-400 mt-1 italic break-words">&ldquo;{award.rationale}&rdquo;</p>
+                <p className="text-xs text-gray-400 mt-1 italic break-words">"{award.rationale}"</p>
             </div>
         </div>
     );
 };
 
-const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }) => {
+const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
     const [recap, setRecap] = React.useState<DraftRecapData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -51,7 +51,6 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }) => {
                 const data = await generateDraftRecap(league);
                 setRecap(data);
             } catch (err) {
-                console.error(err);
                 setError("The Oracle is resting. Could not generate a draft recap.");
             } finally {
                 setIsLoading(false);

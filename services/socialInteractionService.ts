@@ -299,22 +299,22 @@ export class SocialInteractionService {
 
         // Apply filters
         if (filters.userId) {
-            messages = messages.filter(m => 
+            messages = messages.filter((m: any) => 
                 m.senderId === filters.userId || 
                 m.recipientId === filters.userId
             );
         }
         if (filters.leagueId) {
-            messages = messages.filter(m => m.leagueId === filters.leagueId);
+            messages = messages.filter((m: any) => m.leagueId === filters.leagueId);
         }
         if (filters.forumTopicId) {
-            messages = messages.filter(m => m.forumTopicId === filters.forumTopicId);
+            messages = messages.filter((m: any) => m.forumTopicId === filters.forumTopicId);
         }
         if (filters.messageType) {
-            messages = messages.filter(m => m.messageType === filters.messageType);
+            messages = messages.filter((m: any) => m.messageType === filters.messageType);
         }
         if (filters.since) {
-            messages = messages.filter(m => m.timestamp >= filters.since!);
+            messages = messages.filter((m: any) => m.timestamp >= filters.since!);
         }
 
         // Sort by timestamp (newest first)
@@ -333,7 +333,7 @@ export class SocialInteractionService {
         if (!message) throw new Error('Message not found');
 
         // Remove existing reaction from this user
-        message.reactions = message.reactions.filter(r => r.userId !== userId);
+        message.reactions = message.reactions.filter((r: any) => r.userId !== userId);
 
         // Add new reaction
         const reaction: MessageReaction = {
@@ -392,10 +392,10 @@ export class SocialInteractionService {
     async getForumTopics(leagueId: string, category?: ForumCategory): Promise<ForumTopic[]> {
         let topics = Array.from(this.forumTopics.values());
 
-        topics = topics.filter(t => t.leagueId === leagueId);
+        topics = topics.filter((t: any) => t.leagueId === leagueId);
         
         if (category) {
-            topics = topics.filter(t => t.category === category);
+            topics = topics.filter((t: any) => t.category === category);
         }
 
         // Sort by sticky first, then by last activity
@@ -527,7 +527,7 @@ export class SocialInteractionService {
     async getTrashTalkPosts(leagueId: string, limit: number = 50): Promise<TrashTalkPost[]> {
         let posts = Array.from(this.trashTalkPosts.values());
         
-        posts = posts.filter(p => p.leagueId === leagueId && !p.isReported);
+        posts = posts.filter((p: any) => p.leagueId === leagueId && !p.isReported);
         posts.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
         
         return posts.slice(0, limit);
@@ -576,7 +576,7 @@ export class SocialInteractionService {
 
     async getRivalries(leagueId: string): Promise<Rivalry[]> {
         return Array.from(this.rivalries.values())
-            .filter(r => r.leagueId === leagueId)
+            .filter((r: any) => r.leagueId === leagueId)
             .sort((a, b) => b.rivalryScore - a.rivalryScore);
     }
 
@@ -638,7 +638,7 @@ export class SocialInteractionService {
     async getCommunityActivity(leagueId: string, limit: number = 100): Promise<CommunityActivity[]> {
         let activities = Array.from(this.communityActivities.values());
         
-        activities = activities.filter(a => a.leagueId === leagueId);
+        activities = activities.filter((a: any) => a.leagueId === leagueId);
         activities.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
         
         return activities.slice(0, limit);

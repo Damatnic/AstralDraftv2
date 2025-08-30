@@ -10,7 +10,7 @@ interface AccessibilityDashboardProps {
   className?: string;
 }
 
-export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = '' }) => {
+export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = '' }: any) => {
   const [metrics, setMetrics] = useState<AccessibilityMetrics | null>(null);
   const [history, setHistory] = useState<AccessibilityMetrics[]>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<7 | 30 | 90>(30);
@@ -34,7 +34,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
         const dashboardData = await response.json();
         setHistory(dashboardData.history || []);
         setMetrics(dashboardData.latestMetrics);
-      } catch {
+      } catch (error) {
         // Fallback to localStorage
         const historyData = accessibilityMonitoringService.getMetricsHistory();
         setHistory(historyData);
@@ -44,7 +44,6 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
         }
       }
     } catch (error) {
-      console.error('Failed to load accessibility dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -112,7 +111,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
               <select
                 id="timeRange"
                 value={selectedTimeRange}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
+                onChange={(e: any) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
               >
                 <option value={7}>Last 7 days</option>
                 <option value={30}>Last 30 days</option>
@@ -124,10 +123,10 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
               <select
                 id="component"
                 value={selectedComponent}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedComponent(e.target.value)}
+                onChange={(e: any) => setSelectedComponent(e.target.value)}
               >
                 <option value="all">All Components</option>
-                {metrics.componentMetrics.map((component: ComponentAccessibilityMetric) => (
+                {metrics.componentMetrics.map((component: any) => (
                   <option key={component.componentName} value={component.componentName}>
                     {component.componentName}
                   </option>
@@ -231,7 +230,7 @@ interface MetricCardProps {
   color: 'success' | 'warning' | 'danger';
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }) => {
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }: any) => {
   const getTrendIcon = () => {
     switch (trend) {
       case 'improving': return '📈';
@@ -271,8 +270,8 @@ interface SimpleTrendChartProps {
   data: ViolationTrend[];
 }
 
-const SimpleTrendChart: React.FC<SimpleTrendChartProps> = ({ data }) => {
-  const maxValue = Math.max(...data.map((d: ViolationTrend) => Math.max(d.critical, d.serious, d.moderate, d.minor, d.total)));
+const SimpleTrendChart: React.FC<SimpleTrendChartProps> = ({ data }: any) => {
+  const maxValue = Math.max(...data.map((d: any) => Math.max(d.critical, d.serious, d.moderate, d.minor, d.total)));
   const chartHeight = 200;
   const chartWidth = 100;
 
@@ -388,7 +387,7 @@ interface ViolationDistributionChartProps {
   violationsByLevel: AccessibilityMetrics['violationsByLevel'];
 }
 
-const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }) => {
+const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }: any) => {
   const total = Object.values(violationsByLevel).reduce((sum, count) => sum + count, 0);
   
   if (total === 0) {
@@ -400,12 +399,12 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
     { label: 'Serious', count: violationsByLevel.serious, color: '#fd7e14' },
     { label: 'Moderate', count: violationsByLevel.moderate, color: '#ffc107' },
     { label: 'Minor', count: violationsByLevel.minor, color: '#28a745' }
-  ].filter((item: { label: string; count: number; color: string }) => item.count > 0);
+  ].filter((item: any) => item.count > 0);
 
   return (
     <div className="violation-distribution">
       <div className="distribution-bars">
-        {items.map((item, _index) => {
+        {items.map((item, index) => {
           const percentage = (item.count / total) * 100;
           return (
             <div key={item.label} className="distribution-bar">
@@ -434,7 +433,7 @@ interface ComponentStatusTableProps {
   components: ComponentAccessibilityMetric[];
 }
 
-const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }) => {
+const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }: any) => {
   const getStatusIcon = (status: ComponentAccessibilityMetric['status']) => {
     switch (status) {
       case 'passing': return '✅';
@@ -466,7 +465,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
           </tr>
         </thead>
         <tbody>
-          {components.map((component: ComponentAccessibilityMetric) => (
+          {components.map((component: any) => (
             <tr key={component.componentName} className={`status-${component?.status}`}>
               <td className="component-name">{component.componentName}</td>
               <td className="status-cell">
@@ -533,7 +532,7 @@ interface WCAGComplianceChartProps {
   wcagCompliance: AccessibilityMetrics['wcagCompliance'];
 }
 
-const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }) => {
+const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }: any) => {
   const levels = [
     { label: 'Level A', value: wcagCompliance.levelA },
     { label: 'Level AA', value: wcagCompliance.levelAA },
@@ -542,7 +541,7 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
 
   return (
     <div className="wcag-compliance-chart">
-      {levels.map((level, _index) => (
+      {levels.map((level, index) => (
         <div key={level.label} className="compliance-bar">
           <div className="compliance-label">
             <span className="label-text">{level.label}</span>

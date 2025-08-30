@@ -66,7 +66,7 @@ class NotificationService {
 
         // Trigger in-app notification callbacks
         if (this.preferences.inAppNotifications) {
-            this.notificationCallbacks.forEach(callback => callback(newNotification));
+            this.notificationCallbacks.forEach((callback: any) => callback(newNotification));
         }
     }
 
@@ -75,11 +75,11 @@ class NotificationService {
     }
 
     getUnreadNotifications(): OracleNotification[] {
-        return this.notifications.filter(n => !n.isRead);
+        return this.notifications.filter((n: any) => !n.isRead);
     }
 
     markAsRead(notificationId: string): void {
-        const notification = this.notifications.find(n => n.id === notificationId);
+        const notification = this.notifications.find((n: any) => n.id === notificationId);
         if (notification) {
             notification.isRead = true;
             this.saveNotifications();
@@ -87,7 +87,7 @@ class NotificationService {
     }
 
     markAllAsRead(): void {
-        this.notifications.forEach(n => n.isRead = true);
+        this.notifications.forEach((n: any) => n.isRead = true);
         this.saveNotifications();
     }
 
@@ -270,7 +270,7 @@ class NotificationService {
                 this.notifications = JSON.parse(saved);
                 // Clean up old notifications (older than 7 days)
                 const cutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-                this.notifications = this.notifications.filter(n => n.timestamp > cutoff);
+                this.notifications = this.notifications.filter((n: any) => n.timestamp > cutoff);
                 this.saveNotifications();
             }
         } catch (error) {
@@ -334,7 +334,7 @@ class NotificationService {
             1 * 60 * 1000   // 1 minute
         ];
 
-        intervals.forEach(interval => {
+        intervals.forEach((interval: any) => {
             const notificationTime = expireTime - interval;
             if (notificationTime > now) {
                 const timeoutDuration = notificationTime - now;

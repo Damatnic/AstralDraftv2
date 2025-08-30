@@ -11,12 +11,12 @@ interface PositionalScarcityChartProps {
 const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
 const ELITE_TIER_THRESHOLD = 3;
 
-const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ availablePlayers }) => {
+const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ availablePlayers }: any) => {
 
     const scarcityData = React.useMemo(() => {
         return positions.map((pos: PlayerPosition) => {
-            const totalEliteInPosition = allPlayers.filter(p => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
-            const availableEliteInPosition = availablePlayers.filter(p => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
+            const totalEliteInPosition = allPlayers.filter((p: any) => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
+            const availableEliteInPosition = availablePlayers.filter((p: any) => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
             
             const availabilityPercent = totalEliteInPosition.length > 0
                 ? (availableEliteInPosition.length / totalEliteInPosition.length) * 100
@@ -36,8 +36,8 @@ const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ avail
             <h4 className="font-bold text-sm text-center mb-1 text-gray-300">Elite Talent Pool</h4>
             <p className="text-xs text-center mb-4 text-gray-500">Percentage of Tiers 1-3 players remaining.</p>
             <div className="space-y-3">
-                {scarcityData.map((data) => (
-                    <Tooltip key={data.pos} content="This is a tooltip">
+                {scarcityData.map((data: any) => (
+                    <Tooltip content="This is a tooltip">
                         <div className="flex items-center gap-2 text-xs">
                             <span className="w-8 font-bold text-gray-400">{data.pos}</span>
                             <div className="flex-grow bg-black/20 h-5 rounded-full overflow-hidden">

@@ -30,7 +30,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
-}) => {
+}: any) => {
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
   const [startY, setStartY] = React.useState(0);
@@ -185,7 +185,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   threshold = 50,
   children,
   className = ''
-}) => {
+}: any) => {
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
@@ -264,7 +264,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   children,
   className = '',
   overlay = true
-}) => {
+}: any) => {
   const drawerRef = React.useRef<HTMLDivElement>(null);
   const { containerRef } = useFocusTrap(isOpen);
 
@@ -342,10 +342,10 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
   activeTab,
   onTabChange,
   className = ''
-}) => {
+}: any) => {
   // Simple keyboard navigation implementation
   const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
-    const currentIndex = tabs.findIndex((tab: { id: string; label: string; icon?: React.ReactNode; badge?: string | number }) => tab.id === activeTab);
+    const currentIndex = tabs.findIndex((tab: any) => tab.id === activeTab);
     if (e.key === 'ArrowLeft' && currentIndex > 0) {
       onTabChange(tabs[currentIndex - 1].id);
     } else if (e.key === 'ArrowRight' && currentIndex < tabs.length - 1) {
@@ -360,7 +360,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
-      {tabs.map((tab) => (
+      {tabs.map((tab: any) => (
         <button
           key={tab.id}
           role="tab"
@@ -407,7 +407,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   children,
   className = '',
   threshold = 80
-}) => {
+}: any) => {
   const [isPulling, setIsPulling] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [pullDistance, setPullDistance] = React.useState(0);

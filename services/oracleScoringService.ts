@@ -286,7 +286,7 @@ class OracleScoringService {
    * Calculate user's overall score and stats
    */
   calculateUserScore(userId: string, allScores: ScoringResult[]): UserScore {
-    const userScores = allScores.filter(score => score.userId === userId);
+    const userScores = allScores.filter((score: any) => score.userId === userId);
     
     if (userScores.length === 0) {
       return {
@@ -304,10 +304,10 @@ class OracleScoringService {
     }
 
     const totalPoints = userScores.reduce((sum, score) => sum + score.totalPoints, 0);
-    const correctPredictions = userScores.filter(score => score.wasCorrect).length;
+    const correctPredictions = userScores.filter((score: any) => score.wasCorrect).length;
     const totalPredictions = userScores.length;
     const accuracy = totalPredictions > 0 ? (correctPredictions / totalPredictions) * 100 : 0;
-    const oracleBeats = userScores.filter(score => score.beatOracle).length;
+    const oracleBeats = userScores.filter((score: any) => score.beatOracle).length;
     
     // Calculate streaks
     const { currentStreak, longestStreak } = this.calculateStreaks(userScores);
@@ -368,8 +368,8 @@ class OracleScoringService {
    * Generate leaderboard with rankings
    */
   generateLeaderboard(allScores: ScoringResult[]): UserScore[] {
-    const userIds = [...new Set(allScores.map(score => score.userId))];
-    const userScores = userIds.map(userId => this.calculateUserScore(userId, allScores));
+    const userIds = [...new Set(allScores.map((score: any) => score.userId))];
+    const userScores = userIds.map((userId: any) => this.calculateUserScore(userId, allScores));
     
     // Sort by total points (descending)
     userScores.sort((a, b) => b.totalPoints - a.totalPoints);
@@ -444,7 +444,7 @@ class OracleScoringService {
    * Get achievements by tier
    */
   getAchievementsByTier(tier: Achievement['tier']): Achievement[] {
-    return this.achievements.filter(achievement => achievement.tier === tier);
+    return this.achievements.filter((achievement: any) => achievement.tier === tier);
   }
 
   /**
@@ -458,7 +458,7 @@ class OracleScoringService {
     perfectWeek: boolean;
   } {
     // Enhanced week filtering: filter by actual week data or prediction metadata
-    const weeklyScores = allScores.filter(score => {
+    const weeklyScores = allScores.filter((score: any) => {
       if (score.userId !== userId) return false;
       
       // Try multiple approaches to identify week-specific predictions
@@ -474,7 +474,7 @@ class OracleScoringService {
 
     const weeklyPoints = weeklyScores.reduce((sum, score) => sum + score.totalPoints, 0);
     const weeklyPredictions = weeklyScores.length;
-    const weeklyCorrect = weeklyScores.filter(score => score.wasCorrect).length;
+    const weeklyCorrect = weeklyScores.filter((score: any) => score.wasCorrect).length;
     const weeklyAccuracy = weeklyPredictions > 0 ? (weeklyCorrect / weeklyPredictions) * 100 : 0;
     const perfectWeek = weeklyPredictions >= 3 && weeklyCorrect === weeklyPredictions;
 
@@ -537,7 +537,7 @@ class OracleScoringService {
     improvementTrend: 'improving' | 'declining' | 'stable';
     consistencyScore: number;
   } {
-    const userScores = allScores.filter(score => score.userId === userId);
+    const userScores = allScores.filter((score: any) => score.userId === userId);
     
     if (userScores.length < 10) {
       return {
@@ -553,8 +553,8 @@ class OracleScoringService {
     const earlyScores = userScores.slice(0, splitPoint);
     const recentScores = userScores.slice(splitPoint);
     
-    const earlyCorrect = earlyScores.filter(s => s.wasCorrect).length;
-    const recentCorrect = recentScores.filter(s => s.wasCorrect).length;
+    const earlyCorrect = earlyScores.filter((s: any) => s.wasCorrect).length;
+    const recentCorrect = recentScores.filter((s: any) => s.wasCorrect).length;
     
     const earlySeasonAccuracy = (earlyCorrect / earlyScores.length) * 100;
     const recentAccuracy = (recentCorrect / recentScores.length) * 100;

@@ -43,7 +43,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   onClose, 
   user, 
   dispatch 
-}) => {
+}: any) => {
   // League Configuration
   const [leagueName, setLeagueName] = useState('Astral Draft Championship');
   const [selectedPlayerCount, setSelectedPlayerCount] = useState(10);
@@ -125,7 +125,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         }
       });
     } catch (error) {
-      console.error('Error generating team branding:', error);
       dispatch({ 
         type: 'ADD_NOTIFICATION', 
         payload: { 
@@ -218,7 +217,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
       
       onClose();
     } catch (error) {
-      console.error('Error creating enhanced league:', error);
       dispatch({ 
         type: 'ADD_NOTIFICATION', 
         payload: { 
@@ -448,7 +446,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           className="w-full bg-black/10 border border-[var(--panel-border)] rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           aria-label="Select which player you are"
         >
-          {players.map((player) => (
+          {players.map((player: any) => (
             <option key={player.name} value={player.name}>
               {player.name}
             </option>
@@ -542,7 +540,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           <div className="p-4 bg-black/10 rounded-lg">
             <h4 className="font-bold mb-2">Player Roster</h4>
             <div className="space-y-2">
-              {players.map((player) => (
+              {players.map((player: any) => (
                 <div key={player.name} className="flex items-center gap-2 text-sm">
                   <Avatar avatar={player.avatar} className="w-6 h-6 text-sm rounded" />
                   <span className={player.isUser ? 'text-green-400 font-bold' : 'text-gray-300'}>

@@ -8,7 +8,7 @@ interface PlayerPerformanceChartProps {
     league: League;
 }
 
-const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player, league }) => {
+const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player, league }: any) => {
     const chartData = React.useMemo(() => {
         const data = [];
         for (let week = 1; week < league.currentWeek; week++) {
@@ -34,7 +34,7 @@ const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player,
     return (
         <div className="p-4 sm:p-6 h-80 flex flex-col">
             <div className="flex-grow flex items-end gap-2 sm:gap-4 border-b-2 border-l-2 border-white/10 p-2">
-                {chartData.map(({ week, actualScore, projectedScore }) => (
+                {chartData.map(({ week, actualScore, projectedScore }: any) => (
                     <div key={week} className="flex-1 h-full flex flex-col justify-end items-center">
                         <div className="relative w-full h-full flex items-end justify-center">
                             <Tooltip content="This is a tooltip">

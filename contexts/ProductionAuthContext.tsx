@@ -1,10 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Production Authentication Context
  * Comprehensive JWT-based authentication system with email verification,
  * password reset, user profiles, and secure session management
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 // Types
@@ -177,13 +178,12 @@ const apiRequest = async (
 
     return data;
   } catch (error) {
-    console.error('API Request Error:', error);
     throw error;
   }
 };
 
 // Production Auth Provider
-export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -212,7 +212,6 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
           token,
         });
       } catch (error) {
-        console.error('Auth initialization failed:', error);
         removeStoredToken();
         setAuthState(prev => ({ ...prev, isLoading: false }));
       }
@@ -235,7 +234,6 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
           await refreshToken();
         }
       } catch (error) {
-        console.error('Token refresh check failed:', error);
       }
     }, 60000); // Check every minute
 
@@ -295,7 +293,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
   };
 
   // Logout
-  const logout = () => {
+  const logout = useCallback(() => {
     removeStoredToken();
     setAuthState({
       user: null,
@@ -308,10 +306,10 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
     apiRequest('/auth/logout', { method: 'POST' }).catch(() => {
       // Ignore errors - local logout should still work
     });
-  };
+  }, []);
 
   // Refresh Token
-  const refreshToken = async (): Promise<boolean> => {
+  const refreshToken = useCallback(async (): Promise<boolean> => {
     try {
       const refreshTokenValue = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (!refreshTokenValue) {
@@ -334,11 +332,10 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
 
       return true;
     } catch (error) {
-      console.error('Token refresh failed:', error);
       logout();
       return false;
     }
-  };
+  }, [logout]);
 
   // Reset Password
   const resetPassword = async (data: ResetPasswordData): Promise<{ success: boolean; error?: string }> => {
@@ -388,7 +385,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
   };
 
   // Verify Email
-  const verifyEmail = async (token: string): Promise<{ success: boolean; error?: string }> => {
+  const verifyEmail = useCallback(async (token: string): Promise<{ success: boolean; error?: string }> => {
     try {
       await apiRequest(`/auth/verify-email/${token}`, {
         method: 'POST',
@@ -404,7 +401,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
     } catch (error: any) {
       return { success: false, error: error.message || 'Email verification failed' };
     }
-  };
+  }, [authState.isAuthenticated]);
 
   // Resend Verification
   const resendVerification = async (): Promise<{ success: boolean; error?: string }> => {
@@ -420,7 +417,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
   };
 
   // Delete Account
-  const deleteAccount = async (): Promise<{ success: boolean; error?: string }> => {
+  const deleteAccount = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     try {
       await apiRequest('/auth/delete-account', {
         method: 'DELETE',
@@ -431,7 +428,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
     } catch (error: any) {
       return { success: false, error: error.message || 'Account deletion failed' };
     }
-  };
+  }, [logout]);
 
   const contextValue: AuthContextType = useMemo(() => ({
     ...authState,
@@ -445,7 +442,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
     verifyEmail,
     resendVerification,
     deleteAccount,
-  }), [authState]);
+  }), [authState, login, register, logout, refreshToken, resetPassword, changePassword, updateProfile, verifyEmail, resendVerification, deleteAccount]);
 
   return (
     <AuthContext.Provider value={contextValue}>

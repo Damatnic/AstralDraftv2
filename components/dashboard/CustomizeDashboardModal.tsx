@@ -24,7 +24,7 @@ const widgetLabels: { [key: string]: string } = {
     assistant: 'AI Assistant',
 };
 
-const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClose }) => {
+const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [layout, setLayout] = React.useState(state.dashboardLayout);
 

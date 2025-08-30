@@ -3,7 +3,7 @@
  * Comprehensive visualization of advanced statistical modeling and external data sources
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
@@ -11,7 +11,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';
 import { Progress } from '../ui/Progress';
 import { Badge } from '../ui/Badge';
 import { 
-    PredictionFactors, 
+    PredictionFactors,
+    CompositeScore, 
     oracleAdvancedAnalyticsService 
 } from '../../services/oracleAdvancedAnalyticsService';
 
@@ -23,30 +24,31 @@ interface AdvancedAnalyticsDashboardProps {
 }
 
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
-    playerId: _playerId,
-    week: _week,
     predictionFactors,
     onRefresh
 }) => {
     const [activeTab, setActiveTab] = useState('overview');
-    const [compositeScore, setCompositeScore] = useState<Record<string, unknown> | null>(null);
+    const [compositeScore, setCompositeScore] = useState<CompositeScore | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const calculateCompositeScore = useCallback(async () => {
-        if (!predictionFactors) return;
-        
-        setIsLoading(true);
-        try {
-            const score = await oracleAdvancedAnalyticsService.calculateAdvancedCompositeScore(predictionFactors);
-            setCompositeScore(score);
-        } catch (error) {
-            console.error('Failed to calculate composite score:', error);
-        } finally {
-            setIsLoading(false);
-        }
+    // Calculate composite score when prediction factors change
+    const calculateCompositeScore = useMemo(() => {
+        return async () => {
+            if (!predictionFactors) return;
+            
+            setIsLoading(true);
+            try {
+                const score = await oracleAdvancedAnalyticsService.calculateAdvancedCompositeScore(predictionFactors);
+                setCompositeScore(score);
+            } catch (error) {
+                if (process.env.NODE_ENV === 'development') {
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        };
     }, [predictionFactors]);
 
-    // Calculate composite score when prediction factors change
     useEffect(() => {
         if (predictionFactors) {
             calculateCompositeScore();
@@ -97,7 +99,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     const ensembleModelData = useMemo(() => {
         if (!predictionFactors) return [];
         
-        return predictionFactors.ensemblePrediction.modelPredictions.map((model: { model: string; prediction: number; weight: number; confidence: number }) => ({
+        return predictionFactors.ensemblePrediction.modelPredictions.map((model: any) => ({
             name: model.model,
             prediction: model.prediction,
             weight: model.weight * 100,
@@ -108,7 +110,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     const regressionFactorsData = useMemo(() => {
         if (!predictionFactors) return [];
         
-        return predictionFactors.regressionAnalysis.significantFactors.map((factor: { factor: string; coefficient: number; impact: string; pValue: number }) => ({
+        return predictionFactors.regressionAnalysis.significantFactors.map((factor: any) => ({
             name: factor.factor,
             coefficient: Math.abs(factor.coefficient),
             impact: factor.impact,
@@ -170,13 +172,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-blue-600">
-                                    {((compositeScore.score as number) * 100).toFixed(1)}%
+                                    {compositeScore.overall}%
                                 </div>
                                 <div className="text-sm text-gray-600">Composite Score</div>
                             </div>
                             <div className="text-center">
                                 <div className="text-3xl font-bold text-green-600">
-                                    {((compositeScore.confidence as number) * 100).toFixed(1)}%
+                                    {(compositeScore.confidence * 100).toFixed(1)}%
                                 </div>
                                 <div className="text-sm text-gray-600">Confidence Level</div>
                             </div>
@@ -216,7 +218,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <CardContent>
                                 {compositeScore && (
                                     <div className="space-y-2 sm:space-y-3">
-                                        {(compositeScore.reasoning as string[]).map((reason: string, index: number) => (
+                                        {compositeScore.reasoning.map((reason: string, index: number) => (
                                             <div key={index} className="p-2 sm:p-3 bg-gray-50 rounded-lg">
                                                 <p className="text-xs sm:text-sm">{reason}</p>
                                             </div>
@@ -260,7 +262,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         <h4 className="text-sm sm:text-base font-medium mb-2">Key Drivers:</h4>
                                         <div className="flex flex-wrap gap-1 sm:gap-2">
                                             {predictionFactors.ensemblePrediction.keyDrivers.map((driver, index) => (
-                                                <Badge key={index} variant="info" className="text-xs">
+                                                <Badge key={index} variant="default" className="text-xs">
                                                     {driver}
                                                 </Badge>
                                             ))}
@@ -279,7 +281,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             </CardHeader>
                             <CardContent>
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <BarChart data={Object.entries(compositeScore.breakdown as Record<string, unknown>).map(([key, value]) => ({
+                                    <BarChart data={Object.entries(compositeScore.breakdown).map(([key, value]) => ({
                                         name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
                                         score: Number(value) * 100
                                     }))}>
@@ -581,7 +583,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                             <YAxis dataKey="name" type="category" width={120} fontSize={10} />
                                             <Tooltip />
                                             <Bar dataKey="coefficient">
-                                                {regressionFactorsData.map((entry) => (
+                                                {regressionFactorsData.map((entry: any) => (
                                                     <Cell key={`cell-${entry.name}`} fill={entry.impact === 'POSITIVE' ? '#22c55e' : '#ef4444'} />
                                                 ))}
                                             </Bar>
@@ -730,13 +732,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 <div className="space-y-4">
                                     <div className="flex justify-between">
                                         <span>Stadium Type</span>
-                                        <Badge variant="default">
+                                        <Badge variant="outline">
                                             {predictionFactors.externalFactors.stadiumType}
                                         </Badge>
                                     </div>
                                     <div className="flex justify-between">
                                         <span>Field Type</span>
-                                        <Badge variant="default">
+                                        <Badge variant="outline">
                                             {predictionFactors.externalFactors.fieldType}
                                         </Badge>
                                     </div>

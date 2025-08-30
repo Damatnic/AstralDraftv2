@@ -6,7 +6,7 @@ import { useAppState } from '../contexts/AppContext';
 import { AnimatePresence, motion } from 'framer-motion';
 import MatchupScoreboard from '../components/matchup/MatchupScoreboard';
 import MatchupRosterView from '../components/matchup/MatchupRosterView';
-import type { League, Team } from '../types';
+import type { League, Team, Matchup } from '../types';
 import RivalryReportModal from '../components/matchup/RivalryReportModal';
 import { NewspaperIcon } from '../components/icons/NewspaperIcon';
 import { useLeague } from '../hooks/useLeague';
@@ -14,13 +14,13 @@ import MatchupAnalysisWidget from '../components/matchup/MatchupAnalysisWidget';
 import LiveEventTicker from '../components/matchup/LiveEventTicker';
 import { useLiveData } from '../hooks/useLiveData';
 
-const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const [viewedWeek, setViewedWeek] = React.useState(league.currentWeek);
     const [isReportModalOpen, setIsReportModalOpen] = React.useState(false);
 
-    const matchup = league.schedule.find(m => m.week === viewedWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
+    const matchup = league.schedule.find((m: any) => m.week === viewedWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
     
-    const opponentTeam = league.teams.find(t => t.id === (matchup?.teamA.teamId === myTeam.id ? matchup?.teamB.teamId : matchup?.teamA.teamId));
+    const opponentTeam = league.teams.find((t: any) => t.id === (matchup?.teamA.teamId === myTeam.id ? matchup?.teamB.teamId : matchup?.teamA.teamId));
 
     useLiveData(league, myTeam, opponentTeam);
 

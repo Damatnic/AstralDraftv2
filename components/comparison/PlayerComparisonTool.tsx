@@ -33,7 +33,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   initialPlayers = [],
   week = 1,
   season = 2024
-}) => {
+}: any) => {
   // State management
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>(initialPlayers);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,7 +66,6 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
         
         setSearchResults(mockResults);
       } catch (error) {
-        console.error('Error searching players:', error);
         setSearchResults([]);
       }
     };
@@ -98,7 +97,6 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
       );
       setComparison(comparisonResult);
     } catch (error) {
-      console.error('Error loading comparison:', error);
       setError('Failed to load player comparison. Please try again.');
     } finally {
       setLoading(false);
@@ -244,7 +242,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                 {comparison?.players.map((player: any) => (
                   <Badge 
                     key={player.id} 
-                    variant="secondary"
+                    variant="default"
                     className="flex items-center gap-2 py-1 px-3"
                   >
                     {player.name} ({player.position})
@@ -447,7 +445,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                               {player.recentPerformance.floor.toFixed(1)}
                             </td>
                             <td className="text-center p-2">
-                              <Badge variant="secondary" className="text-xs">
+                              <Badge variant="default" className="text-xs">
                                 {player.projectedStats.projectionMethod}
                               </Badge>
                             </td>

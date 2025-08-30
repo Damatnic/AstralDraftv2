@@ -7,7 +7,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { League, Team } from '../../types';
-import { TradeProposal, TradeAnalysis } from './TradeAnalyzerView';
+import { TradeProposal, TradeAnalysis, TeamImpactAnalysis } from './TradeAnalyzerView';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { BarChartIcon } from '../icons/BarChartIcon';
@@ -17,8 +17,8 @@ interface ImpactAssessmentTabProps {
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
     league: League;
-    _currentTeam: Team;
-    _dispatch: React.Dispatch<any>;
+    currentTeam: Team;
+    dispatch: React.Dispatch<any>;
 }
 
 interface ImpactMetric {
@@ -33,9 +33,9 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
     proposal,
     analysis,
     league,
-    _currentTeam,
-    _dispatch
-}) => {
+    currentTeam,
+    dispatch
+}: any) => {
     const impactMetrics: ImpactMetric[] = React.useMemo(() => {
         if (!analysis) return [];
         

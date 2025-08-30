@@ -53,7 +53,7 @@ export const useMobileDetection = (): MobileDetection => {
       // Touch detection
       const isTouchDevice = 'ontouchstart' in window || 
                            navigator.maxTouchPoints > 0 ||
-                           ((navigator as { msMaxTouchPoints?: number }).msMaxTouchPoints || 0) > 0;
+                           (navigator as any).msMaxTouchPoints > 0;
       
       // Orientation detection
       const isPortrait = height > width;
@@ -61,7 +61,7 @@ export const useMobileDetection = (): MobileDetection => {
       
       // PWA detection
       const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
-                   (window.navigator as { standalone?: boolean }).standalone ||
+                   (window.navigator as any).standalone ||
                    document.referrer.includes('android-app://');
       
       // Platform detection
@@ -223,14 +223,9 @@ export const useNetworkStatus = () => {
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
     
     const updateConnectionType = () => {
-      interface ConnectionAPI {
-        connection?: { effectiveType?: string; type?: string };
-        mozConnection?: { effectiveType?: string; type?: string };
-        webkitConnection?: { effectiveType?: string; type?: string };
-      }
-      
-      const nav = navigator as ConnectionAPI;
-      const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
+      const connection = (navigator as any).connection || 
+                        (navigator as any).mozConnection || 
+                        (navigator as any).webkitConnection;
       
       if (connection) {
         setConnectionType(connection.effectiveType || connection.type || 'unknown');

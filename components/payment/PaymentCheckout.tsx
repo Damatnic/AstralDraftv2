@@ -12,7 +12,7 @@ const CheckoutForm: React.FC<{
   paymentType: 'contest' | 'subscription';
   onSuccess: () => void;
   onError: (error: string) => void;
-}> = ({ paymentType, onSuccess, onError }) => {
+}> = ({ paymentType, onSuccess, onError }: any) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
@@ -97,7 +97,7 @@ export const ContestEntryPayment: React.FC<{
   entryType: 'CONTEST_ENTRY_SMALL' | 'CONTEST_ENTRY_MEDIUM' | 'CONTEST_ENTRY_LARGE';
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ contestId, entryType, onSuccess, onCancel }) => {
+}> = ({ contestId, entryType, onSuccess, onCancel }: any) => {
   const { stripe, products, createContestEntryPayment } = usePayment();
   const [clientSecret, setClientSecret] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -194,7 +194,7 @@ export const SubscriptionPayment: React.FC<{
   trialDays?: number;
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ subscriptionType, trialDays = 7, onSuccess, onCancel }) => {
+}> = ({ subscriptionType, trialDays = 7, onSuccess, onCancel }: any) => {
   const { products, createSubscription } = usePayment();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -277,7 +277,7 @@ export const SubscriptionPayment: React.FC<{
         <p>You can cancel anytime. No commitments.</p>
         {trialDays > 0 && (
           <p className="mt-1">
-            Trial ends in {trialDays} days. You won&apos;t be charged until then.
+            Trial ends in {trialDays} days. You won't be charged until then.
           </p>
         )}
       </div>
@@ -289,7 +289,7 @@ export const SubscriptionPayment: React.FC<{
 export const PaymentSuccess: React.FC<{
   type: 'contest' | 'subscription';
   onClose: () => void;
-}> = ({ type, onClose }) => {
+}> = ({ type, onClose }: any) => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
       <div className="text-center">

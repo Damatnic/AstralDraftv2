@@ -8,6 +8,7 @@ import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import {
     announceToScreenReader,
     useKeyboardNavigation,
+    useFocusManagement,
     useReducedMotion,
 } from '../../utils/mobileAccessibilityUtils';
 
@@ -35,7 +36,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     maxPullDistance = 120,
     disabled = false,
     className = ''
-}) => {
+}: any) => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
     const [announcement, setAnnouncement] = React.useState('');
@@ -45,7 +46,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     const startScrollTop = React.useRef(0);
     const prefersReducedMotion = useReducedMotion();
 
-    const handlePanStart = (_event: PointerEvent, _info: PanInfo) => {
+    const handlePanStart = (event: any, info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         const container = containerRef.current;
@@ -60,7 +61,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         }
     };
 
-    const handlePan = useThrottle((event: PointerEvent, info: PanInfo) => {
+    const handlePan = useThrottle((event: any, info: PanInfo) => {
         if (disabled || isRefreshing || pullState === 'idle') return;
         
         const container = containerRef.current;
@@ -87,7 +88,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         }
     }, 16); // 60fps throttling
 
-    const handlePanEnd = async (_event: PointerEvent, _info: PanInfo) => {
+    const handlePanEnd = async (event: any, info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         if (pullState === 'ready') {
@@ -99,7 +100,6 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                 await onRefresh();
                 setAnnouncement('Content refreshed successfully');
             } catch (error) {
-                console.error('Refresh failed:', error);
                 setAnnouncement('Refresh failed. Please try again.');
             } finally {
                 setIsRefreshing(false);
@@ -122,7 +122,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         try {
             await onRefresh();
             setAnnouncement('Content refreshed successfully');
-        } catch {
+        } catch (error) {
             setAnnouncement('Refresh failed. Please try again.');
         } finally {
             setIsRefreshing(false);
@@ -254,12 +254,14 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
     disabled = false,
     role = 'button',
     ariaLabel
-}) => {
+}: any) => {
+    const [isPressed, setIsPressed] = React.useState(false);
     const longPressTimer = React.useRef<NodeJS.Timeout | undefined>(undefined);
     const prefersReducedMotion = useReducedMotion();
 
     const handleTapStart = () => {
         if (disabled) return;
+        setIsPressed(true);
         
         if (onLongPress) {
             longPressTimer.current = setTimeout(() => {
@@ -270,6 +272,7 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
     };
 
     const handleTapEnd = () => {
+        setIsPressed(false);
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current);
         }
@@ -293,7 +296,7 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
         }
     };
 
-    const handlePan = (event: PointerEvent, info: PanInfo) => {
+    const handlePan = (event: any, info: PanInfo) => {
         if (disabled || !onSwipe) return;
         
         const { offset } = info;

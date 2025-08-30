@@ -12,17 +12,17 @@ import { Avatar } from '../ui/Avatar';
 interface AddPlayerModalProps {
     league: League;
     team: Team;
-    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
+    dispatch: React.Dispatch<any>;
     onClose: () => void;
 }
 
-const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }) => {
+const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }: any) => {
     const [search, setSearch] = React.useState('');
 
-    const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: { id: number }) => p.id)));
-    const freeAgents = players.filter((p: { id: number }) => !rosteredPlayerIds.has(p.id));
+    const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: any) => p.id)));
+    const freeAgents = players.filter((p: any) => !rosteredPlayerIds.has(p.id));
 
-    const filteredPlayers = freeAgents.filter((p: { name: string }) => p.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
+    const filteredPlayers = freeAgents.filter((p: any) => p.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
 
     const handleAddPlayer = (player: Player) => {
         dispatch({
@@ -63,7 +63,7 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
                 </div>
 
                 <main className="flex-grow p-2 overflow-y-auto">
-                    {filteredPlayers.map((player: Player) => (
+                    {filteredPlayers.map((player: any) => (
                         <button
                             key={player.id}
                             onClick={() => handleAddPlayer(player)}

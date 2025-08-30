@@ -14,7 +14,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   title = "Something went wrong", 
   message, 
   onRetry 
-}) => {
+}: any) => {
   return (
     <div className="flex items-center justify-center min-h-[200px] p-8">
       <div className="text-center max-w-md">

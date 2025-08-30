@@ -218,8 +218,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         return (
           <ScheduleGenerator 
             isCommissioner={isCommissioner}
-            onScheduleGenerated={(schedule) => {
-              // Schedule generated
+            onScheduleGenerated={(schedule: any) => {
             }}
           />
         );
@@ -427,7 +426,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         {/* Tab Navigation */}
         <div className="mb-8">
           <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 overflow-x-auto">
-            {tabs.map((tab) => (
+            {tabs.map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}

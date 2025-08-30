@@ -13,12 +13,12 @@ interface ToggleSwitchProps {
 }
 
 const spring = {
-    type: "spring" as "spring",
+    type: "spring" as const,
     stiffness: 700,
     damping: 30
 };
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ id, checked, onChange }) => {
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ id, checked, onChange }: any) => {
     return (
         <div 
             id={id}

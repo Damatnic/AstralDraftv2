@@ -125,7 +125,11 @@ class MobileOfflineService {
             this.offlineState.lastSync = new Date();
             this.saveOfflineState();
             
-            // Draft data cached for offline use
+            console.log('✅ Draft data cached for offline use', {
+                players: players.length,
+                leagues: leagues.length,
+                teams: teams.length
+            });
         } catch (error) {
             console.error('❌ Failed to cache draft data:', error);
         }
@@ -187,7 +191,7 @@ class MobileOfflineService {
         this.offlineState.pendingActions.push(action);
         this.savePendingActions();
         
-        // Queued offline action
+        console.log('📋 Queued offline action:', action.type, action.id);
         return action.id;
     }
 
@@ -219,7 +223,7 @@ class MobileOfflineService {
                 timestamp: draftPick.timestamp
             });
 
-            // Player drafted offline
+            console.log('✅ Player drafted offline:', { playerId, teamId, pick });
             return true;
         } catch (error) {
             console.error('❌ Failed to draft player offline:', error);
@@ -268,7 +272,10 @@ class MobileOfflineService {
             this.savePendingActions();
             this.offlineState.lastSync = new Date();
             
-            // Sync completed
+            console.log('✅ Sync completed:', {
+                synced: successfulActions.length,
+                remaining: this.offlineState.pendingActions.length
+            });
         } catch (error) {
             console.error('❌ Sync failed:', error);
         } finally {
@@ -302,10 +309,10 @@ class MobileOfflineService {
     /**
      * Sync draft player action
      */
-    private async syncDraftPlayer(_payload: any): Promise<boolean> {
+    private async syncDraftPlayer(payload: any): Promise<boolean> {
         try {
             // Replace with actual API call
-            // Syncing draft player
+            console.log('🔄 Syncing draft player:', payload);
             
             // Simulate API call delay
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -321,9 +328,9 @@ class MobileOfflineService {
     /**
      * Sync roster update action
      */
-    private async syncRosterUpdate(_payload: any): Promise<boolean> {
+    private async syncRosterUpdate(payload: any): Promise<boolean> {
         try {
-            // Syncing roster update
+            console.log('🔄 Syncing roster update:', payload);
             await new Promise(resolve => setTimeout(resolve, 500));
             return true;
         } catch (error) {
@@ -335,9 +342,9 @@ class MobileOfflineService {
     /**
      * Sync trade proposal action
      */
-    private async syncTradeProposal(_payload: any): Promise<boolean> {
+    private async syncTradeProposal(payload: any): Promise<boolean> {
         try {
-            // Syncing trade proposal
+            console.log('🔄 Syncing trade proposal:', payload);
             await new Promise(resolve => setTimeout(resolve, 800));
             return true;
         } catch (error) {
@@ -438,7 +445,7 @@ class MobileOfflineService {
      * Notify all subscribers of state changes
      */
     private notifySubscribers(): void {
-        this.subscribers.forEach(callback => {
+        this.subscribers.forEach((callback: any) => {
             try {
                 callback(this.offlineState);
             } catch (error) {
@@ -459,7 +466,7 @@ class MobileOfflineService {
      */
     clearOfflineData(): void {
         try {
-            Object.values(this.STORAGE_KEYS).forEach(key => {
+            Object.values(this.STORAGE_KEYS).forEach((key: any) => {
                 localStorage.removeItem(key);
             });
             
@@ -471,7 +478,7 @@ class MobileOfflineService {
                 syncInProgress: false
             };
             
-            // Offline data cleared
+            console.log('✅ Offline data cleared');
         } catch (error) {
             console.error('❌ Failed to clear offline data:', error);
         }

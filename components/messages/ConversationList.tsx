@@ -11,7 +11,7 @@ interface ConversationListProps {
     isNewMessageActive: boolean;
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }) => {
+const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }: any) => {
     const { state } = useAppState();
 
     const conversations = React.useMemo(() => {
@@ -60,7 +60,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
                 </button>
             </div>
             <div className="flex-grow overflow-y-auto p-2 space-y-1">
-                {conversations.map(({ user, unreadCount }) => (
+                {conversations.map(({ user, unreadCount }: any) => (
                     <button
                         key={user.id}
                         onClick={() => onSelectUser(user.id)}

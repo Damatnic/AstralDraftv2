@@ -5,18 +5,18 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player } from '../../types';
-// import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { Player, PlayerPosition } from '../../types';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
     SearchIcon,
     FilterIcon,
     XIcon,
-    ChevronDownIcon
-    // SortAscIcon,
-    // SortDescIcon,
-    // StarIcon,
-    // TrendingUpIcon,
-    // TrendingDownIcon
+    ChevronDownIcon,
+    SortAscIcon,
+    SortDescIcon,
+    StarIcon,
+    TrendingUpIcon,
+    TrendingDownIcon
 } from 'lucide-react';
 
 interface MobileSearchInterfaceProps {
@@ -53,7 +53,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     showFilters = true,
     showSorting = true,
     className = ''
-}) => {
+}: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [showAdvancedFilters, setShowAdvancedFilters] = React.useState(false);
     const [selectedSort, setSelectedSort] = React.useState<SortOption | null>(null);
@@ -66,7 +66,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
         available: undefined
     });
 
-    // const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery('(max-width: 768px)');
 
     const sortOptions: SortOption[] = [
         { id: 'rank', label: 'Overall Rank', key: 'rank', direction: 'asc' },
@@ -79,7 +79,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     ];
 
     const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
-    const teams = Array.from(new Set(players.map(p => p.team))).sort();
+    const teams = Array.from(new Set(players.map((p: any) => p.team))).sort();
 
     // Type-safe helper functions
     const getInjuryStatus = (injuryHistory: string | undefined): boolean => {
@@ -108,7 +108,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
 
     // Filter and sort players
     const filteredAndSortedPlayers = React.useMemo(() => {
-        const filtered = players.filter(player => {
+        const filtered = players.filter((player: any) => {
             // Text search
             if (searchQuery) {
                 const query = searchQuery.toLowerCase();
@@ -183,7 +183,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
         setFilters(prev => ({
             ...prev,
             positions: prev.positions.includes(position)
-                ? prev.positions.filter(p => p !== position)
+                ? prev.positions.filter((p: any) => p !== position)
                 : [...prev.positions, position]
         }));
     };
@@ -192,7 +192,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
         setFilters(prev => ({
             ...prev,
             teams: prev.teams.includes(team)
-                ? prev.teams.filter(t => t !== team)
+                ? prev.teams.filter((t: any) => t !== team)
                 : [...prev.teams, team]
         }));
     };
@@ -229,7 +229,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                     <input
                         type="text"
                         value={searchQuery}
-                        onChange={(e) => handleSearchChange(e.target.value)}
+                        onChange={(e: any) => handleSearchChange(e.target.value)}
                         placeholder={placeholder}
                         className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-blue-400"
                     />
@@ -277,14 +277,14 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     <span className="text-xs text-[var(--text-secondary)] whitespace-nowrap">Sort by:</span>
                                     <select
                                         value={selectedSort?.id || ''}
-                                        onChange={(e) => {
-                                            const option = sortOptions.find(opt => opt.id === e.target.value);
+                                        onChange={(e: any) => {
+                                            const option = sortOptions.find((opt: any) => opt.id === e.target.value);
                                             setSelectedSort(option || null);
                                         }}
                                         className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-2 py-1 text-sm text-[var(--text-primary)]"
                                     >
                                         <option value="">Default</option>
-                                        {sortOptions.map(option => (
+                                        {sortOptions.map((option: any) => (
                                             <option key={option.id} value={option.id}>
                                                 {option.label}
                                             </option>
@@ -320,7 +320,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                         <div className="mb-3">
                             <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Positions</div>
                             <div className="flex flex-wrap gap-2">
-                                {positions.map(position => (
+                                {positions.map((position: any) => (
                                     <button
                                         key={position}
                                         onClick={() => togglePositionFilter(position)}
@@ -341,7 +341,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                             <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Teams</div>
                             <div className="max-h-24 overflow-y-auto">
                                 <div className="grid grid-cols-4 gap-1">
-                                    {teams.map(team => (
+                                    {teams.map((team: any) => (
                                         <button
                                             key={team}
                                             onClick={() => toggleTeamFilter(team)}
@@ -366,7 +366,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     type="number"
                                     placeholder="Min"
                                     value={filters.minRank || ''}
-                                    onChange={(e) => setFilters(prev => ({
+                                    onChange={(e: any) => setFilters(prev => ({
                                         ...prev,
                                         minRank: e.target.value ? parseInt(e.target.value) : undefined
                                     }))}
@@ -377,7 +377,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     type="number"
                                     placeholder="Max"
                                     value={filters.maxRank || ''}
-                                    onChange={(e) => setFilters(prev => ({
+                                    onChange={(e: any) => setFilters(prev => ({
                                         ...prev,
                                         maxRank: e.target.value ? parseInt(e.target.value) : undefined
                                     }))}

@@ -46,7 +46,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
     userId,
     leagueSettings,
     onClose
-}) => {
+}: any) => {
     // State Management
     const [activeTab, setActiveTab] = useState<'cheatsheets' | 'rankings' | 'strategy' | 'mockdraft'>('cheatsheets');
     const [loading, setLoading] = useState(false);
@@ -88,7 +88,6 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
             setPlayers(playersData);
             setStrategies(strategiesData);
         } catch (error) {
-            console.error('Failed to load initial data:', error);
         } finally {
             setLoading(false);
         }
@@ -138,7 +137,6 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
             setSelectedCheatSheet(newCheatSheet);
             // In production, would save to cheat sheets list
         } catch (error) {
-            console.error('Failed to generate cheat sheet:', error);
         } finally {
             setLoading(false);
         }
@@ -168,7 +166,6 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
             setCurrentMockDraft(mockDraftResult);
             // In production, would save to mock drafts list
         } catch (error) {
-            console.error('Failed to run mock draft:', error);
         } finally {
             setLoading(false);
         }

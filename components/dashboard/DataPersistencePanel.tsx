@@ -27,8 +27,6 @@ const DataPersistencePanel: React.FC = () => {
       // Load user preferences on mount
       getUserPreferences().then(prefs => {
         if (prefs) {
-          // TODO: Log preference loading
-          // console.log('✅ User preferences loaded:', prefs);
         }
       });
     }

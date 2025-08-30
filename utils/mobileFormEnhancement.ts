@@ -28,7 +28,7 @@ export function enhanceFormForMobile(
   // Get all input elements within the form
   const inputs = formElement.querySelectorAll('input, textarea');
 
-  inputs.forEach((input) => {
+  inputs.forEach((input: any) => {
     const inputElement = input as HTMLInputElement | HTMLTextAreaElement;
     
     // Skip if already enhanced
@@ -220,9 +220,9 @@ export function initializeGlobalFormEnhancement(options: FormEnhancementOptions 
   }
 
   // Watch for dynamically added forms
-  const observer = new MutationObserver((mutations) => {
-    mutations.forEach((mutation) => {
-      mutation.addedNodes.forEach((node) => {
+  const observer = new MutationObserver((mutations: any) => {
+    mutations.forEach((mutation: any) => {
+      mutation.addedNodes.forEach((node: any) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
           const element = node as Element;
           
@@ -231,14 +231,14 @@ export function initializeGlobalFormEnhancement(options: FormEnhancementOptions 
             enhanceFormForMobile(element as HTMLFormElement, options);
           } else {
             const forms = element.querySelectorAll('form, [data-form-container]');
-            forms.forEach((form) => {
+            forms.forEach((form: any) => {
               enhanceFormForMobile(form as HTMLFormElement, options);
             });
           }
           
           // Also check for individual inputs
           const inputs = element.querySelectorAll('input, textarea');
-          inputs.forEach((input) => {
+          inputs.forEach((input: any) => {
             enhanceInput(input as HTMLInputElement | HTMLTextAreaElement, options);
           });
         }
@@ -260,13 +260,13 @@ export function initializeGlobalFormEnhancement(options: FormEnhancementOptions 
 function enhanceAllFormsInDocument(options: FormEnhancementOptions = {}) {
   // Enhance all forms
   const forms = document.querySelectorAll('form, [data-form-container]');
-  forms.forEach((form) => {
+  forms.forEach((form: any) => {
     enhanceFormForMobile(form as HTMLFormElement, options);
   });
 
   // Enhance standalone inputs
   const inputs = document.querySelectorAll('input:not(form input), textarea:not(form textarea)');
-  inputs.forEach((input) => {
+  inputs.forEach((input: any) => {
     enhanceInput(input as HTMLInputElement | HTMLTextAreaElement, options);
   });
 }

@@ -128,17 +128,17 @@ class DraftService {
    */
   private initializeSocketListeners(): void {
     // Draft events
-    socketService.on('draft:started', (data) => this.handleDraftEvent('started', data));
-    socketService.on('draft:pick_made', (data) => this.handleDraftEvent('pick_made', data));
-    socketService.on('draft:auto_pick', (data) => this.handleDraftEvent('auto_pick', data));
-    socketService.on('draft:pick_skipped', (data) => this.handleDraftEvent('pick_skipped', data));
-    socketService.on('draft:paused', (data) => this.handleDraftEvent('paused', data));
-    socketService.on('draft:resumed', (data) => this.handleDraftEvent('resumed', data));
-    socketService.on('draft:pick_timer', (data) => this.handleDraftEvent('timer_update', data));
-    socketService.on('draft:chat_message', (data) => this.handleDraftEvent('chat_message', data));
-    socketService.on('draft:user_joined', (data) => this.handleDraftEvent('user_joined', data));
-    socketService.on('draft:user_left', (data) => this.handleDraftEvent('user_left', data));
-    socketService.on('draft:error', (data) => this.handleDraftEvent('error', data));
+    socketService.on('draft:started', (data: any) => this.handleDraftEvent('started', data));
+    socketService.on('draft:pick_made', (data: any) => this.handleDraftEvent('pick_made', data));
+    socketService.on('draft:auto_pick', (data: any) => this.handleDraftEvent('auto_pick', data));
+    socketService.on('draft:pick_skipped', (data: any) => this.handleDraftEvent('pick_skipped', data));
+    socketService.on('draft:paused', (data: any) => this.handleDraftEvent('paused', data));
+    socketService.on('draft:resumed', (data: any) => this.handleDraftEvent('resumed', data));
+    socketService.on('draft:pick_timer', (data: any) => this.handleDraftEvent('timer_update', data));
+    socketService.on('draft:chat_message', (data: any) => this.handleDraftEvent('chat_message', data));
+    socketService.on('draft:user_joined', (data: any) => this.handleDraftEvent('user_joined', data));
+    socketService.on('draft:user_left', (data: any) => this.handleDraftEvent('user_left', data));
+    socketService.on('draft:error', (data: any) => this.handleDraftEvent('error', data));
   }
 
   /**
@@ -210,7 +210,7 @@ class DraftService {
         reject(new Error('Draft authentication timeout'));
       }, 10000);
 
-      socketService.once('draft:authenticated', (response) => {
+      socketService.once('draft:authenticated', (response: any) => {
         clearTimeout(timeout);
         if (response.success) {
           resolve();
@@ -219,7 +219,7 @@ class DraftService {
         }
       });
 
-      socketService.once('draft:error', (error) => {
+      socketService.once('draft:error', (error: any) => {
         clearTimeout(timeout);
         reject(new Error(error.error || 'Failed to join draft room'));
       });
@@ -281,7 +281,7 @@ class DraftService {
   /**
    * Resume draft (commissioner only)
    */
-  async resumeDraft(_draftId: string): Promise<void> {
+  async resumeDraft(draftId: string): Promise<void> {
     socketService.emit('draft:resume');
   }
 
@@ -343,7 +343,7 @@ class DraftService {
       // Simple recommendation logic (would be replaced with AI analysis)
       const recommendations = availablePlayers
         .slice(0, count)
-        .map(player => ({
+        .map((player: any) => ({
           player,
           reasoning: `Ranked #${player.rankings.overall || 'N/A'} overall, strong ${position || 'player'} option`,
           confidence: Math.max(0.6, Math.random() * 0.4 + 0.6)
@@ -465,7 +465,7 @@ class DraftService {
     onlinePercentage: number;
     recentActivity: string;
   } {
-    const onlineTeams = draft.draftOrder.filter(team => team.isOnline).length;
+    const onlineTeams = draft.draftOrder.filter((team: any) => team.isOnline).length;
     const totalTeams = draft.draftOrder.length;
     const onlinePercentage = Math.round((onlineTeams / totalTeams) * 100);
     

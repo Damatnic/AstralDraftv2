@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Trash2Icon: React.FC<{ className?: string }> = ({ className }) => (
+export const Trash2Icon: React.FC<{ className?: string }> = ({ className }: any) => (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "h-4 w-4"}>
         <path d="M3 6h18" />
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />

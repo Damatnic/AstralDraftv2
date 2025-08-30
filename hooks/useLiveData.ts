@@ -13,7 +13,7 @@ export const useLiveData = (league?: League, myTeam?: Team, opponentTeam?: Team)
         if (state.currentView === 'MATCHUP' && league && myTeam && opponentTeam) {
             const handleEvent = (event: GamedayEvent | LiveNewsItem) => {
                 if ('type' in event && 'player' in event) { // It's a GamedayEvent
-                    const matchup = league.schedule.find(m =>
+                    const matchup = league.schedule.find((m: any) =>
                         m.week === league.currentWeek &&
                         (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id)
                     );

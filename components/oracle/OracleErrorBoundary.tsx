@@ -3,7 +3,7 @@
  * Catches and handles errors in Oracle prediction components
  */
 
-import { Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from 'react';
 import { AlertTriangleIcon, RefreshCwIcon, HomeIcon } from 'lucide-react';
 import { Widget } from '../ui/Widget';
 
@@ -42,7 +42,6 @@ export class OracleErrorBoundary extends Component<Props, State> {
     }
 
     componentDidCatch(error: Error, errorInfo: any) {
-        console.error('Oracle Error Boundary caught an error:', error, errorInfo);
         
         this.setState({
             error,
@@ -51,7 +50,6 @@ export class OracleErrorBoundary extends Component<Props, State> {
 
         // Report to error tracking service in production
         if (process.env.NODE_ENV === 'production') {
-            console.error('Production error reported:', error.message);
         }
     }
 

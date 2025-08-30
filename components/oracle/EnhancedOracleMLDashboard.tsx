@@ -36,7 +36,7 @@ interface EnhancedMLDashboardProps {
 const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
     isVisible = true,
     onPredictionTest
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = useState<'performance' | 'calibration' | 'predictions' | 'insights'>('performance');
     const [modelPerformance, setModelPerformance] = useState<MLPerformanceData[]>([]);
     const [calibrationMetrics, setCalibrationMetrics] = useState<CalibrationMetrics | null>(null);
@@ -123,7 +123,6 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
             setRecentPredictions(mockPredictions);
             
         } catch (error) {
-            console.error('Failed to load dashboard data:', error);
         } finally {
             setLoading(false);
         }
@@ -177,7 +176,6 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
             onPredictionTest?.(result);
             
         } catch (error) {
-            console.error('Test prediction failed:', error);
             setTestPredictionResult({
                 error: 'Prediction generation failed',
                 fallback: true
@@ -199,7 +197,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                         <YAxis domain={[0.7, 0.9]} />
                         <Tooltip 
                             formatter={(value: number) => [`${(value * 100).toFixed(1)}%`, '']}
-                            labelFormatter={(label) => `Model: ${label}`}
+                            labelFormatter={(label: any) => `Model: ${label}`}
                         />
                         <Bar dataKey="recentAccuracy" fill="#3b82f6" name="Recent (30 days)" />
                         <Bar dataKey="longTermAccuracy" fill="#93c5fd" name="Long-term" />
@@ -219,9 +217,9 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                             outerRadius={100}
                             dataKey="weight"
                             nameKey="modelName"
-                            label={(entry) => `${entry.modelName}: ${(entry.weight * 100).toFixed(1)}%`}
+                            label={(entry: any) => `${entry.modelName}: ${(entry.weight * 100).toFixed(1)}%`}
                         >
-                            {modelPerformance.map((entry) => (
+                            {modelPerformance.map((entry: any) => (
                                 <Cell key={`cell-${entry.modelName}`} fill={[
                                     '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
                                 ][modelPerformance.indexOf(entry)]} />
@@ -234,7 +232,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
 
             {/* Performance Trends */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {modelPerformance.map((model, _index) => (
+                {modelPerformance.map((model, index) => (
                     <div key={model.modelName} className="bg-white rounded-lg p-4 shadow-sm">
                         <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium text-gray-800">{model.modelName}</h4>
@@ -387,7 +385,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                             </tr>
                         </thead>
                         <tbody>
-                            {recentPredictions.map((pred, _index) => (
+                            {recentPredictions.map((pred, index) => (
                                 <tr key={pred.id} className="border-b hover:bg-gray-50">
                                     <td className="py-2 text-sm text-gray-600">
                                         {new Date(pred.timestamp).toLocaleDateString()}
@@ -477,11 +475,11 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                         { date: '2024-02-12', baseline: 77, enhanced: 87 }
                     ]}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" tickFormatter={(value) => new Date(value).toLocaleDateString()} />
+                        <XAxis dataKey="date" tickFormatter={(value: any) => new Date(value).toLocaleDateString()} />
                         <YAxis domain={[65, 90]} />
                         <Tooltip 
                             formatter={(value: number) => [`${value}%`, '']}
-                            labelFormatter={(value) => new Date(value).toLocaleDateString()}
+                            labelFormatter={(value: any) => new Date(value).toLocaleDateString()}
                         />
                         <Area type="monotone" dataKey="baseline" stackId="1" stroke="#93c5fd" fill="#bfdbfe" name="Baseline Oracle" />
                         <Area type="monotone" dataKey="enhanced" stackId="2" stroke="#3b82f6" fill="#60a5fa" name="Enhanced Oracle" />
@@ -511,7 +509,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                                 { id: 'calibration', label: '🎯 Calibration', description: 'Confidence calibration analysis' },
                                 { id: 'predictions', label: '🔮 Predictions', description: 'Enhanced prediction testing' },
                                 { id: 'insights', label: '💡 Insights', description: 'Performance insights & trends' }
-                            ].map((tab) => (
+                            ].map((tab: any) => (
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as any)}

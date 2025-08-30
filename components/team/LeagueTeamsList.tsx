@@ -14,7 +14,7 @@ interface LeagueTeamsListProps {
     dispatch: React.Dispatch<any>;
 }
 
-export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }) => {
+export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }: any) => {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [selectedOpponent, setSelectedOpponent] = React.useState<Team | null>(null);
 

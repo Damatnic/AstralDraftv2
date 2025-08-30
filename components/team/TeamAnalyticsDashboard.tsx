@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
 import { Team, League, Player } from '../../types';
@@ -14,8 +15,8 @@ import { TargetIcon } from '../icons/TargetIcon';
 
 interface TeamAnalyticsDashboardProps {
     team: Team;
-    _league: League;
-    _dispatch: React.Dispatch<any>;
+    league: League;
+    dispatch: React.Dispatch<any>;
 }
 
 interface WeeklyPerformance {
@@ -47,7 +48,7 @@ interface MatchupPreview {
     }[];
 }
 
-const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, _league, _dispatch }) => {
+const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'overview' | 'trends' | 'projections' | 'matchup'>('overview');
 
     // Mock data - in real app this would come from analytics service
@@ -148,7 +149,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, _
                     { id: 'trends', label: 'Trends' },
                     { id: 'projections', label: 'Projections' },
                     { id: 'matchup', label: 'Next Matchup' }
-                ].map((tab) => (
+                ].map((tab: any) => (
                     <button
                         key={tab.id}
                         onClick={() => setSelectedTab(tab.id as any)}
@@ -200,7 +201,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, _
                     <Widget title="Position Breakdown">
                         <div className="p-4">
                             <div className="space-y-4">
-                                {positionAnalysis.map((pos) => (
+                                {positionAnalysis.map((pos: any) => (
                                     <div key={pos.position} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                                         <div className="flex items-center gap-3">
                                             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -244,7 +245,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, _
                             <div className="mb-6">
                                 <h4 className="font-medium text-[var(--text-primary)] mb-4">Weekly Performance</h4>
                                 <div className="space-y-3">
-                                    {weeklyPerformance.map((week) => (
+                                    {weeklyPerformance.map((week: any) => (
                                         <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                                             <div className="flex items-center gap-3">
                                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${

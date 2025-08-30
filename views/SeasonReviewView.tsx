@@ -5,6 +5,7 @@ import { generateSeasonReview } from '../services/geminiService';
 import type { League, SeasonReviewData } from '../types';
 import SeasonReviewDisplay from '../components/reports/SeasonReviewDisplay';
 import { useLeague } from '../hooks/useLeague';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 
 const SeasonReviewLoader: React.FC = () => (
@@ -25,7 +26,7 @@ const SeasonReviewLoader: React.FC = () => (
     </div>
 );
 
-const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }) => {
+const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }: any) => {
     const [review, setReview] = React.useState<SeasonReviewData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -42,7 +43,6 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                  setError("The Oracle could not produce a season review. Please try again later.");
             }
         } catch (err) {
-            console.error(err);
             setError("An error occurred while consulting the Oracle for a season review.");
         } finally {
             setIsLoading(false);

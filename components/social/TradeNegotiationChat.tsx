@@ -5,7 +5,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Player, User } from '../../types';
+import { Widget } from '../ui/Widget';
+import { Player, Team, User } from '../../types';
 import { 
     MessageCircleIcon, 
     SendIcon, 
@@ -16,7 +17,10 @@ import {
     InfoIcon,
     XIcon,
     CheckIcon,
-    ClockIcon
+    ClockIcon,
+    AlertCircleIcon,
+    ThumbsUpIcon,
+    ThumbsDownIcon
 } from 'lucide-react';
 
 export interface TradeMessage {
@@ -86,7 +90,7 @@ interface TradeNegotiationChatProps {
     messages: TradeMessage[];
     currentUser: User & { teamId?: number };
     onSendMessage: (content: string, type?: string, attachments?: TradeAttachment[]) => void;
-    _onSendTradeProposal: (proposal: Omit<TradeProposal, 'id' | 'status'>) => void;
+    onSendTradeProposal: (proposal: Omit<TradeProposal, 'id' | 'status'>) => void;
     onReactToMessage: (messageId: string, emoji: string) => void;
     onAcceptTrade: (proposalId: string) => void;
     onRejectTrade: (proposalId: string, reason?: string) => void;
@@ -100,19 +104,19 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     messages,
     currentUser,
     onSendMessage,
-    _onSendTradeProposal,
+    onSendTradeProposal,
     onReactToMessage,
     onAcceptTrade,
     onRejectTrade,
     onArchiveChat,
     isLoading = false,
     className = ''
-}) => {
+}: any) => {
     const [newMessage, setNewMessage] = React.useState('');
     const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
-    const [, setShowTradeBuilder] = React.useState(false);
+    const [showTradeBuilder, setShowTradeBuilder] = React.useState(false);
     const [showAttachments, setShowAttachments] = React.useState(false);
-    const [,] = React.useState(false);
+    const [isTyping, setIsTyping] = React.useState(false);
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -185,7 +189,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
         }
     };
 
-    const renderTradeProposal = (proposal: TradeProposal, _messageId: string) => (
+    const renderTradeProposal = (proposal: TradeProposal, messageId: string) => (
         <div className="mt-3 p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
             <div className="flex items-center justify-between mb-3">
                 <h4 className="font-medium text-blue-400">Trade Proposal</h4>
@@ -233,7 +237,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             
             {proposal.notes && (
                 <div className="text-sm text-[var(--text-secondary)] mb-3">
-                    &quot;{proposal.notes}&quot;
+                    "{proposal.notes}"
                 </div>
             )}
             
@@ -406,7 +410,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     {messages.map((message, index) => renderMessage(message, index))}
                 </AnimatePresence>
                 
-                {false && (
+                {isTyping && (
                     <div className="flex items-center gap-2 text-[var(--text-secondary)] text-sm">
                         <div className="flex gap-1">
                             <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>

@@ -38,7 +38,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
     onClick,
     className = '',
     compact = false
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Format time remaining

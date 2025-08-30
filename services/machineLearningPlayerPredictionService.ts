@@ -279,7 +279,7 @@ class MachineLearningPlayerPredictionService {
       
       // Generate predictions for all players
       const predictions = await Promise.all(
-        players.slice(0, limit).map(player => 
+        players.slice(0, limit).map((player: any) => 
           this.generatePlayerPrediction(player.id, week, season)
         )
       );
@@ -378,7 +378,7 @@ class MachineLearningPlayerPredictionService {
   async updateModelWithOutcomes(outcomes: BacktestResult[]): Promise<void> {
     try {
       // Convert backtest results to ML training data
-      const trainingData: MLTrainingData[] = outcomes.map(outcome => ({
+      const trainingData: MLTrainingData[] = outcomes.map((outcome: any) => ({
         predictionId: `${outcome.playerId}_${outcome.week}`,
         week: outcome.week,
         type: 'PLAYER_PERFORMANCE',
@@ -539,17 +539,17 @@ class MachineLearningPlayerPredictionService {
       case 'QB':
         return {
           passingYards: this.predictPassingYards(features, basePrediction),
-          passingTDs: this.predictPassingTDs(features, basePrediction),
+          passingTouchdowns: this.predictPassingTDs(features, basePrediction),
           rushingYards: this.predictRushingYards(features, basePrediction, 'QB'),
-          rushingTDs: this.predictRushingTDs(features, basePrediction, 'QB')
+          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, 'QB')
         };
         
       case 'RB':
         return {
           rushingYards: this.predictRushingYards(features, basePrediction, 'RB'),
-          rushingTDs: this.predictRushingTDs(features, basePrediction, 'RB'),
+          rushingTouchdowns: this.predictRushingTDs(features, basePrediction, 'RB'),
           receivingYards: this.predictReceivingYards(features, basePrediction, 'RB'),
-          receivingTDs: this.predictReceivingTDs(features, basePrediction, 'RB'),
+          receivingTouchdowns: this.predictReceivingTDs(features, basePrediction, 'RB'),
           receptions: this.predictReceptions(features, basePrediction, 'RB')
         };
         
@@ -557,7 +557,7 @@ class MachineLearningPlayerPredictionService {
       case 'TE':
         return {
           receivingYards: this.predictReceivingYards(features, basePrediction, position),
-          receivingTDs: this.predictReceivingTDs(features, basePrediction, position),
+          receivingTouchdowns: this.predictReceivingTDs(features, basePrediction, position),
           receptions: this.predictReceptions(features, basePrediction, position)
         };
         
@@ -770,7 +770,7 @@ class MachineLearningPlayerPredictionService {
     let prediction = 0;
     let totalWeight = 0;
     
-    supportVectors.forEach(sv => {
+    supportVectors.forEach((sv: any) => {
       const distance = Math.pow(input.recentPerformance - sv.performance, 2) + 
                       Math.pow(input.matchup - sv.matchup, 2);
       const similarity = Math.exp(-gamma * distance);
@@ -803,7 +803,7 @@ class MachineLearningPlayerPredictionService {
     
     // Combine feature importance across models
     const combinedImportance: Record<string, number> = {};
-    predictions.forEach(model => {
+    predictions.forEach((model: any) => {
       Object.entries(model.featureImportance).forEach(([feature, importance]) => {
         combinedImportance[feature] = (combinedImportance[feature] || 0) + importance * model.weight;
       });
@@ -1245,7 +1245,7 @@ class MachineLearningPlayerPredictionService {
     const residualSumSquares = results.reduce((sum, r) => sum + Math.pow(r.error, 2), 0);
     const r2Score = 1 - (residualSumSquares / totalSumSquares);
     
-    const accuracy = results.filter(r => r.percentageError <= 20).length / results.length;
+    const accuracy = results.filter((r: any) => r.percentageError <= 20).length / results.length;
     
     return {
       meanAbsoluteError: mae,

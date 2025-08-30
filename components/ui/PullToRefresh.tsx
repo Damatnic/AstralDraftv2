@@ -3,7 +3,7 @@
  * Provides native-like pull-to-refresh functionality for mobile devices
  */
 
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePullToRefresh } from '../../hooks/useAdvancedTouch';
 
@@ -27,7 +27,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshingText = 'Refreshing...',
   pullText = 'Pull to refresh',
   releaseText = 'Release to refresh'
-}) => {
+}: any) => {
   const {
     containerRef,
     isPulling,

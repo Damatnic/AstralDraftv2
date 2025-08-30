@@ -21,7 +21,7 @@ const eventIcons: Record<GamedayEventType, React.ReactElement> = {
     FUMBLE: <ZapIcon />,
 };
 
-const LiveEventTicker: React.FC<LiveEventTickerProps> = ({ matchupId }) => {
+const LiveEventTicker: React.FC<LiveEventTickerProps> = ({ matchupId }: any) => {
     const { state } = useAppState();
     const events = (state.gamedayEvents[matchupId] || []).slice(-5); // Show last 5 events
     const scrollRef = React.useRef<HTMLDivElement>(null);

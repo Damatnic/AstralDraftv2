@@ -17,7 +17,7 @@ const gradeColor = (grade: string) => {
     return 'text-red-400 border-red-400/50';
 }
 
-const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
+const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }: any) => {
     const [grade, setGrade] = React.useState<DraftGrade | null>(team.draftGrade || null);
     const [isLoading, setIsLoading] = React.useState(!team.draftGrade);
 
@@ -63,7 +63,7 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
                     <span className="text-3xl font-bold font-display">{grade.overall}</span>
                 </div>
             </div>
-            <p className="text-xs italic text-gray-300">&ldquo;{grade.narrative}&rdquo;</p>
+            <p className="text-xs italic text-gray-300">"{grade.narrative}"</p>
             <div className="text-xs space-y-1">
                 <p><strong>Best Value:</strong> {grade.bestPick.name} ({grade.bestPick.position})</p>
                 <p><strong>Biggest Reach:</strong> {grade.biggestReach.name} ({grade.biggestReach.position})</p>

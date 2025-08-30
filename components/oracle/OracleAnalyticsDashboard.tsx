@@ -11,7 +11,7 @@ interface PerformanceChartProps {
     data: Array<{ week: number; accuracy: number; userWins: number; totalPredictions: number }>;
 }
 
-const PerformanceChart: React.FC<PerformanceChartProps> = ({ data }) => {
+const PerformanceChart: React.FC<PerformanceChartProps> = ({ data }: any) => {
     const maxAccuracy = Math.max(...data.map((d: any) => d.accuracy), 1);
     const maxUserWins = Math.max(...data.map((d: any) => d.userWins), 1);
 
@@ -67,14 +67,14 @@ interface ConfidenceAnalysisProps {
     typeAccuracy: Record<string, number>;
 }
 
-const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }) => {
+const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }: any) => {
     const predictionTypes = Object.keys(confidenceByType);
 
     return (
         <div className="space-y-4">
             <span className="text-sm text-gray-400">Prediction Type Analysis</span>
             <div className="space-y-3">
-                {predictionTypes.map((type) => {
+                {predictionTypes.map((type: any) => {
                     const confidence = confidenceByType[type] || 0;
                     const accuracy = typeAccuracy[type] || 0;
                     const isWellCalibrated = Math.abs(confidence - accuracy * 100) < 10;
@@ -132,7 +132,7 @@ interface InsightCardProps {
     insight: UserInsight;
 }
 
-const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
+const InsightCard: React.FC<InsightCardProps> = ({ insight }: any) => {
     const getInsightIcon = (type: UserInsight['type']) => {
         switch (type) {
             case 'SUCCESS_PATTERN':
@@ -194,7 +194,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
     subtitle, 
     trend = 'neutral',
     color = 'text-blue-400'
-}) => {
+}: any) => {
     const getTrendIcon = () => {
         switch (trend) {
             case 'up':
@@ -249,7 +249,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 setAnalytics(analyticsData);
                 setPerformanceMetrics(metricsData);
             } catch (err) {
-                console.error('Failed to load Oracle analytics:', err);
                 setError('Failed to load analytics data');
             } finally {
                 setLoading(false);
@@ -298,7 +297,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             // Show success message
             alert('✅ Ensemble models trained successfully with ' + mockHistoricalData.length + ' data points!');
         } catch (error) {
-            console.error('Training failed:', error);
             alert('❌ Model training failed. Check console for details.');
         } finally {
             setIsTrainingModels(false);
@@ -496,7 +494,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             <Widget title="Personalized Insights" className="bg-gray-900/50">
                 <div className="space-y-3">
                     {analytics.userInsights.length > 0 ? (
-                        analytics.userInsights.map((insight) => (
+                        analytics.userInsights.map((insight: any) => (
                             <InsightCard key={`${insight.type}-${insight.title}`} insight={insight} />
                         ))
                     ) : (

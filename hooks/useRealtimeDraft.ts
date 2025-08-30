@@ -14,7 +14,7 @@ export const useRealtimeDraft = (
     league: League | undefined, 
     isPaused: boolean,
     user: User, 
-    dispatch: React.Dispatch<{ type: string; payload?: unknown }>
+    dispatch: React.Dispatch<any>
 ) => {
     const { state } = useAppState();
     const playDraftSound = useSound('draft', 0.5);
@@ -24,9 +24,9 @@ export const useRealtimeDraft = (
     const draftPicks = league?.draftPicks ?? [];
     const status = league?.status;
 
-    const currentPick = draftPicks.filter(p => p.playerId).length + 1;
-    const availablePlayers = players.filter(p => !draftPicks.some(dp => dp.playerId === p.id));
-    const myTeamId = teams.find(t => t.owner.id === user.id)?.id;
+    const currentPick = draftPicks.filter((p: any) => p.playerId).length + 1;
+    const availablePlayers = players.filter((p: any) => !draftPicks.some((dp: any) => dp.playerId === p.id));
+    const myTeamId = teams.find((t: any) => t.owner.id === user.id)?.id;
     const teamOnClockId = league ? league.draftPicks[currentPick - 1]?.teamId : null;
     const isMyTurn = myTeamId === teamOnClockId;
     
@@ -47,26 +47,26 @@ export const useRealtimeDraft = (
             return;
         }
 
-        const teamOnTheClock = league.teams.find(t => t.id === teamOnClockId);
+        const teamOnTheClock = league.teams.find((t: any) => t.id === teamOnClockId);
 
         if (!teamOnTheClock) return;
 
         // AI Pick Logic
         if (teamOnTheClock.owner.id.startsWith('ai_')) {
             const pickTimer = setTimeout(async () => {
-                const currentPicksInHook = league.draftPicks.filter(p => p.playerId).length;
+                const currentPicksInHook = league.draftPicks.filter((p: any) => p.playerId).length;
                 
                 if ((currentPicksInHook + 1) !== currentPick) return;
 
-                const availablePlayersNow = players.filter(p => !league.draftPicks.some(dp => dp.playerId === p.id));
+                const availablePlayersNow = players.filter((p: any) => !league.draftPicks.some((dp: any) => dp.playerId === p.id));
                 const recommendedPlayerName = await getAiDraftPick(teamOnTheClock, availablePlayersNow);
-                let playerToDraft = recommendedPlayerName ? availablePlayersNow.find(p => p.name === recommendedPlayerName) : undefined;
+                let playerToDraft = recommendedPlayerName ? availablePlayersNow.find((p: any) => p.name === recommendedPlayerName) : undefined;
 
                 if (!playerToDraft) {
                     console.warn("Gemini pick failed or was invalid. Using fallback logic.");
-                    const rosterCount = (pos: Player['position']) => teamOnTheClock.roster.filter(rp => rp.position === pos).length;
+                    const rosterCount = (pos: Player['position']) => teamOnTheClock.roster.filter((rp: any) => rp.position === pos).length;
                     const ROSTER_LIMITS: { [key in PlayerPosition]: number } = { QB: 2, RB: 5, WR: 6, TE: 2, K: 1, DST: 1 };
-                    const neededPlayers = availablePlayersNow.filter(p => rosterCount(p.position) < ROSTER_LIMITS[p.position]);
+                    const neededPlayers = availablePlayersNow.filter((p: any) => rosterCount(p.position) < ROSTER_LIMITS[p.position]);
                     playerToDraft = neededPlayers[0] || availablePlayersNow[0];
                 }
 
@@ -84,9 +84,9 @@ export const useRealtimeDraft = (
         if (isMyTurn) {
              const autoDraftTimer = setTimeout(() => {
                 const myQueue = state.playerQueues[league.id] || [];
-                const availablePlayersNow = players.filter(p => !league.draftPicks.some(dp => dp.playerId === p.id));
-                const availablePlayerIds = new Set(availablePlayersNow.map(p => p.id));
-                const playerToDraftFromQueue = myQueue.map(pid => players.find(p => p.id === pid)).find(p => p && availablePlayerIds.has(p.id));
+                const availablePlayersNow = players.filter((p: any) => !league.draftPicks.some((dp: any) => dp.playerId === p.id));
+                const availablePlayerIds = new Set(availablePlayersNow.map((p: any) => p.id));
+                const playerToDraftFromQueue = myQueue.map((pid: any) => players.find((p: any) => p.id === pid)).find((p: any) => p && availablePlayerIds.has(p.id));
 
                 if (playerToDraftFromQueue) {
                     dispatch({ type: 'DRAFT_PLAYER', payload: { teamId: myTeamId, player: playerToDraftFromQueue } });
@@ -108,7 +108,7 @@ export const useRealtimeDraft = (
     const draftPlayer = React.useCallback((player: Player) => {
         if (!league) return;
         
-        const internalCurrentPick = league.draftPicks.filter(p => p.playerId).length + 1;
+        const internalCurrentPick = league.draftPicks.filter((p: any) => p.playerId).length + 1;
         const currentTeamId = league.draftPicks[internalCurrentPick - 1]?.teamId;
 
         if (myTeamId === currentTeamId) {
@@ -120,9 +120,9 @@ export const useRealtimeDraft = (
         }
     }, [league, myTeamId, dispatch, playDraftSound]);
 
-    const latestPickOverall = draftPicks.filter(p => p.playerId).length;
-    const latestPick = draftPicks.find(p => p.overall === latestPickOverall);
-    const latestPlayer = latestPick ? players.find(p => p.id === latestPick.playerId) : null;
+    const latestPickOverall = draftPicks.filter((p: any) => p.playerId).length;
+    const latestPick = draftPicks.find((p: any) => p.overall === latestPickOverall);
+    const latestPlayer = latestPick ? players.find((p: any) => p.id === latestPick.playerId) : null;
 
     return {
         teams,

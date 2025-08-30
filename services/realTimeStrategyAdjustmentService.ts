@@ -197,7 +197,7 @@ class RealTimeStrategyAdjustmentService {
             }
         ];
 
-        strategies.forEach(strategy => {
+        strategies.forEach((strategy: any) => {
             this.activeStrategies.set(strategy.id, strategy);
         });
     }
@@ -253,7 +253,7 @@ class RealTimeStrategyAdjustmentService {
         
         // Count consecutive picks by position
         const positions = ['QB', 'RB', 'WR', 'TE'];
-        positions.forEach(position => {
+        positions.forEach((position: any) => {
             let consecutiveCount = 0;
             for (let i = recentPicks.length - 1; i >= 0; i--) {
                 if (recentPicks[i].player?.position === position) {
@@ -268,7 +268,7 @@ class RealTimeStrategyAdjustmentService {
         // Analyze value deviations
         const valueDeviations = context.recentPicks
             .slice(-10)
-            .map(pick => pick.adpDifference || 0);
+            .map((pick: any) => pick.adpDifference || 0);
 
         // Calculate average pick time
         const averagePickTime = context.recentPicks
@@ -277,10 +277,10 @@ class RealTimeStrategyAdjustmentService {
 
         // Detect emergent patterns
         const emergentPatterns: string[] = [];
-        if (Object.values(positionRuns).some(count => count >= 3)) {
+        if (Object.values(positionRuns).some((count: any) => count >= 3)) {
             emergentPatterns.push('positional_run_detected');
         }
-        if (valueDeviations.filter(dev => Math.abs(dev) > 10).length >= 3) {
+        if (valueDeviations.filter((dev: any) => Math.abs(dev) > 10).length >= 3) {
             emergentPatterns.push('high_volatility');
         }
         if (averagePickTime > 90) {
@@ -305,8 +305,8 @@ class RealTimeStrategyAdjustmentService {
     private checkStrategyTriggers(context: DraftContext): StrategyAdjustment[] {
         const adjustments: StrategyAdjustment[] = [];
 
-        this.activeStrategies.forEach(strategy => {
-            strategy.adaptationTriggers.forEach(trigger => {
+        this.activeStrategies.forEach((strategy: any) => {
+            strategy.adaptationTriggers.forEach((trigger: any) => {
                 if (this.evaluateTriggerCondition(trigger, context)) {
                     const adjustment = this.createTriggerAdjustment(trigger, context);
                     adjustments.push(adjustment);
@@ -322,26 +322,24 @@ class RealTimeStrategyAdjustmentService {
 
     private evaluateTriggerCondition(trigger: StrategyTrigger, context: DraftContext): boolean {
         switch (trigger.condition) {
-            case 'available_rb_tier1_count < 3': {
-                const tier1RBs = context.availablePlayers.filter(p => p.position === 'RB' && (p.tier || 10) <= 1);
+            case 'available_rb_tier1_count < 3':
+                const tier1RBs = context.availablePlayers.filter((p: any) => p.position === 'RB' && (p.tier || 10) <= 1);
                 return tier1RBs.length < trigger.threshold;
-            }
 
             case 'wr_consecutive_picks >= 4':
                 return (context.draftFlow.positionRuns['WR'] || 0) >= trigger.threshold;
 
-            case 'rb_adp_value > 10': {
-                const topRBs = context.availablePlayers.filter(p => p.position === 'RB').slice(0, 3);
+            case 'rb_adp_value > 10':
+                const topRBs = context.availablePlayers.filter((p: any) => p.position === 'RB').slice(0, 3);
                 const avgValue = topRBs.reduce((sum, p) => sum + ((p.adp || 999) - context.currentPick), 0) / topRBs.length;
                 return avgValue > trigger.threshold;
-            }
 
             default:
                 return false;
         }
     }
 
-    private createTriggerAdjustment(trigger: StrategyTrigger, _context: DraftContext): StrategyAdjustment {
+    private createTriggerAdjustment(trigger: StrategyTrigger, context: DraftContext): StrategyAdjustment {
         const adjustment: StrategyAdjustment = {
             positionPriorityChanges: {},
             riskToleranceShift: 0,
@@ -369,7 +367,7 @@ class RealTimeStrategyAdjustmentService {
         const adjustments: StrategyAdjustment[] = [];
 
         // Market inefficiency adjustments
-        context.marketInefficiencies.forEach(inefficiency => {
+        context.marketInefficiencies.forEach((inefficiency: any) => {
             if (inefficiency.severity === 'critical' || inefficiency.severity === 'high') {
                 const adjustment = this.createInefficiencyAdjustment(inefficiency, context);
                 if (adjustment) adjustments.push(adjustment);
@@ -433,7 +431,7 @@ class RealTimeStrategyAdjustmentService {
             case 'run_opportunity':
                 if (inefficiency.position) {
                     // Decide whether to join or fade the run
-                    const userPositionCount = context.userTeam.roster?.filter(p => p.position === inefficiency.position).length || 0;
+                    const userPositionCount = context.userTeam.roster?.filter((p: any) => p.position === inefficiency.position).length || 0;
                     const maxNeeded = this.getPositionMax(inefficiency.position);
                     
                     if (userPositionCount < maxNeeded / 2) {
@@ -453,14 +451,14 @@ class RealTimeStrategyAdjustmentService {
         return adjustment;
     }
 
-    private applyAdjustments(adjustments: StrategyAdjustment[], _context: DraftContext): Map<string, DraftStrategy> {
+    private applyAdjustments(adjustments: StrategyAdjustment[], context: DraftContext): Map<string, DraftStrategy> {
         const updatedStrategies = new Map<string, DraftStrategy>();
 
         this.activeStrategies.forEach((strategy, id) => {
             const updatedStrategy = { ...strategy };
 
             // Apply all adjustments to this strategy
-            adjustments.forEach(adjustment => {
+            adjustments.forEach((adjustment: any) => {
                 // Apply position priority changes
                 Object.entries(adjustment.positionPriorityChanges).forEach(([position, change]) => {
                     updatedStrategy.positionPriorities[position] = Math.max(0, 
@@ -493,7 +491,7 @@ class RealTimeStrategyAdjustmentService {
         const recommendations: StrategyRecommendation[] = [];
 
         // Get the active strategy
-        const activeStrategy = Array.from(strategies.values()).find(s => s.active);
+        const activeStrategy = Array.from(strategies.values()).find((s: any) => s.active);
         if (!activeStrategy) return recommendations;
 
         // Position-based recommendations
@@ -518,13 +516,13 @@ class RealTimeStrategyAdjustmentService {
 
         // Check for critical position needs
         Object.entries(strategy.positionPriorities).forEach(([position, priority]) => {
-            const currentCount = userRoster.filter(p => p.position === position).length;
+            const currentCount = userRoster.filter((p: any) => p.position === position).length;
             const maxNeeded = this.getPositionMax(position);
             const needLevel = Math.max(0, maxNeeded - currentCount) / maxNeeded;
 
             if (needLevel > 0.5 && priority > 1.0) {
                 const availablePlayers = context.availablePlayers
-                    .filter(p => p.position === position)
+                    .filter((p: any) => p.position === position)
                     .slice(0, 3);
 
                 if (availablePlayers.length > 0) {
@@ -551,12 +549,12 @@ class RealTimeStrategyAdjustmentService {
         return recommendations;
     }
 
-    private generateValueRecommendations(context: DraftContext, _strategy: DraftStrategy): StrategyRecommendation[] {
+    private generateValueRecommendations(context: DraftContext, strategy: DraftStrategy): StrategyRecommendation[] {
         const recommendations: StrategyRecommendation[] = [];
 
         // Find significant value opportunities
         const valueOpportunities = context.availablePlayers
-            .filter(p => (p.adp || 999) - context.currentPick > 10)
+            .filter((p: any) => (p.adp || 999) - context.currentPick > 10)
             .slice(0, 5);
 
         if (valueOpportunities.length > 0) {
@@ -588,10 +586,10 @@ class RealTimeStrategyAdjustmentService {
             .filter(([_, count]) => count >= 2)
             .map(([position]) => position);
 
-        highRunPositions.forEach(position => {
+        highRunPositions.forEach((position: any) => {
             const priority = strategy.positionPriorities[position] || 1;
             const availablePlayers = context.availablePlayers
-                .filter(p => p.position === position)
+                .filter((p: any) => p.position === position)
                 .slice(0, 2);
 
             if (priority > 0.8 && availablePlayers.length > 0) {
@@ -624,7 +622,7 @@ class RealTimeStrategyAdjustmentService {
     }
 
     public getActiveStrategy(): DraftStrategy | null {
-        return Array.from(this.activeStrategies.values()).find(s => s.active) || null;
+        return Array.from(this.activeStrategies.values()).find((s: any) => s.active) || null;
     }
 
     public switchStrategy(strategyId: string): boolean {
@@ -632,7 +630,7 @@ class RealTimeStrategyAdjustmentService {
         if (!strategy) return false;
 
         // Deactivate all strategies
-        this.activeStrategies.forEach(s => s.active = false);
+        this.activeStrategies.forEach((s: any) => s.active = false);
         
         // Activate selected strategy
         strategy.active = true;

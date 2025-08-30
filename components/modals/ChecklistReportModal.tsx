@@ -22,7 +22,7 @@ const StatusIcon = ({ status }: { status: IntegrityTaskStatus }) => {
     }
 };
 
-const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onClose }) => {
+const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onClose }: any) => {
     
     const groupedTasks = React.useMemo(() => {
         return tasks.reduce<Record<string, IntegrityTask[]>>((acc, task) => {

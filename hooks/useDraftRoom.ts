@@ -147,7 +147,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     const handlers = new Map<string, (message: DraftWebSocketMessage) => void>();
 
     // Draft status handler
-    handlers.set('DRAFT_STATUS', (message) => {
+    handlers.set('DRAFT_STATUS', (message: any) => {
       if (message.type === 'DRAFT_STATUS') {
         setRoomState(draftWebSocketService.getRoomState());
         setConnectionStatus('CONNECTED');
@@ -156,7 +156,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     });
 
     // Pick made handler
-    handlers.set('PICK_MADE', (message) => {
+    handlers.set('PICK_MADE', (message: any) => {
       if (message.type === 'PICK_MADE') {
         setRoomState(draftWebSocketService.getRoomState());
         
@@ -175,7 +175,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     });
 
     // Timer update handler
-    handlers.set('TIMER_UPDATE', (message) => {
+    handlers.set('TIMER_UPDATE', (message: any) => {
       if (message.type === 'TIMER_UPDATE') {
         setRoomState(draftWebSocketService.getRoomState());
         
@@ -206,7 +206,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     });
 
     // Chat message handler
-    handlers.set('CHAT_MESSAGE', (message) => {
+    handlers.set('CHAT_MESSAGE', (message: any) => {
       if (message.type === 'CHAT_MESSAGE') {
         setRoomState(draftWebSocketService.getRoomState());
         

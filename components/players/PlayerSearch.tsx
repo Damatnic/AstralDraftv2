@@ -6,7 +6,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
-import { searchPlayers, NFL_TEAMS } from '../../data/nflPlayers';
+import { searchPlayers, getPlayersByPosition, NFL_TEAMS } from '../../data/nflPlayers';
 import { Player } from '../../types';
 
 interface PlayerSearchProps {
@@ -21,7 +21,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
   showAddButton = false,
   filterPosition,
   excludePlayerIds = []
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPosition, setSelectedPosition] = useState(filterPosition || 'ALL');
@@ -32,18 +32,18 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
 
   // Filter and search players
   const filteredPlayers = useMemo(() => {
-    let players = availablePlayers.filter(player => 
+    let players = availablePlayers.filter((player: any) => 
       !excludePlayerIds.includes(player.id)
     );
 
     // Apply position filter
     if (selectedPosition !== 'ALL') {
-      players = players.filter(player => player.position === selectedPosition);
+      players = players.filter((player: any) => player.position === selectedPosition);
     }
 
     // Apply search query
     if (searchQuery.trim()) {
-      players = searchPlayers(searchQuery).filter(player => 
+      players = searchPlayers(searchQuery).filter((player: any) => 
         !excludePlayerIds.includes(player.id)
       );
     }
@@ -86,6 +86,18 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
     }
   };
 
+  const getPositionColor = (position: string) => {
+    switch (position) {
+      case 'QB': return 'bg-red-600';
+      case 'RB': return 'bg-green-600';
+      case 'WR': return 'bg-blue-600';
+      case 'TE': return 'bg-yellow-600';
+      case 'K': return 'bg-purple-600';
+      case 'DST': return 'bg-gray-600';
+      default: return 'bg-gray-500';
+    }
+  };
+
   return (
     <div className="search-container">
       {/* Search Header */}
@@ -98,7 +110,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
             type="text"
             placeholder="Search players by name, team, or position..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e: any) => setSearchQuery(e.target.value)}
             className="search-input"
           />
         </div>
@@ -110,10 +122,10 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
             <label>Position</label>
             <select
               value={selectedPosition}
-              onChange={(e) => setSelectedPosition(e.target.value)}
+              onChange={(e: any) => setSelectedPosition(e.target.value)}
               className="filter-select"
             >
-              {positions.map(pos => (
+              {positions.map((pos: any) => (
                 <option key={pos} value={pos}>{pos}</option>
               ))}
             </select>
@@ -124,7 +136,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
             <label>Sort By</label>
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
+              onChange={(e: any) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
               className="filter-select"
             >
               <option value="rank">Fantasy Rank</option>
@@ -161,7 +173,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
                 </div>
                 {showAddButton && (
                   <button
-                    onClick={(e) => {
+                    onClick={(e: any) => {
                       e.stopPropagation();
                       onPlayerSelect?.(player);
                     }}

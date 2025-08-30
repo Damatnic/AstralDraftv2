@@ -29,7 +29,7 @@ export const TestEnvironmentSetup: React.FC = () => {
 
   // Quick user switcher for testing
   const switchUser = (userId: string) => {
-    const user = testUsers.find(u => u.id === userId);
+    const user = testUsers.find((u: any) => u.id === userId);
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
       dispatch({ type: 'SET_USER', payload: user });
@@ -51,7 +51,7 @@ export const TestEnvironmentSetup: React.FC = () => {
         <div className="space-y-2 mt-2">
           <p className="text-xs text-gray-400">Quick User Switch:</p>
           <div className="grid grid-cols-2 gap-1">
-            {testUsers.map(user => (
+            {testUsers.map((user: any) => (
               <button
                 key={user.id}
                 onClick={() => switchUser(user.id)}

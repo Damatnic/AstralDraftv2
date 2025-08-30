@@ -14,7 +14,7 @@ interface AiCoManagerWidgetProps {
     dispatch: React.Dispatch<any>;
 }
 
-const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }) => {
+const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<AiLineupSuggestion | null>(null);
 
@@ -25,7 +25,6 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
             const result = await getAiOptimalLineup(team, league);
             setSuggestion(result);
         } catch (e) {
-            console.error(e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Could not get a lineup suggestion.", type: 'SYSTEM' } });
         } finally {
             setIsLoading(false);
@@ -58,8 +57,8 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
                                 animate: { opacity: 1, y: 0 },
                             }}
                         >
-                            <p className="text-xs text-cyan-300 font-bold">Oracle&apos;s Recommendation:</p>
-                            <p className="text-xs italic text-gray-300 my-1">&quot;{suggestion.reasoning}&quot;</p>
+                            <p className="text-xs text-cyan-300 font-bold">Oracle's Recommendation:</p>
+                            <p className="text-xs italic text-gray-300 my-1">"{suggestion.reasoning}"</p>
                             <div className="flex gap-2 mt-2">
                                 <button onClick={() => setSuggestion(null)} className="flex-1 px-2 py-1 text-xs font-bold rounded-md bg-transparent text-gray-400 hover:bg-white/10">Dismiss</button>
                                 <button onClick={handleAcceptLineup} className="flex-1 px-2 py-1 text-xs font-bold rounded-md bg-green-500 text-white hover:bg-green-400">Set Lineup</button>

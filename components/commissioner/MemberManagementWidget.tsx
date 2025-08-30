@@ -1,15 +1,17 @@
 
 import React from 'react';
+import { useAppState } from '../../contexts/AppContext';
 import type { League, User } from '../../types';
 import { Widget } from '../ui/Widget';
+import { UserIcon } from '../icons/UserIcon';
 import { Avatar } from '../ui/Avatar';
 
 interface MemberManagementWidgetProps {
     league: League;
-    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
+    dispatch: React.Dispatch<any>;
 }
 
-const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league, dispatch }) => {
+const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league, dispatch }: any) => {
     
     const handleKick = (user: User) => {
         if (window.confirm(`Are you sure you want to remove ${user.name} from the league? This action is permanent.`)) {
@@ -26,7 +28,7 @@ const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league,
     return (
         <Widget title="Member Management">
             <div className="p-4 space-y-2">
-                {league.members.map((member: User) => (
+                {league.members.map((member: any) => (
                     <div key={member.id} className="p-2 bg-white/5 rounded-lg flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <Avatar avatar={member.avatar} className="w-8 h-8 rounded-md" />

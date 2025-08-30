@@ -114,9 +114,9 @@ export class EnhancedDraftEngine {
   private initializePlayerTiers(): void {
     const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
     
-    positions.forEach(position => {
+    positions.forEach((position: any) => {
       const positionPlayers = players
-        .filter(p => p.position === position)
+        .filter((p: any) => p.position === position)
         .sort((a, b) => (a.adp || 999) - (b.adp || 999));
 
       // Create tiers based on ADP gaps
@@ -124,7 +124,7 @@ export class EnhancedDraftEngine {
       let currentTier: Player[] = [];
       let lastADP = 0;
 
-      positionPlayers.forEach(player => {
+      positionPlayers.forEach((player: any) => {
         const adp = player.adp || 999;
         
         // Start new tier if ADP gap > tier threshold
@@ -315,13 +315,13 @@ export class EnhancedDraftEngine {
     if (needCandidate && needCandidate.player.id !== bpaCandidate?.player.id) {
       recommendations.push(needCandidate);
     }
-    if (valueCandidate && !recommendations.find(r => r.player.id === valueCandidate.player.id)) {
+    if (valueCandidate && !recommendations.find((r: any) => r.player.id === valueCandidate.player.id)) {
       recommendations.push(valueCandidate);
     }
-    if (upsideCandidate && !recommendations.find(r => r.player.id === upsideCandidate.player.id)) {
+    if (upsideCandidate && !recommendations.find((r: any) => r.player.id === upsideCandidate.player.id)) {
       recommendations.push(upsideCandidate);
     }
-    if (safeCandidate && !recommendations.find(r => r.player.id === safeCandidate.player.id)) {
+    if (safeCandidate && !recommendations.find((r: any) => r.player.id === safeCandidate.player.id)) {
       recommendations.push(safeCandidate);
     }
 
@@ -401,7 +401,7 @@ export class EnhancedDraftEngine {
 
     const topNeed = needs[0];
     const needPlayers = availablePlayers
-      .filter(p => p.position === topNeed.position);
+      .filter((p: any) => p.position === topNeed.position);
     const sortedNeedPlayers = [...needPlayers].sort((a, b) => (a.adp || 999) - (b.adp || 999));
 
     if (sortedNeedPlayers.length === 0) return null;
@@ -425,7 +425,7 @@ export class EnhancedDraftEngine {
    */
   private getBestValue(availablePlayers: Player[], currentPick: number): DraftRecommendation | null {
     const valuePickCandidates = availablePlayers
-      .filter(p => p.adp && p.adp > currentPick + 5); // Players falling below ADP
+      .filter((p: any) => p.adp && p.adp > currentPick + 5); // Players falling below ADP
     const sortedValueCandidates = [...valuePickCandidates]
       .sort((a, b) => ((b.adp || 0) - currentPick) - ((a.adp || 0) - currentPick));
 
@@ -451,7 +451,7 @@ export class EnhancedDraftEngine {
    */
   private getBestUpside(availablePlayers: Player[], riskTolerance: 'LOW' | 'MEDIUM' | 'HIGH'): DraftRecommendation | null {
     // Filter by age and situation for upside
-    const upsideCandidates = availablePlayers.filter(player => {
+    const upsideCandidates = availablePlayers.filter((player: any) => {
       if (riskTolerance === 'LOW') return (player.age || 30) <= 27;
       if (riskTolerance === 'MEDIUM') return (player.age || 30) <= 29;
       return true; // High tolerance includes all ages
@@ -489,14 +489,14 @@ export class EnhancedDraftEngine {
 
     if (avoidInjuryProne) {
       // Filter out players with injury history
-      safeCandidates = safeCandidates.filter(player => 
+      safeCandidates = safeCandidates.filter((player: any) => 
         !player.injuryHistory || player.injuryHistory.length === 0
       );
     }
 
     // Prefer players aged 25-29 (prime years)
     const primeAgePlayers = safeCandidates
-      .filter(p => (p.age || 30) >= 24 && (p.age || 30) <= 30);
+      .filter((p: any) => (p.age || 30) >= 24 && (p.age || 30) <= 30);
     const sortedPrimePlayers = [...primeAgePlayers].sort((a, b) => (a.adp || 999) - (b.adp || 999));
     const sortedSafeCandidates = [...safeCandidates].sort((a, b) => (a.adp || 999) - (b.adp || 999));
     
@@ -549,7 +549,7 @@ export class EnhancedDraftEngine {
    */
   private getPositionRank(player: Player, availablePlayers: Player[]): number {
     const positionPlayers = availablePlayers
-      .filter(p => p.position === player.position)
+      .filter((p: any) => p.position === player.position)
       .sort((a, b) => (a.adp || 999) - (b.adp || 999));
     
     return positionPlayers.findIndex(p => p.id === player.id) + 1;
@@ -576,12 +576,12 @@ export class EnhancedDraftEngine {
   private async getAIPickRecommendation(
     team: Team,
     candidates: DraftRecommendation[],
-    _config: AutoDraftConfig
+    config: AutoDraftConfig
   ): Promise<DraftRecommendation | null> {
     try {
-      const aiChoice = await getAiDraftPick(team, candidates.map(c => c.player));
+      const aiChoice = await getAiDraftPick(team, candidates.map((c: any) => c.player));
       
-      const chosenCandidate = candidates.find(c => c.player.name === aiChoice);
+      const chosenCandidate = candidates.find((c: any) => c.player.name === aiChoice);
       return chosenCandidate || null;
     } catch (error) {
       console.error('AI pick recommendation failed:', error);
@@ -592,7 +592,7 @@ export class EnhancedDraftEngine {
   /**
    * Fallback to best available player
    */
-  private getBestAvailablePlayer(availablePlayers: Player[], _currentPick: number): DraftRecommendation | null {
+  private getBestAvailablePlayer(availablePlayers: Player[], currentPick: number): DraftRecommendation | null {
     if (availablePlayers.length === 0) return null;
 
     const sortedPlayers = [...availablePlayers].sort((a, b) => (a.adp || 999) - (b.adp || 999));
@@ -720,7 +720,7 @@ export class EnhancedDraftEngine {
     const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
     const dropoffs: SnakeDraftOptimization['valueDropoffs'] = [];
 
-    positions.forEach(position => {
+    positions.forEach((position: any) => {
       const tiers = this.playerTiers.get(position) || [];
       let playersUntilDrop = 0;
       let nextTierDrop = 0;
@@ -735,7 +735,7 @@ export class EnhancedDraftEngine {
         const firstPlayerInNextTier = nextTier[0];
         
         if ((lastPlayerInTier.adp || 0) >= currentPick) {
-          playersUntilDrop = currentTier.filter(p => (p.adp || 0) >= currentPick).length;
+          playersUntilDrop = currentTier.filter((p: any) => (p.adp || 0) >= currentPick).length;
           nextTierDrop = (firstPlayerInNextTier.adp || 0) - (lastPlayerInTier.adp || 0);
           shouldReach = nextTierDrop > 20; // Significant tier drop
           break;
@@ -902,11 +902,11 @@ export class EnhancedDraftEngine {
   calculateDraftAnalytics(
     team: Team,
     draftPicks: DraftPick[],
-    _league: League
+    league: League
   ): DraftAnalytics {
-    const teamPicks = draftPicks.filter(pick => pick.teamId === team.id);
+    const teamPicks = draftPicks.filter((pick: any) => pick.teamId === team.id);
     const draftedPlayers = teamPicks
-      .map(pick => players.find(p => p.id === pick.playerId))
+      .map((pick: any) => players.find((p: any) => p.id === pick.playerId))
       .filter((p): p is Player => p !== undefined);
 
     // Calculate efficiency score
@@ -915,18 +915,18 @@ export class EnhancedDraftEngine {
     const efficiencyScore = Math.max(0, 100 - ((totalADP / teamPicks.length) - averagePickPosition));
 
     // Identify value picks and reaches
-    const valuePicks = teamPicks.filter(pick => {
-      const player = players.find(p => p.id === pick.playerId);
+    const valuePicks = teamPicks.filter((pick: any) => {
+      const player = players.find((p: any) => p.id === pick.playerId);
       return player?.adp && player.adp > pick.overall + 10;
     });
 
-    const reaches = teamPicks.filter(pick => {
-      const player = players.find(p => p.id === pick.playerId);
+    const reaches = teamPicks.filter((pick: any) => {
+      const player = players.find((p: any) => p.id === pick.playerId);
       return player?.adp && player.adp < pick.overall - 10;
     });
 
-    const steals = teamPicks.filter(pick => {
-      const player = players.find(p => p.id === pick.playerId);
+    const steals = teamPicks.filter((pick: any) => {
+      const player = players.find((p: any) => p.id === pick.playerId);
       return player?.adp && player.adp > pick.overall + 20;
     });
 

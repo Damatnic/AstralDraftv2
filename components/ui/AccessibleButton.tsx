@@ -63,7 +63,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   expanded,
   announceOnClick,
   announceOnDisabled
-}) => {
+}: any) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
@@ -167,7 +167,7 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   pressed,
   expanded,
   announceOnClick
-}) => {
+}: any) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {

@@ -13,7 +13,7 @@ interface CreateLeagueModalProps {
     dispatch: React.Dispatch<any>;
 }
 
-const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, dispatch }) => {
+const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, dispatch }: any) => {
     const [name, setName] = React.useState('My Awesome League');
     const [userTeamName, setUserTeamName] = React.useState(`${user.name}'s Dynasty`);
     const [userTeamAvatar, setUserTeamAvatar] = React.useState(user.avatar);
@@ -23,10 +23,9 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
     const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
     const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
     const [scoring, setScoring] = React.useState<LeagueSettings['scoring']>('PPR');
-    // TODO: Implement trade deadline and waiver rule settings
-    // const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings['tradeDeadline']>(10);
+    const [tradeDeadline, setTradeDeadline] = React.useState<LeagueSettings['tradeDeadline']>(10);
     const [playoffFormat, setPlayoffFormat] = React.useState<LeagueSettings['playoffFormat']>('4_TEAM');
-    // const [waiverRule, setWaiverRule] = React.useState<LeagueSettings['waiverRule']>('FAAB');
+    const [waiverRule, setWaiverRule] = React.useState<LeagueSettings['waiverRule']>('FAAB');
     const [aiAssistanceLevel, setAiAssistanceLevel] = React.useState<LeagueSettings['aiAssistanceLevel']>('FULL');
 
 
@@ -63,9 +62,9 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
                     teamCount,
                     scoring,
                     rosterSize: 16, // Hardcode for now
-                    tradeDeadline: 10, // Default value
+                    tradeDeadline,
                     playoffFormat,
-                    waiverRule: 'FAAB' as const, // Default value
+                    waiverRule,
                     aiAssistanceLevel,
                 },
                 status: 'PRE_DRAFT' as const,
@@ -79,7 +78,6 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ onClose, user, di
             onClose();
 
         } catch (error) {
-            console.error("Error creating league with AI profiles:", error);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Error: Could not create league. Please try again.", type: 'SYSTEM' } });
         } finally {
             setIsSubmitting(false);

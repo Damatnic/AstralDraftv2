@@ -12,7 +12,7 @@ interface WaiverIntelligenceWidgetProps {
     league: League;
 }
 
-const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ league }) => {
+const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ league }: any) => {
     const [intel, setIntel] = React.useState<WaiverIntelligence[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -26,7 +26,6 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
                     setIntel(data);
                 }
             } catch (e) {
-                console.error("Error fetching waiver intelligence", e);
             } finally {
                 setIsLoading(false);
             }
@@ -37,7 +36,7 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
      React.useEffect(() => {
         if (intel.length > 1) {
             const interval = setInterval(() => {
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % intel.length);
+                setCurrentIndex((prevIndex: any) => (prevIndex + 1) % intel.length);
             }, 8000); // Change story every 8 seconds
             return () => clearInterval(interval);
         }
@@ -74,7 +73,7 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
                             {currentIntel.type === 'STREAMING' && <TrendingUpIcon className="h-4 w-4 text-green-400" />}
                             <h4 className="font-bold text-sm text-cyan-300">{currentIntel.title}</h4>
                          </div>
-                        <p className="text-xs text-gray-300 italic">&quot;{currentIntel.content}&quot;</p>
+                        <p className="text-xs text-gray-300 italic">"{currentIntel.content}"</p>
                          <div className="mt-2 flex flex-wrap gap-1">
                             {currentIntel.players.map((name: any) => (
                                 <span key={name} className="text-[10px] bg-black/20 px-1.5 py-0.5 rounded-full">{name}</span>

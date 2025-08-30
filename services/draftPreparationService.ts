@@ -422,25 +422,25 @@ class DraftPreparationService {
 
             // Apply filters
             if (filter.positions?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.positions!.includes(p.position)
                 );
             }
 
             if (filter.tiers?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.tiers!.includes(p.tier)
                 );
             }
 
             if (filter.riskLevel?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.riskLevel!.includes(p.riskLevel)
                 );
             }
 
             if (filter.adpRange) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     p.adp >= filter.adpRange![0] && p.adp <= filter.adpRange![1]
                 );
             }
@@ -503,7 +503,7 @@ class DraftPreparationService {
      */
     async getDraftStrategy(strategyId: string): Promise<DraftStrategy | null> {
         try {
-            return this.mockStrategies.find(s => s.id === strategyId) || null;
+            return this.mockStrategies.find((s: any) => s.id === strategyId) || null;
         } catch (error) {
             console.error('Failed to get draft strategy:', error);
             throw new Error('Failed to get draft strategy');
@@ -522,6 +522,7 @@ class DraftPreparationService {
             };
 
             // In production, this would save to database
+            console.log('Created custom rankings:', newRankings);
             
             return newRankings;
         } catch (error) {
@@ -580,9 +581,9 @@ class DraftPreparationService {
             // Generate cheat sheet data
             const cheatSheetData: CheatSheetData = {
                 players: players.slice(0, 200), // Top 200 players
-                targets: players.filter(p => p.tags.includes('target') || p.sleeper).map(p => p.id),
-                sleepers: players.filter(p => p.sleeper).map(p => p.id),
-                avoid: players.filter(p => p.riskLevel === 'high' && p.injuries.length > 0).map(p => p.id),
+                targets: players.filter((p: any) => p.tags.includes('target') || p.sleeper).map((p: any) => p.id),
+                sleepers: players.filter((p: any) => p.sleeper).map((p: any) => p.id),
+                avoid: players.filter((p: any) => p.riskLevel === 'high' && p.injuries.length > 0).map((p: any) => p.id),
                 strategies: await this.getDraftStrategies(),
                 notes: [
                     'Focus on positional scarcity',
@@ -646,8 +647,8 @@ class DraftPreparationService {
                 }
 
                 // Select player (simplified logic)
-                const availablePlayers = players.filter(p => 
-                    !allPicks.some(pick => pick.playerId === p.id)
+                const availablePlayers = players.filter((p: any) => 
+                    !allPicks.some((pick: any) => pick.playerId === p.id)
                 );
                 
                 if (availablePlayers.length === 0) break;
@@ -711,7 +712,7 @@ class DraftPreparationService {
         const byeWeeks: Record<number, DraftPlayer[]> = {};
         
         // Group players by bye week
-        players.forEach(player => {
+        players.forEach((player: any) => {
             if (!byeWeeks[player.byeWeek]) {
                 byeWeeks[player.byeWeek] = [];
             }
@@ -724,13 +725,13 @@ class DraftPreparationService {
         // Analyze each bye week
         Object.entries(byeWeeks).forEach(([week, weekPlayers]) => {
             const weekNum = parseInt(week);
-            const positions = [...new Set(weekPlayers.map(p => p.position))];
+            const positions = [...new Set(weekPlayers.map((p: any) => p.position))];
             
             if (weekPlayers.length > 3) { // Arbitrary threshold
                 conflicts.push({
                     week: weekNum,
                     positions,
-                    players: weekPlayers.map(p => p.name),
+                    players: weekPlayers.map((p: any) => p.name),
                     severity: weekPlayers.length > 5 ? 'high' : 'medium',
                     impact: `${weekPlayers.length} key players on bye`
                 });
@@ -745,7 +746,7 @@ class DraftPreparationService {
                 'Plan ahead for bye week coverage',
                 'Consider streaming options for thin weeks'
             ],
-            worstWeeks: conflicts.map(c => c.week).slice(0, 3)
+            worstWeeks: conflicts.map((c: any) => c.week).slice(0, 3)
         };
     }
 
@@ -756,7 +757,7 @@ class DraftPreparationService {
         const positionCounts: Record<string, number> = {};
         let totalProjectedPoints = 0;
 
-        userTeam.forEach(player => {
+        userTeam.forEach((player: any) => {
             positionCounts[player.position] = (positionCounts[player.position] || 0) + 1;
             totalProjectedPoints += player.projectedPoints;
         });
@@ -766,7 +767,7 @@ class DraftPreparationService {
             .map(([position]) => position);
 
         const weakPositions = ['QB', 'RB', 'WR', 'TE']
-            .filter(pos => (positionCounts[pos] || 0) < 2);
+            .filter((pos: any) => (positionCounts[pos] || 0) < 2);
 
         return {
             teamGrade: 'B+',
@@ -777,8 +778,8 @@ class DraftPreparationService {
                 'Consider adding RB depth',
                 'Monitor waiver wire for TE options'
             ],
-            bestPicks: userTeam.filter(p => p.valueAtPick > 10).slice(0, 3),
-            questionablePicks: userTeam.filter(p => p.valueAtPick < -5).slice(0, 2),
+            bestPicks: userTeam.filter((p: any) => p.valueAtPick > 10).slice(0, 3),
+            questionablePicks: userTeam.filter((p: any) => p.valueAtPick < -5).slice(0, 2),
             projectedFinish: Math.floor(Math.random() * 6) + 4, // 4th-9th place
             totalProjectedPoints,
             rosterBalance: positionCounts,

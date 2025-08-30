@@ -9,7 +9,7 @@ import { TelescopeIcon } from '../components/icons/TelescopeIcon';
 import { useLeague } from '../hooks/useLeague';
 import ChampionChart from '../components/history/ChampionChart';
 
-const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const history = league.history || [];
 
     return (
@@ -37,7 +37,7 @@ const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<
                 </Widget>
                  <Widget title="Past Seasons" icon={<TelescopeIcon />}>
                     <div className="p-4 space-y-3">
-                        {history.length > 0 ? history.map(entry => (
+                        {history.length > 0 ? history.map((entry: any) => (
                             <div key={entry.season} className="bg-black/10 p-3 rounded-lg flex items-center justify-between hover:bg-black/20 transition-colors">
                                 <p className="font-bold text-white">{entry.season} Season</p>
                                 <button

@@ -3,7 +3,7 @@
  * Complete trade proposal, review, and management system
  */
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -35,10 +35,11 @@ const TradingSystem: React.FC = () => {
   const [offeredPlayers, setOfferedPlayers] = useState<any[]>([]);
   const [requestedPlayers, setRequestedPlayers] = useState<any[]>([]);
   const [tradeMessage, setTradeMessage] = useState('');
+  const [showTradeAnalysis, setShowTradeAnalysis] = useState(false);
 
   const league = state.leagues[0];
   const currentUser = state.user;
-  const userTeam = league?.teams?.find(team => team.owner.id === currentUser?.id);
+  const userTeam = league?.teams?.find((team: any) => team.owner.id === currentUser?.id);
 
   // Simulate existing trade proposals
   const tradeProposals: TradeProposal[] = [
@@ -139,6 +140,27 @@ const TradingSystem: React.FC = () => {
     }
 
     // Simulate trade proposal
+    const newTrade: TradeProposal = {
+      id: `trade-${Date.now()}`,
+      fromTeamId: userTeam?.id || '',
+      toTeamId: selectedTeam,
+      fromTeamName: userTeam?.name || '',
+      toTeamName: league?.teams?.find((t: any) => t.id === selectedTeam)?.name || '',
+      playersOffered: offeredPlayers,
+      playersRequested: requestedPlayers,
+      status: 'pending',
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      message: tradeMessage,
+      fairnessScore: Math.floor(Math.random() * 30) + 70, // 70-100
+      analysis: {
+        winner: Math.random() > 0.5 ? 'team_a' : 'team_b',
+        summary: 'Trade analysis will be generated based on player values and team needs.',
+        teamAGrade: 'B+',
+        teamBGrade: 'B+'
+      }
+    };
+
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
@@ -180,7 +202,7 @@ const TradingSystem: React.FC = () => {
               <div className="mb-6">
                 <label className="block text-white font-semibold mb-3">Select Trading Partner</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {league?.teams?.filter(team => team.id !== userTeam?.id).map(team => (
+                  {league?.teams?.filter((team: any) => team.id !== userTeam?.id).map((team: any) => (
                     <button
                       key={team.id}
                       onClick={() => setSelectedTeam(team.id)}
@@ -204,20 +226,20 @@ const TradingSystem: React.FC = () => {
 
               {/* Players to Offer */}
               <div className="mb-6">
-                <label className="block text-white font-semibold mb-3">Players You&apos;re Offering</label>
+                <label className="block text-white font-semibold mb-3">Players You're Offering</label>
                 <div className="bg-slate-700/30 rounded-lg p-4 min-h-[100px] border-2 border-dashed border-slate-600">
                   {offeredPlayers.length === 0 ? (
                     <p className="text-slate-400 text-center py-4">Select players from your roster to offer</p>
                   ) : (
                     <div className="space-y-2">
-                      {offeredPlayers.map(player => (
+                      {offeredPlayers.map((player: any) => (
                         <div key={player.id} className="flex items-center justify-between p-3 bg-slate-600/50 rounded-lg">
                           <div>
                             <span className="text-white font-semibold">{player.name}</span>
                             <span className="text-slate-300 ml-2">({player.position} - {player.team})</span>
                           </div>
                           <button
-                            onClick={() => setOfferedPlayers(prev => prev.filter(p => p.id !== player.id))}
+                            onClick={() => setOfferedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300"
                           >
                             Remove
@@ -237,14 +259,14 @@ const TradingSystem: React.FC = () => {
                     <p className="text-slate-400 text-center py-4">Select players you want in return</p>
                   ) : (
                     <div className="space-y-2">
-                      {requestedPlayers.map(player => (
+                      {requestedPlayers.map((player: any) => (
                         <div key={player.id} className="flex items-center justify-between p-3 bg-slate-600/50 rounded-lg">
                           <div>
                             <span className="text-white font-semibold">{player.name}</span>
                             <span className="text-slate-300 ml-2">({player.position} - {player.team})</span>
                           </div>
                           <button
-                            onClick={() => setRequestedPlayers(prev => prev.filter(p => p.id !== player.id))}
+                            onClick={() => setRequestedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300"
                           >
                             Remove
@@ -261,7 +283,7 @@ const TradingSystem: React.FC = () => {
                 <label className="block text-white font-semibold mb-3">Trade Message (Optional)</label>
                 <textarea
                   value={tradeMessage}
-                  onChange={(e) => setTradeMessage(e.target.value)}
+                  onChange={(e: any) => setTradeMessage(e.target.value)}
                   placeholder="Explain your trade reasoning..."
                   className="form-input h-24 resize-none"
                 />
@@ -294,11 +316,11 @@ const TradingSystem: React.FC = () => {
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-white">Pending Trades</h3>
               <span className="text-sm text-slate-400">
-                {tradeProposals.filter(t => t.status === 'pending').length} active proposals
+                {tradeProposals.filter((t: any) => t.status === 'pending').length} active proposals
               </span>
             </div>
 
-            {tradeProposals.filter(t => t.status === 'pending').length === 0 ? (
+            {tradeProposals.filter((t: any) => t.status === 'pending').length === 0 ? (
               <div className="card text-center py-8">
                 <p className="text-slate-400 mb-4">No pending trades</p>
                 <button
@@ -310,7 +332,7 @@ const TradingSystem: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                {tradeProposals.filter(t => t.status === 'pending').map(trade => (
+                {tradeProposals.filter((t: any) => t.status === 'pending').map((trade: any) => (
                   <motion.div
                     key={trade.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -336,7 +358,7 @@ const TradingSystem: React.FC = () => {
                       <div>
                         <h4 className="text-white font-semibold mb-3">{trade.fromTeamName} Offers</h4>
                         <div className="space-y-2">
-                          {trade.playersOffered.map(player => (
+                          {trade.playersOffered.map((player: any) => (
                             <div key={player.id} className="p-3 bg-slate-700/50 rounded-lg">
                               <div className="text-white font-medium">{player.name}</div>
                               <div className="text-sm text-slate-400">
@@ -356,7 +378,7 @@ const TradingSystem: React.FC = () => {
                       <div>
                         <h4 className="text-white font-semibold mb-3">{trade.toTeamName} Gets</h4>
                         <div className="space-y-2">
-                          {trade.playersRequested.map(player => (
+                          {trade.playersRequested.map((player: any) => (
                             <div key={player.id} className="p-3 bg-slate-700/50 rounded-lg">
                               <div className="text-white font-medium">{player.name}</div>
                               <div className="text-sm text-slate-400">
@@ -446,7 +468,7 @@ const TradingSystem: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {tradeBlockPlayers.map(player => (
+              {tradeBlockPlayers.map((player: any) => (
                 <motion.div
                   key={player.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -494,7 +516,7 @@ const TradingSystem: React.FC = () => {
 
       {/* Tab Navigation */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2">
-        {tabs.map((tab) => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}

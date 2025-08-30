@@ -157,12 +157,12 @@ export const useAdvancedTouchGestures = (
     };
   };
 
-  const shouldPreventScroll = useCallback((direction: 'up' | 'down' | 'left' | 'right'): boolean => {
+  const shouldPreventScroll = (direction: 'up' | 'down' | 'left' | 'right'): boolean => {
     if (swipe.direction === 'all') return true;
     if (swipe.direction === 'horizontal') return direction === 'left' || direction === 'right';
     if (swipe.direction === 'vertical') return direction === 'up' || direction === 'down';
     return false;
-  }, [swipe.direction]);
+  };
 
   // Touch event handlers
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
@@ -273,9 +273,9 @@ export const useAdvancedTouchGestures = (
         e.preventDefault();
       }
     }
-  }, [gestureState.startPoint, longPress.threshold, swipe.preventScroll, pinch.threshold, pinch.preventZoom, shouldPreventScroll]);
+  }, [gestureState.startPoint, longPress.threshold, swipe.preventScroll, swipe.direction, pinch.threshold, pinch.preventZoom]);
 
-  const handleTouchEnd = useCallback((_e: React.TouchEvent) => {
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     setIsGestureActive(false);
 
     // Clear long press timer

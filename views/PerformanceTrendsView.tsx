@@ -38,13 +38,13 @@ const PerformanceTrendsView: React.FC = () => {
                         <select
                             id="player-select"
                             value={selectedPlayer?.id || ''}
-                            onChange={(e) => {
-                                const player = myTeam.roster.find(p => p.id === Number(e.target.value));
+                            onChange={(e: any) => {
+                                const player = myTeam.roster.find((p: any) => p.id === Number(e.target.value));
                                 setSelectedPlayer(player || null);
                             }}
                             className="bg-black/20 p-2 rounded-md border border-white/10 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
                         >
-                            {myTeam.roster.map(player => (
+                            {myTeam.roster.map((player: any) => (
                                 <option key={player.id} value={player.id}>
                                     {player.name} ({player.position})
                                 </option>

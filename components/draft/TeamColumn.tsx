@@ -26,14 +26,14 @@ const positionColor: Record<string, string> = {
     K: 'bg-yellow-500/70'
 };
 
-const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }) => {
+const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }: any) => {
 
   const getSnakePickDisplay = (pick: DraftPick) => {
     return `${pick.round}.${pick.pickInRound}`;
   }
   
   const displayItems = draftFormat === 'AUCTION'
-    ? team.roster.map((player, _index) => {
+    ? team.roster.map((player, index) => {
         const pick = picks.find((p: any) => p.playerId === player.id);
         return {
             key: player.id,

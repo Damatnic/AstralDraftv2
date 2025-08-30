@@ -55,7 +55,7 @@ export class AccessibilityTester {
         const touchTargets: TouchTargetValidation['touchTargets'] = [];
         const violations: string[] = [];
 
-        interactiveElements.forEach((element) => {
+        interactiveElements.forEach((element: any) => {
             const rect = element.getBoundingClientRect();
             const size = { width: rect.width, height: rect.height };
             
@@ -138,7 +138,7 @@ export class AccessibilityTester {
         
         // Check for missing labels on form controls
         const formControls = container.querySelectorAll('input, select, textarea');
-        formControls.forEach((control) => {
+        formControls.forEach((control: any) => {
             const hasLabel = control.getAttribute('aria-label') || 
                            control.getAttribute('aria-labelledby') ||
                            container.querySelector(`label[for="${control.id}"]`);
@@ -151,7 +151,7 @@ export class AccessibilityTester {
         // Check for proper heading structure
         const headings = container.querySelectorAll('h1, h2, h3, h4, h5, h6');
         if (headings.length > 0) {
-            const levels = Array.from(headings).map(h => parseInt(h.tagName.charAt(1)));
+            const levels = Array.from(headings).map((h: any) => parseInt(h.tagName.charAt(1)));
             for (let i = 1; i < levels.length; i++) {
                 if (levels[i] > levels[i - 1] + 1) {
                     violations.push(`Heading level skipped: h${levels[i - 1]} to h${levels[i]}`);
@@ -173,7 +173,7 @@ export class AccessibilityTester {
         
         // Check text elements for sufficient contrast
         const textElements = container.querySelectorAll('*');
-        textElements.forEach((element) => {
+        textElements.forEach((element: any) => {
             const styles = window.getComputedStyle(element);
             const hasText = element.textContent && element.textContent.trim().length > 0;
             
@@ -199,7 +199,7 @@ export class AccessibilityTester {
         const rgb = this.parseColor(color);
         
         // Convert RGB to relative luminance
-        const sRGB = rgb.map(value => {
+        const sRGB = rgb.map((value: any) => {
             const normalized = value / 255;
             return normalized <= 0.03928 
                 ? normalized / 12.92 

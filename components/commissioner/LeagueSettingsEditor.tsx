@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
 import { XIcon } from '../icons/XIcon';
 import { SaveIcon } from '../icons/SaveIcon';
 import { SettingsIcon } from '../icons/SettingsIcon';
@@ -44,7 +45,7 @@ interface SettingsFormData {
     waiverPeriod: number;
 }
 
-const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onClose, onSave }) => {
+const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onClose, onSave }: any) => {
     const [formData, setFormData] = React.useState<SettingsFormData>({
         draftFormat: league.settings.draftFormat,
         teamCount: league.settings.teamCount,
@@ -118,7 +119,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
-                onClick={(e: React.MouseEvent<HTMLDivElement>) => e.target === e.currentTarget && onClose()}
+                onClick={(e: any) => e.target === e.currentTarget && onClose()}
             >
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
@@ -145,7 +146,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
 
                     {/* Tab Navigation */}
                     <div className="flex border-b border-[var(--panel-border)] bg-[var(--bg-secondary)]">
-                        {tabs.map((tab) => (
+                        {tabs.map((tab: any) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}
@@ -172,7 +173,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.draftFormat}
-                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('draftFormat', e.target.value as 'SNAKE' | 'AUCTION')}
+                                            onChange={(e: any) => updateField('draftFormat', e.target.value as 'SNAKE' | 'AUCTION')}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
                                             <option value="SNAKE">Snake Draft</option>
@@ -185,10 +186,10 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.teamCount}
-                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('teamCount', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField('teamCount', parseInt(e.target.value))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
-                                            {[8, 10, 12, 14, 16, 18, 20].map((count: number) => (
+                                            {[8, 10, 12, 14, 16, 18, 20].map((count: any) => (
                                                 <option key={count} value={count}>{count} Teams</option>
                                             ))}
                                         </select>
@@ -199,7 +200,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.playoffFormat}
-                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('playoffFormat', e.target.value as '4_TEAM' | '6_TEAM')}
+                                            onChange={(e: any) => updateField('playoffFormat', e.target.value as any)}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
                                             <option value="4_TEAM">4 Team Playoff</option>
@@ -215,7 +216,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="1"
                                             max="17"
                                             value={formData.tradeDeadline}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('tradeDeadline', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField('tradeDeadline', parseInt(e.target.value))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         />
                                     </div>
@@ -238,7 +239,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                                     min="0"
                                                     max="10"
                                                     value={count}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateRosterPosition(position as keyof SettingsFormData['rosterPositions'], parseInt(e.target.value))}
+                                                    onChange={(e: any) => updateRosterPosition(position as any, parseInt(e.target.value))}
                                                     className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                                 />
                                             </div>
@@ -256,7 +257,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                     </label>
                                     <select
                                         value={formData.scoring}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('scoring', e.target.value as 'Standard' | 'PPR' | 'Half-PPR')}
+                                        onChange={(e: any) => updateField('scoring', e.target.value as any)}
                                         className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                     >
                                         <option value="Standard">Standard (No PPR)</option>
@@ -276,7 +277,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.waiverRule}
-                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('waiverRule', e.target.value as 'FAAB' | 'REVERSE_ORDER')}
+                                            onChange={(e: any) => updateField('waiverRule', e.target.value as any)}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
                                             <option value="FAAB">FAAB (Free Agent Auction Budget)</option>
@@ -294,7 +295,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                                 max="1000"
                                                 step="25"
                                                 value={formData.faabBudget}
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('faabBudget', parseInt(e.target.value))}
+                                                onChange={(e: any) => updateField('faabBudget', parseInt(e.target.value))}
                                                 className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                             />
                                         </div>
@@ -308,7 +309,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="0"
                                             max="7"
                                             value={formData.waiverPeriod}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('waiverPeriod', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField('waiverPeriod', parseInt(e.target.value))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         />
                                     </div>
@@ -325,7 +326,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.aiAssistanceLevel}
-                                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateField('aiAssistanceLevel', e.target.value as 'FULL' | 'BASIC')}
+                                            onChange={(e: any) => updateField('aiAssistanceLevel', e.target.value as any)}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         >
                                             <option value="BASIC">Basic Recommendations</option>
@@ -342,7 +343,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             max="600"
                                             step="30"
                                             value={formData.pickTimer}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('pickTimer', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField('pickTimer', parseInt(e.target.value))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         />
                                     </div>
@@ -355,7 +356,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="0"
                                             max="10"
                                             value={formData.maxKeepers}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('maxKeepers', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField('maxKeepers', parseInt(e.target.value))}
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                         />
                                     </div>
@@ -364,7 +365,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             type="checkbox"
                                             id="tradingEnabled"
                                             checked={formData.tradingEnabled}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('tradingEnabled', e.target.checked)}
+                                            onChange={(e: any) => updateField('tradingEnabled', e.target.checked)}
                                             className="mr-2"
                                         />
                                         <label htmlFor="tradingEnabled" className="text-sm font-medium text-[var(--text-primary)]">

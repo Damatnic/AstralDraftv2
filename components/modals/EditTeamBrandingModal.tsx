@@ -13,7 +13,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
     leagueId,
     dispatch,
     onClose
-}) => {
+}: any) => {
     const [teamName, setTeamName] = React.useState(team.name || '');
     const [teamLogo, setTeamLogo] = React.useState(team.logo || '');
     const [primaryColor, setPrimaryColor] = React.useState(team.primaryColor || '#3B82F6');
@@ -57,7 +57,6 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
             
             onClose();
         } catch (error) {
-            console.error('Failed to update team branding:', error);
         } finally {
             setLoading(false);
         }
@@ -106,7 +105,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                             Team Logo
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3">
-                            {logoOptions.map((emoji) => (
+                            {logoOptions.map((emoji: any) => (
                                 <button
                                     key={emoji}
                                     onClick={() => setTeamLogo(emoji)}
@@ -137,7 +136,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                             Primary Color
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3">
-                            {predefinedColors.map((color) => (
+                            {predefinedColors.map((color: any) => (
                                 <button
                                     key={color}
                                     onClick={() => setPrimaryColor(color)}
@@ -165,7 +164,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                             Secondary Color
                         </label>
                         <div className="grid grid-cols-8 gap-2 mb-3">
-                            {predefinedColors.map((color) => (
+                            {predefinedColors.map((color: any) => (
                                 <button
                                     key={color}
                                     onClick={() => setSecondaryColor(color)}

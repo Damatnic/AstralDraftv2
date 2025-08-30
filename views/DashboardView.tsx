@@ -24,7 +24,9 @@ import { LayoutIcon } from '../components/icons/LayoutIcon';
 import OnTheHotSeatWidget from '../components/dashboard/OnTheHotSeatWidget';
 import { GlobeIcon } from '../components/icons/GlobeIcon';
 
-type DashboardViewProps = Record<string, never>;
+interface DashboardViewProps {
+  // No props currently needed, but interface ready for future expansion
+}
 
 const DashboardView: React.FC<DashboardViewProps> = () => {
     const { state, dispatch } = useAppState();
@@ -47,11 +49,11 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
         leagues: (
             <Widget title="My Leagues" className="sm:col-span-1 lg:col-span-2">
                 <div className="space-y-3 sm:space-y-4 p-2">
-                    {state.leagues.filter(l => !l.isMock && l.members.some(m => m.id === state.user?.id)).length > 0 ? state.leagues.filter(l => !l.isMock && l.members.some(m => m.id === state.user?.id)).map(league => (
+                    {state.leagues.filter((l: any) => !l.isMock && l.members.some((m: any) => m.id === state.user?.id)).length > 0 ? state.leagues.filter((l: any) => !l.isMock && l.members.some((m: any) => m.id === state.user?.id)).map((league: any) => (
                         <LeagueCard key={league.id} league={league} onJoin={() => handleJoinLeague(league.id)} />
                     )) : (
                         <div className="p-3 sm:p-4 text-center text-secondary">
-                            <p className="mb-4 text-sm sm:text-base">You haven&apos;t joined any leagues yet.</p>
+                            <p className="mb-4 text-sm sm:text-base">You haven't joined any leagues yet.</p>
                             <div className="flex flex-col gap-3 justify-center">
                                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <button 
@@ -162,7 +164,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
 
             <div className="max-w-7xl mx-auto p-4">
                 <main className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                    {state.dashboardLayout.map(widgetId => {
+                    {state.dashboardLayout.map((widgetId: any) => {
                         const widget = widgetComponents[widgetId];
                         if (!widget) return null;
                         return <React.Fragment key={widgetId}>{widget}</React.Fragment>;
@@ -186,7 +188,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
     );
 };
 
-const DashboardViewWithErrorBoundary: React.FC<DashboardViewProps> = (props) => (
+const DashboardViewWithErrorBoundary: React.FC<DashboardViewProps> = (props: any) => (
     <ErrorBoundary>
         <DashboardView {...props} />
     </ErrorBoundary>

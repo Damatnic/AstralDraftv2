@@ -45,7 +45,7 @@ interface UseInjuryTrackingReturn {
   stopMonitoring: () => void;
   refreshData: () => Promise<void>;
   dismissAlert: (alertId: string) => void;
-  getFantasyImpact: (playerId: string) => Promise<unknown>;
+  getFantasyImpact: (playerId: string) => Promise<any>;
 
   // Computed values
   activeInjuries: InjuryStatus[];
@@ -160,8 +160,6 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
 
     // Initial data load
     loadDashboardData();
-    // Intentionally minimal dependencies to avoid infinite loops
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoStart, loadDashboardData]);
 
   // Actions
@@ -197,7 +195,7 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
     playerIdToUpdate: string,
     priority: PlayerPriority
   ) => {
-    const player = monitoredPlayers.find(p => p.playerId === playerIdToUpdate);
+    const player = monitoredPlayers.find((p: any) => p.playerId === playerIdToUpdate);
     if (player) {
       // Remove and re-add with new priority
       injuryTrackingService.removeMonitoredPlayer(playerIdToUpdate);
@@ -227,8 +225,8 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
   }, [loadDashboardData]);
 
   const dismissAlert = useCallback((alertId: string) => {
-    setRecentAlerts(prev => prev.filter(alert => alert.id !== alertId));
-    setPlayerAlerts(prev => prev.filter(alert => alert.id !== alertId));
+    setRecentAlerts(prev => prev.filter((alert: any) => alert.id !== alertId));
+    setPlayerAlerts(prev => prev.filter((alert: any) => alert.id !== alertId));
   }, []);
 
   const getFantasyImpact = useCallback(async (playerIdForImpact: string) => {
@@ -238,17 +236,17 @@ export const useInjuryTracking = (options: UseInjuryTrackingOptions = {}): UseIn
   // Computed values
   const activeInjuries = useMemo(() => {
     return injuryTrackingService.getAllInjuryStatuses()
-      .filter(status => status.status !== 'healthy');
-  }, []);
+      .filter((status: any) => status.status !== 'healthy');
+  }, [dashboardData]);
 
   const criticalAlerts = useMemo(() => {
-    return recentAlerts.filter(alert => 
+    return recentAlerts.filter((alert: any) => 
       alert.severity === 'CRITICAL' || alert.severity === 'HIGH'
     );
   }, [recentAlerts]);
 
   const highPriorityPlayers = useMemo(() => {
-    return monitoredPlayers.filter(player => player.priority === 'HIGH');
+    return monitoredPlayers.filter((player: any) => player.priority === 'HIGH');
   }, [monitoredPlayers]);
 
   const injuryCount = useMemo(() => {

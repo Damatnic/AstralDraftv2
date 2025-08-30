@@ -21,27 +21,28 @@ import { AwardIcon } from '../components/icons/AwardIcon';
 import { NewspaperIcon } from '../components/icons/NewspaperIcon';
 import SideBetsWidget from '../components/hub/SideBetsWidget';
 
-const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.Dispatch<any> }> = ({ league, user, dispatch }) => {
+const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.Dispatch<any> }> = ({ league, user, dispatch }: any) => {
     const isCommissioner = user.id === league.commissionerId;
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
     const isDraftComplete = league.status === 'DRAFT_COMPLETE';
+    const isPreDraft = league.status === 'PRE_DRAFT';
     const isHistoryAvailable = league.history && league.history.length > 0;
     const [slogan, setSlogan] = React.useState<string | null>(null);
 
     const prevWeekRef = React.useRef(league.currentWeek);
     
     React.useEffect(() => {
-        generateLeagueSlogan(league.name, league.teams.map(t => t.name)).then(setSlogan);
+        generateLeagueSlogan(league.name, league.teams.map((t: any) => t.name)).then(setSlogan);
     }, [league.name, league.teams]);
 
     React.useEffect(() => {
         if (league.currentWeek > prevWeekRef.current) {
             const justCompletedWeek = league.currentWeek - 1;
-            const matchups = league.schedule.filter(m => m.week === justCompletedWeek);
+            const matchups = league.schedule.filter((m: any) => m.week === justCompletedWeek);
 
-            matchups.forEach(matchup => {
-                const teamA = league.teams.find(t => t.id === matchup.teamA.teamId);
-                const teamB = league.teams.find(t => t.id === matchup.teamB.teamId);
+            matchups.forEach((matchup: any) => {
+                const teamA = league.teams.find((t: any) => t.id === matchup.teamA.teamId);
+                const teamB = league.teams.find((t: any) => t.id === matchup.teamB.teamId);
 
                 if (teamA && teamB) {
                     if (teamA.owner.persona) {
@@ -79,7 +80,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
         dispatch({ type: 'SET_USER_READY', payload: { leagueId: league.id, userId: user.id, isReady } });
     };
 
-    const allHumanPlayersReady = league.members.filter(m => !m.id.startsWith('ai_')).every(m => m.isReady);
+    const allHumanPlayersReady = league.members.filter((m: any) => !m.id.startsWith('ai_')).every((m: any) => m.isReady);
 
     return (
         <div className="min-h-screen">
@@ -90,7 +91,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                         <h1>{league.name}</h1>
                         <p className="page-subtitle">{league.status.replace('_', ' ')}</p>
                         {slogan && (
-                            <p className="text-sm text-cyan-300/80 font-semibold italic mt-1">&quot;{slogan}&quot;</p>
+                            <p className="text-sm text-cyan-300/80 font-semibold italic mt-1">"{slogan}"</p>
                         )}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-end">
@@ -147,7 +148,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                     <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <Widget title="League Members" icon={<UserIcon />}>
                             <div className="space-y-3 p-4">
-                                {league.members.map(member => (
+                                {league.members.map((member: any) => (
                                     <div key={member.id} className="flex items-center gap-3">
                                         <Avatar avatar={member.avatar} className="w-8 h-8 text-xl rounded-md" />
                                         <div className="flex-grow">

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Mobile Accessibility Utilities
  * Comprehensive accessibility tools and helpers for mobile components
@@ -214,7 +215,7 @@ export const useKeyboardNavigation = (
 };
 
 // Screen reader only text utility
-export const VisuallyHidden: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const VisuallyHidden: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
     <span className="sr-only">
         {children}
     </span>
@@ -238,7 +239,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     disabled,
     className = '',
     ...props
-}) => {
+}: any) => {
     const baseClasses = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variantClasses = {
@@ -294,7 +295,7 @@ export const LiveRegion: React.FC<{
     message: string;
     politeness?: LiveRegionPoliteness;
     clearAfter?: number;
-}> = ({ message, politeness = 'polite', clearAfter = 5000 }) => {
+}> = ({ message, politeness = 'polite', clearAfter = 5000 }: any) => {
     const [currentMessage, setCurrentMessage] = React.useState(message);
 
     React.useEffect(() => {
@@ -328,7 +329,7 @@ export const getContrastRatio = (foreground: string, background: string): number
         const g = (rgb >> 8) & 0xff;
         const b = (rgb >> 0) & 0xff;
         
-        const [rs, gs, bs] = [r, g, b].map(c => {
+        const [rs, gs, bs] = [r, g, b].map((c: any) => {
             const sRGB = c / 255;
             return sRGB <= 0.03928 ? sRGB / 12.92 : Math.pow((sRGB + 0.055) / 1.055, 2.4);
         });

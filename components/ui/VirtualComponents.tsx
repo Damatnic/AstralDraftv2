@@ -76,7 +76,7 @@ export const VirtualList = <T,>({
                         right: 0
                     }}
                 >
-                    {visibleItems.map(({ item, index, key }) => (
+                    {visibleItems.map(({ item, index, key }: any) => (
                         <div
                             key={key}
                             style={{
@@ -106,7 +106,7 @@ interface VirtualGridProps<T> {
     className?: string;
 }
 
-const VirtualGrid = React.memo(<T,>({
+export const VirtualGrid = React.memo(<T,>({
     items,
     itemWidth,
     itemHeight,
@@ -181,7 +181,7 @@ const VirtualGrid = React.memo(<T,>({
                     position: 'relative'
                 }}
             >
-                {visibleItems.map(({ item, index, key, x, y }) => (
+                {visibleItems.map(({ item, index, key, x, y }: any) => (
                     <div
                         key={key}
                         style={{
@@ -198,8 +198,4 @@ const VirtualGrid = React.memo(<T,>({
             </div>
         </div>
     );
-});
-
-VirtualGrid.displayName = 'VirtualGrid';
-
-export { VirtualGrid };
+}) as <T>(props: VirtualGridProps<T>) => React.ReactElement;

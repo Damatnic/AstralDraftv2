@@ -359,8 +359,8 @@ class PaymentService {
       });
 
       const userPayments = paymentIntents.data
-        .filter(pi => pi.metadata.userId === userId)
-        .map(pi => ({
+        .filter((pi: any) => pi.metadata.userId === userId)
+        .map((pi: any) => ({
           id: pi.id,
           userId: pi.metadata.userId,
           amount: pi.amount,
@@ -502,15 +502,15 @@ class PaymentService {
       });
 
       // Calculate analytics
-      const successfulPayments = paymentIntents.data.filter(pi => pi.status === 'succeeded');
+      const successfulPayments = paymentIntents.data.filter((pi: any) => pi.status === 'succeeded');
       const totalRevenue = successfulPayments.reduce((sum, pi) => sum + pi.amount, 0) / 100;
       
       const subscriptionRevenue = successfulPayments
-        .filter(pi => pi.metadata.type === 'subscription')
+        .filter((pi: any) => pi.metadata.type === 'subscription')
         .reduce((sum, pi) => sum + pi.amount, 0) / 100;
       
       const contestRevenue = successfulPayments
-        .filter(pi => pi.metadata.type === 'contest_entry')
+        .filter((pi: any) => pi.metadata.type === 'contest_entry')
         .reduce((sum, pi) => sum + pi.amount, 0) / 100;
 
       const refundAmount = refunds.data.reduce((sum, refund) => sum + refund.amount, 0) / 100;
@@ -526,7 +526,7 @@ class PaymentService {
         subscriptionRevenue,
         contestRevenue,
         activeSubscriptions: subscriptions.data.length,
-        newSubscriptions: subscriptions.data.filter(sub => 
+        newSubscriptions: subscriptions.data.filter((sub: any) => 
           sub.created >= startTimestamp && sub.created <= endTimestamp
         ).length,
         refundAmount,

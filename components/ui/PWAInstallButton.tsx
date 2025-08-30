@@ -46,3 +46,5 @@ export const PWAInstallButton: React.FC = () => {
     </Button>
   );
 };
+
+export default PWAInstallButton;

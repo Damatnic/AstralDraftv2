@@ -9,7 +9,7 @@ interface RivalryWidgetProps {
     opponentManagerId: string;
 }
 
-const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }) => {
+const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any) => {
     const { state } = useAppState();
 
     const record = React.useMemo(() => {

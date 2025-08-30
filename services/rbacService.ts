@@ -107,7 +107,7 @@ ROLE_PERMISSIONS[UserRole.ORACLE_ADMIN] = [
 ];
 
 ROLE_PERMISSIONS[UserRole.ADMIN] = [
-  ...Object.values(Permission).filter(p => p !== Permission.SUPER_ADMIN_ACCESS)
+  ...Object.values(Permission).filter((p: any) => p !== Permission.SUPER_ADMIN_ACCESS)
 ];
 
 ROLE_PERMISSIONS[UserRole.SUPER_ADMIN] = [
@@ -193,7 +193,7 @@ class RBACService {
     }
 
     // Check if any of the user's roles has the permission
-    return user.roles.some(role => 
+    return user.roles.some((role: any) => 
       ROLE_PERMISSIONS[role]?.includes(permission)
     );
   }
@@ -202,14 +202,14 @@ class RBACService {
    * Check if user has any of the specified permissions
    */
   hasAnyPermission(user: UserWithRoles | null, permissions: Permission[]): boolean {
-    return permissions.some(permission => this.hasPermission(user, permission));
+    return permissions.some((permission: any) => this.hasPermission(user, permission));
   }
 
   /**
    * Check if user has all specified permissions
    */
   hasAllPermissions(user: UserWithRoles | null, permissions: Permission[]): boolean {
-    return permissions.every(permission => this.hasPermission(user, permission));
+    return permissions.every((permission: any) => this.hasPermission(user, permission));
   }
 
   /**
@@ -231,7 +231,7 @@ class RBACService {
     }
 
     const userMaxPriority = Math.max(
-      ...user.roles.map(role => ROLE_CONFIGS[role]?.priority || 0)
+      ...user.roles.map((role: any) => ROLE_CONFIGS[role]?.priority || 0)
     );
     
     return userMaxPriority >= ROLE_CONFIGS[minimumRole].priority;
@@ -247,8 +247,8 @@ class RBACService {
 
     const permissions = new Set<Permission>();
     
-    user.roles.forEach(role => {
-      ROLE_PERMISSIONS[role]?.forEach(permission => {
+    user.roles.forEach((role: any) => {
+      ROLE_PERMISSIONS[role]?.forEach((permission: any) => {
         permissions.add(permission);
       });
     });
@@ -287,7 +287,7 @@ class RBACService {
    * Get assignable roles (excluding guest)
    */
   getAssignableRoles(): UserRole[] {
-    return Object.values(UserRole).filter(role => role !== UserRole.GUEST);
+    return Object.values(UserRole).filter((role: any) => role !== UserRole.GUEST);
   }
 
   /**
@@ -326,7 +326,7 @@ class RBACService {
     resources: Array<T & { requiredPermission?: Permission }>,
     defaultPermission?: Permission
   ): T[] {
-    return resources.filter(resource => {
+    return resources.filter((resource: any) => {
       const permission = resource.requiredPermission || defaultPermission;
       return !permission || this.hasPermission(user, permission);
     });

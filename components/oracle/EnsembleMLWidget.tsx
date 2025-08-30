@@ -16,7 +16,7 @@ interface Props {
     compact?: boolean;
 }
 
-const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
+const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) => {
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -56,7 +56,6 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
                 .generateEnsemblePrediction(sampleFeatures, 'fantasy_points');
             setPrediction(result);
         } catch (error) {
-            console.error('Failed to generate prediction:', error);
         } finally {
             setLoading(false);
         }
@@ -119,7 +118,7 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
                             <div className="space-y-2">
                                 <div className="text-sm text-gray-400">Key Factors</div>
                                 <div className="flex flex-wrap gap-2">
-                                    {prediction.featureContributions.slice(0, 3).map((feature) => (
+                                    {prediction.featureContributions.slice(0, 3).map((feature: any) => (
                                         <div
                                             key={feature.feature}
                                             className="flex items-center space-x-1 bg-gray-800/30 rounded px-2 py-1"
@@ -211,7 +210,7 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
 
                         {/* Model Breakdown */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {prediction.modelPredictions.map((model) => (
+                            {prediction.modelPredictions.map((model: any) => (
                                 <motion.div
                                     key={model.modelId}
                                     initial={{ opacity: 0, scale: 0.95 }}

@@ -15,7 +15,7 @@ interface NotificationProps {
   type: NotificationType;
 }
 
-const Notification: React.FC<NotificationProps> = ({ message, type }) => {
+const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
   const getIcon = () => {
     switch (type) {
       case 'DRAFT': return <CheckIcon />;

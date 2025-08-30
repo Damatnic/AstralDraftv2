@@ -317,7 +317,7 @@ class ContestScoringService {
     }
 
     // Check if user already registered
-    if (contest.participants.some(p => p.userId === userId)) {
+    if (contest.participants.some((p: any) => p.userId === userId)) {
       throw new Error('User already registered for this contest');
     }
 
@@ -367,12 +367,12 @@ class ContestScoringService {
       throw new Error('Contest not found');
     }
 
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     if (!participant) {
       throw new Error('User not registered for this contest');
     }
 
-    const prediction = contest.predictions.find(p => p.id === predictionData.predictionId);
+    const prediction = contest.predictions.find((p: any) => p.id === predictionData.predictionId);
     if (!prediction) {
       throw new Error('Prediction not found');
     }
@@ -383,7 +383,7 @@ class ContestScoringService {
     }
 
     // Check if user already made this prediction
-    const existingPrediction = participant.predictions.find(p => p.predictionId === predictionData.predictionId);
+    const existingPrediction = participant.predictions.find((p: any) => p.predictionId === predictionData.predictionId);
     if (existingPrediction && !contest.rules.allowLateEntry) {
       throw new Error('Prediction already submitted');
     }
@@ -584,7 +584,7 @@ class ContestScoringService {
 
     // Process each participant's predictions
     for (const userPrediction of participant.predictions) {
-      const contestPrediction = contest.predictions.find(p => p.id === userPrediction.predictionId);
+      const contestPrediction = contest.predictions.find((p: any) => p.id === userPrediction.predictionId);
       if (!contestPrediction || !contestPrediction.isResolved || !contestPrediction.resolution) {
         continue;
       }
@@ -721,8 +721,8 @@ class ContestScoringService {
     for (const participant of contest.participants) {
       let currentStreak = 0;
       const sortedPredictions = participant.predictions
-        .filter(p => {
-          const pred = contest.predictions.find(cp => cp.id === p.predictionId);
+        .filter((p: any) => {
+          const pred = contest.predictions.find((cp: any) => cp.id === p.predictionId);
           return pred?.isResolved;
         })
         .sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime());
@@ -749,8 +749,8 @@ class ContestScoringService {
 
     // Calculate rankings
     const rankings: ContestRanking[] = contest.participants
-      .filter(p => p.isActive)
-      .map(participant => ({
+      .filter((p: any) => p.isActive)
+      .map((participant: any) => ({
         rank: 0, // Will be set after sorting
         userId: participant.userId,
         username: participant.username,
@@ -797,8 +797,8 @@ class ContestScoringService {
       highestScore: rankings.length > 0 ? rankings[0].totalScore : 0,
       lowestScore: rankings.length > 0 ? rankings[rankings.length - 1].totalScore : 0,
       totalPredictions: contest.predictions.length,
-      resolvedPredictions: contest.predictions.filter(p => p.isResolved).length,
-      pendingPredictions: contest.predictions.filter(p => !p.isResolved).length
+      resolvedPredictions: contest.predictions.filter((p: any) => p.isResolved).length,
+      pendingPredictions: contest.predictions.filter((p: any) => !p.isResolved).length
     };
 
     return {
@@ -814,7 +814,7 @@ class ContestScoringService {
    */
   private isContestComplete(contest: Contest): boolean {
     if (contest.predictions.length === 0) return false;
-    return contest.predictions.every(p => p.isResolved);
+    return contest.predictions.every((p: any) => p.isResolved);
   }
 
   /**
@@ -828,8 +828,8 @@ class ContestScoringService {
     
     // Calculate final payouts
     const payouts: ContestPayout[] = leaderboard.rankings
-      .filter(ranking => ranking.potentialPayout && ranking.potentialPayout > 0)
-      .map(ranking => ({
+      .filter((ranking: any) => ranking.potentialPayout && ranking.potentialPayout > 0)
+      .map((ranking: any) => ({
         userId: ranking.userId,
         rank: ranking.rank,
         amount: ranking.potentialPayout || 0,
@@ -1020,7 +1020,7 @@ class ContestScoringService {
   }
 
   private calculatePotentialPayout(contest: Contest, rank: number): number {
-    const distribution = contest.prizePool.distribution.find(d => d.rank === rank);
+    const distribution = contest.prizePool.distribution.find((d: any) => d.rank === rank);
     return distribution ? distribution.amount : 0;
   }
 
@@ -1083,7 +1083,7 @@ class ContestScoringService {
   }
 
   getActiveContests(): Contest[] {
-    return Array.from(this.contests.values()).filter(c => c.status === 'active');
+    return Array.from(this.contests.values()).filter((c: any) => c.status === 'active');
   }
 
   getContestLeaderboard(contestId: string): ContestLeaderboard | null {
@@ -1109,7 +1109,7 @@ class ContestScoringService {
     lastUpdate: string;
   } {
     return {
-      contestsActive: Array.from(this.contests.values()).filter(c => c.status === 'active').length,
+      contestsActive: Array.from(this.contests.values()).filter((c: any) => c.status === 'active').length,
       gameResultsCached: this.gameResults.size,
       evaluationsCached: this.evaluationCache.size,
       lastUpdate: new Date().toISOString()

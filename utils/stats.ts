@@ -12,13 +12,13 @@ export interface TeamStats {
 }
 
 export const calculateLeagueStats = (league: League) => {
-    const stats: TeamStats[] = league.teams.map(team => {
+    const stats: TeamStats[] = league.teams.map((team: any) => {
         let totalPointsFor = 0;
         let totalPointsAgainst = 0;
         let highestWeek = { week: 0, score: 0 };
         let lowestWeek = { week: 0, score: Infinity };
 
-        league.schedule.forEach(matchup => {
+        league.schedule.forEach((matchup: any) => {
             if (matchup.week >= league.currentWeek) return;
 
             if (matchup.teamA.teamId === team.id) {

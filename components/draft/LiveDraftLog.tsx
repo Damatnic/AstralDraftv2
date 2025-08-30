@@ -8,7 +8,7 @@ interface LiveDraftLogProps {
   teams: Team[];
 }
 
-const LiveDraftLog: React.FC<LiveDraftLogProps> = ({ draftPicks, teams }) => {
+const LiveDraftLog: React.FC<LiveDraftLogProps> = ({ draftPicks, teams }: any) => {
     const completedPicks = draftPicks.filter((p: any) => p.playerId).sort((a, b) => b.overall - a.overall);
 
     return (

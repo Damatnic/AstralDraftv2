@@ -42,7 +42,6 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     myParticipant: null
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   const eventListenersRef = useRef<Array<{ event: string; callback: Function }>>([]);
 
   // Initialize connection on mount if autoConnect is enabled
@@ -54,8 +53,6 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     return () => {
       disconnect();
     };
-    // Intentionally minimal dependencies to avoid infinite loops
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoConnect, user]);
 
   // Setup event listeners
@@ -76,7 +73,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     ];
 
     // Add event listeners
-    listeners.forEach(({ event, callback }) => {
+    listeners.forEach(({ event, callback }: any) => {
       realTimeDraftService.on(event, callback);
     });
 
@@ -84,12 +81,10 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
 
     return () => {
       // Remove event listeners
-      eventListenersRef.current.forEach(({ event, callback }) => {
+      eventListenersRef.current.forEach(({ event, callback }: any) => {
         realTimeDraftService.off(event, callback);
       });
     };
-    // Intentionally minimal dependencies to avoid infinite loops
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update connection status periodically
@@ -108,7 +103,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
         isInRoom: inRoom,
         currentPick: room?.currentPick || null,
         isMyTurn: room ? isUserTurn(room, user?.id) : false,
-        myParticipant: room && user ? room.participants.find(p => p.userId === user.id) || null : null
+        myParticipant: room && user ? room.participants.find((p: any) => p.userId === user.id) || null : null
       }));
     }, 1000);
 
@@ -137,7 +132,6 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     if (autoReconnect) {
       setTimeout(() => connect(), 2000);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoReconnect]);
 
   const handleRoomJoined = useCallback((room: DraftRoom) => {
@@ -149,7 +143,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
       picks: room.picks,
       currentPick: room.currentPick,
       isMyTurn: isUserTurn(room, user?.id),
-      myParticipant: user ? room.participants.find(p => p.userId === user.id) || null : null,
+      myParticipant: user ? room.participants.find((p: any) => p.userId === user.id) || null : null,
       error: null
     }));
   }, [user]);
@@ -175,11 +169,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
       participants: data.room.participants,
       currentPick: data.room.currentPick,
       isMyTurn: isUserTurn(data.room, user?.id),
-      myParticipant: user ? data.room.participants.find(p => p.userId === user.id) || null : null
+      myParticipant: user ? data.room.participants.find((p: any) => p.userId === user.id) || null : null
     }));
 
     // Add system message for pick
-    const participant = data.room.participants.find(p => p.userId === data.pick.teamId);
+    const participant = data.room.participants.find((p: any) => p.userId === data.pick.teamId);
     const pickMessage: ChatMessage = {
       id: `pick_${Date.now()}`,
       userId: data.pick.teamId,
@@ -209,7 +203,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({
       ...prev,
       participants: data.participants,
-      myParticipant: user ? data.participants.find(p => p.userId === user.id) || null : null
+      myParticipant: user ? data.participants.find((p: any) => p.userId === user.id) || null : null
     }));
   }, [user]);
 
@@ -231,11 +225,12 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     }));
   }, [user]);
 
-  const handleDraftEvent = useCallback((_event: DraftEvent) => {
+  const handleDraftEvent = useCallback((event: DraftEvent) => {
+    console.log('Draft event received:', event);
     // Handle specific draft events as needed
   }, []);
 
-  const handleError = useCallback((error: unknown) => {
+  const handleError = useCallback((error: any) => {
     setState(prev => ({
       ...prev,
       error: error instanceof Error ? error.message : 'An error occurred'

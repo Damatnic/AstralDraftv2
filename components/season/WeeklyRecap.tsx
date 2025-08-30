@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
 interface WeeklyHighlight {
@@ -32,7 +32,7 @@ interface WeeklyRecapProps {
   week?: number;
 }
 
-const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }) => {
+const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }: any) => {
   const { state } = useAppState();
   const [selectedWeek, setSelectedWeek] = useState(week);
 
@@ -202,10 +202,10 @@ const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }) => {
           
           <select
             value={selectedWeek}
-            onChange={(e) => setSelectedWeek(Number(e.target.value))}
+            onChange={(e: any) => setSelectedWeek(Number(e.target.value))}
             className="px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
           >
-            {Array.from({ length: 17 }, (_, i) => i + 1).map(weekNum => (
+            {Array.from({ length: 17 }, (_, i) => i + 1).map((weekNum: any) => (
               <option key={weekNum} value={weekNum}>
                 Week {weekNum}
               </option>

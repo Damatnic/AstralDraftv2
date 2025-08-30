@@ -157,7 +157,7 @@ const ModernAuthView: React.FC = () => {
           setErrors({ general: result.error || 'Registration failed' });
         }
       }
-    } catch {
+    } catch (error) {
       setErrors({ general: 'An unexpected error occurred. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -416,7 +416,7 @@ const ModernAuthView: React.FC = () => {
           >
             <div className="flex items-center gap-4 mb-3">
               <div className="flex -space-x-2">
-                {[1, 2, 3].map(i => (
+                {[1, 2, 3].map((i: any) => (
                   <div key={i} className="w-8 h-8 rounded-full bg-white/30 border-2 border-white" />
                 ))}
               </div>

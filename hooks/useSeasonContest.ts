@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { seasonContestService, SeasonContest, BracketPick, AwardPick, PredictionSubmission } from '../services/seasonContestService';
+import { seasonContestService, SeasonContest, BracketPick, AwardPick } from '../services/seasonContestService';
 
 export interface UseSeasonContestOptions {
   userId: string;
@@ -20,7 +20,7 @@ export interface SeasonContestHookReturn {
   // Actions
   selectContest: (contestId: string) => void;
   joinContest: (contestId: string) => Promise<boolean>;
-  submitWeeklyPredictions: (week: number, predictions: { [categoryId: string]: PredictionSubmission }) => Promise<boolean>;
+  submitWeeklyPredictions: (week: number, predictions: { [categoryId: string]: any }) => Promise<boolean>;
   submitBracketPredictions: (picks: BracketPick[]) => Promise<boolean>;
   submitAwardPredictions: (picks: AwardPick[]) => Promise<boolean>;
   
@@ -60,8 +60,8 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
       // Get available contests (not joined by user)
       const allActiveContests = seasonContestService.getActiveContests();
-      const available = allActiveContests.filter(contest => 
-        !userContestsList.some(uc => uc.id === contest.id)
+      const available = allActiveContests.filter((contest: any) => 
+        !userContestsList.some((uc: any) => uc.id === contest.id)
       );
       setAvailableContests(available);
 
@@ -94,7 +94,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
   // Select contest
   const selectContest = useCallback((contestId: string) => {
-    const contest = userContests.find(c => c.id === contestId);
+    const contest = userContests.find((c: any) => c.id === contestId);
     if (contest) {
       setSelectedContest(contest);
     }
@@ -106,7 +106,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
       setSubmitting(true);
       setError(null);
 
-      const contest = availableContests.find(c => c.id === contestId);
+      const contest = availableContests.find((c: any) => c.id === contestId);
       if (!contest) {
         throw new Error('Contest not found');
       }
@@ -143,7 +143,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
   // Submit weekly predictions
   const submitWeeklyPredictions = useCallback(async (
     week: number, 
-    predictions: { [categoryId: string]: PredictionSubmission }
+    predictions: { [categoryId: string]: any }
   ): Promise<boolean> => {
     if (!selectedContest) {
       setError('No contest selected');
@@ -244,36 +244,36 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
   // Get user's rank in contest
   const getUserRank = useCallback((contestId?: string): number => {
     const contest = contestId ? 
-      userContests.find(c => c.id === contestId) : 
+      userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
     
     if (!contest) return 0;
     
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     return participant?.currentRank || 0;
   }, [userContests, selectedContest, userId]);
 
   // Get user's total score in contest
   const getUserScore = useCallback((contestId?: string): number => {
     const contest = contestId ? 
-      userContests.find(c => c.id === contestId) : 
+      userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
     
     if (!contest) return 0;
     
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     return participant?.totalScore || 0;
   }, [userContests, selectedContest, userId]);
 
   // Get user's weekly score
   const getWeeklyScore = useCallback((week: number, contestId?: string): number => {
     const contest = contestId ? 
-      userContests.find(c => c.id === contestId) : 
+      userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
     
     if (!contest) return 0;
     
-    const participant = contest.participants.find(p => p.userId === userId);
+    const participant = contest.participants.find((p: any) => p.userId === userId);
     return participant?.weeklyScores[week] || 0;
   }, [userContests, selectedContest, userId]);
 

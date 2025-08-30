@@ -30,10 +30,10 @@ interface PlayerSearchResult extends Player {
 const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
     league,
     currentTeam,
-    proposal: _proposal,
+    proposal,
     onProposalUpdate,
-    dispatch: _dispatch
-}) => {
+    dispatch
+}: any) => {
     const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
     const [fromPlayers, setFromPlayers] = React.useState<Player[]>([]);
     const [toPlayers, setToPlayers] = React.useState<Player[]>([]);
@@ -205,7 +205,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             {/* Team Selection */}
             <Widget title="Trade Partner" className="bg-[var(--panel-bg)]">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-4">
-                    {availableTeams.map((team) => (
+                    {availableTeams.map((team: any) => (
                         <motion.button
                             key={team.id}
                             onClick={() => setSelectedTeam(team)}
@@ -254,7 +254,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                                     </div>
                                     
                                     <div className="space-y-2">
-                                        {fromPlayers.map((player) => (
+                                        {fromPlayers.map((player: any) => (
                                             <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                                                 <div className="flex items-center gap-3">
                                                     <Avatar avatar="🏈" className="w-8 h-8 rounded-full" />
@@ -344,7 +344,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                                     </div>
                                     
                                     <div className="space-y-2">
-                                        {toPlayers.map((player) => (
+                                        {toPlayers.map((player: any) => (
                                             <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                                                 <div className="flex items-center gap-3">
                                                     <Avatar avatar="🏈" className="w-8 h-8 rounded-full" />
@@ -524,7 +524,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                             
                             <div className="p-4 max-h-96 overflow-y-auto">
                                 <div className="space-y-2">
-                                    {filteredPlayers.map((player) => (
+                                    {filteredPlayers.map((player: any) => (
                                         <button
                                             key={player.id}
                                             onClick={() => addPlayer(player, showPlayerSearch)}

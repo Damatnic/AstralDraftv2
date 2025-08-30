@@ -17,8 +17,8 @@ interface TradeComment {
   timestamp: Date;
   isCounterOffer?: boolean;
   counterOfferDetails?: {
-    playersOffered: unknown[];
-    playersRequested: unknown[];
+    playersOffered: any[];
+    playersRequested: any[];
   };
   reactions: {
     [emoji: string]: string[]; // emoji: array of user IDs
@@ -35,7 +35,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   tradeId, 
   isVisible, 
   onClose 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [newMessage, setNewMessage] = useState('');
   const [showCounterOffer, setShowCounterOffer] = useState(false);
@@ -113,20 +113,18 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   const handleSendMessage = () => {
     if (!newMessage.trim() || !currentUser) return;
 
-    // TODO: Implement comment creation and sending
-    // const newComment: TradeComment = {
-    //   id: `comment-${Date.now()}`,
-    //   tradeId,
-    //   userId: currentUser.id,
-    //   userName: currentUser.name,
-    //   userAvatar: currentUser.avatar,
-    //   message: newMessage.trim(),
-    //   timestamp: new Date(),
-    //   reactions: {}
-    // };
+    const newComment: TradeComment = {
+      id: `comment-${Date.now()}`,
+      tradeId,
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userAvatar: currentUser.avatar,
+      message: newMessage.trim(),
+      timestamp: new Date(),
+      reactions: {}
+    };
 
     // In a real app, this would be sent to the backend
-    // Comment added successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -139,11 +137,10 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
     setNewMessage('');
   };
 
-  const handleReaction = (_commentId: string, _emoji: string) => {
+  const handleReaction = (commentId: string, emoji: string) => {
     if (!currentUser) return;
 
     // In a real app, this would update the backend
-    // Reaction added successfully
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -230,7 +227,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <h5 className="text-blue-400 font-semibold mb-2">Offering:</h5>
-                        {comment.counterOfferDetails.playersOffered.map(player => (
+                        {comment.counterOfferDetails.playersOffered.map((player: any) => (
                           <div key={player.id} className="text-white">
                             {player.name} ({player.position})
                           </div>
@@ -241,7 +238,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                       </div>
                       <div>
                         <h5 className="text-blue-400 font-semibold mb-2">For:</h5>
-                        {comment.counterOfferDetails.playersRequested.map(player => (
+                        {comment.counterOfferDetails.playersRequested.map((player: any) => (
                           <div key={player.id} className="text-white">
                             {player.name} ({player.position})
                           </div>
@@ -278,7 +275,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                       <span className="text-lg">😊</span>
                     </button>
                     <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600">
-                      {reactionEmojis.map(emoji => (
+                      {reactionEmojis.map((emoji: any) => (
                         <button
                           key={emoji}
                           onClick={() => handleReaction(comment.id, emoji)}
@@ -302,10 +299,10 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
             <div className="flex-1">
               <textarea
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={(e: any) => setNewMessage(e.target.value)}
                 placeholder="Add a comment to the discussion..."
                 className="form-input h-20 resize-none mb-3"
-                onKeyPress={(e) => {
+                onKeyPress={(e: any) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSendMessage();

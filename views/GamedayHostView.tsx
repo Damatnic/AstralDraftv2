@@ -5,20 +5,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
+import { generateGamedayHighlight } from '../services/geminiService';
 import { Avatar } from '../components/ui/Avatar';
 import { formatRelativeTime } from '../utils/time';
+import type { Player, GamedayEvent } from '../types';
 import { useLiveData } from '../hooks/useLiveData';
 
 const GamedayHostView: React.FC = () => {
     const { state, dispatch } = useAppState();
     const { league, myTeam } = useLeague();
 
-    const matchup = league?.schedule.find(m =>
+    const matchup = league?.schedule.find((m: any) =>
         m.week === league.currentWeek &&
         (m.teamA.teamId === myTeam?.id || m.teamB.teamId === myTeam?.id)
     );
     const opponentId = matchup?.teamA.teamId === myTeam?.id ? matchup?.teamB.teamId : matchup?.teamA.teamId;
-    const opponentTeam = league?.teams.find(t => t.id === opponentId);
+    const opponentTeam = league?.teams.find((t: any) => t.id === opponentId);
 
     // Use the live data hook
     useLiveData(league, myTeam, opponentTeam);
@@ -27,7 +29,17 @@ const GamedayHostView: React.FC = () => {
     const latestEvent = events.length > 0 ? events[events.length - 1] : null;
 
     React.useEffect(() => {
-        // Live data processing effects can be added here
+        // This effect will run when a new event is added from the live data hook
+        const processNewEvent = async (event: GamedayEvent) => {
+            if (!matchup || !myTeam || !opponentTeam) return;
+
+            const commentary = await generateGamedayHighlight({ teamA: myTeam, teamB: opponentTeam }, event.player);
+            if (commentary) {
+                // We can update the event with the commentary or handle it separately
+                // For simplicity, let's just log it for now but it could be displayed
+            }
+        };
+
         if (latestEvent && !latestEvent.text.includes("commentary")) { // Simple check to avoid reprocessing
              // In a real app, you might have a better way to check if commentary exists
         }
@@ -70,7 +82,7 @@ const GamedayHostView: React.FC = () => {
                         >
                             {latestEvent ? (
                                 <>
-                                    <Avatar avatar={league.teams.find(t => t.id === latestEvent.teamId)?.avatar || '🏈'} className="w-24 h-24 text-6xl mx-auto rounded-lg mb-4" />
+                                    <Avatar avatar={league.teams.find((t: any) => t.id === latestEvent.teamId)?.avatar || '🏈'} className="w-24 h-24 text-6xl mx-auto rounded-lg mb-4" />
                                     <p className="font-display text-3xl font-bold">{latestEvent.text}</p>
                                 </>
                             ) : (
@@ -82,8 +94,8 @@ const GamedayHostView: React.FC = () => {
                 <div className="glass-pane rounded-2xl flex flex-col">
                     <h3 className="p-3 font-bold text-center border-b border-[var(--panel-border)]">Event Timeline</h3>
                     <div className="flex-grow p-2 space-y-2 overflow-y-auto">
-                        {events.slice().reverse().map(event => {
-                            const team = league.teams.find(t => t.id === event.teamId);
+                        {events.slice().reverse().map((event: any) => {
+                            const team = league.teams.find((t: any) => t.id === event.teamId);
                             return (
                                 <div key={event.id} className="p-2 bg-black/20 rounded-md text-sm">
                                     <div className="flex justify-between items-center text-xs text-gray-400 mb-1">

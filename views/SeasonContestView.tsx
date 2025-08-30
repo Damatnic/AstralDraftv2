@@ -58,7 +58,7 @@ const SeasonContestView: React.FC = () => {
             description: 'Highest scoring team each week wins the pot',
             type: 'weekly',
             prize: 20,
-            participants: league.teams.map(t => t.owner.name),
+            participants: league.teams.map((t: any) => t.owner.name),
             leader: {
                 teamId: 1,
                 teamName: 'Thunder Bolts',
@@ -73,7 +73,7 @@ const SeasonContestView: React.FC = () => {
             description: 'Team with most total points at end of regular season',
             type: 'season',
             prize: 50,
-            participants: league.teams.map(t => t.owner.name),
+            participants: league.teams.map((t: any) => t.owner.name),
             leader: {
                 teamId: 2,
                 teamName: 'Storm Chasers',
@@ -97,7 +97,7 @@ const SeasonContestView: React.FC = () => {
             description: 'Pick one team to win each week, can only use each team once',
             type: 'season',
             prize: 100,
-            participants: league.teams.map(t => t.owner.name),
+            participants: league.teams.map((t: any) => t.owner.name),
             leader: {
                 teamId: 3,
                 teamName: 'Lightning Strikes',
@@ -179,7 +179,7 @@ const SeasonContestView: React.FC = () => {
                         </div>
                         <div className="text-center p-3 bg-white/5 rounded-lg">
                             <div className="text-2xl font-bold text-purple-400">
-                                {contests.filter(c => c.participants.includes(state.user?.name || '')).length}
+                                {contests.filter((c: any) => c.participants.includes(state.user?.name || '')).length}
                             </div>
                             <div className="text-sm text-[var(--text-secondary)]">Your Contests</div>
                         </div>
@@ -272,7 +272,7 @@ const SeasonContestView: React.FC = () => {
                                         </span>
                                     ) : (
                                         <button
-                                            onClick={(e) => {
+                                            onClick={(e: any) => {
                                                 e.stopPropagation();
                                                 handleJoinContest(contest.id);
                                             }}
@@ -309,7 +309,7 @@ const SeasonContestView: React.FC = () => {
                                     <input
                                         type="text"
                                         value={newContest.name}
-                                        onChange={(e) => setNewContest(prev => ({ ...prev, name: e.target.value }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, name: e.target.value }))}
                                         className="glass-input w-full"
                                         placeholder="e.g., Weekly High Score"
                                     />
@@ -321,7 +321,7 @@ const SeasonContestView: React.FC = () => {
                                     </label>
                                     <textarea
                                         value={newContest.description}
-                                        onChange={(e) => setNewContest(prev => ({ ...prev, description: e.target.value }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, description: e.target.value }))}
                                         className="glass-input w-full h-20"
                                         placeholder="Describe the contest rules..."
                                     />
@@ -333,7 +333,7 @@ const SeasonContestView: React.FC = () => {
                                     </label>
                                     <select
                                         value={newContest.type}
-                                        onChange={(e) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }))}
                                         className="glass-input w-full"
                                     >
                                         <option value="weekly">Weekly</option>
@@ -349,7 +349,7 @@ const SeasonContestView: React.FC = () => {
                                     <input
                                         type="number"
                                         value={newContest.prize}
-                                        onChange={(e) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }))}
                                         className="glass-input w-full"
                                         min="0"
                                         step="5"
@@ -388,7 +388,7 @@ const SeasonContestView: React.FC = () => {
                             initial={{ scale: 0.9 }}
                             animate={{ scale: 1 }}
                             className="glass-pane p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e: any) => e.stopPropagation()}
                         >
                             <div className="flex items-start justify-between mb-4">
                                 <div>

@@ -22,9 +22,9 @@ const MatchupCard: React.FC<{
     league: ReturnType<typeof useLeague>['league'],
     onSwap?: () => void,
     isPlayoffs?: boolean 
-}> = ({ matchup, league, onSwap, isPlayoffs }) => {
-    const teamA = league?.teams.find(t => t.id === matchup.teamA.teamId);
-    const teamB = league?.teams.find(t => t.id === matchup.teamB.teamId);
+}> = ({ matchup, league, onSwap, isPlayoffs }: any) => {
+    const teamA = league?.teams.find((t: any) => t.id === matchup.teamA.teamId);
+    const teamB = league?.teams.find((t: any) => t.id === matchup.teamB.teamId);
 
     if (!teamA || !teamB) return null;
 
@@ -106,8 +106,8 @@ const ScheduleManagementView: React.FC = () => {
         );
     }
 
-    const weeklyMatchups = league.schedule.filter(m => m.week === selectedWeek);
-    const maxWeek = Math.max(...league.schedule.map(m => m.week));
+    const weeklyMatchups = league.schedule.filter((m: any) => m.week === selectedWeek);
+    const maxWeek = Math.max(...league.schedule.map((m: any) => m.week));
     const isPlayoffWeek = selectedWeek >= 15; // Weeks 15-17 are playoffs
 
     const handleRegenerate = () => {
@@ -125,7 +125,6 @@ const ScheduleManagementView: React.FC = () => {
 
     const handleSwapMatchup = (index: number) => {
         // Logic to swap teams in a matchup
-        // Swapping matchup at index
     };
 
     return (
@@ -193,11 +192,11 @@ const ScheduleManagementView: React.FC = () => {
                                 
                                 <select
                                     value={selectedWeek}
-                                    onChange={(e) => setSelectedWeek(Number(e.target.value))}
+                                    onChange={(e: any) => setSelectedWeek(Number(e.target.value))}
                                     className="glass-input px-4 py-2"
                                 >
-                                    {Array.from({ length: maxWeek }, (_, i) => i + 1).map(week => (
-                                        <option key={`game-${index}`} value={week}>
+                                    {Array.from({ length: maxWeek }, (_, i) => i + 1).map((week: any) => (
+                                        <option key={week} value={week}>
                                             Week {week} {week >= 15 ? '(Playoffs)' : ''}
                                         </option>
                                     ))}
@@ -243,7 +242,7 @@ const ScheduleManagementView: React.FC = () => {
                     {/* Matchups List */}
                     <div className="p-4 space-y-3">
                         <AnimatePresence mode="wait">
-                            {weeklyMatchups.map((game, index) => (
+                            {weeklyMatchups.map((matchup, index) => (
                                 <MatchupCard 
                                     key={`${matchup.week}-${index}`}
                                     matchup={matchup} 

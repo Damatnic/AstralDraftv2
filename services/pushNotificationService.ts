@@ -48,7 +48,7 @@ class PushNotificationService {
 
       // Register service worker
       this.registration = await navigator.serviceWorker.register('/sw.js');
-      // Service worker registered
+      console.log('Service worker registered:', this.registration);
 
       // Wait for service worker to be ready
       await navigator.serviceWorker.ready;
@@ -75,7 +75,7 @@ class PushNotificationService {
       permission = await Notification.requestPermission();
     }
 
-    // Notification permission status
+    console.log('Notification permission:', permission);
     return permission;
   }
 
@@ -92,7 +92,7 @@ class PushNotificationService {
       this.subscription = await this.registration.pushManager.getSubscription();
       
       if (this.subscription) {
-        // Already subscribed to push notifications
+        console.log('Already subscribed to push notifications');
         return this.subscription;
       }
 
@@ -102,7 +102,7 @@ class PushNotificationService {
         applicationServerKey: this.urlBase64ToUint8Array(this.vapidPublicKey)
       });
 
-      // Subscribed to push notifications
+      console.log('Subscribed to push notifications:', this.subscription);
 
       // Send subscription to server
       await this.sendSubscriptionToServer(this.subscription);
@@ -120,14 +120,14 @@ class PushNotificationService {
   async unsubscribe(): Promise<boolean> {
     try {
       if (!this.subscription) {
-        // Not subscribed to push notifications
+        console.log('Not subscribed to push notifications');
         return true;
       }
 
       const success = await this.subscription.unsubscribe();
       
       if (success) {
-        // Unsubscribed from push notifications
+        console.log('Unsubscribed from push notifications');
         this.subscription = null;
         
         // Remove subscription from server
@@ -136,7 +136,7 @@ class PushNotificationService {
 
       return success;
     } catch (error) {
-      // Failed to unsubscribe from push notifications
+      console.error('Failed to unsubscribe from push notifications:', error);
       return false;
     }
   }
@@ -165,9 +165,9 @@ class PushNotificationService {
       };
 
       await this.registration.showNotification(payload.title, options);
-      // Local notification shown
+      console.log('Local notification shown:', payload.title);
     } catch (error) {
-      // Failed to show notification
+      console.error('Failed to show notification:', error);
     }
   }
 
@@ -176,7 +176,7 @@ class PushNotificationService {
    */
   getNotificationTemplate(type: string, data: any): NotificationPayload {
     const templates: { [key: string]: (data: any) => NotificationPayload } = {
-      trade_proposal: (data) => ({
+      trade_proposal: (data: any) => ({
         title: '🔄 New Trade Proposal',
         body: `${data.fromTeam} wants to trade with you!`,
         icon: '/icon-trade.png',
@@ -189,7 +189,7 @@ class PushNotificationService {
         requireInteraction: true
       }),
 
-      trade_accepted: (data) => ({
+      trade_accepted: (data: any) => ({
         title: '✅ Trade Accepted',
         body: `Your trade with ${data.otherTeam} was accepted!`,
         icon: '/icon-trade.png',
@@ -201,7 +201,7 @@ class PushNotificationService {
         ]
       }),
 
-      waiver_result: (data) => ({
+      waiver_result: (data: any) => ({
         title: data.success ? '✅ Waiver Claim Successful' : '❌ Waiver Claim Failed',
         body: data.success 
           ? `You successfully claimed ${data.playerName}!`
@@ -215,7 +215,7 @@ class PushNotificationService {
         ]
       }),
 
-      score_update: (data) => ({
+      score_update: (data: any) => ({
         title: '🏈 Score Update',
         body: `${data.playerName} just scored! Your team: ${data.currentScore} pts`,
         icon: '/icon-score.png',
@@ -228,7 +228,7 @@ class PushNotificationService {
         vibrate: [100, 50, 100, 50, 100]
       }),
 
-      matchup_reminder: (data) => ({
+      matchup_reminder: (data: any) => ({
         title: '⏰ Lineup Reminder',
         body: `Don't forget to set your lineup! Game starts in ${data.timeUntil}.`,
         icon: '/icon-lineup.png',
@@ -241,7 +241,7 @@ class PushNotificationService {
         requireInteraction: true
       }),
 
-      message_received: (data) => ({
+      message_received: (data: any) => ({
         title: '💬 New Message',
         body: `${data.senderName}: ${data.messagePreview}`,
         icon: '/icon-message.png',
@@ -253,7 +253,7 @@ class PushNotificationService {
         ]
       }),
 
-      draft_reminder: (data) => ({
+      draft_reminder: (data: any) => ({
         title: '🏈 Draft Starting Soon',
         body: `Your draft starts in ${data.timeUntil}. Get ready!`,
         icon: '/icon-draft.png',
@@ -267,7 +267,7 @@ class PushNotificationService {
         vibrate: [300, 100, 300, 100, 300]
       }),
 
-      weekly_recap: (data) => ({
+      weekly_recap: (data: any) => ({
         title: '📊 Weekly Recap Available',
         body: `Week ${data.week} recap is ready! See how you performed.`,
         icon: '/icon-recap.png',
@@ -348,9 +348,9 @@ class PushNotificationService {
         throw new Error('Failed to save subscription');
       }
 
-      // Subscription saved to server
+      console.log('Subscription saved to server');
     } catch (error) {
-      // Failed to send subscription to server
+      console.error('Failed to send subscription to server:', error);
       // Store locally as fallback
       localStorage.setItem('push_subscription', JSON.stringify(subscription));
     }
@@ -371,9 +371,9 @@ class PushNotificationService {
         })
       });
 
-      // Subscription removed from server
+      console.log('Subscription removed from server');
     } catch (error) {
-      // Failed to remove subscription from server
+      console.error('Failed to remove subscription from server:', error);
       // Remove from local storage as fallback
       localStorage.removeItem('push_subscription');
     }

@@ -17,7 +17,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
   children,
   onRefresh,
   showPullToRefresh = true
-}) => {
+}: any) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { isPortrait, safeAreaInsets, isMobile } = useMobileViewport();
   const [isInteracting, setIsInteracting] = React.useState(false);

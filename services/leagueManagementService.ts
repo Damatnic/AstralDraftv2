@@ -530,19 +530,19 @@ export class LeagueManagementService {
 
     async getUserLeagues(userId: string): Promise<League[]> {
         return Array.from(this.leagues.values()).filter(
-            league => league.members.some(member => member.userId === userId)
+            league => league.members.some((member: any) => member.userId === userId)
         );
     }
 
     async getPublicLeagues(): Promise<League[]> {
         return Array.from(this.leagues.values())
-            .filter(league => league.isPublic && league.members.length < league.maxMembers)
+            .filter((league: any) => league.isPublic && league.members.length < league.maxMembers)
             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     }
 
     async getUserInvitations(email: string): Promise<LeagueInvitation[]> {
         return Array.from(this.invitations.values())
-            .filter(inv => inv.invitedEmail === email && inv.status === 'pending')
+            .filter((inv: any) => inv.invitedEmail === email && inv.status === 'pending')
             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     }
 

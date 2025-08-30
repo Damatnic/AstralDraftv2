@@ -6,7 +6,6 @@ import type { Player, Team, GroundingChunk } from '../../types';
 import { streamOracleResponse } from '../../services/geminiService';
 import ReactMarkdown from 'react-markdown';
 import GroundingCitations from '../ui/GroundingCitations';
-import { logger } from '../../services/loggingService';
 
 interface Message {
     id: number;
@@ -21,7 +20,7 @@ interface ConversationalOracleProps {
     availablePlayers: Player[];
 }
 
-const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }) => {
+const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }: any) => {
     const [messages, setMessages] = React.useState<Message[]>([
         { id: 1, sender: 'ai', text: "Welcome to the Oracle. Ask me anything about your draft strategy." }
     ]);
@@ -44,13 +43,14 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
         const userMessage: Message = { id: Date.now(), sender: 'user', text: input };
         const aiMessagePlaceholder: Message = { id: Date.now() + 1, sender: 'ai', text: '', isLoading: true, groundingChunks: [] };
 
-        setMessages([...messages, userMessage, aiMessagePlaceholder]);
+        const currentMessages = [...messages, userMessage];
+        setMessages([...currentMessages, aiMessagePlaceholder]);
         setInput('');
         setIsSending(true);
 
         try {
             // Prepare history for the API call, excluding the initial welcome message
-            const historyForApi = messages.slice(1).map((m: Message) => ({ sender: m.sender, text: m.text }));
+            const historyForApi = currentMessages.slice(1).map((m: any) => ({ sender: m.sender, text: m.text }));
 
             const stream = await streamOracleResponse(historyForApi, input, myTeam, availablePlayers);
             let fullText = "";
@@ -61,20 +61,19 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
                 if (newChunks) {
                     collectedChunks.push(...newChunks);
                 }
-                setMessages(prev => prev.map((msg: Message) => 
+                setMessages(prev => prev.map((msg: any) => 
                     msg.id === aiMessagePlaceholder.id ? { ...msg, text: fullText } : msg
                 ));
             }
 
-            const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: GroundingChunk) => c.web && c.web.uri).map((item: GroundingChunk) => [item.web!.uri!, item])).values());
+            const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: any) => c.web && c.web.uri).map((item: any) => [item.web!.uri!, item])).values());
 
-            setMessages(prev => prev.map((msg: Message) => 
+            setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id ? { ...msg, isLoading: false, groundingChunks: uniqueChunks } : msg
             ));
 
         } catch (error) {
-            logger.error("Error calling Gemini API:", error);
-            setMessages(prev => prev.map((msg: Message) => 
+            setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id 
                 ? { ...msg, text: "My apologies, I'm having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
                 : msg
@@ -90,7 +89,7 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
                 <h3 className="font-display text-lg font-bold">THE ORACLE</h3>
             </div>
             <div className="flex-grow p-2 space-y-4 overflow-y-auto">
-                 {messages.map((msg) => (
+                 {messages.map((msg: any) => (
                     <div key={msg.id} className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                         {msg.sender === 'ai' && <span className="text-lg mt-1 self-start flex-shrink-0">🔮</span>}
                         <div className={`max-w-[85%] p-2.5 rounded-lg text-sm leading-relaxed ${msg.sender === 'user' ? 'bg-cyan-600' : 'bg-black/20'}`}>

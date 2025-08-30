@@ -10,7 +10,7 @@ interface WeeklyReportDisplayProps {
     report: WeeklyReportData;
 }
 
-const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => {
+const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }: any) => {
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -21,14 +21,14 @@ const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => 
 
             <div className="max-w-3xl mx-auto">
                 <p className="text-sm text-gray-300 leading-relaxed mb-8 whitespace-pre-wrap text-center italic">
-                    &quot;{report.summary}&quot;
+                    "{report.summary}"
                 </p>
                 
                 {report.powerPlay && (
                     <div className="mb-8 p-4 bg-purple-500/10 border border-purple-400/20 rounded-lg text-center">
                         <h3 className="font-bold text-lg text-purple-300 mb-1 flex items-center justify-center gap-2"><ZapIcon /> Power Play of the Week</h3>
                         <p className="font-semibold text-white">{report.powerPlay.move} by {report.powerPlay.teamName}</p>
-                        <p className="text-xs text-gray-400 mt-1 italic">&quot;{report.powerPlay.rationale}&quot;</p>
+                        <p className="text-xs text-gray-400 mt-1 italic">"{report.powerPlay.rationale}"</p>
                     </div>
                 )}
 
@@ -39,7 +39,7 @@ const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => 
                         <FlameIcon />
                         <h3 className="font-bold text-lg text-cyan-300 mt-2 mb-1">Game of the Week</h3>
                         <p className="font-semibold text-white">{report.gameOfWeek.teamAName} vs. {report.gameOfWeek.teamBName}</p>
-                        <p className="text-xs text-gray-400 mt-1">&quot;{report.gameOfWeek.reason}&quot;</p>
+                        <p className="text-xs text-gray-400 mt-1">"{report.gameOfWeek.reason}"</p>
                     </div>
 
                     {/* Player of the Week */}
@@ -48,7 +48,7 @@ const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => 
                         <h3 className="font-bold text-lg text-yellow-300 mt-2 mb-1">Player of the Week</h3>
                         <p className="font-semibold text-white">{report.playerOfWeek.playerName}</p>
                         <p className="text-xs text-gray-400">{report.playerOfWeek.teamName} - {report.playerOfWeek.stats} points</p>
-                        <p className="text-xs text-gray-400 mt-1">&quot;{report.playerOfWeek.reason}&quot;</p>
+                        <p className="text-xs text-gray-400 mt-1">"{report.playerOfWeek.reason}"</p>
                     </div>
                 </div>
             </div>

@@ -117,7 +117,7 @@ class RealTimeNflDataService {
   private initializeConnection(): void {
     // In production, this would connect to a real WebSocket server
     // For now, we'll use polling as a fallback with simulation of WebSocket events
-    // Initializing real-time NFL data connection
+    console.log('🔄 Initializing real-time NFL data connection...');
     
     // Simulate WebSocket connection
     this.wsConnection.isConnected = true;
@@ -171,12 +171,12 @@ class RealTimeNflDataService {
           this.gameDataCache.set(game.id, liveGameData);
           
           // Emit game events
-          events.forEach(event => {
+          events.forEach((event: any) => {
             this.emit('game_event', event);
           });
           
           // Emit score updates
-          if (events.some(e => e.type === 'SCORE_UPDATE')) {
+          if (events.some((e: any) => e.type === 'SCORE_UPDATE')) {
             this.emit('score_update', {
               gameId: game.id,
               homeScore: game.homeScore,
@@ -361,8 +361,8 @@ class RealTimeNflDataService {
     try {
       const allPlayers = await productionSportsDataService.getPlayerUpdates();
       return allPlayers
-        .filter(player => this.findPlayerGameId(player.id) === gameId)
-        .map(player => ({
+        .filter((player: any) => this.findPlayerGameId(player.id) === gameId)
+        .map((player: any) => ({
           playerId: player.id,
           name: player.name,
           team: player.team,
@@ -427,7 +427,7 @@ class RealTimeNflDataService {
   private emit(eventType: string, data: any): void {
     const listeners = this.eventListeners.get(eventType);
     if (listeners) {
-      listeners.forEach(callback => {
+      listeners.forEach((callback: any) => {
         try {
           callback(data);
         } catch (error) {
@@ -476,7 +476,7 @@ class RealTimeNflDataService {
     if (!this.wsConnection.isConnected) {
       this.initializeConnection();
     }
-    // Real-time NFL data service started
+    console.log('🚀 Real-time NFL data service started');
   }
 
   /**
@@ -484,7 +484,7 @@ class RealTimeNflDataService {
    */
   public stop(): void {
     // Clear all intervals
-    Object.values(this.intervals).forEach(interval => {
+    Object.values(this.intervals).forEach((interval: any) => {
       clearInterval(interval);
     });
     this.intervals = {};
@@ -496,7 +496,7 @@ class RealTimeNflDataService {
     }
     
     this.wsConnection.isConnected = false;
-    // Real-time NFL data service stopped
+    console.log('🛑 Real-time NFL data service stopped');
   }
 
   /**

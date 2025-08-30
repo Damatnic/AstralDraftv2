@@ -20,7 +20,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   onInstall,
   onDismiss,
   showOfflineStatus = true
-}) => {
+}: any) => {
   const { isInstallable, isInstalled, promptInstall } = usePWAInstall();
   const { isOffline } = useOfflineStatus();
   const [dismissed, setDismissed] = React.useState(false);
@@ -140,7 +140,7 @@ interface PWAStatusBannerProps {
 
 export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   className = ''
-}) => {
+}: any) => {
   const { isOffline } = useOfflineStatus();
   const [showBanner, setShowBanner] = React.useState(false);
 
@@ -165,7 +165,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
         {isOffline ? (
           <>
             <span className="pwa-status-banner__icon" aria-hidden="true">📱</span>
-            <span>You&apos;re offline. Some features may be limited.</span>
+            <span>You're offline. Some features may be limited.</span>
           </>
         ) : (
           <>

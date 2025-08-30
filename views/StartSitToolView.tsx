@@ -18,10 +18,10 @@ const PlayerList: React.FC<{
     onSelect: (id: number) => void;
     selectedId: number | null;
     disabledId: number | null;
-}> = ({ roster, onSelect, selectedId, disabledId }) => {
+}> = ({ roster, onSelect, selectedId, disabledId }: any) => {
     return (
         <div className="space-y-2 h-96 overflow-y-auto pr-2">
-            {roster.map(p => (
+            {roster.map((p: any) => (
                 <button
                     key={p.id}
                     onClick={() => onSelect(p.id)}
@@ -42,7 +42,7 @@ const PlayerList: React.FC<{
     );
 };
 
-const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () => void; label: string; weeklyProjection: number | undefined }> = ({ player, onClear, label, weeklyProjection }) => (
+const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () => void; label: string; weeklyProjection: number | undefined }> = ({ player, onClear, label, weeklyProjection }: any) => (
      <div className="glass-pane rounded-xl p-4 flex flex-col items-center justify-center h-48">
         {player ? (
             <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
@@ -66,7 +66,7 @@ const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () =>
 );
 
 
-const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; weeklyProjection: number | undefined; }> = ({ player, isRecommended, weeklyProjection }) => (
+const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; weeklyProjection: number | undefined; }> = ({ player, isRecommended, weeklyProjection }: any) => (
     <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${isRecommended ? 'border-green-400 bg-green-500/10 shadow-lg shadow-green-500/20' : 'border-gray-600/50 opacity-60'}`}>
         {isRecommended && <div className="absolute top-2 right-2 px-2 py-0.5 text-xs font-bold bg-green-400 text-black rounded-full">RECOMMENDED</div>}
         <div className="flex flex-col items-center text-center">
@@ -86,7 +86,7 @@ const AdviceDisplay: React.FC<{
     playerB: Player;
     playerAProj: number | undefined;
     playerBProj: number | undefined;
-}> = ({ advice, playerA, playerB, playerAProj, playerBProj }) => {
+}> = ({ advice, playerA, playerB, playerAProj, playerBProj }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const isPlayerARecommended = advice.recommendedPlayerId === playerA.id;
     
@@ -110,7 +110,7 @@ const AdviceDisplay: React.FC<{
                         )}
                         <RecommendedPlayerCard player={playerB} isRecommended={!isPlayerARecommended} weeklyProjection={playerBProj}/>
                     </div>
-                    <p className="text-sm text-gray-300 italic text-center mt-4 pt-4 border-t border-white/10">&quot;{advice.summary}&quot;</p>
+                    <p className="text-sm text-gray-300 italic text-center mt-4 pt-4 border-t border-white/10">"{advice.summary}"</p>
                 </div>
             </Widget>
         </motion.div>
@@ -118,7 +118,7 @@ const AdviceDisplay: React.FC<{
 };
 
 
-const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const [playerAId, setPlayerAId] = React.useState<number | null>(null);
     const [playerBId, setPlayerBId] = React.useState<number | null>(null);
@@ -127,8 +127,8 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
 
     const handleGetAdvice = async () => {
         if (!playerAId || !playerBId) return;
-        const playerA = myTeam.roster.find(p => p.id === playerAId);
-        const playerB = myTeam.roster.find(p => p.id === playerBId);
+        const playerA = myTeam.roster.find((p: any) => p.id === playerAId);
+        const playerB = myTeam.roster.find((p: any) => p.id === playerBId);
         if (!playerA || !playerB) return;
 
         setIsLoading(true);
@@ -137,15 +137,14 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
             const result = await getStartSitAdvice(playerA, playerB, league);
             setAdvice(result);
         } catch (e) {
-            console.error("Error getting start/sit advice:", e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "The Oracle could not be reached.", type: 'SYSTEM' } });
         } finally {
             setIsLoading(false);
         }
     };
     
-    const playerA = myTeam.roster.find(p => p.id === playerAId);
-    const playerB = myTeam.roster.find(p => p.id === playerBId);
+    const playerA = myTeam.roster.find((p: any) => p.id === playerAId);
+    const playerB = myTeam.roster.find((p: any) => p.id === playerBId);
 
     const playerAProj = playerA?.stats.weeklyProjections[league.currentWeek];
     const playerBProj = playerB?.stats.weeklyProjections[league.currentWeek];

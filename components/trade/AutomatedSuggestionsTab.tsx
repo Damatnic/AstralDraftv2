@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
 import { League, Team, Player } from '../../types';
-import { TradeProposal, TradeAnalysis, AlternativeOffer } from './TradeAnalyzerView';
+import { TradeProposal, TradeAnalysis, ImprovementSuggestion, AlternativeOffer } from './TradeAnalyzerView';
 import { SearchIcon } from '../icons/SearchIcon';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
@@ -18,10 +18,10 @@ import { CheckIcon } from '../icons/CheckIcon';
 interface AutomatedSuggestionsTabProps {
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
-    _league: League;
-    _currentTeam: Team;
+    league: League;
+    currentTeam: Team;
     onProposalUpdate: (proposal: TradeProposal) => void;
-    _dispatch: React.Dispatch<any>;
+    dispatch: React.Dispatch<any>;
 }
 
 interface SmartSuggestion {
@@ -38,11 +38,12 @@ interface SmartSuggestion {
 const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
     proposal,
     analysis,
-    _league,
-    _currentTeam,
+    league,
+    currentTeam,
     onProposalUpdate,
-    _dispatch
-}) => {
+    dispatch
+}: any) => {
+    const [selectedSuggestion, setSelectedSuggestion] = React.useState<SmartSuggestion | null>(null);
     const [showAlternatives, setShowAlternatives] = React.useState(false);
 
     // Generate smart suggestions based on analysis
@@ -153,8 +154,9 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
         }
     };
 
-    const applySuggestion = (_suggestion: SmartSuggestion) => {
+    const applySuggestion = (suggestion: SmartSuggestion) => {
         // Mock implementation - in real app would modify the proposal
+        setSelectedSuggestion(suggestion);
     };
 
     const selectAlternativeOffer = (offer: AlternativeOffer) => {
@@ -323,7 +325,7 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
                                             <div>
                                                 <div className="text-sm text-[var(--text-secondary)] mb-2">You Trade:</div>
                                                 <div className="space-y-1">
-                                                    {offer.fromPlayers.map((player) => (
+                                                    {offer.fromPlayers.map((player: any) => (
                                                         <div key={player.id} className="flex items-center gap-2 text-sm">
                                                             <Avatar avatar="🏈" className="w-6 h-6 rounded-full" />
                                                             <span className="text-[var(--text-primary)]">
@@ -340,7 +342,7 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
                                             <div>
                                                 <div className="text-sm text-[var(--text-secondary)] mb-2">You Receive:</div>
                                                 <div className="space-y-1">
-                                                    {offer.toPlayers.map((player) => (
+                                                    {offer.toPlayers.map((player: any) => (
                                                         <div key={player.id} className="flex items-center gap-2 text-sm">
                                                             <Avatar avatar="🏈" className="w-6 h-6 rounded-full" />
                                                             <span className="text-[var(--text-primary)]">

@@ -5,8 +5,10 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BrainCircuit, TrendingUp, Sparkles, AlertTriangle } from 'lucide-react';
+import { BrainCircuit, TrendingUp, Trophy, Sparkles, AlertTriangle } from 'lucide-react';
 import { useAppState } from '../../hooks/useAppState';
+import { useLeague } from '../../hooks/useLeague';
+import { Player } from '../../types';
 
 interface OraclePrediction {
   id: string;
@@ -18,11 +20,12 @@ interface OraclePrediction {
 }
 
 export const OraclePanel: React.FC = () => {
-  const { dispatch } = useAppState();
+  const { state, dispatch } = useAppState();
+  const { league, myTeam } = useLeague();
   const [activeTab, setActiveTab] = React.useState<'predictions' | 'insights' | 'challenge'>('predictions');
   const [userPrediction, setUserPrediction] = React.useState('');
-  const [oracleScore] = React.useState(0);
-  const [userScore] = React.useState(0);
+  const [oracleScore, setOracleScore] = React.useState(0);
+  const [userScore, setUserScore] = React.useState(0);
   
   // Mock predictions
   const predictions: OraclePrediction[] = [
@@ -99,7 +102,7 @@ export const OraclePanel: React.FC = () => {
   
   const renderPredictions = () => (
     <div className="space-y-4">
-      {predictions.map(pred => (
+      {predictions.map((pred: any) => (
         <motion.div
           key={pred.id}
           initial={{ opacity: 0, y: 20 }}
@@ -201,7 +204,7 @@ export const OraclePanel: React.FC = () => {
           
           <textarea
             value={userPrediction}
-            onChange={(e) => setUserPrediction(e.target.value)}
+            onChange={(e: any) => setUserPrediction(e.target.value)}
             placeholder="Enter your prediction..."
             className="w-full px-3 py-2 bg-black/20 border border-[var(--panel-border)] rounded text-[var(--text-primary)] h-24 resize-none"
           />
@@ -251,7 +254,7 @@ export const OraclePanel: React.FC = () => {
       
       {/* Tabs */}
       <div className="flex gap-2 mb-6">
-        {(['predictions', 'insights', 'challenge'] as const).map(tab => (
+        {(['predictions', 'insights', 'challenge'] as const).map((tab: any) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}

@@ -17,7 +17,7 @@ interface NotificationCenterProps {
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     className = '',
     maxVisible = 5
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [notifications, setNotifications] = useState<OracleNotification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -31,7 +31,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         setUnreadCount(notificationService.getUnreadNotifications().length);
 
         // Listen for new notifications
-        const unsubscribe = notificationService.onNotification((notification) => {
+        const unsubscribe = notificationService.onNotification((notification: any) => {
             setNotifications(prev => [notification, ...prev]);
             setUnreadCount(prev => prev + 1);
             
@@ -174,7 +174,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                             {/* Notification List */}
                             <div className="max-h-96 overflow-y-auto">
                                 {visibleNotifications.length > 0 ? (
-                                    visibleNotifications.map((notification) => (
+                                    visibleNotifications.map((notification: any) => (
                                         <motion.div
                                             key={notification.id}
                                             initial={{ opacity: 0, x: -20 }}
@@ -221,7 +221,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                                     <div className="p-8 text-center text-gray-400">
                                         <Bell className="w-12 h-12 mx-auto mb-4 opacity-50" />
                                         <p>No notifications yet</p>
-                                        <p className="text-sm mt-1">We&apos;ll notify you about prediction updates</p>
+                                        <p className="text-sm mt-1">We'll notify you about prediction updates</p>
                                     </div>
                                 )}
                             </div>

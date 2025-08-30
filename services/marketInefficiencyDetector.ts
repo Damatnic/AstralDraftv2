@@ -96,10 +96,10 @@ class MarketInefficiencyDetector {
     private updatePositionTrends(availablePlayers: Player[]): void {
         const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
-        positions.forEach(position => {
-            const positionPlayers = availablePlayers.filter(p => p.position === position);
+        positions.forEach((position: any) => {
+            const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
             const draftedInPosition = this.recentPicks
-                .filter(pick => pick.player.position === position)
+                .filter((pick: any) => pick.player.position === position)
                 .slice(-5); // Last 5 picks of this position
 
             const averagePickPosition = this.calculateAveragePickPosition(position);
@@ -129,7 +129,7 @@ class MarketInefficiencyDetector {
         const inefficiencies: MarketInefficiency[] = [];
         const topPlayers = availablePlayers.slice(0, 20); // Look at top 20 available
 
-        topPlayers.forEach(player => {
+        topPlayers.forEach((player: any) => {
             const adpDifference = (player.adp || 999) - currentPick;
             
             // Significant value if player is available 10+ picks after ADP
@@ -165,7 +165,7 @@ class MarketInefficiencyDetector {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
-        positions.forEach(position => {
+        positions.forEach((position: any) => {
             const runAnalysis = this.analyzePositionalRun(position);
             
             if (runAnalysis.runLength >= 3) {
@@ -185,7 +185,7 @@ class MarketInefficiencyDetector {
                         `${runAnalysis.runLength} ${position}s taken in recent picks`,
                         `Run intensity: ${(runAnalysis.intensity * 100).toFixed(1)}%`,
                         runAnalysis.likelyToContinue ? 'Trend likely to continue' : 'Run may be ending',
-                        `Next targets: ${runAnalysis.nextTargets.slice(0, 2).map(p => p.name).join(', ')}`
+                        `Next targets: ${runAnalysis.nextTargets.slice(0, 2).map((p: any) => p.name).join(', ')}`
                     ],
                     actionRequired: runAnalysis.likelyToContinue 
                         ? `Jump on ${position} run before value disappears`
@@ -202,8 +202,8 @@ class MarketInefficiencyDetector {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
-        positions.forEach(position => {
-            const positionPlayers = availablePlayers.filter(p => p.position === position);
+        positions.forEach((position: any) => {
+            const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
             if (positionPlayers.length < 2) return;
 
             const topPlayer = positionPlayers[0];
@@ -247,13 +247,13 @@ class MarketInefficiencyDetector {
         const inefficiencies: MarketInefficiency[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
-        positions.forEach(position => {
+        positions.forEach((position: any) => {
             const trend = this.positionTrends.get(position);
             if (!trend) return;
 
             if (trend.scarcityLevel > 0.7) { // High scarcity
-                const positionPlayers = availablePlayers.filter(p => p.position === position);
-                const elitePlayers = positionPlayers.filter(p => (p.tier || 10) <= 2);
+                const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
+                const elitePlayers = positionPlayers.filter((p: any) => (p.tier || 10) <= 2);
 
                 if (elitePlayers.length <= 2) {
                     const severity = elitePlayers.length === 1 ? 'critical' : 'high';
@@ -291,9 +291,9 @@ class MarketInefficiencyDetector {
             const byeWeekCounts = this.analyzeByeWeekDistribution(availablePlayers);
             const optimalByeWeeks = this.findOptimalByeWeeks(byeWeekCounts);
 
-            optimalByeWeeks.forEach(byeWeek => {
-                const playersWithBye = availablePlayers.filter(p => p.bye === byeWeek);
-                const valuePlayers = playersWithBye.filter(p => (p.adp || 999) > currentPick);
+            optimalByeWeeks.forEach((byeWeek: any) => {
+                const playersWithBye = availablePlayers.filter((p: any) => p.bye === byeWeek);
+                const valuePlayers = playersWithBye.filter((p: any) => (p.adp || 999) > currentPick);
 
                 if (valuePlayers.length > 0) {
                     inefficiencies.push({
@@ -323,7 +323,7 @@ class MarketInefficiencyDetector {
         const inefficiencies: MarketInefficiency[] = [];
 
         // Detect if recent picks show panic (multiple reaches in a row)
-        const recentReaches = this.recentPicks.slice(-3).filter(pick => pick.adpDifference > 10);
+        const recentReaches = this.recentPicks.slice(-3).filter((pick: any) => pick.adpDifference > 10);
         
         if (recentReaches.length >= 2) {
             const averageReach = recentReaches.reduce((sum, pick) => sum + pick.adpDifference, 0) / recentReaches.length;
@@ -351,7 +351,7 @@ class MarketInefficiencyDetector {
     }
 
     private analyzePositionalRun(position: string): RunAnalysis {
-        const positionPicks = this.recentPicks.filter(pick => pick.player.position === position);
+        const positionPicks = this.recentPicks.filter((pick: any) => pick.player.position === position);
         const recentPositionPicks = positionPicks.slice(-5);
 
         // Calculate run metrics
@@ -402,7 +402,7 @@ class MarketInefficiencyDetector {
     }
 
     private calculateScarcityLevel(position: string, availablePlayers: Player[]): number {
-        const elitePlayers = availablePlayers.filter(p => (p.tier || 10) <= 2);
+        const elitePlayers = availablePlayers.filter((p: any) => (p.tier || 10) <= 2);
         const totalEliteExpected = this.getExpectedEliteCount(position);
         
         return Math.max(0, 1 - (elitePlayers.length / totalEliteExpected));
@@ -458,7 +458,7 @@ class MarketInefficiencyDetector {
     private analyzeByeWeekDistribution(availablePlayers: Player[]): Record<number, number> {
         const byeWeeks: Record<number, number> = {};
         
-        availablePlayers.forEach(player => {
+        availablePlayers.forEach((player: any) => {
             if (player.bye) {
                 byeWeeks[player.bye] = (byeWeeks[player.bye] || 0) + 1;
             }

@@ -3,7 +3,7 @@
  * Advanced AI with opponent modeling and market analysis
  */
 
-import { Player, Team } from '../types';
+import { Player, Team, League } from '../types';
 
 export interface EnhancedAiPersonality {
     id: string;
@@ -208,7 +208,7 @@ class EnhancedDraftSimulationEngine {
     }
 
     public initializeOpponentModels(teams: Team[]): void {
-        teams.forEach(team => {
+        teams.forEach((team: any) => {
             // Assign personalities (could be based on historical data or random)
             const personality = this.aiPersonalities[Math.floor(Math.random() * this.aiPersonalities.length)];
             
@@ -260,7 +260,7 @@ class EnhancedDraftSimulationEngine {
         if (!model) return null;
 
         const availablePlayers = context.availablePlayers;
-        const scoredPlayers = availablePlayers.map(player => ({
+        const scoredPlayers = availablePlayers.map((player: any) => ({
             player,
             score: this.calculatePlayerScore(player, model, context),
             reasoning: this.generatePickReasoning(player, model, context)
@@ -285,7 +285,7 @@ class EnhancedDraftSimulationEngine {
                 value: this.calculatePickValue(selectedCandidate.player, context),
                 strategicFit: this.calculateStrategicFit(selectedCandidate.player, model),
                 marketTiming: this.calculateMarketTiming(selectedCandidate.player, context),
-                alternatives: topCandidates.slice(1, 4).map(c => c.player)
+                alternatives: topCandidates.slice(1, 4).map((c: any) => c.player)
             };
         }
 
@@ -362,7 +362,7 @@ class EnhancedDraftSimulationEngine {
 
     private calculatePositionLikelihood(personality: EnhancedAiPersonality, roster: Player[]): Record<string, number> {
         const positionCounts: Record<string, number> = {};
-        roster.forEach(player => {
+        roster.forEach((player: any) => {
             positionCounts[player.position] = (positionCounts[player.position] || 0) + 1;
         });
 
@@ -376,7 +376,7 @@ class EnhancedDraftSimulationEngine {
 
         // Normalize to sum to 1
         const total = Object.values(likelihood).reduce((sum, val) => sum + val, 0);
-        Object.keys(likelihood).forEach(pos => {
+        Object.keys(likelihood).forEach((pos: any) => {
             likelihood[pos] = likelihood[pos] / total;
         });
 
@@ -446,7 +446,7 @@ class EnhancedDraftSimulationEngine {
         return Math.min(1, risk);
     }
 
-    private getRecentPerformanceScore(_player: Player): number {
+    private getRecentPerformanceScore(player: Player): number {
         // Simulate recent performance score
         return (Math.random() - 0.5) * 2; // -1 to 1
     }
@@ -474,7 +474,7 @@ class EnhancedDraftSimulationEngine {
         return reasoning;
     }
 
-    private calculatePickRisk(player: Player, _model: OpponentBehaviorModel, _context: DraftContext): number {
+    private calculatePickRisk(player: Player, model: OpponentBehaviorModel, context: DraftContext): number {
         return this.calculatePlayerRisk(player);
     }
 
@@ -518,9 +518,9 @@ class MarketAnalyzer {
         const trends: MarketTrend[] = [];
         const positions = ['QB', 'RB', 'WR', 'TE'];
 
-        positions.forEach(position => {
+        positions.forEach((position: any) => {
             const recentPicks = context.recentPicks.slice(-5);
-            const positionPicks = recentPicks.filter(pick => pick.player.position === position);
+            const positionPicks = recentPicks.filter((pick: any) => pick.player.position === position);
             
             if (positionPicks.length >= 3) {
                 trends.push({
@@ -543,7 +543,7 @@ class StrategyAdvisor {
         const recommendations: PickRecommendation[] = [];
         const availablePlayers = context.availablePlayers.slice(0, 10);
 
-        availablePlayers.forEach(player => {
+        availablePlayers.forEach((player: any) => {
             const recommendation: PickRecommendation = {
                 player,
                 reasoning: this.generateStrategicReasoning(player, userTeam, context, opponentModels),
@@ -567,7 +567,7 @@ class StrategyAdvisor {
         const reasoning: string[] = [];
 
         // Team need analysis
-        const rosterCount = userTeam.roster?.filter(p => p.position === player.position).length || 0;
+        const rosterCount = userTeam.roster?.filter((p: any) => p.position === player.position).length || 0;
         const maxNeeded = this.getPositionMax(player.position);
         
         if (rosterCount < maxNeeded / 2) {
@@ -592,7 +592,7 @@ class StrategyAdvisor {
         let totalProbability = 0;
         let teamsConsidered = 0;
 
-        opponentModels.forEach(model => {
+        opponentModels.forEach((model: any) => {
             const positionLikelihood = model.predictedBehavior.nextPositionLikelihood[player.position] || 0;
             totalProbability += positionLikelihood;
             teamsConsidered++;
@@ -605,7 +605,7 @@ class StrategyAdvisor {
         let confidence = 0.5;
 
         // Higher confidence for addressing needs
-        const rosterCount = userTeam.roster?.filter(p => p.position === player.position).length || 0;
+        const rosterCount = userTeam.roster?.filter((p: any) => p.position === player.position).length || 0;
         if (rosterCount === 0) confidence += 0.3;
 
         // Value confidence
@@ -620,7 +620,7 @@ class StrategyAdvisor {
         return Math.min(1, confidence);
     }
 
-    private calculatePlayerRisk(_player: Player): number {
+    private calculatePlayerRisk(player: Player): number {
         // Reuse risk calculation from main engine
         return Math.random() * 0.5 + 0.2; // Simplified for now
     }
@@ -631,7 +631,7 @@ class StrategyAdvisor {
     }
 
     private calculateUserTeamFit(player: Player, userTeam: Team): number {
-        const rosterCount = userTeam.roster?.filter(p => p.position === player.position).length || 0;
+        const rosterCount = userTeam.roster?.filter((p: any) => p.position === player.position).length || 0;
         const maxNeeded = this.getPositionMax(player.position);
         const need = Math.max(0, maxNeeded - rosterCount) / maxNeeded;
         

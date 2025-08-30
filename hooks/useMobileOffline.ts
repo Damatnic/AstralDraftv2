@@ -10,7 +10,7 @@ import { Player, Team, League } from '../types';
 interface OfflineState {
     isOffline: boolean;
     hasOfflineData: boolean;
-    pendingActions: Array<{ type: string; payload: unknown; id: string }>;
+    pendingActions: any[];
     lastSync: Date | null;
     syncInProgress: boolean;
 }
@@ -20,7 +20,7 @@ interface OfflineActions {
     getCachedPlayers: () => Player[];
     getCachedLeagues: () => League[];
     draftPlayerOffline: (playerId: number, teamId: number, pick: number) => Promise<boolean>;
-    queueAction: (type: "DRAFT_PLAYER" | "UPDATE_ROSTER" | "TRADE_PROPOSAL" | "WAIVER_CLAIM" | "SETTINGS_UPDATE", payload: unknown) => string;
+    queueAction: (type: string, payload: any) => string;
     syncPendingActions: () => Promise<void>;
     clearOfflineData: () => void;
 }
@@ -29,7 +29,7 @@ export const useMobileOffline = (): [OfflineState, OfflineActions] => {
     const [state, setState] = React.useState<OfflineState>(mobileOfflineService.getState());
 
     React.useEffect(() => {
-        const unsubscribe = mobileOfflineService.subscribe((newState) => {
+        const unsubscribe = mobileOfflineService.subscribe((newState: any) => {
             setState(newState);
         });
 
@@ -53,8 +53,8 @@ export const useMobileOffline = (): [OfflineState, OfflineActions] => {
             return await mobileOfflineService.draftPlayerOffline(playerId, teamId, pick);
         },
         
-        queueAction: (type: "DRAFT_PLAYER" | "UPDATE_ROSTER" | "TRADE_PROPOSAL" | "WAIVER_CLAIM" | "SETTINGS_UPDATE", payload: unknown) => {
-            return mobileOfflineService.queueOfflineAction(type, payload);
+        queueAction: (type: string, payload: any) => {
+            return mobileOfflineService.queueOfflineAction(type as any, payload);
         },
         
         syncPendingActions: async () => {

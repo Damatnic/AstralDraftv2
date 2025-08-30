@@ -3,7 +3,9 @@
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
+import { Widget } from '../components/ui/Widget';
 import ErrorDisplay from '../components/core/ErrorDisplay';
+import { NewspaperIcon } from '../components/icons/NewspaperIcon';
 import { generateLeagueNewspaperContent } from '../services/geminiService';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import type { NewspaperContent } from '../types';

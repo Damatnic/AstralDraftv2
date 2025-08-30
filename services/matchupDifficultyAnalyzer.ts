@@ -310,7 +310,7 @@ export class MatchupDifficultyAnalyzer {
     logger.info(`🔍 Analyzing lineup matchups for ${playerIds.length} players`);
     
     const analyses = await Promise.all(
-      playerIds.map(playerId => this.analyzePlayerMatchup(playerId, week, season))
+      playerIds.map((playerId: any) => this.analyzePlayerMatchup(playerId, week, season))
     );
 
     // Sort by difficulty score (easiest matchups first)
@@ -343,7 +343,7 @@ export class MatchupDifficultyAnalyzer {
       for (const game of games) {
         const keyPlayers = await this.getKeyPlayersForTeams(game.homeTeam, game.awayTeam);
         const gameAnalyses = await Promise.all(
-          keyPlayers.map(playerId => this.analyzePlayerMatchup(playerId, week, season))
+          keyPlayers.map((playerId: any) => this.analyzePlayerMatchup(playerId, week, season))
         );
         allAnalyses.push(...gameAnalyses);
       }
@@ -356,8 +356,8 @@ export class MatchupDifficultyAnalyzer {
 
       const positions = ['QB', 'RB', 'WR', 'TE'];
       
-      positions.forEach(position => {
-        const positionAnalyses = allAnalyses.filter(a => a.position === position);
+      positions.forEach((position: any) => {
+        const positionAnalyses = allAnalyses.filter((a: any) => a.position === position);
         positionAnalyses.sort((a, b) => a.difficultyScore - b.difficultyScore);
         
         bestMatchups[position] = positionAnalyses.slice(0, 5);
@@ -365,7 +365,7 @@ export class MatchupDifficultyAnalyzer {
       });
 
       // Identify sleepers (low ownership, easy matchup)
-      allAnalyses.forEach(analysis => {
+      allAnalyses.forEach((analysis: any) => {
         if (analysis.difficultyScore < 30 && analysis.recommendations.startSitAdvice === 'FLEX') {
           sleepers.push(analysis);
         }

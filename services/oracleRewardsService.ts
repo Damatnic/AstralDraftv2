@@ -450,9 +450,9 @@ class OracleRewardsService {
 
     private async unlockAchievement(achievementId: string): Promise<void> {
         const achievements = this.getStoredAchievements();
-        const achievement = this.getAvailableAchievements().find(a => a.id === achievementId);
+        const achievement = this.getAvailableAchievements().find((a: any) => a.id === achievementId);
         
-        if (achievement && !achievements.find(a => a.id === achievementId)) {
+        if (achievement && !achievements.find((a: any) => a.id === achievementId)) {
             achievement.unlockedAt = new Date().toISOString();
             achievements.push(achievement);
             this.storeAchievements(achievements);
@@ -461,9 +461,9 @@ class OracleRewardsService {
 
     private async unlockBadge(badgeId: string): Promise<void> {
         const badges = this.getStoredBadges();
-        const badge = this.getAvailableBadges().find(b => b.id === badgeId);
+        const badge = this.getAvailableBadges().find((b: any) => b.id === badgeId);
         
-        if (badge && !badges.find(b => b.id === badgeId)) {
+        if (badge && !badges.find((b: any) => b.id === badgeId)) {
             badge.earnedAt = new Date().toISOString();
             badges.push(badge);
             this.storeBadges(badges);

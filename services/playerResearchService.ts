@@ -213,19 +213,19 @@ class PlayerResearchService {
 
             // Apply filters
             if (filter.positions?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.positions!.includes(p.position)
                 );
             }
 
             if (filter.teams?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.teams!.includes(p.team)
                 );
             }
 
             if (filter.status?.length) {
-                filteredPlayers = filteredPlayers.filter(p => 
+                filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.status!.includes(p.status as any)
                 );
             }
@@ -277,7 +277,7 @@ class PlayerResearchService {
      */
     async getPlayerDetails(playerId: string): Promise<PlayerBaseInfo | null> {
         try {
-            const player = this.mockPlayers.find(p => p.id === playerId);
+            const player = this.mockPlayers.find((p: any) => p.id === playerId);
             return player || null;
         } catch (error) {
             console.error('Failed to get player details:', error);
@@ -293,7 +293,7 @@ class PlayerResearchService {
             // Mock season stats generation
             const weeks = Array.from({ length: 17 }, (_, i) => i + 1);
             
-            return weeks.map(week => ({
+            return weeks.map((week: any) => ({
                 season,
                 week,
                 gamesPlayed: Math.random() > 0.1 ? 1 : 0, // 90% chance of playing
@@ -319,7 +319,7 @@ class PlayerResearchService {
         try {
             const weeks = week ? [week] : Array.from({ length: 4 }, (_, i) => i + 1);
             
-            return weeks.map(w => ({
+            return weeks.map((w: any) => ({
                 playerId,
                 week: w,
                 season: 2024,
@@ -455,7 +455,7 @@ class PlayerResearchService {
             ];
 
             // Determine advantages
-            metrics.forEach(metric => {
+            metrics.forEach((metric: any) => {
                 const diff = Math.abs(metric.player1Value - metric.player2Value);
                 const threshold = metric.player1Value * 0.1; // 10% difference threshold
                 
@@ -541,7 +541,7 @@ class PlayerResearchService {
 
             // Mock similar players (would use ML similarity in production)
             const similarPlayers = this.mockPlayers
-                .filter(p => p.id !== playerId && p.position === targetPlayer.position)
+                .filter((p: any) => p.id !== playerId && p.position === targetPlayer.position)
                 .slice(0, limit);
 
             return similarPlayers;
@@ -553,7 +553,7 @@ class PlayerResearchService {
 
     // Helper methods for mock data generation
     private generateMockPositionStats(playerId: string): Record<string, number> {
-        const player = this.mockPlayers.find(p => p.id === playerId);
+        const player = this.mockPlayers.find((p: any) => p.id === playerId);
         if (!player) return {};
 
         switch (player.position) {
@@ -597,7 +597,7 @@ class PlayerResearchService {
         return factors.slice(0, Math.floor(Math.random() * 3) + 2);
     }
 
-    private generateMockHeadline(_playerId: string): string {
+    private generateMockHeadline(playerId: string): string {
         const headlines = [
             'Expected to have increased role this week',
             'Dealing with minor injury concerns',

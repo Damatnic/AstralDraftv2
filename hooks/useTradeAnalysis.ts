@@ -70,6 +70,7 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
       refreshIntervalRef.current = setInterval(() => {
         // Re-analyze current trade if we have one
         if (state.currentAnalysis) {
+          console.log('🔄 Auto-refreshing trade analysis...');
           // Would trigger re-analysis here
         }
       }, refreshInterval);
@@ -111,6 +112,8 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
     }));
 
     try {
+      console.log(`🔍 Analyzing trade proposal: ${proposal.id}`);
+      
       const analysis = await tradeAnalysisService.analyzeTradeProposal(
         proposal,
         proposerRoster,
@@ -132,6 +135,7 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
         error: null
       }));
 
+      console.log(`✅ Trade analysis completed: ${analysis.recommendation} (${analysis.fairnessScore}% fair)`);
       return analysis;
 
     } catch (error) {
@@ -171,7 +175,7 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
    * Get analysis from history
    */
   const getAnalysisFromHistory = useCallback((tradeId: string): TradeAnalysis | null => {
-    return state.analysisHistory.find(analysis => analysis.tradeId === tradeId) || null;
+    return state.analysisHistory.find((analysis: any) => analysis.tradeId === tradeId) || null;
   }, [state.analysisHistory]);
 
   /**
@@ -221,7 +225,7 @@ export function useTradeComparison() {
   const addTradeForComparison = useCallback((proposal: TradeProposal) => {
     setState(prev => ({
       ...prev,
-      proposals: [...prev.proposals.filter(p => p.id !== proposal.id), proposal]
+      proposals: [...prev.proposals.filter((p: any) => p.id !== proposal.id), proposal]
     }));
   }, []);
 
@@ -235,9 +239,9 @@ export function useTradeComparison() {
       
       return {
         ...prev,
-        proposals: prev.proposals.filter(p => p.id !== tradeId),
+        proposals: prev.proposals.filter((p: any) => p.id !== tradeId),
         analyses: newAnalyses,
-        rankings: prev.rankings.filter(r => r.tradeId !== tradeId)
+        rankings: prev.rankings.filter((r: any) => r.tradeId !== tradeId)
       };
     });
   }, []);
@@ -413,9 +417,9 @@ export function useTradeRecommendations() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateRecommendations = useCallback(async (
-    _roster: FantasyRoster,
-    _leagueSettings: Record<string, unknown>,
-    _currentWeek: number
+    roster: FantasyRoster,
+    leagueSettings: any,
+    currentWeek: number
   ): Promise<void> => {
     setIsGenerating(true);
 

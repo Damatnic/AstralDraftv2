@@ -163,14 +163,14 @@ export class NFLDataExpansionService {
     const players: NFLPlayer[] = [];
     let playerId = 1;
 
-    COMPLETE_NFL_PLAYERS.forEach(template => {
+    COMPLETE_NFL_PLAYERS.forEach((template: any) => {
       const player = this.createPlayerFromTemplate(template, playerId);
       players.push(player);
       playerId++;
     });
 
     // Add backup players for each team
-    NFL_TEAMS.forEach(team => {
+    NFL_TEAMS.forEach((team: any) => {
       const backupPlayers = this.generateBackupPlayers(team.id, playerId);
       players.push(...backupPlayers);
       playerId += backupPlayers.length;
@@ -602,7 +602,7 @@ export class NFLDataExpansionService {
   private adjustStatsForYear(stats: PlayerStats, adjustment: number): PlayerStats {
     const adjusted = { ...stats };
     
-    Object.keys(adjusted).forEach(key => {
+    Object.keys(adjusted).forEach((key: any) => {
       if (typeof adjusted[key as keyof PlayerStats] === 'number' && key !== 'gamesPlayed') {
         const value = adjusted[key as keyof PlayerStats] as number;
         adjusted[key as keyof PlayerStats] = Math.max(0, Math.floor(value * (1 + adjustment))) as any;

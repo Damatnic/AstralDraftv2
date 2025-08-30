@@ -2,7 +2,7 @@
 import React from 'react';
 import type { Player } from '../../types';
 import PlayerCard from './PlayerCard';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SearchIcon } from '../icons/SearchIcon';
 import { StarFilledIcon } from '../icons/StarFilledIcon';
 import { useAppState } from '../../contexts/AppContext';
@@ -28,8 +28,8 @@ const LOAD_MORE_COUNT = 50;
 const PlayerPool: React.FC<PlayerPoolProps> = ({ 
     players, onPlayerSelect, onAddToQueue, onDraftPlayer, onNominatePlayer,
     onAddNote, isMyTurn, playersToCompare, onToggleCompare, queuedPlayerIds,
-    draftFormat: _draftFormat, isNominationTurn 
-}) => {
+    draftFormat, isNominationTurn 
+}: any) => {
   const { state } = useAppState();
   const [search, setSearch] = React.useState('');
   const [positionFilter, setPositionFilter] = React.useState<string>('ALL');
@@ -128,7 +128,7 @@ const PlayerPool: React.FC<PlayerPoolProps> = ({
       </div>
       <div className="flex-grow overflow-y-auto p-1 sm:p-2 space-y-1">
         <AnimatePresence>
-            {playersToShow.map((player) => (
+            {playersToShow.map((player: any) => (
                 <PlayerCard 
                     key={player.id} 
                     player={player} 

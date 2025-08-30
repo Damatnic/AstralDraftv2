@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Player, League, PlayerPosition } from '../types';
+import { Player, DraftPick, League, PlayerPosition } from '../types';
 import { players } from '../data/players';
 import { 
   enhancedDraftEngine, 
@@ -104,7 +104,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const [watchlist, setWatchlist] = useState<number[]>([]);
 
   // Calculate current draft state
-  const completedPicks = league.draftPicks.filter(pick => pick.playerId).length;
+  const completedPicks = league.draftPicks.filter((pick: any) => pick.playerId).length;
   const currentPick = completedPicks + 1;
   const currentRound = Math.ceil(currentPick / league.teams.length);
   const pickInRound = ((currentPick - 1) % league.teams.length) + 1;
@@ -127,11 +127,11 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const availablePlayers = useMemo(() => {
     const draftedPlayerIds = new Set(
       league.draftPicks
-        .filter(pick => pick.playerId)
-        .map(pick => pick.playerId)
+        .filter((pick: any) => pick.playerId)
+        .map((pick: any) => pick.playerId)
     );
     
-    return players.filter(player => !draftedPlayerIds.has(player.id));
+    return players.filter((player: any) => !draftedPlayerIds.has(player.id));
   }, [league.draftPicks]);
 
   // Apply filters to available players
@@ -141,7 +141,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
     // Search filter
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      filtered = filtered.filter(player =>
+      filtered = filtered.filter((player: any) =>
         player.name.toLowerCase().includes(searchLower) ||
         player.team.toLowerCase().includes(searchLower)
       );
@@ -149,12 +149,12 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
     // Position filter
     if (positionFilter !== 'ALL') {
-      filtered = filtered.filter(player => player.position === positionFilter);
+      filtered = filtered.filter((player: any) => player.position === positionFilter);
     }
 
     // Tier filter
     if (tierFilter !== 'ALL') {
-      filtered = filtered.filter(player => player.tier === tierFilter);
+      filtered = filtered.filter((player: any) => player.tier === tierFilter);
     }
 
     // Sort by ADP
@@ -164,10 +164,10 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   // Load keeper players if keeper league
   useEffect(() => {
     if (keeperConfig?.enabled) {
-      const userTeam = league.teams.find(team => team.id === userTeamId);
+      const userTeam = league.teams.find((team: any) => team.id === userTeamId);
       if (userTeam?.keepers) {
-        const keeperPlayers: KeeperPlayer[] = userTeam.keepers.map(keeperId => {
-          const player = players.find(p => p.id === keeperId);
+        const keeperPlayers: KeeperPlayer[] = userTeam.keepers.map((keeperId: any) => {
+          const player = players.find((p: any) => p.id === keeperId);
           if (!player) return null;
           
           return {
@@ -214,22 +214,37 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
       return;
     }
 
-    const player = players.find(p => p.id === playerId);
+    const player = players.find((p: any) => p.id === playerId);
     if (!player) {
       console.error('Player not found');
       return;
     }
 
-    // Dispatch pick
+    // Create draft pick
+    const draftPick: DraftPick = {
+      overall: currentPick,
+      round: currentRound,
+      pickInRound,
+      teamId: currentTeamId,
+      playerId,
+      timestamp: Date.now()
+    };
+
+    // Dispatch pick - using a more general action type
     dispatch({
       type: 'SET_LOADING',
       payload: false
     });
 
+    console.log('Draft pick made:', draftPick, player);
+    
+    // Note: In a real implementation, you would dispatch to a draft management system
+    // For now, we'll just log and update local state
+
     // Remove from queue if present
-    setDraftQueue(prev => prev.filter(id => id !== playerId));
-    setWatchlist(prev => prev.filter(id => id !== playerId));
-  }, [currentTeamId, userTeamId, isComplete, dispatch]);
+    setDraftQueue(prev => prev.filter((id: any) => id !== playerId));
+    setWatchlist(prev => prev.filter((id: any) => id !== playerId));
+  }, [currentTeamId, userTeamId, isComplete, currentPick, currentRound, pickInRound, league.id, dispatch]);
 
   const enableAutoDraft = useCallback((configOverrides?: Partial<AutoDraftConfig>) => {
     setAutoDraftConfig(prev => ({ ...prev, enabled: true, ...configOverrides }));
@@ -249,7 +264,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   }, []);
 
   const removeFromQueue = useCallback((playerId: number) => {
-    setDraftQueue(prev => prev.filter(id => id !== playerId));
+    setDraftQueue(prev => prev.filter((id: any) => id !== playerId));
   }, []);
 
   const reorderQueue = useCallback((startIndex: number, endIndex: number) => {
@@ -269,7 +284,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   }, []);
 
   const removeFromWatchlist = useCallback((playerId: number) => {
-    setWatchlist(prev => prev.filter(id => id !== playerId));
+    setWatchlist(prev => prev.filter((id: any) => id !== playerId));
   }, []);
 
   const setPositionFilter = useCallback((position: PlayerPosition | 'ALL') => {
@@ -287,7 +302,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const getRecommendations = useCallback((): DraftRecommendation[] => {
     if (currentTeamId !== userTeamId) return [];
 
-    const userTeam = league.teams.find(team => team.id === userTeamId);
+    const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return [];
 
     try {
@@ -310,7 +325,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const analyzePosition = useCallback((): SnakeDraftOptimization | null => {
     if (currentTeamId !== userTeamId) return null;
 
-    const userTeam = league.teams.find(team => team.id === userTeamId);
+    const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return null;
 
     // Find user's draft position (1-based)
@@ -337,14 +352,14 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const performAutoDraft = useCallback(async () => {
     if (currentTeamId !== userTeamId || !autoDraftEnabled) return;
 
-    const userTeam = league.teams.find(team => team.id === userTeamId);
+    const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return;
 
     try {
       // Check queue first
       const availableInQueue = draftQueue
-        .map(id => players.find(p => p.id === id))
-        .filter(p => p && availablePlayers.includes(p))[0];
+        .map((id: any) => players.find((p: any) => p.id === id))
+        .filter((p: any) => p && availablePlayers.includes(p))[0];
 
       if (availableInQueue) {
         makePick(availableInQueue.id);

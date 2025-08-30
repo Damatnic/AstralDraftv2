@@ -27,7 +27,7 @@ const SortablePlayerCard = ({ player }: { player: Player }) => {
 };
 
 // Main VisualRoster component
-const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
+const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
     const { dispatch, state } = useAppState();
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
     
@@ -126,8 +126,8 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
                 <div>
                     <h3 className="font-bold text-lg text-cyan-300 mb-2">Starters ({starters.length}/9)</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2 bg-black/10 rounded-lg min-h-[10rem] border border-transparent">
-                        <SortableContext items={starters.map(p => p.id)} strategy={rectSortingStrategy}>
-                            {starters.map(player => <SortablePlayerCard key={player.id} player={player} />)}
+                        <SortableContext items={starters.map((p: any) => p.id)} strategy={rectSortingStrategy}>
+                            {starters.map((player: any) => <SortablePlayerCard key={player.id} player={player} />)}
                         </SortableContext>
                         {starters.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8">Drag players here to start them.</p>}
                     </div>
@@ -135,8 +135,8 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
                 <div>
                     <h3 className="font-bold text-lg text-cyan-300 mb-2">Bench ({bench.length})</h3>
                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2 bg-black/10 rounded-lg min-h-[10rem] border border-transparent">
-                        <SortableContext items={bench.map(p => p.id)} strategy={rectSortingStrategy}>
-                           {bench.map(player => <SortablePlayerCard key={player.id} player={player} />)}
+                        <SortableContext items={bench.map((p: any) => p.id)} strategy={rectSortingStrategy}>
+                           {bench.map((player: any) => <SortablePlayerCard key={player.id} player={player} />)}
                         </SortableContext>
                         {bench.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8">Your bench is empty.</p>}
                     </div>

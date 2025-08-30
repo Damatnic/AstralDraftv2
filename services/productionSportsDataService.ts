@@ -617,7 +617,7 @@ class ProductionSportsDataService {
   private async createSpreadPrediction(game: NFLGame): Promise<RealPrediction | null> {
     try {
       const odds = await this.getGameOdds();
-      const gameOdds = odds.find(o => o.lastUpdated.includes(game.date.split('T')[0]));
+      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split('T')[0]));
       
       if (!gameOdds) return null;
 
@@ -654,7 +654,7 @@ class ProductionSportsDataService {
   private async createTotalPrediction(game: NFLGame): Promise<RealPrediction | null> {
     try {
       const odds = await this.getGameOdds();
-      const gameOdds = odds.find(o => o.lastUpdated.includes(game.date.split('T')[0]));
+      const gameOdds = odds.find((o: any) => o.lastUpdated.includes(game.date.split('T')[0]));
       
       if (!gameOdds) return null;
 

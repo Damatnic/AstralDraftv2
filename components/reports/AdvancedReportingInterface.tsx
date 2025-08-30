@@ -34,7 +34,7 @@ type ReportingTab = 'templates' | 'reports' | 'insights' | 'dashboards' | 'custo
 
 const AdvancedReportingInterface: React.FC<Props> = ({ 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ReportingTab>('templates');
     const [loading, setLoading] = useState(false);
@@ -89,7 +89,6 @@ const AdvancedReportingInterface: React.FC<Props> = ({
                 }
             }
         } catch (err) {
-            console.error('Failed to load reporting data:', err);
             setError('Failed to load reporting data');
         } finally {
             setLoading(false);
@@ -115,7 +114,6 @@ const AdvancedReportingInterface: React.FC<Props> = ({
                 await loadReportingData();
             }
         } catch (err) {
-            console.error('Failed to generate report:', err);
             setError('Failed to generate report');
         } finally {
             setLoading(false);
@@ -136,7 +134,6 @@ const AdvancedReportingInterface: React.FC<Props> = ({
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         } catch (err) {
-            console.error('Failed to export report:', err);
             setError('Failed to export report');
         }
     };

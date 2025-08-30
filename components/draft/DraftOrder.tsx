@@ -16,7 +16,7 @@ interface DraftOrderProps {
 const DraftOrder: React.FC<DraftOrderProps> = ({ 
   showRandomizeButton = false, 
   isCommissioner = false 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
@@ -61,10 +61,9 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
     });
   };
 
-  // TODO: Implement draft position lookup
-  // const getDraftPosition = (teamId: number): number => {
-  //   return draftOrder.findIndex(team => team.id === teamId) + 1;
-  // };
+  const getDraftPosition = (teamId: number): number => {
+    return draftOrder.findIndex(team => team.id === teamId) + 1;
+  };
 
   const getSnakePickNumbers = (position: number, totalRounds: number = 16): number[] => {
     const picks: number[] = [];

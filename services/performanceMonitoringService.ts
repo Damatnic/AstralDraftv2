@@ -80,43 +80,46 @@ class PerformanceMonitoringService {
   }
 
   private measureFCP(): void {
-    const fcpObserver = new PerformanceObserver((list) => {
+    const fcpObserver = new PerformanceObserver((list: any) => {
       const entries = list.getEntries();
-      const fcp = entries.find(entry => entry.name === 'first-contentful-paint');
+      const fcp = entries.find((entry: any) => entry.name === 'first-contentful-paint');
       if (fcp) {
         this.updateMetric('firstContentfulPaint', fcp.startTime);
+        console.log('FCP:', fcp.startTime);
       }
     });
     fcpObserver.observe({ entryTypes: ['paint'] });
   }
 
   private measureLCP(): void {
-    const lcpObserver = new PerformanceObserver((list) => {
+    const lcpObserver = new PerformanceObserver((list: any) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
       this.updateMetric('largestContentfulPaint', lastEntry.startTime);
+      console.log('LCP:', lastEntry.startTime);
     });
     lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
   }
 
   private measureCLS(): void {
     let clsValue = 0;
-    const clsObserver = new PerformanceObserver((list) => {
+    const clsObserver = new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries() as any[]) {
         if (!entry.hadRecentInput) {
           clsValue += entry.value;
         }
       }
       this.updateMetric('cumulativeLayoutShift', clsValue);
+      console.log('CLS:', clsValue);
     });
     clsObserver.observe({ entryTypes: ['layout-shift'] });
   }
 
   private measureFID(): void {
-    const fidObserver = new PerformanceObserver((list) => {
+    const fidObserver = new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries() as any[]) {
-        const fid = entry.processingStart - entry.startTime;
-        this.updateMetric('firstInputDelay', fid);
+        this.updateMetric('firstInputDelay', entry.processingStart - entry.startTime);
+        console.log('FID:', entry.processingStart - entry.startTime);
       }
     });
     fidObserver.observe({ entryTypes: ['first-input'] });
@@ -128,6 +131,7 @@ class PerformanceMonitoringService {
     if (navigationEntry) {
       const tti = navigationEntry.domInteractive - navigationEntry.fetchStart;
       this.updateMetric('timeToInteractive', tti);
+      console.log('TTI:', tti);
     }
   }
 
@@ -135,11 +139,11 @@ class PerformanceMonitoringService {
    * Monitor resource loading performance
    */
   private monitorResourceLoading(): void {
-    const resourceObserver = new PerformanceObserver((list) => {
+    const resourceObserver = new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries()) {
         const resource = entry as PerformanceResourceTiming;
         if (resource.initiatorType === 'script' || resource.initiatorType === 'link') {
-          // Track resource loading performance
+          console.log(`Resource: ${resource.name}, Duration: ${resource.duration}ms`);
         }
       }
     });
@@ -152,7 +156,7 @@ class PerformanceMonitoringService {
   private trackUserInteractions(): void {
     // Track long tasks that block the main thread
     if ('PerformanceObserver' in window) {
-      const longTaskObserver = new PerformanceObserver((list) => {
+      const longTaskObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           console.warn(`Long task detected: ${entry.duration}ms`);
         }
@@ -160,8 +164,9 @@ class PerformanceMonitoringService {
       
       try {
         longTaskObserver.observe({ entryTypes: ['longtask'] });
-      } catch {
+      } catch (e) {
         // Browser doesn't support longtask entries
+        console.log('Long task monitoring not supported');
       }
     }
   }
@@ -174,9 +179,10 @@ class PerformanceMonitoringService {
     // For runtime analysis, we can estimate based on loaded resources
     const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     
-    const jsResources = resources.filter(r => r.name.endsWith('.js'));
+    const jsResources = resources.filter((r: any) => r.name.endsWith('.js'));
+    const cssResources = resources.filter((r: any) => r.name.endsWith('.css'));
     
-    const chunks: ChunkAnalysis[] = jsResources.map(resource => ({
+    const chunks: ChunkAnalysis[] = jsResources.map((resource: any) => ({
       name: resource.name.split('/').pop() || 'unknown',
       size: resource.transferSize || 0,
       gzippedSize: resource.encodedBodySize || 0,
@@ -187,7 +193,7 @@ class PerformanceMonitoringService {
     const largestAssets: AssetAnalysis[] = resources
       .sort((a, b) => (b.transferSize || 0) - (a.transferSize || 0))
       .slice(0, 10)
-      .map(resource => ({
+      .map((resource: any) => ({
         name: resource.name.split('/').pop() || 'unknown',
         size: resource.transferSize || 0,
         type: this.getAssetType(resource.name),

@@ -12,7 +12,7 @@ interface ChampionChartProps {
     teams: Team[];
 }
 
-const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }) => {
+const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) => {
     const championCounts = React.useMemo(() => {
         const counts: { [teamId: number]: number } = {};
         history.forEach((entry: any) => {

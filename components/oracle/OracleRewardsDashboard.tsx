@@ -16,7 +16,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     max, 
     color = 'bg-blue-500',
     showLabel = true 
-}) => {
+}: any) => {
     const percentage = Math.min((current / max) * 100, 100);
     
     return (
@@ -43,7 +43,7 @@ interface AchievementCardProps {
     isUnlocked: boolean;
 }
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }: any) => {
     const getDifficultyColor = (difficulty: Achievement['difficulty']) => {
         switch (difficulty) {
             case 'BRONZE':
@@ -128,7 +128,7 @@ interface BadgeDisplayProps {
     size?: 'sm' | 'md' | 'lg';
 }
 
-const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) => {
     const getSizeClasses = () => {
         switch (size) {
             case 'sm':
@@ -171,7 +171,7 @@ interface LevelDisplayProps {
     nextLevelPoints: number;
 }
 
-const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }) => {
+const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }: any) => {
     const pointsInCurrentLevel = currentPoints % 500;
     
     return (
@@ -206,6 +206,72 @@ const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextL
     );
 };
 
+interface RewardNotificationProps {
+    rewards: {
+        points: number;
+        newAchievements: Achievement[];
+        newBadges: Badge[];
+        levelUp?: boolean;
+    };
+    onClose: () => void;
+}
+
+const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }: any) => {
+    React.useEffect(() => {
+        const timer = setTimeout(onClose, 5000); // Auto-close after 5 seconds
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed bottom-4 right-4 bg-gray-800 border border-gray-600 rounded-lg p-4 max-w-sm z-50"
+        >
+            <div className="flex items-center justify-between mb-2">
+                <h4 className="font-bold text-white">Rewards Earned!</h4>
+                <button
+                    onClick={onClose}
+                    className="text-gray-400 hover:text-white"
+                >
+                    ✕
+                </button>
+            </div>
+            
+            <div className="space-y-2">
+                {rewards.points > 0 && (
+                    <div className="flex items-center space-x-2">
+                        <span className="text-yellow-400">💰</span>
+                        <span className="text-sm text-white">+{rewards.points} points</span>
+                    </div>
+                )}
+                
+                {rewards.levelUp && (
+                    <div className="flex items-center space-x-2">
+                        <span className="text-purple-400">⬆️</span>
+                        <span className="text-sm text-white">Level up!</span>
+                    </div>
+                )}
+                
+                {rewards.newAchievements.map((achievement: any) => (
+                    <div key={achievement.id} className="flex items-center space-x-2">
+                        <span className="text-2xl">{achievement.icon}</span>
+                        <span className="text-sm text-white">{achievement.title}</span>
+                    </div>
+                ))}
+                
+                {rewards.newBadges.map((badge: any) => (
+                    <div key={badge.id} className="flex items-center space-x-2">
+                        <BadgeDisplay badge={badge} size="sm" />
+                        <span className="text-sm text-white">{badge.name}</span>
+                    </div>
+                ))}
+            </div>
+        </motion.div>
+    );
+};
+
 export const OracleRewardsDashboard: React.FC = () => {
     const [userRewards, setUserRewards] = React.useState<UserRewards | null>(null);
     const [allAchievements, setAllAchievements] = React.useState<Achievement[]>([]);
@@ -222,7 +288,6 @@ export const OracleRewardsDashboard: React.FC = () => {
                 setUserRewards(rewards);
                 setAllAchievements(achievements);
             } catch (error) {
-                console.error('Failed to load rewards:', error);
             } finally {
                 setLoading(false);
             }
@@ -333,7 +398,7 @@ export const OracleRewardsDashboard: React.FC = () => {
                     <div className="space-y-4">
                         {userRewards.badges.length > 0 ? (
                             <div className="grid grid-cols-3 gap-3">
-                                {userRewards.badges.slice(0, 6).map((badge) => (
+                                {userRewards.badges.slice(0, 6).map((badge: any) => (
                                     <BadgeDisplay key={badge.id} badge={badge} />
                                 ))}
                             </div>
@@ -405,7 +470,7 @@ export const OracleRewardsDashboard: React.FC = () => {
             <Widget title="Achievements" className="bg-gray-900/50">
                 <div className="mb-4">
                     <div className="flex flex-wrap gap-2">
-                        {(['ALL', 'PREDICTION', 'STREAK', 'ACCURACY', 'PARTICIPATION', 'SEASONAL', 'MILESTONE'] as const).map((category) => (
+                        {(['ALL', 'PREDICTION', 'STREAK', 'ACCURACY', 'PARTICIPATION', 'SEASONAL', 'MILESTONE'] as const).map((category: any) => (
                             <button
                                 key={category}
                                 onClick={() => setSelectedCategory(category)}
@@ -422,7 +487,7 @@ export const OracleRewardsDashboard: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredAchievements.map((achievement) => {
+                    {filteredAchievements.map((achievement: any) => {
                         const isUnlocked = unlockedAchievements.some((ua: any) => ua.id === achievement.id);
                         return (
                             <AchievementCard

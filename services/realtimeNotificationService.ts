@@ -120,7 +120,7 @@ class RealtimeNotificationService {
    */
   public connect(userId: string): void {
     if (this.socket?.connected) {
-      // Already connected to notification service
+      console.log('Already connected to notification service');
       return;
     }
 
@@ -150,7 +150,7 @@ class RealtimeNotificationService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-      // Connected to notification service
+      console.log('Connected to notification service');
       this.isConnected = true;
       this.connectionRetries = 0;
       
@@ -162,7 +162,7 @@ class RealtimeNotificationService {
     });
 
     this.socket.on('disconnect', () => {
-      // Disconnected from notification service
+      console.log('Disconnected from notification service');
       this.isConnected = false;
       this.scheduleReconnect();
     });
@@ -256,7 +256,7 @@ class RealtimeNotificationService {
     this.saveNotificationHistory();
 
     // Notify listeners
-    this.listeners.forEach(listener => listener(notification));
+    this.listeners.forEach((listener: any) => listener(notification));
 
     // Show browser notification if permitted
     this.showBrowserNotification(notification);
@@ -340,7 +340,7 @@ class RealtimeNotificationService {
     this.connectionRetries++;
 
     this.reconnectTimeout = setTimeout(() => {
-      // Attempting to reconnect
+      console.log(`Attempting to reconnect (${this.connectionRetries}/${this.maxRetries})...`);
       if (this.userId) {
         this.connect(this.userId);
       }
@@ -388,10 +388,10 @@ class RealtimeNotificationService {
       });
 
       if (response.ok) {
-        // Push subscription sent to server
+        console.log('Push subscription sent to server');
       }
     } catch (error) {
-      // Failed to send subscription to server
+      console.error('Failed to send subscription to server:', error);
     }
   }
 
@@ -431,7 +431,7 @@ class RealtimeNotificationService {
    * Mark notification as read
    */
   public markAsRead(notificationId: string): void {
-    const notification = this.notifications.find(n => n.id === notificationId);
+    const notification = this.notifications.find((n: any) => n.id === notificationId);
     if (notification) {
       this.unreadCount = Math.max(0, this.unreadCount - 1);
       this.saveNotificationHistory();

@@ -4,6 +4,7 @@ import { useAppState } from '../contexts/AppContext';
 
 import PlayerPool from '../components/player/PlayerPool';
 import DraftBoard from '../components/draft/DraftBoard';
+import PlayerDetailModal from '../components/player/PlayerDetailModal';
 import PlayerCompareTool from '../components/analytics/PlayerCompareTool';
 import { Player, League, User, AppState } from '../types';
 import { AnimatePresence } from 'framer-motion';
@@ -32,7 +33,7 @@ interface DraftRoomContainerProps {
     playerQueues: AppState['playerQueues'];
 }
 
-const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes: _playerNotes, playerQueues }) => {
+const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }: any) => {
     const [playersToCompare, setPlayersToCompare] = React.useState<Player[]>([]);
     const [isCompareModalOpen, setIsCompareModalOpen] = React.useState(false);
     const [activeSideTab, setActiveSideTab] = React.useState('co-pilot');
@@ -61,9 +62,9 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
 
     const handleToggleCompare = (player: Player) => {
         setPlayersToCompare(prev => {
-            const isAlreadySelected = prev.some(p => p.id === player.id);
+            const isAlreadySelected = prev.some((p: any) => p.id === player.id);
             if (isAlreadySelected) {
-                return prev.filter(p => p.id !== player.id);
+                return prev.filter((p: any) => p.id !== player.id);
             }
             if (prev.length >= 4) {
                 dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Comparison limit of 4 players reached.', type: 'SYSTEM' } });
@@ -165,7 +166,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
                     <div className="h-full flex flex-col glass-pane rounded-lg sm:rounded-2xl">
                         <div className="flex-shrink-0 border-b border-[var(--panel-border)] px-1 sm:px-2">
                              <div className="flex space-x-1 overflow-x-auto scrollbar-hide">
-                                {sidePanelTabs.map(item => (
+                                {sidePanelTabs.map((item: any) => (
                                     <button
                                     key={item.id}
                                     onClick={() => setActiveSideTab(item.id)}

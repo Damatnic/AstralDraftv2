@@ -49,7 +49,7 @@ const GeniusAiChat: React.FC<Props> = ({
   leagueSettings,
   draftHistory,
   onPlayerSelect
-}) => {
+}: any) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -158,7 +158,6 @@ const GeniusAiChat: React.FC<Props> = ({
         }, 500);
       }
     } catch (error) {
-      console.error('Error processing query:', error);
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         type: 'assistant',

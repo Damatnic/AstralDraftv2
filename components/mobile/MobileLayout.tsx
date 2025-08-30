@@ -27,7 +27,7 @@ const MobileLayout: React.FC<Props> = ({
   showPWAPrompt = true,
   notificationCount = 0,
   className = ''
-}) => {
+}: any) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1023px)');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -139,14 +139,6 @@ const MobileLayout: React.FC<Props> = ({
       {/* PWA Install Prompt */}
       {showPWAPrompt && isMobile && (
         <PWAInstallPrompt
-          onInstall={() => {
-            // TODO: Log PWA installation
-            // console.log('PWA installed');
-          }}
-          onDismiss={() => {
-            // TODO: Log PWA prompt dismissal
-            // console.log('PWA prompt dismissed');
-          }}
           className={isKeyboardOpen ? 'hidden' : ''}
         />
       )}

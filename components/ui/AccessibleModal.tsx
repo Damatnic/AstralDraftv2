@@ -47,7 +47,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   closeOnOverlayClick = true,
   showCloseButton = true,
   initialFocus
-}) => {
+}: any) => {
   const { containerRef } = useFocusTrap(isOpen);
   const { announce } = useAnnouncer();
   const titleId = React.useId();
@@ -57,7 +57,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   React.useEffect(() => {
     if (!isOpen) return;
 
-    const handleCustomEscape = (_e: CustomEvent) => {
+    const handleCustomEscape = (e: CustomEvent) => {
       if (closeOnEscape) {
         onClose();
         announce('Modal closed', 'polite');

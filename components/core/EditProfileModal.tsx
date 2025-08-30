@@ -12,7 +12,7 @@ interface EditProfileModalProps {
   onClose: () => void;
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }: any) => {
   const [name, setName] = React.useState(user.name);
   const [avatar, setAvatar] = React.useState(user.avatar);
   const [bio, setBio] = React.useState(user.bio || '');

@@ -5,7 +5,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { League } from '../../types';
+import { Widget } from '../ui/Widget';
+import { Player, Team, User, League } from '../../types';
 import { 
     CalendarIcon, 
     TrophyIcon, 
@@ -13,6 +14,8 @@ import {
     ArrowRightIcon,
     StarIcon,
     FlameIcon,
+    HeartIcon,
+    ThumbsUpIcon,
     MessageCircleIcon,
     ShareIcon,
     FilterIcon,
@@ -20,6 +23,7 @@ import {
     ChevronDownIcon,
     ChevronRightIcon,
     PlayIcon,
+    ImageIcon,
     BarChartIcon,
     CrownIcon,
     ZapIcon,
@@ -150,16 +154,16 @@ interface LeagueHistoryViewerProps {
 }
 
 const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
-    league: _league,
+    league,
     events,
     milestones,
     onEventReaction,
-    onEventComment: _onEventComment,
+    onEventComment,
     onShareEvent,
     className = ''
-}) => {
+}: any) => {
     const [selectedView, setSelectedView] = React.useState<'timeline' | 'milestones' | 'stats'>('timeline');
-    const [timelineFilter] = React.useState<TimelineFilter>({
+    const [timelineFilter, setTimelineFilter] = React.useState<TimelineFilter>({
         seasons: [],
         eventTypes: [],
         participants: [],

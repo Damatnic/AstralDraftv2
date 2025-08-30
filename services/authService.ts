@@ -324,7 +324,7 @@ class AuthService {
   }
 
   private notifyAuthChange(): void {
-    this.authChangeListeners.forEach(listener => {
+    this.authChangeListeners.forEach((listener: any) => {
       try {
         listener(this.currentUser);
       } catch (error) {

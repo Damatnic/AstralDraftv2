@@ -11,7 +11,7 @@ interface PostAnnouncementModalProps {
     onClose: () => void;
 }
 
-const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }) => {
+const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }: any) => {
     const { dispatch } = useAppState();
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');

@@ -39,7 +39,6 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     // Log error to console in development
     if (process.env.NODE_ENV === 'development') {
-      console.error("ErrorBoundary caught an error:", error, errorInfo);
     }
 
     // In production, you might want to send this to an error reporting service
@@ -108,7 +107,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 }
 
 // Feature-specific error boundaries
-const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
+const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) => (
   <div className="text-center p-8 bg-gray-800 rounded-lg">
     <h3 className="text-xl font-bold text-red-400 mb-2">Draft Feature Error</h3>
     <p className="text-gray-300 mb-4">
@@ -123,7 +122,7 @@ const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
   </div>
 );
 
-const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
+const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) => (
   <div className="text-center p-8 bg-gray-800 rounded-lg">
     <h3 className="text-xl font-bold text-purple-400 mb-2">Oracle Feature Error</h3>
     <p className="text-gray-300 mb-4">
@@ -138,10 +137,9 @@ const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
   </div>
 );
 
-export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
   <ErrorBoundary
     onError={(error, errorInfo) => {
-      console.error('Draft feature error:', error, errorInfo);
       // Could send to analytics: trackEvent('error', 'draft', error.message);
     }}
     fallback={DraftErrorFallback}
@@ -150,10 +148,9 @@ export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ ch
   </ErrorBoundary>
 );
 
-export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
   <ErrorBoundary
     onError={(error, errorInfo) => {
-      console.error('Oracle feature error:', error, errorInfo);
     }}
     fallback={OracleErrorFallback}
   >

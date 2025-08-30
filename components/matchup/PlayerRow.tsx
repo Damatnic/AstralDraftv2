@@ -13,7 +13,7 @@ interface PlayerRowProps {
     latestEvent: GamedayEvent | null;
 }
 
-const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent }) => {
+const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent }: any) => {
     const controls = useAnimation();
     const { player, projectedScore, actualScore, isHot } = playerData;
 

@@ -20,17 +20,17 @@ interface MobileOracleInterfaceProps {
     onViewRewards: () => void;
 }
 
-// interface SwipeDirection {
-//     deltaX: number;
-//     deltaY: number;
-// }
+interface SwipeDirection {
+    deltaX: number;
+    deltaY: number;
+}
 
 const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
     week,
     onSubmitPrediction,
     onViewAnalytics,
     onViewRewards
-}) => {
+}: any) => {
     const [challenges, setChallenges] = React.useState<MobileOracleChallenge[]>([]);
     const [currentChallengeIndex, setCurrentChallengeIndex] = React.useState(0);
     const [selectedOption, setSelectedOption] = React.useState<number | null>(null);
@@ -106,7 +106,6 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                 }
             }, 1000);
         } catch (error) {
-            console.error('Failed to submit prediction:', error);
         } finally {
             setIsSubmitting(false);
         }

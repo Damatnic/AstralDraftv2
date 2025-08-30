@@ -6,7 +6,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
-import { Player, League } from '../../types';
+import { Player, League, NewsItem } from '../../types';
 import { NewsIcon } from '../icons/NewsIcon';
 import { ClockIcon } from '../icons/ClockIcon';
 import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
@@ -41,9 +41,9 @@ interface TradeRumor {
 
 const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     player,
-    league: _league,
-    dispatch: _dispatch
-}) => {
+    league,
+    dispatch
+}: any) => {
     // Helper function to handle injury history as string union type
     const getInjuryStatusInfo = (injuryHistory: string | undefined) => {
         if (!injuryHistory) return null;

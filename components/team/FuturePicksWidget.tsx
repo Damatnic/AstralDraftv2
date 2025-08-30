@@ -1,6 +1,6 @@
 
 import React from 'react';
-import type { Team } from '../../types';
+import type { Team, DraftPickAsset } from '../../types';
 import { Widget } from '../ui/Widget';
 import { ArchiveIcon } from '../icons/ArchiveIcon';
 
@@ -8,7 +8,7 @@ interface FuturePicksWidgetProps {
     team: Team;
 }
 
-const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }) => {
+const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }: any) => {
     const picksBySeason = (team.futureDraftPicks || []).reduce((acc, pick) => {
         if (!acc[pick.season]) {
             acc[pick.season] = [];

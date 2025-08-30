@@ -183,7 +183,7 @@ class AIPlayerEvaluator {
     }
 
     private calculatePositionScarcity(position: Position, availablePlayers: Player[]): number {
-        const positionPlayers = availablePlayers.filter(p => p.position === position);
+        const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
         const totalPlayers = availablePlayers.length;
         
         if (totalPlayers === 0) return 1.0;
@@ -201,7 +201,7 @@ class AIPlayerEvaluator {
     }
 
     private calculateTeamNeed(position: Position, team: DraftTeam): number {
-        const currentRoster = team.roster.filter(p => p.position === position);
+        const currentRoster = team.roster.filter((p: any) => p.position === position);
         const needLevel = team.needs.indexOf(position);
         
         if (needLevel === -1) return 0.7; // Not a need
@@ -391,7 +391,7 @@ class DraftSimulationEngine {
     ): DraftPick {
         
         // Evaluate all available players
-        const playerEvaluations = availablePlayers.map(player => ({
+        const playerEvaluations = availablePlayers.map((player: any) => ({
             player,
             value: this.aiEvaluator.evaluatePlayer(player, team, availablePlayers, currentRound, settings)
         }));
@@ -420,7 +420,7 @@ class DraftSimulationEngine {
             confidence: Math.min(100, Math.max(60, selectedPlayer.value / 10)),
             alternativeOptions: playerEvaluations
                 .slice(1, 4)
-                .map(pe => pe.player.name)
+                .map((pe: any) => pe.player.name)
         };
 
         // Update team roster
@@ -429,6 +429,8 @@ class DraftSimulationEngine {
         
         // Update team needs
         this.updateTeamNeeds(team, selectedPlayer.player);
+
+        console.log(`AI Draft Pick: ${team.name} selects ${selectedPlayer.player.name} (${selectedPlayer.player.position}) in round ${currentRound}`);
         
         return pick;
     }
@@ -441,14 +443,14 @@ class DraftSimulationEngine {
         const allTeams = simulation.teams;
         
         // Calculate roster scores
-        const teamScores = allTeams.map(team => ({
+        const teamScores = allTeams.map((team: any) => ({
             team,
             score: this.calculateRosterScore(team, simulation.settings)
         }));
         
         teamScores.sort((a, b) => b.score - a.score);
         
-        const userTeamScore = teamScores.find(ts => ts.team.id === userTeam.id);
+        const userTeamScore = teamScores.find((ts: any) => ts.team.id === userTeam.id);
         const userRank = teamScores.findIndex(ts => ts.team.id === userTeam.id) + 1;
         
         return {
@@ -559,12 +561,12 @@ class DraftSimulationEngine {
 
     private updateTeamNeeds(team: DraftTeam, selectedPlayer: Player): void {
         const position = selectedPlayer.position as Position;
-        const positionCount = team.roster.filter(p => p.position === position).length;
+        const positionCount = team.roster.filter((p: any) => p.position === position).length;
         
         // Remove from needs if threshold met
         const thresholds = { QB: 1, RB: 2, WR: 2, TE: 1, K: 1, DST: 1 };
         if (positionCount >= (thresholds[position] || 1)) {
-            team.needs = team.needs.filter(need => need !== position);
+            team.needs = team.needs.filter((need: any) => need !== position);
         }
     }
 
@@ -576,7 +578,7 @@ class DraftSimulationEngine {
             QB: 100, RB: 90, WR: 85, TE: 70, K: 40, DST: 35
         };
         
-        team.roster.forEach(player => {
+        team.roster.forEach((player: any) => {
             const baseValue = positionValues[player.position as Position] || 50;
             const playerHash = this.aiEvaluator.stringToNumber(player.id.toString());
             const variance = (playerHash % 40) - 20; // -20 to +20
@@ -610,8 +612,8 @@ class DraftSimulationEngine {
     private identifyValueFinds(draftOrder: DraftPick[]): Player[] {
         // Simplified value identification
         return draftOrder
-            .filter(pick => pick.confidence > 85 && pick.round > 5)
-            .map(pick => pick.player)
+            .filter((pick: any) => pick.confidence > 85 && pick.round > 5)
+            .map((pick: any) => pick.player)
             .filter((player): player is Player => player !== undefined)
             .slice(0, 3);
     }
@@ -619,14 +621,14 @@ class DraftSimulationEngine {
     private identifyReaches(draftOrder: DraftPick[]): DraftPick[] {
         // Simplified reach identification
         return draftOrder
-            .filter(pick => pick.confidence < 70 && pick.round < 8)
+            .filter((pick: any) => pick.confidence < 70 && pick.round < 8)
             .slice(0, 3);
     }
 
     private identifySteals(draftOrder: DraftPick[]): DraftPick[] {
         // Simplified steal identification
         return draftOrder
-            .filter(pick => pick.confidence > 90 && pick.round > 3)
+            .filter((pick: any) => pick.confidence > 90 && pick.round > 3)
             .slice(0, 3);
     }
 
@@ -637,9 +639,9 @@ class DraftSimulationEngine {
 
     private generateTeamComparisons(userTeam: DraftTeam, allTeams: DraftTeam[]): TeamComparison[] {
         return allTeams
-            .filter(team => team.id !== userTeam.id)
+            .filter((team: any) => team.id !== userTeam.id)
             .slice(0, 3)
-            .map(team => ({
+            .map((team: any) => ({
                 teamId: team.id,
                 vsUser: 'similar' as const,
                 projectedWins: 8,

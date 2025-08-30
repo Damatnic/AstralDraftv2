@@ -181,30 +181,27 @@ const TrashTalkBoard: React.FC = () => {
 
   const filteredPosts = useMemo(() => {
     if (filterType === 'all') return trashTalkPosts;
-    return trashTalkPosts.filter(post => post.type === filterType);
+    return trashTalkPosts.filter((post: any) => post.type === filterType);
   }, [trashTalkPosts, filterType]);
 
   const handlePostSubmit = () => {
     if (!newPost.trim() || !currentUser) return;
 
-    // TODO: Implement post creation and submission
-    // const post: TrashTalkPost = {
-    //   id: `post-${Date.now()}`,
-    //   userId: currentUser.id,
-    //   userName: currentUser.name,
-    //   userAvatar: currentUser.avatar,
-    //   teamName: league?.teams?.find(t => t.owner.id === currentUser.id)?.name || 'Unknown Team',
-    //   message: newPost.trim(),
-    //   timestamp: new Date(),
-    //   type: postType,
-    //   targetUserId: targetUser || undefined,
-    //   targetUserName: targetUser ? league?.teams?.find(t => t.id === targetUser)?.owner.name : undefined,
-    //   reactions: {},
-    //   replies: []
-    // };
+    const post: TrashTalkPost = {
+      id: `post-${Date.now()}`,
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userAvatar: currentUser.avatar,
+      teamName: league?.teams?.find((t: any) => t.owner.id === currentUser.id)?.name || 'Unknown Team',
+      message: newPost.trim(),
+      timestamp: new Date(),
+      type: postType,
+      targetUserId: targetUser || undefined,
+      targetUserName: targetUser ? league?.teams?.find((t: any) => t.id === targetUser)?.owner.name : undefined,
+      reactions: {},
+      replies: []
+    };
 
-    // TODO: Log trash talk post creation
-    // console.log('New trash talk post:', post);
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -219,22 +216,19 @@ const TrashTalkBoard: React.FC = () => {
     setTargetUser('');
   };
 
-  const handleReply = (_postId: string) => {
+  const handleReply = (postId: string) => {
     if (!replyText.trim() || !currentUser) return;
 
-    // TODO: Implement reply creation and submission
-    // const reply: TrashTalkReply = {
-    //   id: `reply-${Date.now()}`,
-    //   userId: currentUser.id,
-    //   userName: currentUser.name,
-    //   userAvatar: currentUser.avatar,
-    //   message: replyText.trim(),
-    //   timestamp: new Date(),
-    //   reactions: {}
-    // };
+    const reply: TrashTalkReply = {
+      id: `reply-${Date.now()}`,
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userAvatar: currentUser.avatar,
+      message: replyText.trim(),
+      timestamp: new Date(),
+      reactions: {}
+    };
 
-    // TODO: Log reply creation
-    // console.log('New reply:', { postId, reply });
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -248,11 +242,9 @@ const TrashTalkBoard: React.FC = () => {
     setShowReplyInput(null);
   };
 
-  const handleReaction = (postId: string, emoji: string, _isReply = false, _replyId?: string) => {
+  const handleReaction = (postId: string, emoji: string, isReply = false, replyId?: string) => {
     if (!currentUser) return;
 
-    // TODO: Log reaction addition
-    // console.log('Reaction added:', { postId, emoji, isReply, replyId, userId: currentUser.id });
 
     dispatch({
       type: 'ADD_NOTIFICATION',
@@ -324,10 +316,10 @@ const TrashTalkBoard: React.FC = () => {
               { id: 'prediction', label: 'Prediction', icon: '🔮' },
               { id: 'callout', label: 'Call Out', icon: '🎯' },
               { id: 'meme', label: 'Meme', icon: '😂' }
-            ].map(type => (
+            ].map((type: any) => (
               <button
                 key={type.id}
-                onClick={() => setPostType(type.id as 'general' | 'victory' | 'prediction' | 'callout' | 'meme')}
+                onClick={() => setPostType(type.id as any)}
                 className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                   postType === type.id
                     ? 'bg-blue-600 text-white'
@@ -343,11 +335,11 @@ const TrashTalkBoard: React.FC = () => {
           {postType === 'callout' && (
             <select
               value={targetUser}
-              onChange={(e) => setTargetUser(e.target.value)}
+              onChange={(e: any) => setTargetUser(e.target.value)}
               className="form-input"
             >
               <option value="">Select target (optional)</option>
-              {league?.teams?.filter(t => t.owner.id !== currentUser?.id).map(team => (
+              {league?.teams?.filter((t: any) => t.owner.id !== currentUser?.id).map((team: any) => (
                 <option key={team.id} value={team.id}>
                   {team.owner.name} ({team.name})
                 </option>
@@ -358,7 +350,7 @@ const TrashTalkBoard: React.FC = () => {
           {/* Message Input */}
           <textarea
             value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
+            onChange={(e: any) => setNewPost(e.target.value)}
             placeholder="What's on your mind? Keep it spicy but respectful! 🌶️"
             className="form-input h-24 resize-none"
             maxLength={280}
@@ -388,10 +380,10 @@ const TrashTalkBoard: React.FC = () => {
           { id: 'prediction', label: 'Predictions', icon: '🔮' },
           { id: 'callout', label: 'Call Outs', icon: '🎯' },
           { id: 'meme', label: 'Memes', icon: '😂' }
-        ].map(filter => (
+        ].map((filter: any) => (
           <button
             key={filter.id}
-            onClick={() => setFilterType(filter.id as 'all' | 'general' | 'victory' | 'prediction' | 'callout' | 'meme')}
+            onClick={() => setFilterType(filter.id as any)}
             className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               filterType === filter.id
                 ? 'bg-blue-600 text-white'
@@ -470,7 +462,7 @@ const TrashTalkBoard: React.FC = () => {
                     <span className="text-lg">😊+</span>
                   </button>
                   <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 z-10">
-                    {reactionEmojis.map(emoji => (
+                    {reactionEmojis.map((emoji: any) => (
                       <button
                         key={emoji}
                         onClick={() => handleReaction(post.id, emoji)}
@@ -493,7 +485,7 @@ const TrashTalkBoard: React.FC = () => {
               {/* Replies */}
               {post.replies.length > 0 && (
                 <div className="space-y-3 pl-6 border-l-2 border-slate-600">
-                  {post.replies.map(reply => (
+                  {post.replies.map((reply: any) => (
                     <div key={reply.id} className="p-3 bg-slate-800/50 rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg">{reply.userAvatar}</span>
@@ -534,7 +526,7 @@ const TrashTalkBoard: React.FC = () => {
                     <div className="flex-1">
                       <textarea
                         value={replyText}
-                        onChange={(e) => setReplyText(e.target.value)}
+                        onChange={(e: any) => setReplyText(e.target.value)}
                         placeholder="Fire back with a reply..."
                         className="form-input h-16 resize-none mb-2"
                         maxLength={200}

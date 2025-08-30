@@ -213,7 +213,7 @@ const DraftSimulationDemo: React.FC = () => {
 
                                     <div className="space-y-1">
                                         <div className="text-xs font-medium text-gray-400">Key Traits:</div>
-                                        {personality.traits.map((trait) => (
+                                        {personality.traits.map((trait: any) => (
                                             <div key={trait} className="flex items-center space-x-1 text-xs text-gray-300">
                                                 <CheckCircleIcon className="w-3 h-3 text-green-500" />
                                                 <span>{trait}</span>

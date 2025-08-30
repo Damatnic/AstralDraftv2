@@ -11,7 +11,7 @@ interface AdminLoginProps {
   onLogin: (admin: AdminUser) => void;
 }
 
-const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
+const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }: any) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,7 +29,6 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
         setError('Invalid credentials. Please try again.');
       }
     } catch (err) {
-      console.error('Admin authentication error:', err);
       setError('Authentication failed. Please try again.');
     } finally {
       setLoading(false);
@@ -54,7 +53,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
               type="text"
               required
               value={credentials.username}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
+              onChange={(e: any) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your username"
             />
@@ -69,7 +68,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
               type="password"
               required
               value={credentials.password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
+              onChange={(e: any) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               placeholder="Enter your password"
             />
@@ -123,7 +122,6 @@ const AdminRoute: React.FC = () => {
         const admin = JSON.parse(savedAdmin);
         setCurrentAdmin(admin);
       } catch (error) {
-        console.error('Failed to parse saved admin data:', error);
         localStorage.removeItem('astral_admin');
       }
     }

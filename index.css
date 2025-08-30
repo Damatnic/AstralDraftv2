@@ -1,4 +1,4 @@
-/* Astral Draft - Core Styles */
+/* Astral Draft - Elite Draft Room Styles */
 @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -195,5 +195,251 @@ body {
   .mobile-container {
     padding: 1rem;
     max-width: 100%;
+  }
+}
+
+/* Enhanced Draft Room Styles */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Draft Room Animations */
+@keyframes draftPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes timerGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.6);
+  }
+}
+
+@keyframes pickGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(78, 205, 196, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(78, 205, 196, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(78, 205, 196, 0);
+  }
+}
+
+.draft-pulse {
+  animation: draftPulse 2s ease-in-out infinite;
+}
+
+.timer-glow {
+  animation: timerGlow 1s ease-in-out infinite;
+}
+
+.pick-glow {
+  animation: pickGlow 1s ease-out;
+}
+
+/* Enhanced Glass Effects for Draft Room */
+.glass-card-enhanced {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-card-premium {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Position-Specific Colors */
+.position-qb {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), transparent);
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.position-rb {
+  background: linear-gradient(135deg, rgba(78, 205, 196, 0.2), transparent);
+  border-color: rgba(78, 205, 196, 0.3);
+}
+
+.position-wr {
+  background: linear-gradient(135deg, rgba(69, 183, 209, 0.2), transparent);
+  border-color: rgba(69, 183, 209, 0.3);
+}
+
+.position-te {
+  background: linear-gradient(135deg, rgba(249, 202, 36, 0.2), transparent);
+  border-color: rgba(249, 202, 36, 0.3);
+}
+
+.position-k {
+  background: linear-gradient(135deg, rgba(240, 147, 43, 0.2), transparent);
+  border-color: rgba(240, 147, 43, 0.3);
+}
+
+.position-def {
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.2), transparent);
+  border-color: rgba(108, 92, 231, 0.3);
+}
+
+/* AI Recommendations Styling */
+.ai-recommendation {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-recommendation::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(78, 205, 196, 0.1), 
+    transparent);
+  animation: aiScan 3s ease-in-out infinite;
+}
+
+@keyframes aiScan {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: -100%; }
+}
+
+/* Draft Timer Styling */
+.draft-timer {
+  position: relative;
+  display: inline-block;
+}
+
+.draft-timer::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: conic-gradient(from 0deg, #ff6b6b, #4ecdc4, #45b7d1, #ff6b6b);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.7;
+  filter: blur(3px);
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Player Card Hover Effects */
+.player-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.player-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.player-card:active {
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Draft Board Team Indicators */
+.team-on-clock {
+  position: relative;
+  overflow: hidden;
+}
+
+.team-on-clock::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(255, 193, 7, 0.1) 0%,
+    transparent 50%,
+    rgba(255, 193, 7, 0.1) 100%);
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Responsive Draft Room */
+@media (max-width: 1280px) {
+  .draft-room-grid {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .draft-room-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .draft-panel {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .draft-timer {
+    font-size: 1.5rem;
+  }
+  
+  .player-card {
+    padding: 0.75rem;
+  }
+  
+  .ai-recommendation {
+    padding: 0.5rem;
   }
 }

@@ -181,7 +181,7 @@ const LeaderboardView: React.FC = () => {
         const uniqueUsers = state.leagues
           .flatMap(league => league.members)
           .reduce((unique, user) => {
-            if (!unique.find(u => u.id === user.id)) {
+            if (!unique.find((u: any) => u.id === user.id)) {
               unique.push(user);
             }
             return unique;
@@ -196,7 +196,6 @@ const LeaderboardView: React.FC = () => {
         const mockAchievements = generateMockAchievements();
         setAchievements(mockAchievements);
       } catch (error) {
-        console.error('Failed to load leaderboard data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -232,7 +231,7 @@ const LeaderboardView: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <select
           value={filter.timeframe}
-          onChange={(e) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter['timeframe'] }))}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter['timeframe'] }))}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="weekly">This Week</option>
@@ -243,7 +242,7 @@ const LeaderboardView: React.FC = () => {
         
         <select
           value={filter.category}
-          onChange={(e) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter['category'] }))}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter['category'] }))}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="overall">Overall Score</option>
@@ -255,11 +254,11 @@ const LeaderboardView: React.FC = () => {
         {state.leagues.length > 1 && (
           <select
             value={filter.league || ''}
-            onChange={(e) => setFilter(prev => ({ ...prev, league: e.target.value || undefined }))}
+            onChange={(e: any) => setFilter(prev => ({ ...prev, league: e.target.value || undefined }))}
             className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
           >
             <option value="">All Leagues</option>
-            {state.leagues.map(league => (
+            {state.leagues.map((league: any) => (
               <option key={league.id} value={league.id}>{league.name}</option>
             ))}
           </select>
@@ -447,7 +446,7 @@ const LeaderboardView: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Widget title="🔥 Hot Streaks" className="space-y-3">
         {leaderboardData
-          .filter(user => user.streak > 0)
+          .filter((user: any) => user.streak > 0)
           .sort((a, b) => b.streak - a.streak)
           .slice(0, 10)
           .map((scoreCard, index) => (
@@ -467,7 +466,7 @@ const LeaderboardView: React.FC = () => {
 
       <Widget title="❄️ Cold Streaks" className="space-y-3">
         {leaderboardData
-          .filter(user => user.streak < 0)
+          .filter((user: any) => user.streak < 0)
           .sort((a, b) => a.streak - b.streak)
           .slice(0, 10)
           .map((scoreCard, index) => (
@@ -520,9 +519,9 @@ const LeaderboardView: React.FC = () => {
           <h3 className="text-lg font-semibold text-white mb-4">🎯 Accuracy Masters</h3>
           <div className="space-y-2">
             {achievements
-              .filter(ach => ach.category === 'accuracy')
+              .filter((ach: any) => ach.category === 'accuracy')
               .slice(0, 5)
-              .map((achievement, _index) => (
+              .map((achievement, index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
                   <div className="text-2xl">{achievement.icon}</div>
                   <div className="flex-1">
@@ -539,9 +538,9 @@ const LeaderboardView: React.FC = () => {
           <h3 className="text-lg font-semibold text-white mb-4">🔥 Streak Legends</h3>
           <div className="space-y-2">
             {achievements
-              .filter(ach => ach.category === 'streak')
+              .filter((ach: any) => ach.category === 'streak')
               .slice(0, 5)
-              .map((achievement, _index) => (
+              .map((achievement, index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
                   <div className="text-2xl">{achievement.icon}</div>
                   <div className="flex-1">
@@ -591,7 +590,7 @@ const LeaderboardView: React.FC = () => {
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-700">
-        {tabs.map((tab) => (
+        {tabs.map((tab: any) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}

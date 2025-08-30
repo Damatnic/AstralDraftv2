@@ -14,6 +14,9 @@ export interface Player {
   age?: number;
   auctionValue: number;
   projectedPoints?: number;
+  fantasyRank?: number;
+  jerseyNumber?: number;
+  byeWeek?: number;
   consistency?: 'high' | 'medium' | 'low';
   upside?: 'high' | 'medium' | 'low';
   injuryStatus?: 'healthy' | 'questionable' | 'doubtful' | 'out';
@@ -731,6 +734,10 @@ export interface AppState {
     reduceMotion: boolean;
     highContrast: boolean;
     textSize: 'sm' | 'md' | 'lg';
+    // Additional state properties
+    seasonReviewYear?: number;
+    editingMatchups?: boolean;
+    weeklyRecapScript?: { [key: string]: any };
 }
 
 // Holdout Validation Result Interface

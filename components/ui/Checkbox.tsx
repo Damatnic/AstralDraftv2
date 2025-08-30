@@ -11,7 +11,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   className = '',
   id,
   ...props
-}) => {
+}: any) => {
   const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
   return (

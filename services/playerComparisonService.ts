@@ -158,7 +158,7 @@ class PlayerComparisonService {
     try {
       // Fetch base player data
       const players = await Promise.all(
-        playerIds.map(id => productionSportsDataService.getPlayerDetails(id))
+        playerIds.map((id: any) => productionSportsDataService.getPlayerDetails(id))
       );
 
       // Filter out null players
@@ -173,7 +173,7 @@ class PlayerComparisonService {
 
       // Enhance each player with comprehensive analysis
       const enhancedPlayers = await Promise.all(
-        validPlayers.map(player => this.enhancePlayerData(player, week, season, games))
+        validPlayers.map((player: any) => this.enhancePlayerData(player, week, season, games))
       );
 
       // Generate comparative analysis
@@ -238,7 +238,7 @@ class PlayerComparisonService {
     }
 
     const games = await productionSportsDataService.getCurrentWeekGames(week, season);
-    const playerGame = games.find(g => 
+    const playerGame = games.find((g: any) => 
       g.homeTeam.abbreviation === player.team || g.awayTeam.abbreviation === player.team
     );
 
@@ -259,7 +259,7 @@ class PlayerComparisonService {
     }
 
     const games = await productionSportsDataService.getCurrentWeekGames(week, season);
-    const playerGame = games.find(g => 
+    const playerGame = games.find((g: any) => 
       g.homeTeam.abbreviation === player.team || g.awayTeam.abbreviation === player.team
     );
 
@@ -273,7 +273,7 @@ class PlayerComparisonService {
   /**
    * Get trending players based on recent performance
    */
-  async getTrendingPlayers(position?: string, _limit: number = 10): Promise<{
+  async getTrendingPlayers(position?: string, limit: number = 10): Promise<{
     trending: ComparisonPlayer[];
     declining: ComparisonPlayer[];
     breakout: ComparisonPlayer[];
@@ -290,7 +290,7 @@ class PlayerComparisonService {
   /**
    * Generate player ranking for position
    */
-  async generatePositionRankings(_position: string, _week: number): Promise<ComparisonPlayer[]> {
+  async generatePositionRankings(position: string, week: number): Promise<ComparisonPlayer[]> {
     // This would rank all players at a position based on projections
     // For now, returning empty array
     return [];
@@ -304,7 +304,7 @@ class PlayerComparisonService {
     season: number, 
     games: NFLGame[]
   ): Promise<ComparisonPlayer> {
-    const playerGame = games.find(g => 
+    const playerGame = games.find((g: any) => 
       g.homeTeam.abbreviation === player.team || g.awayTeam.abbreviation === player.team
     );
 
@@ -428,7 +428,7 @@ class PlayerComparisonService {
     );
 
     // Calculate confidence based on projection gap and individual confidence
-    const projections = players.map(p => p.projectedStats.fantasyPoints);
+    const projections = players.map((p: any) => p.projectedStats.fantasyPoints);
     const maxProjection = Math.max(...projections);
     const sortedProjections = [...projections].sort((a, b) => b - a);
     const secondMax = sortedProjections[1] || 0;
@@ -473,7 +473,7 @@ class PlayerComparisonService {
   private generateRecommendations(players: ComparisonPlayer[], analysis: ComparisonAnalysis): ComparisonRecommendation[] {
     const recommendations: ComparisonRecommendation[] = [];
 
-    players.forEach(player => {
+    players.forEach((player: any) => {
       if (player.id === analysis.winner) {
         recommendations.push({
           type: 'start',
@@ -523,7 +523,7 @@ class PlayerComparisonService {
     return Number((passingPoints + rushingPoints + receivingPoints).toFixed(1));
   }
 
-  private getMatchupModifier(_player: NFLPlayer, _game: NFLGame): number {
+  private getMatchupModifier(player: NFLPlayer, game: NFLGame): number {
     // This would analyze opponent defensive rankings and player performance against similar defenses
     // For now, using simplified calculation
     const baseModifier = Math.random() * 0.4 + 0.8; // 0.8 - 1.2
@@ -552,7 +552,7 @@ class PlayerComparisonService {
     return Math.max(0.5, modifier);
   }
 
-  private getRecentFormModifier(_player: NFLPlayer): number {
+  private getRecentFormModifier(player: NFLPlayer): number {
     // This would analyze recent game performance trends
     // For now, using random factor with slight bias
     return Math.random() * 0.3 + 0.85; // 0.85 - 1.15
@@ -573,7 +573,7 @@ class PlayerComparisonService {
     return Math.max(10, Math.min(95, Math.round(totalConfidence)));
   }
 
-  private calculateDifficultyScore(defensiveRank: number, _position: string): number {
+  private calculateDifficultyScore(defensiveRank: number, position: string): number {
     // Invert rank so lower rank = easier matchup
     const baseScore = (33 - defensiveRank) / 32 * 10;
     return Math.max(1, Math.min(10, Math.round(baseScore)));
@@ -632,13 +632,13 @@ class PlayerComparisonService {
     return riskFactors[player.injuryStatus || 'healthy'];
   }
 
-  private async getHistoricalMatchups(_playerId: string, _opponent: string): Promise<HistoricalMatchup[]> {
+  private async getHistoricalMatchups(playerId: string, opponent: string): Promise<HistoricalMatchup[]> {
     // This would fetch historical performance against this opponent
     // For now, returning empty array
     return [];
   }
 
-  private identifyKeyFactors(player: NFLPlayer, game: NFLGame, opponent: unknown): string[] {
+  private identifyKeyFactors(player: NFLPlayer, game: NFLGame, opponent: any): string[] {
     const factors = [];
 
     if (game.weather?.windSpeed && game.weather.windSpeed > 15) {
@@ -658,7 +658,7 @@ class PlayerComparisonService {
     return factors;
   }
 
-  private calculateTrend(_player: NFLPlayer): PlayerTrend {
+  private calculateTrend(player: NFLPlayer): PlayerTrend {
     // This would analyze week-over-week performance
     // For now, using random assignment
     const trends: PlayerTrend[] = ['improving', 'declining', 'stable'];
@@ -669,23 +669,23 @@ class PlayerComparisonService {
     const factors = [];
 
     // Check for weather impacts
-    const weatherAffected = players.filter(p => 
+    const weatherAffected = players.filter((p: any) => 
       p.matchupAnalysis.weatherImpact.expectedImpact === 'negative'
     );
     if (weatherAffected.length > 0) {
-      factors.push(`Weather concerns for ${weatherAffected.map(p => p.name).join(', ')}`);
+      factors.push(`Weather concerns for ${weatherAffected.map((p: any) => p.name).join(', ')}`);
     }
 
     // Check for injury risks
-    const injuryRisks = players.filter(p => p.matchupAnalysis.injuryRisk > 25);
+    const injuryRisks = players.filter((p: any) => p.matchupAnalysis.injuryRisk > 25);
     if (injuryRisks.length > 0) {
-      factors.push(`Injury concerns for ${injuryRisks.map(p => p.name).join(', ')}`);
+      factors.push(`Injury concerns for ${injuryRisks.map((p: any) => p.name).join(', ')}`);
     }
 
     // Check for difficult matchups
-    const toughMatchups = players.filter(p => p.matchupAnalysis.difficulty === 'hard');
+    const toughMatchups = players.filter((p: any) => p.matchupAnalysis.difficulty === 'hard');
     if (toughMatchups.length > 0) {
-      factors.push(`Difficult matchups for ${toughMatchups.map(p => p.name).join(', ')}`);
+      factors.push(`Difficult matchups for ${toughMatchups.map((p: any) => p.name).join(', ')}`);
     }
 
     return factors;
@@ -721,7 +721,7 @@ class PlayerComparisonService {
     };
   }
 
-  private async getOracleAccuracy(_playerId: string): Promise<OraclePlayerAccuracy | undefined> {
+  private async getOracleAccuracy(playerId: string): Promise<OraclePlayerAccuracy | undefined> {
     // This would fetch Oracle prediction accuracy for this specific player
     // For now, returning mock data
     return {
@@ -735,11 +735,12 @@ class PlayerComparisonService {
 
   private initializeProjectionModels(): void {
     // This would load ML models for projections
-    // Initialize projection models
+    // For now, just logging initialization
+    console.log('🤖 Player comparison projection models initialized');
   }
 
   private async notifyHighConfidenceComparison(comparison: PlayerComparison): Promise<void> {
-    const winner = comparison.players.find(p => p.id === comparison.analysis.winner);
+    const winner = comparison.players.find((p: any) => p.id === comparison.analysis.winner);
     if (winner) {
       (realtimeNotificationService as any).emit('player_comparison_alert', {
         playerId: winner.id,

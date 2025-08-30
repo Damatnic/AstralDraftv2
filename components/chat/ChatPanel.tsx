@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { formatRelativeTime } from '../../utils/time';
 import { generateTrashTalk } from '../../services/geminiService';
@@ -7,7 +7,6 @@ import { SwordIcon } from '../icons/SwordIcon';
 import { Tooltip } from '../ui/Tooltip';
 import ReactionPicker from './ReactionPicker';
 import TradeEventMessage from './TradeEventMessage';
-import type { ChatMessage } from '../../types/types';
 
 const ChatPanel: React.FC = () => {
     const { state, dispatch } = useAppState();
@@ -16,9 +15,9 @@ const ChatPanel: React.FC = () => {
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
     const [showMentions, setShowMentions] = React.useState(false);
     
-    const activeLeague = state.leagues.find((l: { id: string }) => l.id === state.activeLeagueId);
-    const messages = useMemo(() => activeLeague?.chatMessages || [], [activeLeague?.chatMessages]);
-    const myTeam = activeLeague?.teams.find((t: { owner: { id: string } }) => t.owner.id === state.user?.id);
+    const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
+    const messages = activeLeague?.chatMessages || [];
+    const myTeam = activeLeague?.teams.find((t: any) => t.owner.id === state.user?.id);
     
     React.useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -41,11 +40,11 @@ const ChatPanel: React.FC = () => {
     
     const handleGenerateTrashTalk = async () => {
         if (!myTeam || !activeLeague) return;
-        const matchup = activeLeague.schedule.find((m: { week: number; teamA: { teamId: number }; teamB: { teamId: number } }) => m.week === activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
+        const matchup = activeLeague.schedule.find((m: any) => m.week === activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
         if (!matchup) return;
         
         const opponentId = matchup.teamA.teamId === myTeam.id ? matchup.teamB.teamId : matchup.teamA.teamId;
-        const opponentTeam = activeLeague.teams.find((t: { id: number }) => t.id === opponentId);
+        const opponentTeam = activeLeague.teams.find((t: any) => t.id === opponentId);
         if (!opponentTeam) return;
 
         setIsGenerating(true);
@@ -84,7 +83,7 @@ const ChatPanel: React.FC = () => {
         setShowMentions(false);
     };
 
-    const canGenerateTrashTalk = myTeam && activeLeague && activeLeague.schedule.some((m: { week: number; teamA: { teamId: number }; teamB: { teamId: number } }) => m.week === activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
+    const canGenerateTrashTalk = myTeam && activeLeague && activeLeague.schedule.some((m: any) => m.week === activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
 
     return (
         <div className="glass-pane h-full flex flex-col bg-[var(--panel-bg)] border-[var(--panel-border)] rounded-2xl shadow-lg">
@@ -92,7 +91,7 @@ const ChatPanel: React.FC = () => {
                 <h3 className="font-display text-lg font-bold text-[var(--text-primary)]">LEAGUE CHAT</h3>
             </div>
             <div className="flex-grow p-2 space-y-3 overflow-y-auto">
-                {messages.map((msg: ChatMessage) => {
+                {messages.map((msg: any) => {
                     const isMyMention = msg.mentions?.includes(state.user?.id);
                     if (msg.isSystemMessage && msg.tradeEvent && activeLeague) {
                         return <TradeEventMessage key={msg.id} message={msg} league={activeLeague} onReact={handleReaction} />;
@@ -105,7 +104,7 @@ const ChatPanel: React.FC = () => {
                         <div key={msg.id} className={`flex items-start gap-2.5 text-sm group relative ${msg.user.id === state.user?.id ? 'justify-end' : ''}`}>
                             {msg.user.id !== state.user?.id && <span className="text-xl mt-1">{msg.user.avatar}</span>}
                             <div className="flex flex-col gap-1 w-full max-w-[85%]">
-                                 <ReactionPicker onSelect={(emoji) => handleReaction(msg.id, emoji)} />
+                                 <ReactionPicker onSelect={(emoji: any) => handleReaction(msg.id, emoji)} />
                                 <div className={`p-2 rounded-lg ${msg.user.id === state.user?.id ? 'bg-cyan-600 self-end' : 'bg-black/20 self-start'} ${isMyMention ? 'ring-2 ring-yellow-400' : ''}`}>
                                     <p>{msg.text}</p>
                                 </div>
@@ -131,7 +130,7 @@ const ChatPanel: React.FC = () => {
              <div className="flex-shrink-0 p-2 border-t border-[var(--panel-border)] relative">
                 {showMentions && activeLeague && (
                     <div className="absolute bottom-full left-2 w-1/2 bg-gray-900 border border-white/10 rounded-lg shadow-lg p-1">
-                        {activeLeague.members.filter((m: { id: string }) => m.id !== state.user?.id).map((member: { id: string; name: string }) => (
+                        {activeLeague.members.filter((m: any) => m.id !== state.user?.id).map((member: any) => (
                             <button key={member.id} onClick={() => handleMentionSelect(member.name)} className="w-full text-left p-1.5 text-sm rounded hover:bg-white/10">
                                 {member.name}
                             </button>

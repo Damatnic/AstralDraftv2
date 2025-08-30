@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
-import { Player, League } from '../../types';
+import { Player, League, NewsItem } from '../../types';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
@@ -28,7 +28,7 @@ interface PlayerProfileViewProps {
     onClose?: () => void;
 }
 
-const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }) => {
+const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<string>('overview');
     const [isFavorited, setIsFavorited] = React.useState(false);
     const [showShareMenu, setShowShareMenu] = React.useState(false);
@@ -219,7 +219,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
             {/* Tab Navigation */}
             <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)]">
                 <div className="flex overflow-x-auto">
-                    {tabs.map((tab) => (
+                    {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
                             onClick={() => setSelectedTab(tab.id)}
@@ -259,7 +259,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
 };
 
 // Overview Section Component
-const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league: _league }) => {
+const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }: any) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Player Bio & Info */}
@@ -282,7 +282,7 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
                                     <div>
                                         <h5 className="font-medium text-green-400 mb-2">Strengths</h5>
                                         <ul className="space-y-1">
-                                            {player.scoutingReport.strengths.map((strength) => (
+                                            {player.scoutingReport.strengths.map((strength: any) => (
                                                 <li key={strength} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
                                                     <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
                                                     {strength}
@@ -294,7 +294,7 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
                                     <div>
                                         <h5 className="font-medium text-red-400 mb-2">Weaknesses</h5>
                                         <ul className="space-y-1">
-                                            {player.scoutingReport.weaknesses.map((weakness) => (
+                                            {player.scoutingReport.weaknesses.map((weakness: any) => (
                                                 <li key={weakness} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
                                                     <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
                                                     {weakness}

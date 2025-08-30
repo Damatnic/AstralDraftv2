@@ -26,7 +26,7 @@ export const HighContrastMode: React.FC = () => {
 
   return (
     <Button
-      variant="secondary"
+      variant="default"
       size="sm"
       onClick={toggleHighContrast}
       aria-label={`${highContrast ? 'Disable' : 'Enable'} high contrast mode`}
@@ -35,3 +35,5 @@ export const HighContrastMode: React.FC = () => {
     </Button>
   );
 };
+
+export default HighContrastMode;

@@ -76,7 +76,7 @@ class OAuthService {
    * Get all available OAuth providers
    */
   getAvailableProviders(): OAuthProvider[] {
-    return Object.values(this.providers).filter(provider => provider.clientId);
+    return Object.values(this.providers).filter((provider: any) => provider.clientId);
   }
 
   /**

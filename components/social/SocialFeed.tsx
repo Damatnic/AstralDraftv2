@@ -5,20 +5,29 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User } from '../../types';
+import { Widget } from '../ui/Widget';
+import { Player, Team, User, League } from '../../types';
 import { 
+    HeartIcon, 
     MessageCircleIcon, 
     ShareIcon, 
+    ThumbsUpIcon,
+    ThumbsDownIcon,
     FlameIcon,
     TrophyIcon,
     ArrowRightIcon,
     UsersIcon,
+    CalendarIcon,
     MoreHorizontalIcon,
     PinIcon,
+    FlagIcon,
     BookmarkIcon,
+    ImageIcon,
     PlayIcon,
+    ChevronDownIcon,
     FilterIcon,
     TrendingUpIcon,
+    ClockIcon,
     EyeIcon
 } from 'lucide-react';
 
@@ -133,31 +142,30 @@ export interface SocialFeedFilter {
 }
 
 interface SocialFeedProps {
-    items: SocialFeedItem[];
+    feedItems: SocialFeedItem[];
     currentUser: User;
-    onReact: (itemId: string, reaction: string) => void;
-    onComment: (itemId: string, comment: string) => void;
+    onReaction: (itemId: string, emoji: string) => void;
+    onComment: (itemId: string, content: string, parentId?: string) => void;
     onShare: (itemId: string) => void;
-    onBookmark: (itemId: string) => void;
-    onVote: (itemId: string, pollId: string, optionId: string) => void;
-    _onReport: (itemId: string, reason: string) => void;
     onPin: (itemId: string) => void;
-    _onFilter: (filter: SocialFeedFilter) => void;
+    onReport: (itemId: string, reason: string) => void;
+    onVote: (pollId: string, optionId: string) => void;
+    onFilter: (filter: SocialFeedFilter) => void;
+    className?: string;
 }
 
 const SocialFeed: React.FC<SocialFeedProps> = ({
-    items,
+    feedItems,
     currentUser,
-    onReact,
+    onReaction,
     onComment,
     onShare,
-    onBookmark,
-    onVote,
     onPin,
-    _onReport,
-    _onFilter,
+    onReport,
+    onVote,
+    onFilter,
     className = ''
-}) => {
+}: any) => {
     const [filter, setFilter] = React.useState<SocialFeedFilter>({
         types: [],
         users: [],
@@ -168,11 +176,11 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     const [showFilters, setShowFilters] = React.useState(false);
     const [expandedComments, setExpandedComments] = React.useState<Set<string>>(new Set());
     const [newComment, setNewComment] = React.useState<Record<string, string>>({});
-    const [_replyingTo, setReplyingTo] = React.useState<string | null>(null);
+    const [replyingTo, setReplyingTo] = React.useState<string | null>(null);
 
     // Filter and sort feed items
     const processedFeedItems = React.useMemo(() => {
-        let filtered = items;
+        let filtered = feedItems;
 
         // Type filter
         if (filter.types.length > 0) {
@@ -230,7 +238,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
         }
 
         return filtered;
-    }, [items, filter]);
+    }, [feedItems, filter]);
 
     const getItemTypeIcon = (type: FeedItemType) => {
         switch (type) {
@@ -309,7 +317,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
         setReplyingTo(null);
     };
 
-    const renderPoll = (poll: FeedPoll, _itemId: string) => {
+    const renderPoll = (poll: FeedPoll, itemId: string) => {
         const totalVotes = poll.options.reduce((sum, option) => sum + option.votes, 0);
         const hasVoted = poll.options.some((option: any) => option.voters.includes(currentUser.id));
         const isPollEnded = poll.endsAt < new Date();
@@ -463,7 +471,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                 return (
                                     <button
                                         key={emoji}
-                                        onClick={() => onReact(item.id, emoji)}
+                                        onClick={() => onReaction(item.id, emoji)}
                                         className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition-colors ${
                                             userReacted 
                                                 ? 'bg-blue-500/20 text-blue-400' 

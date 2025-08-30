@@ -2,7 +2,7 @@
 
 
 import React from 'react';
-import type { League, Player, User } from '../types';
+import type { League, Team, Player, User, AuctionState } from '../types';
 import { getAiNomination, getAiBid } from '../services/geminiService';
 import { players } from '../data/players';
 import useSound from './useSound';
@@ -14,16 +14,16 @@ export const useRealtimeAuction = (
     league: League | undefined,
     isPaused: boolean,
     user: User,
-    dispatch: React.Dispatch<{ type: string; payload?: unknown }>
+    dispatch: React.Dispatch<any>
 ) => {
     const playNominationSound = useSound('yourTurn', 0.4);
     const playBidSound = useSound('bid', 0.5);
     const playSoldSound = useSound('sold', 0.6);
 
     const auctionState = league?.auctionState;
-    const teams = React.useMemo(() => league?.teams ?? [], [league?.teams]);
-    const draftedPlayerIds = new Set(league?.draftPicks.map(p => p.playerId));
-    const availablePlayers = players.filter(p => !draftedPlayerIds.has(p.id));
+    const teams = league?.teams ?? [];
+    const draftedPlayerIds = new Set(league?.draftPicks.map((p: any) => p.playerId));
+    const availablePlayers = players.filter((p: any) => !draftedPlayerIds.has(p.id));
     
     // Timer Logic
     React.useEffect(() => {
@@ -34,7 +34,7 @@ export const useRealtimeAuction = (
         const interval = setInterval(() => {
             const timeSinceLastBid = (Date.now() - auctionState.lastBidTimestamp) / 1000;
             if (timeSinceLastBid >= AUCTION_TIMER_SECONDS) {
-                const soldPlayer = players.find(p => p.id === auctionState.nominatedPlayerId)
+                const soldPlayer = players.find((p: any) => p.id === auctionState.nominatedPlayerId)
                 dispatch({ type: 'PROCESS_AUCTION_SALE', payload: { leagueId: league.id } });
                 dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${soldPlayer?.name} sold!`, type: 'DRAFT' }});
                 playSoldSound();
@@ -51,13 +51,13 @@ export const useRealtimeAuction = (
             return;
         }
 
-        const nominatingTeam = teams.find(t => t.id === auctionState.nominatingTeamId);
+        const nominatingTeam = teams.find((t: any) => t.id === auctionState.nominatingTeamId);
         
         // AI Nomination
         if (!auctionState.nominatedPlayerId && nominatingTeam?.owner.id.startsWith('ai_')) {
             const timer = setTimeout(async () => {
                 const playerName = await getAiNomination(nominatingTeam, availablePlayers);
-                const playerToNominate = availablePlayers.find(p => p.name === playerName) || availablePlayers[Math.floor(Math.random() * 20)];
+                const playerToNominate = availablePlayers.find((p: any) => p.name === playerName) || availablePlayers[Math.floor(Math.random() * 20)];
                 if (playerToNominate) {
                     dispatch({ type: 'AUCTION_NOMINATE', payload: { leagueId: league.id, playerId: playerToNominate.id, teamId: nominatingTeam.id } });
                     dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${nominatingTeam.name} nominates ${playerToNominate.name}.`, type: 'DRAFT' } });
@@ -69,12 +69,12 @@ export const useRealtimeAuction = (
 
         // AI Bidding
         if (auctionState.nominatedPlayerId) {
-            const nominatedPlayer = players.find(p => p.id === auctionState.nominatedPlayerId)!;
+            const nominatedPlayer = players.find((p: any) => p.id === auctionState.nominatedPlayerId)!;
             
-            const aiTeamsToAct = teams.filter(t => t.owner.id.startsWith('ai_') && t.id !== auctionState.highBidderId && t.budget > auctionState.currentBid);
+            const aiTeamsToAct = teams.filter((t: any) => t.owner.id.startsWith('ai_') && t.id !== auctionState.highBidderId && t.budget > auctionState.currentBid);
 
-            aiTeamsToAct.forEach(aiTeam => {
-                setTimeout(async () => {
+            aiTeamsToAct.forEach((aiTeam: any) => {
+                const bidTimer = setTimeout(async () => {
                     const latestAuctionState = league?.auctionState; // Get latest state
                     if (!latestAuctionState || latestAuctionState.highBidderId === aiTeam.id || isPaused) return;
 
@@ -88,12 +88,12 @@ export const useRealtimeAuction = (
             });
         }
 
-    }, [auctionState, isPaused, league, availablePlayers, dispatch, playBidSound, playNominationSound, teams]);
+    }, [auctionState, isPaused, league, availablePlayers, dispatch, playBidSound, playNominationSound]);
     
-    const myTeam = teams.find(t => t.owner.id === user.id);
-    const nominatedPlayer = auctionState?.nominatedPlayerId ? players.find(p => p.id === auctionState.nominatedPlayerId) : null;
-    const highBidderTeam = auctionState?.highBidderId ? teams.find(t => t.id === auctionState.highBidderId) : null;
-    const nominatingTeam = auctionState ? teams.find(t => t.id === auctionState.nominatingTeamId) : null;
+    const myTeam = teams.find((t: any) => t.owner.id === user.id);
+    const nominatedPlayer = auctionState?.nominatedPlayerId ? players.find((p: any) => p.id === auctionState.nominatedPlayerId) : null;
+    const highBidderTeam = auctionState?.highBidderId ? teams.find((t: any) => t.id === auctionState.highBidderId) : null;
+    const nominatingTeam = auctionState ? teams.find((t: any) => t.id === auctionState.nominatingTeamId) : null;
     
     const timeLeft = auctionState?.lastBidTimestamp ? Math.max(0, AUCTION_TIMER_SECONDS - Math.floor((Date.now() - auctionState.lastBidTimestamp) / 1000)) : 0;
     

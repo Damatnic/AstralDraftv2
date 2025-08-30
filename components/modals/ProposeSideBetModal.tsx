@@ -10,7 +10,7 @@ interface ProposeSideBetModalProps {
     onClose: () => void;
 }
 
-const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) => {
+const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: any) => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [opponentId, setOpponentId] = React.useState<string>('');
@@ -73,7 +73,7 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
                             className={inputClasses}
                         >
                             <option value="" disabled>Select a manager</option>
-                            {opponents.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                            {opponents.map((t: any) => <option key={t.id} value={t.id}>{t.name}</option>)}
                         </select>
                     </div>
                      <div>

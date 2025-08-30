@@ -158,7 +158,7 @@ const NotificationDemo: React.FC = () => {
                             Quick Notification Tests
                         </h3>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {testNotificationTypes.map((testNotif) => {
+                            {testNotificationTypes.map((testNotif: any) => {
                                 let priorityClasses = 'bg-gray-500/20 text-gray-400';
                                 if (testNotif.priority === 'high') {
                                     priorityClasses = 'bg-orange-500/20 text-orange-400';

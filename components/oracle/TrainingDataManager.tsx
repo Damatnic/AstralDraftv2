@@ -3,7 +3,7 @@
  * Comprehensive interface for managing ML training data, datasets, model training, and performance monitoring
  */
 
-import { useState, useEffect, useCallback, useMemo, memo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { 
     Database, 
@@ -33,6 +33,14 @@ import oracleEnsembleMLService, {
 } from '../../services/oracleEnsembleMachineLearningService';
 
 type TabType = 'overview' | 'datasets' | 'validation' | 'training' | 'performance' | 'config';
+
+interface TrainingMetrics {
+    accuracy: number;
+    loss: number;
+    epoch: number;
+    learningRate: number;
+    validationAccuracy: number;
+}
 
 const TrainingDataManager = memo(() => {
     const [activeTab, setActiveTab] = useState<TabType>('overview');
@@ -82,7 +90,7 @@ const TrainingDataManager = memo(() => {
     });
     const [validationReport, setValidationReport] = useState<ValidationReport | null>(null);
     const [validationRules, setValidationRules] = useState<DataValidationRule[]>([]);
-    const [isValidating] = useState(false);
+    const [isValidating, setIsValidating] = useState(false);
     const [systemConfig, setSystemConfig] = useState({
         ensembleStrategy: 'weighted_average',
         predictionThreshold: 0.75,
@@ -96,7 +104,7 @@ const TrainingDataManager = memo(() => {
         alertOnAnomalies: true
     });
     const [configurationChanged, setConfigurationChanged] = useState(false);
-    const [savingConfiguration] = useState(false);
+    const [savingConfiguration, setSavingConfiguration] = useState(false);
     
     // Enhanced loading and error states
     const [isLoading, setIsLoading] = useState(true);
@@ -153,7 +161,6 @@ const TrainingDataManager = memo(() => {
     const setSpecificError = useCallback((category: keyof typeof errors, message: string | null) => {
         setErrors(prev => ({ ...prev, [category]: message }));
         if (message) {
-            console.error(`${category} error:`, message);
         }
     }, [errors]);
 
@@ -198,13 +205,11 @@ const TrainingDataManager = memo(() => {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
             
             if (currentAttempts < maxRetries) {
-                console.warn(`${operationType} failed (attempt ${currentAttempts + 1}/${maxRetries}): ${errorMessage}. Retrying in ${retryDelay}ms...`);
                 incrementRetryAttempt(operationType);
                 
                 await new Promise(resolve => setTimeout(resolve, retryDelay));
                 return executeWithRetry(operation, operationType, maxRetries, retryDelay * 1.5); // Exponential backoff
             } else {
-                console.error(`${operationType} failed after ${maxRetries} attempts: ${errorMessage}`);
                 setSpecificError(operationType === 'dataLoad' ? 'dataLoad' : 'general', errorMessage);
                 resetRetryAttempts(operationType);
                 return null;
@@ -258,7 +263,6 @@ const TrainingDataManager = memo(() => {
             return result;
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Operation failed';
-            console.error(`${loadingType} operation failed:`, error);
             
             if (errorCategory) {
                 setSpecificError(errorCategory, errorMessage);
@@ -286,7 +290,7 @@ const TrainingDataManager = memo(() => {
                 return true;
             }
             return false;
-        } catch {
+        } catch (error) {
             setRealtimeConnected(false);
             setSpecificError('connection', 'Connection lost - attempting to reconnect...');
             return false;
@@ -320,7 +324,6 @@ const TrainingDataManager = memo(() => {
                     const stats = await oracleEnsembleMLService.getDatasetStatistics();
                     setDatasetStats(stats);
                 } catch (error) {
-                    console.error('Failed to refresh real-time metrics:', error);
                 }
             }, 5000); // Refresh every 5 seconds
             
@@ -332,7 +335,6 @@ const TrainingDataManager = memo(() => {
             setUpdateIntervals(prev => [...prev, metricsInterval, sessionInterval]);
             
         } catch (error) {
-            console.error('Failed to initialize real-time monitoring:', error);
             throw error;
         }
     }, [isTraining]);
@@ -370,13 +372,11 @@ const TrainingDataManager = memo(() => {
             if (history?.status === 'fulfilled') {
                 setTrainingHistory(history.value);
             } else {
-                console.warn('Failed to load training history:', history.reason);
             }
             
             if (report?.status === 'fulfilled') {
                 setValidationReport(report.value);
             } else {
-                console.warn('Failed to load validation report:', report.reason);
             }
             
             if (hasErrors) {
@@ -397,7 +397,6 @@ const TrainingDataManager = memo(() => {
             try {
                 await initializeRealtimeMonitoring();
             } catch (error) {
-                console.warn('Real-time monitoring initialization failed, continuing with basic mode:', error);
                 setSpecificError('connection', 'Real-time features limited - some data may not auto-refresh');
             }
 
@@ -414,7 +413,6 @@ const TrainingDataManager = memo(() => {
                 const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                 setModelMetrics(metrics);
             } catch (error) {
-                console.warn('Failed to load model metrics, using defaults:', error);
                 setSpecificError('general', 'Model metrics temporarily unavailable');
             } finally {
                 setSpecificLoading('modelMetrics', false);
@@ -425,7 +423,6 @@ const TrainingDataManager = memo(() => {
                 const history = oracleEnsembleMLService.getTrainingHistory();
                 setTrainingHistory(history);
             } catch (error) {
-                console.warn('Failed to load training history:', error);
                 // Don't set error for non-critical data
             }
 
@@ -434,7 +431,6 @@ const TrainingDataManager = memo(() => {
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
             } catch (error) {
-                console.warn('Failed to load validation rules:', error);
             }
 
             // Load system configuration with enhanced handling
@@ -448,7 +444,6 @@ const TrainingDataManager = memo(() => {
                 const lastReport = oracleEnsembleMLService.getLastValidationReport();
                 setValidationReport(lastReport);
             } catch (error) {
-                console.warn('Failed to load last validation report:', error);
             }
             
             // Test connection health
@@ -498,7 +493,6 @@ const TrainingDataManager = memo(() => {
                         const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                         setModelMetrics(metrics);
                     } catch (error) {
-                        console.warn('Failed to refresh metrics during training:', error);
                         // Don't fail the entire operation for metrics refresh
                     }
                 }
@@ -509,7 +503,6 @@ const TrainingDataManager = memo(() => {
                 try {
                     await refreshDataSources();
                 } catch (error) {
-                    console.warn('Failed to refresh data after training completion:', error);
                     setSpecificError('dataLoad', 'Failed to refresh data after training completion');
                 }
             }
@@ -555,18 +548,17 @@ const TrainingDataManager = memo(() => {
                 }
             );
 
+            
             // Trigger immediate data refresh
             try {
                 await refreshDataSources();
             } catch (error) {
-                console.warn('Failed to refresh data after starting training:', error);
                 // Don't fail training start for this
             }
             
             resetRetryAttempts('training');
             return sessionId;
-        }, 'trainingData', 'training').catch((error) => {
-            console.error('Failed to start training:', error);
+        }, 'trainingData', 'training').catch((error: any) => {
             setIsTraining(false);
             return null;
         });
@@ -591,7 +583,6 @@ const TrainingDataManager = memo(() => {
             try {
                 oracleEnsembleMLService.cancelTrainingSession(currentSession.id);
             } catch (error) {
-                console.warn('Failed to gracefully cancel training session:', error);
                 // Force stop the training state even if cancellation fails
             }
             
@@ -603,7 +594,6 @@ const TrainingDataManager = memo(() => {
             try {
                 await refreshDataSources();
             } catch (error) {
-                console.warn('Failed to refresh data after stopping training:', error);
                 setSpecificError('dataLoad', 'Training stopped but failed to refresh data');
             }
             
@@ -645,21 +635,18 @@ const TrainingDataManager = memo(() => {
                 exportData.modelMetrics = currentMetrics.value;
             } else {
                 exportData.errors.push('Failed to export model metrics');
-                console.warn('Failed to get model metrics for export:', currentMetrics.reason);
             }
             
             if (currentStats?.status === 'fulfilled') {
                 exportData.datasetStats = currentStats.value;
             } else {
                 exportData.errors.push('Failed to export dataset statistics');
-                console.warn('Failed to get dataset stats for export:', currentStats.reason);
             }
             
             if (recentHistory?.status === 'fulfilled') {
                 exportData.trainingHistory = recentHistory.value;
             } else {
                 exportData.errors.push('Failed to export training history');
-                console.warn('Failed to get training history for export:', recentHistory.reason);
             }
             
             // Create and download the export file
@@ -673,7 +660,7 @@ const TrainingDataManager = memo(() => {
                 URL.revokeObjectURL(url);
                 
                 return true;
-            } catch {
+            } catch (error) {
                 throw new Error('Failed to create or download export file');
             }
         }, 'export', 'general');
@@ -704,7 +691,6 @@ const TrainingDataManager = memo(() => {
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration update';
             setSpecificError('configuration', errorMessage);
-            console.error('Configuration validation failed:', error);
         }
     }, [clearAllErrors, setSpecificError]);
 
@@ -771,7 +757,6 @@ const TrainingDataManager = memo(() => {
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
             } catch (error) {
-                console.warn('Failed to refresh validation rules after validation:', error);
                 // Don't fail the entire validation for this
             }
             
@@ -874,7 +859,6 @@ const TrainingDataManager = memo(() => {
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration value';
             setSpecificError('configuration', errorMessage);
-            console.error('Configuration change validation failed:', error);
         }
     }, [setSpecificError]);
 
@@ -912,7 +896,6 @@ const TrainingDataManager = memo(() => {
                 try {
                     await refreshDataSources();
                 } catch (error) {
-                    console.warn('Configuration saved but failed to refresh data:', error);
                     // Don't fail the save operation for this
                 }
                 
@@ -1295,7 +1278,7 @@ const TrainingDataManager = memo(() => {
                             { name: 'Historical Stats', status: 'active', records: '890K', lastUpdate: '5 min ago' },
                             { name: 'Weather Data', status: 'warning', records: '145K', lastUpdate: '1 hour ago' },
                             { name: 'Injury Reports', status: 'active', records: '23K', lastUpdate: '30 sec ago' }
-                        ].map((source) => (
+                        ].map((source: any) => (
                             <div key={source.name} className="flex items-center justify-between p-3 sm:p-4 bg-gray-800/50 rounded-lg min-h-[60px]">
                                 <div className="flex-1 min-w-0">
                                     <div className="font-medium text-white text-sm sm:text-base truncate">{source.name}</div>
@@ -1472,7 +1455,7 @@ const TrainingDataManager = memo(() => {
                             { name: 'Injury Reports', size: '12 MB', records: '23K', format: 'JSON', lastModified: '3 hours ago', quality: 98.1 },
                             { name: 'Team Analytics', size: '198 MB', records: '567K', format: 'Parquet', lastModified: '6 hours ago', quality: 95.7 },
                             { name: 'Draft Results', size: '34 MB', records: '78K', format: 'CSV', lastModified: '12 hours ago', quality: 93.4 }
-                        ].map((dataset) => (
+                        ].map((dataset: any) => (
                             <div key={dataset.name} className="p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-700 min-h-[200px] flex flex-col">
                                 <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                                     <h4 className="font-medium text-white text-sm sm:text-base truncate flex-1 min-w-0">{dataset.name}</h4>
@@ -1685,7 +1668,7 @@ const TrainingDataManager = memo(() => {
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {validationReport.validationResults.map((result) => {
+                                {validationReport.validationResults.map((result: any) => {
                                     const rule = validationRules.find((r: any) => r.id === result.ruleId);
                                     return (
                                         <div key={result.ruleId} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
@@ -1715,7 +1698,7 @@ const TrainingDataManager = memo(() => {
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-white">Data Quality Recommendations</h3>
                             <div className="space-y-3">
-                                {validationReport.recommendations.map((recommendation) => (
+                                {validationReport.recommendations.map((recommendation: any) => (
                                     <div key={`rec-${recommendation}`} className="flex items-start space-x-3 p-3 bg-gray-800/50 rounded-lg">
                                         <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
                                         <div className="flex-1">
@@ -2078,7 +2061,7 @@ const TrainingDataManager = memo(() => {
 
                 <Widget title="Model Comparison" className="bg-gray-900/50">
                     <div className="space-y-3">
-                        {modelMetrics.models.slice(0, 4).map((model, _idx) => (
+                        {modelMetrics.models.slice(0, 4).map((model, idx) => (
                             <div key={model.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
                                 <div>
                                     <div className="text-white text-sm font-medium">{model.name}</div>
@@ -2113,7 +2096,7 @@ const TrainingDataManager = memo(() => {
                                 { category: 'Tight End', accuracy: 89.1, predictions: 876 },
                                 { category: 'Kicker', accuracy: 94.8, predictions: 543 },
                                 { category: 'Defense', accuracy: 87.2, predictions: 987 }
-                            ].map((item) => (
+                            ].map((item: any) => (
                                 <div key={item.category} className="space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span className="text-gray-300">{item.category}</span>
@@ -2247,7 +2230,7 @@ const TrainingDataManager = memo(() => {
                                     progress: 100,
                                     sampleSize: 3250
                                 }
-                            ].map((test) => (
+                            ].map((test: any) => (
                                 <div key={test.id} className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
                                     <div className="flex items-center justify-between mb-2">
                                         <h4 className="font-medium text-white">{test.name}</h4>
@@ -2587,7 +2570,7 @@ const TrainingDataManager = memo(() => {
                             { name: 'Yahoo Sports API', status: 'connected', latency: '203ms', lastSync: '5 min ago' },
                             { name: 'Weather Service', status: 'warning', latency: '1.2s', lastSync: '1 hour ago' },
                             { name: 'Injury Reports API', status: 'connected', latency: '89ms', lastSync: '30 sec ago' }
-                        ].map((api) => (
+                        ].map((api: any) => (
                             <div key={api.name} className="p-4 bg-gray-800/50 rounded-lg">
                                 <div className="flex items-center justify-between mb-2">
                                     <h4 className="font-medium text-white">{api.name}</h4>
@@ -2628,7 +2611,7 @@ const TrainingDataManager = memo(() => {
                             { name: 'Pre-training Checkpoint', date: '2025-08-03 14:30', size: '118 MB', status: 'success' },
                             { name: 'Weekly Archive', date: '2025-08-01 00:00', size: '134 MB', status: 'success' },
                             { name: 'Manual Backup', date: '2025-07-28 16:45', size: '112 MB', status: 'success' }
-                        ].map((backup) => (
+                        ].map((backup: any) => (
                             <div key={`${backup.name}-${backup.date}`} className="p-3 bg-gray-800/50 rounded-lg">
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="font-medium text-white">{backup.name}</span>

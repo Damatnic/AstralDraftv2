@@ -3,7 +3,7 @@
  * Simplified overview component for historical analytics without external dependencies
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useHistoricalAnalytics, TimeframeType } from '../hooks/useHistoricalAnalytics';
 import { PredictionType } from '../services/oraclePredictionService';
@@ -76,7 +76,6 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
             a.click();
             URL.revokeObjectURL(url);
         } catch (err) {
-            console.error('Export failed:', err);
         }
     };
 
@@ -114,7 +113,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                 <div className="flex items-center space-x-3 mt-4 lg:mt-0">
                     <select
                         value={selectedTimeframe}
-                        onChange={(e) => handleTimeframeChange(e.target.value as TimeframeType)}
+                        onChange={(e: any) => handleTimeframeChange(e.target.value as TimeframeType)}
                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     >
                         <option value="weekly">Weekly</option>
@@ -188,7 +187,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
             {/* Tab Navigation */}
             <div className="border-b border-gray-200">
                 <nav className="-mb-px flex space-x-8">
-                    {tabs.map((tab) => {
+                    {tabs.map((tab: any) => {
                         const Icon = tab.icon;
                         return (
                             <button
@@ -285,7 +284,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                         >
                             <h3 className="text-lg font-semibold text-gray-900 mb-4">Type Performance Trends</h3>
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                {trendAnalysis.typesPerformance.map((typeData) => (
+                                {trendAnalysis.typesPerformance.map((typeData: any) => (
                                     <div key={typeData.type} className="p-4 border border-gray-200 rounded-lg">
                                         <div className="flex items-center justify-between mb-3">
                                             <h4 className="font-medium text-gray-900">

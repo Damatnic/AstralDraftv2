@@ -1,7 +1,6 @@
 
 import React from 'react';
-import type { Team, MatchupTeam, MatchupPlayer } from '../../types';
-// import type { GamedayEvent } from '../../types';
+import type { Team, MatchupTeam, MatchupPlayer, GamedayEvent } from '../../types';
 import { Widget } from '../ui/Widget';
 import PlayerRow from './PlayerRow';
 import { useAppState } from '../../contexts/AppContext';
@@ -14,7 +13,7 @@ interface MatchupRosterViewProps {
     matchupId: string;
 }
 
-const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }) => {
+const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }: any) => {
     const { state } = useAppState();
     const latestEvent = (state.gamedayEvents[matchupId] || []).slice(-1)[0];
 

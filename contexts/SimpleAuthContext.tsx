@@ -1,8 +1,9 @@
+/* eslint-disable react-refresh/only-export-components */
 /**
  * Simple Authentication Context for Astral Draft
  * Works with SimpleAuthService for 10-player + admin system
  */
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import SimpleAuthService, { SimpleUser } from '../services/simpleAuthService';
 
 interface SimpleAuthContextType {
@@ -25,7 +26,7 @@ interface Props {
     children: ReactNode;
 }
 
-export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
+export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
     const [user, setUser] = useState<SimpleUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -41,7 +42,6 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
                     setUser(session.user);
                 }
             } catch (err) {
-                console.error('Failed to initialize auth:', err);
                 setError('Failed to initialize authentication');
             } finally {
                 setIsLoading(false);
@@ -51,18 +51,18 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
         initializeAuth();
     }, []);
 
-    const login = (loggedInUser: SimpleUser) => {
+    const login = useCallback((loggedInUser: SimpleUser) => {
         setUser(loggedInUser);
         setError(null);
-    };
+    }, []);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         SimpleAuthService.logout();
         setUser(null);
         setError(null);
-    };
+    }, []);
 
-    const updateUserPin = async (newPin: string): Promise<boolean> => {
+    const updateUserPin = useCallback(async (newPin: string): Promise<boolean> => {
         if (!user) return false;
 
         try {
@@ -72,13 +72,12 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
             }
             return success;
         } catch (err) {
-            console.error('Failed to update PIN:', err);
             setError('Failed to update PIN');
             return false;
         }
-    };
+    }, [user]);
 
-    const updateUserEmail = async (email: string): Promise<boolean> => {
+    const updateUserEmail = useCallback(async (email: string): Promise<boolean> => {
         if (!user) return false;
 
         try {
@@ -88,13 +87,12 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
             }
             return success;
         } catch (err) {
-            console.error('Failed to update email:', err);
             setError('Failed to update email');
             return false;
         }
-    };
+    }, [user]);
 
-    const updateUserCustomization = async (customization: Partial<SimpleUser['customization']>): Promise<boolean> => {
+    const updateUserCustomization = useCallback(async (customization: Partial<SimpleUser['customization']>): Promise<boolean> => {
         if (!user) return false;
 
         try {
@@ -107,13 +105,12 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
             }
             return success;
         } catch (err) {
-            console.error('Failed to update customization:', err);
             setError('Failed to update customization');
             return false;
         }
-    };
+    }, [user]);
 
-    const updateUserDisplayName = async (displayName: string): Promise<boolean> => {
+    const updateUserDisplayName = useCallback(async (displayName: string): Promise<boolean> => {
         if (!user) return false;
 
         try {
@@ -123,15 +120,14 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
             }
             return success;
         } catch (err) {
-            console.error('Failed to update display name:', err);
             setError('Failed to update display name');
             return false;
         }
-    };
+    }, [user]);
 
-    const clearError = () => {
+    const clearError = useCallback(() => {
         setError(null);
-    };
+    }, []);
 
     const value: SimpleAuthContextType = useMemo(() => ({
         user,
@@ -145,7 +141,7 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
         updateUserCustomization,
         updateUserDisplayName,
         clearError
-    }), [user, isLoading, error]);
+    }), [user, isLoading, error, login, logout, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName, clearError]);
 
     return (
         <SimpleAuthContext.Provider value={value}>

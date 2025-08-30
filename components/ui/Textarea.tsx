@@ -13,7 +13,7 @@ export const Textarea: React.FC<TextareaProps> = ({
   className = '',
   id,
   ...props
-}) => {
+}: any) => {
   const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
 
   return (

@@ -4,7 +4,7 @@ import { useAppState } from '../contexts/AppContext';
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { Widget } from '../components/ui/Widget';
-import type { TeamComparison } from '../types';
+import type { Team, TeamComparison } from '../types';
 import { generateTeamComparison } from '../services/geminiService';
 import TeamComparisonCard from '../components/comparison/TeamComparisonCard';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
@@ -18,8 +18,8 @@ const TeamComparisonView: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState(true);
 
     const teamIds = state.teamsToCompare;
-    const teamA = league?.teams.find(t => t.id === teamIds?.[0]);
-    const teamB = league?.teams.find(t => t.id === teamIds?.[1]);
+    const teamA = league?.teams.find((t: any) => t.id === teamIds?.[0]);
+    const teamB = league?.teams.find((t: any) => t.id === teamIds?.[1]);
 
     React.useEffect(() => {
         if (teamA && teamB && league) {

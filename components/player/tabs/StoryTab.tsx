@@ -11,7 +11,7 @@ interface StoryTabProps {
   league: League;
 }
 
-const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
+const StoryTab: React.FC<StoryTabProps> = ({ player, league }: any) => {
     const [story, setStory] = React.useState<PlayerStory | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -23,7 +23,7 @@ const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
             try {
                 const result = await generatePlayerStory(player, league);
                 setStory(result);
-            } catch {
+            } catch (e) {
                 setError("The Oracle couldn't write this player's story.");
             } finally {
                 setIsLoading(false);

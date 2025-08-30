@@ -38,7 +38,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   onRemoveFromQueue,
   onAddToWatchlist,
   onRemoveFromWatchlist
-}) => {
+}: any) => {
   const recommendation = recommendations.find((rec: any) => rec.player.id === player.id);
   
   return (
@@ -113,7 +113,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
   autoDraftConfig,
   onEnableAutoDraft,
   onDisableAutoDraft
-}) => {
+}: any) => {
   const [strategy, setStrategy] = useState(autoDraftConfig.strategy);
   const [riskTolerance, setRiskTolerance] = useState(autoDraftConfig.riskTolerance);
   const [avoidInjuryProne, setAvoidInjuryProne] = useState(autoDraftConfig.avoidInjuryProne);
@@ -192,7 +192,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
   );
 };
 
-const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }) => {
+const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }: any) => {
   const [activeTab, setActiveTab] = useState<'players' | 'queue' | 'watchlist' | 'analytics' | 'ai-assistant'>('players');
   const [showAiChat, setShowAiChat] = useState(false);
   
@@ -386,7 +386,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit })
               currentPick={currentPick}
               leagueSettings={league.settings || {}}
               draftHistory={league.draftPicks || []}
-              onPlayerSelect={(player) => makePick(player.id)}
+              onPlayerSelect={(player: any) => makePick(player.id)}
             />
           </div>
         )}
@@ -469,7 +469,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit })
                 currentPick={currentPick}
                 leagueSettings={league.settings || {}}
                 draftHistory={league.draftPicks || []}
-                onPlayerSelect={(player) => makePick(player.id)}
+                onPlayerSelect={(player: any) => makePick(player.id)}
               />
             ) : renderPlayersList()}
           </div>

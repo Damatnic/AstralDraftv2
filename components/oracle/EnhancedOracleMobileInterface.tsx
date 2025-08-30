@@ -7,12 +7,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/SimpleAuthContext';
-// import { Widget } from '../ui/Widget';
+import { Widget } from '../ui/Widget';
 import { ZapIcon } from '../icons/ZapIcon';
 import { oracleApiClient } from '../../services/oracleApiClient';
 import { PredictionResponse } from '../../services/oracleApiClient';
-import { useOracleWebSocket } from '../../hooks/useOracleWebSocket';
-// import { OracleWebSocketMessage } from '../../hooks/useOracleWebSocket';
+import { useOracleWebSocket, OracleWebSocketMessage } from '../../hooks/useOracleWebSocket';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useOracleNotifications } from '../../hooks/useOracleNotifications';
 import { oracleMobileService } from '../../services/oracleMobileService';
@@ -20,16 +19,16 @@ import {
     BarChart3, 
     Target, 
     Settings, 
-    // Menu, 
+    Menu, 
     X, 
-    // ChevronLeft, 
-    // ChevronRight,
+    ChevronLeft, 
+    ChevronRight,
     TrendingUp,
     Users,
-    // Clock,
+    Clock,
     Zap,
     AlertCircle,
-    // CheckCircle
+    CheckCircle
 } from 'lucide-react';
 
 import UserStatsWidget, { UserStats } from './UserStatsWidget';
@@ -55,7 +54,7 @@ interface MobileTouchState {
 const EnhancedOracleMobileInterface: React.FC<Props> = ({ 
     week = 1, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     
     // Media queries for responsive design
@@ -242,7 +241,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({
             const livePredictions: LivePrediction[] = response.data.map((p: PredictionResponse) => ({
                 id: p.id,
                 question: p.question,
-                options: p.options.map((opt: string, _idx: number) => ({
+                options: p.options.map((opt: string, idx: number) => ({
                     text: opt,
                     probability: 0.5 // Default probability
                 })),
@@ -264,7 +263,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({
             // For now, we'll skip setting userStats from this response since it's not part of WeeklyPredictionsResponse
             
         } catch (err) {
-            console.error('Failed to load predictions:', err);
             setError('Failed to load Oracle predictions. Please try again.');
         } finally {
             setLoading(false);
@@ -573,7 +571,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({
                                         isTablet ? 'grid-cols-1 lg:grid-cols-2' : 
                                         'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3'
                                     }`}>
-                                        {predictions.map((prediction) => (
+                                        {predictions.map((prediction: any) => (
                                             <PredictionCard
                                                 key={prediction.id}
                                                 prediction={prediction}
@@ -668,7 +666,6 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({
                                                     oracleMobileService.vibrate([50, 50, 50]);
                                                 }
                                             } catch (error) {
-                                                console.error('Failed to submit prediction:', error);
                                             }
                                         }}
                                         className="p-6"

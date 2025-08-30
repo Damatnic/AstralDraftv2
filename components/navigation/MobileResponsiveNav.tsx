@@ -10,8 +10,8 @@ import {
   UsersIcon,
   TrophyIcon,
   ChartBarIcon,
-  // CalendarIcon,
-  // MessageCircleIcon,
+  CalendarIcon,
+  MessageCircleIcon,
   UserIcon,
   SettingsIcon,
   BellIcon,
@@ -45,7 +45,7 @@ interface MobileResponsiveNavProps {
   onViewChange: (view: View) => void;
 }
 
-const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }) => {
+const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }: any) => {
   const { state, dispatch } = useAppState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -82,7 +82,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
     <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
       <div className="glass border-t border-[var(--border-primary)]">
         <div className="grid grid-cols-4 h-16">
-          {primaryNavItems.map((item) => (
+          {primaryNavItems.map((item: any) => (
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}
@@ -159,7 +159,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
                 <p className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
                   Main Menu
                 </p>
-                {[...primaryNavItems, ...secondaryNavItems].map((item) => (
+                {[...primaryNavItems, ...secondaryNavItems].map((item: any) => (
                   <button
                     key={item.view}
                     onClick={() => onViewChange(item.view)}
@@ -220,7 +220,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
           <p className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
             Main
           </p>
-          {primaryNavItems.map((item) => (
+          {primaryNavItems.map((item: any) => (
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}
@@ -248,7 +248,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
           <p className="text-xs font-semibold text-[var(--text-tertiary)] uppercase tracking-wider mb-2">
             League
           </p>
-          {secondaryNavItems.map((item) => (
+          {secondaryNavItems.map((item: any) => (
             <button
               key={item.view}
               onClick={() => onViewChange(item.view)}

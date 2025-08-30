@@ -12,7 +12,7 @@ interface TeamComparisonCardProps {
     weaknesses?: string[];
 }
 
-const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths, weaknesses }) => {
+const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths, weaknesses }: any) => {
     return (
         <Widget title={team.name} icon={<Avatar avatar={team.avatar} className="w-6 h-6 rounded-md" />}>
             <div className="p-2 space-y-4 h-full overflow-y-auto">

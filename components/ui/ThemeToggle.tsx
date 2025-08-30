@@ -8,7 +8,7 @@ interface ThemeToggleProps {
     dispatch: React.Dispatch<any>;
 }
 
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, dispatch }) => {
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, dispatch }: any) => {
     return (
         <button
             onClick={() => dispatch({ type: 'TOGGLE_THEME' })}

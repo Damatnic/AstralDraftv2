@@ -25,7 +25,7 @@ const MobileBottomNav: React.FC<{
     activeView: string;
     onViewChange: (view: string) => void;
     onSettingsOpen: () => void;
-}> = ({ activeView, onViewChange, onSettingsOpen }) => (
+}> = ({ activeView, onViewChange, onSettingsOpen }: any) => (
     <motion.div 
         className="fixed bottom-0 left-0 right-0 bg-gray-800/95 backdrop-blur-sm border-t border-gray-700 z-50"
         initial={{ y: 100 }}
@@ -84,7 +84,7 @@ const MobileBottomNav: React.FC<{
 const MobileHeader: React.FC<{
     onMenuToggle: () => void;
     accuracy: number;
-}> = ({ onMenuToggle, accuracy }) => (
+}> = ({ onMenuToggle, accuracy }: any) => (
     <div className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 z-40 p-4">
         <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -108,7 +108,7 @@ const MobileHeader: React.FC<{
 // Mobile Swipe Indicators
 const MobileSwipeIndicators: React.FC<{
     activeView: string;
-}> = ({ activeView }) => (
+}> = ({ activeView }: any) => (
     <div className="flex justify-center space-x-2 py-2">
         <div className={`w-2 h-2 rounded-full transition-colors ${
             activeView === 'predictions' ? 'bg-blue-400' : 'bg-gray-600'
@@ -125,7 +125,7 @@ const MobileSwipeIndicators: React.FC<{
 const MobileOptimizedOracleInterface: React.FC<Props> = ({ 
     week = 1, 
     className = '' 
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeView, setActiveView] = React.useState('predictions');
     const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -202,7 +202,7 @@ const MobileOptimizedOracleInterface: React.FC<Props> = ({
                         exit={{ y: "100%" }}
                         className="w-full bg-gray-800 rounded-t-3xl p-6"
                         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
-                        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                        onClick={(e: any) => e.stopPropagation()}
                     >
                         <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6"></div>
                         

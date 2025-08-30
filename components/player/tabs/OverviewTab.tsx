@@ -10,14 +10,14 @@ interface OverviewTabProps {
   onFindSimilar: () => void;
 }
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center">
         <p className="text-sm text-gray-400">{label}</p>
         <p className="text-xl font-bold text-white">{value}</p>
     </div>
 );
 
-const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }) => {
+const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any) => {
   const { league } = useLeague();
   const awards = (league?.playerAwards || []).filter((a: any) => a.playerId === player.id);
   const teamMap = new Map(league?.teams.map((t: any) => [t.id, t.name]));

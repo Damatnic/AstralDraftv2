@@ -19,8 +19,7 @@ import {
     useOraclePerformanceMonitoring,
     useMemoryEfficientState
 } from '../../hooks/useOraclePerformanceOptimization';
-// import oraclePerformanceOptimizationService, { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
-import { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
+import oraclePerformanceOptimizationService, { VirtualScrollItem } from '../../services/oraclePerformanceOptimizationService';
 
 // Memoized components for better performance
 const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmit }: {
@@ -80,8 +79,6 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
         </motion.div>
     );
 });
-
-MemoizedPredictionCard.displayName = 'MemoizedPredictionCard';
 
 // Memoized prediction submission form
 const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
@@ -145,8 +142,6 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
     );
 });
 
-PredictionSubmissionForm.displayName = 'PredictionSubmissionForm';
-
 // Virtualized prediction list component
 const VirtualizedPredictionList = memo(({ 
     predictions, 
@@ -208,13 +203,11 @@ const VirtualizedPredictionList = memo(({
     );
 });
 
-VirtualizedPredictionList.displayName = 'VirtualizedPredictionList';
-
 // Main optimized interface component
 const OptimizedOracleRealTimePredictionInterface: React.FC<{
     week?: number;
     className?: string;
-}> = ({ week = 1, className = '' }) => {
+}> = ({ week = 1, className = '' }: any) => {
     const { user } = useAuth();
     const isMobile = useMediaQuery('(max-width: 768px)');
     
@@ -294,7 +287,6 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
             // Clear selection
             setSelectedPrediction(null);
         } catch (error) {
-            console.error('Prediction submission failed:', error);
         }
     }, [submitPrediction, addUpdate, refetchPredictions, setSelectedPrediction]);
 

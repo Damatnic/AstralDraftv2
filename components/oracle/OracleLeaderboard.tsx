@@ -43,9 +43,9 @@ interface OracleLeaderboardProps {
 
 const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     currentUserId,
-    showAchievements: _showAchievements = true,
+    showAchievements = true,
     compact = false
-}) => {
+}: any) => {
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -97,7 +97,6 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
                 throw new Error(data.error || 'Failed to fetch leaderboard');
             }
         } catch (err) {
-            console.error('Error fetching Oracle leaderboard:', err);
             setError(err instanceof Error ? err.message : 'Failed to load leaderboard');
             
             // Fallback to mock data for development
@@ -299,7 +298,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
         
         return (
             <div className="space-y-4">
-                {skeletonItems.map((skeletonId) => (
+                {skeletonItems.map((skeletonId: any) => (
                     <div key={skeletonId} className="bg-gray-800/50 rounded-lg p-4 animate-pulse">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">

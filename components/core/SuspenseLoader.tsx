@@ -12,7 +12,7 @@ interface SuspenseLoaderProps {
 const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({ 
   message = "Loading...", 
   size = 'md' 
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'w-6 h-6',
     md: 'w-8 h-8', 

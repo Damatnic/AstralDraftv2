@@ -5,6 +5,8 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
+import { Avatar } from '../ui/Avatar';
 import { Player, League, Team } from '../../types';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
 import { BarChartIcon } from '../icons/BarChartIcon';
@@ -130,7 +132,7 @@ export interface AlternativeOffer {
     reasoning: string;
 }
 
-const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }) => {
+const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'builder' | 'fairness' | 'impact' | 'suggestions'>('builder');
     const [currentProposal, setCurrentProposal] = React.useState<TradeProposal | null>(null);
     const [analysis, setAnalysis] = React.useState<TradeAnalysis | null>(null);
@@ -258,7 +260,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             {/* Tab Navigation */}
             <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)]">
                 <div className="flex overflow-x-auto">
-                    {tabs.map((tab) => (
+                    {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
                             onClick={() => setSelectedTab(tab.id as any)}
@@ -327,8 +329,8 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                             <FairnessAnalysisTab
                                 proposal={currentProposal}
                                 analysis={analysis}
-                                _league={league}
-                                _dispatch={dispatch}
+                                league={league}
+                                dispatch={dispatch}
                             />
                         )}
                         
@@ -337,8 +339,8 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                                 proposal={currentProposal}
                                 analysis={analysis}
                                 league={league}
-                                _currentTeam={currentTeam}
-                                _dispatch={dispatch}
+                                currentTeam={currentTeam}
+                                dispatch={dispatch}
                             />
                         )}
                         
@@ -360,7 +362,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
 };
 
 // Mock analysis generator for demonstration
-const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, _league: League): TradeAnalysis => {
+const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league: League): TradeAnalysis => {
     const fromValue = proposal.fromPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const toValue = proposal.toPlayers.reduce((sum, p) => sum + p.auctionValue, 0);
     const valueDiff = toValue - fromValue;

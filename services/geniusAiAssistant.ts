@@ -3,7 +3,7 @@
  * Advanced fantasy football draft intelligence with natural language understanding
  */
 
-import { Player, PlayerPosition } from '../types';
+import { Player, PlayerPosition, Team, League } from '../types';
 
 export interface AssistantQuery {
   question: string;
@@ -464,7 +464,7 @@ export class GeniusAiAssistant {
     
     // This is simplified - would need better name extraction
     const words = question.split(' ');
-    const playerNames = words.filter(w => w.length > 3 && w[0] === w[0].toUpperCase());
+    const playerNames = words.filter((w: any) => w.length > 3 && w[0] === w[0].toUpperCase());
     
     if (playerNames.length < 2) {
       return this.provideGeneralRecommendation(context);
@@ -609,7 +609,7 @@ export class GeniusAiAssistant {
     const positionQuality = new Map<PlayerPosition, number>();
     
     // Count positions and assess quality
-    roster.forEach(player => {
+    roster.forEach((player: any) => {
       positionCounts.set(player.position, (positionCounts.get(player.position) || 0) + 1);
       positionQuality.set(
         player.position, 

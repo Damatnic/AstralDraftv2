@@ -38,7 +38,7 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
     trend,
     color,
     onClick
-}) => {
+}: any) => {
     const getTrendColor = (trendType: 'up' | 'down' | 'stable') => {
         switch (trendType) {
             case 'up': return 'text-green-400';
@@ -88,7 +88,7 @@ interface QuickActionProps {
     onClick: () => void;
 }
 
-const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }) => (
+const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }: any) => (
     <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={onClick}
@@ -106,7 +106,7 @@ const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }
 const EnhancedDashboardView: React.FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
-    const activeLeague = state.leagues.find(l => l.id === state.activeLeagueId);
+    const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
 
     const handleRefresh = async () => {
         // Simulate data refresh
@@ -265,7 +265,7 @@ const EnhancedDashboardView: React.FC = () => {
                                         
                                         <div>
                                             <div className="text-lg font-bold text-[var(--text-primary)]">
-                                                {activeLeague.schedule?.filter(m => m.week === activeLeague.currentWeek).length || 0}
+                                                {activeLeague.schedule?.filter((m: any) => m.week === activeLeague.currentWeek).length || 0}
                                             </div>
                                             <div className="text-xs text-[var(--text-secondary)]">
                                                 Matchups
@@ -295,7 +295,7 @@ const EnhancedDashboardView: React.FC = () => {
                                     { text: "John drafted Patrick Mahomes", time: "2 minutes ago", type: "draft" },
                                     { text: "Trade proposal received", time: "1 hour ago", type: "trade" },
                                     { text: "Waiver claim processed", time: "3 hours ago", type: "waiver" }
-                                ].map((activity) => (
+                                ].map((activity: any) => (
                                     <div key={`${activity.type}-${activity.time}`} className="glass-pane rounded-lg p-3">
                                         <div className="flex items-center justify-between">
                                             <span className="text-sm text-[var(--text-primary)]">

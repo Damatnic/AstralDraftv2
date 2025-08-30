@@ -13,7 +13,7 @@ interface EditHeaderModalProps {
     onClose: () => void;
 }
 
-const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }) => {
+const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }: any) => {
     const [imageUrl, setImageUrl] = React.useState(currentHeader || '');
 
     const handleSave = () => {

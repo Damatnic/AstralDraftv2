@@ -25,10 +25,11 @@ interface WeeklyMatchupsProps {
 
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 
-  showAllWeeks: _showAllWeeks = false 
-}) => {
+  showAllWeeks = false 
+}: any) => {
   const { state } = useAppState();
   const [currentWeek, setCurrentWeek] = useState(selectedWeek);
+  const [viewMode, setViewMode] = useState<'current' | 'all'>('current');
 
   const league = state.leagues[0];
 
@@ -150,7 +151,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
   }, [league?.teams]);
 
   const currentWeekMatchups = useMemo(() => {
-    return seasonSchedule.filter(matchup => matchup.week === currentWeek);
+    return seasonSchedule.filter((matchup: any) => matchup.week === currentWeek);
   }, [seasonSchedule, currentWeek]);
 
   const getMatchupStatusColor = (status: string) => {
@@ -207,10 +208,10 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
           
           <select
             value={currentWeek}
-            onChange={(e) => setCurrentWeek(Number(e.target.value))}
+            onChange={(e: any) => setCurrentWeek(Number(e.target.value))}
             className="px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
           >
-            {Array.from({ length: 17 }, (_, i) => i + 1).map(week => (
+            {Array.from({ length: 17 }, (_, i) => i + 1).map((week: any) => (
               <option key={week} value={week}>
                 {getWeekTitle(week)}
               </option>
@@ -336,21 +337,21 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-3 bg-slate-700/50 rounded-lg">
               <div className="text-2xl font-bold text-white">
-                {currentWeekMatchups.filter(m => m.status === 'final').length}
+                {currentWeekMatchups.filter((m: any) => m.status === 'final').length}
               </div>
               <div className="text-sm text-slate-400">Games Complete</div>
             </div>
             
             <div className="text-center p-3 bg-slate-700/50 rounded-lg">
               <div className="text-2xl font-bold text-green-400">
-                {currentWeekMatchups.filter(m => m.status === 'live').length}
+                {currentWeekMatchups.filter((m: any) => m.status === 'live').length}
               </div>
               <div className="text-sm text-slate-400">Games Live</div>
             </div>
             
             <div className="text-center p-3 bg-slate-700/50 rounded-lg">
               <div className="text-2xl font-bold text-blue-400">
-                {currentWeekMatchups.filter(m => m.status === 'upcoming').length}
+                {currentWeekMatchups.filter((m: any) => m.status === 'upcoming').length}
               </div>
               <div className="text-sm text-slate-400">Games Upcoming</div>
             </div>

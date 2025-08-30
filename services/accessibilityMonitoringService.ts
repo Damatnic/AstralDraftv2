@@ -183,8 +183,8 @@ class AccessibilityMonitoringService {
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     return history
-      .filter(metric => new Date(metric.timestamp) >= cutoffDate)
-      .map(metric => ({
+      .filter((metric: any) => new Date(metric.timestamp) >= cutoffDate)
+      .map((metric: any) => ({
         date: metric.timestamp.split('T')[0], // Get date part only
         critical: metric.violationsByLevel.critical,
         serious: metric.violationsByLevel.serious,
@@ -204,9 +204,9 @@ class AccessibilityMonitoringService {
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
     return history
-      .filter(metric => new Date(metric.timestamp) >= cutoffDate)
-      .map(metric => {
-        const component = metric.componentMetrics.find(c => c.componentName === componentName);
+      .filter((metric: any) => new Date(metric.timestamp) >= cutoffDate)
+      .map((metric: any) => {
+        const component = metric.componentMetrics.find((c: any) => c.componentName === componentName);
         if (!component) return null;
 
         return {
@@ -251,9 +251,9 @@ class AccessibilityMonitoringService {
   private calculateWCAGCompliance(violations: AxeResult[]): AccessibilityMetrics['wcagCompliance'] {
     // This is a simplified calculation - in practice, you'd map violations to specific WCAG criteria
     const totalChecks = 50; // Approximate number of WCAG checks
-    const levelAViolations = violations.filter(v => this.isLevelAViolation(v)).length;
-    const levelAAViolations = violations.filter(v => this.isLevelAAViolation(v)).length;
-    const levelAAAViolations = violations.filter(v => this.isLevelAAAViolation(v)).length;
+    const levelAViolations = violations.filter((v: any) => this.isLevelAViolation(v)).length;
+    const levelAAViolations = violations.filter((v: any) => this.isLevelAAViolation(v)).length;
+    const levelAAAViolations = violations.filter((v: any) => this.isLevelAAAViolation(v)).length;
 
     return {
       levelA: Math.max(0, ((totalChecks - levelAViolations) / totalChecks) * 100),
@@ -267,10 +267,10 @@ class AccessibilityMonitoringService {
    */
   private generateComponentMetric(componentName: string, violations: AxeResult[]): ComponentAccessibilityMetric {
     // Filter violations for this component (simplified)
-    const componentViolations = violations.filter(v => 
-      v.nodes.some(node => 
+    const componentViolations = violations.filter((v: any) => 
+      v.nodes.some((node: any) => 
         node.html.includes(componentName.toLowerCase()) || 
-        node.target.some(target => target.includes(componentName.toLowerCase()))
+        node.target.some((target: any) => target.includes(componentName.toLowerCase()))
       )
     );
 
@@ -307,8 +307,8 @@ class AccessibilityMonitoringService {
     // Extract component names from violations (simplified approach)
     const componentNames = new Set<string>();
     
-    violations.forEach(violation => {
-      violation.nodes.forEach(node => {
+    violations.forEach((violation: any) => {
+      violation.nodes.forEach((node: any) => {
         // Try to extract component name from class names or data attributes
         const html = node.html;
         const matches = html.match(/class="[^"]*([A-Z][a-zA-Z]*Component?)[^"]*"/);
@@ -323,7 +323,7 @@ class AccessibilityMonitoringService {
       componentNames.add('Application');
     }
 
-    return Array.from(componentNames).map(name => 
+    return Array.from(componentNames).map((name: any) => 
       this.generateComponentMetric(name, violations)
     );
   }
@@ -412,7 +412,7 @@ class AccessibilityMonitoringService {
       recommendations.push('Increase accessibility test coverage');
     }
 
-    const failingComponents = componentMetrics.filter(c => c.status === 'failing');
+    const failingComponents = componentMetrics.filter((c: any) => c.status === 'failing');
     if (failingComponents.length > 0) {
       recommendations.push(`Focus on ${failingComponents.length} failing components`);
     }
@@ -426,17 +426,17 @@ class AccessibilityMonitoringService {
   private isLevelAViolation(violation: AxeResult): boolean {
     // Map violation rules to WCAG levels
     const levelARules = ['color-contrast', 'image-alt', 'label', 'keyboard'];
-    return violation.tags?.some(tag => levelARules.includes(tag)) || false;
+    return violation.tags?.some((tag: any) => levelARules.includes(tag)) || false;
   }
 
   private isLevelAAViolation(violation: AxeResult): boolean {
     const levelAARules = ['color-contrast-enhanced', 'focus-order-semantics'];
-    return violation.tags?.some(tag => levelAARules.includes(tag)) || false;
+    return violation.tags?.some((tag: any) => levelAARules.includes(tag)) || false;
   }
 
   private isLevelAAAViolation(violation: AxeResult): boolean {
     const levelAAARules = ['color-contrast-enhanced', 'context-help'];
-    return violation.tags?.some(tag => levelAAARules.includes(tag)) || false;
+    return violation.tags?.some((tag: any) => levelAAARules.includes(tag)) || false;
   }
 
   private calculateComponentWCAGScore(violations: AxeResult[]): number {

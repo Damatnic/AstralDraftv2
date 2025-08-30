@@ -9,10 +9,10 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 interface TeamNeedsAnalysisProps {
     team: Team;
     league: League;
-    dispatch: React.Dispatch<{ type: string; payload?: unknown }>;
+    dispatch: React.Dispatch<any>;
 }
 
-const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }) => {
+const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const needs = team.teamNeeds;
 
@@ -24,7 +24,6 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
                 dispatch({ type: 'SET_TEAM_NEEDS', payload: { leagueId: league.id, teamId: team.id, needs: fetchedNeeds } });
             }
         } catch (e) {
-            console.error(e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not analyze team needs.', type: 'SYSTEM' } });
         } finally {
             setIsLoading(false);
@@ -49,7 +48,7 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
                         {needs.map((need, index) => (
                             <div key={index} className="bg-black/10 p-3 rounded-lg">
                                 <h4 className="font-bold text-red-400">{need.position}</h4>
-                                <p className="text-xs italic text-gray-300">&ldquo;{need.rationale}&rdquo;</p>
+                                <p className="text-xs italic text-gray-300">"{need.rationale}"</p>
                             </div>
                         ))}
                     </div>

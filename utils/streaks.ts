@@ -3,7 +3,7 @@ import type { Matchup } from '../types';
 
 export const calculateStreak = (teamId: number, schedule: Matchup[], currentWeek: number) => {
     const pastGames = schedule
-        .filter(m => m.week < currentWeek && (m.teamA.teamId === teamId || m.teamB.teamId === teamId))
+        .filter((m: any) => m.week < currentWeek && (m.teamA.teamId === teamId || m.teamB.teamId === teamId))
         .sort((a, b) => b.week - a.week);
 
     if (pastGames.length === 0) {

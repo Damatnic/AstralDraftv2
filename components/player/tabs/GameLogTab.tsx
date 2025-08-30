@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Player } from '../../../types';
+import type { Player, League, MatchupPlayer } from '../../../types';
 import { useLeague } from '../../../hooks/useLeague';
 import { Avatar } from '../../ui/Avatar';
 
@@ -9,7 +9,7 @@ interface GameLogTabProps {
     player: Player;
 }
 
-const GameLogTab: React.FC<GameLogTabProps> = ({ player }) => {
+const GameLogTab: React.FC<GameLogTabProps> = ({ player }: any) => {
     const { league } = useLeague();
 
     if (!league || league?.status === 'PRE_DRAFT' || league?.status === 'DRAFTING') {

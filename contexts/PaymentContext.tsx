@@ -95,7 +95,7 @@ interface PaymentProviderProps {
   children: ReactNode;
 }
 
-export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) => {
+export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: any) => {
   // Stripe instance
   const [stripe, setStripe] = useState<Stripe | null>(null);
   
@@ -122,7 +122,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
         const stripeInstance = await stripePromise;
         setStripe(stripeInstance);
       } catch (error) {
-        console.error('❌ Failed to initialize Stripe:', error);
       }
     };
 
@@ -141,7 +140,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
           setProducts(data.data.products);
         }
       } catch (error) {
-        console.error('❌ Failed to load payment products:', error);
       } finally {
         setIsLoadingProducts(false);
       }
@@ -176,7 +174,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       return paymentIntent;
 
     } catch (error) {
-      console.error('❌ Failed to create contest entry payment:', error);
       throw error;
     } finally {
       setIsProcessingPayment(false);
@@ -209,7 +206,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       return data.data;
 
     } catch (error) {
-      console.error('❌ Failed to create subscription:', error);
       throw error;
     } finally {
       setIsProcessingPayment(false);
@@ -236,9 +232,9 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
 
       // Refresh subscriptions
       await refreshSubscriptions();
+      
 
     } catch (error) {
-      console.error('❌ Failed to cancel subscription:', error);
       throw error;
     }
   };
@@ -265,7 +261,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       }
 
     } catch (error) {
-      console.error('❌ Failed to refresh subscriptions:', error);
     } finally {
       setIsLoadingSubscriptions(false);
     }
@@ -292,7 +287,6 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       }
 
     } catch (error) {
-      console.error('❌ Failed to refresh payment history:', error);
     } finally {
       setIsLoadingHistory(false);
     }
@@ -309,7 +303,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
 
   // Premium feature checks
   const hasActivePremium = (): boolean => {
-    return subscriptions.some(sub => 
+    return subscriptions.some((sub: any) => 
       sub.productId === 'oracle_premium' && 
       sub.status === 'active' && 
       new Date() < sub.currentPeriodEnd
@@ -317,7 +311,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
   };
 
   const hasActiveAnalytics = (): boolean => {
-    return subscriptions.some(sub => 
+    return subscriptions.some((sub: any) => 
       (sub.productId === 'analytics_pro' || sub.productId === 'oracle_ultimate') && 
       sub.status === 'active' && 
       new Date() < sub.currentPeriodEnd
@@ -325,7 +319,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
   };
 
   const hasActiveUltimate = (): boolean => {
-    return subscriptions.some(sub => 
+    return subscriptions.some((sub: any) => 
       sub.productId === 'oracle_ultimate' && 
       sub.status === 'active' && 
       new Date() < sub.currentPeriodEnd

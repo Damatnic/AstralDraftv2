@@ -7,7 +7,7 @@ interface GestureExampleComponentProps {
 
 export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = ({ 
   className = '' 
-}) => {
+}: any) => {
   const [gestureLog, setGestureLog] = useState<string[]>([]);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -71,18 +71,18 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
       setPosition(prev => ({ ...prev, y: prev.y + 50 }));
     });
 
-    onLongPress((point) => {
+    onLongPress((point: any) => {
       addToLog(`Long Press at (${Math.round(point.x)}, ${Math.round(point.y)})`);
       setPosition({ x: 0, y: 0 });
       setScale(1);
     });
 
-    onDoubleTap((point) => {
+    onDoubleTap((point: any) => {
       addToLog(`Double Tap at (${Math.round(point.x)}, ${Math.round(point.y)})`);
       setScale(prev => prev === 1 ? 1.5 : 1);
     });
 
-    onPinch((newScale, _center) => {
+    onPinch((newScale, center) => {
       addToLog(`Pinch Scale: ${newScale.toFixed(2)}`);
       setScale(newScale);
     });

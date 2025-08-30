@@ -196,7 +196,7 @@ export class AdvancedReportingService {
         let templates = Array.from(this.templates.values());
         
         if (category) {
-            templates = templates.filter(t => t.category === category);
+            templates = templates.filter((t: any) => t.category === category);
         }
 
         return templates.sort((a, b) => b.popularity - a.popularity);
@@ -280,7 +280,7 @@ export class AdvancedReportingService {
 
     async getReportHistory(userId: string, limit: number = 50): Promise<GeneratedReport[]> {
         const reports = Array.from(this.generatedReports.values())
-            .filter(r => r.generatedBy === userId)
+            .filter((r: any) => r.generatedBy === userId)
             .sort((a, b) => b.generatedAt.getTime() - a.generatedAt.getTime())
             .slice(0, limit);
 
@@ -318,8 +318,8 @@ export class AdvancedReportingService {
         const { headers, rows } = report.data;
         let csv = headers.join(',') + '\n';
         
-        rows.forEach(row => {
-            csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+        rows.forEach((row: any) => {
+            csv += row.map((cell: any) => `"${cell}"`).join(',') + '\n';
         });
 
         return new Blob([csv], { type: 'text/csv' });
@@ -356,7 +356,7 @@ export class AdvancedReportingService {
 
         // Example insight generation logic
         if (template.category === 'player_performance' && data.rows.length > 0) {
-            const performanceScores = data.rows.map(row => parseFloat(String(row[2])) || 0);
+            const performanceScores = data.rows.map((row: any) => parseFloat(String(row[2])) || 0);
             const avgScore = performanceScores.reduce((a, b) => a + b, 0) / performanceScores.length;
             const maxScore = Math.max(...performanceScores);
             const minScore = Math.min(...performanceScores);
@@ -518,7 +518,7 @@ export class AdvancedReportingService {
             'Defense Streaming Trade'
         ];
         
-        return trades.map(trade => {
+        return trades.map((trade: any) => {
             const fairness = Math.floor(Math.random() * 40) + 60;
             const impact = ['High', 'Medium', 'Low'][Math.floor(Math.random() * 3)];
             const status = ['Completed', 'Pending', 'Rejected'][Math.floor(Math.random() * 3)];
@@ -532,8 +532,8 @@ export class AdvancedReportingService {
         filters: ReportFilter[], 
         parameters: Record<string, unknown>
     ): unknown[][] {
-        return rows.filter(row => {
-            return filters.every(filter => {
+        return rows.filter((row: any) => {
+            return filters.every((filter: any) => {
                 const columnIndex = headers.indexOf(filter.field);
                 if (columnIndex === -1) return true;
 
@@ -564,10 +564,10 @@ export class AdvancedReportingService {
                 type: 'bar_chart',
                 title: 'Performance Overview',
                 data: {
-                    labels: rows.map(row => row[0]),
+                    labels: rows.map((row: any) => row[0]),
                     datasets: [{
                         label: headers[1] || 'Value',
-                        data: rows.map(row => Number(row[1]) || 0),
+                        data: rows.map((row: any) => Number(row[1]) || 0),
                         backgroundColor: 'rgba(59, 130, 246, 0.8)'
                     }]
                 },
@@ -631,7 +631,7 @@ export class AdvancedReportingService {
 
     async getUserDashboards(userId: string): Promise<CustomDashboard[]> {
         return Array.from(this.dashboards.values())
-            .filter(d => d.userId === userId || d.isPublic)
+            .filter((d: any) => d.userId === userId || d.isPublic)
             .sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
     }
 
@@ -711,7 +711,7 @@ export class AdvancedReportingService {
             }
         ];
 
-        defaultTemplates.forEach(template => {
+        defaultTemplates.forEach((template: any) => {
             this.templates.set(template.id, template);
         });
     }

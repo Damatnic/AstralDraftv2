@@ -30,7 +30,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
     maxPullDistance = 120,
     disabled = false,
     className = ''
-}) => {
+}: any) => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
     
@@ -75,7 +75,6 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
             await onRefresh();
             announceToScreenReader('Content refreshed successfully', 'polite');
         } catch (error) {
-            console.error('Refresh failed:', error);
             announceToScreenReader('Failed to refresh content', 'assertive');
         } finally {
             setIsRefreshing(false);
@@ -84,7 +83,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         }
     };
 
-    const handlePanStart = (_event: any, _info: PanInfo) => {
+    const handlePanStart = (event: any, info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         const container = containerRef.current;
@@ -123,7 +122,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         }
     }, 16); // ~60fps throttling
 
-    const handlePanEnd = async (_event: any, _info: PanInfo) => {
+    const handlePanEnd = async (event: any, info: PanInfo) => {
         if (disabled || isRefreshing) return;
         
         if (pullState === 'ready') {

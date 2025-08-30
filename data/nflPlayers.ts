@@ -59,15 +59,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 1.2,
     projectedPoints: 385.5,
     lastSeasonPoints: 378.2,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 12,
     stats: {
       passingYards: 4306,
-      passingTDs: 29,
+      passingTouchdowns: 29,
       interceptions: 18,
       rushingYards: 524,
-      rushingTDs: 15,
+      rushingTouchdowns: 15,
       completionPercentage: 62.3
     }
   },
@@ -86,15 +86,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 2.1,
     projectedPoints: 375.8,
     lastSeasonPoints: 365.4,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
       passingYards: 3678,
-      passingTDs: 24,
+      passingTouchdowns: 24,
       interceptions: 7,
       rushingYards: 821,
-      rushingTDs: 5,
+      rushingTouchdowns: 5,
       completionPercentage: 65.7
     }
   },
@@ -113,15 +113,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 3.5,
     projectedPoints: 365.2,
     lastSeasonPoints: 342.1,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
       passingYards: 3858,
-      passingTDs: 23,
+      passingTouchdowns: 23,
       interceptions: 15,
       rushingYards: 605,
-      rushingTDs: 13,
+      rushingTouchdowns: 13,
       completionPercentage: 65.4
     }
   },
@@ -140,15 +140,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 4.2,
     projectedPoints: 358.7,
     lastSeasonPoints: 334.8,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 10,
     stats: {
       passingYards: 4183,
-      passingTDs: 27,
+      passingTouchdowns: 27,
       interceptions: 14,
       rushingYards: 389,
-      rushingTDs: 4,
+      rushingTouchdowns: 4,
       completionPercentage: 67.2
     }
   },
@@ -167,15 +167,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 8.3,
     projectedPoints: 325.4,
     lastSeasonPoints: 318.9,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 7,
     stats: {
       passingYards: 4516,
-      passingTDs: 36,
+      passingTouchdowns: 36,
       interceptions: 9,
       rushingYards: 105,
-      rushingTDs: 2,
+      rushingTouchdowns: 2,
       completionPercentage: 69.5
     }
   },
@@ -196,15 +196,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 1.8,
     projectedPoints: 285.6,
     lastSeasonPoints: 278.3,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 9,
     stats: {
       rushingYards: 1459,
-      rushingTDs: 14,
+      rushingTouchdowns: 14,
       receptions: 67,
       receivingYards: 564,
-      receivingTDs: 7,
+      receivingTouchdowns: 7,
       totalTouchdowns: 21
     }
   },
@@ -223,15 +223,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 12.4,
     projectedPoints: 245.8,
     lastSeasonPoints: 198.7,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
       rushingYards: 628,
-      rushingTDs: 5,
+      rushingTouchdowns: 5,
       receptions: 51,
       receivingYards: 436,
-      receivingTDs: 5,
+      receivingTouchdowns: 5,
       totalTouchdowns: 10
     }
   },
@@ -250,15 +250,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 15.7,
     projectedPoints: 235.4,
     lastSeasonPoints: 224.1,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
       rushingYards: 1167,
-      rushingTDs: 12,
+      rushingTouchdowns: 12,
       receptions: 20,
       receivingYards: 214,
-      receivingTDs: 1,
+      receivingTouchdowns: 1,
       totalTouchdowns: 13
     }
   },
@@ -277,15 +277,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 8.9,
     projectedPoints: 258.3,
     lastSeasonPoints: 181.2,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
       rushingYards: 962,
-      rushingTDs: 10,
+      rushingTouchdowns: 10,
       receptions: 41,
       receivingYards: 280,
-      receivingTDs: 4,
+      receivingTouchdowns: 4,
       totalTouchdowns: 14
     }
   },
@@ -304,15 +304,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 18.2,
     projectedPoints: 225.7,
     lastSeasonPoints: 156.8,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
       rushingYards: 741,
-      rushingTDs: 7,
+      rushingTouchdowns: 7,
       receptions: 38,
       receivingYards: 223,
-      receivingTDs: 1,
+      receivingTouchdowns: 1,
       totalTouchdowns: 8
     }
   },
@@ -333,15 +333,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 5.3,
     projectedPoints: 275.8,
     lastSeasonPoints: 268.4,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 6,
     stats: {
       receptions: 119,
       receivingYards: 1799,
-      receivingTDs: 13,
+      receivingTouchdowns: 13,
       rushingYards: 31,
-      rushingTDs: 1,
+      rushingTouchdowns: 1,
       totalTouchdowns: 14
     }
   },
@@ -360,15 +360,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 6.1,
     projectedPoints: 268.9,
     lastSeasonPoints: 256.7,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 7,
     stats: {
       receptions: 135,
       receivingYards: 1749,
-      receivingTDs: 12,
+      receivingTouchdowns: 12,
       rushingYards: 15,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 12
     }
   },
@@ -387,15 +387,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 7.2,
     projectedPoints: 265.4,
     lastSeasonPoints: 241.8,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 12,
     stats: {
       receptions: 100,
       receivingYards: 1216,
-      receivingTDs: 7,
+      receivingTouchdowns: 7,
       rushingYards: 12,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 7
     }
   },
@@ -414,15 +414,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 9.8,
     projectedPoints: 258.7,
     lastSeasonPoints: 245.3,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
       receptions: 119,
       receivingYards: 1515,
-      receivingTDs: 10,
+      receivingTouchdowns: 10,
       rushingYards: 37,
-      rushingTDs: 1,
+      rushingTouchdowns: 1,
       totalTouchdowns: 11
     }
   },
@@ -441,15 +441,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 11.4,
     projectedPoints: 252.1,
     lastSeasonPoints: 238.9,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
       receptions: 106,
       receivingYards: 1456,
-      receivingTDs: 7,
+      receivingTouchdowns: 7,
       rushingYards: 21,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 7
     }
   },
@@ -470,15 +470,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 25.3,
     projectedPoints: 195.8,
     lastSeasonPoints: 188.4,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 10,
     stats: {
       receptions: 93,
       receivingYards: 984,
-      receivingTDs: 5,
+      receivingTouchdowns: 5,
       rushingYards: 0,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 5
     }
   },
@@ -497,15 +497,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 45.7,
     projectedPoints: 165.2,
     lastSeasonPoints: 142.8,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
       receptions: 45,
       receivingYards: 544,
-      receivingTDs: 6,
+      receivingTouchdowns: 6,
       rushingYards: 0,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 6
     }
   },
@@ -524,15 +524,15 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 38.9,
     projectedPoints: 175.4,
     lastSeasonPoints: 172.1,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 5,
     stats: {
       receptions: 86,
       receivingYards: 889,
-      receivingTDs: 10,
+      receivingTouchdowns: 10,
       rushingYards: 0,
-      rushingTDs: 0,
+      rushingTouchdowns: 0,
       totalTouchdowns: 10
     }
   },
@@ -553,7 +553,7 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 145.2,
     projectedPoints: 135.8,
     lastSeasonPoints: 131.0,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 14,
     stats: {
@@ -581,7 +581,7 @@ export const NFL_PLAYERS_2024: Player[] = [
     adp: 125.4,
     projectedPoints: 145.2,
     lastSeasonPoints: 142.8,
-    injuryStatus: 'HEALTHY',
+    injuryStatus: 'healthy',
     isRookie: false,
     byeWeek: 9,
     stats: {
@@ -597,16 +597,16 @@ export const NFL_PLAYERS_2024: Player[] = [
 
 // Helper functions
 export function getPlayersByPosition(position: string): Player[] {
-  return NFL_PLAYERS_2024.filter(player => player.position === position);
+  return NFL_PLAYERS_2024.filter((player: any) => player.position === position);
 }
 
 export function getPlayersByTeam(team: string): Player[] {
-  return NFL_PLAYERS_2024.filter(player => player.team === team);
+  return NFL_PLAYERS_2024.filter((player: any) => player.team === team);
 }
 
 export function searchPlayers(query: string): Player[] {
   const searchTerm = query.toLowerCase();
-  return NFL_PLAYERS_2024.filter(player => 
+  return NFL_PLAYERS_2024.filter((player: any) => 
     player.name.toLowerCase().includes(searchTerm) ||
     player.team.toLowerCase().includes(searchTerm) ||
     player.position.toLowerCase().includes(searchTerm)
@@ -620,7 +620,7 @@ export function getTopPlayersByPosition(position: string, count: number = 10): P
 }
 
 export function getPlayerById(id: number): Player | undefined {
-  return NFL_PLAYERS_2024.find(player => player.id === id);
+  return NFL_PLAYERS_2024.find((player: any) => player.id === id);
 }
 
 // Position groups for roster management

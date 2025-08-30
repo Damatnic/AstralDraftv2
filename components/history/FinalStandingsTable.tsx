@@ -8,7 +8,7 @@ interface FinalStandingsTableProps {
     teams: Team[];
 }
 
-const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }) => {
+const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }: any) => {
     return (
         <div className="p-2">
             <table className="w-full text-sm text-left">

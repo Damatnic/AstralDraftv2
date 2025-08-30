@@ -17,6 +17,7 @@ import { UserPlusIcon } from '../icons/UserPlusIcon';
 import { UserRemoveIcon } from '../icons/UserRemoveIcon';
 import { EyeIcon } from '../icons/EyeIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { StarIcon } from '../icons/StarIcon';
 
 interface EnhancedRosterManagerProps {
@@ -24,6 +25,15 @@ interface EnhancedRosterManagerProps {
     league: League;
     dispatch: React.Dispatch<any>;
     canEdit: boolean;
+}
+
+interface PlayerCardProps {
+    player: Player;
+    onView: () => void;
+    onEdit?: () => void;
+    onRemove?: () => void;
+    showActions: boolean;
+    isStarter?: boolean;
 }
 
 interface PositionGroupProps {
@@ -36,7 +46,7 @@ interface PositionGroupProps {
 
 const SortablePlayerCard: React.FC<{ player: Player; onAction: (player: Player, action: 'view' | 'edit' | 'remove') => void; canEdit: boolean; isStarter?: boolean }> = ({ 
     player, onAction, canEdit, isStarter 
-}) => {
+}: any) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
 
     const style = {
@@ -110,7 +120,7 @@ const SortablePlayerCard: React.FC<{ player: Player; onAction: (player: Player, 
     );
 };
 
-const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxStarters, onPlayerAction, canEdit }) => {
+const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxStarters, onPlayerAction, canEdit }: any) => {
     const starters = players.slice(0, maxStarters);
     const bench = players.slice(maxStarters);
 
@@ -128,7 +138,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                         )}
                     </h4>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                        <SortableContext items={starters.map(p => p.id)} strategy={rectSortingStrategy}>
+                        <SortableContext items={starters.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {starters.map((player: any) => (
                                 <SortablePlayerCard
                                     key={player.id}
@@ -157,7 +167,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                         </span>
                     </h4>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                        <SortableContext items={bench.map(p => p.id)} strategy={rectSortingStrategy}>
+                        <SortableContext items={bench.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {bench.map((player: any) => (
                                 <SortablePlayerCard
                                     key={player.id}
@@ -175,7 +185,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
     );
 };
 
-const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, league, dispatch, canEdit }) => {
+const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, league, dispatch, canEdit }: any) => {
     const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
     const [rosterByPosition, setRosterByPosition] = React.useState<Record<PlayerPosition, Player[]>>({
         QB: [],
@@ -253,6 +263,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
             }));
 
             // Update global state with new lineup order
+            const newStarters = newArray.slice(0, positionRequirements[sourcePosition]);
             dispatch({
                 type: 'UPDATE_POSITION_DEPTH_CHART',
                 payload: {

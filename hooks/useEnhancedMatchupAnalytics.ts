@@ -125,24 +125,24 @@ export const useEnhancedMatchupAnalytics = ({
       ? state.trends.reduce((sum, t) => sum + t.defensiveRank, 0) / state.trends.length 
       : 0,
     hardestMatchup: state.trends.length > 0 
-      ? Math.min(...state.trends.map(t => t.defensiveRank)) 
+      ? Math.min(...state.trends.map((t: any) => t.defensiveRank)) 
       : 0,
     easiestMatchup: state.trends.length > 0 
-      ? Math.max(...state.trends.map(t => t.defensiveRank)) 
+      ? Math.max(...state.trends.map((t: any) => t.defensiveRank)) 
       : 0,
     
     // Volume analysis
     averageTouches: state.trends.length > 0 
       ? state.trends.reduce((sum, t) => sum + t.touches, 0) / state.trends.length 
       : 0,
-    highVolumeGames: state.trends.filter(t => t.touches >= 20).length,
+    highVolumeGames: state.trends.filter((t: any) => t.touches >= 20).length,
     
     // Efficiency metrics
     averageEfficiency: state.trends.length > 0 
       ? state.trends.reduce((sum, t) => sum + t.efficiency, 0) / state.trends.length 
       : 0,
     bestEfficiency: state.trends.length > 0 
-      ? Math.max(...state.trends.map(t => t.efficiency)) 
+      ? Math.max(...state.trends.map((t: any) => t.efficiency)) 
       : 0,
     
     // Correlations
@@ -189,7 +189,7 @@ function calculateGameScriptPerformance(trends: MatchupTrend[]) {
   const gameScripts = ['positive', 'neutral', 'negative'] as const;
   
   return gameScripts.reduce((acc, script) => {
-    const games = trends.filter(t => t.gameScript === script);
+    const games = trends.filter((t: any) => t.gameScript === script);
     acc[script] = {
       games: games.length,
       averagePoints: games.length > 0 
@@ -205,13 +205,13 @@ function calculateCorrelations(trends: MatchupTrend[], getStrength: (value: numb
   if (trends.length < 5) return null;
 
   const defensiveRankCorr = calculateCorrelation(
-    trends.map(t => t.defensiveRank),
-    trends.map(t => t.fantasyPoints)
+    trends.map((t: any) => t.defensiveRank),
+    trends.map((t: any) => t.fantasyPoints)
   );
 
   const touchesCorr = calculateCorrelation(
-    trends.map(t => t.touches),
-    trends.map(t => t.fantasyPoints)
+    trends.map((t: any) => t.touches),
+    trends.map((t: any) => t.fantasyPoints)
   );
 
   return {

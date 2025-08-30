@@ -4,8 +4,16 @@
  */
 
 import type { 
-  Player, Team, User, League, PlayerPosition
+  Player, Team, League, DraftRecapData, TradeAnalysis, WaiverWireAdvice, 
+  PowerRanking, StartSitAdvice, WeeklyReportData, AiLineupSuggestion, 
+  SeasonReviewData, DailyBriefingItem, User, DraftGrade, Persona, 
+  AiProfileData, DraftEvent, PlayerPosition, WatchlistInsight, 
+  WaiverIntelligence, MatchupAnalysis, PlayerStory, TradeOffer, 
+  TradeStory, SeasonStory, TeamComparison, ProjectedStanding, 
+  DraftPickAsset, RecapVideoScene, NewsItem, SideBet, SmartFaabAdvice, 
+  TradeSuggestion, NewspaperContent, TopRivalry 
 } from '../types';
+import { players } from "../data/players";
 import { geminiService, checkApiHealth } from './secureApiClient';
 
 /**
@@ -29,7 +37,7 @@ export const checkGeminiApiStatus = async (): Promise<{
                 : 'Gemini API is not configured on the backend. Contact administrator.',
             apiKeyPresent: geminiAvailable
         };
-    } catch {
+    } catch (error) {
         return {
             configured: false,
             available: false,
@@ -45,6 +53,13 @@ type OracleHistoryItem = {
     sender: 'user' | 'ai';
     text: string;
 };
+
+// Mock implementation helpers (same as before)
+const mockApiCall = <T,>(data: T, delay: number = 800): Promise<T | null> => {
+    return new Promise(resolve => setTimeout(() => resolve(data), delay + Math.random() * 500));
+};
+
+const getRandomElement = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
 /**
  * Stream Oracle response using secure backend
@@ -66,10 +81,10 @@ export const streamOracleResponse = async (
         })();
     }
     
-    const rosterList = myTeam?.roster.map(p => `${p.name} (${p.position})`).join(', ') || 'no players yet';
+    const rosterList = myTeam?.roster.map((p: any) => `${p.name} (${p.position})`).join(', ') || 'no players yet';
     const teamContext = myTeam ? `My current roster consists of: ${rosterList}.` : "I haven't drafted any players yet.";
     
-    const availablePlayersList = availablePlayers.slice(0, 20).map(p => `${p.name} (${p.position}, Rank: ${p.rank})`).join(', ');
+    const availablePlayersList = availablePlayers.slice(0, 20).map((p: any) => `${p.name} (${p.position}, Rank: ${p.rank})`).join(', ');
     const playerContext = `The top available players are: ${availablePlayersList}.`;
     
     const fullPrompt = `
@@ -80,7 +95,7 @@ export const streamOracleResponse = async (
         - ${playerContext}
         
         Conversation History:
-        ${history.map(h => `${h.sender}: ${h.text}`).join('\n')}
+        ${history.map((h: any) => `${h.sender}: ${h.text}`).join('\n')}
         
         User Question: ${newPrompt}
     `;
@@ -113,16 +128,16 @@ export const getAiDraftPick = async (
     if (!apiStatus.available) {
         // Fallback to simple logic when API is not available
         const positionNeeds: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
-        const currentPositions = aiTeam.roster.map(p => p.position);
-        const neededPosition = positionNeeds.find(pos => !currentPositions.includes(pos)) || 'RB' as PlayerPosition;
+        const currentPositions = aiTeam.roster.map((p: any) => p.position);
+        const neededPosition = positionNeeds.find((pos: any) => !currentPositions.includes(pos)) || 'RB' as PlayerPosition;
         const bestAvailable = availablePlayers
-            .filter(p => p.position === neededPosition)
+            .filter((p: any) => p.position === neededPosition)
             .sort((a, b) => a.rank - b.rank)[0];
         return bestAvailable?.name || availablePlayers[0]?.name || null;
     }
     
-    const rosterList = aiTeam.roster.map(p => `${p.name} (${p.position})`).join(', ') || 'empty';
-    const playersList = availablePlayers.slice(0, 30).map(p => p.name).join(', ');
+    const rosterList = aiTeam.roster.map((p: any) => `${p.name} (${p.position})`).join(', ') || 'empty';
+    const playersList = availablePlayers.slice(0, 30).map((p: any) => p.name).join(', ');
     
     const prompt = `
         You are drafting for a fantasy football team.
@@ -137,7 +152,7 @@ export const getAiDraftPick = async (
         const playerName = response?.data?.text?.trim();
         
         // Validate that the player exists in available list
-        if (playerName && availablePlayers.some(p => p.name === playerName)) {
+        if (playerName && availablePlayers.some((p: any) => p.name === playerName)) {
             return playerName;
         }
         
@@ -226,7 +241,7 @@ export const streamAssistantResponse = async (
     const context = `
         You are Astral, a helpful fantasy football assistant.
         User: ${user.name}
-        Leagues: ${leagues.map(l => l.name).join(', ')}
+        Leagues: ${leagues.map((l: any) => l.name).join(', ')}
         
         User's question: ${prompt}
     `;

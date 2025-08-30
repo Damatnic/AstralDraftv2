@@ -206,6 +206,8 @@ class TradeAnalysisService {
   }
 
   private initializeService(): void {
+    console.log('🔄 Initializing Trade Analysis Service...');
+    
     // Clean up expired cache entries every 15 minutes
     setInterval(() => {
       const now = Date.now();
@@ -226,6 +228,8 @@ class TradeAnalysisService {
     receiverRoster: FantasyRoster
   ): Promise<TradeAnalysis> {
     try {
+      console.log(`🔍 Analyzing trade proposal: ${tradeProposal.id}`);
+
       const cacheKey = `trade_analysis_${tradeProposal.id}_${tradeProposal.proposedAt}`;
       const cached = this.cache.get(cacheKey);
       
@@ -320,6 +324,7 @@ class TradeAnalysisService {
       // Cache the result
       this.cache.set(cacheKey, { data: analysis, expires: Date.now() + this.CACHE_TTL });
 
+      console.log(`✅ Trade analysis completed for ${tradeProposal.id}: ${recommendation} (${fairnessScore}% fair)`);
       return analysis;
 
     } catch (error) {
@@ -338,11 +343,11 @@ class TradeAnalysisService {
     scoring: ScoringSettings
   ): Promise<TradeValueComparison> {
     const givingValues = await Promise.all(
-      givingPlayerIds.map(id => this.calculatePlayerValue(id, playerData.get(id), scoring))
+      givingPlayerIds.map((id: any) => this.calculatePlayerValue(id, playerData.get(id), scoring))
     );
 
     const receivingValues = await Promise.all(
-      receivingPlayerIds.map(id => this.calculatePlayerValue(id, playerData.get(id), scoring))
+      receivingPlayerIds.map((id: any) => this.calculatePlayerValue(id, playerData.get(id), scoring))
     );
 
     const givingTotal = givingValues.reduce((sum, player) => sum + player.currentValue, 0);
@@ -372,7 +377,7 @@ class TradeAnalysisService {
   private async calculatePlayerValue(
     playerId: string,
     playerData?: NFLPlayer,
-    _scoring?: ScoringSettings
+    scoring?: ScoringSettings
   ): Promise<PlayerValue> {
     if (!playerData) {
       return {
@@ -631,8 +636,8 @@ class TradeAnalysisService {
     const alternatives: AlternativeTradeOffer[] = [];
 
     // Get all tradeable players from both rosters
-    const proposerPlayers = proposerRoster.players.map(p => p.playerId);
-    const receiverPlayers = receiverRoster.players.map(p => p.playerId);
+    const proposerPlayers = proposerRoster.players.map((p: any) => p.playerId);
+    const receiverPlayers = receiverRoster.players.map((p: any) => p.playerId);
 
     // Generate 3-5 alternative trade scenarios
     for (let i = 0; i < 5; i++) {
@@ -668,7 +673,7 @@ class TradeAnalysisService {
     return Math.min(1, Math.max(0, recentAvg / Math.max(seasonAvg, 1)));
   }
 
-  private async calculateScheduleStrength(_team: string): Promise<number> {
+  private async calculateScheduleStrength(team: string): Promise<number> {
     // Mock calculation - would analyze remaining opponent defenses
     return 0.5 + (Math.random() - 0.5) * 0.3;
   }
@@ -685,7 +690,7 @@ class TradeAnalysisService {
     return scarcityMap[position] || 0.5;
   }
 
-  private async calculateTeamOffenseStrength(_team: string): Promise<number> {
+  private async calculateTeamOffenseStrength(team: string): Promise<number> {
     // Mock calculation - would use team offensive metrics
     return 0.4 + Math.random() * 0.6;
   }
@@ -699,11 +704,11 @@ class TradeAnalysisService {
 
     for (const position of positions) {
       const positionPlayers = roster.players
-        .filter(p => {
+        .filter((p: any) => {
           const player = playerData.get(p.playerId);
           return player?.position === position;
         })
-        .map(p => ({
+        .map((p: any) => ({
           playerId: p.playerId,
           playerName: playerData.get(p.playerId)?.name || 'Unknown',
           position,
@@ -737,10 +742,10 @@ class TradeAnalysisService {
   }
 
   private calculateRosterImpact(
-    _incomingPlayerIds: string[],
-    _outgoingPlayerIds: string[],
-    _roster: FantasyRoster,
-    _playerData: Map<string, NFLPlayer>
+    incomingPlayerIds: string[],
+    outgoingPlayerIds: string[],
+    roster: FantasyRoster,
+    playerData: Map<string, NFLPlayer>
   ): { overallImprovement: number; startingLineupImpact: number; benchDepthImpact: number } {
     // Mock calculation - would analyze actual roster spots and improvements
     return {
@@ -765,13 +770,13 @@ class TradeAnalysisService {
     playerIds: string[],
     weeks: number[],
     season: number,
-    _playerData: Map<string, NFLPlayer>
+    playerData: Map<string, NFLPlayer>
   ): Promise<WeeklyProjection[]> {
     const projections: WeeklyProjection[] = [];
 
     for (const week of weeks) {
       const playerProjections = await Promise.all(
-        playerIds.map(async (playerId) => {
+        playerIds.map(async (playerId: any) => {
           const mlPrediction = await machineLearningPlayerPredictionService.generatePlayerPrediction(
             playerId, week, season
           );
@@ -821,7 +826,7 @@ class TradeAnalysisService {
     return { scenarios, averageImpact };
   }
 
-  private assessPerformanceDeclineRisk(player: NFLPlayer, _currentWeek: number): RiskFactor {
+  private assessPerformanceDeclineRisk(player: NFLPlayer, currentWeek: number): RiskFactor {
     // Mock assessment - would analyze age, usage trends, team changes, etc.
     const riskLevel = Math.random();
     
@@ -844,7 +849,7 @@ class TradeAnalysisService {
     };
   }
 
-  private async assessScheduleRisk(_team: string, _currentWeek: number): Promise<Omit<RiskFactor, 'player'>> {
+  private async assessScheduleRisk(team: string, currentWeek: number): Promise<Omit<RiskFactor, 'player'>> {
     // Mock assessment - would analyze remaining schedule difficulty
     return {
       type: 'schedule',
@@ -883,15 +888,15 @@ class TradeAnalysisService {
   private generateRiskMitigationSuggestions(riskFactors: RiskFactor[]): string[] {
     const suggestions: string[] = [];
     
-    if (riskFactors.some(r => r.type === 'injury')) {
+    if (riskFactors.some((r: any) => r.type === 'injury')) {
       suggestions.push('Consider handcuff players or backup options');
     }
     
-    if (riskFactors.some(r => r.type === 'performance_decline')) {
+    if (riskFactors.some((r: any) => r.type === 'performance_decline')) {
       suggestions.push('Monitor recent performance trends closely');
     }
     
-    if (riskFactors.some(r => r.type === 'schedule')) {
+    if (riskFactors.some((r: any) => r.type === 'schedule')) {
       suggestions.push('Review playoff schedule and matchup difficulty');
     }
 
@@ -985,7 +990,7 @@ class TradeAnalysisService {
 
     // Risk assessment
     if (riskAssessment.overallRisk === 'high' || riskAssessment.overallRisk === 'extreme') {
-      reasons.push(`High risk trade due to ${riskAssessment.riskFactors.map(r => r.description).join(', ')}`);
+      reasons.push(`High risk trade due to ${riskAssessment.riskFactors.map((r: any) => r.description).join(', ')}`);
     }
 
     const baseReason = this.getRecommendationPrefix(recommendation);
@@ -1055,7 +1060,7 @@ class TradeAnalysisService {
     const playerMap = new Map<string, NFLPlayer>();
     
     await Promise.all(
-      playerIds.map(async (playerId) => {
+      playerIds.map(async (playerId: any) => {
         try {
           const player = await productionSportsDataService.getPlayerDetails(playerId);
           if (player) {

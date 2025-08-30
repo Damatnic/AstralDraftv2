@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import { PawPrintIcon } from '../icons/PawPrintIcon';
 import { generateTeamMascot } from '../../services/geminiService';
@@ -13,7 +14,7 @@ interface MascotWidgetProps {
     dispatch: React.Dispatch<any>;
 }
 
-export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }) => {
+export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const mascotUrl = team.mascotUrl;
 
@@ -31,7 +32,6 @@ export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispat
                  dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not generate a mascot.', type: 'SYSTEM' }});
             }
         } catch (e) {
-            console.error(e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'An error occurred while generating the mascot.', type: 'SYSTEM' }});
         } finally {
             setIsLoading(false);

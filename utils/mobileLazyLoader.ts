@@ -23,7 +23,7 @@ export function withMobileLazyLoading<P extends object>(
     loadDelay = 0
   } = options;
 
-  const LazyComponent = React.forwardRef<HTMLDivElement, Props>((_props, _ref) => {
+  return React.forwardRef<any, P>((props, ref) => {
     const { isMobile } = useResponsiveBreakpoint();
     const [shouldLoad, setShouldLoad] = React.useState(!loadOnMobile || !isMobile);
 
@@ -41,12 +41,8 @@ export function withMobileLazyLoading<P extends object>(
       return fallback;
     }
 
-    return React.createElement(Component, _props as any);
+    return React.createElement(Component, props as any);
   });
-
-  LazyComponent.displayName = `MobileLazy(${Component.displayName || Component.name || 'Component'})`;
-  
-  return LazyComponent;
 }
 
 /**
@@ -79,8 +75,8 @@ export class MobileLazyLoader {
     if (typeof window === 'undefined' || this.intersectionObserver) return;
 
     this.intersectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      (entries: any) => {
+        entries.forEach((entry: any) => {
           if (entry.isIntersecting) {
             const componentId = entry.target.getAttribute('data-lazy-id');
             if (componentId && !this.loadedComponents.has(componentId)) {
@@ -189,7 +185,7 @@ export const MobileOptimizedWrapper: React.FC<{
   children: React.ReactNode;
   componentId: string;
   fallback?: React.ReactNode;
-}> = ({ children, componentId, fallback = null }) => {
+}> = ({ children, componentId, fallback = null }: any) => {
   const { elementRef, isLoaded } = useMobileLazyLoad(componentId);
 
   return React.createElement(
@@ -227,7 +223,7 @@ export class BundleSizeMonitor {
           toJSON: () => ({ name: bundleName, duration, startTime })
         } as PerformanceEntry);
 
-        // Bundle loaded successfully
+        console.log(`Bundle ${bundleName} loaded in ${duration.toFixed(2)}ms`);
       }
     };
   }

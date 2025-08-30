@@ -1,5 +1,6 @@
 import React from 'react';
-import type { League, User, View, AppState, Player, Notification } from '../types';
+import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Team, DraftPick, Notification, AuctionState, TradeOffer, WaiverClaim, CreateLeaguePayload, PlayerPosition, WatchlistInsight, Persona, CustomRanking, LeaguePoll, Announcement, Badge, TopRivalry, LeagueInvitation, DraftPickAsset, DraftCommentaryItem, RecapVideoScene, SideBet, SmartFaabAdvice, GamedayEvent, PlayerAwardType, PlayerAward, NewspaperContent, LeagueSettings } from '../types';
+import { players } from '../data/players';
 import { LEAGUE_MEMBERS } from '../data/leagueData';
 import { LEAGUE_WITH_PLAYERS } from '../data/leagueWithPlayers';
 
@@ -23,7 +24,10 @@ type Action =
     | { type: 'UPDATE_TEAM_NAME'; payload: { teamId: number, name: string } }
     | { type: 'ADD_PLAYER_TO_ROSTER'; payload: { teamId: number, player: Player } }
     | { type: 'REMOVE_PLAYER_FROM_ROSTER'; payload: { teamId: number, playerId: number } }
-    | { type: 'SET_LINEUP'; payload: { teamId: number, starters: number[], bench: number[] } };
+    | { type: 'SET_LINEUP'; payload: { teamId: number, starters: number[], bench: number[] } }
+    | { type: 'SET_SEASON_REVIEW_YEAR'; payload: number }
+    | { type: 'EDIT_MATCHUPS'; payload: { leagueId: string } }
+    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: any } };
     
 const AppContext = React.createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 
@@ -83,13 +87,13 @@ const appReducer = (state: AppState, action: Action): AppState => {
         case 'LOGIN': {
             const user = action.payload;
             // Check if user is part of the league
-            const isLeagueMember = LEAGUE_MEMBERS.some(member => 
+            const isLeagueMember = LEAGUE_MEMBERS.some((member: any) => 
                 member.name === user.name || member.id === user.id
             );
             
             if (isLeagueMember) {
                 // Find the corresponding league member
-                const leagueMember = LEAGUE_MEMBERS.find(member => 
+                const leagueMember = LEAGUE_MEMBERS.find((member: any) => 
                     member.name === user.name || member.id === user.id
                 );
                 
@@ -148,14 +152,15 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 notifications: [...state.notifications, {
                     id: Date.now(),
                     message: action.payload.message,
-                    type: action.payload.type
+                    type: action.payload.type,
+                    timestamp: new Date().toISOString()
                 }]
             };
             
         case 'REMOVE_NOTIFICATION':
             return {
                 ...state,
-                notifications: state.notifications.filter(n => n.id !== action.payload)
+                notifications: state.notifications.filter((n: any) => n.id !== action.payload)
             };
             
         case 'SET_PLAYER_DETAIL':
@@ -175,9 +180,9 @@ const appReducer = (state: AppState, action: Action): AppState => {
             const { teamId, name } = action.payload;
             return {
                 ...state,
-                leagues: state.leagues.map(league => ({
+                leagues: state.leagues.map((league: any) => ({
                     ...league,
-                    teams: league.teams.map(team => 
+                    teams: league.teams.map((team: any) => 
                         team.id === teamId ? { ...team, name } : team
                     )
                 }))
@@ -188,9 +193,9 @@ const appReducer = (state: AppState, action: Action): AppState => {
             const { teamId, player } = action.payload;
             return {
                 ...state,
-                leagues: state.leagues.map(league => ({
+                leagues: state.leagues.map((league: any) => ({
                     ...league,
-                    teams: league.teams.map(team => 
+                    teams: league.teams.map((team: any) => 
                         team.id === teamId 
                             ? { ...team, roster: [...team.roster, player] }
                             : team
@@ -203,11 +208,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
             const { teamId, playerId } = action.payload;
             return {
                 ...state,
-                leagues: state.leagues.map(league => ({
+                leagues: state.leagues.map((league: any) => ({
                     ...league,
-                    teams: league.teams.map(team => 
+                    teams: league.teams.map((team: any) => 
                         team.id === teamId 
-                            ? { ...team, roster: team.roster.filter(p => p.id !== playerId) }
+                            ? { ...team, roster: team.roster.filter((p: any) => p.id !== playerId) }
                             : team
                     )
                 }))
@@ -215,8 +220,34 @@ const appReducer = (state: AppState, action: Action): AppState => {
         }
         
         case 'SET_LINEUP': {
+            const { teamId, starters, bench } = action.payload;
             // Implementation for setting lineup
             return state;
+        }
+        
+        case 'SET_SEASON_REVIEW_YEAR': {
+            return {
+                ...state,
+                seasonReviewYear: action.payload
+            };
+        }
+        
+        case 'EDIT_MATCHUPS': {
+            return {
+                ...state,
+                editingMatchups: true,
+                activeLeagueId: action.payload.leagueId
+            };
+        }
+        
+        case 'SET_WEEKLY_RECAP_SCRIPT': {
+            return {
+                ...state,
+                weeklyRecapScript: {
+                    ...state.weeklyRecapScript,
+                    [action.payload.key]: action.payload.value
+                }
+            };
         }
         
         default:
@@ -224,7 +255,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
     }
 };
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = React.useReducer(appReducer, initialState);
 
   // Load saved user session on mount
@@ -234,8 +265,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       try {
         const user = JSON.parse(savedUser);
         dispatch({ type: 'LOGIN', payload: user });
-      } catch {
-        console.error('Failed to load saved user session');
+      } catch (error) {
       }
     }
   }, []);

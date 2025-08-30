@@ -31,17 +31,17 @@ export class MobileCSSOptimizer {
   static analyzeComponentCSSUsage(componentContent: string): CSSUsageAnalysis {
     const classMatches = componentContent.match(/className="([^"]+)"/g) || [];
     const allClasses = classMatches
-      .map(match => match.replace(/className="|"/g, ''))
+      .map((match: any) => match.replace(/className="|"/g, ''))
       .flatMap(classes => classes.split(' '))
       .filter(Boolean);
 
     const uniqueClasses = [...new Set(allClasses)];
     
-    const mobileSpecificClasses = uniqueClasses.filter(cls => 
-      this.mobileBreakpoints.some(bp => cls.startsWith(bp))
+    const mobileSpecificClasses = uniqueClasses.filter((cls: any) => 
+      this.mobileBreakpoints.some((bp: any) => cls.startsWith(bp))
     );
 
-    const criticalClasses = uniqueClasses.filter(cls =>
+    const criticalClasses = uniqueClasses.filter((cls: any) =>
       this.criticalMobileClasses.includes(cls)
     );
 
@@ -85,7 +85,7 @@ export class MobileCSSOptimizer {
    */
   static createLazyMobileComponent<T>(
     importFn: () => Promise<{ default: React.ComponentType<T> }>,
-    _fallback?: React.ComponentType
+    fallback?: React.ComponentType
   ) {
     return React.lazy(async () => {
       // Only load on mobile if needed
@@ -105,13 +105,11 @@ export class MobileCSSOptimizer {
   static measureMobilePerformance() {
     if (typeof window === 'undefined') return;
 
-    const observer = new PerformanceObserver((list) => {
+    const observer = new PerformanceObserver((list: any) => {
       const entries = list.getEntries();
-      entries.forEach((entry) => {
+      entries.forEach((entry: any) => {
         if (entry.entryType === 'measure' && entry.name.includes('mobile')) {
-                  performance.getEntriesByType('navigation').forEach((_entry: PerformanceEntry) => {
-          // Track mobile performance
-        });
+          console.log(`Mobile Performance: ${entry.name} took ${entry.duration}ms`);
         }
       });
     });

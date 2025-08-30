@@ -14,7 +14,7 @@ interface PreferencesModalProps {
     onClose: () => void;
 }
 
-export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }) => {
+export const PreferencesModal: React.FC<PreferencesModalProps> = ({ onClose }: any) => {
     const { state, dispatch } = useAppState();
 
     const handleRequestPermission = () => {

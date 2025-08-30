@@ -86,7 +86,6 @@ const DraftSimulationInterface: React.FC = () => {
                 timeRemaining: 60
             });
         } catch (error) {
-            console.error('Failed to initialize simulation:', error);
         }
     }, [settings]);
 
@@ -183,7 +182,6 @@ const DraftSimulationInterface: React.FC = () => {
             }
 
         } catch (error) {
-            console.error('Failed to simulate pick:', error);
         }
     }, [simulation, simulationState, settings]);
 
@@ -399,7 +397,7 @@ interface DraftSimulationSettingsProps {
 const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> = ({
     settings,
     onSettingsChange
-}) => {
+}: any) => {
     const updateSetting = <K extends keyof SimulationSettings>(
         key: K,
         value: SimulationSettings[K]
@@ -548,19 +546,19 @@ interface DraftBoardProps {
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ 
     draftBoard, 
-    currentPick: _currentPick, 
-    settings: _settings 
-}) => {
+    currentPick, 
+    settings 
+}: any) => {
     return (
         <Widget title="Draft Board" className="bg-gray-900/50">
             <div className="space-y-2">
                 {draftBoard.length === 0 ? (
                     <div className="text-center py-8 text-gray-400">
-                        Draft hasn&apos;t started yet
+                        Draft hasn't started yet
                     </div>
                 ) : (
                     <div className="space-y-1">
-                        {draftBoard.slice(-10).map((pick, _index) => (
+                        {draftBoard.slice(-10).map((pick, index) => (
                             <motion.div
                                 key={pick.overallPick}
                                 initial={{ opacity: 0, x: -20 }}
@@ -608,11 +606,11 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     teams,
     selectedTeam,
     onTeamSelect
-}) => {
+}: any) => {
     return (
         <Widget title="Teams" className="bg-gray-900/50">
             <div className="space-y-2">
-                {teams.map((team) => (
+                {teams.map((team: any) => (
                     <button
                         key={team.id}
                         onClick={() => onTeamSelect(team.id)}
@@ -645,7 +643,7 @@ interface TeamRosterProps {
     team: DraftTeam;
 }
 
-const TeamRoster: React.FC<TeamRosterProps> = ({ team }) => {
+const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
     return (
         <Widget title={`${team.name} Roster`} className="bg-gray-900/50">
             <div className="space-y-2">
@@ -683,7 +681,7 @@ interface DraftAnalyticsProps {
     analytics: any;
 }
 
-const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }) => {
+const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }: any) => {
     return (
         <Widget title="Draft Analytics" className="bg-gray-900/50">
             <div className="space-y-4">

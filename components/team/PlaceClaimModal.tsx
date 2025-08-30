@@ -15,7 +15,7 @@ interface PlaceClaimModalProps {
     onClose: () => void;
 }
 
-const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }) => {
+const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }: any) => {
     const { league } = useLeague();
     const [bid, setBid] = React.useState(1);
     const [playerToDropId, setPlayerToDropId] = React.useState<number | undefined>(myTeam.roster[myTeam.roster.length - 1]?.id);
@@ -117,12 +117,12 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
                     </div>
                      {isFullAiEnabled && (advice || isAnalyzing) && (
                         <div className="p-4 border-t border-b border-[var(--panel-border)]">
-                             <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle&apos;s Advice</h3>
+                             <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle's Advice</h3>
                              {isAnalyzing ? (
                                  <div className="h-14 flex items-center justify-center text-sm text-gray-400">Consulting the cosmos...</div>
                              ) : advice && (
                                 <div className="text-center">
-                                    <p className="text-xs text-gray-300 italic">&quot;{advice.summary}&quot;</p>
+                                    <p className="text-xs text-gray-300 italic">"{advice.summary}"</p>
                                     <p className="font-bold text-base mt-1">Suggested Bid: <span className="text-yellow-300">${advice.suggestedBid}</span></p>
                                 </div>
                              )}

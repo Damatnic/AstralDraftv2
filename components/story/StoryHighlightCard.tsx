@@ -9,7 +9,7 @@ interface StoryHighlightCardProps {
     player?: Player | null;
 }
 
-const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, description, player }) => {
+const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, description, player }: any) => {
     return (
         <div className="glass-pane p-4 rounded-xl flex items-start gap-4">
             <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-cyan-400/10 text-cyan-300 rounded-lg text-2xl">

@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Team, League, PlayerAwardType } from '../../types';
-// import type { Player } from '../../types';
+import type { Team, League, PlayerAwardType, Player } from '../../types';
 import { Modal } from '../ui/Modal';
 import { AwardIcon } from '../icons/AwardIcon';
 
@@ -19,7 +18,7 @@ const awardTypes: { type: PlayerAwardType, label: string, description: string }[
     { type: 'BIGGEST_BUST', label: 'Biggest Bust', description: 'The player who most disappointed relative to their expectations.' },
 ];
 
-const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dispatch, onClose }) => {
+const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dispatch, onClose }: any) => {
     const [selectedAwards, setSelectedAwards] = React.useState<Record<PlayerAwardType, number | null>>(() => {
         const initialState: Record<PlayerAwardType, number | null> = {
             MVP: null, DRAFT_GEM: null, WAIVER_HERO: null, BIGGEST_BUST: null
@@ -73,7 +72,7 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
                     </h2>
                 </header>
                 <main className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-                    {awardTypes.map(({ type, label, description }) => (
+                    {awardTypes.map(({ type, label, description }: any) => (
                         <div key={type}>
                             <label htmlFor={`award-${type}`} className={labelClasses}>{label}</label>
                             <p className="text-xs text-gray-400 mb-1">{description}</p>

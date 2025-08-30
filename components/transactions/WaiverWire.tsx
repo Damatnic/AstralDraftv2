@@ -11,8 +11,18 @@ import { players } from '../../data/players';
 import { Player } from '../../types';
 import { Search, Plus, TrendingUp, Clock, DollarSign } from 'lucide-react';
 
+interface WaiverClaim {
+  id: string;
+  playerId: number;
+  teamId: number;
+  bidAmount: number;
+  priority: number;
+  status: 'pending' | 'processed' | 'failed';
+  timestamp: Date;
+}
+
 export const WaiverWire: React.FC = () => {
-  const { dispatch } = useAppState();
+  const { state, dispatch } = useAppState();
   const { league, myTeam } = useLeague();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
@@ -24,10 +34,10 @@ export const WaiverWire: React.FC = () => {
     if (!league) return [];
     
     const rosteredPlayerIds = new Set(
-      league.teams.flatMap(team => team.roster.map(p => p.id))
+      league.teams.flatMap(team => team.roster.map((p: any) => p.id))
     );
     
-    return players.filter(p => !rosteredPlayerIds.has(p.id));
+    return players.filter((p: any) => !rosteredPlayerIds.has(p.id));
   }, [league]);
   
   // Filter free agents based on search
@@ -35,7 +45,7 @@ export const WaiverWire: React.FC = () => {
     if (!searchQuery) return freeAgents.slice(0, 50);
     
     const query = searchQuery.toLowerCase();
-    return freeAgents.filter(p => 
+    return freeAgents.filter((p: any) => 
       p.name.toLowerCase().includes(query) ||
       p.team.toLowerCase().includes(query) ||
       p.position.toLowerCase().includes(query)
@@ -114,7 +124,7 @@ export const WaiverWire: React.FC = () => {
           type="text"
           placeholder="Search free agents..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e: any) => setSearchQuery(e.target.value)}
           className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] focus:border-cyan-400 focus:outline-none"
         />
       </div>
@@ -126,7 +136,7 @@ export const WaiverWire: React.FC = () => {
           <h3 className="font-semibold text-[var(--text-primary)]">Trending Players</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
-          {trendingPlayers.map(player => (
+          {trendingPlayers.map((player: any) => (
             <button
               key={player.id}
               onClick={() => handleAddPlayer(player)}
@@ -157,7 +167,7 @@ export const WaiverWire: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredPlayers.map(player => (
+            {filteredPlayers.map((player: any) => (
               <tr key={player.id} className="border-b border-[var(--panel-border)] hover:bg-white/5">
                 <td className="p-3">
                   <div className="font-medium text-[var(--text-primary)]">{player.name}</div>
@@ -217,7 +227,7 @@ export const WaiverWire: React.FC = () => {
                     min="0"
                     max={getFAABRemaining()}
                     value={bidAmount}
-                    onChange={(e) => setBidAmount(Number(e.target.value))}
+                    onChange={(e: any) => setBidAmount(Number(e.target.value))}
                     className="flex-1 px-3 py-2 bg-black/20 border border-[var(--panel-border)] rounded text-[var(--text-primary)]"
                   />
                   <span className="text-sm text-[var(--text-secondary)]">

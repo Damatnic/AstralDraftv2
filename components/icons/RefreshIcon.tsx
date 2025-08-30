@@ -4,7 +4,7 @@ interface RefreshIconProps {
   className?: string;
 }
 
-export const RefreshIcon: React.FC<RefreshIconProps> = ({ className }) => (
+export const RefreshIcon: React.FC<RefreshIconProps> = ({ className }: any) => (
   <svg
     className={className}
     fill="none"

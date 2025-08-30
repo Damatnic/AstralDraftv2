@@ -328,7 +328,7 @@ const OracleDataIngestionSection: React.FC = () => {
   useEffect(() => {
     if (isProcessingDemo) {
       const interval = setInterval(() => {
-        setDemoStage((prev) => {
+        setDemoStage((prev: any) => {
           if (prev >= ingestionStages.length - 1) {
             setIsProcessingDemo(false);
             return 0;
@@ -360,7 +360,7 @@ const OracleDataIngestionSection: React.FC = () => {
           Data Ingestion & Validation Workflows
         </h2>
         <p className="section-description">
-          Explore Oracle&apos;s sophisticated data pipeline that processes millions of data points from live sports feeds, 
+          Explore Oracle's sophisticated data pipeline that processes millions of data points from live sports feeds, 
           validates information in real-time, and ensures prediction-ready data quality through comprehensive validation workflows.
         </p>
       </div>
@@ -377,7 +377,7 @@ const OracleDataIngestionSection: React.FC = () => {
         </p>
 
         <div className="data-sources-grid">
-          {dataSources.map((source) => (
+          {dataSources.map((source: any) => (
             <button
               key={source.id}
               className={`data-source-card ${activeDataSource === source.id ? 'active' : ''}`}
@@ -414,7 +414,7 @@ const OracleDataIngestionSection: React.FC = () => {
               <div className="detail-section">
                 <h5>Data Types</h5>
                 <ul className="data-types-list">
-                  {selectedDataSource.dataTypes.map((type) => (
+                  {selectedDataSource.dataTypes.map((type: any) => (
                     <li key={`type-${type}`} className="data-type-item">{type}</li>
                   ))}
                 </ul>
@@ -423,7 +423,7 @@ const OracleDataIngestionSection: React.FC = () => {
               <div className="detail-section">
                 <h5>Validation Rules</h5>
                 <ul className="validation-rules-list">
-                  {selectedDataSource.validationRules.map((rule) => (
+                  {selectedDataSource.validationRules.map((rule: any) => (
                     <li key={`rule-${rule}`} className="validation-rule-item">{rule}</li>
                   ))}
                 </ul>
@@ -441,7 +441,7 @@ const OracleDataIngestionSection: React.FC = () => {
           Data Ingestion Pipeline
         </h3>
         <p className="subsection-description">
-          Oracle&apos;s five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
+          Oracle's five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
         </p>
 
         <div className="pipeline-demo-controls">
@@ -491,7 +491,7 @@ const OracleDataIngestionSection: React.FC = () => {
                     <div className="info-section">
                       <h5>Processing Steps</h5>
                       <ul className="processes-list">
-                        {stage.processes.map((process) => (
+                        {stage.processes.map((process: any) => (
                           <li key={`process-${process}`} className="process-item">{process}</li>
                         ))}
                       </ul>
@@ -500,7 +500,7 @@ const OracleDataIngestionSection: React.FC = () => {
                     <div className="info-section">
                       <h5>Validation Checks</h5>
                       <ul className="validation-checks-list">
-                        {stage.validationChecks.map((check) => (
+                        {stage.validationChecks.map((check: any) => (
                           <li key={`check-${check}`} className="validation-check-item">{check}</li>
                         ))}
                       </ul>
@@ -530,7 +530,7 @@ const OracleDataIngestionSection: React.FC = () => {
         </p>
 
         <div className="validation-categories">
-          {validationRules.map((rule) => (
+          {validationRules.map((rule: any) => (
             <button
               key={rule.id}
               className={`validation-category ${activeValidation === rule.id ? 'active' : ''} ${rule.criticalLevel}`}
@@ -561,7 +561,7 @@ const OracleDataIngestionSection: React.FC = () => {
               <div className="examples-section">
                 <h5>Validation Examples</h5>
                 <ul className="examples-list">
-                  {selectedValidation.examples.map((example) => (
+                  {selectedValidation.examples.map((example: any) => (
                     <li key={`example-${example.substring(0, 20)}`} className="example-item">{example}</li>
                   ))}
                 </ul>
@@ -588,7 +588,7 @@ const OracleDataIngestionSection: React.FC = () => {
         </p>
 
         <div className="quality-metrics-grid">
-          {qualityMetrics.map((metric) => (
+          {qualityMetrics.map((metric: any) => (
             <button
               key={metric.id}
               className={`quality-metric-card ${activeMetric === metric.id ? 'active' : ''}`}
@@ -639,7 +639,7 @@ const OracleDataIngestionSection: React.FC = () => {
         </p>
 
         <div className="pipeline-tabs">
-          {processingPipelines.map((pipeline) => (
+          {processingPipelines.map((pipeline: any) => (
             <button
               key={pipeline.id}
               className={`pipeline-tab ${activePipeline === pipeline.id ? 'active' : ''}`}
@@ -669,7 +669,7 @@ const OracleDataIngestionSection: React.FC = () => {
               <div className="stages-section">
                 <h5>Processing Stages</h5>
                 <div className="stages-flow">
-                  {selectedPipeline.stages.map((stage) => (
+                  {selectedPipeline.stages.map((stage: any) => (
                     <div key={`stage-${stage}`} className="flow-stage">
                       <span className="stage-name">{stage}</span>
                       {selectedPipeline.stages.indexOf(stage) < selectedPipeline.stages.length - 1 && (
@@ -683,7 +683,7 @@ const OracleDataIngestionSection: React.FC = () => {
               <div className="error-recovery-section">
                 <h5>Error Recovery Mechanisms</h5>
                 <ul className="recovery-list">
-                  {selectedPipeline.errorRecovery.map((recovery) => (
+                  {selectedPipeline.errorRecovery.map((recovery: any) => (
                     <li key={`recovery-${recovery}`} className="recovery-item">{recovery}</li>
                   ))}
                 </ul>

@@ -18,7 +18,7 @@ interface DailyBriefingWidgetProps {
     dispatch: React.Dispatch<any>;
 }
 
-const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () => void, onDismiss: () => void }> = ({ suggestion, onAccept, onDismiss }) => {
+const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () => void, onDismiss: () => void }> = ({ suggestion, onAccept, onDismiss }: any) => {
     const suggestedPlayers = suggestion.recommendedStarters.map((id: any) => players.find((p: any) => p.id === id)).filter(Boolean) as Player[];
 
     return (
@@ -30,8 +30,8 @@ const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () 
                 exit: { opacity: 0, height: 0 },
             }}
         >
-            <h5 className="font-bold text-sm text-cyan-300">Oracle&apos;s Suggested Lineup</h5>
-            <p className="text-xs italic text-gray-400 mt-1 mb-2">&quot;{suggestion.reasoning}&quot;</p>
+            <h5 className="font-bold text-sm text-cyan-300">Oracle's Suggested Lineup</h5>
+            <p className="text-xs italic text-gray-400 mt-1 mb-2">"{suggestion.reasoning}"</p>
             <div className="flex flex-wrap gap-1 text-xs mb-3">
                 {suggestedPlayers.map((p: any) => (
                     <div key={p.id} className="bg-black/20 px-1.5 py-0.5 rounded-full flex items-center gap-1">
@@ -49,7 +49,7 @@ const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () 
 };
 
 
-export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam, league, dispatch }) => {
+export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [briefing, setBriefing] = React.useState<DailyBriefingItem[] | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [isAdviceLoading, setIsAdviceLoading] = React.useState(false);
@@ -63,7 +63,6 @@ export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam
                 const data = await generateDailyBriefing(league, myTeam);
                 setBriefing(data);
             } catch (e) {
-                console.error(e);
             } finally {
                 setIsLoading(false);
             }
@@ -84,7 +83,6 @@ export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam
             const suggestion = await getLineupSolution(myTeam, league, playerIds[0]);
             setLineupSuggestion(suggestion);
         } catch (e) {
-            console.error(e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: "Could not get lineup advice." });
         } finally {
             setIsAdviceLoading(false);

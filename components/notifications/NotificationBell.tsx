@@ -13,7 +13,7 @@ interface NotificationBellProps {
     className?: string;
 }
 
-const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: any) => {
     const { unreadCount } = useNotifications();
     const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
 

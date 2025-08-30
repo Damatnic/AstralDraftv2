@@ -500,7 +500,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
   useEffect(() => {
     if (isTransformDemo) {
       const interval = setInterval(() => {
-        setDemoStep((prev) => {
+        setDemoStep((prev: any) => {
           if (prev >= preprocessingStages.length - 1) {
             setIsTransformDemo(false);
             return 0;
@@ -545,12 +545,12 @@ const OracleFeatureExtractionSection: React.FC = () => {
           Feature Categories & Dimensions
         </h3>
         <p className="subsection-description">
-          Oracle&apos;s 18-dimensional feature space encompasses 5 major categories, each contributing critical 
+          Oracle's 18-dimensional feature space encompasses 5 major categories, each contributing critical 
           information for prediction accuracy and model performance.
         </p>
 
         <div className="feature-categories-grid">
-          {featureCategories.map((category) => (
+          {featureCategories.map((category: any) => (
             <button
               key={category.id}
               className={`category-card ${activeCategory === category.id ? 'active' : ''}`}
@@ -581,7 +581,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </div>
             
             <div className="features-list">
-              {selectedCategory.features.map((feature) => (
+              {selectedCategory.features.map((feature: any) => (
                 <div key={feature.id} className="feature-item">
                   <div className="feature-header">
                     <div className="feature-info">
@@ -622,7 +622,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
                   <div className="preprocessing-steps">
                     <h6>Preprocessing Steps</h6>
                     <ul className="preprocessing-list">
-                      {feature.preprocessing.map((step) => (
+                      {feature.preprocessing.map((step: any) => (
                         <li key={`${feature.id}-${step}`} className="preprocessing-step">{step}</li>
                       ))}
                     </ul>
@@ -642,7 +642,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           Preprocessing Pipeline
         </h3>
         <p className="subsection-description">
-          Oracle&apos;s five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
+          Oracle's five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
           through systematic cleaning, engineering, and normalization processes.
         </p>
 
@@ -693,7 +693,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
                     <div className="content-group">
                       <h5>Techniques Applied</h5>
                       <ul className="techniques-list">
-                        {stage.techniques.map((technique) => (
+                        {stage.techniques.map((technique: any) => (
                           <li key={`${stage.id}-${technique}`} className="technique-item">{technique}</li>
                         ))}
                       </ul>
@@ -702,7 +702,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
                     <div className="content-group">
                       <h5>Dependencies</h5>
                       <ul className="dependencies-list">
-                        {stage.dependencies.map((dependency) => (
+                        {stage.dependencies.map((dependency: any) => (
                           <li key={`${stage.id}-${dependency}`} className="dependency-item">{dependency}</li>
                         ))}
                       </ul>
@@ -740,7 +740,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </p>
 
         <div className="example-tabs">
-          {transformationExamples.map((example) => (
+          {transformationExamples.map((example: any) => (
             <button
               key={example.id}
               className={`example-tab ${activeExample === example.id ? 'active' : ''}`}
@@ -804,7 +804,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             <div className="transformation-steps">
               <h5>Transformation Steps</h5>
               <ol className="steps-list">
-                {selectedExample.steps.map((step) => (
+                {selectedExample.steps.map((step: any) => (
                   <li key={`${selectedExample.id}-step-${step.slice(0, 20)}`} className="step-item">{step}</li>
                 ))}
               </ol>
@@ -831,7 +831,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </p>
 
         <div className="engineering-methods-grid">
-          {engineeringMethods.map((method) => (
+          {engineeringMethods.map((method: any) => (
             <button
               key={method.id}
               className={`method-card ${activeMethod === method.id ? 'active' : ''}`}
@@ -869,7 +869,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
               <div className="examples-section">
                 <h5>Application Examples</h5>
                 <ul className="examples-list">
-                  {selectedMethod.examples.map((example) => (
+                  {selectedMethod.examples.map((example: any) => (
                     <li key={`${selectedMethod.id}-${example}`} className="example-item">{example}</li>
                   ))}
                 </ul>
@@ -878,7 +878,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
               <div className="benefits-section">
                 <h5>Key Benefits</h5>
                 <ul className="benefits-list">
-                  {selectedMethod.benefits.map((benefit) => (
+                  {selectedMethod.benefits.map((benefit: any) => (
                     <li key={`${selectedMethod.id}-${benefit}`} className="benefit-item">{benefit}</li>
                   ))}
                 </ul>
@@ -900,7 +900,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           <div className="insight-card">
             <h4>Dimensional Efficiency</h4>
             <p>
-              Oracle&apos;s 18-dimensional feature space represents an optimal balance between information richness 
+              Oracle's 18-dimensional feature space represents an optimal balance between information richness 
               and computational efficiency, capturing 95%+ of predictive variance in sports data.
             </p>
           </div>

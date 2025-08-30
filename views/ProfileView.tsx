@@ -12,6 +12,13 @@ import { calculateManagerStats, calculateCareerHistory } from '../utils/careerSt
 import AchievementsWidget from '../components/profile/AchievementsWidget';
 import { LogOutIcon } from '../components/icons/LogOutIcon';
 
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
+    <div className="bg-white/5 p-3 rounded-lg text-center">
+        <p className="text-sm text-gray-400">{label}</p>
+        <p className="text-2xl font-bold text-white">{value}</p>
+    </div>
+);
+
 const ProfileView: React.FC = () => {
     const { state, dispatch } = useAppState();
     const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
@@ -70,7 +77,7 @@ const ProfileView: React.FC = () => {
                                     <Avatar avatar={state.user.avatar} className="w-28 h-28 text-7xl rounded-full mb-4 ring-4 ring-cyan-400/50" />
                                     <h2 className="text-2xl font-bold font-display">{state.user.name}</h2>
                                     <p className="text-xs text-secondary">Member since {memberSinceDate}</p>
-                                    <p className="text-sm text-secondary mt-3 italic">&quot;{state.user.bio || 'No bio set.'}&quot;</p>
+                                    <p className="text-sm text-secondary mt-3 italic">"{state.user.bio || 'No bio set.'}"</p>
                                     <div className="flex gap-2 mt-4">
                                         <button
                                             onClick={() => setIsEditModalOpen(true)}
@@ -108,7 +115,7 @@ const ProfileView: React.FC = () => {
                         <div className="lg:col-span-2 space-y-6">
                             <Widget title="League History" icon={<BookOpenIcon />}>
                                  <div className="p-4 space-y-3">
-                                    {careerHistory.map(entry => {
+                                    {careerHistory.map((entry: any) => {
                                         const league = state.leagues.find(l=>l.id===entry.leagueId);
                                         return (
                                             <div key={entry.key} className="bg-slate-700/30 p-3 rounded-lg flex items-center justify-between hover:bg-slate-600/30 transition-colors">

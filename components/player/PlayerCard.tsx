@@ -39,7 +39,7 @@ const positionColor: Record<string, string> = {
 const PlayerCard: React.FC<PlayerCardProps> = ({ 
     player, onSelect, onAddToQueue, onDraft, onNominate, onAddNote,
     isMyTurn, isNominationTurn, onToggleCompare, isSelectedForCompare, isInQueue 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const hasNews = player.newsFeed && player.newsFeed.length > 0;
   const hasInjury = player?.injuryHistory && player?.injuryHistory.length > 0;

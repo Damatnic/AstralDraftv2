@@ -143,7 +143,7 @@ const OracleDashboardContainer: React.FC = () => {
             {/* Navigation Tabs */}
             <div className="dashboard-tabs mb-6">
                 <div className="flex space-x-1 bg-gray-800 p-1 rounded-lg">
-                    {tabs.map((tab) => (
+                    {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}

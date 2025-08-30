@@ -1097,14 +1097,14 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     projectedPoints: 24.8,
     stats2024: {
       passingYards: 4306,
-      passingTDs: 29,
+      passingTouchdowns: 29,
       interceptions: 18,
       completions: 315,
       attempts: 541,
       completionPercentage: 58.2,
       passerRating: 89.9,
       rushingYards: 523,
-      rushingTDs: 15,
+      rushingTouchdowns: 15,
       rushingAttempts: 122,
       yardsPerCarry: 4.3,
       fantasyPoints: 398.2,
@@ -1115,30 +1115,30 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     statsHistory: {
       2023: {
         passingYards: 4306,
-        passingTDs: 29,
+        passingTouchdowns: 29,
         interceptions: 18,
         rushingYards: 523,
-        rushingTDs: 15,
+        rushingTouchdowns: 15,
         fantasyPoints: 398.2,
         gamesPlayed: 17,
         pointsPerGame: 23.4
       },
       2022: {
         passingYards: 4283,
-        passingTDs: 35,
+        passingTouchdowns: 35,
         interceptions: 14,
         rushingYards: 762,
-        rushingTDs: 7,
+        rushingTouchdowns: 7,
         fantasyPoints: 421.8,
         gamesPlayed: 17,
         pointsPerGame: 24.8
       },
       2021: {
         passingYards: 4407,
-        passingTDs: 36,
+        passingTouchdowns: 36,
         interceptions: 15,
         rushingYards: 763,
-        rushingTDs: 6,
+        rushingTouchdowns: 6,
         fantasyPoints: 434.1,
         gamesPlayed: 17,
         pointsPerGame: 25.5
@@ -1196,14 +1196,14 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     projectedPoints: 25.4,
     stats2024: {
       passingYards: 3678,
-      passingTDs: 24,
+      passingTouchdowns: 24,
       interceptions: 7,
       completions: 307,
       attempts: 457,
       completionPercentage: 67.2,
       passerRating: 112.7,
       rushingYards: 821,
-      rushingTDs: 3,
+      rushingTouchdowns: 3,
       rushingAttempts: 148,
       yardsPerCarry: 5.5,
       fantasyPoints: 424.6,
@@ -1214,30 +1214,30 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     statsHistory: {
       2023: {
         passingYards: 3678,
-        passingTDs: 24,
+        passingTouchdowns: 24,
         interceptions: 7,
         rushingYards: 821,
-        rushingTDs: 3,
+        rushingTouchdowns: 3,
         fantasyPoints: 424.6,
         gamesPlayed: 17,
         pointsPerGame: 25.0
       },
       2022: {
         passingYards: 2242,
-        passingTDs: 17,
+        passingTouchdowns: 17,
         interceptions: 7,
         rushingYards: 764,
-        rushingTDs: 3,
+        rushingTouchdowns: 3,
         fantasyPoints: 289.8,
         gamesPlayed: 12,
         pointsPerGame: 24.2
       },
       2021: {
         passingYards: 2882,
-        passingTDs: 16,
+        passingTouchdowns: 16,
         interceptions: 13,
         rushingYards: 767,
-        rushingTDs: 2,
+        rushingTouchdowns: 2,
         fantasyPoints: 334.4,
         gamesPlayed: 12,
         pointsPerGame: 27.9
@@ -1296,12 +1296,12 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     projectedPoints: 19.8,
     stats2024: {
       rushingYards: 1459,
-      rushingTDs: 14,
+      rushingTouchdowns: 14,
       rushingAttempts: 272,
       yardsPerCarry: 5.4,
       receptions: 67,
       receivingYards: 564,
-      receivingTDs: 7,
+      receivingTouchdowns: 7,
       targets: 81,
       yardsAfterCatch: 312,
       fantasyPoints: 336.3,
@@ -1312,10 +1312,10 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     statsHistory: {
       2023: {
         rushingYards: 1459,
-        rushingTDs: 14,
+        rushingTouchdowns: 14,
         receptions: 67,
         receivingYards: 564,
-        receivingTDs: 7,
+        receivingTouchdowns: 7,
         fantasyPoints: 336.3,
         fantasyPointsPPR: 403.3,
         gamesPlayed: 16,
@@ -1323,10 +1323,10 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       },
       2022: {
         rushingYards: 1139,
-        rushingTDs: 8,
+        rushingTouchdowns: 8,
         receptions: 85,
         receivingYards: 741,
-        receivingTDs: 4,
+        receivingTouchdowns: 4,
         fantasyPoints: 292.0,
         fantasyPointsPPR: 377.0,
         gamesPlayed: 11,
@@ -1334,10 +1334,10 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       },
       2021: {
         rushingYards: 1,
-        rushingTDs: 0,
+        rushingTouchdowns: 0,
         receptions: 0,
         receivingYards: 0,
-        receivingTDs: 0,
+        receivingTouchdowns: 0,
         fantasyPoints: 0.1,
         fantasyPointsPPR: 0.1,
         gamesPlayed: 1,
@@ -1393,12 +1393,12 @@ export class NFLDatabase {
 
   private initializeDatabase() {
     // Load teams
-    NFL_TEAMS.forEach(team => {
+    NFL_TEAMS.forEach((team: any) => {
       this.teams.set(team.id, team);
     });
 
     // Load players
-    NFL_PLAYERS.forEach(player => {
+    NFL_PLAYERS.forEach((player: any) => {
       this.players.set(player.id, player);
     });
   }
@@ -1408,7 +1408,7 @@ export class NFLDatabase {
     const results: NFLPlayer[] = [];
     const searchTerm = query.toLowerCase();
 
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       const matchesQuery = player.name.toLowerCase().includes(searchTerm) ||
                           player.team.toLowerCase().includes(searchTerm);
       const matchesPosition = !position || player.position === position;
@@ -1426,7 +1426,7 @@ export class NFLDatabase {
   getPlayersByPosition(position: string): NFLPlayer[] {
     const results: NFLPlayer[] = [];
     
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       if (player.position === position) {
         results.push(player);
       }
@@ -1466,7 +1466,7 @@ export class NFLDatabase {
   getPlayersByRelevance(relevance: string): NFLPlayer[] {
     const results: NFLPlayer[] = [];
     
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       if (player.fantasyRelevance === relevance) {
         results.push(player);
       }
@@ -1479,7 +1479,7 @@ export class NFLDatabase {
   getBreakoutCandidates(): NFLPlayer[] {
     const results: NFLPlayer[] = [];
     
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       if (player.breakoutCandidate) {
         results.push(player);
       }
@@ -1492,7 +1492,7 @@ export class NFLDatabase {
   getSleeperPicks(): NFLPlayer[] {
     const results: NFLPlayer[] = [];
     
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       if (player.sleeper) {
         results.push(player);
       }
@@ -1536,7 +1536,7 @@ export class NFLDatabase {
       DEF: 0
     };
 
-    this.players.forEach(player => {
+    this.players.forEach((player: any) => {
       positionCounts[player.position]++;
     });
 

@@ -35,7 +35,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     className = '',
     maxUpdates = 10,
     compact = false
-}) => {
+}: any) => {
     const displayUpdates = updates.slice(0, maxUpdates);
 
     const getUpdateIcon = (type: RealtimeUpdate['type']) => {
@@ -93,7 +93,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                             No updates yet...
                         </div>
                     ) : (
-                        displayUpdates.map((update) => {
+                        displayUpdates.map((update: any) => {
                             const Icon = getUpdateIcon(update.type);
                             const iconColor = getUpdateColor(update.type);
                             

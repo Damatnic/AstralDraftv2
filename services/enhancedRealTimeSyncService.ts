@@ -138,6 +138,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.setupEventHandlers();
             
             this.isRunning = true;
+            console.log(`🚀 Enhanced Real-Time Sync Service started on port ${this.config.port}`);
             
             this.emit('service:started', { port: this.config.port });
         } catch (error) {
@@ -170,6 +171,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.wss.close();
         }
         
+        console.log('🛑 Enhanced Real-Time Sync Service stopped');
         this.emit('service:stopped');
     }
 
@@ -187,7 +189,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.handleNewConnection(ws, request);
         });
 
-        this.wss.on('error', (error) => {
+        this.wss.on('error', (error: any) => {
             console.error('WebSocket server error:', error);
             this.emit('server:error', error);
         });
@@ -218,7 +220,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
 
         // Check connection limits
         const leagueConnections = Array.from(this.clientConnections.values())
-            .filter(conn => conn.leagueId === leagueId);
+            .filter((conn: any) => conn.leagueId === leagueId);
         
         if (leagueConnections.length >= this.config.maxConnectionsPerLeague) {
             ws.close(4002, 'Maximum connections reached for league');
@@ -254,7 +256,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         syncState.participants.set(connectionId, connection);
 
         // Set up message handlers
-        ws.on('message', (data) => {
+        ws.on('message', (data: any) => {
             this.handleMessage(connectionId, data);
         });
 
@@ -262,7 +264,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
             this.handleDisconnection(connectionId, code, reason);
         });
 
-        ws.on('error', (error) => {
+        ws.on('error', (error: any) => {
             this.handleConnectionError(connectionId, error);
         });
 
@@ -276,6 +278,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         // Process offline events if any
         this.processOfflineEvents(userId, leagueId);
         
+        console.log(`✅ Client connected: ${userId} to league ${leagueId}`);
         this.emit('client:connected', { connectionId, userId, leagueId });
     }
 
@@ -345,7 +348,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
 
         const { channels } = message;
         if (Array.isArray(channels)) {
-            channels.forEach(channel => {
+            channels.forEach((channel: any) => {
                 connection.subscriptions.add(channel);
             });
         }
@@ -410,7 +413,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
     private detectConflict(event: SyncEvent, syncState: SyncState): ConflictResolution | null {
         // Check recent events for conflicts
         const recentEvents = syncState.eventHistory
-            .filter(e => e.type === event.type && e.timestamp > event.timestamp - 30000); // 30 seconds window
+            .filter((e: any) => e.type === event.type && e.timestamp > event.timestamp - 30000); // 30 seconds window
 
         for (const recentEvent of recentEvents) {
             if (this.eventsConflict(event, recentEvent)) {
@@ -612,7 +615,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         };
 
         const connection = Array.from(this.clientConnections.values())
-            .find(conn => conn.userId === userId && conn.leagueId === leagueId);
+            .find((conn: any) => conn.userId === userId && conn.leagueId === leagueId);
         
         if (connection) {
             this.sendMessage(connection.id, message);
@@ -637,6 +640,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         this.clientConnections.delete(connectionId);
         this.metrics.activeConnections--;
 
+        console.log(`❌ Client disconnected: ${connection.userId} (${code}: ${reason})`);
         this.emit('client:disconnected', { connectionId, userId: connection.userId, code, reason });
     }
 
@@ -668,7 +672,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         }
 
         // Clean up stale connections
-        staleConnections.forEach(connectionId => {
+        staleConnections.forEach((connectionId: any) => {
             this.handleDisconnection(connectionId, 1001, 'Connection timeout');
         });
     }
@@ -717,7 +721,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         return `event_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     }
 
-    private authenticateConnection(userId: string, _token?: string | null): boolean {
+    private authenticateConnection(userId: string, token?: string | null): boolean {
         // Simplified authentication - in production, validate JWT token
         return !!(userId && userId.length > 0);
     }
@@ -770,15 +774,15 @@ class EnhancedRealTimeSyncService extends EventEmitter {
 
     private setupEventHandlers(): void {
         // Handle real-time data service events
-        realTimeDataService.onGameUpdate((update) => {
+        realTimeDataService.onGameUpdate((update: any) => {
             this.broadcastRealTimeUpdate('SCORE_UPDATE', update);
         });
 
-        realTimeDataService.onPlayerUpdate((update) => {
+        realTimeDataService.onPlayerUpdate((update: any) => {
             this.broadcastRealTimeUpdate('PLAYER_UPDATE', update);
         });
 
-        realTimeDataService.onInjuryAlert((alert) => {
+        realTimeDataService.onInjuryAlert((alert: any) => {
             this.broadcastRealTimeUpdate('INJURY_ALERT', alert);
         });
     }
@@ -870,8 +874,9 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         };
     }
 
-    private handleAcknowledgment(_connectionId: string, _message: any): void {
+    private handleAcknowledgment(connectionId: string, message: any): void {
         // Handle event acknowledgments for reliable delivery
+        console.log(`Received ACK from ${connectionId} for event ${message.eventId}`);
     }
 
     private handleUnsubscription(connectionId: string, message: any): void {
@@ -880,7 +885,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
 
         const { channels } = message;
         if (Array.isArray(channels)) {
-            channels.forEach(channel => {
+            channels.forEach((channel: any) => {
                 connection.subscriptions.delete(channel);
             });
         }
@@ -891,7 +896,7 @@ class EnhancedRealTimeSyncService extends EventEmitter {
         
         // Find and resolve the conflict
         for (const syncState of this.syncStates.values()) {
-            const conflict = syncState.conflictQueue.find(c => c.conflictId === conflictId);
+            const conflict = syncState.conflictQueue.find((c: any) => c.conflictId === conflictId);
             if (conflict) {
                 conflict.resolvedEvent = resolution.resolvedEvent;
                 conflict.status = 'RESOLVED';

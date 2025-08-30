@@ -5,12 +5,12 @@
 
 import React from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-// import { Widget } from '../ui/Widget';
+import { Widget } from '../ui/Widget';
 import { Player, Team, User } from '../../types';
-// import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { 
-    // ChevronUpIcon, 
-    // ChevronDownIcon, 
+    ChevronUpIcon, 
+    ChevronDownIcon, 
     RefreshCwIcon,
     FilterIcon,
     SearchIcon,
@@ -18,11 +18,11 @@ import {
     ClockIcon,
     UsersIcon,
     TrendingUpIcon,
-    // MenuIcon,
+    MenuIcon,
     XIcon,
     PlayIcon,
     PauseIcon,
-    // SkipForwardIcon,
+    SkipForwardIcon,
     ChevronLeftIcon,
     ChevronRightIcon
 } from 'lucide-react';
@@ -53,7 +53,7 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
     onSwipeLeft,
     onSwipeRight,
     onTap
-}) => {
+}: any) => {
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
 
@@ -178,8 +178,8 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
 };
 
 const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
-    currentUser: _currentUser,
-    teams: _teams,
+    currentUser,
+    teams,
     availablePlayers,
     draftedPlayers,
     currentPick,
@@ -189,15 +189,15 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
     onAutoPickToggle,
     onPauseResume,
     className = ''
-}) => {
-    // const isMobile = useMediaQuery('(max-width: 768px)');
+}: any) => {
+    const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeView, setActiveView] = React.useState<'players' | 'picks' | 'queue'>('players');
     const [searchQuery, setSearchQuery] = React.useState('');
     const [filterPosition, setFilterPosition] = React.useState<string>('all');
     const [showFilters, setShowFilters] = React.useState(false);
     const [playerQueue, setPlayerQueue] = React.useState<Player[]>([]);
-    const [isAutoPick] = React.useState(false);
-    const [isDraftPaused] = React.useState(false);
+    const [isAutoPick, setIsAutoPick] = React.useState(false);
+    const [isDraftPaused, setIsDraftPaused] = React.useState(false);
 
     // Filter players based on search and position
     const filteredPlayers = React.useMemo(() => {

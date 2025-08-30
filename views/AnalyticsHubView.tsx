@@ -22,9 +22,9 @@ interface AnalyticsHubViewProps {
   viewType?: AnalyticsViewType;
 }
 
-const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
-    const draftedPlayerIds = new Set(league.draftPicks.map(p => p.playerId));
-    const availablePlayers = players.filter(p => !draftedPlayerIds.has(p.id));
+const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+    const draftedPlayerIds = new Set(league.draftPicks.map((p: any) => p.playerId));
+    const availablePlayers = players.filter((p: any) => !draftedPlayerIds.has(p.id));
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -34,7 +34,7 @@ const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<a
                 </Widget>
                 <Widget title="Team-by-Team Grades">
                     <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
-                        {league.teams.map(team => (
+                        {league.teams.map((team: any) => (
                             <DraftGradeCard key={team.id} team={team} league={league} />
                         ))}
                     </div>
@@ -50,7 +50,7 @@ const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<a
     );
 };
 
-const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -72,7 +72,7 @@ const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.
 };
 
 
-const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const [activeTab, setActiveTab] = React.useState('league');
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
     
@@ -84,7 +84,7 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
     
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE';
 
-    if (isSeasonStarted && isFullAiEnabled && !tabs.find(t => t.id === 'needs')) {
+    if (isSeasonStarted && isFullAiEnabled && !tabs.find((t: any) => t.id === 'needs')) {
         tabs.push({ id: 'needs', label: 'Team Needs' });
     }
 
@@ -179,7 +179,7 @@ const AnalyticsHubView: React.FC<AnalyticsHubViewProps> = () => {
     );
 };
 
-const AnalyticsHubViewWithErrorBoundary: React.FC<AnalyticsHubViewProps> = (props) => (
+const AnalyticsHubViewWithErrorBoundary: React.FC<AnalyticsHubViewProps> = (props: any) => (
     <ErrorBoundary>
         <AnalyticsHubView {...props} />
     </ErrorBoundary>

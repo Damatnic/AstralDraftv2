@@ -10,14 +10,14 @@ import PowerRankingCardSkeleton from '../components/rankings/PowerRankingCardSke
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 
-const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const { state } = useAppState();
     const [rankings, setRankings] = React.useState<PowerRanking[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
     const [retryCount, setRetryCount] = React.useState(0);
 
-    const myTeamId = league.teams.find(t => t.owner.id === state.user?.id)?.id;
+    const myTeamId = league.teams.find((t: any) => t.owner.id === state.user?.id)?.id;
     
     const fetchRankings = React.useCallback(async () => {
         setIsLoading(true);
@@ -32,7 +32,6 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                 setError("The Oracle could not produce power rankings. Please try again later.");
             }
         } catch (err) {
-            console.error(err);
             setError("An error occurred while consulting the Oracle for power rankings.");
         } finally {
             setIsLoading(false);
@@ -75,11 +74,11 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         ) :
                          error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
                          <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                             {rankings.map(ranking => (
+                             {rankings.map((ranking: any) => (
                                  <PowerRankingCard 
                                     key={ranking.teamId} 
                                     ranking={ranking} 
-                                    team={league.teams.find(t => t.id === ranking.teamId)}
+                                    team={league.teams.find((t: any) => t.id === ranking.teamId)}
                                     isMyTeam={ranking.teamId === myTeamId}
                                 />
                              ))}

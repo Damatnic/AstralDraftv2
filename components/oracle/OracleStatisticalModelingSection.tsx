@@ -730,7 +730,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
   useEffect(() => {
     if (isDemoRunning) {
       const interval = setInterval(() => {
-        setDemoStep((prev) => {
+        setDemoStep((prev: any) => {
           const currentDemo = statisticalDemos.find((d: any) => d.id === activeDemo);
           if (prev >= (currentDemo?.steps.length || 0) - 1) {
             setIsDemoRunning(false);
@@ -764,7 +764,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           Statistical Modeling & Probability Calculations
         </h2>
         <p className="section-description">
-          Explore Oracle&apos;s sophisticated statistical foundation including regression models, probability 
+          Explore Oracle's sophisticated statistical foundation including regression models, probability 
           distributions, Bayesian inference, and confidence estimation techniques that power accurate 
           sports predictions with quantified uncertainty.
         </p>
@@ -783,7 +783,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </p>
 
         <div className="models-grid">
-          {statisticalModels.map((model) => (
+          {statisticalModels.map((model: any) => (
             <button
               key={model.id}
               className={`model-card ${activeModel === model.id ? 'active' : ''} ${model.category}`}
@@ -852,7 +852,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
               <div className="applications-section">
                 <h5>Oracle Applications</h5>
                 <ul className="applications-list">
-                  {selectedModel.applications.map((app) => (
+                  {selectedModel.applications.map((app: any) => (
                     <li key={`${selectedModel.id}-${app}`} className="application-item">{app}</li>
                   ))}
                 </ul>
@@ -861,7 +861,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
               <div className="assumptions-section">
                 <h5>Model Assumptions</h5>
                 <ul className="assumptions-list">
-                  {selectedModel.assumptions.map((assumption) => (
+                  {selectedModel.assumptions.map((assumption: any) => (
                     <li key={`${selectedModel.id}-${assumption}`} className="assumption-item">{assumption}</li>
                   ))}
                 </ul>
@@ -884,7 +884,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </p>
 
         <div className="distribution-tabs">
-          {probabilityDistributions.map((dist) => (
+          {probabilityDistributions.map((dist: any) => (
             <button
               key={dist.id}
               className={`distribution-tab ${activeDistribution === dist.id ? 'active' : ''} ${dist.type}`}
@@ -918,7 +918,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
                 <div className="parameters-display">
                   <h5>Parameters</h5>
                   <ul className="parameters-list">
-                    {selectedDistribution.parameters.map((param) => (
+                    {selectedDistribution.parameters.map((param: any) => (
                       <li key={`${selectedDistribution.id}-${param}`} className="parameter-item">
                         <code>{param}</code>
                       </li>
@@ -950,7 +950,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
               <div className="applications-display">
                 <h5>Oracle Applications</h5>
                 <ul className="applications-list">
-                  {selectedDistribution.applications.map((app) => (
+                  {selectedDistribution.applications.map((app: any) => (
                     <li key={`${selectedDistribution.id}-${app}`} className="application-item">{app}</li>
                   ))}
                 </ul>
@@ -1003,7 +1003,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </p>
 
         <div className="bayesian-grid">
-          {bayesianComponents.map((component) => (
+          {bayesianComponents.map((component: any) => (
             <button
               key={component.id}
               className={`bayesian-card ${activeBayesian === component.id ? 'active' : ''} ${component.type}`}
@@ -1039,14 +1039,14 @@ const OracleStatisticalModelingSection: React.FC = () => {
               </div>
               
               <div className="role-section">
-                <h5>Role in Oracle&apos;s System</h5>
+                <h5>Role in Oracle's System</h5>
                 <p className="role-description">{selectedBayesian.role}</p>
               </div>
               
               <div className="examples-section">
                 <h5>Practical Examples</h5>
                 <ul className="examples-list">
-                  {selectedBayesian.examples.map((example) => (
+                  {selectedBayesian.examples.map((example: any) => (
                     <li key={`${selectedBayesian.id}-${example}`} className="example-item">{example}</li>
                   ))}
                 </ul>
@@ -1069,7 +1069,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </p>
 
         <div className="confidence-methods-grid">
-          {confidenceMethods.map((method) => (
+          {confidenceMethods.map((method: any) => (
             <button
               key={method.id}
               className={`confidence-card ${activeConfidence === method.id ? 'active' : ''} ${method.category}`}
@@ -1120,7 +1120,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
                 <div className="advantages">
                   <h5>Advantages</h5>
                   <ul className="advantages-list">
-                    {selectedConfidence.advantages.map((advantage) => (
+                    {selectedConfidence.advantages.map((advantage: any) => (
                       <li key={`${selectedConfidence.id}-adv-${advantage}`} className="advantage-item">{advantage}</li>
                     ))}
                   </ul>
@@ -1129,7 +1129,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
                 <div className="limitations">
                   <h5>Limitations</h5>
                   <ul className="limitations-list">
-                    {selectedConfidence.limitations.map((limitation) => (
+                    {selectedConfidence.limitations.map((limitation: any) => (
                       <li key={`${selectedConfidence.id}-lim-${limitation}`} className="limitation-item">{limitation}</li>
                     ))}
                   </ul>
@@ -1148,13 +1148,13 @@ const OracleStatisticalModelingSection: React.FC = () => {
           Interactive Statistical Demonstrations
         </h3>
         <p className="subsection-description">
-          See Oracle&apos;s statistical methods in action through step-by-step demonstrations of real prediction 
+          See Oracle's statistical methods in action through step-by-step demonstrations of real prediction 
           scenarios, complete with calculations, interpretations, and comparative analysis.
         </p>
 
         <div className="demo-controls">
           <div className="demo-selector">
-            {statisticalDemos.map((demo) => (
+            {statisticalDemos.map((demo: any) => (
               <button
                 key={demo.id}
                 className={`demo-tab ${activeDemo === demo.id ? 'active' : ''}`}

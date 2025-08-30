@@ -94,9 +94,9 @@ class EnhancedCacheService {
             // Schedule periodic cleanup
             this.scheduleCleanup();
 
-            // Enhanced Cache Service initialized successfully
+            console.log('Enhanced Cache Service initialized successfully');
         } catch (error) {
-            console.warn('Failed to initialize cache service:', error);
+            console.error('Failed to initialize cache service:', error);
             // Fallback to memory-only cache
         }
     }
@@ -219,7 +219,7 @@ class EnhancedCacheService {
                 const transaction = this.db.transaction(type, 'readonly');
                 const store = transaction.objectStore(type);
                 
-                await Promise.all(missingKeys.map(async (key) => {
+                await Promise.all(missingKeys.map(async (key: any) => {
                     const fullKey = `${type}:${key}`;
                     const item = await store.get(fullKey);
                     if (item && item.expiresAt > Date.now()) {
@@ -280,7 +280,7 @@ class EnhancedCacheService {
 
         // Check memory cache
         for (const [key, item] of this.memoryCache.entries()) {
-            if (item.metadata.tags?.some(tag => tags.includes(tag))) {
+            if (item.metadata.tags?.some((tag: any) => tags.includes(tag))) {
                 keysToDelete.push(key);
             }
         }

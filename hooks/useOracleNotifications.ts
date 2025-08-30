@@ -43,7 +43,7 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
         loadNotifications();
 
         // Listen for new notifications
-        const unsubscribe = notificationService.onNotification((notification) => {
+        const unsubscribe = notificationService.onNotification((notification: any) => {
             setNotifications(prev => [notification, ...prev]);
             setUnreadCount(prev => prev + 1);
         });
@@ -60,7 +60,7 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
     const markAsRead = useCallback((notificationId: string) => {
         notificationService.markAsRead(notificationId);
         setNotifications(prev => 
-            prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+            prev.map((n: any) => n.id === notificationId ? { ...n, isRead: true } : n)
         );
         setUnreadCount(prev => Math.max(0, prev - 1));
     }, []);
@@ -68,7 +68,7 @@ export const useOracleNotifications = (): UseOracleNotificationsReturn => {
     // Mark all notifications as read
     const markAllAsRead = useCallback(() => {
         notificationService.markAllAsRead();
-        setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+        setNotifications(prev => prev.map((n: any) => ({ ...n, isRead: true })));
         setUnreadCount(0);
     }, []);
 

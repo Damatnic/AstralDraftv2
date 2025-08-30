@@ -13,7 +13,7 @@ interface CreatePollModalProps {
     onClose: () => void;
 }
 
-const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) => {
+const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [question, setQuestion] = React.useState('');
     const [options, setOptions] = React.useState(['', '']);
@@ -38,7 +38,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!question.trim() || options.some((opt: string) => !opt.trim())) {
+        if (!question.trim() || options.some((opt: any) => !opt.trim())) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Question and all options must be filled out.", type: 'SYSTEM' } });
             return;
         }
@@ -49,7 +49,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
                 leagueId,
                 poll: {
                     question,
-                    options: options.map((opt: string) => ({ id: `opt_${Math.random()}`, text: opt, votes: [] })),
+                    options: options.map((opt: any) => ({ id: `opt_${Math.random()}`, text: opt, votes: [] })),
                     createdBy: state.user?.id || 'guest',
                     closesAt: Date.now() + 1000 * 60 * 60 * 24 * 7, // 1 week
                 },

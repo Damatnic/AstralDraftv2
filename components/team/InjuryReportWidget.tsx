@@ -9,7 +9,7 @@ interface InjuryReportWidgetProps {
     myTeam: Team;
 }
 
-const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }) => {
+const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }: any) => {
     const { dispatch } = useAppState();
 
     const injuredPlayers = myTeam.roster.filter((p: any) => 

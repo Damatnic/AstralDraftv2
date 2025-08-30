@@ -16,12 +16,12 @@ const FriendOnboardingGuide: React.FC = () => {
               Ready to Start Predicting?
             </h3>
             <p className="text-gray-600">
-              You&apos;re joining an exclusive group of friends competing to outpredict the Oracle AI!
+              You're joining an exclusive group of friends competing to outpredict the Oracle AI!
             </p>
           </div>
           
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-semibold text-blue-800 mb-2">What You&apos;ll Learn:</h4>
+            <h4 className="font-semibold text-blue-800 mb-2">What You'll Learn:</h4>
             <ul className="text-blue-700 space-y-1">
               <li>• How to login with your friend PIN</li>
               <li>• Making your first prediction</li>
@@ -64,7 +64,7 @@ const FriendOnboardingGuide: React.FC = () => {
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                <span>Click &ldquo;Login&rdquo; or press Enter</span>
+                <span>Click "Login" or press Enter</span>
               </div>
             </div>
           </div>
@@ -174,7 +174,7 @@ const FriendOnboardingGuide: React.FC = () => {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <h5 className="font-medium text-blue-800 mb-2">Your Goals:</h5>
             <div className="text-sm text-blue-700 space-y-1">
-              <div>🎯 <strong>Beat the Oracle:</strong> Outperform the AI&apos;s predictions</div>
+              <div>🎯 <strong>Beat the Oracle:</strong> Outperform the AI's predictions</div>
               <div>🏅 <strong>Climb Leaderboard:</strong> Rank higher than your friends</div>
               <div>📈 <strong>Improve Accuracy:</strong> Aim for 70%+ correct predictions</div>
             </div>
@@ -247,7 +247,7 @@ const FriendOnboardingGuide: React.FC = () => {
               <h5 className="font-semibold text-cyan-800 mb-2">🚀 Pro Tips:</h5>
               <div className="text-sm text-cyan-700 space-y-1">
                 <div>• Research before predicting - knowledge improves accuracy</div>
-                <div>• Don&apos;t always use 100% confidence - manage your risk</div>
+                <div>• Don't always use 100% confidence - manage your risk</div>
                 <div>• Stay consistent - regular participation helps improve results</div>
                 <div>• Learn from the Oracle - analyze when it&apos;s right vs wrong</div>
               </div>
@@ -256,10 +256,10 @@ const FriendOnboardingGuide: React.FC = () => {
             <div>
               <h5 className="font-semibold text-red-800 mb-2">🔧 Common Issues:</h5>
               <div className="text-sm text-red-700 space-y-1">
-                <div><strong>Can&apos;t login?</strong> Double-check PIN is exactly &ldquo;0000&rdquo;</div>
+                <div><strong>Can't login?</strong> Double-check PIN is exactly "0000"</div>
                 <div><strong>Page looks broken?</strong> Refresh your browser</div>
                 <div><strong>No predictions available?</strong> Check back later for new events</div>
-                <div><strong>Prediction didn&apos;t save?</strong> Make sure you clicked &ldquo;Submit&rdquo;</div>
+                <div><strong>Prediction didn't save?</strong> Make sure you clicked "Submit"</div>
               </div>
             </div>
 

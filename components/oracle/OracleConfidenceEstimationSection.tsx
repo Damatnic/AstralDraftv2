@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './OracleConfidenceEstimationSection.css';
 
 interface ConfidenceMethod {
@@ -397,7 +397,7 @@ function OracleConfidenceEstimationSection() {
       averageConfidence: predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length,
       averageUncertainty: predictions.reduce((sum, p) => sum + p.uncertainty, 0) / predictions.length,
       highConfidencePredictions: predictions.filter((p: any) => p.confidence > 0.8).length,
-      lowConfidencePredictions: predictions.filter(p => p.confidence < 0.7).length,
+      lowConfidencePredictions: predictions.filter((p: any) => p.confidence < 0.7).length,
       calibrationScore: 0.923, // Simulated calibration score
       reliabilityScore: 0.887  // Simulated reliability score
     });
@@ -443,7 +443,7 @@ function OracleConfidenceEstimationSection() {
         </div>
         
         <div className="overview-section">
-          <h4>Oracle&apos;s Confidence Framework</h4>
+          <h4>Oracle's Confidence Framework</h4>
           <div className="confidence-framework">
             <div className="framework-flow">
               <div className="flow-stage">
@@ -534,7 +534,7 @@ function OracleConfidenceEstimationSection() {
     <div className="confidence-methods">
       <h3>🔬 Confidence Estimation Methods</h3>
       <div className="methods-grid">
-        {confidenceMethods.map((method) => (
+        {confidenceMethods.map((method: any) => (
           <button
             key={method.id}
             className={`method-card ${selectedMethod === method.id ? 'selected' : ''}`}
@@ -607,7 +607,7 @@ function OracleConfidenceEstimationSection() {
             <span>Implementation</span>
             <span>Theoretical Foundation</span>
           </div>
-          {confidenceMethods.map((method) => (
+          {confidenceMethods.map((method: any) => (
             <div key={`comparison-${method.id}`} className="table-row">
               <span className="method-name">{method.name}</span>
               <span className="cost-score">
@@ -656,7 +656,7 @@ function OracleConfidenceEstimationSection() {
       <div className="uncertainty-grid">
         {uncertaintySources
           .filter((source: any) => selectedUncertaintyType === 'all' || source.type.toLowerCase() === selectedUncertaintyType)
-          .map((source) => (
+          .map((source: any) => (
             <div key={source.id} className={`uncertainty-card ${source.type.toLowerCase()}`}>
               <div className="uncertainty-header">
                 <h4>{source.name}</h4>
@@ -686,7 +686,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="uncertainty-framework">
-        <h4>🔬 Oracle&apos;s Uncertainty Decomposition</h4>
+        <h4>🔬 Oracle's Uncertainty Decomposition</h4>
         <div className="decomposition-formula">
           <div className="formula-card">
             <h6>Total Uncertainty Decomposition</h6>
@@ -729,7 +729,7 @@ function OracleConfidenceEstimationSection() {
       <div className="calibration-metrics">
         <h4>📊 Calibration Metrics</h4>
         <div className="metrics-grid">
-          {calibrationMetrics.map((metric) => (
+          {calibrationMetrics.map((metric: any) => (
             <div key={metric.id} className="metric-card">
               <h5>{metric.name}</h5>
               <div className="metric-formula">
@@ -793,7 +793,7 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       <div className="calibration-results">
-        <h4>📈 Oracle&apos;s Calibration Performance</h4>
+        <h4>📈 Oracle's Calibration Performance</h4>
         <div className="results-dashboard">
           <div className="calibration-score">
             <h5>Overall Calibration Score</h5>
@@ -838,7 +838,7 @@ function OracleConfidenceEstimationSection() {
         <h3>📊 Prediction Intervals</h3>
         <div className="intervals-intro">
           <p>
-            Prediction intervals provide a range of plausible values for Oracle&apos;s predictions, 
+            Prediction intervals provide a range of plausible values for Oracle's predictions, 
             giving you a complete picture of uncertainty rather than just point estimates.
           </p>
         </div>
@@ -860,7 +860,7 @@ function OracleConfidenceEstimationSection() {
         <div className="intervals-visualization">
           <h4>📈 Prediction Intervals for {confidenceLevel}% Confidence</h4>
           <div className="intervals-grid">
-            {intervals.map((interval) => (
+            {intervals.map((interval: any) => (
               <div key={interval.id} className="interval-card">
                 <h5>{interval.method}</h5>
                 <div className="interval-display">
@@ -1002,14 +1002,14 @@ function OracleConfidenceEstimationSection() {
           <div className="insight-card">
             <h5>Uncertainty as Information</h5>
             <p>
-              High uncertainty doesn&apos;t mean bad predictions - it indicates situations where 
+              High uncertainty doesn't mean bad predictions - it indicates situations where 
               multiple outcomes are plausible, creating opportunity for strategic advantage.
             </p>
           </div>
           <div className="insight-card">
             <h5>Dynamic Confidence</h5>
             <p>
-              Oracle&apos;s confidence adapts to changing conditions. Pre-game confidence may differ 
+              Oracle's confidence adapts to changing conditions. Pre-game confidence may differ 
               from in-game confidence as new information becomes available.
             </p>
           </div>
@@ -1029,7 +1029,7 @@ function OracleConfidenceEstimationSection() {
     <div className="oracle-confidence-section">
       <div className="section-header">
         <h2>🎯 Confidence Scores & Uncertainty Quantification</h2>
-        <p>Understanding prediction reliability and uncertainty bounds in Oracle&apos;s AI system</p>
+        <p>Understanding prediction reliability and uncertainty bounds in Oracle's AI system</p>
       </div>
       
       <div className="section-navigation">
@@ -1081,6 +1081,6 @@ function OracleConfidenceEstimationSection() {
       </div>
     </div>
   );
-};
+}
 
 export default OracleConfidenceEstimationSection;

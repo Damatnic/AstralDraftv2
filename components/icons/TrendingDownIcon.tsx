@@ -4,7 +4,7 @@ interface TrendingDownIconProps {
   className?: string;
 }
 
-export const TrendingDownIcon: React.FC<TrendingDownIconProps> = ({ className }) => (
+export const TrendingDownIcon: React.FC<TrendingDownIconProps> = ({ className }: any) => (
   <svg
     className={className}
     fill="none"
@@ -20,3 +20,5 @@ export const TrendingDownIcon: React.FC<TrendingDownIconProps> = ({ className })
     />
   </svg>
 );
+
+export default TrendingDownIcon;

@@ -35,7 +35,7 @@ const apiClient: AxiosInstance = axios.create({
 
 // Request interceptor for auth token
 apiClient.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     // Add auth token if available
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -43,15 +43,15 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );
 
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: any) => response,
+  (error: any) => {
     if (error.response) {
       // Handle specific error cases
       switch (error.response.status) {
@@ -114,7 +114,7 @@ export const geminiService = {
         })
       );
 
-      eventSource.onmessage = (event) => {
+      eventSource.onmessage = (event: any) => {
         if (event.data === '[DONE]') {
           eventSource.close();
           return;
@@ -130,7 +130,7 @@ export const geminiService = {
         }
       };
 
-      eventSource.onerror = (error) => {
+      eventSource.onerror = (error: any) => {
         console.error('Stream error:', error);
         eventSource.close();
       };
@@ -149,7 +149,7 @@ export const geminiService = {
     try {
       const response = await apiClient.get('/health');
       return response.data.apis?.gemini || false;
-    } catch {
+    } catch (error) {
       return false;
     }
   }
@@ -223,7 +223,7 @@ export const sportsDataService = {
     try {
       const response = await apiClient.get('/health');
       return response.data.apis || {};
-    } catch {
+    } catch (error) {
       return {};
     }
   }

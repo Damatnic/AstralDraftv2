@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Player, Team } from '../../types';
-import { NFL_TEAMS } from '../../data/nflPlayers';
+import { POSITION_GROUPS, NFL_TEAMS } from '../../data/nflPlayers';
 import PlayerSearch from '../players/PlayerSearch';
 
 interface RosterManagementProps {
@@ -27,7 +27,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   team,
   isOwner = false,
   showAddDropButtons = false
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<string>('');
@@ -45,9 +45,9 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       if (position === 'BENCH' || position === 'IR') return;
       
       for (let i = 0; i < count; i++) {
-        const player = team.roster.find(p => 
+        const player = team.roster.find((p: any) => 
           p.position === position && 
-          !slots.some(slot => slot.player?.id === p.id)
+          !slots.some((slot: any) => slot.player?.id === p.id)
         ) || null;
         
         slots.push({
@@ -60,8 +60,8 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
     });
     
     // Bench slots
-    const benchPlayers = team.roster.filter(p => 
-      !slots.some(slot => slot.player?.id === p.id)
+    const benchPlayers = team.roster.filter((p: any) => 
+      !slots.some((slot: any) => slot.player?.id === p.id)
     );
     
     for (let i = 0; i < rosterFormat.BENCH; i++) {
@@ -87,9 +87,9 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   };
 
   const rosterSlots = createRosterSlots();
-  const starterSlots = rosterSlots.filter(slot => slot.isStarter);
-  const benchSlots = rosterSlots.filter(slot => slot.position === 'BENCH');
-  const irSlots = rosterSlots.filter(slot => slot.position === 'IR');
+  const starterSlots = rosterSlots.filter((slot: any) => slot.isStarter);
+  const benchSlots = rosterSlots.filter((slot: any) => slot.position === 'BENCH');
+  const irSlots = rosterSlots.filter((slot: any) => slot.position === 'IR');
 
   const getPositionColor = (position: string) => {
     switch (position) {
@@ -158,7 +158,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
     }
   };
 
-  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }) => (
+  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }: any) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -270,7 +270,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
 
         {/* View Toggle */}
         <div className="flex bg-slate-800 rounded-lg p-1">
-          {(['all', 'starters', 'bench'] as const).map((view) => (
+          {(['all', 'starters', 'bench'] as const).map((view: any) => (
             <button
               key={view}
               onClick={() => setRosterView(view)}
@@ -317,7 +317,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-white">
-              {team.roster.filter(p => p.injuryStatus === 'HEALTHY').length}
+              {team.roster.filter((p: any) => p.injuryStatus === 'HEALTHY').length}
             </div>
             <div className="text-sm text-slate-400">Healthy Players</div>
           </div>
@@ -339,7 +339,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e: any) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-white">
@@ -356,7 +356,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
               <PlayerSearch
                 onPlayerSelect={handlePlayerSelect}
                 filterPosition={selectedPosition === 'FLEX' ? '' : selectedPosition}
-                excludePlayerIds={team.roster.map(p => p.id)}
+                excludePlayerIds={team.roster.map((p: any) => p.id)}
                 showAddButton={true}
               />
             </motion.div>

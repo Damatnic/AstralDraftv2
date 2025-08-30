@@ -45,7 +45,7 @@ export const createNavigationHandler = (
   return () => {
     if (data) {
       // If data is provided, might need to set additional state
-      Object.keys(data).forEach(key => {
+      Object.keys(data).forEach((key: any) => {
         if (key !== 'view') {
           dispatch({ type: `SET_${key.toUpperCase()}`, payload: data[key] });
         }

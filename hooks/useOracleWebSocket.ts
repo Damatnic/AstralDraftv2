@@ -7,7 +7,7 @@ import { useRef, useCallback, useEffect, useState } from 'react';
 
 export interface OracleWebSocketMessage {
     type: string;
-    [key: string]: unknown;
+    [key: string]: any;
 }
 
 export interface OracleWebSocketConfig {
@@ -78,7 +78,7 @@ export const useOracleWebSocket = ({
             wsRef.current.onopen = () => {
                 if (!mountedRef.current) return;
                 
-                // Oracle WebSocket connected
+                console.log('✅ Oracle WebSocket connected');
                 setConnectionStatus('connected');
                 
                 // Send initial subscription
@@ -89,7 +89,7 @@ export const useOracleWebSocket = ({
                 });
             };
 
-            wsRef.current.onmessage = (event) => {
+            wsRef.current.onmessage = (event: any) => {
                 if (!mountedRef.current) return;
                 
                 try {
@@ -101,10 +101,10 @@ export const useOracleWebSocket = ({
                 }
             };
 
-            wsRef.current.onclose = (event) => {
+            wsRef.current.onclose = (event: any) => {
                 if (!mountedRef.current) return;
                 
-                // Oracle WebSocket disconnected
+                console.log('🔌 Oracle WebSocket disconnected', event.code, event.reason);
                 setConnectionStatus('disconnected');
                 
                 // Auto-reconnect unless it was a clean close
@@ -117,7 +117,7 @@ export const useOracleWebSocket = ({
                 }
             };
 
-            wsRef.current.onerror = (error) => {
+            wsRef.current.onerror = (error: any) => {
                 if (!mountedRef.current) return;
                 
                 console.error('Oracle WebSocket error:', error);

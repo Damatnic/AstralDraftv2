@@ -20,7 +20,7 @@ const awardConfig: Record<LeagueAward['type'], { icon: React.ReactNode, color: s
 };
 
 
-const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }) => {
+const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }: any) => {
     const config = awardConfig[award.type];
     if (!config) return null;
 
@@ -37,8 +37,8 @@ const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ a
     );
 };
 
-const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }) => {
-    const champion = teams.find(t => t.id === history.championTeamId);
+const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }: any) => {
+    const champion = teams.find((t: any) => t.id === history.championTeamId);
     
     return (
         <motion.div
@@ -61,8 +61,8 @@ const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], ind
                         )}
                     </div>
                     <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {(history.leagueAwards || []).map(award => (
-                            <AwardCard key={award.id} award={award} team={teams.find(t => t.id === award.teamId)} />
+                        {(history.leagueAwards || []).map((award: any) => (
+                            <AwardCard key={award.id} award={award} team={teams.find((t: any) => t.id === award.teamId)} />
                         ))}
                     </div>
                 </div>

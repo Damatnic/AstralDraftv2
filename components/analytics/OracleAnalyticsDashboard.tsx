@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Target, Trophy, Zap, BarChart3, Activity } from 'lucide-react';
 import { useAuth } from '../../contexts/SimpleAuthContext';
+import { oracleApiClient } from '../../services/oracleApiClient';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface PerformanceData {
@@ -77,66 +78,65 @@ interface GlobalAnalytics {
 export const OracleAnalyticsDashboard: React.FC = () => {
     const { user } = useAuth();
     const isMobile = useMediaQuery('(max-width: 768px)');
+    const isTablet = useMediaQuery('(max-width: 1024px)');
     
     const [performanceData, setPerformanceData] = useState<PerformanceData | null>(null);
     const [globalData, setGlobalData] = useState<GlobalAnalytics | null>(null);
-    const [leaderboardData, setLeaderboardData] = useState<Array<{ playerNumber: number; name: string; score: number; rank: number }> | null>(null);
+    const [leaderboardData, setLeaderboardData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedSeason, setSelectedSeason] = useState<number>(2024);
     const [selectedWeeks, setSelectedWeeks] = useState<number>(10);
 
-    const getPlayerNumber = useCallback((user: { id: string; isAdmin?: boolean }): number => {
-        if (user.isAdmin) return 0; // Admin is player 0 for Oracle
-        const match = user.id.match(/player(\d+)/);
-        return match ? parseInt(match[1]) : 1;
-    }, []);
-
-    const loadAnalyticsData = useCallback(async () => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            // Mock data loading for now
-            setPerformanceData({
-                predictionHistory: [],
-                weeklyTrends: [],
-                typeBreakdown: [],
-                confidenceAnalysis: []
-            });
-
-            setGlobalData({
-                globalStats: {
-                    totalUsers: 50,
-                    totalPredictions: 1000,
-                    totalSubmissions: 800,
-                    avgUserConfidence: 0.75,
-                    avgOracleConfidence: 0.85,
-                    userAccuracy: 0.68,
-                    oracleAccuracy: 0.82
-                },
-                weeklyParticipation: [],
-                typePopularity: []
-            });
-
-            setLeaderboardData([
-                { playerNumber: 1, name: 'Player 1', score: 95, rank: 1 },
-                { playerNumber: 2, name: 'Player 2', score: 87, rank: 2 }
-            ]);
-
-        } catch (err) {
-            console.error('Error loading analytics data:', err);
-            setError(err instanceof Error ? err.message : 'Failed to load analytics data');
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
     useEffect(() => {
         if (user?.id) {
             loadAnalyticsData();
         }
-    }, [user, selectedSeason, selectedWeeks, loadAnalyticsData]);
+    }, [user, selectedSeason, selectedWeeks]);
+
+    const getPlayerNumber = (user: any): number => {
+        if (user.isAdmin) return 0; // Admin is player 0 for Oracle
+        const match = user.id.match(/player(\d+)/);
+        return match ? parseInt(match[1]) : 1;
+    };
+
+    const loadAnalyticsData = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const playerNumber = getPlayerNumber(user!);
+
+            const [performanceResponse, globalResponse, leaderboardResponse] = await Promise.all([
+                oracleApiClient.getPerformanceAnalytics(playerNumber, { 
+                    season: selectedSeason, 
+                    weeks: selectedWeeks 
+                }),
+                oracleApiClient.getGlobalAnalytics({ 
+                    season: selectedSeason, 
+                    weeks: selectedWeeks 
+                }),
+                oracleApiClient.getLeaderboard(selectedSeason, undefined, 20)
+            ]);
+
+            if (performanceResponse.success) {
+                setPerformanceData(performanceResponse.data);
+            }
+
+            if (globalResponse.success) {
+                setGlobalData(globalResponse.data);
+            }
+
+            if (leaderboardResponse.success) {
+                setLeaderboardData(leaderboardResponse.data);
+            }
+
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to load analytics data');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const StatCard: React.FC<{
         title: string;
@@ -145,7 +145,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         icon: React.ReactNode;
         trend?: 'up' | 'down' | 'neutral';
         trendValue?: string;
-    }> = ({ title, value, description, icon, trend, trendValue }) => (
+    }> = ({ title, value, description, icon, trend, trendValue }: any) => (
         <Card>
             <CardContent className="flex items-center p-4 sm:p-6">
                 <div className="flex items-center space-x-3 sm:space-x-4 w-full">
@@ -221,7 +221,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         );
     }
 
-    const currentUserRank = leaderboardData?.find((entry: { playerNumber: number; name: string; score: number; rank: number }) => entry.playerNumber === getPlayerNumber(user!));
+    const currentUserRank = leaderboardData?.find((entry: any) => entry.playerNumber === getPlayerNumber(user!));
 
     return (
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
@@ -234,7 +234,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2">
                     <select 
                         value={selectedSeason} 
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedSeason(Number(e.target.value))}
+                        onChange={(e: any) => setSelectedSeason(Number(e.target.value))}
                         className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm sm:text-base min-h-[44px]"
                         aria-label="Select season"
                     >
@@ -243,7 +243,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     </select>
                     <select 
                         value={selectedWeeks} 
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedWeeks(Number(e.target.value))}
+                        onChange={(e: any) => setSelectedWeeks(Number(e.target.value))}
                         className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm sm:text-base min-h-[44px]"
                         aria-label="Select time range"
                     >
@@ -424,7 +424,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-2 sm:space-y-3">
-                            {performanceData.predictionHistory.slice(0, isMobile ? 3 : 5).map((prediction) => (
+                            {performanceData.predictionHistory.slice(0, isMobile ? 3 : 5).map((prediction: any) => (
                                 <div key={prediction.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg gap-2 sm:gap-0">
                                     <div className="flex-1 min-w-0">
                                         <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{prediction.question}</p>
@@ -433,11 +433,11 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
-                                        <Badge variant={prediction.isCorrect ? "success" : "warning"} className="text-xs">
+                                        <Badge variant={prediction.isCorrect ? "default" : "secondary"} className="text-xs">
                                             {prediction.userConfidence}% confidence
                                         </Badge>
                                         {prediction.isResolved && (
-                                            <Badge variant={prediction.isCorrect ? "success" : "error"} className="text-xs">
+                                            <Badge variant={prediction.isCorrect ? "default" : "destructive"} className="text-xs">
                                                 {prediction.isCorrect ? 'Correct' : 'Incorrect'}
                                             </Badge>
                                         )}

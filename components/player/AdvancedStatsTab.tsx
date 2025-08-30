@@ -35,7 +35,7 @@ interface WeeklyProjection {
     confidence: number;
 }
 
-const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league: _league }) => {
+const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: any) => {
     // Mock advanced stats - in real app this would come from analytics service
     const statComparisons: StatComparison[] = [
         {
@@ -186,7 +186,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league: _le
                                 </div>
                                 <div className="text-sm text-[var(--text-secondary)]">Snap Count %</div>
                                 <div className="text-xs text-[var(--text-secondary)] mt-1">
-                                    Share of team&apos;s offensive snaps
+                                    Share of team's offensive snaps
                                 </div>
                             </div>
                             
@@ -220,7 +220,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league: _le
             <Widget title="Upcoming Weekly Projections">
                 <div className="p-4">
                     <div className="space-y-3">
-                        {weeklyProjections.map((week) => (
+                        {weeklyProjections.map((week: any) => (
                             <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                                 <div className="flex items-center gap-4">
                                     <div className="text-center min-w-[60px]">

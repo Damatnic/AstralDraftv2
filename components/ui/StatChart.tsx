@@ -11,7 +11,7 @@ interface StatChartProps {
   color?: string;
 }
 
-const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = '', color = 'bg-cyan-500' }) => {
+const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = '', color = 'bg-cyan-500' }: any) => {
   const percentage = (value / maxValue) * 100;
 
   return (

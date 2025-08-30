@@ -154,7 +154,7 @@ const OracleBeginnerTutorial: React.FC = () => {
             content: `
                 <div class="fantasy-basics">
                     <h3>Fantasy Football Quick Refresher</h3>
-                    <p>Before diving into Oracle predictions, let's review the key concepts that drive fantasy football:</p>
+                    <p>Before diving into Oracle predictions, let&apos;s review the key concepts that drive fantasy football:</p>
                     
                     <div class="positions-guide">
                         <h4>📍 Key Positions & Scoring</h4>
@@ -557,7 +557,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                                 </div>
                                 <div class="avoid">
                                     <h5>🤒 Obvious Injury Impacts</h5>
-                                    <p>When Oracle accounts for clear injury downgrades, it's usually using accurate medical probability data</p>
+                                    <p>When Oracle accounts for clear injury downgrades, it&apos;s usually using accurate medical probability data</p>
                                 </div>
                             </div>
                         </div>
@@ -616,7 +616,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                         
                         <div class="step">
                             <h4>Step 4: Track Your Performance</h4>
-                            <p>Use the analytics dashboard to see where you're beating Oracle</p>
+                            <p>Use the analytics dashboard to see where you&apos;re beating Oracle</p>
                             <div class="tips">
                                 <p><strong>Learn from wins:</strong> What insights gave you an edge?</p>
                                 <p><strong>Learn from losses:</strong> Where was Oracle's data advantage too strong?</p>
@@ -685,7 +685,6 @@ const OracleBeginnerTutorial: React.FC = () => {
                 }));
                 setCurrentStep(progress.currentStep || 0);
             } catch (error) {
-                console.warn('Failed to load tutorial progress:', error);
             }
         }
     }, []);
@@ -797,7 +796,6 @@ const OracleBeginnerTutorial: React.FC = () => {
                 timeSpent: completionData.timeSpent
             }));
         } catch (error) {
-            console.warn('Failed to record tutorial completion:', error);
         }
         
         localStorage.setItem('oracle-beginner-tutorial-completion', JSON.stringify(completionData));

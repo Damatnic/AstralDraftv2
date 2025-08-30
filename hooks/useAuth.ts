@@ -42,7 +42,7 @@ export const useAuth = (): UseAuthReturn => {
     try {
       // For testing, use the test users
       const testUsers = JSON.parse(localStorage.getItem('testUsers') || '[]');
-      const user = testUsers.find((u: { email: string; password: string; id: string }) => u.email === email && u.password === password);
+      const user = testUsers.find((u: any) => u.email === email && u.password === password);
       
       if (user) {
         localStorage.setItem('currentUser', JSON.stringify(user));

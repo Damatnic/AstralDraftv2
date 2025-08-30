@@ -8,7 +8,7 @@ interface EmptyStateProps {
     children?: React.ReactNode;
 }
 
-const EmptyState: React.FC<EmptyStateProps> = ({ icon, illustration, message, children }) => {
+const EmptyState: React.FC<EmptyStateProps> = ({ icon, illustration, message, children }: any) => {
     return (
         <div className="text-center py-4 px-2 text-sm text-gray-500">
             {illustration && <div className="text-gray-600 w-24 h-24 mx-auto mb-2">{illustration}</div>}

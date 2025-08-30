@@ -13,7 +13,7 @@ interface TradeStoryModalProps {
     onClose: () => void;
 }
 
-const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClose }) => {
+const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClose }: any) => {
     const [story, setStory] = React.useState<TradeStory | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 

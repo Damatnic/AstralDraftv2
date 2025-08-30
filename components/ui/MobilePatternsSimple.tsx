@@ -29,7 +29,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
-}) => {
+}: any) => {
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
   const [startY, setStartY] = React.useState(0);
@@ -170,7 +170,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   threshold = 50,
   children,
   className = ''
-}) => {
+}: any) => {
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
@@ -241,7 +241,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
   activeTab,
   onTabChange,
   className = ''
-}) => {
+}: any) => {
   const handleKeyDown = (e: React.KeyboardEvent, tabId: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -254,14 +254,14 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
       className={`flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1 overflow-x-auto ${className}`}
       role="tablist"
     >
-      {tabs.map((tab) => (
+      {tabs.map((tab: any) => (
         <button
           key={tab.id}
           role="tab"
           aria-selected={activeTab === tab.id}
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => handleKeyDown(e, tab.id)}
+          onKeyDown={(e: any) => handleKeyDown(e, tab.id)}
           className={`
             relative flex-1 min-w-0 px-4 py-3 text-sm font-medium rounded-md transition-all duration-200 touch-manipulation
             ${activeTab === tab.id

@@ -46,7 +46,7 @@ const AssistantView: React.FC = () => {
         setIsSending(true);
 
         try {
-            const stream = await streamAssistantResponse(currentInput, state.leagues.filter(l => !l.isMock), state.user!);
+            const stream = await streamAssistantResponse(currentInput, state.leagues.filter((l: any) => !l.isMock), state.user!);
             let fullText = "";
             const collectedChunks: GroundingChunk[] = [];
             for await (const chunk of stream) {
@@ -55,20 +55,19 @@ const AssistantView: React.FC = () => {
                 if (newChunks) {
                     collectedChunks.push(...newChunks);
                 }
-                setMessages(prev => prev.map(msg => 
+                setMessages(prev => prev.map((msg: any) => 
                     msg.id === aiMessagePlaceholder.id ? { ...msg, text: fullText } : msg
                 ));
             }
 
-            const uniqueChunks = Array.from(new Map(collectedChunks.filter(c => c.web && c.web.uri).map(item => [item.web!.uri!, item])).values());
+            const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: any) => c.web && c.web.uri).map((item: any) => [item.web!.uri!, item])).values());
 
-            setMessages(prev => prev.map(msg => 
+            setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id ? { ...msg, isLoading: false, groundingChunks: uniqueChunks } : msg
             ));
 
         } catch (error) {
-            console.error("Error calling Gemini API:", error);
-            setMessages(prev => prev.map(msg => 
+            setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id 
                 ? { ...msg, text: "My apologies, I'm having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
                 : msg
@@ -102,7 +101,7 @@ const AssistantView: React.FC = () => {
             </header>
             <main className="flex-grow flex flex-col items-center glass-pane rounded-2xl overflow-hidden">
                 <div className="flex-grow w-full max-w-4xl p-4 space-y-4 overflow-y-auto">
-                    {messages.map((msg) => (
+                    {messages.map((msg: any) => (
                         <div key={msg.id} className={`flex gap-3 sm:gap-4 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                             {msg.sender === 'ai' && <span className="text-xl sm:text-2xl mt-1 self-start flex-shrink-0">✨</span>}
                             <div className={`max-w-[85%] p-3 rounded-lg text-sm sm:text-base leading-relaxed ${msg.sender === 'user' ? 'bg-cyan-600' : 'bg-black/20'}`}>
@@ -129,7 +128,7 @@ const AssistantView: React.FC = () => {
                 </div>
                 <div className="w-full max-w-4xl p-4 flex-shrink-0">
                     <div className="flex flex-wrap gap-2 mb-2 justify-center">
-                        {messages.length <= 1 && promptSuggestions.map(prompt => (
+                        {messages.length <= 1 && promptSuggestions.map((prompt: any) => (
                             <button 
                                 key={prompt}
                                 onClick={() => handleSend(prompt)}

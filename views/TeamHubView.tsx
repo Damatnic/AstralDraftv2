@@ -31,7 +31,7 @@ import { UsersIcon } from '../components/icons/UsersIcon';
 import ProposeTradeModal from '../components/team/ProposeTradeModal';
 import { useResponsiveBreakpoint } from '../utils/mobileOptimizationUtils';
 
-const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
+const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const isWaiversActive = league.status === 'DRAFT_COMPLETE' || league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE';
@@ -57,12 +57,11 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
     
     const playThemeSong = () => {
         if (audioRef.current) {
-            audioRef.current.play().catch(e => console.error("Error playing audio:", e));
         }
     };
     
     const handleProposeFromWhisperer = (suggestion: TradeSuggestion) => {
-        const opponent = league.teams.find(t => t.id === suggestion.toTeamId);
+        const opponent = league.teams.find((t: any) => t.id === suggestion.toTeamId);
         if (opponent) {
             setTradeSuggestion(suggestion);
             setTradeOpponent(opponent);
@@ -80,7 +79,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                     <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                         {team.name}
                     </h1>
-                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">&quot;{team.motto}&quot;</p>}
+                     {team.motto && <p className="text-sm italic text-cyan-200/80 mt-1">"{team.motto}"</p>}
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">TEAM HUB • WEEK {league.currentWeek > 16 ? 'Post-Season' : league.currentWeek}</p>
                 </div>
                  <button onClick={() => setIsEditHeaderModalOpen(true)} 

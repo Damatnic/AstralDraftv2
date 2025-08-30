@@ -44,7 +44,7 @@ interface PlayerSearchResult {
   currentInjuryStatus?: string;
 }
 
-const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => {
+const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }: any) => {
   const [dashboardData, setDashboardData] = useState<InjuryDashboardData | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
@@ -71,14 +71,13 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
       setDashboardData(data);
       setMonitoredPlayers(injuryTrackingService.getMonitoredPlayers());
     } catch (error) {
-      console.error('Failed to load injury dashboard data:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const setupSubscriptions = () => {
-    injuryTrackingService.onInjuryAlert((alert) => {
+    injuryTrackingService.onInjuryAlert((alert: any) => {
       setAlerts(prev => [alert, ...prev.slice(0, 9)]); // Keep last 10 alerts
     });
 
@@ -87,7 +86,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
     });
   };
 
-  const handleAddPlayer = (playerId: string, playerName: string, _position: string) => {
+  const handleAddPlayer = (playerId: string, playerName: string, position: string) => {
     injuryTrackingService.addMonitoredPlayer(
       playerId,
       playerName,
@@ -226,7 +225,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                 {dashboardData.totalMonitoredPlayers} monitored
               </Badge>
               {dashboardData.activeInjuries > 0 && (
-                <Badge variant="destructive">
+                <Badge variant="error">
                   {dashboardData.activeInjuries} injured
                 </Badge>
               )}
@@ -311,7 +310,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {dashboardData.criticalUpdates.map((injury) => (
+                        {dashboardData.criticalUpdates.map((injury: any) => (
                           <div key={injury.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
                             <div className="flex items-center gap-3">
                               {getInjuryStatusIcon(injury?.status)}
@@ -343,7 +342,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {dashboardData.replacementRecommendations.map((player) => (
+                      {dashboardData.replacementRecommendations.map((player: any) => (
                         <div key={player.playerId} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                           <div>
                             <p className="font-medium">{player.name}</p>
@@ -426,7 +425,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                         
                         {searchResults.length > 0 && (
                           <div className="space-y-2">
-                            {searchResults.map((player) => (
+                            {searchResults.map((player: any) => (
                               <button
                                 key={player.playerId}
                                 type="button"
@@ -449,7 +448,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
 
                 {/* Monitored Players List */}
                 <div className="space-y-3">
-                  {monitoredPlayers.map((player) => {
+                  {monitoredPlayers.map((player: any) => {
                     const status = injuryTrackingService.getPlayerInjuryStatus(player.playerId);
                     return (
                       <Card key={player.playerId}>
@@ -477,10 +476,6 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                             <div className="flex items-center gap-2">
                               <button
                                 type="button"
-                                onClick={() => {
-                                  // TODO: Open player details
-                                  // console.log('Open player details for', player.playerId);
-                                }}
                                 className="p-2 text-blue-600 hover:bg-blue-50 rounded"
                               >
                                 <Settings className="h-4 w-4" />
@@ -520,7 +515,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                 
                 {alerts.length > 0 ? (
                   <div className="space-y-3">
-                    {alerts.map((alert) => {
+                    {alerts.map((alert: any) => {
                       const borderColor = getSeverityBorderColor(alert.severity);
                       return (
                         <Card key={alert.id} className={`border-l-4 ${borderColor}`}>
@@ -540,7 +535,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                                   <div className="mt-3">
                                     <p className="text-sm font-medium text-gray-700 mb-1">Recommended Actions:</p>
                                     <ul className="text-sm text-gray-600 space-y-1">
-                                      {alert.fantasyActions.map((action) => (
+                                      {alert.fantasyActions.map((action: any) => (
                                         <li key={action} className="flex items-start gap-2">
                                           <span className="text-blue-600">•</span>
                                           {action}
@@ -553,7 +548,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                               <div className="text-right text-sm text-gray-500">
                                 <p>{formatTimeAgo(alert.timestamp)}</p>
                                 {alert.actionRequired && (
-                                  <Badge variant="destructive" className="mt-1">Action Required</Badge>
+                                  <Badge variant="error" className="mt-1">Action Required</Badge>
                                 )}
                               </div>
                             </div>
@@ -582,7 +577,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = '' }) => 
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {dashboardData?.injuryTrends.map((trend) => {
+                      {dashboardData?.injuryTrends.map((trend: any) => {
                         const badgeVariant = getTrendBadgeVariant(trend.trend);
                         return (
                           <div key={trend.position} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">

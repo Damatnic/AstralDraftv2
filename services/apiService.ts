@@ -82,21 +82,21 @@ class ApiService {
 
     // Request interceptor to add auth token
     this.client.interceptors.request.use(
-      (config) => {
+      (config: any) => {
         if (this.token) {
           config.headers.Authorization = `Bearer ${this.token}`;
         }
         return config;
       },
-      (error) => {
+      (error: any) => {
         return Promise.reject(error);
       }
     );
 
     // Response interceptor for error handling
     this.client.interceptors.response.use(
-      (response) => response,
-      (error) => {
+      (response: any) => response,
+      (error: any) => {
         if (error.response?.status === 401) {
           // Token expired or invalid
           this.clearToken();

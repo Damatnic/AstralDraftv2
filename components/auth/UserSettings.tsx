@@ -13,7 +13,7 @@ interface Props {
     className?: string;
 }
 
-const UserSettings: React.FC<Props> = ({ className = '' }) => {
+const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
     const { user, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName } = useAuth();
     
     const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'appearance'>('profile');
@@ -53,7 +53,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update display name');
             }
-        } catch {
+        } catch (err) {
             setError('Failed to update display name');
         } finally {
             setIsLoading(false);
@@ -74,7 +74,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update email');
             }
-        } catch {
+        } catch (err) {
             setError('Failed to update email');
         } finally {
             setIsLoading(false);
@@ -106,7 +106,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update PIN');
             }
-        } catch {
+        } catch (err) {
             setError('Failed to update PIN');
         } finally {
             setIsLoading(false);
@@ -124,7 +124,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             } else {
                 setError('Failed to update appearance');
             }
-        } catch {
+        } catch (err) {
             setError('Failed to update appearance');
         } finally {
             setIsLoading(false);
@@ -150,7 +150,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
             <div className="space-y-6">
                 {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-gray-800 rounded-lg p-1">
-                    {tabs.map((tab) => {
+                    {tabs.map((tab: any) => {
                         const Icon = tab.icon;
                         return (
                             <button
@@ -205,7 +205,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     <input
                                         type="text"
                                         value={displayName}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDisplayName(e.target.value)}
+                                        onChange={(e: any) => setDisplayName(e.target.value)}
                                         placeholder="Enter display name"
                                         className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         maxLength={50}
@@ -230,7 +230,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     <input
                                         type="email"
                                         value={email}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                                        onChange={(e: any) => setEmail(e.target.value)}
                                         placeholder="Enter email address"
                                         className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
@@ -270,7 +270,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                         <input
                                             type="password"
                                             value={newPin}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: any) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                                             placeholder="••••"
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             maxLength={4}
@@ -283,7 +283,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                         <input
                                             type="password"
                                             value={confirmPin}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: any) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
                                             placeholder="••••"
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             maxLength={4}
@@ -341,7 +341,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     Background Color
                                 </label>
                                 <div className="grid grid-cols-6 gap-2">
-                                    {colorOptions.map((color) => (
+                                    {colorOptions.map((color: any) => (
                                         <button
                                             key={color}
                                             onClick={() => setCustomization({ ...customization, backgroundColor: color })}
@@ -362,7 +362,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
                                     Emoji
                                 </label>
                                 <div className="grid grid-cols-6 gap-2">
-                                    {emojiOptions.map((emoji) => (
+                                    {emojiOptions.map((emoji: any) => (
                                         <button
                                             key={emoji}
                                             onClick={() => setCustomization({ ...customization, emoji })}

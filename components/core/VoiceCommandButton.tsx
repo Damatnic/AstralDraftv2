@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { MicrophoneIcon } from '../icons/MicrophoneIcon';
 import { players } from '../../data/players';
+import type { Player } from '../../types';
 
 // Web Speech API might be vendor-prefixed
 const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -17,7 +18,6 @@ const speak = (text: string) => {
             utterance.pitch = 0.9;
             window.speechSynthesis.speak(utterance);
         } catch (e) {
-            console.error("Speech synthesis error", e);
         }
     }
 };
@@ -86,7 +86,6 @@ const VoiceCommandButton: React.FC = () => {
         };
 
         recognition.onerror = (event: any) => {
-            console.error('Speech recognition error', event.error);
             speak(`Voice error: ${event.error}`);
         };
 

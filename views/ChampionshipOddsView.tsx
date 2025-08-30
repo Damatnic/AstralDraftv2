@@ -14,15 +14,15 @@ import TradeScenarioModal from '../components/modals/TradeScenarioModal';
 import { FlaskConicalIcon } from '../components/icons/FlaskConicalIcon';
 
 const ChampionshipOddsView: React.FC = () => {
-    const { dispatch } = useAppState();
+    const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
     const [isSimModalOpen, setIsSimModalOpen] = React.useState(false);
 
     React.useEffect(() => {
-        const needsUpdate = league?.teams.some(t => {
+        const needsUpdate = league?.teams.some((t: any) => {
             const history = t.championshipProbHistory || [];
-            return !history.some(h => h.week === league.currentWeek);
+            return !history.some((h: any) => h.week === league.currentWeek);
         });
 
         if (league && needsUpdate && (league.status === 'IN_SEASON' || league.status === 'PLAYOFFS')) {
@@ -46,9 +46,9 @@ const ChampionshipOddsView: React.FC = () => {
     }
     
     const rankedTeams = [...league.teams]
-        .map(team => {
+        .map((team: any) => {
             const history = team.championshipProbHistory || [];
-            const currentProb = history.length > 0 ? history.find(h => h.week === league.currentWeek)?.probability ?? history[history.length - 1].probability : 0;
+            const currentProb = history.length > 0 ? history.find((h: any) => h.week === league.currentWeek)?.probability ?? history[history.length - 1].probability : 0;
             return { ...team, currentProb };
         })
         .sort((a, b) => b.currentProb - a.currentProb);

@@ -15,7 +15,7 @@ const SparklineChart: React.FC<SparklineChartProps> = ({
     height = 30,
     strokeColor = '#06b6d4', // cyan-500
     strokeWidth = 2,
-}) => {
+}: any) => {
     if (data.length < 2) return null;
 
     const min = Math.min(...data);

@@ -5,7 +5,7 @@ interface PhoneIconProps {
   size?: number;
 }
 
-export const PhoneIcon: React.FC<PhoneIconProps> = ({ className = '', size = 24 }) => (
+export const PhoneIcon: React.FC<PhoneIconProps> = ({ className = '', size = 24 }: any) => (
   <svg
     className={className}
     width={size}

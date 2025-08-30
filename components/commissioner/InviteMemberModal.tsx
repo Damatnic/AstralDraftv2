@@ -13,7 +13,7 @@ interface InviteMemberModalProps {
     onClose: () => void;
 }
 
-const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }) => {
+const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }: any) => {
     const { dispatch } = useAppState();
     const [email, setEmail] = React.useState('');
     const [copiedLink, setCopiedLink] = React.useState<string | null>(null);
@@ -66,7 +66,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
                     <h3 className="font-semibold text-sm mb-2">Pending Invitations</h3>
                     {league.invitations && league.invitations.length > 0 ? (
                         <div className="space-y-2">
-                            {league.invitations.map((inv: { id: string; email: string; link: string }) => (
+                            {league.invitations.map((inv: any) => (
                                 <div key={inv.id} className="p-2 bg-black/10 rounded-md flex justify-between items-center">
                                     <span className="text-sm text-gray-300">{inv.email}</span>
                                     <button onClick={() => handleCopy(inv.link)} className="flex items-center gap-1 text-xs text-cyan-300">

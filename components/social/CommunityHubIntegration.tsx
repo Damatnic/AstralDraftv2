@@ -60,12 +60,12 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     currentUser,
     teams,
     users,
-    players: _players,
-    onTradeProposal: _onTradeProposal,
-    onStoryPublish: _onStoryPublish,
+    players,
+    onTradeProposal,
+    onStoryPublish,
     onSocialInteraction,
     className = ''
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = React.useState<SocialFeatureTab>('feed');
     const [recentActivity, setRecentActivity] = React.useState<SocialActivity[]>([]);
     const [communityStats] = React.useState<CommunityStats>({
@@ -259,7 +259,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
         setRecentActivity(prev => [newActivity, ...prev.slice(0, 9)]);
     };
 
-    const getActivityDescription = (action: string, _data: any): string => {
+    const getActivityDescription = (action: string, data: any): string => {
         switch (action) {
             case 'trade_proposal':
                 return 'proposed a new trade';
@@ -411,11 +411,10 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                         currentUser={currentUser}
                         onReaction={(itemId, emoji) => handleSocialAction('feed_reaction', { itemId, emoji })}
                         onComment={(itemId, content) => handleSocialAction('feed_comment', { itemId, content })}
-                        onShare={(itemId) => handleSocialAction('feed_share', { itemId })}
-                        onPin={(itemId) => handleSocialAction('feed_pin', { itemId })}
+                        onShare={(itemId: any) => handleSocialAction('feed_share', { itemId })}
+                        onPin={(itemId: any) => handleSocialAction('feed_pin', { itemId })}
                         onReport={(itemId, reason) => handleSocialAction('feed_report', { itemId, reason })}
                         onVote={(pollId, optionId) => handleSocialAction('poll_vote', { pollId, optionId })}
-                        onFilter={(_filter) => {/* Filter changed */}}
                     />
                 );
                 
@@ -449,7 +448,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                         milestones={mockMilestones}
                         onEventReaction={(eventId, emoji) => handleSocialAction('event_reaction', { eventId, emoji })}
                         onEventComment={(eventId, content) => handleSocialAction('event_comment', { eventId, content })}
-                        onShareEvent={(eventId) => handleSocialAction('event_share', { eventId })}
+                        onShareEvent={(eventId: any) => handleSocialAction('event_share', { eventId })}
                     />
                 );
                 

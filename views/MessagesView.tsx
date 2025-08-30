@@ -3,6 +3,7 @@ import { useAppState } from '../contexts/AppContext';
 import { MailIcon } from '../components/icons/MailIcon';
 import ConversationList from '../components/messages/ConversationList';
 import MessageThread from '../components/messages/MessageThread';
+import EmptyState from '../components/ui/EmptyState';
 import { InboxIcon } from '../components/icons/InboxIcon';
 
 const MessagesView: React.FC = () => {
@@ -22,7 +23,7 @@ const MessagesView: React.FC = () => {
     
     // Auto-select first user with unread messages
     React.useEffect(() => {
-        const firstUnread = state.directMessages.find(dm => dm.toUserId === state.user?.id && !dm.isRead);
+        const firstUnread = state.directMessages.find((dm: any) => dm.toUserId === state.user?.id && !dm.isRead);
         if (firstUnread) {
             setSelectedUserId(firstUnread.fromUserId);
         }

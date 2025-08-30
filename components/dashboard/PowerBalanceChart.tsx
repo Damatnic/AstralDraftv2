@@ -9,7 +9,7 @@ interface PowerBalanceChartProps {
     leagues: League[];
 }
 
-const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
+const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }: any) => {
     const chartData = React.useMemo(() => {
         return leagues.filter((l: any) => !l.isMock).map((league: any) => {
             const myTeam = league.teams.find((t: any) => t.owner.id === 'user_1');
@@ -32,7 +32,7 @@ const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
                     <p className="text-center text-xs text-gray-400">Join a league to see your power balance.</p>
                 ) : (
                     <div className="space-y-3">
-                        {chartData.map(({ leagueName, winPct }) => (
+                        {chartData.map(({ leagueName, winPct }: any) => (
                             <div key={leagueName}>
                                 <p className="text-xs font-semibold text-gray-300 mb-1">{leagueName}</p>
                                 <div className="relative w-full h-5 bg-black/20 rounded-full">

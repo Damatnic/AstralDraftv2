@@ -402,7 +402,7 @@ class WaiverWireAnalyzer {
   async getBreakoutCandidates(settings: WaiverWireSettings): Promise<WaiverWireCandidate[]> {
     const candidates = await this.getWaiverWireCandidates(settings);
     
-    return candidates.filter(candidate => {
+    return candidates.filter((candidate: any) => {
       return candidate.breakoutScore > 0.6 &&
              candidate.analysis.breakoutIndicators.breakoutProbability > 0.4 &&
              candidate.analysis.opportunityMetrics.ceilingProjection > 15;
@@ -418,7 +418,7 @@ class WaiverWireAnalyzer {
   ): Promise<WaiverWireCandidate[]> {
     const candidates = await this.getWaiverWireCandidates(settings, leagueContext);
     
-    return candidates.filter(candidate => 
+    return candidates.filter((candidate: any) => 
       candidate.pickupPriority === 'immediate' || 
       (candidate.pickupPriority === 'high' && candidate.recommendations.timeframe === 'immediate')
     );
@@ -432,7 +432,7 @@ class WaiverWireAnalyzer {
       `schedule_${teamId}_${settings.currentWeek}`,
       async () => {
         const games = await productionSportsDataService.getCurrentWeekGames(settings.currentWeek, settings.season);
-        const remainingGames = games.filter(game => 
+        const remainingGames = games.filter((game: any) => 
           (game.homeTeam.id === teamId || game.awayTeam.id === teamId) &&
           game.week >= settings.currentWeek
         );
@@ -489,7 +489,7 @@ class WaiverWireAnalyzer {
     const allPlayers = await this.getAllNFLPlayers();
     
     // Filter for likely waiver wire candidates (lower ownership, specific positions)
-    return allPlayers.filter(player => {
+    return allPlayers.filter((player: any) => {
       // Mock ownership filter - in reality this would come from platform data
       const estimatedOwnership = this.estimateOwnership(player, settings);
       return estimatedOwnership < 60; // Less than 60% owned
@@ -511,7 +511,7 @@ class WaiverWireAnalyzer {
     return Math.max(0, Math.min(100, baseOwnership + leagueSizeAdjustment));
   }
 
-  private async analyzeUsageTrends(_player: NFLPlayer): Promise<UsageTrendAnalysis> {
+  private async analyzeUsageTrends(player: NFLPlayer): Promise<UsageTrendAnalysis> {
     // Mock implementation - would analyze recent usage patterns
     const mockTrend = (current: number): TrendData => ({
       currentValue: current,
@@ -535,7 +535,7 @@ class WaiverWireAnalyzer {
     };
   }
 
-  private async calculateOpportunityMetrics(_player: NFLPlayer): Promise<OpportunityMetrics> {
+  private async calculateOpportunityMetrics(player: NFLPlayer): Promise<OpportunityMetrics> {
     return {
       vacatedTargets: 25,
       vacatedCarries: 8,
@@ -547,7 +547,7 @@ class WaiverWireAnalyzer {
     };
   }
 
-  private async analyzeTargetShare(_player: NFLPlayer): Promise<TargetShareAnalysis> {
+  private async analyzeTargetShare(player: NFLPlayer): Promise<TargetShareAnalysis> {
     return {
       currentTargetShare: 0.15,
       projectedTargetShare: 0.18,
@@ -603,7 +603,7 @@ class WaiverWireAnalyzer {
     };
   }
 
-  private async analyzeInjuryImpact(_player: NFLPlayer): Promise<InjuryImpactAnalysis> {
+  private async analyzeInjuryImpact(player: NFLPlayer): Promise<InjuryImpactAnalysis> {
     return {
       directInjuryOpportunity: 8,
       indirectInjuryOpportunity: 4,
@@ -613,7 +613,7 @@ class WaiverWireAnalyzer {
     };
   }
 
-  private async analyzeCoachingFactors(_player: NFLPlayer): Promise<CoachingFactors> {
+  private async analyzeCoachingFactors(player: NFLPlayer): Promise<CoachingFactors> {
     return {
       playCalling: {
         aggressiveness: 0.7,
@@ -635,7 +635,7 @@ class WaiverWireAnalyzer {
     };
   }
 
-  private async calculateBreakoutIndicators(_player: NFLPlayer): Promise<BreakoutIndicators> {
+  private async calculateBreakoutIndicators(player: NFLPlayer): Promise<BreakoutIndicators> {
     return {
       talentScore: 0.8,
       opportunityScore: 0.7,
@@ -720,7 +720,7 @@ class WaiverWireAnalyzer {
   private calculateProjectedValue(
     analysis: CandidateAnalysis,
     schedule: ScheduleAnalysis,
-    _settings: WaiverWireSettings
+    settings: WaiverWireSettings
   ): number {
     const baseValue = analysis.opportunityMetrics.ceilingProjection;
     const scheduleAdjustment = (1 - schedule.strengthOfSchedule) * 5;
@@ -743,7 +743,7 @@ class WaiverWireAnalyzer {
     breakoutScore: number,
     opportunityScore: number,
     projectedValue: number,
-    _leagueContext?: LeagueContext
+    leagueContext?: LeagueContext
   ): 'immediate' | 'high' | 'medium' | 'low' | 'watch' {
     const compositeScore = (breakoutScore + opportunityScore + projectedValue / 20) / 3;
     
@@ -757,8 +757,8 @@ class WaiverWireAnalyzer {
   private generateRecommendations(
     analysis: CandidateAnalysis,
     schedule: ScheduleAnalysis,
-    _settings: WaiverWireSettings,
-    _leagueContext?: LeagueContext
+    settings: WaiverWireSettings,
+    leagueContext?: LeagueContext
   ): PickupRecommendations {
     const opportunity = analysis.opportunityMetrics;
     const breakout = analysis.breakoutIndicators;
@@ -851,17 +851,17 @@ class WaiverWireAnalyzer {
   }> {
     const candidates = await this.getWaiverWireCandidates(settings, leagueContext);
     
-    const mustAdd = candidates.filter(c => 
+    const mustAdd = candidates.filter((c: any) => 
       c.pickupPriority === 'immediate' && 
       leagueContext.myTeamNeeds.includes(c.player.position)
     );
     
-    const strongConsider = candidates.filter(c => 
+    const strongConsider = candidates.filter((c: any) => 
       c.pickupPriority === 'high' && 
       c.projectedRemainingValue > 12
     );
     
-    const watch = candidates.filter(c => 
+    const watch = candidates.filter((c: any) => 
       c.pickupPriority === 'medium' && 
       c.analysis.breakoutIndicators.breakoutProbability > 0.4
     );

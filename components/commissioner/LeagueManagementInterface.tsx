@@ -48,7 +48,7 @@ type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
 const LeagueManagementInterface: React.FC<Props> = ({ 
     leagueId, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     const [league, setLeague] = useState<League | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -82,7 +82,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     setLeague(leagues[0]);
                 }
             } catch (err) {
-                console.error('Failed to load league data:', err);
                 setError('Failed to load league information');
             } finally {
                 setLoading(false);
@@ -98,7 +97,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
     // Handle creating new league
     const handleCreateLeague = () => {
         // Show placeholder message - full implementation would show creation modal
-        // TODO: Implement create league modal
     };
 
     // Handle invitation responses
@@ -119,7 +117,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
                 setInvitations(userInvites);
             }
         } catch (err) {
-            console.error('Failed to accept invitation:', err);
             setError('Failed to accept invitation');
         }
     };
@@ -133,7 +130,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
                 setInvitations(userInvites);
             }
         } catch (err) {
-            console.error('Failed to decline invitation:', err);
             setError('Failed to decline invitation');
         }
     };
@@ -151,7 +147,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
             setLeague(updatedLeague);
             setEditingSettings(false);
         } catch (err) {
-            console.error('Failed to update settings:', err);
             setError('Failed to update league settings');
         }
     };
@@ -166,7 +161,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
             const updatedLeague = await leagueManagementService.getLeague(league.id);
             if (updatedLeague) setLeague(updatedLeague);
         } catch (err) {
-            console.error('Failed to invite member:', err);
             setError('Failed to send invitation');
         }
     };
@@ -184,7 +178,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
             );
             setLeague(updatedLeague);
         } catch (err) {
-            console.error('Failed to remove member:', err);
             setError('Failed to remove member');
         }
     };
@@ -202,7 +195,6 @@ const LeagueManagementInterface: React.FC<Props> = ({
             setLeague(updatedLeague);
             setPendingAction(null);
         } catch (err) {
-            console.error('Failed to execute commissioner action:', err);
             setError('Failed to execute action');
         }
     };
@@ -254,14 +246,14 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     <div className="flex items-center space-x-4">
                         <select
                             value={league?.id || ''}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                                const selectedLeague = userLeagues.find((l: { id: string }) => l.id === e.target.value);
+                            onChange={(e: any) => {
+                                const selectedLeague = userLeagues.find((l: any) => l.id === e.target.value);
                                 setLeague(selectedLeague || null);
                             }}
                             className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
                         >
                             <option value="">Select a League</option>
-                            {userLeagues.map((l: { id: string; name: string; commissionerId?: string }) => (
+                            {userLeagues.map((l: any) => (
                                 <option key={l.id} value={l.id}>
                                     {l.name} {l.commissionerId === user?.id.toString() && '(Commissioner)'}
                                 </option>
@@ -299,7 +291,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             Pending Invitations ({invitations.length})
                         </h3>
                         <div className="space-y-2">
-                            {invitations.map((invitation: LeagueInvitation) => (
+                            {invitations.map((invitation: any) => (
                                 <InvitationCard
                                     key={invitation.id}
                                     invitation={invitation}
@@ -320,7 +312,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             { id: 'settings', label: 'Settings', icon: SettingsIcon },
                             { id: 'history', label: 'History', icon: CalendarIcon },
                             ...(isCommissioner ? [{ id: 'commissioner', label: 'Commissioner', icon: ShieldIcon }] : [])
-                        ].map((tab: { id: string; label: string; icon: React.ComponentType<{ className?: string }> }) => (
+                        ].map((tab: any) => (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id as Tab)}
@@ -392,7 +384,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
 };
 
 // Sub-components for each tab
-const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
+const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* League Info */}
@@ -427,7 +419,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
             <Widget title="Current Standings" className="bg-gray-900/50">
                 <div className="space-y-2">
                     {league.members
-                        .filter((m: { record?: unknown }) => m.record)
+                        .filter((m: any) => m.record)
                         .sort((a, b) => (b.record?.wins || 0) - (a.record?.wins || 0))
                         .slice(0, 5)
                         .map((member, index) => (
@@ -455,7 +447,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
             {/* Recent Activity */}
             <Widget title="Recent Activity" className="bg-gray-900/50">
                 <div className="space-y-2">
-                    {league.history.slice(0, 5).map((event: { id: string; type: string; description: string; timestamp: Date }) => (
+                    {league.history.slice(0, 5).map((event: any) => (
                         <div key={event.id} className="py-2 border-b border-gray-700 last:border-b-0">
                             <div className="text-sm text-white">{event.description}</div>
                             <div className="text-xs text-gray-400">
@@ -473,7 +465,7 @@ const InvitationCard: React.FC<{
     invitation: LeagueInvitation;
     onAccept: () => void;
     onDecline: () => void;
-}> = ({ invitation, onAccept, onDecline }) => {
+}> = ({ invitation, onAccept, onDecline }: any) => {
     return (
         <div className="bg-gray-800/50 rounded-lg p-3 flex items-center justify-between">
             <div>
@@ -504,9 +496,9 @@ const InvitationCard: React.FC<{
 };
 
 // Placeholder components for other tabs
-const MembersManagement: React.FC = () => <div>Members Management - Coming Soon</div>;
-const LeagueSettingsPanel: React.FC = () => <div>League Settings - Coming Soon</div>;
-const LeagueHistory: React.FC = () => <div>League History - Coming Soon</div>;
-const CommissionerPanel: React.FC = () => <div>Commissioner Panel - Coming Soon</div>;
+const MembersManagement: React.FC<any> = () => <div>Members Management - Coming Soon</div>;
+const LeagueSettingsPanel: React.FC<any> = () => <div>League Settings - Coming Soon</div>;
+const LeagueHistory: React.FC<any> = () => <div>League History - Coming Soon</div>;
+const CommissionerPanel: React.FC<any> = () => <div>Commissioner Panel - Coming Soon</div>;
 
 export default LeagueManagementInterface;

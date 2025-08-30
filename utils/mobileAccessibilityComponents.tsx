@@ -25,7 +25,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     ariaLabel,
     className = '',
     type = 'button'
-}) => {
+}: any) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     useKeyboardNavigation(buttonRef as React.RefObject<HTMLElement>);
 
@@ -50,7 +50,7 @@ interface VisuallyHiddenProps {
     children: React.ReactNode;
 }
 
-export const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children }) => {
+export const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children }: any) => {
     return (
         <span className="sr-only absolute left-[-10000px] top-auto w-[1px] h-[1px] overflow-hidden">
             {children}
@@ -73,7 +73,7 @@ export const LiveRegion: React.FC<LiveRegionProps> = ({
     politeness = 'polite',
     atomic = true,
     relevant = 'all'
-}) => {
+}: any) => {
     return (
         <div
             aria-live={politeness}

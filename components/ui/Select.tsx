@@ -13,7 +13,7 @@ export const Select: React.FC<SelectProps> = ({
   className = '',
   id,
   ...props
-}) => {
+}: any) => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
@@ -29,7 +29,7 @@ export const Select: React.FC<SelectProps> = ({
         className={`glass-input w-full ${error ? 'border-red-500' : ''} ${className}`}
         {...props}
       >
-        {options.map((option) => (
+        {options.map((option: any) => (
           <option key={option.value} value={option.value} className="bg-[var(--color-bg-primary)] text-white">
             {option.label}
           </option>

@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { getDaysUntilDraft, SEASON_DATES_2025 } from '../data/leagueData';
 import DraftOrder from '../components/draft/DraftOrder';
+import PlayerSearch from '../components/players/PlayerSearch';
 import { getTopPlayersByPosition, DRAFT_TIERS } from '../data/nflPlayers';
 
 const EnhancedDraftPrepView: React.FC = () => {
@@ -176,8 +177,8 @@ const EnhancedDraftPrepView: React.FC = () => {
                           Tier {tier.tier} ({tier.players.length} players)
                         </h5>
                         <div className="flex flex-wrap gap-2">
-                          {tier.players.map(playerId => {
-                            const player = league.allPlayers.find(p => p.id === playerId);
+                          {tier.players.map((playerId: any) => {
+                            const player = league.allPlayers.find((p: any) => p.id === playerId);
                             return player ? (
                               <span
                                 key={playerId}
@@ -216,7 +217,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                   <li>• Avoid QB early unless elite tier (Mahomes, Allen)</li>
                   <li>• Target consistent, high-volume players</li>
                   <li>• Consider positional scarcity</li>
-                  <li>• Don&apos;t reach for your favorite team&apos;s players</li>
+                  <li>• Don't reach for your favorite team's players</li>
                 </ul>
               </div>
 
@@ -227,7 +228,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                 </h4>
                 <ul className="space-y-2 text-slate-300 text-sm">
                   <li>• Fill out starting lineup positions</li>
-                  <li>• Target QB if you haven&apos;t taken one</li>
+                  <li>• Target QB if you haven't taken one</li>
                   <li>• Look for high-upside WR/RB</li>
                   <li>• Consider TE if elite options available</li>
                   <li>• Start thinking about bye weeks</li>
@@ -376,7 +377,7 @@ const EnhancedDraftPrepView: React.FC = () => {
         {/* Tab Navigation */}
         <div className="mb-8">
           <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 overflow-x-auto">
-            {tabs.map((tab) => (
+            {tabs.map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}

@@ -231,7 +231,7 @@ class ApiClient {
       const data: ESPNResponse = await response.json();
       
       // Transform ESPN data to unified Player interface
-      return data.players.map(player => ({
+      return data.players.map((player: any) => ({
         id: player.id.toString(),
         name: player.fullName,
         position: this.getPositionName(player.defaultPositionId),
@@ -287,7 +287,7 @@ class ApiClient {
     const sportsIOPlayers = await this.getSportsIOPlayers(position);
     if (sportsIOPlayers.length > 0) {
       // Transform SportsIO to unified Player interface
-      return sportsIOPlayers.map(player => ({
+      return sportsIOPlayers.map((player: any) => ({
         id: player.player_id,
         name: player.name,
         position: player.position,

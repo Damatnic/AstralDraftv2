@@ -4,7 +4,7 @@ interface BarChartIconProps {
   className?: string;
 }
 
-export const BarChartIcon: React.FC<BarChartIconProps> = ({ className }) => (
+export const BarChartIcon: React.FC<BarChartIconProps> = ({ className }: any) => (
   <svg
     className={className}
     fill="none"

@@ -78,6 +78,7 @@ const PWAInstallPrompt: React.FC = () => {
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       
+      
       if (outcome === 'accepted') {
         setIsInstalled(true);
       }
@@ -85,7 +86,6 @@ const PWAInstallPrompt: React.FC = () => {
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     } catch (error) {
-      console.error('Error during installation:', error);
     }
   };
 
@@ -160,11 +160,11 @@ const PWAInstallPrompt: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
                         <span className="text-lg">2️⃣</span>
-                        <span>Scroll down and tap <strong>&quot;Add to Home Screen&quot;</strong></span>
+                        <span>Scroll down and tap <strong>"Add to Home Screen"</strong></span>
                       </div>
                       <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
                         <span className="text-lg">3️⃣</span>
-                        <span>Tap <strong>&quot;Add&quot;</strong> to install the app</span>
+                        <span>Tap <strong>"Add"</strong> to install the app</span>
                       </div>
                     </div>
                   </div>

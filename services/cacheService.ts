@@ -123,10 +123,10 @@ class CacheService {
   clear(): void {
     this.cache.clear();
     if (this.config.enablePersistence) {
-      const keys = Object.keys(localStorage).filter(key => 
+      const keys = Object.keys(localStorage).filter((key: any) => 
         key.startsWith(this.config.storagePrefix)
       );
-      keys.forEach(key => localStorage.removeItem(key));
+      keys.forEach((key: any) => localStorage.removeItem(key));
     }
   }
 
@@ -189,7 +189,7 @@ class CacheService {
       }
     }
 
-    keysToDelete.forEach(key => this.delete(key));
+    keysToDelete.forEach((key: any) => this.delete(key));
   }
 
   /**
@@ -236,7 +236,7 @@ class CacheService {
 
     try {
       const now = Date.now();
-      const keys = Object.keys(localStorage).filter(key => 
+      const keys = Object.keys(localStorage).filter((key: any) => 
         key.startsWith(this.config.storagePrefix)
       );
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
-type ProjectIntegrityViewProps = Record<string, never>;
+interface ProjectIntegrityViewProps {
+  // No props currently needed, but interface ready for future expansion
+}
 
 const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
   return (
@@ -88,7 +90,7 @@ const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
   );
 };
 
-const ProjectIntegrityViewWithErrorBoundary: React.FC<ProjectIntegrityViewProps> = (props) => (
+const ProjectIntegrityViewWithErrorBoundary: React.FC<ProjectIntegrityViewProps> = (props: any) => (
     <ErrorBoundary>
         <ProjectIntegrityView {...props} />
     </ErrorBoundary>

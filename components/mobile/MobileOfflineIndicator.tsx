@@ -33,7 +33,7 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({
     className = '',
     position = 'top',
     showDetails = false
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [offlineState, setOfflineState] = React.useState(mobileOfflineService.getState());
     const [showBanner, setShowBanner] = React.useState(false);
@@ -42,7 +42,7 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({
 
     // Announce status changes to screen readers
     React.useEffect(() => {
-        const unsubscribe = mobileOfflineService.subscribe((state) => {
+        const unsubscribe = mobileOfflineService.subscribe((state: any) => {
             const previousOfflineStatus = offlineState.isOffline;
             setOfflineState(state);
             
@@ -339,7 +339,7 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({
                         <div className="mt-4 pt-3 border-t border-[var(--panel-border)]">
                             <h5 className="font-medium text-[var(--text-primary)] mb-2">Pending Actions:</h5>
                             <div className="space-y-1 text-xs">
-                                {offlineState.pendingActions.map((action, _index) => (
+                                {offlineState.pendingActions.map((action, index) => (
                                     <div key={action.id} className="flex justify-between text-[var(--text-secondary)]">
                                         <span>{action.type}</span>
                                         <span>Retry {action.retryCount}/{action.maxRetries}</span>

@@ -14,20 +14,20 @@ import { ShieldCheckIcon } from '../icons/ShieldCheckIcon';
 import { PencilIcon } from '../icons/PencilIcon';
 import { XIcon } from '../icons/XIcon';
 import { CheckIcon } from '../icons/CheckIcon';
-import { League } from '../../types';
+import { League, User } from '../../types';
 
 interface EnhancedMemberManagementProps {
     league: League;
-    dispatch: React.Dispatch<{ type: string; payload: unknown }>;
+    dispatch: React.Dispatch<any>;
 }
 
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';
     memberId: string;
-    data?: unknown;
+    data?: any;
 }
 
-const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }) => {
+const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }: any) => {
     const [selectedMember, setSelectedMember] = React.useState<string | null>(null);
     const [editMode, setEditMode] = React.useState<{ memberId: string; field: string } | null>(null);
     const [editValue, setEditValue] = React.useState('');
@@ -115,15 +115,15 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                         <div className="text-xs text-gray-400">Total Members</div>
                     </div>
                     <div className="bg-green-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-green-400">{members.filter(m => m.activity === 'Active').length}</div>
+                        <div className="text-2xl font-bold text-green-400">{members.filter((m: any) => m.activity === 'Active').length}</div>
                         <div className="text-xs text-gray-400">Active</div>
                     </div>
                     <div className="bg-yellow-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-yellow-400">{members.filter(m => m.activity.includes('Inactive')).length}</div>
+                        <div className="text-2xl font-bold text-yellow-400">{members.filter((m: any) => m.activity.includes('Inactive')).length}</div>
                         <div className="text-xs text-gray-400">Inactive</div>
                     </div>
                     <div className="bg-purple-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-purple-400">{members.filter(m => m.isCommissioner || m.isCoCommissioner).length}</div>
+                        <div className="text-2xl font-bold text-purple-400">{members.filter((m: any) => m.isCommissioner || m.isCoCommissioner).length}</div>
                         <div className="text-xs text-gray-400">Admins</div>
                     </div>
                 </div>
@@ -153,7 +153,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
 
                 {/* Members List */}
                 <div className="space-y-3">
-                    {members.map((member) => (
+                    {members.map((member: any) => (
                         <motion.div
                             key={member.id}
                             layout
@@ -188,7 +188,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                     <input
                                                         type="text"
                                                         value={editValue}
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditValue(e.target.value)}
+                                                        onChange={(e: any) => setEditValue(e.target.value)}
                                                         className="px-2 py-1 text-sm border border-[var(--panel-border)] rounded bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                                         autoFocus
                                                     />
@@ -323,7 +323,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
-                            onClick={(e: React.MouseEvent<HTMLDivElement>) => e.target === e.currentTarget && setShowConfirmAction(null)}
+                            onClick={(e: any) => e.target === e.currentTarget && setShowConfirmAction(null)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}

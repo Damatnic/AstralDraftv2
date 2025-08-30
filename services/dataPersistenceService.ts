@@ -343,7 +343,7 @@ class DataPersistenceService {
     try {
       this.syncInProgress = true;
       const queue = this.getSyncQueue();
-      const unsyncedOperations = queue.filter(op => !op.synced);
+      const unsyncedOperations = queue.filter((op: any) => !op.synced);
 
       if (unsyncedOperations.length === 0) {
         return;
@@ -431,7 +431,7 @@ class DataPersistenceService {
         }
       }
 
-      keysToRemove.forEach(key => localStorage.removeItem(key));
+      keysToRemove.forEach((key: any) => localStorage.removeItem(key));
       logger.info('All data cleared successfully');
     } catch (error) {
       logger.error('Failed to clear data:', error);

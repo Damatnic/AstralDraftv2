@@ -235,7 +235,7 @@ class SimpleAuthService {
      */
     static getUserById(id: string): SimpleUser | null {
         const users = this.getAllUsers();
-        return users.find(user => user.id === id) || null;
+        return users.find((user: any) => user.id === id) || null;
     }
 
     /**
@@ -243,7 +243,7 @@ class SimpleAuthService {
      */
     static async authenticateUser(userId: string, pin: string): Promise<AuthSession | null> {
         const users = this.getAllUsers();
-        const user = users.find(u => u.id === userId);
+        const user = users.find((u: any) => u.id === userId);
 
         if (!user || user.pin !== pin) {
             return null;
@@ -255,7 +255,7 @@ class SimpleAuthService {
 
         // Map to league member ID
         const leagueMemberId = this.PLAYER_MAPPING[userId as keyof typeof this.PLAYER_MAPPING];
-        const leagueMember = LEAGUE_MEMBERS.find(m => m.id === leagueMemberId);
+        const leagueMember = LEAGUE_MEMBERS.find((m: any) => m.id === leagueMemberId);
 
         // Create session with proper league member data
         const session: AuthSession = {

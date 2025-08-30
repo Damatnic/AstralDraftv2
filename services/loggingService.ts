@@ -127,7 +127,7 @@ class LoggingService {
   // Get logs for debugging
   getLogs(level?: LogLevel): LogEntry[] {
     if (level !== undefined) {
-      return this.logs.filter(log => log.level >= level);
+      return this.logs.filter((log: any) => log.level >= level);
     }
     return [...this.logs];
   }

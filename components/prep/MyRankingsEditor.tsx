@@ -14,7 +14,7 @@ interface SortableItemProps {
     rank: number;
 }
 
-const SortableItem: React.FC<SortableItemProps> = ({ player, rank }) => {
+const SortableItem: React.FC<SortableItemProps> = ({ player, rank }: any) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
     const style = {
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
@@ -34,7 +34,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ player, rank }) => {
     );
 };
 
-const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }) => {
+const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => {
     const { state, dispatch } = useAppState();
     const [activePosition, setActivePosition] = React.useState<PlayerPosition>('RB');
     const [rankedPlayers, setRankedPlayers] = React.useState<Player[]>([]);
@@ -95,7 +95,7 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }) => {
                 <p className="text-xs text-gray-400 mb-2 flex-shrink-0">Drag and drop to create your personal rankings. Changes are saved automatically.</p>
                 <div className="flex-grow overflow-y-auto pr-2">
                     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                        <SortableContext items={rankedPlayers.map(p => p.id)} strategy={verticalListSortingStrategy}>
+                        <SortableContext items={rankedPlayers.map((p: any) => p.id)} strategy={verticalListSortingStrategy}>
                             <div className="space-y-1">
                                 {rankedPlayers.map((player, index) => (
                                     <SortableItem key={player.id} player={player} rank={index + 1} />

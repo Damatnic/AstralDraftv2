@@ -5,9 +5,11 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Widget } from '../ui/Widget';
 import { Player, League, Team } from '../../types';
 import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
+import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 import { CheckIcon } from '../icons/CheckIcon';
 import { BarChartIcon } from '../icons/BarChartIcon';
@@ -95,13 +97,13 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     timeRemaining,
     recentPicks,
     onPlayerSelect,
-    onStrategyUpdate: _onStrategyUpdate
-}) => {
+    onStrategyUpdate
+}: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'recommendations' | 'opponents' | 'market' | 'strategy'>('recommendations');
     const [recommendations, setRecommendations] = React.useState<CoachRecommendation[]>([]);
     const [opponentModels, setOpponentModels] = React.useState<OpponentModel[]>([]);
     const [marketInefficiencies, setMarketInefficiencies] = React.useState<MarketInefficiency[]>([]);
-    const [currentStrategy] = React.useState<DraftStrategy>({
+    const [currentStrategy, setCurrentStrategy] = React.useState<DraftStrategy>({
         name: 'Balanced Value',
         description: 'Target best available value with positional balance',
         positionPriority: ['RB', 'WR', 'QB', 'TE', 'K', 'DST'],
@@ -132,8 +134,8 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
 
         // Get top available players by position
         const topRBs = availablePlayers.filter((p: any) => p.position === 'RB').slice(0, 3);
-        // const topWRs = availablePlayers.filter((p: any) => p.position === 'WR').slice(0, 3);
-        // const topQBs = availablePlayers.filter((p: any) => p.position === 'QB').slice(0, 2);
+        const topWRs = availablePlayers.filter((p: any) => p.position === 'WR').slice(0, 3);
+        const topQBs = availablePlayers.filter((p: any) => p.position === 'QB').slice(0, 2);
 
         // Primary pick recommendation
         const topPlayer = availablePlayers[0];
@@ -390,7 +392,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
             {/* Tab Navigation */}
             <div className="flex-shrink-0 border-b border-[var(--panel-border)]">
                 <div className="flex overflow-x-auto">
-                    {tabs.map((tab) => (
+                    {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
                             onClick={() => setSelectedTab(tab.id as any)}
@@ -518,7 +520,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                         <div>
                                             <div className="text-xs text-[var(--text-secondary)] mb-2">Likely Next Picks</div>
                                             <div className="space-y-1">
-                                                {model.predictedNextPicks.slice(0, 2).map((player) => (
+                                                {model.predictedNextPicks.slice(0, 2).map((player: any) => (
                                                     <div key={player.id} className="text-sm text-[var(--text-primary)]">
                                                         {player.name} ({player.position})
                                                     </div>
@@ -643,7 +645,7 @@ const calculateReachTendency = (picks: DraftPick[]): number => {
 };
 
 const calculateValueTendency = (picks: DraftPick[]): number => {
-    const values = picks.filter(pick => pick?.adpDifference < -5).length;
+    const values = picks.filter((pick: any) => pick?.adpDifference < -5).length;
     return Math.min(1, values / Math.max(picks.length, 1));
 };
 
@@ -667,7 +669,7 @@ const inferDraftStrategy = (picks: DraftPick[], roster: Player[]): string => {
     
     if (rbCount > wrCount + 1) return 'RB Heavy';
     if (wrCount > rbCount + 1) return 'WR Heavy';
-    if (picks.length > 0 && picks.every(p => p?.adpDifference < 5)) return 'Value Based';
+    if (picks.length > 0 && picks.every((p: any) => p?.adpDifference < 5)) return 'Value Based';
     return 'Balanced';
 };
 

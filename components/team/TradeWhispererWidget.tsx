@@ -12,7 +12,7 @@ interface TradeWhispererWidgetProps {
     onPropose: (suggestion: TradeSuggestion) => void;
 }
 
-const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }) => {
+const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }: any) => {
     const { league, myTeam } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<TradeSuggestion | null>(null);
@@ -25,7 +25,6 @@ const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }
             const result = await proactivelySuggestTrade(myTeam, league);
             setSuggestion(result);
         } catch (e) {
-            console.error(e);
         } finally {
             setIsLoading(false);
         }
@@ -49,7 +48,7 @@ const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }
                                 animate: { opacity: 1, y: 0 },
                             }}
                         >
-                            <p className="text-xs italic text-gray-300 mb-2">&quot;{suggestion.rationale}&quot;</p>
+                            <p className="text-xs italic text-gray-300 mb-2">"{suggestion.rationale}"</p>
                             <div className="text-center text-xs font-bold text-gray-400 mb-2">Trade with {opponent.name}</div>
                             
                             <div className="flex justify-end gap-2 mt-2">

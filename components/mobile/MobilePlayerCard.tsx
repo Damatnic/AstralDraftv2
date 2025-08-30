@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { Player } from '../../types';
 import { 
-    // StarIcon, 
+    StarIcon, 
     TrendingUpIcon, 
     TrendingDownIcon,
     InfoIcon,
@@ -52,7 +52,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     isCompact = false,
     swipeActions = true,
     className = ''
-}) => {
+}: any) => {
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
     const [activeAction, setActiveAction] = React.useState<SwipeAction | null>(null);

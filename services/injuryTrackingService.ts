@@ -271,14 +271,13 @@ class InjuryTrackingService {
    */
   async getInjuryDashboard(): Promise<InjuryDashboardData> {
     const allStatuses = this.getAllInjuryStatuses();
-    const activeInjuries = allStatuses.filter(s => s.status !== 'healthy');
+    const activeInjuries = allStatuses.filter((s: any) => s.status !== 'healthy');
     
     return {
       totalMonitoredPlayers: this.monitoredPlayers.size,
       activeInjuries: activeInjuries.length,
       recentAlerts: await this.getRecentAlerts(24), // Last 24 hours
-      criticalUpdates: activeInjuries.filter(s => 
-        
+      criticalUpdates: activeInjuries.filter((s: any) => 
         s.severity === 'SEVERE' || s.severity === 'SEASON_ENDING'
       ),
       weeklyImpact: this.calculateWeeklyImpact(),
@@ -385,7 +384,7 @@ class InjuryTrackingService {
       
       // Enhanced analysis with ML predictions and matchup data
       const recommendations = await Promise.all(
-        availablePlayers.slice(0, count * 2).map(async (player) => {
+        availablePlayers.slice(0, count * 2).map(async (player: any) => {
           const mlPrediction = await this.getPlayerMLPrediction(player.id);
           const matchupDifficulty = await this.calculateMatchupDifficulty(player.id);
           const availability = await this.calculatePlayerAvailability(player.id, rosterAnalysis?.leagueSize);
@@ -533,7 +532,7 @@ class InjuryTrackingService {
       const emergencyAlertsList: InjuryAlert[] = [];
 
       // Process each source and categorize
-      [...espnUpdates, ...practiceReports, ...emergencyAlerts].forEach(alert => {
+      [...espnUpdates, ...practiceReports, ...emergencyAlerts].forEach((alert: any) => {
         if (alert.alertType === 'NEW_INJURY') {
           newInjuries.push(alert);
         } else if (alert.alertType === 'STATUS_CHANGE') {
@@ -595,7 +594,7 @@ class InjuryTrackingService {
   }> {
     try {
       const playerAnalysis = await Promise.all(
-        playerIds.map(async (playerId) => {
+        playerIds.map(async (playerId: any) => {
           const injuryStatus = this.getPlayerInjuryStatus(playerId);
           if (!injuryStatus) return null;
 
@@ -670,12 +669,12 @@ class InjuryTrackingService {
         this.saveToStorage();
 
         // Trigger callbacks
-        this.updateCallbacks.forEach(callback => callback(newStatus));
+        this.updateCallbacks.forEach((callback: any) => callback(newStatus));
 
         // Generate alert if necessary
         if (currentStatus && this.shouldGenerateAlert(currentStatus, newStatus)) {
           const alert = this.generateAlert(currentStatus, newStatus);
-          this.alertCallbacks.forEach(callback => callback(alert));
+          this.alertCallbacks.forEach((callback: any) => callback(alert));
         }
       }
     } catch (error) {
@@ -865,7 +864,7 @@ class InjuryTrackingService {
     const currentWeek = Math.floor(Math.random() * 18) + 1;
     return {
       week: currentWeek,
-      totalPlayersAffected: this.getAllInjuryStatuses().filter(s => s.status !== 'healthy').length,
+      totalPlayersAffected: this.getAllInjuryStatuses().filter((s: any) => s.status !== 'healthy').length,
       fantasyPointsLost: Math.random() * 100,
       positionBreakdown: {
         QB: Math.random() * 10,
@@ -883,7 +882,7 @@ class InjuryTrackingService {
   }
 
   private calculateInjuryTrends(): InjuryTrendData[] {
-    return ['QB', 'RB', 'WR', 'TE'].map(position => ({
+    return ['QB', 'RB', 'WR', 'TE'].map((position: any) => ({
       position,
       trend: (['INCREASING', 'DECREASING', 'STABLE'] as const)[Math.floor(Math.random() * 3)],
       weeklyCount: Array.from({ length: 18 }, () => Math.floor(Math.random() * 5)),
@@ -1183,7 +1182,7 @@ class InjuryTrackingService {
       const player = this.monitoredPlayers.get(alert.playerId);
       if (player) {
         // Send notifications based on preferences
-        this.alertCallbacks.forEach(callback => callback(alert));
+        this.alertCallbacks.forEach((callback: any) => callback(alert));
       }
     }
   }
@@ -1282,7 +1281,7 @@ class InjuryTrackingService {
     const shortTerm: string[] = [];
     const longTerm: string[] = [];
     
-    analyses.forEach(analysis => {
+    analyses.forEach((analysis: any) => {
       if (analysis.injuryDetails.status === 'out') {
         immediate.push(`Start ${analysis.replacementOptions[0]?.name || 'backup option'} for ${analysis.playerName}`);
       }

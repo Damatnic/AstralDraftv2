@@ -20,7 +20,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
     onDismiss,
     onMarkAsRead,
     autoHideDuration = 5000
-}) => {
+}: any) => {
     const [isVisible, setIsVisible] = useState(true);
     const [progress, setProgress] = useState(100);
 
@@ -157,7 +157,7 @@ interface NotificationToastContainerProps {
 export const NotificationToastContainer: React.FC<NotificationToastContainerProps> = ({
     maxToasts = 3,
     position = 'top-right'
-}) => {
+}: any) => {
     const { notifications, markAsRead } = useNotifications();
     const [displayedToasts, setDisplayedToasts] = useState<string[]>([]);
 
@@ -196,7 +196,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
     return (
         <div className={`fixed ${getPositionClasses()} z-50 space-y-3 pointer-events-none`}>
             <AnimatePresence>
-                {toastsToShow.map((notification) => (
+                {toastsToShow.map((notification: any) => (
                     <div key={notification.id} className="pointer-events-auto">
                         <NotificationToast
                             notification={notification}

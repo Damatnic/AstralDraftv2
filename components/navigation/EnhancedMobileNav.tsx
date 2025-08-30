@@ -6,11 +6,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAdvancedTouch } from '../../hooks/useAdvancedTouch';
-// import { useMobileViewport } from '../../hooks/useMobileViewport';
+import { useMobileViewport } from '../../hooks/useMobileViewport';
 import { ZapIcon } from '../icons/ZapIcon';
 import { TrophyIcon } from '../icons/TrophyIcon';
 import { UserIcon } from '../icons/UserIcon';
-// import { SettingsIcon } from '../icons/SettingsIcon';
+import { SettingsIcon } from '../icons/SettingsIcon';
 import { ChartBarIcon } from '../icons/ChartBarIcon';
 import { LayoutIcon } from '../icons/LayoutIcon';
 import type { View } from '../../types';
@@ -69,12 +69,12 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
   onNavigate,
   onToggleMenu,
   className = ''
-}) => {
+}: any) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPressed, setIsPressed] = useState<string | null>(null);
   const [longPressTarget, setLongPressTarget] = useState<string | null>(null);
   
-  // const { viewportInfo, safeAreaInsets } = useMobileViewport();
+  const { viewportInfo, safeAreaInsets } = useMobileViewport();
 
   // Handle gesture callback first
   const handleGesture = useCallback((gesture: any) => {

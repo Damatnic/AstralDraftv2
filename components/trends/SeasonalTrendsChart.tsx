@@ -77,7 +77,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
   playerId,
   playerName,
   className = ''
-}) => {
+}: any) => {
   const [seasonalData, setSeasonalData] = useState<SeasonalTrendData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,7 +95,6 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
       const data = await seasonalTrendsAnalysisService.generateSeasonalTrends(playerId, [2023, 2024]);
       setSeasonalData(data);
     } catch (err) {
-      console.error('Error loading seasonal trends:', err);
       setError('Failed to load seasonal trends data');
     } finally {
       setLoading(false);
@@ -228,7 +227,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                       <Tooltip content={<CustomTooltip />} />
                       <Legend />
                       <Bar dataKey="averagePoints" name="Average Fantasy Points">
-                        {overviewData.map((entry) => (
+                        {overviewData.map((entry: any) => (
                           <Cell key={`cell-${entry.period}`} fill={entry.color} />
                         ))}
                       </Bar>
@@ -242,7 +241,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                     { period: 'Mid Season', data: seasonalData.trends.midSeason, weeks: '7-12' },
                     { period: 'Late Season', data: seasonalData.trends.lateSeason, weeks: '13-18' },
                     { period: 'Playoffs', data: seasonalData.trends.playoffs, weeks: '19-22' }
-                  ].map(({ period, data, weeks }) => (
+                  ].map(({ period, data, weeks }: any) => (
                     <Card key={period}>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-sm">{period}</CardTitle>
@@ -309,7 +308,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                     <p className="text-gray-500">No significant patterns detected</p>
                   ) : (
                     <div className="space-y-3">
-                      {seasonalData.patterns.map((pattern) => (
+                      {seasonalData.patterns.map((pattern: any) => (
                         <Card key={`${pattern.type}-${pattern.confidence}`}>
                           <CardContent className="pt-4">
                             <div className="flex items-start gap-3">
@@ -417,7 +416,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {seasonalData.analysis.recommendations.map((rec) => (
+                      {seasonalData.analysis.recommendations.map((rec: any) => (
                         <li key={rec} className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                           <span className="text-sm">{rec}</span>

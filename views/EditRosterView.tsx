@@ -28,7 +28,7 @@ const EditRosterView: React.FC = () => {
         );
     }
     
-    const selectedTeam = league.teams.find(t => t.id === selectedTeamId);
+    const selectedTeam = league.teams.find((t: any) => t.id === selectedTeamId);
 
     const handleRemovePlayer = (player: Player) => {
         if (!selectedTeam) return;
@@ -59,10 +59,10 @@ const EditRosterView: React.FC = () => {
                             <select
                                 id="team-select"
                                 value={selectedTeamId || ''}
-                                onChange={(e) => setSelectedTeamId(Number(e.target.value))}
+                                onChange={(e: any) => setSelectedTeamId(Number(e.target.value))}
                                 className="w-full bg-black/20 p-2 rounded-md border border-white/10 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
                             >
-                                {league.teams.map(team => (
+                                {league.teams.map((team: any) => (
                                     <option key={team.id} value={team.id}>{team.name}</option>
                                 ))}
                             </select>
@@ -81,7 +81,7 @@ const EditRosterView: React.FC = () => {
                                     </button>
                                 </div>
                                 <div className="space-y-2 max-h-96 overflow-y-auto">
-                                    {selectedTeam.roster.map(player => (
+                                    {selectedTeam.roster.map((player: any) => (
                                         <div key={player.id} className="flex items-center justify-between p-2 bg-white/5 rounded-md">
                                             <div className="flex items-center gap-2">
                                                 <Avatar avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'} className="w-8 h-8 text-xl rounded-md" />

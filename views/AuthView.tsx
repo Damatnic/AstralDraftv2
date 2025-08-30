@@ -3,6 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
 import { generateTeamBranding } from '../services/geminiService';
+import { LazyImage } from '../components/ui/LazyImage';
 import { authService } from '../services/authService';
 import type { AuthResponse } from '../services/authService';
 import { SparklesIcon } from '../components/icons/SparklesIcon';
@@ -10,7 +11,9 @@ import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 type AuthMode = 'login' | 'register';
 
-type AuthViewProps = Record<string, never>;
+interface AuthViewProps {
+  // No props currently needed, but interface ready for future expansion
+}
 
 const AuthView: React.FC<AuthViewProps> = () => {
     const { dispatch } = useAppState();
@@ -103,7 +106,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 setError(response.error || 'Authentication failed');
             }
         } catch (error) {
-            console.error('Auth error:', error);
             setError('Something went wrong. Please try again.');
         } finally {
             setIsSubmitting(false);
@@ -124,7 +126,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 setAvatar(branding.avatar);
             }
         } catch (error) {
-            console.error('Avatar generation failed:', error);
         } finally {
             setIsGenerating(false);
         }
@@ -302,7 +303,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                                     id="avatar"
                                     type="text"
                                     value={avatar}
-                                    onChange={(e) => setAvatar(e.target.value)}
+                                    onChange={(e: any) => setAvatar(e.target.value)}
                                     className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                                     maxLength={2}
                                     placeholder="🏈"
@@ -342,7 +343,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 <div className="mt-4 text-center text-sm text-gray-300">
                     {mode === 'login' ? (
                         <span>
-                            Don&apos;t have an account?{' '}
+                            Don't have an account?{' '}
                             <button
                                 type="button"
                                 onClick={switchMode}
@@ -369,7 +370,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
     );
 };
 
-const AuthViewWithErrorBoundary: React.FC<AuthViewProps> = (props) => (
+const AuthViewWithErrorBoundary: React.FC<AuthViewProps> = (props: any) => (
     <ErrorBoundary>
         <AuthView {...props} />
     </ErrorBoundary>

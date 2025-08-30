@@ -162,6 +162,8 @@ class TradeAnalysisEngine {
      * Comprehensive trade analysis
      */
     async analyzeTradeProposal(proposal: TradeProposal): Promise<TradeAnalysis> {
+        console.log(`🔍 Analyzing trade proposal: ${proposal.id}`);
+
         // Calculate base values
         const currentValues = this.calculateCurrentValues(proposal);
         const projectedValues = this.calculateProjectedValues(proposal);
@@ -360,7 +362,7 @@ class TradeAnalysisEngine {
     /**
      * Schedule strength adjustment
      */
-    private getScheduleAdjustment(_player: Player): number {
+    private getScheduleAdjustment(player: Player): number {
         // Mock schedule data - in real implementation, would analyze opponent defenses
         const scheduleStrength = Math.random() * 0.2 + 0.9; // 0.9 to 1.1
         return scheduleStrength;
@@ -438,8 +440,8 @@ class TradeAnalysisEngine {
         teamId: string, 
         playersOut: Player[], 
         playersIn: Player[],
-        _picksOut?: DraftPick[],
-        _picksIn?: DraftPick[]
+        picksOut?: DraftPick[],
+        picksIn?: DraftPick[]
     ): Promise<TeamImpact> {
         // Mock team data - in real implementation, would fetch from database
         const currentRoster = await this.getTeamRoster(teamId);
@@ -473,7 +475,7 @@ class TradeAnalysisEngine {
             
             // Apply trade changes
             const rosterAfterTrade = [
-                ...currentRoster.filter(p => !playersOut.some(po => po.id === p.id)),
+                ...currentRoster.filter((p: any) => !playersOut.some((po: any) => po.id === p.id)),
                 ...playersIn
             ];
             
@@ -495,7 +497,7 @@ class TradeAnalysisEngine {
      * Calculate positional strength for a roster
      */
     private calculatePositionalStrength(roster: Player[], position: string): number {
-        const positionPlayers = roster.filter(p => p.position === position);
+        const positionPlayers = roster.filter((p: any) => p.position === position);
         if (positionPlayers.length === 0) return 0;
 
         // Sort by value and take top players for starting lineup
@@ -588,7 +590,7 @@ class TradeAnalysisEngine {
     private generateRecommendation(
         fairnessScore: number, 
         fromTeamImpact: TeamImpact, 
-        _toTeamImpact: TeamImpact
+        toTeamImpact: TeamImpact
     ): TradeAnalysis['recommendation'] {
         if (fairnessScore >= 75 && fromTeamImpact.overallRatingChange > 0) {
             return 'accept';
@@ -635,12 +637,12 @@ class TradeAnalysisEngine {
     }
 
     // Mock implementation methods - would be replaced with real data access
-    private async getTeamRoster(_teamId: string): Promise<Player[]> {
+    private async getTeamRoster(teamId: string): Promise<Player[]> {
         // Mock roster data
         return Array.from(this.playerDatabase.values()).slice(0, 16);
     }
 
-    private calculateLineupImpact(_roster: Player[], _playersOut: Player[], _playersIn: Player[]): LineupImpact {
+    private calculateLineupImpact(roster: Player[], playersOut: Player[], playersIn: Player[]): LineupImpact {
         return {
             weeklyProjectionChange: Math.random() * 20 - 10,
             consistencyChange: Math.random() * 10 - 5,
@@ -653,25 +655,25 @@ class TradeAnalysisEngine {
         return changes.reduce((sum, change) => sum + change.change, 0) / changes.length;
     }
 
-    private calculateBenchDepthImpact(_roster: Player[], _playersOut: Player[], _playersIn: Player[]): number {
+    private calculateBenchDepthImpact(roster: Player[], playersOut: Player[], playersIn: Player[]): number {
         return Math.random() * 20 - 10; // Mock implementation
     }
 
-    private calculatePlayoffProjectionChange(_teamId: string, _changes: PositionStrengthChange[]): number {
+    private calculatePlayoffProjectionChange(teamId: string, changes: PositionStrengthChange[]): number {
         return Math.random() * 15 - 7.5; // Mock implementation
     }
 
-    private calculateRosterBalance(_roster: Player[], _playersOut: Player[], _playersIn: Player[]): number {
+    private calculateRosterBalance(roster: Player[], playersOut: Player[], playersIn: Player[]): number {
         return Math.random() * 10 - 5; // Mock implementation
     }
 
-    private getPositionalRanking(_strength: number, _position: string): number {
+    private getPositionalRanking(strength: number, position: string): number {
         return Math.floor(Math.random() * 12) + 1; // Mock ranking
     }
 
-    private analyzePositionalImpact(_proposal: TradeProposal): PositionalImpact[] {
+    private analyzePositionalImpact(proposal: TradeProposal): PositionalImpact[] {
         const positions = ['QB', 'RB', 'WR', 'TE'];
-        return positions.map(position => ({
+        return positions.map((position: any) => ({
             position,
             scarcityFactor: this.positionalScarcity.get(position) || 1.0,
             marketValue: Math.random() * 100 + 50,
@@ -680,7 +682,7 @@ class TradeAnalysisEngine {
         }));
     }
 
-    private analyzeScheduleImpact(_proposal: TradeProposal): ScheduleImpact {
+    private analyzeScheduleImpact(proposal: TradeProposal): ScheduleImpact {
         return {
             byeWeekConflicts: Math.floor(Math.random() * 3),
             strengthOfSchedule: Math.random() * 20 - 10,
@@ -694,7 +696,7 @@ class TradeAnalysisEngine {
         
         return {
             overallRiskChange: Math.random() * 10 - 5,
-            playerRisks: allPlayers.map(player => ({
+            playerRisks: allPlayers.map((player: any) => ({
                 playerId: player.id.toString(),
                 injuryProbability: Math.random() * 0.3 + 0.1,
                 durabilityScore: Math.random() * 40 + 60,
@@ -746,7 +748,7 @@ class TradeAnalysisEngine {
         ];
     }
 
-    private generateReasoning(fairnessScore: number, fromTeamImpact: TeamImpact, _toTeamImpact: TeamImpact): string[] {
+    private generateReasoning(fairnessScore: number, fromTeamImpact: TeamImpact, toTeamImpact: TeamImpact): string[] {
         const reasoning: string[] = [];
 
         if (fairnessScore >= 75) {
@@ -775,7 +777,7 @@ class TradeAnalysisEngine {
             warnings.push('Trade significantly increases injury risk');
         }
 
-        const highRiskPlayers = riskAnalysis.playerRisks.filter(p => p.injuryProbability > 0.25);
+        const highRiskPlayers = riskAnalysis.playerRisks.filter((p: any) => p.injuryProbability > 0.25);
         if (highRiskPlayers.length > 0) {
             warnings.push(`${highRiskPlayers.length} players have elevated injury risk`);
         }

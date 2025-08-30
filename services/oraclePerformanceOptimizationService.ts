@@ -310,7 +310,7 @@ export class OraclePerformanceOptimizationService {
 
   private async optimizeAlgorithms(): Promise<OptimizationResult | null> {
     try {
-      const activeModels = Array.from(this.models.values()).filter(m => m.isActive);
+      const activeModels = Array.from(this.models.values()).filter((m: any) => m.isActive);
       
       if (activeModels.length > 0) {
         // Find the best performing model and optimize others
@@ -320,11 +320,11 @@ export class OraclePerformanceOptimizationService {
         
         const optimizations = await Promise.all(
           activeModels
-            .filter(m => m.id !== bestModel.id)
-            .map(m => this.optimizeModelPerformance(m.id))
+            .filter((m: any) => m.id !== bestModel.id)
+            .map((m: any) => this.optimizeModelPerformance(m.id))
         );
         
-        if (optimizations.some(opt => opt !== null)) {
+        if (optimizations.some((opt: any) => opt !== null)) {
           return {
             id: `algo_opt_${Date.now()}`,
             timestamp: new Date().toISOString(),

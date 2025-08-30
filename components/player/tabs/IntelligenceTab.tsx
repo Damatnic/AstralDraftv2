@@ -6,19 +6,20 @@ import { NewsIcon } from '../../icons/NewsIcon';
 import { useAppState } from '../../../contexts/AppContext';
 import { generatePlayerNickname, summarizeFantasyImpact } from '../../../services/geminiService';
 import { SparklesIcon } from '../../icons/SparklesIcon';
+import LoadingSpinner from '../../ui/LoadingSpinner';
 
 interface IntelligenceTabProps {
   player: Player;
 }
 
-const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}) => (
+const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}: any) => (
     <div className="bg-white/5 p-3 rounded-lg">
         <p className="text-sm text-gray-400 flex items-center gap-2">{icon} {label}</p>
         <p className="font-semibold text-white mt-1">{value}</p>
     </div>
 );
 
-const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
+const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }: any) => {
     const { state, dispatch } = useAppState();
     const [isLoading, setIsLoading] = React.useState(false);
     const analysis = state.newsImpactAnalyses[news.headline];
@@ -41,9 +42,9 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
                  <div className="mt-2 pt-2 border-t border-white/10">
                     <p className="text-xs text-cyan-300/80 font-semibold flex items-center gap-1">
                         <SparklesIcon className="w-3 h-3" />
-                        Oracle&apos;s Take
+                        Oracle's Take
                     </p>
-                    <p className="text-xs italic text-gray-300">&quot;{analysis}&quot;</p>
+                    <p className="text-xs italic text-gray-300">"{analysis}"</p>
                 </div>
             ) : (
                 <div className="mt-2">
@@ -56,7 +57,7 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
     );
 };
 
-const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
+const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
     const { state, dispatch } = useAppState();
     const nickname = state.playerNicknames[player.id];
     const [isGeneratingNickname, setIsGeneratingNickname] = React.useState(false);

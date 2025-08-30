@@ -11,7 +11,7 @@ interface RadialChartProps {
     strokeWidth?: number;
 }
 
-const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }) => {
+const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }: any) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const progress = value / maxValue;

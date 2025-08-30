@@ -15,7 +15,7 @@ interface RecapVideoPlayerProps {
 
 const sceneDuration = 5000; // 5 seconds per scene
 
-const TitleScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
+const TitleScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }: any) => (
     <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black"
         {...{
@@ -32,7 +32,7 @@ const TitleScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
     </motion.div>
 );
 
-const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }) => {
+const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
     const teamA = league.teams.find((t: any) => t.name === scene.teamAName);
     const teamB = league.teams.find((t: any) => t.name === scene.teamBName);
     return (
@@ -60,13 +60,13 @@ const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ sc
                 </motion.div>
             </div>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.8 } }} className="mt-8 text-lg text-gray-300 text-center italic">
-                &quot;{scene.narration}&quot;
+                "{scene.narration}"
             </motion.p>
         </motion.div>
     )
 };
 
-const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }) => {
+const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
     const team = league.teams.find((t: any) => t.name === scene.playerTeam);
     return (
          <motion.div
@@ -85,13 +85,13 @@ const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = 
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.4 } }} className="text-3xl font-bold">{scene.playerName}</motion.p>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.6 } }} className="text-5xl font-display font-bold text-yellow-300 my-2">{scene.playerScore?.toFixed(2)} PTS</motion.p>
             <motion.p {...{ initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 }, transition: { delay: 0.8 } }} className="mt-4 text-lg text-gray-300 text-center italic">
-                &quot;{scene.narration}&quot;
+                "{scene.narration}"
             </motion.p>
         </motion.div>
     )
 };
 
-const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
+const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }: any) => (
      <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black"
         {...{
@@ -112,7 +112,7 @@ const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
 );
 
 
-const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }) => {
+const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: any) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [isPlaying, setIsPlaying] = React.useState(true);
     const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);

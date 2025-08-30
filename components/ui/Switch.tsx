@@ -14,7 +14,7 @@ export const Switch: React.FC<SwitchProps> = ({
   label,
   disabled = false,
   size = 'md'
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: { track: 'w-8 h-4', thumb: 'w-3 h-3' },
     md: { track: 'w-10 h-5', thumb: 'w-4 h-4' },

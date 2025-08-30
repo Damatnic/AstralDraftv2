@@ -12,6 +12,7 @@ import { CompareIcon } from '../icons/CompareIcon';
 import { SearchIcon } from '../icons/SearchIcon';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
+import { BarChartIcon } from '../icons/BarChartIcon';
 import { useAppState } from '../../contexts/AppContext';
 
 interface PlayerComparisonTabProps {
@@ -31,8 +32,8 @@ interface ComparisonMetric {
 const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     player,
     league,
-    dispatch: _dispatch
-}) => {
+    dispatch
+}: any) => {
     const { state } = useAppState();
     const [comparePlayer, setComparePlayer] = React.useState<Player | null>(null);
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -40,7 +41,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
 
     // Get all players in the same position
     const availablePlayers = React.useMemo(() => {
-        return league.allPlayers.filter(p => 
+        return league.allPlayers.filter((p: any) => 
             p.position === player.position && 
             p.id !== player.id &&
             p.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -413,7 +414,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                                     <input
                                         type="text"
                                         value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onChange={(e: any) => setSearchQuery(e.target.value)}
                                         placeholder="Search players..."
                                         className="w-full pl-10 pr-4 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-blue-400"
                                         autoFocus
@@ -422,7 +423,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
                             </div>
                             
                             <div className="flex-1 overflow-y-auto p-4 space-y-2 max-h-96">
-                                {availablePlayers.map((p) => (
+                                {availablePlayers.map((p: any) => (
                                     <button
                                         key={p.id}
                                         onClick={() => handlePlayerSelect(p)}

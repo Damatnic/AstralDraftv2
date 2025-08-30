@@ -130,7 +130,7 @@ class EnhancedNotificationService {
     private offlineQueue: EnhancedNotification[] = [];
     private isOnline: boolean = navigator.onLine;
     private serviceWorker: ServiceWorkerRegistration | null = null;
-    private readonly eventListeners: Map<string, ((data: any) => void)[]> = new Map();
+    private readonly eventListeners: Map<string, Function[]> = new Map();
 
     constructor() {
         this.setupNetworkListeners();
@@ -154,9 +154,9 @@ class EnhancedNotificationService {
             // Setup periodic cleanup
             this.setupCleanupSchedule();
             
-            // Enhanced Notification Service initialized
+            console.log('📱 Enhanced Notification Service initialized');
         } catch (error) {
-            console.warn('Failed to initialize notification service:', error);
+            console.error('Failed to initialize notification service:', error);
         }
     }
 
@@ -164,9 +164,9 @@ class EnhancedNotificationService {
         if ('serviceWorker' in navigator) {
             try {
                 this.serviceWorker = await navigator.serviceWorker.ready;
-                // Service Worker ready for notifications
+                console.log('🔧 Service Worker ready for notifications');
             } catch (error) {
-                console.warn('Service Worker setup failed:', error);
+                console.error('Service Worker setup failed:', error);
             }
         }
     }
@@ -226,7 +226,7 @@ class EnhancedNotificationService {
             }
         ];
 
-        defaultTemplates.forEach(template => {
+        defaultTemplates.forEach((template: any) => {
             this.templates.set(template.id, template);
         });
     }
@@ -320,7 +320,7 @@ class EnhancedNotificationService {
         }
 
         let message = template.messageTemplate;
-        template.variables.forEach(variable => {
+        template.variables.forEach((variable: any) => {
             const value = variables[variable] || '';
             message = message.replace(new RegExp(`{{${variable}}}`, 'g'), value);
         });
@@ -377,7 +377,7 @@ class EnhancedNotificationService {
         leagueId: string,
         startTime: Date
     ): Promise<void> {
-        const promises = userIds.map(userId =>
+        const promises = userIds.map((userId: any) =>
             this.sendNotification(
                 userId,
                 'DRAFT_START',
@@ -465,7 +465,7 @@ class EnhancedNotificationService {
         commissionerName: string,
         announcement: string
     ): Promise<void> {
-        const promises = userIds.map(userId =>
+        const promises = userIds.map((userId: any) =>
             this.sendFromTemplate('league-announcement', userId, {
                 commissionerName,
                 leagueName: 'League',
@@ -497,11 +497,11 @@ class EnhancedNotificationService {
         let filtered = userNotifications;
         
         if (options.category) {
-            filtered = filtered.filter(n => n.category === options.category);
+            filtered = filtered.filter((n: any) => n.category === options.category);
         }
         
         if (options.unreadOnly) {
-            filtered = filtered.filter(n => !n.isRead);
+            filtered = filtered.filter((n: any) => !n.isRead);
         }
         
         // Sort by priority and creation date
@@ -520,7 +520,7 @@ class EnhancedNotificationService {
 
     async markAsRead(userId: string, notificationId: string): Promise<void> {
         const userNotifications = this.notifications.get(userId) || [];
-        const notification = userNotifications.find(n => n.id === notificationId);
+        const notification = userNotifications.find((n: any) => n.id === notificationId);
         
         if (notification && !notification.isRead) {
             notification.isRead = true;
@@ -532,7 +532,7 @@ class EnhancedNotificationService {
     async markAllAsRead(userId: string, category?: string): Promise<void> {
         const userNotifications = this.notifications.get(userId) || [];
         
-        userNotifications.forEach(notification => {
+        userNotifications.forEach((notification: any) => {
             if (!notification.isRead && (!category || notification.category === category)) {
                 notification.isRead = true;
                 this.emitNotificationEvent('read', notification);
@@ -544,7 +544,7 @@ class EnhancedNotificationService {
 
     async archiveNotification(userId: string, notificationId: string): Promise<void> {
         const userNotifications = this.notifications.get(userId) || [];
-        const notification = userNotifications.find(n => n.id === notificationId);
+        const notification = userNotifications.find((n: any) => n.id === notificationId);
         
         if (notification) {
             notification.isArchived = true;
@@ -793,7 +793,7 @@ class EnhancedNotificationService {
         const now = new Date();
         
         this.notifications.forEach((userNotifications, userId) => {
-            const filtered = userNotifications.filter(notification => 
+            const filtered = userNotifications.filter((notification: any) => 
                 !notification.expiresAt || notification.expiresAt > now
             );
             
@@ -823,7 +823,7 @@ class EnhancedNotificationService {
     }
 
     // Event handling
-    addEventListener(event: string, callback: (data: any) => void): void {
+    addEventListener(event: string, callback: Function): void {
         if (!this.eventListeners.has(event)) {
             this.eventListeners.set(event, []);
         }
@@ -833,7 +833,7 @@ class EnhancedNotificationService {
         }
     }
 
-    removeEventListener(event: string, callback: (data: any) => void): void {
+    removeEventListener(event: string, callback: Function): void {
         const listeners = this.eventListeners.get(event);
         if (listeners) {
             const index = listeners.indexOf(callback);
@@ -845,7 +845,7 @@ class EnhancedNotificationService {
 
     private emitNotificationEvent(event: string, data: any): void {
         const listeners = this.eventListeners.get(event) || [];
-        listeners.forEach(callback => {
+        listeners.forEach((callback: any) => {
             try {
                 callback(data);
             } catch (error) {
@@ -857,7 +857,7 @@ class EnhancedNotificationService {
     // Stats and analytics
     async getNotificationStats(userId: string): Promise<NotificationStats> {
         const notifications = this.notifications.get(userId) || [];
-        const read = notifications.filter(n => n.isRead);
+        const read = notifications.filter((n: any) => n.isRead);
         
         const typeCount = notifications.reduce((acc, n) => {
             acc[n.type] = (acc[n.type] || 0) + 1;

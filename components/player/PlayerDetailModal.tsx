@@ -46,7 +46,7 @@ interface MyNotesTabProps {
     dispatch: React.Dispatch<any>;
 }
 
-const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
+const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) => {
     const [noteText, setNoteText] = React.useState(note?.text || '');
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [isRecording, setIsRecording] = React.useState(false);
@@ -89,7 +89,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
             mediaRecorderRef.current = new MediaRecorder(stream);
             audioChunksRef.current = [];
             
-            mediaRecorderRef.current.ondataavailable = (event) => {
+            mediaRecorderRef.current.ondataavailable = (event: any) => {
                 audioChunksRef.current.push(event.data);
             };
 
@@ -108,7 +108,6 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
             mediaRecorderRef.current.start();
             setIsRecording(true);
         } catch (err) {
-            console.error("Error starting recording:", err);
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Microphone access denied.', type: 'SYSTEM' } });
         }
     };
@@ -178,7 +177,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
     )
 }
 
-const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }) => {
+const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }: any) => {
   const [isSimilarPlayersOpen, setIsSimilarPlayersOpen] = React.useState(false);
   
   const tabItems = [

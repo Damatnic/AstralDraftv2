@@ -5,7 +5,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-// import { useAppState } from '../../contexts/AppContext';
+import { useAppState } from '../../contexts/AppContext';
 
 interface HelpArticle {
   id: string;
@@ -29,7 +29,7 @@ interface HelpCategory {
 }
 
 const HelpSystem: React.FC = () => {
-  // const { state } = useAppState();
+  const { state } = useAppState();
   const [isVisible, setIsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('getting-started');
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
@@ -475,22 +475,22 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
     let filtered = articles;
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(article => article.category === selectedCategory);
+      filtered = filtered.filter((article: any) => article.category === selectedCategory);
     }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(article =>
+      filtered = filtered.filter((article: any) =>
         article.title.toLowerCase().includes(query) ||
         article.content.toLowerCase().includes(query) ||
-        article.tags.some(tag => tag.toLowerCase().includes(query))
+        article.tags.some((tag: any) => tag.toLowerCase().includes(query))
       );
     }
 
     return filtered;
   }, [selectedCategory, searchQuery]);
 
-  const selectedArticleData = articles.find(article => article.id === selectedArticle);
+  const selectedArticleData = articles.find((article: any) => article.id === selectedArticle);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -555,7 +555,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                   <input
                     type="text"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e: any) => setSearchQuery(e.target.value)}
                     placeholder="Search help articles..."
                     className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none"
                   />
@@ -581,7 +581,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                       </div>
                     </button>
 
-                    {categories.map((category) => (
+                    {categories.map((category: any) => (
                       <button
                         key={category.id}
                         onClick={() => setSelectedCategory(category.id)}
@@ -633,7 +633,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                         </div>
                         
                         <div className="flex flex-wrap gap-2">
-                          {selectedArticleData?.tags.map((tag) => (
+                          {selectedArticleData?.tags.map((tag: any) => (
                             <span
                               key={tag}
                               className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded"
@@ -676,7 +676,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     <div className="mb-6">
                       <h2 className="text-2xl font-bold text-white mb-2">
                         {selectedCategory === 'all' ? 'All Articles' : 
-                         categories.find(c => c.id === selectedCategory)?.name}
+                         categories.find((c: any) => c.id === selectedCategory)?.name}
                       </h2>
                       <p className="text-slate-400">
                         {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} found
@@ -684,7 +684,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {filteredArticles.map((article) => (
+                      {filteredArticles.map((article: any) => (
                         <motion.button
                           key={article.id}
                           initial={{ opacity: 0, y: 20 }}

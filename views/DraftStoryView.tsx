@@ -23,7 +23,7 @@ const eventIcons: { [key: string]: React.ReactNode } = {
     MR_IRRELEVANT: <SparklesIcon />,
 };
 
-const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }) => {
+const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }: any) => {
     const icon = eventIcons[event.type] || <SparklesIcon />;
     return (
         <div className="flex items-start gap-4">
@@ -46,7 +46,7 @@ const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team 
     );
 };
 
-const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const [highlights, setHighlights] = React.useState<DraftEvent[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -61,7 +61,7 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                 } else {
                     setError("The Oracle couldn't find the story in this draft.");
                 }
-            } catch {
+            } catch (e) {
                 setError("An error occurred while consulting the Oracle.");
             } finally {
                 setIsLoading(false);
@@ -104,8 +104,8 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                                 >
                                     <HighlightCard 
                                         event={event}
-                                        player={players.find(p => p.id === event.playerId)}
-                                        team={league.teams.find(t => t.id === event.teamId)}
+                                        player={players.find((p: any) => p.id === event.playerId)}
+                                        team={league.teams.find((t: any) => t.id === event.teamId)}
                                     />
                                 </motion.div>
                             ))}

@@ -53,8 +53,8 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     predictionId,
     userId,
     userInfo,
-    onPredictionUpdate: _onPredictionUpdate
-}) => {
+    onPredictionUpdate
+}: any) => {
     // State management
     const [predictionUpdate] = useState<LivePredictionUpdate | null>(null);
     const [collaborativeRoom, setCollaborativeRoom] = useState<CollaborativeRoom | null>(null);
@@ -100,7 +100,6 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                 loadInitialData();
 
             } catch (error) {
-                console.error('Failed to initialize real-time services:', error);
             }
         };
 
@@ -187,7 +186,6 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             updateMetrics();
 
         } catch (error) {
-            console.error('Failed to send message:', error);
         }
     };
 
@@ -281,7 +279,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             </CardHeader>
             <CardContent className="flex-1 flex flex-col space-y-4">
                 <div className="flex-1 overflow-y-auto pr-4 space-y-4">
-                    {messages.map((message) => (
+                    {messages.map((message: any) => (
                         <div key={message.id} className="flex space-x-3">
                             <Avatar 
                                 avatar={message.username.charAt(0).toUpperCase()} 
@@ -300,8 +298,8 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                                 <p className="text-sm mt-1">{message.content}</p>
                                 {message.reactions && message.reactions.length > 0 && (
                                     <div className="flex items-center space-x-1 mt-2">
-                                        {message.reactions.map((reaction) => (
-                                            <Badge key={`${reaction.userId}-${reaction.emoji}-${reaction.timestamp}`} variant="secondary" className="text-xs">
+                                        {message.reactions.map((reaction: any) => (
+                                            <Badge key={`${reaction.userId}-${reaction.emoji}-${reaction.timestamp}`} variant="default" className="text-xs">
                                                 {reaction.emoji}
                                             </Badge>
                                         ))}
@@ -391,7 +389,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        {insights.map((insight) => (
+                        {insights.map((insight: any) => (
                             <div key={insight.id} className="border rounded-lg p-4">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
@@ -416,11 +414,11 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                                         <div className="flex items-center space-x-1 mt-2">
                                             <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1">
                                                 <ThumbsUp className="h-3 w-3" />
-                                                <span>{insight.votes.filter(v => v.vote === 'upvote').length}</span>
+                                                <span>{insight.votes.filter((v: any) => v.vote === 'upvote').length}</span>
                                             </button>
                                             <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1">
                                                 <ThumbsDown className="h-3 w-3" />
-                                                <span>{insight.votes.filter(v => v.vote === 'downvote').length}</span>
+                                                <span>{insight.votes.filter((v: any) => v.vote === 'downvote').length}</span>
                                             </button>
                                         </div>
                                     </div>
@@ -435,7 +433,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
 
     // Helper function to calculate poll option results
     const calculatePollOptionResults = (poll: CommunityPoll) => {
-        return poll.options.map((option) => {
+        return poll.options.map((option: any) => {
             const votes = poll.responses?.filter((r: any) => r.optionId === option.id).length || 0;
             const totalResponses = poll.responses?.length || 0;
             const percentage = totalResponses > 0 
@@ -461,7 +459,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {polls.map((poll) => {
+                    {polls.map((poll: any) => {
                         const optionResults = calculatePollOptionResults(poll);
                         
                         return (
@@ -469,7 +467,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                                 <h4 className="font-medium">{poll.title}</h4>
                                 <p className="text-sm text-gray-600 mt-1">{poll.question}</p>
                                 <div className="mt-4 space-y-2">
-                                    {optionResults.map(({ option, percentage }) => (
+                                    {optionResults.map(({ option, percentage }: any) => (
                                         <div key={option.id} className="space-y-1">
                                             <div className="flex justify-between text-sm">
                                                 <span>{option.text}</span>

@@ -73,25 +73,26 @@ class RealTimeDataService {
      */
     async startRealTimeUpdates(): Promise<void> {
         if (this.isActive) {
-            // Real-time updates already active
+            console.log('Real-time updates already active');
             return;
         }
 
         this.isActive = true;
-        // Starting real-time sports data monitoring
+        console.log('🚀 Starting real-time sports data monitoring...');
 
         // Initialize with current game state
         await this.initializeGameState();
 
-        // Setup automated data fetching
+        // Set up periodic updates
         this.setupGameUpdates();
-        this.setupPlayerTracking();
+        this.setupPlayerUpdates();
+        this.setupInjuryMonitoring();
         this.setupPredictionRefresh();
 
         // Start comprehensive injury tracking
         injuryTrackingService.startMonitoring();
 
-        // Real-time monitoring active
+        console.log('✅ Real-time monitoring active');
     }
 
     /**
@@ -99,13 +100,13 @@ class RealTimeDataService {
      */
     stopRealTimeUpdates(): void {
         this.isActive = false;
-        this.intervals.forEach(interval => clearInterval(interval));
+        this.intervals.forEach((interval: any) => clearInterval(interval));
         this.intervals = [];
         
         // Stop injury tracking
         injuryTrackingService.stopMonitoring();
         
-        // Real-time updates stopped
+        console.log('🛑 Real-time updates stopped');
     }
 
     /**
@@ -136,15 +137,15 @@ class RealTimeDataService {
             const games = await apiClient.getSportsIOGames(currentWeek);
 
             // Track active games using correct API structure
-            games.forEach(game => {
+            games.forEach((game: any) => {
                 if (game.status === 'in_progress') {
                     this.activeGames.add(game.game_id);
                 }
             });
 
-            // Initialized with games
+            console.log(`📊 Initialized with ${games.length} games, ${this.activeGames.size} active`);
         } catch (error) {
-            // Failed to initialize game state
+            console.error('Failed to initialize game state:', error);
         }
     }
 
@@ -250,7 +251,7 @@ class RealTimeDataService {
             try {
                 // Simulate injury monitoring - in production, integrate with injury API
                 const players = await apiClient.getPlayerUpdates();
-                const injuredPlayers = players.filter(p => p.injuryStatus && p.injuryStatus !== 'healthy');
+                const injuredPlayers = players.filter((p: any) => p.injuryStatus && p.injuryStatus !== 'healthy');
                 
                 for (const player of injuredPlayers) {
                     if (this.isNewInjury(player)) {
@@ -417,7 +418,7 @@ class RealTimeDataService {
     }
 
     private async triggerPredictionUpdate(trigger: string, data: any): Promise<void> {
-        // Prediction update triggered
+        console.log(`🔄 Prediction update triggered: ${trigger}`, data);
         // Could regenerate specific predictions here
     }
 
@@ -432,7 +433,7 @@ class RealTimeDataService {
 
     // Callback notification methods
     private notifyGameUpdateCallbacks(update: LiveGameUpdate): void {
-        this.gameUpdateCallbacks.forEach(callback => {
+        this.gameUpdateCallbacks.forEach((callback: any) => {
             try {
                 callback(update);
             } catch (error) {
@@ -442,7 +443,7 @@ class RealTimeDataService {
     }
 
     private notifyPlayerUpdateCallbacks(update: LivePlayerUpdate): void {
-        this.playerUpdateCallbacks.forEach(callback => {
+        this.playerUpdateCallbacks.forEach((callback: any) => {
             try {
                 callback(update);
             } catch (error) {
@@ -452,7 +453,7 @@ class RealTimeDataService {
     }
 
     private notifyInjuryAlertCallbacks(alert: InjuryAlert): void {
-        this.injuryAlertCallbacks.forEach(callback => {
+        this.injuryAlertCallbacks.forEach((callback: any) => {
             try {
                 callback(alert);
             } catch (error) {
@@ -462,7 +463,7 @@ class RealTimeDataService {
     }
 
     private notifyPredictionUpdateCallbacks(update: PredictionUpdate): void {
-        this.predictionUpdateCallbacks.forEach(callback => {
+        this.predictionUpdateCallbacks.forEach((callback: any) => {
             try {
                 callback(update);
             } catch (error) {

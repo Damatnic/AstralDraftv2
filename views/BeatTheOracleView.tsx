@@ -3,6 +3,7 @@ import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { motion } from 'framer-motion';
 import { ZapIcon } from '../components/icons/ZapIcon';
+import { Avatar } from '../components/ui/Avatar';
 import { oraclePredictionService, type OraclePrediction } from '../services/oraclePredictionService';
 import { realTimeDataService } from '../services/realTimeDataService';
 import { OracleAnalyticsDashboard } from '../components/oracle/OracleAnalyticsDashboard';
@@ -52,12 +53,11 @@ const generateChallenges = async (week: number): Promise<OracleChallenge[]> => {
             week: prediction.week,
             type: prediction.type as 'PLAYER_PERFORMANCE' | 'GAME_OUTCOME' | 'WEEKLY_SCORING',
             question: prediction.question,
-            options: prediction.options.map(opt => opt.text),
+            options: prediction.options.map((opt: any) => opt.text),
             oraclePrediction: prediction.oracleChoice,
             oracleConfidence: prediction.confidence
         }));
     } catch (error) {
-        console.error('Failed to generate Oracle challenges:', error);
         // Fallback to mock data if service fails
         return generateMockChallenges(week);
     }
@@ -140,7 +140,7 @@ const updateUserStats = (
 const ChallengeOptions: React.FC<{
     challenge: OracleChallenge;
     onSelectOption: (challengeId: string, optionIndex: number) => void;
-}> = ({ challenge, onSelectOption }) => {
+}> = ({ challenge, onSelectOption }: any) => {
     const getOptionStyle = (optionIndex: number): string => {
         if (challenge.userPrediction === optionIndex) {
             return 'bg-green-500/20 border border-green-500/40';
@@ -174,6 +174,25 @@ const ChallengeOptions: React.FC<{
         </>
     );
 };
+
+// Component for leaderboard entries
+const LeaderboardEntry: React.FC<{
+    rank: number;
+    name: string;
+    score: number;
+    isCurrentUser?: boolean;
+}> = ({ rank, name, score, isCurrentUser = false }: any) => (
+    <div className={`flex items-center justify-between p-3 rounded-lg ${
+        isCurrentUser ? 'bg-blue-500/20' : 'bg-gray-500/10'
+    }`}>
+        <div className="flex items-center space-x-3">
+            <span className="text-lg font-bold">{rank}</span>
+            <Avatar avatar="👤" className="w-6 h-6" />
+            <span>{name}</span>
+        </div>
+        <span className="font-bold">{score} pts</span>
+    </div>
+);
 
 const BeatTheOracleView: React.FC = () => {
     const { state } = useAppState();
@@ -216,7 +235,6 @@ const BeatTheOracleView: React.FC = () => {
                 // Start real-time monitoring
                 await startRealTimeMonitoring();
             } catch (error) {
-                console.error('Failed to load challenges:', error);
                 // Fallback to mock challenges
                 const currentWeek = 1;
                 const mockChallenges = generateMockChallenges(currentWeek);
@@ -248,19 +266,19 @@ const BeatTheOracleView: React.FC = () => {
     const startRealTimeMonitoring = async () => {
         try {
             // Set up real-time callbacks
-            realTimeDataService.onGameUpdate((update) => {
+            realTimeDataService.onGameUpdate((update: any) => {
                 addLiveUpdate(`🏈 Game Update: ${update.homeTeam} ${update.homeScore} - ${update.awayScore} ${update.awayTeam}`);
             });
 
-            realTimeDataService.onPlayerUpdate((update) => {
+            realTimeDataService.onPlayerUpdate((update: any) => {
                 addLiveUpdate(`📊 ${update.name} (${update.team}): ${update.fantasyPoints} pts`);
             });
 
-            realTimeDataService.onInjuryAlert((alert) => {
+            realTimeDataService.onInjuryAlert((alert: any) => {
                 addLiveUpdate(`🚨 Injury Alert: ${alert.playerName} (${alert.team}) - ${alert.injuryType}`);
             });
 
-            realTimeDataService.onPredictionUpdate((update) => {
+            realTimeDataService.onPredictionUpdate((update: any) => {
                 addLiveUpdate(`🔮 Oracle Update: Confidence adjusted to ${update.newConfidence}%`);
                 // Update the relevant challenge
                 updateChallengeConfidence(update.predictionId, update.newConfidence);
@@ -270,7 +288,6 @@ const BeatTheOracleView: React.FC = () => {
             setRealTimeActive(true);
             addLiveUpdate('🚀 Real-time monitoring activated!');
         } catch (error) {
-            console.error('Failed to start real-time monitoring:', error);
         }
     };
 
@@ -288,7 +305,7 @@ const BeatTheOracleView: React.FC = () => {
 
     const updateChallengeConfidence = (predictionId: string, newConfidence: number) => {
         setActiveChallenges(prev => 
-            prev.map(challenge => 
+            prev.map((challenge: any) => 
                 challenge.id === predictionId 
                     ? { ...challenge, oracleConfidence: newConfidence }
                     : challenge
@@ -299,7 +316,7 @@ const BeatTheOracleView: React.FC = () => {
     const handleSelectOption = async (challengeId: string, optionIndex: number) => {
         setLoading(true);
         
-        const challenge = activeChallenges.find(c => c.id === challengeId);
+        const challenge = activeChallenges.find((c: any) => c.id === challengeId);
         if (!challenge) return;
 
         const updatedChallenge: OracleChallenge = {
@@ -337,19 +354,18 @@ const BeatTheOracleView: React.FC = () => {
             }
             
             if (rewardCalc.newAchievements.length > 0) {
-                rewardCalc.newAchievements.forEach(achievement => {
+                rewardCalc.newAchievements.forEach((achievement: any) => {
                     addLiveUpdate(`🏆 Achievement unlocked: ${achievement.title}!`);
                 });
             }
         } catch (error) {
-            console.error('Failed to calculate rewards:', error);
             // Fallback to basic points if rewards service fails
             updatedChallenge.points = isWin ? 25 : 0;
         }
         
         // Update challenge in state
         setActiveChallenges(prev => 
-            prev.map(c => c.id === challengeId ? updatedChallenge : c)
+            prev.map((c: any) => c.id === challengeId ? updatedChallenge : c)
         );
 
         // Update user stats
@@ -517,7 +533,7 @@ const BeatTheOracleView: React.FC = () => {
                         <div className="lg:col-span-2">
                             <Widget title="Weekly Challenges" className="bg-gray-900/50">
                                 <div className="space-y-4">
-                                    {activeChallenges.map((challenge) => (
+                                    {activeChallenges.map((challenge: any) => (
                                 <motion.div
                                     key={challenge.id}
                                     initial={{ opacity: 0, x: -20 }}
@@ -590,7 +606,7 @@ const BeatTheOracleView: React.FC = () => {
                                 {liveUpdates.length === 0 ? (
                                     <div className="text-sm text-gray-500 italic">No live updates yet...</div>
                                 ) : (
-                                    liveUpdates.map((update) => (
+                                    liveUpdates.map((update: any) => (
                                         <motion.div
                                             key={update.id}
                                             initial={{ opacity: 0, x: -10 }}
@@ -706,14 +722,14 @@ const BeatTheOracleView: React.FC = () => {
                             </div>
                         )}
                         
-                        {rewardNotification.newAchievements.map((achievement) => (
+                        {rewardNotification.newAchievements.map((achievement: any) => (
                             <div key={achievement.id} className="flex items-center space-x-2">
                                 <span className="text-2xl">{achievement.icon}</span>
                                 <span className="text-sm text-white">Achievement: {achievement.title}</span>
                             </div>
                         ))}
                         
-                        {rewardNotification.newBadges.map((badge) => (
+                        {rewardNotification.newBadges.map((badge: any) => (
                             <div key={badge.id} className="flex items-center space-x-2">
                                 <span className="text-lg">{badge.icon}</span>
                                 <span className="text-sm text-white">Badge: {badge.name}</span>

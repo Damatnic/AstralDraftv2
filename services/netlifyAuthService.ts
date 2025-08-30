@@ -345,7 +345,7 @@ class NetlifyAuthService {
   }
 
   private notifyListeners() {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener: any) => {
       try {
         listener(this.state);
       } catch (error) {

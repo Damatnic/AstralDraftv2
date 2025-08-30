@@ -6,8 +6,8 @@
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    LineChart, Line
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    LineChart, Line, Area, AreaChart
 } from 'recharts';
 import { 
     Activity, 
@@ -16,6 +16,7 @@ import {
     Database, 
     TrendingUp, 
     Settings,
+    RefreshCw,
     CheckCircle
 } from 'lucide-react';
 import { Widget } from '../ui/Widget';
@@ -75,8 +76,6 @@ const PerformanceMetricCard = memo(({
     );
 });
 
-PerformanceMetricCard.displayName = 'PerformanceMetricCard';
-
 // Memoized real-time updates list
 const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
     updates: any[];
@@ -111,8 +110,6 @@ const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
         </div>
     );
 });
-
-RealTimeUpdatesList.displayName = 'RealTimeUpdatesList';
 
 // Memoized performance chart
 const PerformanceChart = memo(({ data, height = 200 }: {
@@ -154,8 +151,6 @@ const PerformanceChart = memo(({ data, height = 200 }: {
         </ResponsiveContainer>
     );
 });
-
-PerformanceChart.displayName = 'PerformanceChart';
 
 // Debounced settings panel
 const SettingsPanel = memo(({ 
@@ -220,12 +215,10 @@ const SettingsPanel = memo(({
     );
 });
 
-SettingsPanel.displayName = 'SettingsPanel';
-
 // Main dashboard component
 const OraclePerformanceDashboard: React.FC<{
     className?: string;
-}> = ({ className = '' }) => {
+}> = ({ className = '' }: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Performance monitoring

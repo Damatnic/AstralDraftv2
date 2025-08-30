@@ -218,7 +218,7 @@ const MobileNavigation: React.FC = () => {
             {/* Navigation Items */}
             <nav className="flex-1 overflow-y-auto py-4" role="navigation">
               <ul className="space-y-2 px-4">
-                {navigationItems.map((item) => (
+                {navigationItems.map((item: any) => (
                   <li key={item.id}>
                     <button
                       onClick={() => handleNavItemClick(item.view)}

@@ -11,7 +11,7 @@ import { TrophyIcon } from '../components/icons/TrophyIcon';
 import { FlameIcon } from '../components/icons/FlameIcon';
 import { ShieldAlertIcon } from '../components/icons/ShieldAlertIcon';
 
-const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamStats[]; valueKey: keyof TeamStats; subtext?: (stat: TeamStats) => string }> = ({ title, icon, data, valueKey, subtext }) => (
+const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamStats[]; valueKey: keyof TeamStats; subtext?: (stat: TeamStats) => string }> = ({ title, icon, data, valueKey, subtext }: any) => (
     <Widget title={title} icon={icon}>
         <div className="p-2 space-y-1">
             {data.map((stat, index) => (
@@ -66,7 +66,7 @@ const LeagueStatsView: React.FC = () => {
                     icon={<FlameIcon />}
                     data={leaderboards.highestSingleGame}
                     valueKey="highestWeek"
-                    subtext={(stat) => `Week ${stat.highestWeek.week}`}
+                    subtext={(stat: any) => `Week ${stat.highestWeek.week}`}
                 />
                 <Leaderboard 
                     title="Total Points Against"

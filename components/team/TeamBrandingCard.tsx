@@ -8,7 +8,7 @@ interface TeamBrandingCardProps {
     slogan: string;
 }
 
-const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }) => {
+const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }: any) => {
     const { name, avatar, record } = team;
     return (
         <div className="w-full max-w-sm aspect-[2/1] bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 flex flex-col justify-between shadow-lg border border-cyan-400/30 relative overflow-hidden">
@@ -23,7 +23,7 @@ const TeamBrandingCard: React.FC<TeamBrandingCardProps> = ({ team, slogan }) => 
                  <Avatar avatar={avatar} className="w-16 h-16 text-4xl rounded-lg flex-shrink-0" />
             </div>
             <div className="text-center">
-                 <p className="font-display text-lg italic text-cyan-200">&quot;{slogan}&quot;</p>
+                 <p className="font-display text-lg italic text-cyan-200">"{slogan}"</p>
             </div>
             <div className="flex justify-between items-center text-xs text-gray-500">
                 <span className="font-display font-bold">ASTRAL DRAFT</span>

@@ -12,7 +12,9 @@ class SocketService {
   private maxReconnectAttempts = 5;
   private reconnectDelay = 1000;
   private isConnecting = false;
-    private eventListeners: Map<string, ((...args: any[]) => void)[]> = new Map();  /**
+  private eventListeners: Map<string, Function[]> = new Map();
+
+  /**
    * Connect to WebSocket server
    */
   async connect(): Promise<void> {
@@ -46,11 +48,11 @@ class SocketService {
           clearTimeout(timeout);
           this.isConnecting = false;
           this.reconnectAttempts = 0;
-          // WebSocket connected
+          console.log('✅ WebSocket connected');
           resolve();
         });
 
-        this.socket!.on('connect_error', (error) => {
+        this.socket!.on('connect_error', (error: any) => {
           clearTimeout(timeout);
           this.isConnecting = false;
           console.error('❌ WebSocket connection error:', error);
@@ -73,7 +75,7 @@ class SocketService {
       this.socket.disconnect();
       this.socket = null;
       this.eventListeners.clear();
-      // WebSocket disconnected
+      console.log('🔌 WebSocket disconnected');
     }
   }
 
@@ -84,7 +86,7 @@ class SocketService {
     if (!this.socket) return;
 
     this.socket.on('connect', () => {
-      // WebSocket connected
+      console.log('🔗 WebSocket connected');
       this.reconnectAttempts = 0;
       
       // Auto-authenticate if user is logged in
@@ -94,8 +96,8 @@ class SocketService {
       }
     });
 
-    this.socket.on('disconnect', (reason) => {
-      // WebSocket disconnected
+    this.socket.on('disconnect', (reason: any) => {
+      console.log('🔌 WebSocket disconnected:', reason);
       
       // Attempt to reconnect if not intentional
       if (reason === 'io server disconnect') {
@@ -104,12 +106,12 @@ class SocketService {
       }
     });
 
-    this.socket.on('reconnect', (_attemptNumber) => {
-      // WebSocket reconnected
+    this.socket.on('reconnect', (attemptNumber: any) => {
+      console.log(`🔄 WebSocket reconnected after ${attemptNumber} attempts`);
       this.reconnectAttempts = 0;
     });
 
-    this.socket.on('reconnect_error', (error) => {
+    this.socket.on('reconnect_error', (error: any) => {
       console.error('❌ WebSocket reconnection error:', error);
       this.reconnectAttempts++;
       
@@ -119,13 +121,13 @@ class SocketService {
       }
     });
 
-    this.socket.on('error', (error) => {
+    this.socket.on('error', (error: any) => {
       console.error('❌ WebSocket error:', error);
     });
 
     // Re-register all event listeners
     this.eventListeners.forEach((listeners, event) => {
-      listeners.forEach(listener => {
+      listeners.forEach((listener: any) => {
         this.socket!.on(event, listener);
       });
     });
@@ -143,7 +145,7 @@ class SocketService {
     this.reconnectAttempts++;
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
     
-    // Attempting to reconnect
+    console.log(`🔄 Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
     
     setTimeout(() => {
       this.connect().catch(error => {
@@ -175,7 +177,7 @@ class SocketService {
   /**
    * Listen for an event from the server
    */
-  on(event: string, callback: (...args: any[]) => void): void {
+  on(event: string, callback: Function): void {
     // Store the listener for re-registration on reconnect
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, []);
@@ -191,7 +193,7 @@ class SocketService {
   /**
    * Listen for an event once
    */
-  once(event: string, callback: (...args: any[]) => void): void {
+  once(event: string, callback: Function): void {
     if (this.socket) {
       this.socket.once(event, callback);
     }
@@ -200,7 +202,7 @@ class SocketService {
   /**
    * Remove event listener
    */
-  off(event: string, callback?: (...args: any[]) => void): void {
+  off(event: string, callback?: Function): void {
     if (callback) {
       // Remove specific callback
       const listeners = this.eventListeners.get(event);
@@ -374,7 +376,7 @@ class SocketService {
     });
 
     window.addEventListener('offline', () => {
-      // Going offline, WebSocket will disconnect
+      console.log('🔌 Going offline, WebSocket will disconnect');
     });
   }
 }

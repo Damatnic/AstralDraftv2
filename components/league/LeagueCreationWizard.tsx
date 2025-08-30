@@ -44,7 +44,7 @@ interface StepProps {
 }
 
 // Step 1: Basic Information
-const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     return (
         <div className="space-y-6">
             <div>
@@ -107,7 +107,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }
 };
 
 // Step 2: Scoring Settings
-const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     const scoringPresets = {
         standard: { description: "Standard scoring (no points for receptions)" },
         ppr: { description: "Point Per Reception (1 point per catch)" },
@@ -157,7 +157,7 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) 
 };
 
 // Step 3: Draft Settings
-const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     return (
         <div className="space-y-6">
             <div>
@@ -222,7 +222,7 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) =>
 };
 
 // Step 4: Review & Create
-const ReviewStep: React.FC<StepProps> = ({ settings }) => {
+const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
     return (
         <div className="space-y-6">
             <div className="bg-[var(--panel-bg)] p-6 rounded-lg border border-[var(--panel-border)]">
@@ -283,7 +283,7 @@ const LeagueCreationWizard: React.FC = () => {
             title: 'Basic Information',
             description: 'Set up your league name and basic settings',
             component: BasicInfoStep,
-            validation: (data) => {
+            validation: (data: any) => {
                 if (!data.name.trim()) return 'League name is required';
                 if (data.teamCount < 4 || data.teamCount > 20) return 'Team count must be between 4 and 20';
                 return null;
@@ -301,7 +301,7 @@ const LeagueCreationWizard: React.FC = () => {
             title: 'Draft Settings',
             description: 'Set up your draft format and schedule',
             component: DraftStep,
-            validation: (data) => {
+            validation: (data: any) => {
                 if (!data.draftDate) return 'Draft date is required';
                 if (!data.draftTime) return 'Draft time is required';
                 return null;
@@ -392,7 +392,6 @@ const LeagueCreationWizard: React.FC = () => {
                 type: 'SYSTEM'
             }});
         } catch (error) {
-            console.error('Failed to create league:', error);
             dispatch({ type: 'ADD_NOTIFICATION', payload: {
                 message: 'Failed to create league. Please try again.',
                 type: 'SYSTEM'

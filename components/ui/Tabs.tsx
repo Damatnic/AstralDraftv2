@@ -16,7 +16,7 @@ export const Tabs: React.FC<TabsProps> = ({
   items,
   activeTab,
   onTabChange
-}) => {
+}: any) => {
 
   const handleTabChange = (tabId: string) => {
     onTabChange(tabId);
@@ -26,7 +26,7 @@ export const Tabs: React.FC<TabsProps> = ({
     <div className="w-full">
       <div className="border-b border-white/20">
         <nav className="flex space-x-8" role="tablist">
-          {items.map((tab) => (
+          {items.map((tab: any) => (
             <button
               key={tab.id}
               role="tab"

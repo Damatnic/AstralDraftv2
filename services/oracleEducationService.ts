@@ -738,9 +738,9 @@ Calibration measures whether Oracle's confidence levels match actual outcomes. A
 const kuppStats = {
   receptions: 145,
   receivingYards: 1947,
-  receivingTDs: 16,
+  receivingTouchdowns: 16,
   rushingYards: 8,
-  rushingTDs: 0
+  rushingTouchdowns: 0
 };
 
 const standardPoints = 
@@ -1092,14 +1092,14 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get topics by category
      */
     getTopicsByCategory(category: EducationCategory): EducationalTopic[] {
-        return this.getTopics().filter(topic => topic.category === category);
+        return this.getTopics().filter((topic: any) => topic.category === category);
     }
 
     /**
      * Get topics by difficulty
      */
     getTopicsByDifficulty(difficulty: DifficultyLevel): EducationalTopic[] {
-        return this.getTopics().filter(topic => topic.difficulty === difficulty);
+        return this.getTopics().filter((topic: any) => topic.difficulty === difficulty);
     }
 
     /**
@@ -1240,7 +1240,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      */
     searchTopics(query: string): EducationalTopic[] {
         const searchTerm = query.toLowerCase();
-        return this.getTopics().filter(topic =>
+        return this.getTopics().filter((topic: any) =>
             topic.title.toLowerCase().includes(searchTerm) ||
             topic.description.toLowerCase().includes(searchTerm) ||
             topic.content.introduction.toLowerCase().includes(searchTerm)
@@ -1255,7 +1255,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
         if (!topic?.prerequisites) return [];
 
         return topic.prerequisites
-            .map(prereqId => this.getTopic(prereqId))
+            .map((prereqId: any) => this.getTopic(prereqId))
             .filter((t): t is EducationalTopic => t !== null);
     }
 
@@ -1266,7 +1266,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
         if (!this.userProgress) return true;
 
         const prerequisites = this.getTopicPrerequisites(topicId);
-        return prerequisites.every(prereq => 
+        return prerequisites.every((prereq: any) => 
             this.userProgress?.completedTopics.includes(prereq.id)
         );
     }
@@ -1302,7 +1302,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
     private getCategoryProgress(): Record<EducationCategory, number> {
         const progress: Record<string, number> = {};
         
-        Object.values(this.topics).forEach(topic => {
+        Object.values(this.topics).forEach((topic: any) => {
             if (!progress[topic.category]) {
                 progress[topic.category] = 0;
             }
@@ -1325,7 +1325,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
             'EXPERT': 0
         };
 
-        Object.values(this.topics).forEach(topic => {
+        Object.values(this.topics).forEach((topic: any) => {
             if (this.userProgress?.completedTopics.includes(topic.id)) {
                 progress[topic.difficulty]++;
             }

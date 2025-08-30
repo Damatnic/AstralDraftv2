@@ -4,7 +4,7 @@ interface Column<T> {
   key: keyof T;
   header: string;
   sortable?: boolean;
-  render?: (value: T[keyof T], item: T) => React.ReactNode;
+  render?: (value: any, item: T) => React.ReactNode;
 }
 
 interface TableProps<T> {
@@ -21,7 +21,7 @@ export function Table<T>({ data, columns, onSort, sortKey, sortDirection }: Tabl
       <table className="w-full glass-pane">
         <thead>
           <tr className="border-b border-white/20">
-            {columns.map((col) => (
+            {columns.map((col: any) => (
               <th
                 key={String(col.key)}
                 className={`p-3 text-left font-semibold ${col.sortable ? 'cursor-pointer hover:bg-white/10' : ''}`}
@@ -40,7 +40,7 @@ export function Table<T>({ data, columns, onSort, sortKey, sortDirection }: Tabl
         <tbody>
           {data.map((item, index) => (
             <tr key={index} className="border-b border-white/10 hover:bg-white/5">
-              {columns.map((col) => (
+              {columns.map((col: any) => (
                 <td key={String(col.key)} className="p-3">
                   {col.render ? col.render(item[col.key], item) : String(item[col.key])}
                 </td>

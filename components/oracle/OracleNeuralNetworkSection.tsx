@@ -983,7 +983,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
             <div className="summary-card">
               <h6>Trainable Layers</h6>
-              <div className="summary-value">{networkLayers.filter(l => l.type === 'Dense').length}</div>
+              <div className="summary-value">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
               <p>Dense layers with weights</p>
             </div>
             <div className="summary-card">
@@ -993,7 +993,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
             <div className="summary-card">
               <h6>Network Depth</h6>
-              <div className="summary-value">{networkLayers.filter(l => l.type === 'Dense').length}</div>
+              <div className="summary-value">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
               <p>Hidden + output layers</p>
             </div>
           </div>
@@ -1006,7 +1006,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
     <div className="activation-functions">
       <h3>⚡ Activation Functions</h3>
       <div className="activations-grid">
-        {activationFunctions.map((activation) => (
+        {activationFunctions.map((activation: any) => (
           <button 
             key={activation.id} 
             className={`activation-card ${selectedActivation === activation.id ? 'selected' : ''}`}
@@ -1110,7 +1110,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             <span>Performance</span>
             <span>Memory Usage</span>
           </div>
-          {activationFunctions.map((activation) => (
+          {activationFunctions.map((activation: any) => (
             <div key={`comparison-${activation.id}`} className="table-row">
               <span className="function-name">{activation.name}</span>
               <span className="computation-score">
@@ -1136,7 +1136,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
     <div className="training-process">
       <h3>🎓 Training Process & Techniques</h3>
       <div className="training-grid">
-        {trainingTechniques.map((technique) => (
+        {trainingTechniques.map((technique: any) => (
           <div key={technique.id} className="training-card">
             <h4>{technique.name}</h4>
             <p className="training-description">{technique.description}</p>
@@ -1174,7 +1174,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       </div>
       
       <div className="training-pipeline">
-        <h4>🔄 Oracle's Training Pipeline</h4>
+        <h4>🔄 Oracle&apos;s Training Pipeline</h4>
         <div className="pipeline-flow">
           <div className="pipeline-stage">
             <div className="stage-number">1</div>
@@ -1526,7 +1526,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           <div className="insight-card">
             <h5>Architecture Design</h5>
             <p>
-              Oracle's network architecture balances complexity and efficiency, using proven techniques 
+              Oracle&apos;s network architecture balances complexity and efficiency, using proven techniques 
               like residual connections and attention mechanisms for optimal performance.
             </p>
           </div>
@@ -1577,7 +1577,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {learningCurvePoints.map((pt) => (
+              {learningCurvePoints.map((pt: any) => (
                 <tr key={`curve-${pt.sampleSize}-${pt.trainLoss.toFixed(4)}-${pt.valLoss.toFixed(4)}`} className={pt.converged ? 'converged-row' : ''}>
                   <td>{pt.sampleSize}</td>
                   <td>{pt.trainLoss.toFixed(4)}</td>
@@ -1661,7 +1661,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <span>Category</span>
                 <span>Description</span>
               </div>
-              {featureImportanceResults.map((result) => (
+              {featureImportanceResults.map((result: any) => (
                 <div key={`importance-${result.featureName}`} className={`table-row ${result.category}`}>
                   <span className="rank">#{result.rank}</span>
                   <span className="feature-name">{result.featureName}</span>
@@ -1706,7 +1706,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                     </div>
                     
                     <div className="contributions-chart">
-                      {shapAnalysis.localExplanation.contributions.map((contrib) => (
+                      {shapAnalysis.localExplanation.contributions.map((contrib: any) => (
                         <div key={`contrib-${contrib.feature}`} className="contribution-bar">
                           <div className="contrib-feature">{contrib.feature}</div>
                           <div className="contrib-value">
@@ -1753,7 +1753,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                       ))}
                     </div>
                     <div className="matrix-labels">
-                      {featureImportanceResults.slice(0, 6).map((result) => (
+                      {featureImportanceResults.slice(0, 6).map((result: any) => (
                         <div key={`label-${result.featureName}`} className="matrix-label">
                           {result.featureName}
                         </div>
@@ -1766,7 +1766,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               <div className="dependence-plots">
                 <h5>Feature Dependence Plots</h5>
                 <div className="plots-grid">
-                  {shapAnalysis.dependencePlots.map((plot) => (
+                  {shapAnalysis.dependencePlots.map((plot: any) => (
                     <div key={`plot-${plot.feature}`} className="dependence-plot">
                       <h6>{plot.feature}</h6>
                       <div className="plot-container">
@@ -1822,7 +1822,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               <div className="insight-card">
                 <h5>📈 Model Transparency</h5>
                 <p>
-                  Feature importance analysis provides transparency into Oracle's decision-making process, 
+                  Feature importance analysis provides transparency into Oracle&apos;s decision-making process, 
                   building trust and enabling better understanding of prediction rationale.
                 </p>
               </div>
@@ -1863,7 +1863,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
     <div className="oracle-neural-section">
       <div className="section-header">
         <h2>🧠 Neural Network Architecture</h2>
-        <p>Deep learning foundations powering Oracle's predictive intelligence</p>
+        <p>Deep learning foundations powering Oracle&apos;s predictive intelligence</p>
       </div>
       
       <div className="section-navigation">

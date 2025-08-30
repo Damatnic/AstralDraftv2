@@ -20,9 +20,9 @@ import {
 } from 'lucide-react';
 
 interface MobileAnalyticsDashboardProps {
-    _team: Team,
-    _players: Player[],
-    _leagueStats: any
+    team: Team;
+    players: Player[];
+    leagueStats?: any;
     onRefresh?: () => Promise<void>;
     className?: string;
 }
@@ -45,12 +45,12 @@ interface ChartData {
 }
 
 const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
-    team: _team,
-    players: _players,
-    leagueStats: _leagueStats,
+    team,
+    players,
+    leagueStats,
     onRefresh,
     className = ''
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeTab, setActiveTab] = React.useState<'overview' | 'performance' | 'trends' | 'roster'>('overview');
     const [selectedTimeframe, setSelectedTimeframe] = React.useState<'week' | 'month' | 'season'>('week');

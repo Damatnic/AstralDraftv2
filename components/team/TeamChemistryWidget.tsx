@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import { SparklesIcon } from '../icons/SparklesIcon';
 import { generateTeamChemistryReport } from '../../services/geminiService';
@@ -11,7 +12,7 @@ interface TeamChemistryWidgetProps {
     dispatch: React.Dispatch<any>;
 }
 
-const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, league, dispatch }) => {
+const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const report = myTeam.chemistryReport;
 
@@ -24,7 +25,6 @@ const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, leagu
                 dispatch({ type: 'SET_TEAM_CHEMISTRY', payload: { leagueId: league.id, teamId: myTeam.id, report: fetchedReport } });
             }
         } catch (e) {
-            console.error("Error fetching chemistry report", e);
             dispatch({ type: 'ADD_NOTIFICATION', payload: 'Could not fetch chemistry report.' });
         } finally {
             setIsLoading(false);
@@ -35,9 +35,7 @@ const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, leagu
         <Widget title="Team Chemistry" icon={<SparklesIcon />}>
             <div className="p-4">
                 {report ? (
-                                     (
-                     <p className="text-sm text-gray-300 italic">&quot;{report}&quot;</p>
-                )
+                     <p className="text-sm text-gray-300 italic">"{report}"</p>
                 ) : (
                     <p className="text-center text-sm text-gray-400">The Oracle can analyze your roster for strategic balance and player synergy.</p>
                 )}

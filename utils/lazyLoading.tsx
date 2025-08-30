@@ -25,7 +25,7 @@ export function withLazyLoading<T extends Record<string, any>>(
     retryCount = 3
   } = options;
 
-  const LazyWrapper = React.forwardRef<any, T>((props, ref) => {
+  return React.forwardRef<any, T>((props, ref) => {
     const [showSkeleton, setShowSkeleton] = React.useState(true);
     const [retries, setRetries] = React.useState(0);
 
@@ -59,10 +59,6 @@ export function withLazyLoading<T extends Record<string, any>>(
       </ErrorBoundary>
     );
   });
-
-  LazyWrapper.displayName = `LazyWrapper(${LazyComponent.displayName || LazyComponent.name || 'Component'})`;
-  
-  return LazyWrapper;
 }
 
 /**
@@ -121,7 +117,6 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Component lazy loading error:', error, errorInfo);
   }
 
   handleRetry = () => {

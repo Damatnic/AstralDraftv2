@@ -2,16 +2,6 @@ import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { rbacService, UserRole, Permission, type UserWithRoles } from '../../services/rbacService';
 
-interface UserWithOptionalRoles {
-  id: number;
-  username: string;
-  email: string;
-  display_name: string;
-  avatar_url?: string;
-  created_at: string;
-  roles?: UserRole[];
-}
-
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredPermissions?: Permission | Permission[];
@@ -30,13 +20,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRole,
   fallback,
   showError = true
-}) => {
+}: any) => {
   const { user, isAuthenticated } = useAuth();
   
   // Convert user to UserWithRoles format (assuming roles are available)
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as { roles?: UserRole[] }).roles || [UserRole.USER] // Default to USER role if not specified
+    roles: (user as any).roles || [UserRole.USER] // Default to USER role if not specified
   } : null;
 
   // Check authentication first
@@ -85,7 +75,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
               Insufficient Permissions
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              You don&rsquo;t have the required permissions to access this content.
+              You don't have the required permissions to access this content.
             </p>
           </div>
         </div>
@@ -112,18 +102,18 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
   roles,
   fallback = null,
   mode = 'any'
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as { roles?: UserRole[] }).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   const rolesArray = Array.isArray(roles) ? roles : [roles];
   
   const hasAccess = mode === 'any' 
-    ? rolesArray.some((role: UserRole) => rbacService.hasRole(userWithRoles, role))
-    : rolesArray.every((role: UserRole) => rbacService.hasRole(userWithRoles, role));
+    ? rolesArray.some((role: any) => rbacService.hasRole(userWithRoles, role))
+    : rolesArray.every((role: any) => rbacService.hasRole(userWithRoles, role));
 
   return hasAccess ? <>{children}</> : <>{fallback}</>;
 };
@@ -144,11 +134,11 @@ export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   permissions,
   fallback = null,
   mode = 'all'
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as { roles?: UserRole[] }).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   const permissionsArray = Array.isArray(permissions) ? permissions : [permissions];
@@ -174,11 +164,11 @@ export const ConditionalRender: React.FC<ConditionalRenderProps> = ({
   children,
   condition,
   fallback = null
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as UserWithOptionalRoles).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   return condition(userWithRoles) ? <>{children}</> : <>{fallback}</>;
@@ -196,11 +186,11 @@ interface UserRoleBadgeProps {
 export const UserRoleBadge: React.FC<UserRoleBadgeProps> = ({
   className = '',
   showIcon = true
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as UserWithOptionalRoles).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   if (!userWithRoles) {
@@ -240,11 +230,11 @@ interface PermissionListProps {
 export const PermissionList: React.FC<PermissionListProps> = ({
   className = '',
   showCategories = true
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as UserWithOptionalRoles).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   if (!userWithRoles) {
@@ -255,13 +245,13 @@ export const PermissionList: React.FC<PermissionListProps> = ({
   
   // Group permissions by category if requested
   const groupedPermissions = showCategories ? {
-    'User': permissions.filter((p: string) => p.includes('profile') || p.includes('dashboard')),
-    'League': permissions.filter((p: string) => p.includes('league')),
-    'Draft': permissions.filter((p: string) => p.includes('draft')),
-    'Oracle': permissions.filter((p: string) => p.includes('oracle')),
-    'Analytics': permissions.filter((p: string) => p.includes('analytics')),
-    'Social': permissions.filter((p: string) => p.includes('post') || p.includes('comment')),
-    'Admin': permissions.filter((p: string) => p.includes('manage') || p.includes('admin'))
+    'User': permissions.filter((p: any) => p.includes('profile') || p.includes('dashboard')),
+    'League': permissions.filter((p: any) => p.includes('league')),
+    'Draft': permissions.filter((p: any) => p.includes('draft')),
+    'Oracle': permissions.filter((p: any) => p.includes('oracle')),
+    'Analytics': permissions.filter((p: any) => p.includes('analytics')),
+    'Social': permissions.filter((p: any) => p.includes('post') || p.includes('comment')),
+    'Admin': permissions.filter((p: any) => p.includes('manage') || p.includes('admin'))
   } : { 'All Permissions': permissions };
 
   return (
@@ -302,7 +292,7 @@ export const useRBAC = () => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
-    roles: (user as UserWithOptionalRoles).roles || [UserRole.USER]
+    roles: (user as any).roles || [UserRole.USER]
   } : null;
 
   return {

@@ -44,7 +44,7 @@ interface SeasonComparison {
     adp: number;
 }
 
-const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
+const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
     // Mock performance data - in real app this would come from stats API
     const weeklyPerformance: WeeklyPerformance[] = [
         { week: 1, points: 18.5, projected: 16.2, opponent: 'MIA', result: 'over', matchupDifficulty: 'medium' },
@@ -158,7 +158,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
                     <div>
                         <h4 className="font-medium text-[var(--text-primary)] mb-4">Weekly Performance</h4>
                         <div className="space-y-3">
-                            {weeklyPerformance.map((week) => (
+                            {weeklyPerformance.map((week: any) => (
                                 <div key={week.week} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg">
                                     <div className="text-center min-w-[50px]">
                                         <div className="font-bold text-[var(--text-primary)]">W{week.week}</div>
@@ -246,7 +246,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {seasonComparisons.map((season) => (
+                                {seasonComparisons.map((season: any) => (
                                     <tr key={season.season} className="border-b border-[var(--panel-border)]/50">
                                         <td className="py-3 font-medium text-[var(--text-primary)]">
                                             {season.season}

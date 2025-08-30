@@ -13,7 +13,7 @@ interface MatchupScoreboardProps {
     isLive: boolean;
 }
 
-const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }) => {
+const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }: any) => {
     
     const calculateProjectedScore = (team: Team) => {
         return team.roster.slice(0, 9).reduce((total, player) => {

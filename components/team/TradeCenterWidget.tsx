@@ -18,12 +18,13 @@ import { InboxIcon } from '../icons/InboxIcon';
 import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 import { EmptyTumbleweedIcon } from '../icons/EmptyTumbleweedIcon';
 
-export const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
+export const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }: any) => {
     const [isBlockModalOpen, setIsBlockModalOpen] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('incoming');
     
     const incomingOffers = league.tradeOffers.filter((o: any) => o.toTeamId === team.id && o?.status === 'PENDING');
     const outgoingOffers = league.tradeOffers.filter((o: any) => o.fromTeamId === team.id);
+    const completedOffers = league.tradeOffers.filter((o: any) => o?.status !== 'PENDING' && (o.toTeamId === team.id || o.fromTeamId === team.id));
 
     const playTradeSound = useSound('tradeOffer', 0.5);
     const prevIncomingOffersCount = React.useRef(incomingOffers.length);
@@ -56,13 +57,13 @@ export const TradeCenterWidget: React.FC<{ league: League; team: Team; dispatch:
             case 'incoming':
                 return incomingOffers.length > 0 ? (
                     <div className="space-y-2">
-                        {incomingOffers.map(offer => <TradeOfferCard key={offer.id} offer={offer} league={league} myTeamId={team.id} dispatch={dispatch} />)}
+                        {incomingOffers.map((offer: any) => <TradeOfferCard key={offer.id} offer={offer} league={league} myTeamId={team.id} dispatch={dispatch} />)}
                     </div>
                 ) : <EmptyState illustration={<InboxIcon />} message="No pending incoming offers." />;
             case 'outgoing':
                  return outgoingOffers.length > 0 ? (
                     <div className="space-y-2">
-                        {outgoingOffers.map(offer => <TradeOfferCard key={offer.id} offer={offer} league={league} myTeamId={team.id} dispatch={dispatch} />)}
+                        {outgoingOffers.map((offer: any) => <TradeOfferCard key={offer.id} offer={offer} league={league} myTeamId={team.id} dispatch={dispatch} />)}
                     </div>
                 ) : <EmptyState illustration={<PaperPlaneIcon />} message="You haven't sent any offers." />;
             case 'block':

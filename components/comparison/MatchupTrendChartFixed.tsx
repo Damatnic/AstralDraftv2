@@ -77,7 +77,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   playerId,
   playerName,
   className = ''
-}) => {
+}: any) => {
   const [trends, setTrends] = useState<MatchupTrend[]>([]);
   const [defensiveHeatMap, setDefensiveHeatMap] = useState<DefensiveHeatMap | null>(null);
   const [weatherAnalysis, setWeatherAnalysis] = useState<WeatherTrendAnalysis | null>(null);
@@ -110,7 +110,6 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         setDefensiveHeatMap(heatMapData);
       }
     } catch (err) {
-      console.error('Error loading matchup data:', err);
       setError('Failed to load matchup analysis data');
     } finally {
       setLoading(false);
@@ -307,11 +306,11 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         </div>
                         <div className="flex justify-between">
                           <span>Toughest:</span>
-                          <span className="font-medium">#{trends.length > 0 ? Math.min(...trends.map(t => t.defensiveRank)) : 'N/A'}</span>
+                          <span className="font-medium">#{trends.length > 0 ? Math.min(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Easiest:</span>
-                          <span className="font-medium">#{trends.length > 0 ? Math.max(...trends.map(t => t.defensiveRank)) : 'N/A'}</span>
+                          <span className="font-medium">#{trends.length > 0 ? Math.max(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
                       </div>
                     </CardContent>
@@ -331,7 +330,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                         </div>
                         <div className="flex justify-between">
                           <span>Best Game:</span>
-                          <span className="font-medium">{trends.length > 0 ? Math.max(...trends.map(t => t.fantasyPoints)).toFixed(1) : 'N/A'}</span>
+                          <span className="font-medium">{trends.length > 0 ? Math.max(...trends.map((t: any) => t.fantasyPoints)).toFixed(1) : 'N/A'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span>Consistency:</span>
@@ -629,13 +628,13 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                           <div className="flex justify-between mb-2">
                             <span>Medium Volume (10-19 touches):</span>
                             <span className="font-medium">
-                              {trends.filter(t => t.touches >= 10 && t.touches < 20).length} games
+                              {trends.filter((t: any) => t.touches >= 10 && t.touches < 20).length} games
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div 
                               className="bg-yellow-600 h-2 rounded-full"
-                              style={{ width: `${trends.length > 0 ? (trends.filter(t => t.touches >= 10 && t.touches < 20).length / trends.length) * 100 : 0}%` }}
+                              style={{ width: `${trends.length > 0 ? (trends.filter((t: any) => t.touches >= 10 && t.touches < 20).length / trends.length) * 100 : 0}%` }}
                             ></div>
                           </div>
                         </div>
@@ -643,13 +642,13 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                           <div className="flex justify-between mb-2">
                             <span>Low Volume (&lt;10 touches):</span>
                             <span className="font-medium">
-                              {trends.filter(t => t.touches < 10).length} games
+                              {trends.filter((t: any) => t.touches < 10).length} games
                             </span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div 
                               className="bg-red-600 h-2 rounded-full"
-                              style={{ width: `${trends.length > 0 ? (trends.filter(t => t.touches < 10).length / trends.length) * 100 : 0}%` }}
+                              style={{ width: `${trends.length > 0 ? (trends.filter((t: any) => t.touches < 10).length / trends.length) * 100 : 0}%` }}
                             ></div>
                           </div>
                         </div>

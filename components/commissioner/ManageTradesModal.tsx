@@ -17,9 +17,9 @@ interface ManageTradesModalProps {
     onClose: () => void;
 }
 
-const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }) => {
-    const { dispatch } = useAppState();
-    const pendingOffers = league.tradeOffers.filter((o: TradeOffer) => o?.status === 'PENDING');
+const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }: any) => {
+    const { state, dispatch } = useAppState();
+    const pendingOffers = league.tradeOffers.filter((o: any) => o?.status === 'PENDING');
     const isTradeDeadlinePassed = league.currentWeek > league.settings.tradeDeadline;
 
     const handleForce = (offer: TradeOffer) => {
@@ -56,13 +56,13 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
                     {isTradeDeadlinePassed && (
                         <div className="p-3 bg-yellow-500/10 text-yellow-300 text-xs rounded-lg flex items-center gap-2">
                             <AlertTriangleIcon className="h-4 w-4" />
-                            <strong>Warning:</strong> The league&apos;s trade deadline (Week {league.settings.tradeDeadline}) has passed. Any action here is a commissioner override.
+                            <strong>Warning:</strong> The league's trade deadline (Week {league.settings.tradeDeadline}) has passed. Any action here is a commissioner override.
                         </div>
                     )}
                     {pendingOffers.length === 0 ? (
                         <EmptyState message="There are no pending trades in the league." />
                     ) : (
-                        pendingOffers.map((offer: TradeOffer) => (
+                        pendingOffers.map((offer: any) => (
                             <div key={offer.id} className="bg-black/10 p-2 rounded-lg">
                                 <TradeOfferCard offer={offer} league={league} myTeamId={-1} dispatch={dispatch} />
                                 <div className="flex justify-end gap-2 mt-2">

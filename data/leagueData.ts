@@ -267,10 +267,10 @@ export function getDaysUntilDraft(): number {
 
 // Helper function to check if user is in league
 export function isUserInLeague(userId: string): boolean {
-  return LEAGUE_MEMBERS.some(member => member.id === userId);
+  return LEAGUE_MEMBERS.some((member: any) => member.id === userId);
 }
 
 // Helper function to get user's team
 export function getUserTeam(userId: string): Team | null {
-  return TEAMS_2025.find(team => team.owner.id === userId) || null;
+  return TEAMS_2025.find((team: any) => team.owner.id === userId) || null;
 }

@@ -13,7 +13,7 @@ interface ChatMessage {
   content: string;
   timestamp: Date;
   suggestions?: string[];
-  data?: Record<string, unknown>;
+  data?: any;
 }
 
 interface AIResponse {
@@ -21,7 +21,7 @@ interface AIResponse {
   confidence: number;
   suggestions: string[];
   actionable: boolean;
-  data?: Record<string, unknown>;
+  data?: any;
 }
 
 const AIFantasyAssistant: React.FC = () => {
@@ -97,7 +97,6 @@ const AIFantasyAssistant: React.FC = () => {
         setIsTyping(false);
       }, 1500);
     } catch (error) {
-      console.error('AI Assistant error:', error);
       const errorMessage: ChatMessage = {
         id: `error-${Date.now()}`,
         type: 'assistant',
@@ -275,7 +274,7 @@ const AIFantasyAssistant: React.FC = () => {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {messages.map((message) => (
+              {messages.map((message: any) => (
                 <motion.div
                   key={message.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -292,7 +291,7 @@ const AIFantasyAssistant: React.FC = () => {
                     <div className="text-sm whitespace-pre-line">{message.content}</div>
                     {message.suggestions && (
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {message.suggestions.map((suggestion, index) => (
+                        {message.suggestions.map((suggestion: string, index: number) => (
                           <button
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
@@ -333,7 +332,7 @@ const AIFantasyAssistant: React.FC = () => {
                   ref={inputRef}
                   type="text"
                   value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
+                  onChange={(e: any) => setInputMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about fantasy football..."
                   className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none"
@@ -350,7 +349,7 @@ const AIFantasyAssistant: React.FC = () => {
               
               {/* Quick Actions */}
               <div className="flex gap-1 mt-2">
-                {['Trade help', 'Start/sit', 'Waivers', 'Team analysis'].map((action) => (
+                {['Trade help', 'Start/sit', 'Waivers', 'Team analysis'].map((action: any) => (
                   <button
                     key={action}
                     onClick={() => handleSuggestionClick(action)}

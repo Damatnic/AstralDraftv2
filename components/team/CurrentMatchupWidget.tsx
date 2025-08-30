@@ -11,7 +11,7 @@ interface CurrentMatchupWidgetProps {
     dispatch: React.Dispatch<any>;
 }
 
-const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }) => {
+const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const nextMatchup = league.schedule.find((m: any) => 
         m.week === league.currentWeek && 
         (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id)

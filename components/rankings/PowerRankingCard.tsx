@@ -16,7 +16,7 @@ interface PowerRankingCardProps {
     isMyTeam?: boolean;
 }
 
-const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }) => {
+const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }: any) => {
     switch (trend) {
         case 'up': return <ArrowUpIcon className="h-5 w-5 text-green-400" />;
         case 'down': return <ArrowDownIcon className="h-5 w-5 text-red-400" />;
@@ -25,7 +25,7 @@ const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }) => {
     }
 };
 
-const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }) => {
+const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }: any) => {
     if (!team) return null;
 
     return (
@@ -53,7 +53,7 @@ const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMy
                     </div>
                 </div>
                 <p className="text-xs text-gray-300 mt-2 italic">
-                    &quot;{ranking.justification}&quot;
+                    "{ranking.justification}"
                 </p>
             </div>
         </motion.div>

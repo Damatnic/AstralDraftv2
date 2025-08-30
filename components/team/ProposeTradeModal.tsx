@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Team, TradeAnalysis, DraftPickAsset, TradeSuggestion } from '../../types';
+import type { Team, Player, TradeAnalysis, DraftPickAsset, TradeSuggestion } from '../../types';
 import { players } from '../../data/players';
 import { Modal } from '../ui/Modal';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
@@ -16,7 +16,7 @@ interface ProposeTradeModalProps {
     initialOffer?: Omit<TradeSuggestion, 'toTeamId' | 'rationale'>;
 }
 
-const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }) => (
+const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }: any) => (
     <div
         onClick={onToggle}
         className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
@@ -32,7 +32,7 @@ const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: bo
 );
 
 
-const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam, leagueId, dispatch, onClose, initialOffer }) => {
+const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam, leagueId, dispatch, onClose, initialOffer }: any) => {
     const [playersToSend, setPlayersToSend] = React.useState<Set<number>>(new Set(initialOffer?.playersToSend));
     const [playersToReceive, setPlayersToReceive] = React.useState<Set<number>>(new Set(initialOffer?.playersToReceive));
     const [picksToSend, setPicksToSend] = React.useState<Set<string>>(new Set()); // key: "season-round"
@@ -128,13 +128,13 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
                         <div className="flex flex-col">
                             <h3 className="font-semibold text-center mb-2">{myTeam.name} Gives:</h3>
                             <div className="bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-48 overflow-y-auto">
-                                {myTeam.roster.map(p => <AssetSelectItem key={p.id} label={p.name} subtext={`${p.position} - ${p.team}`} isSelected={playersToSend.has(p.id)} onToggle={() => toggleAsset(p.id, 'sendPlayer')} />)}
+                                {myTeam.roster.map((p: any) => <AssetSelectItem key={p.id} label={p.name} subtext={`${p.position} - ${p.team}`} isSelected={playersToSend.has(p.id)} onToggle={() => toggleAsset(p.id, 'sendPlayer')} />)}
                             </div>
                         </div>
                          <div className="flex flex-col">
                             <h3 className="font-semibold text-center mb-2">Draft Picks:</h3>
                             <div className="bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-32 overflow-y-auto">
-                                {(myTeam.futureDraftPicks || []).map(p => <AssetSelectItem key={`${p.season}-${p.round}`} label={`${p.season} Round ${p.round}`} subtext="Draft Pick" isSelected={picksToSend.has(`${p.season}-${p.round}`)} onToggle={() => toggleAsset(`${p.season}-${p.round}`, 'sendPick')} />)}
+                                {(myTeam.futureDraftPicks || []).map((p: any) => <AssetSelectItem key={`${p.season}-${p.round}`} label={`${p.season} Round ${p.round}`} subtext="Draft Pick" isSelected={picksToSend.has(`${p.season}-${p.round}`)} onToggle={() => toggleAsset(`${p.season}-${p.round}`, 'sendPick')} />)}
                             </div>
                         </div>
                     </div>
@@ -147,13 +147,13 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
                         <div className="flex flex-col">
                             <h3 className="font-semibold text-center mb-2">{otherTeam.name} Gives:</h3>
                             <div className="bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-48 overflow-y-auto">
-                               {otherTeam.roster.map(p => <AssetSelectItem key={p.id} label={p.name} subtext={`${p.position} - ${p.team}`} isSelected={playersToReceive.has(p.id)} onToggle={() => toggleAsset(p.id, 'receivePlayer')} />)}
+                               {otherTeam.roster.map((p: any) => <AssetSelectItem key={p.id} label={p.name} subtext={`${p.position} - ${p.team}`} isSelected={playersToReceive.has(p.id)} onToggle={() => toggleAsset(p.id, 'receivePlayer')} />)}
                             </div>
                         </div>
                          <div className="flex flex-col">
                             <h3 className="font-semibold text-center mb-2">Draft Picks:</h3>
                             <div className="bg-black/10 p-2 rounded-lg space-y-2 flex-grow h-32 overflow-y-auto">
-                                {(otherTeam.futureDraftPicks || []).map(p => <AssetSelectItem key={`${p.season}-${p.round}`} label={`${p.season} Round ${p.round}`} subtext="Draft Pick" isSelected={picksToReceive.has(`${p.season}-${p.round}`)} onToggle={() => toggleAsset(`${p.season}-${p.round}`, 'receivePick')} />)}
+                                {(otherTeam.futureDraftPicks || []).map((p: any) => <AssetSelectItem key={`${p.season}-${p.round}`} label={`${p.season} Round ${p.round}`} subtext="Draft Pick" isSelected={picksToReceive.has(`${p.season}-${p.round}`)} onToggle={() => toggleAsset(`${p.season}-${p.round}`, 'receivePick')} />)}
                             </div>
                         </div>
                     </div>
@@ -161,13 +161,13 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
                 
                  {(analysis || isAnalyzing) && (
                     <div className="p-4 border-t border-[var(--panel-border)]">
-                         <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle&apos;s Analysis</h3>
+                         <h3 className="font-bold text-center text-cyan-300 mb-2">Oracle's Analysis</h3>
                          {isAnalyzing ? (
                              <div className="h-20 flex items-center justify-center text-sm text-gray-400">Consulting the cosmos...</div>
                          ) : analysis && (
                             <div className="text-center">
                                 <p className={`font-bold text-lg ${winnerStyle.color}`}>{winnerStyle.text}</p>
-                                <p className="text-xs text-gray-300 italic mt-1">&quot;{analysis.summary}&quot;</p>
+                                <p className="text-xs text-gray-300 italic mt-1">"{analysis.summary}"</p>
                             </div>
                          )}
                     </div>

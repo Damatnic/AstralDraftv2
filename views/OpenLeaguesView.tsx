@@ -2,12 +2,13 @@ import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { Widget } from '../components/ui/Widget';
 import { GlobeIcon } from '../components/icons/GlobeIcon';
+import type { League } from '../types';
 
 const OpenLeaguesView: React.FC = () => {
     const { state, dispatch } = useAppState();
 
-    const openLeagues = state.leagues.filter(l => {
-        const humanMembers = l.members.filter(m => !m.id.startsWith('ai_'));
+    const openLeagues = state.leagues.filter((l: any) => {
+        const humanMembers = l.members.filter((m: any) => !m.id.startsWith('ai_'));
         return l.isPublic && humanMembers.length < l.settings.teamCount;
     });
     
@@ -32,7 +33,7 @@ const OpenLeaguesView: React.FC = () => {
                 <Widget title="Public Leagues" icon={<GlobeIcon />}>
                     <div className="p-4 space-y-3">
                         {openLeagues.length > 0 ? (
-                            openLeagues.map(league => (
+                            openLeagues.map((league: any) => (
                                 <div key={league.id} className="p-3 bg-black/10 rounded-lg flex items-center justify-between hover:bg-black/20">
                                     <div>
                                         <p className="font-bold text-white">{league.name}</p>

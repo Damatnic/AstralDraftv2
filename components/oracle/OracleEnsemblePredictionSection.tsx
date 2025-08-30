@@ -372,7 +372,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
         </div>
         
         <div className="overview-section">
-          <h4>Oracle&apos;s Ensemble Architecture</h4>
+          <h4>Oracle's Ensemble Architecture</h4>
           <div className="architecture-diagram">
             <div className="model-layer">
               <h5>Base Models</h5>
@@ -426,9 +426,9 @@ const OracleEnsemblePredictionSection: React.FC = () => {
 
   const renderModels = () => (
     <div className="ensemble-models">
-      <h3>🤖 Base Models in Oracle&apos;s Ensemble</h3>
+      <h3>🤖 Base Models in Oracle's Ensemble</h3>
       <div className="models-grid">
-        {ensembleModels.map((model) => (
+        {ensembleModels.map((model: any) => (
           <div 
             key={model.id} 
             className={`model-card ${selectedModel === model.id ? 'selected' : ''}`}
@@ -567,7 +567,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <span>Weight</span>
             <span>Contribution</span>
           </div>
-          {ensembleModels.map((model) => (
+          {ensembleModels.map((model: any) => (
             <div key={model.id} className="chart-row">
               <span className="model-name">{model.name}</span>
               <div className="accuracy-bar">
@@ -596,7 +596,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
     <div className="voting-methods">
       <h3>🗳️ Voting and Combination Methods</h3>
       <div className="voting-grid">
-        {votingMethods.map((method) => (
+        {votingMethods.map((method: any) => (
           <div 
             key={method.id} 
             className={`voting-card ${selectedVoting === method.id ? 'selected' : ''}`}
@@ -652,7 +652,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
             <span>Robustness</span>
             <span>Interpretability</span>
           </div>
-          {votingMethods.map((method) => (
+          {votingMethods.map((method: any) => (
             <div key={method.id} className="table-row">
               <span className="method-name">{method.name}</span>
               <span className="complexity-score">
@@ -678,7 +678,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
     <div className="weighting-strategies">
       <h3>⚖️ Weighting Strategies</h3>
       <div className="weighting-grid">
-        {weightingStrategies.map((strategy) => (
+        {weightingStrategies.map((strategy: any) => (
           <div 
             key={strategy.id} 
             className={`weighting-card ${selectedWeighting === strategy.id ? 'selected' : ''}`}
@@ -745,8 +745,8 @@ const OracleEnsemblePredictionSection: React.FC = () => {
         </div>
         
         <div className="weight-explanation">
-          <h5>Current Weighting: {weightingStrategies.find(s => s.id === selectedWeighting)?.name}</h5>
-          <p>{weightingStrategies.find(s => s.id === selectedWeighting)?.description}</p>
+          <h5>Current Weighting: {weightingStrategies.find((s: any) => s.id === selectedWeighting)?.name}</h5>
+          <p>{weightingStrategies.find((s: any) => s.id === selectedWeighting)?.description}</p>
           <div className="weight-factors">
             <h6>Key Factors in Weight Assignment:</h6>
             <ul>
@@ -765,7 +765,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
     <div className="optimization-techniques">
       <h3>🔧 Ensemble Optimization</h3>
       <div className="optimization-grid">
-        {optimizationTechniques.map((technique) => (
+        {optimizationTechniques.map((technique: any) => (
           <div key={technique.name.toLowerCase().replace(/\s+/g, '-')} className="optimization-card">
             <h4>{technique.name}</h4>
             <p className="technique-description">{technique.description}</p>
@@ -786,7 +786,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
       </div>
       
       <div className="optimization-process">
-        <h4>🔄 Oracle&apos;s Optimization Process</h4>
+        <h4>🔄 Oracle's Optimization Process</h4>
         <div className="process-flow">
           <div className="process-step">
             <div className="step-number">1</div>

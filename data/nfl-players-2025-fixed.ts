@@ -130,11 +130,11 @@ export const nflPlayers2025: Player[] = [
 
 // Helper functions for player queries
 export const getPlayersByPosition = (position: PlayerPosition): Player[] => {
-  return nflPlayers2025.filter(p => p.position === position);
+  return nflPlayers2025.filter((p: any) => p.position === position);
 };
 
 export const getPlayersByTier = (tier: number): Player[] => {
-  return nflPlayers2025.filter(p => p.tier === tier);
+  return nflPlayers2025.filter((p: any) => p.tier === tier);
 };
 
 export const getTopPlayers = (count: number = 10): Player[] => {
@@ -143,7 +143,7 @@ export const getTopPlayers = (count: number = 10): Player[] => {
 
 export const searchPlayers = (query: string): Player[] => {
   const lowerQuery = query.toLowerCase();
-  return nflPlayers2025.filter(p => 
+  return nflPlayers2025.filter((p: any) => 
     p.name.toLowerCase().includes(lowerQuery) ||
     p.team.toLowerCase().includes(lowerQuery) ||
     p.position.toLowerCase().includes(lowerQuery)

@@ -2,7 +2,7 @@
 import React from 'react';
 import type { Team, MatchupAnalysis } from '../../types';
 import { getMatchupAnalysis } from '../../services/geminiService';
-// import { PercentIcon } from '../icons/PercentIcon';
+import { PercentIcon } from '../icons/PercentIcon';
 import { CrosshairIcon } from '../icons/CrosshairIcon';
 import { Tooltip } from '../ui/Tooltip';
 
@@ -11,7 +11,7 @@ interface MatchupAnalysisWidgetProps {
     opponentTeam: Team;
 }
 
-const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }) => {
+const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }: any) => {
     const [analysis, setAnalysis] = React.useState<MatchupAnalysis | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -22,7 +22,6 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
                 const result = await getMatchupAnalysis(myTeam, opponentTeam);
                 setAnalysis(result);
             } catch (e) {
-                console.error("Error fetching matchup analysis:", e);
             } finally {
                 setIsLoading(false);
             }
@@ -61,7 +60,7 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
                     <CrosshairIcon /> My Key Player: <span className="text-white">{analysis.keyPlayerMyTeam}</span>
                 </div>
                 <div className="flex items-center gap-2 text-red-300 font-semibold">
-                     <CrosshairIcon /> Opponent&apos;s Key Player: <span className="text-white">{analysis.keyPlayerOpponent}</span>
+                     <CrosshairIcon /> Opponent's Key Player: <span className="text-white">{analysis.keyPlayerOpponent}</span>
                 </div>
             </div>
         </div>

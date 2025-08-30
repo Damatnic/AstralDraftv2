@@ -3,7 +3,7 @@
  * Complete rosters for fantasy football drafting
  */
 
-import { Player } from '../types';
+import { Player, PlayerPosition } from '../types';
 
 // Top 200 fantasy-relevant players for 2025 season
 export const nflPlayers2025: Player[] = [
@@ -132,11 +132,11 @@ export const nflPlayers2025: Player[] = [
 
 // Helper functions for player queries
 export const getPlayersByPosition = (position: string): Player[] => {
-  return nflPlayers2025.filter(p => p.position === position);
+  return nflPlayers2025.filter((p: any) => p.position === position);
 };
 
 export const getPlayersByTier = (tier: number): Player[] => {
-  return nflPlayers2025.filter(p => p.tier === tier);
+  return nflPlayers2025.filter((p: any) => p.tier === tier);
 };
 
 export const getTopPlayers = (count: number = 10): Player[] => {
@@ -145,7 +145,7 @@ export const getTopPlayers = (count: number = 10): Player[] => {
 
 export const searchPlayers = (query: string): Player[] => {
   const lowerQuery = query.toLowerCase();
-  return nflPlayers2025.filter(p => 
+  return nflPlayers2025.filter((p: any) => 
     p.name.toLowerCase().includes(lowerQuery) ||
     p.team.toLowerCase().includes(lowerQuery) ||
     p.position.toLowerCase().includes(lowerQuery)

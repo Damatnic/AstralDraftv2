@@ -90,7 +90,6 @@ const PerformanceMonitor: React.FC = () => {
       
       setIsCollecting(false);
     } catch (error) {
-      console.error('Failed to collect performance metrics:', error);
       setIsCollecting(false);
     }
   };
@@ -119,13 +118,13 @@ const PerformanceMonitor: React.FC = () => {
     // Navigation Timing
     const domContentLoaded = navigation.domContentLoadedEventEnd - navigation.navigationStart;
     const loadComplete = navigation.loadEventEnd - navigation.navigationStart;
-    const firstPaint = paint.find(p => p.name === 'first-paint')?.startTime || 0;
-    const firstContentfulPaint = paint.find(p => p.name === 'first-contentful-paint')?.startTime || 0;
+    const firstPaint = paint.find((p: any) => p.name === 'first-paint')?.startTime || 0;
+    const firstContentfulPaint = paint.find((p: any) => p.name === 'first-contentful-paint')?.startTime || 0;
     
     // Resource Timing
     const totalResources = resources.length;
     const totalSize = resources.reduce((sum, resource) => sum + (resource.transferSize || 0), 0);
-    const cachedResources = resources.filter(r => r.transferSize === 0).length;
+    const cachedResources = resources.filter((r: any) => r.transferSize === 0).length;
     const cacheHitRate = totalResources > 0 ? (cachedResources / totalResources) * 100 : 0;
     
     // Memory Usage
@@ -263,9 +262,9 @@ const PerformanceMonitor: React.FC = () => {
 
   // Core Web Vitals measurement functions
   const getLCP = (): Promise<number | null> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       if ('PerformanceObserver' in window) {
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver((list: any) => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           resolve(lastEntry.startTime);
@@ -285,9 +284,9 @@ const PerformanceMonitor: React.FC = () => {
   };
 
   const getFID = (): Promise<number | null> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       if ('PerformanceObserver' in window) {
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver((list: any) => {
           const entries = list.getEntries();
           const firstEntry = entries[0];
           resolve(firstEntry.processingStart - firstEntry.startTime);
@@ -307,10 +306,10 @@ const PerformanceMonitor: React.FC = () => {
   };
 
   const getCLS = (): Promise<number | null> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       if ('PerformanceObserver' in window) {
         let clsValue = 0;
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
               clsValue += (entry as any).value;
@@ -494,7 +493,7 @@ const PerformanceMonitor: React.FC = () => {
               <div className="p-4 border-t border-slate-600">
                 <h4 className="text-white font-semibold mb-2">Issues ({issues.length})</h4>
                 <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {issues.map((issue) => (
+                  {issues.map((issue: any) => (
                     <div key={issue.id} className="p-2 bg-slate-700/50 rounded text-xs">
                       <div className="flex items-center gap-2 mb-1">
                         <span>{getIssueIcon(issue)}</span>

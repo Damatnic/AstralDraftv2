@@ -9,6 +9,7 @@ import { Widget } from '../../ui/Widget';
 import { Player, League } from '../../../types';
 import { TrophyIcon } from '../../icons/TrophyIcon';
 import { TrendingUpIcon } from '../../icons/TrendingUpIcon';
+import { AlertTriangleIcon } from '../../icons/AlertTriangleIcon';
 import { BarChartIcon } from '../../icons/BarChartIcon';
 import { FireIcon } from '../../icons/FireIcon';
 import { ShieldCheckIcon } from '../../icons/ShieldCheckIcon';
@@ -37,9 +38,9 @@ interface WeeklyProjection {
 
 const FantasyTab: React.FC<FantasyTabProps> = ({
     player,
-    league: _league,
-    dispatch: _dispatch
-}) => {
+    league,
+    dispatch
+}: any) => {
     // Helper function to safely handle injury history as string union type
     const getInjuryRisk = (injuryHistory: string | undefined): {
         level: string;
@@ -406,9 +407,9 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             </div>
                             <div className="text-xs text-[var(--text-secondary)] space-y-1">
                                 {weeklyProjections
-                                    .filter(p => p.difficulty === 'easy')
+                                    .filter((p: any) => p.difficulty === 'easy')
                                     .slice(0, 3)
-                                    .map(p => (
+                                    .map((p: any) => (
                                         <div key={p.week}>
                                             Week {p.week}: {formatValue(p.projection, 'decimal')} projected points
                                         </div>
@@ -423,9 +424,9 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             </div>
                             <div className="text-xs text-red-400 space-y-1">
                                 {weeklyProjections
-                                    .filter(p => p.difficulty === 'hard')
+                                    .filter((p: any) => p.difficulty === 'hard')
                                     .slice(0, 2)
-                                    .map(p => (
+                                    .map((p: any) => (
                                         <div key={p.week}>
                                             Week {p.week}: Tough matchup vs {p.matchup}
                                         </div>

@@ -16,6 +16,7 @@ const SeasonManagementView: React.FC = () => {
   const [currentWeek] = useState(8); // Simulated current week
 
   const league = state.leagues[0];
+  const currentUser = state.user;
 
   const tabs = [
     { id: 'matchups', label: 'Matchups', icon: '⚔️', description: 'Weekly head-to-head matchups' },
@@ -143,7 +144,7 @@ const SeasonManagementView: React.FC = () => {
         {/* Tab Navigation */}
         <div className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2">
-            {tabs.map((tab) => (
+            {tabs.map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}

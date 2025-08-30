@@ -8,7 +8,7 @@ interface MainLayoutProps {
     children: React.ReactNode;
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }: any) => {
     return (
         <>
             <Header />

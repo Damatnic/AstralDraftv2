@@ -76,7 +76,6 @@ const CacheManagementDashboard: React.FC = () => {
             await clearCache(type);
             setLastAction(`Cleared ${target} cache`);
         } catch (error) {
-            console.error('Cache clear failed:', error);
             setLastAction(`Failed to clear ${target} cache`);
         } finally {
             setClearing(null);
@@ -89,7 +88,6 @@ const CacheManagementDashboard: React.FC = () => {
             await invalidateByTags(tags);
             setLastAction(`Invalidated cache for tags: ${tags.join(', ')}`);
         } catch (error) {
-            console.error('Tag invalidation failed:', error);
             setLastAction('Failed to invalidate cache by tags');
         } finally {
             setClearing(null);
@@ -197,7 +195,7 @@ const CacheManagementDashboard: React.FC = () => {
                     <div className="bg-gray-800/30 rounded-lg p-4">
                         <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
                         <div className="grid md:grid-cols-3 gap-3">
-                            {quickActions.map((action) => {
+                            {quickActions.map((action: any) => {
                                 let buttonClasses = 'bg-gray-700/50 hover:bg-gray-700 text-white';
                                 if (clearing !== null) {
                                     buttonClasses = 'bg-gray-600 text-gray-400 cursor-not-allowed';
@@ -229,7 +227,7 @@ const CacheManagementDashboard: React.FC = () => {
                     <div className="bg-gray-800/30 rounded-lg p-4">
                         <h3 className="text-lg font-semibold text-white mb-4">Cache Types</h3>
                         <div className="space-y-3">
-                            {cacheTypes.map((cacheType) => {
+                            {cacheTypes.map((cacheType: any) => {
                                 let buttonClasses = 'bg-red-500 hover:bg-red-600 text-white';
                                 if (clearing === cacheType.type) {
                                     buttonClasses = 'bg-red-600 text-white cursor-not-allowed';

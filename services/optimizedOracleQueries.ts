@@ -3,7 +3,7 @@
  * Performance-tuned queries with caching integration
  */
 
-// @ts-expect-error - Legacy Oracle API compatibility layer
+// @ts-ignore - backend module
 import { getRows, getRow, runQuery } from '../backend/db/index';
 import { oraclePerformanceService } from './oraclePerformanceService';
 
@@ -463,7 +463,7 @@ export class OptimizedOracleQueries {
                 `;
                 
                 const params: any[] = [];
-                chunk.forEach(update => {
+                chunk.forEach((update: any) => {
                     params.push(
                         update.id,
                         update.actualResult,
@@ -523,7 +523,7 @@ export class OptimizedOracleQueries {
             for (const indexQuery of indexes) {
                 await runQuery(indexQuery);
             }
-            // Optimized database indexes created successfully
+            console.log('✅ Optimized database indexes created successfully');
         } catch (error) {
             console.error('❌ Failed to create optimized indexes:', error);
             throw error;

@@ -11,7 +11,7 @@ const NewsTicker: React.FC = () => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
 
     React.useEffect(() => {
-        if (latestNews && !headlines.some((h: LiveNewsItem) => h.id === latestNews.id)) {
+        if (latestNews && !headlines.some((h: any) => h.id === latestNews.id)) {
             setHeadlines(prev => [latestNews, ...prev].slice(0, 10)); // Keep last 10
         }
     }, [latestNews, headlines]);
@@ -19,7 +19,7 @@ const NewsTicker: React.FC = () => {
     React.useEffect(() => {
         if (headlines.length > 1) {
             const interval = setInterval(() => {
-                setCurrentIndex((prevIndex) => (prevIndex + 1) % headlines.length);
+                setCurrentIndex((prevIndex: any) => (prevIndex + 1) % headlines.length);
             }, 5000); // Change headline every 5 seconds
             return () => clearInterval(interval);
         }

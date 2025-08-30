@@ -214,11 +214,11 @@ class LiveDataService {
     }
 
     unsubscribe(listener: (event: GamedayEvent | LiveNewsItem) => void) {
-        this.listeners = this.listeners.filter(l => l !== listener);
+        this.listeners = this.listeners.filter((l: any) => l !== listener);
     }
 
     private emit(event: GamedayEvent | LiveNewsItem) {
-        this.listeners.forEach(listener => {
+        this.listeners.forEach((listener: any) => {
             try {
                 listener(event);
             } catch (error) {

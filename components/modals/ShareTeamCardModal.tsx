@@ -18,7 +18,7 @@ interface ShareTeamCardModalProps {
     onClose: () => void;
 }
 
-const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }) => {
+const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [slogan, setSlogan] = React.useState<string | null>(team.motto || state.teamSlogans[team.id] || null);
     const [isLoadingSlogan, setIsLoadingSlogan] = React.useState(!slogan);

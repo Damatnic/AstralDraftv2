@@ -6,9 +6,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
-import { League } from '../../types';
+import { Player, League } from '../../types';
 import { TradeProposal, TradeAnalysis } from './TradeAnalyzerView';
 import { BarChartIcon } from '../icons/BarChartIcon';
+import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { TrendingDownIcon } from '../icons/TrendingDownIcon';
 import { CheckIcon } from '../icons/CheckIcon';
 import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
@@ -16,8 +17,8 @@ import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 interface FairnessAnalysisTabProps {
     proposal: TradeProposal | null;
     analysis: TradeAnalysis | null;
-    _league: League;
-    _dispatch: React.Dispatch<any>;
+    league: League;
+    dispatch: React.Dispatch<any>;
 }
 
 interface ValueMetric {
@@ -32,9 +33,9 @@ interface ValueMetric {
 const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     proposal,
     analysis,
-    _league,
-    _dispatch
-}) => {
+    league,
+    dispatch
+}: any) => {
     const valueMetrics: ValueMetric[] = React.useMemo(() => {
         if (!analysis) return [];
         

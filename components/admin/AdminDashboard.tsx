@@ -13,7 +13,7 @@ import {
 } from '../../services/adminService';
 
 // Dashboard overview component
-const DashboardOverview: React.FC<{ data: AdminDashboardData['overview'] }> = ({ data }) => {
+const DashboardOverview: React.FC<{ data: AdminDashboardData['overview'] }> = ({ data }: any) => {
   const getHealthColor = (status: string) => {
     switch (status) {
       case 'healthy': return 'text-green-600';
@@ -98,6 +98,7 @@ const DashboardOverview: React.FC<{ data: AdminDashboardData['overview'] }> = ({
 // User management component
 const UserManagement: React.FC = () => {
   const [users, setUsers] = useState<UserSummary[]>([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     status: '',
@@ -112,7 +113,7 @@ const UserManagement: React.FC = () => {
       setUsers(result.users);
       setTotalUsers(result.total);
     } catch (error) {
-      logger.error('Failed to load users:', error);
+      console.error('Failed to load users:', error);
     } finally {
       setLoading(false);
     }
@@ -130,7 +131,6 @@ const UserManagement: React.FC = () => {
         loadUsers();
       }
     } catch (error) {
-      console.error('Failed to update user status:', error);
     }
   };
 
@@ -226,7 +226,7 @@ const UserManagement: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  users.map((user) => (
+                  users.map((user: any) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
@@ -297,7 +297,6 @@ const ContestManagement: React.FC = () => {
       const result = await adminService.getAllContests(1, 50);
       setContests(result.contests);
     } catch (error) {
-      console.error('Failed to load contests:', error);
     } finally {
       setLoading(false);
     }
@@ -311,7 +310,6 @@ const ContestManagement: React.FC = () => {
         loadContests();
       }
     } catch (error) {
-      console.error('Failed to cancel contest:', error);
     }
   };
 
@@ -376,7 +374,7 @@ const ContestManagement: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  contests.map((contest) => (
+                  contests.map((contest: any) => (
                 <tr key={contest.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
@@ -447,7 +445,6 @@ const OracleMetricsPanel: React.FC = () => {
       const data = await adminService.getOracleMetrics();
       setMetrics(data);
     } catch (error) {
-      console.error('Failed to load Oracle metrics:', error);
     } finally {
       setLoading(false);
     }
@@ -575,7 +572,6 @@ const AdminDashboard: React.FC = () => {
       const data = await adminService.getDashboardData();
       setDashboardData(data);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -630,7 +626,7 @@ const AdminDashboard: React.FC = () => {
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8" aria-label="Tabs">
-            {tabs.map((tab) => (
+            {tabs.map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as 'overview' | 'users' | 'contests' | 'payments' | 'oracle' | 'system')}
@@ -663,7 +659,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <div className="space-y-4">
-                    {dashboardData.recentActivity.newUsers.slice(0, 5).map((user) => (
+                    {dashboardData.recentActivity.newUsers.slice(0, 5).map((user: any) => (
                       <div key={user.id} className="flex items-center justify-between">
                         <div>
                           <div className="font-medium text-gray-900">{user.username}</div>
@@ -692,7 +688,7 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {dashboardData.recentActivity.systemAlerts.map((alert) => (
+                      {dashboardData.recentActivity.systemAlerts.map((alert: any) => (
                         <div key={alert.id} className="border-l-4 border-red-400 bg-red-50 p-4">
                           <div className="flex">
                             <div className="flex-shrink-0">

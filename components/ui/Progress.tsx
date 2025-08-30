@@ -7,6 +7,7 @@ interface ProgressProps {
   variant?: 'default' | 'success' | 'warning' | 'error';
   showLabel?: boolean;
   label?: string;
+  className?: string;
 }
 
 export const Progress: React.FC<ProgressProps> = ({
@@ -15,8 +16,9 @@ export const Progress: React.FC<ProgressProps> = ({
   size = 'md',
   variant = 'default',
   showLabel = false,
-  label
-}) => {
+  label,
+  className = ''
+}: any) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   const sizeClasses = {
@@ -33,7 +35,7 @@ export const Progress: React.FC<ProgressProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className={`w-full ${className}`}>
       {(showLabel || label) && (
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-[var(--text-primary)]">

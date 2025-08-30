@@ -50,12 +50,12 @@ interface LiveScoringProps {
 }
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
-  matchupId: _matchupId, 
+  matchupId, 
   teamId, 
   showProjections = true 
-}) => {
+}: any) => {
   const { state } = useAppState();
-  const [isLive] = useState(true);
+  const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [selectedView, setSelectedView] = useState<'summary' | 'detailed'>('summary');
 
@@ -65,7 +65,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   const liveScores = useMemo((): TeamScore[] => {
     if (!league?.teams) return [];
 
-    return league.teams.map(team => {
+    return league.teams.map((team: any) => {
       // Get starting lineup (simulate 9 starters)
       const startingLineup = [
         { position: 'QB', name: 'Josh Allen', team: 'BUF' },
@@ -80,6 +80,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       ];
 
       const playerScores: PlayerScore[] = startingLineup.map((player, index) => {
+        const basePoints = Math.random() * 25; // 0-25 base points
         const projectedPoints = Math.random() * 20 + 10; // 10-30 projected
         const isPlaying = Math.random() > 0.1; // 90% chance playing
         
@@ -91,9 +92,9 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           case 'QB':
             stats = {
               passingYards: Math.floor(Math.random() * 200) + 150,
-              passingTDs: Math.floor(Math.random() * 3) + 1,
+              passingTouchdowns: Math.floor(Math.random() * 3) + 1,
               rushingYards: Math.floor(Math.random() * 50),
-              rushingTDs: Math.random() > 0.7 ? 1 : 0
+              rushingTouchdowns: Math.random() > 0.7 ? 1 : 0
             };
             actualPoints = (stats.passingYards * 0.04) + (stats.passingTDs * 4) + 
                           (stats.rushingYards * 0.1) + (stats.rushingTDs * 6);
@@ -102,10 +103,10 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           case 'RB':
             stats = {
               rushingYards: Math.floor(Math.random() * 100) + 30,
-              rushingTDs: Math.random() > 0.6 ? 1 : 0,
+              rushingTouchdowns: Math.random() > 0.6 ? 1 : 0,
               receivingYards: Math.floor(Math.random() * 50),
               receptions: Math.floor(Math.random() * 5) + 1,
-              receivingTDs: Math.random() > 0.8 ? 1 : 0
+              receivingTouchdowns: Math.random() > 0.8 ? 1 : 0
             };
             actualPoints = (stats.rushingYards * 0.1) + (stats.rushingTDs * 6) +
                           (stats.receivingYards * 0.1) + (stats.receptions * 1) + (stats.receivingTDs * 6);
@@ -116,7 +117,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
             stats = {
               receivingYards: Math.floor(Math.random() * 80) + 20,
               receptions: Math.floor(Math.random() * 8) + 2,
-              receivingTDs: Math.random() > 0.7 ? 1 : 0,
+              receivingTouchdowns: Math.random() > 0.7 ? 1 : 0,
               rushingYards: Math.random() > 0.9 ? Math.floor(Math.random() * 20) : 0
             };
             actualPoints = (stats.receivingYards * 0.1) + (stats.receptions * 1) + 
@@ -127,7 +128,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
             stats = {
               receivingYards: Math.floor(Math.random() * 60) + 15,
               receptions: Math.floor(Math.random() * 6) + 1,
-              receivingTDs: Math.random() > 0.8 ? 1 : 0
+              receivingTouchdowns: Math.random() > 0.8 ? 1 : 0
             };
             actualPoints = (stats.receivingYards * 0.1) + (stats.receptions * 1) + (stats.receivingTDs * 6);
             break;
@@ -232,7 +233,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
     return statLines.slice(0, 3).join(', ');
   };
 
-  const selectedTeamScore = teamId ? liveScores.find(score => score.teamId === teamId) : liveScores[0];
+  const selectedTeamScore = teamId ? liveScores.find((score: any) => score.teamId === teamId) : liveScores[0];
 
   if (!selectedTeamScore) {
     return (

@@ -265,7 +265,7 @@ class AdminService {
       }
     ];
 
-    sampleUsers.forEach(user => {
+    sampleUsers.forEach((user: any) => {
       this.userDatabase.set(user.id, user);
     });
   }
@@ -277,7 +277,7 @@ class AdminService {
     // In production, this would verify against secure storage
     // For now, returning the admin user if credentials match
     if (username === 'admin' && password === 'admin123') {
-      const admin = Array.from(this.adminUsers.values()).find(u => u.username === username);
+      const admin = Array.from(this.adminUsers.values()).find((u: any) => u.username === username);
       if (admin) {
         admin.lastLogin = new Date().toISOString();
         return admin;
@@ -290,7 +290,7 @@ class AdminService {
     const admin = this.adminUsers.get(adminId);
     if (!admin?.isActive) return false;
 
-    const permission = admin.permissions.find(p => p.resource === resource);
+    const permission = admin.permissions.find((p: any) => p.resource === resource);
     return permission ? permission.actions.includes(action as 'read' | 'write' | 'delete' | 'execute') : false;
   }
 
@@ -309,7 +309,7 @@ class AdminService {
     // Apply filters
     if (filters) {
       if (filters.status) {
-        users = users.filter(u => u.status === filters.status);
+        users = users.filter((u: any) => u.status === filters.status);
       }
       if (filters.riskLevel) {
         let riskThreshold: number;
@@ -320,11 +320,11 @@ class AdminService {
         } else {
           riskThreshold = 0;
         }
-        users = users.filter(u => u.riskScore >= riskThreshold);
+        users = users.filter((u: any) => u.riskScore >= riskThreshold);
       }
       if (filters.searchTerm) {
         const term = filters.searchTerm.toLowerCase();
-        users = users.filter(u => 
+        users = users.filter((u: any) => 
           u.username.toLowerCase().includes(term) || 
           u.email.toLowerCase().includes(term)
         );
@@ -399,7 +399,7 @@ class AdminService {
     // Get contests from contest scoring service
     const allContests = contestScoringService.getAllContests();
     
-    let contests: ContestSummary[] = allContests.map(contest => ({
+    let contests: ContestSummary[] = allContests.map((contest: any) => ({
       id: contest.id,
       name: contest.name,
       type: contest.type,
@@ -417,10 +417,10 @@ class AdminService {
     // Apply filters
     if (filters) {
       if (filters.status) {
-        contests = contests.filter(c => c.status === filters.status);
+        contests = contests.filter((c: any) => c.status === filters.status);
       }
       if (filters.type) {
-        contests = contests.filter(c => c.type === filters.type);
+        contests = contests.filter((c: any) => c.type === filters.type);
       }
     }
 
@@ -526,13 +526,13 @@ class AdminService {
     // Apply filters
     if (filters) {
       if (filters.type) {
-        payments = payments.filter(p => p.type === filters.type);
+        payments = payments.filter((p: any) => p.type === filters.type);
       }
       if (filters.status) {
-        payments = payments.filter(p => p.status === filters.status);
+        payments = payments.filter((p: any) => p.status === filters.status);
       }
       if (filters.userId) {
-        payments = payments.filter(p => p.userId === filters.userId);
+        payments = payments.filter((p: any) => p.userId === filters.userId);
       }
     }
 
@@ -650,14 +650,14 @@ class AdminService {
         activeContests: metrics.activeContests,
         totalRevenue: metrics.totalRevenue,
         todayRevenue: metrics.todayRevenue,
-        pendingIssues: this.systemErrors.filter(e => !e.resolved).length,
+        pendingIssues: this.systemErrors.filter((e: any) => !e.resolved).length,
         systemHealth: this.calculateOverallHealth(metrics.systemHealth)
       },
       recentActivity: {
         newUsers: allUsers.users.slice(0, 5),
         recentContests: allContests.contests.slice(0, 3),
         recentPayments: allPayments.payments.slice(0, 5),
-        systemAlerts: this.systemErrors.filter(e => !e.resolved).slice(0, 5)
+        systemAlerts: this.systemErrors.filter((e: any) => !e.resolved).slice(0, 5)
       },
       metrics: {
         userGrowth: this.generateMockGrowthData('users') as { date: string; count: number }[],
@@ -710,7 +710,7 @@ class AdminService {
    * System Error Management
    */
   logSystemError(error: Omit<SystemError, 'id' | 'count' | 'firstOccurrence' | 'lastOccurrence' | 'resolved'>): void {
-    const existingError = this.systemErrors.find(e => 
+    const existingError = this.systemErrors.find((e: any) => 
       e.type === error.type && e.message === error.message && !e.resolved
     );
 
@@ -735,7 +735,7 @@ class AdminService {
       throw new Error('Insufficient permissions');
     }
 
-    const error = this.systemErrors.find(e => e.id === errorId);
+    const error = this.systemErrors.find((e: any) => e.id === errorId);
     if (error) {
       error.resolved = true;
       return true;

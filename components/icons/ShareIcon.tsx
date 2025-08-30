@@ -9,7 +9,7 @@ interface ShareIconProps {
     size?: number;
 }
 
-export const ShareIcon: React.FC<ShareIconProps> = ({ className = "w-5 h-5", size = 20 }) => {
+export const ShareIcon: React.FC<ShareIconProps> = ({ className = "w-5 h-5", size = 20 }: any) => {
     return (
         <svg 
             className={className} 

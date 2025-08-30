@@ -17,7 +17,7 @@ interface NotificationPreferencesProps {
 export const NotificationPreferencesComponent: React.FC<NotificationPreferencesProps> = ({
     className = '',
     onClose
-}) => {
+}: any) => {
     const [preferences, setPreferences] = useState<NotificationPreferences>(
         notificationService.getPreferences()
     );
@@ -51,7 +51,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         enabled: boolean;
         onChange: (enabled: boolean) => void;
         disabled?: boolean;
-    }> = ({ enabled, onChange, disabled = false }) => (
+    }> = ({ enabled, onChange, disabled = false }: any) => (
         <button
             onClick={() => !disabled && onChange(!enabled)}
             disabled={disabled}
@@ -74,7 +74,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         enabled: boolean;
         onChange: (enabled: boolean) => void;
         disabled?: boolean;
-    }> = ({ icon, title, description, enabled, onChange, disabled = false }) => (
+    }> = ({ icon, title, description, enabled, onChange, disabled = false }: any) => (
         <div className="flex items-center justify-between p-4 border-b border-gray-700 last:border-b-0">
             <div className="flex items-start space-x-3 flex-1">
                 <div className="flex-shrink-0 mt-1">
@@ -147,7 +147,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Browser Notifications"
                                 description="Show desktop notifications for Oracle updates"
                                 enabled={preferences.browserNotifications}
-                                onChange={(enabled) => handlePreferenceChange('browserNotifications', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('browserNotifications', enabled)}
                             />
                         )}
                     </div>
@@ -165,7 +165,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Deadline Warnings"
                                 description="Get notified when prediction deadlines are approaching"
                                 enabled={preferences.deadlineWarnings}
-                                onChange={(enabled) => handlePreferenceChange('deadlineWarnings', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('deadlineWarnings', enabled)}
                             />
 
                             <PreferenceRow
@@ -173,7 +173,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Result Announcements"
                                 description="Receive notifications when prediction results are available"
                                 enabled={preferences.resultAnnouncements}
-                                onChange={(enabled) => handlePreferenceChange('resultAnnouncements', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('resultAnnouncements', enabled)}
                             />
 
                             <PreferenceRow
@@ -181,7 +181,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Accuracy Updates"
                                 description="Get notified about significant changes in your accuracy"
                                 enabled={preferences.accuracyUpdates}
-                                onChange={(enabled) => handlePreferenceChange('accuracyUpdates', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('accuracyUpdates', enabled)}
                             />
 
                             <PreferenceRow
@@ -189,7 +189,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Streak Milestones"
                                 description="Celebrate when you reach prediction streak milestones"
                                 enabled={preferences.streakMilestones}
-                                onChange={(enabled) => handlePreferenceChange('streakMilestones', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('streakMilestones', enabled)}
                             />
 
                             <PreferenceRow
@@ -197,7 +197,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Ranking Changes"
                                 description="Stay informed about changes in your leaderboard position"
                                 enabled={preferences.rankingChanges}
-                                onChange={(enabled) => handlePreferenceChange('rankingChanges', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('rankingChanges', enabled)}
                             />
                         </div>
                     </div>
@@ -244,7 +244,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="In-App Notifications"
                                 description="Show notification toasts within the application"
                                 enabled={preferences.inAppNotifications}
-                                onChange={(enabled) => handlePreferenceChange('inAppNotifications', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('inAppNotifications', enabled)}
                             />
 
                             <PreferenceRow
@@ -252,7 +252,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
                                 title="Email Notifications"
                                 description="Receive email notifications for important updates (coming soon)"
                                 enabled={preferences.emailNotifications}
-                                onChange={(enabled) => handlePreferenceChange('emailNotifications', enabled)}
+                                onChange={(enabled: any) => handlePreferenceChange('emailNotifications', enabled)}
                                 disabled={true}
                             />
                         </div>

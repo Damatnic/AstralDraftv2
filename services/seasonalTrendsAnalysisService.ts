@@ -143,7 +143,7 @@ class SeasonalTrendsAnalysisService {
     playerIds: string[], 
     seasons: number[] = [2024]
   ): Promise<SeasonalTrendData[]> {
-    const promises = playerIds.map(playerId => 
+    const promises = playerIds.map((playerId: any) => 
       this.generateSeasonalTrends(playerId, seasons)
     );
     
@@ -198,10 +198,10 @@ class SeasonalTrendsAnalysisService {
    * Calculate seasonal metrics from weekly data
    */
   private calculateSeasonalMetrics(weeklyData: WeeklyPlayerData[]): SeasonalTrendData['trends'] {
-    const earlyWeeks = weeklyData.filter(w => w.week >= 1 && w.week <= 6);
-    const midWeeks = weeklyData.filter(w => w.week >= 7 && w.week <= 12);
-    const lateWeeks = weeklyData.filter(w => w.week >= 13 && w.week <= 18);
-    const playoffWeeks = weeklyData.filter(w => w.week >= 19 && w.week <= 22);
+    const earlyWeeks = weeklyData.filter((w: any) => w.week >= 1 && w.week <= 6);
+    const midWeeks = weeklyData.filter((w: any) => w.week >= 7 && w.week <= 12);
+    const lateWeeks = weeklyData.filter((w: any) => w.week >= 13 && w.week <= 18);
+    const playoffWeeks = weeklyData.filter((w: any) => w.week >= 19 && w.week <= 22);
 
     return {
       earlySeason: this.calculatePeriodMetrics(earlyWeeks),
@@ -228,9 +228,9 @@ class SeasonalTrendsAnalysisService {
       };
     }
 
-    const fantasyPoints = periodData.map(w => w.fantasyPoints);
-    const yards = periodData.map(w => w.yards);
-    const touchdowns = periodData.map(w => w.touchdowns);
+    const fantasyPoints = periodData.map((w: any) => w.fantasyPoints);
+    const yards = periodData.map((w: any) => w.yards);
+    const touchdowns = periodData.map((w: any) => w.touchdowns);
 
     const avgPoints = fantasyPoints.reduce((a, b) => a + b, 0) / fantasyPoints.length;
     const avgYards = yards.reduce((a, b) => a + b, 0) / yards.length;
@@ -243,13 +243,13 @@ class SeasonalTrendsAnalysisService {
     const consistencyScore = Math.max(0, 100 - (coefficientOfVariation * 100));
 
     return {
-      weeks: periodData.map(w => w.week),
+      weeks: periodData.map((w: any) => w.week),
       averageFantasyPoints: parseFloat(avgPoints.toFixed(1)),
-      averageTargets: periodData.filter(w => w.targets).length > 0 
-        ? periodData.reduce((sum, w) => sum + (w.targets || 0), 0) / periodData.filter(w => w.targets).length 
+      averageTargets: periodData.filter((w: any) => w.targets).length > 0 
+        ? periodData.reduce((sum, w) => sum + (w.targets || 0), 0) / periodData.filter((w: any) => w.targets).length 
         : undefined,
-      averageReceptions: periodData.filter(w => w.receptions).length > 0 
-        ? periodData.reduce((sum, w) => sum + (w.receptions || 0), 0) / periodData.filter(w => w.receptions).length 
+      averageReceptions: periodData.filter((w: any) => w.receptions).length > 0 
+        ? periodData.reduce((sum, w) => sum + (w.receptions || 0), 0) / periodData.filter((w: any) => w.receptions).length 
         : undefined,
       averageYards: parseFloat(avgYards.toFixed(1)),
       averageTouchdowns: parseFloat(avgTouchdowns.toFixed(2)),
@@ -257,8 +257,8 @@ class SeasonalTrendsAnalysisService {
       ceiling: Math.max(...fantasyPoints),
       floor: Math.min(...fantasyPoints),
       gamesPlayed: periodData.length,
-      touchesPerGame: periodData.filter(w => w.touches).length > 0 
-        ? periodData.reduce((sum, w) => sum + (w.touches || 0), 0) / periodData.filter(w => w.touches).length 
+      touchesPerGame: periodData.filter((w: any) => w.touches).length > 0 
+        ? periodData.reduce((sum, w) => sum + (w.touches || 0), 0) / periodData.filter((w: any) => w.touches).length 
         : undefined
     };
   }
@@ -327,7 +327,7 @@ class SeasonalTrendsAnalysisService {
         type: 'consistent',
         description: `High consistency across all periods (${avgConsistency.toFixed(1)}% average)`,
         confidence: 0.8,
-        supportingWeeks: weeklyData.map(w => w.week),
+        supportingWeeks: weeklyData.map((w: any) => w.week),
         severity: 'low',
         fantasyImpact: 'Reliable floor makes player suitable for consistent lineup usage'
       });
@@ -336,7 +336,7 @@ class SeasonalTrendsAnalysisService {
         type: 'volatile',
         description: `High volatility across all periods (${avgConsistency.toFixed(1)}% consistency)`,
         confidence: 0.8,
-        supportingWeeks: weeklyData.map(w => w.week),
+        supportingWeeks: weeklyData.map((w: any) => w.week),
         severity: 'high',
         fantasyImpact: 'Boom/bust player with high ceiling but low floor'
       });
@@ -360,7 +360,7 @@ class SeasonalTrendsAnalysisService {
     ];
 
     // Find best and worst periods
-    const periodsWithData = periods.filter(p => p.metrics.gamesPlayed > 0);
+    const periodsWithData = periods.filter((p: any) => p.metrics.gamesPlayed > 0);
     
     if (periodsWithData.length === 0) {
       // Return default analysis if no data
@@ -398,7 +398,7 @@ class SeasonalTrendsAnalysisService {
     }
 
     // Calculate volatility
-    const allPoints = periodsWithData.map(p => p.metrics.averageFantasyPoints);
+    const allPoints = periodsWithData.map((p: any) => p.metrics.averageFantasyPoints);
     const meanPoints = allPoints.reduce((a, b) => a + b, 0) / allPoints.length;
     const variance = allPoints.reduce((acc, points) => acc + Math.pow(points - meanPoints, 2), 0) / allPoints.length;
     const volatility = meanPoints > 0 ? Math.sqrt(variance) / meanPoints : 0;
@@ -437,10 +437,10 @@ class SeasonalTrendsAnalysisService {
   /**
    * Generate reasoning for trend projections
    */
-  private generateTrendReasoning(patterns: SeasonalPattern[], _trend: string): string[] {
+  private generateTrendReasoning(patterns: SeasonalPattern[], trend: string): string[] {
     const reasoning: string[] = [];
     
-    patterns.forEach(pattern => {
+    patterns.forEach((pattern: any) => {
       switch (pattern.type) {
         case 'improving':
           reasoning.push('Showed improvement throughout season');
@@ -470,7 +470,7 @@ class SeasonalTrendsAnalysisService {
   private generateMockWeeklyData(playerId: string, seasons: number[]): WeeklyPlayerData[] {
     const data: WeeklyPlayerData[] = [];
     
-    seasons.forEach((_, _seasonIndex) => {
+    seasons.forEach((_, seasonIndex) => {
       // Simulate different performance patterns
       const basePoints = 12 + Math.random() * 8; // Base performance 12-20 points
       const seasonTrend = (Math.random() - 0.5) * 0.5; // -25% to +25% season trend
@@ -537,7 +537,7 @@ class SeasonalTrendsAnalysisService {
    */
   private initializeMockData(): void {
     // This can be expanded with more realistic mock data
-    // Seasonal Trends Analysis Service initialized
+    console.log('Seasonal Trends Analysis Service initialized');
   }
 }
 

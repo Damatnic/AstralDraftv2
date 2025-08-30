@@ -11,7 +11,7 @@ import ErrorDisplay from '../components/core/ErrorDisplay';
 import { FilmIcon } from '../components/icons/FilmIcon';
 
 
-const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const [report, setReport] = React.useState<WeeklyReportData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -37,7 +37,6 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
             }
 
         } catch (err) {
-            console.error(err);
             setError("An error occurred while consulting the Oracle for a weekly report.");
         } finally {
             setIsLoading(false);
@@ -55,7 +54,7 @@ const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<a
             <header className="flex-shrink-0 flex justify-between items-center mb-6">
                 <div>
                     <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
-                        The Oracle&apos;s Report
+                        The Oracle's Report
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>

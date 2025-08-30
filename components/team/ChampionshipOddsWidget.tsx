@@ -7,11 +7,11 @@ import type { Team, League } from '../../types';
 
 interface ChampionshipOddsWidgetProps {
     team: Team;
-    _league: League;
+    league: League;
     dispatch: React.Dispatch<any>;
 }
 
-const ChampionshipOddsWidget: React.FC<ChampionshipOddsWidgetProps> = ({ team, _league, dispatch }) => {
+const ChampionshipOddsWidget: React.FC<ChampionshipOddsWidgetProps> = ({ team, league, dispatch }: any) => {
     const history = team.championshipProbHistory || [];
     const currentProb = history.length > 0 ? history[history.length - 1].probability : 0;
     const dataPoints = history.map((h: any) => h.probability);

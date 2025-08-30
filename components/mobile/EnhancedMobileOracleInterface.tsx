@@ -49,7 +49,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
   onViewChange,
   week = 1,
   className = ''
-}) => {
+}: any) => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [selectedPrediction, setSelectedPrediction] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -229,7 +229,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
 
         {/* Options */}
         <div className="space-y-2 mb-3">
-          {prediction.options.map((option) => (
+          {prediction.options.map((option: any) => (
             <motion.button
               key={option.id}
               onClick={() => setSelectedPrediction(prediction.id)}
@@ -294,7 +294,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
             <h3 className="text-white font-semibold mb-4">Make Your Prediction</h3>
             
             <div className="space-y-3">
-              {prediction.options.map((option) => (
+              {prediction.options.map((option: any) => (
                 <motion.button
                   key={option.id}
                   onClick={() => handlePredictionSubmit(prediction.id, option.id, 75)}

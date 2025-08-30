@@ -90,9 +90,9 @@ class ProductionOraclePredictionService {
       // Generate initial predictions for current week
       await this.generateWeeklyPredictions(this.currentWeek);
       
-      // Production Oracle Prediction Service initialized
+      console.log('✅ Production Oracle Prediction Service initialized');
     } catch (error) {
-      // Failed to initialize Oracle service
+      console.error('❌ Failed to initialize Oracle service:', error);
     }
   }
 
@@ -101,7 +101,7 @@ class ProductionOraclePredictionService {
    */
   async generateWeeklyPredictions(week: number, season: number = this.currentSeason): Promise<ProductionOraclePrediction[]> {
     try {
-      // Generating Oracle predictions
+      console.log(`🔮 Generating Oracle predictions for Week ${week}, ${season}...`);
 
       const games = await productionSportsDataService.getCurrentWeekGames(week, season);
       const newPredictions: ProductionOraclePrediction[] = [];
@@ -126,15 +126,15 @@ class ProductionOraclePredictionService {
       }
 
       // Store predictions
-      newPredictions.forEach(prediction => {
+      newPredictions.forEach((prediction: any) => {
         this.predictions.set(prediction.id, prediction);
       });
 
-      // Generated predictions for week
+      console.log(`✅ Generated ${newPredictions.length} predictions for Week ${week}`);
       return newPredictions;
 
     } catch (error) {
-      // Failed to generate weekly predictions
+      console.error('Failed to generate weekly predictions:', error);
       return [];
     }
   }
@@ -144,7 +144,7 @@ class ProductionOraclePredictionService {
    */
   async getPredictionsForWeek(week: number, season: number = this.currentSeason): Promise<ProductionOraclePrediction[]> {
     const weekPredictions = Array.from(this.predictions.values())
-      .filter(p => p.week === week && p.season === season);
+      .filter((p: any) => p.week === week && p.season === season);
 
     if (weekPredictions.length === 0) {
       // Generate predictions if none exist
@@ -221,12 +221,12 @@ class ProductionOraclePredictionService {
       
       submissions.push(submission);
 
-      // User submitted prediction
+      console.log(`📝 User ${userId} submitted prediction for ${predictionId}: choice ${choice} (${confidence}% confidence)`);
 
       return { success: true, prediction };
 
     } catch (error) {
-      // Failed to submit user prediction
+      console.error('Failed to submit user prediction:', error);
       return { success: false, error: 'Failed to submit prediction' };
     }
   }
@@ -238,13 +238,13 @@ class ProductionOraclePredictionService {
     try {
       const liveScores = await productionSportsDataService.getLiveScores();
       const weekPredictions = Array.from(this.predictions.values())
-        .filter(p => p.week === week && p.season === season && p.status === 'open');
+        .filter((p: any) => p.week === week && p.season === season && p.status === 'open');
 
       let resolvedCount = 0;
 
       for (const prediction of weekPredictions) {
         if (prediction.gameId) {
-          const game = liveScores.find(g => g.id === prediction.gameId);
+          const game = liveScores.find((g: any) => g.id === prediction.gameId);
           
           if (game && game.status === 'completed') {
             const resolution = this.calculatePredictionResult(prediction, game);
@@ -262,17 +262,17 @@ class ProductionOraclePredictionService {
               await this.calculateUserPoints(prediction);
               
               resolvedCount++;
-              // Resolved prediction
+              console.log(`✅ Resolved prediction ${prediction.id}: ${resolution.explanation}`);
             }
           }
         }
       }
 
-      // Resolved predictions for week
+      console.log(`🎯 Resolved ${resolvedCount} predictions for Week ${week}`);
       return resolvedCount;
 
     } catch (error) {
-      // Failed to resolve predictions
+      console.error('Failed to resolve predictions:', error);
       return 0;
     }
   }
@@ -282,15 +282,15 @@ class ProductionOraclePredictionService {
    */
   getWeeklyLeaderboard(week: number, season: number = this.currentSeason): UserPredictionSummary[] {
     const weekPredictions = Array.from(this.predictions.values())
-      .filter(p => p.week === week && p.season === season);
+      .filter((p: any) => p.week === week && p.season === season);
 
     const userStats = new Map<string, UserPredictionSummary>();
 
     // Calculate stats for each user
-    weekPredictions.forEach(prediction => {
+    weekPredictions.forEach((prediction: any) => {
       const submissions = this.userSubmissions.get(prediction.id) || [];
       
-      submissions.forEach(submission => {
+      submissions.forEach((submission: any) => {
         if (!userStats.has(submission.userId)) {
           userStats.set(submission.userId, {
             userId: submission.userId,
@@ -317,7 +317,7 @@ class ProductionOraclePredictionService {
 
     // Calculate accuracy and sort by points
     const leaderboard = Array.from(userStats.values())
-      .map(user => ({
+      .map((user: any) => ({
         ...user,
         accuracy: user.totalPredictions > 0 ? (user.correctPredictions / user.totalPredictions) * 100 : 0
       }))
@@ -337,14 +337,14 @@ class ProductionOraclePredictionService {
     confidenceAccuracy: number;
   } {
     let predictions = Array.from(this.predictions.values())
-      .filter(p => p.season === season && p.status === 'resolved');
+      .filter((p: any) => p.season === season && p.status === 'resolved');
 
     if (week !== undefined) {
-      predictions = predictions.filter(p => p.week === week);
+      predictions = predictions.filter((p: any) => p.week === week);
     }
 
     const totalPredictions = predictions.length;
-    const correctPredictions = predictions.filter(p => 
+    const correctPredictions = predictions.filter((p: any) => 
       p.resolution && p.oracleChoice === p.resolution.correctAnswer
     ).length;
 
@@ -354,7 +354,7 @@ class ProductionOraclePredictionService {
     let totalConfidenceScore = 0;
     let actualConfidenceScore = 0;
 
-    predictions.forEach(p => {
+    predictions.forEach((p: any) => {
       totalConfidenceScore += p.confidence;
       if (p.resolution && p.oracleChoice === p.resolution.correctAnswer) {
         actualConfidenceScore += p.confidence;
@@ -598,7 +598,7 @@ class ProductionOraclePredictionService {
   private async calculateUserPoints(prediction: ProductionOraclePrediction): Promise<void> {
     const submissions = this.userSubmissions.get(prediction.id) || [];
     
-    submissions.forEach(submission => {
+    submissions.forEach((submission: any) => {
       if (prediction.resolution) {
         const isCorrect = submission.choice === prediction.resolution.correctAnswer;
         const basePoints = isCorrect ? 100 : 0;

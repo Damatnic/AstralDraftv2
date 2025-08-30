@@ -4,11 +4,14 @@
  */
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
-import { Player, Team, League } from '../../types';
+import { Player, Team, League, PlayerPosition } from '../../types';
 import { TrendingUpIcon } from '../icons/TrendingUpIcon';
 import { RefreshIcon } from '../icons/RefreshIcon';
+import { CheckIcon } from '../icons/CheckIcon';
+import { XIcon } from '../icons/XIcon';
 import { StarIcon } from '../icons/StarIcon';
 import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
 
@@ -38,7 +41,7 @@ interface OptimizerSettings {
     considerInjuries: boolean;
 }
 
-const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }) => {
+const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }: any) => {
     const [isOptimizing, setIsOptimizing] = React.useState(false);
     const [suggestions, setSuggestions] = React.useState<LineupSuggestion[]>([]);
     const [selectedSuggestion, setSelectedSuggestion] = React.useState<LineupSuggestion | null>(null);
@@ -304,7 +307,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {currentLineup.map((player, _index) => (
+                        {currentLineup.map((player, index) => (
                             <div key={player.id} className="flex items-center gap-3 p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
                                 <Avatar
                                     avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}

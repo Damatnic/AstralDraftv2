@@ -28,7 +28,7 @@ const statusStyles = {
     FORCED: { bg: 'bg-green-900/20', text: 'text-green-300', label: 'Forced' },
 };
 
-const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }) => {
+const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }: any) => {
     const [isStoryModalOpen, setIsStoryModalOpen] = React.useState(false);
 
     const isIncoming = offer.toTeamId === myTeamId;
@@ -98,9 +98,9 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
         }
     };
 
-    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }) => (
+    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }: any) => (
         <div className="text-xs space-y-1">
-            {players.length > 0 && players.map(p => p && <p key={p.id}>{p.name} ({p.position})</p>)}
+            {players.length > 0 && players.map((p: any) => p && <p key={p.id}>{p.name} ({p.position})</p>)}
             {picks.length > 0 && picks.map((p, i) => <p key={i} className="text-cyan-300">{p.season} R{p.round} Pick</p>)}
             {players.length === 0 && picks.length === 0 && <p className="text-gray-500 italic">Nothing</p>}
         </div>
@@ -132,7 +132,7 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
                  <div className="text-xs mt-2 pt-2 border-t border-white/10 flex items-center justify-center gap-2">
                     <SparklesIcon className={`w-3 h-3 ${winnerStyle.color}`} />
                     <span className={`font-bold ${winnerStyle.color}`}>{winnerStyle.text}:</span>
-                    <span className="italic text-gray-400">&quot;{offer.tradeAnalysis.summary}&quot;</span>
+                    <span className="italic text-gray-400">"{offer.tradeAnalysis.summary}"</span>
                 </div>
             )}
 

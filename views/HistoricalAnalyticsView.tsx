@@ -189,7 +189,7 @@ const HistoricalAnalyticsView: React.FC = () => {
 
   const generateCSVData = (): string => {
     const headers = ['Date', 'Accuracy', 'Predictions', 'Confidence', 'Win Rate'];
-    const rows = analyticsData.map(item => [
+    const rows = analyticsData.map((item: any) => [
       item.date,
       item.accuracy.toFixed(2),
       item.predictions.toString(),
@@ -197,7 +197,7 @@ const HistoricalAnalyticsView: React.FC = () => {
       item.winRate.toFixed(2)
     ]);
     
-    return [headers, ...rows].map(row => row.join(',')).join('\n');
+    return [headers, ...rows].map((row: any) => row.join(',')).join('\n');
   };
 
   const getTrendIcon = (trend: 'up' | 'down' | 'stable'): React.ReactNode => {
@@ -273,7 +273,7 @@ const HistoricalAnalyticsView: React.FC = () => {
               <label className="text-gray-300 font-medium">Timeframe:</label>
               <select
                 value={timeframe}
-                onChange={(e) => setTimeframe(e.target.value as TimeframeType)}
+                onChange={(e: any) => setTimeframe(e.target.value as TimeframeType)}
                 className="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
               >
                 <option value="7d">Last 7 days</option>
@@ -288,7 +288,7 @@ const HistoricalAnalyticsView: React.FC = () => {
               <label className="text-gray-300 font-medium">Type:</label>
               <select
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value as PredictionType | 'all')}
+                onChange={(e: any) => setSelectedType(e.target.value as PredictionType | 'all')}
                 className="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
               >
                 <option value="all">All predictions</option>
@@ -412,7 +412,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
-                    tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
                   <Tooltip 
@@ -455,7 +455,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
-                    tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
                   <Tooltip 
@@ -493,7 +493,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                   dataKey="date" 
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickFormatter={(date) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 />
                 <YAxis stroke="#9CA3AF" fontSize={12} />
                 <Tooltip 

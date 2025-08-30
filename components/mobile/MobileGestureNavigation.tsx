@@ -15,7 +15,7 @@ export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = (
   onQuickAction,
   className = '',
   children
-}) => {
+}: any) => {
   const [feedbackVisible, setFeedbackVisible] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackPosition, setFeedbackPosition] = useState({ x: 0, y: 0 });
@@ -65,35 +65,35 @@ export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = (
 
   // Set up gesture callbacks
   useEffect(() => {
-    onSwipeLeft((gesture) => {
+    onSwipeLeft((gesture: any) => {
       if (gesture.startPoint) {
         showFeedback('← Swipe Left', gesture.startPoint.x, gesture.startPoint.y);
         onNavigate?.('left');
       }
     });
 
-    onSwipeRight((gesture) => {
+    onSwipeRight((gesture: any) => {
       if (gesture.startPoint) {
         showFeedback('Swipe Right →', gesture.startPoint.x, gesture.startPoint.y);
         onNavigate?.('right');
       }
     });
 
-    onSwipeUp((gesture) => {
+    onSwipeUp((gesture: any) => {
       if (gesture.startPoint) {
         showFeedback('↑ Swipe Up', gesture.startPoint.x, gesture.startPoint.y);
         onNavigate?.('up');
       }
     });
 
-    onSwipeDown((gesture) => {
+    onSwipeDown((gesture: any) => {
       if (gesture.startPoint) {
         showFeedback('↓ Swipe Down', gesture.startPoint.x, gesture.startPoint.y);
         onNavigate?.('down');
       }
     });
 
-    onLongPress((point) => {
+    onLongPress((point: any) => {
       showFeedback('📱 Menu', point.x, point.y);
       onMenuToggle?.();
       
@@ -103,7 +103,7 @@ export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = (
       }
     });
 
-    onDoubleTap((point) => {
+    onDoubleTap((point: any) => {
       showFeedback('⚡ Quick Action', point.x, point.y);
       onQuickAction?.();
       

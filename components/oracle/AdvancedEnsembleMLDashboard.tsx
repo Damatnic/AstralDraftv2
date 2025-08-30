@@ -17,7 +17,7 @@ interface Props {
 const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ 
     playerId, 
     onPredictionGenerated 
-}) => {
+}: any) => {
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,6 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
             onPredictionGenerated?.(result);
         } catch (err) {
             setError('Failed to generate ensemble prediction');
-            console.error('Ensemble prediction error:', err);
         } finally {
             setLoading(false);
         }
@@ -75,7 +74,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
 
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                {prediction.modelPredictions.map((model) => (
+                {prediction.modelPredictions.map((model: any) => (
                     <div key={model.modelId} className="bg-gray-50 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-2">
                             <h4 className="font-semibold text-gray-800">{model.modelName}</h4>
@@ -155,7 +154,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
                     🎯 Feature Contributions
                 </h3>
                 <div className="space-y-3">
-                    {topFeatures.map((feature) => (
+                    {topFeatures.map((feature: any) => (
                         <div key={feature.feature} className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
                                 <span className={`w-3 h-3 rounded-full ${
@@ -232,7 +231,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
                     <div>
                         <h4 className="font-medium text-purple-700 mb-2">Primary Drivers</h4>
                         <ul className="text-sm text-gray-700 space-y-1">
-                            {explanability.primaryDrivers.map((driver) => (
+                            {explanability.primaryDrivers.map((driver: any) => (
                                 <li key={driver} className="flex items-center space-x-2">
                                     <span className="text-green-500">✓</span>
                                     <span className="capitalize">{driver}</span>
@@ -244,7 +243,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
                     <div>
                         <h4 className="font-medium text-purple-700 mb-2">Risk Factors</h4>
                         <ul className="text-sm text-gray-700 space-y-1">
-                            {explanability.riskFactors.map((risk) => (
+                            {explanability.riskFactors.map((risk: any) => (
                                 <li key={risk} className="flex items-center space-x-2">
                                     <span className="text-red-500">⚠</span>
                                     <span>{risk}</span>
@@ -256,7 +255,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
                     <div>
                         <h4 className="font-medium text-purple-700 mb-2">Confidence Reasons</h4>
                         <ul className="text-sm text-gray-700 space-y-1">
-                            {explanability.confidenceReasons.map((reason) => (
+                            {explanability.confidenceReasons.map((reason: any) => (
                                 <li key={reason} className="flex items-center space-x-2">
                                     <span className="text-blue-500">ℹ</span>
                                     <span>{reason}</span>
@@ -268,7 +267,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({
                     <div>
                         <h4 className="font-medium text-purple-700 mb-2">Important Caveats</h4>
                         <ul className="text-sm text-gray-700 space-y-1">
-                            {explanability.caveats.map((caveat) => (
+                            {explanability.caveats.map((caveat: any) => (
                                 <li key={caveat} className="flex items-center space-x-2">
                                     <span className="text-gray-500">•</span>
                                     <span>{caveat}</span>
