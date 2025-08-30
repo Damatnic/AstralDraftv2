@@ -7,8 +7,8 @@
     <title>Astral Draft - Elite Fantasy Football</title>
     <link rel="manifest" href="/manifest.json" />
     
-    <!-- Development CSP for local WebSocket connections -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' ws://localhost:* http://localhost:* https://astraldraft.netlify.app wss://astraldraft.netlify.app https://fonts.googleapis.com https://fonts.gstatic.com https://api.gemini.com https://generativelanguage.googleapis.com https://*.espn.com https://api.the-odds-api.com https://api.sportsdata.io; img-src 'self' data: https:; manifest-src 'self'">
+    <!-- Authentication-Friendly CSP - Allows browser extensions and OAuth flows -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net chrome-extension: moz-extension: safari-extension:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' ws://localhost:* wss://localhost:* http://localhost:* https://localhost:* https://astraldraft.netlify.app wss://astraldraft.netlify.app https://fonts.googleapis.com https://fonts.gstatic.com https://api.gemini.com https://generativelanguage.googleapis.com https://*.espn.com https://api.the-odds-api.com https://api.sportsdata.io https://accounts.google.com https://oauth.googleapis.com https://www.googleapis.com chrome-extension: moz-extension: safari-extension:; img-src 'self' data: https:; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://accounts.google.com; frame-src 'self' https://accounts.google.com;"
     
     <!-- DNS prefetch and preconnect for critical resources -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -202,17 +202,70 @@
     <script type="module" src="/index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          // Use relative path for service worker to work with subdirectory deployments
-          const swPath = window.location.pathname.endsWith('/') 
-            ? window.location.pathname + 'sw.js'
-            : window.location.pathname.replace(/\/[^\/]*$/, '/sw.js');
-          navigator.serviceWorker.register(swPath).then(registration => {
-            console.log('SW registered: ', registration);
-          }).catch(registrationError => {
-            console.log('SW registration failed: ', registrationError);
-          });
+        window.addEventListener('load', async () => {
+          try {
+            // Enhanced service worker path resolution with fallback
+            let swPath = '/sw.js';
+            
+            // Check if we're in a subdirectory deployment
+            const currentPath = window.location.pathname;
+            if (currentPath !== '/' && !currentPath.endsWith('/')) {
+              // Extract base path for subdirectory deployments
+              const pathSegments = currentPath.split('/').slice(0, -1);
+              const basePath = pathSegments.join('/');
+              swPath = basePath + '/sw.js';
+            } else if (currentPath.endsWith('/') && currentPath !== '/') {
+              swPath = currentPath + 'sw.js';
+            }
+            
+            // Verify service worker file exists before registration
+            try {
+              const response = await fetch(swPath, { method: 'HEAD' });
+              if (!response.ok) {
+                throw new Error(`Service worker not found at ${swPath}`);
+              }
+            } catch (fetchError) {
+              console.warn('Service worker file check failed:', fetchError.message);
+              // Fallback to root path
+              swPath = '/sw.js';
+            }
+            
+            const registration = await navigator.serviceWorker.register(swPath, {
+              scope: currentPath === '/' ? '/' : currentPath,
+              updateViaCache: 'none' // Ensure fresh updates
+            });
+            
+            // Enhanced registration handling
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New service worker available, could show update notification
+                    console.log('New service worker available');
+                  }
+                });
+              }
+            });
+            
+            // Development logging (safe for production)
+            console.log('SW registered successfully:', registration);
+            
+          } catch (registrationError) {
+            // Enhanced error handling - don't break the app if SW fails
+            // Log service worker registration issues (non-critical)
+            console.warn('SW registration failed (non-critical):', registrationError);
+            
+            // Gracefully degrade without service worker
+            // PWA features will be disabled but app remains functional
+            window.__SW_DISABLED = true;
+          }
         });
+      } else {
+        // Service workers not supported
+        window.__SW_DISABLED = true;
+        // Service workers not supported - graceful degradation
+        console.info('Service Workers not supported in this browser');
       }
     </script>
 </body>

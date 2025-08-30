@@ -210,7 +210,7 @@ export class EnhancedWebSocketService extends EventEmitter {
       reconnectionDelayMax: 30000,
       timeout: 20000,
       transports: ['websocket', 'polling'],
-      secure: import.meta.env.VITE_ENV === 'production'
+      secure: import.meta.env.PROD
     };
 
     this.connectionState = {
@@ -240,30 +240,90 @@ export class EnhancedWebSocketService extends EventEmitter {
     this.updateConnectionState('connecting');
 
     return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        this.updateConnectionState('error', 'Connection timeout');
-        reject(new Error('Connection timeout'));
+      let isResolved = false;
+      let timeoutId: NodeJS.Timeout | null = null;
+      
+      const cleanup = () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        
+        // Remove temporary event listeners to prevent memory leaks
+        if (this.socket && !isResolved) {
+          this.socket.off('connect');
+          this.socket.off('connect_error');
+        }
+      };
+
+      const resolveOnce = () => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          this.onConnect();
+          resolve();
+        }
+      };
+
+      const rejectOnce = (error: Error) => {
+        if (!isResolved) {
+          isResolved = true;
+          cleanup();
+          
+          // Enhanced error suppression for WebSocket connection failures
+          const errorMessage = error.message?.toLowerCase() || '';
+          const isWebSocketConnectionError = errorMessage.includes('websocket') ||
+                                            errorMessage.includes('connection') ||
+                                            errorMessage.includes('network') ||
+                                            errorMessage.includes('timeout') ||
+                                            errorMessage.includes('refused') ||
+                                            errorMessage.includes('unavailable');
+          
+          // Cleanup socket on error
+          if (this.socket) {
+            this.socket.disconnect();
+            this.socket = null;
+          }
+          
+          if (isWebSocketConnectionError) {
+            this.updateConnectionState('disconnected', 'WebSocket unavailable');
+            // Create a suppressed error that won't show in console
+            const suppressedError = new Error('WebSocket service unavailable - graceful degradation active');
+            suppressedError.name = 'WebSocketUnavailable';
+            reject(suppressedError);
+          } else {
+            this.updateConnectionState('error', error.message);
+            reject(error);
+          }
+        }
+      };
+
+      // Set timeout with proper cleanup
+      timeoutId = setTimeout(() => {
+        const timeoutError = new Error('WebSocket connection timeout');
+        rejectOnce(timeoutError);
       }, this.config.timeout);
 
-      this.socket = io(this.config.url, {
-        ...this.config,
-        auth: authToken ? { token: authToken } : undefined,
-        query: userId ? { userId } : undefined
-      });
+      try {
+        this.socket = io(this.config.url, {
+          ...this.config,
+          auth: authToken ? { token: authToken } : undefined,
+          query: userId ? { userId } : undefined,
+          forceNew: true // Ensure fresh connection
+        });
 
-      this.socket.once('connect', () => {
-        clearTimeout(timeout);
-        this.onConnect();
-        resolve();
-      });
+        this.socket.once('connect', resolveOnce);
+        this.socket.once('connect_error', (error: any) => {
+          const connectionError = new Error(`WebSocket connection failed: ${error.message || error}`);
+          rejectOnce(connectionError);
+        });
 
-      this.socket.once('connect_error', (error: any) => {
-        clearTimeout(timeout);
-        this.updateConnectionState('error', error.message);
-        reject(error);
-      });
-
-      this.setupEventHandlers();
+        this.setupEventHandlers();
+        
+      } catch (socketCreationError) {
+        const creationError = new Error(`Failed to create WebSocket: ${socketCreationError}`);
+        rejectOnce(creationError);
+      }
     });
   }
 

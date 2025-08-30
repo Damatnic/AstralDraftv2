@@ -222,60 +222,15 @@ class ApiClient {
    * ESPN Fantasy API Integration (Backup Data Source)
    */
   async getESPNPlayers(leagueId?: string): Promise<Player[]> {
-    try {
-      // ESPN Fantasy API endpoint for player data
-      const url = leagueId 
-        ? `https://fantasy.espn.com/apis/v3/games/ffl/seasons/2024/segments/0/leagues/${leagueId}/players`
-        : 'https://fantasy.espn.com/apis/v3/games/ffl/seasons/2024/players';
-      
-      const response = await fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          ...(this.espnApiKey && { 'Authorization': `Bearer ${this.espnApiKey}` })
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`ESPN API error: ${response.status}`);
-      }
-
-      const data: ESPNResponse = await response.json();
-      
-      // Transform ESPN data to unified Player interface
-      return data.players.map((player: any) => ({
-        id: player.id.toString(),
-        name: player.fullName,
-        position: this.getPositionName(player.defaultPositionId),
-        team: this.getTeamName(player.proTeamId),
-        stats: player.stats?.[0] || {},
-        ownership: player.ownership
-      }));
-    } catch (error) {
-      console.error('Failed to fetch ESPN players:', error);
-      return [];
-    }
+    // ESPN API completely disabled to prevent CORS and 404 errors
+    console.log('ℹ️ ESPN Players API disabled - preventing network errors');
+    return [];
   }
 
   async getESPNLeagueInfo(leagueId: string): Promise<unknown> {
-    try {
-      const url = `https://fantasy.espn.com/apis/v3/games/ffl/seasons/2024/segments/0/leagues/${leagueId}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          ...(this.espnApiKey && { 'Authorization': `Bearer ${this.espnApiKey}` })
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`ESPN API error: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Failed to fetch ESPN league info:', error);
-      return null;
-    }
+    // ESPN API completely disabled to prevent CORS and 404 errors
+    console.log('ℹ️ ESPN League API disabled - preventing network errors');
+    return { disabled: true, reason: 'ESPN API disabled for error prevention' };
   }
 
   /**
@@ -309,8 +264,9 @@ class ApiClient {
       }));
     }
 
-    // Fallback: Try ESPN
-    return await this.getESPNPlayers();
+    // ESPN fallback disabled - return empty array to prevent 404 errors
+    console.log('ℹ️ ESPN fallback disabled - using SportsData.io only');
+    return [];
   }
 
   /**

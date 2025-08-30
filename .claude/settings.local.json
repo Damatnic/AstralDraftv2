@@ -42,7 +42,13 @@
       "Bash(npm ls:*)",
       "Bash(netstat:*)",
       "WebFetch(domain:localhost)",
-      "Bash(start http://localhost:8768)"
+      "Bash(start http://localhost:8768)",
+      "Bash(start http://localhost:8755)",
+      "Bash(start http://localhost:4176)",
+      "Bash(start http://localhost:4175)",
+      "Bash(start http://localhost:4177)",
+      "Bash(start http://localhost:4178)",
+      "Bash(start http://localhost:4179)"
     ],
     "deny": [],
     "ask": [],
