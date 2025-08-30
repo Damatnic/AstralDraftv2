@@ -48,7 +48,8 @@
       "Bash(start http://localhost:4175)",
       "Bash(start http://localhost:4177)",
       "Bash(start http://localhost:4178)",
-      "Bash(start http://localhost:4179)"
+      "Bash(start http://localhost:4179)",
+      "Bash(del nul)"
     ],
     "deny": [],
     "ask": [],

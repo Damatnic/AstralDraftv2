@@ -18,6 +18,7 @@ import {
   ArrowLeftIcon
 } from 'lucide-react';
 import { useProductionAuth, LoginCredentials, RegisterData } from '../../contexts/ProductionAuthContext';
+import { SecurePasswordInput } from '../ui/SecureInput';
 
 type ViewType = 'login' | 'register' | 'forgot-password' | 'verify-email';
 
@@ -319,16 +320,16 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<MailIcon className="w-5 h-5" />}
       />
 
-      <InputField
+      <SecurePasswordInput
         type="password"
         placeholder="Password"
         value={loginData.password}
-        onChange={(value: any) => setLoginData({ ...loginData, password: value })}
+        onChange={(value: string) => setLoginData({ ...loginData, password: value })}
         error={errors.password}
-        icon={<LockIcon className="w-5 h-5" />}
-        showPasswordToggle
-        onTogglePassword={() => setShowPassword(!showPassword)}
-        showPassword={showPassword}
+        label="Password"
+        showToggle={true}
+        clearClipboardDelay={5000}
+        className="pl-10"
       />
 
       <div className="flex items-center justify-between">
@@ -428,28 +429,31 @@ const ProductionLoginInterface: React.FC = () => {
         icon={<UserIcon className="w-5 h-5" />}
       />
 
-      <InputField
+      <SecurePasswordInput
         type="password"
         placeholder="Password"
         value={registerData.password}
-        onChange={(value: any) => setRegisterData({ ...registerData, password: value })}
+        onChange={(value: string) => setRegisterData({ ...registerData, password: value })}
         error={errors.password}
-        icon={<LockIcon className="w-5 h-5" />}
-        showPasswordToggle
-        onTogglePassword={() => setShowPassword(!showPassword)}
-        showPassword={showPassword}
+        label="Password"
+        showToggle={true}
+        strengthIndicator={true}
+        minLength={8}
+        maxLength={128}
+        clearClipboardDelay={5000}
+        className="pl-10"
       />
 
-      <InputField
+      <SecurePasswordInput
         type="password"
         placeholder="Confirm password"
         value={registerData.confirmPassword}
-        onChange={(value: any) => setRegisterData({ ...registerData, confirmPassword: value })}
+        onChange={(value: string) => setRegisterData({ ...registerData, confirmPassword: value })}
         error={errors.confirmPassword}
-        icon={<LockIcon className="w-5 h-5" />}
-        showPasswordToggle
-        onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
-        showPassword={showConfirmPassword}
+        label="Confirm Password"
+        showToggle={true}
+        clearClipboardDelay={5000}
+        className="pl-10"
       />
 
       <label className="flex items-start space-x-3">

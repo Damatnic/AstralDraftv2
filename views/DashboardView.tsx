@@ -23,6 +23,8 @@ import ActivityFeedWidget from '../components/dashboard/ActivityFeedWidget';
 import { LayoutIcon } from '../components/icons/LayoutIcon';
 import OnTheHotSeatWidget from '../components/dashboard/OnTheHotSeatWidget';
 import { GlobeIcon } from '../components/icons/GlobeIcon';
+import CurrentWeekMatchupsWidget from '../components/dashboard/CurrentWeekMatchupsWidget';
+import GameWeekStatusWidget from '../components/dashboard/GameWeekStatusWidget';
 
 interface DashboardViewProps {
   // No props currently needed, but interface ready for future expansion
@@ -45,6 +47,12 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
     const widgetComponents: { [key: string]: React.ReactNode } = {
         whatsNext: (
             <WhatsNextWidget />
+        ),
+        currentWeekMatchups: (
+            <CurrentWeekMatchupsWidget />
+        ),
+        gameWeekStatus: (
+            <GameWeekStatusWidget />
         ),
         leagues: (
             <Widget title="My Leagues" className="sm:col-span-1 lg:col-span-2">

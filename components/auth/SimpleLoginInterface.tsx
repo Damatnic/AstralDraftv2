@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SimpleAuthService, { SimpleUser } from '../../services/simpleAuthService';
+import { SecurePinInput } from '../ui/SecureInput';
 
 interface Props {
     onLogin: (user: SimpleUser) => void;
@@ -77,43 +78,19 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
             </div>
 
             <form onSubmit={handlePinSubmit} className="space-y-4">
-                <div className="relative">
-                    <input
-                        type="password"
-                        value={pin}
-                        onChange={(e: any) => handlePinChange(e.target.value)}
-                        placeholder="••••"
-                        className="w-full bg-gray-700 text-white text-center text-2xl tracking-[0.5em] rounded-lg px-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        maxLength={4}
-                        autoFocus
-                        autocomplete="off"
-                        data-form-type="other"
-                    />
-                    {pin.length > 0 && (
-                        <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <div className="flex space-x-1">
-                                {Array.from({ length: 4 }, (_, i) => (
-                                    <div
-                                        key={`pin-indicator-${i + 1}`}
-                                        className={`w-2 h-2 rounded-full ${
-                                            i < pin.length ? 'bg-blue-500' : 'bg-gray-600'
-                                        }`}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
+                <SecurePinInput
+                    value={pin}
+                    onChange={handlePinChange}
+                    length={4}
+                    showProgress={true}
+                    placeholder="Enter your 4-digit PIN"
+                    autoFocus
+                    error={error}
+                    className="text-center text-xl"
+                    allowPaste={false}
+                    clearClipboardDelay={3000}
+                />
 
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded-lg text-sm text-center"
-                    >
-                        {error}
-                    </motion.div>
-                )}
 
                 <div className="flex space-x-3">
                     <button

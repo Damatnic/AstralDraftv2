@@ -1,6 +1,7 @@
 // Core Components
 export { Button } from './Button';
 export { Input } from './Input';
+export { SecureInput, SecurePasswordInput, SecurePinInput } from './SecureInput';
 export { Select } from './Select';
 export { Textarea } from './Textarea';
 export { Checkbox } from './Checkbox';

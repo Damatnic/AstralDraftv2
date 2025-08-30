@@ -9,6 +9,7 @@ import SimpleAuthService from '../../services/simpleAuthService';
 import { useAppState } from '../../contexts/AppContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { Button } from '../ui/Button';
+import { SecurePinInput } from '../ui/SecureInput';
 
 interface SimplePlayerLoginProps {
   onLogin?: (user: any) => void;
@@ -485,66 +486,41 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
 
                     {/* Modern PIN Input */}
                     <div className="space-y-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-3">
-                          Secure PIN Authentication
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="password"
-                            value={pin}
-                            onChange={(e: any) => handlePinChange(e.target.value)}
-                            onKeyPress={handleKeyPress}
-                            placeholder="Enter PIN (or press Enter)"
-                            className="w-full px-6 py-4 bg-white/5 backdrop-blur-sm border-2 border-primary-500/30 rounded-xl
-                                     text-center text-2xl tracking-[0.3em] text-white font-mono
-                                     focus:outline-none focus:border-primary-500 focus:bg-white/10
-                                     transition-all duration-300 placeholder:text-gray-400 placeholder:text-sm"
-                            maxLength={6}
-                            autoFocus
-                            autoComplete="off"
-                            data-testid="pin-input"
+                      <div onKeyPress={handleKeyPress}>
+                        <SecurePinInput
+                          value={pin}
+                          onChange={handlePinChange}
+                          length={6}
+                          label="Secure PIN Authentication"
+                          placeholder="Enter PIN (or press Enter)"
+                          showProgress={true}
+                          allowPaste={true}
+                          clearClipboardDelay={2000}
+                          autoFocus
+                          error={error}
+                          className="text-center text-2xl tracking-[0.3em]"
+                        />
+                      </div>
+                      
+                      {/* Encouraging feedback */}
+                      <div className="flex justify-center gap-2">
+                        <div className="flex items-center gap-2">
+                          <motion.div
+                            className="w-3 h-3 bg-primary-500 rounded-full"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1, repeat: Infinity }}
                           />
-                          <div className="absolute inset-x-0 -bottom-1 h-[2px] bg-gradient-to-r from-transparent via-primary-500 to-transparent opacity-0 
-                                        group-focus-within:opacity-100 transition-opacity duration-300" />
-                        </div>
-                        
-                        {/* ZERO-ERROR Progress Indicator - Always encouraging */}
-                        <div className="flex justify-center gap-2 mt-4">
-                          <div className="flex items-center gap-2">
-                            <motion.div
-                              className="w-3 h-3 bg-primary-500 rounded-full"
-                              animate={{ scale: [1, 1.2, 1] }}
-                              transition={{ duration: 1, repeat: Infinity }}
-                            />
-                            <span className="text-sm text-primary-300">
-                              {pin.length > 0 ? 'Ready to sign in!' : 'Enter any PIN to continue'}
-                            </span>
-                            <motion.div
-                              className="w-3 h-3 bg-primary-500 rounded-full"
-                              animate={{ scale: [1, 1.2, 1] }}
-                              transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}
-                            />
-                          </div>
+                          <span className="text-sm text-primary-300">
+                            {pin.length > 0 ? 'Ready to sign in!' : 'Enter any PIN to continue'}
+                          </span>
+                          <motion.div
+                            className="w-3 h-3 bg-primary-500 rounded-full"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}
+                          />
                         </div>
                       </div>
 
-                      {/* Error Message */}
-                      <AnimatePresence>
-                        {error && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            className="p-3 rounded-xl bg-danger-500/10 border border-danger-500/30 backdrop-blur-sm"
-                          >
-                            <p className="text-danger-300 text-sm text-center flex items-center justify-center gap-2">
-                              <span className="text-lg">⚠️</span>
-                              {error}
-                            </p>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
 
                       {/* Action Buttons */}
                       <div className="flex gap-3">

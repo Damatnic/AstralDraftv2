@@ -51,7 +51,7 @@ const initialState: AppState = {
     gamedayEvents: {},
     teamSlogans: {},
     playerQueues: {},
-    dashboardLayout: ['whatsNext', 'leagues', 'standings', 'matchup', 'roster', 'players', 'waivers', 'trades', 'chat'],
+    dashboardLayout: ['whatsNext', 'currentWeekMatchups', 'gameWeekStatus', 'leagues', 'standings', 'roster', 'activity', 'performance'],
     notifications: [],
     isDraftPaused: false,
     soundEnabled: true,

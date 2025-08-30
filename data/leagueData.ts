@@ -139,8 +139,8 @@ export const MAIN_LEAGUE: League = {
   name: 'Astral Draft League 2025',
   logoUrl: '/favicon.svg',
   commissionerId: 'user_1', // Nick Damato is commissioner
-  status: 'PRE_DRAFT',
-  currentWeek: 0,
+  status: 'IN_SEASON', // Changed from PRE_DRAFT to IN_SEASON - draft is complete
+  currentWeek: 1, // Week 1 of the regular season
   settings: {
     teamCount: 10,
     playoffTeams: 6,
@@ -248,21 +248,38 @@ export const DRAFT_ORDER_2025 = [
 
 // Important dates for 2025 season
 export const SEASON_DATES_2025 = {
-  draftDate: new Date('2025-08-31T19:00:00Z'),
-  seasonStart: new Date('2025-09-04T00:00:00Z'), // Thursday after Labor Day
-  regularSeasonEnd: new Date('2025-12-21T23:59:59Z'),
-  playoffStart: new Date('2025-12-22T00:00:00Z'),
-  championship: new Date('2026-01-04T00:00:00Z'),
-  tradeDeadline: new Date('2025-11-15T23:59:59Z')
+  draftDate: new Date('2025-08-31T19:00:00Z'), // Draft has been completed
+  seasonStart: new Date('2025-09-05T00:00:00Z'), // September 5, 2025 - NFL Kickoff Thursday
+  regularSeasonEnd: new Date('2025-12-28T23:59:59Z'), // Week 17 ends
+  playoffStart: new Date('2025-12-29T00:00:00Z'), // Fantasy playoffs begin Week 15-17
+  championship: new Date('2026-01-04T00:00:00Z'), // Week 17 championship
+  tradeDeadline: new Date('2025-11-22T23:59:59Z') // Week 12 trade deadline
 };
 
-// Helper function to get days until draft
-export function getDaysUntilDraft(): number {
+// Helper function to get days until next game week
+export function getDaysUntilNextWeek(): number {
   const now = new Date();
-  const draft = SEASON_DATES_2025.draftDate;
-  const diffTime = Math.abs(draft.getTime() - now.getTime());
+  const nextThursday = new Date(now);
+  nextThursday.setDate(now.getDate() + ((4 - now.getDay() + 7) % 7 || 7)); // Get next Thursday
+  const diffTime = Math.abs(nextThursday.getTime() - now.getTime());
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
+}
+
+// Helper function to check if we're in season
+export function isSeasonActive(): boolean {
+  const now = new Date();
+  return now >= SEASON_DATES_2025.seasonStart && now <= SEASON_DATES_2025.regularSeasonEnd;
+}
+
+// Helper function to get current NFL week
+export function getCurrentNFLWeek(): number {
+  const now = new Date();
+  const seasonStart = SEASON_DATES_2025.seasonStart;
+  if (now < seasonStart) return 0;
+  
+  const weeksSinceStart = Math.floor((now.getTime() - seasonStart.getTime()) / (1000 * 60 * 60 * 24 * 7));
+  return Math.min(weeksSinceStart + 1, 18); // Max 18 weeks in NFL season
 }
 
 // Helper function to check if user is in league

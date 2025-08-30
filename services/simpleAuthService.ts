@@ -4,6 +4,7 @@
  */
 
 import { LEAGUE_MEMBERS } from '../data/leagueData';
+import SecurePasswordGenerator from '../utils/securePasswordGenerator';
 
 export interface SimpleUser {
     id: string;
@@ -206,6 +207,79 @@ class SimpleAuthService {
             createdAt: new Date().toISOString()
         }
     ];
+
+    /**
+     * Generate secure random passwords for all non-main users
+     * Preserves the main user's existing passwords (admin and player1)
+     */
+    static generateRandomPasswordsForUsers(): void {
+        try {
+            console.log('🔐 Starting secure password generation for league users...');
+            
+            // Get existing users
+            const users = this.getAllUsers();
+            
+            // Identify main user passwords to preserve
+            const mainUserPasswords = ['7347']; // Admin password
+            const excludeExisting = [...mainUserPasswords];
+            
+            // Get all non-main user IDs (exclude admin and player1 which is also Nick Damato)
+            const nonMainUserIds = ['player2', 'player3', 'player4', 'player5', 'player6', 'player7', 'player8', 'player9', 'player10'];
+            
+            console.log(`🎯 Generating secure passwords for ${nonMainUserIds.length} users...`);
+            
+            // Generate unique passwords for all non-main users
+            const newPasswords = SecurePasswordGenerator.generateMultipleSecurePasswords(
+                nonMainUserIds.length,
+                {
+                    excludeExisting,
+                    excludePatterns: ['0000'], // Exclude the current default
+                    maxAttempts: 1000
+                }
+            );
+            
+            // Update each non-main user with their new password
+            let updatedCount = 0;
+            nonMainUserIds.forEach((userId, index) => {
+                const userIndex = users.findIndex(u => u.id === userId);
+                if (userIndex !== -1) {
+                    const oldPin = users[userIndex].pin;
+                    users[userIndex].pin = newPasswords[index];
+                    
+                    SecurePasswordGenerator.logPasswordGeneration(userId, true);
+                    console.log(`✅ Updated password for ${users[userIndex].displayName} (${userId})`);
+                    updatedCount++;
+                } else {
+                    console.warn(`⚠️  User ${userId} not found, skipping password update`);
+                }
+            });
+            
+            // Save updated users
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(users));
+            
+            console.log(`🚀 Password generation complete! Updated ${updatedCount} users.`);
+            console.log('🔒 Main user passwords preserved (admin: 7347, player1: 0000)');
+            console.log('📋 All passwords are cryptographically secure and unique');
+            
+            // Log summary for audit purposes
+            const auditLog = {
+                timestamp: new Date().toISOString(),
+                action: 'bulk_password_generation',
+                usersUpdated: updatedCount,
+                mainUsersPreserved: ['admin', 'player1'],
+                securityFeatures: ['crypto-secure-random', 'pattern-exclusion', 'uniqueness-guarantee']
+            };
+            
+            if (typeof window !== 'undefined') {
+                (window as any).__ASTRAL_PASSWORD_UPDATE_LOG = auditLog;
+            }
+            
+        } catch (error) {
+            console.error('❌ Failed to generate secure passwords:', error);
+            SecurePasswordGenerator.logPasswordGeneration('bulk_operation', false);
+            throw error;
+        }
+    }
 
     /**
      * ZERO-ERROR Initialize - Always ensures users exist
@@ -413,6 +487,94 @@ class SimpleAuthService {
      */
     private static generateSessionId(): string {
         return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    }
+
+    /**
+     * Get all user passwords for admin display (masked for security)
+     * Returns user info with password status, not actual passwords
+     */
+    static getUserPasswordStatus(): Array<{
+        id: string;
+        displayName: string;
+        passwordSet: boolean;
+        isSecurePattern: boolean;
+        isMainUser: boolean;
+        lastUpdated?: string;
+    }> {
+        try {
+            const users = this.getAllUsers();
+            return users.map(user => {
+                const isMainUser = user.id === 'admin' || user.id === 'player1';
+                const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
+                
+                return {
+                    id: user.id,
+                    displayName: user.displayName,
+                    passwordSet: user.pin && user.pin.length === 4,
+                    isSecurePattern: validation.strength === 'strong',
+                    isMainUser,
+                    lastUpdated: user.lastLogin
+                };
+            });
+        } catch (error) {
+            console.error('Failed to get user password status:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Validate all user passwords and generate report
+     */
+    static generatePasswordSecurityReport(): {
+        totalUsers: number;
+        securePasswords: number;
+        weakPasswords: number;
+        mainUsersProtected: boolean;
+        recommendations: string[];
+    } {
+        try {
+            const users = this.getAllUsers();
+            let secureCount = 0;
+            let weakCount = 0;
+            const recommendations: string[] = [];
+            
+            users.forEach(user => {
+                const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
+                if (validation.strength === 'strong') {
+                    secureCount++;
+                } else {
+                    weakCount++;
+                    if (!user.isAdmin && user.id !== 'player1') {
+                        recommendations.push(`Update password for ${user.displayName} (${user.id})`);
+                    }
+                }
+            });
+            
+            const mainUsersProtected = users
+                .filter(u => u.id === 'admin' || u.id === 'player1')
+                .every(u => u.pin && u.pin !== '0000');
+            
+            if (weakCount > 0) {
+                recommendations.push('Run generateRandomPasswordsForUsers() to secure all non-main users');
+            }
+            
+            return {
+                totalUsers: users.length,
+                securePasswords: secureCount,
+                weakPasswords: weakCount,
+                mainUsersProtected,
+                recommendations
+            };
+        } catch (error) {
+            console.error('Failed to generate password security report:', error);
+            return {
+                totalUsers: 0,
+                securePasswords: 0,
+                weakPasswords: 0,
+                mainUsersProtected: false,
+                recommendations: ['Error generating report - check system logs']
+            };
+        }
     }
 
     /**
