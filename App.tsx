@@ -227,37 +227,76 @@ const AppContent: React.FC = () => {
             }
         };
         
-        // Override console methods with safety checks
+        // NUCLEAR-LEVEL console override with bulletproof safety
+        const safeJoinArgs = (argsList: any): string => {
+            try {
+                if (!argsList) return '';
+                if (!Array.isArray(argsList) && typeof argsList.length !== 'number') return String(argsList || '');
+                if (argsList.length === 0) return '';
+                
+                const safeArgs = [];
+                for (let i = 0; i < (argsList.length || 0); i++) {
+                    try {
+                        const arg = argsList[i];
+                        if (arg === undefined || arg === null) {
+                            safeArgs.push('');
+                        } else if (typeof arg === 'object') {
+                            safeArgs.push(JSON.stringify(arg) || '[object]');
+                        } else {
+                            safeArgs.push(String(arg));
+                        }
+                    } catch (innerE) {
+                        safeArgs.push('[unparseable]');
+                    }
+                }
+                return safeArgs.join(' ');
+            } catch (e) {
+                return String(argsList || '[error]');
+            }
+        };
+        
         console.error = (...args) => {
             try {
-                const message = (args && args.length > 0) ? args.join(' ') : '';
+                const message = safeJoinArgs(args);
                 if (!isExtensionNoise(message)) {
-                    originalConsoleError.apply(console, args);
+                    originalConsoleError.apply(console, args || []);
                 }
             } catch (e) {
-                originalConsoleError.apply(console, args);
+                try {
+                    originalConsoleError.apply(console, args || []);
+                } catch (fallbackError) {
+                    // Complete silence if everything fails
+                }
             }
         };
         
         console.warn = (...args) => {
             try {
-                const message = (args && args.length > 0) ? args.join(' ') : '';
+                const message = safeJoinArgs(args);
                 if (!isExtensionNoise(message)) {
-                    originalConsoleWarn.apply(console, args);
+                    originalConsoleWarn.apply(console, args || []);
                 }
             } catch (e) {
-                originalConsoleWarn.apply(console, args);
+                try {
+                    originalConsoleWarn.apply(console, args || []);
+                } catch (fallbackError) {
+                    // Complete silence if everything fails
+                }
             }
         };
         
         console.log = (...args) => {
             try {
-                const message = (args && args.length > 0) ? args.join(' ') : '';
+                const message = safeJoinArgs(args);
                 if (!isExtensionNoise(message)) {
-                    originalConsoleLog.apply(console, args);
+                    originalConsoleLog.apply(console, args || []);
                 }
             } catch (e) {
-                originalConsoleLog.apply(console, args);
+                try {
+                    originalConsoleLog.apply(console, args || []);
+                } catch (fallbackError) {
+                    // Complete silence if everything fails
+                }
             }
         };
         
@@ -579,18 +618,82 @@ const AppContent: React.FC = () => {
     );
 };
 
+// NUCLEAR-LEVEL Error Prevention Component
+const NuclearErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [hasError, setHasError] = React.useState(false);
+  const [errorCount, setErrorCount] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleError = (error: Error, errorInfo?: any) => {
+      setErrorCount(prev => prev + 1);
+      if (errorCount < 5) { // Allow up to 5 retries
+        setTimeout(() => setHasError(false), 1000);
+      }
+    };
+
+    // Global error catcher
+    const globalErrorHandler = (event: ErrorEvent) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      handleError(new Error(event.message));
+      return false;
+    };
+
+    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      handleError(new Error(String(event.reason)));
+    };
+
+    window.addEventListener('error', globalErrorHandler);
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
+    return () => {
+      window.removeEventListener('error', globalErrorHandler);
+      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+    };
+  }, [errorCount]);
+
+  if (hasError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center">
+        <div className="text-center space-y-4 p-8 bg-slate-800 rounded-lg shadow-xl max-w-md">
+          <div className="text-6xl">🛡️</div>
+          <h1 className="text-2xl font-bold text-white">System Protected</h1>
+          <p className="text-gray-300">The application is recovering from an error...</p>
+          <button
+            onClick={() => {setHasError(false); setErrorCount(0);}}
+            className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+          >
+            Continue to App
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  try {
+    return <>{children}</>;
+  } catch (error) {
+    setHasError(true);
+    return null;
+  }
+};
+
 const App: React.FC = () => {
   return (
-    <AppProvider>
-      <ModalProvider>
-        <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950">
-          <ErrorBoundary>
-            <AppContent />
-            <ModalManager />
-          </ErrorBoundary>
-        </div>
-      </ModalProvider>
-    </AppProvider>
+    <NuclearErrorBoundary>
+      <AppProvider>
+        <ModalProvider>
+          <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950">
+            <ErrorBoundary>
+              <AppContent />
+              <ModalManager />
+            </ErrorBoundary>
+          </div>
+        </ModalProvider>
+      </AppProvider>
+    </NuclearErrorBoundary>
   );
 };
 
