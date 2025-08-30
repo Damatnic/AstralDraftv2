@@ -115,6 +115,7 @@ import SkipLink from './components/ui/SkipLink';
 import PWAInstallButton from './components/ui/PWAInstallButton';
 import HighContrastMode from './components/ui/HighContrastMode';
 import ErrorBoundary from './components/ui/ErrorBoundary';
+import AtomicErrorEliminator from './components/ui/AtomicErrorEliminator';
 import ModernNavigation from './components/ui/ModernNavigation';
 import MobileLayoutWrapper from './components/mobile/MobileLayoutWrapper';
 import ModalManager from './components/ui/ModalManager';
@@ -659,8 +660,9 @@ const AppContent: React.FC = () => {
     };
     
     return (
-        <div className="relative w-full min-h-screen flex flex-col font-sans bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
-            <SkipLink />
+        <AtomicErrorEliminator fallback={<SimpleLoader message="Recovering from error..." />}>
+            <div className="relative w-full min-h-screen flex flex-col font-sans bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
+                <SkipLink />
             
             {/* Modern Navigation Header */}
             {!isMobile && (
@@ -704,7 +706,8 @@ const AppContent: React.FC = () => {
             <div className="fixed top-20 right-4 z-[1080]">
                 <HighContrastMode />
             </div>
-        </div>
+            </div>
+        </AtomicErrorEliminator>
     );
 };
 
