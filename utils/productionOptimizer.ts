@@ -81,15 +81,26 @@ export class ProductionOptimizer {
 
   private enablePerformanceOptimizations(): void {
     if (this.isProduction) {
-      // Disable React DevTools in production
+      // Safely disable React DevTools in production
       if (typeof window !== 'undefined') {
-        (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
-          isDisabled: true,
-          supportsFiber: true,
-          inject: () => {},
-          onCommitFiberRoot: () => {},
-          onCommitFiberUnmount: () => {},
-        };
+        try {
+          // Check if the property is writable before attempting to set it
+          const descriptor = Object.getPropertyDescriptor(window, '__REACT_DEVTOOLS_GLOBAL_HOOK__');
+          if (!descriptor || descriptor.writable !== false) {
+            (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+              isDisabled: true,
+              supportsFiber: true,
+              inject: () => {},
+              onCommitFiberRoot: () => {},
+              onCommitFiberUnmount: () => {},
+            };
+          }
+        } catch (error) {
+          // Silently handle cases where the property cannot be set
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('React DevTools hook could not be disabled:', error);
+          }
+        }
       }
       
       // Enable strict mode optimizations

@@ -133,7 +133,14 @@ async function networkFirstStrategy(request) {
     
     if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE_NAME);
-      cache.put(request, networkResponse.clone());
+      // Check for partial responses which cannot be cached
+      if (networkResponse.status !== 206) {
+        try {
+          await cache.put(request, networkResponse.clone());
+        } catch (cacheError) {
+          console.warn('[SW] Failed to cache response:', cacheError);
+        }
+      }
       await limitCacheSize(DYNAMIC_CACHE_NAME, MAX_DYNAMIC_CACHE_SIZE);
     }
     
@@ -170,7 +177,14 @@ async function cacheFirstStrategy(request) {
     
     if (networkResponse.ok) {
       const cache = await caches.open(DYNAMIC_CACHE_NAME);
-      cache.put(request, networkResponse.clone());
+      // Check for partial responses which cannot be cached
+      if (networkResponse.status !== 206) {
+        try {
+          await cache.put(request, networkResponse.clone());
+        } catch (cacheError) {
+          console.warn('[SW] Failed to cache response:', cacheError);
+        }
+      }
       await limitCacheSize(DYNAMIC_CACHE_NAME, MAX_DYNAMIC_CACHE_SIZE);
     }
     
@@ -196,7 +210,14 @@ async function staleWhileRevalidateStrategy(request) {
   const networkResponsePromise = fetch(request)
     .then((networkResponse) => {
       if (networkResponse.ok) {
-        cache.put(request, networkResponse.clone());
+        // Check for partial responses which cannot be cached
+      if (networkResponse.status !== 206) {
+        try {
+          await cache.put(request, networkResponse.clone());
+        } catch (cacheError) {
+          console.warn('[SW] Failed to cache response:', cacheError);
+        }
+      }
       }
       return networkResponse;
     })
