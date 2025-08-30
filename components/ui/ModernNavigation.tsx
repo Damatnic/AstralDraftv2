@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from './Button';
 import { View, User } from '../../types';
+import { useModal } from '../../contexts/ModalContext';
 
 interface NavigationProps {
   user?: User;
@@ -29,9 +30,10 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
   currentView = 'DASHBOARD' as View,
   onViewChange,
   onLogout
-}: any) => {
+}: NavigationProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { openModal } = useModal();
 
   // Track scroll position for nav background effect
   useEffect(() => {
@@ -69,6 +71,8 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
             : 'bg-gradient-to-b from-dark-900/80 to-transparent backdrop-blur-xl'
           }
         `}
+        role="navigation"
+        aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -78,7 +82,9 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-                aria-label="Toggle menu"
+                aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-navigation-menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {mobileMenuOpen ? (
@@ -110,8 +116,8 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
-              {navItems.map((item: any) => (
+            <div className="hidden lg:flex items-center gap-1" role="menubar" aria-label="Navigation menu">
+              {navItems.map((item) => (
                 <NavButton
                   key={item.id}
                   item={item}
@@ -124,11 +130,19 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
             {/* User Menu */}
             <div className="flex items-center gap-3">
               {/* Notifications */}
-              <button className="relative p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button 
+                className="relative p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
+                aria-label="Notifications (1 new)"
+                aria-describedby="notification-indicator"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                 </svg>
-                <span className="absolute top-1 right-1 w-2 h-2 bg-danger-500 rounded-full animate-pulse" />
+                <span 
+                  className="absolute top-1 right-1 w-2 h-2 bg-danger-500 rounded-full animate-pulse" 
+                  id="notification-indicator"
+                  aria-label="New notification available"
+                />
               </button>
 
               {/* User Profile Dropdown */}
@@ -150,9 +164,12 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
               className="lg:hidden border-t border-white/10 bg-dark-900/95 backdrop-blur-xl"
+              id="mobile-navigation-menu"
+              role="menu"
+              aria-label="Mobile navigation menu"
             >
               <div className="px-4 py-4 space-y-1">
-                {navItems.map((item: any) => (
+                {navItems.map((item) => (
                   <MobileNavButton
                     key={item.id}
                     item={item}
@@ -180,13 +197,13 @@ const NavButton: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }: any) => {
+}> = ({ item, isActive, onClick }) => {
   return (
     <motion.button
       onClick={onClick}
       className={`
         relative px-4 py-2 rounded-xl font-medium text-sm
-        transition-all duration-200 group
+        transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
         ${isActive 
           ? 'text-white' 
           : 'text-gray-400 hover:text-white hover:bg-white/10'
@@ -194,6 +211,9 @@ const NavButton: React.FC<{
       `}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
+      role="menuitem"
+      aria-current={isActive ? 'page' : undefined}
+      aria-label={`Navigate to ${item.label}${item.badge ? ` (${item.badge} notifications)` : ''}`}
     >
       {/* Active indicator */}
       {isActive && (
@@ -222,19 +242,22 @@ const MobileNavButton: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }: any) => {
+}> = ({ item, isActive, onClick }) => {
   return (
     <motion.button
       onClick={onClick}
       className={`
         w-full flex items-center gap-3 px-4 py-3 rounded-xl
-        transition-all duration-200
+        transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
         ${isActive 
           ? 'bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-white border border-primary-500/30' 
           : 'text-gray-400 hover:text-white hover:bg-white/10'
         }
       `}
       whileTap={{ scale: 0.98 }}
+      role="menuitem"
+      aria-current={isActive ? 'page' : undefined}
+      aria-label={`Navigate to ${item.label}${item.badge ? ` (${item.badge} notifications)` : ''}`}
     >
       <span className="text-xl">{item.icon}</span>
       <span className="font-medium">{item.label}</span>
@@ -252,14 +275,19 @@ const UserMenu: React.FC<{
   userName: string;
   teamName: string;
   onLogout?: () => void;
-}> = ({ userName, teamName, onLogout }: any) => {
+}> = ({ userName, teamName, onLogout }) => {
   const [open, setOpen] = useState(false);
+  const { openModal } = useModal();
 
   return (
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/10 transition-all duration-200 group"
+        className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/10 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50"
+        aria-label={`User menu for ${userName} - ${teamName}`}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-controls="user-dropdown-menu"
       >
         <div className="hidden sm:block text-right">
           <p className="text-sm font-semibold text-white group-hover:text-primary-400 transition-colors">
@@ -290,6 +318,9 @@ const UserMenu: React.FC<{
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.15 }}
               className="absolute right-0 mt-2 w-64 origin-top-right z-50"
+              id="user-dropdown-menu"
+              role="menu"
+              aria-label="User account menu"
             >
               <div className="bg-dark-800/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-2xl overflow-hidden">
                 {/* User Info Header */}
@@ -307,10 +338,10 @@ const UserMenu: React.FC<{
 
                 {/* Menu Items */}
                 <div className="p-2">
-                  <MenuButton icon="⚙️" label="Settings" onClick={() => {}} />
-                  <MenuButton icon="👤" label="Profile" onClick={() => {}} />
-                  <MenuButton icon="📊" label="Analytics" onClick={() => {}} />
-                  <MenuButton icon="❓" label="Help & Support" onClick={() => {}} />
+                  <MenuButton icon="⚙️" label="Settings" onClick={() => { setOpen(false); openModal('settings'); }} />
+                  <MenuButton icon="👤" label="Profile" onClick={() => { setOpen(false); openModal('profile'); }} />
+                  <MenuButton icon="📊" label="Analytics" onClick={() => { setOpen(false); openModal('analytics'); }} />
+                  <MenuButton icon="❓" label="Help & Support" onClick={() => { setOpen(false); openModal('help'); }} />
                   
                   <div className="my-2 border-t border-white/10" />
                   
@@ -339,7 +370,7 @@ const MenuButton: React.FC<{
   label: string;
   onClick: () => void;
   variant?: 'default' | 'danger';
-}> = ({ icon, label, onClick, variant = 'default' }: any) => {
+}> = ({ icon, label, onClick, variant = 'default' }) => {
   const variantClasses = {
     default: 'hover:bg-white/10 text-gray-300 hover:text-white',
     danger: 'hover:bg-danger-500/20 text-gray-300 hover:text-danger-400'
@@ -350,9 +381,11 @@ const MenuButton: React.FC<{
       onClick={onClick}
       className={`
         w-full flex items-center gap-3 px-3 py-2 rounded-lg
-        transition-all duration-200
+        transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
         ${variantClasses[variant]}
       `}
+      role="menuitem"
+      aria-label={label}
     >
       <span className="text-lg">{icon}</span>
       <span className="text-sm font-medium">{label}</span>

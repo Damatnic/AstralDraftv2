@@ -16,7 +16,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   size = 'md'
-}: any) => {
+}: ModalProps) => {
   const sizeClasses = {
     sm: 'max-w-md',
     md: 'max-w-lg',
@@ -39,6 +39,23 @@ export const Modal: React.FC<ModalProps> = ({
       document.body.style.paddingRight = '';
     };
   }, [isOpen]);
+
+  // Handle Escape key to close modal
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>

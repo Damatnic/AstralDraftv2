@@ -4,6 +4,7 @@
 
 import React, { useEffect } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
+import { ModalProvider } from './contexts/ModalContext';
 import './styles/globals.css';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import LeagueDashboard from './views/LeagueDashboard';
@@ -16,7 +17,7 @@ import { logger as loggingService } from './services/loggingService';
 import { mobilePerformanceOptimizer } from './utils/mobilePerformanceOptimizer';
 import { touchEnhancer } from './utils/mobileTouchEnhancer';
 import { productionOptimizer } from './utils/productionOptimizer';
-import type { View } from './types';
+import type { View, Notification } from './types';
 
 // Import UI components
 import SkipLink from './components/ui/SkipLink';
@@ -25,6 +26,7 @@ import HighContrastMode from './components/ui/HighContrastMode';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import ModernNavigation from './components/ui/ModernNavigation';
 import MobileLayoutWrapper from './components/mobile/MobileLayoutWrapper';
+import ModalManager from './components/ui/ModalManager';
 
 // Lazy load secondary views
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
@@ -45,7 +47,7 @@ const SeasonManagementView = React.lazy(() => import('./views/SeasonManagementVi
 const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 
 // Enhanced loading component with better visuals and performance
-const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }: any) => (
+const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
     <div className="text-center space-y-6">
       <div className="relative inline-flex">
@@ -88,9 +90,14 @@ const AppContent: React.FC = () => {
         };
     }, []);
 
-    // Initialize real-time services
+    // Initialize real-time services (disabled for frontend-only mode)
     useEffect(() => {
         const initializeRealTimeServices = async () => {
+            // Skip WebSocket initialization if no backend server
+            if (process.env.NODE_ENV === 'development' && !process.env.VITE_WS_URL) {
+                return;
+            }
+            
             try {
                 // Initialize WebSocket connection
                 await enhancedWebSocketService.connect();
@@ -99,7 +106,7 @@ const AppContent: React.FC = () => {
                 await realtimeNotificationServiceV2.initialize(state.user?.id || '');
                 
                 // Listen for notifications using EventEmitter pattern
-                realtimeNotificationServiceV2.on('notification', (notification: any) => {
+                realtimeNotificationServiceV2.on('notification', (notification: Notification) => {
                     // Handle real-time notifications
                     dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
                 });
@@ -120,9 +127,6 @@ const AppContent: React.FC = () => {
                 
                 touchEnhancer.enableHapticFeedback(true);
                 
-                if (process.env.NODE_ENV === 'development') {
-                    console.log('✅ Mobile optimizations initialized');
-                }
             } catch (error) {
                 loggingService.error('Mobile optimization initialization failed', error, 'mobile-init');
             }
@@ -131,9 +135,6 @@ const AppContent: React.FC = () => {
             try {
                 const envInfo = productionOptimizer.getEnvironmentInfo();
                 
-                if (process.env.NODE_ENV === 'development') {
-                    console.log('🎯 Environment initialized:', envInfo);
-                }
                 
                 // Track app initialization performance
                 const startTime = performance.now();
@@ -141,9 +142,6 @@ const AppContent: React.FC = () => {
                     const duration = performance.now() - startTime;
                     performanceMonitor.recordMetric('app_initialization', duration);
                     
-                    if (process.env.NODE_ENV === 'development') {
-                        console.log(`⚡ App initialized in ${duration.toFixed(2)}ms`);
-                    }
                 };
                 
                 requestIdleCallback(initComplete, { timeout: 1000 });
@@ -161,7 +159,7 @@ const AppContent: React.FC = () => {
             enhancedWebSocketService.disconnect();
             realtimeNotificationServiceV2.removeAllListeners();
         };
-    }, [state.user]);
+    }, [state.user, dispatch]);
 
     // Show login if no user is logged in
     if (!state.user) {
@@ -355,11 +353,14 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AppProvider>
-      <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950">
-        <ErrorBoundary>
-          <AppContent />
-        </ErrorBoundary>
-      </div>
+      <ModalProvider>
+        <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950">
+          <ErrorBoundary>
+            <AppContent />
+            <ModalManager />
+          </ErrorBoundary>
+        </div>
+      </ModalProvider>
     </AppProvider>
   );
 };

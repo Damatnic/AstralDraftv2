@@ -5,7 +5,56 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./views/**/*.{js,ts,jsx,tsx}",
-    "./*.tsx"
+    "./hooks/**/*.{js,ts,jsx,tsx}",
+    "./utils/**/*.{js,ts,jsx,tsx}",
+    "./contexts/**/*.{js,ts,jsx,tsx}",
+    "./services/**/*.{js,ts,jsx,tsx}",
+    "./*.{tsx,ts}"
+  ],
+  // Enable JIT mode for better purging
+  mode: 'jit',
+  // Safelist commonly used dynamic classes
+  safelist: [
+    // Animation classes
+    'animate-bounce',
+    'animate-spin',
+    'animate-pulse',
+    'animation-delay-75',
+    'animation-delay-100',
+    'animation-delay-200',
+    
+    // Dynamic background colors
+    {
+      pattern: /^bg-(primary|secondary|accent|red|green|blue|yellow|purple|pink|indigo|cyan|gray|slate|dark)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+      variants: ['hover', 'focus', 'active']
+    },
+    
+    // Dynamic text colors
+    {
+      pattern: /^text-(primary|secondary|accent|red|green|blue|yellow|purple|pink|indigo|cyan|gray|slate|dark|white)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+      variants: ['hover', 'focus', 'active']
+    },
+    
+    // Dynamic border colors
+    {
+      pattern: /^border-(primary|secondary|accent|red|green|blue|yellow|purple|pink|indigo|cyan|gray|slate|dark)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+      variants: ['hover', 'focus', 'active']
+    },
+    
+    // Dynamic spacing
+    {
+      pattern: /^(p|m|pt|pb|pl|pr|mt|mb|ml|mr|px|py|mx|my)-(0|1|2|3|4|5|6|8|10|12|16|20|24|32|40|48|56|64)$/
+    },
+    
+    // Grid and flex utilities
+    {
+      pattern: /^(grid-cols|col-span)-(1|2|3|4|5|6|7|8|9|10|11|12)$/
+    },
+    
+    // Z-index utilities used in modals and overlays
+    {
+      pattern: /^z-(0|10|20|30|40|50|auto|\[1000\]|\[1010\]|\[1020\]|\[1030\]|\[1040\]|\[1050\]|\[1060\]|\[1070\]|\[1080\]|\[1090\])$/
+    }
   ],
   darkMode: 'class',
   theme: {
