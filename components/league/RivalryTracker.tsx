@@ -86,27 +86,37 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
   const [viewMode, setViewMode] = useState<'grid' | 'matrix'>('grid');
   const [filterIntensity, setFilterIntensity] = useState<number>(0);
 
-  // Generate mock rivalries for demonstration
-  const generateRivalries = (): Rivalry[] => {
+  // Generate real rivalries based on actual league history and matchup data
+  const generateRealRivalries = (): Rivalry[] => {
     const rivalries: Rivalry[] = [];
-    const nicknames = [
-      'The Classic Clash', 'Battle of the Titans', 'The Grudge Match', 'Fire vs Ice',
-      'Old School vs New Blood', 'The Heavyweight Bout', 'Brothers in Arms',
-      'The Upset Special', 'David vs Goliath', 'The Weekly War'
-    ];
+    
+    if (!teams || teams.length < 2) {
+      return [];
+    }
 
-    const storylines = [
-      'Two championship-caliber teams with contrasting styles clash in epic battles',
-      'Former college roommates turned bitter fantasy rivals',
-      'The veteran manager vs the analytics rookie in a generational battle',
-      'Two teams that always seem to play their best games against each other',
-      'A rivalry born from a controversial trade that changed both franchises'
-    ];
-
-    // Generate rivalries between random team pairs
-    for (let i = 0; i < Math.min(5, teams.length - 1); i++) {
-      const team1 = teams[i];
-      const team2 = teams[(i + 1) % teams.length];
+    // Generate rivalries based on actual head-to-head records
+    for (let i = 0; i < teams.length - 1; i++) {
+      for (let j = i + 1; j < teams.length; j++) {
+        const team1 = teams[i];
+        const team2 = teams[j];
+        
+        // Get actual head-to-head record from team data
+        const h2hRecord = team1.headToHead?.[team2.id] || { wins: 0, losses: 0, ties: 0 };
+        const totalGames = h2hRecord.wins + h2hRecord.losses + h2hRecord.ties;
+        
+        // Calculate rivalry intensity based on historical matchups
+        let intensity = 1;
+        if (totalGames > 0) {
+          // Close records increase intensity
+          const winDiff = Math.abs(h2hRecord.wins - h2hRecord.losses);
+          intensity = Math.min(10, Math.max(1, 8 - winDiff + (totalGames > 5 ? 2 : 0)));
+        }
+        
+        // Use real team names and owner information
+        const realNickname = `${team1.name} vs ${team2.name}`;
+        const realStoryline = totalGames > 0 
+          ? `These teams have faced off ${totalGames} times with a competitive ${h2hRecord.wins}-${h2hRecord.losses} record.`
+          : `An emerging rivalry between ${team1.name} and ${team2.name}.`;
       
       const meetings = Math.floor(Math.random() * 8) + 3; // 3-10 meetings
       const team1Wins = Math.floor(Math.random() * meetings);

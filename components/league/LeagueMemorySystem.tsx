@@ -57,9 +57,10 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   const [selectedMemory, setSelectedMemory] = useState<LeagueMemory | null>(null);
   const [newComment, setNewComment] = useState('');
 
-  // Generate mock memories for demonstration
-  const generateMockMemories = (): LeagueMemory[] => {
-    const mockMemories: LeagueMemory[] = [
+  // Generate real memories - initially empty, users will add their own
+  const generateRealMemories = (): LeagueMemory[] => {
+    // Return empty array - users will add their own real memories
+    return [];
       {
         id: '1',
         type: 'photo',
@@ -188,7 +189,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
     return mockMemories;
   };
 
-  const [allMemories] = useState<LeagueMemory[]>(generateMockMemories());
+  const [allMemories] = useState<LeagueMemory[]>(generateRealMemories());
 
   useEffect(() => {
     const filtered = selectedCategory === 'all' 

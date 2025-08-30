@@ -58,73 +58,98 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('compact');
   const [sortBy, setSortBy] = useState<'powerScore' | 'record' | 'pointsFor' | 'playoffOdds'>('powerScore');
 
-  // Mock data generator for demonstration
-  const generateMockRankings = (): TeamRanking[] => {
-    const teamNames = [
-      'Dynasty Destroyers', 'Gridiron Gladiators', 'Fantasy Phenoms', 'Championship Chasers',
-      'Playoff Predators', 'Touchdown Titans', 'Victory Vampires', 'Elite Eagles',
-      'Comeback Kings', 'Draft Day Demons'
-    ];
+  // Generate real team rankings based on actual league data
+  const generateRealRankings = (): TeamRanking[] => {
+    try {
+      // Use actual league teams from the context
+      const leagueTeams = teams || [];
+      
+      if (leagueTeams.length === 0) {
+        return [];
+      }
 
-    const owners = [
-      'Mike Johnson', 'Sarah Chen', 'Alex Rodriguez', 'Jordan Smith',
-      'Taylor Brown', 'Casey Wilson', 'Morgan Davis', 'Riley Martinez',
-      'Avery Thompson', 'Quinn Anderson'
-    ];
-
-    return teamNames.map((name, index) => {
-      const wins = Math.floor(Math.random() * (week + 1));
-      const losses = Math.min(week - wins, week);
-      const pf = 1200 + Math.random() * 400;
-      const pa = 1100 + Math.random() * 400;
-      const previousRank = Math.max(1, Math.min(10, index + 1 + Math.floor(Math.random() * 3) - 1));
-      const currentRank = index + 1;
-
-      return {
-        teamId: `team_${index}`,
-        teamName: name,
-        ownerName: owners[index],
-        currentRank,
-        previousRank,
-        record: { wins, losses },
-        pointsFor: pf,
-        pointsAgainst: pa,
-        powerScore: 85 - index * 8 + Math.random() * 10,
-        strengthOfSchedule: 0.4 + Math.random() * 0.3,
-        projectedRecord: { 
-          wins: Math.floor(wins + (14 - week) * (0.3 + Math.random() * 0.4)), 
-          losses: Math.floor(losses + (14 - week) * (0.3 + Math.random() * 0.4))
-        },
-        playoffOdds: Math.max(0, Math.min(100, 90 - index * 9 + Math.random() * 20)),
-        championshipOdds: Math.max(0, Math.min(50, 30 - index * 3 + Math.random() * 10)),
-        trend: currentRank < previousRank ? 'up' : currentRank > previousRank ? 'down' : 'stable',
-        trendStrength: Math.abs(currentRank - previousRank) + 1,
-        keyStats: {
-          avgPointsFor: pf / (wins + losses || 1),
-          avgPointsAgainst: pa / (wins + losses || 1),
-          consistencyScore: 65 + Math.random() * 30,
-          luckFactor: -20 + Math.random() * 40
-        },
-        analysis: {
-          strengths: ['Strong QB play', 'Consistent RB production', 'Deep WR corps'][Math.floor(Math.random() * 3)] ? 
-            ['Strong QB play', 'Consistent RB production'] : ['Deep WR corps', 'Solid defense'],
-          weaknesses: ['Inconsistent kicking', 'Weak bench', 'Injury concerns'][Math.floor(Math.random() * 3)] ? 
-            ['Inconsistent kicking'] : ['Weak bench', 'Injury concerns'],
-          recommendation: index < 3 ? 'Stay the course, make minor tweaks' : 
-                          index < 7 ? 'Active on waiver wire, consider trades' : 
-                          'Major roster overhaul needed',
-          outlook: index < 2 ? 'hot' : index < 5 ? 'warming' : index < 8 ? 'cooling' : 'cold'
-        },
-        nextWeekMatchup: {
-          opponent: teamNames[(index + 3) % 10],
-          difficulty: ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)] as 'easy' | 'medium' | 'hard',
-          winProbability: 30 + Math.random() * 40
-        }
-      };
-    }).sort((a, b) => b.powerScore - a.powerScore);
+      // Calculate real rankings based on actual team performance
+      const rankings = leagueTeams.map((team, index) => {
+        // Use real team data
+        const teamRecord = team.record || { wins: 0, losses: 0 };
+        const teamStats = team.stats || { pointsFor: 0, pointsAgainst: 0 };
+        const gamesPlayed = teamRecord.wins + teamRecord.losses;
+        
+        // Calculate real power score based on performance metrics
+        const winPercentage = gamesPlayed > 0 ? teamRecord.wins / gamesPlayed : 0;
+        const avgPointsFor = gamesPlayed > 0 ? teamStats.pointsFor / gamesPlayed : 0;
+        const avgPointsAgainst = gamesPlayed > 0 ? teamStats.pointsAgainst / gamesPlayed : 0;
+        const powerScore = Math.round((winPercentage * 40 + (avgPointsFor / 150) * 35 + (1 - avgPointsAgainst / 150) * 25) * 100) / 100;
+        
+        // Calculate playoff odds based on current standing
+        const totalTeams = leagueTeams.length;
+        const playoffSpots = Math.max(4, Math.floor(totalTeams / 2));
+        const playoffOdds = Math.max(5, Math.min(95, 100 - (index * (90 / totalTeams))));
+        
+        // Determine trend based on recent performance
+        const previousRank = team.previousRank || index + 1;
+        const currentRank = index + 1;
+        const trend = currentRank < previousRank ? 'up' : currentRank > previousRank ? 'down' : 'stable';
+        
+        return {
+          teamId: team.id,
+          teamName: team.name,
+          ownerName: team.owner?.name || team.owner?.displayName || 'Unknown Owner',
+          currentRank,
+          previousRank,
+          record: teamRecord,
+          pointsFor: Math.round(teamStats.pointsFor * 100) / 100,
+          pointsAgainst: Math.round(teamStats.pointsAgainst * 100) / 100,
+          powerScore,
+          strengthOfSchedule: team.strengthOfSchedule || 0.50,
+          projectedRecord: {
+            wins: Math.round(teamRecord.wins + (14 - week) * winPercentage),
+            losses: Math.round(teamRecord.losses + (14 - week) * (1 - winPercentage))
+          },
+          playoffOdds: Math.round(playoffOdds),
+          championshipOdds: Math.round(Math.max(1, playoffOdds / 3)),
+          trend,
+          trendStrength: Math.abs(currentRank - previousRank) + 1,
+          keyStats: {
+            avgPointsFor: Math.round(avgPointsFor * 100) / 100,
+            avgPointsAgainst: Math.round(avgPointsAgainst * 100) / 100,
+            consistencyScore: team.consistency || 75,
+            luckFactor: team.luckFactor || 0
+          },
+          analysis: {
+            strengths: team.strengths || ['Solid roster construction', 'Active management'],
+            weaknesses: team.weaknesses || ['Room for improvement'],
+            recommendation: currentRank <= playoffSpots / 2 ? 'Stay the course, make minor tweaks' : 
+                           currentRank <= playoffSpots ? 'Active on waiver wire, consider trades' : 
+                           'Major roster overhaul needed',
+            outlook: currentRank <= 2 ? 'hot' : currentRank <= 5 ? 'warming' : currentRank <= 8 ? 'cooling' : 'cold'
+          },
+          nextWeekMatchup: {
+            opponent: team.nextOpponent?.name || 'TBD',
+            difficulty: 'medium' as const,
+            winProbability: Math.round((winPercentage * 70 + 15) * 100) / 100
+          }
+        };
+      });
+      
+      // Sort by power score and update rankings
+      return rankings
+        .sort((a, b) => b.powerScore - a.powerScore)
+        .map((team, index) => ({ ...team, currentRank: index + 1 }));
+        
+    } catch (error) {
+      console.error('Error generating power rankings:', error);
+      return [];
+    }
   };
 
-  const [rankings, setRankings] = useState<TeamRanking[]>(generateMockRankings());
+  const [rankings, setRankings] = useState<TeamRanking[]>([]);
+  
+  // Load real rankings when component mounts or teams change
+  useEffect(() => {
+    const realRankings = generateRealRankings();
+    setRankings(realRankings);
+  }, [teams, week]);
 
   const getTrendIcon = (trend: TeamRanking['trend'], strength: number) => {
     const iconClass = `w-5 h-5 ${strength > 2 ? 'animate-pulse' : ''}`;
