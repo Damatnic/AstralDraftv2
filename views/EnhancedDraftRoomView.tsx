@@ -7,7 +7,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilDraft, SEASON_DATES_2025 } from '../data/leagueData';
+import { getDaysUntilNextWeek, SEASON_DATES_2025 } from '../data/leagueData';
 import { nflPlayers2025 as nflPlayers } from '../data/nfl-players-2025';
 import { realTimeDraftServiceV2 } from '../services/realTimeDraftServiceV2';
 import { enhancedWebSocketService } from '../services/enhancedWebSocketService';
@@ -95,7 +95,7 @@ const EnhancedDraftRoomView: React.FC = () => {
   const playerListRef = useRef<HTMLDivElement>(null);
 
   const league = state.leagues[0];
-  const daysUntilDraft = getDaysUntilDraft();
+  const daysUntilNextWeek = getDaysUntilNextWeek();
   const draftDate = SEASON_DATES_2025.draftDate;
 
   // Initialize draft data

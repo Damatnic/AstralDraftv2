@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilDraft, SEASON_DATES_2025 } from '../data/leagueData';
+import { getDaysUntilNextWeek, SEASON_DATES_2025 } from '../data/leagueData';
 import DraftOrder from '../components/draft/DraftOrder';
 import PlayerSearch from '../components/players/PlayerSearch';
 import { getTopPlayersByPosition, DRAFT_TIERS } from '../data/nflPlayers';
@@ -17,7 +17,7 @@ const EnhancedDraftPrepView: React.FC = () => {
 
   const league = state.leagues[0];
   const isCommissioner = state.user?.id === league?.commissionerId;
-  const daysUntilDraft = getDaysUntilDraft();
+  const daysUntilNextWeek = getDaysUntilNextWeek();
   const draftDate = SEASON_DATES_2025.draftDate;
 
   const tabs = [
@@ -348,7 +348,7 @@ const EnhancedDraftPrepView: React.FC = () => {
             </div>
             
             <div className="text-right">
-              <div className="text-white font-semibold">{daysUntilDraft} days</div>
+              <div className="text-white font-semibold">{daysUntilNextWeek} days</div>
               <div className="text-sm text-orange-400">Until Draft</div>
             </div>
           </div>
@@ -371,7 +371,7 @@ const EnhancedDraftPrepView: React.FC = () => {
               day: 'numeric' 
             })} at 7:00 PM
           </p>
-          <div className="text-3xl font-bold">{daysUntilDraft} Days Remaining</div>
+          <div className="text-3xl font-bold">{daysUntilNextWeek} Days Remaining</div>
         </motion.div>
 
         {/* Tab Navigation */}

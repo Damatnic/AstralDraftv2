@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilDraft, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
+import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
 
 const LeagueDashboard: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -19,7 +19,7 @@ const LeagueDashboard: React.FC = () => {
 
   const league = state.leagues[0]; // Main league
   const userTeam = state.user ? getUserTeam(state.user.id) : null;
-  const daysUntilDraft = getDaysUntilDraft();
+  const daysUntilNextWeek = getDaysUntilNextWeek();
   
   // Calculate draft countdown
   const draftDate = SEASON_DATES_2025.draftDate;
@@ -80,7 +80,7 @@ const LeagueDashboard: React.FC = () => {
             <p className="text-xl mb-4">August 31, 2025 at 7:00 PM</p>
             <div className="flex justify-center gap-8">
               <div>
-                <div className="text-4xl font-bold">{daysUntilDraft}</div>
+                <div className="text-4xl font-bold">{daysUntilNextWeek}</div>
                 <div className="text-sm">DAYS</div>
               </div>
               <div>

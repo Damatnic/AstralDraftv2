@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilDraft, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
+import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
 import { Button } from '../components/ui/Button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { View } from '../types';
@@ -29,7 +29,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
 
   const league = state.leagues[0]; // Main league
   const userTeam = state.user ? getUserTeam(state.user.id) : null;
-  const daysUntilDraft = getDaysUntilDraft();
+  const daysUntilNextWeek = getDaysUntilNextWeek();
   
   // Calculate draft countdown
   const draftDate = SEASON_DATES_2025.draftDate;
@@ -73,7 +73,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
       gradient: 'from-orange-500 via-orange-600 to-red-600',
       glowColor: 'warning' as const,
       description: 'Rankings & strategy',
-      stats: { label: 'Days', value: daysUntilDraft.toString() }
+      stats: { label: 'Days', value: daysUntilNextWeek.toString() }
     },
     { 
       label: 'Standings', 
@@ -199,7 +199,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                   
                   <div className="flex justify-center gap-2 sm:gap-4 md:gap-8">
                     {[
-                      { value: daysUntilDraft, label: 'DAYS', color: 'from-orange-500 to-red-500' },
+                      { value: daysUntilNextWeek, label: 'DAYS', color: 'from-orange-500 to-red-500' },
                       { value: hoursUntilDraft, label: 'HOURS', color: 'from-red-500 to-pink-500' },
                       { value: minutesUntilDraft % 60, label: 'MINUTES', color: 'from-pink-500 to-purple-500' }
                     ].map((item, index) => (

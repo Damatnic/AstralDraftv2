@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../contexts/AppContext';
-import { getUserTeam, getDaysUntilDraft } from '../data/leagueData';
+import { getUserTeam, getDaysUntilNextWeek } from '../data/leagueData';
 import RosterManagement from '../components/roster/RosterManagement';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
@@ -39,7 +39,7 @@ const EnhancedTeamHubView: React.FC = () => {
 
   const league = state.leagues[0];
   const userTeam = state.user ? getUserTeam(state.user.id) : null;
-  const daysUntilDraft = getDaysUntilDraft();
+  const daysUntilNextWeek = getDaysUntilNextWeek();
 
   // Calculate team statistics
   const teamStats = useMemo(() => {
@@ -776,7 +776,7 @@ const EnhancedTeamHubView: React.FC = () => {
                     </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-warning-400">{daysUntilDraft}</div>
+                    <div className="text-3xl font-bold text-warning-400">{daysUntilNextWeek}</div>
                     <div className="text-xs text-gray-500">days left</div>
                   </div>
                 </div>
