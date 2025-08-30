@@ -34,6 +34,26 @@ export interface EnhancedAnalyticsMetrics {
   predictionAccuracy: number;
   systemPerformance: number;
   dataQuality: number;
+  accuracy: {
+    overall: number;
+    trend: number;
+    weeklyConsistency: number;
+  };
+  performance: {
+    userWinRate: number;
+    systemUptime: number;
+    confidenceCorrelation: number;
+  };
+  engagement: {
+    dailyActive: number;
+    sessionDuration: number;
+    totalPredictions: number;
+  };
+  comparative: {
+    vsLastWeek: number;
+    vsLastMonth: number;
+    userPercentile: number;
+  };
 }
 
 class EnhancedAnalyticsService {
@@ -60,6 +80,35 @@ class EnhancedAnalyticsService {
       activeUsers: Math.floor(Math.random() * 100) + 50,
       transactions: Math.floor(Math.random() * 20) + 5,
       systemLoad: Math.random() * 0.5 + 0.3
+    };
+  }
+
+  getEnhancedMetrics(): EnhancedAnalyticsMetrics {
+    return {
+      userEngagement: Math.random() * 0.3 + 0.6,
+      predictionAccuracy: Math.random() * 0.2 + 0.8,
+      systemPerformance: Math.random() * 0.15 + 0.85,
+      dataQuality: Math.random() * 0.1 + 0.9,
+      accuracy: {
+        overall: Math.random() * 0.2 + 0.8,
+        trend: (Math.random() - 0.5) * 0.1,
+        weeklyConsistency: Math.random() * 0.3 + 0.7
+      },
+      performance: {
+        userWinRate: Math.random() * 0.3 + 0.5,
+        systemUptime: Math.random() * 0.05 + 0.95,
+        confidenceCorrelation: Math.random() * 0.4 + 0.6
+      },
+      engagement: {
+        dailyActive: Math.floor(Math.random() * 500) + 200,
+        sessionDuration: Math.random() * 30 + 15,
+        totalPredictions: Math.floor(Math.random() * 2000) + 500
+      },
+      comparative: {
+        vsLastWeek: (Math.random() - 0.5) * 0.2,
+        vsLastMonth: (Math.random() - 0.5) * 0.3,
+        userPercentile: Math.random() * 40 + 60
+      }
     };
   }
 

@@ -131,6 +131,7 @@ const UserManagement: React.FC = () => {
         loadUsers();
       }
     } catch (error) {
+      console.error('Operation failed:', error);
     }
   };
 
@@ -297,6 +298,7 @@ const ContestManagement: React.FC = () => {
       const result = await adminService.getAllContests(1, 50);
       setContests(result.contests);
     } catch (error) {
+      console.error('Operation failed:', error);
     } finally {
       setLoading(false);
     }
@@ -310,6 +312,7 @@ const ContestManagement: React.FC = () => {
         loadContests();
       }
     } catch (error) {
+      console.error('Operation failed:', error);
     }
   };
 
@@ -445,6 +448,7 @@ const OracleMetricsPanel: React.FC = () => {
       const data = await adminService.getOracleMetrics();
       setMetrics(data);
     } catch (error) {
+      console.error('Operation failed:', error);
     } finally {
       setLoading(false);
     }
@@ -572,6 +576,7 @@ const AdminDashboard: React.FC = () => {
       const data = await adminService.getDashboardData();
       setDashboardData(data);
     } catch (error) {
+      console.error('Operation failed:', error);
     } finally {
       setLoading(false);
     }

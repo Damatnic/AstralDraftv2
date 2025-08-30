@@ -27,7 +27,7 @@ interface LiveDraftRoomProps {
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ 
   isActive = false, 
   onDraftComplete 
-}: any) => {
+}: LiveDraftRoomProps) => {
   const { state, dispatch } = useAppState();
   const [currentPick, setCurrentPick] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState(90);
@@ -223,8 +223,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
     if (!pickInfo) return;
 
     // Simple auto-draft logic - pick highest ranked available player
-    const availablePlayers = league.allPlayers.filter((player: any) => 
-      !draftPicks.some((pick: any) => pick.player?.id === player.id)
+    const availablePlayers = league.allPlayers.filter((player: Player) => 
+      !draftPicks.some((pick: DraftPick) => pick.player?.id === player.id)
     );
     
     const bestAvailable = availablePlayers.sort((a, b) => a.fantasyRank - b.fantasyRank)[0];
@@ -583,11 +583,11 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
           <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin">
             <AnimatePresence>
               {draftPicks
-              .filter((pick: any) => pick.isComplete)
+              .filter((pick: DraftPick) => pick.isComplete)
               .slice(-10)
               .reverse()
               .map((pick, index) => {
-                const team = draftOrder.find((t: any) => t.id === pick.teamId);
+                const team = draftOrder.find((t: Team) => t.id === pick.teamId);
                 return (
                   <motion.div
                     key={pick.pick}
@@ -617,15 +617,16 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                   </motion.div>
                 );
               })}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Team Rosters */}
         <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
           <h3 className="text-xl font-bold text-white mb-4">Team Rosters</h3>
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {draftOrder.map((team: any) => {
-              const teamPicks = draftPicks.filter((pick: any) => 
+            {draftOrder.map((team: Team) => {
+              const teamPicks = draftPicks.filter((pick: DraftPick) => 
                 pick.teamId === team.id && pick.isComplete
               );
               
@@ -641,7 +642,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {teamPicks.map((pick: any) => (
+                    {teamPicks.map((pick: DraftPick) => (
                       <span
                         key={pick.pick}
                         className={`${getPositionColor(pick.player?.position || '')} text-white text-xs px-2 py-1 rounded`}
@@ -672,7 +673,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
-              onClick={(e: any) => e.stopPropagation()}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-white">
@@ -689,8 +690,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
               <PlayerSearch
                 onPlayerSelect={handlePlayerSelect}
                 excludePlayerIds={draftPicks
-                  .filter((pick: any) => pick.isComplete && pick.player)
-                  .map((pick: any) => pick.player!.id)
+                  .filter((pick: DraftPick) => pick.isComplete && pick.player)
+                  .map((pick: DraftPick) => pick.player!.id)
                 }
                 showAddButton={false}
               />
@@ -698,7 +699,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 

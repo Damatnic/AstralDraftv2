@@ -32,10 +32,10 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
         const week = weeks[weekIndex];
         if (week === undefined) return;
 
-        const dataForWeek = league.teams.map((team, i) => {
+        const dataForWeek = league.teams.map((team: any, i: number) => {
             const prob = team.championshipProbHistory?.find((h: any) => h.week === week)?.probability ?? null;
             return { name: team.name, prob, color: teamColors[i % teamColors.length] };
-        }).filter((d: any) => d.prob !== null).sort((a, b) => b.prob! - a.prob!);
+        }).filter((d: any) => d.prob !== null).sort((a: any, b: any) => b.prob! - a.prob!);
 
         if (dataForWeek.length === 0) return;
 
@@ -80,7 +80,7 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
                  ))}
 
                 {/* Data lines */}
-                {league.teams.map((team, i) => {
+                {league.teams.map((team: any, i: number) => {
                     const history = team.championshipProbHistory?.filter((h: any) => h.week <= league.currentWeek) || [];
                     if (history.length < 2) return null;
                     const pathData = history.map((h: any) => `${xScale(h.week)},${yScale(h.probability)}`).join(' L ');
