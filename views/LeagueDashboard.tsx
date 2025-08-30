@@ -11,6 +11,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { View } from '../types';
 import { TrophyIcon, UsersIcon, ClipboardListIcon, ChartBarIcon, CalendarIcon, MessageCircleIcon } from '../components/icons';
 
+// Import advanced dashboard widgets
+import LineupOptimizerWidget from '../components/dashboard/LineupOptimizerWidget';
+import ChampionshipProbabilityWidget from '../components/dashboard/ChampionshipProbabilityWidget';
+import WaiverWireIntelligenceWidget from '../components/dashboard/WaiverWireIntelligenceWidget';
+import TradeOpportunityWidget from '../components/dashboard/TradeOpportunityWidget';
+
 const EnhancedLeagueDashboard: React.FC = () => {
   const { state, dispatch } = useAppState();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -337,6 +343,65 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Advanced Analytics Dashboard Widgets */}
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              AI-Powered Insights
+            </h3>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' as View })}
+            >
+              Analytics Hub →
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* Lineup Optimizer Widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <LineupOptimizerWidget />
+            </motion.div>
+
+            {/* Championship Probability Widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <ChampionshipProbabilityWidget />
+            </motion.div>
+
+            {/* Waiver Wire Intelligence Widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <WaiverWireIntelligenceWidget />
+            </motion.div>
+
+            {/* Trade Opportunity Widget */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <TradeOpportunityWidget />
+            </motion.div>
           </div>
         </motion.div>
 
