@@ -64,7 +64,7 @@ const LineupOptimizerWidget: React.FC = () => {
   const currentWeek = state.currentWeek || 1;
 
   const optimizeLineup = useCallback(async () => {
-    if (!userTeam) return;
+    if (!userTeam || !userTeam.roster) return;
 
     setIsOptimizing(true);
     try {
@@ -74,8 +74,8 @@ const LineupOptimizerWidget: React.FC = () => {
       // Mock optimization result
       const mockResult = {
         optimal: {
-          starters: userTeam.players.slice(0, 9),
-          bench: userTeam.players.slice(9, 15),
+          starters: userTeam?.roster?.slice(0, 9) || [],
+          bench: userTeam?.roster?.slice(9, 15) || [],
           totalProjected: 125.5
         },
         analysis: {
@@ -332,7 +332,7 @@ const LineupOptimizerWidget: React.FC = () => {
               <div className="w-12 h-12 border-4 border-primary-500/20 rounded-full"></div>
               <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
             </div>
-            <p className="text-sm text-gray-400 mt-3">Analyzing {userTeam?.players.length || 0} players...</p>
+            <p className="text-sm text-gray-400 mt-3">Analyzing {userTeam?.roster?.length || 0} players...</p>
           </div>
         )}
       </CardContent>

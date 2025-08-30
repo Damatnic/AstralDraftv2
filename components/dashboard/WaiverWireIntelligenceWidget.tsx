@@ -113,8 +113,8 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
         type: index === 0 ? 'breakout' : index === 1 ? 'trending' : index === 2 ? 'injury_replacement' : 'buy_low',
         reasoning: getReasoningForType(index),
         faabRecommendation: Math.max(5, Math.floor((85 - index * 10) / 2)),
-        addDropSuggestion: index < 3 ? {
-          drop: userTeam?.players[userTeam.players.length - 1 - index] || ({} as Player),
+        addDropSuggestion: index < 3 && userTeam?.roster?.length ? {
+          drop: userTeam.roster[userTeam.roster.length - 1 - index] || ({} as Player),
           confidence: 0.75 + Math.random() * 0.2
         } : undefined,
         metrics: {
