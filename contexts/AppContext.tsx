@@ -3,6 +3,7 @@ import type { League, User, View, AppState, ChatMessage, DraftEvent, Player, Tea
 import { players } from '../data/players';
 import { LEAGUE_MEMBERS } from '../data/leagueData';
 import { LEAGUE_WITH_PLAYERS } from '../data/leagueWithPlayers';
+import { sportsIOPlayerService } from '../services/sportsIOPlayerService';
 
 type Action =
     | { type: 'SET_LOADING', payload: boolean }
@@ -27,7 +28,8 @@ type Action =
     | { type: 'SET_LINEUP'; payload: { teamId: number, starters: number[], bench: number[] } }
     | { type: 'SET_SEASON_REVIEW_YEAR'; payload: number }
     | { type: 'EDIT_MATCHUPS'; payload: { leagueId: string } }
-    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: any } };
+    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: any } }
+    | { type: 'UPDATE_LEAGUE_PLAYERS'; payload: { leagueId: string, players: Player[] } };
     
 const AppContext = React.createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
 
@@ -247,6 +249,18 @@ const appReducer = (state: AppState, action: Action): AppState => {
                     ...state.weeklyRecapScript,
                     [action.payload.key]: action.payload.value
                 }
+            };
+        }
+
+        case 'UPDATE_LEAGUE_PLAYERS': {
+            const { leagueId, players } = action.payload;
+            return {
+                ...state,
+                leagues: state.leagues.map((league: any) =>
+                    league.id === leagueId
+                        ? { ...league, allPlayers: players }
+                        : league
+                )
             };
         }
         

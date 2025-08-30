@@ -18,6 +18,8 @@ import ChartBarIcon from '../components/icons/ChartBarIcon';
 import FilterIcon from '../components/icons/AdjustmentsIcon';
 import GridIcon from '../components/icons/LayoutIcon';
 import ListIcon from '../components/icons/ListChecksIcon';
+import PlayerDetailModal from '../components/player/PlayerDetailModal';
+import { sportsIOPlayerService } from '../services/sportsIOPlayerService';
 
 const PlayersView: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -36,6 +38,54 @@ const PlayersView: React.FC = () => {
   const league = state.leagues[0];
   const userTeam = league?.teams.find((team: any) => team.owner.id === state.user?.id);
   const allPlayers = league?.allPlayers || [];
+
+  // Load live player data from Sports.io API
+  useEffect(() => {
+    const loadLivePlayerData = async () => {
+      if (!league) return;
+      
+      try {
+        console.log('🚀 Loading live player data from Sports.io...');
+        const livePlayers = await sportsIOPlayerService.getAllPlayers();
+        
+        if (livePlayers && livePlayers.length > 0) {
+          dispatch({
+            type: 'UPDATE_LEAGUE_PLAYERS',
+            payload: {
+              leagueId: league.id,
+              players: livePlayers
+            }
+          });
+          
+          dispatch({
+            type: 'ADD_NOTIFICATION',
+            payload: {
+              message: `✅ Loaded ${livePlayers.length} players from Sports.io API`,
+              type: 'SUCCESS'
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load live player data:', error);
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            message: '⚠️ Using fallback player data - Sports.io API unavailable',
+            type: 'WARNING'
+          }
+        });
+      }
+    };
+
+    // Only load once when component mounts
+    if (league && allPlayers.length > 0) {
+      // Check if we already have live data (simple check)
+      const hasLiveData = allPlayers.some((player: any) => player.id > 9000);
+      if (!hasLiveData) {
+        loadLivePlayerData();
+      }
+    }
+  }, [league?.id, dispatch]);
 
   // Position configuration with colors and gradients
   const positionConfig = {
@@ -323,11 +373,15 @@ const PlayersView: React.FC = () => {
               {/* Quick Actions */}
               <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-slate-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
+                  type="button"
                   onClick={(e: any) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     handleAddToRoster(player);
                   }}
                   className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium text-sm transition-colors"
+                  autoComplete="off"
+                  data-form="false"
                 >
                   Add to Roster
                 </button>
@@ -377,11 +431,15 @@ const PlayersView: React.FC = () => {
 
               {/* Actions */}
               <button
+                type="button"
                 onClick={(e: any) => {
+                  e.preventDefault();
                   e.stopPropagation();
                   handleAddToRoster(player);
                 }}
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg font-medium text-sm transition-colors border border-blue-500/30"
+                autoComplete="off"
+                data-form="false"
               >
                 Add
               </button>
@@ -618,6 +676,18 @@ const PlayersView: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Player Detail Modal */}
+      {selectedPlayer && (
+        <PlayerDetailModal
+          player={selectedPlayer}
+          onClose={() => setSelectedPlayer(null)}
+          playerNotes={state.playerNotes || {}}
+          dispatch={dispatch}
+          league={league}
+          playerAvatars={state.playerAvatars || {}}
+        />
+      )}
     </div>
   );
 };

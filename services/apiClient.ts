@@ -83,7 +83,7 @@ class ApiClient {
     this.espnApiKey = env?.VITE_ESPN_API_KEY as string;
     this.nflApiKey = env?.VITE_NFL_API_KEY as string;
     this.yahooApiKey = env?.VITE_YAHOO_API_KEY as string;
-    this.sportsIOApiKey = env?.VITE_SPORTSIO_API_KEY as string;
+    this.sportsIOApiKey = env?.VITE_SPORTS_IO_API_KEY as string;
   }
 
   /**
@@ -134,6 +134,11 @@ class ApiClient {
    */
   async getSportsIOGames(week?: number): Promise<SportsIOGame[]> {
     try {
+      if (!this.sportsIOApiKey) {
+        console.warn('Sports.io API key not configured');
+        return [];
+      }
+
       let url = 'https://api.sportsio.io/nfl/games';
       if (week) {
         url += `?week=${week}`;
@@ -160,6 +165,11 @@ class ApiClient {
 
   async getSportsIOPlayers(position?: string): Promise<SportsIOPlayer[]> {
     try {
+      if (!this.sportsIOApiKey) {
+        console.warn('Sports.io API key not configured');
+        return [];
+      }
+
       let url = 'https://api.sportsio.io/nfl/players';
       if (position) {
         url += `?position=${position}`;
