@@ -329,8 +329,14 @@
         console.warn = console.error;
         console.log = console.error;
         
-        // ABSOLUTE error suppression
-        window.onerror = function() { return true; };
+        // TEMPORARILY DISABLED: ABSOLUTE error suppression for debugging
+        // window.onerror = function() { return true; };
+        
+        // Enable error reporting for React debugging
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('🚨 JS ERROR DETECTED:', { message, source, lineno, colno, error });
+            return false; // Show the error
+        };
         
         // Wrap ALL event listeners to prevent crashes
         if (window.addEventListener) {
@@ -349,25 +355,38 @@
                 return originalAddEventListener.call(this, type, safeListener, options);
             };
             
-            // Add our own error handlers
-            window.addEventListener('error', function(e) {
-                try {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                } catch (ex) {
-                    // Ignore
-                }
-                return false;
-            }, true);
+            // TEMPORARILY DISABLED: Error handlers for React debugging
+            // window.addEventListener('error', function(e) {
+            //     try {
+            //         e.preventDefault();
+            //         e.stopImmediatePropagation();
+            //     } catch (ex) {
+            //         // Ignore
+            //     }
+            //     return false;
+            // }, true);
             
+            // Enable error visibility for debugging
+            window.addEventListener('error', function(e) {
+                console.error('🚨 CAPTURED ERROR:', e.error || e.message);
+                // Don't prevent default - let the error show
+            });
+            
+            // TEMPORARILY DISABLED: Unhandled rejection suppression for debugging
+            // window.addEventListener('unhandledrejection', function(e) {
+            //     try {
+            //         e.preventDefault();
+            //         e.stopImmediatePropagation();
+            //     } catch (ex) {
+            //         // Ignore
+            //     }
+            // }, true);
+            
+            // Enable promise rejection visibility
             window.addEventListener('unhandledrejection', function(e) {
-                try {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                } catch (ex) {
-                    // Ignore
-                }
-            }, true);
+                console.error('🚨 UNHANDLED PROMISE REJECTION:', e.reason);
+                // Don't prevent default - let the error show
+            });
         }
         
         // Override setTimeout and setInterval to prevent crashes
