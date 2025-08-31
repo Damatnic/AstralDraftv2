@@ -161,44 +161,80 @@ const initializeApp = async () => {
 
   const attemptInitialization = async () => {
     try {
+      // EMERGENCY DIAGNOSTIC LOGGING
+      console.log('🚀 EMERGENCY DIAGNOSTIC: Starting app initialization...');
+      
       // Verify DOM is ready
       const rootElement = document.getElementById('root');
       if (!rootElement) {
+        console.error('❌ CRITICAL: Root element not found in DOM!');
         throw new Error('Root element not found in DOM');
       }
+      console.log('✅ Root element found:', rootElement);
 
       // Verify React is properly loaded
       if (!React || !React.createElement || !createRoot) {
+        console.error('❌ CRITICAL: React modules not loaded!', {
+          React: !!React,
+          createElement: !!(React && React.createElement),
+          createRoot: !!createRoot
+        });
         throw new Error('React modules not properly loaded');
       }
+      console.log('✅ React modules loaded successfully');
 
       // Create root with proper error handling
+      console.log('📦 Creating React root...');
       const root = createRoot(rootElement, {
         onRecoverableError: (error) => {
-          console.warn('Recoverable error in React root:', error);
+          console.warn('⚠️ Recoverable error in React root:', error);
           if (import.meta.env.PROD && window.loggingService) {
             window.loggingService.warn('React recoverable error', { error: error.message }, 'react-recoverable');
           }
         }
       });
 
-      // Render app with error boundary in StrictMode for better error detection
-      root.render(
-        React.createElement(React.StrictMode, null,
-          React.createElement(ErrorBoundary, {
-            onError: (error, errorInfo) => {
-              reportInitializationError(error, 'React Error Boundary');
-            }
-          },
-            React.createElement(App)
+      // EMERGENCY: Add basic content to verify rendering works
+      console.log('🎨 Rendering React app...');
+      
+      // First try to render a simple test element
+      const testElement = React.createElement('div', {
+        style: { 
+          minHeight: '100vh', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          fontSize: '24px',
+          fontWeight: 'bold'
+        }
+      }, '🏈 Astral Draft Loading...');
+      
+      // Try rendering test element first
+      root.render(testElement);
+      console.log('✅ Test element rendered successfully!');
+      
+      // Wait a moment then render the actual app
+      setTimeout(() => {
+        console.log('🚀 Rendering full application...');
+        root.render(
+          React.createElement(React.StrictMode, null,
+            React.createElement(ErrorBoundary, {
+              onError: (error, errorInfo) => {
+                console.error('❌ Error Boundary triggered:', error, errorInfo);
+                reportInitializationError(error, 'React Error Boundary');
+              }
+            },
+              React.createElement(App)
+            )
           )
-        )
-      );
+        );
+        console.log('✅ Full app render initiated');
+      }, 100);
 
       // Mark initialization as successful
-      if (import.meta.env.DEV) {
-        console.log('✅ App initialized successfully');
-      }
+      console.log('✅ App initialized successfully');
 
     } catch (error) {
       retryCount++;
