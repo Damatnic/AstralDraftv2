@@ -3,11 +3,13 @@
  * Initializes the test league with 10 users on app load
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { testUsers } from '../data/testUsers';
 import { useAppState } from '../hooks/useAppState';
 
 export const TestEnvironmentSetup: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { dispatch } = useAppState();
   const [isInitialized, setIsInitialized] = React.useState(false);
 
@@ -24,7 +26,7 @@ export const TestEnvironmentSetup: React.FC = () => {
       // Login with player1@astral.com to player10@astral.com, password: test1234
     } else {
       setIsInitialized(true);
-    }
+
   }, [dispatch]);
 
   // Quick user switcher for testing
@@ -34,35 +36,33 @@ export const TestEnvironmentSetup: React.FC = () => {
       localStorage.setItem('currentUser', JSON.stringify(user));
       dispatch({ type: 'SET_USER', payload: user });
       // Switched to user: ${user.name}
-    }
+
   };
 
   // Development panel (only show in dev mode)
   if (process.env.NODE_ENV !== 'development') {
     return null;
-  }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <details className="bg-gray-900 rounded-lg shadow-xl p-2 text-white">
-        <summary className="cursor-pointer text-xs font-bold mb-2">
+    <div className="fixed bottom-4 right-4 z-50 sm:px-4 md:px-6 lg:px-8">
+      <details className="bg-gray-900 rounded-lg shadow-xl p-2 text-white sm:px-4 md:px-6 lg:px-8">
+        <summary className="cursor-pointer text-xs font-bold mb-2 sm:px-4 md:px-6 lg:px-8">
           🧪 Test Environment {isInitialized ? '✅' : '⏳'}
         </summary>
-        <div className="space-y-2 mt-2">
-          <p className="text-xs text-gray-400">Quick User Switch:</p>
-          <div className="grid grid-cols-2 gap-1">
+        <div className="space-y-2 mt-2 sm:px-4 md:px-6 lg:px-8">
+          <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Quick User Switch:</p>
+          <div className="grid grid-cols-2 gap-1 sm:px-4 md:px-6 lg:px-8">
             {testUsers.map((user: any) => (
               <button
                 key={user.id}
                 onClick={() => switchUser(user.id)}
-                className="text-xs px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded transition-colors"
                 title={`Email: ${user.email}\nPassword: test1234`}
               >
                 {user.avatar} {user.name.split(' ')[0]}
               </button>
             ))}
           </div>
-          <div className="text-xs text-gray-500 mt-2">
+          <div className="text-xs text-gray-500 mt-2 sm:px-4 md:px-6 lg:px-8">
             <p>League: Test League Available</p>
             <p>Season: 2025</p>
             <p>Teams: 10</p>
@@ -74,4 +74,10 @@ export const TestEnvironmentSetup: React.FC = () => {
   );
 };
 
-export default TestEnvironmentSetup;
+const TestEnvironmentSetupWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TestEnvironmentSetup {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TestEnvironmentSetupWithErrorBoundary);

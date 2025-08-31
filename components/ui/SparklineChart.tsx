@@ -1,5 +1,6 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 
 interface SparklineChartProps {
     data: number[];
@@ -7,6 +8,7 @@ interface SparklineChartProps {
     height?: number;
     strokeColor?: string;
     strokeWidth?: number;
+
 }
 
 const SparklineChart: React.FC<SparklineChartProps> = ({
@@ -15,7 +17,7 @@ const SparklineChart: React.FC<SparklineChartProps> = ({
     height = 30,
     strokeColor = '#06b6d4', // cyan-500
     strokeWidth = 2,
-}: any) => {
+}) => {
     if (data.length < 2) return null;
 
     const min = Math.min(...data);
@@ -49,4 +51,10 @@ const SparklineChart: React.FC<SparklineChartProps> = ({
     );
 };
 
-export default SparklineChart;
+const SparklineChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SparklineChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SparklineChartWithErrorBoundary);

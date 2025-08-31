@@ -34,6 +34,7 @@ interface MockDraftSettings {
   enableTrades: boolean;
   enableKeepers: boolean;
   scoringFormat: 'standard' | 'ppr' | 'halfPpr';
+
 }
 
 interface DraftPick {
@@ -44,7 +45,6 @@ interface DraftPick {
   player: NFLPlayer;
   timestamp: Date;
   isUserPick: boolean;
-}
 
 interface MockTeam {
   id: number;
@@ -54,6 +54,7 @@ interface MockTeam {
   roster: NFLPlayer[];
   draftStrategy?: 'balanced' | 'rb-heavy' | 'wr-heavy' | 'best-available';
   needs: string[];
+
 }
 
 const MockDraftView: React.FC = () => {
@@ -106,8 +107,7 @@ const MockDraftView: React.FC = () => {
         draftStrategy: i === settings.draftPosition - 1 ? undefined : aiStrategies[Math.floor(Math.random() * aiStrategies.length)],
         needs: ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'K', 'DST']
       });
-    }
-    
+
     setTeams(mockTeams);
   }, [settings, state.user]);
 
@@ -153,14 +153,12 @@ const MockDraftView: React.FC = () => {
         break;
       default:
         selectedPlayer = topPlayers[0];
-    }
-    
+
     // Add randomness based on difficulty
     if (Math.random() < randomFactor && topPlayers.length > 5) {
       const randomIndex = Math.floor(Math.random() * 5) + 1;
       selectedPlayer = topPlayers[randomIndex] || selectedPlayer;
-    }
-    
+
     return selectedPlayer;
   }, [availablePlayers, settings.aiDifficulty]);
 
@@ -197,8 +195,7 @@ const MockDraftView: React.FC = () => {
           ? { ...t, needs: t.needs.filter((_, i) => i !== positionIndex) }
           : t
       ));
-    }
-    
+
     // Move to next pick
     if (currentPick >= settings.teamCount * settings.rounds) {
       setDraftComplete(true);
@@ -207,9 +204,9 @@ const MockDraftView: React.FC = () => {
       setCurrentPick(prev => prev + 1);
       if ((currentPick % settings.teamCount) === 0) {
         setCurrentRound(prev => prev + 1);
-      }
+
       setTimeRemaining(settings.timerSeconds);
-    }
+
   }, [currentPick, currentRound, settings]);
 
   // Timer effect
@@ -228,12 +225,11 @@ const MockDraftView: React.FC = () => {
         const aiPick = makeAIPick(currentTeam);
         if (aiPick) {
           processPick(aiPick, currentTeam);
-        }
+
       }, delay);
       
       return () => clearTimeout(timeout);
-    }
-    
+
     // User timer
     const interval = setInterval(() => {
       setTimeRemaining(prev => {
@@ -242,9 +238,9 @@ const MockDraftView: React.FC = () => {
           const autoPick = availablePlayers[0];
           if (autoPick && currentTeam) {
             processPick(autoPick, currentTeam);
-          }
+
           return settings.timerSeconds;
-        }
+
         return prev - 1;
       });
     }, 1000);
@@ -283,7 +279,7 @@ const MockDraftView: React.FC = () => {
     if (currentTeam?.isUser && selectedPlayer) {
       processPick(selectedPlayer, currentTeam);
       setSelectedPlayer(null);
-    }
+
   };
 
   const currentTeam = getCurrentPickingTeam();
@@ -321,7 +317,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.draftPosition}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftPosition: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftPosition: Number(e.target.value) }}
                     className="glass-input w-full"
                   >
                     {Array.from({ length: settings.teamCount }, (_, i) => (
@@ -338,7 +334,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.teamCount}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, teamCount: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, teamCount: Number(e.target.value) }}
                     className="glass-input w-full"
                   >
                     <option value={8}>8 Teams</option>
@@ -354,7 +350,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.rounds}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, rounds: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, rounds: Number(e.target.value) }}
                     className="glass-input w-full"
                   >
                     <option value={10}>10 Rounds</option>
@@ -370,7 +366,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.scoringFormat}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, scoringFormat: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, scoringFormat: e.target.value as any }}
                     className="glass-input w-full"
                   >
                     <option value="standard">Standard</option>
@@ -393,7 +389,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.aiDifficulty}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, aiDifficulty: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, aiDifficulty: e.target.value as any }}
                     className="glass-input w-full"
                   >
                     <option value="easy">Easy - Random picks</option>
@@ -409,7 +405,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.draftSpeed}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftSpeed: e.target.value as any }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, draftSpeed: e.target.value as any }}
                     className="glass-input w-full"
                   >
                     <option value="instant">Instant</option>
@@ -424,7 +420,7 @@ const MockDraftView: React.FC = () => {
                   </label>
                   <select
                     value={settings.timerSeconds}
-                    onChange={(e: any) => setSettings(prev => ({ ...prev, timerSeconds: Number(e.target.value) }))}
+                    onChange={(e: any) => setSettings(prev => ({ ...prev, timerSeconds: Number(e.target.value) }}
                     className="glass-input w-full"
                   >
                     <option value={30}>30 seconds</option>
@@ -439,7 +435,7 @@ const MockDraftView: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={settings.enableTrades}
-                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableTrades: e.target.checked }))}
+                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableTrades: e.target.checked }}
                       className="rounded"
                     />
                     <span className="text-sm text-[var(--text-secondary)]">Enable Draft Pick Trades</span>
@@ -448,7 +444,7 @@ const MockDraftView: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={settings.enableKeepers}
-                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableKeepers: e.target.checked }))}
+                      onChange={(e: any) => setSettings(prev => ({ ...prev, enableKeepers: e.target.checked }}
                       className="rounded"
                     />
                     <span className="text-sm text-[var(--text-secondary)]">Enable Keeper Players</span>
@@ -491,7 +487,6 @@ const MockDraftView: React.FC = () => {
             <div className="flex justify-center">
               <button
                 onClick={startDraft}
-                className="glass-button-primary px-8 py-3 text-lg font-semibold flex items-center gap-2"
               >
                 <PlayIcon className="w-5 h-5" />
                 Start Mock Draft
@@ -501,7 +496,6 @@ const MockDraftView: React.FC = () => {
         </div>
       </div>
     );
-  }
 
   // Draft Room
   return (
@@ -529,7 +523,6 @@ const MockDraftView: React.FC = () => {
             
             <button
               onClick={() => setIsPaused(!isPaused)}
-              className="glass-button p-2"
               disabled={draftComplete}
             >
               {isPaused ? <PlayIcon className="w-5 h-5" /> : <PauseIcon className="w-5 h-5" />}
@@ -537,7 +530,6 @@ const MockDraftView: React.FC = () => {
             
             <button
               onClick={resetDraft}
-              className="glass-button p-2"
             >
               <RotateCcwIcon className="w-5 h-5" />
             </button>
@@ -567,7 +559,6 @@ const MockDraftView: React.FC = () => {
                 {isUserTurn && (
                   <button
                     onClick={() => setShowPlayerSearch(true)}
-                    className="glass-button-primary px-4 py-2"
                   >
                     Search Players
                   </button>
@@ -592,7 +583,6 @@ const MockDraftView: React.FC = () => {
                   </div>
                   <button
                     onClick={makeUserPick}
-                    className="glass-button-primary px-6 py-2"
                   >
                     Draft Player
                   </button>
@@ -616,12 +606,11 @@ const MockDraftView: React.FC = () => {
               <div className="flex justify-center gap-4">
                 <button
                   onClick={resetDraft}
-                  className="glass-button-primary px-6 py-2"
                 >
                   Start New Mock Draft
                 </button>
                 <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' })}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' }}
                   className="glass-button px-6 py-2"
                 >
                   Back to Draft Prep
@@ -750,7 +739,6 @@ const MockDraftView: React.FC = () => {
                   key={player.id}
                   className="flex items-center justify-between p-2 bg-white/5 rounded-lg hover:bg-white/10 cursor-pointer"
                   onClick={() => isUserTurn && setSelectedPlayer(player)}
-                >
                   <div className="flex items-center gap-2">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white
                       ${player.position === 'QB' ? 'bg-red-500' :
@@ -787,7 +775,6 @@ const MockDraftView: React.FC = () => {
               <h2 className="text-2xl font-bold text-white">Select Player</h2>
               <button
                 onClick={() => setShowPlayerSearch(false)}
-                className="glass-button p-2"
               >
                 <XCircleIcon className="w-5 h-5" />
               </button>

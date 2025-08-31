@@ -2,7 +2,8 @@
  * Victory Celebration & Achievement System - Make wins legendary and memorable
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Crown, Star, Zap, Target, Award, Medal, Sparkles, Flame, TrendingUp } from 'lucide-react';
 
@@ -19,12 +20,12 @@ interface Achievement {
     current: number;
     required: number;
   };
-}
 
 interface VictoryType {
   type: 'weekly_win' | 'blowout' | 'comeback' | 'perfect_lineup' | 'highest_score' | 'playoff_berth' | 'championship';
   intensity: 1 | 2 | 3 | 4 | 5;
   duration: number; // seconds
+
 }
 
 interface VictoryCelebrationProps {
@@ -33,7 +34,6 @@ interface VictoryCelebrationProps {
   teamName: string;
   leagueId: string;
   onCelebrationComplete?: () => void;
-}
 
 const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   userId,
@@ -152,7 +152,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       category: 'special',
       rarity: 'epic',
       points: 60
-    }
+
   ];
 
   // Victory celebration animations and effects
@@ -205,7 +205,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       message: 'LEAGUE CHAMPION!',
       animation: 'ultimate',
       color: 'text-gold-400'
-    }
+
   };
 
   // Trigger celebration based on game results
@@ -241,7 +241,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
           ...achievement,
           unlockedAt: new Date()
         });
-      }
+
     });
 
     setActiveAchievements(newAchievements);
@@ -253,7 +253,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       case 'rare': return 'text-blue-400 border-blue-500';
       case 'epic': return 'text-purple-400 border-purple-500';
       case 'legendary': return 'text-yellow-400 border-yellow-500';
-    }
+
   };
 
   const getRarityGlow = (rarity: Achievement['rarity']) => {
@@ -262,14 +262,22 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       case 'rare': return 'shadow-blue-500/50 shadow-lg';
       case 'epic': return 'shadow-purple-500/50 shadow-xl';
       case 'legendary': return 'shadow-yellow-500/50 shadow-2xl';
-    }
+
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
 
   return (
     <>
       {/* Confetti Effect */}
       {confettiActive && (
-        <div className="fixed inset-0 pointer-events-none z-[1090]">
+        <div className="fixed inset-0 pointer-events-none z-[1090] sm:px-4 md:px-6 lg:px-8">
           {[...Array(50)].map((_, i) => (
             <motion.div
               key={i}
@@ -302,7 +310,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100]"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100] sm:px-4 md:px-6 lg:px-8"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
@@ -318,7 +326,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
                 damping: 20,
                 times: [0, 0.6, 0.8, 1]
               }}
-              className="bg-dark-800 rounded-2xl p-8 border-2 border-gold-500 shadow-2xl shadow-gold-500/30 text-center max-w-md w-full mx-4"
+              className="bg-dark-800 rounded-2xl p-8 border-2 border-gold-500 shadow-2xl shadow-gold-500/30 text-center max-w-md w-full mx-4 sm:px-4 md:px-6 lg:px-8"
             >
               {/* Victory Icon */}
               <motion.div
@@ -330,10 +338,10 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
                   repeat: Infinity,
                   duration: 2
                 }}
-                className="flex justify-center mb-4"
+                className="flex justify-center mb-4 sm:px-4 md:px-6 lg:px-8"
               >
-                <div className="w-20 h-20 bg-gradient-to-br from-gold-400 to-yellow-500 rounded-full flex items-center justify-center">
-                  <Crown className="w-10 h-10 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-br from-gold-400 to-yellow-500 rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                  <Crown className="w-10 h-10 text-white sm:px-4 md:px-6 lg:px-8" />
                 </div>
               </motion.div>
 
@@ -351,15 +359,15 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
                 {celebrationEffects[celebrationType.type].message}
               </motion.h2>
 
-              <p className="text-xl text-white mb-4">{userName}</p>
-              <p className="text-lg text-gray-300 mb-6">{teamName}</p>
+              <p className="text-xl text-white mb-4 sm:px-4 md:px-6 lg:px-8">{userName}</p>
+              <p className="text-lg text-gray-300 mb-6 sm:px-4 md:px-6 lg:px-8">{teamName}</p>
 
               {/* Sparkle Effects */}
-              <div className="relative">
+              <div className="relative sm:px-4 md:px-6 lg:px-8">
                 {[...Array(8)].map((_, i) => (
                   <motion.div
                     key={i}
-                    className="absolute"
+                    className="absolute sm:px-4 md:px-6 lg:px-8"
                     style={{
                       left: `${20 + (i * 10)}%`,
                       top: `${20 + (i % 2 * 40)}%`
@@ -374,7 +382,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
                       delay: i * 0.2
                     }}
                   >
-                    <Sparkles className="w-4 h-4 text-yellow-400" />
+                    <Sparkles className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                   </motion.div>
                 ))}
               </div>
@@ -392,24 +400,24 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 400, opacity: 0 }}
             transition={{ delay: index * 0.5 }}
-            className="fixed top-20 right-4 z-[1050] max-w-sm"
+            className="fixed top-20 right-4 z-[1050] max-w-sm sm:px-4 md:px-6 lg:px-8"
             style={{ top: `${5 + index * 7}rem` }}
           >
             <div className={`bg-dark-800 rounded-lg border-2 ${getRarityColor(achievement.rarity)} p-4 ${getRarityGlow(achievement.rarity)}`}>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="text-3xl"
+                  className="text-3xl sm:px-4 md:px-6 lg:px-8"
                 >
                   {achievement.icon}
                 </motion.div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-white text-sm">Achievement Unlocked!</h3>
-                  <p className="text-white font-semibold">{achievement.name}</p>
-                  <p className="text-gray-300 text-xs">{achievement.description}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-yellow-400">+{achievement.points} XP</span>
+                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                  <h3 className="font-bold text-white text-sm sm:px-4 md:px-6 lg:px-8">Achievement Unlocked!</h3>
+                  <p className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{achievement.name}</p>
+                  <p className="text-gray-300 text-xs sm:px-4 md:px-6 lg:px-8">{achievement.description}</p>
+                  <div className="flex items-center gap-2 mt-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-yellow-400 sm:px-4 md:px-6 lg:px-8">+{achievement.points} XP</span>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${getRarityColor(achievement.rarity)}`}>
                       {achievement.rarity.toUpperCase()}
                     </span>
@@ -422,22 +430,19 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
       </AnimatePresence>
 
       {/* Test Celebration Buttons (for development/testing) */}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
+      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">
         <button
           onClick={() => triggerCelebration('weekly_win')}
-          className="px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm transition-colors"
         >
           🏆 Victory
         </button>
         <button
           onClick={() => triggerCelebration('blowout')}
-          className="px-3 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-sm transition-colors"
         >
           💥 Blowout
         </button>
         <button
           onClick={() => triggerCelebration('championship')}
-          className="px-3 py-2 bg-gold-600 hover:bg-gold-500 text-white rounded-lg text-sm transition-colors"
         >
           👑 Championship
         </button>
@@ -446,4 +451,10 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   );
 };
 
-export default VictoryCelebrationSystem;
+const VictoryCelebrationSystemWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <VictoryCelebrationSystem {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(VictoryCelebrationSystemWithErrorBoundary);

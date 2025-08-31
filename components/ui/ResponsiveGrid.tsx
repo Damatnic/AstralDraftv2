@@ -10,7 +10,6 @@ interface ResponsiveGridProps {
   };
   gap?: 'sm' | 'md' | 'lg';
   className?: string;
-}
 
 export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   children,

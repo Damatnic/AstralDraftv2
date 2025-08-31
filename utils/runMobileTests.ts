@@ -43,8 +43,8 @@ export async function runMobileTests() {
       criticalIssues,
       needsImmediateAttention: criticalIssues.length > 0
     };
-    
-  } catch (error) {
+
+    } catch (error) {
     console.error('❌ Mobile testing failed:', error);
     throw error;
   }
@@ -53,7 +53,7 @@ export async function runMobileTests() {
 // Auto-run if called directly
 if (require.main === module) {
   runMobileTests()
-    .then(({ report, needsImmediateAttention }: any) => {
+    .then(({ report, needsImmediateAttention }) => {
       console.log('\n📄 Full Report:');
       console.log(report);
       

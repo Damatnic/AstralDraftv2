@@ -3,7 +3,8 @@
  * Advanced season administration and control panel
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { CalendarIcon } from '../icons/CalendarIcon';
@@ -17,14 +18,14 @@ import { League } from '../../types';
 interface SeasonManagementProps {
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface SeasonAction {
     type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';
     data?: any;
-}
 
-const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }: any) => {
+const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }) => {
     const [showConfirmAction, setShowConfirmAction] = React.useState<SeasonAction | null>(null);
     const [manualScoreMode, setManualScoreMode] = React.useState(false);
     const [selectedMatchup, setSelectedMatchup] = React.useState<string | null>(null);
@@ -85,7 +86,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                     payload: { leagueId: league.id } 
                 });
                 break;
-        }
+
         setShowConfirmAction(null);
     };
 
@@ -100,7 +101,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 teamId: scoreAdjustment.teamId,
                 adjustment: scoreAdjustment.adjustment,
                 reason: scoreAdjustment.reason
-            }
+
         });
 
         dispatch({
@@ -109,7 +110,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 action: 'Manual Score Adjustment',
                 details: `${scoreAdjustment.adjustment} points to team ${scoreAdjustment.teamId}: ${scoreAdjustment.reason}`,
                 commissioner: 'Current User'
-            }
+
         });
 
         setScoreAdjustment({ teamId: '', adjustment: 0, reason: '' });
@@ -127,123 +128,122 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
     };
 
     return (
-        <Widget title="Season Management" icon={<CalendarIcon className="w-5 h-5" />}>
-            <div className="p-4 space-y-6">
+        <Widget title="Season Management" icon={<CalendarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}>
+            <div className="p-4 space-y-6 sm:px-4 md:px-6 lg:px-8">
                 {/* Season Overview */}
-                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-4 rounded-lg">
-                    <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-4 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                             2024 Season - {getSeasonPhase()}
                         </h3>
-                        <div className="text-right">
-                            <div className="text-2xl font-bold text-blue-400">Week {seasonInfo.currentWeek}</div>
-                            <div className="text-xs text-gray-400">of {seasonInfo.totalWeeks}</div>
+                        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">Week {seasonInfo.currentWeek}</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">of {seasonInfo.totalWeeks}</div>
                         </div>
                     </div>
                     
                     {/* Progress Bar */}
-                    <div className="w-full bg-gray-700 rounded-full h-2 mb-3">
+                    <div className="w-full bg-gray-700 rounded-full h-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                         <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${getWeekProgress()}%` }}
-                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full"
+                            className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
                         <div>
-                            <div className="text-gray-400">Trade Deadline</div>
-                            <div className="font-medium">{new Date(seasonInfo.tradeDeadline).toLocaleDateString()}</div>
+                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Trade Deadline</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{new Date(seasonInfo.tradeDeadline).toLocaleDateString()}</div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Playoffs Start</div>
-                            <div className="font-medium">{new Date(seasonInfo.playoffStart).toLocaleDateString()}</div>
+                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Playoffs Start</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{new Date(seasonInfo.playoffStart).toLocaleDateString()}</div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Waiver Day</div>
-                            <div className="font-medium">{seasonInfo.waiverDay}</div>
+                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Waiver Day</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{seasonInfo.waiverDay}</div>
                         </div>
                         <div>
-                            <div className="text-gray-400">Lock Time</div>
-                            <div className="font-medium">{seasonInfo.lockTime}</div>
+                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Lock Time</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{seasonInfo.lockTime}</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Week Controls */}
-                <div className="border border-[var(--panel-border)] rounded-lg p-4">
-                    <h4 className="font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
-                        <AdjustmentsIcon className="w-4 h-4" />
+                <div className="border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                    <h4 className="font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <AdjustmentsIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Week Controls
                     </h4>
                     
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() => handleSeasonAction({ type: 'ADVANCE_WEEK' })}
-                            className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm"
+                            onClick={() => handleSeasonAction({ type: 'ADVANCE_WEEK' }}
+                            className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                             disabled={seasonInfo.currentWeek >= seasonInfo.totalWeeks}
                         >
-                            <PlayIcon className="w-4 h-4" />
+                            <PlayIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             Advance Week
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'RESET_WEEK' })}
-                            className="flex items-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm"
+                            onClick={() => handleSeasonAction({ type: 'RESET_WEEK' }}
+                            className="flex items-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
-                            <RefreshIcon className="w-4 h-4" />
+                            <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             Reset Week
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'FORCE_SYNC' })}
-                            className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+                            onClick={() => handleSeasonAction({ type: 'FORCE_SYNC' }}
+                            className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
-                            <RefreshIcon className="w-4 h-4" />
+                            <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             Force Sync
                         </button>
                         
                         <button
                             onClick={() => setManualScoreMode(!manualScoreMode)}
-                            className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm"
                         >
                             ✏️ Manual Scoring
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'END_SEASON' })}
-                            className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm"
+                            onClick={() => handleSeasonAction({ type: 'END_SEASON' }}
+                            className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
-                            <StopIcon className="w-4 h-4" />
+                            <StopIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             End Season
                         </button>
                     </div>
                 </div>
 
                 {/* Current Week Matchups */}
-                <div className="border border-[var(--panel-border)] rounded-lg p-4">
-                    <h4 className="font-semibold text-[var(--text-primary)] mb-3">
+                <div className="border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                    <h4 className="font-semibold text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                         Week {seasonInfo.currentWeek} Matchups
                     </h4>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {weeklyMatchups.map((matchup: any) => (
                             <div
                                 key={matchup.id}
-                                className="flex items-center justify-between p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg"
+                                className="flex items-center justify-between p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex-1">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[var(--text-primary)]">{matchup.team1}</span>
-                                        <span className="font-bold text-[var(--text-primary)]">{matchup.score1}</span>
+                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{matchup.team1}</span>
+                                        <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{matchup.score1}</span>
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[var(--text-primary)]">{matchup.team2}</span>
-                                        <span className="font-bold text-[var(--text-primary)]">{matchup.score2}</span>
+                                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{matchup.team2}</span>
+                                        <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{matchup.score2}</span>
                                     </div>
                                 </div>
                                 
-                                <div className="ml-4 flex items-center gap-2">
+                                <div className="ml-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className={`px-2 py-1 rounded-full text-xs ${
                                         matchup.completed 
                                             ? 'bg-green-500/20 text-green-400' 
@@ -254,7 +254,6 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     
                                     <button
                                         onClick={() => setSelectedMatchup(selectedMatchup === matchup.id ? null : matchup.id)}
-                                        className="p-1 hover:bg-white/10 rounded"
                                     >
                                         ⋮
                                     </button>
@@ -271,28 +270,28 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 sm:px-4 md:px-6 lg:px-8"
                             onClick={(e: any) => e.target === e.currentTarget && setManualScoreMode(false)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
-                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full"
+                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full sm:px-4 md:px-6 lg:px-8"
                             >
-                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                                     Manual Score Adjustment
                                 </h3>
                                 
-                                <div className="space-y-4">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                             Select Team
                                         </label>
                                         <select
                                             value={scoreAdjustment.teamId}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }))}
-                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, teamId: e.target.value }}
+                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <option value="">Choose team...</option>
                                             <option value="team1">Alice's Aces</option>
@@ -303,45 +302,44 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     </div>
                                     
                                     <div>
-                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                             Point Adjustment
                                         </label>
                                         <input
                                             type="number"
                                             step="0.1"
                                             value={scoreAdjustment.adjustment}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }))}
-                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, adjustment: parseFloat(e.target.value) || 0 }}
+                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                             placeholder="Enter adjustment (+ or -)"
                                         />
                                     </div>
                                     
                                     <div>
-                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                                        <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                             Reason
                                         </label>
                                         <textarea
                                             value={scoreAdjustment.reason}
-                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }))}
+                                            onChange={(e: any) => setScoreAdjustment(prev => ({ ...prev, reason: e.target.value }}
                                             rows={3}
-                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
+                                            className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                             placeholder="Explain the reason for this adjustment..."
                                         />
                                     </div>
                                 </div>
                                 
-                                <div className="flex gap-3 justify-end mt-6">
+                                <div className="flex gap-3 justify-end mt-6 sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setManualScoreMode(false)}
-                                        className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         onClick={handleScoreAdjustment}
                                         disabled={!scoreAdjustment.teamId || !scoreAdjustment.reason}
-                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50"
-                                    >
+                                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                                     aria-label="Action button">
                                         Apply Adjustment
                                     </button>
                                 </div>
@@ -357,28 +355,27 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 sm:px-4 md:px-6 lg:px-8"
                             onClick={(e: any) => e.target === e.currentTarget && setShowConfirmAction(null)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
-                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full"
+                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full sm:px-4 md:px-6 lg:px-8"
                             >
-                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                                     Confirm Season Action
                                 </h3>
-                                <p className="text-[var(--text-secondary)] mb-6">
+                                <p className="text-[var(--text-secondary)] mb-6 sm:px-4 md:px-6 lg:px-8">
                                     {showConfirmAction.type === 'ADVANCE_WEEK' && `Are you sure you want to advance to Week ${seasonInfo.currentWeek + 1}?`}
                                     {showConfirmAction.type === 'RESET_WEEK' && 'Are you sure you want to reset the current week? This will clear all scores and lineup locks.'}
                                     {showConfirmAction.type === 'END_SEASON' && 'Are you sure you want to end the season? This action cannot be undone.'}
                                     {showConfirmAction.type === 'FORCE_SYNC' && 'Force sync all league data with external sources?'}
                                 </p>
-                                <div className="flex gap-3 justify-end">
+                                <div className="flex gap-3 justify-end sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setShowConfirmAction(null)}
-                                        className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                     >
                                         Cancel
                                     </button>
@@ -389,7 +386,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                                 ? 'bg-red-600 hover:bg-red-700' 
                                                 : 'bg-blue-600 hover:bg-blue-700'
                                         }`}
-                                    >
+                                     aria-label="Action button">
                                         Confirm
                                     </button>
                                 </div>
@@ -402,4 +399,10 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
     );
 };
 
-export default SeasonManagement;
+const SeasonManagementWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SeasonManagement {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SeasonManagementWithErrorBoundary);

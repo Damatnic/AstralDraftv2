@@ -41,6 +41,7 @@ export interface AnalyticsData {
   predictions: number;
   confidence: number;
   winRate: number;
+
 }
 
 export interface TrendData {
@@ -49,6 +50,7 @@ export interface TrendData {
   previous: number;
   change: number;
   trend: 'up' | 'down' | 'stable';
+
 }
 
 export interface PredictionMetrics {
@@ -57,7 +59,6 @@ export interface PredictionMetrics {
   accuracy: number;
   avgConfidence: number;
   byType: Record<PredictionType, { total: number; correct: number; accuracy: number }>;
-}
 
 export interface PerformanceMetrics {
   overallAccuracy: number;
@@ -66,6 +67,7 @@ export interface PerformanceMetrics {
   currentStreak: number;
   totalPredictions: number;
   confidenceScore: number;
+
 }
 
 const HistoricalAnalyticsView: React.FC = () => {
@@ -87,6 +89,7 @@ const HistoricalAnalyticsView: React.FC = () => {
   // Load analytics data
   const loadAnalyticsData = React.useCallback(async (): Promise<void> => {
     try {
+
       setIsLoading(true);
       
       // Mock data generation for demo
@@ -99,130 +102,18 @@ const HistoricalAnalyticsView: React.FC = () => {
       setTrendData(mockTrends);
       
       logger.info(`Loaded analytics data for timeframe: ${timeframe}, type: ${selectedType}`);
+    
     } catch (error) {
-      logger.error('Failed to load analytics data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [timeframe, selectedType]);
-
-  useEffect(() => {
-    loadAnalyticsData();
-  }, [loadAnalyticsData]);
-
-  const generateMockAnalyticsData = (period: TimeframeType): AnalyticsData[] => {
-    const days = period === '7d' ? 7 : period === '30d' ? 30 : period === '90d' ? 90 : 365;
-    const data: AnalyticsData[] = [];
-    
-    for (let i = days; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      
-      data.push({
-        date: date.toISOString().split('T')[0],
-        accuracy: 70 + Math.random() * 25, // 70-95%
-        predictions: Math.floor(Math.random() * 20) + 5, // 5-25 predictions
-        confidence: 60 + Math.random() * 30, // 60-90%
-        winRate: 65 + Math.random() * 25 // 65-90%
-      });
-    }
-    
-    return data;
-  };
-
-  const generateMockPerformanceMetrics = (): PerformanceMetrics => ({
-    overallAccuracy: 78.5 + Math.random() * 15,
-    weeklyGrowth: -5 + Math.random() * 15, // -5% to +10%
-    bestStreak: Math.floor(Math.random() * 20) + 5,
-    currentStreak: Math.floor(Math.random() * 10) + 1,
-    totalPredictions: Math.floor(Math.random() * 500) + 100,
-    confidenceScore: 75 + Math.random() * 20
-  });
-
-  const generateMockTrendData = (): TrendData[] => [
-    {
-      metric: 'Accuracy',
-      current: 82.3,
-      previous: 79.1,
-      change: 3.2,
-      trend: 'up'
-    },
-    {
-      metric: 'Confidence',
-      current: 76.8,
-      previous: 78.2,
-      change: -1.4,
-      trend: 'down'
-    },
-    {
-      metric: 'Volume',
-      current: 45,
-      previous: 38,
-      change: 7,
-      trend: 'up'
-    },
-    {
-      metric: 'Win Rate',
-      current: 84.1,
-      previous: 84.1,
-      change: 0,
-      trend: 'stable'
-    }
-  ];
-
-  const exportData = (): void => {
-    try {
-      const csvData = generateCSVData();
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `oracle-analytics-${timeframe}.csv`;
+        console.error(error);
+    `oracle-analytics-${timeframe}.csv`;
       link.click();
       window.URL.revokeObjectURL(url);
       
       logger.info('Analytics data exported successfully');
+
     } catch (error) {
-      logger.error('Failed to export analytics data:', error);
-    }
-  };
-
-  const generateCSVData = (): string => {
-    const headers = ['Date', 'Accuracy', 'Predictions', 'Confidence', 'Win Rate'];
-    const rows = analyticsData.map((item: any) => [
-      item.date,
-      item.accuracy.toFixed(2),
-      item.predictions.toString(),
-      item.confidence.toFixed(2),
-      item.winRate.toFixed(2)
-    ]);
-    
-    return [headers, ...rows].map((row: any) => row.join(',')).join('\n');
-  };
-
-  const getTrendIcon = (trend: 'up' | 'down' | 'stable'): React.ReactNode => {
-    switch (trend) {
-      case 'up':
-        return <FiTrendingUp className="text-green-400" />;
-      case 'down':
-        return <FiTrendingDown className="text-red-400" />;
-      default:
-        return <FiActivity className="text-gray-400" />;
-    }
-  };
-
-  const getTrendColor = (trend: 'up' | 'down' | 'stable'): string => {
-    switch (trend) {
-      case 'up':
-        return 'text-green-400';
-      case 'down':
-        return 'text-red-400';
-      default:
-        return 'text-gray-400';
-    }
-  };
-
-  const formatPercentage = (value: number): string => `${value.toFixed(1)}%`;
+        console.error(error);
+    `${value.toFixed(1)}%`;
   const formatChange = (value: number): string => {
     const sign = value >= 0 ? '+' : '';
     return `${sign}${value.toFixed(1)}`;
@@ -250,7 +141,6 @@ const HistoricalAnalyticsView: React.FC = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={exportData}
-                className="flex items-center space-x-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
               >
                 <FiDownload className="w-4 h-4" />
                 <span>Export</span>
@@ -258,7 +148,6 @@ const HistoricalAnalyticsView: React.FC = () => {
               
               <button
                 onClick={loadAnalyticsData}
-                disabled={isLoading}
                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
               >
                 <FiRefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -274,7 +163,6 @@ const HistoricalAnalyticsView: React.FC = () => {
               <select
                 value={timeframe}
                 onChange={(e: any) => setTimeframe(e.target.value as TimeframeType)}
-                className="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
               >
                 <option value="7d">Last 7 days</option>
                 <option value="30d">Last 30 days</option>
@@ -289,7 +177,6 @@ const HistoricalAnalyticsView: React.FC = () => {
               <select
                 value={selectedType}
                 onChange={(e: any) => setSelectedType(e.target.value as PredictionType | 'all')}
-                className="bg-gray-800 text-white px-3 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
               >
                 <option value="all">All predictions</option>
                 <option value="game_outcome">Game outcomes</option>

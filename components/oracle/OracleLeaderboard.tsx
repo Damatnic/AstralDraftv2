@@ -4,7 +4,8 @@
  * Integrates with backend /api/oracle/leaderboard endpoint
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     TrophyIcon, 
@@ -17,6 +18,7 @@ import { Avatar } from '../ui/Avatar';
 // Remove unused import since we'll use fetch directly
 
 interface LeaderboardEntry {
+
     id: string;
     username: string;
     display_name: string;
@@ -27,25 +29,26 @@ interface LeaderboardEntry {
     correct_predictions: number;
     accuracy_rate: number;
     rank?: number;
-}
 
-interface LeaderboardFilters {
+    } catch (error) {
+        console.error(error);
+    }interface LeaderboardFilters {
     timeframe: 'week' | 'month' | 'season' | 'all';
     season: number;
     week?: number;
+
 }
 
 interface OracleLeaderboardProps {
     currentUserId?: string;
     showAchievements?: boolean;
     compact?: boolean;
-}
 
 const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     currentUserId,
     showAchievements = true,
     compact = false
-}: any) => {
+}) => {
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -69,19 +72,17 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
 
             if (filters.week) {
                 params.append('week', filters.week.toString());
-            }
 
             const response = await fetch(`/api/oracle/leaderboard?${params}`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                }
+
             });
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response?.status}: ${response?.statusText}`);
-            }
 
             const data = await response.json();
             
@@ -95,15 +96,10 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
                 setLastUpdated(new Date());
             } else {
                 throw new Error(data.error || 'Failed to fetch leaderboard');
-            }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to load leaderboard');
-            
-            // Fallback to mock data for development
-            setLeaderboardData(generateMockLeaderboardData());
-        } finally {
+
+        finally {
             setLoading(false);
-        }
+
     };
 
     // Generate mock data as fallback
@@ -141,7 +137,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
         if (!compact) {
             const interval = setInterval(fetchLeaderboard, 30000);
             return () => clearInterval(interval);
-        }
+
     }, [filters, compact]);
 
     // Handle filter changes
@@ -166,7 +162,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
             return { color: 'text-blue-400 bg-blue-400/20', icon: StarIcon };
         } else {
             return { color: 'text-gray-500 bg-gray-500/20', icon: TrendingUpIcon };
-        }
+
     };
 
     // Get accuracy color class
@@ -178,13 +174,12 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
 
     // Render filter controls
     const renderFilters = () => (
-        <div className="flex flex-wrap gap-2 mb-4">
-            <div className="flex items-center gap-2">
-                <FilterIcon className="w-4 h-4 text-gray-400" />
+        <div className="flex flex-wrap gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <FilterIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                 <select
                     value={filters.timeframe}
                     onChange={(e: any) => handleFilterChange('timeframe', e.target.value)}
-                    className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm text-white"
                 >
                     <option value="week">This Week</option>
                     <option value="month">This Month</option>
@@ -201,14 +196,12 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
                     max="18"
                     value={filters.week || ''}
                     onChange={(e: any) => handleFilterChange('week', parseInt(e.target.value) || undefined)}
-                    className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm text-white w-20"
                 />
             )}
 
             <select
                 value={filters.season}
                 onChange={(e: any) => handleFilterChange('season', parseInt(e.target.value))}
-                className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm text-white"
             >
                 <option value={2024}>2024 Season</option>
                 <option value={2023}>2023 Season</option>
@@ -234,22 +227,22 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
                         : 'bg-gray-800/50 border-gray-600/50 hover:bg-gray-700/50'
                 }`}
             >
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                         {/* Rank Badge */}
                         <div className={`flex items-center justify-center w-8 h-8 rounded-full ${badge.color}`}>
-                            <IconComponent className="w-4 h-4" />
+                            <IconComponent className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         </div>
 
                         {/* User Info */}
-                        <div className="flex items-center space-x-2">
-                            <Avatar avatar="🏆" className="w-8 h-8" />
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Avatar avatar="🏆" className="w-8 h-8 sm:px-4 md:px-6 lg:px-8" />
                             <div>
-                                <div className="font-semibold text-white">
+                                <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">
                                     {entry.display_name || entry.username}
-                                    {isCurrentUser && <span className="text-blue-400 text-sm ml-1">(You)</span>}
+                                    {isCurrentUser && <span className="text-blue-400 text-sm ml-1 sm:px-4 md:px-6 lg:px-8">(You)</span>}
                                 </div>
-                                <div className="text-xs text-gray-400">
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     {entry.total_predictions} predictions
                                 </div>
                             </div>
@@ -257,23 +250,23 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center space-x-4 text-sm">
-                        <div className="text-center">
-                            <div className="font-bold text-white">{entry.total_points}</div>
-                            <div className="text-xs text-gray-400">Points</div>
+                    <div className="flex items-center space-x-4 text-sm sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                            <div className="font-bold text-white sm:px-4 md:px-6 lg:px-8">{entry.total_points}</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Points</div>
                         </div>
                         
-                        <div className="text-center">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
                             <div className={`font-bold ${getAccuracyColor(entry.accuracy_rate)}`}>
                                 {entry.accuracy_rate}%
                             </div>
-                            <div className="text-xs text-gray-400">Accuracy</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
                         </div>
 
                         {entry.oracle_beats > 0 && (
-                            <div className="text-center">
-                                <div className="font-bold text-orange-400">{entry.oracle_beats}</div>
-                                <div className="text-xs text-gray-400">Oracle Beats</div>
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="font-bold text-orange-400 sm:px-4 md:px-6 lg:px-8">{entry.oracle_beats}</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Oracle Beats</div>
                             </div>
                         )}
                     </div>
@@ -281,8 +274,8 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
 
                 {/* Additional stats for non-compact mode */}
                 {!compact && (
-                    <div className="mt-3 pt-3 border-t border-gray-600/30">
-                        <div className="flex items-center justify-between text-xs text-gray-400">
+                    <div className="mt-3 pt-3 border-t border-gray-600/30 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                             <span>Correct: {entry.correct_predictions}/{entry.total_predictions}</span>
                             <span>Avg Confidence: {entry.avg_confidence}%</span>
                         </div>
@@ -297,54 +290,61 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
         const skeletonItems = Array.from({ length: compact ? 5 : 10 }, (_, i) => `skeleton-${i}`);
         
         return (
-            <div className="space-y-4">
+            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {skeletonItems.map((skeletonId: any) => (
-                    <div key={skeletonId} className="bg-gray-800/50 rounded-lg p-4 animate-pulse">
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 bg-gray-600 rounded-full"></div>
-                                <div className="space-y-1">
-                                    <div className="w-24 h-4 bg-gray-600 rounded"></div>
-                                    <div className="w-16 h-3 bg-gray-600 rounded"></div>
+                    <div key={skeletonId} className="bg-gray-800/50 rounded-lg p-4 animate-pulse sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="w-8 h-8 bg-gray-600 rounded-full sm:px-4 md:px-6 lg:px-8"></div>
+                                <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="w-24 h-4 bg-gray-600 rounded sm:px-4 md:px-6 lg:px-8"></div>
+                                    <div className="w-16 h-3 bg-gray-600 rounded sm:px-4 md:px-6 lg:px-8"></div>
                                 </div>
                             </div>
-                            <div className="flex space-x-4">
-                                <div className="w-12 h-4 bg-gray-600 rounded"></div>
-                                <div className="w-12 h-4 bg-gray-600 rounded"></div>
+                            <div className="flex space-x-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="w-12 h-4 bg-gray-600 rounded sm:px-4 md:px-6 lg:px-8"></div>
+                                <div className="w-12 h-4 bg-gray-600 rounded sm:px-4 md:px-6 lg:px-8"></div>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
         );
-    }
 
     // Error state
     if (error) {
         return (
-            <div className="text-center py-8">
-                <div className="text-red-400 mb-2">⚠️ Error loading leaderboard</div>
-                <div className="text-gray-400 text-sm mb-4">{error}</div>
+            <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-red-400 mb-2 sm:px-4 md:px-6 lg:px-8">⚠️ Error loading leaderboard</div>
+                <div className="text-gray-400 text-sm mb-4 sm:px-4 md:px-6 lg:px-8">{error}</div>
                 <button
                     onClick={fetchLeaderboard}
-                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm transition-colors"
-                >
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     Try Again
                 </button>
             </div>
         );
-    }
 
     // Main render
+    
+  if (isLoading) {
     return (
-        <div className="space-y-4">
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             {/* Header with refresh info */}
-            <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <TrophyIcon className="w-5 h-5 text-yellow-400" />
+            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                    <TrophyIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                     Oracle Leaderboard
                 </h3>
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     Updated {lastUpdated.toLocaleTimeString()}
                 </div>
             </div>
@@ -353,7 +353,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
             {!compact && renderFilters()}
 
             {/* Leaderboard */}
-            <div className="space-y-2">
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence>
                     {leaderboardData.map((entry, index) => renderLeaderboardEntry(entry, index))}
                 </AnimatePresence>
@@ -361,16 +361,16 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
 
             {/* Empty state */}
             {leaderboardData.length === 0 && !loading && (
-                <div className="text-center py-8 text-gray-400">
-                    <TrophyIcon className="w-12 h-12 mx-auto mb-2 text-gray-600" />
+                <div className="text-center py-8 text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                    <TrophyIcon className="w-12 h-12 mx-auto mb-2 text-gray-600 sm:px-4 md:px-6 lg:px-8" />
                     <div>No rankings available for the selected timeframe</div>
-                    <div className="text-sm mt-1">Make some predictions to see rankings!</div>
+                    <div className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">Make some predictions to see rankings!</div>
                 </div>
             )}
 
             {/* Footer with total count */}
             {!compact && leaderboardData.length > 0 && (
-                <div className="text-center text-xs text-gray-400 pt-2 border-t border-gray-600/30">
+                <div className="text-center text-xs text-gray-400 pt-2 border-t border-gray-600/30 sm:px-4 md:px-6 lg:px-8">
                     Showing top {leaderboardData.length} Oracle competitors
                 </div>
             )}
@@ -378,4 +378,10 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     );
 };
 
-export default OracleLeaderboard;
+const OracleLeaderboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleLeaderboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleLeaderboardWithErrorBoundary);

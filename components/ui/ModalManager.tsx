@@ -3,6 +3,7 @@
  * Handles all application modals in one place
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { useModal } from '../../contexts/ModalContext';
 import { useAppState } from '../../contexts/AppContext';
@@ -106,10 +107,16 @@ export const ModalManager: React.FC = () => {
       
       default:
         return null;
-    }
+
   };
 
   return <>{renderModal()}</>;
 };
 
-export default ModalManager;
+const ModalManagerWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ModalManager {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ModalManagerWithErrorBoundary);

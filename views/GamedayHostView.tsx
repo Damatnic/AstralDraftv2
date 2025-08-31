@@ -37,22 +37,19 @@ const GamedayHostView: React.FC = () => {
             if (commentary) {
                 // We can update the event with the commentary or handle it separately
                 // For simplicity, let's just log it for now but it could be displayed
-            }
+
         };
 
         if (latestEvent && !latestEvent.text.includes("commentary")) { // Simple check to avoid reprocessing
              // In a real app, you might have a better way to check if commentary exists
-        }
-        
-    }, [latestEvent, matchup, myTeam, opponentTeam, dispatch]);
 
+    }, [latestEvent, matchup, myTeam, opponentTeam, dispatch]);
 
     if (!league || !myTeam) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
+
     if (!matchup || !opponentTeam) {
         return <ErrorDisplay title="Bye Week" message="You don't have a matchup this week." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -63,7 +60,7 @@ const GamedayHostView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} className="back-btn">
                     Back to Team Hub
                 </button>
             </header>

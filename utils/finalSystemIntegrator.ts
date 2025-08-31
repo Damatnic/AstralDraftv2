@@ -81,9 +81,13 @@ export class FinalSystemIntegrator {
   private async performAllSystemChecks(): Promise<void> {
     const checkPromises = Array.from(this.systemChecks.keys()).map(async (systemName) => {
       try {
+
         const check = await this.performSystemCheck(systemName);
         this.systemChecks.set(systemName, check);
-      } catch (error) {
+      
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
         this.systemChecks.set(systemName, {
           system: systemName,
           status: 'critical',
@@ -292,23 +296,7 @@ export class FinalSystemIntegrator {
         lastCheck: new Date(),
         details: { permission: notificationPermission }
       };
-    } catch (error) {
-      return {
-        system: 'notificationService',
-        status: 'critical',
-        responseTime: performance.now() - startTime,
-        lastCheck: new Date(),
-        details: { error: error instanceof Error ? error.message : 'Check failed' }
-      };
-    }
-  }
-
-  private async checkLoggingService(): Promise<SystemHealthCheck> {
-    const startTime = performance.now();
-    
-    try {
-      // Test logging service functionality
-      const testLog = `System check: ${Date.now()}`;
+    `System check: ${Date.now()}`;
       (window as any).loggingService?.info?.(testLog, {}, 'system-check');
       const responseTime = performance.now() - startTime;
       
@@ -319,95 +307,7 @@ export class FinalSystemIntegrator {
         lastCheck: new Date(),
         details: { testLogSuccessful: true }
       };
-    } catch (error) {
-      return {
-        system: 'loggingService',
-        status: 'critical',
-        responseTime: performance.now() - startTime,
-        lastCheck: new Date(),
-        details: { error: error instanceof Error ? error.message : 'Check failed' }
-      };
-    }
-  }
-
-  private emitHealthReport(): void {
-    const report = this.generateIntegrationReport();
-    
-    // Emit system health event
-    window.dispatchEvent(new CustomEvent('systemHealthReport', {
-      detail: report
-    }));
-
-    // Log critical issues
-    if (report.overallHealth === 'critical') {
-      console.error('🚨 Critical system issues detected:', report);
-    } else if (report.overallHealth === 'degraded') {
-      console.warn('⚠️ System performance degraded:', report);
-    }
-  }
-
-  private handleSystemError = (event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { system, error } = customEvent.detail || {};
-    
-    if (system && this.systemChecks.has(system)) {
-      this.systemChecks.set(system, {
-        system,
-        status: 'critical',
-        lastCheck: new Date(),
-        details: { error: error?.message || 'System error occurred' }
-      });
-    }
-  };
-
-  private handleSystemRecovery = (event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { system } = customEvent.detail || {};
-    
-    if (system && this.systemChecks.has(system)) {
-      // Trigger immediate recheck
-      this.performSystemCheck(system).then(check => {
-        this.systemChecks.set(system, check);
-      });
-    }
-  };
-
-  private handlePerformanceDegradation = (event: Event) => {
-    const customEvent = event as CustomEvent;
-    
-    // Trigger performance optimization measures
-    this.enableEmergencyOptimizations();
-  };
-
-  private enableEmergencyOptimizations(): void {
-    // Reduce animation quality
-    document.documentElement.classList.add('emergency-optimization');
-    
-    // Emit emergency optimization event
-    window.dispatchEvent(new CustomEvent('emergencyOptimization', {
-      detail: { reason: 'Performance degradation detected' }
-    }));
-  }
-
-  // Public API methods
-  public generateIntegrationReport(): IntegrationReport {
-    const systems = Array.from(this.systemChecks.values());
-    const criticalSystems = systems.filter(s => s.status === 'critical');
-    const degradedSystems = systems.filter(s => s.status === 'degraded');
-    
-    let overallHealth: 'healthy' | 'degraded' | 'critical';
-    if (criticalSystems.length > 0) {
-      overallHealth = 'critical';
-    } else if (degradedSystems.length > 0) {
-      overallHealth = 'degraded';
-    } else {
-      overallHealth = 'healthy';
-    }
-
-    const recommendations: string[] = [];
-    
-    if (criticalSystems.length > 0) {
-      recommendations.push(`Critical: ${criticalSystems.length} systems require immediate attention`);
+    `Critical: ${criticalSystems.length} systems require immediate attention`);
     }
     
     if (degradedSystems.length > 0) {

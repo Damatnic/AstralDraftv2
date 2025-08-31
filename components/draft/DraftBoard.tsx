@@ -1,6 +1,7 @@
 
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import type { Team, DraftPick, Player } from '../../types';
 import TeamColumn from './TeamColumn';
 import { useAppState } from '../../contexts/AppContext';
@@ -12,9 +13,10 @@ interface DraftBoardProps {
   onPlayerSelect: (player: Player) => void;
   draftFormat: 'SNAKE' | 'AUCTION';
   teamOnClockId?: number;
+
 }
 
-const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }: any) => {
+const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }) => {
   const { state } = useAppState();
   const myTeamId = teams.find((t: any) => t.owner.id === state.user?.id)?.id;
   const rounds = draftFormat === 'SNAKE' ? 16 : teams[0]?.roster.length || 16;
@@ -57,4 +59,10 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
   );
 };
 
-export default DraftBoard;
+const DraftBoardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <DraftBoard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(DraftBoardWithErrorBoundary);

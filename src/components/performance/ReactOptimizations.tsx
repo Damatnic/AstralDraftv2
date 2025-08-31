@@ -155,7 +155,7 @@ export const DebouncedInput = memo(({
   onChange,
   debounceMs = 300,
   ...props
-}: DebouncedInputProps) => {
+}) => {
   const [value, setValue] = useState(props.value || '');
   const timeoutRef = useRef<NodeJS.Timeout>();
 
@@ -216,7 +216,7 @@ export const PlayerCard = memo(({
   selected = false,
   onSelect,
   showDetails = true
-}: PlayerCardProps) => {
+}) => {
   const handleClick = useCallback(() => {
     onSelect?.(player);
   }, [player, onSelect]);
@@ -283,7 +283,7 @@ export const TeamRoster = memo(({
   onPlayerSelect,
   selectedPlayerId,
   groupByPosition = false
-}: TeamRosterProps) => {
+}) => {
   // Memoize grouped players
   const groupedPlayers = useMemo(() => {
     if (!groupByPosition) {
@@ -351,7 +351,7 @@ export const OptimizedModal = memo(({
   title,
   children,
   size = 'md'
-}: ModalProps) => {
+}) => {
   // Memoize size classes
   const sizeClasses = useMemo(() => {
     switch (size) {

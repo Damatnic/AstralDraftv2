@@ -3,7 +3,8 @@
  * Modern toast notification component with actions, animations, and real-time updates
  */
 
-import React, { useEffect, useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckIcon, XIcon, EyeIcon } from 'lucide-react';
 import { useNotifications } from '../../contexts/NotificationContext';
@@ -13,14 +14,15 @@ interface NotificationToastProps {
     onDismiss: () => void;
     onMarkAsRead?: () => void;
     autoHideDuration?: number;
+
 }
 
-const NotificationToast: React.FC<NotificationToastProps> = ({
-    notification,
+const NotificationToast: React.FC<NotificationToastProps> = ({ notification,
     onDismiss,
     onMarkAsRead,
     autoHideDuration = 5000
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [progress, setProgress] = useState(100);
 
@@ -54,7 +56,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
             case 'LEAGUE_UPDATE': return '📢';
             case 'ACHIEVEMENT': return '🏆';
             default: return '📱';
-        }
+
     };
 
     const getPriorityColor = (priority: string) => {
@@ -63,7 +65,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
             case 'high': return 'border-orange-500 bg-orange-500/90';
             case 'medium': return 'border-blue-500 bg-blue-500/90';
             default: return 'border-gray-500 bg-gray-500/90';
-        }
+
     };
 
     const handleAction = (actionFn?: () => void) => {
@@ -83,20 +85,20 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
                         bg-gray-900/95 backdrop-blur-sm shadow-xl overflow-hidden`}
                 >
                     {/* Progress bar */}
-                    <div className="absolute top-0 left-0 h-1 bg-white/20 transition-all duration-100 ease-linear"
+                    <div className="absolute top-0 left-0 h-1 bg-white/20 transition-all duration-100 ease-linear sm:px-4 md:px-6 lg:px-8"
                          style={{ width: `${progress}%` }} />
                     
-                    <div className="p-4">
-                        <div className="flex items-start space-x-3">
-                            <div className="text-2xl flex-shrink-0">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                                 {getNotificationIcon(notification.type)}
                             </div>
                             
-                            <div className="flex-1 min-w-0">
-                                <h4 className="text-sm font-semibold text-white mb-1">
+                            <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                                <h4 className="text-sm font-semibold text-white mb-1 sm:px-4 md:px-6 lg:px-8">
                                     {notification.title}
                                 </h4>
-                                <p className="text-sm text-gray-300 line-clamp-2">
+                                <p className="text-sm text-gray-300 line-clamp-2 sm:px-4 md:px-6 lg:px-8">
                                     {notification.message}
                                 </p>
                                 
@@ -104,40 +106,37 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
                                     <a
                                         href={notification.actionUrl}
                                         onClick={() => handleAction()}
-                                        className="inline-block mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                                        className="inline-block mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors sm:px-4 md:px-6 lg:px-8"
                                     >
                                         {notification.actionText || 'View Details'} →
                                     </a>
                                 )}
                             </div>
                             
-                            <div className="flex items-center space-x-1 flex-shrink-0">
+                            <div className="flex items-center space-x-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                                 {!notification.isRead && onMarkAsRead && (
                                     <button
                                         onClick={() => handleAction(onMarkAsRead)}
-                                        className="p-1 text-gray-400 hover:text-green-400 transition-colors"
                                         title="Mark as read"
                                     >
-                                        <CheckIcon className="w-4 h-4" />
+                                        <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     </button>
                                 )}
                                 
                                 {notification.actionUrl && (
                                     <button
                                         onClick={() => window.open(notification.actionUrl, '_blank')}
-                                        className="p-1 text-gray-400 hover:text-blue-400 transition-colors"
                                         title="View details"
                                     >
-                                        <EyeIcon className="w-4 h-4" />
+                                        <EyeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     </button>
                                 )}
                                 
                                 <button
                                     onClick={() => handleAction()}
-                                    className="p-1 text-gray-400 hover:text-white transition-colors"
                                     title="Dismiss"
                                 >
-                                    <XIcon className="w-4 h-4" />
+                                    <XIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 </button>
                             </div>
                         </div>
@@ -152,12 +151,13 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
 interface NotificationToastContainerProps {
     maxToasts?: number;
     position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+
 }
 
 export const NotificationToastContainer: React.FC<NotificationToastContainerProps> = ({
     maxToasts = 3,
     position = 'top-right'
-}: any) => {
+}) => {
     const { notifications, markAsRead } = useNotifications();
     const [displayedToasts, setDisplayedToasts] = useState<string[]>([]);
 
@@ -170,7 +170,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
         if (unreadNotifications.length > 0) {
             const newToastIds = unreadNotifications.map((n: any) => n.id);
             setDisplayedToasts(prev => [...prev, ...newToastIds].slice(-maxToasts));
-        }
+
     }, [notifications, displayedToasts, maxToasts]);
 
     const handleDismissToast = (notificationId: string) => {
@@ -188,7 +188,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
             case 'bottom-left': return 'bottom-4 left-4';
             case 'bottom-right': return 'bottom-4 right-4';
             default: return 'top-4 right-4';
-        }
+
     };
 
     const toastsToShow = notifications.filter((n: any) => displayedToasts.includes(n.id));
@@ -197,7 +197,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
         <div className={`fixed ${getPositionClasses()} z-50 space-y-3 pointer-events-none`}>
             <AnimatePresence>
                 {toastsToShow.map((notification: any) => (
-                    <div key={notification.id} className="pointer-events-auto">
+                    <div key={notification.id} className="pointer-events-auto sm:px-4 md:px-6 lg:px-8">
                         <NotificationToast
                             notification={notification}
                             onDismiss={() => handleDismissToast(notification.id)}
@@ -210,4 +210,10 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
     );
 };
 
-export default NotificationToast;
+const NotificationToastWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationToast {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationToastWithErrorBoundary);

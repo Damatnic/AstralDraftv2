@@ -3,6 +3,7 @@
  * Header notification indicator with unread count
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BellIcon } from 'lucide-react';
@@ -11,9 +12,10 @@ import NotificationCenter from './NotificationCenter';
 
 interface NotificationBellProps {
     className?: string;
+
 }
 
-const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: any) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }) => {
     const { unreadCount } = useNotifications();
     const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
 
@@ -26,13 +28,13 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
             >
-                <BellIcon className="w-6 h-6" />
+                <BellIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                 
                 {unreadCount > 0 && (
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1"
+                        className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8"
                     >
                         {unreadCount > 99 ? '99+' : unreadCount}
                     </motion.div>
@@ -40,7 +42,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
                 
                 {unreadCount > 0 && (
                     <motion.div
-                        className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"
+                        className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                     />
@@ -59,4 +61,10 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
     );
 };
 
-export default NotificationBell;
+const NotificationBellWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationBell {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationBellWithErrorBoundary);

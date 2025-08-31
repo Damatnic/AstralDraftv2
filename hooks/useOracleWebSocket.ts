@@ -43,8 +43,12 @@ export const useOracleWebSocket = ({
     const sendMessage = useCallback((message: OracleWebSocketMessage) => {
         if (wsRef.current?.readyState === WebSocket.OPEN) {
             try {
+
                 wsRef.current.send(JSON.stringify(message));
-            } catch (error) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
                 console.error('Failed to send WebSocket message:', error);
                 onError?.('Failed to send message');
             }
@@ -93,9 +97,13 @@ export const useOracleWebSocket = ({
                 if (!mountedRef.current) return;
                 
                 try {
+
                     const data = JSON.parse(event.data);
                     onMessage(data);
-                } catch (err) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (err) {
                     console.error('Failed to parse WebSocket message:', err);
                     onError?.('Failed to parse message');
                 }
@@ -124,7 +132,8 @@ export const useOracleWebSocket = ({
                 setConnectionStatus('disconnected');
                 onError?.('WebSocket connection failed');
             };
-        } catch (err) {
+        
+    } catch (err) {
             if (!mountedRef.current) return;
             
             console.error('Failed to initialize WebSocket:', err);

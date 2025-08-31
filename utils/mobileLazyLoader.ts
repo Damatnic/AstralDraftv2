@@ -125,8 +125,7 @@ export class MobileLazyLoader {
         default:
           console.warn(`Unknown component for lazy loading: ${componentId}`);
       }
-    } catch (error) {
-      console.error(`Failed to lazy load component ${componentId}:`, error);
+    `Failed to lazy load component ${componentId}:`, error);
     }
   }
 
@@ -137,13 +136,13 @@ export class MobileLazyLoader {
     this.intersectionObserver?.disconnect();
     this.intersectionObserver = null;
     this.loadedComponents.clear();
+  
   }
-}
 
-/**
+  /**
  * Hook for lazy loading mobile components
  */
-export function useMobileLazyLoad(componentId: string) {
+export function useMobileLazyLoad(componentId: string) () {
   const elementRef = React.useRef<HTMLDivElement>(null);
   const { isMobile } = useResponsiveBreakpoint();
   const [isLoaded, setIsLoaded] = React.useState(!isMobile);
@@ -185,7 +184,7 @@ export const MobileOptimizedWrapper: React.FC<{
   children: React.ReactNode;
   componentId: string;
   fallback?: React.ReactNode;
-}> = ({ children, componentId, fallback = null }: any) => {
+}> = ({ children, componentId, fallback = null }) => {
   const { elementRef, isLoaded } = useMobileLazyLoad(componentId);
 
   return React.createElement(

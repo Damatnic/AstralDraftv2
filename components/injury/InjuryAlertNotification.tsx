@@ -3,7 +3,8 @@
  * Real-time injury alert notifications with configurable preferences
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Card, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import {
@@ -26,6 +27,7 @@ interface InjuryAlertNotificationProps {
   maxAlerts?: number;
   showSettings?: boolean;
   onDismiss?: (alertId: string) => void;
+
 }
 
 interface NotificationSettings {
@@ -35,14 +37,13 @@ interface NotificationSettings {
   showRecommendations: boolean;
   groupSimilar: boolean;
   soundEnabled: boolean;
-}
 
-const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
-  className = '',
+const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ className = '',
   maxAlerts = 5,
   showSettings = true,
   onDismiss
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [alerts, setAlerts] = useState<InjuryAlert[]>([]);
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
   const [showSettingsPanel, setShowSettingsPanel] = useState(false);
@@ -67,7 +68,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       }, settings.autoHideDuration * 1000);
 
       return () => clearTimeout(timer);
-    }
+
   }, [alerts, settings.autoHide, settings.autoHideDuration]);
 
   const loadSettings = () => {
@@ -75,17 +76,19 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       const saved = localStorage.getItem('injury_notification_settings');
       if (saved) {
         setSettings({ ...settings, ...JSON.parse(saved) });
-      }
+
     } catch (error) {
-    }
+
   };
 
   const saveSettings = (newSettings: NotificationSettings) => {
     try {
+
       localStorage.setItem('injury_notification_settings', JSON.stringify(newSettings));
       setSettings(newSettings);
+
     } catch (error) {
-    }
+
   };
 
   const getNotificationFrequency = (severity: string): number => {
@@ -93,7 +96,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       case 'CRITICAL': return 800;
       case 'HIGH': return 600;
       default: return 400;
-    }
+
   };
 
   const addAlert = (alert: InjuryAlert) => {
@@ -108,7 +111,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
     if (settings.soundEnabled) {
       playNotificationSound(alert.severity);
-    }
+
   };
 
   const setupAlertSubscription = () => {
@@ -117,6 +120,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
   const playNotificationSound = (severity: string) => {
     try {
+
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -134,8 +138,9 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.5);
+
     } catch (error) {
-    }
+
   };
 
   const handleDismissAlert = (alertId: string) => {
@@ -154,11 +159,11 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'CRITICAL': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      case 'HIGH': return <TrendingDown className="h-4 w-4 text-orange-600" />;
-      case 'MEDIUM': return <Activity className="h-4 w-4 text-yellow-600" />;
-      default: return <TrendingUp className="h-4 w-4 text-green-600" />;
-    }
+      case 'CRITICAL': return <AlertTriangle className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'HIGH': return <TrendingDown className="h-4 w-4 text-orange-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'MEDIUM': return <Activity className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
+      default: return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
+
   };
 
   const getSeverityColor = (severity: string) => {
@@ -167,7 +172,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       case 'HIGH': return 'border-orange-500 bg-orange-50';
       case 'MEDIUM': return 'border-yellow-500 bg-yellow-50';
       default: return 'border-green-500 bg-green-50';
-    }
+
   };
 
   const getPositionClasses = (position: string) => {
@@ -176,7 +181,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       case 'bottom-right': return 'bottom-4 right-4';
       case 'bottom-left': return 'bottom-4 left-4';
       default: return 'top-4 right-4';
-    }
+
   };
 
   const formatTimeAgo = (timestamp: string) => {
@@ -191,7 +196,6 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
   if (alerts.length === 0 && !showSettingsPanel) {
     return null;
-  }
 
   return (
     <>
@@ -199,39 +203,37 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
       <div className={`fixed ${getPositionClasses(settings.position)} z-50 w-96 space-y-3 ${className}`}>
         {/* Settings button */}
         {showSettings && (
-          <div className="flex justify-end">
+          <div className="flex justify-end sm:px-4 md:px-6 lg:px-8">
             <button
               onClick={() => setShowSettingsPanel(!showSettingsPanel)}
-              className="p-2 bg-white rounded-lg shadow-md border hover:bg-gray-50"
             >
-              <Settings className="h-4 w-4 text-gray-600" />
+              <Settings className="h-4 w-4 text-gray-600 sm:px-4 md:px-6 lg:px-8" />
             </button>
           </div>
         )}
 
         {/* Settings panel */}
         {showSettingsPanel && (
-          <Card className="border-blue-200 bg-blue-50">
-            <CardContent className="pt-4">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Notification Settings</h4>
+          <Card className="border-blue-200 bg-blue-50 sm:px-4 md:px-6 lg:px-8">
+            <CardContent className="pt-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                  <h4 className="font-medium sm:px-4 md:px-6 lg:px-8">Notification Settings</h4>
                   <button
                     onClick={() => setShowSettingsPanel(false)}
-                    className="text-gray-500 hover:text-gray-700"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                   </button>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                   <div>
-                    <label htmlFor="position-select" className="block text-sm font-medium mb-1">Position</label>
+                    <label htmlFor="position-select" className="block text-sm font-medium mb-1 sm:px-4 md:px-6 lg:px-8">Position</label>
                     <select
                       id="position-select"
                       value={settings.position}
-                      onChange={(e: any) => saveSettings({ ...settings, position: e.target.value as any })}
-                      className="w-full px-3 py-1 border border-gray-300 rounded text-sm"
+                      onChange={(e: any) => saveSettings({ ...settings, position: e.target.value as any }}
+                      className="w-full px-3 py-1 border border-gray-300 rounded text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                       <option value="top-right">Top Right</option>
                       <option value="top-left">Top Left</option>
@@ -240,20 +242,20 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="auto-hide-checkbox" className="text-sm font-medium">Auto Hide</label>
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <label htmlFor="auto-hide-checkbox" className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Auto Hide</label>
                     <input
                       id="auto-hide-checkbox"
                       type="checkbox"
                       checked={settings.autoHide}
-                      onChange={(e: any) => saveSettings({ ...settings, autoHide: e.target.checked })}
-                      className="rounded"
+                      onChange={(e: any) => saveSettings({ ...settings, autoHide: e.target.checked }}
+                      className="rounded sm:px-4 md:px-6 lg:px-8"
                     />
                   </div>
 
                   {settings.autoHide && (
                     <div>
-                      <label htmlFor="duration-slider" className="block text-sm font-medium mb-1">
+                      <label htmlFor="duration-slider" className="block text-sm font-medium mb-1 sm:px-4 md:px-6 lg:px-8">
                         Auto Hide Duration: {settings.autoHideDuration}s
                       </label>
                       <input
@@ -262,31 +264,31 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
                         min="3"
                         max="30"
                         value={settings.autoHideDuration}
-                        onChange={(e: any) => saveSettings({ ...settings, autoHideDuration: parseInt(e.target.value) })}
-                        className="w-full"
+                        onChange={(e: any) => saveSettings({ ...settings, autoHideDuration: parseInt(e.target.value) }}
+                        className="w-full sm:px-4 md:px-6 lg:px-8"
                       />
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="recommendations-checkbox" className="text-sm font-medium">Show Recommendations</label>
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <label htmlFor="recommendations-checkbox" className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Show Recommendations</label>
                     <input
                       id="recommendations-checkbox"
                       type="checkbox"
                       checked={settings.showRecommendations}
-                      onChange={(e: any) => saveSettings({ ...settings, showRecommendations: e.target.checked })}
-                      className="rounded"
+                      onChange={(e: any) => saveSettings({ ...settings, showRecommendations: e.target.checked }}
+                      className="rounded sm:px-4 md:px-6 lg:px-8"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="sound-checkbox" className="text-sm font-medium">Sound Enabled</label>
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <label htmlFor="sound-checkbox" className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Sound Enabled</label>
                     <input
                       id="sound-checkbox"
                       type="checkbox"
                       checked={settings.soundEnabled}
-                      onChange={(e: any) => saveSettings({ ...settings, soundEnabled: e.target.checked })}
-                      className="rounded"
+                      onChange={(e: any) => saveSettings({ ...settings, soundEnabled: e.target.checked }}
+                      className="rounded sm:px-4 md:px-6 lg:px-8"
                     />
                   </div>
                 </div>
@@ -297,14 +299,14 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
 
         {/* Alert notifications */}
         {alerts.length > 0 && (
-          <div className="space-y-3">
+          <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {/* Dismiss all button */}
             {alerts.length > 1 && (
-              <div className="flex justify-end">
+              <div className="flex justify-end sm:px-4 md:px-6 lg:px-8">
                 <button
                   onClick={handleDismissAll}
-                  className="text-xs px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
-                >
+                  className="text-xs px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600 sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                   Dismiss All ({alerts.length})
                 </button>
               </div>
@@ -316,32 +318,32 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
                 key={alert.id}
                 className={`border-l-4 shadow-lg animate-slide-in ${getSeverityColor(alert.severity)}`}
               >
-                <CardContent className="pt-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3 flex-1">
+                <CardContent className="pt-4 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-start gap-3 flex-1 sm:px-4 md:px-6 lg:px-8">
                       {getSeverityIcon(alert.severity)}
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-sm">
+                      <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                          <span className="font-medium text-sm sm:px-4 md:px-6 lg:px-8">
                             {alert.alertType.replace('_', ' ')}
                           </span>
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="text-xs sm:px-4 md:px-6 lg:px-8">
                             {alert.severity}
                           </Badge>
                         </div>
                         
-                        <p className="text-sm font-medium mb-1">{alert.message}</p>
-                        <p className="text-xs text-gray-600 mb-2">
+                        <p className="text-sm font-medium mb-1 sm:px-4 md:px-6 lg:px-8">{alert.message}</p>
+                        <p className="text-xs text-gray-600 mb-2 sm:px-4 md:px-6 lg:px-8">
                           {alert.team} • {formatTimeAgo(alert.timestamp)}
                         </p>
 
                         {settings.showRecommendations && alert.fantasyActions.length > 0 && (
-                          <div className="mt-2">
-                            <p className="text-xs font-medium text-gray-700 mb-1">Quick Actions:</p>
-                            <ul className="text-xs text-gray-600 space-y-1">
+                          <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
+                            <p className="text-xs font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">Quick Actions:</p>
+                            <ul className="text-xs text-gray-600 space-y-1 sm:px-4 md:px-6 lg:px-8">
                               {alert.fantasyActions.slice(0, 2).map((action: any) => (
-                                <li key={action} className="flex items-start gap-1">
-                                  <span className="text-blue-600">•</span>
+                                <li key={action} className="flex items-start gap-1 sm:px-4 md:px-6 lg:px-8">
+                                  <span className="text-blue-600 sm:px-4 md:px-6 lg:px-8">•</span>
                                   {action}
                                 </li>
                               ))}
@@ -350,26 +352,25 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
                         )}
 
                         {alert.actionRequired && (
-                          <div className="mt-2 flex items-center gap-2">
-                            <ExternalLink className="h-3 w-3 text-blue-600" />
-                            <span className="text-xs text-blue-600 font-medium">Action Required</span>
+                          <div className="mt-2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <ExternalLink className="h-3 w-3 text-blue-600 sm:px-4 md:px-6 lg:px-8" />
+                            <span className="text-xs text-blue-600 font-medium sm:px-4 md:px-6 lg:px-8">Action Required</span>
                           </div>
                         )}
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                       {settings.autoHide && (
-                        <div className="flex items-center gap-1 text-gray-400">
-                          <Clock className="h-3 w-3" />
-                          <span className="text-xs">{settings.autoHideDuration}s</span>
+                        <div className="flex items-center gap-1 text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                          <Clock className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
+                          <span className="text-xs sm:px-4 md:px-6 lg:px-8">{settings.autoHideDuration}s</span>
                         </div>
                       )}
                       <button
                         onClick={() => handleDismissAlert(alert.id)}
-                        className="p-1 text-gray-400 hover:text-gray-600"
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                       </button>
                     </div>
                   </div>
@@ -387,20 +388,25 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({
             from {
               transform: translateX(100%);
               opacity: 0;
-            }
+
             to {
               transform: translateX(0);
               opacity: 1;
-            }
-          }
-          
+
+
           .animate-slide-in {
             animation: slide-in 0.3s ease-out;
-          }
+
         `}
       </style>
     </>
   );
 };
 
-export default InjuryAlertNotification;
+const InjuryAlertNotificationWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <InjuryAlertNotification {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(InjuryAlertNotificationWithErrorBoundary);

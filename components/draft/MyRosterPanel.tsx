@@ -1,22 +1,23 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import type { Team, PlayerPosition } from '../../types';
 import { UserIcon } from '../icons/UserIcon';
 
 interface MyRosterPanelProps {
     team: Team | undefined;
-}
 
 const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
-const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
+}
+
+const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }) => {
     if (!team) {
         return (
-            <div className="h-full flex flex-col items-center justify-center text-center p-4">
-                <p className="text-sm text-[var(--text-secondary)]">Your team information is not available.</p>
+            <div className="h-full flex flex-col items-center justify-center text-center p-4 sm:px-4 md:px-6 lg:px-8">
+                <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Your team information is not available.</p>
             </div>
         );
-    }
 
     const rosterByPosition = positionOrder.map((pos: any) => ({
         position: pos,
@@ -33,7 +34,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
                 </h3>
             </div>
             <div className="flex-grow space-y-2 sm:space-y-3 overflow-y-auto pr-1">
-                {rosterByPosition.map(({ position, players }: any) => (
+                {rosterByPosition.map(({ position, players }) => (
                     <div key={position}>
                         <h4 className="font-bold text-xs sm:text-sm text-cyan-300 px-1 mb-1">{position} ({players.length})</h4>
                         <div className="space-y-0.5 sm:space-y-1">
@@ -54,4 +55,10 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
     );
 };
 
-export default MyRosterPanel;
+const MyRosterPanelWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MyRosterPanel {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MyRosterPanelWithErrorBoundary);

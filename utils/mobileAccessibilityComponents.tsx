@@ -14,6 +14,8 @@ interface AccessibleButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     ariaLabel?: string;
+}
+
     className?: string;
     type?: 'button' | 'submit' | 'reset';
 }
@@ -25,7 +27,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     ariaLabel,
     className = '',
     type = 'button'
-}: any) => {
+}) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     useKeyboardNavigation(buttonRef as React.RefObject<HTMLElement>);
 
@@ -33,8 +35,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
         <button
             ref={buttonRef}
             type={type}
-            onClick={onClick}
-            disabled={disabled}
+            onClick={onClick}{disabled}
             aria-label={ariaLabel}
             className={`${className} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
         >
@@ -50,7 +51,7 @@ interface VisuallyHiddenProps {
     children: React.ReactNode;
 }
 
-export const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children }: any) => {
+export const VisuallyHidden: React.FC<VisuallyHiddenProps> = ({ children }) => {
     return (
         <span className="sr-only absolute left-[-10000px] top-auto w-[1px] h-[1px] overflow-hidden">
             {children}
@@ -73,7 +74,7 @@ export const LiveRegion: React.FC<LiveRegionProps> = ({
     politeness = 'polite',
     atomic = true,
     relevant = 'all'
-}: any) => {
+}) => {
     return (
         <div
             aria-live={politeness}

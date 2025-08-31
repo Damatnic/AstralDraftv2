@@ -19,6 +19,7 @@ interface LeaderboardFilter {
   timeframe: 'weekly' | 'monthly' | 'season' | 'all-time';
   category: 'overall' | 'accuracy' | 'streak' | 'consistency';
   league?: string;
+
 }
 
 interface LeaderboardTab {
@@ -26,9 +27,9 @@ interface LeaderboardTab {
   label: string;
   icon: React.ReactNode;
   description: string;
-}
 
 interface LeaderboardEntry {
+
   userId: string;
   user: {
     id: string;
@@ -47,9 +48,10 @@ interface LeaderboardEntry {
   consistency: number;
   achievements: Achievement[];
   streak: number;
-}
 
-const LeaderboardView: React.FC = () => {
+    } catch (error) {
+        console.error(error);
+    }const LeaderboardView: React.FC = () => {
   const { state } = useAppState();
   const [activeTab, setActiveTab] = React.useState('overall');
   const [filter, setFilter] = React.useState<LeaderboardFilter>({
@@ -141,7 +143,7 @@ const LeaderboardView: React.FC = () => {
         requirement: { type: 'perfect_week', value: 1 },
         points: 400,
         category: 'streak'
-      }
+
     ];
   };
 
@@ -169,7 +171,7 @@ const LeaderboardView: React.FC = () => {
       label: 'Achievements',
       icon: <StarIcon />,
       description: 'Badges and milestones unlocked'
-    }
+
   ];
 
   // Load leaderboard data
@@ -183,7 +185,7 @@ const LeaderboardView: React.FC = () => {
           .reduce((unique, user) => {
             if (!unique.find((u: any) => u.id === user.id)) {
               unique.push(user);
-            }
+
             return unique;
           }, [] as any[])
           .slice(0, 20);
@@ -198,7 +200,7 @@ const LeaderboardView: React.FC = () => {
       } catch (error) {
       } finally {
         setIsLoading(false);
-      }
+
     };
 
     loadLeaderboardData();
@@ -214,7 +216,7 @@ const LeaderboardView: React.FC = () => {
         return <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>;
       default:
         return <div className="w-8 h-8 bg-slate-700 rounded-full flex items-center justify-center text-white font-bold text-sm">{rank}</div>;
-    }
+
   };
 
   const getScoreColor = (score: number, maxScore: number) => {
@@ -231,7 +233,7 @@ const LeaderboardView: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <select
           value={filter.timeframe}
-          onChange={(e: any) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter['timeframe'] }))}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter['timeframe'] }}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="weekly">This Week</option>
@@ -242,7 +244,7 @@ const LeaderboardView: React.FC = () => {
         
         <select
           value={filter.category}
-          onChange={(e: any) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter['category'] }))}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter['category'] }}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="overall">Overall Score</option>
@@ -254,7 +256,7 @@ const LeaderboardView: React.FC = () => {
         {state.leagues.length > 1 && (
           <select
             value={filter.league || ''}
-            onChange={(e: any) => setFilter(prev => ({ ...prev, league: e.target.value || undefined }))}
+            onChange={(e: any) => setFilter(prev => ({ ...prev, league: e.target.value || undefined }}
             className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
           >
             <option value="">All Leagues</option>
@@ -574,7 +576,6 @@ const LeaderboardView: React.FC = () => {
         </div>
       </div>
     );
-  }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 min-h-screen">
@@ -594,12 +595,6 @@ const LeaderboardView: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`
-              flex items-center gap-2 px-4 py-3 rounded-t-lg font-medium transition-all duration-200
-              ${activeTab === tab.id
-                ? 'bg-accent-500/20 text-accent-400 border-b-2 border-accent-500'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }
             `}
           >
             <div className="w-5 h-5">{tab.icon}</div>

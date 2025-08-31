@@ -3,7 +3,8 @@
  * AI-powered trade recommendations and fairness analysis
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -26,9 +27,9 @@ interface TradeOpportunity {
     weakens: string[];
   };
   confidence: number;
-}
 
 const TradeOpportunityWidget: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { state } = useAppState();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [opportunities, setOpportunities] = useState<TradeOpportunity[]>([]);
@@ -104,7 +105,7 @@ const TradeOpportunityWidget: React.FC = () => {
             weakens: ['QB']
           },
           confidence: 0.88
-        }
+
       ];
 
       setOpportunities(mockOpportunities);
@@ -113,14 +114,14 @@ const TradeOpportunityWidget: React.FC = () => {
       console.error('Failed to analyze trades:', error);
     } finally {
       setIsAnalyzing(false);
-    }
+
   };
 
   // Auto-analyze on mount
   useEffect(() => {
     if (userTeam && opportunities.length === 0) {
       analyzeTradeOpportunities();
-    }
+
   }, [userTeam]);
 
   const getFairnessColor = (score: number) => {
@@ -137,7 +138,7 @@ const TradeOpportunityWidget: React.FC = () => {
         return { bg: 'bg-red-500/20', border: 'border-red-500/30', text: 'text-red-400' };
       default:
         return { bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', text: 'text-yellow-400' };
-    }
+
   };
 
   const getWinProbColor = (change: number) => {
@@ -148,27 +149,27 @@ const TradeOpportunityWidget: React.FC = () => {
   };
 
   return (
-    <Card variant="gradient" className="bg-gradient-to-br from-dark-800/90 to-dark-900/90 backdrop-blur-xl border-blue-500/20">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl blur-xl opacity-50 animate-pulse" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                <span className="text-xl">🤝</span>
+    <Card variant="gradient" className="bg-gradient-to-br from-dark-800/90 to-dark-900/90 backdrop-blur-xl border-blue-500/20 sm:px-4 md:px-6 lg:px-8">
+      <CardHeader className="pb-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl blur-xl opacity-50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
+              <div className="relative w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <span className="text-xl sm:px-4 md:px-6 lg:px-8">🤝</span>
               </div>
             </div>
             <div>
-              <CardTitle className="text-lg font-bold text-white">Trade Analyzer</CardTitle>
-              <p className="text-xs text-gray-400 mt-0.5">AI-powered trade evaluation</p>
+              <CardTitle className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">Trade Analyzer</CardTitle>
+              <p className="text-xs text-gray-400 mt-0.5 sm:px-4 md:px-6 lg:px-8">AI-powered trade evaluation</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <Button
               variant={viewMode === 'opportunities' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('opportunities')}
-              className="text-xs px-2 py-1"
+              className="text-xs px-2 py-1 sm:px-4 md:px-6 lg:px-8"
             >
               Opportunities
             </Button>
@@ -176,7 +177,7 @@ const TradeOpportunityWidget: React.FC = () => {
               variant={viewMode === 'analyzer' ? 'primary' : 'secondary'}
               size="sm"
               onClick={() => setViewMode('analyzer')}
-              className="text-xs px-2 py-1"
+              className="text-xs px-2 py-1 sm:px-4 md:px-6 lg:px-8"
             >
               Analyzer
             </Button>
@@ -184,7 +185,7 @@ const TradeOpportunityWidget: React.FC = () => {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           {viewMode === 'opportunities' && (
             <motion.div
@@ -192,7 +193,7 @@ const TradeOpportunityWidget: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-2"
+              className="space-y-2 sm:px-4 md:px-6 lg:px-8"
             >
               {opportunities.map((opp, index) => {
                 const style = getRecommendationStyle(opp.recommendation);
@@ -207,52 +208,52 @@ const TradeOpportunityWidget: React.FC = () => {
                       selectedOpp?.id === opp.id ? 'ring-2 ring-primary-500/50' : ''
                     }`}
                   >
-                    <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
                           <span className={`text-xs font-bold ${style.text} uppercase`}>
                             {opp.recommendation}
                           </span>
-                          <span className="text-xs text-gray-400">
+                          <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                             with {opp.partnerTeam.name}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-gray-500">Fairness:</span>
+                        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                          <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Fairness:</span>
                             <span className={`text-xs font-bold ${getFairnessColor(opp.fairnessScore)}`}>
                               {opp.fairnessScore}%
                             </span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-gray-500">Win Δ:</span>
+                          <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Win Δ:</span>
                             <span className={`text-xs font-bold ${getWinProbColor(opp.winProbabilityChange)}`}>
                               {opp.winProbabilityChange > 0 ? '+' : ''}{opp.winProbabilityChange.toFixed(1)}%
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-xs font-semibold text-gray-400">
+                      <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-xs font-semibold text-gray-400 sm:px-4 md:px-6 lg:px-8">
                           {(opp.confidence * 100).toFixed(0)}% conf
                         </p>
                       </div>
                     </div>
 
-                    <div className="bg-dark-900/50 rounded-md p-2 mb-2">
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="bg-dark-900/50 rounded-md p-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                      <div className="grid grid-cols-2 gap-2 text-xs sm:px-4 md:px-6 lg:px-8">
                         <div>
-                          <p className="text-gray-500 mb-1">You Give:</p>
+                          <p className="text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">You Give:</p>
                           {opp.givePlayers.map((p, i) => (
-                            <p key={i} className="text-orange-400">
+                            <p key={i} className="text-orange-400 sm:px-4 md:px-6 lg:px-8">
                               {p.name} ({p.position})
                             </p>
                           ))}
                         </div>
                         <div>
-                          <p className="text-gray-500 mb-1">You Get:</p>
+                          <p className="text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">You Get:</p>
                           {opp.receivePlayers.map((p, i) => (
-                            <p key={i} className="text-green-400">
+                            <p key={i} className="text-green-400 sm:px-4 md:px-6 lg:px-8">
                               {p.name} ({p.position})
                             </p>
                           ))}
@@ -260,22 +261,22 @@ const TradeOpportunityWidget: React.FC = () => {
                       </div>
                     </div>
 
-                    <p className="text-xs text-gray-300">{opp.reasoning}</p>
+                    <p className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{opp.reasoning}</p>
 
                     {opp.positionalImpact && (
-                      <div className="flex items-center gap-3 mt-2">
+                      <div className="flex items-center gap-3 mt-2 sm:px-4 md:px-6 lg:px-8">
                         {opp.positionalImpact.improves.length > 0 && (
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-green-400">↑</span>
-                            <span className="text-xs text-gray-400">
+                          <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">↑</span>
+                            <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                               {opp.positionalImpact.improves.join(', ')}
                             </span>
                           </div>
                         )}
                         {opp.positionalImpact.weakens.length > 0 && (
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs text-red-400">↓</span>
-                            <span className="text-xs text-gray-400">
+                          <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xs text-red-400 sm:px-4 md:px-6 lg:px-8">↓</span>
+                            <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                               {opp.positionalImpact.weakens.join(', ')}
                             </span>
                           </div>
@@ -287,13 +288,13 @@ const TradeOpportunityWidget: React.FC = () => {
               })}
 
               {opportunities.length === 0 && !isAnalyzing && (
-                <div className="text-center py-8">
-                  <p className="text-gray-400 text-sm">No trade opportunities found</p>
+                <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                  <p className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">No trade opportunities found</p>
                   <Button
                     variant="primary"
                     size="sm"
                     onClick={analyzeTradeOpportunities}
-                    className="mt-3"
+                    className="mt-3 sm:px-4 md:px-6 lg:px-8"
                   >
                     Analyze Trades
                   </Button>
@@ -308,29 +309,29 @@ const TradeOpportunityWidget: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-3"
+              className="space-y-3 sm:px-4 md:px-6 lg:px-8"
             >
               {/* Trade Details */}
-              <div className="bg-dark-800/50 rounded-xl p-4 border border-gray-800">
-                <p className="text-sm font-semibold text-white mb-3">Trade Details</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider">You Send</p>
+              <div className="bg-dark-800/50 rounded-xl p-4 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                <p className="text-sm font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Trade Details</p>
+                <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
+                  <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider sm:px-4 md:px-6 lg:px-8">You Send</p>
                     {selectedOpp.givePlayers.map((player, i) => (
-                      <div key={i} className="bg-orange-500/10 rounded-lg p-2 border border-orange-500/20">
-                        <p className="text-sm font-semibold text-white">{player.name}</p>
-                        <p className="text-xs text-gray-400">
+                      <div key={i} className="bg-orange-500/10 rounded-lg p-2 border border-orange-500/20 sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-sm font-semibold text-white sm:px-4 md:px-6 lg:px-8">{player.name}</p>
+                        <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                           {player.position} - {player.team} • {player.projectedPoints?.toFixed(1)} pts
                         </p>
                       </div>
                     ))}
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-xs text-gray-500 uppercase tracking-wider">You Receive</p>
+                  <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-gray-500 uppercase tracking-wider sm:px-4 md:px-6 lg:px-8">You Receive</p>
                     {selectedOpp.receivePlayers.map((player, i) => (
-                      <div key={i} className="bg-green-500/10 rounded-lg p-2 border border-green-500/20">
-                        <p className="text-sm font-semibold text-white">{player.name}</p>
-                        <p className="text-xs text-gray-400">
+                      <div key={i} className="bg-green-500/10 rounded-lg p-2 border border-green-500/20 sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-sm font-semibold text-white sm:px-4 md:px-6 lg:px-8">{player.name}</p>
+                        <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                           {player.position} - {player.team} • {player.projectedPoints?.toFixed(1)} pts
                         </p>
                       </div>
@@ -340,13 +341,13 @@ const TradeOpportunityWidget: React.FC = () => {
               </div>
 
               {/* Impact Analysis */}
-              <div className="bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-xl p-3 border border-primary-500/30">
-                <p className="text-xs font-semibold text-gray-300 mb-2">📊 Impact Analysis</p>
-                <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gradient-to-r from-primary-500/10 to-accent-500/10 rounded-xl p-3 border border-primary-500/30 sm:px-4 md:px-6 lg:px-8">
+                <p className="text-xs font-semibold text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">📊 Impact Analysis</p>
+                <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Fairness Score</p>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-dark-800 rounded-full overflow-hidden">
+                    <p className="text-xs text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">Fairness Score</p>
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex-1 h-2 bg-dark-800 rounded-full overflow-hidden sm:px-4 md:px-6 lg:px-8">
                         <div 
                           className={`h-full bg-gradient-to-r ${
                             selectedOpp.fairnessScore >= 85 
@@ -364,7 +365,7 @@ const TradeOpportunityWidget: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Win Probability</p>
+                    <p className="text-xs text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">Win Probability</p>
                     <p className={`text-sm font-bold ${getWinProbColor(selectedOpp.winProbabilityChange)}`}>
                       {selectedOpp.winProbabilityChange > 0 ? '+' : ''}{selectedOpp.winProbabilityChange.toFixed(1)}%
                     </p>
@@ -373,23 +374,23 @@ const TradeOpportunityWidget: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                 <Button
                   variant="success"
                   size="sm"
-                  className="flex-1"
+                  className="flex-1 sm:px-4 md:px-6 lg:px-8"
                   onClick={() => console.log('Propose trade')}
                 >
-                  <span className="mr-1">✓</span>
+                  <span className="mr-1 sm:px-4 md:px-6 lg:px-8">✓</span>
                   Propose Trade
                 </Button>
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="flex-1"
+                  className="flex-1 sm:px-4 md:px-6 lg:px-8"
                   onClick={() => console.log('Negotiate')}
                 >
-                  <span className="mr-1">💬</span>
+                  <span className="mr-1 sm:px-4 md:px-6 lg:px-8">💬</span>
                   Negotiate
                 </Button>
               </div>
@@ -399,12 +400,12 @@ const TradeOpportunityWidget: React.FC = () => {
 
         {/* Loading State */}
         {isAnalyzing && (
-          <div className="flex flex-col items-center justify-center py-6">
-            <div className="relative">
-              <div className="w-10 h-10 border-3 border-blue-500/20 rounded-full"></div>
-              <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
+          <div className="flex flex-col items-center justify-center py-6 sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8">
+              <div className="w-10 h-10 border-3 border-blue-500/20 rounded-full sm:px-4 md:px-6 lg:px-8"></div>
+              <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin absolute inset-0 sm:px-4 md:px-6 lg:px-8"></div>
             </div>
-            <p className="text-xs text-gray-400 mt-2">Analyzing trade opportunities...</p>
+            <p className="text-xs text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">Analyzing trade opportunities...</p>
           </div>
         )}
       </CardContent>
@@ -412,4 +413,10 @@ const TradeOpportunityWidget: React.FC = () => {
   );
 };
 
-export default TradeOpportunityWidget;
+const TradeOpportunityWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeOpportunityWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeOpportunityWidgetWithErrorBoundary);

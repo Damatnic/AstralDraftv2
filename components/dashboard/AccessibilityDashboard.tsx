@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import {
@@ -37,9 +38,11 @@ ChartJS.register(
 
 interface AccessibilityDashboardProps {
   className?: string;
+
 }
 
-export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = '' }: any) => {
+export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = ''  }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<AccessibilityMetrics | null>(null);
   const [history, setHistory] = useState<AccessibilityMetrics[]>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<7 | 30 | 90>(30);
@@ -55,17 +58,18 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
   const loadDashboardData = async () => {
     setLoading(true);
     try {
+
       // In a real implementation, this would fetch from your testing service
       const historyData = accessibilityMonitoringService.getMetricsHistory();
       setHistory(historyData);
       
       if (historyData.length > 0) {
         setMetrics(historyData[0]); // Most recent metrics
-      }
+
     } catch (error) {
     } finally {
       setLoading(false);
-    }
+
   };
 
   const trendData = useMemo(() => {
@@ -100,55 +104,51 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
   if (loading) {
     return (
       <div className={`accessibility-dashboard ${className}`}>
-        <div className="loading-state">
-          <div className="spinner" aria-label="Loading accessibility dashboard">
-            <span className="sr-only">Loading...</span>
+        <div className="loading-state sm:px-4 md:px-6 lg:px-8">
+          <div className="spinner sm:px-4 md:px-6 lg:px-8" aria-label="Loading accessibility dashboard">
+            <span className="sr-only sm:px-4 md:px-6 lg:px-8">Loading...</span>
           </div>
           <p>Loading accessibility metrics...</p>
         </div>
       </div>
     );
-  }
 
   if (!metrics) {
     return (
       <div className={`accessibility-dashboard ${className}`}>
-        <div className="empty-state">
+        <div className="empty-state sm:px-4 md:px-6 lg:px-8">
           <h2>No Accessibility Data Available</h2>
           <p>Run accessibility tests to see metrics and trends.</p>
-          <button className="btn-primary" onClick={() => window.location.reload()}>
+          <button className="btn-primary sm:px-4 md:px-6 lg:px-8" onClick={() => window.location.reload()}>
             Refresh Dashboard
           </button>
         </div>
       </div>
     );
-  }
 
   return (
     <div className={`accessibility-dashboard ${className}`}>
-      <header className="dashboard-header">
-        <div className="header-content">
+      <header className="dashboard-header sm:px-4 md:px-6 lg:px-8">
+        <div className="header-content sm:px-4 md:px-6 lg:px-8">
           <h1>Accessibility Monitoring Dashboard</h1>
-          <div className="header-controls">
-            <div className="time-range-selector">
+          <div className="header-controls sm:px-4 md:px-6 lg:px-8">
+            <div className="time-range-selector sm:px-4 md:px-6 lg:px-8">
               <label htmlFor="timeRange">Time Range:</label>
               <select
                 id="timeRange"
                 value={selectedTimeRange}
                 onChange={(e: any) => setSelectedTimeRange(Number(e.target.value) as 7 | 30 | 90)}
-              >
                 <option value={7}>Last 7 days</option>
                 <option value={30}>Last 30 days</option>
                 <option value={90}>Last 90 days</option>
               </select>
             </div>
-            <div className="component-selector">
+            <div className="component-selector sm:px-4 md:px-6 lg:px-8">
               <label htmlFor="component">Component:</label>
               <select
                 id="component"
                 value={selectedComponent}
                 onChange={(e: any) => setSelectedComponent(e.target.value)}
-              >
                 <option value="all">All Components</option>
                 {metrics.componentMetrics.map((component: any) => (
                   <option key={component.componentName} value={component.componentName}>
@@ -157,19 +157,19 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
                 ))}
               </select>
             </div>
-            <button className="refresh-btn" onClick={loadDashboardData} aria-label="Refresh dashboard">
+            <button className="refresh-btn sm:px-4 md:px-6 lg:px-8" onClick={loadDashboardData} aria-label="Refresh dashboard">
               🔄 Refresh
             </button>
           </div>
         </div>
-        <div className="last-updated">
+        <div className="last-updated sm:px-4 md:px-6 lg:px-8">
           Last updated: {lastUpdated}
         </div>
       </header>
 
-      <div className="dashboard-grid">
+      <div className="dashboard-grid sm:px-4 md:px-6 lg:px-8">
         {/* Key Metrics Cards */}
-        <div className="metrics-cards">
+        <div className="metrics-cards sm:px-4 md:px-6 lg:px-8">
           <MetricCard
             title="Overall Score"
             value={overallScore}
@@ -200,44 +200,44 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
         </div>
 
         {/* Violations Trend Chart */}
-        <div className="chart-container">
+        <div className="chart-container sm:px-4 md:px-6 lg:px-8">
           <h3>Violations Trend</h3>
           <ViolationTrendChart data={componentTrendData} />
         </div>
 
         {/* Violation Distribution */}
-        <div className="chart-container">
+        <div className="chart-container sm:px-4 md:px-6 lg:px-8">
           <h3>Current Violations by Severity</h3>
           <ViolationDistributionChart violationsByLevel={metrics.violationsByLevel} />
         </div>
 
         {/* Component Status */}
-        <div className="component-status">
+        <div className="component-status sm:px-4 md:px-6 lg:px-8">
           <h3>Component Accessibility Status</h3>
           <ComponentStatusTable components={metrics.componentMetrics} />
         </div>
 
         {/* WCAG Compliance Levels */}
-        <div className="wcag-compliance">
+        <div className="wcag-compliance sm:px-4 md:px-6 lg:px-8">
           <h3>WCAG Compliance Levels</h3>
           <WCAGComplianceChart wcagCompliance={metrics.wcagCompliance} />
         </div>
 
         {/* Performance Metrics */}
-        <div className="performance-metrics">
+        <div className="performance-metrics sm:px-4 md:px-6 lg:px-8">
           <h3>Performance Metrics</h3>
-          <div className="performance-grid">
-            <div className="performance-item">
-              <span className="label">Test Execution Time:</span>
-              <span className="value">{metrics.performanceMetrics.testExecutionTime.toFixed(2)}s</span>
+          <div className="performance-grid sm:px-4 md:px-6 lg:px-8">
+            <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+              <span className="label sm:px-4 md:px-6 lg:px-8">Test Execution Time:</span>
+              <span className="value sm:px-4 md:px-6 lg:px-8">{metrics.performanceMetrics.testExecutionTime.toFixed(2)}s</span>
             </div>
-            <div className="performance-item">
-              <span className="label">Avg Violations per Component:</span>
-              <span className="value">{metrics.performanceMetrics.averageViolationsPerComponent.toFixed(1)}</span>
+            <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+              <span className="label sm:px-4 md:px-6 lg:px-8">Avg Violations per Component:</span>
+              <span className="value sm:px-4 md:px-6 lg:px-8">{metrics.performanceMetrics.averageViolationsPerComponent.toFixed(1)}</span>
             </div>
-            <div className="performance-item">
-              <span className="label">Total Components Tested:</span>
-              <span className="value">{metrics.testCoverage.testedComponents}</span>
+            <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+              <span className="label sm:px-4 md:px-6 lg:px-8">Total Components Tested:</span>
+              <span className="value sm:px-4 md:px-6 lg:px-8">{metrics.testCoverage.testedComponents}</span>
             </div>
           </div>
         </div>
@@ -252,15 +252,16 @@ interface MetricCardProps {
   unit?: string;
   trend: 'improving' | 'declining' | 'stable';
   color: 'success' | 'warning' | 'danger';
+
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }: any) => {
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }) => {
   const getTrendIcon = () => {
     switch (trend) {
       case 'improving': return '📈';
       case 'declining': return '📉';
       default: return '➡️';
-    }
+
   };
 
   const getTrendText = () => {
@@ -268,22 +269,22 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
       case 'improving': return 'Improving';
       case 'declining': return 'Declining';
       default: return 'Stable';
-    }
+
   };
 
   return (
     <div className={`metric-card metric-card--${color}`}>
-      <div className="metric-card__header">
+      <div className="metric-card__header sm:px-4 md:px-6 lg:px-8">
         <h4>{title}</h4>
         <div className={`trend-indicator trend-indicator--${trend}`} title={getTrendText()}>
           {getTrendIcon()}
         </div>
       </div>
-      <div className="metric-card__value">
+      <div className="metric-card__value sm:px-4 md:px-6 lg:px-8">
         {value}
-        {unit && <span className="unit">{unit}</span>}
+        {unit && <span className="unit sm:px-4 md:px-6 lg:px-8">{unit}</span>}
       </div>
-      <div className="metric-card__trend">
+      <div className="metric-card__trend sm:px-4 md:px-6 lg:px-8">
         {getTrendText()}
       </div>
     </div>
@@ -292,9 +293,10 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
 
 interface ViolationTrendChartProps {
   data: ViolationTrend[];
+
 }
 
-const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) => {
+const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }) => {
   const chartData = {
     labels: data.map((d: any) => d.date),
     datasets: [
@@ -325,8 +327,7 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
         borderColor: '#28a745',
         backgroundColor: 'rgba(40, 167, 69, 0.1)',
         tension: 0.1
-      }
-    ]
+
   };
 
   const options = {
@@ -344,9 +345,9 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
         beginAtZero: true,
         ticks: {
           stepSize: 1
-        }
-      }
-    }
+
+
+
   };
 
   return <Line data={chartData} options={options} />;
@@ -354,9 +355,10 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
 
 interface ViolationDistributionChartProps {
   violationsByLevel: AccessibilityMetrics['violationsByLevel'];
+
 }
 
-const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }: any) => {
+const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }) => {
   const chartData = {
     labels: ['Critical', 'Serious', 'Moderate', 'Minor'],
     datasets: [{
@@ -391,10 +393,10 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
             const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
             return `${label}: ${value} (${percentage}%)`;
-          }
-        }
-      }
-    }
+
+
+
+
   };
 
   return <Doughnut data={chartData} options={options} />;
@@ -402,16 +404,17 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
 
 interface ComponentStatusTableProps {
   components: ComponentAccessibilityMetric[];
+
 }
 
-const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }: any) => {
+const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }) => {
   const getStatusIcon = (status: ComponentAccessibilityMetric['status']) => {
     switch (status) {
       case 'passing': return '✅';
       case 'warning': return '⚠️';
       case 'failing': return '❌';
       default: return '❓';
-    }
+
   };
 
   const getStatusText = (status: ComponentAccessibilityMetric['status']) => {
@@ -420,12 +423,12 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
       case 'warning': return 'Warning';
       case 'failing': return 'Failing';
       default: return 'Unknown';
-    }
+
   };
 
   return (
-    <div className="component-table-container">
-      <table className="component-status-table">
+    <div className="component-table-container sm:px-4 md:px-6 lg:px-8">
+      <table className="component-status-table sm:px-4 md:px-6 lg:px-8">
         <thead>
           <tr>
             <th>Component</th>
@@ -438,49 +441,49 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
         <tbody>
           {components.map((component: any) => (
             <tr key={component.componentName} className={`status-${component?.status}`}>
-              <td className="component-name">{component.componentName}</td>
-              <td className="status-cell">
-                <span className="status-indicator">
+              <td className="component-name sm:px-4 md:px-6 lg:px-8">{component.componentName}</td>
+              <td className="status-cell sm:px-4 md:px-6 lg:px-8">
+                <span className="status-indicator sm:px-4 md:px-6 lg:px-8">
                   {getStatusIcon(component?.status)}
-                  <span className="sr-only">{getStatusText(component?.status)}</span>
+                  <span className="sr-only sm:px-4 md:px-6 lg:px-8">{getStatusText(component?.status)}</span>
                 </span>
                 {getStatusText(component?.status)}
               </td>
-              <td className="score-cell">
-                <div className="score-bar-container">
+              <td className="score-cell sm:px-4 md:px-6 lg:px-8">
+                <div className="score-bar-container sm:px-4 md:px-6 lg:px-8">
                   <div 
-                    className="score-bar" 
+                    className="score-bar sm:px-4 md:px-6 lg:px-8" 
                     style={{ 
                       width: `${component.wcagScore}%`,
                       backgroundColor: component.wcagScore >= 90 ? '#28a745' : 
                                      component.wcagScore >= 70 ? '#ffc107' : '#dc3545'
                     }}
                   ></div>
-                  <span className="score-text">{component.wcagScore}%</span>
+                  <span className="score-text sm:px-4 md:px-6 lg:px-8">{component.wcagScore}%</span>
                 </div>
               </td>
-              <td className="violations-cell">
-                <div className="violations-breakdown">
-                  <span className="total">{component.violationCount}</span>
+              <td className="violations-cell sm:px-4 md:px-6 lg:px-8">
+                <div className="violations-breakdown sm:px-4 md:px-6 lg:px-8">
+                  <span className="total sm:px-4 md:px-6 lg:px-8">{component.violationCount}</span>
                   {component.violationCount > 0 && (
-                    <div className="violations-detail">
+                    <div className="violations-detail sm:px-4 md:px-6 lg:px-8">
                       {component.violationsByLevel.critical > 0 && (
-                        <span className="critical" title="Critical violations">
+                        <span className="critical sm:px-4 md:px-6 lg:px-8" title="Critical violations">
                           🔴 {component.violationsByLevel.critical}
                         </span>
                       )}
                       {component.violationsByLevel.serious > 0 && (
-                        <span className="serious" title="Serious violations">
+                        <span className="serious sm:px-4 md:px-6 lg:px-8" title="Serious violations">
                           🟠 {component.violationsByLevel.serious}
                         </span>
                       )}
                       {component.violationsByLevel.moderate > 0 && (
-                        <span className="moderate" title="Moderate violations">
+                        <span className="moderate sm:px-4 md:px-6 lg:px-8" title="Moderate violations">
                           🟡 {component.violationsByLevel.moderate}
                         </span>
                       )}
                       {component.violationsByLevel.minor > 0 && (
-                        <span className="minor" title="Minor violations">
+                        <span className="minor sm:px-4 md:px-6 lg:px-8" title="Minor violations">
                           🟢 {component.violationsByLevel.minor}
                         </span>
                       )}
@@ -488,7 +491,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
                   )}
                 </div>
               </td>
-              <td className="last-tested-cell">
+              <td className="last-tested-cell sm:px-4 md:px-6 lg:px-8">
                 {new Date(component.lastTested).toLocaleDateString()}
               </td>
             </tr>
@@ -501,9 +504,10 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
 
 interface WCAGComplianceChartProps {
   wcagCompliance: AccessibilityMetrics['wcagCompliance'];
+
 }
 
-const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }: any) => {
+const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }) => {
   const chartData = {
     labels: ['Level A', 'Level AA', 'Level AAA'],
     datasets: [{
@@ -528,7 +532,7 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
     plugins: {
       legend: {
         display: false
-      }
+
     },
     scales: {
       y: {
@@ -537,13 +541,19 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
         ticks: {
           callback: function(value: any) {
             return value + '%';
-          }
-        }
-      }
-    }
+
+
+
+
   };
 
   return <Bar data={chartData} options={options} />;
 };
 
-export default AccessibilityDashboard;
+const AccessibilityDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AccessibilityDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AccessibilityDashboardWithErrorBoundary);

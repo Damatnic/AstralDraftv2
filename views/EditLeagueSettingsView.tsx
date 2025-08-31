@@ -19,7 +19,6 @@ const EditLeagueSettingsView: React.FC = () => {
 
     if (!league || state.user?.id !== league.commissionerId) {
         return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     const isDraftComplete = league.status !== 'PRE_DRAFT' && league.status !== 'DRAFTING';
 
@@ -46,27 +45,27 @@ const EditLeagueSettingsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }} className="glass-button">
                     Back to Tools
                 </button>
             </header>
             <main className="flex-grow max-w-2xl mx-auto w-full">
-                <form onSubmit={handleSaveChanges}>
+                <form onSubmit={handleSaveChanges}
                     <Widget title="General Settings" icon={<SettingsIcon />}>
                         <div className="p-4 space-y-4">
                             <div>
                                 <label htmlFor="league-name" className={labelClasses}>League Name</label>
-                                <input id="league-name" type="text" value={name} onChange={e => setName(e.target.value)} className={inputClasses} />
+                                <input id="league-name" type="text" value={name} onChange={e => setName(e.target.value)} />
                             </div>
                             <div>
                                 <label htmlFor="logo-url" className={labelClasses}>League Logo URL</label>
-                                <input id="logo-url" type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} className={inputClasses} placeholder="https://example.com/logo.png" />
+                                <input id="logo-url" type="text" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} placeholder="https://example.com/logo.png" />
                             </div>
                             <div className={isDraftComplete ? 'opacity-50' : ''}>
                                 <label className={labelClasses}>AI Assistance Level</label>
                                  <div className="flex gap-2">
-                                    <button type="button" onClick={() => setAiAssistanceLevel('FULL')} className={buttonGroupButtonClasses(aiAssistanceLevel === 'FULL')} disabled={isDraftComplete}>Full AI</button>
-                                    <button type="button" onClick={() => setAiAssistanceLevel('BASIC')} className={buttonGroupButtonClasses(aiAssistanceLevel === 'BASIC')} disabled={isDraftComplete}>Basic AI</button>
+                                    <button type="button" onClick={() => setAiAssistanceLevel('FULL')} disabled={isDraftComplete}>Full AI</button>
+                                    <button type="button" onClick={() => setAiAssistanceLevel('BASIC')} disabled={isDraftComplete}>Basic AI</button>
                                 </div>
                                 <p className="text-xs text-gray-500 mt-1">Basic AI disables strategic advice features like lineup suggestions and trade analysis.</p>
                                 {isDraftComplete && <p className="text-xs text-yellow-400 mt-1">Cannot be changed after the draft.</p>}
@@ -81,7 +80,6 @@ const EditLeagueSettingsView: React.FC = () => {
                                     step="1"
                                     value={tradeDeadline}
                                     onChange={e => setTradeDeadline(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
                                     disabled={isDraftComplete}
                                 />
                                 {isDraftComplete && <p className="text-xs text-yellow-400 mt-1">Cannot be changed after the draft.</p>}
@@ -96,7 +94,6 @@ const EditLeagueSettingsView: React.FC = () => {
                                     step="1"
                                     value={keeperCount}
                                     onChange={e => setKeeperCount(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
                                     disabled={isDraftComplete}
                                 />
                                 {isDraftComplete && <p className="text-xs text-yellow-400 mt-1">Cannot be changed after the draft.</p>}

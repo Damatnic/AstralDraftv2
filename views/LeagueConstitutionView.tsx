@@ -26,7 +26,6 @@ const LeagueConstitutionView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     function getDefaultConstitution() {
         return `
@@ -98,7 +97,6 @@ const LeagueConstitutionView: React.FC = () => {
 - Major changes require league vote (majority wins)
 - Changes take effect following season unless emergency
         `.trim();
-    }
 
     const handleSave = () => {
         dispatch({
@@ -131,7 +129,7 @@ const LeagueConstitutionView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} 
                     className="glass-button"
                 >
                     Back to League Hub
@@ -156,14 +154,12 @@ const LeagueConstitutionView: React.FC = () => {
                                     <>
                                         <button
                                             onClick={handleGenerate}
-                                            className="glass-button px-4 py-2 flex items-center gap-2"
                                         >
                                             <FileTextIcon className="w-4 h-4" />
                                             Generate Template
                                         </button>
                                         <button
                                             onClick={() => setIsEditing(true)}
-                                            className="glass-button-primary px-4 py-2 flex items-center gap-2"
                                         >
                                             <EditIcon className="w-4 h-4" />
                                             Edit
@@ -182,7 +178,6 @@ const LeagueConstitutionView: React.FC = () => {
                                         </button>
                                         <button
                                             onClick={handleSave}
-                                            className="glass-button-primary px-4 py-2 flex items-center gap-2"
                                         >
                                             <SaveIcon className="w-4 h-4" />
                                             Save
@@ -213,7 +208,6 @@ const LeagueConstitutionView: React.FC = () => {
                             <textarea
                                 value={constitution}
                                 onChange={(e: any) => setConstitution(e.target.value)}
-                                className="glass-input w-full h-[600px] font-mono text-sm p-4"
                                 placeholder="Enter your league constitution..."
                             />
                         ) : (
@@ -227,21 +221,21 @@ const LeagueConstitutionView: React.FC = () => {
                                                     {line.replace('# ', '')}
                                                 </h1>
                                             );
-                                        }
+
                                         if (line.startsWith('## ')) {
                                             return (
                                                 <h2 key={index} className="text-xl font-semibold text-blue-400 mt-4 mb-2">
                                                     {line.replace('## ', '')}
                                                 </h2>
                                             );
-                                        }
+
                                         if (line.startsWith('### ')) {
                                             return (
                                                 <h3 key={index} className="text-lg font-medium text-white mt-3 mb-2">
                                                     {line.replace('### ', '')}
                                                 </h3>
                                             );
-                                        }
+
                                         // Style list items
                                         if (line.startsWith('- ')) {
                                             return (
@@ -249,14 +243,14 @@ const LeagueConstitutionView: React.FC = () => {
                                                     {line.replace('- ', '')}
                                                 </li>
                                             );
-                                        }
+
                                         if (line.match(/^\d+\. /)) {
                                             return (
                                                 <li key={index} className="ml-4 text-[var(--text-secondary)] mb-1">
                                                     {line}
                                                 </li>
                                             );
-                                        }
+
                                         // Regular paragraphs
                                         return line.trim() ? (
                                             <p key={index} className="text-[var(--text-secondary)] mb-2">

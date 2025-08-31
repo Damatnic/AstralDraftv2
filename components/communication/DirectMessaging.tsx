@@ -3,7 +3,8 @@
  * Private conversations between league members
  */
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useMemo, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -23,7 +24,6 @@ interface DirectMessage {
     type: 'trade' | 'player' | 'image';
     data: any;
   }[];
-}
 
 interface Conversation {
   id: string;
@@ -36,9 +36,9 @@ interface Conversation {
   lastMessage: DirectMessage;
   unreadCount: number;
   isActive: boolean;
-}
 
 const DirectMessaging: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
@@ -116,7 +116,7 @@ const DirectMessaging: React.FC = () => {
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
         isRead: true,
         messageType: 'text'
-      }
+
     ];
   }, [currentUser]);
 
@@ -135,7 +135,6 @@ const DirectMessaging: React.FC = () => {
         if (team) {
           otherParticipant.teamName = team.name;
           otherParticipant.avatar = team.avatar;
-        }
 
         convMap.set(message.conversationId, {
           id: message.conversationId,
@@ -152,15 +151,14 @@ const DirectMessaging: React.FC = () => {
           unreadCount: 0,
           isActive: false
         });
-      }
 
       const conv = convMap.get(message.conversationId)!;
       if (message.timestamp > conv.lastMessage.timestamp) {
         conv.lastMessage = message;
-      }
+
       if (!message.isRead && message.recipientId === currentUser?.id) {
         conv.unreadCount++;
-      }
+
     });
 
     return Array.from(convMap.values()).sort((a, b) => 
@@ -199,13 +197,12 @@ const DirectMessaging: React.FC = () => {
       messageType: 'text'
     };
 
-
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
         message: 'Message sent!',
         type: 'SUCCESS'
-      }
+
     });
 
     setNewMessage('');
@@ -218,7 +215,6 @@ const DirectMessaging: React.FC = () => {
     if (!recipient) return;
 
     const newConversationId = `conv-${Date.now()}`;
-    
 
     setSelectedConversation(newConversationId);
     setShowNewConversation(false);
@@ -229,7 +225,7 @@ const DirectMessaging: React.FC = () => {
       payload: {
         message: `Started conversation with ${recipient.owner.name}`,
         type: 'SUCCESS'
-      }
+
     });
   };
 
@@ -251,18 +247,17 @@ const DirectMessaging: React.FC = () => {
   };
 
   return (
-    <div className="h-[600px] flex bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden">
+    <div className="h-[600px] flex bg-slate-800/50 rounded-xl border border-slate-700 overflow-hidden sm:px-4 md:px-6 lg:px-8">
       {/* Conversations Sidebar */}
-      <div className="w-80 border-r border-slate-700 flex flex-col">
+      <div className="w-80 border-r border-slate-700 flex flex-col sm:px-4 md:px-6 lg:px-8">
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-slate-700">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold text-white">Messages</h3>
+        <div className="p-4 border-b border-slate-700 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+            <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">Messages</h3>
             <button
               onClick={() => setShowNewConversation(true)}
-              className="text-blue-400 hover:text-blue-300 transition-colors"
             >
-              <span className="text-xl">✏️</span>
+              <span className="text-xl sm:px-4 md:px-6 lg:px-8">✏️</span>
             </button>
           </div>
           
@@ -270,57 +265,51 @@ const DirectMessaging: React.FC = () => {
           <input
             type="text"
             placeholder="Search conversations..."
-            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none"
+            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
           />
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {conversations.length === 0 ? (
-            <div className="p-4 text-center">
-              <p className="text-slate-400 mb-3">No conversations yet</p>
+            <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+              <p className="text-slate-400 mb-3 sm:px-4 md:px-6 lg:px-8">No conversations yet</p>
               <button
                 onClick={() => setShowNewConversation(true)}
-                className="btn btn-primary btn-sm"
               >
                 Start Chatting
               </button>
             </div>
           ) : (
-            <div className="space-y-1 p-2">
+            <div className="space-y-1 p-2 sm:px-4 md:px-6 lg:px-8">
               {conversations.map((conversation: any) => {
                 const participant = conversation.participants.find((p: any) => p.id !== currentUser?.id);
                 return (
                   <button
                     key={conversation.id}
-                    onClick={() => setSelectedConversation(conversation.id)}
-                    className={`w-full p-3 rounded-lg text-left transition-colors ${
-                      selectedConversation === conversation.id
-                        ? 'bg-blue-600 text-white'
-                        : 'hover:bg-slate-700/50 text-slate-300'
-                    }`}
+                    onClick={() => setSelectedConversation(conversation.id)}`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <span className="text-2xl">{participant?.avatar}</span>
+                    <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="relative sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{participant?.avatar}</span>
                         {conversation.unreadCount > 0 && (
-                          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                          <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                             {conversation.unreadCount}
                           </span>
                         )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold truncate">{participant?.name}</span>
-                          <span className="text-xs opacity-75">
+                      <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="font-semibold truncate sm:px-4 md:px-6 lg:px-8">{participant?.name}</span>
+                          <span className="text-xs opacity-75 sm:px-4 md:px-6 lg:px-8">
                             {formatTimestamp(conversation.lastMessage.timestamp)}
                           </span>
                         </div>
-                        <p className="text-sm opacity-75 truncate">
+                        <p className="text-sm opacity-75 truncate sm:px-4 md:px-6 lg:px-8">
                           {conversation.lastMessage.senderId === currentUser?.id ? 'You: ' : ''}
                           {conversation.lastMessage.message}
                         </p>
-                        <p className="text-xs opacity-60">{participant?.teamName}</p>
+                        <p className="text-xs opacity-60 sm:px-4 md:px-6 lg:px-8">{participant?.teamName}</p>
                       </div>
                     </div>
                   </button>
@@ -332,22 +321,22 @@ const DirectMessaging: React.FC = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col sm:px-4 md:px-6 lg:px-8">
         {selectedConversation ? (
           <>
             {/* Chat Header */}
-            <div className="p-4 border-b border-slate-700 bg-slate-800/30">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{otherParticipant?.avatar}</span>
+            <div className="p-4 border-b border-slate-700 bg-slate-800/30 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{otherParticipant?.avatar}</span>
                 <div>
-                  <h4 className="text-white font-semibold">{otherParticipant?.name}</h4>
-                  <p className="text-slate-400 text-sm">{otherParticipant?.teamName}</p>
+                  <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{otherParticipant?.name}</h4>
+                  <p className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">{otherParticipant?.teamName}</p>
                 </div>
               </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
               {selectedConversationMessages.map((message: any) => (
                 <div
                   key={message.id}
@@ -362,7 +351,7 @@ const DirectMessaging: React.FC = () => {
                         : 'bg-slate-700 text-slate-300'
                     }`}
                   >
-                    <p className="text-sm">{message.message}</p>
+                    <p className="text-sm sm:px-4 md:px-6 lg:px-8">{message.message}</p>
                     <p className={`text-xs mt-1 ${
                       message.senderId === currentUser?.id ? 'text-blue-200' : 'text-slate-400'
                     }`}>
@@ -375,38 +364,37 @@ const DirectMessaging: React.FC = () => {
             </div>
 
             {/* Message Input */}
-            <div className="p-4 border-t border-slate-700">
-              <div className="flex gap-3">
+            <div className="p-4 border-t border-slate-700 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="text"
                   value={newMessage}
                   onChange={(e: any) => setNewMessage(e.target.value)}
-                  placeholder="Type a message..."
-                  className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                  className="flex-1 px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
                   onKeyPress={(e: any) => {
                     if (e.key === 'Enter') {
                       handleSendMessage();
-                    }
+
                   }}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!newMessage.trim()}
-                  className="btn btn-primary"
-                >
+                  className="btn btn-primary sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                   Send
                 </button>
               </div>
               
               {/* Quick Actions */}
-              <div className="flex gap-2 mt-2">
-                <button className="text-slate-400 hover:text-white transition-colors text-sm">
+              <div className="flex gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
+                <button className="text-slate-400 hover:text-white transition-colors text-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                   📎 Attach
                 </button>
-                <button className="text-slate-400 hover:text-white transition-colors text-sm">
+                <button className="text-slate-400 hover:text-white transition-colors text-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                   🔗 Share Trade
                 </button>
-                <button className="text-slate-400 hover:text-white transition-colors text-sm">
+                <button className="text-slate-400 hover:text-white transition-colors text-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                   👤 Share Player
                 </button>
               </div>
@@ -414,14 +402,13 @@ const DirectMessaging: React.FC = () => {
           </>
         ) : (
           /* No Conversation Selected */
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <span className="text-6xl mb-4 block">💬</span>
-              <h3 className="text-xl font-bold text-white mb-2">Select a Conversation</h3>
-              <p className="text-slate-400 mb-4">Choose a conversation to start messaging</p>
+          <div className="flex-1 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+              <span className="text-6xl mb-4 block sm:px-4 md:px-6 lg:px-8">💬</span>
+              <h3 className="text-xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Select a Conversation</h3>
+              <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">Choose a conversation to start messaging</p>
               <button
                 onClick={() => setShowNewConversation(true)}
-                className="btn btn-primary"
               >
                 Start New Conversation
               </button>
@@ -433,30 +420,28 @@ const DirectMessaging: React.FC = () => {
       {/* New Conversation Modal */}
       <AnimatePresence>
         {showNewConversation && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="card w-full max-w-md"
+              className="card w-full max-w-md sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-white">New Conversation</h3>
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">New Conversation</h3>
                 <button
                   onClick={() => setShowNewConversation(false)}
-                  className="text-slate-400 hover:text-white transition-colors"
                 >
-                  <span className="text-xl">×</span>
+                  <span className="text-xl sm:px-4 md:px-6 lg:px-8">×</span>
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 <div>
-                  <label className="block text-white font-medium mb-2">Select Recipient</label>
+                  <label className="block text-white font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Select Recipient</label>
                   <select
                     value={selectedRecipient}
                     onChange={(e: any) => setSelectedRecipient(e.target.value)}
-                    className="form-input"
                   >
                     <option value="">Choose a league member...</option>
                     {league?.teams?.filter((t: any) => t.owner.id !== currentUser?.id).map((team: any) => (
@@ -467,18 +452,17 @@ const DirectMessaging: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={() => setShowNewConversation(false)}
-                    className="btn btn-secondary flex-1"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleStartNewConversation}
                     disabled={!selectedRecipient}
-                    className="btn btn-primary flex-1"
-                  >
+                    className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
+                   aria-label="Action button">
                     Start Chat
                   </button>
                 </div>
@@ -491,4 +475,10 @@ const DirectMessaging: React.FC = () => {
   );
 };
 
-export default DirectMessaging;
+const DirectMessagingWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <DirectMessaging {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(DirectMessagingWithErrorBoundary);

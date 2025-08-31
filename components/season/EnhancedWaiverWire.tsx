@@ -3,7 +3,8 @@
  * FAAB bidding system with waiver claims and free agency
  */
 
-import React, { useState, useMemo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import PlayerSearch from '../PlayerSearch';
@@ -22,13 +23,13 @@ interface WaiverClaim {
   priority: number;
   status: 'pending' | 'successful' | 'failed';
   processedAt?: Date;
+
 }
 
 interface WaiverPeriod {
   isActive: boolean;
   nextProcessing: Date;
   currentPeriod: 'waiver' | 'free_agency';
-}
 
 const EnhancedWaiverWire: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -119,7 +120,7 @@ const EnhancedWaiverWire: React.FC = () => {
       bidAmount: 12,
       priority: 2,
       status: 'pending'
-    }
+
   ];
 
   const userBudget = faabBudgets[userTeam?.id || ''] || { remaining: 100, spent: 0 };
@@ -160,7 +161,7 @@ const EnhancedWaiverWire: React.FC = () => {
       case 'K': return 'text-orange-400 bg-orange-900/20';
       case 'DEF': return 'text-gray-400 bg-gray-900/20';
       default: return 'text-white bg-slate-900/20';
-    }
+
   };
 
   const getClaimStatusColor = (status: string) => {
@@ -169,7 +170,7 @@ const EnhancedWaiverWire: React.FC = () => {
       case 'successful': return 'text-green-400 bg-green-900/20';
       case 'failed': return 'text-red-400 bg-red-900/20';
       default: return 'text-slate-400 bg-slate-900/20';
-    }
+
   };
 
   const tabs = [
@@ -179,65 +180,60 @@ const EnhancedWaiverWire: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h2 className="text-2xl font-bold text-white">Waiver Wire</h2>
-          <p className="text-slate-400">
+          <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Waiver Wire</h2>
+          <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
             {waiverPeriod.currentPeriod === 'waiver' ? 'Waiver Period' : 'Free Agency'} • 
             Next Processing: {waiverPeriod.nextProcessing.toLocaleDateString()}
           </p>
         </div>
         
-        <div className="text-right">
-          <div className="text-white font-semibold">FAAB Budget</div>
-          <div className="text-2xl font-bold text-green-400">${userBudget.remaining}</div>
-          <div className="text-sm text-slate-400">of $100 remaining</div>
+        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+          <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">FAAB Budget</div>
+          <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">${userBudget.remaining}</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">of $100 remaining</div>
         </div>
       </div>
 
       {/* Waiver Status */}
-      <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+      <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
             <div>
-              <div className="text-blue-400 font-semibold">
+              <div className="text-blue-400 font-semibold sm:px-4 md:px-6 lg:px-8">
                 {waiverPeriod.currentPeriod === 'waiver' ? 'Waiver Period Active' : 'Free Agency Open'}
               </div>
-              <div className="text-sm text-blue-300">
+              <div className="text-sm text-blue-300 sm:px-4 md:px-6 lg:px-8">
                 {waiverPeriod.currentPeriod === 'waiver' 
                   ? 'Submit FAAB bids until Tuesday 11:59 PM'
                   : 'Add players immediately (first come, first served)'
-                }
+
               </div>
             </div>
           </div>
           
-          <div className="text-right">
-            <div className="text-blue-400 font-semibold">
+          <div className="text-right sm:px-4 md:px-6 lg:px-8">
+            <div className="text-blue-400 font-semibold sm:px-4 md:px-6 lg:px-8">
               {Math.ceil((waiverPeriod.nextProcessing.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days
             </div>
-            <div className="text-sm text-blue-300">until processing</div>
+            <div className="text-sm text-blue-300 sm:px-4 md:px-6 lg:px-8">until processing</div>
           </div>
         </div>
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1">
+      <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
         {tabs.map((tab: any) => (
           <button
             key={tab.id}
-            onClick={() => setSelectedTab(tab.id as any)}
-            className={`flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors flex-1 ${
-              selectedTab === tab.id
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-            }`}
+            onClick={() => setSelectedTab(tab.id as any)}`}
           >
             <span>{tab.icon}</span>
-            <span className="font-medium">{tab.label}</span>
+            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
           </button>
         ))}
       </div>
@@ -250,24 +246,22 @@ const EnhancedWaiverWire: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-4"
+            className="space-y-4 sm:px-4 md:px-6 lg:px-8"
           >
             {/* Search and Filters */}
-            <div className="flex gap-4">
-              <div className="flex-1">
+            <div className="flex gap-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="text"
                   placeholder="Search players..."
                   value={searchTerm}
                   onChange={(e: any) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
                 />
               </div>
               
               <select
                 value={positionFilter}
                 onChange={(e: any) => setPositionFilter(e.target.value)}
-                className="px-4 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
               >
                 <option value="ALL">All Positions</option>
                 <option value="QB">QB</option>
@@ -280,27 +274,27 @@ const EnhancedWaiverWire: React.FC = () => {
             </div>
 
             {/* Available Players List */}
-            <div className="space-y-2">
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               {availablePlayers.map((player, index) => (
                 <motion.div
                   key={player.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors"
+                  className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors sm:px-4 md:px-6 lg:px-8"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                       <div className={`px-2 py-1 rounded text-xs font-bold ${getPositionColor(player.position)}`}>
                         {player.position}
                       </div>
                       
                       <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-white font-semibold">{player.name}</h4>
-                          <span className="text-sm text-slate-400">{player.team}</span>
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                          <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{player.name}</h4>
+                          <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{player.team}</span>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-slate-400">
+                        <div className="flex items-center gap-4 text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                           <span>Proj: {player.projectedPoints} pts</span>
                           <span>Add: {player.addPercentage}%</span>
                           <span>Own: {player.ownership}%</span>
@@ -309,11 +303,11 @@ const EnhancedWaiverWire: React.FC = () => {
                     </div>
                     
                     <button
-                      onClick={() => {
+                      onClick={() = aria-label="Action button"> {
                         setSelectedPlayer(player);
                         setShowBidModal(true);
                       }}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                     >
                       {waiverPeriod.currentPeriod === 'waiver' ? 'Place Bid' : 'Add Player'}
                     </button>
@@ -330,24 +324,24 @@ const EnhancedWaiverWire: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-4"
+            className="space-y-4 sm:px-4 md:px-6 lg:px-8"
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-bold text-white">My Waiver Claims</h3>
-              <span className="text-sm text-slate-400">
+            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+              <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">My Waiver Claims</h3>
+              <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                 {waiverClaims.filter((c: any) => c.claimingTeamId === userTeam?.id).length} active claims
               </span>
             </div>
 
             {waiverClaims.filter((c: any) => c.claimingTeamId === userTeam?.id).length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-slate-400">No active waiver claims</p>
-                <p className="text-sm text-slate-500 mt-2">
+              <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">No active waiver claims</p>
+                <p className="text-sm text-slate-500 mt-2 sm:px-4 md:px-6 lg:px-8">
                   Browse available players to place a bid
                 </p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                 {waiverClaims
                   .filter((c: any) => c.claimingTeamId === userTeam?.id)
                   .map((claim, index) => (
@@ -356,34 +350,34 @@ const EnhancedWaiverWire: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-slate-800/50 rounded-lg p-4 border border-slate-700"
+                      className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 sm:px-4 md:px-6 lg:px-8"
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="text-center">
-                            <div className="text-lg font-bold text-white">#{claim.priority}</div>
-                            <div className="text-xs text-slate-400">Priority</div>
+                      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">#{claim.priority}</div>
+                            <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Priority</div>
                           </div>
                           
                           <div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                               <span className={`px-2 py-1 rounded text-xs font-bold ${getPositionColor(claim.position)}`}>
                                 {claim.position}
                               </span>
-                              <h4 className="text-white font-semibold">{claim.playerName}</h4>
-                              <span className="text-sm text-slate-400">{claim.team}</span>
+                              <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{claim.playerName}</h4>
+                              <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{claim.team}</span>
                             </div>
                             
                             {claim.dropPlayerName && (
-                              <div className="text-sm text-slate-400 mt-1">
+                              <div className="text-sm text-slate-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 Drop: {claim.dropPlayerName}
                               </div>
                             )}
                           </div>
                         </div>
                         
-                        <div className="text-right">
-                          <div className="text-xl font-bold text-green-400">
+                        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                          <div className="text-xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                             ${claim.bidAmount}
                           </div>
                           <div className={`px-2 py-1 rounded text-xs font-medium ${getClaimStatusColor(claim.status)}`}>
@@ -404,9 +398,9 @@ const EnhancedWaiverWire: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="space-y-4"
+            className="space-y-4 sm:px-4 md:px-6 lg:px-8"
           >
-            <h3 className="text-lg font-bold text-white">FAAB Budgets</h3>
+            <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">FAAB Budgets</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {league?.teams?.map((team, index) => {
@@ -423,36 +417,36 @@ const EnhancedWaiverWire: React.FC = () => {
                       isUserTeam ? 'border-blue-500 bg-blue-900/10' : 'border-slate-700'
                     }`}
                   >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{team.avatar}</span>
+                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{team.avatar}</span>
                         <div>
-                          <h4 className="text-white font-semibold">{team.name}</h4>
-                          <p className="text-sm text-slate-400">{team.owner.name}</p>
+                          <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{team.name}</h4>
+                          <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{team.owner.name}</p>
                         </div>
                       </div>
                       
                       {isUserTeam && (
-                        <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded">
+                        <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded sm:px-4 md:px-6 lg:px-8">
                           YOU
                         </span>
                       )}
                     </div>
                     
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-slate-400">Remaining</span>
-                        <span className="text-green-400 font-semibold">${budget.remaining}</span>
+                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Remaining</span>
+                        <span className="text-green-400 font-semibold sm:px-4 md:px-6 lg:px-8">${budget.remaining}</span>
                       </div>
                       
-                      <div className="flex justify-between text-sm">
-                        <span className="text-slate-400">Spent</span>
-                        <span className="text-red-400 font-semibold">${budget.spent}</span>
+                      <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Spent</span>
+                        <span className="text-red-400 font-semibold sm:px-4 md:px-6 lg:px-8">${budget.spent}</span>
                       </div>
                       
-                      <div className="w-full bg-slate-700 rounded-full h-2">
+                      <div className="w-full bg-slate-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                         <div
-                          className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                          className="bg-green-500 h-2 rounded-full transition-all duration-500 sm:px-4 md:px-6 lg:px-8"
                           style={{ width: `${budget.remaining}%` }}
                         ></div>
                       </div>
@@ -467,33 +461,33 @@ const EnhancedWaiverWire: React.FC = () => {
 
       {/* Bid Modal */}
       {showBidModal && selectedPlayer && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-slate-800 rounded-xl p-6 w-full max-w-md border border-slate-700"
+            className="bg-slate-800 rounded-xl p-6 w-full max-w-md border border-slate-700 sm:px-4 md:px-6 lg:px-8"
           >
-            <h3 className="text-xl font-bold text-white mb-4">
+            <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
               Place FAAB Bid
             </h3>
             
-            <div className="space-y-4">
+            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
               {/* Player Info */}
-              <div className="bg-slate-700/50 rounded-lg p-3">
-                <div className="flex items-center gap-3">
+              <div className="bg-slate-700/50 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                   <span className={`px-2 py-1 rounded text-xs font-bold ${getPositionColor(selectedPlayer.position)}`}>
                     {selectedPlayer.position}
                   </span>
                   <div>
-                    <h4 className="text-white font-semibold">{selectedPlayer.name}</h4>
-                    <p className="text-sm text-slate-400">{selectedPlayer.team}</p>
+                    <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{selectedPlayer.name}</h4>
+                    <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{selectedPlayer.team}</p>
                   </div>
                 </div>
               </div>
               
               {/* Bid Amount */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                   Bid Amount (${userBudget.remaining} available)
                 </label>
                 <input
@@ -502,14 +496,13 @@ const EnhancedWaiverWire: React.FC = () => {
                   max={userBudget.remaining}
                   value={bidAmount}
                   onChange={(e: any) => setBidAmount(Number(e.target.value))}
-                  className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
                   placeholder="Enter bid amount"
                 />
               </div>
               
               {/* Drop Player (optional) */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                   Drop Player (optional)
                 </label>
                 <select
@@ -518,7 +511,7 @@ const EnhancedWaiverWire: React.FC = () => {
                     const player = userTeam?.roster?.find((p: any) => p.id === e.target.value);
                     setDropPlayer(player || null);
                   }}
-                  className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
                 >
                   <option value="">Select player to drop</option>
                   {userTeam?.roster?.map((player: any) => (
@@ -530,17 +523,16 @@ const EnhancedWaiverWire: React.FC = () => {
               </div>
             </div>
             
-            <div className="flex gap-3 mt-6">
+            <div className="flex gap-3 mt-6 sm:px-4 md:px-6 lg:px-8">
               <button
                 onClick={() => setShowBidModal(false)}
-                className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePlaceBid}
-                disabled={bidAmount <= 0 || bidAmount > userBudget.remaining}
-                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:text-slate-400 text-white rounded-lg transition-colors"
+                disabled={bidAmount <= 0 || bidAmount  aria-label="Action button"> userBudget.remaining}
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:text-slate-400 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
               >
                 Place Bid
               </button>
@@ -552,4 +544,10 @@ const EnhancedWaiverWire: React.FC = () => {
   );
 };
 
-export default EnhancedWaiverWire;
+const EnhancedWaiverWireWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedWaiverWire {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedWaiverWireWithErrorBoundary);

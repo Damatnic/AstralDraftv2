@@ -51,40 +51,11 @@ export const useAuth = (): UseAuthReturn => {
       } else {
         throw new Error('Invalid credentials');
       }
-    } catch (error) {
-      console.error('Login failed:', error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
-  const logout = () => {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('authToken');
-    dispatch({ type: 'SET_USER', payload: null });
-  };
-  
-  const signup = async (email: string, password: string, name: string) => {
-    setIsLoading(true);
-    try {
-      // For testing, create a new user
-      const newUser = {
-        id: Date.now().toString(),
-        email,
-        name,
-        avatar: '🎯'
-      };
-      
-      // Store in test users
-      const testUsers = JSON.parse(localStorage.getItem('testUsers') || '[]');
-      testUsers.push({ ...newUser, password });
-      localStorage.setItem('testUsers', JSON.stringify(testUsers));
-      
-      // Log them in
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      localStorage.setItem('authToken', `test-token-${newUser.id}`);
+    `test-token-${newUser.id}`);
       dispatch({ type: 'SET_USER', payload: newUser });
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Signup failed:', error);
       throw error;

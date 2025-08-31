@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import './OracleStatisticalModelingSection.css';
 
 interface StatisticalModel {
@@ -12,6 +13,7 @@ interface StatisticalModel {
   accuracy: number;
   complexity: 'low' | 'medium' | 'high';
   interpretability: number; // 0-100
+
 }
 
 interface ProbabilityDistribution {
@@ -26,13 +28,13 @@ interface ProbabilityDistribution {
   cdf?: string;
   mean?: string;
   variance?: string;
-}
 
 interface DistributionExample {
   scenario: string;
   parameters: Record<string, number>;
   visualization: number[];
   interpretation: string;
+
 }
 
 interface BayesianComponent {
@@ -43,7 +45,6 @@ interface BayesianComponent {
   formula: string;
   role: string;
   examples: string[];
-}
 
 interface ConfidenceMethod {
   id: string;
@@ -55,6 +56,7 @@ interface ConfidenceMethod {
   limitations: string[];
   accuracy: number;
   computationalCost: 'low' | 'medium' | 'high';
+
 }
 
 interface StatisticalDemo {
@@ -66,7 +68,6 @@ interface StatisticalDemo {
   steps: DemoStep[];
   result: any;
   interpretation: string;
-}
 
 interface DemoStep {
   id: string;
@@ -75,9 +76,11 @@ interface DemoStep {
   calculation: string;
   result: string | number;
   explanation: string;
+
 }
 
 const OracleStatisticalModelingSection: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [activeModel, setActiveModel] = useState<string>('linear-regression');
   const [activeDistribution, setActiveDistribution] = useState<string>('normal');
   const [activeBayesian, setActiveBayesian] = useState<string>('bayes-theorem');
@@ -182,7 +185,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
       accuracy: 83,
       complexity: 'high',
       interpretability: 70
-    }
+
   ];
 
   const probabilityDistributions: ProbabilityDistribution[] = [
@@ -209,8 +212,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { mean: 0, variance: 4 },
           visualization: [0.01, 0.04, 0.15, 0.30, 0.50, 0.30, 0.15, 0.04, 0.01],
           interpretation: 'Model errors are centered at zero with most predictions within ±2 points of actual'
-        }
-      ]
+
     },
     {
       id: 'binomial',
@@ -234,8 +236,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { n: 20, p: 0.65 },
           visualization: [0.0, 0.0, 0.01, 0.04, 0.09, 0.16, 0.22, 0.23, 0.17, 0.08],
           interpretation: '20 red zone trips with 65% TD rate yields ~13 touchdowns typically'
-        }
-      ]
+
     },
     {
       id: 'poisson',
@@ -259,8 +260,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { lambda: 1.2 },
           visualization: [0.30, 0.36, 0.22, 0.09, 0.03, 0.01, 0.0, 0.0, 0.0],
           interpretation: 'Player experiences ~1.2 injuries per season, 0-1 injuries most common'
-        }
-      ]
+
     },
     {
       id: 'beta',
@@ -284,8 +284,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { alpha: 27, beta: 3 },
           visualization: [0.0, 0.0, 0.0, 0.01, 0.04, 0.12, 0.25, 0.35, 0.23],
           interpretation: 'Kicker with 90% success rate showing high reliability in range'
-        }
-      ]
+
     },
     {
       id: 'gamma',
@@ -303,8 +302,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { alpha: 2, beta: 0.5 },
           visualization: [0.25, 0.30, 0.20, 0.12, 0.07, 0.04, 0.02, 0.0, 0.0],
           interpretation: 'Average 4 minutes between TDs, with exponential decay for longer intervals'
-        }
-      ]
+
     },
     {
       id: 'student-t',
@@ -322,9 +320,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           parameters: { nu: 5 },
           visualization: [0.02, 0.06, 0.15, 0.25, 0.35, 0.25, 0.15, 0.06, 0.02],
           interpretation: 'With only 5 games, wider confidence intervals account for uncertainty'
-        }
-      ]
-    }
+
   ];
 
   const bayesianComponents: BayesianComponent[] = [
@@ -339,7 +335,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Update player injury probability with medical reports',
         'Revise team win probability with roster changes',
         'Adjust weather impact estimates with forecast updates'
-      ]
+
     },
     {
       id: 'prior-distribution',
@@ -352,7 +348,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Historical team performance as starting point',
         'Expert opinions on player capabilities',
         'League-wide statistical patterns as baseline'
-      ]
+
     },
     {
       id: 'likelihood-function',
@@ -365,7 +361,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'How well do QB stats explain team wins?',
         'Probability of observed scores given player projections',
         'Likelihood of weather affecting game outcomes'
-      ]
+
     },
     {
       id: 'posterior-distribution',
@@ -378,7 +374,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Updated player projections after recent games',
         'Revised team strength after key injuries',
         'Adjusted weather impact after historical analysis'
-      ]
+
     },
     {
       id: 'marginal-likelihood',
@@ -391,7 +387,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Model selection between different prediction approaches',
         'Evidence for including specific features',
         'Comparing team strength models'
-      ]
+
     },
     {
       id: 'conjugate-priors',
@@ -404,8 +400,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
         'Beta prior for completion percentages yields beta posterior',
         'Normal prior for player means yields normal posterior',
         'Gamma prior for rate parameters yields gamma posterior'
-      ]
-    }
+
   ];
 
   const confidenceMethods: ConfidenceMethod[] = [
@@ -474,7 +469,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
       limitations: ['Crossing quantiles possible', 'Limited software support', 'Interpretation complexity'],
       accuracy: 83,
       computationalCost: 'medium'
-    }
+
   ];
 
   const statisticalDemos: StatisticalDemo[] = [
@@ -533,7 +528,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(>30 pts) = 1 - Φ((30-27.1)/2.4)',
           result: 0.227,
           explanation: '22.7% probability of exceeding 30 fantasy points'
-        }
+
       ],
       result: {
         prediction: 27.1,
@@ -543,7 +538,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           '20to25': 0.23,
           '25to30': 0.40,
           'over30': 0.22
-        }
+
       },
       interpretation: 'Statistical models converge on 27.1 point prediction with moderate confidence. Bayesian approach provides slight upward adjustment for home field advantage. Bootstrap confidence intervals account for recent performance variability.'
     },
@@ -594,7 +589,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(Total > 47.5) = 1 - P(Poisson(27.3) ≤ 47)',
           result: 0.02,
           explanation: 'Only 2% chance of exceeding 47.5 points - strong Under indication'
-        }
+
       ],
       result: {
         homeScore: 15.3,
@@ -620,7 +615,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           winsWithPlayer: 9,
           gamesWithoutPlayer: 4,
           winsWithoutPlayer: 1
-        }
+
       },
       steps: [
         {
@@ -654,7 +649,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'P(Win) = 0.65×0.75 + 0.35×0.25',
           result: 0.575,
           explanation: 'Win probability drops from 65% to 57.5% due to injury uncertainty'
-        }
+
       ],
       result: {
         originalWinProb: 0.65,
@@ -707,7 +702,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           calculation: 'PI = 24.6 ± 2.131 × √(2.1² + 4.41)',
           result: '[18.4, 30.8]',
           explanation: 'Wider interval accounting for both estimation and individual variability'
-        }
+
       ],
       result: {
         methods: {
@@ -721,10 +716,10 @@ const OracleStatisticalModelingSection: React.FC = () => {
           'Model-free inference': 'Bootstrap CI',
           'Prior incorporation': 'Bayesian CI',
           'Future prediction': 'Prediction Interval'
-        }
+
       },
       interpretation: 'All confidence methods provide similar parameter intervals (~±4.5 points). Prediction intervals are wider for forecasting individuals. Bootstrap method shows slight efficiency gain from empirical distribution.'
-    }
+
   ];
 
   useEffect(() => {
@@ -735,13 +730,13 @@ const OracleStatisticalModelingSection: React.FC = () => {
           if (prev >= (currentDemo?.steps.length || 0) - 1) {
             setIsDemoRunning(false);
             return 0;
-          }
+
           return prev + 1;
         });
       }, 3000);
 
       return () => clearInterval(interval);
-    }
+
   }, [isDemoRunning, activeDemo, statisticalDemos]);
 
   const startDemo = () => {
@@ -756,14 +751,14 @@ const OracleStatisticalModelingSection: React.FC = () => {
   const selectedDemo = statisticalDemos.find((demo: any) => demo.id === activeDemo);
 
   return (
-    <div className="oracle-statistical-modeling-section">
-      <div className="section-header">
-        <h2 className="section-title">
-          <span className="title-icon">📊</span>
+    <div className="oracle-statistical-modeling-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
+        <h2 className="section-title sm:px-4 md:px-6 lg:px-8">
+          <span className="title-icon sm:px-4 md:px-6 lg:px-8">📊</span>
           {' '}
           Statistical Modeling & Probability Calculations
         </h2>
-        <p className="section-description">
+        <p className="section-description sm:px-4 md:px-6 lg:px-8">
           Explore Oracle's sophisticated statistical foundation including regression models, probability 
           distributions, Bayesian inference, and confidence estimation techniques that power accurate 
           sports predictions with quantified uncertainty.
@@ -771,18 +766,18 @@ const OracleStatisticalModelingSection: React.FC = () => {
       </div>
 
       {/* Statistical Models */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🔢</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔢</span>
           {' '}
           Core Statistical Models
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle employs a comprehensive suite of statistical models, from simple linear regression to 
           advanced ensemble methods, each optimized for specific prediction scenarios and data characteristics.
         </p>
 
-        <div className="models-grid">
+        <div className="models-grid sm:px-4 md:px-6 lg:px-8">
           {statisticalModels.map((model: any) => (
             <button
               key={model.id}
@@ -790,38 +785,38 @@ const OracleStatisticalModelingSection: React.FC = () => {
               onClick={() => setActiveModel(model.id)}
               aria-label={`Explore ${model.name} model`}
             >
-              <div className="model-header">
-                <h4 className="model-name">{model.name}</h4>
+              <div className="model-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="model-name sm:px-4 md:px-6 lg:px-8">{model.name}</h4>
                 <span className={`model-category ${model.category}`}>
                   {model.category}
                 </span>
               </div>
               
-              <div className="model-metrics">
-                <div className="metric">
-                  <span className="metric-label">Accuracy</span>
-                  <div className="metric-bar">
+              <div className="model-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                  <div className="metric-bar sm:px-4 md:px-6 lg:px-8">
                     <div 
-                      className="metric-fill" 
+                      className="metric-fill sm:px-4 md:px-6 lg:px-8" 
                       style={{ width: `${model.accuracy}%` }}
                     />
                   </div>
-                  <span className="metric-value">{model.accuracy}%</span>
+                  <span className="metric-value sm:px-4 md:px-6 lg:px-8">{model.accuracy}%</span>
                 </div>
                 
-                <div className="metric">
-                  <span className="metric-label">Interpretability</span>
-                  <div className="metric-bar">
+                <div className="metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Interpretability</span>
+                  <div className="metric-bar sm:px-4 md:px-6 lg:px-8">
                     <div 
-                      className="metric-fill interpretability" 
+                      className="metric-fill interpretability sm:px-4 md:px-6 lg:px-8" 
                       style={{ width: `${model.interpretability}%` }}
                     />
                   </div>
-                  <span className="metric-value">{model.interpretability}%</span>
+                  <span className="metric-value sm:px-4 md:px-6 lg:px-8">{model.interpretability}%</span>
                 </div>
               </div>
               
-              <div className="complexity-indicator">
+              <div className="complexity-indicator sm:px-4 md:px-6 lg:px-8">
                 <span className={`complexity ${model.complexity}`}>
                   {model.complexity} complexity
                 </span>
@@ -831,38 +826,38 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </div>
 
         {selectedModel && (
-          <div className="model-details">
-            <div className="model-details-header">
+          <div className="model-details sm:px-4 md:px-6 lg:px-8">
+            <div className="model-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedModel.name}</h4>
               <span className={`category-badge ${selectedModel.category}`}>
                 {selectedModel.category}
               </span>
             </div>
             
-            <p className="model-description">{selectedModel.description}</p>
+            <p className="model-description sm:px-4 md:px-6 lg:px-8">{selectedModel.description}</p>
             
-            <div className="model-content">
-              <div className="formula-section">
+            <div className="model-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Mathematical Formula</h5>
-                <div className="formula-display">
-                  <code className="formula">{selectedModel.formula}</code>
+                <div className="formula-display sm:px-4 md:px-6 lg:px-8">
+                  <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedModel.formula}</code>
                 </div>
               </div>
               
-              <div className="applications-section">
+              <div className="applications-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Oracle Applications</h5>
-                <ul className="applications-list">
+                <ul className="applications-list sm:px-4 md:px-6 lg:px-8">
                   {selectedModel.applications.map((app: any) => (
-                    <li key={`${selectedModel.id}-${app}`} className="application-item">{app}</li>
+                    <li key={`${selectedModel.id}-${app}`} className="application-item sm:px-4 md:px-6 lg:px-8">{app}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="assumptions-section">
+              <div className="assumptions-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Model Assumptions</h5>
-                <ul className="assumptions-list">
+                <ul className="assumptions-list sm:px-4 md:px-6 lg:px-8">
                   {selectedModel.assumptions.map((assumption: any) => (
-                    <li key={`${selectedModel.id}-${assumption}`} className="assumption-item">{assumption}</li>
+                    <li key={`${selectedModel.id}-${assumption}`} className="assumption-item sm:px-4 md:px-6 lg:px-8">{assumption}</li>
                   ))}
                 </ul>
               </div>
@@ -872,18 +867,18 @@ const OracleStatisticalModelingSection: React.FC = () => {
       </div>
 
       {/* Probability Distributions */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">📈</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">📈</span>
           {' '}
           Probability Distributions
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle leverages fundamental probability distributions to model uncertainty, variability, and 
           likelihood in sports data, providing mathematical foundations for prediction confidence.
         </p>
 
-        <div className="distribution-tabs">
+        <div className="distribution-tabs sm:px-4 md:px-6 lg:px-8">
           {probabilityDistributions.map((dist: any) => (
             <button
               key={dist.id}
@@ -891,35 +886,35 @@ const OracleStatisticalModelingSection: React.FC = () => {
               onClick={() => setActiveDistribution(dist.id)}
               aria-label={`Explore ${dist.name} distribution`}
             >
-              <span className="tab-name">{dist.name.split(' ')[0]}</span>
+              <span className="tab-name sm:px-4 md:px-6 lg:px-8">{dist.name.split(' ')[0]}</span>
               <span className={`tab-type ${dist.type}`}>{dist.type}</span>
             </button>
           ))}
         </div>
 
         {selectedDistribution && (
-          <div className="distribution-details">
-            <div className="distribution-header">
+          <div className="distribution-details sm:px-4 md:px-6 lg:px-8">
+            <div className="distribution-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedDistribution.name}</h4>
               <span className={`type-badge ${selectedDistribution.type}`}>
                 {selectedDistribution.type}
               </span>
             </div>
             
-            <p className="distribution-description">{selectedDistribution.description}</p>
+            <p className="distribution-description sm:px-4 md:px-6 lg:px-8">{selectedDistribution.description}</p>
             
-            <div className="distribution-content">
-              <div className="formula-parameters">
-                <div className="formula-display">
+            <div className="distribution-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-parameters sm:px-4 md:px-6 lg:px-8">
+                <div className="formula-display sm:px-4 md:px-6 lg:px-8">
                   <h5>Probability Density/Mass Function</h5>
-                  <code className="formula">{selectedDistribution.formula}</code>
+                  <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedDistribution.formula}</code>
                 </div>
                 
-                <div className="parameters-display">
+                <div className="parameters-display sm:px-4 md:px-6 lg:px-8">
                   <h5>Parameters</h5>
-                  <ul className="parameters-list">
+                  <ul className="parameters-list sm:px-4 md:px-6 lg:px-8">
                     {selectedDistribution.parameters.map((param: any) => (
-                      <li key={`${selectedDistribution.id}-${param}`} className="parameter-item">
+                      <li key={`${selectedDistribution.id}-${param}`} className="parameter-item sm:px-4 md:px-6 lg:px-8">
                         <code>{param}</code>
                       </li>
                     ))}
@@ -927,60 +922,60 @@ const OracleStatisticalModelingSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="statistics-display">
+              <div className="statistics-display sm:px-4 md:px-6 lg:px-8">
                 <h5>Key Statistics</h5>
-                <div className="statistics-grid">
-                  <div className="statistic">
-                    <span className="stat-label">Mean (μ)</span>
-                    <code className="stat-value">{selectedDistribution.mean}</code>
+                <div className="statistics-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="statistic sm:px-4 md:px-6 lg:px-8">
+                    <span className="stat-label sm:px-4 md:px-6 lg:px-8">Mean (μ)</span>
+                    <code className="stat-value sm:px-4 md:px-6 lg:px-8">{selectedDistribution.mean}</code>
                   </div>
-                  <div className="statistic">
-                    <span className="stat-label">Variance (σ²)</span>
-                    <code className="stat-value">{selectedDistribution.variance}</code>
+                  <div className="statistic sm:px-4 md:px-6 lg:px-8">
+                    <span className="stat-label sm:px-4 md:px-6 lg:px-8">Variance (σ²)</span>
+                    <code className="stat-value sm:px-4 md:px-6 lg:px-8">{selectedDistribution.variance}</code>
                   </div>
                   {selectedDistribution.cdf && (
-                    <div className="statistic">
-                      <span className="stat-label">CDF</span>
-                      <code className="stat-value">{selectedDistribution.cdf}</code>
+                    <div className="statistic sm:px-4 md:px-6 lg:px-8">
+                      <span className="stat-label sm:px-4 md:px-6 lg:px-8">CDF</span>
+                      <code className="stat-value sm:px-4 md:px-6 lg:px-8">{selectedDistribution.cdf}</code>
                     </div>
                   )}
                 </div>
               </div>
               
-              <div className="applications-display">
+              <div className="applications-display sm:px-4 md:px-6 lg:px-8">
                 <h5>Oracle Applications</h5>
-                <ul className="applications-list">
+                <ul className="applications-list sm:px-4 md:px-6 lg:px-8">
                   {selectedDistribution.applications.map((app: any) => (
-                    <li key={`${selectedDistribution.id}-${app}`} className="application-item">{app}</li>
+                    <li key={`${selectedDistribution.id}-${app}`} className="application-item sm:px-4 md:px-6 lg:px-8">{app}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="examples-display">
+              <div className="examples-display sm:px-4 md:px-6 lg:px-8">
                 <h5>Real-World Examples</h5>
-                <div className="examples-grid">
+                <div className="examples-grid sm:px-4 md:px-6 lg:px-8">
                   {selectedDistribution.examples.map((example, exampleIndex) => (
-                    <div key={`${selectedDistribution.id}-example-${exampleIndex}`} className="example-card">
+                    <div key={`${selectedDistribution.id}-example-${exampleIndex}`} className="example-card sm:px-4 md:px-6 lg:px-8">
                       <h6>{example.scenario}</h6>
-                      <div className="example-parameters">
+                      <div className="example-parameters sm:px-4 md:px-6 lg:px-8">
                         {Object.entries(example.parameters).map(([key, value]) => (
-                          <span key={key} className="parameter">
+                          <span key={key} className="parameter sm:px-4 md:px-6 lg:px-8">
                             {key}: <code>{value}</code>
                           </span>
                         ))}
                       </div>
-                      <div className="visualization">
-                        <div className="viz-bars">
+                      <div className="visualization sm:px-4 md:px-6 lg:px-8">
+                        <div className="viz-bars sm:px-4 md:px-6 lg:px-8">
                           {example.visualization.map((height, barIndex) => (
                             <div 
                               key={`${selectedDistribution.id}-example-${exampleIndex}-bar-${barIndex}`} 
-                              className="viz-bar"
+                              className="viz-bar sm:px-4 md:px-6 lg:px-8"
                               style={{ height: `${height * 100}px` }}
                             />
                           ))}
                         </div>
                       </div>
-                      <p className="example-interpretation">{example.interpretation}</p>
+                      <p className="example-interpretation sm:px-4 md:px-6 lg:px-8">{example.interpretation}</p>
                     </div>
                   ))}
                 </div>
@@ -991,18 +986,18 @@ const OracleStatisticalModelingSection: React.FC = () => {
       </div>
 
       {/* Bayesian Methods */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🧠</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🧠</span>
           {' '}
           Bayesian Inference Framework
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle incorporates Bayesian methodology to update predictions with new evidence, combine prior 
           knowledge with current data, and provide probabilistic reasoning for uncertainty quantification.
         </p>
 
-        <div className="bayesian-grid">
+        <div className="bayesian-grid sm:px-4 md:px-6 lg:px-8">
           {bayesianComponents.map((component: any) => (
             <button
               key={component.id}
@@ -1010,44 +1005,44 @@ const OracleStatisticalModelingSection: React.FC = () => {
               onClick={() => setActiveBayesian(component.id)}
               aria-label={`Learn about ${component.name}`}
             >
-              <div className="component-header">
-                <h4 className="component-name">{component.name}</h4>
+              <div className="component-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="component-name sm:px-4 md:px-6 lg:px-8">{component.name}</h4>
                 <span className={`component-type ${component.type}`}>
                   {component.type}
                 </span>
               </div>
-              <p className="component-description">{component.description}</p>
+              <p className="component-description sm:px-4 md:px-6 lg:px-8">{component.description}</p>
             </button>
           ))}
         </div>
 
         {selectedBayesian && (
-          <div className="bayesian-details">
-            <div className="bayesian-details-header">
+          <div className="bayesian-details sm:px-4 md:px-6 lg:px-8">
+            <div className="bayesian-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedBayesian.name}</h4>
               <span className={`type-badge ${selectedBayesian.type}`}>
                 {selectedBayesian.type}
               </span>
             </div>
             
-            <p className="bayesian-description">{selectedBayesian.description}</p>
+            <p className="bayesian-description sm:px-4 md:px-6 lg:px-8">{selectedBayesian.description}</p>
             
-            <div className="bayesian-content">
-              <div className="formula-section">
+            <div className="bayesian-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Mathematical Representation</h5>
-                <code className="formula">{selectedBayesian.formula}</code>
+                <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedBayesian.formula}</code>
               </div>
               
-              <div className="role-section">
+              <div className="role-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Role in Oracle's System</h5>
-                <p className="role-description">{selectedBayesian.role}</p>
+                <p className="role-description sm:px-4 md:px-6 lg:px-8">{selectedBayesian.role}</p>
               </div>
               
-              <div className="examples-section">
+              <div className="examples-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Practical Examples</h5>
-                <ul className="examples-list">
+                <ul className="examples-list sm:px-4 md:px-6 lg:px-8">
                   {selectedBayesian.examples.map((example: any) => (
-                    <li key={`${selectedBayesian.id}-${example}`} className="example-item">{example}</li>
+                    <li key={`${selectedBayesian.id}-${example}`} className="example-item sm:px-4 md:px-6 lg:px-8">{example}</li>
                   ))}
                 </ul>
               </div>
@@ -1057,18 +1052,18 @@ const OracleStatisticalModelingSection: React.FC = () => {
       </div>
 
       {/* Confidence Estimation */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🎯</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🎯</span>
           {' '}
           Confidence Estimation Methods
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle employs multiple approaches to quantify prediction uncertainty, from classical confidence 
           intervals to modern ensemble methods, ensuring reliable uncertainty estimates across all predictions.
         </p>
 
-        <div className="confidence-methods-grid">
+        <div className="confidence-methods-grid sm:px-4 md:px-6 lg:px-8">
           {confidenceMethods.map((method: any) => (
             <button
               key={method.id}
@@ -1076,20 +1071,20 @@ const OracleStatisticalModelingSection: React.FC = () => {
               onClick={() => setActiveConfidence(method.id)}
               aria-label={`Explore ${method.name} method`}
             >
-              <div className="method-header">
-                <h4 className="method-name">{method.name}</h4>
+              <div className="method-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</h4>
                 <span className={`method-category ${method.category}`}>
                   {method.category}
                 </span>
               </div>
               
-              <div className="method-metrics">
-                <div className="accuracy-metric">
-                  <span className="metric-label">Accuracy</span>
-                  <span className="metric-value">{method.accuracy}%</span>
+              <div className="method-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="accuracy-metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                  <span className="metric-value sm:px-4 md:px-6 lg:px-8">{method.accuracy}%</span>
                 </div>
-                <div className="cost-metric">
-                  <span className="metric-label">Cost</span>
+                <div className="cost-metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Cost</span>
                   <span className={`cost-indicator ${method.computationalCost}`}>
                     {method.computationalCost}
                   </span>
@@ -1100,37 +1095,37 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </div>
 
         {selectedConfidence && (
-          <div className="confidence-details">
-            <div className="confidence-details-header">
+          <div className="confidence-details sm:px-4 md:px-6 lg:px-8">
+            <div className="confidence-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedConfidence.name}</h4>
               <span className={`category-badge ${selectedConfidence.category}`}>
                 {selectedConfidence.category}
               </span>
             </div>
             
-            <p className="confidence-description">{selectedConfidence.description}</p>
+            <p className="confidence-description sm:px-4 md:px-6 lg:px-8">{selectedConfidence.description}</p>
             
-            <div className="confidence-content">
-              <div className="formula-section">
+            <div className="confidence-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Mathematical Formula</h5>
-                <code className="formula">{selectedConfidence.formula}</code>
+                <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedConfidence.formula}</code>
               </div>
               
-              <div className="pros-cons">
-                <div className="advantages">
+              <div className="pros-cons sm:px-4 md:px-6 lg:px-8">
+                <div className="advantages sm:px-4 md:px-6 lg:px-8">
                   <h5>Advantages</h5>
-                  <ul className="advantages-list">
+                  <ul className="advantages-list sm:px-4 md:px-6 lg:px-8">
                     {selectedConfidence.advantages.map((advantage: any) => (
-                      <li key={`${selectedConfidence.id}-adv-${advantage}`} className="advantage-item">{advantage}</li>
+                      <li key={`${selectedConfidence.id}-adv-${advantage}`} className="advantage-item sm:px-4 md:px-6 lg:px-8">{advantage}</li>
                     ))}
                   </ul>
                 </div>
                 
-                <div className="limitations">
+                <div className="limitations sm:px-4 md:px-6 lg:px-8">
                   <h5>Limitations</h5>
-                  <ul className="limitations-list">
+                  <ul className="limitations-list sm:px-4 md:px-6 lg:px-8">
                     {selectedConfidence.limitations.map((limitation: any) => (
-                      <li key={`${selectedConfidence.id}-lim-${limitation}`} className="limitation-item">{limitation}</li>
+                      <li key={`${selectedConfidence.id}-lim-${limitation}`} className="limitation-item sm:px-4 md:px-6 lg:px-8">{limitation}</li>
                     ))}
                   </ul>
                 </div>
@@ -1141,19 +1136,19 @@ const OracleStatisticalModelingSection: React.FC = () => {
       </div>
 
       {/* Interactive Demonstrations */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🧪</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🧪</span>
           {' '}
           Interactive Statistical Demonstrations
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           See Oracle's statistical methods in action through step-by-step demonstrations of real prediction 
           scenarios, complete with calculations, interpretations, and comparative analysis.
         </p>
 
-        <div className="demo-controls">
-          <div className="demo-selector">
+        <div className="demo-controls sm:px-4 md:px-6 lg:px-8">
+          <div className="demo-selector sm:px-4 md:px-6 lg:px-8">
             {statisticalDemos.map((demo: any) => (
               <button
                 key={demo.id}
@@ -1167,7 +1162,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
           </div>
           
           <button
-            className="demo-start-button"
+            className="demo-start-button sm:px-4 md:px-6 lg:px-8"
             onClick={startDemo}
             disabled={isDemoRunning}
             aria-label="Start statistical demonstration"
@@ -1177,30 +1172,30 @@ const OracleStatisticalModelingSection: React.FC = () => {
         </div>
 
         {selectedDemo && (
-          <div className="demo-content">
-            <div className="demo-header">
+          <div className="demo-content sm:px-4 md:px-6 lg:px-8">
+            <div className="demo-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedDemo.name}</h4>
               <span className={`demo-type ${selectedDemo.type}`}>
                 {selectedDemo.type}
               </span>
             </div>
             
-            <p className="demo-description">{selectedDemo.description}</p>
+            <p className="demo-description sm:px-4 md:px-6 lg:px-8">{selectedDemo.description}</p>
             
-            <div className="demo-input">
+            <div className="demo-input sm:px-4 md:px-6 lg:px-8">
               <h5>Input Data</h5>
-              <div className="input-display">
+              <div className="input-display sm:px-4 md:px-6 lg:px-8">
                 {Object.entries(selectedDemo.inputData).map(([key, value]) => (
-                  <div key={key} className="input-item">
-                    <span className="input-key">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}:</span>
-                    <span className="input-value">
+                  <div key={key} className="input-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="input-key sm:px-4 md:px-6 lg:px-8">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}:</span>
+                    <span className="input-value sm:px-4 md:px-6 lg:px-8">
                       {(() => {
                         if (Array.isArray(value)) {
                           return `[${value.join(', ')}]`;
-                        }
+
                         if (typeof value === 'object' && value !== null) {
                           return JSON.stringify(value, null, 2);
-                        }
+
                         return String(value);
                       })()}
                     </span>
@@ -1209,9 +1204,9 @@ const OracleStatisticalModelingSection: React.FC = () => {
               </div>
             </div>
             
-            <div className="demo-steps">
+            <div className="demo-steps sm:px-4 md:px-6 lg:px-8">
               <h5>Calculation Steps</h5>
-              <div className="steps-container">
+              <div className="steps-container sm:px-4 md:px-6 lg:px-8">
                 {selectedDemo.steps.map((step, index) => (
                   <div 
                     key={step.id}
@@ -1221,76 +1216,76 @@ const OracleStatisticalModelingSection: React.FC = () => {
                       isDemoRunning && index < demoStep ? 'completed' : ''
                     }`}
                   >
-                    <div className="step-number">{index + 1}</div>
-                    <div className="step-content">
+                    <div className="step-number sm:px-4 md:px-6 lg:px-8">{index + 1}</div>
+                    <div className="step-content sm:px-4 md:px-6 lg:px-8">
                       <h6>{step.title}</h6>
-                      <p className="step-description">{step.description}</p>
-                      <div className="calculation">
-                        <code className="calculation-formula">{step.calculation}</code>
-                        <span className="calculation-result">= {step.result}</span>
+                      <p className="step-description sm:px-4 md:px-6 lg:px-8">{step.description}</p>
+                      <div className="calculation sm:px-4 md:px-6 lg:px-8">
+                        <code className="calculation-formula sm:px-4 md:px-6 lg:px-8">{step.calculation}</code>
+                        <span className="calculation-result sm:px-4 md:px-6 lg:px-8">= {step.result}</span>
                       </div>
-                      <p className="step-explanation">{step.explanation}</p>
+                      <p className="step-explanation sm:px-4 md:px-6 lg:px-8">{step.explanation}</p>
                     </div>
                     {isDemoRunning && index === demoStep && (
-                      <div className="processing-indicator">Computing...</div>
+                      <div className="processing-indicator sm:px-4 md:px-6 lg:px-8">Computing...</div>
                     )}
                     {isDemoRunning && index < demoStep && (
-                      <div className="completed-indicator">✓</div>
+                      <div className="completed-indicator sm:px-4 md:px-6 lg:px-8">✓</div>
                     )}
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="demo-result">
+            <div className="demo-result sm:px-4 md:px-6 lg:px-8">
               <h5>Final Results</h5>
-              <div className="result-display">
+              <div className="result-display sm:px-4 md:px-6 lg:px-8">
                 {typeof selectedDemo.result === 'object' ? (
                   Object.entries(selectedDemo.result).map(([key, value]) => (
-                    <div key={key} className="result-item">
-                      <span className="result-key">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}:</span>
-                      <span className="result-value">
+                    <div key={key} className="result-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="result-key sm:px-4 md:px-6 lg:px-8">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}:</span>
+                      <span className="result-value sm:px-4 md:px-6 lg:px-8">
                         {(() => {
                           if (Array.isArray(value)) {
                             return `[${value.join(', ')}]`;
-                          }
+
                           if (typeof value === 'object' && value !== null) {
                             return JSON.stringify(value, null, 2);
-                          }
+
                           if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
                             return String(value);
-                          }
+
                           return '';
                         })()}
                       </span>
                     </div>
                   ))
                 ) : (
-                  <div className="result-item">
-                    <span className="result-value">{String(selectedDemo.result)}</span>
+                  <div className="result-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="result-value sm:px-4 md:px-6 lg:px-8">{String(selectedDemo.result)}</span>
                   </div>
                 )}
               </div>
             </div>
             
-            <div className="demo-interpretation">
+            <div className="demo-interpretation sm:px-4 md:px-6 lg:px-8">
               <h5>Statistical Interpretation</h5>
-              <p className="interpretation-text">{selectedDemo.interpretation}</p>
+              <p className="interpretation-text sm:px-4 md:px-6 lg:px-8">{selectedDemo.interpretation}</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Key Mathematical Insights */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">💡</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">💡</span>
           {' '}
           Statistical Modeling Insights
         </h3>
         
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Model Selection Strategy</h4>
             <p>
               Oracle dynamically selects optimal statistical models based on data characteristics, 
@@ -1299,7 +1294,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Probability Distribution Matching</h4>
             <p>
               Each prediction scenario uses domain-appropriate distributions: Normal for player 
@@ -1308,7 +1303,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Bayesian Prior Integration</h4>
             <p>
               Oracle incorporates expert knowledge through carefully constructed priors, allowing 
@@ -1317,7 +1312,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Multi-Level Confidence</h4>
             <p>
               Prediction confidence operates at multiple levels: model uncertainty, parameter 
@@ -1326,7 +1321,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Computational Efficiency</h4>
             <p>
               Statistical calculations are optimized for real-time prediction generation, using 
@@ -1335,7 +1330,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Validation Framework</h4>
             <p>
               All statistical models undergo rigorous validation including cross-validation, 
@@ -1349,4 +1344,10 @@ const OracleStatisticalModelingSection: React.FC = () => {
   );
 };
 
-export default OracleStatisticalModelingSection;
+const OracleStatisticalModelingSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleStatisticalModelingSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleStatisticalModelingSectionWithErrorBoundary);

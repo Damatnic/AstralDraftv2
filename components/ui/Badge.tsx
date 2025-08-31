@@ -5,6 +5,7 @@ interface BadgeProps {
   variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -12,7 +13,7 @@ export const Badge: React.FC<BadgeProps> = ({
   variant = 'default',
   size = 'md',
   className = ''
-}: any) => {
+}) => {
   const variantClasses = {
     default: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
     success: 'bg-green-500/20 text-green-300 border-green-500/30',

@@ -23,7 +23,7 @@ const eventIcons: { [key: string]: React.ReactNode } = {
     MR_IRRELEVANT: <SparklesIcon />,
 };
 
-const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }: any) => {
+const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }) => {
     const icon = eventIcons[event.type] || <SparklesIcon />;
     return (
         <div className="flex items-start gap-4">
@@ -46,7 +46,7 @@ const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team 
     );
 };
 
-const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
     const [highlights, setHighlights] = React.useState<DraftEvent[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -55,17 +55,18 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
         const fetchHighlights = async () => {
             setIsLoading(true);
             try {
+
                 const data = await generateDraftStoryHighlights(league);
                 if (data) {
                     setHighlights(data.sort((a,b) => a.timestamp - b.timestamp));
                 } else {
                     setError("The Oracle couldn't find the story in this draft.");
-                }
-            } catch (e) {
+
+    } catch (error) {
                 setError("An error occurred while consulting the Oracle.");
             } finally {
                 setIsLoading(false);
-            }
+
         };
         fetchHighlights();
     }, [league]);
@@ -79,7 +80,7 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="mobile-touch-target px-4 py-3 bg-white/10 rounded-lg text-sm hover:bg-white/20">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }} className="mobile-touch-target px-4 py-3 bg-white/10 rounded-lg text-sm hover:bg-white/20">
                     Back to Analytics
                 </button>
             </header>
@@ -118,7 +119,6 @@ const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any
     );
 };
 
-
 const DraftStoryView: React.FC = () => {
     const { dispatch } = useAppState();
     const { league } = useLeague();
@@ -127,13 +127,12 @@ const DraftStoryView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a completed league to view its draft story.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mobile-touch-target mt-4 px-4 py-3 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mobile-touch-target mt-4 px-4 py-3 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     return <DraftStoryContent league={league} dispatch={dispatch} />;
 };
 

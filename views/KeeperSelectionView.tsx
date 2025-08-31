@@ -17,13 +17,11 @@ const KeeperSelectionView: React.FC = () => {
 
     if (!league || !myTeam) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
-    
+
     const keeperCount = league.settings.keeperCount || 0;
 
     if (keeperCount === 0) {
         return <ErrorDisplay title="Not a Keeper League" message="This league is not set up for keepers." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
-    }
 
     const handleTogglePlayer = (playerId: number) => {
         setSelectedIds(prev => {
@@ -33,8 +31,8 @@ const KeeperSelectionView: React.FC = () => {
             } else {
                 if (newSet.size < keeperCount) {
                     newSet.add(playerId);
-                }
-            }
+
+
             return newSet;
         });
     };
@@ -62,7 +60,7 @@ const KeeperSelectionView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                     className="glass-button"
                 >
                     Back to Team Hub
@@ -116,12 +114,7 @@ const KeeperSelectionView: React.FC = () => {
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ delay: index * 0.05 }}
-                                        onClick={() => handleTogglePlayer(player.id)}
-                                        className={`relative p-4 rounded-lg flex items-center gap-3 cursor-pointer transition-all ${
-                                            isSelected 
-                                                ? 'bg-gradient-to-r from-blue-500/30 to-purple-500/30 ring-2 ring-blue-400' 
-                                                : 'bg-white/5 hover:bg-white/10'
-                                        }`}
+                                        onClick={() => handleTogglePlayer(player.id)}`}
                                     >
                                         {/* Selection Indicator */}
                                         <div className="absolute top-2 right-2">
@@ -171,7 +164,6 @@ const KeeperSelectionView: React.FC = () => {
                         <div className="mt-8 flex justify-between items-center">
                             <button
                                 onClick={() => setSelectedIds(new Set())}
-                                className="glass-button flex items-center gap-2"
                                 disabled={selectedIds.size === 0}
                             >
                                 <XCircleIcon className="w-4 h-4" />
@@ -180,7 +172,6 @@ const KeeperSelectionView: React.FC = () => {
                             
                             <button 
                                 onClick={handleSaveChanges}
-                                className="glass-button-primary px-6 py-3 font-semibold flex items-center gap-2"
                                 disabled={selectedIds.size === 0}
                             >
                                 <CheckCircleIcon className="w-5 h-5" />

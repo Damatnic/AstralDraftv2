@@ -223,14 +223,8 @@ class MobilePerformanceMonitor {
                     url: window.location.href
                 })
             });
-        } catch (error) {
-            console.error('Failed to report metric:', error);
-        }
-    }
-
-    // Manual performance measurements
-    public startMeasure(name: string) {
-        performance.mark(`${name}-start`);
+        
+    `${name}-start`);
     }
 
     public endMeasure(name: string) {
@@ -276,6 +270,7 @@ class MobilePerformanceMonitor {
     public async getBatteryInfo() {
         if ('getBattery' in navigator) {
             try {
+
                 const battery = await (navigator as any).getBattery();
                 return {
                     level: Math.round(battery.level * 100),
@@ -283,7 +278,10 @@ class MobilePerformanceMonitor {
                     chargingTime: battery.chargingTime,
                     dischargingTime: battery.dischargingTime
                 };
-            } catch (error) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
                 console.error('Battery API not available:', error);
                 return null;
             }

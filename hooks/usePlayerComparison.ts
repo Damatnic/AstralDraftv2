@@ -156,43 +156,14 @@ export const usePlayerComparison = (options: UsePlayerComparisonOptions = {}): U
   // Quick comparison for two players
   const quickCompare = useCallback(async (playerId1: string, playerId2: string) => {
     try {
+
       setLoading(true);
       const result = await playerComparisonService.quickCompare(playerId1, playerId2, currentWeek);
       return result;
-    } catch (err) {
-      console.error('Quick comparison error:', err);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [currentWeek]);
-
-  // Cache management
-  const clearCache = useCallback(() => {
-    playerComparisonService.clearCache();
-  }, []);
-
-  const getCacheStats = useCallback(() => {
-    return playerComparisonService.getCacheStats();
-  }, []);
-
-  // Computed values
-  const canCompare = selectedPlayers.length >= 2;
-  const hasMaxPlayers = selectedPlayers.length >= maxPlayers;
-  
-  const recommendedPlayer = comparison?.players.find(
-    p => p.id === comparison.analysis.winner
-  ) || null;
-
-  const comparisonSummary = comparison ? (() => {
-    const winner = recommendedPlayer;
-    if (!winner) return null;
     
-    const confidence = comparison.analysis.confidence;
-    const projectedPoints = winner.projectedStats.fantasyPoints;
-    const matchup = winner.matchupAnalysis.difficulty;
-    
-    return `${winner.name} is recommended with ${confidence}% confidence, projecting ${projectedPoints} points in a ${matchup} matchup`;
+    } catch (error) {
+        console.error(error);
+    `${winner.name} is recommended with ${confidence}% confidence, projecting ${projectedPoints} points in a ${matchup} matchup`;
   })() : null;
 
   return {

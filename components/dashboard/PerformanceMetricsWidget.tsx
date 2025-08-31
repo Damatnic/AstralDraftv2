@@ -1,5 +1,6 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
 import { ActivityIcon, TrophyIcon, UserIcon } from 'lucide-react'; // Assuming lucide-react is available or similar icons
@@ -7,14 +8,14 @@ import { FlameIcon } from '../icons/FlameIcon';
 import { StarIcon } from '../icons/StarIcon';
 import { BarChartIcon } from 'lucide-react';
 
-const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; color: string }> = ({ icon, label, value, color }: any) => (
-    <div className="flex items-center gap-2">
+const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; color: string }> = ({ icon, label, value, color }) => (
+    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
         <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-black/20 ${color}`}>
             {icon}
         </div>
         <div>
-            <p className="text-xs text-gray-400">{label}</p>
-            <p className="text-sm font-bold text-white">{value}</p>
+            <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{label}</p>
+            <p className="text-sm font-bold text-white sm:px-4 md:px-6 lg:px-8">{value}</p>
         </div>
     </div>
 );
@@ -27,12 +28,11 @@ const PerformanceMetricsWidget: React.FC = () => {
     if (!myTeam || !activeLeague || activeLeague?.status === 'PRE_DRAFT' || activeLeague?.status === 'DRAFTING') {
         return (
              <Widget title="My Performance">
-                 <div className="p-4 text-center text-xs text-gray-400 h-full flex items-center justify-center">
+                 <div className="p-4 text-center text-xs text-gray-400 h-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                     Performance metrics will appear here once the season starts.
                  </div>
             </Widget>
         );
-    }
 
     const weeklyScores = activeLeague.schedule
         .filter((m: any) => m.week < activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id))
@@ -44,10 +44,9 @@ const PerformanceMetricsWidget: React.FC = () => {
     
     const rank = [...activeLeague.teams].sort((a, b) => b.record.wins - a.record.wins).findIndex((t: any) => t.id === myTeam.id) + 1;
 
-
     return (
         <Widget title="My Performance">
-            <div className="p-3 space-y-3">
+            <div className="p-3 space-y-3 sm:px-4 md:px-6 lg:px-8">
                 <StatCard icon={<FlameIcon />} label="Best Week" value={bestWeek} color="text-orange-400" />
                 <StatCard icon={<StarIcon />} label="Team MVP" value={teamMVP} color="text-yellow-400" />
                 <StatCard icon={<TrophyIcon />} label="Current Rank" value={rank} color="text-cyan-400" />
@@ -56,4 +55,10 @@ const PerformanceMetricsWidget: React.FC = () => {
     );
 };
 
-export default PerformanceMetricsWidget;
+const PerformanceMetricsWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PerformanceMetricsWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PerformanceMetricsWidgetWithErrorBoundary);

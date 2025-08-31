@@ -26,7 +26,6 @@ export const WeeklyRecapVideoView: React.FC = () => {
             setScript(cachedScript);
             setIsLoading(false);
             return;
-        }
 
         setIsLoading(true);
         setError(null);
@@ -37,7 +36,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                     dispatch({ type: 'SET_WEEKLY_RECAP_SCRIPT', payload: { key: scriptCacheKey, script: data } });
                 } else {
                     setError("The Oracle could not produce a video script for this week.");
-                }
+
             })
             .catch(() => setError("An error occurred while consulting the Oracle."))
             .finally(() => setIsLoading(false));
@@ -46,7 +45,6 @@ export const WeeklyRecapVideoView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="No active league found." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -56,7 +54,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                 {script && <RecapVideoPlayer script={script} league={league} />}
             </div>
             <button
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })}
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' }}
                 className="glass-button mt-6"
             >
                 Back to Report

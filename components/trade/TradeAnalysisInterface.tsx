@@ -3,7 +3,8 @@
  * Clean implementation with trade builder and analysis view
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     ArrowRightLeftIcon, 
@@ -19,6 +20,7 @@ import { Player } from '../../types';
 interface SimpleTradeProposal {
     fromPlayers: Player[];
     toPlayers: Player[];
+
 }
 
 interface SimpleTradeAnalysis {
@@ -29,11 +31,10 @@ interface SimpleTradeAnalysis {
     projectedValueDifference: number;
     reasoning: string[];
     warnings: string[];
-}
 
 export const TradeAnalysisInterface: React.FC<{
     className?: string;
-}> = ({ className = '' }: any) => {
+}> = ({ className = '' }) => {
     const [proposal, setProposal] = useState<SimpleTradeProposal>({
         fromPlayers: [],
         toPlayers: []
@@ -62,7 +63,7 @@ export const TradeAnalysisInterface: React.FC<{
                     lastYear: 310,
                     vorp: 85,
                     weeklyProjections: { 1: 25, 2: 22, 3: 28 }
-                }
+
             },
             { 
                 id: 2, 
@@ -80,7 +81,7 @@ export const TradeAnalysisInterface: React.FC<{
                     lastYear: 400,
                     vorp: 120,
                     weeklyProjections: { 1: 28, 2: 25, 3: 32 }
-                }
+
             },
             { 
                 id: 3, 
@@ -98,7 +99,7 @@ export const TradeAnalysisInterface: React.FC<{
                     lastYear: 320,
                     vorp: 95,
                     weeklyProjections: { 1: 22, 2: 20, 3: 25 }
-                }
+
             },
         ];
         setAvailablePlayers(mockPlayers);
@@ -110,7 +111,7 @@ export const TradeAnalysisInterface: React.FC<{
             [side === 'from' ? 'fromPlayers' : 'toPlayers']: [
                 ...prev[side === 'from' ? 'fromPlayers' : 'toPlayers'], 
                 player
-            ]
+
         }));
     }, []);
 
@@ -127,6 +128,7 @@ export const TradeAnalysisInterface: React.FC<{
 
         setIsAnalyzing(true);
         try {
+
             // Mock analysis
             await new Promise(resolve => setTimeout(resolve, 2000));
             
@@ -144,43 +146,42 @@ export const TradeAnalysisInterface: React.FC<{
                 warnings: [
                     'Slightly reduces bench depth',
                     'Minor injury risk consideration'
-                ]
+
             };
             
             setAnalysis(mockAnalysis);
             setActiveTab('analysis');
-        } catch (error) {
+    
+    } catch (error) {
         } finally {
             setIsAnalyzing(false);
-        }
+
     }, [proposal]);
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <Widget title="Trade Analysis Center" className={`bg-gray-900 ${className}`}>
-            <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-white flex items-center">
-                        <ArrowRightLeftIcon className="w-6 h-6 mr-2" />
+            <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-xl font-bold text-white flex items-center sm:px-4 md:px-6 lg:px-8">
+                        <ArrowRightLeftIcon className="w-6 h-6 mr-2 sm:px-4 md:px-6 lg:px-8" />
                         Trade Analysis Center
                     </h2>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() => setActiveTab('builder')}
-                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                activeTab === 'builder' 
-                                    ? 'bg-blue-600 text-white' 
-                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            }`}
+                            onClick={() => setActiveTab('builder')}`}
                         >
                             Builder
                         </button>
                         <button
-                            onClick={() => setActiveTab('analysis')}
-                            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                                activeTab === 'analysis' 
-                                    ? 'bg-blue-600 text-white' 
-                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            }`}
+                            onClick={() => setActiveTab('analysis')}`}
                             disabled={!analysis}
                         >
                             Analysis
@@ -196,27 +197,26 @@ export const TradeAnalysisInterface: React.FC<{
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.2 }}
-                            className="space-y-6"
+                            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 {/* From Team */}
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                                        <UsersIcon className="w-5 h-5 mr-2" />
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center sm:px-4 md:px-6 lg:px-8">
+                                        <UsersIcon className="w-5 h-5 mr-2 sm:px-4 md:px-6 lg:px-8" />
                                         Trading Away
                                     </h3>
-                                    <div className="space-y-2 mb-4">
+                                    <div className="space-y-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                                         {proposal.fromPlayers.map((player: any) => (
-                                            <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2">
+                                            <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2 sm:px-4 md:px-6 lg:px-8">
                                                 <div>
-                                                    <span className="text-white font-medium">{player.name}</span>
-                                                    <span className="text-gray-400 text-sm ml-2">{player.position} - {player.team}</span>
+                                                    <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                                    <span className="text-gray-400 text-sm ml-2 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</span>
                                                 </div>
                                                 <button
                                                     onClick={() => removePlayer(player.id, 'from')}
-                                                    className="text-red-400 hover:text-red-300"
                                                 >
-                                                    <XCircleIcon className="w-4 h-4" />
+                                                    <XCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
@@ -224,23 +224,22 @@ export const TradeAnalysisInterface: React.FC<{
                                 </div>
 
                                 {/* To Team */}
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                                        <UsersIcon className="w-5 h-5 mr-2" />
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="text-lg font-semibold text-white mb-4 flex items-center sm:px-4 md:px-6 lg:px-8">
+                                        <UsersIcon className="w-5 h-5 mr-2 sm:px-4 md:px-6 lg:px-8" />
                                         Receiving
                                     </h3>
-                                    <div className="space-y-2 mb-4">
+                                    <div className="space-y-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                                         {proposal.toPlayers.map((player: any) => (
-                                            <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2">
+                                            <div key={player.id} className="flex items-center justify-between bg-gray-700/50 rounded p-2 sm:px-4 md:px-6 lg:px-8">
                                                 <div>
-                                                    <span className="text-white font-medium">{player.name}</span>
-                                                    <span className="text-gray-400 text-sm ml-2">{player.position} - {player.team}</span>
+                                                    <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                                    <span className="text-gray-400 text-sm ml-2 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</span>
                                                 </div>
                                                 <button
                                                     onClick={() => removePlayer(player.id, 'to')}
-                                                    className="text-red-400 hover:text-red-300"
                                                 >
-                                                    <XCircleIcon className="w-4 h-4" />
+                                                    <XCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
@@ -249,26 +248,24 @@ export const TradeAnalysisInterface: React.FC<{
                             </div>
 
                             {/* Available Players */}
-                            <div className="bg-gray-800/50 rounded-lg p-4">
-                                <h3 className="text-lg font-semibold text-white mb-4">Available Players</h3>
+                            <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Available Players</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
                                     {availablePlayers.map((player: any) => (
-                                        <div key={player.id} className="bg-gray-700/50 rounded p-2 text-sm">
-                                            <div className="flex items-center justify-between">
+                                        <div key={player.id} className="bg-gray-700/50 rounded p-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                                 <div>
-                                                    <span className="text-white font-medium">{player.name}</span>
-                                                    <div className="text-gray-400">{player.position} - {player.team}</div>
+                                                    <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                                    <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</div>
                                                 </div>
-                                                <div className="flex space-x-1">
+                                                <div className="flex space-x-1 sm:px-4 md:px-6 lg:px-8">
                                                     <button
                                                         onClick={() => addPlayer(player, 'from')}
-                                                        className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs"
                                                     >
                                                         Give
                                                     </button>
                                                     <button
                                                         onClick={() => addPlayer(player, 'to')}
-                                                        className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs"
                                                     >
                                                         Get
                                                     </button>
@@ -282,20 +279,20 @@ export const TradeAnalysisInterface: React.FC<{
                             <button
                                 onClick={analyzeCurrentTrade}
                                 disabled={isAnalyzing || !proposal.fromPlayers.length || !proposal.toPlayers.length}
-                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center"
-                            >
+                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 {isAnalyzing ? (
                                     <>
                                         <motion.div
                                             animate={{ rotate: 360 }}
                                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
+                                            className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2 sm:px-4 md:px-6 lg:px-8"
                                         />
                                         Analyzing Trade...
                                     </>
                                 ) : (
                                     <>
-                                        <BarChart3Icon className="w-5 h-5 mr-2" />
+                                        <BarChart3Icon className="w-5 h-5 mr-2 sm:px-4 md:px-6 lg:px-8" />
                                         Analyze Trade
                                     </>
                                 )}
@@ -310,37 +307,37 @@ export const TradeAnalysisInterface: React.FC<{
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.2 }}
-                            className="space-y-6"
+                            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Overall Grade */}
-                            <div className="bg-gray-800/50 rounded-lg p-6 text-center">
-                                <div className="flex items-center justify-center mb-4">
-                                    <CheckCircleIcon className="w-8 h-8 text-green-400" />
+                            <div className="bg-gray-800/50 rounded-lg p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-center mb-4 sm:px-4 md:px-6 lg:px-8">
+                                    <CheckCircleIcon className="w-8 h-8 text-green-400 sm:px-4 md:px-6 lg:px-8" />
                                 </div>
-                                <div className="text-4xl font-bold mb-2 text-blue-400">
+                                <div className="text-4xl font-bold mb-2 text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                     {analysis.overallGrade}
                                 </div>
-                                <h3 className="text-xl font-semibold text-white mb-2">Trade Grade</h3>
-                                <p className="text-gray-300">Good value trade with positive team impact</p>
+                                <h3 className="text-xl font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Trade Grade</h3>
+                                <p className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Good value trade with positive team impact</p>
                             </div>
 
                             {/* Key Metrics */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h4 className="font-semibold text-white mb-2">Fairness Score</h4>
-                                    <div className="text-2xl font-bold text-yellow-400">
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Fairness Score</h4>
+                                    <div className="text-2xl font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">
                                         {analysis.fairnessScore}/100
                                     </div>
                                 </div>
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h4 className="font-semibold text-white mb-2">Current Value</h4>
-                                    <div className="text-2xl font-bold text-green-400">
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Current Value</h4>
+                                    <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                                         +{analysis.currentValueDifference}%
                                     </div>
                                 </div>
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h4 className="font-semibold text-white mb-2">Future Value</h4>
-                                    <div className="text-2xl font-bold text-green-400">
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Future Value</h4>
+                                    <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                                         +{analysis.projectedValueDifference}%
                                     </div>
                                 </div>
@@ -348,30 +345,30 @@ export const TradeAnalysisInterface: React.FC<{
 
                             {/* Reasoning and Warnings */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h4 className="font-semibold text-white mb-4 flex items-center">
-                                        <CheckCircleIcon className="w-5 h-5 text-green-400 mr-2" />
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-semibold text-white mb-4 flex items-center sm:px-4 md:px-6 lg:px-8">
+                                        <CheckCircleIcon className="w-5 h-5 text-green-400 mr-2 sm:px-4 md:px-6 lg:px-8" />
                                         Reasoning
                                     </h4>
-                                    <ul className="space-y-2">
+                                    <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {analysis.reasoning.map((reason, index) => (
-                                            <li key={`reason-${reason.slice(0, 10)}-${index}`} className="text-sm text-gray-300 flex items-start space-x-2">
-                                                <CheckCircleIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                                            <li key={`reason-${reason.slice(0, 10)}-${index}`} className="text-sm text-gray-300 flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                                <CheckCircleIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{reason}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
 
-                                <div className="bg-gray-800/50 rounded-lg p-4">
-                                    <h4 className="font-semibold text-white mb-4 flex items-center">
-                                        <AlertTriangleIcon className="w-5 h-5 text-yellow-400 mr-2" />
+                                <div className="bg-gray-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-semibold text-white mb-4 flex items-center sm:px-4 md:px-6 lg:px-8">
+                                        <AlertTriangleIcon className="w-5 h-5 text-yellow-400 mr-2 sm:px-4 md:px-6 lg:px-8" />
                                         Warnings
                                     </h4>
-                                    <ul className="space-y-2">
+                                    <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {analysis.warnings.map((warning, index) => (
-                                            <li key={`warning-${warning.slice(0, 10)}-${index}`} className="text-sm text-yellow-300 flex items-start space-x-2">
-                                                <AlertTriangleIcon className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+                                            <li key={`warning-${warning.slice(0, 10)}-${index}`} className="text-sm text-yellow-300 flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                                <AlertTriangleIcon className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{warning}</span>
                                             </li>
                                         ))}
@@ -380,8 +377,8 @@ export const TradeAnalysisInterface: React.FC<{
                             </div>
 
                             {/* Action Button */}
-                            <div className="text-center">
-                                <button className="px-8 py-3 rounded-lg font-semibold transition-colors bg-green-600 hover:bg-green-700 text-white">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <button className="px-8 py-3 rounded-lg font-semibold transition-colors bg-green-600 hover:bg-green-700 text-white sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                     Accept Trade
                                 </button>
                             </div>
@@ -393,4 +390,10 @@ export const TradeAnalysisInterface: React.FC<{
     );
 };
 
-export default TradeAnalysisInterface;
+const TradeAnalysisInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeAnalysisInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeAnalysisInterfaceWithErrorBoundary);

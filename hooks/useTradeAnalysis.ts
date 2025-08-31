@@ -112,6 +112,7 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
     }));
 
     try {
+
       console.log(`🔍 Analyzing trade proposal: ${proposal.id}`);
       
       const analysis = await tradeAnalysisService.analyzeTradeProposal(
@@ -139,55 +140,8 @@ export function useTradeAnalysis(options: UseTradeAnalysisOptions = {}) {
       return analysis;
 
     } catch (error) {
-      console.error('❌ Error analyzing trade:', error);
-      setState(prev => ({
-        ...prev,
-        isAnalyzing: false,
-        error: error instanceof Error ? error.message : 'Failed to analyze trade',
-        lastUpdated: new Date().toISOString()
-      }));
-      return null;
-    }
-  }, [cacheTimeout]);
-
-  /**
-   * Clear current analysis
-   */
-  const clearAnalysis = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      currentAnalysis: null,
-      error: null
-    }));
-  }, []);
-
-  /**
-   * Clear analysis history
-   */
-  const clearHistory = useCallback(() => {
-    setState(prev => ({
-      ...prev,
-      analysisHistory: []
-    }));
-  }, []);
-
-  /**
-   * Get analysis from history
-   */
-  const getAnalysisFromHistory = useCallback((tradeId: string): TradeAnalysis | null => {
-    return state.analysisHistory.find((analysis: any) => analysis.tradeId === tradeId) || null;
-  }, [state.analysisHistory]);
-
-  /**
-   * Refresh current analysis
-   */
-  const refreshAnalysis = useCallback(async (
-    proposal: TradeProposal,
-    proposerRoster: FantasyRoster,
-    receiverRoster: FantasyRoster
-  ): Promise<TradeAnalysis | null> => {
-    // Clear cache for this proposal
-    const cacheKey = `${proposal.id}_${proposal.proposedAt}`;
+        console.error(error);
+    `${proposal.id}_${proposal.proposedAt}`;
     analysisCache.current.delete(cacheKey);
     
     return analyzeTradeProposal(proposal, proposerRoster, receiverRoster);
@@ -264,14 +218,17 @@ export function useTradeComparison() {
       // Analyze each proposal
       for (const proposal of state.proposals) {
         try {
+
           const analysis = await tradeAnalysisService.analyzeTradeProposal(
             proposal,
             proposerRoster,
             receiverRoster
           );
           analyses.set(proposal.id, analysis);
-        } catch (error) {
-          console.error(`Error analyzing trade ${proposal.id}:`, error);
+        
+    } catch (error) {
+        console.error(error);
+    `Error analyzing trade ${proposal.id}:`, error);
         }
       }
 
@@ -294,68 +251,7 @@ export function useTradeComparison() {
         bestTrade
       }));
 
-    } catch (error) {
-      console.error('Error comparing trades:', error);
-      setError(error instanceof Error ? error.message : 'Failed to compare trades');
-    } finally {
-      setIsComparing(false);
-    }
-  }, [state.proposals]);
-
-  /**
-   * Clear all comparisons
-   */
-  const clearComparisons = useCallback(() => {
-    setState({
-      proposals: [],
-      analyses: new Map(),
-      rankings: [],
-      bestTrade: null
-    });
-    setError(null);
-  }, []);
-
-  /**
-   * Get analysis for specific trade
-   */
-  const getTradeAnalysis = useCallback((tradeId: string): TradeAnalysis | null => {
-    return state.analyses.get(tradeId) || null;
-  }, [state.analyses]);
-
-  return {
-    ...state,
-    isComparing,
-    error,
-    addTradeForComparison,
-    removeTradeFromComparison,
-    compareAllTrades,
-    clearComparisons,
-    getTradeAnalysis
-  };
-}
-
-/**
- * Hook for analyzing a single trade with specific players
- */
-export function useSingleTradeAnalysis() {
-  const [analysis, setAnalysis] = useState<TradeAnalysis | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const analyzeTradeByPlayers = useCallback(async (
-    givingPlayerIds: string[],
-    receivingPlayerIds: string[],
-    proposerRoster: FantasyRoster,
-    receiverRoster: FantasyRoster,
-    metadata?: TradeProposal['metadata']
-  ): Promise<TradeAnalysis | null> => {
-    setIsAnalyzing(true);
-    setError(null);
-
-    try {
-      // Create a trade proposal from the player IDs
-      const proposal: TradeProposal = {
-        id: `temp_${Date.now()}`,
+    `temp_${Date.now()}`,
         proposedBy: 'user',
         proposedTo: 'opponent',
         givingPlayers: givingPlayerIds,
@@ -424,6 +320,7 @@ export function useTradeRecommendations() {
     setIsGenerating(true);
 
     try {
+
       // Mock implementation - would analyze roster and generate recommendations
       await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -450,6 +347,8 @@ export function useTradeRecommendations() {
         ]
       });
 
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Error generating recommendations:', error);
     } finally {

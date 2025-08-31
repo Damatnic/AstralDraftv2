@@ -7,9 +7,10 @@ interface AvatarProps {
   className?: string;
   alt?: string;
   generatedAvatarUrl?: string;
+
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }: any) => {
+export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }) => {
   const isImageUrl = generatedAvatarUrl || (avatar && (avatar.startsWith('data:image') || avatar.startsWith('https')));
 
   if (isImageUrl) {
@@ -22,7 +23,6 @@ export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team a
         loading="lazy"
       />
     );
-  }
 
   // It's an emoji
   return (

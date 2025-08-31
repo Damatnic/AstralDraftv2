@@ -3,7 +3,8 @@
  * Creates 14-week regular season + 3-week playoff schedule
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Team } from '../../types';
@@ -16,17 +17,17 @@ interface Matchup {
   team2Score?: number;
   isPlayoff?: boolean;
   isChampionship?: boolean;
+
 }
 
 interface ScheduleGeneratorProps {
   onScheduleGenerated?: (schedule: Matchup[]) => void;
   isCommissioner?: boolean;
-}
 
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   onScheduleGenerated,
   isCommissioner = false
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const [schedule, setSchedule] = useState<Matchup[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -59,11 +60,9 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
           team2Id,
           isPlayoff: false
         });
-      }
-      
+
       matchups.push(...weekMatchups);
-    }
-    
+
     return matchups;
   };
 
@@ -85,7 +84,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         team1Id: teams[3]?.id || 4, // 4th seed
         team2Id: teams[4]?.id || 5, // 5th seed
         isPlayoff: true
-      }
+
     );
     
     // Week 16: Semifinals
@@ -102,7 +101,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         team1Id: teams[1]?.id || 2, // 2nd seed
         team2Id: teams[4]?.id || 5, // Winner of 4v5 (placeholder)
         isPlayoff: true
-      }
+
     );
     
     // Week 17: Championship
@@ -118,6 +117,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   };
 
   const handleGenerateSchedule = async () => {
+    try {
     if (!isCommissioner) return;
     
     setIsGenerating(true);
@@ -139,7 +139,11 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
       payload: {
         message: 'Season schedule generated successfully!',
         type: 'SUCCESS'
-      }
+
+    } catch (error) {
+      console.error('Error in handleGenerateSchedule:', error);
+
+
     });
   };
 
@@ -163,13 +167,21 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
     return 'Season';
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h3 className="text-xl font-bold text-white">Season Schedule</h3>
-          <p className="text-slate-400">
+          <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Season Schedule</h3>
+          <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
             14-week regular season + 3-week playoffs
           </p>
         </div>
@@ -183,10 +195,10 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                 ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
-          >
+           aria-label="Action button">
             {isGenerating ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                 Generating...
               </div>
             ) : (
@@ -198,47 +210,45 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
 
       {schedule.length === 0 ? (
         /* No Schedule Generated */
-        <div className="bg-slate-800/50 rounded-xl p-8 border border-slate-700 text-center">
-          <div className="text-4xl mb-4">📅</div>
-          <h4 className="text-lg font-semibold text-white mb-2">No Schedule Generated</h4>
-          <p className="text-slate-400 mb-4">
+        <div className="bg-slate-800/50 rounded-xl p-8 border border-slate-700 text-center sm:px-4 md:px-6 lg:px-8">
+          <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">📅</div>
+          <h4 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">No Schedule Generated</h4>
+          <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">
             {isCommissioner 
               ? 'Generate the season schedule to begin matchups'
               : 'The commissioner will generate the schedule soon'
-            }
+
           </p>
           {!isCommissioner && (
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 sm:px-4 md:px-6 lg:px-8">
               Schedule will include 14 regular season weeks + 3 playoff weeks
             </p>
           )}
         </div>
       ) : (
         /* Schedule Display */
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
           {/* Week Navigation */}
-          <div className="flex items-center justify-between bg-slate-800/50 rounded-lg p-4">
+          <div className="flex items-center justify-between bg-slate-800/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
             <button
               onClick={() => setCurrentWeek(Math.max(1, currentWeek - 1))}
-              disabled={currentWeek === 1}
-              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded transition-colors"
+              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded transition-colors sm:px-4 md:px-6 lg:px-8"
             >
               ← Previous
             </button>
             
-            <div className="text-center">
-              <h4 className="text-lg font-bold text-white">
+            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+              <h4 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">
                 Week {currentWeek} - {getWeekType(currentWeek)}
               </h4>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                 {currentWeek <= 14 ? 'Regular Season' : 'Playoffs'}
               </p>
             </div>
             
             <button
               onClick={() => setCurrentWeek(Math.min(17, currentWeek + 1))}
-              disabled={currentWeek === 17}
-              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded transition-colors"
+              className="px-3 py-1 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded transition-colors sm:px-4 md:px-6 lg:px-8"
             >
               Next →
             </button>
@@ -261,54 +271,54 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                 }`}
               >
                 {matchup.isChampionship && (
-                  <div className="text-center mb-3">
-                    <span className="px-2 py-1 bg-yellow-600 text-white text-xs font-bold rounded">
+                  <div className="text-center mb-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="px-2 py-1 bg-yellow-600 text-white text-xs font-bold rounded sm:px-4 md:px-6 lg:px-8">
                       🏆 CHAMPIONSHIP
                     </span>
                   </div>
                 )}
                 
                 {matchup.isPlayoff && !matchup.isChampionship && (
-                  <div className="text-center mb-3">
-                    <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded">
+                  <div className="text-center mb-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="px-2 py-1 bg-blue-600 text-white text-xs font-bold rounded sm:px-4 md:px-6 lg:px-8">
                       🏈 PLAYOFF
                     </span>
                   </div>
                 )}
 
-                <div className="space-y-3">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                   {/* Team 1 */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{getTeamAvatar(matchup.team1Id)}</span>
-                      <span className="text-white font-medium">
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <span className="text-lg sm:px-4 md:px-6 lg:px-8">{getTeamAvatar(matchup.team1Id)}</span>
+                      <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                         {getTeamName(matchup.team1Id)}
                       </span>
                     </div>
-                    <div className="text-white font-bold">
+                    <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">
                       {matchup.team1Score || '-'}
                     </div>
                   </div>
 
-                  <div className="text-center text-slate-400 text-sm">vs</div>
+                  <div className="text-center text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">vs</div>
 
                   {/* Team 2 */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{getTeamAvatar(matchup.team2Id)}</span>
-                      <span className="text-white font-medium">
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <span className="text-lg sm:px-4 md:px-6 lg:px-8">{getTeamAvatar(matchup.team2Id)}</span>
+                      <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                         {getTeamName(matchup.team2Id)}
                       </span>
                     </div>
-                    <div className="text-white font-bold">
+                    <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">
                       {matchup.team2Score || '-'}
                     </div>
                   </div>
                 </div>
 
                 {/* Matchup Status */}
-                <div className="mt-3 pt-3 border-t border-slate-600 text-center">
-                  <span className="text-xs text-slate-400">
+                <div className="mt-3 pt-3 border-t border-slate-600 text-center sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                     {matchup.team1Score && matchup.team2Score 
                       ? 'Final' 
                       : currentWeek === matchup.week 
@@ -316,7 +326,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                       : currentWeek > matchup.week 
                       ? 'Completed' 
                       : 'Upcoming'
-                    }
+
                   </span>
                 </div>
               </motion.div>
@@ -324,24 +334,24 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
           </div>
 
           {/* Schedule Summary */}
-          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-            <h4 className="font-semibold text-white mb-3">Season Format</h4>
+          <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Season Format</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div className="text-center">
-                <div className="text-white font-bold">14</div>
-                <div className="text-slate-400">Regular Season</div>
+              <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">14</div>
+                <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Regular Season</div>
               </div>
-              <div className="text-center">
-                <div className="text-white font-bold">6</div>
-                <div className="text-slate-400">Playoff Teams</div>
+              <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">6</div>
+                <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Playoff Teams</div>
               </div>
-              <div className="text-center">
-                <div className="text-white font-bold">3</div>
-                <div className="text-slate-400">Playoff Weeks</div>
+              <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">3</div>
+                <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Playoff Weeks</div>
               </div>
-              <div className="text-center">
-                <div className="text-white font-bold">17</div>
-                <div className="text-slate-400">Total Weeks</div>
+              <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                <div className="text-white font-bold sm:px-4 md:px-6 lg:px-8">17</div>
+                <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Total Weeks</div>
               </div>
             </div>
           </div>
@@ -351,4 +361,10 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   );
 };
 
-export default ScheduleGenerator;
+const ScheduleGeneratorWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ScheduleGenerator {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ScheduleGeneratorWithErrorBoundary);

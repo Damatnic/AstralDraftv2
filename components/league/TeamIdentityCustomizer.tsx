@@ -2,7 +2,8 @@
  * Team Identity & Customization System - Express team personality and style
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Palette, Crown, Music, Shirt, Image, Save, RefreshCw, Eye, Volume2 } from 'lucide-react';
 
@@ -40,13 +41,13 @@ interface TeamIdentity {
     background: string;
     animation: string;
   };
-}
 
 interface TeamIdentityCustomizerProps {
   teamId: string;
   currentIdentity?: TeamIdentity;
   onSave: (identity: TeamIdentity) => void;
   onPreview: (identity: TeamIdentity) => void;
+
 }
 
 const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
@@ -87,7 +88,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       text: 'CHAMPIONS',
       background: 'gradient',
       animation: 'pulse'
-    }
+
   });
 
   const [activeTab, setActiveTab] = useState<'colors' | 'logo' | 'audio' | 'celebration' | 'jersey' | 'personality'>('colors');
@@ -119,7 +120,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       { name: 'Corporate', primary: '#1f2937', secondary: '#111827', accent: '#3b82f6' },
       { name: 'Executive', primary: '#374151', secondary: '#1f2937', accent: '#10b981' },
       { name: 'Elite', primary: '#581c87', secondary: '#4c1d95', accent: '#c4b5fd' }
-    ]
+
   };
 
   // Logo options
@@ -182,32 +183,31 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       teamPersonality: {
         ...identity.teamPersonality,
         traits: newTraits
-      }
+
     });
   };
 
   const renderColorTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Color Presets */}
       <div>
-        <h4 className="font-semibold text-white mb-3">Quick Presets</h4>
-        <div className="space-y-3">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Quick Presets</h4>
+        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {Object.entries(colorPresets).map(([style, presets]) => (
-            <div key={style} className="space-y-2">
-              <div className="text-sm text-gray-400 capitalize">{style} Style</div>
-              <div className="grid grid-cols-3 gap-2">
+            <div key={style} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="text-sm text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{style} Style</div>
+              <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                 {presets.map(preset => (
                   <button
                     key={preset.name}
                     onClick={() => handleColorPreset(preset)}
-                    className="p-3 rounded-lg border border-gray-600 hover:border-gray-500 transition-colors"
                   >
-                    <div className="flex gap-1 mb-2">
-                      <div className="w-4 h-4 rounded" style={{ backgroundColor: preset.primary }}></div>
-                      <div className="w-4 h-4 rounded" style={{ backgroundColor: preset.secondary }}></div>
-                      <div className="w-4 h-4 rounded" style={{ backgroundColor: preset.accent }}></div>
+                    <div className="flex gap-1 mb-2 sm:px-4 md:px-6 lg:px-8">
+                      <div className="w-4 h-4 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: preset.primary }}></div>
+                      <div className="w-4 h-4 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: preset.secondary }}></div>
+                      <div className="w-4 h-4 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: preset.accent }}></div>
                     </div>
-                    <div className="text-xs text-gray-300">{preset.name}</div>
+                    <div className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">{preset.name}</div>
                   </button>
                 ))}
               </div>
@@ -218,33 +218,33 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
 
       {/* Custom Colors */}
       <div>
-        <h4 className="font-semibold text-white mb-3">Custom Colors</h4>
-        <div className="grid grid-cols-3 gap-4">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Custom Colors</h4>
+        <div className="grid grid-cols-3 gap-4 sm:px-4 md:px-6 lg:px-8">
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Primary</label>
+            <label className="block text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Primary</label>
             <input
               type="color"
               value={identity.primaryColor}
-              onChange={(e) => updateIdentity({ primaryColor: e.target.value })}
-              className="w-full h-10 rounded border border-gray-600"
+              onChange={(e) => updateIdentity({ primaryColor: e.target.value }}
+              className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Secondary</label>
+            <label className="block text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Secondary</label>
             <input
               type="color"
               value={identity.secondaryColor}
-              onChange={(e) => updateIdentity({ secondaryColor: e.target.value })}
-              className="w-full h-10 rounded border border-gray-600"
+              onChange={(e) => updateIdentity({ secondaryColor: e.target.value }}
+              className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Accent</label>
+            <label className="block text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Accent</label>
             <input
               type="color"
               value={identity.accentColor}
-              onChange={(e) => updateIdentity({ accentColor: e.target.value })}
-              className="w-full h-10 rounded border border-gray-600"
+              onChange={(e) => updateIdentity({ accentColor: e.target.value }}
+              className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
         </div>
@@ -253,14 +253,14 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   );
 
   const renderLogoTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       <div>
-        <h4 className="font-semibold text-white mb-3">Team Logo</h4>
-        <div className="grid grid-cols-8 gap-2">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Logo</h4>
+        <div className="grid grid-cols-8 gap-2 sm:px-4 md:px-6 lg:px-8">
           {logoEmojis.map(emoji => (
             <button
               key={emoji}
-              onClick={() => updateIdentity({ logo: emoji, logoType: 'emoji' })}
+              onClick={() => updateIdentity({ logo: emoji, logoType: 'emoji' }}
               className={`p-3 text-2xl rounded-lg border transition-colors ${
                 identity.logo === emoji
                   ? 'border-primary-500 bg-primary-500/20'
@@ -274,70 +274,70 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       </div>
 
       <div>
-        <h4 className="font-semibold text-white mb-3">Team Motto</h4>
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Motto</h4>
         <input
           type="text"
           value={identity.motto}
-          onChange={(e) => updateIdentity({ motto: e.target.value })}
+          onChange={(e) => updateIdentity({ motto: e.target.value }}
           placeholder="Enter your team motto..."
-          className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400"
+          className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
           maxLength={50}
         />
-        <div className="text-xs text-gray-500 mt-1">{identity.motto.length}/50 characters</div>
+        <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">{identity.motto.length}/50 characters</div>
       </div>
     </div>
   );
 
   const renderAudioTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       <div>
-        <h4 className="font-semibold text-white mb-3">Walk-up Song</h4>
-        <div className="space-y-2 max-h-60 overflow-y-auto">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Walk-up Song</h4>
+        <div className="space-y-2 max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {walkupSongs.map(song => (
             <button
               key={`${song.name}-${song.artist}`}
-              onClick={() => updateIdentity({ walkupSong: song })}
+              onClick={() => updateIdentity({ walkupSong: song }}
               className={`w-full p-3 rounded-lg border transition-colors text-left ${
                 identity.walkupSong.name === song.name
                   ? 'border-primary-500 bg-primary-500/20'
                   : 'border-gray-600 hover:border-gray-500'
               }`}
             >
-              <div className="font-semibold text-white">{song.name}</div>
-              <div className="text-sm text-gray-400">{song.artist} • {song.duration}s</div>
+              <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{song.name}</div>
+              <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{song.artist} • {song.duration}s</div>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="p-4 bg-dark-700 rounded-lg">
-        <div className="flex items-center gap-2 mb-2">
-          <Volume2 className="w-4 h-4 text-primary-400" />
-          <span className="font-semibold text-primary-400">Selected Song</span>
+      <div className="p-4 bg-dark-700 rounded-lg sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+          <Volume2 className="w-4 h-4 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
+          <span className="font-semibold text-primary-400 sm:px-4 md:px-6 lg:px-8">Selected Song</span>
         </div>
-        <div className="text-white">{identity.walkupSong.name}</div>
-        <div className="text-sm text-gray-400">{identity.walkupSong.artist}</div>
+        <div className="text-white sm:px-4 md:px-6 lg:px-8">{identity.walkupSong.name}</div>
+        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{identity.walkupSong.artist}</div>
       </div>
     </div>
   );
 
   const renderCelebrationTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       <div>
-        <h4 className="font-semibold text-white mb-3">Victory Celebration</h4>
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Victory Celebration</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {celebrations.map(celebration => (
             <button
               key={celebration.name}
-              onClick={() => updateIdentity({ endZoneCelebration: celebration })}
+              onClick={() => updateIdentity({ endZoneCelebration: celebration }}
               className={`p-4 rounded-lg border transition-colors text-left ${
                 identity.endZoneCelebration.name === celebration.name
                   ? 'border-primary-500 bg-primary-500/20'
                   : 'border-gray-600 hover:border-gray-500'
               }`}
             >
-              <div className="font-semibold text-white">{celebration.name}</div>
-              <div className="text-sm text-gray-400">
+              <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{celebration.name}</div>
+              <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                 {celebration.duration / 1000}s • {celebration.particles ? 'With particles' : 'Clean animation'}
               </div>
             </button>
@@ -347,15 +347,14 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
 
       {/* Custom Banner */}
       <div>
-        <h4 className="font-semibold text-white mb-3">Victory Banner</h4>
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Victory Banner</h4>
         <input
           type="text"
           value={identity.customBanner.text}
           onChange={(e) => updateIdentity({ 
-            customBanner: { ...identity.customBanner, text: e.target.value }
-          })}
+            customBanner: { ...identity.customBanner, text: e.target.value }})}
           placeholder="Victory message..."
-          className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400"
+          className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
           maxLength={20}
         />
       </div>
@@ -363,18 +362,18 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   );
 
   const renderPersonalityTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       <div>
-        <h4 className="font-semibold text-white mb-3">Team Personality</h4>
-        <div className="grid grid-cols-5 gap-2">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Personality</h4>
+        <div className="grid grid-cols-5 gap-2 sm:px-4 md:px-6 lg:px-8">
           {(Object.keys(personalityTraits) as Array<keyof typeof personalityTraits>).map(style => (
             <button
               key={style}
-              onClick={() => updateIdentity({ 
+              onClick={() = aria-label="Action button"> updateIdentity({ 
                 teamPersonality: { 
                   style, 
                   traits: personalityTraits[style].slice(0, 3) 
-                }
+
               })}
               className={`p-3 rounded-lg border transition-colors ${
                 identity.teamPersonality.style === style
@@ -382,27 +381,22 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
                   : 'border-gray-600 hover:border-gray-500'
               }`}
             >
-              <div className="text-sm font-semibold text-white capitalize">{style}</div>
+              <div className="text-sm font-semibold text-white capitalize sm:px-4 md:px-6 lg:px-8">{style}</div>
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <h4 className="font-semibold text-white mb-3">
+        <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">
           Team Traits 
-          <span className="text-sm text-gray-400 ml-2">({identity.teamPersonality.traits.length}/5)</span>
+          <span className="text-sm text-gray-400 ml-2 sm:px-4 md:px-6 lg:px-8">({identity.teamPersonality.traits.length}/5)</span>
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {personalityTraits[identity.teamPersonality.style].map(trait => (
             <button
               key={trait}
-              onClick={() => toggleTrait(trait)}
-              className={`p-2 rounded-lg border transition-colors text-sm ${
-                identity.teamPersonality.traits.includes(trait)
-                  ? 'border-primary-500 bg-primary-500/20 text-primary-300'
-                  : 'border-gray-600 hover:border-gray-500 text-gray-300'
-              }`}
+              onClick={() => toggleTrait(trait)}`}
             >
               {trait}
             </button>
@@ -412,35 +406,37 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
     </div>
   );
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
-    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700">
+    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Palette className="w-6 h-6 text-purple-400" />
+      <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+          <Palette className="w-6 h-6 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
           <div>
-            <h2 className="text-2xl font-bold text-white">Team Identity Studio</h2>
-            <p className="text-gray-400">Express your team's unique personality</p>
+            <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Team Identity Studio</h2>
+            <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Express your team's unique personality</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <button
-            onClick={() => setPreviewMode(!previewMode)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              previewMode 
-                ? 'bg-green-600 hover:bg-green-500 text-white' 
-                : 'bg-dark-700 hover:bg-dark-600 text-gray-300'
-            }`}
+            onClick={() => setPreviewMode(!previewMode)}`}
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             {previewMode ? 'Exit Preview' : 'Preview'}
           </button>
           <button
             onClick={() => onSave(identity)}
-            className="flex items-center gap-2 bg-primary-600 hover:bg-primary-500 text-white px-4 py-2 rounded-lg transition-colors"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             Save Changes
           </button>
         </div>
@@ -450,7 +446,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         {/* Customization Panel */}
         <div className="lg:col-span-2">
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6 sm:px-4 md:px-6 lg:px-8">
             {[
               { id: 'colors', label: 'Colors', icon: Palette },
               { id: 'logo', label: 'Logo & Motto', icon: Crown },
@@ -460,21 +456,16 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'bg-primary-600 text-white'
-                    : 'bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600'
-                }`}
+                onClick={() => setActiveTab(tab.id as any)}`}
               >
-                <tab.icon className="w-4 h-4" />
+                <tab.icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                 {tab.label}
               </button>
             ))}
           </div>
 
           {/* Tab Content */}
-          <div className="bg-dark-700 rounded-lg p-6">
+          <div className="bg-dark-700 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
             {activeTab === 'colors' && renderColorTab()}
             {activeTab === 'logo' && renderLogoTab()}
             {activeTab === 'audio' && renderAudioTab()}
@@ -484,31 +475,31 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         </div>
 
         {/* Live Preview */}
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {/* Team Card Preview */}
           <div 
-            className="p-6 rounded-xl border-2 transition-all"
+            className="p-6 rounded-xl border-2 transition-all sm:px-4 md:px-6 lg:px-8"
             style={{
               backgroundColor: `${identity.primaryColor}10`,
               borderColor: identity.primaryColor,
               background: `linear-gradient(135deg, ${identity.primaryColor}20, ${identity.secondaryColor}20)`
             }}
           >
-            <div className="text-center space-y-3">
-              <div className="text-4xl">{identity.logo}</div>
+            <div className="text-center space-y-3 sm:px-4 md:px-6 lg:px-8">
+              <div className="text-4xl sm:px-4 md:px-6 lg:px-8">{identity.logo}</div>
               <div>
-                <h3 className="text-xl font-bold text-white">{identity.teamName || 'Team Name'}</h3>
-                <p className="text-sm italic" style={{ color: identity.accentColor }}>
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{identity.teamName || 'Team Name'}</h3>
+                <p className="text-sm italic sm:px-4 md:px-6 lg:px-8" style={{ color: identity.accentColor }}>
                   "{identity.motto || 'Your motto here'}"
                 </p>
               </div>
               
               {/* Team Traits */}
-              <div className="flex flex-wrap gap-1 justify-center">
+              <div className="flex flex-wrap gap-1 justify-center sm:px-4 md:px-6 lg:px-8">
                 {identity.teamPersonality.traits.slice(0, 3).map(trait => (
                   <span 
                     key={trait}
-                    className="px-2 py-1 rounded-full text-xs font-semibold"
+                    className="px-2 py-1 rounded-full text-xs font-semibold sm:px-4 md:px-6 lg:px-8"
                     style={{ 
                       backgroundColor: `${identity.accentColor}30`,
                       color: identity.accentColor 
@@ -522,41 +513,41 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           </div>
 
           {/* Color Palette */}
-          <div className="bg-dark-700 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">Color Palette</h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded" style={{ backgroundColor: identity.primaryColor }}></div>
-                <span className="text-sm text-gray-300">Primary: {identity.primaryColor}</span>
+          <div className="bg-dark-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Color Palette</h4>
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-6 h-6 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: identity.primaryColor }}></div>
+                <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Primary: {identity.primaryColor}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded" style={{ backgroundColor: identity.secondaryColor }}></div>
-                <span className="text-sm text-gray-300">Secondary: {identity.secondaryColor}</span>
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-6 h-6 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: identity.secondaryColor }}></div>
+                <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Secondary: {identity.secondaryColor}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 rounded" style={{ backgroundColor: identity.accentColor }}></div>
-                <span className="text-sm text-gray-300">Accent: {identity.accentColor}</span>
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-6 h-6 rounded sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: identity.accentColor }}></div>
+                <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Accent: {identity.accentColor}</span>
               </div>
             </div>
           </div>
 
           {/* Audio Preview */}
-          <div className="bg-dark-700 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">Walk-up Song</h4>
-            <div className="space-y-1">
-              <div className="text-sm font-medium text-white">{identity.walkupSong.name}</div>
-              <div className="text-xs text-gray-400">{identity.walkupSong.artist}</div>
-              <div className="text-xs text-gray-500">{identity.walkupSong.duration} seconds</div>
+          <div className="bg-dark-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Walk-up Song</h4>
+            <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
+              <div className="text-sm font-medium text-white sm:px-4 md:px-6 lg:px-8">{identity.walkupSong.name}</div>
+              <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{identity.walkupSong.artist}</div>
+              <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{identity.walkupSong.duration} seconds</div>
             </div>
           </div>
 
           {/* Celebration Preview */}
-          <div className="bg-dark-700 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">Victory Setup</h4>
-            <div className="space-y-2 text-sm">
-              <div className="text-white">Celebration: {identity.endZoneCelebration.name}</div>
-              <div className="text-gray-400">Duration: {identity.endZoneCelebration.duration / 1000}s</div>
-              <div className="text-gray-400">Banner: "{identity.customBanner.text || 'VICTORY!'}"</div>
+          <div className="bg-dark-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Victory Setup</h4>
+            <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+              <div className="text-white sm:px-4 md:px-6 lg:px-8">Celebration: {identity.endZoneCelebration.name}</div>
+              <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Duration: {identity.endZoneCelebration.duration / 1000}s</div>
+              <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Banner: "{identity.customBanner.text || 'VICTORY!'}"</div>
             </div>
           </div>
         </div>
@@ -569,25 +560,25 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[1100]"
+            className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[1100] sm:px-4 md:px-6 lg:px-8"
           >
             <motion.div
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
-              className="text-center space-y-6"
+              className="text-center space-y-6 sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="text-8xl animate-bounce">{identity.logo}</div>
+              <div className="text-8xl animate-bounce sm:px-4 md:px-6 lg:px-8">{identity.logo}</div>
               <div>
-                <h1 className="text-6xl font-bold text-white mb-4">{identity.teamName || 'TEAM NAME'}</h1>
+                <h1 className="text-6xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">{identity.teamName || 'TEAM NAME'}</h1>
                 <p 
-                  className="text-2xl font-bold mb-6"
+                  className="text-2xl font-bold mb-6 sm:px-4 md:px-6 lg:px-8"
                   style={{ color: identity.accentColor }}
                 >
                   "{identity.motto || 'YOUR MOTTO HERE'}"
                 </p>
                 <div 
-                  className="text-4xl font-bold px-8 py-4 rounded-lg animate-pulse"
+                  className="text-4xl font-bold px-8 py-4 rounded-lg animate-pulse sm:px-4 md:px-6 lg:px-8"
                   style={{ 
                     backgroundColor: `${identity.primaryColor}30`,
                     border: `2px solid ${identity.accentColor}`
@@ -599,7 +590,6 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
               
               <button
                 onClick={() => setPreviewMode(false)}
-                className="mt-8 px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
               >
                 Exit Preview
               </button>
@@ -611,4 +601,10 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   );
 };
 
-export default TeamIdentityCustomizer;
+const TeamIdentityCustomizerWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TeamIdentityCustomizer {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TeamIdentityCustomizerWithErrorBoundary);

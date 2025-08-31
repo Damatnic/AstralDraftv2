@@ -9,7 +9,6 @@ interface PremiumCardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
   hover?: boolean;
   pulse?: boolean;
   className?: string;
-}
 
 export const PremiumCard: React.FC<PremiumCardProps> = ({
   children,
@@ -88,28 +87,28 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
     >
       {/* Premium gradient overlay */}
       {variant === 'elevated' && (
-        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5" />
-          <div className="absolute top-0 left-0 w-40 h-40 bg-primary-500/10 rounded-full filter blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-40 h-40 bg-secondary-500/10 rounded-full filter blur-3xl" />
+        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none sm:px-4 md:px-6 lg:px-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 sm:px-4 md:px-6 lg:px-8" />
+          <div className="absolute top-0 left-0 w-40 h-40 bg-primary-500/10 rounded-full filter blur-3xl sm:px-4 md:px-6 lg:px-8" />
+          <div className="absolute bottom-0 right-0 w-40 h-40 bg-secondary-500/10 rounded-full filter blur-3xl sm:px-4 md:px-6 lg:px-8" />
         </div>
       )}
 
       {/* Animated border gradient for player and team cards */}
       {(variant === 'player' || variant === 'team') && (
-        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute inset-[-2px] rounded-2xl bg-gradient-to-r from-primary-500/20 via-secondary-500/20 to-primary-500/20 animate-gradient" />
-          <div className="absolute inset-0 rounded-2xl bg-dark-900" />
+        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none sm:px-4 md:px-6 lg:px-8">
+          <div className="absolute inset-[-2px] rounded-2xl bg-gradient-to-r from-primary-500/20 via-secondary-500/20 to-primary-500/20 animate-gradient sm:px-4 md:px-6 lg:px-8" />
+          <div className="absolute inset-0 rounded-2xl bg-dark-900 sm:px-4 md:px-6 lg:px-8" />
         </div>
       )}
 
       {/* Content wrapper */}
-      <div className="relative z-10">
+      <div className="relative z-10 sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
 
       {/* Noise texture overlay for premium feel */}
-      <div className="absolute inset-0 rounded-2xl pointer-events-none opacity-[0.015]">
+      <div className="absolute inset-0 rounded-2xl pointer-events-none opacity-[0.015] sm:px-4 md:px-6 lg:px-8">
         <svg width="100%" height="100%">
           <filter id="noise">
             <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" />
@@ -189,8 +188,8 @@ export const StatCard: React.FC<{
 
   return (
     <PremiumCard variant="stat" padding="md" hover glowColor={trend === 'up' ? 'success' : trend === 'down' ? 'danger' : 'none'}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
+      <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
           <p className="text-xs sm:text-sm text-gray-400 font-medium uppercase tracking-wider">
             {title}
           </p>
@@ -199,8 +198,8 @@ export const StatCard: React.FC<{
           </p>
           {change !== undefined && (
             <div className={`flex items-center gap-1 mt-2 ${trendColors[trend]}`}>
-              <span className="text-lg">{trendIcons[trend]}</span>
-              <span className="text-sm font-semibold">{Math.abs(change)}%</span>
+              <span className="text-lg sm:px-4 md:px-6 lg:px-8">{trendIcons[trend]}</span>
+              <span className="text-sm font-semibold sm:px-4 md:px-6 lg:px-8">{Math.abs(change)}%</span>
             </div>
           )}
         </div>

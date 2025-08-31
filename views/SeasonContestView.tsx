@@ -30,7 +30,6 @@ interface Contest {
     };
     deadline?: string;
     status: 'active' | 'completed' | 'upcoming';
-}
 
 const SeasonContestView: React.FC = () => {
     const { state, dispatch } = useAppState();
@@ -48,7 +47,6 @@ const SeasonContestView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     // Mock contest data - in production this would come from the database
     const contests: Contest[] = [
@@ -105,7 +103,7 @@ const SeasonContestView: React.FC = () => {
                 score: 8
             },
             status: 'active'
-        }
+
     ];
 
     const handleCreateContest = () => {
@@ -136,7 +134,7 @@ const SeasonContestView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} Side Bets & Challenges</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} 
                     className="glass-button"
                 >
                     Back to League Hub
@@ -158,7 +156,6 @@ const SeasonContestView: React.FC = () => {
                         {isCommissioner && (
                             <button
                                 onClick={() => setShowCreateModal(true)}
-                                className="glass-button-primary px-4 py-2 flex items-center gap-2"
                             >
                                 <PlusCircleIcon className="w-4 h-4" />
                                 Create Contest
@@ -204,8 +201,6 @@ const SeasonContestView: React.FC = () => {
                                 transition={{ delay: index * 0.1 }}
                                 className="glass-pane p-6 hover:ring-2 hover:ring-blue-400/50 transition-all cursor-pointer"
                                 onClick={() => setSelectedContest(contest)}
-                            >
-                                {/* Contest Header */}
                                 <div className="flex items-start justify-between mb-4">
                                     <div>
                                         <h3 className="text-lg font-bold text-white flex items-center gap-2">
@@ -309,7 +304,7 @@ const SeasonContestView: React.FC = () => {
                                     <input
                                         type="text"
                                         value={newContest.name}
-                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, name: e.target.value }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, name: e.target.value }}
                                         className="glass-input w-full"
                                         placeholder="e.g., Weekly High Score"
                                     />
@@ -321,7 +316,7 @@ const SeasonContestView: React.FC = () => {
                                     </label>
                                     <textarea
                                         value={newContest.description}
-                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, description: e.target.value }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, description: e.target.value }}
                                         className="glass-input w-full h-20"
                                         placeholder="Describe the contest rules..."
                                     />
@@ -333,7 +328,7 @@ const SeasonContestView: React.FC = () => {
                                     </label>
                                     <select
                                         value={newContest.type}
-                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, type: e.target.value as Contest['type'] }}
                                         className="glass-input w-full"
                                     >
                                         <option value="weekly">Weekly</option>
@@ -349,7 +344,7 @@ const SeasonContestView: React.FC = () => {
                                     <input
                                         type="number"
                                         value={newContest.prize}
-                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }))}
+                                        onChange={(e: any) => setNewContest(prev => ({ ...prev, prize: Number(e.target.value) }}
                                         className="glass-input w-full"
                                         min="0"
                                         step="5"
@@ -360,13 +355,11 @@ const SeasonContestView: React.FC = () => {
                             <div className="flex gap-3 mt-6">
                                 <button
                                     onClick={() => setShowCreateModal(false)}
-                                    className="flex-1 glass-button py-2"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={handleCreateContest}
-                                    className="flex-1 glass-button-primary py-2"
                                     disabled={!newContest.name || !newContest.description}
                                 >
                                     Create Contest
@@ -383,13 +376,11 @@ const SeasonContestView: React.FC = () => {
                         animate={{ opacity: 1 }}
                         className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                         onClick={() => setSelectedContest(null)}
-                    >
                         <motion.div
                             initial={{ scale: 0.9 }}
                             animate={{ scale: 1 }}
                             className="glass-pane p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
                             onClick={(e: any) => e.stopPropagation()}
-                        >
                             <div className="flex items-start justify-between mb-4">
                                 <div>
                                     <h3 className="text-2xl font-bold text-white">{selectedContest.name}</h3>
@@ -397,7 +388,6 @@ const SeasonContestView: React.FC = () => {
                                 </div>
                                 <button
                                     onClick={() => setSelectedContest(null)}
-                                    className="glass-button p-2"
                                 >
                                     <XCircleIcon className="w-5 h-5" />
                                 </button>

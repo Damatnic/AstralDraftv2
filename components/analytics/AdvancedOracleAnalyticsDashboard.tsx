@@ -3,7 +3,8 @@
  * Comprehensive performance tracking with Oracle vs user analysis
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { 
     LineChart, Line, BarChart, Bar,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -59,7 +60,6 @@ interface AdvancedAnalyticsMetrics {
         marketInefficiencies: Array<{ area: string; opportunity: number; description: string }>;
         predictionPatterns: Array<{ pattern: string; frequency: number; successRate: number }>;
     };
-}
 
 interface ReportFilters {
     timeframe: 'week' | 'month' | 'season' | 'all';
@@ -67,9 +67,11 @@ interface ReportFilters {
     confidenceRange: [number, number];
     includedUsers: 'all' | 'active' | 'top10' | 'custom';
     season: number;
+
 }
 
 const AdvancedOracleAnalyticsDashboard: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [metrics, setMetrics] = useState<AdvancedAnalyticsMetrics | null>(null);
     const [loading, setLoading] = useState(true);
     const [_filters, _setFilters] = useState<ReportFilters>({
@@ -89,6 +91,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     const loadAdvancedAnalytics = async () => {
         setLoading(true);
         try {
+
             // Fetch comprehensive analytics data
             const [oracleStats, userStats, comparativeStats] = await Promise.all([
                 fetchOraclePerformanceData(),
@@ -104,27 +107,46 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 comparative: comparativeStats,
                 insights
             });
-        } catch (error) {
+    
+    } catch (error) {
             // Use mock data for demo
             setMetrics(generateMockAdvancedMetrics());
         } finally {
             setLoading(false);
-        }
+
     };
 
     const fetchOraclePerformanceData = async () => {
-        const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season}&timeframe=${_filters.timeframe}`);
+    try {
+
+        const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season
+    `);
         return response.json();
+    
+    } catch (error) {
+        console.error(error);
     };
 
     const fetchUserPerformanceData = async () => {
-        const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season}&timeframe=${_filters.timeframe}`);
+    try {
+
+        const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season
+    `);
         return response.json();
+    
+    } catch (error) {
+        console.error(error);
     };
 
     const fetchComparativeAnalytics = async () => {
-        const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season}`);
+    try {
+
+        const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season
+    `);
         return response.json();
+    
+    } catch (error) {
+        console.error(error);
     };
 
     const generateAdvancedInsights = (oracle: any, users: any, comparative: any) => {
@@ -215,7 +237,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { user: 'Player 8', accuracy: 79, oracleBeats: 9 },
                     { user: 'Player 1', accuracy: 77, oracleBeats: 8 },
                     { user: 'Player 7', accuracy: 75, oracleBeats: 7 }
-                ]
+
             },
             comparative: {
                 weeklyComparison: weeks.map((week: any) => ({
@@ -235,7 +257,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { confidenceRange: '80-89%', oracleAccuracy: 83, userAccuracy: 67, oracleVolume: 28, userVolume: 28 },
                     { confidenceRange: '70-79%', oracleAccuracy: 76, userAccuracy: 71, oracleVolume: 32, userVolume: 45 },
                     { confidenceRange: '60-69%', oracleAccuracy: 68, userAccuracy: 65, oracleVolume: 25, userVolume: 38 }
-                ]
+
             },
             insights: {
                 performanceGaps: [
@@ -257,14 +279,14 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { pattern: 'High Confidence + Low Accuracy', frequency: 23, successRate: 45 },
                     { pattern: 'Conservative Betting', frequency: 67, successRate: 72 },
                     { pattern: 'Contrarian Picks', frequency: 12, successRate: 58 }
-                ]
-            }
+
         };
     };
 
     const generateReport = async () => {
         setReportGenerating(true);
         try {
+
             // Generate comprehensive PDF report
             const reportData = {
                 metrics,
@@ -281,36 +303,19 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             a.download = `oracle-analytics-report-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-        } catch (error) {
-        } finally {
+        finally {
             setReportGenerating(false);
-        }
-    };
 
-    const MetricCard = ({ title, value, subtitle, trend, icon, color = 'text-blue-400' }: {
-        title: string;
-        value: string | number;
-        subtitle?: string;
-        trend?: 'up' | 'down' | 'stable';
-        icon: React.ReactNode;
-        color?: string;
-    }) => (
-        <Card className="bg-gray-800/50 border-gray-700">
-            <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                        <p className="text-sm text-gray-400">{title}</p>
-                        <div className="flex items-center space-x-2">
-                            <span className={`text-xl font-bold ${color}`}>{value}</span>
+    `text-xl font-bold ${color}`}>{value}</span>
                             {trend && (
-                                <div className="flex items-center">
-                                    {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-400" />}
-                                    {trend === 'down' && <TrendingDown className="w-4 h-4 text-red-400" />}
-                                    {trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded" />}
+                                <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
+                                    {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
+                                    {trend === 'down' && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
+                                    {trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
                                 </div>
                             )}
                         </div>
-                        {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
+                        {subtitle && <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{subtitle}</p>}
                     </div>
                     <div className={color}>
                         {icon}
@@ -322,58 +327,56 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="space-y-6">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Loading advanced analytics...</p>
+            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
+                    <p className="text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">Loading advanced analytics...</p>
                 </div>
             </div>
         );
-    }
 
     if (!metrics) {
         return (
-            <div className="space-y-6">
-                <Widget title="Advanced Analytics" className="bg-gray-900/50">
-                    <div className="text-center py-8">
-                        <Activity className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                        <p className="text-gray-400">Unable to load analytics data</p>
+            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <Widget title="Advanced Analytics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                        <Activity className="w-12 h-12 text-gray-500 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+                        <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Unable to load analytics data</p>
                         <button 
                             onClick={loadAdvancedAnalytics}
-                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                        >
+                            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
                             Retry
                         </button>
                     </div>
                 </Widget>
             </div>
         );
-    }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header with Controls */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 <div>
-                    <h2 className="text-2xl font-bold text-white">Advanced Oracle Analytics</h2>
-                    <p className="text-gray-400">Comprehensive performance tracking and insights</p>
+                    <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Advanced Oracle Analytics</h2>
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Comprehensive performance tracking and insights</p>
                 </div>
                 
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={loadAdvancedAnalytics}
-                        className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                    >
-                        <RefreshCw className="w-4 h-4" />
+                        className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <RefreshCw className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         <span>Refresh</span>
                     </button>
                     
                     <button
                         onClick={generateReport}
                         disabled={reportGenerating}
-                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                    >
-                        <Download className="w-4 h-4" />
+                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         <span>{reportGenerating ? 'Generating...' : 'Export Report'}</span>
                     </button>
                 </div>
@@ -386,7 +389,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     value={`${metrics.oracle.overallAccuracy.toFixed(1)}%`}
                     subtitle="Overall performance"
                     trend="stable"
-                    icon={<Brain className="w-6 h-6" />}
+                    icon={<Brain className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />}
                     color="text-purple-400"
                 />
                 
@@ -395,7 +398,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     value={`${metrics.users.averageAccuracy.toFixed(1)}%`}
                     subtitle="Community performance"
                     trend="up"
-                    icon={<Users className="w-6 h-6" />}
+                    icon={<Users className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />}
                     color="text-blue-400"
                 />
                 
@@ -404,7 +407,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     value={`${(metrics.oracle.overallAccuracy - metrics.users.averageAccuracy).toFixed(1)}%`}
                     subtitle="Oracle advantage"
                     trend="down"
-                    icon={<Target className="w-6 h-6" />}
+                    icon={<Target className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />}
                     color="text-green-400"
                 />
                 
@@ -413,7 +416,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     value={`${metrics.users.beatOracleRate.toFixed(1)}%`}
                     subtitle="Users beating Oracle"
                     trend="up"
-                    icon={<Trophy className="w-6 h-6" />}
+                    icon={<Trophy className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />}
                     color="text-yellow-400"
                 />
             </div>
@@ -421,9 +424,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             {/* Performance Comparison Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Oracle vs Users Weekly Performance */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white">Weekly Performance Comparison</CardTitle>
+                        <CardTitle className="text-white sm:px-4 md:px-6 lg:px-8">Weekly Performance Comparison</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
@@ -461,9 +464,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 </Card>
 
                 {/* Confidence Calibration Analysis */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white">Confidence Calibration</CardTitle>
+                        <CardTitle className="text-white sm:px-4 md:px-6 lg:px-8">Confidence Calibration</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ResponsiveContainer width="100%" height={300}>
@@ -487,9 +490,9 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             </div>
 
             {/* Prediction Type Analysis */}
-            <Card className="bg-gray-800/50 border-gray-700">
+            <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <CardHeader>
-                    <CardTitle className="text-white">Performance by Prediction Type</CardTitle>
+                    <CardTitle className="text-white sm:px-4 md:px-6 lg:px-8">Performance by Prediction Type</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={350}>
@@ -515,28 +518,28 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             {/* Advanced Insights Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Performance Gaps */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center space-x-2">
-                            <Target className="w-5 h-5" />
+                        <CardTitle className="text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Target className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             <span>Performance Gaps</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.performanceGaps.map((gap, index) => (
-                                <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                                <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <div className="font-medium text-white">{gap.metric}</div>
-                                        <div className="text-sm text-gray-400">
+                                        <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{gap.metric}</div>
+                                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                             Gap: {gap.gap > 0 ? '+' : ''}{gap.gap.toFixed(1)}%
                                         </div>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                        {gap.trend === 'improving' && <TrendingUp className="w-4 h-4 text-green-400" />}
-                                        {gap.trend === 'declining' && <TrendingDown className="w-4 h-4 text-red-400" />}
-                                        {gap.trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded" />}
-                                        <span className="text-xs text-gray-500 capitalize">{gap.trend}</span>
+                                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                        {gap.trend === 'improving' && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
+                                        {gap.trend === 'declining' && <TrendingDown className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
+                                        {gap.trend === 'stable' && <div className="w-4 h-1 bg-gray-400 rounded sm:px-4 md:px-6 lg:px-8" />}
+                                        <span className="text-xs text-gray-500 capitalize sm:px-4 md:px-6 lg:px-8">{gap.trend}</span>
                                     </div>
                                 </div>
                             ))}
@@ -545,22 +548,22 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 </Card>
 
                 {/* User Behavior Analysis */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center space-x-2">
-                            <Eye className="w-5 h-5" />
+                        <CardTitle className="text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Eye className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             <span>User Behavior Insights</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.userBehaviors.map((behavior, index) => (
-                                <div key={index} className="p-3 bg-gray-700/30 rounded-lg">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="font-medium text-white">{behavior.behavior}</div>
-                                        <div className="text-sm text-orange-400">{behavior.impact}% impact</div>
+                                <div key={index} className="p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{behavior.behavior}</div>
+                                        <div className="text-sm text-orange-400 sm:px-4 md:px-6 lg:px-8">{behavior.impact}% impact</div>
                                     </div>
-                                    <div className="text-sm text-gray-400">{behavior.recommendation}</div>
+                                    <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{behavior.recommendation}</div>
                                 </div>
                             ))}
                         </div>
@@ -571,27 +574,27 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             {/* Top Performers and Market Inefficiencies */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Top Performers */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center space-x-2">
-                            <Award className="w-5 h-5" />
+                        <CardTitle className="text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             <span>Top Performers</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {metrics.users.topPerformers.map((performer, index) => (
-                                <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="flex items-center justify-center w-8 h-8 bg-blue-600 rounded-full text-white font-bold text-sm">
+                                <div key={index} className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center justify-center w-8 h-8 bg-blue-600 rounded-full text-white font-bold text-sm sm:px-4 md:px-6 lg:px-8">
                                             {index + 1}
                                         </div>
                                         <div>
-                                            <div className="font-medium text-white">{performer.user}</div>
-                                            <div className="text-sm text-gray-400">{performer.oracleBeats} Oracle beats</div>
+                                            <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{performer.user}</div>
+                                            <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{performer.oracleBeats} Oracle beats</div>
                                         </div>
                                     </div>
-                                    <div className="text-green-400 font-bold">{performer.accuracy.toFixed(1)}%</div>
+                                    <div className="text-green-400 font-bold sm:px-4 md:px-6 lg:px-8">{performer.accuracy.toFixed(1)}%</div>
                                 </div>
                             ))}
                         </div>
@@ -599,22 +602,22 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 </Card>
 
                 {/* Market Inefficiencies */}
-                <Card className="bg-gray-800/50 border-gray-700">
+                <Card className="bg-gray-800/50 border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
-                        <CardTitle className="text-white flex items-center space-x-2">
-                            <Zap className="w-5 h-5" />
+                        <CardTitle className="text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Zap className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             <span>Market Inefficiencies</span>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {metrics.insights.marketInefficiencies.map((inefficiency, index) => (
-                                <div key={index} className="p-3 bg-gray-700/30 rounded-lg">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="font-medium text-white">{inefficiency.area}</div>
-                                        <div className="text-sm text-yellow-400">{inefficiency.opportunity}% opportunity</div>
+                                <div key={index} className="p-3 bg-gray-700/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{inefficiency.area}</div>
+                                        <div className="text-sm text-yellow-400 sm:px-4 md:px-6 lg:px-8">{inefficiency.opportunity}% opportunity</div>
                                     </div>
-                                    <div className="text-sm text-gray-400">{inefficiency.description}</div>
+                                    <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{inefficiency.description}</div>
                                 </div>
                             ))}
                         </div>
@@ -625,4 +628,10 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-export default AdvancedOracleAnalyticsDashboard;
+const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AdvancedOracleAnalyticsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AdvancedOracleAnalyticsDashboardWithErrorBoundary);

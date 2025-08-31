@@ -3,7 +3,8 @@
  * Provides advanced mobile navigation with haptic feedback and gesture support
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAdvancedTouch } from '../../hooks/useAdvancedTouch';
 import { useMobileViewport } from '../../hooks/useMobileViewport';
@@ -22,6 +23,7 @@ interface NavigationItem {
   view: View;
   badge?: number;
   disabled?: boolean;
+
 }
 
 interface EnhancedMobileNavProps {
@@ -29,7 +31,6 @@ interface EnhancedMobileNavProps {
   onNavigate: (view: View) => void;
   onToggleMenu?: () => void;
   className?: string;
-}
 
 const navigationItems: NavigationItem[] = [
   {
@@ -61,7 +62,7 @@ const navigationItems: NavigationItem[] = [
     label: 'Profile',
     icon: <UserIcon />,
     view: 'PROFILE'
-  }
+
 ];
 
 export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
@@ -69,7 +70,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
   onNavigate,
   onToggleMenu,
   className = ''
-}: any) => {
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPressed, setIsPressed] = useState<string | null>(null);
   const [longPressTarget, setLongPressTarget] = useState<string | null>(null);
@@ -82,8 +83,8 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
       // Long press opens context menu or quick actions
       if (onToggleMenu) {
         onToggleMenu();
-      }
-    }
+
+
   }, [longPressTarget, onToggleMenu]);
   
   const { triggerHaptic } = useAdvancedTouch({
@@ -96,7 +97,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
     const index = navigationItems.findIndex((item: any) => item.view === currentView);
     if (index !== -1) {
       setActiveIndex(index);
-    }
+
   }, [currentView]);
 
   const handleNavItemPress = useCallback((item: NavigationItem, index: number) => {
@@ -136,21 +137,27 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
       transition={{ type: 'spring', damping: 20 }}
     >
       {/* Background blur effect */}
-      <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-white/60 dark:from-gray-900/80 dark:to-gray-900/60" />
+      <div className="absolute inset-0 bg-gradient-to-t from-white/80 to-white/60 dark:from-gray-900/80 dark:to-gray-900/60 sm:px-4 md:px-6 lg:px-8" />
       
       {/* Navigation Items */}
-      <div className="relative flex items-center justify-around h-full px-4">
+      <div className="relative flex items-center justify-around h-full px-4 sm:px-4 md:px-6 lg:px-8">
         {navigationItems.map((item, index) => {
           const isActive = activeIndex === index;
           const isCurrentPressed = isPressed === item.id;
-          
-          return (
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
             <motion.button
               key={item.id}
               onTouchStart={() => handleLongPress(item.id)}
-              onTouchEnd={() => setLongPressTarget(null)}
               onClick={() => handleNavItemPress(item, index)}
-              disabled={item.disabled}
               className={`
                 relative flex flex-col items-center justify-center
                 min-w-[48px] min-h-[48px] p-2 rounded-xl
@@ -158,11 +165,11 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
                 ${item.disabled 
                   ? 'opacity-40 cursor-not-allowed' 
                   : 'cursor-pointer touch-manipulation'
-                }
+
                 ${isActive 
                   ? 'text-blue-600 dark:text-blue-400' 
                   : 'text-gray-600 dark:text-gray-400'
-                }
+
                 active:scale-95
               `}
               whileHover={{ scale: 1.05 }}
@@ -177,7 +184,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
               <AnimatePresence>
                 {isActive && (
                   <motion.div
-                    className="absolute -top-1 left-1/2 w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full"
+                    className="absolute -top-1 left-1/2 w-1 h-1 bg-blue-600 dark:bg-blue-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                     style={{ x: '-50%' }}
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -208,7 +215,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
               {/* Badge */}
               {Boolean(item.badge && item.badge > 0) && (
                 <motion.div
-                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1"
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 500, delay: 0.1 }}
@@ -220,7 +227,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
               {/* Ripple effect */}
               {isCurrentPressed && (
                 <motion.div
-                  className="absolute inset-0 bg-blue-500/20 rounded-xl"
+                  className="absolute inset-0 bg-blue-500/20 rounded-xl sm:px-4 md:px-6 lg:px-8"
                   initial={{ scale: 0, opacity: 1 }}
                   animate={{ scale: 1.2, opacity: 0 }}
                   transition={{ duration: 0.3 }}
@@ -235,7 +242,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
       <AnimatePresence>
         {longPressTarget && (
           <motion.div
-            className="absolute -top-12 left-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded-lg"
+            className="absolute -top-12 left-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded-lg sm:px-4 md:px-6 lg:px-8"
             style={{ x: '-50%' }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -249,4 +256,10 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
   );
 };
 
-export default EnhancedMobileNav;
+const EnhancedMobileNavWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedMobileNav {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedMobileNavWithErrorBoundary);

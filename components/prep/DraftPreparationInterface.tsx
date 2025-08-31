@@ -3,7 +3,8 @@
  * Comprehensive UI for draft preparation with cheat sheets, rankings, strategy planning, and mock drafts
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { 
     List, 
     Download, 
@@ -40,13 +41,12 @@ interface DraftPreparationInterfaceProps {
         rosterPositions: Record<string, number>;
     };
     onClose?: () => void;
-}
 
 export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps> = ({
     userId,
     leagueSettings,
     onClose
-}: any) => {
+}) => {
     // State Management
     const [activeTab, setActiveTab] = useState<'cheatsheets' | 'rankings' | 'strategy' | 'mockdraft'>('cheatsheets');
     const [loading, setLoading] = useState(false);
@@ -80,6 +80,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
     const loadInitialData = useCallback(async () => {
         setLoading(true);
         try {
+
             const [playersData, strategiesData] = await Promise.all([
                 draftPreparationService.getDraftPlayers(),
                 draftPreparationService.getDraftStrategies()
@@ -87,10 +88,11 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
             
             setPlayers(playersData);
             setStrategies(strategiesData);
-        } catch (error) {
+        
+    } catch (error) {
         } finally {
             setLoading(false);
-        }
+
     }, []);
 
     // Filter players (simplified for demo)
@@ -136,10 +138,10 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             setSelectedCheatSheet(newCheatSheet);
             // In production, would save to cheat sheets list
-        } catch (error) {
+    } catch (error) {
         } finally {
             setLoading(false);
-        }
+
     };
 
     // Run mock draft
@@ -148,6 +150,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
         
         setLoading(true);
         try {
+
             const mockDraftSettings: MockDraftSettings = {
                 leagueSize: leagueSettings?.leagueSize || 12,
                 scoringFormat: leagueSettings?.scoringFormat || 'ppr',
@@ -165,35 +168,35 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             setCurrentMockDraft(mockDraftResult);
             // In production, would save to mock drafts list
-        } catch (error) {
+    
+    } catch (error) {
         } finally {
             setLoading(false);
-        }
+
     };
 
     // Render cheat sheets tab
     const renderCheatSheetsTab = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header with actions */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Cheat Sheets</h2>
-                    <p className="text-gray-600">Generate and customize draft cheat sheets</p>
+                    <h2 className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">Cheat Sheets</h2>
+                    <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Generate and customize draft cheat sheets</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                     >
-                        <Settings className="h-4 w-4" />
+                        <Settings className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         Settings
                     </button>
                     <button
                         onClick={handleGenerateCheatSheet}
                         disabled={loading}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        <FileText className="h-4 w-4" />
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <FileText className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         Generate Cheat Sheet
                     </button>
                 </div>
@@ -201,34 +204,34 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             {/* Cheat sheet settings */}
             {showFilters && (
-                <div className="bg-gray-50 p-4 rounded-lg space-y-4">
-                    <h3 className="font-semibold text-gray-900">Cheat Sheet Settings</h3>
+                <div className="bg-gray-50 p-4 rounded-lg space-y-4 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="font-semibold text-gray-900 sm:px-4 md:px-6 lg:px-8">Cheat Sheet Settings</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                                 Format
                             </label>
-                            <select className="w-full p-2 border border-gray-300 rounded-lg">
+                            <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <option value="tiers">Tiers View</option>
                                 <option value="list">List View</option>
                                 <option value="grid">Grid View</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                                 Density
                             </label>
-                            <select className="w-full p-2 border border-gray-300 rounded-lg">
+                            <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <option value="compact">Compact</option>
                                 <option value="normal">Normal</option>
                                 <option value="spacious">Spacious</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                                 Color Scheme
                             </label>
-                            <select className="w-full p-2 border border-gray-300 rounded-lg">
+                            <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <option value="default">Default</option>
                                 <option value="colorblind">Colorblind Friendly</option>
                                 <option value="dark">Dark Mode</option>
@@ -236,40 +239,40 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                         </div>
                     </div>
                     
-                    <div className="flex flex-wrap gap-4">
-                        <label className="flex items-center">
+                    <div className="flex flex-wrap gap-4 sm:px-4 md:px-6 lg:px-8">
+                        <label className="flex items-center sm:px-4 md:px-6 lg:px-8">
                             <input 
                                 type="checkbox" 
-                                className="mr-2" 
+                                className="mr-2 sm:px-4 md:px-6 lg:px-8" 
                                 checked={cheatSheetSettings.showADP}
                                 onChange={(e: any) => setCheatSheetSettings(prev => ({
                                     ...prev,
                                     showADP: e.target.checked
-                                }))}
+                                }}
                             />
                             Show ADP
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center sm:px-4 md:px-6 lg:px-8">
                             <input 
                                 type="checkbox" 
-                                className="mr-2"
+                                className="mr-2 sm:px-4 md:px-6 lg:px-8"
                                 checked={cheatSheetSettings.showProjections}
                                 onChange={(e: any) => setCheatSheetSettings(prev => ({
                                     ...prev,
                                     showProjections: e.target.checked
-                                }))}
+                                }}
                             />
                             Show Projections
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center sm:px-4 md:px-6 lg:px-8">
                             <input 
                                 type="checkbox" 
-                                className="mr-2"
+                                className="mr-2 sm:px-4 md:px-6 lg:px-8"
                                 checked={cheatSheetSettings.includeInjuredPlayers}
                                 onChange={(e: any) => setCheatSheetSettings(prev => ({
                                     ...prev,
                                     includeInjuredPlayers: e.target.checked
-                                }))}
+                                }}
                             />
                             Include Injured Players
                         </label>
@@ -279,35 +282,35 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             {/* Generated cheat sheet display */}
             {selectedCheatSheet && (
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                    <div className="p-4 border-b border-gray-200 bg-gray-50">
-                        <div className="flex justify-between items-center">
-                            <h3 className="font-semibold text-gray-900">{selectedCheatSheet.name}</h3>
-                            <div className="flex gap-2">
-                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    <Copy className="h-3 w-3" />
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 border-b border-gray-200 bg-gray-50 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="font-semibold text-gray-900 sm:px-4 md:px-6 lg:px-8">{selectedCheatSheet.name}</h3>
+                            <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
+                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                    <Copy className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                     Copy
                                 </button>
-                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    <Download className="h-3 w-3" />
+                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                    <Download className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                     Export
                                 </button>
-                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">
-                                    <Share2 className="h-3 w-3" />
+                                <button className="flex items-center gap-2 px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                    <Share2 className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                     Share
                                 </button>
                             </div>
                         </div>
                     </div>
                     
-                    <div className="p-4">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {/* Player tiers display */}
-                        <div className="space-y-6">
+                        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                             {['QB', 'RB', 'WR', 'TE'].map((position: any) => {
                                 const positionPlayers = filteredPlayers.filter((p: any) => p.position === position).slice(0, 20);
                                 return (
-                                    <div key={position} className="space-y-3">
-                                        <h4 className="font-semibold text-lg text-gray-900">{position} Rankings</h4>
+                                    <div key={position} className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-semibold text-lg text-gray-900 sm:px-4 md:px-6 lg:px-8">{position} Rankings</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                             {positionPlayers.map((player, index) => (
                                                 <div 
@@ -318,18 +321,18 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                                         'border-gray-200 bg-gray-50'
                                                     }`}
                                                 >
-                                                    <div className="flex justify-between items-start">
+                                                    <div className="flex justify-between items-start sm:px-4 md:px-6 lg:px-8">
                                                         <div>
-                                                            <div className="font-medium text-gray-900">{player.name}</div>
-                                                            <div className="text-sm text-gray-600">{player.team}</div>
+                                                            <div className="font-medium text-gray-900 sm:px-4 md:px-6 lg:px-8">{player.name}</div>
+                                                            <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{player.team}</div>
                                                             {cheatSheetSettings.showADP && (
-                                                                <div className="text-xs text-gray-500">ADP: {player?.adp}</div>
+                                                                <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">ADP: {player?.adp}</div>
                                                             )}
                                                         </div>
-                                                        <div className="text-right">
-                                                            <div className="text-sm font-medium">#{index + 1}</div>
-                                                            {player.sleeper && <Star className="h-3 w-3 text-yellow-500" />}
-                                                            {player.riskLevel === 'high' && <AlertTriangle className="h-3 w-3 text-red-500" />}
+                                                        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                                            <div className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">#{index + 1}</div>
+                                                            {player.sleeper && <Star className="h-3 w-3 text-yellow-500 sm:px-4 md:px-6 lg:px-8" />}
+                                                            {player.riskLevel === 'high' && <AlertTriangle className="h-3 w-3 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -347,52 +350,51 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
     // Render rankings tab
     const renderRankingsTab = () => (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Custom Rankings</h2>
-                    <p className="text-gray-600">Create and customize your player rankings</p>
+                    <h2 className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">Custom Rankings</h2>
+                    <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Create and customize your player rankings</p>
                 </div>
                 <button
                     onClick={() => setEditingRankings(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
-                    <Edit3 className="h-4 w-4" />
+                    <Edit3 className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                     Create Rankings
                 </button>
             </div>
 
             {/* Rankings editor */}
             {editingRankings && (
-                <div className="bg-white rounded-lg border border-gray-200 p-6">
-                    <h3 className="font-semibold text-gray-900 mb-4">Customize Player Rankings</h3>
+                <div className="bg-white rounded-lg border border-gray-200 p-6 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="font-semibold text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">Customize Player Rankings</h3>
                     
                     {/* Drag and drop rankings interface */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {['QB', 'RB', 'WR', 'TE'].map((position: any) => (
-                            <div key={position} className="border border-gray-200 rounded-lg p-4">
-                                <h4 className="font-medium text-gray-900 mb-3">{position} Rankings</h4>
-                                <div className="space-y-2">
+                            <div key={position} className="border border-gray-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                <h4 className="font-medium text-gray-900 mb-3 sm:px-4 md:px-6 lg:px-8">{position} Rankings</h4>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     {filteredPlayers
                                         .filter((p: any) => p.position === position)
                                         .slice(0, 10)
                                         .map((player, index) => (
                                             <div
                                                 key={player.id}
-                                                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-move"
+                                                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-move sm:px-4 md:px-6 lg:px-8"
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <Move className="h-4 w-4 text-gray-400" />
-                                                    <span className="font-medium">#{index + 1}</span>
+                                                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                                    <Move className="h-4 w-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
+                                                    <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{index + 1}</span>
                                                     <span>{player.name}</span>
-                                                    <span className="text-sm text-gray-600">({player.team})</span>
+                                                    <span className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">({player.team})</span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs bg-gray-200 px-2 py-1 rounded">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-xs bg-gray-200 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">
                                                         Tier {player?.tier}
                                                     </span>
-                                                    <button className="text-gray-400 hover:text-gray-600">
-                                                        <Edit3 className="h-3 w-3" />
+                                                    <button className="text-gray-400 hover:text-gray-600 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                                        <Edit3 className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                                     </button>
                                                 </div>
                                             </div>
@@ -402,14 +404,13 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                         ))}
                     </div>
 
-                    <div className="flex justify-end gap-3 mt-6">
+                    <div className="flex justify-end gap-3 mt-6 sm:px-4 md:px-6 lg:px-8">
                         <button
                             onClick={() => setEditingRankings(false)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
                         >
                             Cancel
                         </button>
-                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                             Save Rankings
                         </button>
                     </div>
@@ -420,10 +421,10 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
     // Render strategy tab
     const renderStrategyTab = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <h2 className="text-2xl font-bold text-gray-900">Draft Strategy</h2>
-                <p className="text-gray-600">Plan your draft approach and strategy</p>
+                <h2 className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">Draft Strategy</h2>
+                <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Plan your draft approach and strategy</p>
             </div>
 
             {/* Strategy selection */}
@@ -436,10 +437,10 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                 ? 'border-blue-500 bg-blue-50'
                                 : 'border-gray-200 hover:border-gray-300'
                         }`}
-                        onClick={() => setSelectedStrategy(strategy.id)}
+                        onClick={() = role="button" tabIndex={0}> setSelectedStrategy(strategy.id)}
                     >
-                        <div className="flex justify-between items-start mb-3">
-                            <h3 className="font-semibold text-gray-900">{strategy.name}</h3>
+                        <div className="flex justify-between items-start mb-3 sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="font-semibold text-gray-900 sm:px-4 md:px-6 lg:px-8">{strategy.name}</h3>
                             <span className={`text-xs px-2 py-1 rounded ${
                                 strategy.difficulty === 'beginner' ? 'bg-green-100 text-green-800' :
                                 strategy.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-800' :
@@ -448,28 +449,28 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                 {strategy.difficulty}
                             </span>
                         </div>
-                        <p className="text-gray-600 text-sm mb-4">{strategy.description}</p>
+                        <p className="text-gray-600 text-sm mb-4 sm:px-4 md:px-6 lg:px-8">{strategy.description}</p>
                         
                         {/* Strategy stats */}
-                        <div className="flex justify-between items-center text-sm">
-                            <span className="text-gray-500">Success Rate</span>
-                            <span className="font-medium">{strategy.success_rate}%</span>
+                        <div className="flex justify-between items-center text-sm sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Success Rate</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{strategy.success_rate}%</span>
                         </div>
                         
                         {/* Strategy details */}
-                        <div className="mt-4 pt-4 border-t border-gray-200">
-                            <div className="space-y-2">
+                        <div className="mt-4 pt-4 border-t border-gray-200 sm:px-4 md:px-6 lg:px-8">
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 <div>
-                                    <span className="text-xs font-medium text-green-600">Pros:</span>
-                                    <ul className="text-xs text-gray-600 mt-1">
+                                    <span className="text-xs font-medium text-green-600 sm:px-4 md:px-6 lg:px-8">Pros:</span>
+                                    <ul className="text-xs text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                                         {strategy.pros.slice(0, 2).map((pro: string, index: number) => (
                                             <li key={index}>• {pro}</li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div>
-                                    <span className="text-xs font-medium text-red-600">Cons:</span>
-                                    <ul className="text-xs text-gray-600 mt-1">
+                                    <span className="text-xs font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">Cons:</span>
+                                    <ul className="text-xs text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                                         {strategy.cons.slice(0, 2).map((con: string, index: number) => (
                                             <li key={index}>• {con}</li>
                                         ))}
@@ -483,23 +484,23 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             {/* Selected strategy details */}
             {selectedStrategy && (
-                <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="bg-white rounded-lg border border-gray-200 p-6 sm:px-4 md:px-6 lg:px-8">
                     {(() => {
                         const strategy = strategies.find((s: any) => s.id === selectedStrategy);
                         if (!strategy) return null;
                         
                         return (
                             <div>
-                                <h3 className="font-semibold text-gray-900 mb-4">
+                                <h3 className="font-semibold text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">
                                     {strategy.name} - Round by Round Guide
                                 </h3>
-                                <div className="space-y-4">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     {strategy.rounds.map((round: any) => (
-                                        <div key={round.round} className="border border-gray-200 rounded-lg p-4">
-                                            <div className="flex justify-between items-center mb-3">
-                                                <h4 className="font-medium">Round {round.round}</h4>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                        <div key={round.round} className="border border-gray-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex justify-between items-center mb-3 sm:px-4 md:px-6 lg:px-8">
+                                                <h4 className="font-medium sm:px-4 md:px-6 lg:px-8">Round {round.round}</h4>
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">
                                                         Flexibility: {Math.round(round.flexibility * 100)}%
                                                     </span>
                                                 </div>
@@ -507,27 +508,27 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                             
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                                                 <div>
-                                                    <span className="font-medium text-gray-700">Target Positions:</span>
-                                                    <div className="text-gray-600 mt-1">
+                                                    <span className="font-medium text-gray-700 sm:px-4 md:px-6 lg:px-8">Target Positions:</span>
+                                                    <div className="text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                                                         {round.positions.join(', ')}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <span className="font-medium text-green-700">Targets:</span>
-                                                    <div className="text-gray-600 mt-1">
+                                                    <span className="font-medium text-green-700 sm:px-4 md:px-6 lg:px-8">Targets:</span>
+                                                    <div className="text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                                                         {round.targets.join(', ')}
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <span className="font-medium text-red-700">Avoid:</span>
-                                                    <div className="text-gray-600 mt-1">
+                                                    <span className="font-medium text-red-700 sm:px-4 md:px-6 lg:px-8">Avoid:</span>
+                                                    <div className="text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                                                         {round.avoid.join(', ')}
                                                     </div>
                                                 </div>
                                             </div>
                                             
                                             {round.notes && (
-                                                <div className="mt-3 p-3 bg-gray-50 rounded text-sm text-gray-600">
+                                                <div className="mt-3 p-3 bg-gray-50 rounded text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">
                                                     {round.notes}
                                                 </div>
                                             )}
@@ -544,31 +545,31 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
     // Render mock draft tab
     const renderMockDraftTab = () => (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Mock Draft</h2>
-                    <p className="text-gray-600">Practice your draft strategy</p>
+                    <h2 className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">Mock Draft</h2>
+                    <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Practice your draft strategy</p>
                 </div>
                 <button
                     onClick={handleRunMockDraft}
                     disabled={!selectedStrategy || loading}
-                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
-                >
-                    <Play className="h-4 w-4" />
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
+                    <Play className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                     {loading ? 'Running...' : 'Start Mock Draft'}
                 </button>
             </div>
 
             {/* Mock draft settings */}
-            <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-3">Mock Draft Settings</h3>
+            <div className="bg-gray-50 p-4 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-semibold text-gray-900 mb-3 sm:px-4 md:px-6 lg:px-8">Mock Draft Settings</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                             League Size
                         </label>
-                        <select className="w-full p-2 border border-gray-300 rounded-lg">
+                        <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <option value="8">8 Teams</option>
                             <option value="10">10 Teams</option>
                             <option value="12">12 Teams</option>
@@ -576,33 +577,32 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                             Draft Type
                         </label>
-                        <select className="w-full p-2 border border-gray-300 rounded-lg">
+                        <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <option value="snake">Snake Draft</option>
                             <option value="linear">Linear Draft</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                             Time per Pick
                         </label>
-                        <select className="w-full p-2 border border-gray-300 rounded-lg">
+                        <select className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <option value="60">60 seconds</option>
                             <option value="90">90 seconds</option>
                             <option value="120">2 minutes</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">
                             Strategy
                         </label>
                         <select 
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            className="w-full p-2 border border-gray-300 rounded-lg sm:px-4 md:px-6 lg:px-8"
                             value={selectedStrategy}
                             onChange={(e: any) => setSelectedStrategy(e.target.value)}
-                        >
                             <option value="">Select Strategy</option>
                             {strategies.map((strategy: any) => (
                                 <option key={strategy.id} value={strategy.id}>
@@ -616,41 +616,41 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
             {/* Mock draft results */}
             {currentMockDraft && (
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                    <div className="p-4 border-b border-gray-200 bg-gray-50">
-                        <div className="flex justify-between items-center">
-                            <h3 className="font-semibold text-gray-900">Mock Draft Results</h3>
-                            <div className="flex items-center gap-4 text-sm text-gray-600">
-                                <span className="flex items-center gap-1">
-                                    <Clock className="h-4 w-4" />
+                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 border-b border-gray-200 bg-gray-50 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="font-semibold text-gray-900 sm:px-4 md:px-6 lg:px-8">Mock Draft Results</h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">
+                                <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                    <Clock className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     {Math.floor(currentMockDraft.duration / 60)}m {currentMockDraft.duration % 60}s
                                 </span>
-                                <span className="flex items-center gap-1">
-                                    <Trophy className="h-4 w-4" />
+                                <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                    <Trophy className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Grade: {currentMockDraft.analysis.teamGrade}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-4">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {/* Team analysis */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <h4 className="font-semibold text-gray-900 mb-3">Your Draft Picks</h4>
-                                <div className="space-y-2">
+                                <h4 className="font-semibold text-gray-900 mb-3 sm:px-4 md:px-6 lg:px-8">Your Draft Picks</h4>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     {currentMockDraft.userTeam.map((player: any) => (
                                         <div
                                             key={player.id}
-                                            className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                                            className="flex justify-between items-center p-3 bg-gray-50 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <div>
-                                                <span className="font-medium">{player.name}</span>
-                                                <span className="text-sm text-gray-600 ml-2">
+                                                <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                                <span className="text-sm text-gray-600 ml-2 sm:px-4 md:px-6 lg:px-8">
                                                     ({player.position} - {player.team})
                                                 </span>
                                             </div>
-                                            <div className="text-right text-sm">
+                                            <div className="text-right text-sm sm:px-4 md:px-6 lg:px-8">
                                                 <div>Round {player.round}.{player.pick}</div>
                                                 <div className={`${
                                                     player.valueAtPick > 10 ? 'text-green-600' :
@@ -666,15 +666,15 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                             </div>
 
                             <div>
-                                <h4 className="font-semibold text-gray-900 mb-3">Analysis</h4>
-                                <div className="space-y-4">
+                                <h4 className="font-semibold text-gray-900 mb-3 sm:px-4 md:px-6 lg:px-8">Analysis</h4>
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <h5 className="font-medium text-gray-700 mb-2">Strengths</h5>
-                                        <div className="flex flex-wrap gap-2">
+                                        <h5 className="font-medium text-gray-700 mb-2 sm:px-4 md:px-6 lg:px-8">Strengths</h5>
+                                        <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                             {currentMockDraft.analysis.strengthPositions.map((pos: any) => (
                                                 <span 
                                                     key={pos} 
-                                                    className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded"
+                                                    className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded sm:px-4 md:px-6 lg:px-8"
                                                 >
                                                     {pos}
                                                 </span>
@@ -683,12 +683,12 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                     </div>
 
                                     <div>
-                                        <h5 className="font-medium text-gray-700 mb-2">Weaknesses</h5>
-                                        <div className="flex flex-wrap gap-2">
+                                        <h5 className="font-medium text-gray-700 mb-2 sm:px-4 md:px-6 lg:px-8">Weaknesses</h5>
+                                        <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                             {currentMockDraft.analysis.weakPositions.map((pos: any) => (
                                                 <span 
                                                     key={pos} 
-                                                    className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded"
+                                                    className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded sm:px-4 md:px-6 lg:px-8"
                                                 >
                                                     {pos}
                                                 </span>
@@ -697,19 +697,19 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                     </div>
 
                                     <div>
-                                        <h5 className="font-medium text-gray-700 mb-2">Recommendations</h5>
-                                        <ul className="text-sm text-gray-600 space-y-1">
+                                        <h5 className="font-medium text-gray-700 mb-2 sm:px-4 md:px-6 lg:px-8">Recommendations</h5>
+                                        <ul className="text-sm text-gray-600 space-y-1 sm:px-4 md:px-6 lg:px-8">
                                             {currentMockDraft.analysis.recommendations.map((rec, index) => (
                                                 <li key={index}>• {rec}</li>
                                             ))}
                                         </ul>
                                     </div>
 
-                                    <div className="pt-4 border-t border-gray-200">
-                                        <div className="grid grid-cols-2 gap-4 text-sm">
+                                    <div className="pt-4 border-t border-gray-200 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="grid grid-cols-2 gap-4 text-sm sm:px-4 md:px-6 lg:px-8">
                                             <div>
-                                                <span className="text-gray-600">Projected Finish:</span>
-                                                <span className="ml-2 font-medium">
+                                                <span className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Projected Finish:</span>
+                                                <span className="ml-2 font-medium sm:px-4 md:px-6 lg:px-8">
                                                     {currentMockDraft.analysis.projectedFinish}
                                                     {currentMockDraft.analysis.projectedFinish === 1 ? 'st' :
                                                      currentMockDraft.analysis.projectedFinish === 2 ? 'nd' :
@@ -717,8 +717,8 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                                                 </span>
                                             </div>
                                             <div>
-                                                <span className="text-gray-600">Total Points:</span>
-                                                <span className="ml-2 font-medium">
+                                                <span className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Total Points:</span>
+                                                <span className="ml-2 font-medium sm:px-4 md:px-6 lg:px-8">
                                                     {currentMockDraft.analysis.totalProjectedPoints.toFixed(1)}
                                                 </span>
                                             </div>
@@ -735,38 +735,37 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
 
     if (loading && players.length === 0) {
         return (
-            <div className="flex items-center justify-center h-96">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading draft preparation tools...</p>
+            <div className="flex items-center justify-center h-96 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
+                    <p className="mt-4 text-gray-600 sm:px-4 md:px-6 lg:px-8">Loading draft preparation tools...</p>
                 </div>
             </div>
         );
-    }
 
     return (
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-7xl mx-auto p-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex justify-between items-center mb-8 sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Draft Preparation</h1>
-                    <p className="text-gray-600 mt-1">
+                    <h1 className="text-3xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">Draft Preparation</h1>
+                    <p className="text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">
                         Complete toolkit for draft preparation and strategy planning
                     </p>
                 </div>
                 {onClose && (
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
-                    >
+                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         Close
                     </button>
                 )}
             </div>
 
             {/* Navigation tabs */}
-            <div className="border-b border-gray-200 mb-8">
-                <nav className="flex space-x-8">
+            <div className="border-b border-gray-200 mb-8 sm:px-4 md:px-6 lg:px-8">
+                <nav className="flex space-x-8 sm:px-4 md:px-6 lg:px-8">
                     {[
                         { id: 'cheatsheets', label: 'Cheat Sheets', icon: FileText },
                         { id: 'rankings', label: 'Rankings', icon: List },
@@ -774,17 +773,21 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
                         { id: 'mockdraft', label: 'Mock Draft', icon: Play }
                     ].map((tab: any) => {
                         const Icon = tab.icon;
-                        return (
+                        
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${
-                                    activeTab === tab.id
-                                        ? 'border-blue-500 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
+                                onClick={() => setActiveTab(tab.id as any)}`}
                             >
-                                <Icon className="h-4 w-4" />
+                                <Icon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                 {tab.label}
                             </button>
                         );
@@ -793,7 +796,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
             </div>
 
             {/* Tab content */}
-            <div className="min-h-[600px]">
+            <div className="min-h-[600px] sm:px-4 md:px-6 lg:px-8">
                 {activeTab === 'cheatsheets' && renderCheatSheetsTab()}
                 {activeTab === 'rankings' && renderRankingsTab()}
                 {activeTab === 'strategy' && renderStrategyTab()}
@@ -803,4 +806,10 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
     );
 };
 
-export default DraftPreparationInterface;
+const DraftPreparationInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <DraftPreparationInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(DraftPreparationInterfaceWithErrorBoundary);

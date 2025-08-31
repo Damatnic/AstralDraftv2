@@ -3,7 +3,8 @@
  * Comprehensive responsive utilities, breakpoint management, and adaptive layouts
  */
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, ReactNode, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // =========================================
@@ -11,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 // =========================================
 
 export const breakpoints = {
+  const [isLoading, setIsLoading] = React.useState(false);
   xs: '475px',
   sm: '640px',
   md: '768px',
@@ -34,7 +36,6 @@ export const useMediaQuery = (query: string): boolean => {
     const media = window.matchMedia(query);
     if (media.matches !== matches) {
       setMatches(media.matches);
-    }
 
     const listener = (e: MediaQueryListEvent) => setMatches(e.matches);
     media.addEventListener('change', listener);
@@ -82,10 +83,11 @@ export const useViewportSize = () => {
         width: window.innerWidth,
         height: window.innerHeight,
       });
-    };
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return windowSize;
@@ -101,6 +103,7 @@ interface ContainerProps {
   padding?: boolean;
   center?: boolean;
   className?: string;
+
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -157,7 +160,6 @@ interface GridProps {
     '2xl'?: number;
   } | number;
   className?: string;
-}
 
 export const ResponsiveGrid: React.FC<GridProps> = ({
   children,
@@ -174,7 +176,7 @@ export const ResponsiveGrid: React.FC<GridProps> = ({
       colClasses.push(`grid-cols-${colCount}`);
     } else {
       colClasses.push(`${breakpoint}:grid-cols-${colCount}`);
-    }
+
   });
 
   // Handle gap
@@ -186,9 +188,8 @@ export const ResponsiveGrid: React.FC<GridProps> = ({
         gapClasses.push(`gap-${gapSize}`);
       } else {
         gapClasses.push(`${breakpoint}:gap-${gapSize}`);
-      }
+
     });
-  }
 
   const classes = [
     'grid',
@@ -209,6 +210,7 @@ interface ShowProps {
   above?: Breakpoint;
   below?: Breakpoint;
   only?: Breakpoint | Breakpoint[];
+
 }
 
 export const Show: React.FC<ShowProps> = ({
@@ -226,18 +228,15 @@ export const Show: React.FC<ShowProps> = ({
     const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
     const aboveIndex = breakpointOrder.indexOf(above);
     shouldShow = currentIndex >= aboveIndex;
-  }
 
   if (below) {
     const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
     const belowIndex = breakpointOrder.indexOf(below);
     shouldShow = currentIndex <= belowIndex;
-  }
 
   if (only) {
     const onlyBreakpoints = Array.isArray(only) ? only : [only];
     shouldShow = onlyBreakpoints.includes(currentBreakpoint);
-  }
 
   return (
     <AnimatePresence>
@@ -267,22 +266,21 @@ export const Hide: React.FC<ShowProps> = (props) => {
     const aboveIndex = breakpointOrder.indexOf(above);
     if (aboveIndex > 0) {
       invertedProps.below = breakpointOrder[aboveIndex - 1];
-    }
+
   } else if (below) {
     // Hide below becomes show above the next breakpoint
     const breakpointOrder: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const belowIndex = breakpointOrder.indexOf(below);
     if (belowIndex < breakpointOrder.length - 1) {
       invertedProps.above = breakpointOrder[belowIndex + 1];
-    }
+
   } else if (only) {
     // Hide only these breakpoints - show all others
     const allBreakpoints: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const onlyBreakpoints = Array.isArray(only) ? only : [only];
     const otherBreakpoints = allBreakpoints.filter(bp => !onlyBreakpoints.includes(bp));
     invertedProps.only = otherBreakpoints;
-  }
-  
+
   return <Show {...invertedProps} />;
 };
 
@@ -299,7 +297,6 @@ interface ResponsiveValueProps<T> {
   '2xl'?: T;
   '3xl'?: T;
   '4xl'?: T;
-}
 
 export const useResponsiveValue = <T,>(values: ResponsiveValueProps<T>): T | undefined => {
   const currentBreakpoint = useCurrentBreakpoint();
@@ -313,9 +310,8 @@ export const useResponsiveValue = <T,>(values: ResponsiveValueProps<T>): T | und
     const breakpoint = breakpointOrder[i];
     if (values[breakpoint] !== undefined) {
       return values[breakpoint];
-    }
-  }
-  
+
+
   return undefined;
 };
 
@@ -328,6 +324,7 @@ interface ResponsiveTextProps {
   size?: ResponsiveValueProps<'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | '8xl' | '9xl'>;
   weight?: ResponsiveValueProps<'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'>;
   className?: string;
+
 }
 
 export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
@@ -417,6 +414,7 @@ interface ResponsiveSpacingProps {
   pl?: ResponsiveValueProps<number>;
   pr?: ResponsiveValueProps<number>;
   className?: string;
+
 }
 
 export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
@@ -438,7 +436,7 @@ export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
       if (value !== undefined) {
         const prefix = breakpoint === 'xs' ? '' : `${breakpoint}:`;
         spacingClasses.push(`${prefix}${property}-${value}`);
-      }
+
     });
   };
 
@@ -473,6 +471,7 @@ interface AspectRatioProps {
   children: ReactNode;
   ratio?: number | string;
   className?: string;
+
 }
 
 export const AspectRatio: React.FC<AspectRatioProps> = ({
@@ -486,7 +485,7 @@ export const AspectRatio: React.FC<AspectRatioProps> = ({
 
   return (
     <div className={`relative w-full ${className}`} style={{ paddingBottom: aspectRatioValue }}>
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
     </div>
@@ -506,6 +505,7 @@ interface ResponsiveImageProps {
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   loading?: 'lazy' | 'eager';
   priority?: boolean;
+
 }
 
 export const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
@@ -555,12 +555,11 @@ export const BreakpointDebugger: React.FC = () => {
 
   if (process.env.NODE_ENV === 'production') {
     return null;
-  }
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-mono">
-      <div>Breakpoint: <strong className="text-green-400">{currentBreakpoint}</strong></div>
-      <div>Size: <strong className="text-blue-400">{width}×{height}</strong></div>
+    <div className="fixed bottom-4 left-4 z-50 bg-black bg-opacity-80 text-white px-3 py-2 rounded-lg text-sm font-mono sm:px-4 md:px-6 lg:px-8">
+      <div>Breakpoint: <strong className="text-green-400 sm:px-4 md:px-6 lg:px-8">{currentBreakpoint}</strong></div>
+      <div>Size: <strong className="text-blue-400 sm:px-4 md:px-6 lg:px-8">{width}×{height}</strong></div>
     </div>
   );
 };

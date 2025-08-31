@@ -27,19 +27,18 @@ const ProjectedStandingsView: React.FC = () => {
                         setStandings(data);
                     } else {
                         setError("The Oracle could not generate projections at this time.");
-                    }
+
                 })
                 .catch(() => setError("An error occurred while consulting the Oracle."))
                 .finally(() => setIsLoading(false));
         } else {
             setIsLoading(false);
-        }
+
     }, [league]);
 
     if (!league || !(league.status === 'IN_SEASON' || league.status === 'PLAYOFFS')) {
         return <ErrorDisplay title="Not Available" message="Projected standings are only available during an active season." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} />;
-    }
-    
+
     const sortedStandings = standings
         ? [...standings].sort((a, b) => b.projectedWins - a.projectedWins)
         : [];
@@ -53,7 +52,7 @@ const ProjectedStandingsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }} className="glass-button">
                     Back to Standings
                 </button>
             </header>
@@ -102,7 +101,7 @@ const ProjectedStandingsView: React.FC = () => {
                             </table>
                         </div>
                      )
-                    }
+
                 </Widget>
             </main>
         </div>

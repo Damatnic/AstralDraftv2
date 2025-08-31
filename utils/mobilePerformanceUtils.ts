@@ -364,6 +364,7 @@ export const usePWAInstall = (): PWAInstallPrompt => {
         if (!installPrompt) return;
 
         try {
+
             const result = await installPrompt.prompt();
             console.log('PWA install prompt result:', result);
             
@@ -371,36 +372,10 @@ export const usePWAInstall = (): PWAInstallPrompt => {
                 setInstallPrompt(null);
                 setIsInstallable(false);
             }
-        } catch (error) {
-            console.error('PWA install failed:', error);
-        }
-    }, [installPrompt]);
 
-    return {
-        isInstallable,
-        installPrompt,
-        showInstallPrompt
-    };
-};
-
-// Mobile-optimized image loading
-export const useMobileImageOptimization = () => {
-    const deviceCapabilities = useRef(detectMobileCapabilities());
-    const imageCache = useRef(new Map<string, string>());
-
-    const optimizeImageForMobile = useCallback(async (
-        src: string,
-        options: {
-            width?: number;
-            height?: number;
-            quality?: number;
-            format?: 'webp' | 'jpeg';
-        } = {}
-    ): Promise<string> => {
-        const { isLowEndDevice, devicePixelRatio } = deviceCapabilities.current;
-        const { width, height, quality = isLowEndDevice ? 0.6 : 0.8, format = 'webp' } = options;
-
-        const cacheKey = `${src}-${width}-${height}-${quality}-${format}`;
+    } catch (error) {
+        console.error(error);
+    `${src}-${width}-${height}-${quality}-${format}`;
         if (imageCache.current.has(cacheKey)) {
             const cached = imageCache.current.get(cacheKey);
             return cached || src;
@@ -452,154 +427,8 @@ export const useMobileImageOptimization = () => {
 
                     imageCache.current.set(cacheKey, optimizedDataUrl);
                     resolve(optimizedDataUrl);
-                } catch (error) {
-                    console.warn('Image optimization failed:', error);
-                    resolve(src);
-                }
-            };
-
-            img.onerror = () => resolve(src);
-            img.src = src;
-        });
-    }, []);
-
-    const clearImageCache = useCallback(() => {
-        imageCache.current.clear();
-    }, []);
-
-    return {
-        optimizeImageForMobile,
-        clearImageCache,
-        isLowEndDevice: deviceCapabilities.current.isLowEndDevice
-    };
-};
-
-// Mobile touch performance optimization
-export const useMobileTouchOptimization = () => {
-    const lastTouchTime = useRef(0);
-    const touchStartPosition = useRef<{ x: number; y: number } | null>(null);
-
-    const optimizeTouchEvent = useCallback((callback: (event: TouchEvent) => void, delay = 16) => {
-        return (event: TouchEvent) => {
-            const now = Date.now();
-            
-            if (now - lastTouchTime.current >= delay) {
-                callback(event);
-                lastTouchTime.current = now;
-            }
-        };
-    }, []);
-
-    const handleTouchStart = useCallback((event: TouchEvent) => {
-        const touch = event.touches[0];
-        touchStartPosition.current = { x: touch.clientX, y: touch.clientY };
-        
-        // Prevent zooming on double tap for specific elements
-        if (event.touches.length === 1) {
-            const target = event.target as HTMLElement;
-            if (target.classList.contains('prevent-zoom')) {
-                event.preventDefault();
-            }
-        }
-    }, []);
-
-    const getTouchDistance = useCallback((startPos: { x: number; y: number }, endPos: { x: number; y: number }) => {
-        const dx = endPos.x - startPos.x;
-        const dy = endPos.y - startPos.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }, []);
-
-    return {
-        optimizeTouchEvent,
-        handleTouchStart,
-        getTouchDistance,
-        touchStartPosition: touchStartPosition.current
-    };
-};
-
-// Network-aware loading
-export const useNetworkAwareLoading = () => {
-    const [connectionInfo, setConnectionInfo] = useState<{
-        effectiveType: string;
-        saveData: boolean;
-        downlink: number;
-    } | null>(null);
-
-    useEffect(() => {
-        const connection = (navigator as any).connection || (navigator as any).mozConnection;
-        
-        if (connection) {
-            const updateConnectionInfo = () => {
-                setConnectionInfo({
-                    effectiveType: connection.effectiveType,
-                    saveData: connection.saveData,
-                    downlink: connection.downlink
-                });
-            };
-
-            updateConnectionInfo();
-            connection.addEventListener('change', updateConnectionInfo);
-
-            return () => {
-                connection.removeEventListener('change', updateConnectionInfo);
-            };
-        }
-    }, []);
-
-    const shouldLoadHeavyContent = useCallback((contentType: 'images' | 'videos' | 'animations') => {
-        if (!connectionInfo) return true;
-
-        const { effectiveType, saveData } = connectionInfo;
-
-        if (saveData) {
-            return contentType === 'images';
-        }
-
-        switch (effectiveType) {
-            case 'slow-2g':
-                return false;
-            case '2g':
-                return contentType === 'images';
-            case '3g':
-                return contentType !== 'videos';
-            case '4g':
-            default:
-                return true;
-        }
-    }, [connectionInfo]);
-
-    return {
-        connectionInfo,
-        shouldLoadHeavyContent,
-        isSlowConnection: connectionInfo?.effectiveType === 'slow-2g' || connectionInfo?.effectiveType === '2g',
-        isDataSaverOn: connectionInfo?.saveData || false
-    };
-};
-
-// Mobile gesture performance optimization
-export const useMobileGesturePerformance = () => {
-    const gestureStartTime = useRef(0);
-    const gestureFrameId = useRef<number | null>(null);
-
-    const optimizeGestureCallback = useCallback((callback: () => void) => {
-        if (gestureFrameId.current) {
-            cancelAnimationFrame(gestureFrameId.current);
-        }
-
-        gestureFrameId.current = requestAnimationFrame(() => {
-            callback();
-            gestureFrameId.current = null;
-        });
-    }, []);
-
-    const startGestureTracking = useCallback(() => {
-        gestureStartTime.current = performance.now();
-    }, []);
-
-    const endGestureTracking = useCallback((gestureName: string) => {
-        const duration = performance.now() - gestureStartTime.current;
-        if (duration > 16) { // More than one frame
-            console.warn(`Gesture "${gestureName}" took ${duration.toFixed(2)}ms`);
+                
+    `Gesture "${gestureName}" took ${duration.toFixed(2)}ms`);
         }
     }, []);
 

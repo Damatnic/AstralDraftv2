@@ -1,6 +1,7 @@
 
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import type { Team, League, AiLineupSuggestion } from '../../types';
 import { Widget } from '../ui/Widget';
 import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
@@ -12,9 +13,10 @@ interface AiCoManagerWidgetProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
-const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }: any) => {
+const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<AiLineupSuggestion | null>(null);
 
@@ -22,13 +24,15 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
         setIsLoading(true);
         setSuggestion(null);
         try {
+
             const result = await getAiOptimalLineup(team, league);
             setSuggestion(result);
-        } catch (e) {
+        
+    } catch (error) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Could not get a lineup suggestion.", type: 'SYSTEM' } });
         } finally {
             setIsLoading(false);
-        }
+
     };
 
     const handleAcceptLineup = () => {
@@ -43,7 +47,7 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
 
     return (
         <Widget title="AI Co-Manager" icon={<BrainCircuitIcon />}>
-            <div className="p-3">
+            <div className="p-3 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
                     {isLoading ? (
                         <motion.div key="loading" {...{ initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }}>
@@ -57,17 +61,17 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
                                 animate: { opacity: 1, y: 0 },
                             }}
                         >
-                            <p className="text-xs text-cyan-300 font-bold">Oracle's Recommendation:</p>
-                            <p className="text-xs italic text-gray-300 my-1">"{suggestion.reasoning}"</p>
-                            <div className="flex gap-2 mt-2">
-                                <button onClick={() => setSuggestion(null)} className="flex-1 px-2 py-1 text-xs font-bold rounded-md bg-transparent text-gray-400 hover:bg-white/10">Dismiss</button>
-                                <button onClick={handleAcceptLineup} className="flex-1 px-2 py-1 text-xs font-bold rounded-md bg-green-500 text-white hover:bg-green-400">Set Lineup</button>
+                            <p className="text-xs text-cyan-300 font-bold sm:px-4 md:px-6 lg:px-8">Oracle's Recommendation:</p>
+                            <p className="text-xs italic text-gray-300 my-1 sm:px-4 md:px-6 lg:px-8">"{suggestion.reasoning}"</p>
+                            <div className="flex gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
+                                <button onClick={() => setSuggestion(null)}
+                                <button onClick={handleAcceptLineup} className="flex-1 px-2 py-1 text-xs font-bold rounded-md bg-green-500 text-white hover:bg-green-400 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Set Lineup</button>
                             </div>
                         </motion.div>
                     ) : (
                          <motion.div key="default" {...{ initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }}>
-                            <p className="text-center text-xs text-gray-400 mb-2">Let the Oracle recommend your best starting lineup for this week.</p>
-                            <button onClick={handleGetLineup} className="w-full py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20">
+                            <p className="text-center text-xs text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Let the Oracle recommend your best starting lineup for this week.</p>
+                            <button onClick={handleGetLineup} className="w-full py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                 Get Optimal Lineup
                             </button>
                          </motion.div>
@@ -78,4 +82,10 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
     );
 };
 
-export default AiCoManagerWidget;
+const AiCoManagerWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AiCoManagerWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AiCoManagerWidgetWithErrorBoundary);

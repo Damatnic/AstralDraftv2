@@ -13,6 +13,7 @@ type AuthMode = 'login' | 'register';
 
 interface AuthViewProps {
   // No props currently needed, but interface ready for future expansion
+
 }
 
 const AuthView: React.FC<AuthViewProps> = () => {
@@ -47,7 +48,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
         } else {
             if (!formData.username.trim()) return 'Username is required';
             if (!formData.password) return 'Password is required';
-        }
+
         return null;
     };
 
@@ -58,7 +59,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
         if (validationError) {
             setError(validationError);
             return;
-        }
 
         setIsSubmitting(true);
         setError(null);
@@ -77,10 +77,9 @@ const AuthView: React.FC<AuthViewProps> = () => {
                 if (response.success) {
                     // Auto-login after successful registration
                     response = await authService.login(formData.username, formData.password);
-                }
+
             } else {
                 response = await authService.login(formData.username, formData.password);
-            }
 
             if (response.success && response.data) {
                 // Update app state with authenticated user
@@ -92,7 +91,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                         avatar,
                         isCommissioner: true, // You might want to get this from the user data
                         memberSince: new Date(response.data.user.created_at).getTime(),
-                    }
+
                 });
 
                 dispatch({
@@ -100,16 +99,16 @@ const AuthView: React.FC<AuthViewProps> = () => {
                     payload: {
                         message: `Welcome ${response.data.user.display_name || response.data.user.username}!`,
                         type: 'SYSTEM'
-                    }
+
                 });
             } else {
                 setError(response.error || 'Authentication failed');
-            }
+
         } catch (error) {
             setError('Something went wrong. Please try again.');
         } finally {
             setIsSubmitting(false);
-        }
+
     };
     
     const handleGenerate = async () => {
@@ -117,69 +116,17 @@ const AuthView: React.FC<AuthViewProps> = () => {
         if (!nameToUse.trim()) {
             setError("Please enter a name first.");
             return;
-        }
-        
+
         setIsGenerating(true);
         try {
+
             const branding = await generateTeamBranding(nameToUse);
             if (branding) {
                 setAvatar(branding.avatar);
-            }
-        } catch (error) {
-        } finally {
-            setIsGenerating(false);
-        }
-    };
 
-    const switchMode = () => {
-        setMode(mode === 'login' ? 'register' : 'login');
-        setError(null);
-        setFormData({
-            username: '',
-            email: '',
-            password: '',
-            displayName: '',
-            confirmPassword: ''
-        });
-    };
-
-    return (
-        <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 relative bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
-            {/* Enhanced background */}
-            <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 via-[var(--bg-primary)] to-purple-900/20"></div>
-            <div className="fixed inset-0">
-                <div className="stars stars1"></div>
-                <div className="stars stars2"></div>
-                <div className="stars stars3"></div>
-            </div>
-            
-             <motion.div
-                className="text-center mb-6 sm:mb-8 relative z-10"
-                {...{
-                  initial: { opacity: 0, y: -20 },
-                  animate: { opacity: 1, y: 0 },
-                  transition: { duration: 0.5 },
-                }}
-             >
-                <img src="/favicon.svg" alt="Astral Draft Logo" className="h-16 w-16 mx-auto mb-4" />
-                <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-wider text-white">ASTRAL DRAFT</h1>
-                <p className="text-base sm:text-lg text-cyan-200/80">Your AI-Powered Fantasy Commissioner</p>
-            </motion.div>
-
-            <motion.form
-                onSubmit={handleSubmit}
-                className="w-full max-w-md glass-pane p-6 sm:p-8 rounded-2xl shadow-2xl relative z-10"
-                {...{
-                  initial: { opacity: 0, y: 20 },
-                  animate: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.5 } },
-                }}
-            >
-                <div className="flex justify-center mb-6">
-                    <div className="flex bg-gray-900/60 rounded-lg p-1 border border-gray-600/50">
-                        <button
-                            type="button"
-                            onClick={() => setMode('login')}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+    } catch (error) {
+        console.error(error);
+    `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                                 mode === 'login' ? 'bg-cyan-500 text-white shadow-lg' : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
                             }`}
                         >
@@ -187,10 +134,7 @@ const AuthView: React.FC<AuthViewProps> = () => {
                         </button>
                         <button
                             type="button"
-                            onClick={() => setMode('register')}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                mode === 'register' ? 'bg-cyan-500 text-white shadow-lg' : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setMode('register')}`}
                         >
                             Register
                         </button>
@@ -218,7 +162,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                             type="text"
                             value={formData.username}
                             onChange={handleInputChange}
-                            className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                             placeholder="Enter your username"
                             required
                         />
@@ -236,7 +179,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                                     type="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
-                                    className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                                     placeholder="Enter your email"
                                     required
                                 />
@@ -252,7 +194,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                                     type="text"
                                     value={formData.displayName}
                                     onChange={handleInputChange}
-                                    className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                                     placeholder="e.g., Alex Johnson"
                                 />
                             </div>
@@ -269,7 +210,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                             type="password"
                             value={formData.password}
                             onChange={handleInputChange}
-                            className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                             placeholder="Enter your password"
                             required
                         />
@@ -286,7 +226,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                                 type="password"
                                 value={formData.confirmPassword}
                                 onChange={handleInputChange}
-                                className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                                 placeholder="Confirm your password"
                                 required
                             />
@@ -304,14 +243,12 @@ const AuthView: React.FC<AuthViewProps> = () => {
                                     type="text"
                                     value={avatar}
                                     onChange={(e: any) => setAvatar(e.target.value)}
-                                    className="w-full bg-gray-700/50 text-white p-3 rounded-md border border-gray-500/50 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 focus:outline-none transition-all"
                                     maxLength={2}
                                     placeholder="🏈"
                                 />
                                 <button 
                                     type="button" 
-                                    onClick={handleGenerate} 
-                                    disabled={isGenerating}
+                                    onClick={handleGenerate}
                                     className="p-3 bg-purple-500/20 text-purple-300 rounded-md hover:bg-purple-500/30 disabled:opacity-50"
                                 >
                                     {isGenerating ? (
@@ -347,7 +284,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                             <button
                                 type="button"
                                 onClick={switchMode}
-                                className="text-cyan-400 hover:text-cyan-300 underline font-medium"
                             >
                                 Sign up
                             </button>
@@ -358,7 +294,6 @@ const AuthView: React.FC<AuthViewProps> = () => {
                             <button
                                 type="button"
                                 onClick={switchMode}
-                                className="text-cyan-400 hover:text-cyan-300 underline font-medium"
                             >
                                 Sign in
                             </button>

@@ -3,6 +3,7 @@
  * Enhanced version with performance optimizations for large datasets and real-time interactions
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/SimpleAuthContext';
@@ -43,23 +44,23 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
             }`}
             onClick={() => onSelect(prediction.id)}
         >
-            <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-white text-sm leading-5">
+            <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                    <h4 className="font-medium text-gray-900 dark:text-white text-sm leading-5 sm:px-4 md:px-6 lg:px-8">
                         {prediction.question}
                     </h4>
-                    <div className="flex items-center space-x-3 mt-2 text-xs text-gray-500">
+                    <div className="flex items-center space-x-3 mt-2 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                         <span>Week {prediction.week}</span>
                         <span>•</span>
-                        <span className="capitalize">{prediction.type.replace('_', ' ')}</span>
+                        <span className="capitalize sm:px-4 md:px-6 lg:px-8">{prediction.type.replace('_', ' ')}</span>
                         <span>•</span>
                         <span>{prediction.participants} participants</span>
                     </div>
                 </div>
-                <div className="flex items-center space-x-2 ml-4">
-                    <div className="text-right">
-                        <div className="text-xs text-gray-500">Oracle Confidence</div>
-                        <div className="font-semibold text-blue-600 dark:text-blue-400">
+                <div className="flex items-center space-x-2 ml-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Oracle Confidence</div>
+                        <div className="font-semibold text-blue-600 dark:text-blue-400 sm:px-4 md:px-6 lg:px-8">
                             {Math.round(prediction.oracleConfidence)}%
                         </div>
                     </div>
@@ -71,9 +72,9 @@ const MemoizedPredictionCard = memo(({ prediction, isSelected, onSelect, onSubmi
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3"
+                    className="border-t border-gray-200 dark:border-gray-700 pt-3 mt-3 sm:px-4 md:px-6 lg:px-8"
                 >
-                    <PredictionSubmissionForm prediction={prediction} onSubmit={handleSubmit} />
+                    <PredictionSubmissionForm prediction={prediction} onSubmit={handleSubmit}
                 </motion.div>
             )}
         </motion.div>
@@ -91,25 +92,20 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
     const handleSubmit = useCallback(() => {
         if (selectedChoice !== null) {
             onSubmit(selectedChoice, confidence);
-        }
+
     }, [selectedChoice, confidence, onSubmit]);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                     Your Prediction
                 </label>
-                <div className="space-y-2">
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {prediction.choices.map((choice: string, index: number) => (
                         <button
                             key={index}
-                            onClick={() => setSelectedChoice(index)}
-                            className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                                selectedChoice === index
-                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
-                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 text-gray-700 dark:text-gray-300'
-                            }`}
+                            onClick={() => setSelectedChoice(index)}`}
                         >
                             {choice}
                         </button>
@@ -118,7 +114,7 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                     Confidence: {confidence}%
                 </label>
                 <input
@@ -127,15 +123,14 @@ const PredictionSubmissionForm = memo(({ prediction, onSubmit }: {
                     max="100"
                     value={confidence}
                     onChange={(e: any) => setConfidence(Number(e.target.value))}
-                    className="w-full"
                 />
             </div>
 
             <button
                 onClick={handleSubmit}
                 disabled={selectedChoice === null}
-                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
+                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
                 Submit Prediction
             </button>
         </div>
@@ -173,7 +168,7 @@ const VirtualizedPredictionList = memo(({
 
     return (
         <div 
-            className="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg"
+            className="overflow-auto border border-gray-200 dark:border-gray-700 rounded-lg sm:px-4 md:px-6 lg:px-8"
             style={{ height: containerHeight }}
             onScroll={handleScroll}
         >
@@ -188,14 +183,13 @@ const VirtualizedPredictionList = memo(({
                             right: 0,
                             height: item.height || 120
                         }}
-                        className="px-4 py-2"
+                        className="px-4 py-2 sm:px-4 md:px-6 lg:px-8"
                     >
                         <MemoizedPredictionCard
                             prediction={item.data}
                             isSelected={selectedPrediction === item.id}
                             onSelect={onSelectPrediction}
                             onSubmit={onSubmitPrediction}
-                        />
                     </div>
                 ))}
             </div>
@@ -207,7 +201,7 @@ const VirtualizedPredictionList = memo(({
 const OptimizedOracleRealTimePredictionInterface: React.FC<{
     week?: number;
     className?: string;
-}> = ({ week = 1, className = '' }: any) => {
+}> = ({ week = 1, className = '' }) => {
     const { user } = useAuth();
     const isMobile = useMediaQuery('(max-width: 768px)');
     
@@ -286,9 +280,7 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
             
             // Clear selection
             setSelectedPrediction(null);
-        } catch (error) {
-        }
-    }, [submitPrediction, addUpdate, refetchPredictions, setSelectedPrediction]);
+        }, [submitPrediction, addUpdate, refetchPredictions, setSelectedPrediction]);
 
     // Filter predictions based on search
     const filteredPredictions = useMemo(() => {
@@ -303,33 +295,38 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
     // Loading state
     if (predictionsLoading) {
         return (
-            <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <span className="ml-2 text-gray-600">Loading predictions...</span>
+            <div className="flex items-center justify-center h-64 sm:px-4 md:px-6 lg:px-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
+                <span className="ml-2 text-gray-600 sm:px-4 md:px-6 lg:px-8">Loading predictions...</span>
             </div>
         );
-    }
 
     // Error state
     if (predictionsError) {
         return (
-            <div className="text-center py-8">
-                <div className="text-red-600 mb-4">Failed to load predictions</div>
+            <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-red-600 mb-4 sm:px-4 md:px-6 lg:px-8">Failed to load predictions</div>
                 <button 
                     onClick={() => refetchPredictions()}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                 >
                     Retry
                 </button>
             </div>
         );
-    }
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <div className={`optimized-oracle-interface ${className}`}>
             {/* Performance metrics (development only) */}
             {process.env.NODE_ENV === 'development' && (
-                <div className="mb-4 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs">
+                <div className="mb-4 p-2 bg-gray-100 dark:bg-gray-800 rounded text-xs sm:px-4 md:px-6 lg:px-8">
                     <div>Renders: {metrics.renderCount} | Avg: {metrics.averageRenderTime.toFixed(2)}ms</div>
                     <div>Cache Hit Rate: {metrics.cacheHitRate.toFixed(1)}% | Memory: {metrics.memoryUsage.toFixed(1)}MB</div>
                 </div>
@@ -337,33 +334,31 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Header with search */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div className="flex items-center space-x-3">
-                    <ZapIcon className="w-6 h-6 text-blue-600" />
-                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                    <ZapIcon className="w-6 h-6 text-blue-600 sm:px-4 md:px-6 lg:px-8" />
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
                         Oracle Predictions
                     </h1>
-                    <span className="text-sm text-gray-500">Week {week}</span>
+                    <span className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Week {week}</span>
                 </div>
                 
-                <div className="flex items-center space-x-3">
-                    <div className="relative">
+                <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                    <div className="relative sm:px-4 md:px-6 lg:px-8">
                         <input
                             type="text"
                             placeholder="Search predictions..."
                             value={query}
                             onChange={(e: any) => setQuery(e.target.value)}
-                            className="w-64 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         {isSearching && (
-                            <div className="absolute right-2 top-2">
-                                <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                            <div className="absolute right-2 top-2 sm:px-4 md:px-6 lg:px-8">
+                                <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full sm:px-4 md:px-6 lg:px-8"></div>
                             </div>
                         )}
                     </div>
                     
                     <button
                         onClick={() => setActiveView(activeView === 'predictions' ? 'analytics' : 'predictions')}
-                        className="px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                     >
                         {activeView === 'predictions' ? 'Analytics' : 'Predictions'}
                     </button>
@@ -372,13 +367,13 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Real-time updates */}
             {updates.length > 0 && (
-                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
+                <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2 sm:px-4 md:px-6 lg:px-8">
                         Recent Updates
                     </div>
-                    <div className="space-y-1 max-h-20 overflow-y-auto">
+                    <div className="space-y-1 max-h-20 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                         {updates.slice(-3).map((update, index) => (
-                            <div key={index} className="text-xs text-blue-700 dark:text-blue-300">
+                            <div key={index} className="text-xs text-blue-700 dark:text-blue-300 sm:px-4 md:px-6 lg:px-8">
                                 {update.message}
                             </div>
                         ))}
@@ -388,8 +383,8 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Submission error */}
             {submissionError && (
-                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="text-sm text-red-700 dark:text-red-300">
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-sm text-red-700 dark:text-red-300 sm:px-4 md:px-6 lg:px-8">
                         {submissionError}
                     </div>
                 </div>
@@ -403,27 +398,27 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="space-y-4"
+                        className="space-y-4 sm:px-4 md:px-6 lg:px-8"
                     >
                         {/* User stats widget */}
                         {userStats?.data && !statsLoading && (
-                            <Widget title="Your Performance" className="mb-4">
+                            <Widget title="Your Performance" className="mb-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                                     <div>
-                                        <div className="text-2xl font-bold text-blue-600">{userStats.data.totalPredictions}</div>
-                                        <div className="text-sm text-gray-500">Total</div>
+                                        <div className="text-2xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">{userStats.data.totalPredictions}</div>
+                                        <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Total</div>
                                     </div>
                                     <div>
-                                        <div className="text-2xl font-bold text-green-600">{userStats.data.correctPredictions}</div>
-                                        <div className="text-sm text-gray-500">Correct</div>
+                                        <div className="text-2xl font-bold text-green-600 sm:px-4 md:px-6 lg:px-8">{userStats.data.correctPredictions}</div>
+                                        <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Correct</div>
                                     </div>
                                     <div>
-                                        <div className="text-2xl font-bold text-purple-600">{userStats.data.accuracy.toFixed(1)}%</div>
-                                        <div className="text-sm text-gray-500">Accuracy</div>
+                                        <div className="text-2xl font-bold text-purple-600 sm:px-4 md:px-6 lg:px-8">{userStats.data.accuracy.toFixed(1)}%</div>
+                                        <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
                                     </div>
                                     <div>
-                                        <div className="text-2xl font-bold text-orange-600">{userStats.data.currentStreak}</div>
-                                        <div className="text-sm text-gray-500">Streak</div>
+                                        <div className="text-2xl font-bold text-orange-600 sm:px-4 md:px-6 lg:px-8">{userStats.data.currentStreak}</div>
+                                        <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Streak</div>
                                     </div>
                                 </div>
                             </Widget>
@@ -446,8 +441,8 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
                         exit={{ opacity: 0 }}
                     >
                         {/* Analytics placeholder - would load optimized analytics component */}
-                        <div className="text-center py-8">
-                            <div className="text-gray-600 dark:text-gray-400">
+                        <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 Analytics view with optimized performance
                             </div>
                         </div>
@@ -457,10 +452,10 @@ const OptimizedOracleRealTimePredictionInterface: React.FC<{
 
             {/* Loading overlay for submissions */}
             {isSubmitting && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-3">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                        <span className="text-gray-700 dark:text-gray-300">Submitting prediction...</span>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
+                        <span className="text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Submitting prediction...</span>
                     </div>
                 </div>
             )}

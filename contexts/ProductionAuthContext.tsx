@@ -47,19 +47,20 @@ export interface User {
     streak: number;
     points: number;
   };
-}
 
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   token: string | null;
+
 }
 
 export interface LoginCredentials {
   email: string;
   password: string;
   rememberMe?: boolean;
+
 }
 
 export interface RegisterData {
@@ -69,16 +70,19 @@ export interface RegisterData {
   password: string;
   confirmPassword: string;
   acceptTerms: boolean;
+
 }
 
 export interface ResetPasswordData {
   email: string;
+
 }
 
 export interface ChangePasswordData {
   currentPassword: string;
   newPassword: string;
   confirmNewPassword: string;
+
 }
 
 export interface AuthContextType extends AuthState {
@@ -92,7 +96,6 @@ export interface AuthContextType extends AuthState {
   verifyEmail: (token: string) => Promise<{ success: boolean; error?: string }>;
   resendVerification: () => Promise<{ success: boolean; error?: string }>;
   deleteAccount: () => Promise<{ success: boolean; error?: string }>;
-}
 
 // JWT Token Interface
 interface JWTPayload {
@@ -102,7 +105,6 @@ interface JWTPayload {
   isAdmin: boolean;
   iat: number;
   exp: number;
-}
 
 // Create Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -117,39 +119,57 @@ const TOKEN_KEY = 'astral_draft_token';
 const REFRESH_TOKEN_KEY = 'astral_draft_refresh_token';
 
 // Helper Functions
+}
+
 const getStoredToken = (): string | null => {
   try {
+
     return localStorage.getItem(TOKEN_KEY);
-  } catch {
+  
+    } catch (error) {
+        console.error(error);
+    } catch {
     return null;
-  }
+
 };
 
 const setStoredToken = (token: string): void => {
   try {
+
     localStorage.setItem(TOKEN_KEY, token);
-  } catch {
+  
+    } catch (error) {
+        console.error(error);
+    } catch {
     // Handle localStorage errors silently
-  }
+
 };
 
 const removeStoredToken = (): void => {
   try {
+
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
-  } catch {
+  
+    } catch (error) {
+        console.error(error);
+    } catch {
     // Handle localStorage errors silently
-  }
+
 };
 
 const isTokenValid = (token: string): boolean => {
   try {
+
     const decoded = jwtDecode<JWTPayload>(token);
     const currentTime = Date.now() / 1000;
     return decoded.exp > currentTime;
-  } catch {
+  
+    } catch (error) {
+        console.error(error);
+    } catch {
     return false;
-  }
+
 };
 
 // API Helper
@@ -174,16 +194,16 @@ const apiRequest = async (
 
     if (!response.ok) {
       throw new Error(data.message || `HTTP ${response.status}`);
-    }
 
     return data;
-  } catch (error) {
+  
+    } catch (error) {
     throw error;
-  }
+
 };
 
 // Production Auth Provider
-export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
+export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,
@@ -199,9 +219,9 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       if (!token || !isTokenValid(token)) {
         setAuthState(prev => ({ ...prev, isLoading: false }));
         return;
-      }
 
       try {
+
         // Fetch current user data
         const userData = await apiRequest('/auth/me');
         
@@ -211,10 +231,11 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
           isLoading: false,
           token,
         });
-      } catch (error) {
+      
+    } catch (error) {
         removeStoredToken();
         setAuthState(prev => ({ ...prev, isLoading: false }));
-      }
+
     };
 
     initializeAuth();
@@ -226,15 +247,16 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
 
     const refreshInterval = setInterval(async () => {
       try {
+
         const decoded = jwtDecode<JWTPayload>(authState.token!);
         const timeUntilExpiry = decoded.exp * 1000 - Date.now();
         
         // Refresh if token expires in less than 5 minutes
         if (timeUntilExpiry < 5 * 60 * 1000) {
           await refreshToken();
-        }
-      } catch (error) {
-      }
+
+    } catch (error) {
+
     }, 60000); // Check every minute
 
     return () => clearInterval(refreshInterval);
@@ -243,6 +265,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
   // Login
   const login = async (credentials: LoginCredentials): Promise<{ success: boolean; error?: string }> => {
     try {
+
       setAuthState(prev => ({ ...prev, isLoading: true }));
 
       const response = await apiRequest('/auth/login', {
@@ -255,7 +278,6 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       setStoredToken(token);
       if (refreshToken) {
         localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-      }
 
       setAuthState({
         user,
@@ -265,15 +287,17 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       });
 
       return { success: true };
-    } catch (error: any) {
+    
+    } catch (error) {
       setAuthState(prev => ({ ...prev, isLoading: false }));
       return { success: false, error: error.message || 'Login failed' };
-    }
+
   };
 
   // Register
   const register = async (data: RegisterData): Promise<{ success: boolean; error?: string }> => {
     try {
+
       setAuthState(prev => ({ ...prev, isLoading: true }));
 
       await apiRequest('/auth/register', {
@@ -286,10 +310,11 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       return { 
         success: true
       };
-    } catch (error: any) {
+    
+    } catch (error) {
       setAuthState(prev => ({ ...prev, isLoading: false }));
       return { success: false, error: error.message || 'Registration failed' };
-    }
+
   };
 
   // Logout
@@ -314,7 +339,6 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       const refreshTokenValue = localStorage.getItem(REFRESH_TOKEN_KEY);
       if (!refreshTokenValue) {
         throw new Error('No refresh token available');
-      }
 
       const response = await apiRequest('/auth/refresh', {
         method: 'POST',
@@ -331,38 +355,43 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       }));
 
       return true;
+    
     } catch (error) {
       logout();
       return false;
-    }
+
   }, [logout]);
 
   // Reset Password
   const resetPassword = async (data: ResetPasswordData): Promise<{ success: boolean; error?: string }> => {
     try {
+
       await apiRequest('/auth/reset-password', {
         method: 'POST',
         body: JSON.stringify(data),
       });
 
       return { success: true };
-    } catch (error: any) {
+    
+    } catch (error) {
       return { success: false, error: error.message || 'Password reset failed' };
-    }
+
   };
 
   // Change Password
   const changePassword = async (data: ChangePasswordData): Promise<{ success: boolean; error?: string }> => {
     try {
+
       await apiRequest('/auth/change-password', {
         method: 'POST',
         body: JSON.stringify(data),
       });
 
       return { success: true };
-    } catch (error: any) {
+    
+    } catch (error) {
       return { success: false, error: error.message || 'Password change failed' };
-    }
+
   };
 
   // Update Profile
@@ -379,15 +408,7 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       }));
 
       return { success: true };
-    } catch (error: any) {
-      return { success: false, error: error.message || 'Profile update failed' };
-    }
-  };
-
-  // Verify Email
-  const verifyEmail = useCallback(async (token: string): Promise<{ success: boolean; error?: string }> => {
-    try {
-      await apiRequest(`/auth/verify-email/${token}`, {
+    `/auth/verify-email/${token}`, {
         method: 'POST',
       });
 
@@ -395,39 +416,42 @@ export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ chil
       if (authState.isAuthenticated) {
         const userData = await apiRequest('/auth/me');
         setAuthState(prev => ({ ...prev, user: userData }));
-      }
 
       return { success: true };
     } catch (error: any) {
       return { success: false, error: error.message || 'Email verification failed' };
-    }
+
   }, [authState.isAuthenticated]);
 
   // Resend Verification
   const resendVerification = async (): Promise<{ success: boolean; error?: string }> => {
     try {
+
       await apiRequest('/auth/resend-verification', {
         method: 'POST',
       });
 
       return { success: true };
-    } catch (error: any) {
+    
+    } catch (error) {
       return { success: false, error: error.message || 'Failed to resend verification' };
-    }
+
   };
 
   // Delete Account
   const deleteAccount = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     try {
+
       await apiRequest('/auth/delete-account', {
         method: 'DELETE',
       });
 
       logout();
       return { success: true };
-    } catch (error: any) {
+    
+    } catch (error) {
       return { success: false, error: error.message || 'Account deletion failed' };
-    }
+
   }, [logout]);
 
   const contextValue: AuthContextType = useMemo(() => ({
@@ -456,7 +480,7 @@ export const useProductionAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useProductionAuth must be used within a ProductionAuthProvider');
-  }
+
   return context;
 };
 

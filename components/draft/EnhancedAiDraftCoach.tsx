@@ -3,7 +3,8 @@
  * Advanced real-time coaching with strategy adjustments and market analysis
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Player, League, Team } from '../../types';
@@ -26,6 +27,7 @@ interface EnhancedAiDraftCoachProps {
     recentPicks: DraftPick[];
     onPlayerSelect: (player: Player) => void;
     onStrategyUpdate: (strategy: DraftStrategy) => void;
+
 }
 
 export interface DraftPick {
@@ -35,6 +37,7 @@ export interface DraftPick {
     player: Player;
     timestamp: number;
     adpDifference: number;
+
 }
 
 export interface DraftStrategy {
@@ -44,6 +47,7 @@ export interface DraftStrategy {
     riskTolerance: 'conservative' | 'moderate' | 'aggressive';
     valueBased: boolean;
     targetPositions: string[];
+
 }
 
 export interface CoachRecommendation {
@@ -58,6 +62,7 @@ export interface CoachRecommendation {
     action?: string;
     impact: number;
     timeLeft?: number;
+
 }
 
 export interface OpponentModel {
@@ -73,7 +78,6 @@ export interface OpponentModel {
     predictedNextPicks: Player[];
     confidence: number;
     draftStrategy: string;
-}
 
 export interface MarketInefficiency {
     id: string;
@@ -85,6 +89,7 @@ export interface MarketInefficiency {
     confidence: number;
     timeWindow: number;
     reasoning: string;
+
 }
 
 const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
@@ -98,7 +103,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     recentPicks,
     onPlayerSelect,
     onStrategyUpdate
-}: any) => {
+}) => {
     const [selectedTab, setSelectedTab] = React.useState<'recommendations' | 'opponents' | 'market' | 'strategy'>('recommendations');
     const [recommendations, setRecommendations] = React.useState<CoachRecommendation[]>([]);
     const [opponentModels, setOpponentModels] = React.useState<OpponentModel[]>([]);
@@ -116,7 +121,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     React.useEffect(() => {
         if (isMyTurn && availablePlayers.length > 0) {
             generateRecommendations();
-        }
+
     }, [isMyTurn, currentPick, availablePlayers, currentTeam]);
 
     // Update opponent models based on recent picks
@@ -158,7 +163,6 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                 impact: 85,
                 timeLeft: timeRemaining
             });
-        }
 
         // Position-specific recommendations
         if (currentRound <= 3 && topRBs.length > 0) {
@@ -176,7 +180,6 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                 ],
                 impact: 75
             });
-        }
 
         // Urgency recommendations for time pressure
         if (timeRemaining < 30 && isMyTurn) {
@@ -195,7 +198,6 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                 impact: 60,
                 timeLeft: timeRemaining
             });
-        }
 
         // Market inefficiency alerts
         const undervaluedPlayers = availablePlayers.filter((p: any) => p?.adp > currentPick + 10);
@@ -214,7 +216,6 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                 ],
                 impact: 65
             });
-        }
 
         setRecommendations(newRecommendations);
     }, [availablePlayers, currentPick, currentRound, isMyTurn, timeRemaining, currentTeam]);
@@ -231,7 +232,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                 teamPicks.forEach((pick: any) => {
                     if (pick.player) {
                         positionCounts[pick.player.position] = (positionCounts[pick.player.position] || 0) + 1;
-                    }
+
                 });
 
                 // Predict next picks based on patterns
@@ -284,7 +285,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                     timeWindow: 3,
                     reasoning: `Position scarcity increasing, consider targeting ${position} soon`
                 });
-            }
+
         });
 
         // Detect undervalued players
@@ -301,7 +302,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                     timeWindow: 5,
                     reasoning: 'Significant value opportunity - player drafted much later than expected'
                 });
-            }
+
         });
 
         // Detect tier breaks
@@ -321,19 +322,19 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                         timeWindow: 2,
                         reasoning: `Consider reaching for ${positionPlayers[0].name} before tier drop`
                     });
-                }
-            }
+
+
         });
 
         setMarketInefficiencies(inefficiencies);
     }, [recentPicks, availablePlayers, currentPick]);
 
     const getRecommendationIcon = (type: string, priority: string) => {
-        if (priority === 'critical') return <AlertTriangleIcon className="w-5 h-5 text-red-400" />;
-        if (type === 'pick') return <CheckIcon className="w-5 h-5 text-green-400" />;
-        if (type === 'market') return <TrendingUpIcon className="w-5 h-5 text-blue-400" />;
-        if (type === 'strategy') return <BarChartIcon className="w-5 h-5 text-purple-400" />;
-        return <BrainCircuitIcon className="w-5 h-5 text-gray-400" />;
+        if (priority === 'critical') return <AlertTriangleIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (type === 'pick') return <CheckIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (type === 'market') return <TrendingUpIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (type === 'strategy') return <BarChartIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
+        return <BrainCircuitIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
     const getPriorityColor = (priority: string) => {
@@ -343,46 +344,54 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
             case 'medium': return 'border-yellow-400 bg-yellow-500/10';
             case 'low': return 'border-gray-400 bg-gray-500/10';
             default: return 'border-gray-400 bg-gray-500/10';
-        }
+
     };
 
     const handleRecommendationAction = (recommendation: CoachRecommendation) => {
         if (recommendation.player && recommendation.type === 'pick') {
             onPlayerSelect(recommendation.player);
-        }
+
     };
 
     const tabs = [
-        { id: 'recommendations', label: 'Recommendations', icon: <BrainCircuitIcon className="w-4 h-4" /> },
-        { id: 'opponents', label: 'Opponents', icon: <SearchIcon className="w-4 h-4" /> },
-        { id: 'market', label: 'Market', icon: <TrendingUpIcon className="w-4 h-4" /> },
-        { id: 'strategy', label: 'Strategy', icon: <BarChartIcon className="w-4 h-4" /> }
+        { id: 'recommendations', label: 'Recommendations', icon: <BrainCircuitIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+        { id: 'opponents', label: 'Opponents', icon: <SearchIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+        { id: 'market', label: 'Market', icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+        { id: 'strategy', label: 'Strategy', icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
     ];
 
+  if (isLoading) {
     return (
-        <div className="h-full flex flex-col bg-[var(--panel-bg)]">
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
+        <div className="h-full flex flex-col bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
             {/* Header with AI Status */}
-            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)]">
-                <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-lg text-[var(--text-primary)] flex items-center gap-2">
-                        <BrainCircuitIcon className="w-6 h-6 text-blue-400" />
+            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="font-bold text-lg text-[var(--text-primary)] flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <BrainCircuitIcon className="w-6 h-6 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
                         AI Draft Coach
                     </h3>
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span className="text-xs text-[var(--text-secondary)]">Active</span>
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
+                        <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Active</span>
                     </div>
                 </div>
                 
                 {isMyTurn && (
-                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-3">
-                        <div className="flex items-center justify-between">
-                            <span className="text-blue-400 font-medium">Your Turn!</span>
-                            <span className="text-blue-400 font-mono">
+                    <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-blue-400 font-medium sm:px-4 md:px-6 lg:px-8">Your Turn!</span>
+                            <span className="text-blue-400 font-mono sm:px-4 md:px-6 lg:px-8">
                                 {Math.floor(timeRemaining / 60)}:{(timeRemaining % 60).toString().padStart(2, '0')}
                             </span>
                         </div>
-                        <div className="text-sm text-[var(--text-secondary)] mt-1">
+                        <div className="text-sm text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                             Pick {currentPick} • Round {currentRound}
                         </div>
                     </div>
@@ -390,17 +399,12 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex-shrink-0 border-b border-[var(--panel-border)]">
-                <div className="flex overflow-x-auto">
+            <div className="flex-shrink-0 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
-                            onClick={() => setSelectedTab(tab.id as any)}
-                            className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors whitespace-nowrap ${
-                                selectedTab === tab.id
-                                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-500/10'
-                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
-                            }`}
+                            onClick={() => setSelectedTab(tab.id as any)}`}
                         >
                             {tab.icon}
                             {tab.label}
@@ -410,7 +414,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={selectedTab}
@@ -418,10 +422,10 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
-                        className="p-4 h-full"
+                        className="p-4 h-full sm:px-4 md:px-6 lg:px-8"
                     >
                         {selectedTab === 'recommendations' && (
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {recommendations.map((rec, index) => (
                                     <motion.div
                                         key={rec.id}
@@ -431,40 +435,40 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                         className={`border rounded-lg p-4 cursor-pointer hover:bg-white/5 transition-colors ${getPriorityColor(rec.priority)}`}
                                         onClick={() => handleRecommendationAction(rec)}
                                     >
-                                        <div className="flex items-start gap-3">
+                                        <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                                             {getRecommendationIcon(rec.type, rec.priority)}
-                                            <div className="flex-1">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <h4 className="font-medium text-[var(--text-primary)]">
+                                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                         {rec.title}
                                                     </h4>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-xs text-[var(--text-secondary)]">
+                                                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                        <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                             {rec.confidence}% confidence
                                                         </span>
                                                         {rec.timeLeft && rec.timeLeft < 60 && (
-                                                            <span className="text-xs text-red-400 font-mono">
+                                                            <span className="text-xs text-red-400 font-mono sm:px-4 md:px-6 lg:px-8">
                                                                 {rec.timeLeft}s
                                                             </span>
                                                         )}
                                                     </div>
                                                 </div>
                                                 
-                                                <p className="text-sm text-[var(--text-secondary)] mb-3">
+                                                <p className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                                     {rec.description}
                                                 </p>
                                                 
-                                                <div className="space-y-1">
+                                                <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                                     {rec.reasoning.map((reason, idx) => (
-                                                        <div key={idx} className="flex items-center gap-2 text-xs text-[var(--text-secondary)]">
-                                                            <div className="w-1 h-1 bg-current rounded-full"></div>
+                                                        <div key={idx} className="flex items-center gap-2 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                                            <div className="w-1 h-1 bg-current rounded-full sm:px-4 md:px-6 lg:px-8"></div>
                                                             {reason}
                                                         </div>
                                                     ))}
                                                 </div>
                                                 
                                                 {rec.action && (
-                                                    <button className="mt-3 px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                                    <button className="mt-3 px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                         {rec.action}
                                                     </button>
                                                 )}
@@ -474,54 +478,54 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                 ))}
                                 
                                 {recommendations.length === 0 && (
-                                    <div className="text-center py-8 text-[var(--text-secondary)]">
-                                        <BrainCircuitIcon className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                                    <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                        <BrainCircuitIcon className="w-12 h-12 mx-auto mb-3 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                         <p>AI is analyzing the draft...</p>
-                                        <p className="text-sm">Recommendations will appear when it&apos;s your turn</p>
+                                        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Recommendations will appear when it&apos;s your turn</p>
                                     </div>
                                 )}
                             </div>
                         )}
                         
                         {selectedTab === 'opponents' && (
-                            <div className="space-y-4">
+                            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 {opponentModels.map((model, index) => (
                                     <motion.div
                                         key={model.teamId}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="bg-white/5 rounded-lg p-4"
+                                        className="bg-white/5 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h4 className="font-medium text-[var(--text-primary)]">
+                                        <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                            <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                 {model.teamName}
                                             </h4>
-                                            <span className="text-xs text-[var(--text-secondary)]">
+                                            <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 {model.confidence}% confidence
                                             </span>
                                         </div>
                                         
-                                        <div className="grid grid-cols-2 gap-3 mb-3">
+                                        <div className="grid grid-cols-2 gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
                                             <div>
-                                                <div className="text-xs text-[var(--text-secondary)]">Avg Pick Time</div>
-                                                <div className="font-mono text-sm text-[var(--text-primary)]">
+                                                <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Avg Pick Time</div>
+                                                <div className="font-mono text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                     {Math.round(model.tendencies.averagePickTime)}s
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="text-xs text-[var(--text-secondary)]">Strategy</div>
-                                                <div className="text-sm text-[var(--text-primary)]">
+                                                <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Strategy</div>
+                                                <div className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                     {model.draftStrategy}
                                                 </div>
                                             </div>
                                         </div>
                                         
                                         <div>
-                                            <div className="text-xs text-[var(--text-secondary)] mb-2">Likely Next Picks</div>
-                                            <div className="space-y-1">
+                                            <div className="text-xs text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Likely Next Picks</div>
+                                            <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                                 {model.predictedNextPicks.slice(0, 2).map((player: any) => (
-                                                    <div key={player.id} className="text-sm text-[var(--text-primary)]">
+                                                    <div key={player.id} className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                         {player.name} ({player.position})
                                                     </div>
                                                 ))}
@@ -533,29 +537,29 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                         )}
                         
                         {selectedTab === 'market' && (
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {marketInefficiencies.map((inefficiency, index) => (
                                     <motion.div
                                         key={inefficiency.id}
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="bg-white/5 rounded-lg p-4 border border-[var(--panel-border)]"
+                                        className="bg-white/5 rounded-lg p-4 border border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h4 className="font-medium text-[var(--text-primary)]">
+                                        <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                            <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                 {inefficiency.description}
                                             </h4>
-                                            <span className="text-xs text-[var(--text-secondary)]">
+                                            <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 {inefficiency.confidence}% confidence
                                             </span>
                                         </div>
                                         
-                                        <p className="text-sm text-[var(--text-secondary)] mb-2">
+                                        <p className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                             {inefficiency.reasoning}
                                         </p>
                                         
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                             <span className={`px-2 py-1 rounded text-xs font-medium ${
                                                 inefficiency.type === 'undervalued' ? 'bg-green-500/20 text-green-400' :
                                                 inefficiency.type === 'overvalued' ? 'bg-red-500/20 text-red-400' :
@@ -565,7 +569,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                                 {inefficiency.type.replace('_', ' ').toUpperCase()}
                                             </span>
                                             
-                                            <span className="text-xs text-[var(--text-secondary)]">
+                                            <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 Act within {inefficiency.timeWindow} picks
                                             </span>
                                         </div>
@@ -573,44 +577,44 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
                                 ))}
                                 
                                 {marketInefficiencies.length === 0 && (
-                                    <div className="text-center py-8 text-[var(--text-secondary)]">
-                                        <TrendingUpIcon className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                                    <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                        <TrendingUpIcon className="w-12 h-12 mx-auto mb-3 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                         <p>No significant market inefficiencies detected</p>
-                                        <p className="text-sm">Market is following expected patterns</p>
+                                        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Market is following expected patterns</p>
                                     </div>
                                 )}
                             </div>
                         )}
                         
                         {selectedTab === 'strategy' && (
-                            <div className="space-y-4">
-                                <div className="bg-white/5 rounded-lg p-4">
-                                    <h4 className="font-medium text-[var(--text-primary)] mb-3">Current Strategy</h4>
-                                    <div className="space-y-2">
+                            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="bg-white/5 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Current Strategy</h4>
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         <div>
-                                            <span className="text-sm text-[var(--text-secondary)]">Name: </span>
-                                            <span className="text-sm text-[var(--text-primary)]">{currentStrategy.name}</span>
+                                            <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Name: </span>
+                                            <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{currentStrategy.name}</span>
                                         </div>
                                         <div>
-                                            <span className="text-sm text-[var(--text-secondary)]">Description: </span>
-                                            <span className="text-sm text-[var(--text-primary)]">{currentStrategy.description}</span>
+                                            <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Description: </span>
+                                            <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{currentStrategy.description}</span>
                                         </div>
                                         <div>
-                                            <span className="text-sm text-[var(--text-secondary)]">Risk Tolerance: </span>
-                                            <span className="text-sm text-[var(--text-primary)]">{currentStrategy.riskTolerance}</span>
+                                            <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Risk Tolerance: </span>
+                                            <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{currentStrategy.riskTolerance}</span>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div className="bg-white/5 rounded-lg p-4">
-                                    <h4 className="font-medium text-[var(--text-primary)] mb-3">Position Priority</h4>
-                                    <div className="space-y-2">
+                                <div className="bg-white/5 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Position Priority</h4>
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {currentStrategy.positionPriority.map((position, index) => (
-                                            <div key={position} className="flex items-center justify-between">
-                                                <span className="text-sm text-[var(--text-primary)]">
+                                            <div key={position} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                     {index + 1}. {position}
                                                 </span>
-                                                <span className="text-xs text-[var(--text-secondary)]">
+                                                <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                     Priority {index + 1}
                                                 </span>
                                             </div>
@@ -661,7 +665,7 @@ const inferDraftStrategy = (picks: DraftPick[], roster: Player[]): string => {
     [...picks.map((p: any) => p.player), ...roster].forEach((player: any) => {
         if (player) {
             positionCounts[player.position] = (positionCounts[player.position] || 0) + 1;
-        }
+
     });
 
     const rbCount = positionCounts['RB'] || 0;
@@ -673,4 +677,10 @@ const inferDraftStrategy = (picks: DraftPick[], roster: Player[]): string => {
     return 'Balanced';
 };
 
-export default EnhancedAiDraftCoach;
+const EnhancedAiDraftCoachWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedAiDraftCoach {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedAiDraftCoachWithErrorBoundary);

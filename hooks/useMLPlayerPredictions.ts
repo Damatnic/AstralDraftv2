@@ -112,6 +112,7 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
     setState(prev => ({ ...prev, loading: true, error: null }));
 
     try {
+
       const prediction = await machineLearningPlayerPredictionService.generatePlayerPrediction(playerId, week, season);
       
       // Cache the result
@@ -127,21 +128,8 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
       onPredictionGenerated?.(prediction);
 
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to generate prediction';
-      setState(prev => ({
-        ...prev,
-        loading: false,
-        error: errorMessage
-      }));
-      onError?.(errorMessage);
-    }
-  }, [predictionCache, onPredictionGenerated, onError]);
-
-  /**
-   * Generate weekly rankings for a position
-   */
-  const generateRankings = useCallback(async (position: string, week: number, season: number = 2024, limit: number = 50) => {
-    const cacheKey = `${position}_${week}_${season}_${limit}`;
+        console.error(error);
+    `${position}_${week}_${season}_${limit}`;
     
     // Check cache first
     if (rankingsCache?.has(cacheKey)) {
@@ -156,6 +144,7 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
     setState(prev => ({ ...prev, loadingRankings: true, error: null }));
 
     try {
+
       const rankings = await machineLearningPlayerPredictionService.generateWeeklyRankings(position, week, season, limit);
       
       // Cache the result
@@ -170,6 +159,8 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
 
       onRankingsGenerated?.(rankings);
 
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to generate rankings';
       setState(prev => ({
@@ -188,6 +179,7 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
     setState(prev => ({ ...prev, loadingComparison: true, error: null }));
 
     try {
+
       const comparison = await machineLearningPlayerPredictionService.comparePlayerPredictions(playerId1, playerId2, week, season);
       
       setState(prev => ({
@@ -199,6 +191,8 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
 
       onComparisonGenerated?.(comparison);
 
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to compare players';
       setState(prev => ({
@@ -226,6 +220,7 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
       }));
 
       return metrics;
+    
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to backtest model';
       onError?.(errorMessage);

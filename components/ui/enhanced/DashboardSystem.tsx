@@ -3,6 +3,7 @@
  * Professional dashboard with customizable widgets, layout persistence, and advanced features
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useRef, useCallback, useMemo, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -61,7 +62,6 @@ export interface Widget {
   refreshInterval?: number;
   lastUpdated?: Date;
   priority?: number;
-}
 
 export interface DashboardLayout {
   id: string;
@@ -71,6 +71,7 @@ export interface DashboardLayout {
   created: Date;
   modified: Date;
   isDefault?: boolean;
+
 }
 
 export interface DashboardContextType {
@@ -89,7 +90,6 @@ export interface DashboardContextType {
   exportLayout: () => string;
   importLayout: (data: string) => void;
   resetLayout: () => void;
-}
 
 // =========================================
 // DASHBOARD CONTEXT
@@ -97,11 +97,13 @@ export interface DashboardContextType {
 
 const DashboardContext = React.createContext<DashboardContextType | null>(null);
 
+}
+
 export const useDashboard = (): DashboardContextType => {
   const context = React.useContext(DashboardContext);
   if (!context) {
     throw new Error('useDashboard must be used within DashboardProvider');
-  }
+
   return context;
 };
 
@@ -139,7 +141,7 @@ const widgetSizeConfig: Record<WidgetSize, {
     gridColumns: 'col-span-full', 
     gridRows: 'row-span-6', 
     minHeight: 'min-h-[600px]' 
-  }
+
 };
 
 // =========================================
@@ -153,6 +155,7 @@ interface SortableWidgetProps {
   onEdit?: (widget: Widget) => void;
   onRemove?: (widgetId: string) => void;
   onResize?: (widgetId: string, size: WidgetSize) => void;
+
 }
 
 const SortableWidget: React.FC<SortableWidgetProps> = ({
@@ -208,18 +211,18 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="absolute -top-2 -right-2 z-10 flex gap-1"
+            className="absolute -top-2 -right-2 z-10 flex gap-1 sm:px-4 md:px-6 lg:px-8"
           >
             {/* Drag Handle */}
             <motion.button
               {...attributes}
               {...listeners}
-              className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-700 transition-colors"
+              className="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-700 transition-colors sm:px-4 md:px-6 lg:px-8"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               title="Drag to reorder"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
               </svg>
             </motion.button>
@@ -227,12 +230,12 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
             {/* Edit Button */}
             <motion.button
               onClick={() => onEdit?.(widget)}
-              className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors"
+              className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors sm:px-4 md:px-6 lg:px-8"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               title="Edit widget"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </motion.button>
@@ -241,12 +244,12 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
             {!widget.isLocked && (
               <motion.button
                 onClick={() => onRemove?.(widget.id)}
-                className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors"
+                className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors sm:px-4 md:px-6 lg:px-8"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 title="Remove widget"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </motion.button>
@@ -256,13 +259,13 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
       </AnimatePresence>
 
       {/* Widget Content */}
-      <div className="h-full">
+      <div className="h-full sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
 
       {/* Editing Overlay */}
       {isEditing && (
-        <div className="absolute inset-0 border-2 border-dashed border-primary-400 rounded-lg pointer-events-none opacity-50" />
+        <div className="absolute inset-0 border-2 border-dashed border-primary-400 rounded-lg pointer-events-none opacity-50 sm:px-4 md:px-6 lg:px-8" />
       )}
     </motion.div>
   );
@@ -275,6 +278,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
 interface BaseWidgetProps {
   widget: Widget;
   className?: string;
+
 }
 
 const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
@@ -290,15 +294,15 @@ const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
       hover:bg-glass-heavy hover:border-glass-border-strong
       ${className}
     `}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-white">{widget.title}</h3>
+      <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+        <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">{widget.title}</h3>
         {widget.lastUpdated && (
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
             Updated {new Date(widget.lastUpdated).toLocaleTimeString()}
           </span>
         )}
       </div>
-      <div className="h-full pb-16">
+      <div className="h-full pb-16 sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
     </div>
@@ -310,11 +314,11 @@ export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
   
   return (
     <BaseWidget widget={widget}>
-      <div className="text-center">
-        <div className="text-4xl font-bold text-white mb-2">
+      <div className="text-center sm:px-4 md:px-6 lg:px-8">
+        <div className="text-4xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
           {data.value || '0'}
         </div>
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
           {data.subtitle || 'No data'}
         </div>
         {data.change && (
@@ -332,9 +336,9 @@ export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
 export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
   return (
     <BaseWidget widget={widget}>
-      <div className="flex items-center justify-center h-full text-gray-400">
-        <div className="text-center">
-          <div className="text-6xl mb-4">📊</div>
+      <div className="flex items-center justify-center h-full text-gray-400 sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+          <div className="text-6xl mb-4 sm:px-4 md:px-6 lg:px-8">📊</div>
           <div>Chart data would go here</div>
         </div>
       </div>
@@ -347,16 +351,16 @@ export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
   
   return (
     <BaseWidget widget={widget}>
-      <div className="space-y-3 max-h-full overflow-y-auto">
+      <div className="space-y-3 max-h-full overflow-y-auto sm:px-4 md:px-6 lg:px-8">
         {items.length === 0 ? (
-          <div className="text-center text-gray-400 py-8">
+          <div className="text-center text-gray-400 py-8 sm:px-4 md:px-6 lg:px-8">
             No items to display
           </div>
         ) : (
           items.map((item: any, index: number) => (
-            <div key={index} className="p-3 bg-glass-light rounded-lg">
-              <div className="font-medium text-white">{item.title}</div>
-              <div className="text-sm text-gray-400">{item.description}</div>
+            <div key={index} className="p-3 bg-glass-light rounded-lg sm:px-4 md:px-6 lg:px-8">
+              <div className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{item.title}</div>
+              <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{item.description}</div>
             </div>
           ))
         )}
@@ -399,6 +403,7 @@ interface DashboardGridProps {
   onWidgetUpdate: (widgetId: string, updates: Partial<Widget>) => void;
   onWidgetRemove: (widgetId: string) => void;
   columns?: number;
+
 }
 
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
@@ -449,7 +454,6 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
 
         return newItems;
       });
-    }
 
     setActiveId(null);
   }, [columns, onWidgetUpdate]);
@@ -502,6 +506,7 @@ interface WidgetLibraryProps {
   isOpen: boolean;
   onClose: () => void;
   onAddWidget: (widget: Omit<Widget, 'id'>) => void;
+
 }
 
 export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
@@ -542,7 +547,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-40"
+            className="fixed inset-0 bg-black/50 z-40 sm:px-4 md:px-6 lg:px-8"
             onClick={onClose}
           />
 
@@ -551,34 +556,34 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
-            className="fixed top-0 right-0 w-full max-w-md h-full bg-dark-900 border-l border-gray-700 z-50 overflow-y-auto"
+            className="fixed top-0 right-0 w-full max-w-md h-full bg-dark-900 border-l border-gray-700 z-50 overflow-y-auto sm:px-4 md:px-6 lg:px-8"
           >
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Widget Library</h2>
+            <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+                <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Widget Library</h2>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 bg-glass-medium rounded-full flex items-center justify-center text-white hover:bg-glass-heavy transition-colors"
-                >
+                  className="w-8 h-8 bg-glass-medium rounded-full flex items-center justify-center text-white hover:bg-glass-heavy transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                   ✕
                 </button>
               </div>
 
-              <div className="grid gap-4">
+              <div className="grid gap-4 sm:px-4 md:px-6 lg:px-8">
                 {availableWidgets.map((widget) => (
                   <motion.button
                     key={widget.type}
                     onClick={() => handleAddWidget(widget)}
-                    className="p-4 bg-glass-light hover:bg-glass-medium border border-glass-border rounded-xl text-left transition-all duration-200"
+                    className="p-4 bg-glass-light hover:bg-glass-medium border border-glass-border rounded-xl text-left transition-all duration-200 sm:px-4 md:px-6 lg:px-8"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="text-2xl">{widget.icon}</div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-semibold">{widget.title}</h3>
-                        <p className="text-gray-400 text-sm mt-1">{widget.description}</p>
-                        <div className="text-xs text-primary-400 mt-2">
+                    <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="text-2xl sm:px-4 md:px-6 lg:px-8">{widget.icon}</div>
+                      <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{widget.title}</h3>
+                        <p className="text-gray-400 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{widget.description}</p>
+                        <div className="text-xs text-primary-400 mt-2 sm:px-4 md:px-6 lg:px-8">
                           Size: {widget.defaultSize.toUpperCase()}
                         </div>
                       </div>
@@ -601,6 +606,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
 interface DashboardProviderProps {
   children: ReactNode;
   storageKey?: string;
+
 }
 
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({
@@ -656,11 +662,10 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
           items: [
             { title: 'Player Update', description: 'Latest injury report' },
             { title: 'Trade News', description: 'Big trade shakes up league' }
-          ]
+
         },
         isVisible: true
-      }
-    ]
+
   };
 
   // Initialize with default layout
@@ -668,37 +673,12 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
+
         const data = JSON.parse(stored);
         setLayouts(data.layouts || [defaultLayout]);
         setCurrentLayoutState(data.currentLayout || defaultLayout);
-      } catch (error) {
-        setLayouts([defaultLayout]);
-        setCurrentLayoutState(defaultLayout);
-      }
-    } else {
-      setLayouts([defaultLayout]);
-      setCurrentLayoutState(defaultLayout);
-    }
-  }, [storageKey]);
-
-  // Save to localStorage
-  React.useEffect(() => {
-    const data = {
-      layouts,
-      currentLayout
-    };
-    localStorage.setItem(storageKey, JSON.stringify(data));
-  }, [layouts, currentLayout, storageKey]);
-
-  const contextValue: DashboardContextType = {
-    layouts,
-    currentLayout,
-    isEditing,
-    availableWidgets: ['stat', 'chart', 'table', 'feed', 'player', 'standings', 'schedule', 'trades', 'news', 'analytics'],
-
-    createLayout: (name: string) => {
-      const newLayout: DashboardLayout = {
-        id: `layout-${Date.now()}`,
+      
+    `layout-${Date.now()}`,
         name,
         widgets: [],
         columns: 6,
@@ -712,7 +692,7 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       setLayouts(prev => prev.map(l => l.id === layout.id ? { ...layout, modified: new Date() } : l));
       if (currentLayout?.id === layout.id) {
         setCurrentLayoutState({ ...layout, modified: new Date() });
-      }
+
     },
 
     deleteLayout: (layoutId: string) => {
@@ -720,14 +700,14 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       if (currentLayout?.id === layoutId) {
         const remaining = layouts.filter(l => l.id !== layoutId);
         setCurrentLayoutState(remaining[0] || null);
-      }
+
     },
 
     setCurrentLayout: (layoutId: string) => {
       const layout = layouts.find(l => l.id === layoutId);
       if (layout) {
         setCurrentLayoutState(layout);
-      }
+
     },
 
     addWidget: (widget: Omit<Widget, 'id'>) => {
@@ -786,22 +766,31 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
     importLayout: (data: string) => {
       try {
+
         const parsed = JSON.parse(data);
         if (parsed.layouts && parsed.currentLayout) {
           setLayouts(parsed.layouts);
           setCurrentLayoutState(parsed.currentLayout);
-        }
-      } catch (error) {
+
+    } catch (error) {
         throw new Error('Invalid dashboard data format');
-      }
+
     },
 
     resetLayout: () => {
       setLayouts([defaultLayout]);
       setCurrentLayoutState(defaultLayout);
       setIsEditing(false);
-    }
+
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
 
   return (
     <DashboardContext.Provider value={contextValue}>

@@ -3,7 +3,8 @@
  * Helps users install the app as a native mobile app
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -13,9 +14,9 @@ interface BeforeInstallPromptEvent extends Event {
     platform: string;
   }>;
   prompt(): Promise<void>;
-}
 
 const PWAInstallPrompt: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -52,7 +53,7 @@ const PWAInstallPrompt: React.FC = () => {
         setTimeout(() => {
           setShowInstallPrompt(true);
         }, 5000); // Show after 5 seconds
-      }
+
     };
 
     // Listen for app installed event
@@ -75,18 +76,18 @@ const PWAInstallPrompt: React.FC = () => {
     if (!deferredPrompt) return;
 
     try {
+
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
-      
+
       if (outcome === 'accepted') {
         setIsInstalled(true);
-      }
-      
+
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
+
     } catch (error) {
-    }
+
   };
 
   const handleDismiss = () => {
@@ -103,7 +104,6 @@ const PWAInstallPrompt: React.FC = () => {
   // Don't show if already installed or dismissed this session
   if (isInstalled || sessionStorage.getItem('pwa-install-dismissed')) {
     return null;
-  }
 
   return (
     <>
@@ -111,10 +111,10 @@ const PWAInstallPrompt: React.FC = () => {
       {isIOS && !isStandalone && (
         <button
           onClick={handleIOSInstallInstructions}
-          className="fixed bottom-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors"
+          className="fixed bottom-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors sm:px-4 md:px-6 lg:px-8"
           title="Install App"
-        >
-          <span className="text-xl">📱</span>
+         aria-label="Action button">
+          <span className="text-xl sm:px-4 md:px-6 lg:px-8">📱</span>
         </button>
       )}
 
@@ -126,44 +126,44 @@ const PWAInstallPrompt: React.FC = () => {
               initial={{ opacity: 0, y: 100, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 100, scale: 0.9 }}
-              className="card w-full max-w-md"
+              className="card w-full max-w-md sm:px-4 md:px-6 lg:px-8"
             >
               {/* Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="text-2xl">🏈</span>
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-2xl sm:px-4 md:px-6 lg:px-8">🏈</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-white">Install Astral Draft</h3>
-                    <p className="text-sm text-slate-400">Get the full app experience</p>
+                    <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">Install Astral Draft</h3>
+                    <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Get the full app experience</p>
                   </div>
                 </div>
                 <button
                   onClick={handleDismiss}
-                  className="text-slate-400 hover:text-white transition-colors"
-                >
-                  <span className="text-xl">×</span>
+                  className="text-slate-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
+                  <span className="text-xl sm:px-4 md:px-6 lg:px-8">×</span>
                 </button>
               </div>
 
               {/* Content */}
-              <div className="space-y-4">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {isIOS ? (
                   /* iOS Installation Instructions */
                   <div>
-                    <h4 className="text-white font-semibold mb-3">Install on iOS:</h4>
-                    <div className="space-y-3 text-sm text-slate-300">
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">1️⃣</span>
+                    <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Install on iOS:</h4>
+                    <div className="space-y-3 text-sm text-slate-300 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">1️⃣</span>
                         <span>Tap the <strong>Share</strong> button in Safari</span>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">2️⃣</span>
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">2️⃣</span>
                         <span>Scroll down and tap <strong>"Add to Home Screen"</strong></span>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">3️⃣</span>
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">3️⃣</span>
                         <span>Tap <strong>"Add"</strong> to install the app</span>
                       </div>
                     </div>
@@ -171,34 +171,34 @@ const PWAInstallPrompt: React.FC = () => {
                 ) : (
                   /* Android/Desktop Installation */
                   <div>
-                    <h4 className="text-white font-semibold mb-3">Why install Astral Draft?</h4>
-                    <div className="grid grid-cols-1 gap-3">
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">⚡</span>
+                    <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Why install Astral Draft?</h4>
+                    <div className="grid grid-cols-1 gap-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">⚡</span>
                         <div>
-                          <div className="text-white font-medium">Faster Performance</div>
-                          <div className="text-xs text-slate-400">Instant loading and smooth animations</div>
+                          <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Faster Performance</div>
+                          <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Instant loading and smooth animations</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">📱</span>
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">📱</span>
                         <div>
-                          <div className="text-white font-medium">Native App Experience</div>
-                          <div className="text-xs text-slate-400">Works like a real mobile app</div>
+                          <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Native App Experience</div>
+                          <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Works like a real mobile app</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">🔔</span>
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">🔔</span>
                         <div>
-                          <div className="text-white font-medium">Push Notifications</div>
-                          <div className="text-xs text-slate-400">Get alerts for trades, waivers, and scores</div>
+                          <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Push Notifications</div>
+                          <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Get alerts for trades, waivers, and scores</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg">
-                        <span className="text-lg">📶</span>
+                      <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">📶</span>
                         <div>
-                          <div className="text-white font-medium">Offline Access</div>
-                          <div className="text-xs text-slate-400">View your team even without internet</div>
+                          <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Offline Access</div>
+                          <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">View your team even without internet</div>
                         </div>
                       </div>
                     </div>
@@ -206,34 +206,34 @@ const PWAInstallPrompt: React.FC = () => {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 pt-4">
+                <div className="flex gap-3 pt-4 sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={handleDismiss}
-                    className="btn btn-secondary flex-1"
-                  >
+                    className="btn btn-secondary flex-1 sm:px-4 md:px-6 lg:px-8"
+                   aria-label="Action button">
                     Maybe Later
                   </button>
                   {!isIOS && deferredPrompt && (
                     <button
                       onClick={handleInstallClick}
-                      className="btn btn-primary flex-1"
-                    >
+                      className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                       📱 Install App
                     </button>
                   )}
                   {isIOS && (
                     <button
                       onClick={handleDismiss}
-                      className="btn btn-primary flex-1"
-                    >
+                      className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                       Got It!
                     </button>
                   )}
                 </div>
 
                 {/* App Info */}
-                <div className="pt-4 border-t border-slate-600">
-                  <div className="flex items-center justify-between text-xs text-slate-400">
+                <div className="pt-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center justify-between text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                     <span>Size: ~2MB</span>
                     <span>Works offline</span>
                     <span>Free forever</span>
@@ -252,11 +252,11 @@ const PWAInstallPrompt: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 2 }}
           onClick={() => setShowInstallPrompt(true)}
-          className="fixed bottom-4 right-4 z-40 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white p-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-110"
+          className="fixed bottom-4 right-4 z-40 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white p-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-110 sm:px-4 md:px-6 lg:px-8"
           title="Install Astral Draft"
         >
-          <div className="flex items-center gap-2">
-            <span className="text-xl">📱</span>
+          <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+            <span className="text-xl sm:px-4 md:px-6 lg:px-8">📱</span>
             <span className="hidden sm:inline text-sm font-semibold">Install</span>
           </div>
         </motion.button>
@@ -265,4 +265,10 @@ const PWAInstallPrompt: React.FC = () => {
   );
 };
 
-export default PWAInstallPrompt;
+const PWAInstallPromptWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PWAInstallPrompt {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PWAInstallPromptWithErrorBoundary);

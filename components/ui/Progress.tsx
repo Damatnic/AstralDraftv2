@@ -8,6 +8,7 @@ interface ProgressProps {
   showLabel?: boolean;
   label?: string;
   className?: string;
+
 }
 
 export const Progress: React.FC<ProgressProps> = ({
@@ -18,7 +19,7 @@ export const Progress: React.FC<ProgressProps> = ({
   showLabel = false,
   label,
   className = ''
-}: any) => {
+}) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   const sizeClasses = {
@@ -37,11 +38,11 @@ export const Progress: React.FC<ProgressProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {(showLabel || label) && (
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-[var(--text-primary)]">
+        <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
+          <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
             {label || 'Progress'}
           </span>
-          <span className="text-sm text-[var(--text-secondary)]">
+          <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
             {Math.round(percentage)}%
           </span>
         </div>

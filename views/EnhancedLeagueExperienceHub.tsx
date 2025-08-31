@@ -27,6 +27,7 @@ interface EnhancedLeagueExperienceHubProps {
   userName: string;
   teamName: string;
   currentWeek: number;
+
 }
 
 interface LeagueStats {
@@ -36,7 +37,6 @@ interface LeagueStats {
   achievementPoints: number;
   rivalries: number;
   activeStreaks: number;
-}
 
 const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = ({
   leagueId,
@@ -132,7 +132,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
       icon: Camera, 
       color: 'text-pink-400',
       description: 'Photo sharing and moments'
-    }
+
   ];
 
   const handleVictoryCelebration = () => {
@@ -233,8 +233,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
             ].map(action => (
               <button
                 key={action.label}
-                onClick={() => setActiveSection(action.section)}
-                className={`${action.color} hover:opacity-80 text-white p-3 rounded-lg transition-opacity flex items-center gap-2 text-sm font-semibold`}
+                onClick={() => setActiveSection(action.section)} hover:opacity-80 text-white p-3 rounded-lg transition-opacity flex items-center gap-2 text-sm font-semibold`}
               >
                 <action.icon className="w-4 h-4" />
                 {action.label}
@@ -339,7 +338,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         );
       default:
         return renderOverview();
-    }
+
   };
 
   return (
@@ -381,12 +380,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
             {sections.map(section => (
               <button
                 key={section.id}
-                onClick={() => setActiveSection(section.id)}
-                className={`w-full text-left p-3 rounded-lg transition-all group ${
-                  activeSection === section.id
-                    ? 'bg-primary-600 text-white'
-                    : 'hover:bg-dark-700 text-gray-300'
-                }`}
+                onClick={() => setActiveSection(section.id)}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">

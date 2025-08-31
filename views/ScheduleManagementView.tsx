@@ -22,7 +22,7 @@ const MatchupCard: React.FC<{
     league: ReturnType<typeof useLeague>['league'],
     onSwap?: () => void,
     isPlayoffs?: boolean 
-}> = ({ matchup, league, onSwap, isPlayoffs }: any) => {
+}> = ({ matchup, league, onSwap, isPlayoffs }) => {
     const teamA = league?.teams.find((t: any) => t.id === matchup.teamA.teamId);
     const teamB = league?.teams.find((t: any) => t.id === matchup.teamB.teamId);
 
@@ -59,7 +59,6 @@ const MatchupCard: React.FC<{
             {onSwap && (
                 <button
                     onClick={onSwap}
-                    className="ml-4 p-2 glass-button"
                     title="Swap matchup"
                 >
                     <ShuffleIcon className="w-4 h-4" />
@@ -78,8 +77,7 @@ const ScheduleManagementView: React.FC = () => {
 
     if (!league || state.user?.id !== league.commissionerId) {
         return <ErrorDisplay title="Access Denied" message="You are not the commissioner of this league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
-    
+
     if (league.schedule.length === 0) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 p-8">
@@ -95,7 +93,7 @@ const ScheduleManagementView: React.FC = () => {
                             The league schedule will be automatically generated after the draft is complete.
                         </p>
                         <button
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })}
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }}
                             className="glass-button-primary px-6 py-3"
                         >
                             Back to Commissioner Tools
@@ -104,7 +102,6 @@ const ScheduleManagementView: React.FC = () => {
                 </div>
             </div>
         );
-    }
 
     const weeklyMatchups = league.schedule.filter((m: any) => m.week === selectedWeek);
     const maxWeek = Math.max(...league.schedule.map((m: any) => m.week));
@@ -138,7 +135,7 @@ const ScheduleManagementView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }} 
                     className="glass-button"
                 >
                     Back to Tools
@@ -184,7 +181,6 @@ const ScheduleManagementView: React.FC = () => {
                             <div className="flex items-center gap-2">
                                 <button 
                                     onClick={() => setSelectedWeek(w => Math.max(1, w-1))} 
-                                    disabled={selectedWeek === 1} 
                                     className="glass-button p-2"
                                 >
                                     <ChevronLeftIcon className="w-5 h-5" />
@@ -193,7 +189,6 @@ const ScheduleManagementView: React.FC = () => {
                                 <select
                                     value={selectedWeek}
                                     onChange={(e: any) => setSelectedWeek(Number(e.target.value))}
-                                    className="glass-input px-4 py-2"
                                 >
                                     {Array.from({ length: maxWeek }, (_, i) => i + 1).map((week: any) => (
                                         <option key={week} value={week}>
@@ -204,7 +199,6 @@ const ScheduleManagementView: React.FC = () => {
                                 
                                 <button 
                                     onClick={() => setSelectedWeek(w => Math.min(maxWeek, w+1))} 
-                                    disabled={selectedWeek === maxWeek} 
                                     className="glass-button p-2"
                                 >
                                     <ChevronRightIcon className="w-5 h-5" />
@@ -213,15 +207,13 @@ const ScheduleManagementView: React.FC = () => {
 
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => setEditMode(!editMode)}
-                                    className={`glass-button px-4 py-2 ${editMode ? 'ring-2 ring-blue-400' : ''}`}
+                                    onClick={() => setEditMode(!editMode)}`}
                                 >
                                     {editMode ? 'Done Editing' : 'Edit Mode'}
                                 </button>
                                 
                                 <button 
                                     onClick={handleRegenerate}
-                                    className="glass-button px-4 py-2 text-red-400 hover:text-red-300"
                                 >
                                     <RefreshCwIcon className="w-4 h-4 inline mr-2" />
                                     Regenerate
@@ -267,7 +259,6 @@ const ScheduleManagementView: React.FC = () => {
                             <div className="flex justify-end gap-2">
                                 <button
                                     onClick={() => setEditMode(false)}
-                                    className="glass-button px-4 py-2"
                                 >
                                     Cancel
                                 </button>
@@ -313,13 +304,11 @@ const ScheduleManagementView: React.FC = () => {
                             <div className="flex gap-3">
                                 <button
                                     onClick={() => setShowConfirmation(false)}
-                                    className="flex-1 glass-button py-2"
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     onClick={confirmRegenerate}
-                                    className="flex-1 glass-button-primary py-2"
                                 >
                                     Regenerate
                                 </button>

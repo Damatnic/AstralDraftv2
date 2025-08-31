@@ -3,6 +3,7 @@
  * Real-time scoring updates and player performance tracking
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
@@ -33,7 +34,6 @@ interface PlayerScore {
     safeties?: number;
     pointsAllowed?: number;
   };
-}
 
 interface TeamScore {
   teamId: string;
@@ -41,19 +41,19 @@ interface TeamScore {
   totalPoints: number;
   projectedPoints: number;
   playerScores: PlayerScore[];
+
 }
 
 interface LiveScoringProps {
   matchupId?: string;
   teamId?: string;
   showProjections?: boolean;
-}
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
   matchupId, 
   teamId, 
   showProjections = true 
-}: any) => {
+}) => {
   const { state } = useAppState();
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
@@ -155,7 +155,6 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                           (stats.pointsAllowed <= 6 ? 10 : stats.pointsAllowed <= 13 ? 7 : 
                            stats.pointsAllowed <= 20 ? 4 : stats.pointsAllowed <= 27 ? 1 : 0);
             break;
-        }
 
         return {
           playerId: `player-${team.id}-${index}`,
@@ -202,7 +201,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       case 'K': return 'text-orange-400';
       case 'DEF': return 'text-gray-400';
       default: return 'text-white';
-    }
+
   };
 
   const getGameStatusIcon = (status: string) => {
@@ -211,7 +210,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       case 'final': return '✅';
       case 'not_started': return '⏰';
       default: return '⏰';
-    }
+
   };
 
   const formatStats = (player: PlayerScore) => {
@@ -237,52 +236,49 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
 
   if (!selectedTeamScore) {
     return (
-      <div className="text-center py-8">
-        <p className="text-slate-400">No scoring data available</p>
+      <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+        <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">No scoring data available</p>
       </div>
     );
-  }
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Live Scoring Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold text-white">Live Scoring</h2>
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Live Scoring</h2>
           {isLive && (
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-400 text-sm font-medium">LIVE</span>
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
+              <span className="text-green-400 text-sm font-medium sm:px-4 md:px-6 lg:px-8">LIVE</span>
             </div>
           )}
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <div className="text-sm text-slate-400">Last Update</div>
-            <div className="text-white font-medium">
+        <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="text-right sm:px-4 md:px-6 lg:px-8">
+            <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Last Update</div>
+            <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
               {lastUpdate.toLocaleTimeString()}
             </div>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
             <button
-              onClick={() => setSelectedView('summary')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedView === 'summary'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-              }`}
+              onClick={() => setSelectedView('summary')}`}
             >
               Summary
             </button>
             <button
-              onClick={() => setSelectedView('detailed')}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedView === 'detailed'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-              }`}
+              onClick={() => setSelectedView('detailed')}`}
             >
               Detailed
             </button>
@@ -291,22 +287,22 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       </div>
 
       {/* Team Score Summary */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">{selectedTeamScore.teamName.charAt(0)}</span>
+      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+            <span className="text-3xl sm:px-4 md:px-6 lg:px-8">{selectedTeamScore.teamName.charAt(0)}</span>
             <div>
-              <h3 className="text-xl font-bold text-white">{selectedTeamScore.teamName}</h3>
-              <p className="text-slate-400">Starting Lineup</p>
+              <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{selectedTeamScore.teamName}</h3>
+              <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Starting Lineup</p>
             </div>
           </div>
           
-          <div className="text-right">
-            <div className="text-3xl font-bold text-white">
+          <div className="text-right sm:px-4 md:px-6 lg:px-8">
+            <div className="text-3xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
               {selectedTeamScore.totalPoints}
             </div>
             {showProjections && (
-              <div className="text-sm text-slate-400">
+              <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                 Proj: {selectedTeamScore.projectedPoints}
               </div>
             )}
@@ -315,9 +311,9 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
 
         {/* Progress Bar */}
         {showProjections && (
-          <div className="w-full bg-slate-700 rounded-full h-2 mb-4">
+          <div className="w-full bg-slate-700 rounded-full h-2 mb-4 sm:px-4 md:px-6 lg:px-8">
             <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-500"
+              className="bg-blue-500 h-2 rounded-full transition-all duration-500 sm:px-4 md:px-6 lg:px-8"
               style={{
                 width: `${Math.min(100, (selectedTeamScore.totalPoints / selectedTeamScore.projectedPoints) * 100)}%`
               }}
@@ -327,7 +323,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       </div>
 
       {/* Player Scores */}
-      <div className="space-y-4">
+      <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {selectedTeamScore.playerScores.map((player, index) => (
             <motion.div
@@ -335,46 +331,46 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors"
+              className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="text-center">
+              <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                  <div className="text-center sm:px-4 md:px-6 lg:px-8">
                     <div className={`text-sm font-bold ${getPositionColor(player.position)}`}>
                       {player.position}
                     </div>
-                    <div className="text-xs text-slate-500">{player.team}</div>
+                    <div className="text-xs text-slate-500 sm:px-4 md:px-6 lg:px-8">{player.team}</div>
                   </div>
                   
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h4 className="text-white font-semibold">{player.playerName}</h4>
-                      <span className="text-sm">
+                  <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{player.playerName}</h4>
+                      <span className="text-sm sm:px-4 md:px-6 lg:px-8">
                         {getGameStatusIcon(player.gameStatus)}
                       </span>
                       {!player.isPlaying && (
-                        <span className="px-2 py-1 bg-red-900/50 text-red-400 text-xs rounded">
+                        <span className="px-2 py-1 bg-red-900/50 text-red-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
                           OUT
                         </span>
                       )}
                     </div>
                     
                     {selectedView === 'detailed' && (
-                      <div className="text-sm text-slate-400 mt-1">
+                      <div className="text-sm text-slate-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                         {formatStats(player)}
                       </div>
                     )}
                   </div>
                 </div>
                 
-                <div className="text-right">
+                <div className="text-right sm:px-4 md:px-6 lg:px-8">
                   <div className={`text-xl font-bold ${
                     player.points > player.projectedPoints ? 'text-green-400' : 'text-white'
                   }`}>
                     {player.points}
                   </div>
                   {showProjections && (
-                    <div className="text-sm text-slate-400">
+                    <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                       {player.projectedPoints}
                     </div>
                   )}
@@ -386,12 +382,12 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       </div>
 
       {/* Scoring Notes */}
-      <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4">
-        <div className="flex items-center gap-2 text-blue-400 mb-2">
+      <div className="bg-blue-900/20 border border-blue-600/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-2 text-blue-400 mb-2 sm:px-4 md:px-6 lg:px-8">
           <span>ℹ️</span>
-          <span className="font-semibold">Scoring System</span>
+          <span className="font-semibold sm:px-4 md:px-6 lg:px-8">Scoring System</span>
         </div>
-        <div className="text-sm text-blue-300 space-y-1">
+        <div className="text-sm text-blue-300 space-y-1 sm:px-4 md:px-6 lg:px-8">
           <p>• Full PPR (1 point per reception)</p>
           <p>• 6 points for all TDs, 4 points for passing TDs</p>
           <p>• 1 point per 10 rushing/receiving yards, 1 point per 25 passing yards</p>
@@ -402,4 +398,10 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   );
 };
 
-export default LiveScoring;
+const LiveScoringWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LiveScoring {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LiveScoringWithErrorBoundary);

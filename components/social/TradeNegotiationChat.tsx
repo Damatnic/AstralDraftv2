@@ -3,7 +3,8 @@
  * Real-time chat system for trade discussions
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Player, Team, User } from '../../types';
@@ -37,6 +38,7 @@ export interface TradeMessage {
     isRead: boolean;
     isEdited?: boolean;
     editedAt?: Date;
+
 }
 
 export interface TradeAttachment {
@@ -45,6 +47,7 @@ export interface TradeAttachment {
     url?: string;
     data?: any;
     metadata?: Record<string, any>;
+
 }
 
 export interface TradeProposal {
@@ -57,6 +60,7 @@ export interface TradeProposal {
     expiresAt: Date;
     fairnessScore?: number;
     notes?: string;
+
 }
 
 export interface MessageReaction {
@@ -65,6 +69,7 @@ export interface MessageReaction {
     userId: string;
     userName: string;
     timestamp: Date;
+
 }
 
 export interface TradeChatSession {
@@ -83,7 +88,6 @@ export interface TradeChatSession {
         relatedPlayers?: Player[];
         priority?: 'low' | 'medium' | 'high';
     };
-}
 
 interface TradeNegotiationChatProps {
     session: TradeChatSession;
@@ -97,7 +101,6 @@ interface TradeNegotiationChatProps {
     onArchiveChat: () => void;
     isLoading?: boolean;
     className?: string;
-}
 
 const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     session,
@@ -111,7 +114,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     onArchiveChat,
     isLoading = false,
     className = ''
-}: any) => {
+}) => {
     const [newMessage, setNewMessage] = React.useState('');
     const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
     const [showTradeBuilder, setShowTradeBuilder] = React.useState(false);
@@ -135,14 +138,14 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
         if (newMessage.trim() && !isLoading) {
             onSendMessage(newMessage.trim());
             setNewMessage('');
-        }
+
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSendMessage(e);
-        }
+
     };
 
     const formatTimestamp = (timestamp: Date) => {
@@ -162,14 +165,14 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     const getMessageTypeIcon = (type: string) => {
         switch (type) {
             case 'trade_proposal':
-                return <MessageCircleIcon className="w-4 h-4 text-blue-400" />;
+                return <MessageCircleIcon className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'counter_offer':
-                return <ClockIcon className="w-4 h-4 text-orange-400" />;
+                return <ClockIcon className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'system':
-                return <InfoIcon className="w-4 h-4 text-gray-400" />;
+                return <InfoIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return null;
-        }
+
     };
 
     const getProposalStatusColor = (status: string) => {
@@ -186,13 +189,13 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 return 'text-orange-400 bg-orange-500/20';
             default:
                 return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     const renderTradeProposal = (proposal: TradeProposal, messageId: string) => (
-        <div className="mt-3 p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg">
-            <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium text-blue-400">Trade Proposal</h4>
+        <div className="mt-3 p-4 bg-blue-500/10 border border-blue-400/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                <h4 className="font-medium text-blue-400 sm:px-4 md:px-6 lg:px-8">Trade Proposal</h4>
                 <span className={`px-2 py-1 rounded text-xs font-medium ${getProposalStatusColor(proposal?.status)}`}>
                     {proposal.status.toUpperCase()}
                 </span>
@@ -200,10 +203,10 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                 <div>
-                    <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Offering</h5>
-                    <div className="space-y-1">
+                    <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Offering</h5>
+                    <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {proposal.fromPlayers.map((player: any) => (
-                            <div key={player.id} className="text-sm text-[var(--text-primary)]">
+                            <div key={player.id} className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {player.name} ({player.position})
                             </div>
                         ))}
@@ -211,10 +214,10 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 </div>
                 
                 <div>
-                    <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2">Requesting</h5>
-                    <div className="space-y-1">
+                    <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Requesting</h5>
+                    <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {proposal.toPlayers.map((player: any) => (
-                            <div key={player.id} className="text-sm text-[var(--text-primary)]">
+                            <div key={player.id} className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {player.name} ({player.position})
                             </div>
                         ))}
@@ -223,8 +226,8 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             </div>
             
             {proposal.fairnessScore && (
-                <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs text-[var(--text-secondary)]">Fairness Score:</span>
+                <div className="flex items-center gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Fairness Score:</span>
                     <div className={`px-2 py-1 rounded text-xs font-medium ${
                         proposal.fairnessScore >= 80 ? 'text-green-400 bg-green-500/20' :
                         proposal.fairnessScore >= 60 ? 'text-yellow-400 bg-yellow-500/20' :
@@ -236,31 +239,29 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             )}
             
             {proposal.notes && (
-                <div className="text-sm text-[var(--text-secondary)] mb-3">
+                <div className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                     "{proposal.notes}"
                 </div>
             )}
             
             {proposal?.status === 'pending' && proposal.toTeamId === currentUser.teamId && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={() => onAcceptTrade(proposal.id)}
-                        className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
                     >
-                        <CheckIcon className="w-4 h-4" />
+                        <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Accept
                     </button>
                     <button
                         onClick={() => onRejectTrade(proposal.id)}
-                        className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
                     >
-                        <XIcon className="w-4 h-4" />
+                        <XIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Reject
                     </button>
                 </div>
             )}
             
-            <div className="text-xs text-[var(--text-secondary)] mt-2">
+            <div className="text-xs text-[var(--text-secondary)] mt-2 sm:px-4 md:px-6 lg:px-8">
                 Expires: {new Date(proposal.expiresAt).toLocaleString()}
             </div>
         </div>
@@ -279,11 +280,11 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} ${showAvatar ? 'mt-4' : 'mt-1'}`}
             >
                 {showAvatar && !isOwnMessage && (
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                         <img
                             src={message.senderAvatar || '/default-avatar.png'}
                             alt={message.senderName}
-                            className="w-8 h-8 rounded-full"
+                            className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
                 )}
@@ -291,11 +292,11 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 <div className={`flex-1 max-w-[80%] ${isOwnMessage ? 'text-right' : 'text-left'}`}>
                     {showAvatar && (
                         <div className={`flex items-center gap-2 mb-1 ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
-                            <span className="text-sm font-medium text-[var(--text-primary)]">
+                            <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {message.senderName}
                             </span>
                             {getMessageTypeIcon(message.type)}
-                            <span className="text-xs text-[var(--text-secondary)]">
+                            <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 {formatTimestamp(message.timestamp)}
                             </span>
                         </div>
@@ -308,14 +309,14 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                             ? 'bg-gray-500/20 text-[var(--text-secondary)]'
                             : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-primary)]'
                     }`}>
-                        <div className="text-sm whitespace-pre-wrap">{message.content}</div>
+                        <div className="text-sm whitespace-pre-wrap sm:px-4 md:px-6 lg:px-8">{message.content}</div>
                         
                         {message.tradeProposal && renderTradeProposal(message.tradeProposal, message.id)}
                         
                         {message.attachments && message.attachments.length > 0 && (
-                            <div className="mt-2 space-y-2">
+                            <div className="mt-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {message.attachments.map((attachment: any) => (
-                                    <div key={attachment.id} className="text-xs opacity-75">
+                                    <div key={attachment.id} className="text-xs opacity-75 sm:px-4 md:px-6 lg:px-8">
                                         📎 {attachment.type}
                                     </div>
                                 ))}
@@ -324,7 +325,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     </div>
                     
                     {message.reactions && message.reactions.length > 0 && (
-                        <div className="flex items-center gap-1 mt-1 flex-wrap">
+                        <div className="flex items-center gap-1 mt-1 flex-wrap sm:px-4 md:px-6 lg:px-8">
                             {Object.entries(
                                 message.reactions.reduce((acc, reaction) => {
                                     acc[reaction.emoji] = (acc[reaction.emoji] || 0) + 1;
@@ -334,7 +335,6 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                                 <button
                                     key={emoji}
                                     onClick={() => onReactToMessage(message.id, emoji)}
-                                    className="flex items-center gap-1 px-2 py-1 bg-white/10 rounded-full text-xs hover:bg-white/20 transition-colors"
                                 >
                                     <span>{emoji}</span>
                                     <span>{count}</span>
@@ -345,11 +345,11 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 </div>
                 
                 {showAvatar && isOwnMessage && (
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                         <img
                             src={currentUser.avatar || '/default-avatar.png'}
                             alt={currentUser.name}
-                            className="w-8 h-8 rounded-full"
+                            className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
                 )}
@@ -360,62 +360,61 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     return (
         <div className={`h-full flex flex-col bg-[var(--panel-bg)] ${className}`}>
             {/* Chat Header */}
-            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)]">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <MessageCircleIcon className="w-6 h-6 text-blue-400" />
+            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <MessageCircleIcon className="w-6 h-6 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
                         <div>
-                            <h3 className="font-bold text-lg text-[var(--text-primary)]">
+                            <h3 className="font-bold text-lg text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {session.title}
                             </h3>
-                            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+                            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 <span>{session.participants.length} participants</span>
                                 {session.currentProposal && (
                                     <>
                                         <span>•</span>
-                                        <span className="text-blue-400">Active proposal</span>
+                                        <span className="text-blue-400 sm:px-4 md:px-6 lg:px-8">Active proposal</span>
                                     </>
                                 )}
                             </div>
                         </div>
                     </div>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button
                             onClick={() => setShowTradeBuilder(true)}
-                            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                             title="Create trade proposal"
                         >
-                            <MessageCircleIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                            <MessageCircleIcon className="w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         </button>
-                        <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-                            <PhoneIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        <button className="p-2 hover:bg-white/10 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                            <PhoneIcon className="w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         </button>
-                        <button className="p-2 hover:bg-white/10 rounded-lg transition-colors">
-                            <VideoIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                        <button className="p-2 hover:bg-white/10 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                            <VideoIcon className="w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         </button>
                         <button
                             onClick={onArchiveChat}
-                            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                        >
-                            <XIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                            className="p-2 hover:bg-white/10 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
+                            <XIcon className="w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         </button>
                     </div>
                 </div>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-1">
+            <div className="flex-1 overflow-y-auto p-4 space-y-1 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence>
                     {messages.map((message, index) => renderMessage(message, index))}
                 </AnimatePresence>
                 
                 {isTyping && (
-                    <div className="flex items-center gap-2 text-[var(--text-secondary)] text-sm">
-                        <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="flex items-center gap-2 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8"></div>
+                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.2s' }}></div>
                         </div>
                         <span>Someone is typing...</span>
                     </div>
@@ -425,35 +424,32 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             </div>
 
             {/* Message Input */}
-            <div className="flex-shrink-0 p-4 border-t border-[var(--panel-border)]">
-                <form onSubmit={handleSendMessage} className="flex items-end gap-3">
-                    <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
+            <div className="flex-shrink-0 p-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <form onSubmit={handleSendMessage}
+                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
                             <button
                                 type="button"
                                 onClick={() => setShowAttachments(!showAttachments)}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                             >
-                                <PaperclipIcon className="w-4 h-4 text-[var(--text-secondary)]" />
+                                <PaperclipIcon className="w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                             >
-                                <SmileIcon className="w-4 h-4 text-[var(--text-secondary)]" />
+                                <SmileIcon className="w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                             </button>
                         </div>
                         
-                        <div className="relative">
+                        <div className="relative sm:px-4 md:px-6 lg:px-8">
                             <input
                                 ref={inputRef}
                                 type="text"
                                 value={newMessage}
                                 onChange={(e: any) => setNewMessage(e.target.value)}
-                                onKeyPress={handleKeyPress}
                                 placeholder="Type a message..."
-                                className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                 disabled={isLoading}
                             />
                         </div>
@@ -462,9 +458,9 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     <button
                         type="submit"
                         disabled={!newMessage.trim() || isLoading}
-                        className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                        <SendIcon className="w-5 h-5" />
+                        className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <SendIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                 </form>
             </div>
@@ -475,17 +471,17 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute bottom-20 left-4 right-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3 shadow-lg"
+                    className="absolute bottom-20 left-4 right-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3 shadow-lg sm:px-4 md:px-6 lg:px-8"
                 >
-                    <div className="grid grid-cols-8 gap-2">
+                    <div className="grid grid-cols-8 gap-2 sm:px-4 md:px-6 lg:px-8">
                         {['👍', '👎', '😄', '😮', '😢', '😡', '❤️', '🔥'].map((emoji: any) => (
                             <button
                                 key={emoji}
-                                onClick={() => {
+                                onClick={() = aria-label="Action button"> {
                                     // Would add reaction to last message or selected message
                                     setShowEmojiPicker(false);
                                 }}
-                                className="p-2 hover:bg-white/10 rounded text-xl"
+                                className="p-2 hover:bg-white/10 rounded text-xl sm:px-4 md:px-6 lg:px-8"
                             >
                                 {emoji}
                             </button>
@@ -497,4 +493,10 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     );
 };
 
-export default TradeNegotiationChat;
+const TradeNegotiationChatWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeNegotiationChat {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeNegotiationChatWithErrorBoundary);

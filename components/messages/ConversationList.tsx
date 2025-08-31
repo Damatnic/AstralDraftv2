@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import type { User } from '../../types';
@@ -9,9 +10,10 @@ interface ConversationListProps {
     onSelectUser: (userId: string) => void;
     onStartNewMessage: () => void;
     isNewMessageActive: boolean;
+
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }: any) => {
+const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }) => {
     const { state } = useAppState();
 
     const conversations = React.useMemo(() => {
@@ -20,7 +22,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
             league.members.forEach((member: any) => {
                 if (member.id !== state.user?.id) {
                     userMap.set(member.id, member);
-                }
+
             });
         });
 
@@ -31,10 +33,10 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
             const otherUserId = dm.fromUserId === state.user?.id ? dm.toUserId : dm.fromUserId;
             if (!lastMessageTimes[otherUserId] || dm.timestamp > lastMessageTimes[otherUserId]) {
                 lastMessageTimes[otherUserId] = dm.timestamp;
-            }
+
             if (dm.toUserId === state.user?.id && !dm.isRead) {
                 unreadCounts[otherUserId] = (unreadCounts[otherUserId] || 0) + 1;
-            }
+
         });
 
         return Array.from(userMap.values())
@@ -48,32 +50,29 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
     }, [state.leagues, state.directMessages, state.user?.id]);
 
     return (
-        <div className="h-full flex flex-col">
-            <div className="p-4 border-b border-[var(--panel-border)]">
+        <div className="h-full flex flex-col sm:px-4 md:px-6 lg:px-8">
+            <div className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                 <button
                     onClick={onStartNewMessage}
                     className={`w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-bold rounded-lg transition-colors ${
                         isNewMessageActive ? 'bg-cyan-500 text-black' : 'bg-white/10 hover:bg-white/20'
                     }`}
-                >
+                 aria-label="Action button">
                     <PlusCircleIcon /> New Message
                 </button>
             </div>
-            <div className="flex-grow overflow-y-auto p-2 space-y-1">
-                {conversations.map(({ user, unreadCount }: any) => (
+            <div className="flex-grow overflow-y-auto p-2 space-y-1 sm:px-4 md:px-6 lg:px-8">
+                {conversations.map(({ user, unreadCount }) => (
                     <button
                         key={user.id}
-                        onClick={() => onSelectUser(user.id)}
-                        className={`w-full flex items-center justify-between p-2 rounded-md text-left transition-colors ${
-                            selectedUserId === user.id ? 'bg-cyan-500/20' : 'hover:bg-white/10'
-                        }`}
+                        onClick={() => onSelectUser(user.id)}`}
                     >
-                        <div className="flex items-center gap-3">
-                            <Avatar avatar={user.avatar} className="w-10 h-10 text-2xl rounded-full" />
-                            <span className="font-semibold text-sm">{user.name}</span>
+                        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                            <Avatar avatar={user.avatar} className="w-10 h-10 text-2xl rounded-full sm:px-4 md:px-6 lg:px-8" />
+                            <span className="font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{user.name}</span>
                         </div>
                         {unreadCount > 0 && (
-                            <span className="w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                            <span className="w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                                 {unreadCount}
                             </span>
                         )}
@@ -84,4 +83,10 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
     );
 };
 
-export default ConversationList;
+const ConversationListWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ConversationList {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ConversationListWithErrorBoundary);

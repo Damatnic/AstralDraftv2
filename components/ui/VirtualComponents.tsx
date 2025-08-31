@@ -3,7 +3,7 @@
  * Optimized components for rendering large lists and grids on mobile
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useVirtualScroll } from '../../hooks/useVirtualScroll';
 import { useOptimizedScroll } from '../../utils/mobilePerformanceUtils';
 
@@ -15,7 +15,6 @@ interface VirtualListProps<T> {
     overscan?: number;
     className?: string;
     onScroll?: (scrollTop: number) => void;
-}
 
 export const VirtualList = <T,>({
     items,
@@ -46,8 +45,8 @@ export const VirtualList = <T,>({
                 const handleScroll = () => onScroll(element.scrollTop);
                 element.addEventListener('scroll', handleScroll, { passive: true });
                 return () => element.removeEventListener('scroll', handleScroll);
-            }
-        }
+
+
     }, [onScroll, containerProps.ref]);
 
     const visibleItems = React.useMemo(() => {
@@ -59,8 +58,8 @@ export const VirtualList = <T,>({
                     index: i,
                     key: i
                 });
-            }
-        }
+
+
         return result;
     }, [items, visibleRange]);
 
@@ -76,7 +75,7 @@ export const VirtualList = <T,>({
                         right: 0
                     }}
                 >
-                    {visibleItems.map(({ item, index, key }: any) => (
+                    {visibleItems.map(({ item, index, key }) => (
                         <div
                             key={key}
                             style={{
@@ -104,7 +103,6 @@ interface VirtualGridProps<T> {
     gap?: number;
     overscan?: number;
     className?: string;
-}
 
 export const VirtualGrid = React.memo(<T,>({
     items,
@@ -144,7 +142,7 @@ export const VirtualGrid = React.memo(<T,>({
         const element = containerRef.current;
         if (element) {
             setScrollTop(element.scrollTop);
-        }
+
     });
 
     const visibleItems = React.useMemo(() => {
@@ -160,12 +158,20 @@ export const VirtualGrid = React.memo(<T,>({
                     x: col * (itemWidth + gap),
                     y: row * rowHeight
                 });
-            }
-        }
+
+
         return result;
     }, [items, visibleRange, columnsPerRow, itemWidth, gap, rowHeight]);
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <div
             ref={containerRef}
             className={className}
@@ -181,7 +187,7 @@ export const VirtualGrid = React.memo(<T,>({
                     position: 'relative'
                 }}
             >
-                {visibleItems.map(({ item, index, key, x, y }: any) => (
+                {visibleItems.map(({ item, index, key, x, y }) => (
                     <div
                         key={key}
                         style={{

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
 // Card Component Props
@@ -10,30 +10,25 @@ interface CardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
   glow?: boolean;
   glowColor?: 'primary' | 'secondary' | 'accent' | 'danger' | 'warning';
   interactive?: boolean;
-}
 
 // Card Header Props
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
-}
 
 // Card Title Props
 interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-}
 
 // Card Content Props
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-}
 
 // Card Footer Props
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
-}
 
 // Main Card Component
 export const Card: React.FC<CardProps> = ({ 
@@ -46,7 +41,7 @@ export const Card: React.FC<CardProps> = ({
   glowColor = 'primary',
   interactive = false,
   ...props
-}: any) => {
+}) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Mouse tracking for interactive glow effect
@@ -135,13 +130,13 @@ export const Card: React.FC<CardProps> = ({
       <>
         <div 
           className="absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none
-                     group-hover:opacity-100"
+                     group-hover:opacity-100 sm:px-4 md:px-6 lg:px-8"
           style={{
             background: `radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
                         rgba(94, 107, 255, 0.15) 0%, transparent 50%)`
           }}
         />
-        <div className="absolute inset-[1px] rounded-2xl bg-gradient-to-br from-transparent via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div className="absolute inset-[1px] rounded-2xl bg-gradient-to-br from-transparent via-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 sm:px-4 md:px-6 lg:px-8" />
       </>
     ) : null
   );
@@ -149,9 +144,9 @@ export const Card: React.FC<CardProps> = ({
   // Animated border gradient
   const AnimatedBorder = () => (
     variant === 'gradient' ? (
-      <div className="absolute inset-0 rounded-2xl overflow-hidden">
+      <div className="absolute inset-0 rounded-2xl overflow-hidden sm:px-4 md:px-6 lg:px-8">
         <div className="absolute inset-[-2px] bg-gradient-to-r from-primary-500 via-accent-500 to-secondary-500 
-                        opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-500 animate-gradient" />
+                        opacity-0 group-hover:opacity-20 blur-sm transition-opacity duration-500 animate-gradient sm:px-4 md:px-6 lg:px-8" />
       </div>
     ) : null
   );
@@ -173,7 +168,7 @@ export const Card: React.FC<CardProps> = ({
     >
       <AnimatedBorder />
       <InteractiveGlow />
-      <div className="relative z-10">
+      <div className="relative z-10 sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
     </motion.div>
@@ -186,7 +181,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   className = '', 
   separated = false,
   ...props 
-}: any) => {
+}) => {
   return (
     <div 
       className={`
@@ -207,7 +202,7 @@ export const CardTitle: React.FC<CardTitleProps> = ({
   className = '',
   size = 'lg',
   ...props 
-}: any) => {
+}) => {
   const sizeClasses = {
     sm: 'text-base',
     md: 'text-lg',
@@ -234,7 +229,7 @@ export const CardDescription: React.FC<React.HTMLAttributes<HTMLParagraphElement
   children, 
   className = '',
   ...props 
-}: any) => {
+}) => {
   return (
     <p 
       className={`text-sm text-gray-400 ${className}`} 
@@ -250,7 +245,7 @@ export const CardContent: React.FC<CardContentProps> = ({
   children, 
   className = '', 
   ...props 
-}: any) => {
+}) => {
   return (
     <div className={`${className}`} {...props}>
       {children}
@@ -264,7 +259,16 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   className = '',
   separated = false,
   ...props 
-}: any) => {
+}) => {
+  
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
     <div 
       className={`

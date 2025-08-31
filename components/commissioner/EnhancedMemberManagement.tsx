@@ -3,7 +3,8 @@
  * Comprehensive member administration with advanced controls
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { UsersIcon } from '../icons/UsersIcon';
@@ -19,15 +20,15 @@ import { League, User } from '../../types';
 interface EnhancedMemberManagementProps {
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';
     memberId: string;
     data?: any;
-}
 
-const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }: any) => {
+const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }) => {
     const [selectedMember, setSelectedMember] = React.useState<string | null>(null);
     const [editMode, setEditMode] = React.useState<{ memberId: string; field: string } | null>(null);
     const [editValue, setEditValue] = React.useState('');
@@ -75,7 +76,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                     payload: { leagueId: league.id, memberId: showConfirmAction.memberId } 
                 });
                 break;
-        }
+
         setShowConfirmAction(null);
     };
 
@@ -94,7 +95,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                 memberId: editMode.memberId, 
                 field: editMode.field,
                 value: editValue 
-            } 
+
         });
         setEditMode(null);
         setEditValue('');
@@ -106,53 +107,53 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
     };
 
     return (
-        <Widget title="Enhanced Member Management" icon={<UsersIcon className="w-5 h-5" />}>
-            <div className="p-4 space-y-4">
+        <Widget title="Enhanced Member Management" icon={<UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}>
+            <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {/* Member Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div className="bg-blue-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-blue-400">{members.length}</div>
-                        <div className="text-xs text-gray-400">Total Members</div>
+                    <div className="bg-blue-500/20 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">{members.length}</div>
+                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Total Members</div>
                     </div>
-                    <div className="bg-green-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-green-400">{members.filter((m: any) => m.activity === 'Active').length}</div>
-                        <div className="text-xs text-gray-400">Active</div>
+                    <div className="bg-green-500/20 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">{members.filter((m: any) => m.activity === 'Active').length}</div>
+                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Active</div>
                     </div>
-                    <div className="bg-yellow-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-yellow-400">{members.filter((m: any) => m.activity.includes('Inactive')).length}</div>
-                        <div className="text-xs text-gray-400">Inactive</div>
+                    <div className="bg-yellow-500/20 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-2xl font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">{members.filter((m: any) => m.activity.includes('Inactive')).length}</div>
+                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Inactive</div>
                     </div>
-                    <div className="bg-purple-500/20 p-3 rounded-lg text-center">
-                        <div className="text-2xl font-bold text-purple-400">{members.filter((m: any) => m.isCommissioner || m.isCoCommissioner).length}</div>
-                        <div className="text-xs text-gray-400">Admins</div>
+                    <div className="bg-purple-500/20 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-2xl font-bold text-purple-400 sm:px-4 md:px-6 lg:px-8">{members.filter((m: any) => m.isCommissioner || m.isCoCommissioner).length}</div>
+                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Admins</div>
                     </div>
                 </div>
 
                 {/* Quick Actions */}
-                <div className="flex flex-wrap gap-2 mb-4">
+                <div className="flex flex-wrap gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'INVITE_MEMBERS' })}
-                        className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm"
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'INVITE_MEMBERS' }}
+                        className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
-                        <UserPlusIcon className="w-4 h-4" />
+                        <UserPlusIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Invite Members
                     </button>
                     <button 
-                        onClick={() => dispatch({ type: 'EXPORT_MEMBER_LIST', payload: league.id })}
-                        className="flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm"
+                        onClick={() => dispatch({ type: 'EXPORT_MEMBER_LIST', payload: league.id }}
+                        className="flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                         📋 Export List
                     </button>
                     <button 
-                        onClick={() => dispatch({ type: 'BULK_MESSAGE_MEMBERS', payload: league.id })}
-                        className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+                        onClick={() => dispatch({ type: 'BULK_MESSAGE_MEMBERS', payload: league.id }}
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                     >
                         📢 Send Message
                     </button>
                 </div>
 
                 {/* Members List */}
-                <div className="space-y-3">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {members.map((member: any) => (
                         <motion.div
                             key={member.id}
@@ -163,52 +164,50 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                     : 'border-[var(--panel-border)] hover:border-gray-500'
                             }`}
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="text-2xl">{member.avatar}</div>
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl sm:px-4 md:px-6 lg:px-8">{member.avatar}</div>
                                     <div>
-                                        <div className="flex items-center gap-2">
-                                            <h4 className="font-semibold text-[var(--text-primary)]">
+                                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                            <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                 {member.name}
                                             </h4>
                                             {member.isCommissioner && (
                                                 <span title="Commissioner">
-                                                    <CrownIcon className="w-4 h-4 text-yellow-500" />
+                                                    <CrownIcon className="w-4 h-4 text-yellow-500 sm:px-4 md:px-6 lg:px-8" />
                                                 </span>
                                             )}
                                             {member.isCoCommissioner && (
                                                 <span title="Co-Commissioner">
-                                                    <ShieldCheckIcon className="w-4 h-4 text-blue-500" />
+                                                    <ShieldCheckIcon className="w-4 h-4 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                                                 </span>
                                             )}
                                         </div>
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                             {editMode?.memberId === member.id && editMode?.field === 'teamName' ? (
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                                     <input
                                                         type="text"
                                                         value={editValue}
                                                         onChange={(e: any) => setEditValue(e.target.value)}
-                                                        className="px-2 py-1 text-sm border border-[var(--panel-border)] rounded bg-[var(--panel-bg)] text-[var(--text-primary)]"
                                                         autoFocus
                                                     />
-                                                    <button onClick={saveEdit} className="text-green-500 hover:text-green-400">
-                                                        <CheckIcon className="w-4 h-4" />
+                                                    <button onClick={saveEdit} className="text-green-500 hover:text-green-400 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                                        <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                     </button>
-                                                    <button onClick={cancelEdit} className="text-red-500 hover:text-red-400">
-                                                        <XIcon className="w-4 h-4" />
+                                                    <button onClick={cancelEdit} className="text-red-500 hover:text-red-400 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                                        <XIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-sm text-[var(--text-secondary)]">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         {member.teamName}
                                                     </span>
                                                     <button 
                                                         onClick={() => startEdit(member.id, 'teamName', member.teamName)}
-                                                        className="text-gray-400 hover:text-[var(--text-primary)]"
                                                     >
-                                                        <PencilIcon className="w-3 h-3" />
+                                                        <PencilIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                                     </button>
                                                 </div>
                                             )}
@@ -216,18 +215,17 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                                     {/* Member Stats */}
-                                    <div className="text-right text-sm">
-                                        <div className="text-[var(--text-primary)] font-medium">{member.record}</div>
-                                        <div className="text-[var(--text-secondary)]">{member.points} pts</div>
+                                    <div className="text-right text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <div className="text-[var(--text-primary)] font-medium sm:px-4 md:px-6 lg:px-8">{member.record}</div>
+                                        <div className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{member.points} pts</div>
                                     </div>
 
                                     {/* Actions Dropdown */}
-                                    <div className="relative">
+                                    <div className="relative sm:px-4 md:px-6 lg:px-8">
                                         <button 
                                             onClick={() => setSelectedMember(selectedMember === member.id ? null : member.id)}
-                                            className="p-2 hover:bg-white/10 rounded-lg"
                                         >
                                             ⋮
                                         </button>
@@ -238,55 +236,55 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                                                     initial={{ opacity: 0, scale: 0.95 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
-                                                    className="absolute right-0 top-full mt-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-lg z-10 min-w-[200px]"
+                                                    className="absolute right-0 top-full mt-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-lg z-10 min-w-[200px] sm:px-4 md:px-6 lg:px-8"
                                                 >
-                                                    <div className="py-1">
+                                                    <div className="py-1 sm:px-4 md:px-6 lg:px-8">
                                                         {!member.isCommissioner && (
                                                             <>
                                                                 <button 
-                                                                    onClick={() => handleMemberAction({ 
+                                                                    onClick={() = aria-label="Action button"> handleMemberAction({ 
                                                                         type: 'TOGGLE_ADMIN', 
                                                                         memberId: member.id 
                                                                     })}
-                                                                    className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 flex items-center gap-2"
+                                                                    className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
                                                                 >
-                                                                    <ShieldCheckIcon className="w-4 h-4" />
+                                                                    <ShieldCheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                                     {member.isCoCommissioner ? 'Remove Admin' : 'Make Admin'}
                                                                 </button>
                                                                 <button 
-                                                                    onClick={() => handleMemberAction({ 
+                                                                    onClick={() = aria-label="Action button"> handleMemberAction({ 
                                                                         type: 'PROMOTE_TO_COMMISSIONER', 
                                                                         memberId: member.id 
                                                                     })}
-                                                                    className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 flex items-center gap-2"
+                                                                    className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
                                                                 >
-                                                                    <CrownIcon className="w-4 h-4" />
+                                                                    <CrownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                                     Make Commissioner
                                                                 </button>
                                                             </>
                                                         )}
                                                         <button 
-                                                            onClick={() => dispatch({ type: 'VIEW_MEMBER_PROFILE', payload: member.id })}
-                                                            className="w-full px-4 py-2 text-left text-sm hover:bg-white/10"
+                                                            onClick={() => dispatch({ type: 'VIEW_MEMBER_PROFILE', payload: member.id }}
+                                                            className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 sm:px-4 md:px-6 lg:px-8"
                                                         >
                                                             👤 View Profile
                                                         </button>
                                                         <button 
-                                                            onClick={() => dispatch({ type: 'MESSAGE_MEMBER', payload: member.id })}
-                                                            className="w-full px-4 py-2 text-left text-sm hover:bg-white/10"
+                                                            onClick={() => dispatch({ type: 'MESSAGE_MEMBER', payload: member.id }}
+                                                            className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 sm:px-4 md:px-6 lg:px-8"
                                                         >
                                                             💬 Send Message
                                                         </button>
-                                                        <hr className="my-1 border-[var(--panel-border)]" />
+                                                        <hr className="my-1 border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8" />
                                                         {!member.isCommissioner && (
                                                             <button 
-                                                                onClick={() => handleMemberAction({ 
+                                                                onClick={() = aria-label="Action button"> handleMemberAction({ 
                                                                     type: 'REMOVE_MEMBER', 
                                                                     memberId: member.id 
                                                                 })}
-                                                                className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 text-red-400 flex items-center gap-2"
+                                                                className="w-full px-4 py-2 text-left text-sm hover:bg-white/10 text-red-400 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
                                                             >
-                                                                <UserRemoveIcon className="w-4 h-4" />
+                                                                <UserRemoveIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                                 Remove from League
                                                             </button>
                                                         )}
@@ -299,8 +297,8 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                             </div>
 
                             {/* Activity Status */}
-                            <div className="mt-2 flex items-center justify-between text-xs">
-                                <span className="text-[var(--text-secondary)]">
+                            <div className="mt-2 flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                     Joined: {new Date(member.joinDate).toLocaleDateString()}
                                 </span>
                                 <span className={`px-2 py-1 rounded-full ${
@@ -322,34 +320,33 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 sm:px-4 md:px-6 lg:px-8"
                             onClick={(e: any) => e.target === e.currentTarget && setShowConfirmAction(null)}
                         >
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
-                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full"
+                                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-md w-full sm:px-4 md:px-6 lg:px-8"
                             >
-                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
+                                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                                     Confirm Action
                                 </h3>
-                                <p className="text-[var(--text-secondary)] mb-6">
+                                <p className="text-[var(--text-secondary)] mb-6 sm:px-4 md:px-6 lg:px-8">
                                     {showConfirmAction.type === 'REMOVE_MEMBER' && 'Are you sure you want to remove this member from the league?'}
                                     {showConfirmAction.type === 'PROMOTE_TO_COMMISSIONER' && 'Are you sure you want to transfer commissioner rights to this member?'}
                                     {showConfirmAction.type === 'TOGGLE_ADMIN' && 'Are you sure you want to change this member\'s admin status?'}
                                 </p>
-                                <div className="flex gap-3 justify-end">
+                                <div className="flex gap-3 justify-end sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setShowConfirmAction(null)}
-                                        className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         onClick={confirmAction}
-                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                                    >
+                                        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg sm:px-4 md:px-6 lg:px-8"
+                                     aria-label="Action button">
                                         Confirm
                                     </button>
                                 </div>
@@ -362,4 +359,10 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
     );
 };
 
-export default EnhancedMemberManagement;
+const EnhancedMemberManagementWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedMemberManagement {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedMemberManagementWithErrorBoundary);

@@ -59,6 +59,7 @@ export const usePWAInstall = () => {
     if (!installPrompt) return false;
 
     try {
+
       await installPrompt.prompt();
       const choiceResult = await installPrompt.userChoice;
       
@@ -69,6 +70,9 @@ export const usePWAInstall = () => {
         announce('Installation cancelled', 'polite');
         return false;
       }
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Error during installation:', error);
       announce('Installation failed', 'assertive');
@@ -148,6 +152,7 @@ export const usePushNotifications = () => {
     }
 
     try {
+
       const result = await Notification.requestPermission();
       setPermission(result);
       
@@ -158,6 +163,9 @@ export const usePushNotifications = () => {
         announce('Notifications denied', 'polite');
         return false;
       }
+
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Error requesting notification permission:', error);
       announce('Failed to enable notifications', 'assertive');
@@ -193,6 +201,7 @@ export const usePushNotifications = () => {
         });
         return true;
       }
+    
     } catch (error) {
       console.error('Error showing notification:', error);
       return false;
@@ -271,10 +280,14 @@ export const pwaUtils = {
   updateServiceWorker: async (): Promise<boolean> => {
     if ('serviceWorker' in navigator) {
       try {
+
         const registration = await navigator.serviceWorker.ready;
         await registration.update();
         return true;
-      } catch (error) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
         console.error('Error updating service worker:', error);
         return false;
       }
@@ -306,6 +319,7 @@ export const usePWAUpdates = () => {
     announce('Updating app...', 'assertive');
     
     try {
+
       const success = await pwaUtils.updateServiceWorker();
       if (success) {
         announce('App updated successfully. Refreshing...', 'assertive');
@@ -314,6 +328,9 @@ export const usePWAUpdates = () => {
         announce('Update failed', 'assertive');
         setIsUpdating(false);
       }
+
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Error applying update:', error);
       announce('Update failed', 'assertive');

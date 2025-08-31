@@ -3,7 +3,8 @@
  * Comprehensive player information with advanced stats, news, and comparison tools
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
@@ -26,9 +27,10 @@ interface PlayerProfileViewProps {
     league: League;
     dispatch: React.Dispatch<any>;
     onClose?: () => void;
+
 }
 
-const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }: any) => {
+const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }) => {
     const [selectedTab, setSelectedTab] = React.useState<string>('overview');
     const [isFavorited, setIsFavorited] = React.useState(false);
     const [showShareMenu, setShowShareMenu] = React.useState(false);
@@ -37,28 +39,28 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
         {
             id: 'overview',
             label: 'Overview',
-            icon: <SparklesIcon className="w-4 h-4" />
+            icon: <SparklesIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
         },
         {
             id: 'advanced-stats',
             label: 'Advanced Stats',
-            icon: <BarChartIcon className="w-4 h-4" />
+            icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
         },
         {
             id: 'news',
             label: 'News & Updates',
-            icon: <NewsIcon className="w-4 h-4" />
+            icon: <NewsIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
         },
         {
             id: 'trends',
             label: 'Season Trends',
-            icon: <TrendingUpIcon className="w-4 h-4" />
+            icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
         },
         {
             id: 'comparison',
             label: 'Compare Players',
-            icon: <CompareIcon className="w-4 h-4" />
-        }
+            icon: <CompareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+
     ];
 
     const positionColors = {
@@ -82,12 +84,12 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
         const trend = getCurrentTrend();
         switch (trend) {
             case 'up':
-                return <TrendingUpIcon className="w-5 h-5 text-green-400" />;
+                return <TrendingUpIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'down':
-                return <TrendingDownIcon className="w-5 h-5 text-red-400" />;
+                return <TrendingDownIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
-                return <BarChartIcon className="w-5 h-5 text-gray-400" />;
-        }
+                return <BarChartIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const handleShare = (platform: string) => {
@@ -102,51 +104,47 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
                 navigator.clipboard.writeText(url);
                 // Add toast notification here
                 break;
-        }
+
         setShowShareMenu(false);
     };
 
     return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
+        <div className="min-h-screen bg-[var(--bg-primary)] sm:px-4 md:px-6 lg:px-8">
             {/* Header Section */}
             <div className={`relative bg-gradient-to-br ${positionColors[player.position]} border-b border-[var(--panel-border)]`}>
-                <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-4">
+                <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-start justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                             <Avatar
                                 avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
-                                className="w-20 h-20 text-3xl rounded-xl border-2 border-white/20"
+                                className="w-20 h-20 text-3xl rounded-xl border-2 border-white/20 sm:px-4 md:px-6 lg:px-8"
                             />
                             <div>
-                                <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-1">
+                                <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                     {player.name}
                                 </h1>
-                                <div className="flex items-center gap-3 text-[var(--text-secondary)]">
-                                    <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium">
+                                <div className="flex items-center gap-3 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                    <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium sm:px-4 md:px-6 lg:px-8">
                                         {player.position}
                                     </span>
-                                    <span className="text-lg font-semibold">{player.team}</span>
+                                    <span className="text-lg font-semibold sm:px-4 md:px-6 lg:px-8">{player.team}</span>
                                     <span>#{player.rank} Overall</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <button
-                                onClick={() => setIsFavorited(!isFavorited)}
-                                className={`p-2 rounded-lg transition-colors ${
-                                    isFavorited ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-gray-400 hover:text-white'
-                                }`}
+                                onClick={() => setIsFavorited(!isFavorited)}`}
                             >
-                                <HeartIcon className="w-5 h-5" />
+                                <HeartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                             
-                            <div className="relative">
+                            <div className="relative sm:px-4 md:px-6 lg:px-8">
                                 <button
                                     onClick={() => setShowShareMenu(!showShareMenu)}
-                                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
                                 >
-                                    <ShareIcon className="w-5 h-5 text-gray-400" />
+                                    <ShareIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                                 </button>
                                 
                                 <AnimatePresence>
@@ -155,17 +153,15 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
                                             initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                             animate={{ opacity: 1, scale: 1, y: 0 }}
                                             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                            className="absolute right-0 top-full mt-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl z-50 min-w-[150px]"
+                                            className="absolute right-0 top-full mt-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl z-50 min-w-[150px] sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <button
                                                 onClick={() => handleShare('twitter')}
-                                                className="w-full px-4 py-2 text-left hover:bg-white/5 text-[var(--text-primary)] text-sm"
                                             >
                                                 Share on Twitter
                                             </button>
                                             <button
                                                 onClick={() => handleShare('copy')}
-                                                className="w-full px-4 py-2 text-left hover:bg-white/5 text-[var(--text-primary)] text-sm border-t border-[var(--panel-border)]"
                                             >
                                                 Copy Link
                                             </button>
@@ -177,8 +173,8 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
                             {onClose && (
                                 <button
                                     onClick={onClose}
-                                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                                >
+                                    className="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                                 aria-label="Action button">
                                     ✕
                                 </button>
                             )}
@@ -187,47 +183,42 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
 
                     {/* Quick Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
-                        <div className="text-center p-3 bg-white/10 rounded-lg">
-                            <div className="text-xl font-bold text-[var(--text-primary)]">{player.stats.projection}</div>
-                            <div className="text-xs text-[var(--text-secondary)]">Projected Pts</div>
+                        <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.stats.projection}</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Projected Pts</div>
                         </div>
-                        <div className="text-center p-3 bg-white/10 rounded-lg">
-                            <div className="text-xl font-bold text-[var(--text-primary)]">{player?.adp}</div>
-                            <div className="text-xs text-[var(--text-secondary)]">ADP</div>
+                        <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player?.adp}</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">ADP</div>
                         </div>
-                        <div className="text-center p-3 bg-white/10 rounded-lg">
-                            <div className="text-xl font-bold text-[var(--text-primary)]">${player.auctionValue}</div>
-                            <div className="text-xs text-[var(--text-secondary)]">Auction Value</div>
+                        <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">${player.auctionValue}</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Auction Value</div>
                         </div>
-                        <div className="text-center p-3 bg-white/10 rounded-lg">
-                            <div className="text-xl font-bold text-[var(--text-primary)]">Week {player.bye}</div>
-                            <div className="text-xs text-[var(--text-secondary)]">Bye Week</div>
+                        <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Week {player.bye}</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Bye Week</div>
                         </div>
-                        <div className="text-center p-3 bg-white/10 rounded-lg">
-                            <div className="flex items-center justify-center gap-2">
+                        <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                 {getTrendIcon()}
-                                <div className="text-xl font-bold text-[var(--text-primary)]">
+                                <div className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     {player.stats.vorp > 0 ? '+' : ''}{player.stats.vorp.toFixed(1)}
                                 </div>
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">VORP</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">VORP</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Tab Navigation */}
-            <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)]">
-                <div className="flex overflow-x-auto">
+            <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
-                            onClick={() => setSelectedTab(tab.id)}
-                            className={`flex items-center gap-2 px-6 py-4 font-medium transition-colors relative whitespace-nowrap ${
-                                selectedTab === tab.id
-                                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-500/10'
-                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
-                            }`}
+                            onClick={() => setSelectedTab(tab.id)}`}
                         >
                             {tab.icon}
                             {tab.label}
@@ -237,7 +228,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
             </div>
 
             {/* Tab Content */}
-            <div className="p-6">
+            <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={selectedTab}
@@ -259,32 +250,32 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
 };
 
 // Overview Section Component
-const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }: any) => {
+const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Player Bio & Info */}
             <div className="lg:col-span-2 space-y-6">
                 <Widget title="Player Information">
-                    <div className="p-4 space-y-4">
+                    <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
-                            <h4 className="font-medium text-[var(--text-primary)] mb-2">Biography</h4>
-                            <p className="text-[var(--text-secondary)] leading-relaxed">
+                            <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Biography</h4>
+                            <p className="text-[var(--text-secondary)] leading-relaxed sm:px-4 md:px-6 lg:px-8">
                                 {player.bio || "No biography available for this player."}
                             </p>
                         </div>
 
                         {player.scoutingReport && (
                             <div>
-                                <h4 className="font-medium text-[var(--text-primary)] mb-2">Scouting Report</h4>
-                                <p className="text-[var(--text-secondary)] mb-3">{player.scoutingReport.summary}</p>
+                                <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Scouting Report</h4>
+                                <p className="text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">{player.scoutingReport.summary}</p>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <h5 className="font-medium text-green-400 mb-2">Strengths</h5>
-                                        <ul className="space-y-1">
+                                        <h5 className="font-medium text-green-400 mb-2 sm:px-4 md:px-6 lg:px-8">Strengths</h5>
+                                        <ul className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                             {player.scoutingReport.strengths.map((strength: any) => (
-                                                <li key={strength} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
-                                                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+                                                <li key={strength} className="text-sm text-[var(--text-secondary)] flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full sm:px-4 md:px-6 lg:px-8"></span>
                                                     {strength}
                                                 </li>
                                             ))}
@@ -292,11 +283,11 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
                                     </div>
                                     
                                     <div>
-                                        <h5 className="font-medium text-red-400 mb-2">Weaknesses</h5>
-                                        <ul className="space-y-1">
+                                        <h5 className="font-medium text-red-400 mb-2 sm:px-4 md:px-6 lg:px-8">Weaknesses</h5>
+                                        <ul className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                             {player.scoutingReport.weaknesses.map((weakness: any) => (
-                                                <li key={weakness} className="text-sm text-[var(--text-secondary)] flex items-center gap-2">
-                                                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                                                <li key={weakness} className="text-sm text-[var(--text-secondary)] flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full sm:px-4 md:px-6 lg:px-8"></span>
                                                     {weakness}
                                                 </li>
                                             ))}
@@ -311,19 +302,19 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
                 {/* Contract Information */}
                 {player.contract && (
                     <Widget title="Contract Details">
-                        <div className="p-4">
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="text-center p-3 bg-blue-500/10 rounded-lg">
-                                    <div className="text-lg font-bold text-blue-400">{player.contract.years} years</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Contract Length</div>
+                        <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                            <div className="grid grid-cols-3 gap-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-center p-3 bg-blue-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">{player.contract.years} years</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Contract Length</div>
                                 </div>
-                                <div className="text-center p-3 bg-green-500/10 rounded-lg">
-                                    <div className="text-lg font-bold text-green-400">{player.contract.amount}</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Total Value</div>
+                                <div className="text-center p-3 bg-green-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">{player.contract.amount}</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Total Value</div>
                                 </div>
-                                <div className="text-center p-3 bg-yellow-500/10 rounded-lg">
-                                    <div className="text-lg font-bold text-yellow-400">{player.contract.guaranteed}</div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Guaranteed</div>
+                                <div className="text-center p-3 bg-yellow-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">{player.contract.guaranteed}</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Guaranteed</div>
                                 </div>
                             </div>
                         </div>
@@ -332,34 +323,34 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
             </div>
 
             {/* Sidebar with Quick Stats and Astral Intelligence */}
-            <div className="space-y-6">
+            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <Widget title="Fantasy Metrics">
-                    <div className="p-4 space-y-3">
-                        <div className="flex justify-between items-center">
-                            <span className="text-[var(--text-secondary)]">Tier</span>
-                            <span className="font-bold text-[var(--text-primary)]">Tier {player?.tier}</span>
+                    <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Tier</span>
+                            <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Tier {player?.tier}</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-[var(--text-secondary)]">Age</span>
-                            <span className="font-bold text-[var(--text-primary)]">{player?.age} years</span>
+                        <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Age</span>
+                            <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player?.age} years</span>
                         </div>
-                        <div className="flex justify-between items-center">
-                            <span className="text-[var(--text-secondary)]">Last Year</span>
-                            <span className="font-bold text-[var(--text-primary)]">{player.stats.lastYear} pts</span>
+                        <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Last Year</span>
+                            <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.stats.lastYear} pts</span>
                         </div>
                         {player.advancedMetrics && (
                             <>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[var(--text-secondary)]">Snap %</span>
-                                    <span className="font-bold text-[var(--text-primary)]">{player.advancedMetrics.snapCountPct}%</span>
+                                <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Snap %</span>
+                                    <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.advancedMetrics.snapCountPct}%</span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[var(--text-secondary)]">Target Share</span>
-                                    <span className="font-bold text-[var(--text-primary)]">{player.advancedMetrics.targetSharePct}%</span>
+                                <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Target Share</span>
+                                    <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.advancedMetrics.targetSharePct}%</span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-[var(--text-secondary)]">RZ Touches</span>
-                                    <span className="font-bold text-[var(--text-primary)]">{player.advancedMetrics.redZoneTouches}</span>
+                                <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">RZ Touches</span>
+                                    <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.advancedMetrics.redZoneTouches}</span>
                                 </div>
                             </>
                         )}
@@ -368,22 +359,22 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
 
                 {player.astralIntelligence && (
                     <Widget title="Astral Intelligence">
-                        <div className="p-4 space-y-3">
+                        <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
                             <div>
-                                <span className="text-[var(--text-secondary)] text-sm">Spirit Animal</span>
-                                <p className="font-medium text-[var(--text-primary)]">{player.astralIntelligence.spiritAnimal}</p>
+                                <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Spirit Animal</span>
+                                <p className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.astralIntelligence.spiritAnimal}</p>
                             </div>
                             <div>
-                                <span className="text-[var(--text-secondary)] text-sm">Pregame Ritual</span>
-                                <p className="font-medium text-[var(--text-primary)]">{player.astralIntelligence.pregameRitual}</p>
+                                <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Pregame Ritual</span>
+                                <p className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.astralIntelligence.pregameRitual}</p>
                             </div>
                             <div>
-                                <span className="text-[var(--text-secondary)] text-sm">Offseason Hobby</span>
-                                <p className="font-medium text-[var(--text-primary)]">{player.astralIntelligence.offseasonHobby}</p>
+                                <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Offseason Hobby</span>
+                                <p className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.astralIntelligence.offseasonHobby}</p>
                             </div>
                             <div>
-                                <span className="text-[var(--text-secondary)] text-sm">Signature Celebration</span>
-                                <p className="font-medium text-[var(--text-primary)]">{player.astralIntelligence.signatureCelebration}</p>
+                                <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Signature Celebration</span>
+                                <p className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.astralIntelligence.signatureCelebration}</p>
                             </div>
                         </div>
                     </Widget>
@@ -393,4 +384,10 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
     );
 };
 
-export default PlayerProfileView;
+const PlayerProfileViewWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PlayerProfileView {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PlayerProfileViewWithErrorBoundary);

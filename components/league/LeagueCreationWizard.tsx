@@ -4,7 +4,8 @@
  * Implements T2.1 League Management System requirements
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
@@ -27,6 +28,7 @@ interface WizardSettings {
     draftType: 'snake' | 'auction';
     draftDate: string;
     draftTime: string;
+
 }
 
 interface LeagueCreationStep {
@@ -35,70 +37,70 @@ interface LeagueCreationStep {
     description: string;
     component: React.ComponentType<StepProps>;
     validation: (data: WizardSettings) => string | null;
-}
 
 interface StepProps {
     settings: WizardSettings;
     updateSettings: (updates: Partial<WizardSettings>) => void;
     errors: Record<string, string>;
-}
 
 // Step 1: Basic Information
-const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
+}
+
+const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                     League Name *
                 </label>
                 <input
                     type="text"
                     value={settings.name}
-                    onChange={(e: any) => updateSettings({ name: e.target.value })}
-                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e: any) => updateSettings({ name: e.target.value }}
+                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
                     placeholder="Enter your league name"
                 />
-                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                {errors.name && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.name}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                     Number of Teams *
                 </label>
                 <select
                     value={settings.teamCount}
-                    onChange={(e: any) => updateSettings({ teamCount: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={(e: any) => updateSettings({ teamCount: parseInt(e.target.value) }}
+                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
                 >
                     {[8, 10, 12, 14, 16].map((count: any) => (
                         <option key={count} value={count}>{count} Teams</option>
                     ))}
                 </select>
-                {errors.teamCount && <p className="text-red-500 text-sm mt-1">{errors.teamCount}</p>}
+                {errors.teamCount && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.teamCount}</p>}
             </div>
 
             <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                     League Description
                 </label>
                 <textarea
                     value={settings.description}
-                    onChange={(e: any) => updateSettings({ description: e.target.value })}
+                    onChange={(e: any) => updateSettings({ description: e.target.value }}
                     rows={3}
-                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
                     placeholder="Optional description for your league"
                 />
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
                 <input
                     type="checkbox"
                     id="isPublic"
                     checked={settings.isPublic}
-                    onChange={(e: any) => updateSettings({ isPublic: e.target.checked })}
-                    className="mr-2"
+                    onChange={(e: any) => updateSettings({ isPublic: e.target.checked }}
+                    className="mr-2 sm:px-4 md:px-6 lg:px-8"
                 />
-                <label htmlFor="isPublic" className="text-sm text-[var(--text-primary)]">
+                <label htmlFor="isPublic" className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                     Make this league public (others can request to join)
                 </label>
             </div>
@@ -107,7 +109,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }
 };
 
 // Step 2: Scoring Settings
-const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
+const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
     const scoringPresets = {
         standard: { description: "Standard scoring (no points for receptions)" },
         ppr: { description: "Point Per Reception (1 point per catch)" },
@@ -122,46 +124,46 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: 
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-4">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                     Scoring Type *
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {Object.entries(scoringPresets).map(([key, preset]) => (
                         <div
                             key={key}
-                            onClick={() => handlePresetChange(key as keyof typeof scoringPresets)}
+                            onClick={() = role="button" tabIndex={0}> handlePresetChange(key as keyof typeof scoringPresets)}
                             className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                                 settings.scoringType === key
                                     ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                                     : 'border-[var(--panel-border)] hover:border-blue-300'
                             }`}
                         >
-                            <div className="flex items-center justify-between mb-2">
-                                <h3 className="font-semibold text-[var(--text-primary)] capitalize">
+                            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="font-semibold text-[var(--text-primary)] capitalize sm:px-4 md:px-6 lg:px-8">
                                     {key.replace('_', ' ')}
                                 </h3>
                                 {settings.scoringType === key && (
-                                    <CheckIcon className="w-5 h-5 text-blue-500" />
+                                    <CheckIcon className="w-5 h-5 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
-                            <p className="text-sm text-[var(--text-secondary)]">{preset.description}</p>
+                            <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{preset.description}</p>
                         </div>
                     ))}
                 </div>
-                {errors.scoringType && <p className="text-red-500 text-sm mt-1">{errors.scoringType}</p>}
+                {errors.scoringType && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.scoringType}</p>}
             </div>
         </div>
     );
 };
 
 // Step 3: Draft Settings
-const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
+const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-4">
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                     Draft Type *
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -171,50 +173,50 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: an
                     ].map((type: any) => (
                         <div
                             key={type.key}
-                            onClick={() => updateSettings({ draftType: type.key as any })}
+                            onClick={() = role="button" tabIndex={0}> updateSettings({ draftType: type.key as any })}
                             className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                                 settings.draftType === type.key
                                     ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                                     : 'border-[var(--panel-border)] hover:border-blue-300'
                             }`}
                         >
-                            <div className="flex items-center justify-between mb-2">
-                                <h3 className="font-semibold text-[var(--text-primary)]">{type.name}</h3>
+                            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{type.name}</h3>
                                 {settings.draftType === type.key && (
-                                    <CheckIcon className="w-5 h-5 text-blue-500" />
+                                    <CheckIcon className="w-5 h-5 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
-                            <p className="text-sm text-[var(--text-secondary)]">{type.description}</p>
+                            <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{type.description}</p>
                         </div>
                     ))}
                 </div>
-                {errors.draftType && <p className="text-red-500 text-sm mt-1">{errors.draftType}</p>}
+                {errors.draftType && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.draftType}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                         Draft Date
                     </label>
                     <input
                         type="date"
                         value={settings.draftDate}
-                        onChange={(e: any) => updateSettings({ draftDate: e.target.value })}
-                        className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
+                        onChange={(e: any) => updateSettings({ draftDate: e.target.value }}
+                        className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                     />
-                    {errors.draftDate && <p className="text-red-500 text-sm mt-1">{errors.draftDate}</p>}
+                    {errors.draftDate && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.draftDate}</p>}
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                         Draft Time
                     </label>
                     <input
                         type="time"
                         value={settings.draftTime}
-                        onChange={(e: any) => updateSettings({ draftTime: e.target.value })}
-                        className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)]"
+                        onChange={(e: any) => updateSettings({ draftTime: e.target.value }}
+                        className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                     />
-                    {errors.draftTime && <p className="text-red-500 text-sm mt-1">{errors.draftTime}</p>}
+                    {errors.draftTime && <p className="text-red-500 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{errors.draftTime}</p>}
                 </div>
             </div>
         </div>
@@ -222,16 +224,16 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: an
 };
 
 // Step 4: Review & Create
-const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
+const ReviewStep: React.FC<StepProps> = ({ settings }) => {
     return (
-        <div className="space-y-6">
-            <div className="bg-[var(--panel-bg)] p-6 rounded-lg border border-[var(--panel-border)]">
-                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4">League Summary</h3>
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            <div className="bg-[var(--panel-bg)] p-6 rounded-lg border border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">League Summary</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <h4 className="font-medium text-[var(--text-primary)] mb-2">Basic Information</h4>
-                        <ul className="space-y-1 text-sm text-[var(--text-secondary)]">
+                        <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Basic Information</h4>
+                        <ul className="space-y-1 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <li>Name: {settings.name}</li>
                             <li>Teams: {settings.teamCount}</li>
                             <li>Type: {settings.isPublic ? 'Public' : 'Private'}</li>
@@ -239,15 +241,15 @@ const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
                     </div>
                     
                     <div>
-                        <h4 className="font-medium text-[var(--text-primary)] mb-2">Scoring</h4>
-                        <ul className="space-y-1 text-sm text-[var(--text-secondary)]">
+                        <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Scoring</h4>
+                        <ul className="space-y-1 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <li>Type: {settings.scoringType.replace('_', ' ').toUpperCase()}</li>
                         </ul>
                     </div>
                     
                     <div>
-                        <h4 className="font-medium text-[var(--text-primary)] mb-2">Draft Settings</h4>
-                        <ul className="space-y-1 text-sm text-[var(--text-secondary)]">
+                        <h4 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Draft Settings</h4>
+                        <ul className="space-y-1 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <li>Type: {settings.draftType.charAt(0).toUpperCase() + settings.draftType.slice(1)}</li>
                             <li>Date: {settings.draftDate}</li>
                             <li>Time: {settings.draftTime}</li>
@@ -287,7 +289,7 @@ const LeagueCreationWizard: React.FC = () => {
                 if (!data.name.trim()) return 'League name is required';
                 if (data.teamCount < 4 || data.teamCount > 20) return 'Team count must be between 4 and 20';
                 return null;
-            }
+
         },
         {
             id: 'scoring',
@@ -305,7 +307,7 @@ const LeagueCreationWizard: React.FC = () => {
                 if (!data.draftDate) return 'Draft date is required';
                 if (!data.draftTime) return 'Draft time is required';
                 return null;
-            }
+
         },
         {
             id: 'review',
@@ -313,7 +315,7 @@ const LeagueCreationWizard: React.FC = () => {
             description: 'Review your settings and create the league',
             component: ReviewStep,
             validation: () => null
-        }
+
     ];
 
     const updateSettings = (updates: Partial<WizardSettings>) => {
@@ -328,8 +330,7 @@ const LeagueCreationWizard: React.FC = () => {
         if (error) {
             setErrors({ [currentStepData.id]: error });
             return false;
-        }
-        
+
         setErrors({});
         return true;
     };
@@ -337,7 +338,7 @@ const LeagueCreationWizard: React.FC = () => {
     const handleNext = () => {
         if (validateCurrentStep()) {
             setCurrentStep(prev => Math.min(prev + 1, steps.length - 1));
-        }
+
     };
 
     const handlePrev = () => {
@@ -391,58 +392,54 @@ const LeagueCreationWizard: React.FC = () => {
                 message: `League "${settings.name}" created successfully!`,
                 type: 'SYSTEM'
             }});
-        } catch (error) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: {
-                message: 'Failed to create league. Please try again.',
-                type: 'SYSTEM'
-            }});
+        });
         } finally {
             setIsCreating(false);
-        }
+
     };
 
     const CurrentStepComponent = steps[currentStep].component;
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
-            <header className="flex-shrink-0 mb-6">
-                <div className="flex items-center justify-between mb-4">
+            <header className="flex-shrink-0 mb-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                     <div>
                         <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                             Create League
                         </h1>
-                        <p className="text-sm text-[var(--text-secondary)] tracking-widest">
+                        <p className="text-sm text-[var(--text-secondary)] tracking-widest sm:px-4 md:px-6 lg:px-8">
                             Step {currentStep + 1} of {steps.length}
                         </p>
                     </div>
                     <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
-                        className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20 mobile-touch-target"
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+                        className="px-4 py-2 bg-white/10 rounded-lg text-sm hover:bg-white/20 mobile-touch-target sm:px-4 md:px-6 lg:px-8"
                     >
                         Cancel
                     </button>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6 sm:px-4 md:px-6 lg:px-8">
                     <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300 sm:px-4 md:px-6 lg:px-8"
                         style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
                     />
                 </div>
 
                 {/* Step Indicator */}
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
                     {steps.map((step, index) => (
-                        <div key={step.id} className="flex flex-col items-center">
+                        <div key={step.id} className="flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                                 index <= currentStep
                                     ? 'bg-blue-600 text-white'
                                     : 'bg-gray-300 text-gray-600 dark:bg-gray-600 dark:text-gray-300'
                             }`}>
-                                {index < currentStep ? <CheckIcon className="w-4 h-4" /> : index + 1}
+                                {index < currentStep ? <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> : index + 1}
                             </div>
-                            <span className="text-xs text-[var(--text-secondary)] mt-1 text-center max-w-20">
+                            <span className="text-xs text-[var(--text-secondary)] mt-1 text-center max-w-20 sm:px-4 md:px-6 lg:px-8">
                                 {step.title}
                             </span>
                         </div>
@@ -450,10 +447,10 @@ const LeagueCreationWizard: React.FC = () => {
                 </div>
             </header>
 
-            <main className="flex-grow">
+            <main className="flex-grow sm:px-4 md:px-6 lg:px-8">
                 <Widget title={steps[currentStep].title}>
-                    <div className="p-6">
-                        <p className="text-[var(--text-secondary)] mb-6">
+                    <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-[var(--text-secondary)] mb-6 sm:px-4 md:px-6 lg:px-8">
                             {steps[currentStep].description}
                         </p>
                         
@@ -476,13 +473,13 @@ const LeagueCreationWizard: React.FC = () => {
                 </Widget>
             </main>
 
-            <footer className="flex-shrink-0 flex justify-between items-center mt-6 pt-6 border-t border-[var(--panel-border)]">
+            <footer className="flex-shrink-0 flex justify-between items-center mt-6 pt-6 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                 <button
                     onClick={handlePrev}
                     disabled={currentStep === 0}
-                    className="flex items-center gap-2 px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target"
-                >
-                    <ChevronLeftIcon className="w-4 h-4" />
+                    className="flex items-center gap-2 px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
+                    <ChevronLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     Previous
                 </button>
 
@@ -490,17 +487,17 @@ const LeagueCreationWizard: React.FC = () => {
                     <button
                         onClick={handleCreateLeague}
                         disabled={isCreating}
-                        className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target"
-                    >
+                        className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed mobile-touch-target sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         {isCreating ? 'Creating...' : 'Create League'}
                     </button>
                 ) : (
                     <button
                         onClick={handleNext}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium mobile-touch-target"
-                    >
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium mobile-touch-target sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         Next
-                        <ChevronRightIcon className="w-4 h-4" />
+                        <ChevronRightIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                 )}
             </footer>
@@ -508,4 +505,10 @@ const LeagueCreationWizard: React.FC = () => {
     );
 };
 
-export default LeagueCreationWizard;
+const LeagueCreationWizardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LeagueCreationWizard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LeagueCreationWizardWithErrorBoundary);

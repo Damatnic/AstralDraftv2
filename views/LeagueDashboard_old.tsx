@@ -57,7 +57,7 @@ const LeagueDashboard: React.FC = () => {
                 <p className="text-sm text-slate-400">{userTeam?.name}</p>
               </div>
               <button
-                onClick={() => dispatch({ type: 'LOGOUT' })}
+                onClick={() => dispatch({ type: 'LOGOUT' }}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
               >
                 Logout
@@ -103,7 +103,7 @@ const LeagueDashboard: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as any })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as any }}
               className={`${item.color} hover:opacity-90 rounded-xl p-6 text-white transition-all transform hover:scale-105`}
             >
               <div className="text-4xl mb-2">{item.icon}</div>

@@ -3,7 +3,8 @@
  * Provides quick lineup optimization with ML-powered recommendations
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -18,10 +19,12 @@ interface OptimizationStrategy {
   description: string;
   icon: string;
   color: string;
+
 }
 
 const strategies: OptimizationStrategy[] = [
   {
+  const [isLoading, setIsLoading] = React.useState(false);
     id: 'optimal',
     name: 'Optimal',
     description: 'Best projected points',
@@ -48,7 +51,7 @@ const strategies: OptimizationStrategy[] = [
     description: 'Tournament play',
     icon: '🎲',
     color: 'from-orange-500 to-orange-600'
-  }
+
 ];
 
 const LineupOptimizerWidget: React.FC = () => {
@@ -105,14 +108,14 @@ const LineupOptimizerWidget: React.FC = () => {
       console.error('Failed to optimize lineup:', error);
     } finally {
       setIsOptimizing(false);
-    }
+
   }, [userTeam]);
 
   // Auto-optimize on widget mount
   useEffect(() => {
     if (userTeam && !optimizedLineup) {
       optimizeLineup();
-    }
+
   }, [userTeam, optimizedLineup, optimizeLineup]);
 
   const getConfidenceColor = (confidence: number) => {
@@ -128,35 +131,35 @@ const LineupOptimizerWidget: React.FC = () => {
   };
 
   return (
-    <Card variant="gradient" className="bg-gradient-to-br from-dark-800/90 to-dark-900/90 backdrop-blur-xl border-primary-500/20">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-xl blur-xl opacity-50 animate-pulse" />
-              <div className="relative w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-xl flex items-center justify-center">
-                <span className="text-xl">🤖</span>
+    <Card variant="gradient" className="bg-gradient-to-br from-dark-800/90 to-dark-900/90 backdrop-blur-xl border-primary-500/20 sm:px-4 md:px-6 lg:px-8">
+      <CardHeader className="pb-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 rounded-xl blur-xl opacity-50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
+              <div className="relative w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-xl flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <span className="text-xl sm:px-4 md:px-6 lg:px-8">🤖</span>
               </div>
             </div>
             <div>
-              <CardTitle className="text-lg font-bold text-white">AI Lineup Optimizer</CardTitle>
-              <p className="text-xs text-gray-400 mt-0.5">ML-powered recommendations</p>
+              <CardTitle className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">AI Lineup Optimizer</CardTitle>
+              <p className="text-xs text-gray-400 mt-0.5 sm:px-4 md:px-6 lg:px-8">ML-powered recommendations</p>
             </div>
           </div>
           <Button
             variant="secondary"
             size="sm"
             onClick={() => setShowDetails(!showDetails)}
-            className="text-xs"
+            className="text-xs sm:px-4 md:px-6 lg:px-8"
           >
             {showDetails ? 'Hide' : 'Details'}
           </Button>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         {/* Strategy Selection */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
           {strategies.map((strategy) => (
             <motion.button
               key={strategy.id}
@@ -169,11 +172,11 @@ const LineupOptimizerWidget: React.FC = () => {
                   : 'border-gray-700 bg-dark-800/50 hover:border-gray-600'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <span className="text-lg">{strategy.icon}</span>
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-white">{strategy.name}</p>
-                  <p className="text-xs text-gray-500">{strategy.description}</p>
+              <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <span className="text-lg sm:px-4 md:px-6 lg:px-8">{strategy.icon}</span>
+                <div className="text-left sm:px-4 md:px-6 lg:px-8">
+                  <p className="text-xs font-semibold text-white sm:px-4 md:px-6 lg:px-8">{strategy.name}</p>
+                  <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{strategy.description}</p>
                 </div>
               </div>
             </motion.button>
@@ -187,32 +190,32 @@ const LineupOptimizerWidget: React.FC = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-3"
+              className="space-y-3 sm:px-4 md:px-6 lg:px-8"
             >
               {/* Projected Points */}
-              <div className="bg-dark-800/50 rounded-xl p-4 border border-gray-800">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-400">Projected Points</span>
+              <div className="bg-dark-800/50 rounded-xl p-4 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Projected Points</span>
                   <span className={`text-xs font-semibold ${getConfidenceColor(confidenceScore)}`}>
                     {(confidenceScore * 100).toFixed(0)}% Confidence
                   </span>
                 </div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-white">
+                <div className="flex items-baseline gap-2 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-3xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                     {optimizedLineup.analysis.totalProjected.toFixed(1)}
                   </span>
-                  <span className="text-sm text-gray-500">pts</span>
+                  <span className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">pts</span>
                 </div>
-                <div className="flex items-center gap-4 mt-2">
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs text-gray-500">Floor:</span>
-                    <span className="text-xs font-semibold text-gray-400">
+                <div className="flex items-center gap-4 mt-2 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Floor:</span>
+                    <span className="text-xs font-semibold text-gray-400 sm:px-4 md:px-6 lg:px-8">
                       {optimizedLineup.analysis.floor.toFixed(1)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs text-gray-500">Ceiling:</span>
-                    <span className="text-xs font-semibold text-gray-400">
+                  <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Ceiling:</span>
+                    <span className="text-xs font-semibold text-gray-400 sm:px-4 md:px-6 lg:px-8">
                       {optimizedLineup.analysis.ceiling.toFixed(1)}
                     </span>
                   </div>
@@ -220,31 +223,31 @@ const LineupOptimizerWidget: React.FC = () => {
               </div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800">
-                  <div className="flex items-center gap-1 mb-1">
-                    <span className="text-xs">💥</span>
-                    <span className="text-xs text-gray-500">Boom</span>
+              <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-1 mb-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs sm:px-4 md:px-6 lg:px-8">💥</span>
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Boom</span>
                   </div>
-                  <span className="text-sm font-bold text-green-400">
+                  <span className="text-sm font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                     {(optimizedLineup.analysis.boomProbability * 100).toFixed(0)}%
                   </span>
                 </div>
-                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800">
-                  <div className="flex items-center gap-1 mb-1">
-                    <span className="text-xs">📉</span>
-                    <span className="text-xs text-gray-500">Bust</span>
+                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-1 mb-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs sm:px-4 md:px-6 lg:px-8">📉</span>
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Bust</span>
                   </div>
-                  <span className="text-sm font-bold text-orange-400">
+                  <span className="text-sm font-bold text-orange-400 sm:px-4 md:px-6 lg:px-8">
                     {(optimizedLineup.analysis.bustProbability * 100).toFixed(0)}%
                   </span>
                 </div>
-                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800">
-                  <div className="flex items-center gap-1 mb-1">
-                    <span className="text-xs">🔄</span>
-                    <span className="text-xs text-gray-500">Changes</span>
+                <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-1 mb-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs sm:px-4 md:px-6 lg:px-8">🔄</span>
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Changes</span>
                   </div>
-                  <span className="text-sm font-bold text-primary-400">
+                  <span className="text-sm font-bold text-primary-400 sm:px-4 md:px-6 lg:px-8">
                     {lineupChanges}
                   </span>
                 </div>
@@ -256,17 +259,17 @@ const LineupOptimizerWidget: React.FC = () => {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="bg-dark-800/50 rounded-lg p-3 border border-gray-800"
+                  className="bg-dark-800/50 rounded-lg p-3 border border-gray-800 sm:px-4 md:px-6 lg:px-8"
                 >
-                  <p className="text-xs font-semibold text-gray-400 mb-2">Position Strength</p>
-                  <div className="grid grid-cols-3 gap-2">
+                  <p className="text-xs font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Position Strength</p>
+                  <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                     {Array.from(optimizedLineup.analysis.positionStrength.entries()).map(([pos, strength]) => {
                       const indicator = getPositionStrengthIndicator(strength);
                       return (
-                        <div key={pos} className="flex items-center gap-1">
+                        <div key={pos} className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                           <span className={`text-xs ${indicator.color}`}>{indicator.icon}</span>
-                          <span className="text-xs text-gray-400">{pos}:</span>
-                          <span className="text-xs font-semibold text-white">
+                          <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{pos}:</span>
+                          <span className="text-xs font-semibold text-white sm:px-4 md:px-6 lg:px-8">
                             {(strength * 100).toFixed(0)}%
                           </span>
                         </div>
@@ -274,11 +277,11 @@ const LineupOptimizerWidget: React.FC = () => {
                     })}
                   </div>
                   {optimizedLineup.analysis.stackingBonus > 1 && (
-                    <div className="mt-2 pt-2 border-t border-gray-800">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs">🔗</span>
-                        <span className="text-xs text-gray-400">Stack Bonus:</span>
-                        <span className="text-xs font-semibold text-green-400">
+                    <div className="mt-2 pt-2 border-t border-gray-800 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-xs sm:px-4 md:px-6 lg:px-8">🔗</span>
+                        <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Stack Bonus:</span>
+                        <span className="text-xs font-semibold text-green-400 sm:px-4 md:px-6 lg:px-8">
                           +{((optimizedLineup.analysis.stackingBonus - 1) * 100).toFixed(0)}%
                         </span>
                       </div>
@@ -288,22 +291,22 @@ const LineupOptimizerWidget: React.FC = () => {
               )}
 
               {/* Action Buttons */}
-              <div className="flex gap-2">
+              <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                 <Button
                   variant="primary"
                   size="sm"
                   onClick={optimizeLineup}
                   disabled={isOptimizing}
-                  className="flex-1"
+                  className="flex-1 sm:px-4 md:px-6 lg:px-8"
                 >
                   {isOptimizing ? (
                     <>
-                      <span className="animate-spin mr-2">⚡</span>
+                      <span className="animate-spin mr-2 sm:px-4 md:px-6 lg:px-8">⚡</span>
                       Optimizing...
                     </>
                   ) : (
                     <>
-                      <span className="mr-2">🔄</span>
+                      <span className="mr-2 sm:px-4 md:px-6 lg:px-8">🔄</span>
                       Re-Optimize
                     </>
                   )}
@@ -315,9 +318,9 @@ const LineupOptimizerWidget: React.FC = () => {
                     // Apply the optimized lineup
                     console.log('Applying optimized lineup');
                   }}
-                  className="flex-1"
+                  className="flex-1 sm:px-4 md:px-6 lg:px-8"
                 >
-                  <span className="mr-2">✓</span>
+                  <span className="mr-2 sm:px-4 md:px-6 lg:px-8">✓</span>
                   Apply Lineup
                 </Button>
               </div>
@@ -327,12 +330,12 @@ const LineupOptimizerWidget: React.FC = () => {
 
         {/* Loading State */}
         {isOptimizing && !optimizedLineup && (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="relative">
-              <div className="w-12 h-12 border-4 border-primary-500/20 rounded-full"></div>
-              <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0"></div>
+          <div className="flex flex-col items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8">
+              <div className="w-12 h-12 border-4 border-primary-500/20 rounded-full sm:px-4 md:px-6 lg:px-8"></div>
+              <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin absolute inset-0 sm:px-4 md:px-6 lg:px-8"></div>
             </div>
-            <p className="text-sm text-gray-400 mt-3">Analyzing {userTeam?.roster?.length || 0} players...</p>
+            <p className="text-sm text-gray-400 mt-3 sm:px-4 md:px-6 lg:px-8">Analyzing {userTeam?.roster?.length || 0} players...</p>
           </div>
         )}
       </CardContent>
@@ -340,4 +343,10 @@ const LineupOptimizerWidget: React.FC = () => {
   );
 };
 
-export default LineupOptimizerWidget;
+const LineupOptimizerWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LineupOptimizerWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LineupOptimizerWidgetWithErrorBoundary);

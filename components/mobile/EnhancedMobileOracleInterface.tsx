@@ -3,7 +3,8 @@
  * Optimized for touch interactions and mobile screens
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Target, 
@@ -28,6 +29,7 @@ interface Prediction {
   confidence?: number;
   submitted?: boolean;
   result?: number;
+
 }
 
 interface PredictionOption {
@@ -35,21 +37,21 @@ interface PredictionOption {
   text: string;
   odds: number;
   probability: number;
-}
 
 interface Props {
   activeView: string;
   onViewChange: (view: string) => void;
   week?: number;
   className?: string;
+
 }
 
-const EnhancedMobileOracleInterface: React.FC<Props> = ({
-  activeView,
+const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   onViewChange,
   week = 1,
   className = ''
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [selectedPrediction, setSelectedPrediction] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -97,7 +99,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
         deadline: '2024-09-15T20:00:00Z',
         category: 'player_prop',
         difficulty: 'hard'
-      }
+
     ];
 
     setPredictions(mockPredictions);
@@ -137,7 +139,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
       case 'medium': return 'text-yellow-400 bg-yellow-400/10';
       case 'hard': return 'text-red-400 bg-red-400/10';
       default: return 'text-gray-400 bg-gray-400/10';
-    }
+
   };
 
   const getCategoryIcon = (category: string) => {
@@ -147,7 +149,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
       case 'player_prop': return Users;
       case 'team_prop': return Trophy;
       default: return Target;
-    }
+
   };
 
   const isDeadlineSoon = (deadline: string) => {
@@ -159,15 +161,15 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
 
   const renderStatsCard = () => (
     <motion.div
-      className="bg-gray-800/50 rounded-xl p-4 mb-6 backdrop-blur-sm"
+      className="bg-gray-800/50 rounded-xl p-4 mb-6 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Week {week} Oracle</h2>
+      <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+        <h2 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Week {week} Oracle</h2>
         <motion.button
           onClick={handleRefresh}
-          className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 min-h-[44px] min-w-[44px]"
+          className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 min-h-[44px] min-w-[44px] sm:px-4 md:px-6 lg:px-8"
           whileTap={{ scale: 0.95 }}
           disabled={refreshing}
         >
@@ -175,14 +177,14 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
         </motion.button>
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-center">
-          <div className="text-2xl font-bold text-blue-400">{stats.submitted}/{stats.totalPredictions}</div>
-          <div className="text-sm text-gray-400">Submitted</div>
+      <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">{stats.submitted}/{stats.totalPredictions}</div>
+          <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Submitted</div>
         </div>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-green-400">{stats.accuracy}%</div>
-          <div className="text-sm text-gray-400">Accuracy</div>
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">{stats.accuracy}%</div>
+          <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
         </div>
       </div>
     </motion.div>
@@ -195,40 +197,40 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
     return (
       <motion.div
         key={prediction.id}
-        className="bg-gray-800/50 rounded-xl p-4 mb-4 backdrop-blur-sm border border-gray-700/50"
+        className="bg-gray-800/50 rounded-xl p-4 mb-4 backdrop-blur-sm border border-gray-700/50 sm:px-4 md:px-6 lg:px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileTap={{ scale: 0.98 }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <CategoryIcon className="w-5 h-5 text-blue-400" />
+        <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+            <CategoryIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${getDifficultyColor(prediction.difficulty)}`}>
               {prediction.difficulty.toUpperCase()}
             </span>
           </div>
           
           {prediction.submitted ? (
-            <div className="flex items-center space-x-1 text-green-400">
-              <CheckCircle className="w-4 h-4" />
-              <span className="text-xs font-medium">{prediction.confidence}%</span>
+            <div className="flex items-center space-x-1 text-green-400 sm:px-4 md:px-6 lg:px-8">
+              <CheckCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+              <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">{prediction.confidence}%</span>
             </div>
           ) : deadlineSoon && (
-            <div className="flex items-center space-x-1 text-orange-400">
-              <AlertCircle className="w-4 h-4" />
-              <span className="text-xs font-medium">Soon</span>
+            <div className="flex items-center space-x-1 text-orange-400 sm:px-4 md:px-6 lg:px-8">
+              <AlertCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+              <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Soon</span>
             </div>
           )}
         </div>
 
         {/* Question */}
-        <h3 className="text-white font-medium mb-3 leading-relaxed">
+        <h3 className="text-white font-medium mb-3 leading-relaxed sm:px-4 md:px-6 lg:px-8">
           {prediction.question}
         </h3>
 
         {/* Options */}
-        <div className="space-y-2 mb-3">
+        <div className="space-y-2 mb-3 sm:px-4 md:px-6 lg:px-8">
           {prediction.options.map((option: any) => (
             <motion.button
               key={option.id}
@@ -238,12 +240,12 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
                 bg-gray-700/30 hover:bg-gray-700/50
                 text-left transition-colors min-h-[44px]
                 flex items-center justify-between
-              "
+               sm:px-4 md:px-6 lg:px-8"
               whileTap={{ scale: 0.98 }}
               disabled={prediction.submitted}
             >
-              <span className="text-white text-sm">{option.text}</span>
-              <div className="flex items-center space-x-2 text-xs text-gray-400">
+              <span className="text-white text-sm sm:px-4 md:px-6 lg:px-8">{option.text}</span>
+              <div className="flex items-center space-x-2 text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                 <span>{option.odds > 0 ? '+' : ''}{option.odds}</span>
                 <span>({(option.probability * 100).toFixed(0)}%)</span>
               </div>
@@ -252,13 +254,13 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
         </div>
 
         {/* Deadline */}
-        <div className="flex items-center justify-between text-xs text-gray-400">
-          <div className="flex items-center space-x-1">
-            <Clock className="w-3 h-3" />
+        <div className="flex items-center justify-between text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8">
+            <Clock className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
             <span>Deadline: {new Date(prediction.deadline).toLocaleTimeString()}</span>
           </div>
           {!prediction.submitted && (
-            <span className="text-blue-400 font-medium">Tap to predict</span>
+            <span className="text-blue-400 font-medium sm:px-4 md:px-6 lg:px-8">Tap to predict</span>
           )}
         </div>
       </motion.div>
@@ -272,7 +274,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
     return (
       <AnimatePresence>
         <motion.div
-          className="fixed inset-0 bg-black/50 flex items-end justify-center z-50"
+          className="fixed inset-0 bg-black/50 flex items-end justify-center z-50 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -282,7 +284,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
             className="
               bg-gray-800 rounded-t-xl p-6 w-full max-w-sm
               border-t border-gray-700
-            "
+             sm:px-4 md:px-6 lg:px-8"
             style={{ 
               paddingBottom: 'calc(24px + env(safe-area-inset-bottom))'
             }}
@@ -291,9 +293,9 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
             exit={{ y: '100%' }}
             onClick={e => e.stopPropagation()}
           >
-            <h3 className="text-white font-semibold mb-4">Make Your Prediction</h3>
+            <h3 className="text-white font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Make Your Prediction</h3>
             
-            <div className="space-y-3">
+            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
               {prediction.options.map((option: any) => (
                 <motion.button
                   key={option.id}
@@ -302,12 +304,12 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
                     w-full p-4 rounded-lg border border-gray-600
                     bg-gray-700/50 hover:bg-blue-600/20 hover:border-blue-500
                     text-white transition-colors min-h-[44px]
-                  "
+                   sm:px-4 md:px-6 lg:px-8"
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">{option.text}</span>
-                    <span className="text-sm text-gray-400">
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="font-medium sm:px-4 md:px-6 lg:px-8">{option.text}</span>
+                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                       {option.odds > 0 ? '+' : ''}{option.odds}
                     </span>
                   </div>
@@ -326,34 +328,34 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
       onViewChange={onViewChange}
       className={className}
     >
-      <div className="p-4 pb-6">
+      <div className="p-4 pb-6 sm:px-4 md:px-6 lg:px-8">
         {/* Stats Card */}
         {renderStatsCard()}
 
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-white">Available Predictions</h2>
-          <div className="flex items-center space-x-1 text-sm text-gray-400">
-            <Zap className="w-4 h-4" />
+        <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+          <h2 className="text-xl font-semibold text-white sm:px-4 md:px-6 lg:px-8">Available Predictions</h2>
+          <div className="flex items-center space-x-1 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+            <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             <span>Live</span>
           </div>
         </div>
 
         {/* Predictions List */}
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {predictions.map(renderPredictionCard)}
         </div>
 
         {/* Empty State */}
         {predictions.length === 0 && (
           <motion.div
-            className="text-center py-12"
+            className="text-center py-12 sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <Target className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-400 mb-2">No Predictions Available</h3>
-            <p className="text-gray-500">Check back soon for new Oracle predictions!</p>
+            <Target className="w-16 h-16 text-gray-600 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+            <h3 className="text-lg font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">No Predictions Available</h3>
+            <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Check back soon for new Oracle predictions!</p>
           </motion.div>
         )}
       </div>
@@ -364,4 +366,10 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({
   );
 };
 
-export default EnhancedMobileOracleInterface;
+const EnhancedMobileOracleInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedMobileOracleInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedMobileOracleInterfaceWithErrorBoundary);

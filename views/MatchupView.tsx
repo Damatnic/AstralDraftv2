@@ -1,6 +1,5 @@
 
 
-
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -14,7 +13,7 @@ import MatchupAnalysisWidget from '../components/matchup/MatchupAnalysisWidget';
 import LiveEventTicker from '../components/matchup/LiveEventTicker';
 import { useLiveData } from '../hooks/useLiveData';
 
-const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
+const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
     const [viewedWeek, setViewedWeek] = React.useState(league.currentWeek);
     const [isReportModalOpen, setIsReportModalOpen] = React.useState(false);
 
@@ -26,15 +25,13 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
 
     if (!matchup) {
         return <div className="p-8 text-center text-gray-400">You have a bye week.</div>
-    }
-    
+
     const isMyTeamA = matchup.teamA.teamId === myTeam.id;
     const myMatchupTeam = isMyTeamA ? matchup.teamA : matchup.teamB;
     const opponentMatchupTeam = isMyTeamA ? matchup.teamB : matchup.teamA;
 
     if (!opponentTeam) {
         return <div className="p-8 text-center text-red-400">Error: Opponent not found.</div>;
-    }
 
     const canGoToPrev = viewedWeek > 1;
     const canGoToNext = viewedWeek < 14;
@@ -53,7 +50,6 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                         <div className="flex items-center gap-2">
                             <button 
                                 onClick={() => setViewedWeek(v => v-1)} 
-                                disabled={!canGoToPrev} 
                                 className="btn btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 ← Prev
@@ -61,14 +57,13 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                             <span className="font-bold w-20 text-center text-white">Week {viewedWeek}</span>
                             <button 
                                 onClick={() => setViewedWeek(v => v+1)} 
-                                disabled={!canGoToNext} 
                                 className="btn btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 Next →
                             </button>
                         </div>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                             className="back-btn"
                         >
                             Back to Team
@@ -102,7 +97,6 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                             <MatchupAnalysisWidget myTeam={myTeam} opponentTeam={opponentTeam} />
                             <button
                                 onClick={() => setIsReportModalOpen(true)}
-                                className="btn flex items-center justify-center gap-2"
                             >
                                 <NewspaperIcon />
                                 Rivalry Report
@@ -142,7 +136,6 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
     );
 };
 
-
 const MatchupView: React.FC = () => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
@@ -152,7 +145,7 @@ const MatchupView: React.FC = () => {
             {(!myTeam || !league) ? (
                 <div className="w-full h-full flex items-center justify-center">
                     <p>Team or League not found.</p>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
                         Back to Dashboard
                     </button>
                 </div>

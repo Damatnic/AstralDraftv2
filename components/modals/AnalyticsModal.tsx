@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BarChart3, TrendingUp, Target, Award, Calendar, Users, Zap } from 'lucide-react';
@@ -6,6 +7,7 @@ import { X, BarChart3, TrendingUp, Target, Award, Calendar, Users, Zap } from 'l
 interface AnalyticsModalProps {
   isOpen: boolean;
   onClose: () => void;
+
 }
 
 export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose }) => {
@@ -16,10 +18,10 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
   const [timeRange, setTimeRange] = useState('season');
 
   const tabs = [
-    { id: 'performance', label: 'Performance', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'team', label: 'Team Analysis', icon: <Users className="w-4 h-4" /> },
-    { id: 'trends', label: 'Trends', icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'predictions', label: 'Predictions', icon: <Target className="w-4 h-4" /> }
+    { id: 'performance', label: 'Performance', icon: <TrendingUp className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: 'team', label: 'Team Analysis', icon: <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: 'trends', label: 'Trends', icon: <BarChart3 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: 'predictions', label: 'Predictions', icon: <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
   ];
 
   const performanceMetrics = [
@@ -54,7 +56,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       rank: 4,
       color: 'text-orange-400',
       bgColor: 'bg-orange-400/20'
-    }
+
   ];
 
   const teamComposition = [
@@ -108,7 +110,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       description: 'Team value increasing',
       confidence: 88,
       color: 'text-purple-400'
-    }
+
   ];
 
   const insights = [
@@ -139,21 +141,21 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       description: 'Consider picking up emerging WR handcuffs',
       impact: 'Low',
       color: 'text-blue-400'
-    }
+
   ];
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
         />
 
         {/* Modal */}
@@ -161,24 +163,23 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-6xl max-h-[90vh] bg-dark-800/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+          className="relative w-full max-w-6xl max-h-[90vh] bg-dark-800/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden sm:px-4 md:px-6 lg:px-8"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-primary-500/10 to-primary-600/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-primary-400" />
+          <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-primary-500/10 to-primary-600/10 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+              <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <BarChart3 className="w-5 h-5 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Analytics Dashboard</h2>
-                <p className="text-sm text-gray-400">Deep insights into your team performance</p>
+                <h2 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Analytics Dashboard</h2>
+                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Deep insights into your team performance</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(e.target.value)}
-                className="bg-dark-700 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:ring-2 focus:ring-primary-500"
               >
                 <option value="season">Full Season</option>
                 <option value="recent">Last 4 Weeks</option>
@@ -186,25 +187,20 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
               </select>
               <button
                 onClick={onClose}
-                className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-4 h-4" />
+                className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
+               aria-label="Action button">
+                <X className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               </button>
             </div>
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-white/10 bg-dark-900/50">
-            <div className="flex px-6 gap-1">
+          <div className="border-b border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex px-6 gap-1 sm:px-4 md:px-6 lg:px-8">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors relative ${
-                    activeTab === tab.id
-                      ? 'text-primary-400 border-b-2 border-primary-400'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  onClick={() => setActiveTab(tab.id)}`}
                 >
                   {tab.icon}
                   {tab.label}
@@ -214,10 +210,10 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Content */}
-          <div className="overflow-y-auto max-h-[calc(90vh-160px)] custom-scrollbar">
-            <div className="p-6">
+          <div className="overflow-y-auto max-h-[calc(90vh-160px)] custom-scrollbar sm:px-4 md:px-6 lg:px-8">
+            <div className="p-6 sm:px-4 md:px-6 lg:px-8">
               {activeTab === 'performance' && (
-                <div className="space-y-6">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   {/* Key Metrics */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {performanceMetrics.map((metric, index) => (
@@ -228,13 +224,13 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                         transition={{ delay: index * 0.1 }}
                         className={`${metric.bgColor} rounded-xl p-4 border border-white/10`}
                       >
-                        <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-sm font-medium text-gray-300">{metric.label}</h3>
-                          <div className="text-xs bg-white/10 px-2 py-1 rounded-full text-white">
+                        <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                          <h3 className="text-sm font-medium text-gray-300 sm:px-4 md:px-6 lg:px-8">{metric.label}</h3>
+                          <div className="text-xs bg-white/10 px-2 py-1 rounded-full text-white sm:px-4 md:px-6 lg:px-8">
                             #{metric.rank}
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           <div className={`text-2xl font-bold ${metric.color}`}>
                             {metric.value}{metric.label.includes('Rate') || metric.label.includes('Success') ? '%' : ''}
                           </div>
@@ -247,20 +243,20 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                   </div>
 
                   {/* Insights */}
-                  <div className="bg-dark-700/50 rounded-xl p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">Key Insights</h3>
+                  <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Key Insights</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       {insights.map((insight, index) => (
-                        <div key={index} className="flex items-start gap-3 p-4 bg-dark-600/50 rounded-lg">
+                        <div key={index} className="flex items-start gap-3 p-4 bg-dark-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <div className={`w-2 h-2 rounded-full ${insight.color.replace('text-', 'bg-')} mt-2`}></div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-medium text-white">{insight.title}</h4>
+                          <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
+                              <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
                               <span className={`text-xs px-2 py-1 rounded-full ${insight.color} bg-current bg-opacity-20`}>
                                 {insight.impact}
                               </span>
                             </div>
-                            <p className="text-sm text-gray-400">{insight.description}</p>
+                            <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{insight.description}</p>
                           </div>
                         </div>
                       ))}
@@ -270,25 +266,25 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
               )}
 
               {activeTab === 'team' && (
-                <div className="space-y-6">
-                  <div className="bg-dark-700/50 rounded-xl p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">Positional Strength Analysis</h3>
-                    <div className="space-y-4">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                  <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Positional Strength Analysis</h3>
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                       {teamComposition.map((position, index) => (
-                        <div key={position.position} className="flex items-center gap-4 p-4 bg-dark-600/50 rounded-lg">
-                          <div className="w-12 text-center">
+                        <div key={position.position} className="flex items-center gap-4 p-4 bg-dark-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                          <div className="w-12 text-center sm:px-4 md:px-6 lg:px-8">
                             <div className={`text-sm font-bold ${position.color}`}>{position.position}</div>
                           </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="text-white font-medium">
+                          <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                              <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                 {position.players.join(', ')}
                               </div>
-                              <div className="text-sm text-gray-400">
+                              <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 Strength: <span className={position.color}>{position.strength}</span>
                               </div>
                             </div>
-                            <div className="w-full bg-gray-600 rounded-full h-2">
+                            <div className="w-full bg-gray-600 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                               <div
                                 className={`h-2 rounded-full ${position.color.replace('text-', 'bg-')}`}
                                 style={{ width: `${position.strength}%` }}
@@ -303,36 +299,36 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
               )}
 
               {activeTab === 'trends' && (
-                <div className="space-y-6">
-                  <div className="bg-dark-700/50 rounded-xl p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">Scoring Trends</h3>
-                    <div className="h-64 flex items-end justify-between gap-1 px-4">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                  <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
+                    <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Scoring Trends</h3>
+                    <div className="h-64 flex items-end justify-between gap-1 px-4 sm:px-4 md:px-6 lg:px-8">
                       {trendData.map((week, index) => (
-                        <div key={week.week} className="flex-1 flex flex-col items-center">
-                          <div className="w-full max-w-8 space-y-1">
+                        <div key={week.week} className="flex-1 flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
+                          <div className="w-full max-w-8 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             <div
-                              className="bg-primary-500 rounded-t"
+                              className="bg-primary-500 rounded-t sm:px-4 md:px-6 lg:px-8"
                               style={{ height: `${(week.points / 180) * 200}px` }}
                               title={`Week ${week.week}: ${week.points} pts`}
                             ></div>
                             <div
-                              className="bg-gray-500 opacity-60"
+                              className="bg-gray-500 opacity-60 sm:px-4 md:px-6 lg:px-8"
                               style={{ height: `${(week.projection / 180) * 200}px` }}
                               title={`Projection: ${week.projection} pts`}
                             ></div>
                           </div>
-                          <div className="text-xs text-gray-400 mt-2">W{week.week}</div>
+                          <div className="text-xs text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">W{week.week}</div>
                         </div>
                       ))}
                     </div>
-                    <div className="flex items-center justify-center gap-6 mt-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-primary-500 rounded"></div>
-                        <span className="text-sm text-gray-400">Actual Points</span>
+                    <div className="flex items-center justify-center gap-6 mt-4 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-3 h-3 bg-primary-500 rounded sm:px-4 md:px-6 lg:px-8"></div>
+                        <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Actual Points</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-gray-500 rounded"></div>
-                        <span className="text-sm text-gray-400">Projected Points</span>
+                      <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-3 h-3 bg-gray-500 rounded sm:px-4 md:px-6 lg:px-8"></div>
+                        <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Projected Points</span>
                       </div>
                     </div>
                   </div>
@@ -340,7 +336,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
               )}
 
               {activeTab === 'predictions' && (
-                <div className="space-y-6">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="grid md:grid-cols-2 gap-6">
                     {predictions.map((prediction, index) => (
                       <motion.div
@@ -348,23 +344,23 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: index * 0.1 }}
-                        className="bg-dark-700/50 rounded-xl p-6"
+                        className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8"
                       >
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-white">{prediction.type}</h3>
+                        <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                          <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">{prediction.type}</h3>
                           <div className={`text-2xl font-bold ${prediction.color}`}>
                             {prediction.value}%
                           </div>
                         </div>
-                        <p className="text-gray-400 mb-4">{prediction.description}</p>
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-400">Confidence Level</span>
-                            <span className="text-white">{prediction.confidence}%</span>
+                        <p className="text-gray-400 mb-4 sm:px-4 md:px-6 lg:px-8">{prediction.description}</p>
+                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                          <div className="flex items-center justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Confidence Level</span>
+                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{prediction.confidence}%</span>
                           </div>
-                          <div className="w-full bg-gray-600 rounded-full h-2">
+                          <div className="w-full bg-gray-600 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div
-                              className="bg-primary-500 h-2 rounded-full"
+                              className="bg-primary-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${prediction.confidence}%` }}
                             ></div>
                           </div>
@@ -374,31 +370,31 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                   </div>
 
                   {/* AI Recommendations */}
-                  <div className="bg-gradient-to-r from-primary-500/10 to-purple-500/10 rounded-xl p-6 border border-primary-500/20">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Zap className="w-5 h-5 text-primary-400" />
-                      <h3 className="text-lg font-semibold text-white">AI Recommendations</h3>
+                  <div className="bg-gradient-to-r from-primary-500/10 to-purple-500/10 rounded-xl p-6 border border-primary-500/20 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-3 mb-4 sm:px-4 md:px-6 lg:px-8">
+                      <Zap className="w-5 h-5 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
+                      <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">AI Recommendations</h3>
                     </div>
-                    <div className="space-y-3">
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-green-400 rounded-full mt-2"></div>
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 bg-green-400 rounded-full mt-2 sm:px-4 md:px-6 lg:px-8"></div>
                         <div>
-                          <p className="text-white font-medium">Start Christian McCaffrey with confidence</p>
-                          <p className="text-sm text-gray-400">85% chance of 15+ points based on matchup analysis</p>
+                          <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Start Christian McCaffrey with confidence</p>
+                          <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">85% chance of 15+ points based on matchup analysis</p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2"></div>
+                      <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 sm:px-4 md:px-6 lg:px-8"></div>
                         <div>
-                          <p className="text-white font-medium">Consider benching WR3 for emerging waiver pickup</p>
-                          <p className="text-sm text-gray-400">Better matchup and trending upward in targets</p>
+                          <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Consider benching WR3 for emerging waiver pickup</p>
+                          <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Better matchup and trending upward in targets</p>
                         </div>
                       </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-blue-400 rounded-full mt-2"></div>
+                      <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 sm:px-4 md:px-6 lg:px-8"></div>
                         <div>
-                          <p className="text-white font-medium">Trade deadline opportunity approaching</p>
-                          <p className="text-sm text-gray-400">Your QB depth could fetch valuable RB help</p>
+                          <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Trade deadline opportunity approaching</p>
+                          <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Your QB depth could fetch valuable RB help</p>
                         </div>
                       </div>
                     </div>
@@ -413,4 +409,10 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
   );
 };
 
-export default AnalyticsModal;
+const AnalyticsModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AnalyticsModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AnalyticsModalWithErrorBoundary);

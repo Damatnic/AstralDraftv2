@@ -3,7 +3,8 @@
  * Premium real-time draft interface with advanced visuals
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Player, Team } from '../../types';
@@ -17,17 +18,17 @@ interface DraftPick {
   player: Player | null;
   timeRemaining: number;
   isComplete: boolean;
+
 }
 
 interface LiveDraftRoomProps {
   isActive?: boolean;
   onDraftComplete?: () => void;
-}
 
-const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ 
-  isActive = false, 
+const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false, 
   onDraftComplete 
-}: LiveDraftRoomProps) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const [currentPick, setCurrentPick] = useState(1);
   const [timeRemaining, setTimeRemaining] = useState(90);
@@ -73,10 +74,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
             timeRemaining: 90,
             isComplete: false
           });
-        }
-      }
+
+
       setDraftPicks(picks);
-    }
+
   }, [league?.teams, draftOrder.length, totalRounds]);
 
   // Timer logic
@@ -87,16 +88,15 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
           if (prev <= 1) {
             handleAutoDraft();
             return 90;
-          }
+
           return prev - 1;
         });
       }, 1000);
-    }
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
-      }
+
     };
   }, [isDraftStarted, isPaused, timeRemaining]);
 
@@ -114,14 +114,14 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         setRecentPick(null);
       }, 3000);
       return () => clearTimeout(timer);
-    }
+
   }, [recentPick]);
 
   // Sound notifications
   useEffect(() => {
     if (typeof window !== 'undefined') {
       audioRef.current = new Audio();
-    }
+
   }, []);
 
   const playSound = (type: 'pick' | 'timer' | 'turn') => {
@@ -148,8 +148,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         oscillator.frequency.value = 600;
         gainNode.gain.value = 0.4;
         break;
-    }
-    
+
     oscillator.start();
     oscillator.stop(context.currentTime + 0.2);
   };
@@ -177,7 +176,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
       payload: {
         message: 'Draft has started! Good luck everyone!',
         type: 'SUCCESS'
-      }
+
     });
   };
 
@@ -188,7 +187,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
       payload: {
         message: isPaused ? 'Draft resumed' : 'Draft paused',
         type: 'INFO'
-      }
+
     });
   };
 
@@ -237,9 +236,9 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         payload: {
           message: `${pickInfo.team?.name} auto-drafted ${bestAvailable.name}`,
           type: 'INFO'
-        }
+
       });
-    }
+
   };
 
   const advanceToNextPick = (selectedPlayer: Player) => {
@@ -253,11 +252,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         payload: {
           message: 'Draft Complete! Good luck this season!',
           type: 'SUCCESS'
-        }
+
       });
       onDraftComplete?.();
       return;
-    }
 
     setCurrentPick(prev => prev + 1);
     setTimeRemaining(90);
@@ -273,7 +271,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
       case 'K': return 'bg-purple-600';
       case 'DST': return 'bg-gray-600';
       default: return 'bg-gray-500';
-    }
+
   };
 
   const pickInfo = getCurrentPickInfo();
@@ -282,21 +280,21 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
   return (
     <motion.div 
       ref={draftRoomRef}
-      className="relative min-h-screen space-y-8 p-6"
+      className="relative min-h-screen space-y-8 p-6 sm:px-4 md:px-6 lg:px-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       {/* Premium Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,110,247,0.15),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(16,185,129,0.12),transparent_50%)]" />
+      <div className="absolute inset-0 -z-10 sm:px-4 md:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 sm:px-4 md:px-6 lg:px-8" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,110,247,0.15),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(16,185,129,0.12),transparent_50%)] sm:px-4 md:px-6 lg:px-8" />
         {showParticles && (
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden sm:px-4 md:px-6 lg:px-8">
             {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-2 h-2 bg-primary-400 rounded-full"
+                className="absolute w-2 h-2 bg-primary-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                 initial={{
                   x: Math.random() * window.innerWidth,
                   y: window.innerHeight + 50,
@@ -321,32 +319,32 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
 
       {/* Premium Draft Header */}
       <motion.div 
-        className="glass-panel-premium p-8 border border-white/10"
+        className="glass-panel-premium p-8 border border-white/10 sm:px-4 md:px-6 lg:px-8"
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
           <div>
             <motion.h1 
-              className="text-4xl font-bold text-gradient mb-2"
+              className="text-4xl font-bold text-gradient mb-2 sm:px-4 md:px-6 lg:px-8"
               initial={{ x: -30 }}
               animate={{ x: 0 }}
             >
               Live Draft Room
             </motion.h1>
-            <p className="text-slate-300 text-lg">
+            <p className="text-slate-300 text-lg sm:px-4 md:px-6 lg:px-8">
               Round {pickInfo?.pick.round || 1} • Pick {currentPick} of {totalPicks}
             </p>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence mode="wait">
               {!isDraftStarted ? (
                 <motion.button
                   key="start"
                   onClick={handleStartDraft}
-                  className="btn-success px-8 py-4 text-lg font-bold shadow-[0_0_30px_rgba(16,185,129,0.5)]"
+                  className="btn-success px-8 py-4 text-lg font-bold shadow-[0_0_30px_rgba(16,185,129,0.5)] sm:px-4 md:px-6 lg:px-8"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   exit={{ scale: 0, rotate: 180 }}
@@ -380,7 +378,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         <AnimatePresence>
           {pickInfo && (
             <motion.div 
-              className="glass-card p-6 border-l-4 border-primary-500 relative overflow-hidden"
+              className="glass-card p-6 border-l-4 border-primary-500 relative overflow-hidden sm:px-4 md:px-6 lg:px-8"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -388,7 +386,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
             >
               {/* Animated background for current pick */}
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-cyan-400/10 to-transparent"
+                className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-cyan-400/10 to-transparent sm:px-4 md:px-6 lg:px-8"
                 animate={isMyTurn ? {
                   backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                 } : {}}
@@ -399,10 +397,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                 }}
               />
               
-              <div className="relative flex items-center justify-between">
-                <div className="flex items-center gap-6">
+              <div className="relative flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-6 sm:px-4 md:px-6 lg:px-8">
                   <motion.div 
-                    className="text-5xl"
+                    className="text-5xl sm:px-4 md:px-6 lg:px-8"
                     animate={isMyTurn ? {
                       scale: [1, 1.2, 1],
                       rotate: [0, 5, -5, 0]
@@ -414,18 +412,18 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                   
                   <div>
                     <motion.h3 
-                      className="text-2xl font-bold text-white mb-1"
+                      className="text-2xl font-bold text-white mb-1 sm:px-4 md:px-6 lg:px-8"
                       animate={isMyTurn ? { color: ['#ffffff', '#4facfe', '#ffffff'] } : {}}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
                       {pickInfo.team?.name}
                     </motion.h3>
-                    <p className="text-slate-300 text-lg">{pickInfo.team?.owner.name}</p>
+                    <p className="text-slate-300 text-lg sm:px-4 md:px-6 lg:px-8">{pickInfo.team?.owner.name}</p>
                     
                     <AnimatePresence>
                       {isMyTurn && (
                         <motion.div 
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-cyan-400 text-white text-sm font-bold rounded-full shadow-[0_0_20px_rgba(79,110,247,0.5)] mt-2"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-cyan-400 text-white text-sm font-bold rounded-full shadow-[0_0_20px_rgba(79,110,247,0.5)] mt-2 sm:px-4 md:px-6 lg:px-8"
                           initial={{ scale: 0, x: -50 }}
                           animate={{ 
                             scale: 1, 
@@ -434,7 +432,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                               '0_0_20px_rgba(79,110,247,0.5)',
                               '0_0_30px_rgba(79,110,247,0.8)',
                               '0_0_20px_rgba(79,110,247,0.5)'
-                            ]
+
                           }}
                           exit={{ scale: 0, x: 50 }}
                           transition={{ 
@@ -442,7 +440,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                             boxShadow: { duration: 2, repeat: Infinity }
                           }}
                         >
-                          <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                          <div className="w-2 h-2 bg-white rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8" />
                           YOUR TURN
                         </motion.div>
                       )}
@@ -451,7 +449,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                 </div>
                 
                 {/* Premium Timer */}
-                <div className="text-center relative">
+                <div className="text-center relative sm:px-4 md:px-6 lg:px-8">
                   <motion.div 
                     className={`text-6xl font-bold relative ${
                       isTimerCritical 
@@ -466,14 +464,14 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                         '0_0_10px_rgba(239,68,68,0.5)',
                         '0_0_20px_rgba(239,68,68,0.8)',
                         '0_0_10px_rgba(239,68,68,0.5)'
-                      ]
+
                     } : {}}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
                     {timeRemaining}
                     {isTimerCritical && (
                       <motion.div
-                        className="absolute -inset-4 border-2 border-red-500 rounded-full"
+                        className="absolute -inset-4 border-2 border-red-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                         animate={{
                           scale: [1, 1.2, 1],
                           opacity: [0.5, 1, 0.5]
@@ -482,10 +480,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                       />
                     )}
                   </motion.div>
-                  <div className="text-sm text-slate-400 font-medium mt-1">seconds left</div>
+                  <div className="text-sm text-slate-400 font-medium mt-1 sm:px-4 md:px-6 lg:px-8">seconds left</div>
                   
                   {/* Timer progress bar */}
-                  <div className="w-20 h-1 bg-slate-600 rounded-full mt-2 mx-auto overflow-hidden">
+                  <div className="w-20 h-1 bg-slate-600 rounded-full mt-2 mx-auto overflow-hidden sm:px-4 md:px-6 lg:px-8">
                     <motion.div
                       className={`h-full rounded-full ${
                         isTimerCritical ? 'bg-red-500' : timeRemaining <= 30 ? 'bg-amber-500' : 'bg-primary-500'
@@ -508,56 +506,56 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -30, scale: 0.95 }}
-            className="glass-panel-premium border-2 border-primary-500/30 shadow-[0_0_40px_rgba(79,110,247,0.2)]"
+            className="glass-panel-premium border-2 border-primary-500/30 shadow-[0_0_40px_rgba(79,110,247,0.2)] sm:px-4 md:px-6 lg:px-8"
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
           >
-            <div className="p-8">
+            <div className="p-8 sm:px-4 md:px-6 lg:px-8">
               <motion.h3 
-                className="text-2xl font-bold text-gradient mb-6 flex items-center gap-3"
+                className="text-2xl font-bold text-gradient mb-6 flex items-center gap-3 sm:px-4 md:px-6 lg:px-8"
                 animate={{
                   backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
-                <div className="w-3 h-3 bg-primary-500 rounded-full animate-pulse" />
+                <div className="w-3 h-3 bg-primary-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8" />
                 Make Your Pick
               </motion.h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <motion.button
                   onClick={() => setShowPlayerSearch(true)}
-                  className="group relative p-6 glass-card border border-primary-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(79,110,247,0.3)]"
+                  className="group relative p-6 glass-card border border-primary-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(79,110,247,0.3)] sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="text-3xl group-hover:scale-110 transition-transform">🔍</div>
+                  <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-3xl group-hover:scale-110 transition-transform sm:px-4 md:px-6 lg:px-8">🔍</div>
                     <div>
-                      <div className="text-lg font-bold text-white group-hover:text-primary-300 transition-colors">
+                      <div className="text-lg font-bold text-white group-hover:text-primary-300 transition-colors sm:px-4 md:px-6 lg:px-8">
                         Search Players
                       </div>
-                      <div className="text-sm text-slate-400">Browse available talent</div>
+                      <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Browse available talent</div>
                     </div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 group-hover:from-primary-500/10 to-transparent rounded-xl transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 group-hover:from-primary-500/10 to-transparent rounded-xl transition-all duration-300 sm:px-4 md:px-6 lg:px-8" />
                 </motion.button>
                 
                 <motion.button
                   onClick={handleAutoDraft}
-                  className="group relative p-6 glass-card border border-slate-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(100,116,139,0.3)]"
+                  className="group relative p-6 glass-card border border-slate-500/30 rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(100,116,139,0.3)] sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="text-3xl group-hover:scale-110 transition-transform">🤖</div>
+                  <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-3xl group-hover:scale-110 transition-transform sm:px-4 md:px-6 lg:px-8">🤖</div>
                     <div>
-                      <div className="text-lg font-bold text-white group-hover:text-slate-300 transition-colors">
+                      <div className="text-lg font-bold text-white group-hover:text-slate-300 transition-colors sm:px-4 md:px-6 lg:px-8">
                         Auto Draft
                       </div>
-                      <div className="text-sm text-slate-400">Let AI pick for you</div>
+                      <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Let AI pick for you</div>
                     </div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-r from-slate-500/0 group-hover:from-slate-500/10 to-transparent rounded-xl transition-all duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-500/0 group-hover:from-slate-500/10 to-transparent rounded-xl transition-all duration-300 sm:px-4 md:px-6 lg:px-8" />
                 </motion.button>
               </div>
             </div>
@@ -566,21 +564,21 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
       </AnimatePresence>
 
       {/* Premium Draft Board */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:px-4 md:px-6 lg:px-8">
         {/* Recent Picks with Premium Styling */}
         <motion.div 
-          className="glass-panel p-6"
+          className="glass-panel p-6 sm:px-4 md:px-6 lg:px-8"
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="text-2xl">🎯</div>
-            <h3 className="text-xl font-bold text-white">Recent Picks</h3>
-            <div className="flex-1 h-px bg-gradient-to-r from-primary-500/50 to-transparent" />
+          <div className="flex items-center gap-3 mb-6 sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl sm:px-4 md:px-6 lg:px-8">🎯</div>
+            <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Recent Picks</h3>
+            <div className="flex-1 h-px bg-gradient-to-r from-primary-500/50 to-transparent sm:px-4 md:px-6 lg:px-8" />
           </div>
           
-          <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin">
+          <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence>
               {draftPicks
               .filter((pick: DraftPick) => pick.isComplete)
@@ -593,24 +591,24 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                     key={pick.pick}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-blue-600 text-white text-sm font-bold rounded flex items-center justify-center">
+                    <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="w-8 h-8 bg-blue-600 text-white text-sm font-bold rounded flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                         {pick.pick}
                       </div>
                       <div>
-                        <p className="text-white font-medium">{pick.player?.name}</p>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{pick.player?.name}</p>
+                        <p className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                           {team?.name} • Round {pick.round}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                       <div className={`${getPositionColor(pick.player?.position || '')} text-white text-xs font-bold px-2 py-1 rounded`}>
                         {pick.player?.position}
                       </div>
-                      <span className="text-slate-400 text-sm">
+                      <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">
                         {NFL_TEAMS[pick.player?.team as keyof typeof NFL_TEAMS]?.name || pick.player?.team}
                       </span>
                     </div>
@@ -622,26 +620,26 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
         </motion.div>
 
         {/* Team Rosters */}
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-          <h3 className="text-xl font-bold text-white mb-4">Team Rosters</h3>
-          <div className="space-y-3 max-h-96 overflow-y-auto">
+        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+          <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Team Rosters</h3>
+          <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             {draftOrder.map((team: Team) => {
               const teamPicks = draftPicks.filter((pick: DraftPick) => 
                 pick.teamId === team.id && pick.isComplete
               );
               
               return (
-                <div key={team.id} className="p-3 bg-slate-700/50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{team.avatar}</span>
-                      <span className="text-white font-medium">{team.name}</span>
+                <div key={team.id} className="p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <span className="text-lg sm:px-4 md:px-6 lg:px-8">{team.avatar}</span>
+                      <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{team.name}</span>
                     </div>
-                    <span className="text-slate-400 text-sm">
+                    <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">
                       {teamPicks.length}/16 picks
                     </span>
                   </div>
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1 sm:px-4 md:px-6 lg:px-8">
                     {teamPicks.map((pick: DraftPick) => (
                       <span
                         key={pick.pick}
@@ -665,23 +663,22 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8"
             onClick={() => setShowPlayerSearch(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                   Select Your Pick - {timeRemaining}s remaining
                 </h3>
                 <button
                   onClick={() => setShowPlayerSearch(false)}
-                  className="text-slate-400 hover:text-white text-2xl"
                 >
                   ×
                 </button>
@@ -692,7 +689,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
                 excludePlayerIds={draftPicks
                   .filter((pick: DraftPick) => pick.isComplete && pick.player)
                   .map((pick: DraftPick) => pick.player!.id)
-                }
+
                 showAddButton={false}
               />
             </motion.div>
@@ -703,4 +700,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({
   );
 };
 
-export default LiveDraftRoom;
+const LiveDraftRoomWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LiveDraftRoom {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LiveDraftRoomWithErrorBoundary);

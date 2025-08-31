@@ -3,7 +3,7 @@
  * Handles Stripe payment processing for contest entries and subscriptions
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { usePayment } from '../../contexts/PaymentContext';
 
@@ -12,7 +12,7 @@ const CheckoutForm: React.FC<{
   paymentType: 'contest' | 'subscription';
   onSuccess: () => void;
   onError: (error: string) => void;
-}> = ({ paymentType, onSuccess, onError }: any) => {
+}> = ({ paymentType, onSuccess, onError }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
@@ -22,14 +22,20 @@ const CheckoutForm: React.FC<{
     return paymentType === 'contest' ? 'Pay Contest Entry Fee' : 'Start Subscription';
   }, [paymentType]);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async () => {
+    try {
+
     event.preventDefault();
 
     if (!stripe || !elements) {
       return;
-    }
+    
+    } catch (error) {
+      console.error('Error in handleSubmit:', error);
 
-    setIsLoading(true);
+    } catch (error) {
+        console.error(error);
+    }setIsLoading(true);
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -45,10 +51,9 @@ const CheckoutForm: React.FC<{
       } else {
         setMessage('An unexpected error occurred.');
         onError('An unexpected error occurred.');
-      }
+
     } else {
       onSuccess();
-    }
 
     setIsLoading(false);
   };
@@ -58,7 +63,7 @@ const CheckoutForm: React.FC<{
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit} className="space-y-6">
+    <form id="payment-form" onSubmit={handleSubmit}
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       
       <button
@@ -69,11 +74,11 @@ const CheckoutForm: React.FC<{
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
             : 'bg-blue-600 text-white hover:bg-blue-700'
         }`}
-      >
+       aria-label="Action button">
         <span id="button-text">
           {isLoading ? (
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 sm:px-4 md:px-6 lg:px-8"></div>
               Processing...
             </div>
           ) : (
@@ -83,7 +88,7 @@ const CheckoutForm: React.FC<{
       </button>
       
       {message && (
-        <div className="text-red-600 text-sm mt-2">
+        <div className="text-red-600 text-sm mt-2 sm:px-4 md:px-6 lg:px-8">
           {message}
         </div>
       )}
@@ -97,7 +102,7 @@ export const ContestEntryPayment: React.FC<{
   entryType: 'CONTEST_ENTRY_SMALL' | 'CONTEST_ENTRY_MEDIUM' | 'CONTEST_ENTRY_LARGE';
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ contestId, entryType, onSuccess, onCancel }: any) => {
+}> = ({ contestId, entryType, onSuccess, onCancel }) => {
   const { stripe, products, createContestEntryPayment } = usePayment();
   const [clientSecret, setClientSecret] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -108,14 +113,16 @@ export const ContestEntryPayment: React.FC<{
   useEffect(() => {
     const initializePayment = async () => {
       try {
+
         setIsLoading(true);
         const paymentIntent = await createContestEntryPayment(contestId, entryType);
         setClientSecret(paymentIntent.clientSecret);
-      } catch (error) {
+      
+    } catch (error) {
         setError(error instanceof Error ? error.message : 'Failed to initialize payment');
       } finally {
         setIsLoading(false);
-      }
+
     };
 
     initializePayment();
@@ -123,31 +130,29 @@ export const ContestEntryPayment: React.FC<{
 
   if (isLoading && !clientSecret) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-        <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-2 text-gray-600">Initializing payment...</span>
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
+          <span className="ml-2 text-gray-600 sm:px-4 md:px-6 lg:px-8">Initializing payment...</span>
         </div>
       </div>
     );
-  }
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-        <div className="text-center">
-          <div className="text-red-600 mb-4">❌ Payment Error</div>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+          <div className="text-red-600 mb-4 sm:px-4 md:px-6 lg:px-8">❌ Payment Error</div>
+          <p className="text-gray-600 mb-4 sm:px-4 md:px-6 lg:px-8">{error}</p>
           <button
             onClick={onCancel}
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
-          >
+            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
+           aria-label="Action button">
             Close
           </button>
         </div>
       </div>
     );
-  }
 
   const stripeOptions = {
     clientSecret,
@@ -157,11 +162,11 @@ export const ContestEntryPayment: React.FC<{
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Contest Entry Payment</h3>
-        <p className="text-gray-600">{product?.description}</p>
-        <div className="text-2xl font-bold text-blue-600 mt-2">
+    <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
+      <div className="text-center mb-6 sm:px-4 md:px-6 lg:px-8">
+        <h3 className="text-xl font-bold text-gray-900 mb-2 sm:px-4 md:px-6 lg:px-8">Contest Entry Payment</h3>
+        <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">{product?.description}</p>
+        <div className="text-2xl font-bold text-blue-600 mt-2 sm:px-4 md:px-6 lg:px-8">
           ${(product?.price / 100).toFixed(2)}
         </div>
       </div>
@@ -176,11 +181,11 @@ export const ContestEntryPayment: React.FC<{
         </Elements>
       )}
 
-      <div className="mt-6 text-center">
+      <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
         <button
           onClick={onCancel}
-          className="text-gray-500 hover:text-gray-700 text-sm"
-        >
+          className="text-gray-500 hover:text-gray-700 text-sm sm:px-4 md:px-6 lg:px-8"
+         aria-label="Action button">
           Cancel
         </button>
       </div>
@@ -194,7 +199,7 @@ export const SubscriptionPayment: React.FC<{
   trialDays?: number;
   onSuccess: () => void;
   onCancel: () => void;
-}> = ({ subscriptionType, trialDays = 7, onSuccess, onCancel }: any) => {
+}> = ({ subscriptionType, trialDays = 7, onSuccess, onCancel }) => {
   const { products, createSubscription } = usePayment();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -203,58 +208,22 @@ export const SubscriptionPayment: React.FC<{
 
   const handleSubscriptionCreation = async () => {
     try {
+
       setIsLoading(true);
       await createSubscription(subscriptionType, trialDays);
       onSuccess();
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Failed to create subscription');
-    } finally {
+    finally {
       setIsLoading(false);
-    }
-  };
 
-  if (!product) {
-    return (
-      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-        <div className="text-center text-red-600">Product not found</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-      <div className="text-center mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-        <p className="text-gray-600">{product.description}</p>
-        <div className="text-2xl font-bold text-blue-600 mt-2">
-          ${(product.price / 100).toFixed(2)}/month
-        </div>
-        {trialDays > 0 && (
-          <div className="text-green-600 text-sm mt-1">
-            {trialDays} day free trial
-          </div>
-        )}
-      </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-          <div className="text-red-600 text-sm">{error}</div>
-        </div>
-      )}
-
-      <div className="space-y-4">
-        <button
-          onClick={handleSubscriptionCreation}
-          disabled={isLoading}
-          className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+    `w-full py-3 px-4 rounded-lg font-medium transition-colors ${
             isLoading
               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
               : 'bg-blue-600 text-white hover:bg-blue-700'
           }`}
-        >
+         aria-label="Action button">
           {isLoading ? (
-            <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+            <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 sm:px-4 md:px-6 lg:px-8"></div>
               Creating subscription...
             </div>
           ) : (
@@ -267,16 +236,16 @@ export const SubscriptionPayment: React.FC<{
 
         <button
           onClick={onCancel}
-          className="w-full py-2 px-4 text-gray-500 hover:text-gray-700 text-sm"
-        >
+          className="w-full py-2 px-4 text-gray-500 hover:text-gray-700 text-sm sm:px-4 md:px-6 lg:px-8"
+         aria-label="Action button">
           Cancel
         </button>
       </div>
 
-      <div className="mt-6 text-xs text-gray-500 text-center">
+      <div className="mt-6 text-xs text-gray-500 text-center sm:px-4 md:px-6 lg:px-8">
         <p>You can cancel anytime. No commitments.</p>
         {trialDays > 0 && (
-          <p className="mt-1">
+          <p className="mt-1 sm:px-4 md:px-6 lg:px-8">
             Trial ends in {trialDays} days. You won't be charged until then.
           </p>
         )}
@@ -289,24 +258,24 @@ export const SubscriptionPayment: React.FC<{
 export const PaymentSuccess: React.FC<{
   type: 'contest' | 'subscription';
   onClose: () => void;
-}> = ({ type, onClose }: any) => {
+}> = ({ type, onClose }) => {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
-      <div className="text-center">
-        <div className="text-green-600 text-4xl mb-4">✅</div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
+    <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
+      <div className="text-center sm:px-4 md:px-6 lg:px-8">
+        <div className="text-green-600 text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">✅</div>
+        <h3 className="text-xl font-bold text-gray-900 mb-2 sm:px-4 md:px-6 lg:px-8">
           Payment Successful!
         </h3>
-        <p className="text-gray-600 mb-6">
+        <p className="text-gray-600 mb-6 sm:px-4 md:px-6 lg:px-8">
           {type === 'contest' 
             ? 'You have successfully entered the contest. Good luck!'
             : 'Your subscription has been activated. Enjoy your premium features!'
-          }
+
         </p>
         <button
           onClick={onClose}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
-        >
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8"
+         aria-label="Action button">
           Continue
         </button>
       </div>

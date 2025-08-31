@@ -3,7 +3,8 @@
  * Detailed view and interaction for individual predictions
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     BrainIcon, 
@@ -22,13 +23,14 @@ interface PredictionDetailProps {
     prediction: LivePrediction;
     onSubmit: (predictionId: string, choice: number, confidence: number) => void;
     className?: string;
+
 }
 
 export const PredictionDetail: React.FC<PredictionDetailProps> = ({ 
     prediction, 
     onSubmit,
     className = ''
-}: any) => {
+}) => {
     const [selectedChoice, setSelectedChoice] = useState<number | null>(prediction.userChoice ?? null);
     const [confidence, setConfidence] = useState(prediction.userConfidence ?? 75);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,18 +52,15 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
         if (selectedChoice === null) {
             setValidationError('Please select a choice');
             return false;
-        }
-        
+
         if (confidence < 50 || confidence > 100) {
             setValidationError('Confidence must be between 50% and 100%');
             return false;
-        }
-        
+
         if (isExpired) {
             setValidationError('This prediction has expired');
             return false;
-        }
-        
+
         setValidationError(null);
         return true;
     };
@@ -71,12 +70,14 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
         
         setIsSubmitting(true);
         try {
+
             onSubmit(prediction.id, selectedChoice, confidence);
-        } catch (error) {
+        
+    } catch (error) {
             setValidationError('Failed to submit prediction. Please try again.');
         } finally {
             setIsSubmitting(false);
-        }
+
     };
 
     // Format time remaining with urgency
@@ -92,8 +93,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                 text: `${hours}h ${minutes % 60}m remaining`, 
                 urgent: false 
             };
-        }
-        
+
         return { 
             text: `${minutes}m remaining`, 
             urgent 
@@ -102,18 +102,26 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
 
     const timeInfo = formatTimeRemaining(prediction.timeRemaining);
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <Widget title="Prediction Details" className={`bg-gray-900/50 ${className}`}>
-            <div className="space-y-6">
+            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 {/* Question Header */}
                 <div>
-                    <h3 className="text-lg font-semibold text-white mb-2">
+                    <h3 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                         {prediction.question}
                     </h3>
                     
                     {/* Time and participation info */}
                     <div className="flex items-center justify-between text-sm md:text-xs">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <ClockIcon className={`w-5 h-5 md:w-4 md:h-4 ${timeInfo.urgent ? 'text-red-400' : 'text-gray-400'}`} />
                             <span className={timeInfo.urgent ? 'text-red-400 font-medium' : 'text-gray-400'}>
                                 {timeInfo.text}
@@ -122,7 +130,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                                 <motion.span
                                     animate={{ scale: [1, 1.1, 1] }}
                                     transition={{ repeat: Infinity, duration: 2 }}
-                                    className="text-red-400"
+                                    className="text-red-400 sm:px-4 md:px-6 lg:px-8"
                                 >
                                     ⚡
                                 </motion.span>
@@ -139,14 +147,14 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-blue-900/30 rounded-lg p-4 border border-blue-800/50"
+                    className="bg-blue-900/30 rounded-lg p-4 border border-blue-800/50 sm:px-4 md:px-6 lg:px-8"
                 >
-                    <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <BrainIcon className="w-6 h-6 md:w-5 md:h-5 text-blue-400" />
                             <span className="text-sm md:text-xs font-medium text-blue-400">Oracle's Prediction</span>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="text-sm md:text-xs text-gray-400">{prediction.confidence}% confident</span>
                             <div className={`w-3 h-3 md:w-2 md:h-2 rounded-full ${
                                 (() => {
@@ -157,13 +165,13 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                             }`} />
                         </div>
                     </div>
-                    <div className="text-white font-medium mb-2">
+                    <div className="text-white font-medium mb-2 sm:px-4 md:px-6 lg:px-8">
                         {prediction.options[prediction.oracleChoice]?.text || 'Unknown'}
                     </div>
                     {prediction.reasoning && (
-                        <div className="text-sm text-gray-300 bg-blue-900/20 rounded-md p-3">
-                            <div className="flex items-start space-x-2">
-                                <InfoIcon className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
+                        <div className="text-sm text-gray-300 bg-blue-900/20 rounded-md p-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-start space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                <InfoIcon className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                 <span>{prediction.reasoning}</span>
                             </div>
                         </div>
@@ -178,15 +186,15 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="space-y-4"
+                            className="space-y-4 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <h4 className="font-medium text-white flex items-center space-x-2">
+                            <h4 className="font-medium text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                 <TrendingUpIcon className="w-5 h-5 md:w-4 md:h-4" />
                                 <span className="text-base md:text-sm">Your Prediction</span>
                             </h4>
                             
                             {/* Choice Selection */}
-                            <div className="space-y-2">
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {prediction.options.map((option, index) => (
                                     <motion.button
                                         key={option.text}
@@ -199,9 +207,9 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                                                 : 'bg-gray-800/50 text-gray-300 border-gray-700/50 hover:bg-gray-800 hover:border-gray-600'
                                         }`}
                                     >
-                                        <div className="flex items-center justify-between">
+                                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                             <span className="text-base md:text-sm font-medium">{option.text}</span>
-                                            <div className="flex items-center space-x-2">
+                                            <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                                 <span className="text-sm md:text-xs opacity-75">
                                                     {(option.probability * 100).toFixed(1)}% likely
                                                 </span>
@@ -215,9 +223,9 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                             </div>
 
                             {/* Confidence Slider */}
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <label htmlFor="confidence-slider" className="font-medium text-white">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <label htmlFor="confidence-slider" className="font-medium text-white sm:px-4 md:px-6 lg:px-8">
                                         Confidence Level
                                     </label>
                                     <span className={`text-lg font-bold ${
@@ -237,9 +245,8 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                                     max="100"
                                     value={confidence}
                                     onChange={(e: any) => setConfidence(Number(e.target.value))}
-                                    className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
                                 />
-                                <div className="flex justify-between text-xs text-gray-400">
+                                <div className="flex justify-between text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     <span>50% (Uncertain)</span>
                                     <span>75% (Confident)</span>
                                     <span>100% (Certain)</span>
@@ -253,10 +260,10 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
-                                        className="flex items-center space-x-2 text-red-400 bg-red-900/20 border border-red-800/50 rounded-lg p-3"
+                                        className="flex items-center space-x-2 text-red-400 bg-red-900/20 border border-red-800/50 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        <AlertCircleIcon className="w-4 h-4 flex-shrink-0" />
-                                        <span className="text-sm">{validationError}</span>
+                                        <AlertCircleIcon className="w-4 h-4 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                        <span className="text-sm sm:px-4 md:px-6 lg:px-8">{validationError}</span>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -290,16 +297,16 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                             key="submitted-state"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-green-900/30 rounded-lg p-4 border border-green-800/50"
+                            className="bg-green-900/30 rounded-lg p-4 border border-green-800/50 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-center space-x-2 mb-3">
-                                <CheckCircleIcon className="w-5 h-5 text-green-400" />
-                                <span className="font-medium text-green-400">Prediction Submitted</span>
+                            <div className="flex items-center space-x-2 mb-3 sm:px-4 md:px-6 lg:px-8">
+                                <CheckCircleIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />
+                                <span className="font-medium text-green-400 sm:px-4 md:px-6 lg:px-8">Prediction Submitted</span>
                             </div>
-                            <div className="text-white font-medium mb-1">
+                            <div className="text-white font-medium mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {prediction.userChoice !== undefined ? prediction.options[prediction.userChoice]?.text : 'Unknown'}
                             </div>
-                            <div className="text-sm text-gray-400">
+                            <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 {prediction.userConfidence}% confidence • Submitted successfully
                             </div>
                         </motion.div>
@@ -311,11 +318,11 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                             key="expired-state"
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-red-900/30 rounded-lg p-4 border border-red-800/50 text-center"
+                            className="bg-red-900/30 rounded-lg p-4 border border-red-800/50 text-center sm:px-4 md:px-6 lg:px-8"
                         >
-                            <ClockIcon className="w-8 h-8 text-red-400 mx-auto mb-2" />
-                            <div className="font-medium text-red-400 mb-1">Prediction Expired</div>
-                            <div className="text-sm text-gray-400">
+                            <ClockIcon className="w-8 h-8 text-red-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                            <div className="font-medium text-red-400 mb-1 sm:px-4 md:px-6 lg:px-8">Prediction Expired</div>
+                            <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 This prediction is no longer accepting submissions
                             </div>
                         </motion.div>
@@ -326,31 +333,31 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-purple-900/30 rounded-lg p-4 border border-purple-800/50"
+                    className="bg-purple-900/30 rounded-lg p-4 border border-purple-800/50 sm:px-4 md:px-6 lg:px-8"
                 >
-                    <div className="flex items-center space-x-2 mb-3">
-                        <UsersIcon className="w-5 h-5 text-purple-400" />
-                        <span className="font-medium text-purple-400">Community Consensus</span>
+                    <div className="flex items-center space-x-2 mb-3 sm:px-4 md:px-6 lg:px-8">
+                        <UsersIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-purple-400 sm:px-4 md:px-6 lg:px-8">Community Consensus</span>
                     </div>
-                    <div className="text-white font-medium mb-1">
+                    <div className="text-white font-medium mb-1 sm:px-4 md:px-6 lg:px-8">
                         {prediction.options[prediction.consensusChoice || 0]?.text}
                     </div>
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         {prediction.consensusConfidence || 0}% average confidence • {prediction.participants || 0} participants
                     </div>
                     
                     {/* Agreement indicator */}
                     {prediction.userChoice !== undefined && (
-                        <div className="mt-3 pt-3 border-t border-purple-800/50">
+                        <div className="mt-3 pt-3 border-t border-purple-800/50 sm:px-4 md:px-6 lg:px-8">
                             {prediction.userChoice === prediction.consensusChoice ? (
-                                <div className="flex items-center space-x-2 text-green-400">
-                                    <CheckCircleIcon className="w-4 h-4" />
-                                    <span className="text-sm">You agree with the community</span>
+                                <div className="flex items-center space-x-2 text-green-400 sm:px-4 md:px-6 lg:px-8">
+                                    <CheckCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-sm sm:px-4 md:px-6 lg:px-8">You agree with the community</span>
                                 </div>
                             ) : (
-                                <div className="flex items-center space-x-2 text-yellow-400">
-                                    <TrendingUpIcon className="w-4 h-4" />
-                                    <span className="text-sm">You have a different prediction</span>
+                                <div className="flex items-center space-x-2 text-yellow-400 sm:px-4 md:px-6 lg:px-8">
+                                    <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-sm sm:px-4 md:px-6 lg:px-8">You have a different prediction</span>
                                 </div>
                             )}
                         </div>
@@ -361,4 +368,10 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
     );
 };
 
-export default PredictionDetail;
+const PredictionDetailWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PredictionDetail {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PredictionDetailWithErrorBoundary);

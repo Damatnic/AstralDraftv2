@@ -3,7 +3,8 @@
  * Glassmorphism, micro-animations, accessibility features, and modern design
  */
 
-import React, { forwardRef, ReactNode, ButtonHTMLAttributes } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, forwardRef, ReactNode, ButtonHTMLAttributes } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RippleEffect, GlowEffect } from './AnimationLibrary';
 
@@ -43,7 +44,6 @@ interface EnhancedButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElemen
   children: ReactNode;
   href?: string;
   as?: 'button' | 'a';
-}
 
 // =========================================
 // BUTTON COMPONENT
@@ -258,7 +258,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
             >
               <LoadingSpinner size={size} />
               {loadingText && <span>{loadingText}</span>}
@@ -269,11 +269,11 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="flex items-center justify-center gap-2"
+              className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
             >
               {leftIcon && (
                 <motion.span
-                  className="flex-shrink-0"
+                  className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ scale: 1.1, rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 0.3 }}
                 >
@@ -281,11 +281,11 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
                 </motion.span>
               )}
               
-              <span className="truncate">{children}</span>
+              <span className="truncate sm:px-4 md:px-6 lg:px-8">{children}</span>
               
               {rightIcon && (
                 <motion.span
-                  className="flex-shrink-0"
+                  className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ scale: 1.1, x: 2 }}
                   transition={{ duration: 0.3 }}
                 >
@@ -330,11 +330,9 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
 
       if (ripple && !disabled && !loading) {
         content = <RippleEffect>{content}</RippleEffect>;
-      }
 
       if (glow && !disabled) {
         content = <GlowEffect>{content}</GlowEffect>;
-      }
 
       return <>{content}</>;
     };
@@ -346,14 +344,12 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
             ref={ref as React.Ref<HTMLAnchorElement>}
             href={href}
             className={classes}
-            {...motionProps}
             {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
           >
             {buttonContent}
           </MotionAnchor>
         </ButtonWrapper>
       );
-    }
 
     return (
       <ButtonWrapper>
@@ -363,14 +359,13 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
           disabled={disabled || loading}
           onClick={onClick}
           className={classes}
-          {...motionProps}
           {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
         >
           {buttonContent}
         </MotionButton>
       </ButtonWrapper>
     );
-  }
+
 );
 
 EnhancedButton.displayName = 'EnhancedButton';
@@ -385,6 +380,7 @@ interface ButtonGroupProps {
   orientation?: 'horizontal' | 'vertical';
   spacing?: 'none' | 'sm' | 'md' | 'lg';
   variant?: 'connected' | 'separated';
+
 }
 
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
@@ -424,7 +420,6 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
             if (isFirst) roundedClasses = 'rounded-b-none';
             else if (isLast) roundedClasses = 'rounded-t-none';
             else roundedClasses = 'rounded-none';
-          }
 
           return React.cloneElement(child, {
             className: `${child.props.className || ''} ${roundedClasses} ${!isFirst ? 'border-l-0' : ''}`.trim()
@@ -432,7 +427,6 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
         })}
       </div>
     );
-  }
 
   return (
     <div className={`${baseClasses} ${className}`} role="group">
@@ -449,7 +443,6 @@ interface FloatingActionButtonProps extends Omit<EnhancedButtonProps, 'shape' | 
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
   size?: 'sm' | 'md' | 'lg';
   tooltip?: string;
-}
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   position = 'bottom-right',
@@ -488,7 +481,13 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 // EXPORTS
 // =========================================
 
-export default EnhancedButton;
+const EnhancedButtonWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedButton {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedButtonWithErrorBoundary);
 
 export type {
   ButtonVariant,

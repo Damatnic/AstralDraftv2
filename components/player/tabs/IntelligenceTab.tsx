@@ -1,5 +1,6 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { Player, NewsItem } from '../../../types';
 import { NewsIcon } from '../../icons/NewsIcon';
@@ -10,45 +11,52 @@ import LoadingSpinner from '../../ui/LoadingSpinner';
 
 interface IntelligenceTabProps {
   player: Player;
+
 }
 
-const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}: any) => (
-    <div className="bg-white/5 p-3 rounded-lg">
-        <p className="text-sm text-gray-400 flex items-center gap-2">{icon} {label}</p>
-        <p className="font-semibold text-white mt-1">{value}</p>
+const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}) => (
+    <div className="bg-white/5 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
+        <p className="text-sm text-gray-400 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">{icon} {label}</p>
+        <p className="font-semibold text-white mt-1 sm:px-4 md:px-6 lg:px-8">{value}</p>
     </div>
 );
 
-const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }: any) => {
+const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
     const { state, dispatch } = useAppState();
     const [isLoading, setIsLoading] = React.useState(false);
     const analysis = state.newsImpactAnalyses[news.headline];
 
     const handleAnalyze = async () => {
+    try {
         if (analysis) return;
         setIsLoading(true);
         const result = await summarizeFantasyImpact(news.headline);
         if (result) {
-            dispatch({ type: 'SET_NEWS_IMPACT', payload: { headline: news.headline, analysis: result } });
-        }
+            dispatch({ type: 'SET_NEWS_IMPACT', payload: { headline: news.headline, analysis: result 
+    
+    } catch (error) {
+      console.error('Error in handleAnalyze:', error);
+
+  } });
+
         setIsLoading(false);
     };
 
     return (
-        <div className="bg-white/5 p-3 rounded-lg text-sm">
-            <p className="text-white font-semibold">{news.headline}</p>
-            <p className="text-xs text-gray-500">{news.date} - {news.source}</p>
+        <div className="bg-white/5 p-3 rounded-lg text-sm sm:px-4 md:px-6 lg:px-8">
+            <p className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{news.headline}</p>
+            <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{news.date} - {news.source}</p>
             {analysis ? (
-                 <div className="mt-2 pt-2 border-t border-white/10">
-                    <p className="text-xs text-cyan-300/80 font-semibold flex items-center gap-1">
-                        <SparklesIcon className="w-3 h-3" />
+                 <div className="mt-2 pt-2 border-t border-white/10 sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-cyan-300/80 font-semibold flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                        <SparklesIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                         Oracle's Take
                     </p>
-                    <p className="text-xs italic text-gray-300">"{analysis}"</p>
+                    <p className="text-xs italic text-gray-300 sm:px-4 md:px-6 lg:px-8">"{analysis}"</p>
                 </div>
             ) : (
-                <div className="mt-2">
-                    <button onClick={handleAnalyze} disabled={isLoading} className="flex items-center gap-1.5 px-2 py-1 bg-cyan-500/10 text-cyan-300 text-xs font-bold rounded-md hover:bg-cyan-500/20 disabled:opacity-50">
+                <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
+                    <button onClick={handleAnalyze} disabled={isLoading} className="flex items-center gap-1.5 px-2 py-1 bg-cyan-500/10 text-cyan-300 text-xs font-bold rounded-md hover:bg-cyan-500/20 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                         {isLoading ? 'Analyzing...' : <><SparklesIcon /> Analyze Impact</>}
                     </button>
                 </div>
@@ -57,27 +65,33 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }: any) => {
     );
 };
 
-const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
+const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
     const { state, dispatch } = useAppState();
     const nickname = state.playerNicknames[player.id];
     const [isGeneratingNickname, setIsGeneratingNickname] = React.useState(false);
     const { astralIntelligence: intel, newsFeed } = player;
 
     const handleGenerateNickname = async () => {
+    try {
         setIsGeneratingNickname(true);
         const newNickname = await generatePlayerNickname(player);
         if (newNickname) {
-            dispatch({ type: 'SET_PLAYER_NICKNAME', payload: { playerId: player.id, nickname: newNickname } });
+            dispatch({ type: 'SET_PLAYER_NICKNAME', payload: { playerId: player.id, nickname: newNickname 
+    
+    } catch (error) {
+      console.error('Error in handleGenerateNickname:', error);
+
+  } });
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Nickname for ${player.name} generated!`, type: 'SYSTEM' } });
         } else {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not generate a nickname.', type: 'SYSTEM' } });
-        }
+
         setIsGeneratingNickname(false);
     };
 
     return (
         <motion.div
-            className="space-y-6"
+            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
             {...{
                 initial: { opacity: 0, x: -10 },
                 animate: { opacity: 1, x: 0 },
@@ -85,18 +99,18 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
             }}
         >
             <div>
-                <h3 className="font-bold text-lg text-cyan-300 mb-2">Astral Intelligence Report</h3>
+                <h3 className="font-bold text-lg text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Astral Intelligence Report</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
                     {nickname ? (
                         <IntelCard label="Nickname" value={nickname} icon="🏷️" />
                     ) : (
-                        <div className="bg-white/5 p-3 rounded-lg flex flex-col items-center justify-center text-center">
-                            <p className="text-xs text-gray-400 mb-2">The Oracle can bestow a unique nickname upon this player.</p>
+                        <div className="bg-white/5 p-3 rounded-lg flex flex-col items-center justify-center text-center sm:px-4 md:px-6 lg:px-8">
+                            <p className="text-xs text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">The Oracle can bestow a unique nickname upon this player.</p>
                             <button
                                 onClick={handleGenerateNickname}
                                 disabled={isGeneratingNickname}
-                                className="flex items-center gap-2 px-3 py-1.5 bg-transparent border border-cyan-400/50 text-cyan-300 font-bold text-xs rounded-md hover:bg-cyan-400/20 disabled:opacity-50"
-                            >
+                                className="flex items-center gap-2 px-3 py-1.5 bg-transparent border border-cyan-400/50 text-cyan-300 font-bold text-xs rounded-md hover:bg-cyan-400/20 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 {isGeneratingNickname ? 'Generating...' : <><SparklesIcon /> Generate Nickname</>}
                             </button>
                         </div>
@@ -115,8 +129,8 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
       
             {newsFeed && newsFeed.length > 0 && (
                 <div>
-                    <h3 className="font-bold text-lg text-cyan-300 mb-2 flex items-center gap-2"><NewsIcon /> Latest News Feed</h3>
-                    <div className="space-y-3">
+                    <h3 className="font-bold text-lg text-cyan-300 mb-2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><NewsIcon /> Latest News Feed</h3>
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {newsFeed.map((news, i) => (
                             <NewsItemCard key={i} news={news} />
                         ))}
@@ -125,10 +139,16 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
             )}
 
             {!intel && (!newsFeed || newsFeed.length === 0) && !nickname &&
-                <p className="text-gray-500 text-center py-4">No special intelligence available. Try generating a nickname!</p>
-            }
+                <p className="text-gray-500 text-center py-4 sm:px-4 md:px-6 lg:px-8">No special intelligence available. Try generating a nickname!</p>
+
         </motion.div>
     );
 };
 
-export default IntelligenceTab;
+const IntelligenceTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <IntelligenceTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(IntelligenceTabWithErrorBoundary);

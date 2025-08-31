@@ -3,7 +3,8 @@
  * Comprehensive notification display and management interface with real-time updates
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { realtimeNotificationService, RealtimeNotification } from '../../services/realtimeNotificationService';
@@ -27,13 +28,14 @@ interface NotificationCenterProps {
     isOpen: boolean;
     onClose: () => void;
     className?: string;
+
 }
 
 const NotificationCenter: React.FC<NotificationCenterProps> = ({ 
     isOpen, 
     onClose, 
     className = '' 
-}: any) => {
+}) => {
     const {
         notifications,
         unreadCount,
@@ -53,7 +55,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     useEffect(() => {
         if (isOpen) {
             refreshNotifications();
-        }
+
     }, [isOpen, refreshNotifications]);
 
     // Setup real-time notification listener
@@ -66,7 +68,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             if (preferences?.enableSoundNotifications) {
                 const audio = new Audio('/notification-sound.mp3');
                 audio.play().catch(() => {}); // Ignore errors if sound file not found
-            }
+
         };
 
         realtimeNotificationService.on('notification_received', handleRealtimeNotification);
@@ -94,7 +96,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             case 'LEAGUE_UPDATE': return '📢';
             case 'ACHIEVEMENT': return '🏆';
             default: return '📱';
-        }
+
     };
 
     const getPriorityColor = (priority: string) => {
@@ -103,7 +105,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             case 'high': return 'border-orange-500 bg-orange-500/10';
             case 'medium': return 'border-blue-500 bg-blue-500/10';
             default: return 'border-gray-500 bg-gray-500/10';
-        }
+
     };
 
     const formatTimeAgo = (date: Date) => {
@@ -134,44 +136,42 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             className={`fixed top-0 right-0 h-full w-96 bg-gray-900 border-l border-gray-700 shadow-2xl z-50 flex flex-col ${className}`}
         >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                <div className="flex items-center space-x-2">
-                    <BellIcon className="text-blue-400" />
-                    <h2 className="text-lg font-semibold text-white">
+            <div className="flex items-center justify-between p-4 border-b border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <BellIcon className="text-blue-400 sm:px-4 md:px-6 lg:px-8" />
+                    <h2 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">
                         Notifications
                         {unreadCount > 0 && (
-                            <span className="ml-2 px-2 py-1 bg-red-500 text-white text-xs rounded-full">
+                            <span className="ml-2 px-2 py-1 bg-red-500 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                                 {unreadCount}
                             </span>
                         )}
                     </h2>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={() => setShowSettings(!showSettings)}
-                        className="p-2 text-gray-400 hover:text-white transition-colors"
                         title="Settings"
                     >
-                        <SettingsIcon className="w-5 h-5" />
+                        <SettingsIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                     <button
                         onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-white transition-colors"
+                        className="p-2 text-gray-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
                         title="Close"
-                    >
+                     aria-label="Action button">
                         ✕
                     </button>
                 </div>
             </div>
 
             {/* Filters */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                <div className="flex space-x-2">
-                    <FilterIcon className="w-4 h-4 text-gray-400 mt-1" />
+            <div className="flex items-center justify-between p-4 border-b border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <FilterIcon className="w-4 h-4 text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8" />
                     <select
                         value={filter}
                         onChange={(e: any) => setFilter(e.target.value as any)}
-                        className="bg-gray-800 text-white text-sm rounded px-2 py-1 border border-gray-600"
                     >
                         <option value="all">All</option>
                         <option value="unread">Unread</option>
@@ -184,10 +184,9 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                 {unreadCount > 0 && (
                     <button
                         onClick={() => markAllAsRead(filter === 'all' ? undefined : filter)}
-                        className="flex items-center space-x-1 text-sm text-blue-400 hover:text-blue-300 transition-colors"
                         title="Mark all as read"
                     >
-                        <CheckCheckIcon className="w-4 h-4" />
+                        <CheckCheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         <span>Mark all read</span>
                     </button>
                 )}
@@ -200,7 +199,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="border-b border-gray-700 overflow-hidden"
+                        className="border-b border-gray-700 overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     >
                         <NotificationSettings 
                             preferences={preferences}
@@ -211,31 +210,31 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
             </AnimatePresence>
 
             {/* Notifications List */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 {loading && (
-                    <div className="flex items-center justify-center p-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-                        <span className="ml-2 text-gray-400">Loading notifications...</span>
+                    <div className="flex items-center justify-center p-8 sm:px-4 md:px-6 lg:px-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 sm:px-4 md:px-6 lg:px-8"></div>
+                        <span className="ml-2 text-gray-400 sm:px-4 md:px-6 lg:px-8">Loading notifications...</span>
                     </div>
                 )}
                 
                 {!loading && filteredNotifications.length === 0 && (
-                    <div className="flex flex-col items-center justify-center p-8 text-center">
-                        <BellIcon className="w-12 h-12 text-gray-600 mb-4" />
-                        <h3 className="text-lg font-semibold text-gray-400 mb-2">
+                    <div className="flex flex-col items-center justify-center p-8 text-center sm:px-4 md:px-6 lg:px-8">
+                        <BellIcon className="w-12 h-12 text-gray-600 mb-4 sm:px-4 md:px-6 lg:px-8" />
+                        <h3 className="text-lg font-semibold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">
                             No notifications
                         </h3>
-                        <p className="text-gray-500">
+                        <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">
                             {filter === 'unread' 
                                 ? "You're all caught up!" 
                                 : getNoNotificationsMessage(filter)
-                            }
+
                         </p>
                     </div>
                 )}
                 
                 {!loading && filteredNotifications.length > 0 && (
-                    <div className="p-4 space-y-3">
+                    <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
                         <AnimatePresence>
                             {filteredNotifications.map((notification: any) => (
                                 <NotificationItem
@@ -266,6 +265,7 @@ interface NotificationItemProps {
     getIcon: (type: string) => string;
     getPriorityColor: (priority: string) => string;
     formatTimeAgo: (date: Date) => string;
+
 }
 
 const NotificationItem: React.FC<NotificationItemProps> = ({
@@ -276,7 +276,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     getIcon,
     getPriorityColor,
     formatTimeAgo
-}: any) => {
+}) => {
     const [showActions, setShowActions] = useState(false);
 
     const handleAction = (actionFn: () => void) => {
@@ -295,19 +295,19 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
             onMouseEnter={() => setShowActions(true)}
             onMouseLeave={() => setShowActions(false)}
         >
-            <div className="flex items-start space-x-3">
-                <div className="text-2xl flex-shrink-0">
+            <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-2xl flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                     {getIcon(notification.type)}
                 </div>
                 
-                <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
+                <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
                         <h4 className={`text-sm font-semibold ${
                             notification.isRead ? 'text-gray-300' : 'text-white'
                         }`}>
                             {notification.title}
                         </h4>
-                        <span className="text-xs text-gray-500 flex-shrink-0">
+                        <span className="text-xs text-gray-500 flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                             {formatTimeAgo(new Date(notification.createdAt))}
                         </span>
                     </div>
@@ -321,7 +321,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                     {notification.actionUrl && (
                         <a
                             href={notification.actionUrl}
-                            className="inline-block mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors"
+                            className="inline-block mt-2 text-xs text-blue-400 hover:text-blue-300 transition-colors sm:px-4 md:px-6 lg:px-8"
                         >
                             {notification.actionText || 'View Details'} →
                         </a>
@@ -329,7 +329,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                 </div>
                 
                 {!notification.isRead && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2 sm:px-4 md:px-6 lg:px-8"></div>
                 )}
             </div>
 
@@ -340,30 +340,27 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
-                        className="absolute top-2 right-2 flex space-x-1 bg-gray-800 rounded-lg p-1 shadow-lg"
+                        className="absolute top-2 right-2 flex space-x-1 bg-gray-800 rounded-lg p-1 shadow-lg sm:px-4 md:px-6 lg:px-8"
                     >
                         {!notification.isRead && (
                             <button
                                 onClick={() => handleAction(() => onMarkAsRead(notification.id))}
-                                className="p-1 text-gray-400 hover:text-green-400 transition-colors"
                                 title="Mark as read"
                             >
-                                <CheckIcon className="w-4 h-4" />
+                                <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                         )}
                         <button
                             onClick={() => handleAction(() => onArchive(notification.id))}
-                            className="p-1 text-gray-400 hover:text-yellow-400 transition-colors"
                             title="Archive"
                         >
-                            <ArchiveIcon className="w-4 h-4" />
+                            <ArchiveIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         </button>
                         <button
                             onClick={() => handleAction(() => onDelete(notification.id))}
-                            className="p-1 text-gray-400 hover:text-red-400 transition-colors"
                             title="Delete"
                         >
-                            <TrashIcon className="w-4 h-4" />
+                            <TrashIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         </button>
                     </motion.div>
                 )}
@@ -376,9 +373,10 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 interface NotificationSettingsProps {
     preferences: any;
     onClose: () => void;
+
 }
 
-const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }: any) => {
+const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }) => {
     const { updatePreferences } = useNotifications();
     const [localPreferences, setLocalPreferences] = useState(preferences || {});
 
@@ -389,79 +387,82 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
         
         for (let i = 0; i < keys.length - 1; i++) {
             current = current[keys[i]];
-        }
+
         current[keys[keys.length - 1]] = value;
         
         setLocalPreferences(updated);
         updatePreferences(updated);
     };
 
+  if (isLoading) {
     return (
-        <div className="p-4 bg-gray-800/50">
-            <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-white">Notification Settings</h3>
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
+        <div className="p-4 bg-gray-800/50 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-sm font-semibold text-white sm:px-4 md:px-6 lg:px-8">Notification Settings</h3>
                 <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white text-sm"
-                >
+                    className="text-gray-400 hover:text-white text-sm sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     Done
                 </button>
             </div>
             
-            <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Push Notifications</span>
+            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Push Notifications</span>
                     <input
                         type="checkbox"
                         checked={localPreferences?.enablePushNotifications || false}
                         onChange={(e: any) => handleToggle('enablePushNotifications', e.target.checked)}
-                        className="accent-blue-500"
                     />
                 </div>
                 
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Sound Notifications</span>
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Sound Notifications</span>
                     <input
                         type="checkbox"
                         checked={localPreferences?.enableSoundNotifications || false}
                         onChange={(e: any) => handleToggle('enableSoundNotifications', e.target.checked)}
-                        className="accent-blue-500"
                     />
                 </div>
                 
-                <hr className="border-gray-600" />
+                <hr className="border-gray-600 sm:px-4 md:px-6 lg:px-8" />
                 
-                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide sm:px-4 md:px-6 lg:px-8">
                     Categories
                 </div>
                 
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Draft Alerts</span>
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Draft Alerts</span>
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.draft?.enabled || false}
                         onChange={(e: any) => handleToggle('categories.draft.enabled', e.target.checked)}
-                        className="accent-blue-500"
                     />
                 </div>
                 
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Oracle Predictions</span>
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Oracle Predictions</span>
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.oracle?.enabled || false}
                         onChange={(e: any) => handleToggle('categories.oracle.enabled', e.target.checked)}
-                        className="accent-blue-500"
                     />
                 </div>
                 
-                <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">League Updates</span>
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">League Updates</span>
                     <input
                         type="checkbox"
                         checked={localPreferences?.categories?.league?.enabled || false}
                         onChange={(e: any) => handleToggle('categories.league.enabled', e.target.checked)}
-                        className="accent-blue-500"
                     />
                 </div>
             </div>
@@ -469,4 +470,10 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
     );
 };
 
-export default NotificationCenter;
+const NotificationCenterWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationCenter {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationCenterWithErrorBoundary);

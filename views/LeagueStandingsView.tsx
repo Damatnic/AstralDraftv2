@@ -13,7 +13,7 @@ import { CompareIcon } from '../components/icons/CompareIcon';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
 
-const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUserId: string; dispatch: React.Dispatch<any> }> = ({ league, myTeamId, myUserId, dispatch }: any) => {
+const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUserId: string; dispatch: React.Dispatch<any> }> = ({ league, myTeamId, myUserId, dispatch }) => {
     const [selectedTeams, setSelectedTeams] = React.useState<Set<number>>(new Set());
     
     const sortedTeams = [...league.teams].sort((a, b) => {
@@ -21,7 +21,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
         const bWinPct = b.record.wins + b.record.ties * 0.5;
         if (aWinPct !== bWinPct) {
             return bWinPct - aWinPct;
-        }
+
         // Could add points for as a tie-breaker
         return 0;
     });
@@ -34,8 +34,8 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
             } else {
                 if (newSet.size < 2) {
                     newSet.add(teamId);
-                }
-            }
+
+
             return newSet;
         });
     };
@@ -44,7 +44,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
         if (selectedTeams.size === 2) {
             const [teamAId, teamBId] = Array.from(selectedTeams);
             dispatch({ type: 'SET_TEAMS_TO_COMPARE', payload: [teamAId, teamBId] });
-        }
+
     };
 
     return (
@@ -58,7 +58,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                     </div>
                     <div className="flex items-center gap-2">
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECTED_STANDINGS' })}
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECTED_STANDINGS' }}
                             className="btn btn-secondary flex items-center gap-2"
                         >
                             <TrendingUpIcon /> View Projections
@@ -66,10 +66,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                         <AnimatePresence>
                             {selectedTeams.size === 2 && (
                                 <motion.button
-                                    onClick={handleCompare}
-                                    className="btn btn-success flex items-center gap-2"
-                                    {...{
-                                        initial: { opacity: 0, scale: 0.8 },
+                                    onClick={handleCompare},
                                         animate: { opacity: 1, scale: 1 },
                                         exit: { opacity: 0, scale: 0.8 },
                                     }}
@@ -79,7 +76,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                             )}
                         </AnimatePresence>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                             className="back-btn"
                         >
                             Back to My Team
@@ -115,7 +112,6 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                                                         type="checkbox"
                                                         checked={isSelected}
                                                         onChange={() => handleSelectTeam(team.id)}
-                                                        disabled={selectedTeams.size >= 2 && !isSelected}
                                                         className="h-4 w-4 rounded bg-gray-700 border-gray-600 text-cyan-500 focus:ring-cyan-600 cursor-pointer disabled:cursor-not-allowed"
                                                     />
                                                 </td>
@@ -127,10 +123,10 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                                                             <button 
                                                                 onClick={() => {
                                                                     if (team.owner.id === myUserId) {
-                                                                        dispatch({ type: 'SET_VIEW', payload: 'PROFILE' });
+                                                                        dispatch({ type: 'SET_VIEW', payload: 'PROFILE' }
                                                                     } else {
                                                                         dispatch({ type: 'SET_MANAGER_PROFILE', payload: team.owner.id });
-                                                                    }
+
                                                                 }}
                                                                 className="font-semibold text-white text-left hover:underline"
                                                             >
@@ -173,7 +169,7 @@ const LeagueStandingsView: React.FC = () => {
             {!league || !myTeam || !state.user ? (
                 <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                     <p>Select a league to view standings.</p>
-                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                         Back to Dashboard
                     </button>
                 </div>

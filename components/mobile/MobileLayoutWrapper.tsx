@@ -3,7 +3,8 @@
  * Provides responsive layout structure and mobile-specific navigation
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import MobileBottomNavigation from './MobileBottomNavigation';
@@ -23,6 +24,7 @@ interface MobileLayoutWrapperProps {
     onViewChange: (view: View) => void;
     showBottomNav?: boolean;
     className?: string;
+
 }
 
 interface MobileLayoutConfig {
@@ -38,7 +40,8 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     onViewChange,
     showBottomNav = true,
     className = ''
-}: any) => {
+}) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
     const [isKeyboardVisible, setIsKeyboardVisible] = React.useState(false);
@@ -148,7 +151,6 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     // Don't apply mobile layout on desktop
     if (!isMobile && !isTablet) {
         return <>{children}</>;
-    }
 
     const bottomNavHeight = 80; // Height of bottom navigation
 
@@ -172,7 +174,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
             {/* Main Content Area */}
             <section 
-                className="mobile-content-area"
+                className="mobile-content-area sm:px-4 md:px-6 lg:px-8"
                 aria-label="Main content"
                 style={{
                     height: `calc(100vh - ${safeAreaInsets.top + safeAreaInsets.bottom}px)`,
@@ -182,7 +184,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
             >
                 {/* Content Container */}
                 <div 
-                    className="flex-1 relative overflow-hidden"
+                    className="flex-1 relative overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     style={{
                         marginBottom: layoutConfig.hasBottomNav && showBottomNav && !isKeyboardVisible 
                             ? `${bottomNavHeight}px` 
@@ -202,7 +204,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                                 animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                                 exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -20 }}
                                 transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-                                className="h-full"
+                                className="h-full sm:px-4 md:px-6 lg:px-8"
                                 aria-live="polite"
                             >
                                 {children}
@@ -219,7 +221,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                             animate={prefersReducedMotion ? { opacity: 1 } : { y: 0 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { y: bottomNavHeight }}
                             transition={prefersReducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 30 }}
-                            className="fixed bottom-0 left-0 right-0 z-50"
+                            className="fixed bottom-0 left-0 right-0 z-50 sm:px-4 md:px-6 lg:px-8"
                             style={{
                                 paddingLeft: safeAreaInsets.left,
                                 paddingRight: safeAreaInsets.right,
@@ -240,12 +242,10 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                 .mobile-layout-wrapper {
                     -webkit-overflow-scrolling: touch;
                     touch-action: manipulation;
-                }
 
                 .mobile-content-area {
                     position: relative;
                     z-index: 1;
-                }
 
                 /* Handle safe areas for devices with notches */
                 @supports (padding: env(safe-area-inset-top)) {
@@ -254,23 +254,20 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                         padding-left: env(safe-area-inset-left);
                         padding-right: env(safe-area-inset-right);
                         padding-bottom: env(safe-area-inset-bottom);
-                    }
-                }
+
 
                 /* Prevent zoom on input focus */
                 @media screen and (max-width: 768px) {
                     input, select, textarea {
                         font-size: 16px !important;
-                    }
-                }
+
 
                 /* Hide scrollbars on mobile but keep functionality */
                 @media screen and (max-width: 768px) {
                     ::-webkit-scrollbar {
                         width: 0px;
                         background: transparent;
-                    }
-                }
+
 
                 /* Improve touch performance */
                 * {
@@ -278,7 +275,6 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                     -webkit-touch-callout: none;
                     -webkit-user-select: none;
                     user-select: none;
-                }
 
                 /* Allow text selection in specific areas */
                 input, textarea, [contenteditable] {
@@ -292,9 +288,16 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                     backface-visibility: hidden;
                     -webkit-backface-visibility: hidden;
                 }
+
             `}</style>
         </main>
     );
 };
 
-export default MobileLayoutWrapper;
+const MobileLayoutWrapperWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileLayoutWrapper {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileLayoutWrapperWithErrorBoundary);

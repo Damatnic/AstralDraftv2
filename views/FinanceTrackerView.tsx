@@ -10,7 +10,6 @@ const FinanceTrackerView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay message="No league selected" />;
-    }
 
     return (
         <div className="space-y-6 p-6">

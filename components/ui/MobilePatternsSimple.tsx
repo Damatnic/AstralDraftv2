@@ -3,7 +3,7 @@
  * Bottom sheets, swipe gestures, and mobile-first navigation components
  */
 
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { AccessibleButton } from './AccessibleButton';
 
@@ -15,21 +15,22 @@ interface BottomSheetProps {
   className?: string;
   snapPoints?: number[];
   initialSnap?: number;
-}
 
 /**
  * Bottom Sheet Modal for Mobile
  * Provides native mobile app-like modal experience
  */
-export const BottomSheet: React.FC<BottomSheetProps> = ({
-  isOpen,
+}
+
+export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   onClose,
   title,
   children,
   className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
   const [startY, setStartY] = React.useState(0);
@@ -41,17 +42,16 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
-      }
+
     };
 
     if (isOpen) {
       document.addEventListener('keydown', handleKeydown);
       if (sheetRef.current) {
         sheetRef.current.showModal();
-      }
+
     } else if (sheetRef.current) {
       sheetRef.current.close();
-    }
 
     return () => {
       document.removeEventListener('keydown', handleKeydown);
@@ -81,10 +81,9 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
         onClose();
       } else {
         setCurrentSnap(Math.max(0, currentSnap - 1));
-      }
+
     } else if (deltaY < -threshold) {
       setCurrentSnap(Math.min(snapPoints.length - 1, currentSnap + 1));
-    }
 
     setIsDragging(false);
     setStartY(0);
@@ -100,8 +99,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
     if (isDragging && currentY > startY) {
       const dragOffset = Math.min(currentY - startY, 200);
       return `translateY(calc(${(1 - snapPoint) * 100}% + ${dragOffset}px))`;
-    }
-    
+
     return baseTransform;
   };
 
@@ -110,32 +108,29 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
   return (
     <>
       <div 
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity sm:px-4 md:px-6 lg:px-8"
         onClick={onClose}
-        aria-hidden="true"
-      />
+      / tabIndex={0}>
       
       <dialog
         ref={sheetRef}
         className={`fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-3xl shadow-2xl z-50 transition-transform duration-300 ease-out border-0 p-0 max-h-[90vh] ${className}`}
         style={{ transform: getTransform() }}
         onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         aria-labelledby={title ? 'bottom-sheet-title' : undefined}
       >
-        <div className="flex justify-center py-3">
-          <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
+        <div className="flex justify-center py-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full sm:px-4 md:px-6 lg:px-8" />
         </div>
         
         {title && (
-          <div className="flex items-center justify-between px-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between px-6 pb-4 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
+            <h2 id="bottom-sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
               {title}
             </h2>
             <AccessibleButton
               onClick={onClose}
-              variant="ghost"
               size="sm"
               aria-label="Close bottom sheet"
             >
@@ -144,7 +139,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
           </div>
         )}
         
-        <div className="px-6 py-4 overflow-y-auto max-h-[70vh]">
+        <div className="px-6 py-4 overflow-y-auto max-h-[70vh] sm:px-4 md:px-6 lg:px-8">
           {children}
         </div>
       </dialog>
@@ -160,6 +155,7 @@ interface SwipeGestureProps {
   threshold?: number;
   children: React.ReactNode;
   className?: string;
+
 }
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
@@ -170,7 +166,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   threshold = 50,
   children,
   className = ''
-}: any) => {
+}) => {
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
@@ -204,19 +200,18 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
         onSwipeLeft();
       } else if (isRightSwipe && onSwipeRight) {
         onSwipeRight();
-      }
+
     } else if (isUpSwipe && onSwipeUp) {
       onSwipeUp();
     } else if (isDownSwipe && onSwipeDown) {
       onSwipeDown();
-    }
+
   };
 
   return (
     <div
       className={className}
       onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       {children}
@@ -234,19 +229,18 @@ interface MobileTabsProps {
   activeTab: string;
   onTabChange: (tabId: string) => void;
   className?: string;
-}
 
 export const MobileTabs: React.FC<MobileTabsProps> = ({
   tabs,
   activeTab,
   onTabChange,
   className = ''
-}: any) => {
+}) => {
   const handleKeyDown = (e: React.KeyboardEvent, tabId: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onTabChange(tabId);
-    }
+
   };
 
   return (
@@ -261,21 +255,20 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
           aria-selected={activeTab === tab.id}
           aria-controls={`panel-${tab.id}`}
           onClick={() => onTabChange(tab.id)}
-          onKeyDown={(e: any) => handleKeyDown(e, tab.id)}
           className={`
             relative flex-1 min-w-0 px-4 py-3 text-sm font-medium rounded-md transition-all duration-200 touch-manipulation
             ${activeTab === tab.id
               ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
               : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-white/50 dark:hover:bg-gray-700/50'
-            }
+
           `}
           style={{ minHeight: '44px' }}
         >
-          <span className="flex items-center justify-center gap-2">
+          <span className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
             {tab.icon}
-            <span className="truncate">{tab.label}</span>
+            <span className="truncate sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
             {tab.badge && (
-              <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center">
+              <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] h-5 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                 {tab.badge}
               </span>
             )}

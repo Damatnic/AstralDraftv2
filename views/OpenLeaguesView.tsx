@@ -25,7 +25,7 @@ const OpenLeaguesView: React.FC = () => {
                         Open Leagues
                     </h1>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="back-btn">
                     Back to Dashboard
                 </button>
             </header>
@@ -43,7 +43,6 @@ const OpenLeaguesView: React.FC = () => {
                                     </div>
                                     <button
                                         onClick={() => handleJoin(league.id)}
-                                        className="btn btn-success text-sm"
                                     >
                                         Join
                                     </button>

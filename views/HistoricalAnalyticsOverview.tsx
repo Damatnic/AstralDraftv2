@@ -35,6 +35,7 @@ const PREDICTION_TYPE_COLORS: Record<PredictionType, string> = {
 
 interface HistoricalAnalyticsOverviewProps {
     className?: string;
+
 }
 
 export function HistoricalAnalyticsOverview({ className = '' }: Readonly<HistoricalAnalyticsOverviewProps>) {
@@ -67,6 +68,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
 
     const handleExport = async () => {
         try {
+
             const data = await exportData('json');
             const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -75,11 +77,10 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
             a.download = `oracle-analytics-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-        } catch (err) {
-        }
-    };
 
-    const formatAccuracy = (accuracy: number) => `${(accuracy * 100).toFixed(1)}%`;
+    } catch (error) {
+        console.error(error);
+    `${(accuracy * 100).toFixed(1)}%`;
     const formatChange = (change: number) => {
         const prefix = change > 0 ? '+' : '';
         return `${prefix}${(change * 100).toFixed(1)}%`;
@@ -97,7 +98,6 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                 <ErrorDisplay error={error} onRetry={refreshAnalytics} />
             </div>
         );
-    }
 
     return (
         <div className={`space-y-6 ${className}`}>
@@ -114,7 +114,6 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     <select
                         value={selectedTimeframe}
                         onChange={(e: any) => handleTimeframeChange(e.target.value as TimeframeType)}
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                     >
                         <option value="weekly">Weekly</option>
                         <option value="monthly">Monthly</option>
@@ -124,7 +123,6 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     
                     <button
                         onClick={handleExport}
-                        className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                     >
                         <DownloadIcon />
                         <span>Export</span>
@@ -132,7 +130,6 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                     
                     <button
                         onClick={refreshAnalytics}
-                        disabled={isLoading}
                         className="flex items-center space-x-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50"
                     >
                         <RefreshIcon className={isLoading ? 'animate-spin' : ''} />
@@ -192,12 +189,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
-                                className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'border-purple-500 text-purple-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                                }`}
+                                onClick={() => setActiveTab(tab.id as any)}`}
                             >
                                 <Icon />
                                 <span>{tab.label}</span>
@@ -340,8 +332,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                                                     break;
                                                 default:
                                                     recBgClass = 'bg-purple-50 border-purple-400';
-                                            }
-                                            
+
                                             let priorityClass: string;
                                             switch (rec.priority) {
                                                 case 'high':
@@ -352,8 +343,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                                                     break;
                                                 default:
                                                     priorityClass = 'bg-gray-100 text-gray-800';
-                                            }
-                                            
+
                                             return (
                                                 <div 
                                                     key={`recommendation-${rec.title}-${index}`}
@@ -438,6 +428,5 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
             </div>
         </div>
     );
-}
 
 export default HistoricalAnalyticsOverview;

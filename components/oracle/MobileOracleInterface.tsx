@@ -4,7 +4,8 @@
  * Designed for mobile-first experience with responsive design
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { ZapIcon } from '../icons/ZapIcon';
@@ -18,19 +19,19 @@ interface MobileOracleInterfaceProps {
     onSubmitPrediction: (challengeId: string, optionIndex: number) => void;
     onViewAnalytics: () => void;
     onViewRewards: () => void;
+
 }
 
 interface SwipeDirection {
     deltaX: number;
     deltaY: number;
-}
 
-const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
-    week,
+const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({ week,
     onSubmitPrediction,
     onViewAnalytics,
     onViewRewards
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [challenges, setChallenges] = React.useState<MobileOracleChallenge[]>([]);
     const [currentChallengeIndex, setCurrentChallengeIndex] = React.useState(0);
     const [selectedOption, setSelectedOption] = React.useState<number | null>(null);
@@ -45,9 +46,15 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
     // Load challenges and setup mobile service
     React.useEffect(() => {
         const loadChallenges = async () => {
+    try {
+
             const mobileChallenges = await oracleMobileService.getMobileChallenges(week);
             setChallenges(mobileChallenges);
-        };
+
+    } catch (error) {
+      console.error('Error in loadChallenges:', error);
+
+  };
 
         loadChallenges();
         setNotificationConfig(oracleMobileService.getNotificationConfig());
@@ -59,13 +66,13 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                 handleNextChallenge();
             } else if (event.detail.direction === 'previous') {
                 handlePreviousChallenge();
-            }
+
         };
 
         const handleQuickSubmit = () => {
             if (selectedOption !== null) {
                 handleSubmitPrediction();
-            }
+
         };
 
         document.addEventListener('oracle-navigate', handleOracleNavigate as EventListener);
@@ -103,12 +110,12 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
             setTimeout(() => {
                 if (currentChallengeIndex < challenges.length - 1) {
                     handleNextChallenge();
-                }
+
             }, 1000);
-        } catch (error) {
+    } catch (error) {
         } finally {
             setIsSubmitting(false);
-        }
+
     };
 
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -130,26 +137,39 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                 handlePreviousChallenge();
             } else {
                 handleNextChallenge();
-            }
+
             oracleMobileService.vibrate([25]); // Light haptic feedback
-        }
 
         setTouchStart(null);
     };
 
     const handleInstallPWA = async () => {
+    try {
+
         const installed = await oracleMobileService.promptInstall();
         if (installed) {
             setShowInstallPrompt(false);
-        }
-    };
+        
+    } catch (error) {
+      console.error('Error in handleInstallPWA:', error);
+
+    } catch (error) {
+        console.error(error);
+    }};
 
     const handleEnableNotifications = async () => {
+    try {
+
         const granted = await oracleMobileService.requestNotificationPermission();
         if (granted) {
             setNotificationConfig(oracleMobileService.getNotificationConfig());
-        }
-    };
+        
+    } catch (error) {
+      console.error('Error in handleEnableNotifications:', error);
+
+    } catch (error) {
+        console.error(error);
+    }};
 
     const formatTimeRemaining = (milliseconds: number): string => {
         const hours = Math.floor(milliseconds / (1000 * 60 * 60));
@@ -157,7 +177,7 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
         
         if (hours > 0) {
             return `${hours}h ${minutes}m`;
-        }
+
         return `${minutes}m`;
     };
 
@@ -167,22 +187,21 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
             case 'medium': return 'text-yellow-400 bg-yellow-500/20';
             case 'hard': return 'text-red-400 bg-red-500/20';
             default: return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     if (!currentChallenge) {
         return (
             <Widget title="Oracle Challenges" icon={<ZapIcon />}>
-                <div className="p-6 text-center">
-                    <div className="text-gray-400 mb-4">🔮</div>
-                    <p className="text-gray-400">No challenges available for Week {week}</p>
+                <div className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-gray-400 mb-4 sm:px-4 md:px-6 lg:px-8">🔮</div>
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">No challenges available for Week {week}</p>
                 </div>
             </Widget>
         );
-    }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             {/* Install PWA Prompt */}
             <AnimatePresence>
                 {showInstallPrompt && (
@@ -190,24 +209,22 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-3"
+                        className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <p className="text-sm font-semibold text-blue-300">Install Oracle App</p>
-                                <p className="text-xs text-gray-400">Get offline access and push notifications</p>
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                <p className="text-sm font-semibold text-blue-300 sm:px-4 md:px-6 lg:px-8">Install Oracle App</p>
+                                <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Get offline access and push notifications</p>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <button
                                     onClick={() => setShowInstallPrompt(false)}
-                                    className="px-2 py-1 text-xs text-gray-400 hover:text-white"
                                 >
                                     Dismiss
                                 </button>
                                 <button
                                     onClick={handleInstallPWA}
-                                    className="px-3 py-1 text-xs font-bold bg-blue-500 text-white rounded-md hover:bg-blue-400"
-                                >
+                                 aria-label="Action button">
                                     Install
                                 </button>
                             </div>
@@ -223,17 +240,16 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-lg p-3"
+                        className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <div className="flex items-center justify-between">
-                            <div className="flex-1">
-                                <p className="text-sm font-semibold text-yellow-300">Enable Notifications</p>
-                                <p className="text-xs text-gray-400">Get alerts for new challenges and results</p>
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                <p className="text-sm font-semibold text-yellow-300 sm:px-4 md:px-6 lg:px-8">Enable Notifications</p>
+                                <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Get alerts for new challenges and results</p>
                             </div>
                             <button
                                 onClick={handleEnableNotifications}
-                                className="px-3 py-1 text-xs font-bold bg-yellow-500 text-black rounded-md hover:bg-yellow-400"
-                            >
+                             aria-label="Action button">
                                 Enable
                             </button>
                         </div>
@@ -242,71 +258,65 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
             </AnimatePresence>
 
             {/* Main Challenge Interface */}
-            <Widget title="Oracle Challenges" icon={<ZapIcon />} className="oracle-challenge-card">
+            <Widget title="Oracle Challenges" icon={<ZapIcon />} className="oracle-challenge-card sm:px-4 md:px-6 lg:px-8">
                 <div
-                    className="relative overflow-hidden"
+                    className="relative overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     onTouchStart={isTouch ? handleTouchStart : undefined}
-                    onTouchEnd={isTouch ? handleTouchEnd : undefined}
                 >
                     {/* Challenge Header */}
-                    <div className="p-4 border-b border-gray-700/50">
-                        <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
+                    <div className="p-4 border-b border-gray-700/50 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <div className={`px-2 py-1 rounded-full text-xs font-bold ${getDifficultyColor(currentChallenge.difficulty)}`}>
                                     {currentChallenge.difficulty.toUpperCase()}
                                 </div>
                                 {currentChallenge.isUrgent && (
-                                    <div className="px-2 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 animate-pulse">
+                                    <div className="px-2 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 animate-pulse sm:px-4 md:px-6 lg:px-8">
                                         ⚡ URGENT
                                     </div>
                                 )}
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-gray-400">
-                                <ClockIcon className="w-3 h-3" />
+                            <div className="flex items-center gap-2 text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                                <ClockIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                 {formatTimeRemaining(currentChallenge.timeRemaining)}
                             </div>
                         </div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2 text-xs text-gray-400">
-                                <TrophyIcon className="w-3 h-3" />
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center gap-2 text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                                <TrophyIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                 {currentChallenge.pointsAvailable} pts
                             </div>
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 {currentChallengeIndex + 1} of {challenges.length}
                             </div>
                         </div>
                     </div>
 
                     {/* Challenge Question */}
-                    <div className="p-4">
-                        <h3 className="text-lg font-bold text-white mb-4 leading-tight">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-bold text-white mb-4 leading-tight sm:px-4 md:px-6 lg:px-8">
                             {currentChallenge.question}
                         </h3>
 
                         {/* Options */}
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {currentChallenge.options.map((option, index) => (
                                 <motion.button
                                     key={`option-${currentChallenge.id}-${index}`}
-                                    onClick={() => setSelectedOption(index)}
-                                    className={`w-full p-4 rounded-lg text-left transition-all duration-200 prediction-option ${
-                                        selectedOption === index
-                                            ? 'bg-cyan-500/20 border-2 border-cyan-400 text-cyan-300'
-                                            : 'bg-gray-800/50 border-2 border-gray-600/30 text-gray-300 hover:bg-gray-700/50 hover:border-gray-500/50'
-                                    }`}
+                                    onClick={() => setSelectedOption(index)}`}
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-medium">{option}</span>
+                                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{option}</span>
                                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                                             selectedOption === index
                                                 ? 'border-cyan-400 bg-cyan-400'
                                                 : 'border-gray-500'
                                         }`}>
                                             {selectedOption === index && (
-                                                <div className="w-2 h-2 bg-white rounded-full" />
+                                                <div className="w-2 h-2 bg-white rounded-full sm:px-4 md:px-6 lg:px-8" />
                                             )}
                                         </div>
                                     </div>
@@ -317,7 +327,6 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                         {/* Submit Button */}
                         <motion.button
                             onClick={handleSubmitPrediction}
-                            disabled={selectedOption === null || isSubmitting}
                             className={`w-full mt-6 py-4 rounded-lg font-bold text-lg transition-all duration-200 ${
                                 selectedOption !== null && !isSubmitting
                                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-400 hover:to-purple-500 shadow-lg'
@@ -329,22 +338,22 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
                             {(() => {
                                 if (isSubmitting) {
                                     return (
-                                        <div className="flex items-center justify-center gap-2">
-                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                        <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8" />
                                             Submitting...
                                         </div>
                                     );
-                                }
+
                                 if (selectedOption !== null) {
                                     return 'Submit Prediction';
-                                }
+
                                 return 'Select an Option';
                             })()}
                         </motion.button>
 
                         {/* Swipe Hint */}
                         {isTouch && challenges.length > 1 && (
-                            <p className="text-center text-xs text-gray-500 mt-3">
+                            <p className="text-center text-xs text-gray-500 mt-3 sm:px-4 md:px-6 lg:px-8">
                                 ← Swipe to navigate between challenges →
                             </p>
                         )}
@@ -352,20 +361,18 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
 
                     {/* Navigation Buttons for Non-Touch Devices */}
                     {!isTouch && challenges.length > 1 && (
-                        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none">
+                        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between pointer-events-none sm:px-4 md:px-6 lg:px-8">
                             <button
                                 onClick={handlePreviousChallenge}
-                                disabled={currentChallengeIndex === 0}
-                                className="ml-2 p-2 bg-black/50 backdrop-blur-sm rounded-full pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/70"
-                            >
-                                <ChevronLeftIcon className="w-5 h-5" />
+                                className="ml-2 p-2 bg-black/50 backdrop-blur-sm rounded-full pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/70 sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
+                                <ChevronLeftIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                             <button
                                 onClick={handleNextChallenge}
-                                disabled={currentChallengeIndex === challenges.length - 1}
-                                className="mr-2 p-2 bg-black/50 backdrop-blur-sm rounded-full pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/70"
-                            >
-                                <ChevronRightIcon className="w-5 h-5" />
+                                className="mr-2 p-2 bg-black/50 backdrop-blur-sm rounded-full pointer-events-auto disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black/70 sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
+                                <ChevronRightIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                         </div>
                     )}
@@ -373,28 +380,26 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
             </Widget>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                 <button
                     onClick={onViewAnalytics}
-                    className="p-4 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-400/30 rounded-lg text-left hover:from-blue-500/30 hover:to-cyan-500/30 transition-all"
-                >
-                    <div className="text-2xl font-bold text-blue-300">78%</div>
-                    <div className="text-xs text-gray-400">Accuracy</div>
+                 aria-label="Action button">
+                    <div className="text-2xl font-bold text-blue-300 sm:px-4 md:px-6 lg:px-8">78%</div>
+                    <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
                 </button>
                 <button
                     onClick={onViewRewards}
-                    className="p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-400/30 rounded-lg text-left hover:from-purple-500/30 hover:to-pink-500/30 transition-all"
-                >
-                    <div className="text-2xl font-bold text-purple-300">1,250</div>
-                    <div className="text-xs text-gray-400">Points</div>
+                 aria-label="Action button">
+                    <div className="text-2xl font-bold text-purple-300 sm:px-4 md:px-6 lg:px-8">1,250</div>
+                    <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Points</div>
                 </button>
             </div>
 
             {/* Mobile-Optimized Tips */}
             {isMobile && (
-                <div className="bg-gray-800/30 border border-gray-600/30 rounded-lg p-3">
-                    <h4 className="text-sm font-semibold text-gray-300 mb-2">💡 Mobile Tips</h4>
-                    <ul className="text-xs text-gray-400 space-y-1">
+                <div className="bg-gray-800/30 border border-gray-600/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
+                    <h4 className="text-sm font-semibold text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">💡 Mobile Tips</h4>
+                    <ul className="text-xs text-gray-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
                         <li>• Swipe left/right to navigate challenges</li>
                         <li>• Long press options for quick submission</li>
                         <li>• Install the app for offline access</li>
@@ -406,4 +411,10 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({
     );
 };
 
-export default MobileOracleInterface;
+const MobileOracleInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileOracleInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileOracleInterfaceWithErrorBoundary);

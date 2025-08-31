@@ -10,7 +10,6 @@ const CustomScoringEditorView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay message="No league selected" />;
-    }
 
     return (
         <div className="space-y-6 p-6 min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">

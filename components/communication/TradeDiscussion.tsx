@@ -3,7 +3,8 @@
  * Threaded conversations for trade negotiations
  */
 
-import React, { useState, useMemo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -23,19 +24,19 @@ interface TradeComment {
   reactions: {
     [emoji: string]: string[]; // emoji: array of user IDs
   };
-}
 
 interface TradeDiscussionProps {
   tradeId: string;
   isVisible: boolean;
   onClose: () => void;
+
 }
 
 const TradeDiscussion: React.FC<TradeDiscussionProps> = ({ 
   tradeId, 
   isVisible, 
   onClose 
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const [newMessage, setNewMessage] = useState('');
   const [showCounterOffer, setShowCounterOffer] = useState(false);
@@ -56,7 +57,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '👍': ['user-2'],
           '🤔': ['user-3']
-        }
+
       },
       {
         id: 'comment-2',
@@ -69,7 +70,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '💭': ['user-1'],
           '👀': ['user-1', 'user-4']
-        }
+
       },
       {
         id: 'comment-3',
@@ -87,12 +88,12 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
           ],
           playersRequested: [
             { id: 'p3', name: 'Cooper Kupp', position: 'WR' }
-          ]
+
         },
         reactions: {
           '🔥': ['user-2'],
           '👍': ['user-2', 'user-5']
-        }
+
       },
       {
         id: 'comment-4',
@@ -105,8 +106,8 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         reactions: {
           '⏰': ['user-1'],
           '🤝': ['user-1']
-        }
-      }
+
+
     ];
   }, [tradeId]);
 
@@ -131,7 +132,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
       payload: {
         message: 'Comment posted successfully!',
         type: 'SUCCESS'
-      }
+
     });
 
     setNewMessage('');
@@ -147,7 +148,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
       payload: {
         message: 'Reaction added!',
         type: 'INFO'
-      }
+
     });
   };
 
@@ -169,29 +170,29 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className="card w-full max-w-2xl max-h-[80vh] flex flex-col"
+        className="card w-full max-w-2xl max-h-[80vh] flex flex-col sm:px-4 md:px-6 lg:px-8"
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-600">
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-600 sm:px-4 md:px-6 lg:px-8">
           <div>
-            <h3 className="text-xl font-bold text-white">Trade Discussion</h3>
-            <p className="text-slate-400 text-sm">Negotiate and discuss trade details</p>
+            <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Trade Discussion</h3>
+            <p className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">Negotiate and discuss trade details</p>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
-          >
-            <span className="text-2xl">×</span>
+            className="text-slate-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
+           aria-label="Action button">
+            <span className="text-2xl sm:px-4 md:px-6 lg:px-8">×</span>
           </button>
         </div>
 
         {/* Comments List */}
-        <div className="flex-1 overflow-y-auto space-y-4 mb-6">
+        <div className="flex-1 overflow-y-auto space-y-4 mb-6 sm:px-4 md:px-6 lg:px-8">
           <AnimatePresence>
             {tradeComments.map((comment, index) => (
               <motion.div
@@ -206,40 +207,40 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                 }`}
               >
                 {/* Comment Header */}
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-2xl">{comment.userAvatar}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-white font-semibold">{comment.userName}</span>
+                <div className="flex items-center gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{comment.userAvatar}</span>
+                  <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                      <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{comment.userName}</span>
                       {comment.isCounterOffer && (
-                        <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded-full">
+                        <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                           Counter Offer
                         </span>
                       )}
                     </div>
-                    <span className="text-slate-400 text-sm">{formatTimestamp(comment.timestamp)}</span>
+                    <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">{formatTimestamp(comment.timestamp)}</span>
                   </div>
                 </div>
 
                 {/* Counter Offer Details */}
                 {comment.isCounterOffer && comment.counterOfferDetails && (
-                  <div className="mb-3 p-3 bg-slate-800/50 rounded-lg">
+                  <div className="mb-3 p-3 bg-slate-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <h5 className="text-blue-400 font-semibold mb-2">Offering:</h5>
+                        <h5 className="text-blue-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Offering:</h5>
                         {comment.counterOfferDetails.playersOffered.map((player: any) => (
-                          <div key={player.id} className="text-white">
+                          <div key={player.id} className="text-white sm:px-4 md:px-6 lg:px-8">
                             {player.name} ({player.position})
                           </div>
                         ))}
                       </div>
-                      <div className="flex items-center justify-center">
-                        <span className="text-2xl text-blue-400">⇄</span>
+                      <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-2xl text-blue-400 sm:px-4 md:px-6 lg:px-8">⇄</span>
                       </div>
                       <div>
-                        <h5 className="text-blue-400 font-semibold mb-2">For:</h5>
+                        <h5 className="text-blue-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">For:</h5>
                         {comment.counterOfferDetails.playersRequested.map((player: any) => (
-                          <div key={player.id} className="text-white">
+                          <div key={player.id} className="text-white sm:px-4 md:px-6 lg:px-8">
                             {player.name} ({player.position})
                           </div>
                         ))}
@@ -249,20 +250,15 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                 )}
 
                 {/* Comment Message */}
-                <p className="text-slate-300 mb-3">{comment.message}</p>
+                <p className="text-slate-300 mb-3 sm:px-4 md:px-6 lg:px-8">{comment.message}</p>
 
                 {/* Reactions */}
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(comment.reactions).map(([emoji, userIds]) => (
                       <button
                         key={emoji}
-                        onClick={() => handleReaction(comment.id, emoji)}
-                        className={`px-2 py-1 rounded-full text-sm transition-colors ${
-                          userIds.includes(currentUser?.id || '')
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
-                        }`}
+                        onClick={() => handleReaction(comment.id, emoji)}`}
                       >
                         {emoji} {userIds.length}
                       </button>
@@ -270,16 +266,15 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                   </div>
                   
                   {/* Add Reaction Dropdown */}
-                  <div className="relative group">
-                    <button className="text-slate-400 hover:text-white transition-colors">
-                      <span className="text-lg">😊</span>
+                  <div className="relative group sm:px-4 md:px-6 lg:px-8">
+                    <button className="text-slate-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                      <span className="text-lg sm:px-4 md:px-6 lg:px-8">😊</span>
                     </button>
-                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600">
+                    <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 sm:px-4 md:px-6 lg:px-8">
                       {reactionEmojis.map((emoji: any) => (
                         <button
                           key={emoji}
                           onClick={() => handleReaction(comment.id, emoji)}
-                          className="hover:bg-slate-700 p-1 rounded transition-colors"
                         >
                           {emoji}
                         </button>
@@ -293,39 +288,37 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         </div>
 
         {/* Message Input */}
-        <div className="border-t border-slate-600 pt-4">
-          <div className="flex gap-3">
-            <span className="text-2xl">{currentUser?.avatar}</span>
-            <div className="flex-1">
+        <div className="border-t border-slate-600 pt-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
+            <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{currentUser?.avatar}</span>
+            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
               <textarea
                 value={newMessage}
                 onChange={(e: any) => setNewMessage(e.target.value)}
-                placeholder="Add a comment to the discussion..."
-                className="form-input h-20 resize-none mb-3"
+                className="form-input h-20 resize-none mb-3 sm:px-4 md:px-6 lg:px-8"
                 onKeyPress={(e: any) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     handleSendMessage();
-                  }
+
                 }}
               />
-              <div className="flex items-center justify-between">
-                <div className="flex gap-2">
+              <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={() => setShowCounterOffer(!showCounterOffer)}
-                    className="btn btn-secondary btn-sm"
                   >
                     📝 Counter Offer
                   </button>
-                  <button className="btn btn-secondary btn-sm">
+                  <button className="btn btn-secondary btn-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                     📎 Attach
                   </button>
                 </div>
                 <button
                   onClick={handleSendMessage}
                   disabled={!newMessage.trim()}
-                  className="btn btn-primary"
-                >
+                  className="btn btn-primary sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                   Send Comment
                 </button>
               </div>
@@ -339,19 +332,18 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-4 p-4 bg-blue-900/20 border border-blue-600/30 rounded-lg"
+            className="mt-4 p-4 bg-blue-900/20 border border-blue-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8"
           >
-            <h4 className="text-white font-semibold mb-3">Create Counter Offer</h4>
-            <p className="text-blue-300 text-sm mb-3">
+            <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Create Counter Offer</h4>
+            <p className="text-blue-300 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">
               Modify the trade terms and post as a counter offer
             </p>
-            <div className="flex gap-3">
-              <button className="btn btn-primary flex-1">
+            <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
+              <button className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                 Build Counter Offer
               </button>
               <button
                 onClick={() => setShowCounterOffer(false)}
-                className="btn btn-secondary"
               >
                 Cancel
               </button>
@@ -363,4 +355,10 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   );
 };
 
-export default TradeDiscussion;
+const TradeDiscussionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeDiscussion {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeDiscussionWithErrorBoundary);

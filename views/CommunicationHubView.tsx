@@ -45,7 +45,7 @@ const CommunicationHubView: React.FC = () => {
       icon: '🗳️', 
       description: 'Vote on league matters',
       count: 0 // active polls
-    }
+
   ];
 
   const renderTabContent = () => {
@@ -310,7 +310,7 @@ const CommunicationHubView: React.FC = () => {
       
       default:
         return null;
-    }
+
   };
 
   return (
@@ -320,7 +320,7 @@ const CommunicationHubView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
               className="back-btn"
             >
               ← Back to Dashboard
@@ -390,12 +390,7 @@ const CommunicationHubView: React.FC = () => {
           {tabs.map((tab: any) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-md transition-colors relative ${
-                activeTab === tab.id
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-              }`}
+              onClick={() => setActiveTab(tab.id as any)}`}
             >
               <span className="text-2xl">{tab.icon}</span>
               <div className="text-center">

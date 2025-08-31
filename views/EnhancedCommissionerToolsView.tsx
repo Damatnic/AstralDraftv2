@@ -21,7 +21,7 @@ const EnhancedCommissionerToolsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
               className="glass-button"
             >
               ← Back to Dashboard
@@ -62,7 +62,7 @@ const EnhancedCommissionerToolsView: React.FC = () => {
                 <p>Your Role: League Member</p>
               </div>
               <button
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
                 className="glass-button-primary mt-6 px-6 py-3"
               >
                 Return to Dashboard

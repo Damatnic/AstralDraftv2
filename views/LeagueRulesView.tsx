@@ -6,14 +6,14 @@ import { BookOpenIcon } from '../components/icons/BookOpenIcon';
 import type { League } from '../types';
 import { useLeague } from '../hooks/useLeague';
 
-const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, value }: any) => (
+const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, value }) => (
     <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
         <span className="font-semibold text-gray-300">{label}</span>
         <span className="font-bold text-white">{value}</span>
     </div>
 );
 
-const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
     const settings = league.settings;
 
     return (
@@ -25,7 +25,7 @@ const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<an
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button">
                     Back to League Hub
                 </button>
             </header>
@@ -81,13 +81,12 @@ const LeagueRulesView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view its rules.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     return <LeagueRulesContent league={league} dispatch={dispatch} />;
 };
 

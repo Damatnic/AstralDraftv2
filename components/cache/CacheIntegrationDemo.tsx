@@ -3,7 +3,8 @@
  * Demonstrates intelligent caching in action with real examples
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { DatabaseIcon, ZapIcon, WifiOffIcon, CheckCircleIcon } from 'lucide-react';
 import { Widget } from '../ui/Widget';
@@ -45,7 +46,7 @@ const mockAPIFunctions = {
             factors: ['Weather', 'Matchup', 'Recent Form', 'Injury Status'],
             timestamp: new Date().toISOString()
         };
-    }
+
 };
 
 const CacheIntegrationDemo: React.FC = () => {
@@ -61,7 +62,7 @@ const CacheIntegrationDemo: React.FC = () => {
             staleTime: 10 * 1000, // 10 seconds
             cacheTime: 30 * 1000, // 30 seconds
             refreshInterval: 15 * 1000, // Refresh every 15 seconds
-        }
+
     );
 
     // Demo 2: Offline-aware caching
@@ -72,7 +73,7 @@ const CacheIntegrationDemo: React.FC = () => {
         {
             staleTime: 5 * 1000, // 5 seconds (real-time data)
             cacheTime: 60 * 1000, // 1 minute
-        }
+
     );
 
     // Demo 3: Manual cache management
@@ -84,7 +85,7 @@ const CacheIntegrationDemo: React.FC = () => {
             enabled: selectedDemo === 'oracle', // Only fetch when selected
             staleTime: 30 * 1000, // 30 seconds
             cacheTime: 5 * 60 * 1000, // 5 minutes
-        }
+
     );
 
     const demos = [
@@ -111,81 +112,20 @@ const CacheIntegrationDemo: React.FC = () => {
             cache: oracleCache,
             icon: ZapIcon,
             color: 'purple'
-        }
+
     ];
 
     const handlePreload = async () => {
         try {
+
             await preloadData(
                 'players',
                 'player-preload',
                 () => mockAPIFunctions.fetchPlayerStats('preload'),
                 { tags: ['preload', 'demo'] }
             );
-        } catch (error) {
-        }
-    };
-
-    const getStatusColor = (cache: any) => {
-        if (cache.isLoading) return 'text-yellow-400';
-        if (cache.isError) return 'text-red-400';
-        if (cache.isStale) return 'text-orange-400';
-        return 'text-green-400';
-    };
-
-    const getStatusIcon = (cache: any) => {
-        if (cache.isLoading) return '⏳';
-        if (cache.isError) return '❌';
-        if (cache.isStale) return '⚠️';
-        return '✅';
-    };
-
-    const getCacheStatusText = (cache: any) => {
-        if (cache.isLoading) return 'Loading';
-        if (cache.isError) return 'Error';
-        if (cache.isStale) return 'Stale';
-        return 'Fresh';
-    };
-
-    return (
-        <div className="space-y-6">
-            <Widget title="🚀 Intelligent Cache System Demo" className="bg-gray-900/50">
-                <div className="space-y-6">
-                    {/* Cache Strategy Overview */}
-                    <div className="bg-blue-900/20 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
-                            Cache Strategy Overview
-                        </h3>
-                        <div className="grid md:grid-cols-3 gap-4 text-sm">
-                            <div className="bg-gray-800/50 rounded-lg p-3">
-                                <div className="font-medium text-blue-400 mb-2">Cache-First</div>
-                                <div className="text-gray-300">Player data, team info, static resources</div>
-                            </div>
-                            <div className="bg-gray-800/50 rounded-lg p-3">
-                                <div className="font-medium text-green-400 mb-2">Network-First</div>
-                                <div className="text-gray-300">Draft picks, Oracle predictions, live data</div>
-                            </div>
-                            <div className="bg-gray-800/50 rounded-lg p-3">
-                                <div className="font-medium text-purple-400 mb-2">Stale-While-Revalidate</div>
-                                <div className="text-gray-300">User preferences, profile data</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Interactive Demos */}
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
-                            Interactive Cache Demos
-                        </h3>
-                        <div className="grid md:grid-cols-3 gap-4">
-                            {demos.map((demo: any) => {
-                                const isActive = selectedDemo === demo.id;
-                                const cache = demo.cache;
-
-                                return (
-                                    <motion.div
-                                        key={demo.id}
-                                        className={`p-4 rounded-lg border-2 transition-colors cursor-pointer ${
+        
+    `p-4 rounded-lg border-2 transition-colors cursor-pointer ${
                                             isActive 
                                                 ? `border-${demo.color}-500 bg-${demo.color}-900/20` 
                                                 : 'border-gray-600 bg-gray-700/50 hover:border-gray-500'
@@ -194,19 +134,19 @@ const CacheIntegrationDemo: React.FC = () => {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        <div className="flex items-center space-x-3 mb-3">
+                                        <div className="flex items-center space-x-3 mb-3 sm:px-4 md:px-6 lg:px-8">
                                             <demo.icon className={`w-6 h-6 text-${demo.color}-400`} />
-                                            <span className="font-medium text-white">{demo.name}</span>
+                                            <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{demo.name}</span>
                                         </div>
                                         
-                                        <div className="text-sm text-gray-400 mb-3">
+                                        <div className="text-sm text-gray-400 mb-3 sm:px-4 md:px-6 lg:px-8">
                                             {demo.description}
                                         </div>
 
                                         {/* Cache Status */}
-                                        <div className="space-y-2">
-                                            <div className="flex items-center justify-between text-xs">
-                                                <span className="text-gray-400">Status:</span>
+                                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Status:</span>
                                                 <span className={`flex items-center space-x-1 ${getStatusColor(cache)}`}>
                                                     <span>{getStatusIcon(cache)}</span>
                                                     <span>{getCacheStatusText(cache)}</span>
@@ -214,17 +154,17 @@ const CacheIntegrationDemo: React.FC = () => {
                                             </div>
                                             
                                             {Boolean(cache.lastUpdated) && (
-                                                <div className="flex items-center justify-between text-xs">
-                                                    <span className="text-gray-400">Last Updated:</span>
-                                                    <span className="text-gray-300">
+                                                <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Last Updated:</span>
+                                                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">
                                                         {cache.lastUpdated ? new Date(cache.lastUpdated).toLocaleTimeString() : 'Never'}
                                                     </span>
                                                 </div>
                                             )}
 
                                             {demo.id === 'draft' && 'isOnline' in cache && (
-                                                <div className="flex items-center justify-between text-xs">
-                                                    <span className="text-gray-400">Network:</span>
+                                                <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Network:</span>
                                                     <span className={`flex items-center space-x-1 ${
                                                         cache.isOnline ? 'text-green-400' : 'text-red-400'
                                                     }`}>
@@ -236,24 +176,24 @@ const CacheIntegrationDemo: React.FC = () => {
                                         </div>
 
                                         {/* Action Buttons */}
-                                        <div className="mt-3 space-y-2">
+                                        <div className="mt-3 space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             <button
-                                                onClick={(e: any) => {
+                                                onClick={(e: any) = aria-label="Action button"> {
                                                     e.stopPropagation();
                                                     cache.refetch();
                                                 }}
                                                 disabled={cache.isFetching}
-                                                className="w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white text-xs rounded transition-colors"
+                                                className="w-full px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white text-xs rounded transition-colors sm:px-4 md:px-6 lg:px-8"
                                             >
                                                 {cache.isFetching ? 'Refreshing...' : 'Refresh'}
                                             </button>
                                             
                                             <button
-                                                onClick={(e: any) => {
+                                                onClick={(e: any) = aria-label="Action button"> {
                                                     e.stopPropagation();
                                                     cache.invalidate();
                                                 }}
-                                                className="w-full px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition-colors"
+                                                className="w-full px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition-colors sm:px-4 md:px-6 lg:px-8"
                                             >
                                                 Invalidate
                                             </button>
@@ -269,12 +209,12 @@ const CacheIntegrationDemo: React.FC = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="bg-gray-800/30 rounded-lg p-4"
+                            className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <h3 className="text-lg font-semibold text-white mb-4">
+                            <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                                 Cached Data Preview
                             </h3>
-                            <pre className="bg-black/50 rounded-lg p-4 text-sm text-gray-300 overflow-auto">
+                            <pre className="bg-black/50 rounded-lg p-4 text-sm text-gray-300 overflow-auto sm:px-4 md:px-6 lg:px-8">
                                 {JSON.stringify(
                                     demos.find((d: any) => d.id === selectedDemo)?.cache.data,
                                     null,
@@ -285,39 +225,39 @@ const CacheIntegrationDemo: React.FC = () => {
                     )}
 
                     {/* Cache Operations */}
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
+                    <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             Advanced Cache Operations
                         </h3>
                         <div className="grid md:grid-cols-2 gap-4">
                             <button
                                 onClick={handlePreload}
-                                className="flex items-center justify-center space-x-2 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
-                            >
-                                <DatabaseIcon className="w-5 h-5" />
+                                className="flex items-center justify-center space-x-2 p-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
+                                <DatabaseIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Preload Data</span>
                             </button>
                             
                             <button
-                                onClick={() => {
+                                onClick={() = aria-label="Action button"> {
                                     // Force all demos to refresh
                                     playerCache.refetch();
                                     draftCache.refetch();
                                     if (selectedDemo === 'oracle') {
                                         oracleCache.refetch();
-                                    }
+
                                 }}
-                                className="flex items-center justify-center space-x-2 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                                className="flex items-center justify-center space-x-2 p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                             >
-                                <CheckCircleIcon className="w-5 h-5" />
+                                <CheckCircleIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Refresh All</span>
                             </button>
                         </div>
                     </div>
 
                     {/* Benefits Summary */}
-                    <div className="bg-green-900/20 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
+                    <div className="bg-green-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             ✅ Intelligent Caching Benefits
                         </h3>
                         <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-300">
@@ -339,4 +279,10 @@ const CacheIntegrationDemo: React.FC = () => {
     );
 };
 
-export default CacheIntegrationDemo;
+const CacheIntegrationDemoWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <CacheIntegrationDemo {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(CacheIntegrationDemoWithErrorBoundary);

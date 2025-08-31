@@ -1,7 +1,7 @@
 
 
-
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { Team, DraftPick, Player } from '../../types';
 import { players } from '../../data/players';
@@ -15,6 +15,7 @@ interface TeamColumnProps {
   draftFormat: 'SNAKE' | 'AUCTION';
   isMyTeam?: boolean;
   isOnTheClock?: boolean;
+
 }
 
 const positionColor: Record<string, string> = {
@@ -26,14 +27,12 @@ const positionColor: Record<string, string> = {
     K: 'bg-yellow-500/70'
 };
 
-const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }: any) => {
-
-  const getSnakePickDisplay = (pick: DraftPick) => {
+const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }) => {
+    const getSnakePickDisplay = (pick: DraftPick) => {
     return `${pick.round}.${pick.pickInRound}`;
-  }
-  
-  const displayItems = draftFormat === 'AUCTION'
-    ? team.roster.map((player, index) => {
+    const displayItems = draftFormat === 'AUCTION'
+    ? team.roster.map((player, index) 
+} {
         const pick = picks.find((p: any) => p.playerId === player.id);
         return {
             key: player.id,
@@ -51,7 +50,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
             price: undefined,
             isCurrent: pick.overall === currentPick,
             display: getSnakePickDisplay(pick)
-        }
+
     });
 
   const columnClasses = [
@@ -76,10 +75,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
         return (
           <WrapperComponent
             key={item.key}
-            onClick={() => item.player && onPlayerSelect(item.player)}
-            {...{
-                layout: true,
-                initial: { opacity: 0, y: -10 },
+            onClick={() => item.player && onPlayerSelect(item.player)},
                 animate: { opacity: 1, y: 0 },
                 exit: { opacity: 0 },
                 transition: { duration: 0.3 },
@@ -92,7 +88,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
           >
             {item.player ? (
               <div className="flex items-center gap-1 sm:gap-1.5 w-full px-1 sm:px-1.5 overflow-hidden">
-                <span className="truncate flex-grow text-left text-shadow-sm">{item.player.name}</span>
+                <span className="truncate flex-grow text-left text-shadow-sm sm:px-4 md:px-6 lg:px-8">{item.player.name}</span>
                  {draftFormat === 'AUCTION' && item.price && (
                     <span className="font-bold text-yellow-300/90 text-[9px] sm:text-xs">${item.price}</span>
                 )}
@@ -108,4 +104,10 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
   );
 };
 
-export default TeamColumn;
+const TeamColumnWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TeamColumn {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TeamColumnWithErrorBoundary);

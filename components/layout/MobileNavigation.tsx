@@ -3,7 +3,8 @@
  * Provides accessible mobile navigation with proper touch targets
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CloseIcon } from '../icons/CloseIcon';
@@ -25,9 +26,11 @@ interface MobileNavItem {
   view: View;
   badge?: number;
   disabled?: boolean;
+
 }
 
 const MobileNavigation: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const { isMobileNavOpen } = state;
   const { containerRef } = useFocusTrap(isMobileNavOpen);
@@ -80,7 +83,7 @@ const MobileNavigation: React.FC = () => {
       label: 'Commissioner Tools',
       icon: <SettingsIcon />,
       view: 'COMMISSIONER_TOOLS'
-    }
+
   ];
 
   const handleNavItemClick = (view: View) => {
@@ -91,7 +94,7 @@ const MobileNavigation: React.FC = () => {
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       dispatch({ type: 'TOGGLE_MOBILE_NAV' });
-    }
+
   };
 
   React.useEffect(() => {
@@ -100,7 +103,6 @@ const MobileNavigation: React.FC = () => {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-    }
 
     // Cleanup on unmount
     return () => {
@@ -124,18 +126,18 @@ const MobileNavigation: React.FC = () => {
           if (document.activeElement === firstElement) {
             e.preventDefault();
             lastElement?.focus();
-          }
+
         } else if (document.activeElement === lastElement) {
           e.preventDefault();
           firstElement?.focus();
-        }
-      }
+
+
     };
 
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         dispatch({ type: 'TOGGLE_MOBILE_NAV' });
-      }
+
     };
 
     document.addEventListener('keydown', handleTabKey);
@@ -154,7 +156,7 @@ const MobileNavigation: React.FC = () => {
         <motion.dialog
           ref={containerRef as React.RefObject<HTMLDialogElement>}
           open
-          className="mobile-nav fixed inset-0 z-50 flex"
+          className="mobile-nav fixed inset-0 z-50 flex sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -163,11 +165,11 @@ const MobileNavigation: React.FC = () => {
           aria-label="Mobile Navigation"
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8" />
           
           {/* Navigation Panel */}
           <motion.div
-            className="relative ml-auto h-full w-80 max-w-[85vw] bg-slate-900/95 backdrop-blur-xl border-l border-white/10 shadow-2xl"
+            className="relative ml-auto h-full w-80 max-w-[85vw] bg-slate-900/95 backdrop-blur-xl border-l border-white/10 shadow-2xl sm:px-4 md:px-6 lg:px-8"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -179,36 +181,36 @@ const MobileNavigation: React.FC = () => {
             }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between p-6 border-b border-white/10 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <LazyImage 
                   src="/favicon.svg" 
                   alt="Astral Draft" 
-                  className="h-8 w-8"
+                  className="h-8 w-8 sm:px-4 md:px-6 lg:px-8"
                   loading="eager"
                 />
-                <h2 className="text-xl font-bold text-white font-display">
+                <h2 className="text-xl font-bold text-white font-display sm:px-4 md:px-6 lg:px-8">
                   ASTRAL DRAFT
                 </h2>
               </div>
               <button
                 onClick={() => dispatch({ type: 'TOGGLE_MOBILE_NAV' })}
-                className="mobile-touch-target flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                className="mobile-touch-target flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors sm:px-4 md:px-6 lg:px-8"
                 aria-label="Close navigation"
               >
-                <CloseIcon className="w-5 h-5 text-white" />
+                <CloseIcon className="w-5 h-5 text-white sm:px-4 md:px-6 lg:px-8" />
               </button>
             </div>
 
             {/* User Info */}
-            <div className="p-6 border-b border-white/10">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg">
+            <div className="p-6 border-b border-white/10 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg sm:px-4 md:px-6 lg:px-8">
                   {(state.user?.name || 'G').charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">{state.user?.name || 'Guest'}</h3>
-                  <p className="text-white/60 text-sm">
+                  <h3 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{state.user?.name || 'Guest'}</h3>
+                  <p className="text-white/60 text-sm sm:px-4 md:px-6 lg:px-8">
                     {state.leagues.filter((l: any) => l.members.some((m: any) => m.id === state.user?.id)).length} leagues
                   </p>
                 </div>
@@ -216,8 +218,8 @@ const MobileNavigation: React.FC = () => {
             </div>
 
             {/* Navigation Items */}
-            <nav className="flex-1 overflow-y-auto py-4" role="navigation">
-              <ul className="space-y-2 px-4">
+            <nav className="flex-1 overflow-y-auto py-4 sm:px-4 md:px-6 lg:px-8" role="navigation">
+              <ul className="space-y-2 px-4 sm:px-4 md:px-6 lg:px-8">
                 {navigationItems.map((item: any) => (
                   <li key={item.id}>
                     <button
@@ -228,27 +230,27 @@ const MobileNavigation: React.FC = () => {
                         ${state.currentView === item.view 
                           ? 'bg-accent-500/20 text-accent-400 border border-accent-500/30' 
                           : 'text-white/80 hover:text-white hover:bg-white/10'
-                        }
+
                         ${item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
                         focus:outline-none focus:ring-2 focus:ring-accent-500/50 focus:ring-offset-2 focus:ring-offset-slate-900
                       `}
                       aria-current={state.currentView === item.view ? 'page' : undefined}
                     >
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                         <div className={`
                           w-6 h-6 transition-colors duration-200
                           ${state.currentView === item.view ? 'text-accent-400' : 'text-white/60 group-hover:text-white'}
                         `}>
                           {item.icon}
                         </div>
-                        <span className="font-medium text-base">
+                        <span className="font-medium text-base sm:px-4 md:px-6 lg:px-8">
                           {item.label}
                         </span>
                       </div>
                       
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {Boolean(item.badge && item.badge > 0) && (
-                          <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
+                          <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center sm:px-4 md:px-6 lg:px-8">
                             {item.badge && item.badge > 99 ? '99+' : item.badge}
                           </span>
                         )}
@@ -257,7 +259,7 @@ const MobileNavigation: React.FC = () => {
                           ${state.currentView === item.view 
                             ? 'text-accent-400 transform rotate-90' 
                             : 'text-white/40 group-hover:text-white/60 group-hover:transform group-hover:translate-x-1'
-                          }
+
                         `} />
                       </div>
                     </button>
@@ -267,10 +269,10 @@ const MobileNavigation: React.FC = () => {
             </nav>
 
             {/* Footer */}
-            <div className="p-6 border-t border-white/10">
-              <div className="text-center text-white/60 text-sm">
+            <div className="p-6 border-t border-white/10 sm:px-4 md:px-6 lg:px-8">
+              <div className="text-center text-white/60 text-sm sm:px-4 md:px-6 lg:px-8">
                 <p>Astral Draft v2.0</p>
-                <p className="mt-1">Fantasy Football Reimagined</p>
+                <p className="mt-1 sm:px-4 md:px-6 lg:px-8">Fantasy Football Reimagined</p>
               </div>
             </div>
           </motion.div>
@@ -280,4 +282,10 @@ const MobileNavigation: React.FC = () => {
   );
 };
 
-export default MobileNavigation;
+const MobileNavigationWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileNavigation {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileNavigationWithErrorBoundary);

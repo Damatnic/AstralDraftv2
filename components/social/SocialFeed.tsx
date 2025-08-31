@@ -3,7 +3,8 @@
  * Enhanced activity stream with reactions, comments, and community interactions
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Player, Team, User, League } from '../../types';
@@ -50,7 +51,6 @@ export interface SocialFeedItem {
     visibility: 'public' | 'league_only' | 'friends_only';
     tags: string[];
     mentions: FeedMention[];
-}
 
 export type FeedItemType = 
     | 'trade_announcement'
@@ -70,6 +70,8 @@ export type FeedItemType =
     | 'news_share'
     | 'league_update';
 
+}
+
 export interface FeedContent {
     text?: string;
     media?: FeedMedia[];
@@ -77,6 +79,7 @@ export interface FeedContent {
     poll?: FeedPoll;
     tradeProposal?: any;
     achievement?: any;
+
 }
 
 export interface FeedMedia {
@@ -86,6 +89,7 @@ export interface FeedMedia {
     thumbnail?: string;
     caption?: string;
     metadata?: any;
+
 }
 
 export interface FeedPoll {
@@ -95,6 +99,7 @@ export interface FeedPoll {
     endsAt: Date;
     allowMultiple: boolean;
     isAnonymous: boolean;
+
 }
 
 export interface FeedPollOption {
@@ -102,6 +107,7 @@ export interface FeedPollOption {
     text: string;
     votes: number;
     voters: string[]; // User IDs
+
 }
 
 export interface FeedReaction {
@@ -110,6 +116,7 @@ export interface FeedReaction {
     userName: string;
     emoji: string;
     timestamp: Date;
+
 }
 
 export interface FeedComment {
@@ -123,6 +130,7 @@ export interface FeedComment {
     replies?: FeedComment[];
     isEdited: boolean;
     isPinned: boolean;
+
 }
 
 export interface FeedMention {
@@ -131,6 +139,7 @@ export interface FeedMention {
     type: 'user' | 'team';
     position: number;
     length: number;
+
 }
 
 export interface SocialFeedFilter {
@@ -139,6 +148,7 @@ export interface SocialFeedFilter {
     timeRange: 'today' | 'week' | 'month' | 'all';
     sortBy: 'latest' | 'popular' | 'trending';
     showPinnedOnly: boolean;
+
 }
 
 interface SocialFeedProps {
@@ -152,7 +162,6 @@ interface SocialFeedProps {
     onVote: (pollId: string, optionId: string) => void;
     onFilter: (filter: SocialFeedFilter) => void;
     className?: string;
-}
 
 const SocialFeed: React.FC<SocialFeedProps> = ({
     feedItems,
@@ -165,7 +174,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     onVote,
     onFilter,
     className = ''
-}: any) => {
+}) => {
     const [filter, setFilter] = React.useState<SocialFeedFilter>({
         types: [],
         users: [],
@@ -185,12 +194,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
         // Type filter
         if (filter.types.length > 0) {
             filtered = filtered.filter((item: any) => filter.types.includes(item.type));
-        }
 
         // User filter
         if (filter.users.length > 0) {
             filtered = filtered.filter((item: any) => filter.users.includes(item.userId));
-        }
 
         // Time range filter
         const now = new Date();
@@ -203,12 +210,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
 
         if (filter.timeRange !== 'all') {
             filtered = filtered.filter((item: any) => item.timestamp >= timeFilters[filter.timeRange]);
-        }
 
         // Pinned filter
         if (filter.showPinnedOnly) {
             filtered = filtered.filter((item: any) => item.isPinned);
-        }
 
         // Sort
         switch (filter.sortBy) {
@@ -228,14 +233,12 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 break;
             default: // latest
                 filtered.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-        }
 
         // Always show pinned items first (unless pinned-only filter is active)
         if (!filter.showPinnedOnly) {
             const pinned = filtered.filter((item: any) => item.isPinned);
             const unpinned = filtered.filter((item: any) => !item.isPinned);
             filtered = [...pinned, ...unpinned];
-        }
 
         return filtered;
     }, [feedItems, filter]);
@@ -244,22 +247,22 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
         switch (type) {
             case 'trade_announcement':
             case 'trade_request':
-                return <ArrowRightIcon className="w-4 h-4 text-blue-400" />;
+                return <ArrowRightIcon className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'achievement':
             case 'milestone':
-                return <TrophyIcon className="w-4 h-4 text-yellow-400" />;
+                return <TrophyIcon className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'trash_talk':
-                return <FlameIcon className="w-4 h-4 text-red-400" />;
+                return <FlameIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'prediction':
             case 'analysis':
-                return <TrendingUpIcon className="w-4 h-4 text-purple-400" />;
+                return <TrendingUpIcon className="w-4 h-4 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'celebration':
-                return <TrophyIcon className="w-4 h-4 text-green-400" />;
+                return <TrophyIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'poll':
-                return <UsersIcon className="w-4 h-4 text-orange-400" />;
+                return <UsersIcon className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
-                return <MessageCircleIcon className="w-4 h-4 text-gray-400" />;
-        }
+                return <MessageCircleIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const getItemTypeColor = (type: FeedItemType) => {
@@ -281,7 +284,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 return 'text-orange-400 bg-orange-500/20';
             default:
                 return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     const formatTimestamp = (date: Date) => {
@@ -304,7 +307,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
             newExpanded.delete(itemId);
         } else {
             newExpanded.add(itemId);
-        }
+
         setExpandedComments(newExpanded);
     };
 
@@ -323,9 +326,9 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
         const isPollEnded = poll.endsAt < new Date();
 
         return (
-            <div className="mt-3 p-4 bg-gray-500/10 rounded-lg">
-                <h4 className="font-medium text-[var(--text-primary)] mb-3">{poll.question}</h4>
-                <div className="space-y-2">
+            <div className="mt-3 p-4 bg-gray-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                <h4 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">{poll.question}</h4>
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {poll.options.map((option: any) => {
                         const percentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
                         const userVoted = option.voters.includes(currentUser.id);
@@ -334,7 +337,6 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                             <button
                                 key={option.id}
                                 onClick={() => !hasVoted && !isPollEnded && onVote(poll.id, option.id)}
-                                disabled={hasVoted || isPollEnded}
                                 className={`w-full p-3 rounded border text-left transition-colors ${
                                     userVoted 
                                         ? 'border-blue-400 bg-blue-500/20' 
@@ -343,14 +345,14 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                             : 'border-[var(--panel-border)] hover:border-blue-400/50 hover:bg-blue-500/10'
                                 }`}
                             >
-                                <div className="flex items-center justify-between">
-                                    <span className="text-[var(--text-primary)]">{option.text}</span>
-                                    <span className="text-sm text-[var(--text-secondary)]">
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{option.text}</span>
+                                    <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {option.votes} ({percentage.toFixed(0)}%)
                                     </span>
                                 </div>
                                 {(hasVoted || isPollEnded) && (
-                                    <div className="mt-2 h-2 bg-gray-500/20 rounded overflow-hidden">
+                                    <div className="mt-2 h-2 bg-gray-500/20 rounded overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${percentage}%` }}
@@ -362,7 +364,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                         );
                     })}
                 </div>
-                <div className="flex items-center justify-between mt-3 text-sm text-[var(--text-secondary)]">
+                <div className="flex items-center justify-between mt-3 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                     <span>{totalVotes} votes</span>
                     <span>Ends {formatTimestamp(poll.endsAt)}</span>
                 </div>
@@ -383,70 +385,70 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 } ${item.isHighlighted ? 'ring-2 ring-blue-400/30' : ''}`}
             >
                 {/* Header */}
-                <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-start gap-3">
+                <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                         <img
                             src={item.userAvatar || '/default-avatar.png'}
                             alt={item.userName}
-                            className="w-10 h-10 rounded-full"
+                            className="w-10 h-10 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
-                        <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                                <span className="font-medium text-[var(--text-primary)]">
+                        <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     {item.userName}
                                 </span>
                                 {item.teamName && (
-                                    <span className="text-sm text-[var(--text-secondary)]">
+                                    <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         • {item.teamName}
                                     </span>
                                 )}
                                 <span className={`px-2 py-1 rounded text-xs ${getItemTypeColor(item.type)}`}>
                                     {getItemTypeIcon(item.type)}
                                 </span>
-                                {item.isPinned && <PinIcon className="w-4 h-4 text-yellow-400" />}
+                                {item.isPinned && <PinIcon className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />}
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+                            <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 <span>{formatTimestamp(item.timestamp)}</span>
                                 <span>•</span>
-                                <div className="flex items-center gap-1">
-                                    <EyeIcon className="w-3 h-3" />
+                                <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                    <EyeIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                     {item.views}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1">
-                        <MoreHorizontalIcon className="w-4 h-4" />
+                    <button className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                        <MoreHorizontalIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="mb-4">
+                <div className="mb-4 sm:px-4 md:px-6 lg:px-8">
                     {item.content.text && (
-                        <p className="text-[var(--text-primary)] mb-3 whitespace-pre-wrap">
+                        <p className="text-[var(--text-primary)] mb-3 whitespace-pre-wrap sm:px-4 md:px-6 lg:px-8">
                             {item.content.text}
                         </p>
                     )}
 
                     {/* Media */}
                     {item.content.media && item.content.media.length > 0 && (
-                        <div className="grid grid-cols-2 gap-2 mb-3">
+                        <div className="grid grid-cols-2 gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             {item.content.media.slice(0, 4).map((media: any) => (
-                                <div key={media.id} className="relative">
+                                <div key={media.id} className="relative sm:px-4 md:px-6 lg:px-8">
                                     {media.type === 'image' && (
                                         <img
                                             src={media.url}
                                             alt={media.caption}
-                                            className="w-full h-32 object-cover rounded"
+                                            className="w-full h-32 object-cover rounded sm:px-4 md:px-6 lg:px-8"
                                         />
                                     )}
                                     {media.type === 'video' && (
-                                        <div className="w-full h-32 bg-gray-500/20 rounded flex items-center justify-center">
-                                            <PlayIcon className="w-8 h-8 text-[var(--text-secondary)]" />
+                                        <div className="w-full h-32 bg-gray-500/20 rounded flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                                            <PlayIcon className="w-8 h-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                                         </div>
                                     )}
                                     {media.caption && (
-                                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 rounded-b">
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 rounded-b sm:px-4 md:px-6 lg:px-8">
                                             {media.caption}
                                         </div>
                                     )}
@@ -460,10 +462,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-3 border-t border-[var(--panel-border)]">
-                    <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between pt-3 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                         {/* Reactions */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             {['👍', '❤️', '😂', '🔥', '🤔'].map((emoji: any) => {
                                 const count = item.reactions.filter((r: any) => r.emoji === emoji).length;
                                 const userReacted = item.reactions.some((r: any) => r.emoji === emoji && r.userId === currentUser.id);
@@ -471,15 +473,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                 return (
                                     <button
                                         key={emoji}
-                                        onClick={() => onReaction(item.id, emoji)}
-                                        className={`flex items-center gap-1 px-2 py-1 rounded text-sm transition-colors ${
-                                            userReacted 
-                                                ? 'bg-blue-500/20 text-blue-400' 
-                                                : 'hover:bg-white/10 text-[var(--text-secondary)]'
-                                        }`}
+                                        onClick={() => onReaction(item.id, emoji)}`}
                                     >
                                         <span>{emoji}</span>
-                                        {count > 0 && <span className="text-xs">{count}</span>}
+                                        {count > 0 && <span className="text-xs sm:px-4 md:px-6 lg:px-8">{count}</span>}
                                     </button>
                                 );
                             })}
@@ -488,28 +485,25 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                         {/* Comment */}
                         <button
                             onClick={() => toggleComments(item.id)}
-                            className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                         >
-                            <MessageCircleIcon className="w-4 h-4" />
+                            <MessageCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             {item.comments.length}
                         </button>
 
                         {/* Share */}
                         <button
                             onClick={() => onShare(item.id)}
-                            className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                         >
-                            <ShareIcon className="w-4 h-4" />
+                            <ShareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             {item.shares}
                         </button>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button
                             onClick={() => onPin(item.id)}
-                            className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] p-1"
                         >
-                            <BookmarkIcon className="w-4 h-4" />
+                            <BookmarkIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         </button>
                     </div>
                 </div>
@@ -521,28 +515,27 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-4 pt-4 border-t border-[var(--panel-border)]"
+                            className="mt-4 pt-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Comment Input */}
-                            <div className="flex gap-3 mb-4">
+                            <div className="flex gap-3 mb-4 sm:px-4 md:px-6 lg:px-8">
                                 <img
                                     src={currentUser.avatar || '/default-avatar.png'}
                                     alt={currentUser.name || 'User'}
-                                    className="w-8 h-8 rounded-full flex-shrink-0"
+                                    className="w-8 h-8 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                                 />
-                                <div className="flex-1">
+                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                     <textarea
                                         value={newComment[item.id] || ''}
-                                        onChange={(e: any) => setNewComment(prev => ({ ...prev, [item.id]: e.target.value }))}
+                                        onChange={(e: any) => setNewComment(prev => ({ ...prev, [item.id]: e.target.value }}
                                         placeholder="Write a comment..."
-                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none"
+                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none sm:px-4 md:px-6 lg:px-8"
                                         rows={2}
                                     />
-                                    <div className="flex justify-end mt-2">
+                                    <div className="flex justify-end mt-2 sm:px-4 md:px-6 lg:px-8">
                                         <button
                                             onClick={() => handleComment(item.id)}
-                                            disabled={!newComment[item.id]?.trim()}
-                                            className="px-3 py-1 bg-blue-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-3 py-1 bg-blue-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed sm:px-4 md:px-6 lg:px-8"
                                         >
                                             Comment
                                         </button>
@@ -551,44 +544,44 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                             </div>
 
                             {/* Comments List */}
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {item.comments.map((comment: any) => (
-                                    <div key={comment.id} className="flex gap-3">
+                                    <div key={comment.id} className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                                         <img
                                             src={comment.userAvatar || '/default-avatar.png'}
                                             alt={comment.userName}
-                                            className="w-8 h-8 rounded-full flex-shrink-0"
+                                            className="w-8 h-8 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                                         />
-                                        <div className="flex-1 min-w-0">
-                                            <div className="bg-gray-500/10 rounded-lg p-3">
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="font-medium text-[var(--text-primary)] text-sm">
+                                        <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="bg-gray-500/10 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="font-medium text-[var(--text-primary)] text-sm sm:px-4 md:px-6 lg:px-8">
                                                         {comment.userName}
                                                     </span>
-                                                    <span className="text-xs text-[var(--text-secondary)]">
+                                                    <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         {formatTimestamp(comment.timestamp)}
                                                     </span>
                                                     {comment.isEdited && (
-                                                        <span className="text-xs text-[var(--text-secondary)]">
+                                                        <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                             (edited)
                                                         </span>
                                                     )}
                                                 </div>
-                                                <p className="text-sm text-[var(--text-primary)]">
+                                                <p className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                     {comment.content}
                                                 </p>
                                             </div>
                                             
                                             {/* Comment reactions */}
-                                            <div className="flex items-center gap-2 mt-1">
-                                                <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                                            <div className="flex items-center gap-2 mt-1 sm:px-4 md:px-6 lg:px-8">
+                                                <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                     Like
                                                 </button>
-                                                <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+                                                <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                     Reply
                                                 </button>
                                                 {comment.reactions.length > 0 && (
-                                                    <span className="text-xs text-[var(--text-secondary)]">
+                                                    <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         {comment.reactions.length} reactions
                                                     </span>
                                                 )}
@@ -607,14 +600,13 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     return (
         <div className={`h-full flex flex-col bg-[var(--panel-bg)] ${className}`}>
             {/* Header */}
-            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)]">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-[var(--text-primary)]">Social Feed</h2>
+            <div className="flex-shrink-0 p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Social Feed</h2>
                     <button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="flex items-center gap-2 px-3 py-2 bg-gray-500/20 text-[var(--text-secondary)] rounded-lg hover:bg-gray-500/30 transition-colors text-sm"
                     >
-                        <FilterIcon className="w-4 h-4" />
+                        <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         Filters
                     </button>
                 </div>
@@ -626,17 +618,17 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-4 p-4 bg-gray-500/10 rounded-lg"
+                            className="mt-4 p-4 bg-gray-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8"
                         >
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                         Sort By
                                     </label>
                                     <select
                                         value={filter.sortBy}
-                                        onChange={(e: any) => setFilter(prev => ({ ...prev, sortBy: e.target.value as any }))}
-                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)]"
+                                        onChange={(e: any) => setFilter(prev => ({ ...prev, sortBy: e.target.value as any }}
+                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                     >
                                         <option value="latest">Latest</option>
                                         <option value="popular">Popular</option>
@@ -645,13 +637,13 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                         Time Range
                                     </label>
                                     <select
                                         value={filter.timeRange}
-                                        onChange={(e: any) => setFilter(prev => ({ ...prev, timeRange: e.target.value as any }))}
-                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)]"
+                                        onChange={(e: any) => setFilter(prev => ({ ...prev, timeRange: e.target.value as any }}
+                                        className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                     >
                                         <option value="all">All Time</option>
                                         <option value="today">Today</option>
@@ -661,17 +653,17 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2">
+                                    <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                         Options
                                     </label>
-                                    <label className="flex items-center gap-2">
+                                    <label className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                         <input
                                             type="checkbox"
                                             checked={filter.showPinnedOnly}
-                                            onChange={(e: any) => setFilter(prev => ({ ...prev, showPinnedOnly: e.target.checked }))}
-                                            className="rounded"
+                                            onChange={(e: any) => setFilter(prev => ({ ...prev, showPinnedOnly: e.target.checked }}
+                                            className="rounded sm:px-4 md:px-6 lg:px-8"
                                         />
-                                        <span className="text-sm text-[var(--text-primary)]">Pinned only</span>
+                                        <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Pinned only</span>
                                     </label>
                                 </div>
                             </div>
@@ -681,12 +673,12 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
             </div>
 
             {/* Feed */}
-            <div className="flex-1 overflow-y-auto p-4">
-                <div className="space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {processedFeedItems.length === 0 ? (
-                        <div className="text-center py-12 text-[var(--text-secondary)]">
-                            <MessageCircleIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                            <p className="text-lg font-medium mb-2">No posts found</p>
+                        <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                            <MessageCircleIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                            <p className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">No posts found</p>
                             <p>Try adjusting your filters or be the first to post!</p>
                         </div>
                     ) : (
@@ -698,4 +690,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     );
 };
 
-export default SocialFeed;
+const SocialFeedWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SocialFeed {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SocialFeedWithErrorBoundary);

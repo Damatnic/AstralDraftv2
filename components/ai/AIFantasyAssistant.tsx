@@ -3,7 +3,8 @@
  * Natural language AI assistant for fantasy football advice
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -14,6 +15,7 @@ interface ChatMessage {
   timestamp: Date;
   suggestions?: string[];
   data?: any;
+
 }
 
 interface AIResponse {
@@ -22,9 +24,9 @@ interface AIResponse {
   suggestions: string[];
   actionable: boolean;
   data?: any;
-}
 
 const AIFantasyAssistant: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { state } = useAppState();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -42,7 +44,7 @@ const AIFantasyAssistant: React.FC = () => {
   useEffect(() => {
     if (isVisible && inputRef.current) {
       inputRef.current.focus();
-    }
+
   }, [isVisible]);
 
   // Initialize with welcome message
@@ -59,17 +61,19 @@ const AIFantasyAssistant: React.FC = () => {
           'Find waiver wire targets',
           'Help me with a trade',
           'Injury impact analysis'
-        ]
+
       };
       setMessages([welcomeMessage]);
-    }
+
   }, [currentUser?.name, messages.length]);
 
   const handleSendMessage = async () => {
+    try {
     if (!inputMessage.trim()) return;
 
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()}`,
+      id: `user-${Date.now()
+    }`,
       type: 'user',
       content: inputMessage.trim(),
       timestamp: new Date()
@@ -96,9 +100,7 @@ const AIFantasyAssistant: React.FC = () => {
         setMessages(prev => [...prev, assistantMessage]);
         setIsTyping(false);
       }, 1500);
-    } catch (error) {
-      const errorMessage: ChatMessage = {
-        id: `error-${Date.now()}`,
+    `,
         type: 'assistant',
         content: 'Sorry, I encountered an error. Please try again or rephrase your question.',
         timestamp: new Date(),
@@ -106,7 +108,7 @@ const AIFantasyAssistant: React.FC = () => {
       };
       setMessages(prev => [...prev, errorMessage]);
       setIsTyping(false);
-    }
+
   };
 
   const getAIResponse = async (message: string): Promise<AIResponse> => {
@@ -126,7 +128,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // Start/sit decisions
     if (lowerMessage.includes('start') || lowerMessage.includes('sit') || lowerMessage.includes('lineup')) {
@@ -141,7 +142,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // Waiver wire help
     if (lowerMessage.includes('waiver') || lowerMessage.includes('pickup') || lowerMessage.includes('add')) {
@@ -156,7 +156,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // Team analysis
     if (lowerMessage.includes('analyze my team') || lowerMessage.includes('team analysis')) {
@@ -171,7 +170,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // Injury analysis
     if (lowerMessage.includes('injury') || lowerMessage.includes('hurt') || lowerMessage.includes('injured')) {
@@ -186,7 +184,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // General strategy
     if (lowerMessage.includes('strategy') || lowerMessage.includes('advice') || lowerMessage.includes('help')) {
@@ -201,7 +198,6 @@ const AIFantasyAssistant: React.FC = () => {
         ],
         actionable: true
       };
-    }
 
     // Default response for unclear queries
     return {
@@ -227,7 +223,7 @@ const AIFantasyAssistant: React.FC = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
-    }
+
   };
 
   return (
@@ -235,11 +231,10 @@ const AIFantasyAssistant: React.FC = () => {
       {/* Toggle Button */}
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white p-4 rounded-full shadow-xl transition-all duration-300 transform hover:scale-110"
         title="AI Fantasy Assistant"
       >
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🤖</span>
+        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+          <span className="text-xl sm:px-4 md:px-6 lg:px-8">🤖</span>
           <span className="hidden sm:inline text-sm font-semibold">AI Assistant</span>
         </div>
       </button>
@@ -251,29 +246,28 @@ const AIFantasyAssistant: React.FC = () => {
             initial={{ opacity: 0, y: 100, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.9 }}
-            className="fixed bottom-20 right-4 z-50 w-96 h-96 bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl flex flex-col"
+            className="fixed bottom-20 right-4 z-50 w-96 h-96 bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl flex flex-col sm:px-4 md:px-6 lg:px-8"
           >
             {/* Header */}
-            <div className="p-4 border-b border-slate-600 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-lg">🤖</span>
+            <div className="p-4 border-b border-slate-600 flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-lg sm:px-4 md:px-6 lg:px-8">🤖</span>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">AI Fantasy Assistant</h3>
-                  <p className="text-xs text-slate-400">Powered by advanced AI</p>
+                  <h3 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">AI Fantasy Assistant</h3>
+                  <p className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Powered by advanced AI</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsVisible(false)}
-                className="text-slate-400 hover:text-white transition-colors"
               >
-                <span className="text-xl">×</span>
+                <span className="text-xl sm:px-4 md:px-6 lg:px-8">×</span>
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
               {messages.map((message: any) => (
                 <motion.div
                   key={message.id}
@@ -288,14 +282,13 @@ const AIFantasyAssistant: React.FC = () => {
                         : 'bg-slate-700 text-slate-300'
                     }`}
                   >
-                    <div className="text-sm whitespace-pre-line">{message.content}</div>
+                    <div className="text-sm whitespace-pre-line sm:px-4 md:px-6 lg:px-8">{message.content}</div>
                     {message.suggestions && (
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <div className="mt-3 flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                         {message.suggestions.map((suggestion: string, index: number) => (
                           <button
                             key={index}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            className="px-2 py-1 bg-slate-600 hover:bg-slate-500 text-xs rounded transition-colors"
                           >
                             {suggestion}
                           </button>
@@ -311,13 +304,13 @@ const AIFantasyAssistant: React.FC = () => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex justify-start"
+                  className="flex justify-start sm:px-4 md:px-6 lg:px-8"
                 >
-                  <div className="bg-slate-700 p-3 rounded-lg">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="bg-slate-700 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex space-x-1 sm:px-4 md:px-6 lg:px-8">
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8"></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                   </div>
                 </motion.div>
@@ -326,34 +319,32 @@ const AIFantasyAssistant: React.FC = () => {
             </div>
 
             {/* Input */}
-            <div className="p-4 border-t border-slate-600">
-              <div className="flex gap-2">
+            <div className="p-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                 <input
                   ref={inputRef}
                   type="text"
                   value={inputMessage}
                   onChange={(e: any) => setInputMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about fantasy football..."
-                  className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none"
+                  className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
                   disabled={isTyping}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
-                >
-                  <span className="text-sm">Send</span>
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
+                  <span className="text-sm sm:px-4 md:px-6 lg:px-8">Send</span>
                 </button>
               </div>
               
               {/* Quick Actions */}
-              <div className="flex gap-1 mt-2">
+              <div className="flex gap-1 mt-2 sm:px-4 md:px-6 lg:px-8">
                 {['Trade help', 'Start/sit', 'Waivers', 'Team analysis'].map((action: any) => (
                   <button
                     key={action}
                     onClick={() => handleSuggestionClick(action)}
-                    className="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs rounded transition-colors"
                   >
                     {action}
                   </button>
@@ -367,4 +358,10 @@ const AIFantasyAssistant: React.FC = () => {
   );
 };
 
-export default AIFantasyAssistant;
+const AIFantasyAssistantWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AIFantasyAssistant {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AIFantasyAssistantWithErrorBoundary);

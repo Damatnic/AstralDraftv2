@@ -3,7 +3,8 @@
  * Compact analytics view optimized for mobile devices with touch interactions
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, Team } from '../../types';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -25,6 +26,7 @@ interface MobileAnalyticsDashboardProps {
     leagueStats?: any;
     onRefresh?: () => Promise<void>;
     className?: string;
+
 }
 
 interface MetricCard {
@@ -36,12 +38,12 @@ interface MetricCard {
     color: string;
     icon: React.ReactNode;
     description?: string;
-}
 
 interface ChartData {
     label: string;
     value: number;
     color: string;
+
 }
 
 const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
@@ -50,7 +52,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     leagueStats,
     onRefresh,
     className = ''
-}: any) => {
+}) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeTab, setActiveTab] = React.useState<'overview' | 'performance' | 'trends' | 'roster'>('overview');
     const [selectedTimeframe, setSelectedTimeframe] = React.useState<'week' | 'month' | 'season'>('week');
@@ -66,7 +68,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             change: 8.2,
             trend: 'up',
             color: 'text-blue-400',
-            icon: <TrophyIcon className="w-5 h-5" />,
+            icon: <TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Season total fantasy points'
         },
         {
@@ -76,7 +78,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             change: -2.3,
             trend: 'down',
             color: 'text-green-400',
-            icon: <BarChart3Icon className="w-5 h-5" />,
+            icon: <BarChart3Icon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Average points per week'
         },
         {
@@ -85,7 +87,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             value: '3rd',
             trend: 'stable',
             color: 'text-purple-400',
-            icon: <UsersIcon className="w-5 h-5" />,
+            icon: <UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Current standings position'
         },
         {
@@ -95,9 +97,9 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             change: 12.5,
             trend: 'up',
             color: 'text-yellow-400',
-            icon: <ZapIcon className="w-5 h-5" />,
+            icon: <ZapIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Highest weekly score'
-        }
+
     ];
 
     const performanceData: ChartData[] = [
@@ -119,12 +121,20 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     ];
 
     const handleRefresh = async () => {
+    try {
+
         if (onRefresh) {
             await onRefresh();
-        } else {
+        
+    } catch (error) {
+      console.error('Error in handleRefresh:', error);
+
+    } catch (error) {
+        console.error(error);
+    }else {
             // Simulate refresh
             await new Promise(resolve => setTimeout(resolve, 1500));
-        }
+
     };
 
     const formatTrend = (trend?: 'up' | 'down' | 'stable', change?: number) => {
@@ -133,11 +143,11 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
         return (
             <div className={`flex items-center gap-1 ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
                 {trend === 'up' ? 
-                    <TrendingUpIcon className="w-3 h-3" /> : 
-                    <TrendingDownIcon className="w-3 h-3" />
-                }
+                    <TrendingUpIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" /> : 
+                    <TrendingDownIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
+
                 {change && Boolean(change) && (
-                    <span className="text-xs font-medium">
+                    <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">
                         {Math.abs(change).toFixed(1)}%
                     </span>
                 )}
@@ -153,27 +163,27 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                 key={metric.id}
                 layout
                 onClick={() => setExpandedCard(isExpanded ? null : metric.id)}
-                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors"
+                className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors sm:px-4 md:px-6 lg:px-8"
             >
-                <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2">
+                <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <div className={metric.color}>
                             {metric.icon}
                         </div>
-                        <span className="text-sm font-medium text-[var(--text-primary)]">
+                        <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                             {metric.title}
                         </span>
                     </div>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {formatTrend(metric.trend, metric.change)}
                         {metric.description && (
-                            <InfoIcon className="w-3 h-3 text-[var(--text-secondary)]" />
+                            <InfoIcon className="w-3 h-3 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         )}
                     </div>
                 </div>
                 
-                <div className="text-2xl font-bold text-[var(--text-primary)] mb-1">
+                <div className="text-2xl font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                     {metric.value}
                 </div>
                 
@@ -183,7 +193,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="text-sm text-[var(--text-secondary)] mt-2 pt-2 border-t border-[var(--panel-border)]"
+                            className="text-sm text-[var(--text-secondary)] mt-2 pt-2 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                         >
                             {metric.description}
                         </motion.div>
@@ -194,24 +204,24 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     };
 
     const renderPositionChart = () => (
-        <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4">
-            <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                <BarChart3Icon className="w-4 h-4" />
+        <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <BarChart3Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                 Position Performance
             </h3>
             
-            <div className="space-y-3">
+            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                 {performanceData.map((item, index) => {
                     const maxValue = Math.max(...performanceData.map((d: any) => d.value));
                     const percentage = (item.value / maxValue) * 100;
                     
                     return (
-                        <div key={item.label} className="flex items-center gap-3">
-                            <div className="w-8 text-sm font-medium text-[var(--text-primary)]">
+                        <div key={item.label} className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-8 text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {item.label}
                             </div>
-                            <div className="flex-1 relative">
-                                <div className="h-6 bg-gray-500/20 rounded overflow-hidden">
+                            <div className="flex-1 relative sm:px-4 md:px-6 lg:px-8">
+                                <div className="h-6 bg-gray-500/20 rounded overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${percentage}%` }}
@@ -219,7 +229,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                                         className={`h-full ${item.color}`}
                                     />
                                 </div>
-                                <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
+                                <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white sm:px-4 md:px-6 lg:px-8">
                                     {item.value}
                                 </div>
                             </div>
@@ -231,34 +241,34 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     );
 
     const renderRosterAnalysis = () => (
-        <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4">
-            <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                <UsersIcon className="w-4 h-4" />
+        <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                 Roster Strengths
             </h3>
             
-            <div className="space-y-2">
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {rosterStrengths.map((item: any) => (
-                    <div key={item.position} className="flex items-center justify-between p-2 rounded">
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium text-[var(--text-primary)]">
+                    <div key={item.position} className="flex items-center justify-between p-2 rounded sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {item.position}
                             </span>
                             {item.weakness && (
-                                <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">
+                                <span className="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs sm:px-4 md:px-6 lg:px-8">
                                     Weak
                                 </span>
                             )}
                         </div>
                         
-                        <div className="flex items-center gap-2">
-                            <div className="w-16 h-2 bg-gray-500/20 rounded overflow-hidden">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-16 h-2 bg-gray-500/20 rounded overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                 <div
                                     className={`h-full ${item.weakness ? 'bg-red-400' : 'bg-green-400'}`}
                                     style={{ width: `${item.strength}%` }}
                                 />
                             </div>
-                            <span className="text-xs text-[var(--text-secondary)] w-8">
+                            <span className="text-xs text-[var(--text-secondary)] w-8 sm:px-4 md:px-6 lg:px-8">
                                 {item.strength}
                             </span>
                         </div>
@@ -269,28 +279,28 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     );
 
     const renderTrendsView = () => (
-        <div className="space-y-4">
-            <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4">
-                <h3 className="font-medium text-[var(--text-primary)] mb-3">Weekly Trends</h3>
-                <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+            <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Weekly Trends</h3>
+                <div className="grid grid-cols-3 gap-4 text-center sm:px-4 md:px-6 lg:px-8">
                     <div>
-                        <div className="text-xs text-[var(--text-secondary)]">Last 3 Weeks</div>
-                        <div className="text-lg font-bold text-green-400">↗ +12%</div>
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Last 3 Weeks</div>
+                        <div className="text-lg font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">↗ +12%</div>
                     </div>
                     <div>
-                        <div className="text-xs text-[var(--text-secondary)]">Consistency</div>
-                        <div className="text-lg font-bold text-blue-400">85%</div>
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Consistency</div>
+                        <div className="text-lg font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">85%</div>
                     </div>
                     <div>
-                        <div className="text-xs text-[var(--text-secondary)]">Peak Week</div>
-                        <div className="text-lg font-bold text-yellow-400">Week 7</div>
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Peak Week</div>
+                        <div className="text-lg font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">Week 7</div>
                     </div>
                 </div>
             </div>
             
-            <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4">
-                <h3 className="font-medium text-[var(--text-primary)] mb-3">Matchup Difficulty</h3>
-                <div className="space-y-2">
+            <div className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">Matchup Difficulty</h3>
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {['Week 15', 'Week 16', 'Week 17'].map((week, index) => {
                         const getDifficultyColor = (idx: number) => {
                             if (idx === 0) return 'bg-green-400';
@@ -305,11 +315,11 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                         };
                         
                         return (
-                            <div key={week} className="flex items-center justify-between">
-                                <span className="text-sm text-[var(--text-primary)]">{week}</span>
-                                <div className="flex items-center gap-2">
+                            <div key={week} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{week}</span>
+                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <div className={`w-3 h-3 rounded-full ${getDifficultyColor(index)}`} />
-                                    <span className="text-xs text-[var(--text-secondary)]">
+                                    <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {getDifficultyLabel(index)}
                                     </span>
                                 </div>
@@ -323,20 +333,18 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
 
     if (!isMobile) {
         return null; // Desktop analytics should use the full component
-    }
 
     return (
         <div className={`h-full flex flex-col bg-[var(--app-bg)] ${className}`}>
             {/* Header */}
-            <div className="flex-shrink-0 bg-[var(--panel-bg)] border-b border-[var(--panel-border)] sticky top-0 z-10">
-                <div className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h1 className="text-xl font-bold text-[var(--text-primary)]">Analytics</h1>
-                        <div className="flex items-center gap-2">
+            <div className="flex-shrink-0 bg-[var(--panel-bg)] border-b border-[var(--panel-border)] sticky top-0 z-10 sm:px-4 md:px-6 lg:px-8">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                        <h1 className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Analytics</h1>
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <select
                                 value={selectedTimeframe}
                                 onChange={(e: any) => setSelectedTimeframe(e.target.value as any)}
-                                className="px-3 py-1 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-sm text-[var(--text-primary)]"
                             >
                                 <option value="week">This Week</option>
                                 <option value="month">This Month</option>
@@ -344,15 +352,14 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                             </select>
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
-                                className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                             >
-                                <FilterIcon className="w-4 h-4" />
+                                <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                         </div>
                     </div>
 
                     {/* Tab Navigation */}
-                    <div className="flex">
+                    <div className="flex sm:px-4 md:px-6 lg:px-8">
                         {[
                             { id: 'overview', label: 'Overview' },
                             { id: 'performance', label: 'Performance' },
@@ -361,12 +368,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                         ].map((tab: any) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as any)}
-                                className={`flex-1 py-2 text-sm font-medium border-b-2 transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'border-blue-400 text-blue-400'
-                                        : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                                }`}
+                                onClick={() => setActiveTab(tab.id as any)}`}
                             >
                                 {tab.label}
                             </button>
@@ -376,9 +378,9 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
             </div>
 
             {/* Content */}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden sm:px-4 md:px-6 lg:px-8">
                 <MobilePullToRefresh onRefresh={handleRefresh}>
-                    <div className="p-4">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeTab}
@@ -387,13 +389,13 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                                 exit={{ opacity: 0, x: -20 }}
                             >
                                 {activeTab === 'overview' && (
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                                         {overviewMetrics.map((metric: any) => renderMetricCard(metric))}
                                     </div>
                                 )}
 
                                 {activeTab === 'performance' && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {renderPositionChart()}
                                     </div>
                                 )}
@@ -401,7 +403,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
                                 {activeTab === 'trends' && renderTrendsView()}
 
                                 {activeTab === 'roster' && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {renderRosterAnalysis()}
                                     </div>
                                 )}
@@ -414,4 +416,10 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     );
 };
 
-export default MobileAnalyticsDashboard;
+const MobileAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileAnalyticsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileAnalyticsDashboardWithErrorBoundary);

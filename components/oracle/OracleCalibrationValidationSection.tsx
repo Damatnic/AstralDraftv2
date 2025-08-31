@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import type { HoldoutResult, TimeSeriesResult, BootstrapResult, CalibrationResult } from '../../types';
 import './OracleCalibrationValidationSection.css';
 
@@ -31,9 +32,10 @@ interface ValidationMethod {
   complexity: ComplexityLevel;
   computationalCost: ComplexityLevel;
   reliability: ComplexityLevel;
-}
 
 // Cross-Validation Interfaces
+}
+
 interface CrossValidationConfig {
   id: string;
   name: string;
@@ -49,7 +51,6 @@ interface CrossValidationConfig {
   description: string;
   formula: string;
   implementation: string;
-}
 
 interface CrossValidationResult {
   method: string;
@@ -67,7 +68,6 @@ interface CrossValidationResult {
     score: number;
     metrics: Record<string, number>;
   }[];
-}
 
 // Holdout Validation Interfaces
 interface HoldoutConfig {
@@ -84,9 +84,10 @@ interface HoldoutConfig {
   timeAware: boolean;
   description: string;
   implementation: string;
-}
 
 // Time Series Validation Interfaces
+}
+
 interface TimeSeriesValidationConfig {
   id: string;
   name: string;
@@ -103,7 +104,6 @@ interface TimeSeriesValidationConfig {
   advantages: string[];
   disadvantages: string[];
   useCases: string[];
-}
 
 // Bootstrap Resampling Configuration
 interface BootstrapConfig {
@@ -123,6 +123,7 @@ interface BootstrapConfig {
   advantages: string[];
   disadvantages: string[];
   useCases: string[];
+
 }
 
 interface TimeSeriesValidationResult {
@@ -143,7 +144,6 @@ interface TimeSeriesValidationResult {
     score: number;
     metrics: Record<string, number>;
   }[];
-}
 
 // ===== CALIBRATION METHOD INTERFACES =====
 
@@ -160,6 +160,7 @@ interface CalibrationMethod {
   interpretability: ComplexityLevel;
   scalability: ComplexityLevel;
   robustness: ComplexityLevel;
+
 }
 
 interface CalibrationConfig {
@@ -174,7 +175,6 @@ interface CalibrationConfig {
     weights?: number[];
     voting: VotingStrategy;
   };
-}
 
 // ===== PERFORMANCE METRICS INTERFACES =====
 
@@ -189,6 +189,7 @@ interface PerformanceMetric {
   higherIsBetter: boolean;
   useCases: string[];
   limitations: string[];
+
 }
 
 interface ClassificationMetrics {
@@ -207,7 +208,6 @@ interface ClassificationMetrics {
   balancedAccuracy: number;
   topKAccuracy?: number;
   confusionMatrix: number[][];
-}
 
 interface RegressionMetrics {
   mse: number;
@@ -223,6 +223,7 @@ interface RegressionMetrics {
   explainedVariance: number;
   huberLoss?: number;
   quantileLoss?: number;
+
 }
 
 interface CalibrationMetrics {
@@ -238,7 +239,6 @@ interface CalibrationMetrics {
   uncertainty: number;
   calibrationSlope: number;
   calibrationIntercept: number;
-}
 
 interface FantasyMetrics {
   pointsAccuracy: number;
@@ -253,6 +253,7 @@ interface FantasyMetrics {
   injuryAdjustedAccuracy: number;
   weatherAdjustedAccuracy: number;
   matchupAdjustedAccuracy: number;
+
 }
 
 interface ComprehensiveMetrics {
@@ -261,7 +262,6 @@ interface ComprehensiveMetrics {
   calibration: CalibrationMetrics;
   fantasy: FantasyMetrics;
   custom?: Record<string, number>;
-}
 
 // ===== EXPERIMENT AND EVALUATION INTERFACES =====
 
@@ -287,7 +287,6 @@ interface ValidationExperiment {
   startTime?: string;
   endTime?: string;
   duration?: number;
-}
 
 interface ExperimentResult {
   experimentId: string;
@@ -306,7 +305,6 @@ interface ExperimentResult {
     recommendations: string[];
     riskAssessment: string;
   };
-}
 
 interface ValidationReport {
   summary: {
@@ -338,7 +336,6 @@ interface ValidationReport {
     monitoringMetrics: string[];
     revalidationFrequency: string;
   };
-}
 
 // ===== DEMO AND INTERACTION INTERFACES =====
 
@@ -352,6 +349,7 @@ interface ValidationDemoConfig {
   targetType: TargetType;
   temporalData: boolean;
   realTimeMode: boolean;
+
 }
 
 interface ValidationDemoState {
@@ -367,7 +365,6 @@ interface ValidationDemoState {
     residualPlot?: any;
     featureImportance?: any;
   };
-}
 
 // ===== UTILITY INTERFACES =====
 
@@ -378,6 +375,7 @@ interface ValidationConfig {
   backend: 'sklearn' | 'custom' | 'distributed';
   cachePredictions: boolean;
   saveIntermediateResults: boolean;
+
 }
 
 interface ModelMetadata {
@@ -397,7 +395,6 @@ interface ModelMetadata {
     validation: number;
     test?: number;
   };
-}
 
 // ===== BIAS-VARIANCE ANALYSIS INTERFACES =====
 
@@ -411,6 +408,7 @@ interface BiasVarianceExperiment {
   expectedNoise: number;
   totalError: number;
   decompositionMethod: 'bootstrap' | 'analytical' | 'monte_carlo';
+
 }
 
 interface BiasVarianceResult {
@@ -434,7 +432,6 @@ interface BiasVarianceResult {
     r2: number;
     adjustedR2: number;
   };
-}
 
 interface BiasVarianceVisualization {
   complexityRange: number[];
@@ -445,6 +442,7 @@ interface BiasVarianceVisualization {
   underfittingRegion: [number, number];
   overfittingRegion: [number, number];
   sweetSpot: number;
+
 }
 
 interface ModelComplexityConfig {
@@ -458,7 +456,6 @@ interface ModelComplexityConfig {
   optimizationTarget: 'bias' | 'variance' | 'total_error' | 'generalization';
   regularization: boolean;
   crossValidation: boolean;
-}
 
 // ===== LEARNING CURVE ANALYSIS INTERFACES =====
 
@@ -473,6 +470,7 @@ interface LearningCurveExperiment {
   expectedConvergencePoint: number;
   dataEfficiency: 'low' | 'medium' | 'high';
   convergenceRate: 'slow' | 'medium' | 'fast';
+
 }
 
 interface LearningCurveResult {
@@ -487,7 +485,6 @@ interface LearningCurveResult {
   generalizationError: number;
   confidenceInterval: [number, number];
   isConverged: boolean;
-}
 
 interface LearningCurveVisualization {
   sampleSizes: number[];
@@ -509,7 +506,6 @@ interface LearningCurveVisualization {
     convergenceBehavior: string;
     recommendations: string[];
   };
-}
 
 interface DataSizeConfig {
   id: string;
@@ -521,6 +517,7 @@ interface DataSizeConfig {
   validationRatio: number;
   crossValidationFolds: number;
   randomState: number;
+
 }
 
 interface FantasyContext {
@@ -539,7 +536,6 @@ interface FantasyContext {
     totalPlayers: number;
     activeRosters: number;
   };
-}
 
 // Component placeholder for the main section
 const OracleCalibrationValidationSection: React.FC = () => {
@@ -654,7 +650,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       description: 'Double CV for unbiased hyperparameter tuning and model selection in fantasy sports',
       formula: 'NestedCV = (1/k₁) ∑ᵢ₌₁ᵏ¹ min_{h} (1/k₂) ∑ⱼ₌₁ᵏ² L(fₕ(X₋ᵢⱼ), yᵢⱼ)',
       implementation: 'Outer loop for model evaluation, inner loop for hyperparameter optimization'
-    }
+
   ];
 
   // Holdout validation method configurations
@@ -711,7 +707,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       timeAware: false,
       description: 'Player-grouped split ensuring same player never appears in both train and test sets',
       implementation: 'Group-based sampling for testing generalization to unseen players'
-    }
+
   ];
 
   // Time series validation methods configuration
@@ -783,7 +779,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       advantages: ['Independent validation sets', 'Prevents temporal leakage', 'Clear separation'],
       disadvantages: ['Wastes data with gaps', 'Fewer validation points', 'May miss transitions'],
       useCases: ['Season-to-season validation', 'Draft class analysis', 'Multi-year trend detection']
-    }
+
   ];
 
   // Bootstrap resampling methods configuration
@@ -850,7 +846,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       advantages: ['Model-based uncertainty', 'Smooth estimates', 'Extrapolation possible'],
       disadvantages: ['Distribution assumption required', 'May miss non-parametric features', 'Model misspecification risk'],
       useCases: ['Well-understood distributions', 'Smooth confidence bands', 'Prediction intervals']
-    }
+
   ];
 
   // Calibration methods configuration
@@ -888,7 +884,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Binary outcomes (injury, breakout)',
         'Draft pick success probability',
         'Win/loss predictions'
-      ]
+
     },
     {
       id: 'isotonic_regression',
@@ -923,7 +919,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Multi-class position predictions',
         'Performance tier classifications',
         'Trade value assessments'
-      ]
+
     },
     {
       id: 'bayesian_calibration',
@@ -958,7 +954,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Injury recovery probability',
         'Career trajectory modeling',
         'Draft value uncertainty'
-      ]
+
     },
     {
       id: 'temperature_scaling',
@@ -993,8 +989,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         'Multi-position classifications',
         'Ensemble model calibration',
         'Neural ranking systems'
-      ]
-    }
+
   ];
 
   // Performance metrics configuration
@@ -1157,7 +1152,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       higherIsBetter: true,
       useCases: ['Finding value picks', 'Late-round gems', 'Competitive advantage'],
       limitations: ['Sleeper definition varies', 'Rare event prediction', 'Market efficiency limits']
-    }
+
   ];
 
   const metricCategories = [
@@ -1232,7 +1227,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       expectedNoise: 0.10,
       totalError: 0.65,
       decompositionMethod: 'analytical'
-    }
+
   ];
 
   // Model complexity configurations
@@ -1296,7 +1291,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       optimizationTarget: 'total_error',
       regularization: true,
       crossValidation: true
-    }
+
   ];
 
   // Learning curve experiments
@@ -1360,7 +1355,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       expectedConvergencePoint: 3500,
       dataEfficiency: 'low',
       convergenceRate: 'slow'
-    }
+
   ];
 
   // Data size configurations
@@ -1397,7 +1392,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       validationRatio: 0.2,
       crossValidationFolds: 3,
       randomState: 42
-    }
+
   ];
 
   // Helper functions for cross-validation analysis
@@ -1508,6 +1503,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate holdout validation experiment
   const runHoldoutExperiment = async () => {
+    try {
+
     setHoldoutExperimentRunning(true);
     setHoldoutProgress(0);
 
@@ -1520,9 +1517,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < steps.length; step++) {
       await new Promise(resolve => setTimeout(resolve, 600));
       setHoldoutProgress((step + 1) / steps.length * 100);
-    }
+    
+    } catch (error) {
+      console.error('Error in runHoldoutExperiment:', error);
 
-    // Generate realistic results
+    } catch (error) {
+        console.error(error);
+    }// Generate realistic results
     const totalSize = 10000;
     const trainSize = Math.floor(totalSize * selectedMethod.trainRatio);
     const testSize = Math.floor(totalSize * selectedMethod.testRatio);
@@ -1550,7 +1551,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         mape: 15.2 + Math.random() * 3.0,
         fantasyAccuracy: 0.82 + Math.random() * 0.12,
         rankingCorrelation: 0.75 + Math.random() * 0.18
-      }
+
     };
 
     setHoldoutResults(result);
@@ -1919,6 +1920,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate time series validation experiment
   const runTimeSeriesExperiment = async () => {
+    try {
+
     setTimeSeriesExperimentRunning(true);
     setTimeSeriesProgress(0);
 
@@ -1931,9 +1934,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < steps.length; step++) {
       await new Promise(resolve => setTimeout(resolve, 800));
       setTimeSeriesProgress((step + 1) / steps.length * 100);
-    }
+    
+    } catch (error) {
+      console.error('Error in runTimeSeriesExperiment:', error);
 
-    // Generate realistic time series validation results
+    } catch (error) {
+        console.error(error);
+    }// Generate realistic time series validation results
     const totalWeeks = 17; // NFL season
     const minTrainSize = selectedMethod.minTrainSize;
     const windowSize = selectedMethod.windowSize;
@@ -1972,7 +1979,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
           trainEnd = trainStart + minTrainSize;
           testStart = trainEnd;
           testEnd = testStart + 1;
-      }
 
       if (testEnd <= totalWeeks) {
         const trainScore = 0.85 + Math.random() * 0.1 - splitIndex * 0.005; // Slight degradation over time
@@ -1986,13 +1992,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
           testScore,
           dataLeakage: false
         });
-      }
 
       currentStart += stepSize;
       splitIndex++;
       
       if (splitIndex > 10) break; // Limit to reasonable number of splits
-    }
 
     const avgTrainScore = splits.reduce((sum, s) => sum + s.trainScore, 0) / splits.length;
     const avgTestScore = splits.reduce((sum, s) => sum + s.testScore, 0) / splits.length;
@@ -2020,7 +2024,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         rankingCorrelation: 0.71 + Math.random() * 0.20,
         temporalStability: scoreStability,
         seasonConsistency: 0.68 + Math.random() * 0.25
-      }
+
     };
 
     setTimeSeriesResults(result);
@@ -2029,6 +2033,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate bootstrap resampling experiment
   const runBootstrapExperiment = async () => {
+    try {
+
     setBootstrapExperimentRunning(true);
     setBootstrapProgress(0);
 
@@ -2042,9 +2048,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < totalSteps; step++) {
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       setBootstrapProgress(((step + 1) / totalSteps) * 100);
-    }
+    
+    } catch (error) {
+      console.error('Error in runBootstrapExperiment:', error);
 
-    // Generate realistic bootstrap results with fantasy football context
+    } catch (error) {
+        console.error(error);
+    }// Generate realistic bootstrap results with fantasy football context
     const nBootstraps = selectedMethod.nBootstraps;
     const baseScore = 0.78 + Math.random() * 0.15;
     
@@ -2060,8 +2070,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         score += (Math.random() - 0.5) * 0.12 - 0.01; // More variable
       } else if (selectedMethod.type === 'parametric') {
         score += (Math.random() - 0.5) * 0.06 + 0.04; // Smoothest
-      }
-      
+
       return Math.max(0.1, Math.min(0.95, score));
     });
 
@@ -2122,7 +2131,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         requiredSamples: Math.min(nBootstraps, Math.ceil(1000 / (std + 0.01))),
         stabilityThreshold: 0.05,
         finalVariance: variance
-      }
+
     };
 
     setBootstrapResults(result);
@@ -2131,6 +2140,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate calibration experiment
   const runCalibrationExperiment = async () => {
+    try {
     setCalibrationExperimentRunning(true);
     setCalibrationProgress(0);
 
@@ -2144,96 +2154,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < totalSteps; step++) {
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
       setCalibrationProgress(((step + 1) / totalSteps) * 100);
-    }
-
-    // Generate realistic calibration results
-    const nSamples = 1000;
-    const nBins = 10;
     
-    // Generate uncalibrated predictions (model outputs)
-    const uncalibratedPredictions = Array.from({ length: nSamples }, () => {
-      // Simulate overconfident model - predictions tend to be more extreme than reality
-      let pred = Math.random();
-      if (selectedMethod.id === 'temperature_scaling') {
-        // Neural networks often show overconfidence
-        pred = Math.pow(pred, 0.7); // Make more extreme
-      } else if (selectedMethod.id === 'platt_scaling') {
-        // Sigmoid models may have different biases
-        pred = 1 / (1 + Math.exp(-3 * (pred - 0.5))); // Sigmoid-like bias
-      }
-      return Math.max(0.01, Math.min(0.99, pred));
-    });
-
-    // Generate true labels based on predictions with realistic miscalibration
-    const trueLabels = uncalibratedPredictions.map((pred: any) => {
-      const actualProb = selectedMethod.id === 'bayesian_calibration' 
-        ? pred * 0.9 + 0.05  // Bayesian more accurate
-        : pred * 0.85 + 0.075; // Others show overconfidence
-      return Math.random() < actualProb ? 1 : 0;
-    });
-
-    // Generate calibrated predictions based on method characteristics
-    const calibratedPredictions = uncalibratedPredictions.map((pred: any) => {
-      let calibrated = pred;
-      
-      switch (selectedMethod.id) {
-        case 'temperature_scaling':
-          // Temperature scaling with T > 1 reduces confidence
-          const temperature = 1.5 + Math.random() * 0.5;
-          calibrated = 1 / (1 + Math.exp(-Math.log(pred / (1 - pred)) / temperature));
-          break;
-        case 'platt_scaling':
-          // Platt scaling with learned parameters
-          const A = -0.8 + Math.random() * 0.4;
-          const B = 0.2 + Math.random() * 0.3;
-          calibrated = 1 / (1 + Math.exp(A * pred + B));
-          break;
-        case 'isotonic_regression':
-          // Isotonic regression - non-parametric mapping
-          calibrated = Math.pow(pred, 0.9 + Math.random() * 0.2);
-          break;
-        case 'bayesian_calibration':
-          // Bayesian calibration with uncertainty
-          calibrated = pred * (0.95 + Math.random() * 0.1) + (Math.random() - 0.5) * 0.05;
-          break;
-      }
-      
-      return Math.max(0.01, Math.min(0.99, calibrated));
-    });
-
-    // Calculate reliability diagram
-    const binWidth = 1.0 / nBins;
-    const reliabilityDiagram = Array.from({ length: nBins }, (_, i) => {
-      const binStart = i * binWidth;
-      const binEnd = (i + 1) * binWidth;
-      
-      // Uncalibrated bin
-      const uncalInBin = uncalibratedPredictions
-        .map((pred, idx) => ({ pred, label: trueLabels[idx] }))
-        .filter((item: any) => item.pred >= binStart && item.pred < binEnd);
-      
-      const uncalMeanPred = uncalInBin.length > 0 
-        ? uncalInBin.reduce((sum, item) => sum + item.pred, 0) / uncalInBin.length 
-        : binStart + binWidth / 2;
-      const uncalAccuracy = uncalInBin.length > 0 
-        ? uncalInBin.reduce((sum, item) => sum + item.label, 0) / uncalInBin.length 
-        : 0;
-      
-      // Calibrated bin
-      const calInBin = calibratedPredictions
-        .map((pred, idx) => ({ pred, label: trueLabels[idx] }))
-        .filter((item: any) => item.pred >= binStart && item.pred < binEnd);
-      
-      const calMeanPred = calInBin.length > 0 
-        ? calInBin.reduce((sum, item) => sum + item.pred, 0) / calInBin.length 
-        : binStart + binWidth / 2;
-      const calAccuracy = calInBin.length > 0 
-        ? calInBin.reduce((sum, item) => sum + item.label, 0) / calInBin.length 
-        : 0;
-
-      return {
-        bin: i,
-        range: `${(binStart * 100).toFixed(0)}-${(binEnd * 100).toFixed(0)}%`,
+    `${(binStart * 100).toFixed(0)}-${(binEnd * 100).toFixed(0)}%`,
         uncalibrated: {
           count: uncalInBin.length,
           meanPrediction: uncalMeanPred,
@@ -2245,7 +2167,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           meanPrediction: calMeanPred,
           accuracy: calAccuracy,
           calibrationError: Math.abs(calMeanPred - calAccuracy)
-        }
+
       };
     });
 
@@ -2325,7 +2247,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         meanPredicted: binMeans,
         fractionPositives: reliabilityDiagram.map((bin: any) => bin.calibrated.accuracy),
         binCounts
-      }
+
     };
 
     setCalibrationResults(result);
@@ -2334,6 +2256,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate performance metrics experiment
   const runPerformanceMetricsExperiment = async () => {
+    try {
+
     setMetricsExperimentRunning(true);
     setMetricsProgress(0);
 
@@ -2344,9 +2268,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < totalSteps; step++) {
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       setMetricsProgress(((step + 1) / totalSteps) * 100);
-    }
+    
+    } catch (error) {
+      console.error('Error in runPerformanceMetricsExperiment:', error);
 
-    // Generate realistic performance metrics based on selected model
+    } catch (error) {
+        console.error(error);
+    }// Generate realistic performance metrics based on selected model
     const selectedModelType = modelTypes.find((m: any) => m.id === selectedModel);
     const nSamples = 1000;
     
@@ -2373,7 +2301,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           break;
         default:
           noise = (Math.random() - 0.5) * 0.1;
-      }
+
       return Math.max(0, Math.min(1, pred + noise));
     });
 
@@ -2488,7 +2416,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         injuryAdjustedAccuracy: pointsAccuracy * 0.95,
         weatherAdjustedAccuracy: pointsAccuracy * 0.98,
         matchupAdjustedAccuracy: pointsAccuracy * 1.02
-      }
+
     };
 
     setMetricsResults(result);
@@ -2497,6 +2425,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate bias-variance trade-off experiment
   const runBiasVarianceExperiment = async () => {
+    try {
+
     setBiasVarianceExperimentRunning(true);
     setBiasVarianceProgress(0);
 
@@ -2509,9 +2439,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < steps.length; step++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setBiasVarianceProgress((step + 1) / steps.length * 100);
-    }
+    
+    } catch (error) {
+      console.error('Error in runBiasVarianceExperiment:', error);
 
-    // Generate bias-variance results across complexity range
+    } catch (error) {
+        console.error(error);
+    }// Generate bias-variance results across complexity range
     const complexityStart = selectedComplexityRange[0];
     const complexityEnd = selectedComplexityRange[1];
     const complexityStep = selectedConfig.stepSize;
@@ -2537,8 +2471,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       } else {
         // Overfitting region - increasing bias due to poor generalization
         bias = 0.05 + 0.2 * Math.exp((complexity - optimalComplexity) / 8);
-      }
-      
+
       // Variance typically increases with complexity
       let variance: number;
       if (selectedConfig.regularization) {
@@ -2547,8 +2480,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       } else {
         // Without regularization, variance increases faster
         variance = 0.02 + 0.5 * (complexity / complexityEnd);
-      }
-      
+
       // Add model-specific adjustments
       switch (selectedConfig.id) {
         case 'polynomial':
@@ -2576,16 +2508,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
             // High C (low regularization)
             bias = 0.05 + 0.1 * Math.exp((complexity - 1) / 10);
             variance = 0.05 + Math.log(complexity) * 0.15;
-          }
+
           break;
-      }
 
       const totalError = bias + variance + baseNoise;
       
       if (totalError < minTotalError) {
         minTotalError = totalError;
         optimalComplexity = complexity;
-      }
 
       // Generate sample predictions for visualization
       const sampleSize = 100;
@@ -2625,7 +2555,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           mae,
           r2: Math.max(0, Math.min(1, r2)),
           adjustedR2: Math.max(0, 1 - (1 - r2) * (sampleSize - 1) / (sampleSize - 2 - 1))
-        }
+
       };
 
       results.push(result);
@@ -2633,7 +2563,6 @@ const OracleCalibrationValidationSection: React.FC = () => {
       varianceValues.push(variance);
       totalErrorValues.push(totalError);
       complexityRange.push(complexity);
-    }
 
     // Create visualization data
     const visualization: BiasVarianceVisualization = {
@@ -2653,7 +2582,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
   };
 
   // Learning Curve Experiment Simulation
-  const runLearningCurveExperiment = async (experimentId: string) => {
+  const runLearningCurveExperiment = async () => {
+    try {
     setLearningCurveExperimentRunning(true);
     setLearningCurveProgress(0);
 
@@ -2665,79 +2595,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
     for (let step = 0; step < steps.length; step++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       setLearningCurveProgress((step + 1) / steps.length * 100);
-    }
-
-    // Generate learning curve results across sample size range
-    const sampleStart = selectedExperiment.sampleSizeRange[0];
-    const sampleEnd = selectedExperiment.sampleSizeRange[1];
-    const sampleStep = selectedExperiment.stepSize;
-
-    const results: LearningCurveResult[] = [];
-    const sampleSizes: number[] = [];
-    const performanceValues: number[] = [];
-    const convergencePoint = selectedExperiment.expectedConvergencePoint;
-    let converged = false;
-
-    for (let sampleSize = sampleStart; sampleSize <= sampleEnd; sampleSize += sampleStep) {
-      // Simulate performance improvement with increasing sample size
-      const noise = Math.random() * 0.02 - 0.01;
-      let basePerformance = 0.5 + (sampleSize / (convergencePoint * 2));
-      if (sampleSize >= convergencePoint) {
-        basePerformance = 0.95 + noise;
-        converged = true;
-      } else {
-        basePerformance += noise;
-      }
-      basePerformance = Math.min(1, Math.max(0, basePerformance));
-      results.push({
-        sampleSize,
-        trainScore: basePerformance,
-        validationScore: basePerformance * 0.95, // Slightly lower validation score
-        trainingTime: Math.random() * 100 + 50,
-        convergenceIndicator: converged ? 1 : 0,
-        dataEfficiency: basePerformance / (sampleSize / 1000),
-        overfittingGap: basePerformance * 0.05,
-        generalizationError: (1 - basePerformance) * 0.1,
-        confidenceInterval: [basePerformance - 0.02, basePerformance + 0.02] as [number, number],
-        isConverged: converged
-      });
-      sampleSizes.push(sampleSize);
-      performanceValues.push(basePerformance);
-    }
-
-    // Visualization object
-    const visualization: LearningCurveVisualization = {
-      sampleSizes,
-      trainScores: performanceValues,
-      validationScores: performanceValues.map((val: any) => val * 0.95),
-      testScores: performanceValues.map((val: any) => val * 0.93),
-      convergencePoint,
-      plateauStart: convergencePoint * 0.8,
-      dataEfficiencyScore: 0.85,
-      recommendedSampleSize: Math.max(...sampleSizes),
-      convergenceAnalysis: {
-        hasConverged: converged,
-        convergenceRate: 'medium' as const,
-        plateauDetected: true,
-        optimalDataSize: Math.max(...sampleSizes)
-      },
-      insights: {
-        dataEfficiency: 'Good data efficiency achieved',
-        convergenceBehavior: 'Stable convergence pattern',
-        recommendations: ['Continue with current approach', 'Monitor performance']
-      }
-    };
-    setLearningCurveResults(results);
-    setLearningCurveVisualization(visualization);
-    setLearningCurveExperimentRunning(false);
-    setLearningCurveProgress(100);
-  }
-
-  // Helper function to render fold blocks
-  const renderFoldBlocks = (method: CrossValidationConfig, foldIndex: number) => (
-    Array.from({ length: method.folds }).map((_, blockIndex) => (
-      <div
-        key={`block-${method.id}-${foldIndex}-${blockIndex}`}
+    
+    `block-${method.id}-${foldIndex}-${blockIndex}`}
         className={`fold-block ${blockIndex === foldIndex ? 'validation' : 'training'}`}
       >
         {blockIndex === foldIndex ? 'Val' : 'Train'}
@@ -2747,11 +2606,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Helper function to render fold visualization
   const renderFoldVisualization = (method: CrossValidationConfig) => (
-    <div className="fold-diagram">
+    <div className="fold-diagram sm:px-4 md:px-6 lg:px-8">
       {Array.from({ length: method.folds }).map((_, foldIndex) => (
-        <div key={`fold-${method.id}-${foldIndex}`} className="fold-row">
-          <span className="fold-label">Fold {foldIndex + 1}:</span>
-          <div className="fold-blocks">
+        <div key={`fold-${method.id}-${foldIndex}`} className="fold-row sm:px-4 md:px-6 lg:px-8">
+          <span className="fold-label sm:px-4 md:px-6 lg:px-8">Fold {foldIndex + 1}:</span>
+          <div className="fold-blocks sm:px-4 md:px-6 lg:px-8">
             {renderFoldBlocks(method, foldIndex)}
           </div>
         </div>
@@ -2761,30 +2620,30 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Helper function to render method configuration
   const renderMethodConfig = (method: CrossValidationConfig) => (
-    <div className="method-config">
-      <div className="config-grid">
-        <div className="config-item">
+    <div className="method-config sm:px-4 md:px-6 lg:px-8">
+      <div className="config-grid sm:px-4 md:px-6 lg:px-8">
+        <div className="config-item sm:px-4 md:px-6 lg:px-8">
           <span>Folds:</span>
           <span>{method.folds}</span>
         </div>
-        <div className="config-item">
+        <div className="config-item sm:px-4 md:px-6 lg:px-8">
           <span>Shuffle:</span>
           <span>{method.shuffle ? 'Yes' : 'No'}</span>
         </div>
         {method.stratifyColumn && (
-          <div className="config-item">
+          <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Stratify:</span>
             <span>{method.stratifyColumn}</span>
           </div>
         )}
         {method.groupColumn && (
-          <div className="config-item">
+          <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Group By:</span>
             <span>{method.groupColumn}</span>
           </div>
         )}
         {method.timeColumn && (
-          <div className="config-item">
+          <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Time Column:</span>
             <span>{method.timeColumn}</span>
           </div>
@@ -2820,14 +2679,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         best: 'Hyperparameter optimization with unbiased evaluation',
         use: 'Model selection for production deployment',
         tradeoff: 'Most reliable but computationally expensive'
-      }
+
     };
 
     const app = applications[methodId as keyof typeof applications];
     if (!app) return null;
 
     return (
-      <div className="application-info">
+      <div className="application-info sm:px-4 md:px-6 lg:px-8">
         <p><strong>Best for:</strong> {app.best}</p>
         <p><strong>Fantasy Use:</strong> {app.use}</p>
         <p><strong>{Object.keys(app)[2]}:</strong> {Object.values(app)[2]}</p>
@@ -2835,6 +2694,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     );
   };
   const runCVExperiment = async () => {
+    try {
     setCvExperimentRunning(true);
     setExperimentProgress(0);
 
@@ -2849,142 +2709,37 @@ const OracleCalibrationValidationSection: React.FC = () => {
       testSize: number;
       score: number;
       metrics: Record<string, number>;
-    }> = [];
-
-    for (let fold = 0; fold < totalSteps; fold++) {
-      await new Promise(resolve => setTimeout(resolve, 800)); // Simulate processing time
-      
-      const foldResult = {
-        fold: fold + 1,
-        trainSize: Math.floor(8000 * 0.8), // Simulate training size
-        testSize: Math.floor(8000 * 0.2), // Simulate test size
-        score: 0.85 + Math.random() * 0.1, // Simulate score with variance
-        metrics: {
-          mae: 2.1 + Math.random() * 0.5,
-          rmse: 2.8 + Math.random() * 0.7,
-          r2: 0.78 + Math.random() * 0.15,
-          mape: 15.2 + Math.random() * 3.0
-        }
-      };
-      
-      foldResults.push(foldResult);
-      setExperimentProgress((fold + 1) / totalSteps * 100);
-    }
-
-    const scores = foldResults.map((f: any) => f.score);
-    const meanScore = scores.reduce((a, b) => a + b, 0) / scores.length;
-    const stdScore = Math.sqrt(scores.reduce((acc, score) => acc + Math.pow(score - meanScore, 2), 0) / scores.length);
-
-    const result: CrossValidationResult = {
-      method: selectedMethod.name,
-      folds: selectedMethod.folds,
-      scores,
-      meanScore,
-      stdScore,
-      confidenceInterval: [meanScore - 1.96 * stdScore, meanScore + 1.96 * stdScore],
-      trainingTime: 45.2 + Math.random() * 20,
-      validationTime: 8.3 + Math.random() * 5,
-      details: foldResults
-    };
-
-    setCvResults(result);
-    setCvExperimentRunning(false);
-  };
-
-  // Render functions
-  const renderOverview = () => (
-    <div className="overview-content">
-      <h3>🎯 Calibration & Validation Overview</h3>
-      <div className="overview-section">
-        <h4>Why Validation Matters in Fantasy Sports</h4>
-        <p>
-          Proper validation ensures Oracle's predictions generalize to unseen games and players, 
-          preventing overfitting to historical data and providing reliable performance estimates.
-        </p>
-        
-        <div className="validation-benefits">
-          <div className="benefit-card">
-            <span className="benefit-icon">🛡️</span>
-            <h6>Overfitting Prevention</h6>
-            <p>Detects when models memorize training data instead of learning generalizable patterns</p>
-          </div>
-          <div className="benefit-card">
-            <span className="benefit-icon">📊</span>
-            <h6>Performance Estimation</h6>
-            <p>Provides unbiased estimates of model performance on unseen fantasy football data</p>
-          </div>
-          <div className="benefit-card">
-            <span className="benefit-icon">⚖️</span>
-            <h6>Model Selection</h6>
-            <p>Enables fair comparison between different prediction algorithms and architectures</p>
-          </div>
-          <div className="benefit-card">
-            <span className="benefit-icon">🎯</span>
-            <h6>Hyperparameter Tuning</h6>
-            <p>Optimizes model configuration without contaminating test performance estimates</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderCrossValidation = () => (
-    <div className="cross-validation-content">
-      <h3>🔄 Cross-Validation Techniques</h3>
-      
-      <div className="cv-overview">
-        <h4>Cross-Validation Fundamentals</h4>
-        <p>
-          Cross-validation systematically partitions data to estimate model performance while maximizing 
-          data utilization. For fantasy sports, proper CV prevents temporal leakage and ensures 
-          realistic performance estimates.
-        </p>
-        
-        <div className="cv-equation">
-          <h5>Mathematical Foundation</h5>
-          <div className="equation-card">
-            <div className="equation">
-              CV(k) = (1/k) ∑<sub>i=1</sub><sup>k</sup> L(f<sub>-i</sub>(X<sub>-i</sub>), y<sub>i</sub>)
-            </div>
-            <p>Where f<sub>-i</sub> is trained on all folds except i, and L is the loss function</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="cv-methods-grid">
-        {crossValidationMethods.map((method: any) => (
-          <button
-            key={method.id}
-            className={`cv-method-card ${selectedCVMethod === method.id ? 'selected' : ''}`}
+    
+    `cv-method-card ${selectedCVMethod === method.id ? 'selected' : ''}`}
             onClick={() => setSelectedCVMethod(method.id)}
           >
-            <div className="method-header">
+            <div className="method-header sm:px-4 md:px-6 lg:px-8">
               <h4>{method.name}</h4>
-              {selectedCVMethod === method.id && <span className="selected-badge">Selected</span>}
+              {selectedCVMethod === method.id && <span className="selected-badge sm:px-4 md:px-6 lg:px-8">Selected</span>}
             </div>
             
-            <div className="method-description">
+            <div className="method-description sm:px-4 md:px-6 lg:px-8">
               <p>{method.description}</p>
             </div>
             
-            <div className="method-formula">
+            <div className="method-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Formula:</strong>
-              <div className="formula-display">{method.formula}</div>
+              <div className="formula-display sm:px-4 md:px-6 lg:px-8">{method.formula}</div>
             </div>
             
             {renderMethodConfig(method)}
             
-            <div className="method-implementation">
+            <div className="method-implementation sm:px-4 md:px-6 lg:px-8">
               <strong>Implementation:</strong>
               <p>{method.implementation}</p>
             </div>
             
             {selectedCVMethod === method.id && (
-              <div className="method-details">
+              <div className="method-details sm:px-4 md:px-6 lg:px-8">
                 <h6>Fantasy Sports Applications</h6>
                 {renderFantasyApplications(method.id)}
                 
-                <div className="method-visualization">
+                <div className="method-visualization sm:px-4 md:px-6 lg:px-8">
                   <h6>Fold Structure Visualization</h6>
                   {renderFoldVisualization(method)}
                 </div>
@@ -2994,10 +2749,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="cv-comparison-matrix">
+      <div className="cv-comparison-matrix sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Method Comparison Matrix</h4>
-        <div className="comparison-table">
-          <div className="table-header">
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="table-header sm:px-4 md:px-6 lg:px-8">
             <span>Method</span>
             <span>Complexity</span>
             <span>Reliability</span>
@@ -3005,27 +2760,26 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <span>Fantasy Fit</span>
           </div>
           {crossValidationMethods.map((method: any) => (
-            <div key={`comparison-${method.id}`} className="table-row">
-              <span className="method-name">{method.name}</span>
-              <span className="complexity-score">{getCVComplexityScore(method.id)}</span>
-              <span className="reliability-score">{getCVReliabilityScore(method.id)}</span>
-              <span className="efficiency-score">{getCVEfficiencyScore(method.id)}</span>
-              <span className="fantasy-score">{getCVFantasyScore(method.id)}</span>
+            <div key={`comparison-${method.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
+              <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
+              <span className="complexity-score sm:px-4 md:px-6 lg:px-8">{getCVComplexityScore(method.id)}</span>
+              <span className="reliability-score sm:px-4 md:px-6 lg:px-8">{getCVReliabilityScore(method.id)}</span>
+              <span className="efficiency-score sm:px-4 md:px-6 lg:px-8">{getCVEfficiencyScore(method.id)}</span>
+              <span className="fantasy-score sm:px-4 md:px-6 lg:px-8">{getCVFantasyScore(method.id)}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="cv-experiment">
+      <div className="cv-experiment sm:px-4 md:px-6 lg:px-8">
         <h4>🧪 Interactive CV Experiment</h4>
-        <div className="experiment-controls">
-          <div className="method-selector">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
+          <div className="method-selector sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="cv-method-select">Selected Method:</label>
             <select 
               id="cv-method-select"
               value={selectedCVMethod} 
               onChange={(e: any) => setSelectedCVMethod(e.target.value)}
-              disabled={cvExperimentRunning}
             >
               {crossValidationMethods.map((method: any) => (
                 <option key={`option-${method.id}`} value={method.id}>
@@ -3036,7 +2790,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </div>
           
           <button 
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             onClick={runCVExperiment}
             disabled={cvExperimentRunning}
           >
@@ -3045,14 +2799,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {cvExperimentRunning && (
-          <div className="experiment-progress">
-            <div className="progress-header">
+          <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
+            <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
               <span>{Math.round(experimentProgress)}%</span>
             </div>
-            <div className="progress-bar">
+            <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
               <div 
-                className="progress-fill" 
+                className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                 style={{ width: `${experimentProgress}%` }}
               ></div>
             </div>
@@ -3060,35 +2814,35 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {cvResults && !cvExperimentRunning && (
-          <div className="experiment-results">
+          <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Experiment Results</h5>
             
-            <div className="results-summary">
-              <div className="summary-metrics">
-                <div className="metric-card">
+            <div className="results-summary sm:px-4 md:px-6 lg:px-8">
+              <div className="summary-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-card sm:px-4 md:px-6 lg:px-8">
                   <h6>Mean Score</h6>
-                  <div className="metric-value-display">{cvResults.meanScore.toFixed(4)}</div>
+                  <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{cvResults.meanScore.toFixed(4)}</div>
                 </div>
-                <div className="metric-card">
+                <div className="metric-card sm:px-4 md:px-6 lg:px-8">
                   <h6>Std Deviation</h6>
-                  <div className="metric-value-display">{cvResults.stdScore.toFixed(4)}</div>
+                  <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{cvResults.stdScore.toFixed(4)}</div>
                 </div>
-                <div className="metric-card">
+                <div className="metric-card sm:px-4 md:px-6 lg:px-8">
                   <h6>95% CI</h6>
-                  <div className="metric-value-display">
+                  <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">
                     [{cvResults.confidenceInterval[0].toFixed(3)}, {cvResults.confidenceInterval[1].toFixed(3)}]
                   </div>
                 </div>
-                <div className="metric-card">
+                <div className="metric-card sm:px-4 md:px-6 lg:px-8">
                   <h6>Total Time</h6>
-                  <div className="metric-value-display">{cvResults.trainingTime.toFixed(1)}s</div>
+                  <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{cvResults.trainingTime.toFixed(1)}s</div>
                 </div>
               </div>
               
-              <div className="fold-results">
+              <div className="fold-results sm:px-4 md:px-6 lg:px-8">
                 <h6>Individual Fold Results</h6>
-                <div className="fold-results-table">
-                  <div className="fold-header">
+                <div className="fold-results-table sm:px-4 md:px-6 lg:px-8">
+                  <div className="fold-header sm:px-4 md:px-6 lg:px-8">
                     <span>Fold</span>
                     <span>Score</span>
                     <span>Train Size</span>
@@ -3097,7 +2851,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     <span>RMSE</span>
                   </div>
                   {cvResults.details.map((fold: any) => (
-                    <div key={`fold-result-${fold.fold}`} className="fold-results-row">
+                    <div key={`fold-result-${fold.fold}`} className="fold-results-row sm:px-4 md:px-6 lg:px-8">
                       <span>{fold.fold}</span>
                       <span>{fold.score.toFixed(3)}</span>
                       <span>{fold.trainSize.toLocaleString()}</span>
@@ -3113,45 +2867,45 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="cv-best-practices">
+      <div className="cv-best-practices sm:px-4 md:px-6 lg:px-8">
         <h4>💡 Best Practices for Fantasy Sports CV</h4>
-        <div className="practices-grid">
-          <div className="practice-card">
+        <div className="practices-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>🕐 Temporal Awareness</h5>
             <p>
               Always use time-aware validation for fantasy sports. Historical data should never 
               be used to predict the past. Time series splits are essential for realistic evaluation.
             </p>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>👤 Player Grouping</h5>
             <p>
               Group by player_id to test generalization to new players. This reveals whether 
               your model learns player-specific patterns or truly generalizable features.
             </p>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>🎯 Position Stratification</h5>
             <p>
               Stratify by position to ensure balanced representation. Fantasy football has 
               different position distributions that affect model evaluation fairness.
             </p>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>📏 Sufficient Folds</h5>
             <p>
               Use 5-10 folds for robust estimates. More folds reduce variance but increase 
               computational cost. Balance based on dataset size and available compute.
             </p>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>🔁 Nested Validation</h5>
             <p>
               Use nested CV for hyperparameter tuning. This prevents optimistic bias from 
               hyperparameter selection and provides unbiased performance estimates.
             </p>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Multiple Metrics</h5>
             <p>
               Evaluate multiple metrics (MAE, RMSE, R², fantasy-specific). Different metrics 
@@ -3164,8 +2918,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderHoldout = () => (
-    <div className="validation-content">
-      <div className="section-header">
+    <div className="validation-content sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h3>🎯 Holdout Validation Methods</h3>
         <p>
           Holdout validation splits data into separate training and testing sets, 
@@ -3173,54 +2927,54 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </p>
       </div>
 
-      <div className="methods-grid">
+      <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {holdoutMethods.map((method: any) => (
           <div 
             key={method.id} 
             className={`method-card ${selectedHoldoutMethod === method.id ? 'selected' : ''}`}
             onClick={() => setSelectedHoldoutMethod(method.id)}
           >
-            <div className="method-header">
-              <span className="method-icon">{method.icon}</span>
+            <div className="method-header sm:px-4 md:px-6 lg:px-8">
+              <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
               <h4>{method.name}</h4>
             </div>
-            <p className="method-description">{method.description}</p>
+            <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
             
-            <div className="method-details">
-              <div className="split-info">
-                <div className="split-ratio">
-                  <span className="split-label">Train: {(method.trainRatio * 100)}%</span>
-                  <span className="split-label">Test: {(method.testRatio * 100)}%</span>
+            <div className="method-details sm:px-4 md:px-6 lg:px-8">
+              <div className="split-info sm:px-4 md:px-6 lg:px-8">
+                <div className="split-ratio sm:px-4 md:px-6 lg:px-8">
+                  <span className="split-label sm:px-4 md:px-6 lg:px-8">Train: {(method.trainRatio * 100)}%</span>
+                  <span className="split-label sm:px-4 md:px-6 lg:px-8">Test: {(method.testRatio * 100)}%</span>
                   {method.validationRatio && (
-                    <span className="split-label">Val: {(method.validationRatio * 100)}%</span>
+                    <span className="split-label sm:px-4 md:px-6 lg:px-8">Val: {(method.validationRatio * 100)}%</span>
                   )}
                 </div>
               </div>
               
-              <div className="method-metrics">
-                <div className="metric-row">
-                  <span className="metric-label">Simplicity</span>
-                  <span className="metric-stars">{getHoldoutSimplicityScore(method.id)}</span>
+              <div className="method-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Simplicity</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getHoldoutSimplicityScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Reliability</span>
-                  <span className="metric-stars">{getHoldoutReliabilityScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Reliability</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getHoldoutReliabilityScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Speed</span>
-                  <span className="metric-stars">{getHoldoutSpeedScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Speed</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getHoldoutSpeedScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Fantasy Suitability</span>
-                  <span className="metric-stars">{getHoldoutFantasyScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Fantasy Suitability</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getHoldoutFantasyScore(method.id)}</span>
                 </div>
               </div>
 
-              <div className="method-specifics">
-                <div className="specific-detail">
+              <div className="method-specifics sm:px-4 md:px-6 lg:px-8">
+                <div className="specific-detail sm:px-4 md:px-6 lg:px-8">
                   <strong>Data Leakage Risk:</strong> {getHoldoutDataLeakageRisk(method.id)}
                 </div>
-                <div className="specific-detail">
+                <div className="specific-detail sm:px-4 md:px-6 lg:px-8">
                   <strong>Best Use Case:</strong> {getHoldoutBestUseCase(method.id)}
                 </div>
               </div>
@@ -3229,25 +2983,25 @@ const OracleCalibrationValidationSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="methods-comparison">
+      <div className="methods-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Holdout Methods Comparison</h4>
-        <div className="comparison-table">
-          <div className="comparison-header">
-            <div className="header-cell">Method</div>
-            <div className="header-cell">Simplicity</div>
-            <div className="header-cell">Reliability</div>
-            <div className="header-cell">Speed</div>
-            <div className="header-cell">Fantasy Score</div>
-            <div className="header-cell">Split Strategy</div>
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="comparison-header sm:px-4 md:px-6 lg:px-8">
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Method</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Simplicity</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Reliability</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Speed</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Fantasy Score</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Split Strategy</div>
           </div>
           {holdoutMethods.map((method: any) => (
-            <div key={method.id} className="comparison-row">
-              <div className="cell method-name">{method.name}</div>
-              <div className="cell">{getHoldoutSimplicityScore(method.id)}</div>
-              <div className="cell">{getHoldoutReliabilityScore(method.id)}</div>
-              <div className="cell">{getHoldoutSpeedScore(method.id)}</div>
-              <div className="cell">{getHoldoutFantasyScore(method.id)}</div>
-              <div className="cell split-strategy">
+            <div key={method.id} className="comparison-row sm:px-4 md:px-6 lg:px-8">
+              <div className="cell method-name sm:px-4 md:px-6 lg:px-8">{method.name}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getHoldoutSimplicityScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getHoldoutReliabilityScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getHoldoutSpeedScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getHoldoutFantasyScore(method.id)}</div>
+              <div className="cell split-strategy sm:px-4 md:px-6 lg:px-8">
                 {(method.trainRatio * 100)}% / {(method.testRatio * 100)}%
                 {method.validationRatio && ` / ${(method.validationRatio * 100)}%`}
               </div>
@@ -3256,10 +3010,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="fantasy-applications">
+      <div className="fantasy-applications sm:px-4 md:px-6 lg:px-8">
         <h4>🏈 Fantasy Football Applications</h4>
-        <div className="applications-grid">
-          <div className="application-card">
+        <div className="applications-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>🎯 Simple Holdout</h5>
             <p>Perfect for quick model evaluation when you have abundant data and want fast results.</p>
             <ul>
@@ -3269,7 +3023,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>⚖️ Stratified Holdout</h5>
             <p>Maintains position balance across splits, ensuring fair evaluation for all player types.</p>
             <ul>
@@ -3279,7 +3033,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>👥 Grouped Holdout</h5>
             <p>Prevents data leakage by keeping related players together in same split.</p>
             <ul>
@@ -3289,7 +3043,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>📅 Temporal Holdout</h5>
             <p>Uses time-based splits to simulate real-world prediction scenarios.</p>
             <ul>
@@ -3301,13 +3055,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="interactive-experiment">
+      <div className="interactive-experiment sm:px-4 md:px-6 lg:px-8">
         <h4>🧪 Holdout Validation Experiment</h4>
         <p>Run a real-time holdout validation experiment with the selected method:</p>
         
-        <div className="experiment-controls">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <button 
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             onClick={runHoldoutExperiment}
             disabled={holdoutExperimentRunning}
           >
@@ -3316,14 +3070,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {holdoutExperimentRunning && (
-          <div className="experiment-progress">
-            <div className="progress-header">
+          <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
+            <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
               <span>{Math.round(holdoutProgress)}%</span>
             </div>
-            <div className="progress-bar">
+            <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
               <div 
-                className="progress-fill" 
+                className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                 style={{ width: `${holdoutProgress}%` }}
               ></div>
             </div>
@@ -3331,48 +3085,48 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {holdoutResults && (
-          <div className="experiment-results">
+          <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Holdout Validation Results</h5>
-            <div className="results-grid">
-              <div className="result-section">
+            <div className="results-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Dataset Splits</h6>
-                <div className="split-results">
-                  <div className="split-item">
-                    <span className="label">Training Set:</span>
-                    <span className="value">{holdoutResults.trainSize.toLocaleString()} samples</span>
+                <div className="split-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="split-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Training Set:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.trainSize.toLocaleString()} samples</span>
                   </div>
-                  <div className="split-item">
-                    <span className="label">Test Set:</span>
-                    <span className="value">{holdoutResults.testSize.toLocaleString()} samples</span>
+                  <div className="split-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Test Set:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.testSize.toLocaleString()} samples</span>
                   </div>
                   {holdoutResults.validationSize && (
-                    <div className="split-item">
-                      <span className="label">Validation Set:</span>
-                      <span className="value">{holdoutResults.validationSize.toLocaleString()} samples</span>
+                    <div className="split-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="label sm:px-4 md:px-6 lg:px-8">Validation Set:</span>
+                      <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.validationSize.toLocaleString()} samples</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="result-section">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Performance Scores</h6>
-                <div className="score-results">
-                  <div className="score-item">
-                    <span className="label">Training Score:</span>
-                    <span className="value">{holdoutResults.trainScore.toFixed(4)}</span>
+                <div className="score-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Training Score:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.trainScore.toFixed(4)}</span>
                   </div>
-                  <div className="score-item">
-                    <span className="label">Test Score:</span>
-                    <span className="value">{holdoutResults.testScore.toFixed(4)}</span>
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Test Score:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.testScore.toFixed(4)}</span>
                   </div>
                   {holdoutResults.validationScore && (
-                    <div className="score-item">
-                      <span className="label">Validation Score:</span>
-                      <span className="value">{holdoutResults.validationScore.toFixed(4)}</span>
+                    <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="label sm:px-4 md:px-6 lg:px-8">Validation Score:</span>
+                      <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.validationScore.toFixed(4)}</span>
                     </div>
                   )}
-                  <div className="score-item">
-                    <span className="label">Overfitting:</span>
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Overfitting:</span>
                     <span className={`value ${holdoutResults.overfit > 0.05 ? 'warning' : 'good'}`}>
                       {holdoutResults.overfit.toFixed(4)}
                     </span>
@@ -3380,32 +3134,32 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="result-section">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Detailed Metrics</h6>
-                <div className="metrics-results">
-                  <div className="metric-item">
-                    <span className="label">MAE:</span>
-                    <span className="value">{holdoutResults.metrics.mae.toFixed(2)}</span>
+                <div className="metrics-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">MAE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.metrics.mae.toFixed(2)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">RMSE:</span>
-                    <span className="value">{holdoutResults.metrics.rmse.toFixed(2)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">RMSE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.metrics.rmse.toFixed(2)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">R²:</span>
-                    <span className="value">{holdoutResults.metrics.r2.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">R²:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.metrics.r2.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">MAPE:</span>
-                    <span className="value">{holdoutResults.metrics.mape.toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">MAPE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.metrics.mape.toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">Fantasy Accuracy:</span>
-                    <span className="value">{(holdoutResults.metrics.fantasyAccuracy * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Fantasy Accuracy:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{(holdoutResults.metrics.fantasyAccuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">Ranking Correlation:</span>
-                    <span className="value">{holdoutResults.metrics.rankingCorrelation.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Ranking Correlation:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.metrics.rankingCorrelation.toFixed(3)}</span>
                   </div>
                 </div>
               </div>
@@ -3414,10 +3168,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="best-practices">
+      <div className="best-practices sm:px-4 md:px-6 lg:px-8">
         <h4>📋 Holdout Validation Best Practices</h4>
-        <div className="practices-grid">
-          <div className="practice-card">
+        <div className="practices-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>✅ Do</h5>
             <ul>
               <li>Use appropriate split ratios (70/20/10 or 80/20)</li>
@@ -3428,7 +3182,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>❌ Don't</h5>
             <ul>
               <li>Use holdout with small datasets (&lt;1000 samples)</li>
@@ -3444,8 +3198,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderTimeSeries = () => (
-    <div className="validation-content">
-      <div className="section-header">
+    <div className="validation-content sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h3>📈 Time Series Validation Methods</h3>
         <p>
           Time series validation ensures models are evaluated using realistic temporal constraints,
@@ -3453,58 +3207,58 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </p>
       </div>
 
-      <div className="methods-grid">
+      <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {timeSeriesMethods.map((method: any) => (
           <div 
             key={method.id} 
             className={`method-card ${selectedTimeSeriesMethod === method.id ? 'selected' : ''}`}
             onClick={() => setSelectedTimeSeriesMethod(method.id)}
           >
-            <div className="method-header">
-              <span className="method-icon">{method.icon}</span>
+            <div className="method-header sm:px-4 md:px-6 lg:px-8">
+              <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
               <h4>{method.name}</h4>
             </div>
-            <p className="method-description">{method.description}</p>
+            <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
             
-            <div className="method-details">
-              <div className="window-info">
-                <div className="window-specs">
-                  <span className="spec-label">Window: {method.windowSize} weeks</span>
-                  <span className="spec-label">Step: {method.stepSize} week(s)</span>
-                  <span className="spec-label">Min Train: {method.minTrainSize} weeks</span>
+            <div className="method-details sm:px-4 md:px-6 lg:px-8">
+              <div className="window-info sm:px-4 md:px-6 lg:px-8">
+                <div className="window-specs sm:px-4 md:px-6 lg:px-8">
+                  <span className="spec-label sm:px-4 md:px-6 lg:px-8">Window: {method.windowSize} weeks</span>
+                  <span className="spec-label sm:px-4 md:px-6 lg:px-8">Step: {method.stepSize} week(s)</span>
+                  <span className="spec-label sm:px-4 md:px-6 lg:px-8">Min Train: {method.minTrainSize} weeks</span>
                 </div>
               </div>
               
-              <div className="method-metrics">
-                <div className="metric-row">
-                  <span className="metric-label">Complexity</span>
-                  <span className="metric-stars">{getTimeSeriesComplexityScore(method.id)}</span>
+              <div className="method-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Complexity</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getTimeSeriesComplexityScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Reliability</span>
-                  <span className="metric-stars">{getTimeSeriesReliabilityScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Reliability</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getTimeSeriesReliabilityScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Efficiency</span>
-                  <span className="metric-stars">{getTimeSeriesEfficiencyScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Efficiency</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getTimeSeriesEfficiencyScore(method.id)}</span>
                 </div>
-                <div className="metric-row">
-                  <span className="metric-label">Fantasy Suitability</span>
-                  <span className="metric-stars">{getTimeSeriesFantasyScore(method.id)}</span>
+                <div className="metric-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Fantasy Suitability</span>
+                  <span className="metric-stars sm:px-4 md:px-6 lg:px-8">{getTimeSeriesFantasyScore(method.id)}</span>
                 </div>
               </div>
 
-              <div className="method-specifics">
-                <div className="specific-detail">
+              <div className="method-specifics sm:px-4 md:px-6 lg:px-8">
+                <div className="specific-detail sm:px-4 md:px-6 lg:px-8">
                   <strong>Data Usage:</strong> {getTimeSeriesDataUsage(method.id)}
                 </div>
-                <div className="specific-detail">
+                <div className="specific-detail sm:px-4 md:px-6 lg:px-8">
                   <strong>Best Use Case:</strong> {getTimeSeriesBestUseCase(method.id)}
                 </div>
               </div>
 
-              <div className="advantages-disadvantages">
-                <div className="advantages">
+              <div className="advantages-disadvantages sm:px-4 md:px-6 lg:px-8">
+                <div className="advantages sm:px-4 md:px-6 lg:px-8">
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, advIndex) => (
@@ -3512,7 +3266,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="disadvantages">
+                <div className="disadvantages sm:px-4 md:px-6 lg:px-8">
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, disIndex) => (
@@ -3526,25 +3280,25 @@ const OracleCalibrationValidationSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="methods-comparison">
+      <div className="methods-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Time Series Methods Comparison</h4>
-        <div className="comparison-table">
-          <div className="comparison-header">
-            <div className="header-cell">Method</div>
-            <div className="header-cell">Complexity</div>
-            <div className="header-cell">Reliability</div>
-            <div className="header-cell">Efficiency</div>
-            <div className="header-cell">Fantasy Score</div>
-            <div className="header-cell">Window/Step</div>
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="comparison-header sm:px-4 md:px-6 lg:px-8">
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Method</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Complexity</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Reliability</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Efficiency</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Fantasy Score</div>
+            <div className="header-cell sm:px-4 md:px-6 lg:px-8">Window/Step</div>
           </div>
           {timeSeriesMethods.map((method: any) => (
-            <div key={method.id} className="comparison-row">
-              <div className="cell method-name">{method.name}</div>
-              <div className="cell">{getTimeSeriesComplexityScore(method.id)}</div>
-              <div className="cell">{getTimeSeriesReliabilityScore(method.id)}</div>
-              <div className="cell">{getTimeSeriesEfficiencyScore(method.id)}</div>
-              <div className="cell">{getTimeSeriesFantasyScore(method.id)}</div>
-              <div className="cell window-step">
+            <div key={method.id} className="comparison-row sm:px-4 md:px-6 lg:px-8">
+              <div className="cell method-name sm:px-4 md:px-6 lg:px-8">{method.name}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getTimeSeriesComplexityScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getTimeSeriesReliabilityScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getTimeSeriesEfficiencyScore(method.id)}</div>
+              <div className="cell sm:px-4 md:px-6 lg:px-8">{getTimeSeriesFantasyScore(method.id)}</div>
+              <div className="cell window-step sm:px-4 md:px-6 lg:px-8">
                 {method.windowSize}w / {method.stepSize}w
               </div>
             </div>
@@ -3552,10 +3306,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="fantasy-applications">
+      <div className="fantasy-applications sm:px-4 md:px-6 lg:px-8">
         <h4>🏈 Fantasy Football Time Series Applications</h4>
-        <div className="applications-grid">
-          <div className="application-card">
+        <div className="applications-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>🚶 Walk-Forward Validation</h5>
             <p>Perfect for simulating live season progression and weekly prediction accuracy.</p>
             <ul>
@@ -3566,7 +3320,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Expanding Window</h5>
             <p>Ideal for career analysis and long-term trend identification using all historical data.</p>
             <ul>
@@ -3577,7 +3331,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>🎡 Rolling Window</h5>
             <p>Excellent for recent form analysis and injury recovery pattern detection.</p>
             <ul>
@@ -3588,7 +3342,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>🧱 Blocked Time Series</h5>
             <p>Best for independent season validation and draft class analysis.</p>
             <ul>
@@ -3601,13 +3355,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="interactive-experiment">
+      <div className="interactive-experiment sm:px-4 md:px-6 lg:px-8">
         <h4>🧪 Time Series Validation Experiment</h4>
         <p>Run a real-time time series validation experiment with the selected method:</p>
         
-        <div className="experiment-controls">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <button 
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             onClick={runTimeSeriesExperiment}
             disabled={timeSeriesExperimentRunning}
           >
@@ -3616,14 +3370,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {timeSeriesExperimentRunning && (
-          <div className="experiment-progress">
-            <div className="progress-header">
+          <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
+            <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
               <span>{Math.round(timeSeriesProgress)}%</span>
             </div>
-            <div className="progress-bar">
+            <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
               <div 
-                className="progress-fill" 
+                className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                 style={{ width: `${timeSeriesProgress}%` }}
               ></div>
             </div>
@@ -3631,48 +3385,48 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {timeSeriesResults && (
-          <div className="experiment-results">
+          <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Time Series Validation Results</h5>
-            <div className="results-grid">
-              <div className="result-section">
+            <div className="results-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Validation Overview</h6>
-                <div className="overview-results">
-                  <div className="overview-item">
-                    <span className="label">Method:</span>
-                    <span className="value">{timeSeriesResults.method}</span>
+                <div className="overview-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="overview-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Method:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.method}</span>
                   </div>
-                  <div className="overview-item">
-                    <span className="label">Total Splits:</span>
-                    <span className="value">{timeSeriesResults.totalSplits}</span>
+                  <div className="overview-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Total Splits:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.totalSplits}</span>
                   </div>
-                  <div className="overview-item">
-                    <span className="label">Avg Train Size:</span>
-                    <span className="value">{timeSeriesResults.trainSize} weeks</span>
+                  <div className="overview-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Avg Train Size:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.trainSize} weeks</span>
                   </div>
-                  <div className="overview-item">
-                    <span className="label">Test Size:</span>
-                    <span className="value">{timeSeriesResults.testSize} week</span>
+                  <div className="overview-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Test Size:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.testSize} week</span>
                   </div>
                 </div>
               </div>
 
-              <div className="result-section">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Performance Scores</h6>
-                <div className="score-results">
-                  <div className="score-item">
-                    <span className="label">Avg Training Score:</span>
-                    <span className="value">{timeSeriesResults.avgTrainScore.toFixed(4)}</span>
+                <div className="score-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Avg Training Score:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.avgTrainScore.toFixed(4)}</span>
                   </div>
-                  <div className="score-item">
-                    <span className="label">Avg Test Score:</span>
-                    <span className="value">{timeSeriesResults.avgTestScore.toFixed(4)}</span>
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Avg Test Score:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.avgTestScore.toFixed(4)}</span>
                   </div>
-                  <div className="score-item">
-                    <span className="label">Score Stability:</span>
-                    <span className="value">{(timeSeriesResults.scoreStability * 100).toFixed(1)}%</span>
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Score Stability:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{(timeSeriesResults.scoreStability * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="score-item">
-                    <span className="label">Temporal Consistency:</span>
+                  <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Temporal Consistency:</span>
                     <span className={`value ${timeSeriesResults.temporalConsistency > 0.8 ? 'good' : 'warning'}`}>
                       {(timeSeriesResults.temporalConsistency * 100).toFixed(1)}%
                     </span>
@@ -3680,41 +3434,41 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="result-section">
+              <div className="result-section sm:px-4 md:px-6 lg:px-8">
                 <h6>Detailed Metrics</h6>
-                <div className="metrics-results">
-                  <div className="metric-item">
-                    <span className="label">MAE:</span>
-                    <span className="value">{timeSeriesResults.metrics.mae.toFixed(2)}</span>
+                <div className="metrics-results sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">MAE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.metrics.mae.toFixed(2)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">RMSE:</span>
-                    <span className="value">{timeSeriesResults.metrics.rmse.toFixed(2)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">RMSE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.metrics.rmse.toFixed(2)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">R²:</span>
-                    <span className="value">{timeSeriesResults.metrics.r2.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">R²:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.metrics.r2.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">MAPE:</span>
-                    <span className="value">{timeSeriesResults.metrics.mape.toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">MAPE:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{timeSeriesResults.metrics.mape.toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">Fantasy Accuracy:</span>
-                    <span className="value">{(timeSeriesResults.metrics.fantasyAccuracy * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Fantasy Accuracy:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{(timeSeriesResults.metrics.fantasyAccuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="label">Temporal Stability:</span>
-                    <span className="value">{(timeSeriesResults.metrics.temporalStability * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="label sm:px-4 md:px-6 lg:px-8">Temporal Stability:</span>
+                    <span className="value sm:px-4 md:px-6 lg:px-8">{(timeSeriesResults.metrics.temporalStability * 100).toFixed(1)}%</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="splits-breakdown">
+            <div className="splits-breakdown sm:px-4 md:px-6 lg:px-8">
               <h6>📋 Individual Splits Performance</h6>
-              <div className="splits-table">
-                <div className="splits-header">
+              <div className="splits-table sm:px-4 md:px-6 lg:px-8">
+                <div className="splits-header sm:px-4 md:px-6 lg:px-8">
                   <span>Split</span>
                   <span>Train Period</span>
                   <span>Test Period</span>
@@ -3723,7 +3477,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <span>Difference</span>
                 </div>
                 {timeSeriesResults.splits.slice(0, 8).map((split: any) => (
-                  <div key={`split-${split.splitIndex}`} className="splits-row">
+                  <div key={`split-${split.splitIndex}`} className="splits-row sm:px-4 md:px-6 lg:px-8">
                     <span>{split.splitIndex + 1}</span>
                     <span>{split.trainPeriod}</span>
                     <span>{split.testPeriod}</span>
@@ -3735,8 +3489,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </div>
                 ))}
                 {timeSeriesResults.splits.length > 8 && (
-                  <div className="splits-row summary">
-                    <div className="text-center text-gray-400">... and {timeSeriesResults.splits.length - 8} more splits</div>
+                  <div className="splits-row summary sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-center text-gray-400 sm:px-4 md:px-6 lg:px-8">... and {timeSeriesResults.splits.length - 8} more splits</div>
                   </div>
                 )}
               </div>
@@ -3745,10 +3499,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="best-practices">
+      <div className="best-practices sm:px-4 md:px-6 lg:px-8">
         <h4>📋 Time Series Validation Best Practices</h4>
-        <div className="practices-grid">
-          <div className="practice-card">
+        <div className="practices-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>✅ Do</h5>
             <ul>
               <li>Maintain strict temporal order in all splits</li>
@@ -3759,7 +3513,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </ul>
           </div>
           
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>❌ Don't</h5>
             <ul>
               <li>Shuffle time series data randomly</li>
@@ -3772,31 +3526,31 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="temporal-insights">
+      <div className="temporal-insights sm:px-4 md:px-6 lg:px-8">
         <h4>⏰ Key Temporal Insights for Fantasy Football</h4>
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Season Progression</h5>
             <p>
               Player performance often changes throughout the season due to fatigue, injuries, 
               and game script evolution. Time series validation captures these temporal effects.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Weekly Dependencies</h5>
             <p>
               Fantasy performance can have week-to-week dependencies due to matchup difficulty, 
               weather conditions, and team strategy adaptations.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Look-Ahead Bias</h5>
             <p>
               Traditional validation can accidentally use future information. Time series validation 
               prevents this by enforcing realistic prediction scenarios.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Concept Drift</h5>
             <p>
               Fantasy football strategies and player roles evolve over time. Rolling windows 
@@ -3809,18 +3563,18 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderBootstrap = () => (
-    <div className="bootstrap-section">
+    <div className="bootstrap-section sm:px-4 md:px-6 lg:px-8">
       <h3>🎲 Bootstrap Resampling Methods</h3>
-      <div className="bootstrap-intro">
+      <div className="bootstrap-intro sm:px-4 md:px-6 lg:px-8">
         <p>
           Bootstrap resampling provides uncertainty quantification by creating multiple datasets through 
           resampling, enabling robust confidence interval estimation and model stability assessment.
         </p>
       </div>
 
-      <div className="bootstrap-methods-grid">
+      <div className="bootstrap-methods-grid sm:px-4 md:px-6 lg:px-8">
         <h4>Available Bootstrap Methods</h4>
-        <div className="methods-container">
+        <div className="methods-container sm:px-4 md:px-6 lg:px-8">
           {bootstrapMethods.map((method: any) => (
             <div 
               key={method.id} 
@@ -3831,46 +3585,46 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onKeyDown={(e: any) => e.key === 'Enter' && setSelectedBootstrapMethod(method.id)}
               aria-label={`Select ${method.name} bootstrap method`}
             >
-              <div className="method-header">
-                <span className="method-icon">{method.icon}</span>
+              <div className="method-header sm:px-4 md:px-6 lg:px-8">
+                <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
                 <h5>{method.name}</h5>
               </div>
               
-              <p className="method-description">{method.description}</p>
+              <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
               
-              <div className="method-details">
-                <div className="detail-item">
+              <div className="method-details sm:px-4 md:px-6 lg:px-8">
+                <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Type:</strong>
                   <span>{method.type}</span>
                 </div>
-                <div className="detail-item">
+                <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Bootstraps:</strong>
                   <span>{method.nBootstraps.toLocaleString()}</span>
                 </div>
-                <div className="detail-item">
+                <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Replacement:</strong>
                   <span>{method.replacement ? 'Yes' : 'No'}</span>
                 </div>
-                <div className="detail-item">
+                <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Confidence Level:</strong>
                   <span>{(method.confidenceLevel * 100)}%</span>
                 </div>
                 {method.blockSize && (
-                  <div className="detail-item">
+                  <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Block Size:</strong>
                     <span>{method.blockSize}</span>
                   </div>
                 )}
                 {method.stratifyColumn && (
-                  <div className="detail-item">
+                  <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Stratify by:</strong>
                     <span>{method.stratifyColumn}</span>
                   </div>
                 )}
               </div>
 
-              <div className="method-analysis">
-                <div className="advantages">
+              <div className="method-analysis sm:px-4 md:px-6 lg:px-8">
+                <div className="advantages sm:px-4 md:px-6 lg:px-8">
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, advIndex) => (
@@ -3878,7 +3632,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="disadvantages">
+                <div className="disadvantages sm:px-4 md:px-6 lg:px-8">
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, disIndex) => (
@@ -3886,7 +3640,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className="use-cases">
+                <div className="use-cases sm:px-4 md:px-6 lg:px-8">
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, useIndex) => (
@@ -3896,7 +3650,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="implementation-info">
+              <div className="implementation-info sm:px-4 md:px-6 lg:px-8">
                 <strong>Implementation:</strong>
                 <p>{method.implementation}</p>
               </div>
@@ -3905,10 +3659,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="bootstrap-comparison">
+      <div className="bootstrap-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Method Comparison Matrix</h4>
-        <div className="comparison-table">
-          <div className="comparison-header">
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="comparison-header sm:px-4 md:px-6 lg:px-8">
             <span>Method</span>
             <span>Complexity</span>
             <span>Reliability</span>
@@ -3918,24 +3672,24 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <span>Best Use Case</span>
           </div>
           {bootstrapMethods.map((method: any) => (
-            <div key={`comparison-${method.id}`} className="comparison-row">
-              <span className="method-name">{method.name}</span>
-              <span className="complexity-score">
+            <div key={`comparison-${method.id}`} className="comparison-row sm:px-4 md:px-6 lg:px-8">
+              <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
+              <span className="complexity-score sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapComplexityScore(method.id)}
               </span>
-              <span className="reliability-score">
+              <span className="reliability-score sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapReliabilityScore(method.id)}
               </span>
-              <span className="efficiency-score">
+              <span className="efficiency-score sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapEfficiencyScore(method.id)}
               </span>
-              <span className="fantasy-score">
+              <span className="fantasy-score sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapFantasyScore(method.id)}
               </span>
-              <span className="data-usage">
+              <span className="data-usage sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapDataUsage(method.id)}
               </span>
-              <span className="best-use-case">
+              <span className="best-use-case sm:px-4 md:px-6 lg:px-8">
                 {getBootstrapBestUseCase(method.id)}
               </span>
             </div>
@@ -3943,11 +3697,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="bootstrap-experiment">
+      <div className="bootstrap-experiment sm:px-4 md:px-6 lg:px-8">
         <h4>🧪 Interactive Bootstrap Experiment</h4>
-        <div className="experiment-controls">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <button 
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             onClick={runBootstrapExperiment}
             disabled={bootstrapExperimentRunning}
             aria-label="Run bootstrap resampling experiment"
@@ -3957,14 +3711,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {bootstrapExperimentRunning && (
-          <div className="experiment-progress">
-            <div className="progress-header">
+          <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
+            <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
               <span>{bootstrapProgress.toFixed(0)}%</span>
             </div>
-            <div className="progress-bar">
+            <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
               <div 
-                className="progress-fill" 
+                className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                 style={{ width: `${bootstrapProgress}%` }}
               ></div>
             </div>
@@ -3972,129 +3726,129 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {bootstrapResults && (
-          <div className="experiment-results">
+          <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Bootstrap Resampling Results</h5>
             
-            <div className="results-overview">
-              <div className="result-card">
+            <div className="results-overview sm:px-4 md:px-6 lg:px-8">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Method Used</h6>
-                <div className="result-value">{bootstrapResults.method}</div>
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">{bootstrapResults.method}</div>
               </div>
-              <div className="result-card">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Bootstrap Samples</h6>
-                <div className="result-value">{bootstrapResults.nBootstraps.toLocaleString()}</div>
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">{bootstrapResults.nBootstraps.toLocaleString()}</div>
               </div>
-              <div className="result-card">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Average Score</h6>
-                <div className="result-value">{bootstrapResults.avgScore.toFixed(4)}</div>
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">{bootstrapResults.avgScore.toFixed(4)}</div>
               </div>
-              <div className="result-card">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Std Deviation</h6>
-                <div className="result-value">{bootstrapResults.statistics.std.toFixed(4)}</div>
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">{bootstrapResults.statistics.std.toFixed(4)}</div>
               </div>
-              <div className="result-card">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Confidence Interval</h6>
-                <div className="result-value">
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">
                   [{bootstrapResults.confidenceInterval.lower.toFixed(3)}, {bootstrapResults.confidenceInterval.upper.toFixed(3)}]
                 </div>
               </div>
-              <div className="result-card">
+              <div className="result-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Stability Index</h6>
-                <div className="result-value">{bootstrapResults.metrics.stabilityIndex.toFixed(3)}</div>
+                <div className="result-value sm:px-4 md:px-6 lg:px-8">{bootstrapResults.metrics.stabilityIndex.toFixed(3)}</div>
               </div>
             </div>
 
-            <div className="detailed-statistics">
+            <div className="detailed-statistics sm:px-4 md:px-6 lg:px-8">
               <h6>📊 Detailed Statistics</h6>
-              <div className="stats-grid">
-                <div className="stat-item">
+              <div className="stats-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Mean:</span>
                   <span>{bootstrapResults.statistics.mean.toFixed(4)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Median:</span>
                   <span>{bootstrapResults.statistics.median.toFixed(4)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Q25:</span>
                   <span>{bootstrapResults.statistics.q25.toFixed(4)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Q75:</span>
                   <span>{bootstrapResults.statistics.q75.toFixed(4)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Variance:</span>
                   <span>{bootstrapResults.statistics.variance.toFixed(6)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Skewness:</span>
                   <span>{bootstrapResults.statistics.skewness.toFixed(3)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Kurtosis:</span>
                   <span>{bootstrapResults.statistics.kurtosis.toFixed(3)}</span>
                 </div>
-                <div className="stat-item">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
                   <span>Replacement Ratio:</span>
                   <span>{bootstrapResults.replacementRatio.toFixed(1)}</span>
                 </div>
               </div>
             </div>
 
-            <div className="bootstrap-metrics">
+            <div className="bootstrap-metrics sm:px-4 md:px-6 lg:px-8">
               <h6>🎯 Fantasy Football Metrics</h6>
-              <div className="metrics-grid">
-                <div className="metric-item">
+              <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>MAE:</span>
                   <span>{bootstrapResults.metrics.mae.toFixed(3)}</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>RMSE:</span>
                   <span>{bootstrapResults.metrics.rmse.toFixed(3)}</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>R² Score:</span>
                   <span>{bootstrapResults.metrics.r2.toFixed(3)}</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>MAPE:</span>
                   <span>{bootstrapResults.metrics.mape.toFixed(1)}%</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>Fantasy Accuracy:</span>
                   <span>{(bootstrapResults.metrics.fantasyAccuracy * 100).toFixed(1)}%</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>Diversity Score:</span>
                   <span>{bootstrapResults.metrics.diversityScore.toFixed(3)}</span>
                 </div>
-                <div className="metric-item">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                   <span>Robustness:</span>
                   <span>{bootstrapResults.metrics.robustnessMetric.toFixed(3)}</span>
                 </div>
               </div>
             </div>
 
-            <div className="convergence-analysis">
+            <div className="convergence-analysis sm:px-4 md:px-6 lg:px-8">
               <h6>🔄 Convergence Analysis</h6>
-              <div className="convergence-info">
-                <div className="convergence-status">
+              <div className="convergence-info sm:px-4 md:px-6 lg:px-8">
+                <div className="convergence-status sm:px-4 md:px-6 lg:px-8">
                   <strong>Converged:</strong>
                   <span className={`status ${bootstrapResults.convergence.converged ? 'success' : 'warning'}`}>
                     {bootstrapResults.convergence.converged ? '✅ Yes' : '⚠️ No'}
                   </span>
                 </div>
-                <div className="convergence-details">
-                  <div className="detail-row">
+                <div className="convergence-details sm:px-4 md:px-6 lg:px-8">
+                  <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                     <span>Required Samples:</span>
                     <span>{bootstrapResults.convergence.requiredSamples.toLocaleString()}</span>
                   </div>
-                  <div className="detail-row">
+                  <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                     <span>Stability Threshold:</span>
                     <span>{bootstrapResults.convergence.stabilityThreshold}</span>
                   </div>
-                  <div className="detail-row">
+                  <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                     <span>Final Variance:</span>
                     <span>{bootstrapResults.convergence.finalVariance.toFixed(6)}</span>
                   </div>
@@ -4102,23 +3856,23 @@ const OracleCalibrationValidationSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="bootstrap-distribution">
+            <div className="bootstrap-distribution sm:px-4 md:px-6 lg:px-8">
               <h6>📈 Score Distribution Analysis</h6>
-              <div className="distribution-info">
+              <div className="distribution-info sm:px-4 md:px-6 lg:px-8">
                 <p>
                   Bootstrap samples generated {bootstrapResults.nBootstraps.toLocaleString()} resampled datasets
                   with scores ranging from {Math.min(...bootstrapResults.bootstrapScores).toFixed(3)} to{' '}
                   {Math.max(...bootstrapResults.bootstrapScores).toFixed(3)}.
                 </p>
-                <div className="distribution-stats">
-                  <div className="dist-item">
+                <div className="distribution-stats sm:px-4 md:px-6 lg:px-8">
+                  <div className="dist-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Distribution Shape:</strong>
                     <span>
                       {bootstrapResults.statistics.skewness > 0.5 ? 'Right-skewed' : 
                        bootstrapResults.statistics.skewness < -0.5 ? 'Left-skewed' : 'Symmetric'}
                     </span>
                   </div>
-                  <div className="dist-item">
+                  <div className="dist-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Tail Behavior:</strong>
                     <span>
                       {bootstrapResults.statistics.kurtosis > 1 ? 'Heavy-tailed' :
@@ -4132,10 +3886,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="bootstrap-best-practices">
+      <div className="bootstrap-best-practices sm:px-4 md:px-6 lg:px-8">
         <h4>💡 Bootstrap Best Practices</h4>
-        <div className="practices-grid">
-          <div className="practice-card">
+        <div className="practices-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>🎯 Method Selection</h5>
             <ul>
               <li>Use basic bootstrap for general uncertainty quantification</li>
@@ -4144,7 +3898,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               <li>Consider parametric bootstrap for well-understood distributions</li>
             </ul>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Sample Size Guidelines</h5>
             <ul>
               <li>Start with 1000 bootstrap samples for initial analysis</li>
@@ -4153,7 +3907,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               <li>Balance computational cost with precision requirements</li>
             </ul>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>⚖️ Confidence Intervals</h5>
             <ul>
               <li>Use 95% confidence level for standard applications</li>
@@ -4162,7 +3916,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               <li>Consider bootstrap-t intervals for better coverage</li>
             </ul>
           </div>
-          <div className="practice-card">
+          <div className="practice-card sm:px-4 md:px-6 lg:px-8">
             <h5>🏈 Fantasy Applications</h5>
             <ul>
               <li>Bootstrap player performance projections for uncertainty</li>
@@ -4174,10 +3928,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="bootstrap-insights">
+      <div className="bootstrap-insights sm:px-4 md:px-6 lg:px-8">
         <h4>🔍 Key Insights</h4>
-        <div className="insights-container">
-          <div className="insight-item">
+        <div className="insights-container sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Uncertainty Quantification</h5>
             <p>
               Bootstrap resampling provides robust uncertainty estimates without strong distributional 
@@ -4185,7 +3939,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               can be complex and non-normal.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Model Stability</h5>
             <p>
               By generating multiple datasets through resampling, bootstrap methods reveal model 
@@ -4193,7 +3947,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               for fantasy football applications.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Confidence Intervals</h5>
             <p>
               Bootstrap confidence intervals provide practical bounds for fantasy point predictions, 
@@ -4207,14 +3961,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderCalibration = () => (
-    <div className="calibration-section">
+    <div className="calibration-section sm:px-4 md:px-6 lg:px-8">
       <h3>⚖️ Probability Calibration Methods</h3>
-      <p className="section-description">
+      <p className="section-description sm:px-4 md:px-6 lg:px-8">
         Probability calibration ensures that predicted probabilities reflect true likelihood of outcomes. 
         Well-calibrated models provide reliable confidence estimates essential for fantasy football decision-making.
       </p>
 
-      <div className="methods-grid">
+      <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {calibrationMethods.map((method: any) => (
           <div 
             key={method.id} 
@@ -4226,51 +3980,51 @@ const OracleCalibrationValidationSection: React.FC = () => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 setSelectedCalibrationMethod(method.id);
-              }
+
             }}
           >
-            <div className="method-header">
-              <span className="method-icon">{method.icon}</span>
+            <div className="method-header sm:px-4 md:px-6 lg:px-8">
+              <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
               <h4>{method.name}</h4>
-              <span className="method-type">{method.type}</span>
+              <span className="method-type sm:px-4 md:px-6 lg:px-8">{method.type}</span>
             </div>
             
-            <div className="method-info">
-              <p className="method-description">{method.description}</p>
+            <div className="method-info sm:px-4 md:px-6 lg:px-8">
+              <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
               
-              <div className="method-details">
-                <div className="detail-row">
+              <div className="method-details sm:px-4 md:px-6 lg:px-8">
+                <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                   <strong>Formula:</strong> <code>{method.formula}</code>
                 </div>
-                <div className="detail-row">
+                <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                   <strong>Complexity:</strong> {method.complexity}
                 </div>
-                <div className="detail-row">
+                <div className="detail-row sm:px-4 md:px-6 lg:px-8">
                   <strong>Data Need:</strong> {method.dataRequirement}
                 </div>
               </div>
 
-              <div className="performance-grid">
-                <div className="performance-item">
-                  <span className="performance-label">Complexity</span>
-                  <span className="performance-stars">{getCalibrationComplexityScore(method.id)}</span>
+              <div className="performance-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="performance-label sm:px-4 md:px-6 lg:px-8">Complexity</span>
+                  <span className="performance-stars sm:px-4 md:px-6 lg:px-8">{getCalibrationComplexityScore(method.id)}</span>
                 </div>
-                <div className="performance-item">
-                  <span className="performance-label">Reliability</span>
-                  <span className="performance-stars">{getCalibrationReliabilityScore(method.id)}</span>
+                <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="performance-label sm:px-4 md:px-6 lg:px-8">Reliability</span>
+                  <span className="performance-stars sm:px-4 md:px-6 lg:px-8">{getCalibrationReliabilityScore(method.id)}</span>
                 </div>
-                <div className="performance-item">
-                  <span className="performance-label">Efficiency</span>
-                  <span className="performance-stars">{getCalibrationEfficiencyScore(method.id)}</span>
+                <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="performance-label sm:px-4 md:px-6 lg:px-8">Efficiency</span>
+                  <span className="performance-stars sm:px-4 md:px-6 lg:px-8">{getCalibrationEfficiencyScore(method.id)}</span>
                 </div>
-                <div className="performance-item">
-                  <span className="performance-label">Fantasy Use</span>
-                  <span className="performance-stars">{getCalibrationFantasyScore(method.id)}</span>
+                <div className="performance-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="performance-label sm:px-4 md:px-6 lg:px-8">Fantasy Use</span>
+                  <span className="performance-stars sm:px-4 md:px-6 lg:px-8">{getCalibrationFantasyScore(method.id)}</span>
                 </div>
               </div>
 
-              <div className="method-lists">
-                <div className="list-section">
+              <div className="method-lists sm:px-4 md:px-6 lg:px-8">
+                <div className="list-section sm:px-4 md:px-6 lg:px-8">
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, index) => (
@@ -4279,7 +4033,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="list-section">
+                <div className="list-section sm:px-4 md:px-6 lg:px-8">
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, index) => (
@@ -4288,7 +4042,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </ul>
                 </div>
                 
-                <div className="list-section">
+                <div className="list-section sm:px-4 md:px-6 lg:px-8">
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, index) => (
@@ -4297,7 +4051,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </ul>
                 </div>
 
-                <div className="list-section">
+                <div className="list-section sm:px-4 md:px-6 lg:px-8">
                   <h6>🏈 Fantasy Applications</h6>
                   <ul>
                     {method.fantasyApplications.map((application, index) => (
@@ -4311,21 +4065,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
         ))}
       </div>
 
-      <div className="experiment-section">
-        <div className="experiment-controls">
+      <div className="experiment-section sm:px-4 md:px-6 lg:px-8">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <h4>🧪 Interactive Calibration Experiment</h4>
           <p>
             Run a calibration experiment to see how {calibrationMethods.find((m: any) => m.id === selectedCalibrationMethod)?.name} 
             improves probability reliability. This simulation demonstrates calibration performance on fantasy football predictions.
           </p>
           
-          <div className="control-group">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="calibration-method-select">Calibration Method:</label>
             <select 
               id="calibration-method-select"
               value={selectedCalibrationMethod} 
               onChange={(e: any) => setSelectedCalibrationMethod(e.target.value)}
-              className="method-select"
             >
               {calibrationMethods.map((method: any) => (
                 <option key={method.id} value={method.id}>
@@ -4338,120 +4091,120 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <button 
             onClick={runCalibrationExperiment}
             disabled={calibrationExperimentRunning}
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run calibration experiment"
           >
             {calibrationExperimentRunning ? '🔄 Running Calibration...' : '🚀 Run Calibration Experiment'}
           </button>
 
           {calibrationExperimentRunning && (
-            <div className="progress-container">
-              <div className="progress-bar">
+            <div className="progress-container sm:px-4 md:px-6 lg:px-8">
+              <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div 
-                  className="progress-fill" 
+                  className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                   style={{ width: `${calibrationProgress}%` }}
                 ></div>
               </div>
-              <span className="progress-text">{calibrationProgress.toFixed(1)}% Complete</span>
+              <span className="progress-text sm:px-4 md:px-6 lg:px-8">{calibrationProgress.toFixed(1)}% Complete</span>
             </div>
           )}
         </div>
 
         {calibrationResults && (
-          <div className="results-container">
+          <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>⚖️ Calibration Results</h5>
             
-            <div className="results-summary">
-              <div className="summary-card">
+            <div className="results-summary sm:px-4 md:px-6 lg:px-8">
+              <div className="summary-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Method Overview</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Method</span>
-                    <span className="metric-value">{calibrationResults.method}</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Method</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.method}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Type</span>
-                    <span className="metric-value">{calibrationResults.methodType}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Type</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.methodType}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Samples</span>
-                    <span className="metric-value">{calibrationResults.parameters.nSamples}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Samples</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.parameters.nSamples}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Preserves Ranking</span>
-                    <span className="metric-value">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Preserves Ranking</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">
                       {calibrationResults.parameters.preservesRanking ? '✅ Yes' : '❌ No'}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="summary-card">
+              <div className="summary-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Calibration Improvement</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Original Brier Score</span>
-                    <span className="metric-value">{calibrationResults.originalBrierScore.toFixed(4)}</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Original Brier Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.originalBrierScore.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Calibrated Brier Score</span>
-                    <span className="metric-value">{calibrationResults.calibratedBrierScore.toFixed(4)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Calibrated Brier Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.calibratedBrierScore.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Brier Improvement</span>
-                    <span className="metric-value improvement">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Brier Improvement</span>
+                    <span className="metric-value improvement sm:px-4 md:px-6 lg:px-8">
                       {(calibrationResults.brierImprovement * 100).toFixed(1)}%
                     </span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Calibration Error</span>
-                    <span className="metric-value">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Calibration Error</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">
                       {calibrationResults.calibrationMetrics.calibrationError.toFixed(4)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="summary-card">
+              <div className="summary-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Performance Metrics</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Accuracy</span>
-                    <span className="metric-value">{(calibrationResults.performanceMetrics.accuracy * 100).toFixed(1)}%</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(calibrationResults.performanceMetrics.accuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Precision</span>
-                    <span className="metric-value">{(calibrationResults.performanceMetrics.precision * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Precision</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(calibrationResults.performanceMetrics.precision * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Recall</span>
-                    <span className="metric-value">{(calibrationResults.performanceMetrics.recall * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Recall</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(calibrationResults.performanceMetrics.recall * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">F1 Score</span>
-                    <span className="metric-value">{(calibrationResults.performanceMetrics.f1Score * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">F1 Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(calibrationResults.performanceMetrics.f1Score * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">AUC</span>
-                    <span className="metric-value">{calibrationResults.performanceMetrics.auc.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">AUC</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{calibrationResults.performanceMetrics.auc.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Fantasy Accuracy</span>
-                    <span className="metric-value">{(calibrationResults.performanceMetrics.fantasyAccuracy * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Fantasy Accuracy</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(calibrationResults.performanceMetrics.fantasyAccuracy * 100).toFixed(1)}%</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="reliability-diagram">
+            <div className="reliability-diagram sm:px-4 md:px-6 lg:px-8">
               <h6>📊 Reliability Diagram</h6>
               <p>
                 This diagram shows how well calibrated the predictions are. Points closer to the diagonal 
                 line indicate better calibration, where predicted probabilities match actual frequencies.
               </p>
               
-              <div className="diagram-container">
-                <table className="reliability-table">
+              <div className="diagram-container sm:px-4 md:px-6 lg:px-8">
+                <table className="reliability-table sm:px-4 md:px-6 lg:px-8">
                   <thead>
                     <tr>
                       <th>Bin Range</th>
@@ -4490,10 +4243,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="calibration-insights">
+            <div className="calibration-insights sm:px-4 md:px-6 lg:px-8">
               <h6>🎯 Calibration Insights</h6>
-              <div className="insights-grid">
-                <div className="insight-item">
+              <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Reliability Assessment</h6>
                   <p>
                     The {calibrationResults.method} method achieved a calibration error of{' '}
@@ -4503,7 +4256,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                      calibrationResults.calibrationMetrics.calibrationError < 0.15 ? 'moderate' : 'poor'} calibration.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Ranking Preservation</h6>
                   <p>
                     This method {calibrationResults.parameters.preservesRanking ? 'preserves' : 'does not preserve'} the 
@@ -4512,7 +4265,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     fantasy football player rankings and draft strategies.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Football Application</h6>
                   <p>
                     For fantasy football, this calibration approach provides{' '}
@@ -4528,9 +4281,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="method-comparison">
+      <div className="method-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Method Comparison</h4>
-        <table className="comparison-table">
+        <table className="comparison-table sm:px-4 md:px-6 lg:px-8">
           <thead>
             <tr>
               <th>Method</th>
@@ -4546,7 +4299,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             {calibrationMethods.map((method: any) => (
               <tr key={method.id} className={selectedCalibrationMethod === method.id ? 'selected-row' : ''}>
                 <td>
-                  <span className="method-icon">{method.icon}</span>
+                  <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
                   {method.name}
                 </td>
                 <td>{getCalibrationComplexityScore(method.id)}</td>
@@ -4554,17 +4307,17 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <td>{getCalibrationEfficiencyScore(method.id)}</td>
                 <td>{getCalibrationFantasyScore(method.id)}</td>
                 <td>{getCalibrationDataRequirement(method.id)}</td>
-                <td className="use-case-cell">{getCalibrationBestUseCase(method.id)}</td>
+                <td className="use-case-cell sm:px-4 md:px-6 lg:px-8">{getCalibrationBestUseCase(method.id)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <div className="calibration-insights">
+      <div className="calibration-insights sm:px-4 md:px-6 lg:px-8">
         <h4>🎯 Calibration in Fantasy Football</h4>
-        <div className="insights-grid">
-          <div className="insight-item">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Probability Reliability</h5>
             <p>
               Well-calibrated predictions ensure that when Oracle predicts a 70% chance of a player 
@@ -4572,7 +4325,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               crucial for risk assessment and lineup optimization decisions.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Decision Support</h5>
             <p>
               Calibrated probabilities enable better decision-making by providing honest uncertainty 
@@ -4580,7 +4333,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               players and safer, consistent options.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Model Trust</h5>
             <p>
               Calibration builds trust in Oracle's predictions by ensuring confidence levels accurately 
@@ -4594,16 +4347,16 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderPerformanceMetrics = () => (
-    <div className="performance-metrics-section">
+    <div className="performance-metrics-section sm:px-4 md:px-6 lg:px-8">
       <h3>📊 Performance Evaluation Metrics</h3>
-      <p className="section-description">
+      <p className="section-description sm:px-4 md:px-6 lg:px-8">
         Comprehensive performance evaluation using classification, regression, calibration, and fantasy-specific metrics
         to assess model quality across different dimensions of prediction accuracy and reliability.
       </p>
 
-      <div className="metrics-categories">
+      <div className="metrics-categories sm:px-4 md:px-6 lg:px-8">
         <h4>📋 Metric Categories</h4>
-        <div className="categories-grid">
+        <div className="categories-grid sm:px-4 md:px-6 lg:px-8">
           {metricCategories.map((category: any) => (
             <button
               key={category.id}
@@ -4615,21 +4368,21 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   setSelectedMetricCategory(category.id);
-                }
+
               }}
             >
-              <div className="category-icon">{category.icon}</div>
+              <div className="category-icon sm:px-4 md:px-6 lg:px-8">{category.icon}</div>
               <h5>{category.name}</h5>
               <p>{category.description}</p>
-              {selectedMetricCategory === category.id && <span className="selected-badge">Active</span>}
+              {selectedMetricCategory === category.id && <span className="selected-badge sm:px-4 md:px-6 lg:px-8">Active</span>}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="metrics-detailed">
+      <div className="metrics-detailed sm:px-4 md:px-6 lg:px-8">
         <h4>🎯 Performance Metrics</h4>
-        <div className="metrics-grid">
+        <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
           {performanceMetrics
             .filter((metric: any) => metric.category === selectedMetricCategory)
             .map((metric: any) => (
@@ -4643,32 +4396,32 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     setSelectedMetric(metric.id);
-                  }
+
                 }}
               >
-                <div className="metric-header">
+                <div className="metric-header sm:px-4 md:px-6 lg:px-8">
                   <h5>{metric.name}</h5>
-                  <div className="metric-range">Range: {metric.range}</div>
+                  <div className="metric-range sm:px-4 md:px-6 lg:px-8">Range: {metric.range}</div>
                   <div className={`metric-direction ${metric.higherIsBetter ? 'higher-better' : 'lower-better'}`}>
                     {metric.higherIsBetter ? '⬆️ Higher is Better' : '⬇️ Lower is Better'}
                   </div>
                 </div>
 
-                <div className="metric-details">
-                  <p className="metric-description">{metric.description}</p>
+                <div className="metric-details sm:px-4 md:px-6 lg:px-8">
+                  <p className="metric-description sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
                   
-                  <div className="metric-formula">
+                  <div className="metric-formula sm:px-4 md:px-6 lg:px-8">
                     <strong>Formula:</strong>
                     <code>{metric.formula}</code>
                   </div>
 
-                  <div className="metric-interpretation">
+                  <div className="metric-interpretation sm:px-4 md:px-6 lg:px-8">
                     <strong>Interpretation:</strong>
                     <p>{metric.interpretation}</p>
                   </div>
 
-                  <div className="metric-analysis">
-                    <div className="use-cases">
+                  <div className="metric-analysis sm:px-4 md:px-6 lg:px-8">
+                    <div className="use-cases sm:px-4 md:px-6 lg:px-8">
                       <h6>✅ Use Cases</h6>
                       <ul>
                         {metric.useCases.map((useCase, index) => (
@@ -4677,7 +4430,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                       </ul>
                     </div>
 
-                    <div className="limitations">
+                    <div className="limitations sm:px-4 md:px-6 lg:px-8">
                       <h6>⚠️ Limitations</h6>
                       <ul>
                         {metric.limitations.map((limitation, index) => (
@@ -4687,23 +4440,23 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="metric-scores">
-                    <div className="score-grid">
-                      <div className="score-item">
-                        <span className="score-label">Importance</span>
-                        <span className="score-stars">{getMetricImportanceScore(metric.id)}</span>
+                  <div className="metric-scores sm:px-4 md:px-6 lg:px-8">
+                    <div className="score-grid sm:px-4 md:px-6 lg:px-8">
+                      <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                        <span className="score-label sm:px-4 md:px-6 lg:px-8">Importance</span>
+                        <span className="score-stars sm:px-4 md:px-6 lg:px-8">{getMetricImportanceScore(metric.id)}</span>
                       </div>
-                      <div className="score-item">
-                        <span className="score-label">Interpretability</span>
-                        <span className="score-stars">{getMetricInterpretabilityScore(metric.id)}</span>
+                      <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                        <span className="score-label sm:px-4 md:px-6 lg:px-8">Interpretability</span>
+                        <span className="score-stars sm:px-4 md:px-6 lg:px-8">{getMetricInterpretabilityScore(metric.id)}</span>
                       </div>
-                      <div className="score-item">
-                        <span className="score-label">Robustness</span>
-                        <span className="score-stars">{getMetricRobustnessScore(metric.id)}</span>
+                      <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                        <span className="score-label sm:px-4 md:px-6 lg:px-8">Robustness</span>
+                        <span className="score-stars sm:px-4 md:px-6 lg:px-8">{getMetricRobustnessScore(metric.id)}</span>
                       </div>
-                      <div className="score-item">
-                        <span className="score-label">Fantasy Relevance</span>
-                        <span className="score-stars">{getMetricFantasyRelevanceScore(metric.id)}</span>
+                      <div className="score-item sm:px-4 md:px-6 lg:px-8">
+                        <span className="score-label sm:px-4 md:px-6 lg:px-8">Fantasy Relevance</span>
+                        <span className="score-stars sm:px-4 md:px-6 lg:px-8">{getMetricFantasyRelevanceScore(metric.id)}</span>
                       </div>
                     </div>
                   </div>
@@ -4713,21 +4466,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="experiment-section">
-        <div className="experiment-controls">
+      <div className="experiment-section sm:px-4 md:px-6 lg:px-8">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <h4>🧪 Performance Evaluation Experiment</h4>
           <p>
             Evaluate multiple performance metrics across different model types to understand strengths,
             weaknesses, and trade-offs in fantasy football prediction tasks.
           </p>
 
-          <div className="control-group">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="model-type-select">Model Type:</label>
             <select
               id="model-type-select"
               value={selectedModel}
               onChange={(e: any) => setSelectedModel(e.target.value)}
-              className="model-select"
             >
               {modelTypes.map((model: any) => (
                 <option key={model.id} value={model.id}>
@@ -4737,13 +4489,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </select>
           </div>
 
-          <div className="control-group">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="metric-category-select">Focus Category:</label>
             <select
               id="metric-category-select"
               value={selectedMetricCategory}
               onChange={(e: any) => setSelectedMetricCategory(e.target.value)}
-              className="category-select"
             >
               {metricCategories.map((category: any) => (
                 <option key={category.id} value={category.id}>
@@ -4756,84 +4507,84 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <button
             onClick={runPerformanceMetricsExperiment}
             disabled={metricsExperimentRunning}
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run performance metrics experiment"
           >
             {metricsExperimentRunning ? '🔄 Evaluating Performance...' : '🚀 Run Performance Evaluation'}
           </button>
 
           {metricsExperimentRunning && (
-            <div className="progress-container">
-              <div className="progress-bar">
+            <div className="progress-container sm:px-4 md:px-6 lg:px-8">
+              <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div
-                  className="progress-fill"
+                  className="progress-fill sm:px-4 md:px-6 lg:px-8"
                   style={{ width: `${metricsProgress}%` }}
                 ></div>
               </div>
-              <span className="progress-text">{metricsProgress.toFixed(1)}% Complete</span>
+              <span className="progress-text sm:px-4 md:px-6 lg:px-8">{metricsProgress.toFixed(1)}% Complete</span>
             </div>
           )}
         </div>
 
         {metricsResults && (
-          <div className="results-container">
+          <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Performance Evaluation Results</h5>
 
-            <div className="results-summary">
-              <div className="summary-card">
+            <div className="results-summary sm:px-4 md:px-6 lg:px-8">
+              <div className="summary-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Model Overview</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Model Type</span>
-                    <span className="metric-value">
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Model Type</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">
                       {modelTypes.find((m: any) => m.id === selectedModel)?.name}
                     </span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Evaluation Set</span>
-                    <span className="metric-value">1,000 samples</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Evaluation Set</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">1,000 samples</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Task Type</span>
-                    <span className="metric-value">Fantasy Points Prediction</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Task Type</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">Fantasy Points Prediction</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {metricsResults.classification && (
-              <div className="metrics-category-results">
+              <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>🎯 Classification Metrics</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Accuracy</span>
-                    <span className="metric-value">{(metricsResults.classification.accuracy * 100).toFixed(1)}%</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.classification.accuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Precision</span>
-                    <span className="metric-value">{(metricsResults.classification.precision * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Precision</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.classification.precision * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Recall</span>
-                    <span className="metric-value">{(metricsResults.classification.recall * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Recall</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.classification.recall * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">F1-Score</span>
-                    <span className="metric-value">{(metricsResults.classification.f1Score * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">F1-Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.classification.f1Score * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">AUC-ROC</span>
-                    <span className="metric-value">{metricsResults.classification.auc.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">AUC-ROC</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.auc.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">AUC-PR</span>
-                    <span className="metric-value">{metricsResults.classification.prAuc.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">AUC-PR</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.prAuc.toFixed(3)}</span>
                   </div>
                 </div>
 
-                <div className="confusion-matrix">
+                <div className="confusion-matrix sm:px-4 md:px-6 lg:px-8">
                   <h6>Confusion Matrix</h6>
-                  <table className="matrix-table">
+                  <table className="matrix-table sm:px-4 md:px-6 lg:px-8">
                     <thead>
                       <tr>
                         <th></th>
@@ -4844,13 +4595,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     <tbody>
                       <tr>
                         <td><strong>Actual 0</strong></td>
-                        <td className="true-negative">{metricsResults.classification.confusionMatrix[0][0]}</td>
-                        <td className="false-positive">{metricsResults.classification.confusionMatrix[0][1]}</td>
+                        <td className="true-negative sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.confusionMatrix[0][0]}</td>
+                        <td className="false-positive sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.confusionMatrix[0][1]}</td>
                       </tr>
                       <tr>
                         <td><strong>Actual 1</strong></td>
-                        <td className="false-negative">{metricsResults.classification.confusionMatrix[1][0]}</td>
-                        <td className="true-positive">{metricsResults.classification.confusionMatrix[1][1]}</td>
+                        <td className="false-negative sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.confusionMatrix[1][0]}</td>
+                        <td className="true-positive sm:px-4 md:px-6 lg:px-8">{metricsResults.classification.confusionMatrix[1][1]}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -4859,105 +4610,105 @@ const OracleCalibrationValidationSection: React.FC = () => {
             )}
 
             {metricsResults.regression && (
-              <div className="metrics-category-results">
+              <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>📈 Regression Metrics</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">MSE</span>
-                    <span className="metric-value">{metricsResults.regression.mse.toFixed(4)}</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">MSE</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.mse.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">RMSE</span>
-                    <span className="metric-value">{metricsResults.regression.rmse.toFixed(4)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">RMSE</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.rmse.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">MAE</span>
-                    <span className="metric-value">{metricsResults.regression.mae.toFixed(4)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">MAE</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.mae.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">MAPE</span>
-                    <span className="metric-value">{metricsResults.regression.mape.toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">MAPE</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.mape.toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">R²</span>
-                    <span className="metric-value">{metricsResults.regression.r2.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">R²</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.r2.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Adjusted R²</span>
-                    <span className="metric-value">{metricsResults.regression.adjustedR2.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Adjusted R²</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.regression.adjustedR2.toFixed(3)}</span>
                   </div>
                 </div>
               </div>
             )}
 
             {metricsResults.calibration && (
-              <div className="metrics-category-results">
+              <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>⚖️ Calibration Metrics</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Expected Calibration Error</span>
-                    <span className="metric-value">{(metricsResults.calibration.expectedCalibrationError * 100).toFixed(2)}%</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Expected Calibration Error</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.calibration.expectedCalibrationError * 100).toFixed(2)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Brier Score</span>
-                    <span className="metric-value">{metricsResults.calibration.brierScore.toFixed(4)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Brier Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.calibration.brierScore.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Reliability</span>
-                    <span className="metric-value">{(metricsResults.calibration.reliability * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Reliability</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.calibration.reliability * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Resolution</span>
-                    <span className="metric-value">{metricsResults.calibration.resolution.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Resolution</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.calibration.resolution.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Sharpness</span>
-                    <span className="metric-value">{metricsResults.calibration.sharpness.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Sharpness</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.calibration.sharpness.toFixed(3)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Calibration Slope</span>
-                    <span className="metric-value">{metricsResults.calibration.calibrationSlope.toFixed(3)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Calibration Slope</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.calibration.calibrationSlope.toFixed(3)}</span>
                   </div>
                 </div>
               </div>
             )}
 
             {metricsResults.fantasy && (
-              <div className="metrics-category-results">
+              <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>🏈 Fantasy Football Metrics</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Points Accuracy</span>
-                    <span className="metric-value">{(metricsResults.fantasy.pointsAccuracy * 100).toFixed(1)}%</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Points Accuracy</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.fantasy.pointsAccuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Ranking Accuracy</span>
-                    <span className="metric-value">{(metricsResults.fantasy.rankingAccuracy * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Ranking Accuracy</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.fantasy.rankingAccuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Bust Detection</span>
-                    <span className="metric-value">{(metricsResults.fantasy.bustDetectionRecall * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Bust Detection</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.fantasy.bustDetectionRecall * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Sleeper ID</span>
-                    <span className="metric-value">{(metricsResults.fantasy.sleoperIdentification * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Sleeper ID</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.fantasy.sleoperIdentification * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Value Over Replacement</span>
-                    <span className="metric-value">{metricsResults.fantasy.valueOverReplacement.toFixed(1)}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Value Over Replacement</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{metricsResults.fantasy.valueOverReplacement.toFixed(1)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Consistency Score</span>
-                    <span className="metric-value">{(metricsResults.fantasy.consistencyScore * 100).toFixed(1)}%</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Consistency Score</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(metricsResults.fantasy.consistencyScore * 100).toFixed(1)}%</span>
                   </div>
                 </div>
               </div>
             )}
 
-            <div className="metrics-insights">
+            <div className="metrics-insights sm:px-4 md:px-6 lg:px-8">
               <h6>💡 Performance Insights</h6>
-              <div className="insights-grid">
-                <div className="insight-item">
+              <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Model Strengths</h6>
                   <p>
                     The {modelTypes.find((m: any) => m.id === selectedModel)?.name} model shows{' '}
@@ -4967,7 +4718,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     classification performance with strong predictive capabilities for fantasy football applications.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Calibration Quality</h6>
                   <p>
                     The calibration metrics indicate{' '}
@@ -4977,7 +4728,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     probability calibration, providing reliable confidence estimates for decision-making.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Relevance</h6>
                   <p>
                     The fantasy-specific metrics demonstrate{' '}
@@ -4993,9 +4744,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="metrics-comparison">
+      <div className="metrics-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Metrics Comparison</h4>
-        <table className="comparison-table">
+        <table className="comparison-table sm:px-4 md:px-6 lg:px-8">
           <thead>
             <tr>
               <th>Metric</th>
@@ -5012,23 +4763,23 @@ const OracleCalibrationValidationSection: React.FC = () => {
               .filter((metric: any) => metric.category === selectedMetricCategory)
               .map((metric: any) => (
                 <tr key={metric.id} className={selectedMetric === metric.id ? 'selected-row' : ''}>
-                  <td className="metric-name">{metric.name}</td>
-                  <td className="metric-category">{metric.category}</td>
+                  <td className="metric-name sm:px-4 md:px-6 lg:px-8">{metric.name}</td>
+                  <td className="metric-category sm:px-4 md:px-6 lg:px-8">{metric.category}</td>
                   <td>{getMetricImportanceScore(metric.id)}</td>
                   <td>{getMetricInterpretabilityScore(metric.id)}</td>
                   <td>{getMetricRobustnessScore(metric.id)}</td>
                   <td>{getMetricFantasyRelevanceScore(metric.id)}</td>
-                  <td className="use-case-cell">{metric.useCases[0]}</td>
+                  <td className="use-case-cell sm:px-4 md:px-6 lg:px-8">{metric.useCases[0]}</td>
                 </tr>
               ))}
           </tbody>
         </table>
       </div>
 
-      <div className="performance-insights">
+      <div className="performance-insights sm:px-4 md:px-6 lg:px-8">
         <h4>🎯 Performance Evaluation in Fantasy Football</h4>
-        <div className="insights-grid">
-          <div className="insight-item">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Multi-Metric Assessment</h5>
             <p>
               Comprehensive performance evaluation requires multiple metrics to capture different aspects
@@ -5036,7 +4787,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               evaluate point predictions, and calibration metrics ensure reliable confidence estimates.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Context-Dependent Metrics</h5>
             <p>
               Different fantasy football scenarios require different metric priorities. Draft preparation
@@ -5044,7 +4795,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               and bust detection capabilities.
             </p>
           </div>
-          <div className="insight-item">
+          <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Trade-off Analysis</h5>
             <p>
               Model performance often involves trade-offs between different metrics. Understanding these
@@ -5058,62 +4809,61 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderBiasVarianceAnalysis = () => (
-    <div className="bias-variance-section">
+    <div className="bias-variance-section sm:px-4 md:px-6 lg:px-8">
       <h3>⚖️ Bias-Variance Trade-off Analysis</h3>
-      <p className="section-description">
+      <p className="section-description sm:px-4 md:px-6 lg:px-8">
         Understanding the fundamental trade-off between bias and variance in machine learning models
         to optimize prediction accuracy and generalization in fantasy football applications.
       </p>
 
-      <div className="bias-variance-concepts">
+      <div className="bias-variance-concepts sm:px-4 md:px-6 lg:px-8">
         <h4>🧠 Core Concepts</h4>
-        <div className="concepts-grid">
-          <div className="concept-card">
-            <div className="concept-icon">📉</div>
+        <div className="concepts-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="concept-card sm:px-4 md:px-6 lg:px-8">
+            <div className="concept-icon sm:px-4 md:px-6 lg:px-8">📉</div>
             <h5>Bias</h5>
             <p>
               Error from overly simplistic assumptions. High bias models (underfitting) miss relevant
               relationships between player performance factors, leading to systematic prediction errors.
             </p>
-            <div className="concept-formula">
+            <div className="concept-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Bias² = </strong>(E[f̂(x)] - f(x))²
             </div>
           </div>
-          <div className="concept-card">
-            <div className="concept-icon">📊</div>
+          <div className="concept-card sm:px-4 md:px-6 lg:px-8">
+            <div className="concept-icon sm:px-4 md:px-6 lg:px-8">📊</div>
             <h5>Variance</h5>
             <p>
               Error from sensitivity to small changes in training data. High variance models (overfitting)
               change dramatically with different player samples, reducing generalization ability.
             </p>
-            <div className="concept-formula">
+            <div className="concept-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Variance = </strong>E[(f̂(x) - E[f̂(x)])²]
             </div>
           </div>
-          <div className="concept-card">
-            <div className="concept-icon">🎯</div>
+          <div className="concept-card sm:px-4 md:px-6 lg:px-8">
+            <div className="concept-icon sm:px-4 md:px-6 lg:px-8">🎯</div>
             <h5>Total Error</h5>
             <p>
               Combination of bias, variance, and irreducible noise. The goal is finding optimal
               model complexity that minimizes total prediction error for fantasy football scenarios.
             </p>
-            <div className="concept-formula">
+            <div className="concept-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Error = </strong>Bias² + Variance + Noise
             </div>
           </div>
         </div>
       </div>
 
-      <div className="model-complexity-selection">
+      <div className="model-complexity-selection sm:px-4 md:px-6 lg:px-8">
         <h4>🔧 Model Complexity Analysis</h4>
-        <div className="complexity-controls">
-          <div className="control-group">
+        <div className="complexity-controls sm:px-4 md:px-6 lg:px-8">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="complexity-model-select">Model Type:</label>
             <select
               id="complexity-model-select"
               value={selectedComplexityModel}
               onChange={(e: any) => setSelectedComplexityModel(e.target.value)}
-              className="complexity-select"
             >
               {complexityConfigs.map((config: any) => (
                 <option key={config.id} value={config.id}>
@@ -5123,13 +4873,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </select>
           </div>
 
-          <div className="control-group">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="decomposition-method-select">Decomposition Method:</label>
             <select
               id="decomposition-method-select"
               value={decompositionMethod}
               onChange={(e: any) => setDecompositionMethod(e.target.value)}
-              className="method-select"
             >
               <option value="bootstrap">Bootstrap Sampling</option>
               <option value="analytical">Analytical Decomposition</option>
@@ -5137,68 +4886,66 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </select>
           </div>
 
-          <div className="control-group">
+          <div className="control-group sm:px-4 md:px-6 lg:px-8">
             <label htmlFor="complexity-range">Complexity Range:</label>
-            <div className="range-inputs">
+            <div className="range-inputs sm:px-4 md:px-6 lg:px-8">
               <input
                 type="number"
                 value={selectedComplexityRange[0]}
                 onChange={(e: any) => setSelectedComplexityRange([+e.target.value, selectedComplexityRange[1]])}
-                min="1"
                 max="50"
-                className="range-input"
+                className="range-input sm:px-4 md:px-6 lg:px-8"
               />
               <span>to</span>
               <input
                 type="number"
                 value={selectedComplexityRange[1]}
                 onChange={(e: any) => setSelectedComplexityRange([selectedComplexityRange[0], +e.target.value])}
-                min="1"
                 max="50"
-                className="range-input"
+                className="range-input sm:px-4 md:px-6 lg:px-8"
               />
             </div>
           </div>
         </div>
 
-        <div className="complexity-experiments">
+        <div className="complexity-experiments sm:px-4 md:px-6 lg:px-8">
           <h5>📋 Experiment Configurations</h5>
-          <div className="experiments-grid">
+          <div className="experiments-grid sm:px-4 md:px-6 lg:px-8">
             {biasVarianceExperiments.map((experiment: any) => (
-              <div key={experiment.id} className="experiment-card">
+              <div key={experiment.id} className="experiment-card sm:px-4 md:px-6 lg:px-8">
                 <h6>{experiment.name}</h6>
                 <p>{experiment.description}</p>
                 
-                <div className="experiment-preview">
-                  <div className="preview-metrics">
-                    <div className="metric-item">
-                      <span className="metric-label">Expected Bias</span>
-                      <span className="metric-value">{(experiment.expectedBias * 100).toFixed(1)}%</span>
+                <div className="experiment-preview sm:px-4 md:px-6 lg:px-8">
+                  <div className="preview-metrics sm:px-4 md:px-6 lg:px-8">
+                    <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="metric-label sm:px-4 md:px-6 lg:px-8">Expected Bias</span>
+                      <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(experiment.expectedBias * 100).toFixed(1)}%</span>
                     </div>
-                    <div className="metric-item">
-                      <span className="metric-label">Expected Variance</span>
-                      <span className="metric-value">{(experiment.expectedVariance * 100).toFixed(1)}%</span>
+                    <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="metric-label sm:px-4 md:px-6 lg:px-8">Expected Variance</span>
+                      <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(experiment.expectedVariance * 100).toFixed(1)}%</span>
                     </div>
-                    <div className="metric-item">
-                      <span className="metric-label">Total Error</span>
-                      <span className="metric-value">{(experiment.totalError * 100).toFixed(1)}%</span>
+                    <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="metric-label sm:px-4 md:px-6 lg:px-8">Total Error</span>
+                      <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(experiment.totalError * 100).toFixed(1)}%</span>
                     </div>
                   </div>
                   
-                  <div className="experiment-scores">
-                    <div className="score-item">
+                  <div className="experiment-scores sm:px-4 md:px-6 lg:px-8">
+                    <div className="score-item sm:px-4 md:px-6 lg:px-8">
                       <span>Bias Tendency</span>
                       <span>{getBiasComplexityScore(experiment.id)}</span>
                     </div>
-                    <div className="score-item">
+                    <div className="score-item sm:px-4 md:px-6 lg:px-8">
                       <span>Variance Tendency</span>
                       <span>{getVarianceComplexityScore(experiment.id)}</span>
                     </div>
-                    <div className="score-item">
+                    <div className="score-item sm:px-4 md:px-6 lg:px-8">
                       <span>Interpretability</span>
                       <span>{getInterpretabilityScore(experiment.id)}</span>
                     </div>
-                    <div className="score-item">
+                    <div className="score-item sm:px-4 md:px-6 lg:px-8">
                       <span>Computation</span>
                       <span>{getComputationalComplexityScore(experiment.id)}</span>
                     </div>
@@ -5210,8 +4957,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
       </div>
 
-      <div className="bias-variance-experiment">
-        <div className="experiment-controls">
+      <div className="bias-variance-experiment sm:px-4 md:px-6 lg:px-8">
+        <div className="experiment-controls sm:px-4 md:px-6 lg:px-8">
           <h4>🧪 Bias-Variance Decomposition Experiment</h4>
           <p>
             Run comprehensive bias-variance analysis to understand model behavior across different
@@ -5221,115 +4968,115 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <button
             onClick={runBiasVarianceExperiment}
             disabled={biasVarianceExperimentRunning}
-            className="experiment-button"
+            className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run bias-variance analysis experiment"
           >
             {biasVarianceExperimentRunning ? '🔄 Analyzing Trade-offs...' : '🚀 Run Bias-Variance Analysis'}
           </button>
 
           {biasVarianceExperimentRunning && (
-            <div className="progress-container">
-              <div className="progress-bar">
+            <div className="progress-container sm:px-4 md:px-6 lg:px-8">
+              <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div
-                  className="progress-fill"
+                  className="progress-fill sm:px-4 md:px-6 lg:px-8"
                   style={{ width: `${biasVarianceProgress}%` }}
                 ></div>
               </div>
-              <span className="progress-text">{biasVarianceProgress.toFixed(1)}% Complete</span>
+              <span className="progress-text sm:px-4 md:px-6 lg:px-8">{biasVarianceProgress.toFixed(1)}% Complete</span>
             </div>
           )}
         </div>
 
         {biasVarianceVisualization && biasVarianceResults && (
-          <div className="results-container">
+          <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Bias-Variance Decomposition Results</h5>
 
-            <div className="results-summary">
-              <div className="summary-card">
+            <div className="results-summary sm:px-4 md:px-6 lg:px-8">
+              <div className="summary-card sm:px-4 md:px-6 lg:px-8">
                 <h6>Optimal Complexity</h6>
-                <div className="metric-grid">
-                  <div className="metric-item">
-                    <span className="metric-label">Sweet Spot</span>
-                    <span className="metric-value">{biasVarianceVisualization.sweetSpot.toFixed(1)}</span>
+                <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Sweet Spot</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{biasVarianceVisualization.sweetSpot.toFixed(1)}</span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Model Type</span>
-                    <span className="metric-value">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Model Type</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">
                       {complexityConfigs.find((c: any) => c.id === selectedComplexityModel)?.name}
                     </span>
                   </div>
-                  <div className="metric-item">
-                    <span className="metric-label">Complexity Range</span>
-                    <span className="metric-value">{selectedComplexityRange[0]} - {selectedComplexityRange[1]}</span>
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                    <span className="metric-label sm:px-4 md:px-6 lg:px-8">Complexity Range</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{selectedComplexityRange[0]} - {selectedComplexityRange[1]}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bias-variance-chart">
+            <div className="bias-variance-chart sm:px-4 md:px-6 lg:px-8">
               <h6>📈 Bias-Variance Trade-off Visualization</h6>
-              <div className="chart-container">
-                <div className="chart-legend">
-                  <div className="legend-item bias">
-                    <span className="legend-color"></span>
+              <div className="chart-container sm:px-4 md:px-6 lg:px-8">
+                <div className="chart-legend sm:px-4 md:px-6 lg:px-8">
+                  <div className="legend-item bias sm:px-4 md:px-6 lg:px-8">
+                    <span className="legend-color sm:px-4 md:px-6 lg:px-8"></span>
                     <span>Bias²</span>
                   </div>
-                  <div className="legend-item variance">
-                    <span className="legend-color"></span>
+                  <div className="legend-item variance sm:px-4 md:px-6 lg:px-8">
+                    <span className="legend-color sm:px-4 md:px-6 lg:px-8"></span>
                     <span>Variance</span>
                   </div>
-                  <div className="legend-item total">
-                    <span className="legend-color"></span>
+                  <div className="legend-item total sm:px-4 md:px-6 lg:px-8">
+                    <span className="legend-color sm:px-4 md:px-6 lg:px-8"></span>
                     <span>Total Error</span>
                   </div>
-                  <div className="legend-item optimal">
-                    <span className="legend-marker">⭐</span>
+                  <div className="legend-item optimal sm:px-4 md:px-6 lg:px-8">
+                    <span className="legend-marker sm:px-4 md:px-6 lg:px-8">⭐</span>
                     <span>Optimal Point</span>
                   </div>
                 </div>
                 
-                <div className="chart-area">
-                  <div className="chart-grid">
+                <div className="chart-area sm:px-4 md:px-6 lg:px-8">
+                  <div className="chart-grid sm:px-4 md:px-6 lg:px-8">
                     {biasVarianceVisualization.complexityRange.map((complexity, index) => (
-                      <div key={`chart-point-${complexity}`} className="chart-point" style={{
+                      <div key={`chart-point-${complexity}`} className="chart-point sm:px-4 md:px-6 lg:px-8" style={{
                         left: `${(complexity - biasVarianceVisualization.complexityRange[0]) / 
                           (biasVarianceVisualization.complexityRange[biasVarianceVisualization.complexityRange.length - 1] - 
                            biasVarianceVisualization.complexityRange[0]) * 100}%`
                       }}>
-                        <div className="bias-bar" style={{
+                        <div className="bias-bar sm:px-4 md:px-6 lg:px-8" style={{
                           height: `${biasVarianceVisualization.biasValues[index] * 200}px`,
                           backgroundColor: '#ff6b6b'
                         }}></div>
-                        <div className="variance-bar" style={{
+                        <div className="variance-bar sm:px-4 md:px-6 lg:px-8" style={{
                           height: `${biasVarianceVisualization.varianceValues[index] * 200}px`,
                           backgroundColor: '#4ecdc4'
                         }}></div>
-                        <div className="total-line" style={{
+                        <div className="total-line sm:px-4 md:px-6 lg:px-8" style={{
                           bottom: `${biasVarianceVisualization.totalErrorValues[index] * 200}px`
                         }}></div>
                         {Math.abs(complexity - biasVarianceVisualization.optimalComplexity) < 0.5 && (
-                          <div className="optimal-marker">⭐</div>
+                          <div className="optimal-marker sm:px-4 md:px-6 lg:px-8">⭐</div>
                         )}
                       </div>
                     ))}
                   </div>
                   
-                  <div className="chart-labels">
-                    <div className="x-axis-label">Model Complexity</div>
-                    <div className="y-axis-label">Error</div>
+                  <div className="chart-labels sm:px-4 md:px-6 lg:px-8">
+                    <div className="x-axis-label sm:px-4 md:px-6 lg:px-8">Model Complexity</div>
+                    <div className="y-axis-label sm:px-4 md:px-6 lg:px-8">Error</div>
                   </div>
                 </div>
 
-                <div className="region-indicators">
-                  <div className="underfitting-region">
+                <div className="region-indicators sm:px-4 md:px-6 lg:px-8">
+                  <div className="underfitting-region sm:px-4 md:px-6 lg:px-8">
                     <span>🔻 Underfitting</span>
                     <p>High bias, low variance</p>
                   </div>
-                  <div className="sweet-spot-region">
+                  <div className="sweet-spot-region sm:px-4 md:px-6 lg:px-8">
                     <span>🎯 Sweet Spot</span>
                     <p>Balanced bias-variance</p>
                   </div>
-                  <div className="overfitting-region">
+                  <div className="overfitting-region sm:px-4 md:px-6 lg:px-8">
                     <span>🔺 Overfitting</span>
                     <p>Low bias, high variance</p>
                   </div>
@@ -5337,10 +5084,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="detailed-results">
+            <div className="detailed-results sm:px-4 md:px-6 lg:px-8">
               <h6>📋 Detailed Analysis</h6>
-              <div className="results-table-container">
-                <table className="results-table">
+              <div className="results-table-container sm:px-4 md:px-6 lg:px-8">
+                <table className="results-table sm:px-4 md:px-6 lg:px-8">
                   <thead>
                     <tr>
                       <th>Complexity</th>
@@ -5373,7 +5120,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </tbody>
                 </table>
                 {biasVarianceResults.length > 8 && (
-                  <p className="table-truncation">
+                  <p className="table-truncation sm:px-4 md:px-6 lg:px-8">
                     Showing first 8 of {biasVarianceResults.length} complexity levels. 
                     Full analysis includes {biasVarianceResults.length} data points.
                   </p>
@@ -5381,10 +5128,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="bias-variance-insights">
+            <div className="bias-variance-insights sm:px-4 md:px-6 lg:px-8">
               <h6>💡 Trade-off Insights</h6>
-              <div className="insights-grid">
-                <div className="insight-item">
+              <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Model Complexity Impact</h6>
                   <p>
                     The {complexityConfigs.find((c: any) => c.id === selectedComplexityModel)?.name} model shows{' '}
@@ -5395,7 +5142,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                                'complex non-linear interactions'} in fantasy football data.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Generalization Capability</h6>
                   <p>
                     The optimal bias-variance balance suggests{' '}
@@ -5404,7 +5151,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     generalization performance for unseen fantasy football scenarios and player combinations.
                   </p>
                 </div>
-                <div className="insight-item">
+                <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Football Application</h6>
                   <p>
                     For fantasy football predictions, this analysis suggests using{' '}
@@ -5419,10 +5166,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
       </div>
 
-      <div className="bias-variance-applications">
+      <div className="bias-variance-applications sm:px-4 md:px-6 lg:px-8">
         <h4>🏈 Fantasy Football Applications</h4>
-        <div className="applications-grid">
-          <div className="application-card">
+        <div className="applications-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>Player Performance Modeling</h5>
             <p>
               Bias-variance analysis helps determine optimal model complexity for different player types.
@@ -5430,7 +5177,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               complex models capturing matchup nuances (accepting higher variance for lower bias).
             </p>
           </div>
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>Seasonal vs Weekly Predictions</h5>
             <p>
               Season-long projections favor lower variance models (ensemble methods, regularization) while
@@ -5438,7 +5185,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               and short-term trends.
             </p>
           </div>
-          <div className="application-card">
+          <div className="application-card sm:px-4 md:px-6 lg:px-8">
             <h5>Draft Strategy Optimization</h5>
             <p>
               Understanding bias-variance trade-offs guides draft preparation models. Early rounds emphasize
@@ -5452,20 +5199,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 
   const renderPlaceholder = (title: string) => (
-    <div className="placeholder-content">
+    <div className="placeholder-content sm:px-4 md:px-6 lg:px-8">
       <h3>🚧 {title}</h3>
       <p>This section will be implemented in upcoming tasks.</p>
     </div>
   );
   
   return (
-    <div className="oracle-calibration-validation-section">
-      <div className="section-header">
+    <div className="oracle-calibration-validation-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2>🎯 Prediction Calibration & Validation</h2>
         <p>Ensuring accuracy, reliability, and trustworthiness in Oracle's predictions</p>
       </div>
       
-      <div className="section-navigation">
+      <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button 
           className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
@@ -5522,7 +5269,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </button>
       </div>
       
-      <div className="section-content">
+      <div className="section-content sm:px-4 md:px-6 lg:px-8">
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'crossval' && renderCrossValidation()}
         {activeTab === 'holdout' && renderHoldout()}
@@ -5537,4 +5284,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 };
 
-export default OracleCalibrationValidationSection;
+const OracleCalibrationValidationSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleCalibrationValidationSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleCalibrationValidationSectionWithErrorBoundary);

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -47,7 +48,6 @@ interface PerformanceData {
         accuracy: number;
         avgConfidence: number;
     }>;
-}
 
 interface GlobalAnalytics {
     globalStats: {
@@ -73,9 +73,9 @@ interface GlobalAnalytics {
         avgUserConfidence: number;
         uniqueParticipants: number;
     }>;
-}
 
 export const OracleAnalyticsDashboard: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const { user } = useAuth();
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
@@ -91,7 +91,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     useEffect(() => {
         if (user?.id) {
             loadAnalyticsData();
-        }
+
     }, [user, selectedSeason, selectedWeeks]);
 
     const getPlayerNumber = (user: any): number => {
@@ -102,6 +102,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
     const loadAnalyticsData = async () => {
         try {
+
             setLoading(true);
             setError(null);
 
@@ -121,21 +122,18 @@ export const OracleAnalyticsDashboard: React.FC = () => {
 
             if (performanceResponse.success) {
                 setPerformanceData(performanceResponse.data);
-            }
 
             if (globalResponse.success) {
                 setGlobalData(globalResponse.data);
-            }
 
             if (leaderboardResponse.success) {
                 setLeaderboardData(leaderboardResponse.data);
-            }
 
-        } catch (err) {
+    } catch (error) {
             setError(err instanceof Error ? err.message : 'Failed to load analytics data');
         } finally {
             setLoading(false);
-        }
+
     };
 
     const StatCard: React.FC<{
@@ -145,27 +143,27 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         icon: React.ReactNode;
         trend?: 'up' | 'down' | 'neutral';
         trendValue?: string;
-    }> = ({ title, value, description, icon, trend, trendValue }: any) => (
+    }> = ({ title, value, description, icon, trend, trendValue }) => (
         <Card>
             <CardContent className="flex items-center p-4 sm:p-6">
                 <div className="flex items-center space-x-3 sm:space-x-4 w-full">
-                    <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
+                    <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                         {icon}
                     </div>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
                         <p className="text-xs sm:text-sm font-medium text-gray-600 truncate">{title}</p>
                         <p className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{value}</p>
                         {description && (
-                            <p className="text-xs text-gray-500 truncate">{description}</p>
+                            <p className="text-xs text-gray-500 truncate sm:px-4 md:px-6 lg:px-8">{description}</p>
                         )}
                         {trend && trendValue && (
                             <div className={`flex items-center text-xs ${
                                 trend === 'up' ? 'text-green-600' : 
                                 trend === 'down' ? 'text-red-600' : 'text-gray-600'
                             }`}>
-                                {trend === 'up' ? <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0" /> : 
-                                 trend === 'down' ? <TrendingDown className="w-3 h-3 mr-1 flex-shrink-0" /> : null}
-                                <span className="truncate">{trendValue}</span>
+                                {trend === 'up' ? <TrendingUp className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : 
+                                 trend === 'down' ? <TrendingDown className="w-3 h-3 mr-1 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" /> : null}
+                                <span className="truncate sm:px-4 md:px-6 lg:px-8">{trendValue}</span>
                             </div>
                         )}
                     </div>
@@ -177,7 +175,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     if (loading) {
         return (
             <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
                     <h1 className="text-xl sm:text-2xl font-bold text-white">Oracle Analytics Dashboard</h1>
                 </div>
@@ -185,7 +183,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     {[...Array(4)].map((_, i) => (
                         <Card key={i}>
                             <CardContent className="p-4 sm:p-6">
-                                <div className="animate-pulse">
+                                <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
                                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded mb-2"></div>
                                     <div className="w-16 sm:w-20 h-3 sm:h-4 bg-gray-200 rounded mb-1"></div>
                                     <div className="w-12 sm:w-16 h-5 sm:h-6 bg-gray-200 rounded"></div>
@@ -196,14 +194,13 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 </div>
             </div>
         );
-    }
 
     if (error) {
         return (
             <div className="p-4 sm:p-6">
                 <Card>
                     <CardContent className="p-4 sm:p-6 text-center">
-                        <div className="text-red-500 mb-2">
+                        <div className="text-red-500 mb-2 sm:px-4 md:px-6 lg:px-8">
                             <Activity className="w-8 h-8 sm:w-12 sm:h-12 mx-auto" />
                         </div>
                         <h3 className="text-base sm:text-lg font-semibold text-red-700">Error Loading Analytics</h3>
@@ -219,7 +216,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 </Card>
             </div>
         );
-    }
 
     const currentUserRank = leaderboardData?.find((entry: any) => entry.playerNumber === getPlayerNumber(user!));
 
@@ -227,7 +223,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" />
                     <h1 className="text-xl sm:text-2xl font-bold text-white">Oracle Analytics Dashboard</h1>
                 </div>
@@ -235,7 +231,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     <select 
                         value={selectedSeason} 
                         onChange={(e: any) => setSelectedSeason(Number(e.target.value))}
-                        className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm sm:text-base min-h-[44px]"
                         aria-label="Select season"
                     >
                         <option value="2024">2024 Season</option>
@@ -244,7 +239,6 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                     <select 
                         value={selectedWeeks} 
                         onChange={(e: any) => setSelectedWeeks(Number(e.target.value))}
-                        className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm sm:text-base min-h-[44px]"
                         aria-label="Select time range"
                     >
                         <option value="5">Last 5 Weeks</option>
@@ -426,18 +420,18 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                         <div className="space-y-2 sm:space-y-3">
                             {performanceData.predictionHistory.slice(0, isMobile ? 3 : 5).map((prediction: any) => (
                                 <div key={prediction.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg gap-2 sm:gap-0">
-                                    <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                         <p className="font-medium text-gray-900 text-sm sm:text-base truncate">{prediction.question}</p>
                                         <p className="text-xs sm:text-sm text-gray-600">
                                             Week {prediction.week} • {prediction.type}
                                         </p>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
-                                        <Badge variant={prediction.isCorrect ? "default" : "secondary"} className="text-xs">
+                                    <div className="flex flex-wrap items-center gap-2 flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
+                                        <Badge variant={prediction.isCorrect ? "default" : "secondary"} className="text-xs sm:px-4 md:px-6 lg:px-8">
                                             {prediction.userConfidence}% confidence
                                         </Badge>
                                         {prediction.isResolved && (
-                                            <Badge variant={prediction.isCorrect ? "default" : "destructive"} className="text-xs">
+                                            <Badge variant={prediction.isCorrect ? "default" : "destructive"} className="text-xs sm:px-4 md:px-6 lg:px-8">
                                                 {prediction.isCorrect ? 'Correct' : 'Incorrect'}
                                             </Badge>
                                         )}
@@ -455,4 +449,10 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-export default OracleAnalyticsDashboard;
+const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleAnalyticsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleAnalyticsDashboardWithErrorBoundary);

@@ -1,7 +1,7 @@
 
 
-
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import type { ChatMessage, League, Player, DraftPickAsset } from '../../types';
 import { players } from '../../data/players';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
@@ -12,9 +12,10 @@ interface TradeEventMessageProps {
     message: ChatMessage;
     league: League;
     onReact: (messageId: string, emoji: string) => void;
+
 }
 
-const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }: any) => {
+const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }) => {
     const { tradeEvent, aiHotTake, reactions } = message;
 
     if (!tradeEvent) return null;
@@ -30,29 +31,29 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
     const offeredPicks = tradeEvent.draftPicksOffered || [];
     const requestedPicks = tradeEvent.draftPicksRequested || [];
 
-    const AssetChip: React.FC<{ children: React.ReactNode, isPick?: boolean }> = ({ children, isPick }: any) => (
+    const AssetChip: React.FC<{ children: React.ReactNode, isPick?: boolean }> = ({ children, isPick }) => (
         <div className={`px-1.5 py-0.5 rounded text-xs ${isPick ? 'bg-cyan-900/80' : 'bg-black/20'}`}>{children}</div>
     );
 
     return (
-        <div className="p-3 my-2 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-2 border-purple-400/20 rounded-lg group relative">
+        <div className="p-3 my-2 bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-2 border-purple-400/20 rounded-lg group relative sm:px-4 md:px-6 lg:px-8">
             <ReactionPicker onSelect={(emoji: any) => onReact(message.id, emoji)} />
-            <div className="flex items-center gap-2 text-purple-300 font-bold text-sm mb-2">
+            <div className="flex items-center gap-2 text-purple-300 font-bold text-sm mb-2 sm:px-4 md:px-6 lg:px-8">
                 <ArrowRightLeftIcon />
                 <span>TRADE ACCEPTED</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-center text-xs">
+            <div className="grid grid-cols-2 gap-2 text-center text-xs sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <p className="font-semibold">{fromTeam.name} gives:</p>
-                    <div className="flex flex-wrap gap-1 mt-1 justify-center">
+                    <p className="font-semibold sm:px-4 md:px-6 lg:px-8">{fromTeam.name} gives:</p>
+                    <div className="flex flex-wrap gap-1 mt-1 justify-center sm:px-4 md:px-6 lg:px-8">
                         {offeredPlayers.map((p: any) => <AssetChip key={p.id}>{p.name}</AssetChip>)}
                         {offeredPicks.map((p, i) => <AssetChip key={i} isPick>{p.season} R{p.round}</AssetChip>)}
                     </div>
                 </div>
                 <div>
-                    <p className="font-semibold">{toTeam.name} gives:</p>
-                    <div className="flex flex-wrap gap-1 mt-1 justify-center">
+                    <p className="font-semibold sm:px-4 md:px-6 lg:px-8">{toTeam.name} gives:</p>
+                    <div className="flex flex-wrap gap-1 mt-1 justify-center sm:px-4 md:px-6 lg:px-8">
                         {requestedPlayers.map((p: any) => <AssetChip key={p.id}>{p.name}</AssetChip>)}
                         {requestedPicks.map((p, i) => <AssetChip key={i} isPick>{p.season} R{p.round}</AssetChip>)}
                     </div>
@@ -60,21 +61,21 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
             </div>
 
             {aiHotTake && (
-                <div className="mt-2 pt-2 border-t border-white/10 text-center">
-                    <p className="text-xs text-cyan-300/80 font-semibold flex items-center justify-center gap-1">
-                        <SparklesIcon className="w-3 h-3" />
+                <div className="mt-2 pt-2 border-t border-white/10 text-center sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-cyan-300/80 font-semibold flex items-center justify-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                        <SparklesIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                         Oracle's Take
                     </p>
-                    <p className="text-xs italic text-gray-300">"{aiHotTake}"</p>
+                    <p className="text-xs italic text-gray-300 sm:px-4 md:px-6 lg:px-8">"{aiHotTake}"</p>
                 </div>
             )}
             
             {reactions && Object.keys(reactions).length > 0 && (
-                <div className="flex gap-1 mt-2 justify-center">
+                <div className="flex gap-1 mt-2 justify-center sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(reactions).map(([emoji, userIds]) => (
-                        <div key={emoji} className="px-1.5 py-0.5 bg-black/30 rounded-full text-xs flex items-center gap-1">
+                        <div key={emoji} className="px-1.5 py-0.5 bg-black/30 rounded-full text-xs flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                             <span>{emoji}</span>
-                            <span className="text-gray-300">{userIds.length}</span>
+                            <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{userIds.length}</span>
                         </div>
                     ))}
                 </div>
@@ -83,4 +84,10 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
     );
 };
 
-export default TradeEventMessage;
+const TradeEventMessageWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeEventMessage {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeEventMessageWithErrorBoundary);

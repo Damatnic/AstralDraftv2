@@ -11,7 +11,7 @@ import { TrophyIcon } from '../components/icons/TrophyIcon';
 import { FlameIcon } from '../components/icons/FlameIcon';
 import { ShieldAlertIcon } from '../components/icons/ShieldAlertIcon';
 
-const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamStats[]; valueKey: keyof TeamStats; subtext?: (stat: TeamStats) => string }> = ({ title, icon, data, valueKey, subtext }: any) => (
+const Leaderboard: React.FC<{ title: string; icon: React.ReactNode; data: TeamStats[]; valueKey: keyof TeamStats; subtext?: (stat: TeamStats) => string }> = ({ title, icon, data, valueKey, subtext }) => (
     <Widget title={title} icon={icon}>
         <div className="p-2 space-y-1">
             {data.map((stat, index) => (
@@ -37,7 +37,6 @@ const LeagueStatsView: React.FC = () => {
     
     if (!league || league.status === 'PRE_DRAFT' || league.status === 'DRAFTING') {
         return <ErrorDisplay title="Not Available" message="League stats will be available once the season starts." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} />;
-    }
 
     const leaderboards = calculateLeagueStats(league);
 
@@ -50,7 +49,7 @@ const LeagueStatsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="back-btn">
                     Back to League Hub
                 </button>
             </header>

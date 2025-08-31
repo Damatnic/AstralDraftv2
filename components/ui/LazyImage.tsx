@@ -6,7 +6,6 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   placeholder?: string;
   fallback?: string;
   className?: string;
-}
 
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,
@@ -27,17 +26,24 @@ export const LazyImage: React.FC<LazyImageProps> = ({
         if (entry.isIntersecting) {
           setIsInView(true);
           observer.disconnect();
-        }
+
       },
       { threshold: 0.1 }
     );
 
     if (imgRef.current) {
       observer.observe(imgRef.current);
-    }
 
     return () => observer.disconnect();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
 
   return (
     <img

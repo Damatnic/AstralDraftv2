@@ -3,7 +3,7 @@
  * Foundational UI components for historical analytics display
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 // Simple SVG Icons
@@ -90,6 +90,7 @@ interface StatCardProps {
     icon: React.ReactNode;
     iconBgColor: string;
     delay?: number;
+
 }
 
 export function StatCard({ 
@@ -106,26 +107,25 @@ export function StatCard({
         changeColorClass = 'text-green-600';
     } else if (changeType === 'negative') {
         changeColorClass = 'text-red-600';
-    }
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay }}
-            className="bg-white rounded-lg border border-gray-200 p-6"
+            className="bg-white rounded-lg border border-gray-200 p-6 sm:px-4 md:px-6 lg:px-8"
         >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <p className="text-sm font-medium text-gray-600">{title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{value}</p>
+                    <p className="text-sm font-medium text-gray-600 sm:px-4 md:px-6 lg:px-8">{title}</p>
+                    <p className="text-2xl font-bold text-gray-900 sm:px-4 md:px-6 lg:px-8">{value}</p>
                 </div>
                 <div className={`h-12 w-12 ${iconBgColor} rounded-lg flex items-center justify-center`}>
                     {icon}
                 </div>
             </div>
             {change && (
-                <div className="mt-4">
+                <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
                     <span className={`text-sm ${changeColorClass}`}>
                         {change}
                     </span>
@@ -133,7 +133,6 @@ export function StatCard({
             )}
         </motion.div>
     );
-}
 
 // Simple Progress Bar
 interface ProgressBarProps {
@@ -141,6 +140,7 @@ interface ProgressBarProps {
     max: number;
     color?: string;
     height?: string;
+
 }
 
 export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2" }: Readonly<ProgressBarProps>) {
@@ -154,13 +154,13 @@ export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2
             />
         </div>
     );
-}
 
 // Simple Trend Indicator
 interface TrendIndicatorProps {
     value: number;
     label: string;
     showIcon?: boolean;
+
 }
 
 export function TrendIndicator({ value, label, showIcon = true }: Readonly<TrendIndicatorProps>) {
@@ -172,40 +172,36 @@ export function TrendIndicator({ value, label, showIcon = true }: Readonly<Trend
         textColorClass = 'text-green-600';
     } else if (isNegative) {
         textColorClass = 'text-red-600';
-    }
-    
+
     return (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
             {showIcon && (
                 <>
-                    {isPositive && <TrendingUpIcon className="w-4 h-4 text-green-500" />}
-                    {isNegative && <TrendingDownIcon className="w-4 h-4 text-red-500" />}
-                    {!isPositive && !isNegative && <div className="w-4 h-4" />}
+                    {isPositive && <TrendingUpIcon className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />}
+                    {isNegative && <TrendingDownIcon className="w-4 h-4 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
+                    {!isPositive && !isNegative && <div className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />}
                 </>
             )}
             <span className={`text-sm font-medium ${textColorClass}`}>
                 {value > 0 ? '+' : ''}{(value * 100).toFixed(1)}%
             </span>
-            <span className="text-sm text-gray-600">{label}</span>
+            <span className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{label}</span>
         </div>
     );
-}
 
 // Simple Line Chart (SVG-based)
 interface SimpleLineChartProps {
     data: { period: string; value: number }[];
     height?: number;
     color?: string;
-}
 
 export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Readonly<SimpleLineChartProps>) {
     if (!data || data.length === 0) {
         return (
-            <div className="flex items-center justify-center h-48 text-gray-500">
+            <div className="flex items-center justify-center h-48 text-gray-500 sm:px-4 md:px-6 lg:px-8">
                 No data available
             </div>
         );
-    }
 
     const maxValue = Math.max(...data.map((d: any) => d.value));
     const minValue = Math.min(...data.map((d: any) => d.value));
@@ -223,8 +219,8 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
     }).join(' ');
 
     return (
-        <div className="w-full">
-            <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
+        <div className="w-full sm:px-4 md:px-6 lg:px-8">
+            <svg width="100%" height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible sm:px-4 md:px-6 lg:px-8">
                 {/* Grid lines */}
                 <defs>
                     <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -267,7 +263,7 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
                             x={x}
                             y={height - 10}
                             textAnchor="middle"
-                            className="text-xs fill-gray-600"
+                            className="text-xs fill-gray-600 sm:px-4 md:px-6 lg:px-8"
                         >
                             {d.period}
                         </text>
@@ -276,35 +272,32 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
             </svg>
         </div>
     );
-}
 
 // Simple Bar Chart
 interface SimpleBarChartProps {
     data: { label: string; value: number; color?: string }[];
     height?: number;
-}
 
 export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartProps>) {
     if (!data || data.length === 0) {
         return (
-            <div className="flex items-center justify-center h-48 text-gray-500">
+            <div className="flex items-center justify-center h-48 text-gray-500 sm:px-4 md:px-6 lg:px-8">
                 No data available
             </div>
         );
-    }
 
     const maxValue = Math.max(...data.map((d: any) => d.value));
     
     return (
-        <div className="space-y-3">
+        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {data.map((item, index) => (
-                <div key={`bar-${item.label}-${index}`} className="flex items-center space-x-3">
-                    <div className="w-24 text-sm text-gray-600 text-right">
+                <div key={`bar-${item.label}-${index}`} className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                    <div className="w-24 text-sm text-gray-600 text-right sm:px-4 md:px-6 lg:px-8">
                         {item.label}
                     </div>
-                    <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                            <div className="flex-1 bg-gray-200 rounded-full h-4">
+                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex-1 bg-gray-200 rounded-full h-4 sm:px-4 md:px-6 lg:px-8">
                                 <div
                                     className={`h-4 rounded-full transition-all duration-500 ${
                                         item.color || 'bg-purple-600'
@@ -312,7 +305,7 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
                                     style={{ width: `${(item.value / maxValue) * 100}%` }}
                                 />
                             </div>
-                            <div className="text-sm font-medium text-gray-900 w-16 text-right">
+                            <div className="text-sm font-medium text-gray-900 w-16 text-right sm:px-4 md:px-6 lg:px-8">
                                 {(item.value * 100).toFixed(1)}%
                             </div>
                         </div>
@@ -321,37 +314,35 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
             ))}
         </div>
     );
-}
 
 // Loading Spinner
 export function LoadingSpinner({ size = "h-8 w-8" }: Readonly<{ size?: string }>) {
     return (
         <div className={`animate-spin rounded-full ${size} border-b-2 border-purple-600`} />
     );
-}
 
 // Error Display
 interface ErrorDisplayProps {
     error: string;
     onRetry?: () => void;
+
 }
 
 export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
     return (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <div className="flex items-center space-x-2 text-red-800">
-                <AlertIcon className="h-5 w-5" />
-                <span className="font-medium">Error Loading Analytics</span>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center space-x-2 text-red-800 sm:px-4 md:px-6 lg:px-8">
+                <AlertIcon className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
+                <span className="font-medium sm:px-4 md:px-6 lg:px-8">Error Loading Analytics</span>
             </div>
-            <p className="text-red-600 mt-1">{error}</p>
+            <p className="text-red-600 mt-1 sm:px-4 md:px-6 lg:px-8">{error}</p>
             {onRetry && (
                 <button
                     onClick={onRetry}
-                    className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                >
+                    className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     Retry
                 </button>
             )}
         </div>
     );
-}

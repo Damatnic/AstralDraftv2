@@ -47,67 +47,14 @@ export class PasswordUpdateUtility {
         }
       };
       
-    } catch (error) {
-      console.error('❌ Password update failed:', error);
-      return {
-        success: false,
-        message: 'Failed to update passwords',
-        errors: [error instanceof Error ? error.message : String(error)]
-      };
-    }
-  }
-
-  /**
-   * Test password validation system
-   */
-  static testPasswordValidation(): {
-    success: boolean;
-    results: Array<{
-      password: string;
-      validation: any;
-      category: string;
-    }>;
-  } {
-    const testPasswords = [
-      { password: '7347', category: 'main_user_admin' },
-      { password: '0000', category: 'weak_pattern' },
-      { password: '1234', category: 'weak_sequential' },
-      { password: '5896', category: 'potentially_strong' },
-      { password: '1111', category: 'weak_repeated' },
-      { password: '9876', category: 'weak_descending' },
-      { password: '3849', category: 'random_strong' }
-    ];
-
-    const results = testPasswords.map(test => ({
-      ...test,
-      validation: SecurePasswordGenerator.validatePasswordStrength(test.password)
-    }));
-
-    console.log('🧪 Password Validation Test Results:', results);
-
-    return {
-      success: true,
-      results
-    };
-  }
-
-  /**
-   * Generate sample secure passwords for testing
-   */
-  static generateSamplePasswords(count: number = 5): string[] {
-    try {
-      const passwords = SecurePasswordGenerator.generateMultipleSecurePasswords(count, {
-        excludePatterns: ['7347'], // Preserve admin password
-        maxAttempts: 1000
-      });
-      
-      console.log(`🔐 Generated ${count} sample secure passwords`);
+    `🔐 Generated ${count} sample secure passwords`);
       passwords.forEach((password, index) => {
         const validation = SecurePasswordGenerator.validatePasswordStrength(password);
         console.log(`  ${index + 1}. ${password} - Strength: ${validation.strength}`);
       });
       
       return passwords;
+    
     } catch (error) {
       console.error('Failed to generate sample passwords:', error);
       return [];
@@ -135,9 +82,13 @@ export class PasswordUpdateUtility {
     // Check localStorage
     let localStorageAvailable = false;
     try {
+
       localStorage.setItem('test', 'test');
       localStorage.removeItem('test');
       localStorageAvailable = true;
+    
+    } catch (error) {
+        console.error(error);
     } catch (e) {
       localStorageAvailable = false;
       issues.push('localStorage not available - session management may fail');

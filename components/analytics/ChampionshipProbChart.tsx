@@ -1,17 +1,19 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import type { League } from '../../types';
 
 interface ChampionshipProbChartProps {
     league: League;
-}
 
 const teamColors = [
     '#34d399', '#f87171', '#60a5fa', '#facc15', '#a78bfa', '#fb923c',
     '#f472b6', '#38bdf8', '#a3e635', '#4ade80', '#c084fc', '#fb7185'
 ];
 
-const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }: any) => {
+}
+
+const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }) => {
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
@@ -43,13 +45,13 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
             x: e.clientX - svgRect.left,
             y: e.clientY - svgRect.top,
             content: (
-                <div className="glass-card-sm">
-                    <p className="text-body-sm font-bold mb-2 text-white">Week {week}</p>
+                <div className="glass-card-sm sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-body-sm font-bold mb-2 text-white sm:px-4 md:px-6 lg:px-8">Week {week}</p>
                     {dataForWeek.map((d: any) => (
-                        <div key={d.name} className="flex items-center gap-2 mb-1">
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></div>
-                            <span className="text-caption text-gray-300">{d.name}:</span>
-                            <span className="text-body-sm font-bold text-white">{d.prob?.toFixed(1)}%</span>
+                        <div key={d.name} className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-2 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: d.color }}></div>
+                            <span className="text-caption text-gray-300 sm:px-4 md:px-6 lg:px-8">{d.name}:</span>
+                            <span className="text-body-sm font-bold text-white sm:px-4 md:px-6 lg:px-8">{d.prob?.toFixed(1)}%</span>
                         </div>
                     ))}
                 </div>
@@ -60,8 +62,8 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
     const handleMouseLeave = () => setTooltip(null);
 
     return (
-        <div className="relative w-full h-full">
-            <svg ref={chartRef} viewBox={`0 0 ${width} ${height}`} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className="w-full h-full">
+        <div className="relative w-full h-full sm:px-4 md:px-6 lg:px-8">
+            <svg ref={chartRef} viewBox={`0 0 ${width} ${height}`} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className="w-full h-full sm:px-4 md:px-6 lg:px-8">
                 {/* Axes */}
                 <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="#475569" />
                 <line x1={padding} y1={padding} x2={padding} y2={height - padding} stroke="#475569" />
@@ -90,7 +92,7 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
                 })}
             </svg>
             {tooltip && (
-                <div className="absolute pointer-events-none p-2 rounded-lg" style={{ left: tooltip.x + 10, top: tooltip.y + 10 }}>
+                <div className="absolute pointer-events-none p-2 rounded-lg sm:px-4 md:px-6 lg:px-8" style={{ left: tooltip.x + 10, top: tooltip.y + 10 }}>
                     {tooltip.content}
                 </div>
             )}
@@ -98,4 +100,10 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }:
     );
 };
 
-export default ChampionshipProbChart;
+const ChampionshipProbChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ChampionshipProbChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ChampionshipProbChartWithErrorBoundary);

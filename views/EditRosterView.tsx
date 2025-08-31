@@ -21,13 +21,12 @@ const EditRosterView: React.FC = () => {
         return (
             <div className="p-8 text-center">
                 <p className="text-red-400">Access Denied. You are not the commissioner of this league.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     const selectedTeam = league.teams.find((t: any) => t.id === selectedTeamId);
 
     const handleRemovePlayer = (player: Player) => {
@@ -35,7 +34,7 @@ const EditRosterView: React.FC = () => {
         if (window.confirm(`Are you sure you want to remove ${player.name} from ${selectedTeam.name}?`)) {
             dispatch({ type: 'MANUAL_REMOVE_PLAYER', payload: { leagueId: league.id, teamId: selectedTeam.id, playerId: player.id }});
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${player.name} removed from ${selectedTeam.name}.`, type: 'SYSTEM' } });
-        }
+
     };
 
     return (
@@ -47,7 +46,7 @@ const EditRosterView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }} className="back-btn">
                     Back to Tools
                 </button>
             </header>
@@ -60,7 +59,6 @@ const EditRosterView: React.FC = () => {
                                 id="team-select"
                                 value={selectedTeamId || ''}
                                 onChange={(e: any) => setSelectedTeamId(Number(e.target.value))}
-                                className="w-full bg-black/20 p-2 rounded-md border border-white/10 focus:ring-2 focus:ring-cyan-400 focus:outline-none"
                             >
                                 {league.teams.map((team: any) => (
                                     <option key={team.id} value={team.id}>{team.name}</option>
@@ -74,7 +72,6 @@ const EditRosterView: React.FC = () => {
                                     <h3 className="font-bold text-lg text-cyan-300">Roster for {selectedTeam.name} ({selectedTeam.roster.length}/{league.settings.rosterSize})</h3>
                                     <button
                                         onClick={() => setIsAddModalOpen(true)}
-                                        disabled={selectedTeam.roster.length >= league.settings.rosterSize}
                                         className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-green-500/10 text-green-300 rounded-md hover:bg-green-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <UserPlusIcon /> Add Player
@@ -92,7 +89,6 @@ const EditRosterView: React.FC = () => {
                                             </div>
                                             <button 
                                                 onClick={() => handleRemovePlayer(player)}
-                                                className="flex items-center gap-1 px-2 py-1 text-xs font-bold bg-red-500/10 text-red-300 rounded-md hover:bg-red-500/20"
                                             >
                                                 <UserRemoveIcon /> Remove
                                             </button>

@@ -29,6 +29,7 @@ const useSound = (soundType: SoundType, volume: number = 0.5): (() => void) => {
         }
 
         try {
+
             if (!audioCache[soundType]) {
                 audioCache[soundType] = new Audio(sounds[soundType]);
             }
@@ -38,7 +39,10 @@ const useSound = (soundType: SoundType, volume: number = 0.5): (() => void) => {
             // Allow playing the sound again even if it's already playing
             audio.currentTime = 0;
             audio.play().catch(e => console.error("Error playing sound:", e));
-        } catch (e) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (e) {
             console.error("Could not play sound", e);
         }
     }, [soundType, volume, state.soundEnabled, state.isAudioUnlocked]);

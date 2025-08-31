@@ -4,7 +4,8 @@
  * prediction types, confidence levels, and getting started guide
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 
 interface TutorialStep {
     id: string;
@@ -14,6 +15,7 @@ interface TutorialStep {
     quiz?: QuizQuestion;
     visual?: string;
     practiceChallenge?: PracticeChallenge;
+
 }
 
 interface QuizQuestion {
@@ -21,13 +23,13 @@ interface QuizQuestion {
     options: string[];
     correctAnswer: number;
     explanation: string;
-}
 
 interface PracticeChallenge {
     type: 'prediction' | 'confidence' | 'reasoning';
     scenario: string;
     options?: string[];
     expectedAnswer?: string | number;
+
 }
 
 interface UserProgress {
@@ -37,9 +39,9 @@ interface UserProgress {
     practiceScores: Record<number, number>;
     startTime: string;
     lastAccessed: string;
-}
 
 const OracleBeginnerTutorial: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [userProgress, setUserProgress] = useState<UserProgress>({
         currentStep: 0,
@@ -146,7 +148,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 ],
                 correctAnswer: 1,
                 explanation: "The Oracle's strength comes from combining AI analysis, real-time data feeds, and continuous machine learning to create comprehensive predictions."
-            }
+
         },
         {
             id: 'fantasy-basics',
@@ -227,7 +229,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 ],
                 correctAnswer: 1,
                 explanation: "Volume and opportunity are crucial because even talented players need touches and targets to produce fantasy points consistently."
-            }
+
         },
         {
             id: 'prediction-types',
@@ -293,7 +295,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 scenario: 'You see a Player Performance prediction with these options: (A) Christian McCaffrey - clear weather, soft matchup (B) Josh Jacobs - windy conditions, tough defense (C) Derrick Henry - normal weather, average matchup. The Oracle chooses McCaffrey with 75% confidence. What factors likely influenced this choice?',
                 options: ['Weather only', 'Matchup difficulty only', 'Combination of weather, matchup, and player volume', 'Team record'],
                 expectedAnswer: 2
-            }
+
         },
         {
             id: 'confidence-levels',
@@ -367,7 +369,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 ],
                 correctAnswer: 1,
                 explanation: "Low to moderate confidence (60-70%) indicates uncertainty in the data, making it the best time to use your human insights to potentially beat the Oracle."
-            }
+
         },
         {
             id: 'reading-predictions',
@@ -457,7 +459,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 type: 'reasoning',
                 scenario: 'Looking at the sample prediction above, Oracle chose McCaffrey with 78% confidence. The reasoning mentions "favorable matchup" and "clear weather." If you wanted to disagree, what factors might you consider that Oracle could be underweighting?',
                 expectedAnswer: 'Recent injury concerns, rest vs workload, game script if team falls behind, or red zone usage trends'
-            }
+
         },
         {
             id: 'beating-oracle',
@@ -575,7 +577,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 ],
                 correctAnswer: 2,
                 explanation: "The best strategy is to target low confidence predictions (60-70%) where Oracle is uncertain, and use your specific knowledge about intangibles, recent developments, or coaching tendencies that the AI might miss."
-            }
+
         },
         {
             id: 'getting-started',
@@ -668,7 +670,7 @@ const OracleBeginnerTutorial: React.FC = () => {
                 </div>
             `,
             visual: '🎊'
-        }
+
     ];
 
     // Load saved progress on component mount
@@ -676,6 +678,7 @@ const OracleBeginnerTutorial: React.FC = () => {
         const savedProgress = localStorage.getItem('oracle-beginner-tutorial-progress');
         if (savedProgress) {
             try {
+
                 const progress = JSON.parse(savedProgress);
                 setUserProgress(prev => ({
                     ...prev,
@@ -684,9 +687,10 @@ const OracleBeginnerTutorial: React.FC = () => {
                     lastAccessed: new Date().toISOString()
                 }));
                 setCurrentStep(progress.currentStep || 0);
-            } catch (error) {
-            }
-        }
+
+    } catch (error) {
+
+
     }, []);
 
     // Save progress whenever it changes
@@ -714,7 +718,7 @@ const OracleBeginnerTutorial: React.FC = () => {
             quizResults: {
                 ...prev.quizResults,
                 [currentStep]: isCorrect
-            }
+
         }));
         
         setShowResult(true);
@@ -738,7 +742,7 @@ const OracleBeginnerTutorial: React.FC = () => {
             practiceScores: {
                 ...prev.practiceScores,
                 [currentStep]: score
-            }
+
         }));
         
         setShowResult(true);
@@ -763,7 +767,7 @@ const OracleBeginnerTutorial: React.FC = () => {
             // Tutorial complete
             setTutorialComplete(true);
             recordTutorialCompletion();
-        }
+
     };
 
     // Navigate to previous step
@@ -773,7 +777,7 @@ const OracleBeginnerTutorial: React.FC = () => {
             setSelectedAnswer(null);
             setShowResult(false);
             setPracticeInput('');
-        }
+
     };
 
     // Record tutorial completion
@@ -788,6 +792,7 @@ const OracleBeginnerTutorial: React.FC = () => {
         
         // Record in education service
         try {
+
             // Record tutorial completion in localStorage for education service
             localStorage.setItem('oracle-tutorial-oracle-introduction-completion', JSON.stringify({
                 completed: true,
@@ -795,98 +800,17 @@ const OracleBeginnerTutorial: React.FC = () => {
                 quizScore: completionData.quizAccuracy * 100,
                 timeSpent: completionData.timeSpent
             }));
-        } catch (error) {
-        }
-        
         localStorage.setItem('oracle-beginner-tutorial-completion', JSON.stringify(completionData));
-    };
-
-    const currentTutorialStep = tutorialSteps[currentStep];
-    const progressPercentage = ((currentStep + 1) / tutorialSteps.length) * 100;
-
-    if (tutorialComplete) {
-        return (
-            <div className="oracle-tutorial-complete">
-                <div className="completion-celebration">
-                    <div className="celebration-header">
-                        <h2>🎉 Congratulations!</h2>
-                        <h3>You&apos;ve completed the Oracle Beginner Tutorial!</h3>
-                    </div>
-                    
-                    <div className="completion-stats">
-                        <div className="stat">
-                            <span className="stat-label">Quiz Accuracy:</span>
-                            <span className="stat-value">
-                                {Math.round((Object.values(userProgress.quizResults).filter(Boolean).length / Object.keys(userProgress.quizResults).length) * 100)}%
-                            </span>
-                        </div>
-                        <div className="stat">
-                            <span className="stat-label">Steps Completed:</span>
-                            <span className="stat-value">{tutorialSteps.length}/{tutorialSteps.length}</span>
-                        </div>
-                        <div className="stat">
-                            <span className="stat-label">Average Practice Score:</span>
-                            <span className="stat-value">
-                                {Math.round(Object.values(userProgress.practiceScores).reduce((a, b) => a + b, 0) / Object.values(userProgress.practiceScores).length) || 0}
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div className="next-steps">
-                        <h4>🚀 Ready for the Next Level?</h4>
-                        <div className="next-step-options">
-                            <button className="primary-button">
-                                🎯 Start Oracle Challenges
-                            </button>
-                            <button className="secondary-button">
-                                📚 Advanced Tutorial
-                            </button>
-                            <button className="secondary-button">
-                                🏆 Practice Center
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div className="restart-option">
-                        <button 
-                            className="text-button"
-                            onClick={() => {
-                                setTutorialComplete(false);
-                                setCurrentStep(0);
-                                setUserProgress({
-                                    currentStep: 0,
-                                    completedSteps: new Set(),
-                                    quizResults: {},
-                                    practiceScores: {},
-                                    startTime: new Date().toISOString(),
-                                    lastAccessed: new Date().toISOString()
-                                });
-                            }}
-                        >
-                            🔄 Restart Tutorial
-                        </button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="oracle-beginner-tutorial">
-            <div className="tutorial-header">
-                <div className="progress-section">
-                    <div className="progress-bar">
-                        <div 
-                            className="progress-fill" 
-                            style={{ width: `${progressPercentage}%` }}
+    
+    `${progressPercentage}%` }}
                         ></div>
                     </div>
-                    <div className="progress-text">
+                    <div className="progress-text sm:px-4 md:px-6 lg:px-8">
                         Step {currentStep + 1} of {tutorialSteps.length} ({Math.round(progressPercentage)}%)
                     </div>
                 </div>
                 
-                <div className="step-indicator">
+                <div className="step-indicator sm:px-4 md:px-6 lg:px-8">
                     {tutorialSteps.map((step, index) => (
                         <div 
                             key={step.id}
@@ -899,30 +823,29 @@ const OracleBeginnerTutorial: React.FC = () => {
                 </div>
             </div>
             
-            <div className="tutorial-content">
-                <div className="step-header">
-                    <div className="step-visual">{currentTutorialStep.visual}</div>
+            <div className="tutorial-content sm:px-4 md:px-6 lg:px-8">
+                <div className="step-header sm:px-4 md:px-6 lg:px-8">
+                    <div className="step-visual sm:px-4 md:px-6 lg:px-8">{currentTutorialStep.visual}</div>
                     <h2>{currentTutorialStep.title}</h2>
                 </div>
                 
                 <div 
-                    className="step-content"
+                    className="step-content sm:px-4 md:px-6 lg:px-8"
                     dangerouslySetInnerHTML={{ __html: currentTutorialStep.content }}
                 />
                 
                 {/* Quiz Section */}
                 {currentTutorialStep.quiz && (
-                    <div className="quiz-section">
+                    <div className="quiz-section sm:px-4 md:px-6 lg:px-8">
                         <h4>🧠 Knowledge Check</h4>
-                        <div className="quiz-question">
+                        <div className="quiz-question sm:px-4 md:px-6 lg:px-8">
                             <p><strong>{currentTutorialStep.quiz.question}</strong></p>
-                            <div className="quiz-options">
+                            <div className="quiz-options sm:px-4 md:px-6 lg:px-8">
                                 {currentTutorialStep.quiz.options.map((option, index) => (
                                     <button
                                         key={`quiz-option-${currentStep}-${index}`}
                                         className={`quiz-option ${selectedAnswer === index ? 'selected' : ''}`}
                                         onClick={() => setSelectedAnswer(index)}
-                                        disabled={showResult}
                                     >
                                         {option}
                                     </button>
@@ -931,19 +854,19 @@ const OracleBeginnerTutorial: React.FC = () => {
                             
                             {!showResult && selectedAnswer !== null && (
                                 <button 
-                                    className="submit-quiz-button"
+                                    className="submit-quiz-button sm:px-4 md:px-6 lg:px-8"
                                     onClick={handleQuizSubmit}
-                                >
+                                 aria-label="Action button">
                                     Submit Answer
                                 </button>
                             )}
                             
                             {showResult && currentTutorialStep.quiz && (
                                 <div className={`quiz-result ${selectedAnswer === currentTutorialStep.quiz.correctAnswer ? 'correct' : 'incorrect'}`}>
-                                    <div className="result-header">
+                                    <div className="result-header sm:px-4 md:px-6 lg:px-8">
                                         {selectedAnswer === currentTutorialStep.quiz.correctAnswer ? '✅ Correct!' : '❌ Incorrect'}
                                     </div>
-                                    <div className="result-explanation">
+                                    <div className="result-explanation sm:px-4 md:px-6 lg:px-8">
                                         <strong>Explanation:</strong> {currentTutorialStep.quiz.explanation}
                                     </div>
                                 </div>
@@ -954,19 +877,18 @@ const OracleBeginnerTutorial: React.FC = () => {
                 
                 {/* Practice Challenge Section */}
                 {currentTutorialStep.practiceChallenge && (
-                    <div className="practice-section">
+                    <div className="practice-section sm:px-4 md:px-6 lg:px-8">
                         <h4>💪 Practice Challenge</h4>
-                        <div className="practice-scenario">
+                        <div className="practice-scenario sm:px-4 md:px-6 lg:px-8">
                             <p><strong>Scenario:</strong> {currentTutorialStep.practiceChallenge.scenario}</p>
                             
                             {currentTutorialStep.practiceChallenge.type === 'prediction' && currentTutorialStep.practiceChallenge.options && (
-                                <div className="practice-options">
+                                <div className="practice-options sm:px-4 md:px-6 lg:px-8">
                                     {currentTutorialStep.practiceChallenge.options.map((option, index) => (
                                         <button
                                             key={`practice-option-${currentStep}-${index}`}
                                             className={`practice-option ${selectedAnswer === index ? 'selected' : ''}`}
                                             onClick={() => setSelectedAnswer(index)}
-                                            disabled={showResult}
                                         >
                                             {option}
                                         </button>
@@ -975,11 +897,10 @@ const OracleBeginnerTutorial: React.FC = () => {
                             )}
                             
                             {currentTutorialStep.practiceChallenge.type === 'reasoning' && (
-                                <div className="practice-input">
+                                <div className="practice-input sm:px-4 md:px-6 lg:px-8">
                                     <textarea
                                         value={practiceInput}
                                         onChange={(e: any) => setPracticeInput(e.target.value)}
-                                        placeholder="Share your reasoning and analysis..."
                                         disabled={showResult}
                                         rows={4}
                                     />
@@ -988,28 +909,28 @@ const OracleBeginnerTutorial: React.FC = () => {
                             
                             {!showResult && (
                                 <button 
-                                    className="submit-practice-button"
+                                    className="submit-practice-button sm:px-4 md:px-6 lg:px-8"
                                     onClick={currentTutorialStep.practiceChallenge.type === 'prediction' ? handleQuizSubmit : handlePracticeSubmit}
                                     disabled={
                                         currentTutorialStep.practiceChallenge.type === 'prediction' 
                                             ? selectedAnswer === null 
                                             : !practiceInput.trim()
-                                    }
-                                >
+
+                                 aria-label="Action button">
                                     Submit Practice
                                 </button>
                             )}
                             
                             {showResult && (
-                                <div className="practice-result">
+                                <div className="practice-result sm:px-4 md:px-6 lg:px-8">
                                     {currentTutorialStep.practiceChallenge.type === 'prediction' ? (
                                         <div className={`result ${selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? 'correct' : 'incorrect'}`}>
                                             {selectedAnswer === currentTutorialStep.practiceChallenge.expectedAnswer ? '🎯 Great thinking!' : '📚 Good attempt!'}
                                             <p>The key insight is understanding how multiple factors combine to influence Oracle&apos;s confidence.</p>
                                         </div>
                                     ) : (
-                                        <div className="reasoning-feedback">
-                                            <div className="score">
+                                        <div className="reasoning-feedback sm:px-4 md:px-6 lg:px-8">
+                                            <div className="score sm:px-4 md:px-6 lg:px-8">
                                                 Score: {userProgress.practiceScores[currentStep] || 0}/100
                                             </div>
                                             <p>Excellent reasoning! You&apos;re thinking like a fantasy expert. Key factors to consider: {currentTutorialStep.practiceChallenge.expectedAnswer}</p>
@@ -1022,23 +943,23 @@ const OracleBeginnerTutorial: React.FC = () => {
                 )}
             </div>
             
-            <div className="tutorial-navigation">
+            <div className="tutorial-navigation sm:px-4 md:px-6 lg:px-8">
                 <button 
-                    className="nav-button prev-button"
+                    className="nav-button prev-button sm:px-4 md:px-6 lg:px-8"
                     onClick={prevStep}
                     disabled={currentStep === 0}
-                >
+                 aria-label="Action button">
                     ← Previous
                 </button>
                 
                 <button 
-                    className="nav-button next-button"
+                    className="nav-button next-button sm:px-4 md:px-6 lg:px-8"
                     onClick={nextStep}
                     disabled={
                         (currentTutorialStep.quiz && !showResult) ||
                         (currentTutorialStep.practiceChallenge && !showResult)
-                    }
-                >
+
+                 aria-label="Action button">
                     {currentStep === tutorialSteps.length - 1 ? 'Complete Tutorial' : 'Next →'}
                 </button>
             </div>
@@ -1046,4 +967,10 @@ const OracleBeginnerTutorial: React.FC = () => {
     );
 };
 
-export default OracleBeginnerTutorial;
+const OracleBeginnerTutorialWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleBeginnerTutorial {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleBeginnerTutorialWithErrorBoundary);

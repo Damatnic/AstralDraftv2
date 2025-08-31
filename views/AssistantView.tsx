@@ -1,6 +1,5 @@
 
 
-
 import React from 'react';
 import { useAppState } from '../contexts/AppContext';
 import { streamAssistantResponse } from '../services/geminiService';
@@ -15,6 +14,7 @@ interface Message {
     text: string;
     isLoading?: boolean;
     groundingChunks?: GroundingChunk[];
+
 }
 
 const AssistantView: React.FC = () => {
@@ -54,11 +54,10 @@ const AssistantView: React.FC = () => {
                 const newChunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
                 if (newChunks) {
                     collectedChunks.push(...newChunks);
-                }
+
                 setMessages(prev => prev.map((msg: any) => 
                     msg.id === aiMessagePlaceholder.id ? { ...msg, text: fullText } : msg
                 ));
-            }
 
             const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: any) => c.web && c.web.uri).map((item: any) => [item.web!.uri!, item])).values());
 
@@ -74,7 +73,7 @@ const AssistantView: React.FC = () => {
             ));
         } finally {
             setIsSending(false);
-        }
+
     };
     
     const promptSuggestions = [
@@ -95,7 +94,7 @@ const AssistantView: React.FC = () => {
                         </span>
                     </h1>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="back-btn">
                     Back to Dashboard
                 </button>
             </header>
@@ -132,7 +131,6 @@ const AssistantView: React.FC = () => {
                             <button 
                                 key={prompt}
                                 onClick={() => handleSend(prompt)}
-                                className="px-3 py-1 bg-white/10 text-xs rounded-full hover:bg-white/20"
                             >
                                 {prompt}
                             </button>
@@ -144,11 +142,10 @@ const AssistantView: React.FC = () => {
                             placeholder={isSending ? "Astral is thinking..." : "Ask anything..."}
                             value={input}
                             onChange={e => setInput(e.target.value)}
-                            onKeyDown={e => e.key === 'Enter' && handleSend()}
                             disabled={isSending}
                             className="flex-grow bg-black/10 dark:bg-gray-900/50 border border-[var(--panel-border)] rounded-lg px-4 py-3 text-sm placeholder:text-[var(--text-secondary)] focus:outline-none focus:ring-1 focus:ring-cyan-400 disabled:opacity-50"
                         />
-                        <button onClick={() => handleSend()} disabled={isSending || !input} className="px-6 py-3 bg-cyan-500 text-black font-bold text-sm rounded-lg hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed">Send</button>
+                        <button onClick={() => handleSend()} className="px-6 py-3 bg-cyan-500 text-black font-bold text-sm rounded-lg hover:bg-cyan-400 disabled:opacity-50 disabled:cursor-not-allowed">Send</button>
                     </div>
                 </div>
             </main>

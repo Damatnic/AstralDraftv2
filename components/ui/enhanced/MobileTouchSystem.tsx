@@ -3,7 +3,8 @@
  * Professional mobile-first design with haptic feedback, gestures, and accessibility
  */
 
-import React, { useState, useRef, useEffect, ReactNode, TouchEvent, MouseEvent } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useRef, useEffect, ReactNode, TouchEvent, MouseEvent } from 'react';
 import { motion, PanInfo, useMotionValue, useTransform, animate } from 'framer-motion';
 
 // =========================================
@@ -15,6 +16,7 @@ interface TouchFeedbackOptions {
   visual?: boolean;
   audio?: boolean;
   intensity?: 'light' | 'medium' | 'heavy';
+
 }
 
 interface SwipeHandlers {
@@ -22,7 +24,6 @@ interface SwipeHandlers {
   onSwipeRight?: () => void;
   onSwipeUp?: () => void;
   onSwipeDown?: () => void;
-}
 
 interface GestureConfig {
   threshold?: number;
@@ -30,11 +31,12 @@ interface GestureConfig {
   preventDefaultTouches?: boolean;
   enablePinch?: boolean;
   enableRotate?: boolean;
-}
 
 // =========================================
 // HAPTIC FEEDBACK SYSTEM
 // =========================================
+
+}
 
 export class HapticManager {
   private static instance: HapticManager;
@@ -43,23 +45,21 @@ export class HapticManager {
 
   constructor() {
     this.isSupported = 'vibrate' in navigator;
-  }
 
   static getInstance(): HapticManager {
     if (!HapticManager.instance) {
       HapticManager.instance = new HapticManager();
-    }
+
     return HapticManager.instance;
-  }
 
   setEnabled(enabled: boolean): void {
     this.isEnabled = enabled;
-  }
 
   trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error'): void {
     if (!this.isSupported || !this.isEnabled) return;
 
     const patterns = {
+  const [isLoading, setIsLoading] = React.useState(false);
       light: [10],
       medium: [50],
       heavy: [100],
@@ -69,13 +69,11 @@ export class HapticManager {
     };
 
     navigator.vibrate(patterns[type]);
-  }
 
   async triggerPattern(pattern: number[]): Promise<void> {
     if (!this.isSupported || !this.isEnabled) return;
     navigator.vibrate(pattern);
-  }
-}
+
 
 export const haptic = HapticManager.getInstance();
 
@@ -94,6 +92,7 @@ interface TouchButtonProps {
   rippleColor?: string;
   pressScale?: number;
   longPressDuration?: number;
+
 }
 
 export const TouchButton: React.FC<TouchButtonProps> = ({
@@ -121,7 +120,6 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (feedback.haptic) {
       haptic.trigger(feedback.intensity || 'medium');
-    }
 
     if (feedback.visual) {
       const touch = e.touches[0];
@@ -134,7 +132,6 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       setTimeout(() => {
         setRipples(prev => prev.filter(ripple => ripple.id !== id));
       }, 600);
-    }
 
     if (onLongPress) {
       pressTimer.current = setTimeout(() => {
@@ -142,7 +139,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
         haptic.trigger('heavy');
         onLongPress();
       }, longPressDuration);
-    }
+
   };
 
   const handleTouchEnd = () => {
@@ -152,11 +149,10 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (pressTimer.current) {
       clearTimeout(pressTimer.current);
-    }
 
     if (onPress && !longPressTriggered.current) {
       onPress();
-    }
+
   };
 
   const handleMouseDown = (e: MouseEvent) => {
@@ -175,14 +171,13 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       setTimeout(() => {
         setRipples(prev => prev.filter(ripple => ripple.id !== id));
       }, 600);
-    }
 
     if (onLongPress) {
       pressTimer.current = setTimeout(() => {
         longPressTriggered.current = true;
         onLongPress();
       }, longPressDuration);
-    }
+
   };
 
   const handleMouseUp = () => {
@@ -192,18 +187,17 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
     if (pressTimer.current) {
       clearTimeout(pressTimer.current);
-    }
 
     if (onPress && !longPressTriggered.current) {
       onPress();
-    }
+
   };
 
   useEffect(() => {
     return () => {
       if (pressTimer.current) {
         clearTimeout(pressTimer.current);
-      }
+
     };
   }, []);
 
@@ -217,7 +211,6 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       style={style}
       disabled={disabled}
       onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       animate={{
@@ -235,7 +228,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       {ripples.map(ripple => (
         <motion.div
           key={ripple.id}
-          className="absolute rounded-full pointer-events-none"
+          className="absolute rounded-full pointer-events-none sm:px-4 md:px-6 lg:px-8"
           style={{
             left: ripple.x,
             top: ripple.y,
@@ -265,6 +258,7 @@ interface SwipeGestureProps {
   handlers?: SwipeHandlers;
   config?: GestureConfig;
   className?: string;
+
 }
 
 export const SwipeGesture: React.FC<SwipeGestureProps> = ({
@@ -290,8 +284,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       } else if (offset.x < 0 && handlers.onSwipeLeft) {
         haptic.trigger('light');
         handlers.onSwipeLeft();
-      }
-    }
+
 
     if (Math.abs(offset.y) > threshold && Math.abs(vel.y) > velocity) {
       if (offset.y > 0 && handlers.onSwipeDown) {
@@ -300,8 +293,8 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
       } else if (offset.y < 0 && handlers.onSwipeUp) {
         haptic.trigger('light');
         handlers.onSwipeUp();
-      }
-    }
+
+
   };
 
   return (
@@ -330,6 +323,7 @@ interface PullToRefreshProps {
   threshold?: number;
   className?: string;
   refreshIndicator?: ReactNode;
+
 }
 
 export const PullToRefresh: React.FC<PullToRefreshProps> = ({
@@ -348,7 +342,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     if (info.offset.y > 0 && window.scrollY === 0) {
       setPullDistance(info.offset.y);
-    }
+
   };
 
   const handleDragEnd = async (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -357,132 +351,14 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       haptic.trigger('success');
       
       try {
+
         await onRefresh();
-      } finally {
-        setIsRefreshing(false);
-        setPullDistance(0);
-        animate(y, 0, { type: "spring", stiffness: 300, damping: 30 });
-      }
-    } else {
-      setPullDistance(0);
-      animate(y, 0, { type: "spring", stiffness: 300, damping: 30 });
-    }
-  };
-
-  const DefaultRefreshIndicator = () => (
-    <motion.div
-      className="flex items-center justify-center p-4"
-      style={{ opacity, scale }}
-    >
-      <div className="flex items-center gap-2 text-white">
-        <motion.div
-          className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
-          animate={{ rotate: isRefreshing ? 360 : 0 }}
-          transition={{ duration: 1, repeat: isRefreshing ? Infinity : 0, ease: "linear" }}
-        />
-        <span className="text-sm font-medium">
-          {isRefreshing ? 'Refreshing...' : 'Pull to refresh'}
-        </span>
-      </div>
-    </motion.div>
-  );
-
-  return (
-    <div className={className}>
-      <motion.div
-        style={{ y }}
-        drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        dragElastic={0.2}
-        onDrag={handleDrag}
-        onDragEnd={handleDragEnd}
-      >
-        <motion.div
-          className="absolute top-0 left-0 right-0 z-10"
-          initial={{ height: 0 }}
-          animate={{ height: Math.min(pullDistance, threshold + 20) }}
-        >
-          {refreshIndicator || <DefaultRefreshIndicator />}
-        </motion.div>
-        
-        <motion.div
-          style={{ 
-            marginTop: isRefreshing ? threshold + 20 : Math.min(pullDistance, threshold + 20)
-          }}
-        >
-          {children}
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-};
-
-// =========================================
-// TOUCH SLIDER
-// =========================================
-
-interface TouchSliderProps {
-  min?: number;
-  max?: number;
-  value: number;
-  onChange: (value: number) => void;
-  step?: number;
-  className?: string;
-  trackClassName?: string;
-  thumbClassName?: string;
-  disabled?: boolean;
-  showValue?: boolean;
-}
-
-export const TouchSlider: React.FC<TouchSliderProps> = ({
-  min = 0,
-  max = 100,
-  value,
-  onChange,
-  step = 1,
-  className = '',
-  trackClassName = '',
-  thumbClassName = '',
-  disabled = false,
-  showValue = true
-}) => {
-  const constraintsRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  
-  const percentage = ((value - min) / (max - min)) * 100;
-  const x = useMotionValue(0);
-
-  const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (!constraintsRef.current || disabled) return;
-
-    const rect = constraintsRef.current.getBoundingClientRect();
-    const newPercentage = Math.max(0, Math.min(100, (info.point.x - rect.left) / rect.width * 100));
-    const newValue = min + (newPercentage / 100) * (max - min);
-    const steppedValue = Math.round(newValue / step) * step;
-    
-    onChange(Math.max(min, Math.min(max, steppedValue)));
-    
-    if (isDragging) {
-      haptic.trigger('light');
-    }
-  };
-
-  const handleDragStart = () => {
-    setIsDragging(true);
-    haptic.trigger('medium');
-  };
-
-  const handleDragEnd = () => {
-    setIsDragging(false);
-    haptic.trigger('light');
-  };
-
-  return (
-    <div className={`relative ${className}`}>
+      
+    `relative ${className}`}>
       {showValue && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 sm:px-4 md:px-6 lg:px-8">
           <motion.div
-            className="bg-dark-800 text-white px-2 py-1 rounded text-xs font-medium"
+            className="bg-dark-800 text-white px-2 py-1 rounded text-xs font-medium sm:px-4 md:px-6 lg:px-8"
             animate={{ scale: isDragging ? 1.1 : 1 }}
           >
             {value}
@@ -496,7 +372,7 @@ export const TouchSlider: React.FC<TouchSliderProps> = ({
       >
         {/* Progress Track */}
         <motion.div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full"
+          className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full sm:px-4 md:px-6 lg:px-8"
           style={{ width: `${percentage}%` }}
         />
         
@@ -532,6 +408,7 @@ interface TouchCardStackProps {
   children: ReactNode[];
   onSwipe?: (direction: 'left' | 'right', index: number) => void;
   className?: string;
+
 }
 
 export const TouchCardStack: React.FC<TouchCardStackProps> = ({
@@ -552,7 +429,7 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
       {cards.map((card, index) => (
         <motion.div
           key={card.id}
-          className="absolute inset-0"
+          className="absolute inset-0 sm:px-4 md:px-6 lg:px-8"
           initial={{ scale: 1 - index * 0.05, y: index * 10, z: -index }}
           animate={{ scale: 1 - index * 0.05, y: index * 10, z: -index }}
           drag="x"
@@ -563,7 +440,7 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
               handleSwipe('right', card.id);
             } else if (info.offset.x < -threshold) {
               handleSwipe('left', card.id);
-            }
+
           }}
           style={{
             zIndex: cards.length - index
@@ -599,14 +476,12 @@ export const useMobileScroll = () => {
         setScrollDirection('down');
       } else if (currentScrollY < lastScrollY.current) {
         setScrollDirection('up');
-      }
-      
+
       lastScrollY.current = currentScrollY;
 
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
-      }
-      
+
       scrollTimer.current = setTimeout(() => {
         setIsScrolling(false);
         setScrollDirection(null);
@@ -618,7 +493,7 @@ export const useMobileScroll = () => {
       window.removeEventListener('scroll', handleScroll);
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
-      }
+
     };
   }, []);
 
@@ -662,8 +537,8 @@ export const useSafeArea = () => {
             left: getEnvValue('safe-area-inset-left'),
             right: getEnvValue('safe-area-inset-right')
           });
-        }
-      }
+
+
     };
 
     updateSafeArea();

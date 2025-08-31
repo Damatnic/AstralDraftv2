@@ -18,6 +18,7 @@ export interface Player {
   averagePoints: number;
   isStarting: boolean;
   injuryStatus?: string;
+
 }
 
 export interface Team {
@@ -27,7 +28,6 @@ export interface Team {
   roster: Player[];
   record: { wins: number; losses: number; ties: number };
   totalPoints: number;
-}
 
 export interface League {
   id: string;
@@ -35,6 +35,7 @@ export interface League {
   teams: Team[];
   currentWeek: number;
   settings: Record<string, unknown>;
+
 }
 
 export interface Transaction {
@@ -43,15 +44,15 @@ export interface Transaction {
   player: Player;
   timestamp: string;
   description: string;
-}
 
 export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
 
-interface TeamManagementViewProps {
-  onBack?: () => void;
 }
 
-const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) => {
+interface TeamManagementViewProps {
+  onBack?: () => void;
+
+const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }) => {
   // State management
   const [activeTab, setActiveTab] = useState<TabType>('roster');
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
@@ -86,9 +87,8 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         record: { wins: 2, losses: 2, ties: 0 },
         totalPoints: 425.0,
         roster: generateMockRoster()
-      }
+
     ];
-  }
 
   function generateMockRoster(): Player[] {
     return [
@@ -128,9 +128,8 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         projectedPoints: 14.2,
         averagePoints: 13.8,
         isStarting: true
-      }
+
     ];
-  }
 
   // Tab handlers
   const handleTabChange = (tab: TabType): void => {
@@ -344,9 +343,8 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
         player: mockPlayer,
         timestamp: new Date(Date.now() - 172800000).toISOString(),
         description: 'Dropped Sample Player to waivers'
-      }
+
     ];
-  }
 
   // Tab configuration
   const tabs = [
@@ -370,7 +368,6 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
               {onBack && (
                 <button
                   onClick={onBack}
-                  className="p-2 text-gray-400 hover:text-white transition-colors"
                 >
                   <FiChevronLeft className="w-6 h-6" />
                 </button>
@@ -389,7 +386,6 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
             <select
               value={selectedTeamId || league.teams[0]?.id || ''}
               onChange={(e: any) => handleTeamSelect(e.target.value)}
-              className="bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:border-purple-500"
             >
               {league.teams.map((team: any) => (
                 <option key={team.id} value={team.id}>
@@ -406,12 +402,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
               return (
                 <button
                   key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === tab.id
-                      ? 'bg-purple-600 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
-                  }`}
+                  onClick={() => handleTabChange(tab.id)}`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>

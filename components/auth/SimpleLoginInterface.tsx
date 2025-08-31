@@ -3,7 +3,8 @@
  * 10 player buttons + admin login with PIN authentication
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SimpleAuthService, { SimpleUser } from '../../services/simpleAuthService';
 import { SecurePinInput } from '../ui/SecureInput';
@@ -11,43 +12,50 @@ import { SecurePinInput } from '../ui/SecureInput';
 interface Props {
     onLogin: (user: SimpleUser) => void;
     className?: string;
+
 }
 
 interface PinInputProps {
     user: SimpleUser;
     onSuccess: (user: SimpleUser) => void;
     onBack: () => void;
-}
 
-const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => {
+const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }) => {
     const [pin, setPin] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handlePinSubmit = async (e: React.FormEvent) => {
+    const handlePinSubmit = async () => {
+    try {
+
         e.preventDefault();
         if (pin.length !== 4) {
             setError('PIN must be 4 digits');
             return;
-        }
+        
+    } catch (error) {
+      console.error('Error in handlePinSubmit:', error);
 
-        setIsLoading(true);
+    } catch (error) {
+        console.error(error);
+    }setIsLoading(true);
         setError('');
 
         try {
+
             const session = await SimpleAuthService.authenticateUser(user.id, pin);
             if (session) {
                 onSuccess(session.user);
             } else {
                 setError('Invalid PIN. Please try again.');
                 setPin('');
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Login failed. Please try again.');
             setPin('');
         } finally {
             setIsLoading(false);
-        }
+
     };
 
     const handlePinChange = (value: string) => {
@@ -62,52 +70,50 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gray-800 rounded-2xl p-8 w-full max-w-md mx-auto"
+            className="bg-gray-800 rounded-2xl p-8 w-full max-w-md mx-auto sm:px-4 md:px-6 lg:px-8"
         >
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 sm:px-4 md:px-6 lg:px-8">
                 <div 
-                    className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl"
+                    className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl sm:px-4 md:px-6 lg:px-8"
                     style={{ backgroundColor: user.customization.backgroundColor }}
                 >
                     {user.customization.emoji}
                 </div>
-                <h2 className="text-2xl font-bold text-white mb-2">
+                <h2 className="text-2xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                     Welcome, {user.displayName}!
                 </h2>
-                <p className="text-gray-400">Enter your 4-digit PIN</p>
+                <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Enter your 4-digit PIN</p>
             </div>
 
-            <form onSubmit={handlePinSubmit} className="space-y-4">
+            <form onSubmit={handlePinSubmit}
                 <SecurePinInput
                     value={pin}
                     onChange={handlePinChange}
-                    length={4}
                     showProgress={true}
                     placeholder="Enter your 4-digit PIN"
                     autoFocus
                     error={error}
-                    className="text-center text-xl"
+                    className="text-center text-xl sm:px-4 md:px-6 lg:px-8"
                     allowPaste={false}
                     clearClipboardDelay={3000}
                 />
 
-
-                <div className="flex space-x-3">
+                <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                     <button
                         type="button"
-                        onClick={(e) => { e.preventDefault(); onBack(); }}
-                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg transition-colors min-h-[44px]"
+                        onClick={(e) = aria-label="Action button"> { e.preventDefault(); onBack(); }}
+                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg transition-colors min-h-[44px] sm:px-4 md:px-6 lg:px-8"
                     >
                         Back
                     </button>
                     <button
                         type="submit"
                         disabled={pin.length !== 4 || isLoading}
-                        className="flex-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg transition-colors font-medium"
-                    >
+                        className="flex-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         {isLoading ? (
-                            <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                            <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2 sm:px-4 md:px-6 lg:px-8"></div>
                                 Signing In...
                             </div>
                         ) : (
@@ -118,8 +124,8 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
             </form>
 
             {user.id !== 'admin' && (
-                <div className="mt-6 pt-6 border-t border-gray-700">
-                    <p className="text-xs text-gray-500 text-center">
+                <div className="mt-6 pt-6 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-gray-500 text-center sm:px-4 md:px-6 lg:px-8">
                         Default PIN is 0000. You can change it after logging in.
                     </p>
                 </div>
@@ -128,7 +134,7 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => 
     );
 };
 
-const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any) => {
+const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }) => {
     const [users, setUsers] = useState<SimpleUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<SimpleUser | null>(null);
 
@@ -162,20 +168,19 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                 />
             </div>
         );
-    }
 
     return (
         <div className={`min-h-screen bg-gray-900 flex items-center justify-center p-4 ${className}`}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full max-w-4xl"
+                className="w-full max-w-4xl sm:px-4 md:px-6 lg:px-8"
             >
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-white mb-2">
+                <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
+                    <h1 className="text-4xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                         🔮 Astral Draft Oracle
                     </h1>
-                    <p className="text-xl text-gray-400">
+                    <p className="text-xl text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         Choose your player to sign in
                     </p>
                 </div>
@@ -190,20 +195,20 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={(e) => { e.preventDefault(); handleUserSelect(user); }}
-                            className="btn-primary p-6 rounded-xl text-white font-medium transition-all duration-200 hover:shadow-lg min-h-[44px]"
+                            className="btn-primary p-6 rounded-xl text-white font-medium transition-all duration-200 hover:shadow-lg min-h-[44px] sm:px-4 md:px-6 lg:px-8"
                             style={{ backgroundColor: user.customization.backgroundColor }}
                         >
-                            <div className="text-3xl mb-2">{user.customization.emoji}</div>
-                            <div className="text-lg font-semibold">{user.displayName}</div>
-                            <div className="text-sm opacity-75">Click to sign in</div>
+                            <div className="text-3xl mb-2 sm:px-4 md:px-6 lg:px-8">{user.customization.emoji}</div>
+                            <div className="text-lg font-semibold sm:px-4 md:px-6 lg:px-8">{user.displayName}</div>
+                            <div className="text-sm opacity-75 sm:px-4 md:px-6 lg:px-8">Click to sign in</div>
                         </motion.button>
                     ))}
                 </div>
 
                 {/* Admin Section */}
-                <div className="border-t border-gray-700 pt-8">
-                    <div className="text-center mb-4">
-                        <p className="text-gray-500 text-sm">League Administration</p>
+                <div className="border-t border-gray-700 pt-8 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-center mb-4 sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-gray-500 text-sm sm:px-4 md:px-6 lg:px-8">League Administration</p>
                     </div>
                     
                     {users.filter((user: any) => user.isAdmin).map((admin: any) => (
@@ -215,11 +220,11 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={(e) => { e.preventDefault(); handleUserSelect(admin); }}
-                            className="w-full max-w-md mx-auto block p-4 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white transition-all duration-200 min-h-[44px]"
+                            className="w-full max-w-md mx-auto block p-4 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white transition-all duration-200 min-h-[44px] sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-center justify-center space-x-3">
+                            <div className="flex items-center justify-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                                 <div 
-                                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
+                                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl sm:px-4 md:px-6 lg:px-8"
                                     style={{ 
                                         backgroundColor: admin.customization.backgroundColor,
                                         color: admin.customization.textColor 
@@ -228,16 +233,16 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
                                     {admin.customization.emoji}
                                 </div>
                                 <div>
-                                    <div className="font-semibold text-lg">{admin.displayName}</div>
-                                    <div className="text-sm text-gray-400">Administrator Access</div>
+                                    <div className="font-semibold text-lg sm:px-4 md:px-6 lg:px-8">{admin.displayName}</div>
+                                    <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Administrator Access</div>
                                 </div>
                             </div>
                         </motion.button>
                     ))}
                 </div>
 
-                <div className="text-center mt-8">
-                    <p className="text-xs text-gray-600">
+                <div className="text-center mt-8 sm:px-4 md:px-6 lg:px-8">
+                    <p className="text-xs text-gray-600 sm:px-4 md:px-6 lg:px-8">
                         Astral Draft Oracle • League Prediction System
                     </p>
                 </div>
@@ -246,4 +251,10 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any)
     );
 };
 
-export default SimpleLoginInterface;
+const SimpleLoginInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SimpleLoginInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SimpleLoginInterfaceWithErrorBoundary);

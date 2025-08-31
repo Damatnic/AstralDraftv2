@@ -93,6 +93,7 @@ class PreloadManager {
     const startTime = performance.now();
     
     try {
+
       // Create timeout promise if specified
       const timeoutPromise = resource.config.timeout ? 
         new Promise((_, reject) => 
@@ -119,13 +120,10 @@ class PreloadManager {
       console.log(`✅ Preloaded ${id} in ${loadTime.toFixed(2)}ms`);
       
       return result;
-      
+
     } catch (error) {
-      resource.loading = false;
-      resource.error = error as Error;
-      
-      const loadTime = performance.now() - startTime;
-      performanceOptimizer.recordMetric(`PreloadError-${id}`, loadTime);
+        console.error(error);
+    `PreloadError-${id}`, loadTime);
       
       console.error(`❌ Failed to preload ${id}:`, error);
       

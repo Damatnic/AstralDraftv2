@@ -287,13 +287,17 @@ export const useOracleMobileForm = () => {
         setIsSubmitting(true);
         
         try {
+
             await submitFunction();
             
             // Success haptic feedback
             if ('vibrate' in navigator) {
                 navigator.vibrate([50, 50, 50]);
             }
-        } catch (error) {
+        
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
             // Error haptic feedback
             if ('vibrate' in navigator) {
                 navigator.vibrate([100, 50, 100]);

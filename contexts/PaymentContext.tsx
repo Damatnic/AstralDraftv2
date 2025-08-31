@@ -18,6 +18,7 @@ export interface PaymentProduct {
   type: 'one_time' | 'subscription';
   interval?: 'month' | 'year';
   description: string;
+
 }
 
 export interface PaymentIntent {
@@ -26,6 +27,7 @@ export interface PaymentIntent {
   currency: string;
   status: string;
   clientSecret: string;
+
 }
 
 export interface UserSubscription {
@@ -35,6 +37,7 @@ export interface UserSubscription {
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
   cancelAtPeriodEnd: boolean;
+
 }
 
 export interface PaymentHistory {
@@ -45,6 +48,7 @@ export interface PaymentHistory {
   type: 'contest_entry' | 'subscription' | 'one_time';
   productId: string;
   createdAt: Date;
+
 }
 
 interface PaymentContextType {
@@ -79,7 +83,6 @@ interface PaymentContextType {
   hasActiveAnalytics: () => boolean;
   hasActiveUltimate: () => boolean;
   canAccessPremiumFeature: (feature: string) => boolean;
-}
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
 
@@ -87,15 +90,16 @@ export const usePayment = () => {
   const context = useContext(PaymentContext);
   if (!context) {
     throw new Error('usePayment must be used within a PaymentProvider');
-  }
+
   return context;
 };
 
 interface PaymentProviderProps {
   children: ReactNode;
+
 }
 
-export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: any) => {
+export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) => {
   // Stripe instance
   const [stripe, setStripe] = useState<Stripe | null>(null);
   
@@ -119,10 +123,12 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
   useEffect(() => {
     const initializeStripe = async () => {
       try {
+
         const stripeInstance = await stripePromise;
         setStripe(stripeInstance);
-      } catch (error) {
-      }
+
+    } catch (error) {
+
     };
 
     initializeStripe();
@@ -132,17 +138,18 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
   useEffect(() => {
     const loadProducts = async () => {
       try {
+
         setIsLoadingProducts(true);
         const response = await fetch('/api/payment/products');
         const data = await response.json();
         
         if (data.success) {
           setProducts(data.data.products);
-        }
-      } catch (error) {
+
+    } catch (error) {
       } finally {
         setIsLoadingProducts(false);
-      }
+
     };
 
     loadProducts();
@@ -166,30 +173,13 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       
       if (!data.success) {
         throw new Error(data.error || 'Failed to create payment intent');
-      }
 
       const paymentIntent = data.data.paymentIntent;
       setCurrentPaymentIntent(paymentIntent);
       
       return paymentIntent;
 
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  // Create subscription
-  const createSubscription = async (subscriptionType: string, trialDays: number = 7): Promise<any> => {
-    try {
-      setIsProcessingPayment(true);
-      
-      const response = await fetch('/api/payment/subscription', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+    `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ subscriptionType, trialDays })
       });
@@ -198,24 +188,13 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       
       if (!data.success) {
         throw new Error(data.error || 'Failed to create subscription');
-      }
 
       // Refresh subscriptions
       await refreshSubscriptions();
       
       return data.data;
 
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  // Cancel subscription
-  const cancelSubscription = async (subscriptionId: string, immediate: boolean = false): Promise<void> => {
-    try {
-      const response = await fetch(`/api/payment/subscription/${subscriptionId}/cancel`, {
+    `/api/payment/subscription/${subscriptionId}/cancel`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -228,26 +207,12 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       
       if (!data.success) {
         throw new Error(data.error || 'Failed to cancel subscription');
-      }
 
       // Refresh subscriptions
       await refreshSubscriptions();
-      
 
-    } catch (error) {
-      throw error;
-    }
-  };
+    `Bearer ${localStorage.getItem('token')}`
 
-  // Refresh subscriptions
-  const refreshSubscriptions = async (): Promise<void> => {
-    try {
-      setIsLoadingSubscriptions(true);
-      
-      const response = await fetch('/api/payment/subscriptions', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
       });
 
       const data = await response.json();
@@ -258,23 +223,9 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
           currentPeriodStart: new Date(sub.currentPeriodStart),
           currentPeriodEnd: new Date(sub.currentPeriodEnd)
         })));
-      }
 
-    } catch (error) {
-    } finally {
-      setIsLoadingSubscriptions(false);
-    }
-  };
+    `Bearer ${localStorage.getItem('token')}`
 
-  // Refresh payment history
-  const refreshPaymentHistory = async (): Promise<void> => {
-    try {
-      setIsLoadingHistory(true);
-      
-      const response = await fetch('/api/payment/history', {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
       });
 
       const data = await response.json();
@@ -284,12 +235,11 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
           ...payment,
           createdAt: new Date(payment.createdAt)
         })));
-      }
 
     } catch (error) {
     } finally {
       setIsLoadingHistory(false);
-    }
+
   };
 
   // Load user data on mount
@@ -298,7 +248,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
     if (token) {
       refreshSubscriptions();
       refreshPaymentHistory();
-    }
+
   }, []);
 
   // Premium feature checks
@@ -342,7 +292,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       
       default:
         return false;
-    }
+
   };
 
   const value: PaymentContextType = useMemo(() => ({

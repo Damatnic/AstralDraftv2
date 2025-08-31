@@ -10,7 +10,6 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import { motion } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 
-
 const SeasonStoryView: React.FC = () => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
@@ -23,16 +22,14 @@ const SeasonStoryView: React.FC = () => {
             generateNarrativeSeasonStory(myTeam, league)
                 .then(setStoryData)
                 .finally(() => setIsLoading(false));
-        }
+
     }, [myTeam, league]);
     
     if (!league || !myTeam) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
-    
+
     if (league.status !== 'COMPLETE' && league.status !== 'PLAYOFFS') {
         return <ErrorDisplay title="Not Ready" message="Your season story will be available once the season is complete." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -43,7 +40,7 @@ const SeasonStoryView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} - {league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} className="back-btn">
                     Back to Team Hub
                 </button>
             </header>
@@ -65,7 +62,7 @@ const SeasonStoryView: React.FC = () => {
                      ) : (
                         <ErrorDisplay title="Could not generate story" message="The Oracle was unable to write your season's story. Please try again later." />
                      )
-                    }
+
                 </div>
             </main>
         </div>

@@ -18,6 +18,7 @@ interface TeamStanding {
   winPercentage: number;
   playoffPosition: number;
   playoffStatus: 'clinched' | 'contending' | 'eliminated';
+
 }
 
 const EnhancedLeagueStandingsView: React.FC = () => {
@@ -54,7 +55,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       // Sort by win percentage, then by points for
       if (b.winPercentage !== a.winPercentage) {
         return b.winPercentage - a.winPercentage;
-      }
+
       return b.pointsFor - a.pointsFor;
     }).map((standing, index) => ({
       ...standing,
@@ -76,7 +77,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'contending': return 'text-yellow-400';
       case 'eliminated': return 'text-red-400';
       default: return 'text-slate-400';
-    }
+
   };
 
   const getPlayoffStatusText = (status: string, position: number) => {
@@ -85,7 +86,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'contending': return 'In Hunt';
       case 'eliminated': return 'Eliminated';
       default: return '';
-    }
+
   };
 
   const renderTabContent = () => {
@@ -390,7 +391,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
 
       default:
         return null;
-    }
+
   };
 
   return (
@@ -400,7 +401,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
               className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
             >
               ← Back to Dashboard
@@ -429,12 +430,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center justify-center gap-2 py-3 px-4 rounded-md transition-colors whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'bg-blue-600 text-white'
-                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-                }`}
+                onClick={() => setActiveTab(tab.id as any)}`}
               >
                 <span>{tab.icon}</span>
                 <span className="font-medium">{tab.label}</span>

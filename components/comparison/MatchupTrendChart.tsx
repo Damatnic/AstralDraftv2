@@ -3,7 +3,8 @@
  * Advanced charts for displaying historical matchup performance trends
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   XAxis,
   YAxis,
@@ -45,31 +46,31 @@ interface MatchupTrendChartProps {
   playerId: string;
   playerName: string;
   className?: string;
+
 }
 
 interface ChartDataPoint extends MatchupTrend {
   formattedWeek: string;
   difficultyColor: string;
   weatherIcon: string;
-}
 
 // Move tooltip component outside to avoid lint issues
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
     const data = payload[0].payload as ChartDataPoint;
     return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
-        <p className="font-medium">{label}</p>
-        <p className="text-sm text-gray-600">vs {data.opponent}</p>
-        <p className="text-lg font-bold text-blue-600">{data.fantasyPoints.toFixed(1)} pts</p>
-        <p className="text-sm">Touches: {data.touches}</p>
-        <p className="text-sm">Efficiency: {data.efficiency.toFixed(2)}</p>
-        <p className="text-sm">Def Rank: #{data.defensiveRank}</p>
-        <p className="text-sm">Game Script: {data.gameScript}</p>
-        {data.weather && <p className="text-sm">Weather: {data.weatherIcon}</p>}
+      <div className="bg-white p-3 border rounded-lg shadow-lg sm:px-4 md:px-6 lg:px-8">
+        <p className="font-medium sm:px-4 md:px-6 lg:px-8">{label}</p>
+        <p className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">vs {data.opponent}</p>
+        <p className="text-lg font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">{data.fantasyPoints.toFixed(1)} pts</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Touches: {data.touches}</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Efficiency: {data.efficiency.toFixed(2)}</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Def Rank: #{data.defensiveRank}</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Game Script: {data.gameScript}</p>
+        {data.weather && <p className="text-sm sm:px-4 md:px-6 lg:px-8">Weather: {data.weatherIcon}</p>}
       </div>
     );
-  }
+
   return null;
 };
 
@@ -77,7 +78,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   playerId,
   playerName,
   className = ''
-}: any) => {
+}) => {
   const [trends, setTrends] = useState<MatchupTrend[]>([]);
   const [defensiveHeatMap, setDefensiveHeatMap] = useState<DefensiveHeatMap | null>(null);
   const [weatherAnalysis, setWeatherAnalysis] = useState<WeatherTrendAnalysis | null>(null);
@@ -91,6 +92,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
   const loadMatchupData = async () => {
     try {
+
       setLoading(true);
       setError(null);
 
@@ -108,12 +110,12 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
         const position = 'WR'; // Mock position
         const heatMapData = await enhancedMatchupAnalyticsService.generateDefensiveHeatMap(recentOpponent, position);
         setDefensiveHeatMap(heatMapData);
-      }
-    } catch (err) {
+
+    } catch (error) {
       setError('Failed to load matchup analysis data');
     } finally {
       setLoading(false);
-    }
+
   };
 
   const prepareChartData = (): ChartDataPoint[] => {
@@ -139,7 +141,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
       case 'wind': return '💨';
       case 'fog': return '🌫️';
       default: return '☀️';
-    }
+
   };
 
   const getTrendDirection = (data: ChartDataPoint[]): 'up' | 'down' | 'stable' => {
@@ -160,7 +162,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
       case 'up': return 'default';
       case 'down': return 'destructive';
       default: return 'secondary';
-    }
+
   };
 
   const getDefensiveBadgeVariant = (rank: number) => {
@@ -176,46 +178,44 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5 animate-pulse" />
+          <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+            <Activity className="h-5 w-5 animate-pulse sm:px-4 md:px-6 lg:px-8" />
             Loading Matchup Trends...
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-96 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="h-96 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
           </div>
         </CardContent>
       </Card>
     );
-  }
 
   if (error) {
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="text-red-600">Error Loading Data</CardTitle>
+          <CardTitle className="text-red-600 sm:px-4 md:px-6 lg:px-8">Error Loading Data</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">{error}</p>
+          <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">{error}</p>
         </CardContent>
       </Card>
     );
-  }
 
   return (
     <div className={`enhanced-matchup-trends ${className}`}>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5" />
+          <CardTitle className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <BarChart3 className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
               Enhanced Matchup Analysis - {playerName}
             </div>
-            <div className="flex items-center gap-2">
-              {trendDirection === 'up' && <TrendingUp className="h-5 w-5 text-green-600" />}
-              {trendDirection === 'down' && <TrendingDown className="h-5 w-5 text-red-600" />}
-              {trendDirection === 'stable' && <Activity className="h-5 w-5 text-blue-600" />}
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              {trendDirection === 'up' && <TrendingUp className="h-5 w-5 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
+              {trendDirection === 'down' && <TrendingDown className="h-5 w-5 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
+              {trendDirection === 'stable' && <Activity className="h-5 w-5 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
               <Badge variant={getBadgeVariant(trendDirection)}>
                 {trendDirection} trend
               </Badge>
@@ -234,11 +234,11 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
             onTabChange={setActiveTab}
           />
 
-          <div className="mt-6">
+          <div className="mt-6 sm:px-4 md:px-6 lg:px-8">
             {/* Performance Trends Tab */}
             {activeTab === 'trends' && (
-              <div className="space-y-6">
-                <div className="h-96">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -273,18 +273,27 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                 {/* Game Script Analysis */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">Game Script Distribution</CardTitle>
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm sm:px-4 md:px-6 lg:px-8">Game Script Distribution</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2 text-sm">
+                      <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
                         {['positive', 'neutral', 'negative'].map((script: any) => {
                           const count = trends.filter((t: any) => t.gameScript === script).length;
                           const percentage = trends.length > 0 ? (count / trends.length * 100).toFixed(0) : '0';
-                          return (
-                            <div key={script} className="flex justify-between">
-                              <span className="capitalize">{script}:</span>
-                              <span className="font-medium">{count} ({percentage}%)</span>
+                          
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
+                            <div key={script} className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                              <span className="capitalize sm:px-4 md:px-6 lg:px-8">{script}:</span>
+                              <span className="font-medium sm:px-4 md:px-6 lg:px-8">{count} ({percentage}%)</span>
                             </div>
                           );
                         })}
@@ -293,48 +302,48 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                   </Card>
 
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">Matchup Difficulty</CardTitle>
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm sm:px-4 md:px-6 lg:px-8">Matchup Difficulty</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
+                      <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Avg Def Rank:</span>
-                          <span className="font-medium">
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                             #{trends.length > 0 ? (trends.reduce((sum, t) => sum + t.defensiveRank, 0) / trends.length).toFixed(0) : 'N/A'}
                           </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Toughest:</span>
-                          <span className="font-medium">#{trends.length > 0 ? Math.min(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.min(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Easiest:</span>
-                          <span className="font-medium">#{trends.length > 0 ? Math.max(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">#{trends.length > 0 ? Math.max(...trends.map((t: any) => t.defensiveRank)) : 'N/A'}</span>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
 
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">Performance Metrics</CardTitle>
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm sm:px-4 md:px-6 lg:px-8">Performance Metrics</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
+                      <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Avg Points:</span>
-                          <span className="font-medium">
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                             {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length).toFixed(1) : 'N/A'}
                           </span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Best Game:</span>
-                          <span className="font-medium">{trends.length > 0 ? Math.max(...trends.map((t: any) => t.fantasyPoints)).toFixed(1) : 'N/A'}</span>
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">{trends.length > 0 ? Math.max(...trends.map((t: any) => t.fantasyPoints)).toFixed(1) : 'N/A'}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                           <span>Consistency:</span>
-                          <span className="font-medium">
+                          <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                             {trends.length > 0 ? (100 - (Math.sqrt(trends.reduce((sum, t) => sum + Math.pow(t.fantasyPoints - (trends.reduce((s, tr) => s + tr.fantasyPoints, 0) / trends.length), 2), 0) / trends.length) / (trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length) * 100)).toFixed(0) : '0'}%
                           </span>
                         </div>
@@ -347,8 +356,8 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
             {/* Defensive Analysis Tab */}
             {activeTab === 'defensive' && defensiveHeatMap && (
-              <div className="space-y-6">
-                <div className="h-96">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={defensiveHeatMap.weeklyTrends}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -362,7 +371,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                             color = '#dc2626'; // red
                           } else if (entry.fantasyPointsAllowed > 15) {
                             color = '#f59e0b'; // yellow
-                          }
+
                           return <Cell key={`cell-${entry.week}-${index}`} fill={color} />;
                         })}
                       </Bar>
@@ -373,25 +382,25 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Shield className="h-5 w-5" />
+                      <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Shield className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         Defensive Stats vs {defensiveHeatMap.position}
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Fantasy Points Allowed:</span>
-                        <span className="font-medium">{defensiveHeatMap.vsPosition.fantasyPointsAllowed}</span>
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{defensiveHeatMap.vsPosition.fantasyPointsAllowed}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>League Rank:</span>
                         <Badge variant={getDefensiveBadgeVariant(defensiveHeatMap.vsPosition.rank)}>
                           #{defensiveHeatMap.vsPosition.rank}
                         </Badge>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Yards Allowed:</span>
-                        <span className="font-medium">
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                           {(() => {
                             if (defensiveHeatMap.position === 'QB') return defensiveHeatMap.vsPosition.passingYards;
                             if (defensiveHeatMap.position === 'RB') return defensiveHeatMap.vsPosition.rushingYards;
@@ -399,9 +408,9 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                           })()}
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>TDs Allowed:</span>
-                        <span className="font-medium">{defensiveHeatMap.vsPosition.touchdowns}</span>
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{defensiveHeatMap.vsPosition.touchdowns}</span>
                       </div>
                     </CardContent>
                   </Card>
@@ -411,27 +420,27 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <CardTitle>Home vs Away Performance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
+                      <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
-                          <div className="flex justify-between mb-2">
+                          <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span>Home Games:</span>
-                            <span className="font-medium">{defensiveHeatMap.seasonTotals.homeVsAway.home.toFixed(1)} pts</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{defensiveHeatMap.seasonTotals.homeVsAway.home.toFixed(1)} pts</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className="bg-blue-600 h-2 rounded-full"
+                              className="bg-blue-600 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${(defensiveHeatMap.seasonTotals.homeVsAway.home / 25) * 100}%` }}
                             ></div>
                           </div>
                         </div>
                         <div>
-                          <div className="flex justify-between mb-2">
+                          <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span>Away Games:</span>
-                            <span className="font-medium">{defensiveHeatMap.seasonTotals.homeVsAway.away.toFixed(1)} pts</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{defensiveHeatMap.seasonTotals.homeVsAway.away.toFixed(1)} pts</span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className="bg-orange-600 h-2 rounded-full"
+                              className="bg-orange-600 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${(defensiveHeatMap.seasonTotals.homeVsAway.away / 25) * 100}%` }}
                             ></div>
                           </div>
@@ -445,29 +454,29 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
             {/* Weather Impact Tab */}
             {activeTab === 'weather' && weatherAnalysis && (
-              <div className="space-y-6">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <Cloud className="h-4 w-4" />
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Cloud className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         Temperature Impact
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Optimal Range:</span>
-                        <span className="font-medium">
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                           {weatherAnalysis.temperatureImpact.optimalRange.min}°-{weatherAnalysis.temperatureImpact.optimalRange.max}°F
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Cold Weather:</span>
                         <span className={`font-medium ${weatherAnalysis.temperatureImpact.coldWeatherPerformance < 0 ? 'text-red-600' : 'text-green-600'}`}>
                           {weatherAnalysis.temperatureImpact.coldWeatherPerformance > 0 ? '+' : ''}{weatherAnalysis.temperatureImpact.coldWeatherPerformance}%
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Hot Weather:</span>
                         <span className={`font-medium ${weatherAnalysis.temperatureImpact.hotWeatherPerformance < 0 ? 'text-red-600' : 'text-green-600'}`}>
                           {weatherAnalysis.temperatureImpact.hotWeatherPerformance > 0 ? '+' : ''}{weatherAnalysis.temperatureImpact.hotWeatherPerformance}%
@@ -477,45 +486,45 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                   </Card>
 
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <Wind className="h-4 w-4" />
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Wind className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         Wind Impact
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Threshold:</span>
-                        <span className="font-medium">{weatherAnalysis.windImpact.threshold} mph</span>
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{weatherAnalysis.windImpact.threshold} mph</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Pass Attempts:</span>
-                        <span className="font-medium text-red-600">{weatherAnalysis.windImpact.passAttemptImpact}% per mph</span>
+                        <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">{weatherAnalysis.windImpact.passAttemptImpact}% per mph</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Accuracy:</span>
-                        <span className="font-medium text-red-600">{weatherAnalysis.windImpact.passingAccuracyImpact}% per mph</span>
+                        <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">{weatherAnalysis.windImpact.passingAccuracyImpact}% per mph</span>
                       </div>
                     </CardContent>
                   </Card>
 
                   <Card>
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm flex items-center gap-2">
-                        <Droplets className="h-4 w-4" />
+                    <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                      <CardTitle className="text-sm flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Droplets className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         Precipitation Impact
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Fumbles:</span>
-                        <span className="font-medium text-red-600">+{weatherAnalysis.precipitationImpact.fumblesIncreaseRate}%</span>
+                        <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">+{weatherAnalysis.precipitationImpact.fumblesIncreaseRate}%</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Passing:</span>
-                        <span className="font-medium text-red-600">{weatherAnalysis.precipitationImpact.passingImpact}%</span>
+                        <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">{weatherAnalysis.precipitationImpact.passingImpact}%</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Running:</span>
                         <span className={`font-medium ${weatherAnalysis.precipitationImpact.runningImpact > 0 ? 'text-green-600' : 'text-red-600'}`}>
                           {weatherAnalysis.precipitationImpact.runningImpact > 0 ? '+' : ''}{weatherAnalysis.precipitationImpact.runningImpact}%
@@ -530,7 +539,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                     <CardTitle>Historical Weather Games</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-64">
+                    <div className="h-64 sm:px-4 md:px-6 lg:px-8">
                       <ResponsiveContainer width="100%" height="100%">
                         <ScatterChart data={weatherAnalysis.historicalWeatherGames}>
                           <CartesianGrid strokeDasharray="3 3" />
@@ -548,8 +557,8 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
 
             {/* Efficiency Metrics Tab */}
             {activeTab === 'efficiency' && (
-              <div className="space-y-6">
-                <div className="h-96">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={chartData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -571,31 +580,31 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Target className="h-5 w-5" />
+                      <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Target className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         Efficiency Analysis
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Average Efficiency:</span>
-                        <span className="font-medium">
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                           {trends.length > 0 ? (trends.reduce((sum, t) => sum + t.efficiency, 0) / trends.length).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Best Efficiency:</span>
-                        <span className="font-medium text-green-600">
+                        <span className="font-medium text-green-600 sm:px-4 md:px-6 lg:px-8">
                           {trends.length > 0 ? Math.max(...trends.map((t: any) => t.efficiency)).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Worst Efficiency:</span>
-                        <span className="font-medium text-red-600">
+                        <span className="font-medium text-red-600 sm:px-4 md:px-6 lg:px-8">
                           {trends.length > 0 ? Math.min(...trends.map((t: any) => t.efficiency)).toFixed(2) : 'N/A'} pts/touch
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Efficiency Trend:</span>
                         <Badge variant={getBadgeVariant(trendDirection)}>
                           {trendDirection}
@@ -609,45 +618,45 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
                       <CardTitle>Touch Distribution</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
+                      <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
-                          <div className="flex justify-between mb-2">
+                          <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span>High Volume (20+ touches):</span>
-                            <span className="font-medium">
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                               {trends.filter((t: any) => t.touches >= 20).length} games
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className="bg-green-600 h-2 rounded-full"
+                              className="bg-green-600 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${trends.length > 0 ? (trends.filter((t: any) => t.touches >= 20).length / trends.length) * 100 : 0}%` }}
                             ></div>
                           </div>
                         </div>
                         <div>
-                          <div className="flex justify-between mb-2">
+                          <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span>Medium Volume (10-19 touches):</span>
-                            <span className="font-medium">
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                               {trends.filter((t: any) => t.touches >= 10 && t.touches < 20).length} games
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className="bg-yellow-600 h-2 rounded-full"
+                              className="bg-yellow-600 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${trends.length > 0 ? (trends.filter((t: any) => t.touches >= 10 && t.touches < 20).length / trends.length) * 100 : 0}%` }}
                             ></div>
                           </div>
                         </div>
                         <div>
-                          <div className="flex justify-between mb-2">
+                          <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span>Low Volume (&lt;10 touches):</span>
-                            <span className="font-medium">
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">
                               {trends.filter((t: any) => t.touches < 10).length} games
                             </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className="bg-red-600 h-2 rounded-full"
+                              className="bg-red-600 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                               style={{ width: `${trends.length > 0 ? (trends.filter((t: any) => t.touches < 10).length / trends.length) * 100 : 0}%` }}
                             ></div>
                           </div>
@@ -665,4 +674,10 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   );
 };
 
-export default MatchupTrendChart;
+const MatchupTrendChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MatchupTrendChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MatchupTrendChartWithErrorBoundary);

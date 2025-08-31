@@ -10,6 +10,7 @@
  * - Mobile-friendly touch interactions
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EyeIcon, EyeOffIcon, ShieldCheckIcon, KeyIcon, LockIcon, AlertTriangleIcon } from 'lucide-react';
@@ -26,6 +27,7 @@ interface SecureInputBaseProps {
   onBlur?: () => void;
   placeholder?: string;
   autoFocus?: boolean;
+
 }
 
 interface SecurePasswordInputProps extends SecureInputBaseProps {
@@ -38,7 +40,6 @@ interface SecurePasswordInputProps extends SecureInputBaseProps {
   strengthIndicator?: boolean;
   minLength?: number;
   maxLength?: number;
-}
 
 interface SecurePinInputProps extends SecureInputBaseProps {
   type: 'pin';
@@ -49,7 +50,6 @@ interface SecurePinInputProps extends SecureInputBaseProps {
   showProgress?: boolean;
   allowPaste?: boolean;
   clearClipboardDelay?: number;
-}
 
 type SecureInputProps = SecurePasswordInputProps | SecurePinInputProps;
 
@@ -110,7 +110,7 @@ const SecurityIndicator: React.FC<{ level: 'high' | 'medium' | 'low' }> = ({ lev
 
 // Progress dots for PIN input
 const PinProgress: React.FC<{ current: number; total: number; filled: boolean[] }> = ({ current, total, filled }) => (
-  <div className="flex justify-center gap-2 mt-3">
+  <div className="flex justify-center gap-2 mt-3 sm:px-4 md:px-6 lg:px-8">
     {Array.from({ length: total }, (_, i) => (
       <motion.div
         key={i}
@@ -144,14 +144,13 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     
     if (clearTimeoutRef.current) {
       clearTimeout(clearTimeoutRef.current);
-    }
-    
+
     clearTimeoutRef.current = setTimeout(() => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText('').catch(() => {
           // Silently fail if clipboard access is denied
         });
-      }
+
     }, delay);
   }, [props.type]);
   
@@ -167,9 +166,8 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
       const passwordProps = props as SecurePasswordInputProps;
       if (passwordProps.maxLength) {
         value = value.slice(0, passwordProps.maxLength);
-      }
-    }
-    
+
+
     props.onChange(value);
   };
   
@@ -178,8 +176,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     if (props.type === 'pin' && !(props as SecurePinInputProps).allowPaste) {
       e.preventDefault();
       return;
-    }
-    
+
     clearClipboard();
   };
   
@@ -200,7 +197,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     return () => {
       if (clearTimeoutRef.current) {
         clearTimeout(clearTimeoutRef.current);
-      }
+
     };
   }, []);
   
@@ -216,7 +213,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     } else {
       const strength = passwordStrength?.score || 0;
       return strength >= 4 ? 'high' : strength >= 2 ? 'medium' : 'low';
-    }
+
   };
   
   // Base input classes
@@ -240,8 +237,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
       stateClasses = 'border-primary-500/70 focus:border-primary-500 bg-primary-500/5 shadow-lg shadow-primary-500/20';
     } else {
       stateClasses = 'border-white/20 hover:border-white/30';
-    }
-    
+
     return `${baseClasses} ${stateClasses} ${props.className || ''}`;
   };
   
@@ -253,28 +249,26 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     const filled = Array.from({ length: pinLength }, (_, i) => i < props.value.length);
     
     return (
-      <div className="space-y-3">
+      <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
         {props.label && (
           <label 
             htmlFor={inputId}
-            className="flex items-center gap-2 text-sm font-medium text-white"
+            className="flex items-center gap-2 text-sm font-medium text-white sm:px-4 md:px-6 lg:px-8"
           >
-            <LockIcon className="w-4 h-4 text-primary-400" />
+            <LockIcon className="w-4 h-4 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
             {props.label}
-            {props.required && <span className="text-red-400">*</span>}
+            {props.required && <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">*</span>}
           </label>
         )}
         
-        <div className="relative">
+        <div className="relative sm:px-4 md:px-6 lg:px-8">
           <input
             ref={inputRef}
             id={inputId}
             type={showPassword ? 'text' : 'password'}
             value={showPassword ? props.value : props.value.replace(/./g, maskChar)}
             onChange={handleChange}
-            onPaste={handlePaste}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             className={getInputClasses()}
             placeholder={props.placeholder || `Enter ${pinLength}-digit PIN`}
             maxLength={pinLength}
@@ -289,7 +283,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
           />
           
           {/* Security indicator */}
-          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 sm:px-4 md:px-6 lg:px-8">
             <SecurityIndicator level={getSecurityLevel()} />
           </div>
         </div>
@@ -310,9 +304,9 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20"
+              className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20 sm:px-4 md:px-6 lg:px-8"
             >
-              <AlertTriangleIcon className="w-4 h-4" />
+              <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span>{props.error}</span>
             </motion.div>
           )}
@@ -322,45 +316,42 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="flex items-center gap-2 text-green-400 text-sm bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20"
+              className="flex items-center gap-2 text-green-400 text-sm bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20 sm:px-4 md:px-6 lg:px-8"
             >
-              <ShieldCheckIcon className="w-4 h-4" />
+              <ShieldCheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span>{props.success}</span>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
     );
-  }
-  
+
   // Password input rendering
   const passwordProps = props as SecurePasswordInputProps;
   const maskChar = passwordProps.maskCharacter || '•';
   const showToggleButton = passwordProps.showToggle !== false;
   
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
       {props.label && (
         <label 
           htmlFor={inputId}
-          className="flex items-center gap-2 text-sm font-medium text-white"
+          className="flex items-center gap-2 text-sm font-medium text-white sm:px-4 md:px-6 lg:px-8"
         >
-          <KeyIcon className="w-4 h-4 text-primary-400" />
+          <KeyIcon className="w-4 h-4 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
           {props.label}
-          {props.required && <span className="text-red-400">*</span>}
+          {props.required && <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">*</span>}
         </label>
       )}
       
-      <div className="relative">
+      <div className="relative sm:px-4 md:px-6 lg:px-8">
         <input
           ref={inputRef}
           id={inputId}
           type={showPassword ? 'text' : 'password'}
           value={showPassword ? props.value : props.value.replace(/./g, maskChar)}
           onChange={handleChange}
-          onPaste={handlePaste}
           onFocus={handleFocus}
-          onBlur={handleBlur}
           className={`${getInputClasses()} ${showToggleButton ? 'pr-20' : 'pr-16'}`}
           placeholder={props.placeholder || 'Enter secure password'}
           minLength={passwordProps.minLength}
@@ -373,7 +364,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
           aria-label="Secure password input"
         />
         
-        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
+        <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           {/* Security indicator */}
           <SecurityIndicator level={getSecurityLevel()} />
           
@@ -382,15 +373,15 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
             <motion.button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               {showPassword ? (
-                <EyeOffIcon className="w-4 h-4" />
+                <EyeOffIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               ) : (
-                <EyeIcon className="w-4 h-4" />
+                <EyeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               )}
             </motion.button>
           )}
@@ -402,15 +393,15 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
-          className="space-y-2"
+          className="space-y-2 sm:px-4 md:px-6 lg:px-8"
         >
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-400">Password Strength</span>
+          <div className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Password Strength</span>
             <span style={{ color: passwordStrength.color }}>{passwordStrength.feedback}</span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
             <motion.div
-              className="h-2 rounded-full transition-all duration-300"
+              className="h-2 rounded-full transition-all duration-300 sm:px-4 md:px-6 lg:px-8"
               style={{ backgroundColor: passwordStrength.color }}
               initial={{ width: 0 }}
               animate={{ width: `${(passwordStrength.score / 6) * 100}%` }}
@@ -426,9 +417,9 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20"
+            className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20 sm:px-4 md:px-6 lg:px-8"
           >
-            <AlertTriangleIcon className="w-4 h-4" />
+            <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             <span>{props.error}</span>
           </motion.div>
         )}
@@ -438,9 +429,9 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="flex items-center gap-2 text-green-400 text-sm bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20"
+            className="flex items-center gap-2 text-green-400 text-sm bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20 sm:px-4 md:px-6 lg:px-8"
           >
-            <ShieldCheckIcon className="w-4 h-4" />
+            <ShieldCheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             <span>{props.success}</span>
           </motion.div>
         )}
@@ -451,10 +442,10 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-xs text-gray-400 space-y-1 bg-white/5 p-3 rounded-lg border border-white/10"
+          className="text-xs text-gray-400 space-y-1 bg-white/5 p-3 rounded-lg border border-white/10 sm:px-4 md:px-6 lg:px-8"
         >
-          <div className="font-medium text-gray-300 mb-2">Security Tips:</div>
-          <div className="grid grid-cols-1 gap-1">
+          <div className="font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Security Tips:</div>
+          <div className="grid grid-cols-1 gap-1 sm:px-4 md:px-6 lg:px-8">
             <div>• Use at least 8 characters</div>
             <div>• Include uppercase and lowercase letters</div>
             <div>• Add numbers and special characters</div>
@@ -475,4 +466,10 @@ export const SecurePinInput: React.FC<SecurePinInputProps> = (props) => (
   <SecureInput {...props} type="pin" />
 );
 
-export default SecureInput;
+const SecureInputWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SecureInput {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SecureInputWithErrorBoundary);

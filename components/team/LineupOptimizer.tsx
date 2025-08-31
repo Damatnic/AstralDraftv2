@@ -3,7 +3,8 @@
  * AI-powered lineup suggestions and optimization tools
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
@@ -20,6 +21,7 @@ interface LineupOptimizerProps {
     league: League;
     dispatch: React.Dispatch<any>;
     canEdit: boolean;
+
 }
 
 interface LineupSuggestion {
@@ -31,7 +33,6 @@ interface LineupSuggestion {
     reasoning: string;
     improvements: string[];
     riskLevel: 'Low' | 'Medium' | 'High';
-}
 
 interface OptimizerSettings {
     optimizeFor: 'ceiling' | 'floor' | 'projection';
@@ -39,9 +40,10 @@ interface OptimizerSettings {
     considerMatchups: boolean;
     considerWeather: boolean;
     considerInjuries: boolean;
+
 }
 
-const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }: any) => {
+const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }) => {
     const [isOptimizing, setIsOptimizing] = React.useState(false);
     const [suggestions, setSuggestions] = React.useState<LineupSuggestion[]>([]);
     const [selectedSuggestion, setSelectedSuggestion] = React.useState<LineupSuggestion | null>(null);
@@ -68,6 +70,8 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
     ];
 
     const generateOptimizations = async () => {
+    try {
+
         setIsOptimizing(true);
         
         // Simulate AI optimization process
@@ -87,7 +91,13 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     'Consider streaming defense with better matchup'
                 ],
                 riskLevel: 'Medium'
-            },
+            
+    } catch (error) {
+      console.error('Error in generateOptimizations:', error);
+
+    } catch (error) {
+        console.error(error);
+    },
             {
                 id: '2',
                 name: 'Safe Floor',
@@ -115,7 +125,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     'Target quarterbacks in projected shootouts'
                 ],
                 riskLevel: 'High'
-            }
+
         ];
 
         setSuggestions(mockSuggestions);
@@ -132,7 +142,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                 leagueId: league.id,
                 teamId: team.id,
                 playerIds: suggestion.starters.map((p: any) => p.id)
-            }
+
         });
 
         dispatch({
@@ -140,7 +150,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
             payload: {
                 message: `Applied "${suggestion.name}" lineup optimization`,
                 type: 'SYSTEM'
-            }
+
         });
     };
 
@@ -152,11 +162,11 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     ? 'border-blue-500 bg-blue-500/10'
                     : 'border-[var(--panel-border)] hover:border-gray-500'
             }`}
-            onClick={() => setSelectedSuggestion(suggestion)}
+            onClick={() = role="button" tabIndex={0}> setSelectedSuggestion(suggestion)}
         >
-            <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold text-[var(--text-primary)]">{suggestion.name}</h4>
-                <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{suggestion.name}</h4>
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
                         suggestion.riskLevel === 'Low' ? 'bg-green-500/20 text-green-400' :
                         suggestion.riskLevel === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
@@ -167,36 +177,36 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-3 text-sm">
-                <div className="text-center">
-                    <div className="text-lg font-bold text-green-400">
+            <div className="grid grid-cols-3 gap-4 mb-3 text-sm sm:px-4 md:px-6 lg:px-8">
+                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-lg font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                         {suggestion.projectedScore.toFixed(1)}
                     </div>
-                    <div className="text-gray-400">Projected</div>
+                    <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Projected</div>
                 </div>
-                <div className="text-center">
-                    <div className="text-lg font-bold text-blue-400">
+                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-lg font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                         +{(suggestion.projectedScore - currentProjection).toFixed(1)}
                     </div>
-                    <div className="text-gray-400">Improvement</div>
+                    <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Improvement</div>
                 </div>
-                <div className="text-center">
-                    <div className="text-lg font-bold text-purple-400">
+                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-lg font-bold text-purple-400 sm:px-4 md:px-6 lg:px-8">
                         {suggestion.confidence}%
                     </div>
-                    <div className="text-gray-400">Confidence</div>
+                    <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Confidence</div>
                 </div>
             </div>
 
-            <p className="text-sm text-[var(--text-secondary)] mb-3">{suggestion.reasoning}</p>
+            <p className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">{suggestion.reasoning}</p>
 
             {canEdit && (
                 <button
-                    onClick={(e: any) => {
+                    onClick={(e: any) = aria-label="Action button"> {
                         e.stopPropagation();
                         applyLineup(suggestion);
                     }}
-                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium"
+                    className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                 >
                     Apply This Lineup
                 </button>
@@ -205,19 +215,19 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
     );
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Optimizer Settings */}
             <Widget title="Optimization Settings">
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Optimize For
                             </label>
                             <select
                                 value={settings.optimizeFor}
-                                onChange={(e: any) => setSettings(prev => ({ ...prev, optimizeFor: e.target.value as any }))}
-                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)]"
+                                onChange={(e: any) => setSettings(prev => ({ ...prev, optimizeFor: e.target.value as any }}
+                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="projection">Projected Points</option>
                                 <option value="ceiling">Ceiling (Maximum Upside)</option>
@@ -226,13 +236,13 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Risk Tolerance
                             </label>
                             <select
                                 value={settings.riskTolerance}
-                                onChange={(e: any) => setSettings(prev => ({ ...prev, riskTolerance: e.target.value as any }))}
-                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)]"
+                                onChange={(e: any) => setSettings(prev => ({ ...prev, riskTolerance: e.target.value as any }}
+                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="conservative">Conservative</option>
                                 <option value="balanced">Balanced</option>
@@ -241,34 +251,34 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Advanced Options
                             </label>
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-sm">
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                <label className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="checkbox"
                                         checked={settings.considerMatchups}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerMatchups: e.target.checked }))}
-                                        className="rounded"
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerMatchups: e.target.checked }}
+                                        className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Matchups
                                 </label>
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="checkbox"
                                         checked={settings.considerWeather}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerWeather: e.target.checked }))}
-                                        className="rounded"
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerWeather: e.target.checked }}
+                                        className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Weather
                                 </label>
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="checkbox"
                                         checked={settings.considerInjuries}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerInjuries: e.target.checked }))}
-                                        className="rounded"
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerInjuries: e.target.checked }}
+                                        className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Injuries
                                 </label>
@@ -279,16 +289,16 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     <button
                         onClick={generateOptimizations}
                         disabled={isOptimizing || !canEdit}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50"
-                    >
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         {isOptimizing ? (
                             <>
-                                <RefreshIcon className="w-4 h-4 animate-spin" />
+                                <RefreshIcon className="w-4 h-4 animate-spin sm:px-4 md:px-6 lg:px-8" />
                                 Optimizing...
                             </>
                         ) : (
                             <>
-                                <BrainCircuitIcon className="w-4 h-4" />
+                                <BrainCircuitIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 Generate Optimizations
                             </>
                         )}
@@ -298,30 +308,30 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
             {/* Current Lineup */}
             <Widget title="Current Lineup">
-                <div className="p-4">
-                    <div className="mb-4 text-center">
-                        <div className="text-2xl font-bold text-[var(--text-primary)]">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="mb-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-2xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                             {currentProjection.toFixed(1)} pts
                         </div>
-                        <div className="text-sm text-[var(--text-secondary)]">Projected Score</div>
+                        <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Projected Score</div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         {currentLineup.map((player, index) => (
-                            <div key={player.id} className="flex items-center gap-3 p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
+                            <div key={player.id} className="flex items-center gap-3 p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <Avatar
                                     avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
-                                    className="w-10 h-10 text-xl rounded-md"
+                                    className="w-10 h-10 text-xl rounded-md sm:px-4 md:px-6 lg:px-8"
                                 />
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-1">
-                                        <p className="font-medium text-[var(--text-primary)] truncate">{player.name}</p>
-                                        <StarIcon className="w-3 h-3 text-yellow-500" />
+                                <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                        <p className="font-medium text-[var(--text-primary)] truncate sm:px-4 md:px-6 lg:px-8">{player.name}</p>
+                                        <StarIcon className="w-3 h-3 text-yellow-500 sm:px-4 md:px-6 lg:px-8" />
                                     </div>
-                                    <p className="text-sm text-[var(--text-secondary)]">{player.position} - {player.team}</p>
+                                    <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</p>
                                 </div>
-                                <div className="text-right">
-                                    <div className="font-medium text-green-400">{player.stats.projection.toFixed(1)}</div>
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                    <div className="font-medium text-green-400 sm:px-4 md:px-6 lg:px-8">{player.stats.projection.toFixed(1)}</div>
                                 </div>
                             </div>
                         ))}
@@ -332,44 +342,44 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
             {/* Optimization Suggestions */}
             {suggestions.length > 0 && (
                 <Widget title="Lineup Suggestions">
-                    <div className="p-4">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
                             {suggestions.map(renderLineupCard)}
                         </div>
 
                         {/* Detailed View */}
                         {selectedSuggestion && (
-                            <div className="border-t border-[var(--panel-border)] pt-4">
-                                <h4 className="font-semibold text-[var(--text-primary)] mb-3">
+                            <div className="border-t border-[var(--panel-border)] pt-4 sm:px-4 md:px-6 lg:px-8">
+                                <h4 className="font-semibold text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Detailed Analysis: {selectedSuggestion.name}
                                 </h4>
 
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-2">Recommended Starters</h5>
-                                        <div className="space-y-2">
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Recommended Starters</h5>
+                                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             {selectedSuggestion.starters.map((player, index) => (
-                                                <div key={player.id} className="flex items-center justify-between p-2 bg-[var(--panel-bg)] rounded">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">
+                                                <div key={player.id} className="flex items-center justify-between p-2 bg-[var(--panel-bg)] rounded sm:px-4 md:px-6 lg:px-8">
+                                                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                        <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded sm:px-4 md:px-6 lg:px-8">
                                                             {positionSlots[index]?.position || 'FLEX'}
                                                         </span>
-                                                        <span className="font-medium">{player.name}</span>
-                                                        <span className="text-sm text-[var(--text-secondary)]">({player.position})</span>
+                                                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                                        <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">({player.position})</span>
                                                     </div>
-                                                    <span className="text-green-400 font-medium">{player.stats.projection.toFixed(1)}</span>
+                                                    <span className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">{player.stats.projection.toFixed(1)}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
 
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-2">Key Improvements</h5>
-                                        <ul className="space-y-2">
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Key Improvements</h5>
+                                        <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             {selectedSuggestion.improvements.map((improvement, index) => (
-                                                <li key={index} className="flex items-start gap-2 text-sm">
-                                                    <TrendingUpIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                                    <span className="text-[var(--text-secondary)]">{improvement}</span>
+                                                <li key={index} className="flex items-start gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                                    <TrendingUpIcon className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                                    <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{improvement}</span>
                                                 </li>
                                             ))}
                                         </ul>
@@ -384,23 +394,23 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
             {/* Empty State */}
             {suggestions.length === 0 && !isOptimizing && (
                 <Widget title="Lineup Optimization">
-                    <div className="p-8 text-center">
-                        <BrainCircuitIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
+                    <div className="p-8 text-center sm:px-4 md:px-6 lg:px-8">
+                        <BrainCircuitIcon className="w-16 h-16 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+                        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                             Ready to Optimize Your Lineup?
                         </h3>
-                        <p className="text-[var(--text-secondary)] mb-4">
+                        <p className="text-[var(--text-secondary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                             Get AI-powered lineup suggestions based on projections, matchups, and your preferences.
                         </p>
                         {canEdit ? (
                             <button
                                 onClick={generateOptimizations}
-                                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium"
-                            >
+                                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 Generate Lineup Suggestions
                             </button>
                         ) : (
-                            <p className="text-yellow-400">View-only mode - optimization not available</p>
+                            <p className="text-yellow-400 sm:px-4 md:px-6 lg:px-8">View-only mode - optimization not available</p>
                         )}
                     </div>
                 </Widget>
@@ -409,4 +419,10 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
     );
 };
 
-export default LineupOptimizer;
+const LineupOptimizerWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LineupOptimizer {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LineupOptimizerWithErrorBoundary);

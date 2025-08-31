@@ -9,7 +9,7 @@ import PlayerDetailModal from '../components/player/PlayerDetailModal';
 import { useLeague } from '../hooks/useLeague';
 import WaiverIntelligenceWidget from '../components/team/WaiverIntelligenceWidget';
 
-const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any>; playerNotes: AppState['playerNotes'], playerAvatars: AppState['playerAvatars'] }> = ({ league, myTeam, dispatch, playerNotes, playerAvatars }: any) => {
+const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any>; playerNotes: AppState['playerNotes'], playerAvatars: AppState['playerAvatars'] }> = ({ league, myTeam, dispatch, playerNotes, playerAvatars }) => {
     const [search, setSearch] = React.useState('');
     const [positionFilter, setPositionFilter] = React.useState<string>('ALL');
     const [isClaimModalOpen, setIsClaimModalOpen] = React.useState(false);
@@ -56,7 +56,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                             <span className="text-green-300 font-bold">FAAB: ${myTeam.faab}</span>
                         </div>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                             className="back-btn"
                         >
                             Back to Team
@@ -78,7 +78,6 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                         placeholder="Search player..."
                                         value={search}
                                         onChange={e => setSearch(e.target.value)}
-                                        className="search-input"
                                     />
                                 </div>
                             </div>
@@ -88,8 +87,6 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                     <button
                                         key={pos}
                                         onClick={() => setPositionFilter(pos)}
-                                        className={`px-2.5 py-0.5 text-xs font-bold rounded-full transition-all
-                                            ${positionFilter === pos ? 'bg-cyan-400 text-black' : 'btn btn-secondary'}
                                         `}
                                     >
                                         {pos}
@@ -101,14 +98,13 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                 {filteredPlayers.map((player: any) => (
                                     <div key={player.id} className="player-card cursor-pointer">
                                         <div className="player-header">
-                                            <div className="player-info" onClick={() => setSelectedPlayer(player)}>
+                                            <div className="player-info" onClick={() => setSelectedPlayer(player)}
                                                 <div className="position-badge">{player.position}</div>
                                                 <h3 className="player-name">{player.name}</h3>
                                                 <p className="player-team">{player.team} • Rank #{player.rank}</p>
                                             </div>
                                             <button 
-                                                onClick={() => handleOpenClaimModal(player)} 
-                                                className="btn btn-success"
+                                                onClick={() => handleOpenClaimModal(player)}
                                             >
                                                 Claim
                                             </button>
@@ -132,8 +128,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                             <div className="flex justify-between items-center">
                                                 <p className="font-semibold text-white">{playerToAdd?.name}</p>
                                                 <button 
-                                                    onClick={() => handleCancelClaim(claim.id)} 
-                                                    className="text-red-400 hover:text-red-300"
+                                                    onClick={() => handleCancelClaim(claim.id)}
                                                 >
                                                     Cancel
                                                 </button>
@@ -182,12 +177,11 @@ const WaiverWireView: React.FC = () => {
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load waiver wire. Please select a league first.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
 
     return <WaiverWireContent league={league} myTeam={myTeam} dispatch={dispatch} playerNotes={state.playerNotes} playerAvatars={state.playerAvatars} />;
 };

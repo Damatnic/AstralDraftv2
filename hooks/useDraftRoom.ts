@@ -73,9 +73,13 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
   // Connection management
   const connect = useCallback(async () => {
     try {
+
       setError(null);
       setConnectionStatus('CONNECTING');
       await draftWebSocketService.connectToDraftRoom(leagueId, userId);
+
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect to draft room';
       setError(errorMessage);
@@ -94,6 +98,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
   // Draft actions
   const makePick = useCallback((playerId: number) => {
     try {
+
       if (!isConnected) {
         throw new Error('Not connected to draft room');
       }
@@ -104,6 +109,9 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
       
       draftWebSocketService.sendPick(leagueId, teamId, playerId);
       setError(null);
+
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to make pick';
       setError(errorMessage);
@@ -112,12 +120,16 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
 
   const sendChatMessage = useCallback((message: string, isTradeProposal = false) => {
     try {
+
       if (!isConnected) {
         throw new Error('Not connected to draft room');
       }
       
       draftWebSocketService.sendChatMessage(leagueId, userId, message, isTradeProposal);
       setError(null);
+
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
       setError(errorMessage);
@@ -126,12 +138,16 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
 
   const toggleTimer = useCallback(() => {
     try {
+
       if (!isConnected) {
         throw new Error('Not connected to draft room');
       }
       
       draftWebSocketService.toggleTimer(leagueId);
       setError(null);
+
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to toggle timer';
       setError(errorMessage);

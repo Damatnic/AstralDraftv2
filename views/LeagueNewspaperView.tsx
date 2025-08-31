@@ -27,14 +27,12 @@ const LeagueNewspaperView: React.FC = () => {
         if (!league || !cacheKey || maxWeek < 1) {
             setIsLoading(false);
             return;
-        }
 
         const cachedNewspaper = state.leagueNewspapers[cacheKey];
         if (cachedNewspaper) {
             setNewspaper(cachedNewspaper);
             setIsLoading(false);
             return;
-        }
 
         setIsLoading(true);
         setError(null);
@@ -45,7 +43,7 @@ const LeagueNewspaperView: React.FC = () => {
                     dispatch({ type: 'SET_LEAGUE_NEWSPAPER', payload: { key: cacheKey, newspaper: data } });
                 } else {
                     setError("The Oracle could not write this week's newspaper.");
-                }
+
             })
             .catch(() => setError("An error occurred while consulting the Oracle."))
             .finally(() => setIsLoading(false));
@@ -54,10 +52,9 @@ const LeagueNewspaperView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="Please select a league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
+
      if (maxWeek < 1) {
         return <ErrorDisplay title="Not Available" message="The newspaper will be published after Week 1 is complete." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -70,15 +67,15 @@ const LeagueNewspaperView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-4">
                      <div className="flex items-center gap-2">
-                        <button onClick={() => setSelectedWeek(w => w - 1)} disabled={selectedWeek <= 1} className="glass-button px-3 py-1 text-sm">
+                        <button onClick={() => setSelectedWeek(w => w - 1)} className="glass-button px-3 py-1 text-sm">
                             &lt;
                         </button>
                         <span className="font-bold w-24 text-center">Week {selectedWeek} Issue</span>
-                        <button onClick={() => setSelectedWeek(w => w + 1)} disabled={selectedWeek >= maxWeek} className="glass-button px-3 py-1 text-sm">
+                        <button onClick={() => setSelectedWeek(w => w + 1)} className="glass-button px-3 py-1 text-sm">
                             &gt;
                         </button>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button">
                         Back to League Hub
                     </button>
                 </div>

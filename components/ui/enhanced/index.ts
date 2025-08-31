@@ -296,7 +296,7 @@ export const Animations = {
     PulseLoader,
     SpinLoader,
     WaveLoader
-  }
+
 };
 
 // Visual Effects Collection
@@ -316,7 +316,7 @@ export const VisualEffects = {
   backgrounds: {
     LiquidBackground,
     AuroraBackground
-  }
+
 };
 
 // Layout System
@@ -343,7 +343,7 @@ export const LayoutSystem = {
     isTablet,
     isDesktop,
     breakpoints
-  }
+
 };
 
 // Mobile Touch System
@@ -362,7 +362,7 @@ export const MobileSystem = {
   hooks: {
     useMobileScroll,
     useSafeArea
-  }
+
 };
 
 // Accessibility Suite
@@ -376,7 +376,7 @@ export const AccessibilitySuite = {
     FocusTrap,
     AccessibilityPanel,
     LiveRegion
-  }
+
 };
 
 // Dashboard Suite
@@ -389,7 +389,7 @@ export const DashboardSuite = {
     StatWidget,
     ChartWidget,
     FeedWidget
-  }
+
 };
 
 // =========================================

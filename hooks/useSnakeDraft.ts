@@ -306,6 +306,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
     if (!userTeam) return [];
 
     try {
+
       const recs = enhancedDraftEngine.getPickRecommendations(
         availablePlayers,
         userTeam.roster || [],
@@ -316,6 +317,9 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
       
       setRecommendations(recs);
       return recs;
+
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Failed to get recommendations:', error);
       return [];

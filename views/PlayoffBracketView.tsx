@@ -15,12 +15,13 @@ interface MatchupCardProps {
     matchup: Matchup;
     teams: Team[];
     isWinner?: boolean;
+
 }
 
-const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }: any) => {
+const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }) => {
     if (!matchupTeam || !team) {
         return <div className="h-10 flex items-center px-2 text-sm text-gray-500">TBD</div>;
-    }
+
     const score = matchupTeam.score > 0 ? matchupTeam.score.toFixed(2) : '-';
     return (
         <div className="flex justify-between items-center h-10 px-2">
@@ -34,7 +35,7 @@ const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({
     );
 };
 
-const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }: any) => {
+const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }) => {
     const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
     const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
     const winnerId = matchup.teamA.score > matchup.teamB.score ? matchup.teamA.teamId : matchup.teamA.score < matchup.teamB.score ? matchup.teamB.teamId : undefined;
@@ -58,7 +59,7 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }: any) => {
     );
 };
 
-const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
     const { isMobile } = useResponsiveBreakpoint();
     const semifinals = league.playoffBracket?.[15] || [];
     const championship = league.playoffBracket?.[16]?.[0];
@@ -77,7 +78,7 @@ const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch
                         <p className="page-subtitle">{league.name}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                         className="back-btn"
                     >
                         Back to My Team
@@ -199,13 +200,12 @@ const PlayoffBracketView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>The playoffs have not started yet for this league.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     return <PlayoffBracketContent league={league} dispatch={dispatch} />;
 };
 

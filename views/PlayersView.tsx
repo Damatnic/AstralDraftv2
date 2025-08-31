@@ -54,7 +54,7 @@ const PlayersView: React.FC = () => {
             payload: {
               leagueId: league.id,
               players: livePlayers
-            }
+
           });
           
           dispatch({
@@ -62,183 +62,14 @@ const PlayersView: React.FC = () => {
             payload: {
               message: `✅ Loaded ${livePlayers.length} players from Sports.io API`,
               type: 'SUCCESS'
-            }
+
           });
-        }
-      } catch (error) {
-        console.error('Failed to load live player data:', error);
-        dispatch({
-          type: 'ADD_NOTIFICATION',
-          payload: {
-            message: '⚠️ Using fallback player data - Sports.io API unavailable',
-            type: 'WARNING'
-          }
-        });
-      }
-    };
 
-    // Only load once when component mounts
-    if (league && allPlayers.length > 0) {
-      // Check if we already have live data (simple check)
-      const hasLiveData = allPlayers.some((player: any) => player.id > 9000);
-      if (!hasLiveData) {
-        loadLivePlayerData();
-      }
-    }
-  }, [league?.id, dispatch]);
-
-  // Position configuration with colors and gradients
-  const positionConfig = {
-    QB: { 
-      color: 'from-red-500 to-pink-600',
-      bgColor: 'bg-gradient-to-br from-red-500/20 to-pink-600/20',
-      borderColor: 'border-red-500/30',
-      icon: '🎯',
-      stats: ['passingYards', 'passingTDs', 'qbRating']
-    },
-    RB: { 
-      color: 'from-green-500 to-emerald-600',
-      bgColor: 'bg-gradient-to-br from-green-500/20 to-emerald-600/20',
-      borderColor: 'border-green-500/30',
-      icon: '⚡',
-      stats: ['rushingYards', 'rushingTDs', 'yardsPerCarry']
-    },
-    WR: { 
-      color: 'from-blue-500 to-cyan-600',
-      bgColor: 'bg-gradient-to-br from-blue-500/20 to-cyan-600/20',
-      borderColor: 'border-blue-500/30',
-      icon: '🎪',
-      stats: ['receptions', 'receivingYards', 'receivingTDs']
-    },
-    TE: { 
-      color: 'from-yellow-500 to-amber-600',
-      bgColor: 'bg-gradient-to-br from-yellow-500/20 to-amber-600/20',
-      borderColor: 'border-yellow-500/30',
-      icon: '🛡️',
-      stats: ['receptions', 'receivingYards', 'receivingTDs']
-    },
-    K: { 
-      color: 'from-purple-500 to-violet-600',
-      bgColor: 'bg-gradient-to-br from-purple-500/20 to-violet-600/20',
-      borderColor: 'border-purple-500/30',
-      icon: '🎯',
-      stats: ['fieldGoalsMade', 'fieldGoalPct', 'extraPointsMade']
-    },
-    DST: { 
-      color: 'from-gray-500 to-slate-600',
-      bgColor: 'bg-gradient-to-br from-gray-500/20 to-slate-600/20',
-      borderColor: 'border-gray-500/30',
-      icon: '🛡️',
-      stats: ['sacks', 'interceptions', 'pointsAllowed']
-    }
-  };
-
-  const getPositionConfig = (position: string) => {
-    return positionConfig[position as keyof typeof positionConfig] || {
-      color: 'from-gray-500 to-slate-600',
-      bgColor: 'bg-gradient-to-br from-gray-500/20 to-slate-600/20',
-      borderColor: 'border-gray-500/30',
-      icon: '👤',
-      stats: []
-    };
-  };
-
-  const getInjuryConfig = (status: string) => {
-    const configs = {
-      HEALTHY: { color: 'text-green-400', bg: 'bg-green-500/20', icon: '✅' },
-      QUESTIONABLE: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', icon: '⚠️' },
-      DOUBTFUL: { color: 'text-orange-400', bg: 'bg-orange-500/20', icon: '⚠️' },
-      OUT: { color: 'text-red-400', bg: 'bg-red-500/20', icon: '🚫' },
-      IR: { color: 'text-red-600', bg: 'bg-red-600/20', icon: '🏥' }
-    };
-    return configs[status] || { color: 'text-gray-400', bg: 'bg-gray-500/20', icon: '❓' };
-  };
-
-  // Calculate trending score (mock implementation)
-  const getTrendingScore = (player: Player) => {
-    // In production, this would analyze recent performance, news, social media mentions
-    const baseScore = 100 - player.fantasyRank;
-    const variance = Math.random() * 20 - 10;
-    return Math.max(0, Math.min(100, baseScore + variance));
-  };
-
-  // Filter and sort players
-  const filteredPlayers = useMemo(() => {
-    let players = [...allPlayers];
-
-    // Search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      players = players.filter((player: Player) => 
-        player.name.toLowerCase().includes(query) ||
-        player.team.toLowerCase().includes(query) ||
-        player.college?.toLowerCase().includes(query)
-      );
-    }
-
-    // Position filter
-    if (selectedPosition !== 'ALL') {
-      players = players.filter((player: Player) => player.position === selectedPosition);
-    }
-
-    // Team filter
-    if (selectedTeam !== 'ALL') {
-      players = players.filter((player: Player) => player.team === selectedTeam);
-    }
-
-    // Injury filter
-    if (injuryFilter !== 'ALL') {
-      players = players.filter((player: Player) => player.injuryStatus === injuryFilter);
-    }
-
-    // Sort players
-    players.sort((a: Player, b: Player) => {
-      switch (sortBy) {
-        case 'rank':
-          return a.fantasyRank - b.fantasyRank;
-        case 'name':
-          return a.name.localeCompare(b.name);
-        case 'team':
-          return a.team.localeCompare(b.team);
-        case 'points':
-          return b.projectedPoints - a.projectedPoints;
-        case 'trending':
-          return getTrendingScore(b) - getTrendingScore(a);
-        default:
-          return a.fantasyRank - b.fantasyRank;
-      }
-    });
-
-    return players;
-  }, [allPlayers, searchQuery, selectedPosition, selectedTeam, injuryFilter, sortBy]);
-
-  const handlePlayerSelect = (player: Player) => {
-    if (compareMode) {
-      if (comparePlayers.find((p: any) => p.id === player.id)) {
-        setComparePlayers(comparePlayers.filter((p: any) => p.id !== player.id));
-      } else if (comparePlayers.length < 3) {
-        setComparePlayers([...comparePlayers, player]);
-      }
-    } else {
-      setSelectedPlayer(player);
-    }
-  };
-
-  const handleAddToRoster = (player: Player) => {
-    if (userTeam) {
-      dispatch({
-        type: 'ADD_PLAYER_TO_ROSTER',
-        payload: { teamId: userTeam.id, player }
-      });
-      
-      dispatch({
-        type: 'ADD_NOTIFICATION',
-        payload: {
-          message: `${player.name} added to your roster!`,
+      `${player.name} added to your roster!`,
           type: 'SUCCESS'
-        }
+
       });
-    }
+
   };
 
   // Player Card Component
@@ -257,9 +88,6 @@ const PlayersView: React.FC = () => {
         transition={{ delay: index * 0.02 }}
         whileHover={{ y: -4, transition: { duration: 0.2 } }}
         onClick={() => handlePlayerSelect(player)}
-        className={`
-          relative group cursor-pointer
-          ${viewMode === 'grid' ? 'h-full' : 'w-full'}
         `}
       >
         {/* Card Container with Glassmorphism */}
@@ -462,7 +290,7 @@ const PlayersView: React.FC = () => {
         {/* Navigation Header */}
         <div className="nav-header mb-4">
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
             className="back-btn"
           >
             ← Back to Dashboard
@@ -506,12 +334,10 @@ const PlayersView: React.FC = () => {
                 placeholder="Search by name, team, college, or position..."
                 value={searchQuery}
                 onChange={(e: any) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-400/50 focus:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all text-lg"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-white transition-colors"
                 >
                   ✕
                 </button>
@@ -524,7 +350,6 @@ const PlayersView: React.FC = () => {
               <select
                 value={selectedPosition}
                 onChange={(e: any) => setSelectedPosition(e.target.value)}
-                className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Positions</option>
                 {Object.keys(positionConfig).map((pos: any) => (
@@ -536,7 +361,6 @@ const PlayersView: React.FC = () => {
               <select
                 value={selectedTeam}
                 onChange={(e: any) => setSelectedTeam(e.target.value)}
-                className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Teams</option>
                 {Object.entries(NFL_TEAMS).map(([key, team]) => (
@@ -548,7 +372,6 @@ const PlayersView: React.FC = () => {
               <select
                 value={injuryFilter}
                 onChange={(e: any) => setInjuryFilter(e.target.value)}
-                className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="ALL">All Status</option>
                 <option value="HEALTHY">Healthy</option>
@@ -562,7 +385,6 @@ const PlayersView: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e: any) => setSortBy(e.target.value as any)}
-                className="px-4 py-2 bg-slate-800/50 backdrop-blur-xl border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-400/50 transition-all"
               >
                 <option value="rank">Fantasy Rank</option>
                 <option value="points">Projected Points</option>
@@ -574,22 +396,12 @@ const PlayersView: React.FC = () => {
               {/* View Mode Toggle */}
               <div className="flex items-center gap-2 ml-auto">
                 <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-all ${
-                    viewMode === 'grid' 
-                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  onClick={() => setViewMode('grid')}`}
                 >
                   <GridIcon className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-all ${
-                    viewMode === 'list' 
-                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' 
-                      : 'text-gray-400 hover:text-white'
-                  }`}
+                  onClick={() => setViewMode('list')}`}
                 >
                   <ListIcon className="h-5 w-5" />
                 </button>
@@ -654,7 +466,6 @@ const PlayersView: React.FC = () => {
                       <span className="text-white font-medium">{player.name}</span>
                       <button
                         onClick={() => setComparePlayers(comparePlayers.filter((p: any) => p.id !== player.id))}
-                        className="text-gray-400 hover:text-red-400 transition-colors"
                       >
                         ✕
                       </button>

@@ -3,6 +3,7 @@
  * Advanced analytics dashboard with real-time metrics, predictive insights, and comprehensive reporting
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -17,7 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { enhancedAnalyticsService, type RealTimeMetrics, type PredictiveInsight } from '../../services/enhancedAnalyticsService';
 
 // WebSocket hook with basic implementation for demo
-const useWebSocket = (url: string, options: any = {}) => {
+const useWebSocket = (url: string, options: any = {
+  const [isLoading, setIsLoading] = React.useState(false);}) => {
   const [isConnected, setIsConnected] = React.useState(false);
   const [lastMessage, setLastMessage] = React.useState<string | null>(null);
   
@@ -52,6 +54,7 @@ interface DashboardState {
   alertsEnabled: boolean;
   autoRefresh: boolean;
   refreshInterval: number;
+
 }
 
 const COLORS = {
@@ -117,19 +120,21 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
   useEffect(() => {
     if (lastMessage && state.isRealTime) {
       try {
+
         const data = JSON.parse(lastMessage);
         if (data.type === 'metrics_update') {
           updateMetrics(data.payload);
         } else if (data.type === 'insight_generated') {
           addNewInsight(data.payload);
-        }
-      } catch (error) {
-      }
-    }
+
+    } catch (error) {
+
+
   }, [lastMessage, state.isRealTime]);
 
   const loadAnalyticsData = useCallback(async () => {
     try {
+
       setLoading(true);
       setError(null);
 
@@ -141,7 +146,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       const insights = await enhancedAnalyticsService.getPredictiveInsights(state.selectedTimeframe);
       setPredictiveInsights(insights);
 
-    } catch (err) {
+    } catch (error) {
       setError(err instanceof Error ? err.message : 'Failed to load analytics data');
       
       // Use mock data for demo
@@ -149,7 +154,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       setPredictiveInsights(generateMockPredictiveInsights());
     } finally {
       setLoading(false);
-    }
+
   }, [state.selectedTimeframe]);
 
   useEffect(() => {
@@ -170,6 +175,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
 
   const generateReport = async () => {
     try {
+
       const report = await enhancedAnalyticsService.generateAnalyticsReport();
       const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -180,15 +186,8 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    } catch (error) {
-    }
-  };
-
-  // Memoized calculations
-  const accuracyTrend = useMemo(() => {
-    if (!metrics) return [];
-    return metrics.accuracy.predictions.slice(-24).map((pred, index) => ({
-      time: `${23 - index}h ago`,
+    
+    `${23 - index}h ago`,
       accuracy: pred.accuracy,
       confidence: pred.confidence
     }));
@@ -224,7 +223,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         change: -5,
         trend: 'up' as const,
         color: metrics.performance.responseTime < 200 ? COLORS.success : COLORS.warning
-      }
+
     ];
   }, [metrics]);
 
@@ -279,8 +278,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         confidence: 92,
         impact: 'medium',
         actionable: false
-      }
-    ]
+
   });
 
   const generateMockPredictiveInsights = (): PredictiveInsight[] => [
@@ -305,28 +303,27 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
           value: 78.5 + (i * 0.6) + (Math.random() - 0.5) * 2,
           confidence: 84 - i * 2
         }))
-      }
-    }
+
+
   ];
 
   if (loading && !metrics) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Loading real-time analytics...</p>
+      <div className="flex items-center justify-center h-96 sm:px-4 md:px-6 lg:px-8">
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />
+          <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Loading real-time analytics...</p>
         </div>
       </div>
     );
-  }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 min-h-screen">
+    <div className="space-y-6 p-6 bg-gray-50 min-h-screen sm:px-4 md:px-6 lg:px-8">
       {/* Header Controls */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 bg-white p-4 rounded-lg shadow-sm">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Real-Time Analytics Dashboard</h1>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-gray-900 mb-1 sm:px-4 md:px-6 lg:px-8">Real-Time Analytics Dashboard</h1>
+          <div className="flex items-center gap-2 text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">
             <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
             <span>{isConnected ? 'Connected' : 'Disconnected'}</span>
             <span>•</span>
@@ -334,11 +331,11 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
           </div>
         </div>
         
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <select
             value={state.selectedTimeframe}
-            onChange={(e: any) => handleStateChange({ selectedTimeframe: e.target.value as any })}
-            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e: any) => handleStateChange({ selectedTimeframe: e.target.value as any }}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
           >
             <option value="1h">Last Hour</option>
             <option value="24h">Last 24 Hours</option>
@@ -348,40 +345,40 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
           </select>
           
           <button
-            onClick={() => handleStateChange({ isRealTime: !state.isRealTime })}
+            onClick={() => handleStateChange({ isRealTime: !state.isRealTime }}
             className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2 ${
               state.isRealTime 
                 ? 'bg-green-100 text-green-700 hover:bg-green-200' 
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            {state.isRealTime ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+            {state.isRealTime ? <Play className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" /> : <Pause className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />}
             {state.isRealTime ? 'Real-Time' : 'Paused'}
           </button>
           
           <button
             onClick={loadAnalyticsData}
             disabled={loading}
-            className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
-          >
+            className="px-3 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
+           aria-label="Action button">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
           
           <button
             onClick={generateReport}
-            className="px-3 py-2 bg-purple-600 text-white rounded-md text-sm font-medium hover:bg-purple-700 flex items-center gap-2"
-          >
-            <Download className="h-4 w-4" />
+            className="px-3 py-2 bg-purple-600 text-white rounded-md text-sm font-medium hover:bg-purple-700 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"
+           aria-label="Action button">
+            <Download className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
             Export
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
-          <AlertTriangle className="h-5 w-5 text-red-600" />
-          <p className="text-red-800">{error}</p>
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+          <AlertTriangle className="h-5 w-5 text-red-600 sm:px-4 md:px-6 lg:px-8" />
+          <p className="text-red-800 sm:px-4 md:px-6 lg:px-8">{error}</p>
         </div>
       )}
 
@@ -394,18 +391,18 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <Card className="bg-white">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+            <Card className="bg-white sm:px-4 md:px-6 lg:px-8">
+              <CardContent className="p-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">{indicator.label}</p>
-                    <p className="text-2xl font-bold" style={{ color: indicator.color }}>{indicator.value}</p>
+                    <p className="text-sm text-gray-600 mb-1 sm:px-4 md:px-6 lg:px-8">{indicator.label}</p>
+                    <p className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8" style={{ color: indicator.color }}>{indicator.value}</p>
                     {indicator.change !== 0 && (
-                      <div className="flex items-center gap-1 mt-1">
+                      <div className="flex items-center gap-1 mt-1 sm:px-4 md:px-6 lg:px-8">
                         {indicator.trend === 'up' ? (
-                          <TrendingUp className="h-4 w-4 text-green-600" />
+                          <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />
                         ) : (
-                          <TrendingDown className="h-4 w-4 text-red-600" />
+                          <TrendingDown className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />
                         )}
                         <span className={`text-sm ${indicator.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
                           {indicator.change > 0 ? '+' : ''}{indicator.change}
@@ -413,8 +410,8 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: `${indicator.color}20` }}>
-                    <Activity className="h-6 w-6" style={{ color: indicator.color }} />
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8" style={{ backgroundColor: `${indicator.color}20` }}>
+                    <Activity className="h-6 w-6 sm:px-4 md:px-6 lg:px-8" style={{ color: indicator.color }} />
                   </div>
                 </div>
               </CardContent>
@@ -426,10 +423,10 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       {/* Real-Time Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Accuracy Trend Chart */}
-        <Card className="bg-white">
+        <Card className="bg-white sm:px-4 md:px-6 lg:px-8">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <TrendingUp className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
               Accuracy Trend (24h)
             </CardTitle>
           </CardHeader>
@@ -470,15 +467,15 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         </Card>
 
         {/* Predictive Insights */}
-        <Card className="bg-white">
+        <Card className="bg-white sm:px-4 md:px-6 lg:px-8">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <Lightbulb className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
               Predictive Insights
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4 max-h-80 overflow-y-auto">
+            <div className="space-y-4 max-h-80 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
               <AnimatePresence>
                 {predictiveInsights.slice(0, 3).map((insight, index) => (
                   <motion.div
@@ -487,19 +484,19 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ delay: index * 0.1 }}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow sm:px-4 md:px-6 lg:px-8"
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-gray-900">{insight.title}</h4>
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                      <h4 className="font-medium text-gray-900 sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full sm:px-4 md:px-6 lg:px-8">
                         {insight.confidence}% confidence
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{insight.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">{insight.timeframe} forecast</span>
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-gray-500">Impact:</span>
+                    <p className="text-sm text-gray-600 mb-3 sm:px-4 md:px-6 lg:px-8">{insight.description}</p>
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                      <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{insight.timeframe} forecast</span>
+                      <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Impact:</span>
                         <span className={`text-xs px-2 py-1 rounded-full ${
                           insight.impact === 'high' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                         }`}>
@@ -517,10 +514,10 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
 
       {/* Real-Time Insights Feed */}
       {metrics?.insights && metrics.insights.length > 0 && (
-        <Card className="bg-white">
+        <Card className="bg-white sm:px-4 md:px-6 lg:px-8">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Eye className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <Eye className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
               Real-Time Insights
             </CardTitle>
           </CardHeader>
@@ -534,17 +531,17 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   className={`p-4 rounded-lg border-l-4 ${getInsightBorderColor(insight.type)}`}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-gray-900">{insight.title}</h4>
+                  <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                    <h4 className="font-medium text-gray-900 sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
                     <span className={`text-xs px-2 py-1 rounded-full ${getImpactColor(insight.impact)}`}>
                       {insight.impact}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{insight.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">{insight.confidence}% confidence</span>
+                  <p className="text-sm text-gray-600 mb-2 sm:px-4 md:px-6 lg:px-8">{insight.description}</p>
+                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{insight.confidence}% confidence</span>
                     {insight.actionable && (
-                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full sm:px-4 md:px-6 lg:px-8">
                         Actionable
                       </span>
                     )}
@@ -559,4 +556,10 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
   );
 };
 
-export default RealTimeAnalyticsDashboard;
+const RealTimeAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <RealTimeAnalyticsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(RealTimeAnalyticsDashboardWithErrorBoundary);

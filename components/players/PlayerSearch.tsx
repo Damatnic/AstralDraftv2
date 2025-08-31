@@ -3,7 +3,8 @@
  * Search and filter NFL players for roster management
  */
 
-import React, { useState, useMemo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { searchPlayers, getPlayersByPosition, NFL_TEAMS } from '../../data/nflPlayers';
@@ -14,6 +15,7 @@ interface PlayerSearchProps {
   showAddButton?: boolean;
   filterPosition?: string;
   excludePlayerIds?: number[];
+
 }
 
 const PlayerSearch: React.FC<PlayerSearchProps> = ({
@@ -21,7 +23,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
   showAddButton = false,
   filterPosition,
   excludePlayerIds = []
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPosition, setSelectedPosition] = useState(filterPosition || 'ALL');
@@ -39,14 +41,12 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
     // Apply position filter
     if (selectedPosition !== 'ALL') {
       players = players.filter((player: any) => player.position === selectedPosition);
-    }
 
     // Apply search query
     if (searchQuery.trim()) {
       players = searchPlayers(searchQuery).filter((player: any) => 
         !excludePlayerIds.includes(player.id)
       );
-    }
 
     // Sort players
     players.sort((a, b) => {
@@ -59,7 +59,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
           return a.team.localeCompare(b.team);
         default:
           return a.fantasyRank - b.fantasyRank;
-      }
+
     });
 
     return players.slice(0, 50); // Limit to 50 results for performance
@@ -72,7 +72,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       onPlayerSelect(player);
     } else {
       dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });
-    }
+
   };
 
   const getInjuryStatusColor = (status: string) => {
@@ -83,7 +83,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       case 'OUT': return 'text-red-400';
       case 'IR': return 'text-red-600';
       default: return 'text-gray-400';
-    }
+
   };
 
   const getPositionColor = (position: string) => {
@@ -95,37 +95,35 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       case 'K': return 'bg-purple-600';
       case 'DST': return 'bg-gray-600';
       default: return 'bg-gray-500';
-    }
+
   };
 
   return (
-    <div className="search-container">
+    <div className="search-container sm:px-4 md:px-6 lg:px-8">
       {/* Search Header */}
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-white mb-4">Player Search</h3>
+      <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
+        <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Player Search</h3>
         
         {/* Search Input */}
-        <div className="input-group mb-4">
+        <div className="input-group mb-4 sm:px-4 md:px-6 lg:px-8">
           <input
             type="search"
             placeholder="Search players by name, team, or position..."
             value={searchQuery}
             onChange={(e: any) => setSearchQuery(e.target.value)}
-            className="search-input mobile-scroll"
             autocomplete="off"
             data-form-type="search"
           />
         </div>
 
         {/* Filters */}
-        <div className="search-row">
+        <div className="search-row sm:px-4 md:px-6 lg:px-8">
           {/* Position Filter */}
-          <div className="input-group">
+          <div className="input-group sm:px-4 md:px-6 lg:px-8">
             <label>Position</label>
             <select
               value={selectedPosition}
               onChange={(e: any) => setSelectedPosition(e.target.value)}
-              className="filter-select mobile-scroll"
               autocomplete="off"
             >
               {positions.map((pos: any) => (
@@ -135,12 +133,11 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
           </div>
 
           {/* Sort By */}
-          <div className="input-group">
+          <div className="input-group sm:px-4 md:px-6 lg:px-8">
             <label>Sort By</label>
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
-              className="filter-select mobile-scroll"
               autocomplete="off"
             >
               <option value="rank">Fantasy Rank</option>
@@ -152,7 +149,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       </div>
 
       {/* Results */}
-      <div className="space-y-2 max-h-96 overflow-y-auto mobile-scroll custom-scrollbar">
+      <div className="space-y-2 max-h-96 overflow-y-auto mobile-scroll custom-scrollbar sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {filteredPlayers.map((player, index) => (
             <motion.div
@@ -164,42 +161,42 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
               onClick={(e) => { e.preventDefault(); handlePlayerClick(player); }}
               className={`player-card ${player.position.toLowerCase()} cursor-pointer group`}
             >
-              <div className="player-header">
-                <div className="player-info">
-                  <div className="position-badge">{player.position}</div>
-                  <h3 className="player-name group-hover:text-blue-400 transition-colors">
+              <div className="player-header sm:px-4 md:px-6 lg:px-8">
+                <div className="player-info sm:px-4 md:px-6 lg:px-8">
+                  <div className="position-badge sm:px-4 md:px-6 lg:px-8">{player.position}</div>
+                  <h3 className="player-name group-hover:text-blue-400 transition-colors sm:px-4 md:px-6 lg:px-8">
                     {player.name}
                   </h3>
-                  <p className="player-team">
+                  <p className="player-team sm:px-4 md:px-6 lg:px-8">
                     {NFL_TEAMS[player.team as keyof typeof NFL_TEAMS]?.name || player.team} • #{player.jerseyNumber}
                     {player.age > 0 && ` • ${player.age}y`}
                   </p>
                 </div>
                 {showAddButton && (
                   <button
-                    onClick={(e: any) => {
+                    onClick={(e: any) = aria-label="Action button"> {
                       e.preventDefault();
                       e.stopPropagation();
                       onPlayerSelect?.(player);
                     }}
-                    className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                   >
                     Add
                   </button>
                 )}
               </div>
 
-              <div className="player-stats">
-                <div className="stat-item">
-                  <span className="stat-label">Rank</span>
-                  <span className="stat-value">#{player.fantasyRank}</span>
+              <div className="player-stats sm:px-4 md:px-6 lg:px-8">
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Rank</span>
+                  <span className="stat-value sm:px-4 md:px-6 lg:px-8">#{player.fantasyRank}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-label">Projection</span>
-                  <span className="stat-value">{player.projectedPoints.toFixed(1)}</span>
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Projection</span>
+                  <span className="stat-value sm:px-4 md:px-6 lg:px-8">{player.projectedPoints.toFixed(1)}</span>
                 </div>
-                <div className="stat-item">
-                  <span className="stat-label">Status</span>
+                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Status</span>
                   <span className={`stat-value ${getInjuryStatusColor(player.injuryStatus)}`}>
                     {player.injuryStatus}
                   </span>
@@ -210,18 +207,24 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
         </AnimatePresence>
 
         {filteredPlayers.length === 0 && (
-          <div className="text-center py-8 text-slate-400">
+          <div className="text-center py-8 text-slate-400 sm:px-4 md:px-6 lg:px-8">
             {searchQuery ? 'No players found matching your search.' : 'No players available.'}
           </div>
         )}
       </div>
 
       {/* Results Count */}
-      <div className="mt-4 text-sm text-slate-400 text-center">
+      <div className="mt-4 text-sm text-slate-400 text-center sm:px-4 md:px-6 lg:px-8">
         Showing {filteredPlayers.length} of {availablePlayers.length} players
       </div>
     </div>
   );
 };
 
-export default PlayerSearch;
+const PlayerSearchWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PlayerSearch {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PlayerSearchWithErrorBoundary);

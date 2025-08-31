@@ -1,8 +1,15 @@
+interface IconProps {
+  size?: number | string;
+  className?: string;
+  color?: string;
+  'aria-label'?: string;
 
 import React from 'react';
 
-export const TelescopeIcon: React.FC<{ className?: string }> = ({ className }: any) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "h-4 w-4"}>
+}
+
+export const TelescopeIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="telescope icon">
         <path d="m10.06 14.44-8.12 8.12" />
         <path d="M17.61 6.39 6.39 17.61" />
         <path d="M14.14 10.86a2.5 2.5 0 0 0 3.54 0l4.24-4.24a2.5 2.5 0 0 0 0-3.54l-1.41-1.41a2.5 2.5 0 0 0-3.54 0L12.73 6.07a2.5 2.5 0 0 0 0 3.54Z" />

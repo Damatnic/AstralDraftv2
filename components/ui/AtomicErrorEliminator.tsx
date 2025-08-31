@@ -3,7 +3,8 @@
  * Intercepts ALL React rendering and prevents ANY error from crashing the app
  */
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, Component, ReactNode, ErrorInfo } from 'react';
 
 // Override React.createElement at the most fundamental level
 const originalCreateElement = React.createElement;
@@ -13,13 +14,16 @@ const originalChildren = React.Children;
 // Bulletproof property access for React props
 const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
   try {
+
     if (!props || typeof props !== 'object') return fallback;
     if (key === 'length' && Array.isArray(props)) return props.length || 0;
     if (key === 'length' && props.length !== undefined) return props.length || 0;
     return props[key] !== undefined ? props[key] : fallback;
-  } catch {
-    return fallback;
-  }
+  
+    } catch (error) {
+        console.error(error);
+        return fallback;
+    }
 };
 
 // Override React.createElement to be bulletproof
@@ -45,7 +49,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
         }
       });
     }
-    
+
     return originalCreateElement.call(React, type, safeProps, ...safeChildren);
   } catch (error) {
     console.warn('React.createElement error intercepted:', error);
@@ -60,13 +64,15 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
 // Override React.cloneElement to be bulletproof
 (React as any).cloneElement = function(element: any, props: any, ...children: any[]) {
   try {
+
     if (!element) return originalCreateElement.call(React, 'div', {}, 'Invalid element');
     
     const safeProps = props && typeof props === 'object' ? { ...props } : {};
     const safeChildren = children.filter(child => child !== undefined && child !== null);
     
     return originalCloneElement.call(React, element, safeProps, ...safeChildren);
-  } catch (error) {
+    
+    } catch (error) {
     console.warn('React.cloneElement error intercepted:', error);
     return originalCreateElement.call(React, 'div', { 
       style: { display: 'none' },
@@ -80,6 +86,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
   ...originalChildren,
   map: (children: any, fn: any) => {
     try {
+
       if (!children) return [];
       if (!Array.isArray(children) && typeof children.length !== 'number') {
         children = [children];
@@ -92,6 +99,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
   },
   forEach: (children: any, fn: any) => {
     try {
+
       if (!children) return;
       if (!Array.isArray(children) && typeof children.length !== 'number') {
         children = [children];
@@ -103,6 +111,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
   },
   count: (children: any) => {
     try {
+
       if (!children) return 0;
       if (Array.isArray(children)) return children.length;
       if (typeof children.length === 'number') return children.length;
@@ -114,6 +123,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
   },
   toArray: (children: any) => {
     try {
+
       if (!children) return [];
       return originalChildren.toArray(children);
     } catch (error) {
@@ -235,6 +245,8 @@ class AtomicErrorEliminator extends Component<AtomicErrorEliminatorProps, Atomic
           Component failed to recover. Error: {this.state.lastError?.message || 'Unknown'}
           <button 
             onClick={() => this.setState({ hasError: false, errorCount: 0, lastError: null })}
+            onTouchStart={() => this.setState({ hasError: false, errorCount: 0, lastError: null })}
+            aria-label="Reset error button"
             style={{ 
               marginLeft: '10px', 
               padding: '2px 6px', 
@@ -253,9 +265,9 @@ class AtomicErrorEliminator extends Component<AtomicErrorEliminatorProps, Atomic
 
     try {
       return this.props.children;
-    } catch (renderError) {
-      console.warn('Render error intercepted:', renderError);
-      this.componentDidCatch(renderError as Error, { componentStack: 'Render phase' });
+    } catch (error) {
+      console.warn('Render error intercepted:', error);
+      this.componentDidCatch(error as Error, { componentStack: 'Render phase' });
       return null;
     }
   }
@@ -283,4 +295,10 @@ export const SafeSpan = withAtomicErrorProtection('span' as any);
 export const SafeButton = withAtomicErrorProtection('button' as any);
 export const SafeInput = withAtomicErrorProtection('input' as any);
 
-export default AtomicErrorEliminator;
+const AtomicErrorEliminatorWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AtomicErrorEliminator {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AtomicErrorEliminatorWithErrorBoundary);

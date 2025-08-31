@@ -1,12 +1,14 @@
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import type { Team, League } from '../../types';
 
 interface WeeklyScoreChartProps {
     team: Team;
     league: League;
+
 }
 
-const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any) => {
+const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }) => {
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
@@ -21,13 +23,12 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
             const leagueAverage = weeklyMatchups.length > 0 ? totalScore / (weeklyMatchups.length * 2) : 0;
             
             data.push({ week, myScore, leagueAverage });
-        }
+
         return data;
     }, [team, league]);
 
     if (chartData.length < 2) {
-        return <p className="text-center text-sm text-gray-400 p-8">Not enough data to display a trend.</p>;
-    }
+        return <p className="text-center text-sm text-gray-400 p-8 sm:px-4 md:px-6 lg:px-8">Not enough data to display a trend.</p>;
 
     const width = 500;
     const height = 300;
@@ -59,17 +60,17 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
             x: e.clientX - svgRect.left,
             y: e.clientY - svgRect.top,
             content: (
-                <div className="p-2 bg-gray-900/80 border border-white/10 rounded-lg text-xs shadow-lg">
-                    <p className="font-bold mb-1">Week {weekData.week}</p>
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-cyan-500"></div>
+                <div className="p-2 bg-gray-900/80 border border-white/10 rounded-lg text-xs shadow-lg sm:px-4 md:px-6 lg:px-8">
+                    <p className="font-bold mb-1 sm:px-4 md:px-6 lg:px-8">Week {weekData.week}</p>
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 rounded-full bg-cyan-500 sm:px-4 md:px-6 lg:px-8"></div>
                         <span>My Score:</span>
-                        <span className="font-bold">{weekData.myScore.toFixed(2)}</span>
+                        <span className="font-bold sm:px-4 md:px-6 lg:px-8">{weekData.myScore.toFixed(2)}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="w-2 h-2 rounded-full bg-gray-500 sm:px-4 md:px-6 lg:px-8"></div>
                         <span>League Avg:</span>
-                        <span className="font-bold">{weekData.leagueAverage.toFixed(2)}</span>
+                        <span className="font-bold sm:px-4 md:px-6 lg:px-8">{weekData.leagueAverage.toFixed(2)}</span>
                     </div>
                 </div>
             )
@@ -80,8 +81,8 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
 
     return (
         <div className="p-4 sm:p-6 h-full flex flex-col">
-            <div className="relative flex-grow">
-                <svg ref={chartRef} viewBox={`0 0 ${width} ${height}`} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className="w-full h-full">
+            <div className="relative flex-grow sm:px-4 md:px-6 lg:px-8">
+                <svg ref={chartRef} viewBox={`0 0 ${width} ${height}`} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className="w-full h-full sm:px-4 md:px-6 lg:px-8">
                     {/* Axes and Gridlines */}
                     <line x1={padding.left} y1={height - padding.bottom} x2={width - padding.right} y2={height - padding.bottom} stroke="#475569" />
                     <line x1={padding.left} y1={padding.top} x2={padding.left} y2={height - padding.bottom} stroke="#475569" />
@@ -121,18 +122,18 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
                     )}
                 </svg>
                  {tooltip && (
-                    <div className="absolute pointer-events-none p-2 rounded-lg" style={{ left: tooltip.x + 10, top: tooltip.y - 30 }}>
+                    <div className="absolute pointer-events-none p-2 rounded-lg sm:px-4 md:px-6 lg:px-8" style={{ left: tooltip.x + 10, top: tooltip.y - 30 }}>
                         {tooltip.content}
                     </div>
                 )}
             </div>
-             <div className="flex-shrink-0 flex justify-center gap-6 text-xs mt-4">
-                <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-cyan-500 rounded-sm"></div>
+             <div className="flex-shrink-0 flex justify-center gap-6 text-xs mt-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="w-3 h-3 bg-cyan-500 rounded-sm sm:px-4 md:px-6 lg:px-8"></div>
                     <span>My Score</span>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className="w-5 h-px border-t-2 border-dashed border-gray-500"></div>
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="w-5 h-px border-t-2 border-dashed border-gray-500 sm:px-4 md:px-6 lg:px-8"></div>
                     <span>League Average</span>
                 </div>
             </div>
@@ -140,4 +141,10 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any
     );
 };
 
-export default WeeklyScoreChart;
+const WeeklyScoreChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <WeeklyScoreChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(WeeklyScoreChartWithErrorBoundary);

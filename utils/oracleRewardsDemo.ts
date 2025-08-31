@@ -182,6 +182,7 @@ export const simulateRewardEarning = async (challengeType = 'PLAYER_PERFORMANCE'
         }
         
         return rewardCalc;
+    
     } catch (error) {
         console.error('Failed to simulate reward earning:', error);
         return null;

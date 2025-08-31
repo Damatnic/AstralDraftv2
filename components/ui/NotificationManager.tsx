@@ -1,6 +1,6 @@
 
 
-
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
@@ -8,6 +8,7 @@ import Notification from './Notification';
 import useSound from '../../hooks/useSound';
 
 const NotificationManager: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const { state, dispatch } = useAppState();
     const playNotificationSound = useSound('notification', 0.4);
 
@@ -21,11 +22,11 @@ const NotificationManager: React.FC = () => {
             }, 4500); // Display for 4.5 seconds
 
             return () => clearTimeout(timer);
-        }
+
     }, [currentNotification, dispatch, playNotificationSound]);
 
     return (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence>
                 {currentNotification && (
                     <Notification key={currentNotification.id} message={currentNotification.message} type={currentNotification.type} />
@@ -35,4 +36,10 @@ const NotificationManager: React.FC = () => {
     );
 };
 
-export default NotificationManager;
+const NotificationManagerWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationManager {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationManagerWithErrorBoundary);

@@ -3,7 +3,8 @@
  * Advanced glass morphism, neon effects, particle systems, and modern visual enhancements
  */
 
-import React, { useRef, useEffect, useState, ReactNode, useMemo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useRef, useEffect, useState, ReactNode, useMemo } from 'react';
 import { motion, useMotionValue, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 
 // =========================================
@@ -19,6 +20,7 @@ interface GlassEffectProps {
   className?: string;
   interactive?: boolean;
   glowOnHover?: boolean;
+
 }
 
 interface NeonEffectProps {
@@ -28,7 +30,6 @@ interface NeonEffectProps {
   flicker?: boolean;
   animate?: boolean;
   className?: string;
-}
 
 interface ParticleSystemProps {
   particleCount?: number;
@@ -37,6 +38,7 @@ interface ParticleSystemProps {
   animationSpeed?: number;
   className?: string;
   interactive?: boolean;
+
 }
 
 interface HolographicEffectProps {
@@ -44,14 +46,12 @@ interface HolographicEffectProps {
   speed?: number;
   intensity?: number;
   className?: string;
-}
 
 // =========================================
 // PREMIUM GLASS MORPHISM COMPONENT
 // =========================================
 
-export const GlassEffect: React.FC<GlassEffectProps> = ({
-  children,
+export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
   intensity = 'medium',
   tint = 'rgba(255, 255, 255, 0.1)',
   border = true,
@@ -59,7 +59,8 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
   className = '',
   interactive = false,
   glowOnHover = false
-}) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const intensitySettings = {
@@ -82,7 +83,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
       backdrop: 'backdrop-blur-xl',
       opacity: '0.16',
       borderOpacity: '0.25'
-    }
+
   };
 
   const settings = intensitySettings[intensity];
@@ -126,17 +127,17 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
           y: -2,
           transition: { duration: 0.2 }
         } : {}
-      }
+
       whileTap={
         interactive ? {
           scale: 0.98,
           transition: { duration: 0.1 }
         } : {}
-      }
+
     >
       {/* Enhanced Glass Effect Overlay */}
       <div
-        className="absolute inset-0 rounded-2xl pointer-events-none"
+        className="absolute inset-0 rounded-2xl pointer-events-none sm:px-4 md:px-6 lg:px-8"
         style={{
           background: `linear-gradient(135deg, 
             rgba(255, 255, 255, 0.1) 0%,
@@ -150,7 +151,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
       <AnimatePresence>
         {isHovered && glowOnHover && (
           <motion.div
-            className="absolute inset-0 rounded-2xl pointer-events-none"
+            className="absolute inset-0 rounded-2xl pointer-events-none sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -160,7 +161,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
             }}
           >
             <motion.div
-              className="w-full h-full rounded-2xl"
+              className="w-full h-full rounded-2xl sm:px-4 md:px-6 lg:px-8"
               animate={{
                 backgroundPosition: ['200% 0', '-200% 0']
               }}
@@ -179,7 +180,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({
       </AnimatePresence>
 
       {/* Content */}
-      <div className="relative z-10">
+      <div className="relative z-10 sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
     </motion.div>
@@ -233,16 +234,16 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
             `drop-shadow(${neonShadow})`,
             `drop-shadow(0 0 ${settings.blur * 1.5}px ${color})`,
             `drop-shadow(${neonShadow})`
-          ]
+
         } : {}
-      }
+
       transition={
         animate ? {
           duration: 2,
           repeat: Infinity,
           ease: "easeInOut"
         } : {}
-      }
+
     >
       {flicker && (
         <style>
@@ -251,10 +252,10 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
               0%, 100% { opacity: 1; }
               50% { opacity: 0.7; }
               25%, 75% { opacity: 0.9; }
-            }
+
             .neon-flicker {
               animation: neon-flicker 2s infinite;
-            }
+
           `}
         </style>
       )}
@@ -278,6 +279,7 @@ interface Particle {
   life: number;
   maxLife: number;
   size: number;
+
 }
 
 export const ParticleSystem: React.FC<ParticleSystemProps> = ({
@@ -321,8 +323,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
         if (distance < 100) {
           particle.vx += dx * 0.0001;
           particle.vy += dy * 0.0001;
-        }
-      }
+
 
       // Bounce off walls
       if (particle.x < 0 || particle.x > width) particle.vx *= -1;
@@ -338,7 +339,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
         particle.life = 0;
         particle.x = Math.random() * width;
         particle.y = Math.random() * height;
-      }
+
     });
   };
 
@@ -373,7 +374,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
           ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(otherParticle.x, otherParticle.y);
           ctx.stroke();
-        }
+
       });
     });
   };
@@ -415,7 +416,6 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
     
     if (interactive) {
       canvas.addEventListener('mousemove', handleMouseMove);
-    }
 
     animationRef.current = requestAnimationFrame(animate);
 
@@ -423,10 +423,10 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
       window.removeEventListener('resize', handleResize);
       if (interactive) {
         canvas.removeEventListener('mousemove', handleMouseMove);
-      }
+
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
-      }
+
     };
   }, [particleCount, particleColor, particleSize, animationSpeed, interactive]);
 
@@ -478,7 +478,7 @@ export const HolographicEffect: React.FC<HolographicEffectProps> = ({
         ease: "linear"
       }}
     >
-      <div className="relative z-10 mix-blend-difference">
+      <div className="relative z-10 mix-blend-difference sm:px-4 md:px-6 lg:px-8">
         {children}
       </div>
     </motion.div>
@@ -494,6 +494,7 @@ interface LiquidBackgroundProps {
   speed?: number;
   blur?: number;
   className?: string;
+
 }
 
 export const LiquidBackground: React.FC<LiquidBackgroundProps> = ({
@@ -507,7 +508,7 @@ export const LiquidBackground: React.FC<LiquidBackgroundProps> = ({
       {colors.map((color, index) => (
         <motion.div
           key={index}
-          className="absolute rounded-full opacity-70"
+          className="absolute rounded-full opacity-70 sm:px-4 md:px-6 lg:px-8"
           style={{
             width: '40%',
             height: '40%',
@@ -539,6 +540,7 @@ interface AuroraBackgroundProps {
   className?: string;
   colors?: string[];
   speed?: number;
+
 }
 
 export const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
@@ -549,7 +551,7 @@ export const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 sm:px-4 md:px-6 lg:px-8"
         style={{
           background: `
             radial-gradient(ellipse 80% 80% at 50% -20%, ${colors[0]}40 0%, transparent 80%),
@@ -580,6 +582,7 @@ interface GradientTextProps {
   gradient?: string[];
   animate?: boolean;
   className?: string;
+
 }
 
 export const GradientText: React.FC<GradientTextProps> = ({
@@ -622,6 +625,7 @@ interface FloatingElementsProps {
   speed?: number;
   range?: number;
   className?: string;
+
 }
 
 export const FloatingElements: React.FC<FloatingElementsProps> = ({

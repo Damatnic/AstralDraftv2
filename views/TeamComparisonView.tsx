@@ -27,12 +27,11 @@ const TeamComparisonView: React.FC = () => {
             generateTeamComparison(teamA, teamB, league)
                 .then(setComparison)
                 .finally(() => setIsLoading(false));
-        }
+
     }, [teamA, teamB, league]);
 
     if (!league || !teamA || !teamB) {
         return <ErrorDisplay title="Error" message="Could not find teams to compare." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -43,7 +42,7 @@ const TeamComparisonView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }} className="glass-button">
                     Back to Standings
                 </button>
             </header>

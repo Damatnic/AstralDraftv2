@@ -37,6 +37,7 @@ export const useOracleDashboard = (userId: string, season: number = 2024) => {
 
     const loadDashboardData = useCallback(async () => {
         try {
+
             setData(prev => ({ ...prev, isLoading: true, error: null }));
 
             const [stats, insights, historyData] = await Promise.all([
@@ -58,7 +59,9 @@ export const useOracleDashboard = (userId: string, season: number = 2024) => {
                 error: null
             });
 
-        } catch (error) {
+    } catch (error) {
+        console.error(error);
+    } catch (error) {
             console.error('Failed to load dashboard data:', error);
             setData(prev => ({
                 ...prev,

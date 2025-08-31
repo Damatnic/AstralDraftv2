@@ -3,7 +3,8 @@
  * Displays user Oracle prediction performance stats
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { TrophyIcon, TargetIcon, ZapIcon, TrendingUpIcon } from 'lucide-react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -14,19 +15,19 @@ export interface UserStats {
     accuracy: number;
     streak: number;
     rank: number;
+
 }
 
 interface UserStatsWidgetProps {
     stats: UserStats;
     className?: string;
     compact?: boolean;
-}
 
 export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({ 
     stats, 
     className = '',
     compact = false 
-}: any) => {
+}) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     const statItems = [
@@ -57,7 +58,7 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
             color: 'text-yellow-400',
             bgColor: 'bg-yellow-500/10',
             icon: TrophyIcon
-        }
+
     ];
 
     if (compact) {
@@ -74,12 +75,11 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
                         <div className={`text-sm sm:text-xs font-bold ${item.color} mb-1 sm:mb-0`}>
                             {item.value}
                         </div>
-                        <div className="text-xs text-gray-400">{item.label}</div>
+                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{item.label}</div>
                     </motion.div>
                 ))}
             </div>
         );
-    }
 
     return (
         <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 ${className}`}>
@@ -93,7 +93,7 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
                         transition={{ delay: index * 0.1 }}
                         className={`${item.bgColor} rounded-lg p-4 sm:p-5 text-center min-h-[100px] sm:min-h-[120px] flex flex-col justify-center`}
                     >
-                        <div className="flex items-center justify-center mb-2">
+                        <div className="flex items-center justify-center mb-2 sm:px-4 md:px-6 lg:px-8">
                             <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`} />
                         </div>
                         <div className={`text-xl sm:text-2xl font-bold ${item.color} mb-1`}>
@@ -115,7 +115,7 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
                         )}
                         
                         {item.label === 'Rank' && stats.rank <= 10 && (
-                            <div className="text-xs text-yellow-400 mt-1">
+                            <div className="text-xs text-yellow-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 Top 10!
                             </div>
                         )}
@@ -126,4 +126,10 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
     );
 };
 
-export default UserStatsWidget;
+const UserStatsWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <UserStatsWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(UserStatsWidgetWithErrorBoundary);

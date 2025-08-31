@@ -407,13 +407,15 @@ export const trackAsyncOperation = async <T>(
 ): Promise<T> => {
   const startTime = performance.now();
   try {
+
     const result = await operation();
     const duration = performance.now() - startTime;
     performanceOptimizer.recordMetric(`AsyncOperation-${operationName}`, duration);
     return result;
-  } catch (error) {
-    const duration = performance.now() - startTime;
-    performanceOptimizer.recordMetric(`AsyncOperationError-${operationName}`, duration);
+  
+    } catch (error) {
+        console.error(error);
+    `AsyncOperationError-${operationName}`, duration);
     throw error;
   }
 };

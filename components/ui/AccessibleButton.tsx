@@ -3,7 +3,8 @@
  * Enhanced with proper ARIA attributes, keyboard navigation, and mobile touch targets
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { getButtonA11yProps, useAnnouncer } from '../../utils/accessibility';
 
@@ -28,6 +29,7 @@ export interface AccessibleButtonProps {
   // Announcement settings
   announceOnClick?: string;
   announceOnDisabled?: string;
+
 }
 
 const variantClasses = {
@@ -63,24 +65,22 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   expanded,
   announceOnClick,
   announceOnDisabled
-}: any) => {
+}) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
     if (disabled || isLoading) {
       if (announceOnDisabled) {
         announce(announceOnDisabled, 'polite');
-      }
+
       return;
-    }
 
     if (onClick) {
       onClick();
-    }
 
     if (announceOnClick) {
       announce(announceOnClick, 'polite');
-    }
+
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -88,19 +88,19 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleClick();
-    }
+
   };
 
   const buttonContent = isLoading ? (
     <>
-      <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+      <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2 sm:px-4 md:px-6 lg:px-8" />
       {loadingText}
     </>
   ) : (
     <>
-      {startIcon && <span className="mr-2">{startIcon}</span>}
+      {startIcon && <span className="mr-2 sm:px-4 md:px-6 lg:px-8">{startIcon}</span>}
       {children}
-      {endIcon && <span className="ml-2">{endIcon}</span>}
+      {endIcon && <span className="ml-2 sm:px-4 md:px-6 lg:px-8">{endIcon}</span>}
     </>
   );
 
@@ -152,6 +152,7 @@ export interface AccessibleIconButtonProps {
   pressed?: boolean;
   expanded?: boolean;
   announceOnClick?: string;
+
 }
 
 export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
@@ -167,7 +168,7 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   pressed,
   expanded,
   announceOnClick
-}: any) => {
+}) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
@@ -175,11 +176,10 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
 
     if (onClick) {
       onClick();
-    }
 
     if (announceOnClick) {
       announce(announceOnClick, 'polite');
-    }
+
   };
 
   const iconSizeClasses = {
@@ -223,4 +223,10 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   );
 };
 
-export default AccessibleButton;
+const AccessibleButtonWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AccessibleButton {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AccessibleButtonWithErrorBoundary);

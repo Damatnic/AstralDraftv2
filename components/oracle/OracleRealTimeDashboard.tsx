@@ -3,7 +3,8 @@
  * Live updates, collaborative features, and interactive prediction interface
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Avatar } from '../ui/Avatar';
@@ -39,7 +40,6 @@ interface OracleRealTimeDashboardProps {
         avatar?: string;
     };
     onPredictionUpdate?: (update: LivePredictionUpdate) => void;
-}
 
 interface RealTimeMetrics {
     activeUsers: number;
@@ -47,14 +47,15 @@ interface RealTimeMetrics {
     consensusLevel: number;
     confidenceAverage: number;
     trendingDirection: 'up' | 'down' | 'stable';
+
 }
 
-const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
-    predictionId,
+const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predictionId,
     userId,
     userInfo,
     onPredictionUpdate
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     // State management
     const [predictionUpdate] = useState<LivePredictionUpdate | null>(null);
     const [collaborativeRoom, setCollaborativeRoom] = useState<CollaborativeRoom | null>(null);
@@ -81,6 +82,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     useEffect(() => {
         const initializeServices = async () => {
             try {
+
                 // Subscribe to live updates
                 await oracleRealTimeService.subscribeToPrediction(userId, predictionId);
                 
@@ -99,8 +101,8 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                 // Load initial data
                 loadInitialData();
 
-            } catch (error) {
-            }
+    } catch (error) {
+
         };
 
         initializeServices();
@@ -110,7 +112,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             // Cleanup if method exists
             if ('unsubscribeFromPrediction' in oracleRealTimeService) {
                 (oracleRealTimeService as any).unsubscribeFromPrediction(userId, predictionId);
-            }
+
         };
     }, [predictionId, userId, userInfo]);
 
@@ -159,7 +161,6 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             trendingDirection = 'down';
         } else {
             trendingDirection = 'stable';
-        }
 
         setMetrics({
             activeUsers,
@@ -175,6 +176,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
         if (!messageInput.trim()) return;
 
         try {
+
             const message = await oracleCollaborativeService.sendMessage(
                 userId,
                 predictionId,
@@ -185,8 +187,8 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
             setMessageInput('');
             updateMetrics();
 
-        } catch (error) {
-        }
+    } catch (error) {
+
     };
 
     // Format timestamp
@@ -214,50 +216,50 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     const renderMetricsOverview = () => (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card>
-                <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                        <Users className="h-4 w-4 text-blue-500" />
+                <CardContent className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <Users className="h-4 w-4 text-blue-500 sm:px-4 md:px-6 lg:px-8" />
                         <div>
-                            <p className="text-sm font-medium">Active Users</p>
-                            <p className="text-2xl font-bold">{metrics.activeUsers}</p>
+                            <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Active Users</p>
+                            <p className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">{metrics.activeUsers}</p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
             <Card>
-                <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                        <MessageCircle className="h-4 w-4 text-green-500" />
+                <CardContent className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <MessageCircle className="h-4 w-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />
                         <div>
-                            <p className="text-sm font-medium">Messages</p>
-                            <p className="text-2xl font-bold">{metrics.totalMessages}</p>
+                            <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Messages</p>
+                            <p className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">{metrics.totalMessages}</p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
             <Card>
-                <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                        <Target className="h-4 w-4 text-purple-500" />
+                <CardContent className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <Target className="h-4 w-4 text-purple-500 sm:px-4 md:px-6 lg:px-8" />
                         <div>
-                            <p className="text-sm font-medium">Consensus</p>
-                            <p className="text-2xl font-bold">{metrics.consensusLevel.toFixed(0)}%</p>
+                            <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Consensus</p>
+                            <p className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">{metrics.consensusLevel.toFixed(0)}%</p>
                         </div>
                     </div>
                 </CardContent>
             </Card>
 
             <Card>
-                <CardContent className="p-4">
-                    <div className="flex items-center space-x-2">
-                        {metrics.trendingDirection === 'up' && <TrendingUp className="h-4 w-4 text-green-500" />}
-                        {metrics.trendingDirection === 'down' && <TrendingDown className="h-4 w-4 text-red-500" />}
-                        {metrics.trendingDirection === 'stable' && <BarChart3 className="h-4 w-4 text-gray-500" />}
+                <CardContent className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        {metrics.trendingDirection === 'up' && <TrendingUp className="h-4 w-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />}
+                        {metrics.trendingDirection === 'down' && <TrendingDown className="h-4 w-4 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
+                        {metrics.trendingDirection === 'stable' && <BarChart3 className="h-4 w-4 text-gray-500 sm:px-4 md:px-6 lg:px-8" />}
                         <div>
-                            <p className="text-sm font-medium">Sentiment</p>
-                            <p className="text-2xl font-bold capitalize">{metrics.trendingDirection}</p>
+                            <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Sentiment</p>
+                            <p className="text-2xl font-bold capitalize sm:px-4 md:px-6 lg:px-8">{metrics.trendingDirection}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -267,39 +269,39 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
 
     // Render chat interface
     const renderChatInterface = () => (
-        <Card className="h-[600px] flex flex-col">
+        <Card className="h-[600px] flex flex-col sm:px-4 md:px-6 lg:px-8">
             <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                    <MessageCircle className="h-5 w-5" />
+                <CardTitle className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <MessageCircle className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                     <span>Live Discussion</span>
                     <Badge variant={isConnected ? "default" : "destructive"}>
                         {isConnected ? "Connected" : "Connecting..."}
                     </Badge>
                 </CardTitle>
             </CardHeader>
-            <CardContent className="flex-1 flex flex-col space-y-4">
-                <div className="flex-1 overflow-y-auto pr-4 space-y-4">
+            <CardContent className="flex-1 flex flex-col space-y-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex-1 overflow-y-auto pr-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {messages.map((message: any) => (
-                        <div key={message.id} className="flex space-x-3">
+                        <div key={message.id} className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                             <Avatar 
                                 avatar={message.username.charAt(0).toUpperCase()} 
-                                className="h-8 w-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium"
+                                className="h-8 w-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             />
-                            <div className="flex-1">
-                                <div className="flex items-center space-x-2">
-                                    <span className="font-medium text-sm">{message.username}</span>
-                                    <span className="text-xs text-gray-500">
+                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="font-medium text-sm sm:px-4 md:px-6 lg:px-8">{message.username}</span>
+                                    <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                         {formatTimestamp(message.timestamp)}
                                     </span>
-                                    <Badge variant="outline" className="text-xs">
+                                    <Badge variant="outline" className="text-xs sm:px-4 md:px-6 lg:px-8">
                                         {message.type}
                                     </Badge>
                                 </div>
-                                <p className="text-sm mt-1">{message.content}</p>
+                                <p className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{message.content}</p>
                                 {message.reactions && message.reactions.length > 0 && (
-                                    <div className="flex items-center space-x-1 mt-2">
+                                    <div className="flex items-center space-x-1 mt-2 sm:px-4 md:px-6 lg:px-8">
                                         {message.reactions.map((reaction: any) => (
-                                            <Badge key={`${reaction.userId}-${reaction.emoji}-${reaction.timestamp}`} variant="default" className="text-xs">
+                                            <Badge key={`${reaction.userId}-${reaction.emoji}-${reaction.timestamp}`} variant="default" className="text-xs sm:px-4 md:px-6 lg:px-8">
                                                 {reaction.emoji}
                                             </Badge>
                                         ))}
@@ -310,25 +312,20 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                     ))}
                 </div>
 
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <textarea
                         placeholder="Share your thoughts..."
                         value={messageInput}
                         onChange={(e: any) => setMessageInput(e.target.value)}
-                        onKeyDown={(e: any) => {
-                            if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                handleSendMessage();
-                            }
                         }}
-                        className="flex-1 p-2 border rounded-lg min-h-[60px] resize-none"
+                        className="flex-1 p-2 border rounded-lg min-h-[60px] resize-none sm:px-4 md:px-6 lg:px-8"
                     />
                     <button 
                         onClick={handleSendMessage}
                         disabled={!messageInput.trim()}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
-                    >
-                        <Send className="h-4 w-4" />
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <Send className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                 </div>
             </CardContent>
@@ -337,47 +334,44 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
 
     // Render insights panel
     const renderInsightsPanel = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                        <Lightbulb className="h-5 w-5" />
+                    <CardTitle className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <Lightbulb className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         <span>Share Insight</span>
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     <input
                         type="text"
                         placeholder="Insight title..."
                         value={insightTitle}
                         onChange={(e: any) => setInsightTitle(e.target.value)}
-                        className="w-full px-3 py-2 border rounded-lg"
                     />
                     <textarea
                         placeholder="Share your analysis or insight..."
                         value={insightContent}
                         onChange={(e: any) => setInsightContent(e.target.value)}
-                        className="w-full px-3 py-2 border rounded-lg min-h-[100px] resize-none"
                     />
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Confidence Level: {insightConfidence}%</label>
+                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                        <label className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Confidence Level: {insightConfidence}%</label>
                         <input
                             type="range"
                             min="0"
                             max="100"
                             value={insightConfidence}
                             onChange={(e: any) => setInsightConfidence(Number(e.target.value))}
-                            className="w-full"
                         />
                     </div>
                     <button 
-                        onClick={() => {
+                        onClick={() = aria-label="Action button"> {
                             // Handle insight sharing when method is available
                         }}
                         disabled={!insightTitle.trim() || !insightContent.trim()}
-                        className="w-full px-4 py-2 bg-purple-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2"
+                        className="w-full px-4 py-2 bg-purple-500 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-600 transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <Lightbulb className="h-4 w-4" />
+                        <Lightbulb className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                         <span>Share Insight</span>
                     </button>
                 </CardContent>
@@ -388,18 +382,18 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                     <CardTitle>Community Insights</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {insights.map((insight: any) => (
-                            <div key={insight.id} className="border rounded-lg p-4">
-                                <div className="flex items-start justify-between">
-                                    <div className="flex-1">
-                                        <h4 className="font-medium">{insight.title}</h4>
-                                        <p className="text-sm text-gray-600 mt-1">{insight.content}</p>
-                                        <div className="flex items-center space-x-4 mt-3">
-                                            <span className="text-xs text-gray-500">
+                            <div key={insight.id} className="border rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
+                                        <p className="text-sm text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">{insight.content}</p>
+                                        <div className="flex items-center space-x-4 mt-3 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                 by {insight.username}
                                             </span>
-                                            <span className="text-xs text-gray-500">
+                                            <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                 {formatTimestamp(insight.timestamp)}
                                             </span>
                                             <Badge variant="outline">
@@ -407,17 +401,17 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                                             </Badge>
                                         </div>
                                     </div>
-                                    <div className="text-right">
+                                    <div className="text-right sm:px-4 md:px-6 lg:px-8">
                                         <div className={`font-medium ${getConfidenceColor(insight.confidence || 0)}`}>
                                             {insight.confidence || 0}%
                                         </div>
-                                        <div className="flex items-center space-x-1 mt-2">
-                                            <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1">
-                                                <ThumbsUp className="h-3 w-3" />
+                                        <div className="flex items-center space-x-1 mt-2 sm:px-4 md:px-6 lg:px-8">
+                                            <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                                <ThumbsUp className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{insight.votes.filter((v: any) => v.vote === 'upvote').length}</span>
                                             </button>
-                                            <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1">
-                                                <ThumbsDown className="h-3 w-3" />
+                                            <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                                <ThumbsDown className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                                 <span>{insight.votes.filter((v: any) => v.vote === 'downvote').length}</span>
                                             </button>
                                         </div>
@@ -452,35 +446,35 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     const renderPollsSection = () => (
         <Card>
             <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                    <BarChart3 className="h-5 w-5" />
+                <CardTitle className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <BarChart3 className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                     <span>Community Polls</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {polls.map((poll: any) => {
                         const optionResults = calculatePollOptionResults(poll);
                         
                         return (
-                            <div key={poll.id} className="border rounded-lg p-4">
-                                <h4 className="font-medium">{poll.title}</h4>
-                                <p className="text-sm text-gray-600 mt-1">{poll.question}</p>
-                                <div className="mt-4 space-y-2">
-                                    {optionResults.map(({ option, percentage }: any) => (
-                                        <div key={option.id} className="space-y-1">
-                                            <div className="flex justify-between text-sm">
+                            <div key={poll.id} className="border rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                <h4 className="font-medium sm:px-4 md:px-6 lg:px-8">{poll.title}</h4>
+                                <p className="text-sm text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">{poll.question}</p>
+                                <div className="mt-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    {optionResults.map(({ option, percentage }) => (
+                                        <div key={option.id} className="space-y-1 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
                                                 <span>{option.text}</span>
                                                 <span>{percentage.toFixed(1)}%</span>
                                             </div>
-                                            <Progress value={percentage} className="h-2" />
+                                            <Progress value={percentage} className="h-2 sm:px-4 md:px-6 lg:px-8" />
                                         </div>
                                     ))}
                                 </div>
-                                <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
+                                <div className="flex items-center justify-between mt-4 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                     <span>{poll.responses?.length || 0} responses</span>
-                                    <span className="flex items-center space-x-1">
-                                        <Clock className="h-3 w-3" />
+                                    <span className="flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8">
+                                        <Clock className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
                                         <span>Expires {poll.expiresAt ? new Date(poll.expiresAt).toLocaleDateString() : 'N/A'}</span>
                                     </span>
                                 </div>
@@ -510,20 +504,20 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
                 return renderPollsSection();
             default:
                 return renderChatInterface();
-        }
+
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header with status */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                            <Zap className="h-5 w-5" />
+                    <CardTitle className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <Zap className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                             <span>Oracle Real-Time Dashboard</span>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <Badge variant={isConnected ? "default" : "destructive"}>
                                 {isConnected ? "Live" : "Connecting"}
                             </Badge>
@@ -557,4 +551,10 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({
     );
 };
 
-export default OracleRealTimeDashboard;
+const OracleRealTimeDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleRealTimeDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleRealTimeDashboardWithErrorBoundary);

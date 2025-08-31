@@ -1,4 +1,5 @@
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
@@ -7,9 +8,10 @@ import { calculateHeadToHeadRecord } from '../../utils/careerStats';
 
 interface RivalryWidgetProps {
     opponentManagerId: string;
+
 }
 
-const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any) => {
+const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }) => {
     const { state } = useAppState();
 
     const record = React.useMemo(() => {
@@ -29,12 +31,12 @@ const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any)
 
     return (
         <Widget title="Rivalry" icon={<SwordIcon />}>
-            <div className="p-4 text-center">
-                <p className="text-sm text-gray-300">All-Time Head-to-Head</p>
+            <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                <p className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">All-Time Head-to-Head</p>
                 <p className={`font-display text-4xl font-bold my-2 ${getRecordColor(totalWins, totalLosses)}`}>
                     {totalWins}-{totalLosses}{totalTies > 0 ? `-${totalTies}` : ''}
                 </p>
-                <div className="text-xs text-gray-400 space-y-1">
+                <div className="text-xs text-gray-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
                     <p>Regular Season: {regularSeason.wins}-{regularSeason.losses}{regularSeason.ties > 0 ? `-${regularSeason.ties}` : ''}</p>
                     <p>Playoffs: {playoffs.wins}-{playoffs.losses}{playoffs.ties > 0 ? `-${playoffs.ties}` : ''}</p>
                 </div>
@@ -43,4 +45,10 @@ const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any)
     );
 };
 
-export default RivalryWidget;
+const RivalryWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <RivalryWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(RivalryWidgetWithErrorBoundary);

@@ -3,7 +3,10 @@
  * Comprehensive accessibility features including screen readers, keyboard navigation, and inclusive design
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { 
+  useCallback, 
+  useMemo, 
   createContext, 
   useContext, 
   useEffect, 
@@ -29,6 +32,7 @@ interface AccessibilityState {
   focusIndicatorMode: boolean;
   colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
   announcements: Announcement[];
+
 }
 
 interface Announcement {
@@ -36,7 +40,6 @@ interface Announcement {
   message: string;
   priority: 'polite' | 'assertive';
   timestamp: number;
-}
 
 interface AccessibilityActions {
   toggleScreenReader: () => void;
@@ -48,7 +51,6 @@ interface AccessibilityActions {
   setColorBlindMode: (mode: AccessibilityState['colorBlindMode']) => void;
   announce: (message: string, priority?: 'polite' | 'assertive') => void;
   clearAnnouncements: () => void;
-}
 
 type AccessibilityContextType = AccessibilityState & AccessibilityActions;
 
@@ -58,11 +60,14 @@ type AccessibilityContextType = AccessibilityState & AccessibilityActions;
 
 const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
+}
+
 export const useAccessibility = (): AccessibilityContextType => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const context = useContext(AccessibilityContext);
   if (!context) {
     throw new Error('useAccessibility must be used within AccessibilityProvider');
-  }
+
   return context;
 };
 
@@ -73,6 +78,7 @@ export const useAccessibility = (): AccessibilityContextType => {
 interface AccessibilityProviderProps {
   children: ReactNode;
   storageKey?: string;
+
 }
 
 export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
@@ -127,10 +133,10 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Tab') {
         setState(prev => ({ ...prev, keyboardNavigationMode: true }));
-      }
     };
 
-    const handleMouseDown = () => {
+    const handleMouseDown = () 
+} {
       setState(prev => ({ ...prev, keyboardNavigationMode: false }));
     };
 
@@ -159,7 +165,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
 
       if (hasScreenReader) {
         setState(prev => ({ ...prev, screenReaderMode: true }));
-      }
+
     };
 
     detectScreenReader();
@@ -173,12 +179,14 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
     const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
+
         const parsed = JSON.parse(stored);
         setState(prev => ({ ...prev, ...parsed, announcements: [] }));
-      } catch (error) {
+
+    } catch (error) {
         console.warn('Failed to load accessibility settings:', error);
-      }
-    }
+
+
   }, [storageKey]);
 
   useEffect(() => {
@@ -205,7 +213,6 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
     root.classList.remove('a11y-protanopia', 'a11y-deuteranopia', 'a11y-tritanopia');
     if (state.colorBlindMode !== 'none') {
       root.classList.add(`a11y-${state.colorBlindMode}`);
-    }
 
     // Set CSS custom properties
     root.style.setProperty('--a11y-focus-width', state.focusIndicatorMode ? '3px' : '0px');
@@ -271,7 +278,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
 
     clearAnnouncements: () => {
       setState(prev => ({ ...prev, announcements: [] }));
-    }
+
   };
 
   const contextValue: AccessibilityContextType = {
@@ -293,6 +300,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
 
 interface LiveRegionProps {
   announcements: Announcement[];
+
 }
 
 const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
@@ -301,7 +309,7 @@ const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
       <div
         aria-live="polite"
         aria-atomic="true"
-        className="sr-only"
+        className="sr-only sm:px-4 md:px-6 lg:px-8"
         role="status"
       >
         {announcements
@@ -310,13 +318,13 @@ const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
           .map(a => (
             <div key={a.id}>{a.message}</div>
           ))
-        }
+
       </div>
       
       <div
         aria-live="assertive"
         aria-atomic="true"
-        className="sr-only"
+        className="sr-only sm:px-4 md:px-6 lg:px-8"
         role="alert"
       >
         {announcements
@@ -325,7 +333,7 @@ const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
           .map(a => (
             <div key={a.id}>{a.message}</div>
           ))
-        }
+
       </div>
     </>
   );
@@ -345,6 +353,7 @@ interface AccessibleButtonProps {
   'aria-label'?: string;
   'aria-describedby'?: string;
   role?: string;
+
 }
 
 export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
@@ -366,14 +375,14 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     if (!disabled && onClick) {
       onClick();
       announce(`Button ${ariaLabel || 'activated'}`, 'polite');
-    }
+
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleClick();
-    }
+
   };
 
   const handleFocus = (e: FocusEvent<HTMLButtonElement>) => {
@@ -412,7 +421,6 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onFocus={handleFocus}
-      onBlur={handleBlur}
       disabled={disabled}
       role={role}
       aria-label={ariaLabel}
@@ -444,6 +452,7 @@ interface AccessibleInputProps {
   hint?: string;
   className?: string;
   id?: string;
+
 }
 
 export const AccessibleInput: React.FC<AccessibleInputProps> = ({
@@ -480,21 +489,21 @@ export const AccessibleInput: React.FC<AccessibleInputProps> = ({
     setIsFocused(false);
     if (error) {
       announce(`${label} has error: ${error}`, 'assertive');
-    }
+
   };
 
   return (
     <div className={`space-y-2 ${className}`}>
       <label 
         htmlFor={id}
-        className="block text-sm font-medium text-white"
+        className="block text-sm font-medium text-white sm:px-4 md:px-6 lg:px-8"
       >
         {label}
-        {required && <span className="text-red-500 ml-1" aria-label="required">*</span>}
+        {required && <span className="text-red-500 ml-1 sm:px-4 md:px-6 lg:px-8" aria-label="required">*</span>}
       </label>
       
       {hint && (
-        <p id={hintId} className="text-sm text-gray-400">
+        <p id={hintId} className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
           {hint}
         </p>
       )}
@@ -504,9 +513,7 @@ export const AccessibleInput: React.FC<AccessibleInputProps> = ({
         type={type}
         value={value}
         onChange={handleChange}
-        onFocus={handleFocus}
         onBlur={handleBlur}
-        placeholder={placeholder}
         disabled={disabled}
         required={required}
         aria-invalid={!!error}
@@ -525,7 +532,7 @@ export const AccessibleInput: React.FC<AccessibleInputProps> = ({
       />
       
       {error && (
-        <p id={errorId} className="text-sm text-red-500" role="alert">
+        <p id={errorId} className="text-sm text-red-500 sm:px-4 md:px-6 lg:px-8" role="alert">
           {error}
         </p>
       )}
@@ -541,6 +548,7 @@ interface SkipLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
+
 }
 
 export const SkipLink: React.FC<SkipLinkProps> = ({
@@ -557,7 +565,6 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
     <a
       href={href}
       onFocus={handleFocus}
-      onBlur={handleBlur}
       className={`
         absolute top-4 left-4 z-50
         px-4 py-2 bg-primary-600 text-white
@@ -582,6 +589,7 @@ interface FocusTrapProps {
   active?: boolean;
   restoreFocus?: boolean;
   className?: string;
+
 }
 
 export const FocusTrap: React.FC<FocusTrapProps> = ({
@@ -616,13 +624,13 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
         if (document.activeElement === firstElement) {
           e.preventDefault();
           lastElement?.focus();
-        }
+
       } else {
         if (document.activeElement === lastElement) {
           e.preventDefault();
           firstElement?.focus();
-        }
-      }
+
+
     };
 
     // Focus the first element
@@ -636,13 +644,12 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
       // Restore focus to the previously focused element
       if (restoreFocus && lastFocusedElement.current) {
         lastFocusedElement.current.focus();
-      }
+
     };
   }, [active, restoreFocus]);
 
   if (!active) {
     return <>{children}</>;
-  }
 
   return (
     <div ref={containerRef} className={className}>
@@ -679,7 +686,7 @@ export const AccessibilityPanel: React.FC = () => {
         onClick={() => setIsOpen(true)}
         aria-label="Open accessibility settings"
         variant="secondary"
-        className="fixed top-4 right-4 z-50"
+        className="fixed top-4 right-4 z-50 sm:px-4 md:px-6 lg:px-8"
       >
         ♿ A11y
       </AccessibleButton>
@@ -692,7 +699,7 @@ export const AccessibilityPanel: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50"
+              className="fixed inset-0 bg-black/50 z-50 sm:px-4 md:px-6 lg:px-8"
               onClick={() => setIsOpen(false)}
             />
 
@@ -702,11 +709,11 @@ export const AccessibilityPanel: React.FC = () => {
                 initial={{ opacity: 0, x: '100%' }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: '100%' }}
-                className="fixed top-0 right-0 w-full max-w-md h-full bg-dark-900 border-l border-gray-700 z-50 overflow-y-auto"
+                className="fixed top-0 right-0 w-full max-w-md h-full bg-dark-900 border-l border-gray-700 z-50 overflow-y-auto sm:px-4 md:px-6 lg:px-8"
               >
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-white">Accessibility Settings</h2>
+                <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Accessibility Settings</h2>
                     <AccessibleButton
                       onClick={() => setIsOpen(false)}
                       aria-label="Close accessibility settings"
@@ -717,47 +724,43 @@ export const AccessibilityPanel: React.FC = () => {
                     </AccessibleButton>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Vision Settings */}
                     <section>
-                      <h3 className="text-lg font-semibold text-white mb-4">Vision</h3>
-                      <div className="space-y-3">
-                        <label className="flex items-center justify-between">
-                          <span className="text-white">High Contrast</span>
+                      <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Vision</h3>
+                      <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <label className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-white sm:px-4 md:px-6 lg:px-8">High Contrast</span>
                           <input
                             type="checkbox"
                             checked={highContrastMode}
                             onChange={toggleHighContrast}
-                            className="w-5 h-5"
                           />
                         </label>
 
-                        <label className="flex items-center justify-between">
-                          <span className="text-white">Large Text</span>
+                        <label className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-white sm:px-4 md:px-6 lg:px-8">Large Text</span>
                           <input
                             type="checkbox"
                             checked={largeTextMode}
                             onChange={toggleLargeText}
-                            className="w-5 h-5"
                           />
                         </label>
 
-                        <label className="flex items-center justify-between">
-                          <span className="text-white">Focus Indicators</span>
+                        <label className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-white sm:px-4 md:px-6 lg:px-8">Focus Indicators</span>
                           <input
                             type="checkbox"
                             checked={focusIndicatorMode}
                             onChange={toggleFocusIndicator}
-                            className="w-5 h-5"
                           />
                         </label>
 
                         <div>
-                          <label className="block text-white mb-2">Color Blind Support</label>
+                          <label className="block text-white mb-2 sm:px-4 md:px-6 lg:px-8">Color Blind Support</label>
                           <select
                             value={colorBlindMode}
                             onChange={(e) => setColorBlindMode(e.target.value as any)}
-                            className="w-full p-2 bg-gray-800 text-white border border-gray-600 rounded"
                           >
                             <option value="none">None</option>
                             <option value="protanopia">Protanopia (Red-blind)</option>
@@ -770,15 +773,14 @@ export const AccessibilityPanel: React.FC = () => {
 
                     {/* Motion Settings */}
                     <section>
-                      <h3 className="text-lg font-semibold text-white mb-4">Motion</h3>
-                      <div className="space-y-3">
-                        <label className="flex items-center justify-between">
-                          <span className="text-white">Reduced Motion</span>
+                      <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Motion</h3>
+                      <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <label className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-white sm:px-4 md:px-6 lg:px-8">Reduced Motion</span>
                           <input
                             type="checkbox"
                             checked={reducedMotionMode}
                             onChange={toggleReducedMotion}
-                            className="w-5 h-5"
                           />
                         </label>
                       </div>
@@ -786,15 +788,14 @@ export const AccessibilityPanel: React.FC = () => {
 
                     {/* Screen Reader Settings */}
                     <section>
-                      <h3 className="text-lg font-semibold text-white mb-4">Screen Reader</h3>
-                      <div className="space-y-3">
-                        <label className="flex items-center justify-between">
-                          <span className="text-white">Screen Reader Mode</span>
+                      <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Screen Reader</h3>
+                      <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <label className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-white sm:px-4 md:px-6 lg:px-8">Screen Reader Mode</span>
                           <input
                             type="checkbox"
                             checked={screenReaderMode}
                             onChange={toggleScreenReader}
-                            className="w-5 h-5"
                           />
                         </label>
                       </div>

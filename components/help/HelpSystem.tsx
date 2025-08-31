@@ -3,6 +3,7 @@
  * Comprehensive help documentation and tutorials
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
@@ -18,6 +19,7 @@ interface HelpArticle {
   lastUpdated: Date;
   helpful: number;
   views: number;
+
 }
 
 interface HelpCategory {
@@ -26,7 +28,6 @@ interface HelpCategory {
   icon: string;
   description: string;
   articles: string[];
-}
 
 const HelpSystem: React.FC = () => {
   const { state } = useAppState();
@@ -71,7 +72,7 @@ const HelpSystem: React.FC = () => {
       icon: '🔧',
       description: 'Fix common issues',
       articles: ['login-issues', 'app-problems', 'notification-setup', 'performance-tips']
-    }
+
   ];
 
   // Help articles
@@ -467,7 +468,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
       lastUpdated: new Date('2024-01-25'),
       helpful: 72,
       views: 189
-    }
+
   ];
 
   // Filter articles based on search and category
@@ -476,7 +477,6 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
 
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((article: any) => article.category === selectedCategory);
-    }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -485,7 +485,6 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
         article.content.toLowerCase().includes(query) ||
         article.tags.some((tag: any) => tag.toLowerCase().includes(query))
       );
-    }
 
     return filtered;
   }, [selectedCategory, searchQuery]);
@@ -498,7 +497,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
       case 'intermediate': return 'text-yellow-400 bg-yellow-900/20';
       case 'advanced': return 'text-red-400 bg-red-900/20';
       default: return 'text-slate-400 bg-slate-900/20';
-    }
+
   };
 
   const formatContent = (content: string) => {
@@ -521,33 +520,31 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
       {/* Help Button */}
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className="fixed bottom-32 right-4 z-50 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-110"
         title="Help & Documentation"
       >
-        <span className="text-xl">❓</span>
+        <span className="text-xl sm:px-4 md:px-6 lg:px-8">❓</span>
       </button>
 
       {/* Help System Modal */}
       <AnimatePresence>
         {isVisible && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-6xl h-[80vh] bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl flex"
+              className="w-full max-w-6xl h-[80vh] bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl flex sm:px-4 md:px-6 lg:px-8"
             >
               {/* Sidebar */}
-              <div className="w-80 border-r border-slate-600 flex flex-col">
+              <div className="w-80 border-r border-slate-600 flex flex-col sm:px-4 md:px-6 lg:px-8">
                 {/* Header */}
-                <div className="p-4 border-b border-slate-600">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-white">Help Center</h2>
+                <div className="p-4 border-b border-slate-600 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Help Center</h2>
                     <button
                       onClick={() => setIsVisible(false)}
-                      className="text-slate-400 hover:text-white transition-colors"
                     >
-                      <span className="text-xl">×</span>
+                      <span className="text-xl sm:px-4 md:px-6 lg:px-8">×</span>
                     </button>
                   </div>
                   
@@ -556,27 +553,21 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     type="text"
                     value={searchQuery}
                     onChange={(e: any) => setSearchQuery(e.target.value)}
-                    placeholder="Search help articles..."
-                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none"
+                    className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
                   />
                 </div>
 
                 {/* Categories */}
-                <div className="flex-1 overflow-y-auto p-4">
-                  <div className="space-y-2">
+                <div className="flex-1 overflow-y-auto p-4 sm:px-4 md:px-6 lg:px-8">
+                  <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                      onClick={() => setSelectedCategory('all')}
-                      className={`w-full text-left p-3 rounded-lg transition-colors ${
-                        selectedCategory === 'all'
-                          ? 'bg-blue-600 text-white'
-                          : 'text-slate-300 hover:bg-slate-700'
-                      }`}
+                      onClick={() => setSelectedCategory('all')}`}
                     >
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">📚</span>
+                      <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">📚</span>
                         <div>
-                          <div className="font-medium">All Articles</div>
-                          <div className="text-xs opacity-75">{articles.length} articles</div>
+                          <div className="font-medium sm:px-4 md:px-6 lg:px-8">All Articles</div>
+                          <div className="text-xs opacity-75 sm:px-4 md:px-6 lg:px-8">{articles.length} articles</div>
                         </div>
                       </div>
                     </button>
@@ -584,18 +575,13 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     {categories.map((category: any) => (
                       <button
                         key={category.id}
-                        onClick={() => setSelectedCategory(category.id)}
-                        className={`w-full text-left p-3 rounded-lg transition-colors ${
-                          selectedCategory === category.id
-                            ? 'bg-blue-600 text-white'
-                            : 'text-slate-300 hover:bg-slate-700'
-                        }`}
+                        onClick={() => setSelectedCategory(category.id)}`}
                       >
-                        <div className="flex items-center gap-3">
-                          <span className="text-lg">{category.icon}</span>
+                        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                          <span className="text-lg sm:px-4 md:px-6 lg:px-8">{category.icon}</span>
                           <div>
-                            <div className="font-medium">{category.name}</div>
-                            <div className="text-xs opacity-75">{category.description}</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{category.name}</div>
+                            <div className="text-xs opacity-75 sm:px-4 md:px-6 lg:px-8">{category.description}</div>
                           </div>
                         </div>
                       </button>
@@ -605,25 +591,24 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
               </div>
 
               {/* Main Content */}
-              <div className="flex-1 flex flex-col">
+              <div className="flex-1 flex flex-col sm:px-4 md:px-6 lg:px-8">
                 {selectedArticle ? (
                   /* Article View */
-                  <div className="flex-1 overflow-y-auto">
-                    <div className="p-6">
+                  <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                       {/* Article Header */}
-                      <div className="mb-6">
+                      <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
                         <button
                           onClick={() => setSelectedArticle(null)}
-                          className="text-blue-400 hover:text-blue-300 mb-4 flex items-center gap-2"
                         >
                           ← Back to articles
                         </button>
                         
-                        <h1 className="text-3xl font-bold text-white mb-4">
+                        <h1 className="text-3xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                           {selectedArticleData?.title}
                         </h1>
                         
-                        <div className="flex items-center gap-4 text-sm text-slate-400 mb-4">
+                        <div className="flex items-center gap-4 text-sm text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">
                           <span className={`px-2 py-1 rounded ${getDifficultyColor(selectedArticleData?.difficulty || 'beginner')}`}>
                             {selectedArticleData?.difficulty}
                           </span>
@@ -632,11 +617,11 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                           <span>👍 {selectedArticleData?.helpful} helpful</span>
                         </div>
                         
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                           {selectedArticleData?.tags.map((tag: any) => (
                             <span
                               key={tag}
-                              className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded"
+                              className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded sm:px-4 md:px-6 lg:px-8"
                             >
                               #{tag}
                             </span>
@@ -646,23 +631,23 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
 
                       {/* Article Content */}
                       <div 
-                        className="prose prose-invert max-w-none"
+                        className="prose prose-invert max-w-none sm:px-4 md:px-6 lg:px-8"
                         dangerouslySetInnerHTML={{ 
                           __html: formatContent(selectedArticleData?.content || '') 
                         }}
                       />
 
                       {/* Article Footer */}
-                      <div className="mt-8 pt-6 border-t border-slate-600">
-                        <div className="flex items-center justify-between">
-                          <div className="text-sm text-slate-400">
+                      <div className="mt-8 pt-6 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                             Last updated: {selectedArticleData?.lastUpdated.toLocaleDateString()}
                           </div>
-                          <div className="flex gap-2">
-                            <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors">
+                          <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                               👍 Helpful
                             </button>
-                            <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm transition-colors">
+                            <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                               📝 Suggest Edit
                             </button>
                           </div>
@@ -672,13 +657,13 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                   </div>
                 ) : (
                   /* Article List */
-                  <div className="flex-1 overflow-y-auto p-6">
-                    <div className="mb-6">
-                      <h2 className="text-2xl font-bold text-white mb-2">
+                  <div className="flex-1 overflow-y-auto p-6 sm:px-4 md:px-6 lg:px-8">
+                    <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
+                      <h2 className="text-2xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                         {selectedCategory === 'all' ? 'All Articles' : 
                          categories.find((c: any) => c.id === selectedCategory)?.name}
                       </h2>
-                      <p className="text-slate-400">
+                      <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
                         {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} found
                       </p>
                     </div>
@@ -690,27 +675,27 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           onClick={() => setSelectedArticle(article.id)}
-                          className="text-left p-4 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-all"
+                          className="text-left p-4 bg-slate-700/50 hover:bg-slate-600/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-all sm:px-4 md:px-6 lg:px-8"
                         >
-                          <h3 className="text-lg font-semibold text-white mb-2">
+                          <h3 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                             {article.title}
                           </h3>
                           
-                          <div className="flex items-center gap-2 mb-3">
+                          <div className="flex items-center gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             <span className={`px-2 py-1 text-xs rounded ${getDifficultyColor(article.difficulty)}`}>
                               {article.difficulty}
                             </span>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                               📖 {article.readTime} min
                             </span>
                           </div>
                           
-                          <p className="text-slate-300 text-sm mb-3 line-clamp-2">
+                          <p className="text-slate-300 text-sm mb-3 line-clamp-2 sm:px-4 md:px-6 lg:px-8">
                             {article.content.substring(0, 120)}...
                           </p>
                           
-                          <div className="flex items-center justify-between text-xs text-slate-400">
-                            <div className="flex gap-4">
+                          <div className="flex items-center justify-between text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex gap-4 sm:px-4 md:px-6 lg:px-8">
                               <span>👁️ {article.views}</span>
                               <span>👍 {article.helpful}</span>
                             </div>
@@ -721,10 +706,10 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     </div>
 
                     {filteredArticles.length === 0 && (
-                      <div className="text-center py-12">
-                        <span className="text-6xl mb-4 block">📚</span>
-                        <h3 className="text-xl font-semibold text-white mb-2">No articles found</h3>
-                        <p className="text-slate-400">Try adjusting your search or browse different categories.</p>
+                      <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-6xl mb-4 block sm:px-4 md:px-6 lg:px-8">📚</span>
+                        <h3 className="text-xl font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">No articles found</h3>
+                        <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Try adjusting your search or browse different categories.</p>
                       </div>
                     )}
                   </div>
@@ -738,4 +723,10 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
   );
 };
 
-export default HelpSystem;
+const HelpSystemWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <HelpSystem {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(HelpSystemWithErrorBoundary);

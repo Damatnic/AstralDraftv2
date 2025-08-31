@@ -3,7 +3,7 @@
  * Simplified main interface using extracted components
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/SimpleAuthContext';
 import { Widget } from '../ui/Widget';
@@ -27,14 +27,15 @@ import { useOracleNotifications } from '../../hooks/useOracleNotifications';
 interface Props {
     week?: number;
     className?: string;
-}
 
 // Interfaces now imported from extracted components
 
-const OracleRealTimePredictionInterface: React.FC<Props> = ({ 
-    week = 1, 
+}
+
+const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const { user, isAuthenticated } = useAuth();
     
     // Media queries for responsive design
@@ -92,7 +93,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                         timestamp: new Date().toISOString()
                     });
                     updateParticipantCount(data.predictionId, data.totalParticipants);
-                }
+
                 break;
 
             case 'CONSENSUS_UPDATE':
@@ -119,8 +120,8 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                     const prediction = predictions.find((p: any) => p.id === data.predictionId);
                     if (prediction) {
                         notifyPredictionDeadline(data.predictionId, prediction.question, data.minutesRemaining);
-                    }
-                }
+
+
                 break;
 
             case 'USER_STATS_UPDATE':
@@ -129,21 +130,18 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                     // Accuracy change notification
                     if (Math.abs(data.stats.accuracy - previousStats.accuracy) >= 5) {
                         notifyAccuracyUpdate(data.stats.accuracy, previousStats.accuracy);
-                    }
-                    
+
                     // Streak milestone notification (new streaks of 3, 5, 10, etc.)
                     if (data.stats.streak > previousStats.streak && 
                         (data.stats.streak === 3 || data.stats.streak === 5 || 
                          data.stats.streak === 10 || data.stats.streak % 10 === 0)) {
                         notifyStreakMilestone(data.stats.streak);
-                    }
-                    
+
                     // Ranking change notification
                     if (data.stats.rank !== previousStats.rank && data.stats.rank > 0) {
                         notifyRankingChange(data.stats.rank, previousStats.rank);
-                    }
-                }
-                
+
+
                 // Update previous stats for next comparison
                 setPreviousStats(userStats);
                 setUserStats(data.stats);
@@ -154,11 +152,11 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 if (data.predictionId && data.question && typeof data.userCorrect === 'boolean') {
                     const pointsEarned = data.pointsEarned || 0;
                     notifyPredictionResult(data.predictionId, data.question, data.userCorrect, pointsEarned);
-                }
+
                 break;
 
             default:
-        }
+
     }, [user]);
 
     // WebSocket Hook
@@ -202,7 +200,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
             case 'connected': return 'bg-green-500 animate-pulse';
             case 'connecting': return 'bg-yellow-500 animate-pulse';
             default: return 'bg-red-500';
-        }
+
     };
 
     const selectedPredictionData = predictions.find((p: any) => p.id === selectedPrediction);
@@ -224,15 +222,13 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 const isAvailable = await oracleApiClient.isAvailable();
                 if (!isAvailable) {
                     throw new Error('Oracle backend is not available. Please ensure the Oracle server is running.');
-                }
-                
+
                 // Fetch real predictions from backend
                 const response = await oracleApiClient.getWeeklyPredictions(week);
                 
                 if (!response.success) {
                     throw new Error('Failed to load predictions from server');
-                }
-                
+
                 // Convert API response to LivePrediction format
                 const livePredictions: LivePrediction[] = response.data.map((p: PredictionResponse) => ({
                     id: p.id,
@@ -266,14 +262,13 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                     if (prediction.timeRemaining && prediction.timeRemaining > 0) {
                         const expiresAt = new Date(Date.now() + prediction.timeRemaining).toISOString();
                         scheduleDeadlineNotifications(prediction.id, prediction.question, expiresAt);
-                    }
+
                 });
                 
                 // Auto-select first prediction
                 if (livePredictions.length > 0) {
                     setSelectedPrediction(livePredictions[0].id);
-                }
-                
+
                 // Load user stats
                 try {
                     const statsResponse = await oracleApiClient.getUserStats(playerNumber);
@@ -291,80 +286,20 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                             // Accuracy change notification
                             if (Math.abs(newStats.accuracy - previousStats.accuracy) >= 5) {
                                 notifyAccuracyUpdate(newStats.accuracy, previousStats.accuracy);
-                            }
-                            
+
                             // Streak milestone notification
                             if (newStats.streak > previousStats.streak) {
                                 notifyStreakMilestone(newStats.streak);
-                            }
-                            
+
                             // Ranking change notification
                             if (newStats.rank !== previousStats.rank && newStats.rank > 0 && previousStats.rank > 0) {
                                 notifyRankingChange(newStats.rank, previousStats.rank);
-                            }
-                        }
-                        
+
+
                         setPreviousStats(userStats);
                         setUserStats(newStats);
-                    }
-                } catch (statsError) {
-                    // Don't fail the whole component for stats
-                }
-                
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to load Oracle predictions');
-            } finally {
-                setLoading(false);
-            }
-        };
 
-        loadPredictions();
-    }, [week, isAuthenticated, user]);
-
-    // Submit user prediction
-    const submitPrediction = useCallback(async (predictionId: string, choice: number, confidence: number, reasoning?: string) => {
-        if (!isAuthenticated || !user) {
-            setError('Please log in to submit predictions');
-            return;
-        }
-
-        try {
-            // Update UI optimistically
-            updatePrediction({
-                id: predictionId,
-                userChoice: choice,
-                userConfidence: confidence,
-                isSubmitted: true
-            });
-
-            // Submit to API
-            const response = await oracleApiClient.submitPrediction(predictionId, choice, confidence, reasoning);
-            
-            if (!response.success) {
-                throw new Error(response.message || 'Failed to submit prediction');
-            }
-
-            // Send to WebSocket for real-time update
-            sendMessage({
-                type: 'SUBMIT_PREDICTION',
-                predictionId,
-                choice,
-                confidence,
-                reasoning,
-                userId: user.id,
-                username: user.username || user.displayName
-            });
-
-            // Schedule deadline notifications for this prediction
-            const targetPrediction = predictions.find((p: any) => p.id === predictionId);
-            if (targetPrediction?.timeRemaining && targetPrediction.timeRemaining > 0) {
-                // Convert timeRemaining (seconds) to an expiration timestamp
-                const expiresAt = new Date(Date.now() + (targetPrediction.timeRemaining * 1000)).toISOString();
-                scheduleDeadlineNotifications(predictionId, targetPrediction.question, expiresAt);
-            }
-
-            addRealtimeUpdate({
-                id: `submit-${Date.now()}`,
+    `submit-${Date.now()}`,
                 type: 'USER_JOINED',
                 message: `You submitted your prediction: ${choice}`,
                 timestamp: new Date().toISOString()
@@ -376,7 +311,6 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                     id: predictionId,
                     participants: response.data.participantsCount
                 });
-            }
 
             // Check if this was a result notification scenario
             const prediction = predictions.find((p: any) => p.id === predictionId);
@@ -384,19 +318,9 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 const isCorrect = prediction.oracleChoice === choice;
                 const pointsEarned = response.data.pointsEarned || 0;
                 notifyPredictionResult(predictionId, prediction.question, isCorrect, pointsEarned);
-            }
 
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to submit prediction');
-            
-            // Revert optimistic update
-            updatePrediction({
-                id: predictionId,
-                userChoice: undefined,
-                userConfidence: undefined,
-                isSubmitted: false
-            });
-        }
+        );
+
     }, [isAuthenticated, user, updatePrediction, sendMessage, addRealtimeUpdate]);
 
     // Authentication guard
@@ -404,7 +328,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
         return (
             <OracleErrorBoundary>
                 <Widget title="🔮 Oracle Predictions" className={className}>
-                    <div className="text-center py-8 px-4">
+                    <div className="text-center py-8 px-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="text-gray-400 mb-6 text-sm sm:text-base">
                             Please log in to access Oracle predictions
                         </div>
@@ -418,28 +342,26 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 </Widget>
             </OracleErrorBoundary>
         );
-    }
 
     // Loading state
     if (loading) {
         return (
             <OracleErrorBoundary>
                 <Widget title="🔮 Oracle Predictions" className={className}>
-                    <div className="flex items-center justify-center py-8 px-4">
+                    <div className="flex items-center justify-center py-8 px-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-blue-400"></div>
                         <span className="ml-3 text-gray-400 text-sm sm:text-base">Loading Oracle predictions...</span>
                     </div>
                 </Widget>
             </OracleErrorBoundary>
         );
-    }
 
     // Error state
     if (error) {
         return (
             <OracleErrorBoundary>
                 <Widget title="🔮 Oracle Predictions" className={className}>
-                    <div className="text-center py-8 px-4">
+                    <div className="text-center py-8 px-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="text-red-400 mb-6 text-sm sm:text-base break-words">{error}</div>
                         <button 
                             onClick={() => window.location.reload()}
@@ -452,18 +374,17 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                 </Widget>
             </OracleErrorBoundary>
         );
-    }
 
     return (
         <OracleErrorBoundary>
             <div className={`oracle-realtime-interface ${className}`}>
                 <Widget 
                     title="🔮 Oracle Predictions"
-                    className="bg-gray-900/50"
+                    className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8"
                 >
                     {/* Header with status and view toggle */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4 sm:mb-6 px-4 sm:px-0">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <ZapIcon className="text-blue-400 w-5 h-5 sm:w-6 sm:h-6" />
                             <span className="text-lg sm:text-xl font-semibold">Week {week} Oracle</span>
                         </div>
@@ -481,7 +402,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                     aria-label="View Predictions"
                                     aria-pressed={activeView === 'predictions'}
                                 >
-                                    <Target className="w-4 h-4 inline mr-1" />
+                                    <Target className="w-4 h-4 inline mr-1 sm:px-4 md:px-6 lg:px-8" />
                                     Predictions
                                 </button>
                                 <button
@@ -494,7 +415,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                     aria-label="View Analytics"
                                     aria-pressed={activeView === 'analytics'}
                                 >
-                                    <BarChart3 className="w-4 h-4 inline mr-1" />
+                                    <BarChart3 className="w-4 h-4 inline mr-1 sm:px-4 md:px-6 lg:px-8" />
                                     Analytics
                                 </button>
                             </div>
@@ -505,10 +426,10 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                 
                                 <button
                                     onClick={() => setShowNotificationSettings(!showNotificationSettings)}
-                                    className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                                    className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                                     aria-label="Notification Settings"
                                 >
-                                    <Settings className="w-5 h-5" />
+                                    <Settings className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                 </button>
                             </div>
                             
@@ -538,26 +459,25 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                             {/* Main Content - Mobile Stack, Desktop Grid */}
                             {isMobile ? (
                                 /* Mobile Layout: Stacked */
-                                <div className="space-y-6">
+                                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                     {/* Selected Prediction Detail First on Mobile */}
                                     {selectedPredictionData && (
-                                        <div className="order-1">
-                                            <h3 className="text-lg font-semibold text-white mb-3">Selected Prediction</h3>
+                                        <div className="order-1 sm:px-4 md:px-6 lg:px-8">
+                                            <h3 className="text-lg font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Selected Prediction</h3>
                                             <PredictionDetail 
                                                 prediction={selectedPredictionData}
                                                 onSubmit={submitPrediction}
-                                            />
                                         </div>
                                     )}
 
                                     {/* Predictions List */}
-                                    <div className="order-2">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className="text-lg font-semibold text-white">Active Predictions</h3>
-                                            <span className="text-sm text-gray-400">{predictions.length} available</span>
+                                    <div className="order-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Active Predictions</h3>
+                                            <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{predictions.length} available</span>
                                         </div>
                                         
-                                        <div className="space-y-3 max-h-80 overflow-y-auto">
+                                        <div className="space-y-3 max-h-80 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                                             {predictions.map((prediction: any) => (
                                                 <motion.div
                                                     key={prediction.id}
@@ -576,12 +496,12 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                     </div>
 
                                     {/* AI Ensemble Widget */}
-                                    <div className="order-3">
+                                    <div className="order-3 sm:px-4 md:px-6 lg:px-8">
                                         <EnsembleMLWidget compact={true} />
                                     </div>
 
                                     {/* Real-time Updates */}
-                                    <div className="order-4">
+                                    <div className="order-4 sm:px-4 md:px-6 lg:px-8">
                                         <RealtimeUpdatesWidget 
                                             updates={realtimeUpdates}
                                             compact
@@ -593,13 +513,13 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                 /* Desktop/Tablet Layout: Grid */
                                 <div className="grid lg:grid-cols-2 gap-6">
                                     {/* Left Column: Predictions List */}
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <h3 className="text-lg font-semibold text-white">Active Predictions</h3>
-                                            <span className="text-sm text-gray-400">{predictions.length} available</span>
+                                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Active Predictions</h3>
+                                            <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{predictions.length} available</span>
                                         </div>
                                         
-                                        <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+                                        <div className="space-y-3 max-h-96 overflow-y-auto pr-2 sm:px-4 md:px-6 lg:px-8">
                                             {predictions.map((prediction: any) => (
                                                 <motion.div
                                                     key={prediction.id}
@@ -618,13 +538,12 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
                                     </div>
 
                                     {/* Right Column */}
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                         {/* Selected Prediction Detail */}
                                         {selectedPredictionData && (
                                             <PredictionDetail 
                                                 prediction={selectedPredictionData}
                                                 onSubmit={submitPrediction}
-                                            />
                                         )}
 
                                         {/* AI Ensemble Widget */}
@@ -652,4 +571,10 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({
     );
 };
 
-export default OracleRealTimePredictionInterface;
+const OracleRealTimePredictionInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleRealTimePredictionInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleRealTimePredictionInterfaceWithErrorBoundary);

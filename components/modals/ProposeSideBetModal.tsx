@@ -1,5 +1,6 @@
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { useLeague } from '../../hooks/useLeague';
@@ -8,9 +9,10 @@ import { SwordsIcon } from '../icons/SwordsIcon';
 
 interface ProposeSideBetModalProps {
     onClose: () => void;
+
 }
 
-const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: any) => {
+const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [opponentId, setOpponentId] = React.useState<string>('');
@@ -26,7 +28,6 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
         if (!opponentId || !terms.trim() || !stakes.trim()) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "All fields are required.", type: 'SYSTEM' } });
             return;
-        }
 
         dispatch({
             type: 'PROPOSE_SIDE_BET',
@@ -37,8 +38,8 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
                     accepterId: Number(opponentId),
                     terms,
                     stakes,
-                }
-            }
+
+
         });
         dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Side bet proposed!', type: 'SYSTEM' } });
         onClose();
@@ -51,26 +52,22 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
         <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
-                className="glass-pane rounded-xl shadow-2xl w-full max-w-lg"
-                onClick={e => e.stopPropagation()}
-                {...{
-                    initial: { opacity: 0, scale: 0.95 },
+                onClick={e => e.stopPropagation()},
                     animate: { opacity: 1, scale: 1 },
                 }}
             >
-                <header className="p-4 border-b border-[var(--panel-border)]">
-                    <h2 className="text-xl font-bold font-display flex items-center gap-2">
+                <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <SwordsIcon /> Propose Side Bet
                     </h2>
                 </header>
-                <main className="p-4 space-y-4">
+                <main className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     <div>
                         <label htmlFor="opponent-select" className={labelClasses}>Opponent</label>
                         <select
                             id="opponent-select"
                             value={opponentId}
                             onChange={e => setOpponentId(e.target.value)}
-                            className={inputClasses}
                         >
                             <option value="" disabled>Select a manager</option>
                             {opponents.map((t: any) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -83,7 +80,6 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
                             type="text"
                             value={terms}
                             onChange={e => setTerms(e.target.value)}
-                            className={inputClasses}
                             placeholder="e.g., My QB outscores yours this week"
                         />
                     </div>
@@ -94,18 +90,23 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: an
                             type="text"
                             value={stakes}
                             onChange={e => setStakes(e.target.value)}
-                            className={inputClasses}
                             placeholder="e.g., Loser buys pizza"
                         />
                     </div>
                 </main>
-                <footer className="p-4 flex justify-end gap-2 border-t border-[var(--panel-border)]">
-                    <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold bg-transparent border border-transparent hover:border-[var(--panel-border)] rounded-md">Cancel</button>
-                    <button type="submit" className="px-4 py-2 text-sm font-bold bg-cyan-500 text-black rounded-md">Propose Bet</button>
+                <footer className="p-4 flex justify-end gap-2 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                    <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-bold bg-transparent border border-transparent hover:border-[var(--panel-border)] rounded-md sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Cancel</button>
+                    <button type="submit" className="px-4 py-2 text-sm font-bold bg-cyan-500 text-black rounded-md sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Propose Bet</button>
                 </footer>
             </motion.form>
         </Modal>
     );
 };
 
-export default ProposeSideBetModal;
+const ProposeSideBetModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ProposeSideBetModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ProposeSideBetModalWithErrorBoundary);

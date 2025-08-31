@@ -26,7 +26,7 @@ const SeasonReviewLoader: React.FC = () => (
     </div>
 );
 
-const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }: any) => {
+const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }) => {
     const [review, setReview] = React.useState<SeasonReviewData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -36,17 +36,18 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
         setIsLoading(true);
         setError(null);
         try {
+
             const data = await generateSeasonReview(league, seasonYear);
             if (data) {
                 setReview(data);
             } else {
                  setError("The Oracle could not produce a season review. Please try again later.");
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError("An error occurred while consulting the Oracle for a season review.");
         } finally {
             setIsLoading(false);
-        }
+
     }, [league, seasonYear]);
     
     React.useEffect(() => {
@@ -64,7 +65,7 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} - {seasonYear} Season</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' }} className="glass-button">
                     Back to History
                 </button>
             </header>
@@ -74,13 +75,12 @@ const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispat
                      error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
                      review ? <SeasonReviewDisplay review={review} teams={league.teams} /> :
                      <div className="p-6 text-center text-gray-400">No review available for this season.</div>
-                    }
+
                 </div>
             </main>
         </div>
     );
 };
-
 
 const SeasonReviewView: React.FC = () => {
     const { state, dispatch } = useAppState();
@@ -91,12 +91,11 @@ const SeasonReviewView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a season to review from the League History.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="glass-button-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
 
     return <SeasonReviewContent league={league} seasonYear={seasonYear} dispatch={dispatch} />
 };

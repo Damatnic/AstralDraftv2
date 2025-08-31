@@ -3,6 +3,7 @@
  * Displays prediction history, accuracy metrics, and personalized insights
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Widget } from '../ui/Widget';
 import { 
@@ -36,7 +37,6 @@ interface UserStats {
         calibration: number;
         overconfidence: number;
     };
-}
 
 interface PredictionHistory {
     id: string;
@@ -51,6 +51,7 @@ interface PredictionHistory {
     points: number;
     submittedAt: string;
     category: string;
+
 }
 
 interface PersonalizedInsight {
@@ -60,7 +61,6 @@ interface PersonalizedInsight {
     actionable?: string;
     priority: 'high' | 'medium' | 'low';
     metric?: number;
-}
 
 const OracleUserDashboard: React.FC = () => {
     const [userStats, setUserStats] = useState<UserStats | null>(null);
@@ -103,7 +103,7 @@ const OracleUserDashboard: React.FC = () => {
                     average: 72.5,
                     calibration: 0.85,
                     overconfidence: 4.5
-                }
+
             };
 
             // Generate prediction history
@@ -115,7 +115,6 @@ const OracleUserDashboard: React.FC = () => {
                     actualResult = Math.random() > 0.5 ? 1 : 0;
                 } else {
                     actualResult = undefined;
-                }
 
                 return {
                     id: `pred_${i + 1}`,
@@ -171,7 +170,7 @@ const OracleUserDashboard: React.FC = () => {
                     description: 'You show strong potential in milestone predictions but have limited attempts',
                     actionable: 'Try making more predictions in this category to boost your overall accuracy',
                     priority: 'low'
-                }
+
             ];
 
             setUserStats(mockStats);
@@ -192,7 +191,6 @@ const OracleUserDashboard: React.FC = () => {
         // Filter by category
         if (selectedCategory !== 'all') {
             filtered = filtered.filter((p: any) => p.category === selectedCategory);
-        }
 
         // Filter by timeframe
         const now = new Date();
@@ -210,7 +208,6 @@ const OracleUserDashboard: React.FC = () => {
                 break;
             default:
                 cutoffDate.setFullYear(2020); // All time
-        }
 
         return filtered.filter((p: any) => new Date(p.submittedAt) >= cutoffDate);
     }, [predictionHistory, timeframe, selectedCategory]);
@@ -218,16 +215,15 @@ const OracleUserDashboard: React.FC = () => {
     if (isLoading || !userStats) {
         return (
             <Widget title="Oracle Dashboard">
-                <div className="p-6 text-center">
-                    <div className="animate-pulse space-y-4">
-                        <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto"></div>
-                        <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
-                        <div className="h-4 bg-gray-300 rounded w-2/3 mx-auto"></div>
+                <div className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                    <div className="animate-pulse space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
+                        <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
+                        <div className="h-4 bg-gray-300 rounded w-2/3 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
                     </div>
                 </div>
             </Widget>
         );
-    }
 
     const getAccuracyColor = (accuracy: number) => {
         if (accuracy >= 70) return 'text-green-500';
@@ -237,29 +233,28 @@ const OracleUserDashboard: React.FC = () => {
 
     const getInsightIcon = (type: string) => {
         switch (type) {
-            case 'strength': return <Star className="w-4 h-4 text-yellow-500" />;
-            case 'trend': return <TrendingUp className="w-4 h-4 text-blue-500" />;
-            case 'improvement': return <Target className="w-4 h-4 text-orange-500" />;
-            case 'recommendation': return <Brain className="w-4 h-4 text-purple-500" />;
-            default: return <Eye className="w-4 h-4 text-gray-500" />;
-        }
+            case 'strength': return <Star className="w-4 h-4 text-yellow-500 sm:px-4 md:px-6 lg:px-8" />;
+            case 'trend': return <TrendingUp className="w-4 h-4 text-blue-500 sm:px-4 md:px-6 lg:px-8" />;
+            case 'improvement': return <Target className="w-4 h-4 text-orange-500 sm:px-4 md:px-6 lg:px-8" />;
+            case 'recommendation': return <Brain className="w-4 h-4 text-purple-500 sm:px-4 md:px-6 lg:px-8" />;
+            default: return <Eye className="w-4 h-4 text-gray-500 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     return (
-        <div className="oracle-user-dashboard space-y-6">
+        <div className="oracle-user-dashboard space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Dashboard Header */}
-            <div className="dashboard-header">
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                        <Brain className="w-6 h-6 text-purple-500" />
+            <div className="dashboard-header sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                    <h2 className="text-2xl font-bold text-white flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Brain className="w-6 h-6 text-purple-500 sm:px-4 md:px-6 lg:px-8" />
                         Oracle Dashboard
                     </h2>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <select 
                             value={timeframe} 
                             onChange={(e: any) => setTimeframe(e.target.value as any)}
-                            className="bg-gray-800 text-white px-3 py-1 rounded border border-gray-600 text-sm"
                         >
                             <option value="week">This Week</option>
                             <option value="month">This Month</option>
@@ -273,61 +268,61 @@ const OracleUserDashboard: React.FC = () => {
             {/* Key Performance Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Widget title="Overall Accuracy">
-                    <div className="p-4 text-center">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
                         <div className={`text-3xl font-bold ${getAccuracyColor(userStats.accuracy)}`}>
                             {userStats.accuracy}%
                         </div>
-                        <div className="text-sm text-gray-400 mt-1">
+                        <div className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                             {userStats.correctPredictions}/{userStats.totalPredictions} correct
                         </div>
-                        <div className="flex items-center justify-center gap-1 mt-2 text-xs">
-                            <TrophyIcon className="w-3 h-3" />
+                        <div className="flex items-center justify-center gap-1 mt-2 text-xs sm:px-4 md:px-6 lg:px-8">
+                            <TrophyIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                             Rank #{userStats.rank}
                         </div>
                     </div>
                 </Widget>
 
                 <Widget title="Current Streak">
-                    <div className="p-4 text-center">
-                        <div className="flex items-center justify-center gap-2">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <Flame className={`w-6 h-6 ${userStats.streaks.current >= 3 ? 'text-orange-500' : 'text-gray-400'}`} />
-                            <span className="text-2xl font-bold text-white">
+                            <span className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                                 {userStats.streaks.current}
                             </span>
                         </div>
-                        <div className="text-sm text-gray-400 mt-1">
+                        <div className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                             {userStats.streaks.type === 'correct' ? 'Correct' : 'Incorrect'} predictions
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">
                             Best: {userStats.streaks.longest}
                         </div>
                     </div>
                 </Widget>
 
                 <Widget title="Total Points">
-                    <div className="p-4 text-center">
-                        <div className="text-3xl font-bold text-blue-500">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-3xl font-bold text-blue-500 sm:px-4 md:px-6 lg:px-8">
                             {userStats.totalPoints}
                         </div>
-                        <div className="text-sm text-gray-400 mt-1">
+                        <div className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                             +{Math.round(userStats.totalPoints / userStats.totalPredictions)} avg per prediction
                         </div>
-                        <div className="flex items-center justify-center gap-1 mt-2 text-xs">
-                            <Award className="w-3 h-3" />
+                        <div className="flex items-center justify-center gap-1 mt-2 text-xs sm:px-4 md:px-6 lg:px-8">
+                            <Award className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                             Oracle Points
                         </div>
                     </div>
                 </Widget>
 
                 <Widget title="Confidence">
-                    <div className="p-4 text-center">
-                        <div className="text-3xl font-bold text-purple-500">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-3xl font-bold text-purple-500 sm:px-4 md:px-6 lg:px-8">
                             {userStats.confidence.average}%
                         </div>
-                        <div className="text-sm text-gray-400 mt-1">
+                        <div className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                             Average confidence
                         </div>
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">
                             Calibration: {Math.round(userStats.confidence.calibration * 100)}%
                         </div>
                     </div>
@@ -336,7 +331,7 @@ const OracleUserDashboard: React.FC = () => {
 
             {/* Category Performance */}
             <Widget title="Performance by Category">
-                <div className="p-4">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {userStats.categoryAccuracy.map((category: any) => {
                             const isSelected = selectedCategory === category.category;
@@ -348,21 +343,21 @@ const OracleUserDashboard: React.FC = () => {
                                 <button
                                     key={category.category}
                                     className={`p-3 rounded-lg border transition-colors ${borderClass}`}
-                                    onClick={() => setSelectedCategory(
+                                    onClick={() = aria-label="Action button"> setSelectedCategory(
                                         isSelected ? 'all' : category.category
                                     )}
                                     type="button"
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <BarChart3 className="w-4 h-4 text-gray-400" />
-                                            <span className="font-medium text-white">{category.category}</span>
+                                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                            <BarChart3 className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
+                                            <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{category.category}</span>
                                         </div>
                                         <div className={`font-bold ${getAccuracyColor(category.accuracy)}`}>
                                             {category.accuracy}%
                                         </div>
                                     </div>
-                                    <div className="text-xs text-gray-400 mt-1">
+                                    <div className="text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                         {Math.round(category.accuracy * category.total / 100)} correct out of {category.total}
                                     </div>
                                 </button>
@@ -374,24 +369,23 @@ const OracleUserDashboard: React.FC = () => {
 
             {/* Weekly Accuracy Trend */}
             <Widget title="Weekly Accuracy Trend">
-                <div className="p-4">
-                    <div className="flex items-end gap-2 h-32">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-end gap-2 h-32 sm:px-4 md:px-6 lg:px-8">
                         {userStats.weeklyAccuracy.map((week: any) => {
                             let bgColorClass = 'bg-red-500';
                             if (week.accuracy >= 70) {
                                 bgColorClass = 'bg-green-500';
                             } else if (week.accuracy >= 60) {
                                 bgColorClass = 'bg-yellow-500';
-                            }
 
                             return (
-                                <div key={week.week} className="flex-1 flex flex-col items-center">
+                                <div key={week.week} className="flex-1 flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
                                     <div 
                                         className={`w-full rounded-t transition-all ${bgColorClass}`}
                                         style={{ height: `${week.accuracy}%` }}
                                     />
-                                    <div className="text-xs text-gray-400 mt-1">W{week.week}</div>
-                                    <div className="text-xs text-gray-500">{week.accuracy}%</div>
+                                    <div className="text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">W{week.week}</div>
+                                    <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">{week.accuracy}%</div>
                                 </div>
                             );
                         })}
@@ -401,34 +395,33 @@ const OracleUserDashboard: React.FC = () => {
 
             {/* Personalized Insights */}
             <Widget title="Personalized Insights">
-                <div className="p-4 space-y-3">
+                <div className="p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {insights.map((insight: any) => {
                         let borderClass = 'border-blue-500 bg-blue-500/10';
                         if (insight.priority === 'high') {
                             borderClass = 'border-red-500 bg-red-500/10';
                         } else if (insight.priority === 'medium') {
                             borderClass = 'border-yellow-500 bg-yellow-500/10';
-                        }
 
                         return (
                             <div 
                                 key={insight.title}
                                 className={`p-3 rounded-lg border-l-4 ${borderClass}`}
                             >
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {getInsightIcon(insight.type)}
-                                    <div className="flex-1">
-                                        <div className="flex items-center justify-between">
-                                            <h4 className="font-medium text-white">{insight.title}</h4>
+                                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                            <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
                                             {Boolean(insight.metric) && (
-                                                <span className="text-sm font-bold text-white">
+                                                <span className="text-sm font-bold text-white sm:px-4 md:px-6 lg:px-8">
                                                     {insight.metric}%
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-sm text-gray-300 mt-1">{insight.description}</p>
+                                        <p className="text-sm text-gray-300 mt-1 sm:px-4 md:px-6 lg:px-8">{insight.description}</p>
                                         {insight.actionable && (
-                                            <p className="text-xs text-gray-400 mt-2 italic">
+                                            <p className="text-xs text-gray-400 mt-2 italic sm:px-4 md:px-6 lg:px-8">
                                                 💡 {insight.actionable}
                                             </p>
                                         )}
@@ -442,16 +435,16 @@ const OracleUserDashboard: React.FC = () => {
 
             {/* Recent Prediction History */}
             <Widget title={selectedCategory !== 'all' ? `Recent Predictions (${selectedCategory})` : 'Recent Predictions'}>
-                <div className="p-4">
-                    <div className="space-y-3 max-h-96 overflow-y-auto">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                         {filteredHistory.slice(0, 10).map((prediction: any) => (
                             <div 
                                 key={prediction.id}
-                                className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg"
+                                className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-white">
+                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-sm font-medium text-white sm:px-4 md:px-6 lg:px-8">
                                             {prediction.question}
                                         </span>
                                         {prediction.isResolved && (
@@ -464,21 +457,21 @@ const OracleUserDashboard: React.FC = () => {
                                             </span>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-400">
+                                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         <span>Week {prediction.week}</span>
                                         <span>Confidence: {prediction.confidence}%</span>
                                         <span>Category: {prediction.category}</span>
                                         {prediction.isResolved && (
-                                            <span className="text-blue-400">+{prediction.points} pts</span>
+                                            <span className="text-blue-400 sm:px-4 md:px-6 lg:px-8">+{prediction.points} pts</span>
                                         )}
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <div className="text-sm text-gray-400">
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         {new Date(prediction.submittedAt).toLocaleDateString()}
                                     </div>
                                     {!prediction.isResolved && (
-                                        <div className="text-xs text-yellow-500">Pending</div>
+                                        <div className="text-xs text-yellow-500 sm:px-4 md:px-6 lg:px-8">Pending</div>
                                     )}
                                 </div>
                             </div>
@@ -486,8 +479,8 @@ const OracleUserDashboard: React.FC = () => {
                     </div>
                     
                     {filteredHistory.length === 0 && (
-                        <div className="text-center py-8 text-gray-400">
-                            <Activity className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <div className="text-center py-8 text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                            <Activity className="w-12 h-12 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                             <p>No predictions found for the selected filters</p>
                         </div>
                     )}
@@ -497,4 +490,10 @@ const OracleUserDashboard: React.FC = () => {
     );
 };
 
-export default OracleUserDashboard;
+const OracleUserDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleUserDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleUserDashboardWithErrorBoundary);

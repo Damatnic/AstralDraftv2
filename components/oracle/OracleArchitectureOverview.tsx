@@ -3,7 +3,8 @@
  * Educational section explaining Oracle's prediction architecture and system design
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import './OracleArchitectureOverview.css';
 
 interface ArchitectureLayer {
@@ -13,6 +14,7 @@ interface ArchitectureLayer {
     components: string[];
     dataFlow: string;
     examples: string[];
+
 }
 
 interface SystemComponent {
@@ -22,7 +24,6 @@ interface SystemComponent {
     inputs: string[];
     outputs: string[];
     technology: string;
-}
 
 interface DataFlowStep {
     id: string;
@@ -31,9 +32,11 @@ interface DataFlowStep {
     description: string;
     duration: string;
     dependencies: string[];
+
 }
 
 const OracleArchitectureOverview: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [activeLayer, setActiveLayer] = useState<string>('data-layer');
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
     const [showDataFlow, setShowDataFlow] = useState<boolean>(false);
@@ -52,7 +55,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 'Injury reports processed within minutes of announcement',
                 'Weather data refreshed hourly for all game locations',
                 'Team roster changes tracked in real-time'
-            ]
+
         },
         {
             id: 'processing-layer',
@@ -65,7 +68,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 'Calculate Player Efficiency Ratings (PER) from raw statistics',
                 'Extract team chemistry scores from performance patterns',
                 'Generate matchup difficulty ratings based on historical data'
-            ]
+
         },
         {
             id: 'ai-layer',
@@ -78,7 +81,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 'Analyze complex scenario interactions using natural language',
                 'Provide contextual reasoning for prediction confidence',
                 'Adapt communication style based on user expertise level'
-            ]
+
         },
         {
             id: 'ml-layer',
@@ -91,7 +94,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 'Calibrate confidence scores based on historical performance',
                 'Detect seasonal patterns and trend shifts automatically',
                 'Continuously learn from prediction outcomes'
-            ]
+
         },
         {
             id: 'prediction-layer',
@@ -104,8 +107,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 'Calculate precise probability distributions for all options',
                 'Assess prediction risk and uncertainty levels',
                 'Format predictions for optimal user comprehension'
-            ]
-        }
+
     ];
 
     // System components definition
@@ -149,7 +151,7 @@ const OracleArchitectureOverview: React.FC = () => {
             inputs: ['Live game feeds', 'Breaking news', 'Roster changes'],
             outputs: ['Real-time updates', 'Dynamic adjustments', 'Alert notifications'],
             technology: 'Event-driven architecture with WebSocket connections'
-        }
+
     ];
 
     // Data flow steps
@@ -217,20 +219,21 @@ const OracleArchitectureOverview: React.FC = () => {
             description: 'Format predictions for user interface with interactive elements and explanations',
             duration: '< 5 seconds',
             dependencies: ['prediction-synthesis']
-        }
+
     ];
 
     // Progress tracking
     useEffect(() => {
-        const interval = setInterval(() => {
+    const interval = setInterval(() => {
             setProgress(prev => prev < 100 ? prev + 1 : 0);
-        }, 100);
+    , 100);
 
         return () => clearInterval(interval);
     }, []);
 
     // Helper functions
-    const getLayerIcon = (layerId: string): string => {
+    const getLayerIcon = (layerId: string): string 
+} {
         const icons: Record<string, string> = {
             'data-layer': '📡',
             'processing-layer': '⚙️',
@@ -261,15 +264,15 @@ const OracleArchitectureOverview: React.FC = () => {
             aria-expanded={activeLayer === layer.id}
             aria-controls={`layer-content-${layer.id}`}
         >
-            <div className="layer-header">
-                <span className="layer-icon">{getLayerIcon(layer.id)}</span>
-                <h3 className="layer-name">{layer.name}</h3>
+            <div className="layer-header sm:px-4 md:px-6 lg:px-8">
+                <span className="layer-icon sm:px-4 md:px-6 lg:px-8">{getLayerIcon(layer.id)}</span>
+                <h3 className="layer-name sm:px-4 md:px-6 lg:px-8">{layer.name}</h3>
             </div>
             
-            <div className="layer-content" id={`layer-content-${layer.id}`}>
-                <p className="layer-description">{layer.description}</p>
+            <div className="layer-content sm:px-4 md:px-6 lg:px-8" id={`layer-content-${layer.id}`}>
+                <p className="layer-description sm:px-4 md:px-6 lg:px-8">{layer.description}</p>
                 
-                <div className="layer-components">
+                <div className="layer-components sm:px-4 md:px-6 lg:px-8">
                     <h4>Key Components:</h4>
                     <ul>
                         {layer.components.map((component, index) => (
@@ -278,19 +281,19 @@ const OracleArchitectureOverview: React.FC = () => {
                     </ul>
                 </div>
                 
-                <div className="data-flow">
+                <div className="data-flow sm:px-4 md:px-6 lg:px-8">
                     <h4>Data Flow:</h4>
-                    <div className="flow-diagram">
+                    <div className="flow-diagram sm:px-4 md:px-6 lg:px-8">
                         {layer.dataFlow.split(' → ').map((step, index, array) => (
                             <React.Fragment key={`${layer.id}-flow-${index}`}>
-                                <span className="flow-step">{step}</span>
-                                {index < array.length - 1 && <span className="flow-arrow">→</span>}
+                                <span className="flow-step sm:px-4 md:px-6 lg:px-8">{step}</span>
+                                {index < array.length - 1 && <span className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</span>}
                             </React.Fragment>
                         ))}
                     </div>
                 </div>
                 
-                <div className="layer-examples">
+                <div className="layer-examples sm:px-4 md:px-6 lg:px-8">
                     <h4>Examples:</h4>
                     <ul>
                         {layer.examples.map((example, index) => (
@@ -312,20 +315,20 @@ const OracleArchitectureOverview: React.FC = () => {
             aria-expanded={selectedComponent === component.id}
             aria-controls={`component-details-${component.id}`}
         >
-            <div className="component-header">
+            <div className="component-header sm:px-4 md:px-6 lg:px-8">
                 <div
-                    className="component-status"
+                    className="component-status sm:px-4 md:px-6 lg:px-8"
                     style={{ backgroundColor: getComponentStatusColor(component.id) }}
                 ></div>
-                <h4 className="component-name">{component.name}</h4>
+                <h4 className="component-name sm:px-4 md:px-6 lg:px-8">{component.name}</h4>
             </div>
             
             {selectedComponent === component.id && (
-                <div className="component-details" id={`component-details-${component.id}`}>
-                    <p className="component-purpose">{component.purpose}</p>
+                <div className="component-details sm:px-4 md:px-6 lg:px-8" id={`component-details-${component.id}`}>
+                    <p className="component-purpose sm:px-4 md:px-6 lg:px-8">{component.purpose}</p>
                     
-                    <div className="component-io">
-                        <div className="inputs">
+                    <div className="component-io sm:px-4 md:px-6 lg:px-8">
+                        <div className="inputs sm:px-4 md:px-6 lg:px-8">
                             <h5>Inputs:</h5>
                             <ul>
                                 {component.inputs.map((input, index) => (
@@ -334,7 +337,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             </ul>
                         </div>
                         
-                        <div className="outputs">
+                        <div className="outputs sm:px-4 md:px-6 lg:px-8">
                             <h5>Outputs:</h5>
                             <ul>
                                 {component.outputs.map((output, index) => (
@@ -344,7 +347,7 @@ const OracleArchitectureOverview: React.FC = () => {
                         </div>
                     </div>
                     
-                    <div className="component-tech">
+                    <div className="component-tech sm:px-4 md:px-6 lg:px-8">
                         <h5>Technology:</h5>
                         <p>{component.technology}</p>
                     </div>
@@ -354,15 +357,15 @@ const OracleArchitectureOverview: React.FC = () => {
     );
 
     const renderDataFlowStep = (step: DataFlowStep) => (
-        <div key={step.id} className="data-flow-step">
-            <div className="step-number">{step.step}</div>
-            <div className="step-content">
-                <h4 className="step-title">{step.title}</h4>
-                <p className="step-description">{step.description}</p>
-                <div className="step-meta">
-                    <span className="step-duration">⏱️ {step.duration}</span>
+        <div key={step.id} className="data-flow-step sm:px-4 md:px-6 lg:px-8">
+            <div className="step-number sm:px-4 md:px-6 lg:px-8">{step.step}</div>
+            <div className="step-content sm:px-4 md:px-6 lg:px-8">
+                <h4 className="step-title sm:px-4 md:px-6 lg:px-8">{step.title}</h4>
+                <p className="step-description sm:px-4 md:px-6 lg:px-8">{step.description}</p>
+                <div className="step-meta sm:px-4 md:px-6 lg:px-8">
+                    <span className="step-duration sm:px-4 md:px-6 lg:px-8">⏱️ {step.duration}</span>
                     {step.dependencies.length > 0 && (
-                        <span className="step-dependencies">
+                        <span className="step-dependencies sm:px-4 md:px-6 lg:px-8">
                             🔗 Depends on: {step.dependencies.join(', ')}
                         </span>
                     )}
@@ -372,10 +375,10 @@ const OracleArchitectureOverview: React.FC = () => {
     );
 
     return (
-        <div className="oracle-architecture-overview">
-            <div className="overview-header">
+        <div className="oracle-architecture-overview sm:px-4 md:px-6 lg:px-8">
+            <div className="overview-header sm:px-4 md:px-6 lg:px-8">
                 <h2>🏗️ Oracle Prediction Architecture</h2>
-                <p className="overview-description">
+                <p className="overview-description sm:px-4 md:px-6 lg:px-8">
                     Discover how Oracle's sophisticated AI-driven prediction system processes millions of data points 
                     to generate accurate fantasy football predictions. This multi-layered architecture combines 
                     real-time data processing, advanced machine learning, and natural language AI to deliver 
@@ -383,43 +386,43 @@ const OracleArchitectureOverview: React.FC = () => {
                 </p>
             </div>
 
-            <div className="architecture-sections">
+            <div className="architecture-sections sm:px-4 md:px-6 lg:px-8">
                 {/* System Overview */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>📊 System Overview</h3>
-                    <div className="system-overview">
-                        <div className="overview-stats">
-                            <div className="stat-item">
-                                <span className="stat-number">5</span>
-                                <span className="stat-label">Architecture Layers</span>
+                    <div className="system-overview sm:px-4 md:px-6 lg:px-8">
+                        <div className="overview-stats sm:px-4 md:px-6 lg:px-8">
+                            <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-number sm:px-4 md:px-6 lg:px-8">5</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Architecture Layers</span>
                             </div>
-                            <div className="stat-item">
-                                <span className="stat-number">18</span>
-                                <span className="stat-label">Feature Dimensions</span>
+                            <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-number sm:px-4 md:px-6 lg:px-8">18</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Feature Dimensions</span>
                             </div>
-                            <div className="stat-item">
-                                <span className="stat-number">30s</span>
-                                <span className="stat-label">Update Frequency</span>
+                            <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-number sm:px-4 md:px-6 lg:px-8">30s</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Update Frequency</span>
                             </div>
-                            <div className="stat-item">
-                                <span className="stat-number">85%+</span>
-                                <span className="stat-label">Accuracy Rate</span>
+                            <div className="stat-item sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-number sm:px-4 md:px-6 lg:px-8">85%+</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Accuracy Rate</span>
                             </div>
                         </div>
                         
-                        <div className="architecture-diagram">
-                            <div className="diagram-header">
+                        <div className="architecture-diagram sm:px-4 md:px-6 lg:px-8">
+                            <div className="diagram-header sm:px-4 md:px-6 lg:px-8">
                                 <h4>Prediction Pipeline</h4>
-                                <div className="progress-bar">
+                                <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                                     <div 
-                                        className="progress-fill" 
+                                        className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                                         style={{ width: `${progress}%` }}
                                     ></div>
-                                    <span className="progress-text">Processing: {progress}%</span>
+                                    <span className="progress-text sm:px-4 md:px-6 lg:px-8">Processing: {progress}%</span>
                                 </div>
                             </div>
                             
-                            <div className="pipeline-visualization">
+                            <div className="pipeline-visualization sm:px-4 md:px-6 lg:px-8">
                                 {architectureLayers.map((layer, index) => (
                                     <button 
                                         key={layer.id} 
@@ -428,10 +431,10 @@ const OracleArchitectureOverview: React.FC = () => {
                                         type="button"
                                         aria-label={`Select ${layer.name}`}
                                     >
-                                        <div className="pipeline-icon">{getLayerIcon(layer.id)}</div>
-                                        <div className="pipeline-name">{layer.name}</div>
+                                        <div className="pipeline-icon sm:px-4 md:px-6 lg:px-8">{getLayerIcon(layer.id)}</div>
+                                        <div className="pipeline-name sm:px-4 md:px-6 lg:px-8">{layer.name}</div>
                                         {index < architectureLayers.length - 1 && (
-                                            <div className="pipeline-connector">↓</div>
+                                            <div className="pipeline-connector sm:px-4 md:px-6 lg:px-8">↓</div>
                                         )}
                                     </button>
                                 ))}
@@ -441,36 +444,36 @@ const OracleArchitectureOverview: React.FC = () => {
                 </section>
 
                 {/* Architecture Layers */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>🏗️ Architecture Layers</h3>
-                    <p className="section-description">
+                    <p className="section-description sm:px-4 md:px-6 lg:px-8">
                         Oracle's prediction system is built on five interconnected layers, each responsible 
                         for specific aspects of data processing and analysis. Click on each layer to explore 
                         its components and data flow.
                     </p>
                     
-                    <div className="architecture-layers">
+                    <div className="architecture-layers sm:px-4 md:px-6 lg:px-8">
                         {architectureLayers.map(renderArchitectureLayer)}
                     </div>
                 </section>
 
                 {/* System Components */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>⚙️ Core Components</h3>
-                    <p className="section-description">
+                    <p className="section-description sm:px-4 md:px-6 lg:px-8">
                         Each layer contains specialized components that work together to process data and 
                         generate predictions. Click on components to see their inputs, outputs, and technology stack.
                     </p>
                     
-                    <div className="system-components">
+                    <div className="system-components sm:px-4 md:px-6 lg:px-8">
                         {systemComponents.map(renderSystemComponent)}
                     </div>
                 </section>
 
                 {/* Data Flow */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>🔄 Data Flow Process</h3>
-                    <div className="section-controls">
+                    <div className="section-controls sm:px-4 md:px-6 lg:px-8">
                         <button
                             className={`control-button ${showDataFlow ? 'active' : ''}`}
                             onClick={() => setShowDataFlow(!showDataFlow)}
@@ -480,30 +483,30 @@ const OracleArchitectureOverview: React.FC = () => {
                     </div>
                     
                     {showDataFlow && (
-                        <div className="data-flow-visualization">
-                            <p className="flow-description">
+                        <div className="data-flow-visualization sm:px-4 md:px-6 lg:px-8">
+                            <p className="flow-description sm:px-4 md:px-6 lg:px-8">
                                 Follow the complete journey of data from collection to final prediction output. 
                                 Each step builds upon the previous one to create increasingly sophisticated analysis.
                             </p>
                             
-                            <div className="data-flow-steps">
+                            <div className="data-flow-steps sm:px-4 md:px-6 lg:px-8">
                                 {dataFlowSteps.map(renderDataFlowStep)}
                             </div>
                             
-                            <div className="flow-summary">
+                            <div className="flow-summary sm:px-4 md:px-6 lg:px-8">
                                 <h4>🎯 End-to-End Processing Time</h4>
-                                <div className="timing-breakdown">
-                                    <div className="timing-item">
-                                        <span className="timing-label">Total Processing:</span>
-                                        <span className="timing-value">90-120 seconds</span>
+                                <div className="timing-breakdown sm:px-4 md:px-6 lg:px-8">
+                                    <div className="timing-item sm:px-4 md:px-6 lg:px-8">
+                                        <span className="timing-label sm:px-4 md:px-6 lg:px-8">Total Processing:</span>
+                                        <span className="timing-value sm:px-4 md:px-6 lg:px-8">90-120 seconds</span>
                                     </div>
-                                    <div className="timing-item">
-                                        <span className="timing-label">Critical Path:</span>
-                                        <span className="timing-value">Data → ML → AI → Output</span>
+                                    <div className="timing-item sm:px-4 md:px-6 lg:px-8">
+                                        <span className="timing-label sm:px-4 md:px-6 lg:px-8">Critical Path:</span>
+                                        <span className="timing-value sm:px-4 md:px-6 lg:px-8">Data → ML → AI → Output</span>
                                     </div>
-                                    <div className="timing-item">
-                                        <span className="timing-label">Update Frequency:</span>
-                                        <span className="timing-value">Every 30 seconds (10s during games)</span>
+                                    <div className="timing-item sm:px-4 md:px-6 lg:px-8">
+                                        <span className="timing-label sm:px-4 md:px-6 lg:px-8">Update Frequency:</span>
+                                        <span className="timing-value sm:px-4 md:px-6 lg:px-8">Every 30 seconds (10s during games)</span>
                                     </div>
                                 </div>
                             </div>
@@ -512,11 +515,11 @@ const OracleArchitectureOverview: React.FC = () => {
                 </section>
 
                 {/* Key Insights */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>💡 Key Architecture Insights</h3>
-                    <div className="insights-grid">
-                        <div className="insight-card">
-                            <div className="insight-icon">🚀</div>
+                    <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+                        <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                            <div className="insight-icon sm:px-4 md:px-6 lg:px-8">🚀</div>
                             <h4>Performance Optimization</h4>
                             <p>
                                 Parallel processing across layers enables sub-2-minute prediction generation 
@@ -524,8 +527,8 @@ const OracleArchitectureOverview: React.FC = () => {
                             </p>
                         </div>
                         
-                        <div className="insight-card">
-                            <div className="insight-icon">🔄</div>
+                        <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                            <div className="insight-icon sm:px-4 md:px-6 lg:px-8">🔄</div>
                             <h4>Continuous Learning</h4>
                             <p>
                                 The ML layer continuously improves by recording prediction outcomes and 
@@ -533,8 +536,8 @@ const OracleArchitectureOverview: React.FC = () => {
                             </p>
                         </div>
                         
-                        <div className="insight-card">
-                            <div className="insight-icon">🎯</div>
+                        <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                            <div className="insight-icon sm:px-4 md:px-6 lg:px-8">🎯</div>
                             <h4>Ensemble Accuracy</h4>
                             <p>
                                 Multiple prediction models are combined using weighted voting to achieve 
@@ -542,8 +545,8 @@ const OracleArchitectureOverview: React.FC = () => {
                             </p>
                         </div>
                         
-                        <div className="insight-card">
-                            <div className="insight-icon">📊</div>
+                        <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                            <div className="insight-icon sm:px-4 md:px-6 lg:px-8">📊</div>
                             <h4>Real-time Adaptation</h4>
                             <p>
                                 Live data monitoring allows predictions to adapt instantly to breaking news, 
@@ -554,10 +557,10 @@ const OracleArchitectureOverview: React.FC = () => {
                 </section>
 
                 {/* Technical Specifications */}
-                <section className="architecture-section">
+                <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>🔧 Technical Specifications</h3>
-                    <div className="tech-specs">
-                        <div className="spec-category">
+                    <div className="tech-specs sm:px-4 md:px-6 lg:px-8">
+                        <div className="spec-category sm:px-4 md:px-6 lg:px-8">
                             <h4>Data Processing</h4>
                             <ul>
                                 <li><strong>Input Sources:</strong> SportsIO API, Weather APIs, News Feeds</li>
@@ -567,7 +570,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             </ul>
                         </div>
                         
-                        <div className="spec-category">
+                        <div className="spec-category sm:px-4 md:px-6 lg:px-8">
                             <h4>Machine Learning</h4>
                             <ul>
                                 <li><strong>Model Types:</strong> Ensemble methods with multiple algorithms</li>
@@ -577,7 +580,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             </ul>
                         </div>
                         
-                        <div className="spec-category">
+                        <div className="spec-category sm:px-4 md:px-6 lg:px-8">
                             <h4>AI Integration</h4>
                             <ul>
                                 <li><strong>AI Engine:</strong> Google Gemini with fantasy football optimization</li>
@@ -587,7 +590,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             </ul>
                         </div>
                         
-                        <div className="spec-category">
+                        <div className="spec-category sm:px-4 md:px-6 lg:px-8">
                             <h4>Performance Metrics</h4>
                             <ul>
                                 <li><strong>Accuracy Rate:</strong> 85%+ across all prediction types</li>
@@ -600,20 +603,20 @@ const OracleArchitectureOverview: React.FC = () => {
                 </section>
             </div>
 
-            <div className="overview-footer">
-                <div className="next-steps">
+            <div className="overview-footer sm:px-4 md:px-6 lg:px-8">
+                <div className="next-steps sm:px-4 md:px-6 lg:px-8">
                     <h4>🎓 Continue Learning</h4>
                     <p>
                         Now that you understand Oracle's architecture, explore how each component works in detail:
                     </p>
-                    <div className="next-step-buttons">
-                        <button className="next-step-btn">
+                    <div className="next-step-buttons sm:px-4 md:px-6 lg:px-8">
+                        <button className="next-step-btn sm:px-4 md:px-6 lg:px-8">
                             🤖 AI Integration Details
                         </button>
-                        <button className="next-step-btn">
+                        <button className="next-step-btn sm:px-4 md:px-6 lg:px-8">
                             📡 Data Processing Deep Dive
                         </button>
-                        <button className="next-step-btn">
+                        <button className="next-step-btn sm:px-4 md:px-6 lg:px-8">
                             🧠 Machine Learning Methods
                         </button>
                     </div>
@@ -623,4 +626,10 @@ const OracleArchitectureOverview: React.FC = () => {
     );
 };
 
-export default OracleArchitectureOverview;
+const OracleArchitectureOverviewWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleArchitectureOverview {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleArchitectureOverviewWithErrorBoundary);

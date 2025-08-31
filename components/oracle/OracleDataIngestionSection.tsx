@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import './OracleDataIngestionSection.css';
 
 interface DataSource {
@@ -11,6 +12,7 @@ interface DataSource {
   description: string;
   dataTypes: string[];
   validationRules: string[];
+
 }
 
 interface IngestionStage {
@@ -21,7 +23,6 @@ interface IngestionStage {
   outputFormat: string;
   validationChecks: string[];
   timing: string;
-}
 
 interface ValidationRule {
   id: string;
@@ -31,6 +32,7 @@ interface ValidationRule {
   examples: string[];
   failureHandling: string;
   criticalLevel: 'low' | 'medium' | 'high' | 'critical';
+
 }
 
 interface DataQualityMetric {
@@ -40,7 +42,6 @@ interface DataQualityMetric {
   formula: string;
   threshold: string;
   impact: string;
-}
 
 interface ProcessingPipeline {
   id: string;
@@ -49,9 +50,11 @@ interface ProcessingPipeline {
   parallelization: boolean;
   throughput: string;
   errorRecovery: string[];
+
 }
 
 const OracleDataIngestionSection: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [activeDataSource, setActiveDataSource] = useState<string>('sportsio');
   const [activeStage, setActiveStage] = useState<string>('acquisition');
   const [activeValidation, setActiveValidation] = useState<string>('integrity');
@@ -104,7 +107,7 @@ const OracleDataIngestionSection: React.FC = () => {
       description: 'Comprehensive historical data warehouse with multi-year player and team statistics',
       dataTypes: ['Historical Stats', 'Season Trends', 'Career Data', 'Team History', 'Coaching Records'],
       validationRules: ['Referential Integrity', 'Data Completeness', 'Statistical Accuracy', 'Version Control']
-    }
+
   ];
 
   const ingestionStages: IngestionStage[] = [
@@ -187,7 +190,7 @@ const OracleDataIngestionSection: React.FC = () => {
       outputFormat: 'Indexed database records',
       validationChecks: ['Storage Integrity', 'Index Consistency', 'Access Performance', 'Backup Verification'],
       timing: '< 1 second for write operations'
-    }
+
   ];
 
   const validationRules: ValidationRule[] = [
@@ -260,7 +263,7 @@ const OracleDataIngestionSection: React.FC = () => {
       ],
       failureHandling: 'Recalculate using multiple methods, flag calculation errors, manual review',
       criticalLevel: 'critical'
-    }
+
   ];
 
   const qualityMetrics: DataQualityMetric[] = [
@@ -295,7 +298,7 @@ const OracleDataIngestionSection: React.FC = () => {
       formula: 'Σ(Source Agreement) / Number of Sources',
       threshold: '≥ 0.85 for multi-source validation',
       impact: 'Inconsistent data triggers manual review and confidence adjustment'
-    }
+
   ];
 
   const processingPipelines: ProcessingPipeline[] = [
@@ -322,7 +325,7 @@ const OracleDataIngestionSection: React.FC = () => {
       parallelization: false,
       throughput: '5,000+ predictions/minute',
       errorRecovery: ['Data Imputation', 'Confidence Adjustment', 'Alternative Models', 'Human Oversight']
-    }
+
   ];
 
   useEffect(() => {
@@ -332,13 +335,13 @@ const OracleDataIngestionSection: React.FC = () => {
           if (prev >= ingestionStages.length - 1) {
             setIsProcessingDemo(false);
             return 0;
-          }
+
           return prev + 1;
         });
       }, 2000);
 
       return () => clearInterval(interval);
-    }
+
   }, [isProcessingDemo, ingestionStages.length]);
 
   const startProcessingDemo = () => {
@@ -352,31 +355,31 @@ const OracleDataIngestionSection: React.FC = () => {
   const selectedPipeline = processingPipelines.find((pipeline: any) => pipeline.id === activePipeline);
 
   return (
-    <div className="oracle-data-ingestion-section">
-      <div className="section-header">
-        <h2 className="section-title">
-          <span className="title-icon">📊</span>
+    <div className="oracle-data-ingestion-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
+        <h2 className="section-title sm:px-4 md:px-6 lg:px-8">
+          <span className="title-icon sm:px-4 md:px-6 lg:px-8">📊</span>
           {' '}
           Data Ingestion & Validation Workflows
         </h2>
-        <p className="section-description">
+        <p className="section-description sm:px-4 md:px-6 lg:px-8">
           Explore Oracle's sophisticated data pipeline that processes millions of data points from live sports feeds, 
           validates information in real-time, and ensures prediction-ready data quality through comprehensive validation workflows.
         </p>
       </div>
 
       {/* Data Sources Overview */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🔌</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔌</span>
           {' '}
           Data Sources & Feeds
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle ingests data from multiple high-reliability sources, each optimized for specific data types and update frequencies.
         </p>
 
-        <div className="data-sources-grid">
+        <div className="data-sources-grid sm:px-4 md:px-6 lg:px-8">
           {dataSources.map((source: any) => (
             <button
               key={source.id}
@@ -384,18 +387,18 @@ const OracleDataIngestionSection: React.FC = () => {
               onClick={() => setActiveDataSource(source.id)}
               aria-label={`Select ${source.name} data source`}
             >
-              <div className="source-header">
-                <h4 className="source-name">{source.name}</h4>
+              <div className="source-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="source-name sm:px-4 md:px-6 lg:px-8">{source.name}</h4>
                 <span className={`source-type ${source.type}`}>{source.type.toUpperCase()}</span>
               </div>
-              <div className="source-metrics">
-                <div className="metric">
-                  <span className="metric-label">Reliability</span>
-                  <span className="metric-value">{source.reliability}%</span>
+              <div className="source-metrics sm:px-4 md:px-6 lg:px-8">
+                <div className="metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Reliability</span>
+                  <span className="metric-value sm:px-4 md:px-6 lg:px-8">{source.reliability}%</span>
                 </div>
-                <div className="metric">
-                  <span className="metric-label">Latency</span>
-                  <span className="metric-value">{source.latency}</span>
+                <div className="metric sm:px-4 md:px-6 lg:px-8">
+                  <span className="metric-label sm:px-4 md:px-6 lg:px-8">Latency</span>
+                  <span className="metric-value sm:px-4 md:px-6 lg:px-8">{source.latency}</span>
                 </div>
               </div>
             </button>
@@ -403,28 +406,28 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedDataSource && (
-          <div className="selected-source-details">
-            <div className="source-details-header">
+          <div className="selected-source-details sm:px-4 md:px-6 lg:px-8">
+            <div className="source-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedDataSource.name} Details</h4>
-              <span className="update-frequency">Updates: {selectedDataSource.updateFrequency}</span>
+              <span className="update-frequency sm:px-4 md:px-6 lg:px-8">Updates: {selectedDataSource.updateFrequency}</span>
             </div>
-            <p className="source-description">{selectedDataSource.description}</p>
+            <p className="source-description sm:px-4 md:px-6 lg:px-8">{selectedDataSource.description}</p>
             
-            <div className="details-grid">
-              <div className="detail-section">
+            <div className="details-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="detail-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Data Types</h5>
-                <ul className="data-types-list">
+                <ul className="data-types-list sm:px-4 md:px-6 lg:px-8">
                   {selectedDataSource.dataTypes.map((type: any) => (
-                    <li key={`type-${type}`} className="data-type-item">{type}</li>
+                    <li key={`type-${type}`} className="data-type-item sm:px-4 md:px-6 lg:px-8">{type}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="detail-section">
+              <div className="detail-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Validation Rules</h5>
-                <ul className="validation-rules-list">
+                <ul className="validation-rules-list sm:px-4 md:px-6 lg:px-8">
                   {selectedDataSource.validationRules.map((rule: any) => (
-                    <li key={`rule-${rule}`} className="validation-rule-item">{rule}</li>
+                    <li key={`rule-${rule}`} className="validation-rule-item sm:px-4 md:px-6 lg:px-8">{rule}</li>
                   ))}
                 </ul>
               </div>
@@ -434,19 +437,19 @@ const OracleDataIngestionSection: React.FC = () => {
       </div>
 
       {/* Ingestion Pipeline Stages */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">⚡</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">⚡</span>
           {' '}
           Data Ingestion Pipeline
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle's five-stage ingestion pipeline processes raw data into prediction-ready information with comprehensive validation at each step.
         </p>
 
-        <div className="pipeline-demo-controls">
+        <div className="pipeline-demo-controls sm:px-4 md:px-6 lg:px-8">
           <button
-            className="demo-button"
+            className="demo-button sm:px-4 md:px-6 lg:px-8"
             onClick={startProcessingDemo}
             disabled={isProcessingDemo}
             aria-label="Start processing pipeline demonstration"
@@ -455,7 +458,7 @@ const OracleDataIngestionSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="pipeline-stages">
+        <div className="pipeline-stages sm:px-4 md:px-6 lg:px-8">
           {ingestionStages.map((stage, index) => (
             <div
               key={stage.id}
@@ -464,52 +467,52 @@ const OracleDataIngestionSection: React.FC = () => {
               } ${isProcessingDemo && index < demoStage ? 'completed' : ''}`}
             >
               <button
-                className="stage-header"
+                className="stage-header sm:px-4 md:px-6 lg:px-8"
                 onClick={() => setActiveStage(stage.id)}
                 aria-label={`View details for ${stage.name}`}
               >
-                <div className="stage-number">{index + 1}</div>
-                <div className="stage-info">
-                  <h4 className="stage-name">{stage.name}</h4>
-                  <span className="stage-timing">{stage.timing}</span>
+                <div className="stage-number sm:px-4 md:px-6 lg:px-8">{index + 1}</div>
+                <div className="stage-info sm:px-4 md:px-6 lg:px-8">
+                  <h4 className="stage-name sm:px-4 md:px-6 lg:px-8">{stage.name}</h4>
+                  <span className="stage-timing sm:px-4 md:px-6 lg:px-8">{stage.timing}</span>
                 </div>
-                <div className="stage-status">
+                <div className="stage-status sm:px-4 md:px-6 lg:px-8">
                   {isProcessingDemo && index === demoStage && (
-                    <div className="processing-indicator">Processing...</div>
+                    <div className="processing-indicator sm:px-4 md:px-6 lg:px-8">Processing...</div>
                   )}
                   {isProcessingDemo && index < demoStage && (
-                    <div className="completed-indicator">✓</div>
+                    <div className="completed-indicator sm:px-4 md:px-6 lg:px-8">✓</div>
                   )}
                 </div>
               </button>
 
               {activeStage === stage.id && (
-                <div className="stage-details">
-                  <p className="stage-description">{stage.description}</p>
+                <div className="stage-details sm:px-4 md:px-6 lg:px-8">
+                  <p className="stage-description sm:px-4 md:px-6 lg:px-8">{stage.description}</p>
                   
-                  <div className="stage-info-grid">
-                    <div className="info-section">
+                  <div className="stage-info-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="info-section sm:px-4 md:px-6 lg:px-8">
                       <h5>Processing Steps</h5>
-                      <ul className="processes-list">
+                      <ul className="processes-list sm:px-4 md:px-6 lg:px-8">
                         {stage.processes.map((process: any) => (
-                          <li key={`process-${process}`} className="process-item">{process}</li>
+                          <li key={`process-${process}`} className="process-item sm:px-4 md:px-6 lg:px-8">{process}</li>
                         ))}
                       </ul>
                     </div>
                     
-                    <div className="info-section">
+                    <div className="info-section sm:px-4 md:px-6 lg:px-8">
                       <h5>Validation Checks</h5>
-                      <ul className="validation-checks-list">
+                      <ul className="validation-checks-list sm:px-4 md:px-6 lg:px-8">
                         {stage.validationChecks.map((check: any) => (
-                          <li key={`check-${check}`} className="validation-check-item">{check}</li>
+                          <li key={`check-${check}`} className="validation-check-item sm:px-4 md:px-6 lg:px-8">{check}</li>
                         ))}
                       </ul>
                     </div>
                   </div>
                   
-                  <div className="output-format">
+                  <div className="output-format sm:px-4 md:px-6 lg:px-8">
                     <h5>Output Format</h5>
-                    <span className="format-description">{stage.outputFormat}</span>
+                    <span className="format-description sm:px-4 md:px-6 lg:px-8">{stage.outputFormat}</span>
                   </div>
                 </div>
               )}
@@ -519,17 +522,17 @@ const OracleDataIngestionSection: React.FC = () => {
       </div>
 
       {/* Validation Rules & Quality Control */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🛡️</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🛡️</span>
           {' '}
           Validation Rules & Quality Control
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Comprehensive validation framework ensuring data integrity, consistency, and accuracy across all ingestion stages.
         </p>
 
-        <div className="validation-categories">
+        <div className="validation-categories sm:px-4 md:px-6 lg:px-8">
           {validationRules.map((rule: any) => (
             <button
               key={rule.id}
@@ -537,39 +540,39 @@ const OracleDataIngestionSection: React.FC = () => {
               onClick={() => setActiveValidation(rule.id)}
               aria-label={`View ${rule.name} validation details`}
             >
-              <div className="category-header">
-                <h4 className="category-name">{rule.name}</h4>
+              <div className="category-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="category-name sm:px-4 md:px-6 lg:px-8">{rule.name}</h4>
                 <span className={`critical-level ${rule.criticalLevel}`}>
                   {rule.criticalLevel.toUpperCase()}
                 </span>
               </div>
-              <span className="category-type">{rule.category}</span>
+              <span className="category-type sm:px-4 md:px-6 lg:px-8">{rule.category}</span>
             </button>
           ))}
         </div>
 
         {selectedValidation && (
-          <div className="validation-details">
-            <div className="validation-header">
+          <div className="validation-details sm:px-4 md:px-6 lg:px-8">
+            <div className="validation-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedValidation.name}</h4>
-              <span className="validation-category">{selectedValidation.category}</span>
+              <span className="validation-category sm:px-4 md:px-6 lg:px-8">{selectedValidation.category}</span>
             </div>
             
-            <p className="validation-description">{selectedValidation.description}</p>
+            <p className="validation-description sm:px-4 md:px-6 lg:px-8">{selectedValidation.description}</p>
             
-            <div className="validation-content">
-              <div className="examples-section">
+            <div className="validation-content sm:px-4 md:px-6 lg:px-8">
+              <div className="examples-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Validation Examples</h5>
-                <ul className="examples-list">
+                <ul className="examples-list sm:px-4 md:px-6 lg:px-8">
                   {selectedValidation.examples.map((example: any) => (
-                    <li key={`example-${example.substring(0, 20)}`} className="example-item">{example}</li>
+                    <li key={`example-${example.substring(0, 20)}`} className="example-item sm:px-4 md:px-6 lg:px-8">{example}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="failure-handling-section">
+              <div className="failure-handling-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Failure Handling</h5>
-                <p className="failure-handling">{selectedValidation.failureHandling}</p>
+                <p className="failure-handling sm:px-4 md:px-6 lg:px-8">{selectedValidation.failureHandling}</p>
               </div>
             </div>
           </div>
@@ -577,17 +580,17 @@ const OracleDataIngestionSection: React.FC = () => {
       </div>
 
       {/* Data Quality Metrics */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">📈</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">📈</span>
           {' '}
           Data Quality Metrics
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle continuously monitors data quality using mathematical metrics that directly impact prediction confidence and accuracy.
         </p>
 
-        <div className="quality-metrics-grid">
+        <div className="quality-metrics-grid sm:px-4 md:px-6 lg:px-8">
           {qualityMetrics.map((metric: any) => (
             <button
               key={metric.id}
@@ -595,32 +598,32 @@ const OracleDataIngestionSection: React.FC = () => {
               onClick={() => setActiveMetric(metric.id)}
               aria-label={`View ${metric.name} metric details`}
             >
-              <h4 className="metric-name">{metric.name}</h4>
-              <p className="metric-description">{metric.description}</p>
+              <h4 className="metric-name sm:px-4 md:px-6 lg:px-8">{metric.name}</h4>
+              <p className="metric-description sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
             </button>
           ))}
         </div>
 
         {selectedMetric && (
-          <div className="metric-details">
-            <div className="metric-header">
+          <div className="metric-details sm:px-4 md:px-6 lg:px-8">
+            <div className="metric-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedMetric.name}</h4>
             </div>
             
-            <div className="metric-content">
-              <div className="formula-section">
+            <div className="metric-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Calculation Formula</h5>
-                <code className="formula">{selectedMetric.formula}</code>
+                <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedMetric.formula}</code>
               </div>
               
-              <div className="threshold-section">
+              <div className="threshold-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Quality Threshold</h5>
-                <span className="threshold">{selectedMetric.threshold}</span>
+                <span className="threshold sm:px-4 md:px-6 lg:px-8">{selectedMetric.threshold}</span>
               </div>
               
-              <div className="impact-section">
+              <div className="impact-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Impact on Predictions</h5>
-                <p className="impact">{selectedMetric.impact}</p>
+                <p className="impact sm:px-4 md:px-6 lg:px-8">{selectedMetric.impact}</p>
               </div>
             </div>
           </div>
@@ -628,17 +631,17 @@ const OracleDataIngestionSection: React.FC = () => {
       </div>
 
       {/* Processing Pipelines */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🔄</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔄</span>
           {' '}
           Processing Pipelines & Orchestration
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle operates multiple specialized pipelines optimized for different data processing requirements and performance needs.
         </p>
 
-        <div className="pipeline-tabs">
+        <div className="pipeline-tabs sm:px-4 md:px-6 lg:px-8">
           {processingPipelines.map((pipeline: any) => (
             <button
               key={pipeline.id}
@@ -652,39 +655,39 @@ const OracleDataIngestionSection: React.FC = () => {
         </div>
 
         {selectedPipeline && (
-          <div className="pipeline-details">
-            <div className="pipeline-header">
+          <div className="pipeline-details sm:px-4 md:px-6 lg:px-8">
+            <div className="pipeline-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedPipeline.name}</h4>
-              <div className="pipeline-specs">
-                <span className="spec">
+              <div className="pipeline-specs sm:px-4 md:px-6 lg:px-8">
+                <span className="spec sm:px-4 md:px-6 lg:px-8">
                   <strong>Throughput:</strong> {selectedPipeline.throughput}
                 </span>
-                <span className="spec">
+                <span className="spec sm:px-4 md:px-6 lg:px-8">
                   <strong>Parallelization:</strong> {selectedPipeline.parallelization ? 'Enabled' : 'Sequential'}
                 </span>
               </div>
             </div>
             
-            <div className="pipeline-content">
-              <div className="stages-section">
+            <div className="pipeline-content sm:px-4 md:px-6 lg:px-8">
+              <div className="stages-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Processing Stages</h5>
-                <div className="stages-flow">
+                <div className="stages-flow sm:px-4 md:px-6 lg:px-8">
                   {selectedPipeline.stages.map((stage: any) => (
-                    <div key={`stage-${stage}`} className="flow-stage">
-                      <span className="stage-name">{stage}</span>
+                    <div key={`stage-${stage}`} className="flow-stage sm:px-4 md:px-6 lg:px-8">
+                      <span className="stage-name sm:px-4 md:px-6 lg:px-8">{stage}</span>
                       {selectedPipeline.stages.indexOf(stage) < selectedPipeline.stages.length - 1 && (
-                        <div className="flow-arrow">→</div>
+                        <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div className="error-recovery-section">
+              <div className="error-recovery-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Error Recovery Mechanisms</h5>
-                <ul className="recovery-list">
+                <ul className="recovery-list sm:px-4 md:px-6 lg:px-8">
                   {selectedPipeline.errorRecovery.map((recovery: any) => (
-                    <li key={`recovery-${recovery}`} className="recovery-item">{recovery}</li>
+                    <li key={`recovery-${recovery}`} className="recovery-item sm:px-4 md:px-6 lg:px-8">{recovery}</li>
                   ))}
                 </ul>
               </div>
@@ -694,15 +697,15 @@ const OracleDataIngestionSection: React.FC = () => {
       </div>
 
       {/* Key Insights */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">💡</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">💡</span>
           {' '}
           Key Data Ingestion Insights
         </h3>
         
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Multi-Source Validation</h4>
             <p>
               Oracle cross-references data from 4+ sources to ensure accuracy, with automatic conflict resolution 
@@ -710,7 +713,7 @@ const OracleDataIngestionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Real-Time Quality Monitoring</h4>
             <p>
               Continuous quality assessment with 15+ metrics ensures data meets prediction standards, 
@@ -718,7 +721,7 @@ const OracleDataIngestionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Adaptive Processing</h4>
             <p>
               Pipeline automatically adjusts processing priority and resource allocation based on data importance, 
@@ -726,7 +729,7 @@ const OracleDataIngestionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Predictive Data Health</h4>
             <p>
               Machine learning models predict data quality issues before they impact predictions, 
@@ -739,4 +742,10 @@ const OracleDataIngestionSection: React.FC = () => {
   );
 };
 
-export default OracleDataIngestionSection;
+const OracleDataIngestionSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleDataIngestionSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleDataIngestionSectionWithErrorBoundary);

@@ -3,7 +3,8 @@
  * Bottom sheet navigation optimized for mobile devices with gesture support
  */
 
-import React, { useRef } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { View } from '../../types';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -33,6 +34,7 @@ interface MobileBottomNavigationProps {
     onViewChange: (view: View) => void;
     notificationCount?: number;
     className?: string;
+
 }
 
 interface NavigationItem {
@@ -41,14 +43,13 @@ interface NavigationItem {
     icon: React.ReactNode;
     color: string;
     category: 'primary' | 'secondary';
-}
 
 const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
     activeView,
     onViewChange,
     notificationCount = 0,
     className = ''
-}: any) => {
+}) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [dragY, setDragY] = React.useState(0);
@@ -62,83 +63,83 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
         {
             id: 'DASHBOARD',
             label: 'Dashboard',
-            icon: <HomeIcon className="w-5 h-5" />,
+            icon: <HomeIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-blue-400',
             category: 'primary'
         },
         {
             id: 'DRAFT_ROOM',
             label: 'Draft',
-            icon: <TrophyIcon className="w-5 h-5" />,
+            icon: <TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-green-400',
             category: 'primary'
         },
         {
             id: 'LEAGUE_HUB',
             label: 'League',
-            icon: <UsersIcon className="w-5 h-5" />,
+            icon: <UsersIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-purple-400',
             category: 'primary'
         },
         {
             id: 'ANALYTICS_HUB',
             label: 'Analytics',
-            icon: <BarChartIcon className="w-5 h-5" />,
+            icon: <BarChartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-orange-400',
             category: 'primary'
         },
         {
             id: 'PROFILE',
             label: 'Profile',
-            icon: <UserIcon className="w-5 h-5" />,
+            icon: <UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-indigo-400',
             category: 'primary'
-        }
+
     ];
 
     const secondaryNavItems: NavigationItem[] = [
         {
             id: 'TEAM_HUB',
             label: 'My Team',
-            icon: <TrophyIcon className="w-4 h-4" />,
+            icon: <TrophyIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-yellow-400',
             category: 'secondary'
         },
         {
             id: 'MATCHUP',
             label: 'Matchup',
-            icon: <UsersIcon className="w-4 h-4" />,
+            icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-red-400',
             category: 'secondary'
         },
         {
             id: 'WAIVER_WIRE',
             label: 'Waivers',
-            icon: <SearchIcon className="w-4 h-4" />,
+            icon: <SearchIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-cyan-400',
             category: 'secondary'
         },
         {
             id: 'MESSAGES',
             label: 'Messages',
-            icon: <MessageSquareIcon className="w-4 h-4" />,
+            icon: <MessageSquareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-pink-400',
             category: 'secondary'
         },
         {
             id: 'LEAGUE_STANDINGS',
             label: 'Standings',
-            icon: <BarChartIcon className="w-4 h-4" />,
+            icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-emerald-400',
             category: 'secondary'
         },
         {
             id: 'WEEKLY_REPORT',
             label: 'Report',
-            icon: <CalendarIcon className="w-4 h-4" />,
+            icon: <CalendarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-violet-400',
             category: 'secondary'
-        }
+
     ];
 
     const handleDrag = useThrottle((event: any, info: PanInfo) => {
@@ -153,8 +154,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
             setIsExpanded(true);
         } else if (info.offset.y > threshold) {
             setIsExpanded(false);
-        }
-        
+
         setDragY(0);
     };
 
@@ -187,20 +187,20 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                 aria-selected={isActive}
                 tabIndex={isActive ? 0 : -1}
             >
-                <div className="relative" aria-hidden="true">
+                <div className="relative sm:px-4 md:px-6 lg:px-8" aria-hidden="true">
                     {item.icon}
                     {hasNotification && (
                         <motion.div
                             initial={prefersReducedMotion ? {} : { scale: 0 }}
                             animate={prefersReducedMotion ? {} : { scale: 1 }}
-                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-xs text-white font-bold"
+                            className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-xs text-white font-bold sm:px-4 md:px-6 lg:px-8"
                             aria-hidden="true"
                         >
                             {notificationCount > 9 ? '9+' : notificationCount}
                         </motion.div>
                     )}
                 </div>
-                <span className="text-xs mt-1 font-medium" aria-hidden="true">
+                <span className="text-xs mt-1 font-medium sm:px-4 md:px-6 lg:px-8" aria-hidden="true">
                     {item.label}
                 </span>
                 {hasNotification && (
@@ -214,7 +214,6 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
 
     if (!isMobile) {
         return null;
-    }
 
     return (
         <nav 
@@ -230,7 +229,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                         animate={prefersReducedMotion ? {} : { opacity: 1 }}
                         exit={prefersReducedMotion ? {} : { opacity: 0 }}
                         onClick={() => setIsExpanded(false)}
-                        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
                         style={{ zIndex: -1 }}
                         aria-hidden="true"
                     />
@@ -249,30 +248,30 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                     height: isExpanded ? 'auto' : 80
                 }}
                 style={{ y: dragY }}
-                className="bg-[var(--panel-bg)]/95 backdrop-blur-lg border-t border-[var(--panel-border)] rounded-t-xl shadow-2xl"
+                className="bg-[var(--panel-bg)]/95 backdrop-blur-lg border-t border-[var(--panel-border)] rounded-t-xl shadow-2xl sm:px-4 md:px-6 lg:px-8"
                 role="tablist"
                 aria-label="Navigation tabs"
             >
                 {/* Drag Handle */}
-                <div className="flex justify-center py-2">
+                <div className="flex justify-center py-2 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className="mobile-touch-target mobile-focus-ring p-2 rounded-lg"
+                        className="mobile-touch-target mobile-focus-ring p-2 rounded-lg sm:px-4 md:px-6 lg:px-8"
                         aria-label={isExpanded ? "Collapse navigation" : "Expand navigation"}
                         aria-expanded={isExpanded}
                         aria-controls="secondary-navigation"
                     >
                         <motion.div
                             animate={prefersReducedMotion ? {} : { rotate: isExpanded ? 180 : 0 }}
-                            className="w-8 h-1 bg-gray-400 rounded-full"
+                            className="w-8 h-1 bg-gray-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                             aria-hidden="true"
                         />
                     </button>
                 </div>
 
                 {/* Primary Navigation */}
-                <div className="px-4 pb-2">
-                    <div className="grid grid-cols-5 gap-1">
+                <div className="px-4 pb-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="grid grid-cols-5 gap-1 sm:px-4 md:px-6 lg:px-8">
                         {primaryNavItems.map((item: any) => 
                             renderNavItem(item, activeView === item.id)
                         )}
@@ -286,13 +285,13 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="px-4 pb-6"
+                            className="px-4 pb-6 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="border-t border-[var(--panel-border)] pt-4 mb-4">
-                                <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-3">
+                            <div className="border-t border-[var(--panel-border)] pt-4 mb-4 sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                     More Options
                                 </h3>
-                                <div className="grid grid-cols-3 gap-2">
+                                <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {secondaryNavItems.map((item: any) => (
                                         <motion.button
                                             key={item.id}
@@ -308,7 +307,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                                             }`}
                                         >
                                             {item.icon}
-                                            <span className="text-xs mt-1 font-medium">
+                                            <span className="text-xs mt-1 font-medium sm:px-4 md:px-6 lg:px-8">
                                                 {item.label}
                                             </span>
                                         </motion.button>
@@ -317,29 +316,29 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                             </div>
 
                             {/* Quick Actions */}
-                            <div className="grid grid-cols-2 gap-2">
+                            <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <motion.button
                                     whileTap={{ scale: 0.95 }}
-                                    className="flex items-center justify-center gap-2 p-3 bg-blue-500/20 text-blue-400 rounded-lg"
+                                    className="flex items-center justify-center gap-2 p-3 bg-blue-500/20 text-blue-400 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                     onClick={() => {
                                         onViewChange('DRAFT_ROOM');
                                         setIsExpanded(false);
                                     }}
                                 >
-                                    <TrophyIcon className="w-4 h-4" />
-                                    <span className="text-sm font-medium">Start Draft</span>
+                                    <TrophyIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Start Draft</span>
                                 </motion.button>
                                 
                                 <motion.button
                                     whileTap={{ scale: 0.95 }}
-                                    className="flex items-center justify-center gap-2 p-3 bg-green-500/20 text-green-400 rounded-lg"
+                                    className="flex items-center justify-center gap-2 p-3 bg-green-500/20 text-green-400 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                     onClick={() => {
                                         onViewChange('TEAM_HUB');
                                         setIsExpanded(false);
                                     }}
                                 >
-                                    <UsersIcon className="w-4 h-4" />
-                                    <span className="text-sm font-medium">My Team</span>
+                                    <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">My Team</span>
                                 </motion.button>
                             </div>
                         </motion.div>
@@ -347,7 +346,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
                 </AnimatePresence>
 
                 {/* Safe area padding for devices with home indicator */}
-                <div className="h-safe-area-inset-bottom" />
+                <div className="h-safe-area-inset-bottom sm:px-4 md:px-6 lg:px-8" />
             </motion.div>
         </nav>
     );

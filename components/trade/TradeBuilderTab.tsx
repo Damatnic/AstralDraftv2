@@ -3,6 +3,7 @@
  * Interface for building and configuring trade proposals
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
@@ -20,20 +21,20 @@ interface TradeBuilderTabProps {
     proposal: TradeProposal | null;
     onProposalUpdate: (proposal: TradeProposal) => void;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface PlayerSearchResult extends Player {
     teamName: string;
     isAvailable: boolean;
-}
 
-const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
-    league,
+const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     currentTeam,
     proposal,
     onProposalUpdate,
     dispatch
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
     const [fromPlayers, setFromPlayers] = React.useState<Player[]>([]);
     const [toPlayers, setToPlayers] = React.useState<Player[]>([]);
@@ -104,7 +105,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             },
             teamName: selectedTeam?.name || 'Team Alpha',
             isAvailable: true
-        }
+
     ], [selectedTeam?.name]);
 
     const availableTeams = React.useMemo(() => 
@@ -136,7 +137,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                 message: tradeMessage
             };
             onProposalUpdate(newProposal);
-        }
+
     }, [selectedTeam, fromPlayers, toPlayers, fromPicks, toPicks, tradeMessage, currentTeam, onProposalUpdate]);
 
     const addPlayer = (player: Player, side: 'from' | 'to') => {
@@ -144,7 +145,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             setFromPlayers(prev => [...prev, player]);
         } else {
             setToPlayers(prev => [...prev, player]);
-        }
+
         setShowPlayerSearch(null);
         setSearchTerm('');
     };
@@ -154,7 +155,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             setFromPlayers(prev => prev.filter((p: any) => p.id !== playerId));
         } else {
             setToPlayers(prev => prev.filter((p: any) => p.id !== playerId));
-        }
+
     };
 
     const addDraftPick = (side: 'from' | 'to') => {
@@ -170,7 +171,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             setFromPicks(prev => [...prev, newPick]);
         } else {
             setToPicks(prev => [...prev, newPick]);
-        }
+
     };
 
     const removeDraftPick = (index: number, side: 'from' | 'to') => {
@@ -178,7 +179,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
             setFromPicks(prev => prev.filter((_, i) => i !== index));
         } else {
             setToPicks(prev => prev.filter((_, i) => i !== index));
-        }
+
     };
 
     const clearTrade = () => {
@@ -201,9 +202,9 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
     const valueDifference = toValue - fromValue;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Team Selection */}
-            <Widget title="Trade Partner" className="bg-[var(--panel-bg)]">
+            <Widget title="Trade Partner" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 p-4">
                     {availableTeams.map((team: any) => (
                         <motion.button
@@ -217,11 +218,11 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                                     : 'border-[var(--panel-border)] bg-white/5 text-[var(--text-primary)] hover:border-blue-400/50'
                             }`}
                         >
-                            <div className="flex items-center gap-3">
-                                <Avatar avatar={team.avatar} className="w-10 h-10 rounded-full" />
-                                <div className="text-left">
-                                    <div className="font-medium">{team.name}</div>
-                                    <div className="text-xs opacity-70">{team.record.wins}-{team.record.losses}</div>
+                            <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                <Avatar avatar={team.avatar} className="w-10 h-10 rounded-full sm:px-4 md:px-6 lg:px-8" />
+                                <div className="text-left sm:px-4 md:px-6 lg:px-8">
+                                    <div className="font-medium sm:px-4 md:px-6 lg:px-8">{team.name}</div>
+                                    <div className="text-xs opacity-70 sm:px-4 md:px-6 lg:px-8">{team.record.wins}-{team.record.losses}</div>
                                 </div>
                             </div>
                         </motion.button>
@@ -234,48 +235,46 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                     {/* Trade Configuration */}
                     <div className="grid lg:grid-cols-2 gap-6">
                         {/* Your Team (From) */}
-                        <Widget title={`${currentTeam.name} (You)`} className="bg-[var(--panel-bg)]">
-                            <div className="p-4 space-y-4">
-                                <div className="text-sm font-medium text-[var(--text-secondary)] mb-4">
+                        <Widget title={`${currentTeam.name} (You)`} className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                            <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-sm font-medium text-[var(--text-secondary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                                     Trade Value: ${fromValue}
                                 </div>
                                 
                                 {/* Players */}
                                 <div>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-medium text-[var(--text-primary)]">Players</h4>
+                                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Players</h4>
                                         <button
                                             onClick={() => setShowPlayerSearch('from')}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors"
                                         >
-                                            <PlusCircleIcon className="w-4 h-4" />
+                                            <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Player
                                         </button>
                                     </div>
                                     
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {fromPlayers.map((player: any) => (
-                                            <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar avatar="🏈" className="w-8 h-8 rounded-full" />
+                                            <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                                    <Avatar avatar="🏈" className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8" />
                                                     <div>
-                                                        <div className="font-medium text-[var(--text-primary)]">{player.name}</div>
-                                                        <div className="text-sm text-[var(--text-secondary)]">
+                                                        <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.name}</div>
+                                                        <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                             {player.position} • {player.team} • ${player.auctionValue}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <button
                                                     onClick={() => removePlayer(player.id, 'from')}
-                                                    className="p-1 text-red-400 hover:bg-red-500/20 rounded"
                                                 >
-                                                    <CloseIcon className="w-4 h-4" />
+                                                    <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
                                         
                                         {fromPlayers.length === 0 && (
-                                            <div className="text-center py-8 text-[var(--text-secondary)]">
+                                            <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 No players selected
                                             </div>
                                         )}
@@ -284,37 +283,35 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
 
                                 {/* Draft Picks */}
                                 <div>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-medium text-[var(--text-primary)]">Draft Picks</h4>
+                                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Draft Picks</h4>
                                         <button
                                             onClick={() => addDraftPick('from')}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
                                         >
-                                            <PlusCircleIcon className="w-4 h-4" />
+                                            <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Pick
                                         </button>
                                     </div>
                                     
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {fromPicks.map((pick, index) => (
-                                            <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                            <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div>
-                                                    <div className="font-medium text-[var(--text-primary)]">{pick.description}</div>
-                                                    <div className="text-sm text-[var(--text-secondary)]">
+                                                    <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{pick.description}</div>
+                                                    <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         Estimated Value: ${pick.estimatedValue}
                                                     </div>
                                                 </div>
                                                 <button
                                                     onClick={() => removeDraftPick(index, 'from')}
-                                                    className="p-1 text-red-400 hover:bg-red-500/20 rounded"
                                                 >
-                                                    <CloseIcon className="w-4 h-4" />
+                                                    <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
                                         
                                         {fromPicks.length === 0 && (
-                                            <div className="text-center py-4 text-[var(--text-secondary)] text-sm">
+                                            <div className="text-center py-4 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
                                                 No draft picks included
                                             </div>
                                         )}
@@ -324,48 +321,46 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                         </Widget>
 
                         {/* Trade Partner (To) */}
-                        <Widget title={selectedTeam.name} className="bg-[var(--panel-bg)]">
-                            <div className="p-4 space-y-4">
-                                <div className="text-sm font-medium text-[var(--text-secondary)] mb-4">
+                        <Widget title={selectedTeam.name} className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                            <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-sm font-medium text-[var(--text-secondary)] mb-4 sm:px-4 md:px-6 lg:px-8">
                                     Trade Value: ${toValue}
                                 </div>
                                 
                                 {/* Players */}
                                 <div>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-medium text-[var(--text-primary)]">Players</h4>
+                                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Players</h4>
                                         <button
                                             onClick={() => setShowPlayerSearch('to')}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors"
                                         >
-                                            <PlusCircleIcon className="w-4 h-4" />
+                                            <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Player
                                         </button>
                                     </div>
                                     
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {toPlayers.map((player: any) => (
-                                            <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar avatar="🏈" className="w-8 h-8 rounded-full" />
+                                            <div key={player.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                                    <Avatar avatar="🏈" className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8" />
                                                     <div>
-                                                        <div className="font-medium text-[var(--text-primary)]">{player.name}</div>
-                                                        <div className="text-sm text-[var(--text-secondary)]">
+                                                        <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.name}</div>
+                                                        <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                             {player.position} • {player.team} • ${player.auctionValue}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <button
                                                     onClick={() => removePlayer(player.id, 'to')}
-                                                    className="p-1 text-red-400 hover:bg-red-500/20 rounded"
                                                 >
-                                                    <CloseIcon className="w-4 h-4" />
+                                                    <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
                                         
                                         {toPlayers.length === 0 && (
-                                            <div className="text-center py-8 text-[var(--text-secondary)]">
+                                            <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                 No players selected
                                             </div>
                                         )}
@@ -374,37 +369,35 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
 
                                 {/* Draft Picks */}
                                 <div>
-                                    <div className="flex items-center justify-between mb-3">
-                                        <h4 className="font-medium text-[var(--text-primary)]">Draft Picks</h4>
+                                    <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Draft Picks</h4>
                                         <button
                                             onClick={() => addDraftPick('to')}
-                                            className="flex items-center gap-2 px-3 py-1.5 bg-purple-500/20 text-purple-400 rounded-lg hover:bg-purple-500/30 transition-colors"
                                         >
-                                            <PlusCircleIcon className="w-4 h-4" />
+                                            <PlusCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                             Add Pick
                                         </button>
                                     </div>
                                     
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         {toPicks.map((pick, index) => (
-                                            <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                            <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                                 <div>
-                                                    <div className="font-medium text-[var(--text-primary)]">{pick.description}</div>
-                                                    <div className="text-sm text-[var(--text-secondary)]">
+                                                    <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{pick.description}</div>
+                                                    <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         Estimated Value: ${pick.estimatedValue}
                                                     </div>
                                                 </div>
                                                 <button
                                                     onClick={() => removeDraftPick(index, 'to')}
-                                                    className="p-1 text-red-400 hover:bg-red-500/20 rounded"
                                                 >
-                                                    <CloseIcon className="w-4 h-4" />
+                                                    <CloseIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                                 </button>
                                             </div>
                                         ))}
                                         
                                         {toPicks.length === 0 && (
-                                            <div className="text-center py-4 text-[var(--text-secondary)] text-sm">
+                                            <div className="text-center py-4 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
                                                 No draft picks included
                                             </div>
                                         )}
@@ -416,19 +409,19 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
 
                     {/* Trade Summary */}
                     {(fromPlayers.length > 0 || toPlayers.length > 0 || fromPicks.length > 0 || toPicks.length > 0) && (
-                        <Widget title="Trade Summary" className="bg-[var(--panel-bg)]">
-                            <div className="p-4 space-y-4">
-                                <div className="flex items-center justify-center gap-4 p-4 bg-white/5 rounded-lg">
-                                    <div className="text-center">
-                                        <div className="font-bold text-2xl text-[var(--text-primary)]">${fromValue}</div>
-                                        <div className="text-sm text-[var(--text-secondary)]">{currentTeam.name}</div>
+                        <Widget title="Trade Summary" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                            <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-center gap-4 p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                        <div className="font-bold text-2xl text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">${fromValue}</div>
+                                        <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{currentTeam.name}</div>
                                     </div>
                                     
-                                    <ArrowRightLeftIcon className="w-8 h-8 text-[var(--text-secondary)]" />
+                                    <ArrowRightLeftIcon className="w-8 h-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                                     
-                                    <div className="text-center">
-                                        <div className="font-bold text-2xl text-[var(--text-primary)]">${toValue}</div>
-                                        <div className="text-sm text-[var(--text-secondary)]">{selectedTeam.name}</div>
+                                    <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                        <div className="font-bold text-2xl text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">${toValue}</div>
+                                        <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{selectedTeam.name}</div>
                                     </div>
                                 </div>
                                 
@@ -439,36 +432,35 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                                         ? 'bg-yellow-500/20 text-yellow-400'
                                         : 'bg-red-500/20 text-red-400'
                                 }`}>
-                                    <div className="font-medium">
+                                    <div className="font-medium sm:px-4 md:px-6 lg:px-8">
                                         {valueDifference === 0 
                                             ? 'Perfectly balanced trade' 
                                             : `${valueDifference > 0 ? 'You receive' : 'You give'} $${Math.abs(valueDifference)} more value`
-                                        }
+
                                     </div>
                                 </div>
                                 
-                                <div className="space-y-3">
-                                    <label className="block">
-                                        <span className="text-sm font-medium text-[var(--text-primary)] mb-2 block">
+                                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                    <label className="block sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-sm font-medium text-[var(--text-primary)] mb-2 block sm:px-4 md:px-6 lg:px-8">
                                             Trade Message (Optional)
                                         </span>
                                         <textarea
                                             value={tradeMessage}
                                             onChange={(e: any) => setTradeMessage(e.target.value)}
-                                            placeholder="Add a message to your trade partner..."
-                                            className="w-full p-3 bg-white/5 border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none"
+                                            className="w-full p-3 bg-white/5 border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none sm:px-4 md:px-6 lg:px-8"
                                             rows={3}
                                         />
                                     </label>
                                     
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                                         <button
                                             onClick={clearTrade}
-                                            className="px-6 py-2 border border-[var(--panel-border)] text-[var(--text-secondary)] rounded-lg hover:bg-white/5 transition-colors"
-                                        >
+                                            className="px-6 py-2 border border-[var(--panel-border)] text-[var(--text-secondary)] rounded-lg hover:bg-white/5 transition-colors sm:px-4 md:px-6 lg:px-8"
+                                         aria-label="Action button">
                                             Clear Trade
                                         </button>
-                                        <button className="flex-1 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                        <button className="flex-1 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                             Send Trade Proposal
                                         </button>
                                     </div>
@@ -479,9 +471,9 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
 
                     {/* Trade Message */}
                     {(fromPlayers.length === 0 && toPlayers.length === 0 && fromPicks.length === 0 && toPicks.length === 0) && (
-                        <div className="text-center py-12 text-[var(--text-secondary)]">
-                            <ArrowRightLeftIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                            <h3 className="text-lg font-medium mb-2">Build Your Trade</h3>
+                        <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                            <ArrowRightLeftIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                            <h3 className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Build Your Trade</h3>
                             <p>Add players and draft picks to both sides to create a trade proposal</p>
                         </div>
                     )}
@@ -495,7 +487,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 sm:px-4 md:px-6 lg:px-8"
                         onClick={() => setShowPlayerSearch(null)}
                     >
                         <motion.div
@@ -503,38 +495,36 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
                             onClick={(e: any) => e.stopPropagation()}
-                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg w-full max-w-lg max-h-[80vh] overflow-hidden"
+                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg w-full max-w-lg max-h-[80vh] overflow-hidden sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="p-4 border-b border-[var(--panel-border)]">
-                                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-3">
+                            <div className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Add Player to {showPlayerSearch === 'from' ? currentTeam.name : selectedTeam?.name}
                                 </h3>
-                                <div className="relative">
-                                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
+                                <div className="relative sm:px-4 md:px-6 lg:px-8">
+                                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                                     <input
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e: any) => setSearchTerm(e.target.value)}
-                                        placeholder="Search players..."
-                                        className="w-full pl-10 pr-4 py-2 bg-white/5 border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)]"
+                                        className="w-full pl-10 pr-4 py-2 bg-white/5 border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8"
                                         autoFocus
                                     />
                                 </div>
                             </div>
                             
-                            <div className="p-4 max-h-96 overflow-y-auto">
-                                <div className="space-y-2">
+                            <div className="p-4 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                     {filteredPlayers.map((player: any) => (
                                         <button
                                             key={player.id}
                                             onClick={() => addPlayer(player, showPlayerSearch)}
-                                            className="w-full p-3 text-left bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
                                         >
-                                            <div className="flex items-center gap-3">
-                                                <Avatar avatar="🏈" className="w-8 h-8 rounded-full" />
-                                                <div className="flex-1">
-                                                    <div className="font-medium text-[var(--text-primary)]">{player.name}</div>
-                                                    <div className="text-sm text-[var(--text-secondary)]">
+                                            <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                                <Avatar avatar="🏈" className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8" />
+                                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                                    <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.name}</div>
+                                                    <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         {player.position} • {player.team} • ${player.auctionValue} • {player.teamName}
                                                     </div>
                                                 </div>
@@ -543,7 +533,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
                                     ))}
                                     
                                     {filteredPlayers.length === 0 && (
-                                        <div className="text-center py-8 text-[var(--text-secondary)]">
+                                        <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                             No players found
                                         </div>
                                     )}
@@ -557,4 +547,10 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({
     );
 };
 
-export default TradeBuilderTab;
+const TradeBuilderTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeBuilderTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeBuilderTabWithErrorBoundary);

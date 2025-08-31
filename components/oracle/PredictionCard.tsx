@@ -3,6 +3,7 @@
  * Individual prediction display with interaction capabilities
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ClockIcon, UsersIcon, BrainIcon } from 'lucide-react';
@@ -22,7 +23,6 @@ export interface LivePrediction {
     participants?: number;
     consensusChoice?: number;
     consensusConfidence?: number;
-}
 
 interface PredictionCardProps {
     prediction: LivePrediction;
@@ -30,6 +30,7 @@ interface PredictionCardProps {
     onClick: () => void;
     className?: string;
     compact?: boolean;
+
 }
 
 export const PredictionCard: React.FC<PredictionCardProps> = ({
@@ -38,7 +39,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
     onClick,
     className = '',
     compact = false
-}: any) => {
+}) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Format time remaining
@@ -50,7 +51,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
         
         if (hours > 0) {
             return `${hours}h ${minutes % 60}m left`;
-        }
+
         return `${minutes}m left`;
     };
 
@@ -72,15 +73,13 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 text: 'Submitted',
                 className: 'bg-green-500/20 text-green-400'
             };
-        }
-        
+
         if (!prediction.timeRemaining || prediction.timeRemaining <= 0) {
             return {
                 text: 'Expired',
                 className: 'bg-red-500/20 text-red-400'
             };
-        }
-        
+
         return {
             text: 'Open',
             className: 'bg-blue-500/20 text-blue-400'
@@ -100,7 +99,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                     ${isSelected 
                         ? 'bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/20' 
                         : 'bg-gray-800/30 border-gray-700/50 hover:bg-gray-800/50 hover:border-gray-600'
-                    }
+
                     ${className}
                 `}
                 onClick={onClick}
@@ -111,7 +110,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         onClick();
-                    }
+
                 }}
             >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
@@ -124,20 +123,19 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-400">
-                    <div className="flex items-center space-x-2">
-                        <ClockIcon className="w-4 h-4 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <ClockIcon className="w-4 h-4 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                         <span className={getTimeColor(prediction.timeRemaining)}>
                             {formatTimeRemaining(prediction.timeRemaining)}
                         </span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <UsersIcon className="w-4 h-4 flex-shrink-0" />
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <UsersIcon className="w-4 h-4 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                         <span>{prediction.participants || 0} users</span>
                     </div>
                 </div>
             </motion.div>
         );
-    }
 
     return (
         <motion.div
@@ -150,7 +148,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 ${isSelected 
                     ? 'bg-blue-600/20 border-blue-500 shadow-xl shadow-blue-500/25 ring-1 ring-blue-500/50' 
                     : 'bg-gray-800/40 border-gray-700/50 hover:bg-gray-800/60 hover:border-gray-600 hover:shadow-lg'
-                }
+
                 ${className}
             `}
             onClick={onClick}
@@ -161,7 +159,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     onClick();
-                }
+
             }}
         >
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3 mb-3 sm:mb-4">
@@ -174,55 +172,55 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
             </div>
             
             {/* Oracle's prediction preview */}
-            <div className="mb-3 p-3 bg-blue-900/20 rounded-lg border border-blue-800/30">
-                <div className="flex items-center space-x-2 mb-2">
-                    <BrainIcon className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                    <span className="text-sm font-medium text-blue-400">Oracle Choice</span>
-                    <span className="text-sm text-gray-400">{prediction.confidence}%</span>
+            <div className="mb-3 p-3 bg-blue-900/20 rounded-lg border border-blue-800/30 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center space-x-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                    <BrainIcon className="w-4 h-4 text-blue-400 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                    <span className="text-sm font-medium text-blue-400 sm:px-4 md:px-6 lg:px-8">Oracle Choice</span>
+                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{prediction.confidence}%</span>
                 </div>
-                <div className="text-sm text-white break-words">
+                <div className="text-sm text-white break-words sm:px-4 md:px-6 lg:px-8">
                     {prediction.options[prediction.oracleChoice]?.text || 'Unknown'}
                 </div>
             </div>
             
             {/* User's prediction if submitted */}
             {prediction.isSubmitted && prediction.userChoice !== undefined && (
-                <div className="mb-3 p-3 bg-green-900/20 rounded-lg border border-green-800/30">
-                    <div className="text-sm font-medium text-green-400 mb-2">Your Choice</div>
-                    <div className="text-sm text-white break-words">
+                <div className="mb-3 p-3 bg-green-900/20 rounded-lg border border-green-800/30 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-sm font-medium text-green-400 mb-2 sm:px-4 md:px-6 lg:px-8">Your Choice</div>
+                    <div className="text-sm text-white break-words sm:px-4 md:px-6 lg:px-8">
                         {prediction.options[prediction.userChoice]?.text}
-                        <span className="text-gray-400 ml-2">({prediction.userConfidence}%)</span>
+                        <span className="text-gray-400 ml-2 sm:px-4 md:px-6 lg:px-8">({prediction.userConfidence}%)</span>
                     </div>
                 </div>
             )}
             
             {/* Stats row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-sm mb-3">
-                <div className="flex items-center space-x-2">
-                    <ClockIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <ClockIcon className="w-4 h-4 text-gray-400 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                     <span className={getTimeColor(prediction.timeRemaining)}>
                         {formatTimeRemaining(prediction.timeRemaining)}
                     </span>
                 </div>
-                <div className="flex items-center space-x-2">
-                    <UsersIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <span className="text-gray-300">{prediction.participants || 0} participants</span>
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <UsersIcon className="w-4 h-4 text-gray-400 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{prediction.participants || 0} participants</span>
                 </div>
             </div>
             
             {/* Community consensus */}
-            <div className="pt-3 border-t border-gray-700/50">
+            <div className="pt-3 border-t border-gray-700/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-2 text-xs">
-                    <span className="text-gray-500">
+                    <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">
                         Oracle: {prediction.confidence}% confident
                     </span>
-                    <span className="text-purple-400">
+                    <span className="text-purple-400 sm:px-4 md:px-6 lg:px-8">
                         Community: {prediction.consensusConfidence || 0}%
                     </span>
                 </div>
                 
                 {/* Consensus choice */}
-                <div className="text-xs text-gray-400 mt-2 break-words">
+                <div className="text-xs text-gray-400 mt-2 break-words sm:px-4 md:px-6 lg:px-8">
                     Community choice: {prediction.options[prediction.consensusChoice || 0]?.text || 'Unknown'}
                 </div>
             </div>
@@ -232,7 +230,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-2 -right-2 w-5 h-5 bg-blue-500 rounded-full border-2 border-gray-900"
+                    className="absolute -top-2 -right-2 w-5 h-5 bg-blue-500 rounded-full border-2 border-gray-900 sm:px-4 md:px-6 lg:px-8"
                     aria-hidden="true"
                 />
             )}
@@ -240,4 +238,10 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
     );
 };
 
-export default PredictionCard;
+const PredictionCardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PredictionCard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PredictionCardWithErrorBoundary);

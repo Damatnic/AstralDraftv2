@@ -3,7 +3,8 @@
  * Handles PWA installation prompts and provides fallback for iOS
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, X, Share, Plus, Smartphone } from 'lucide-react';
 
@@ -11,13 +12,14 @@ interface Props {
   onInstall?: () => void;
   onDismiss?: () => void;
   className?: string;
+
 }
 
-const PWAInstallPrompt: React.FC<Props> = ({ 
-  onInstall, 
+const PWAInstallPrompt: React.FC<Props> = ({ onInstall, 
   onDismiss,
   className = ''
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -44,13 +46,11 @@ const PWAInstallPrompt: React.FC<Props> = ({
     // Don't show prompt if already installed
     if (checkStandalone()) {
       return;
-    }
 
     // Check if user has already dismissed the prompt
     const hasDismissed = localStorage.getItem('pwa-install-dismissed');
     if (hasDismissed) {
       return;
-    }
 
     // Listen for beforeinstallprompt event (Android/Chrome)
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -71,7 +71,6 @@ const PWAInstallPrompt: React.FC<Props> = ({
         clearTimeout(timer);
         window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       };
-    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -79,14 +78,19 @@ const PWAInstallPrompt: React.FC<Props> = ({
   }, []);
 
   const handleInstallClick = async () => {
+    try {
+
     if (isIOS) {
       setShowIOSInstructions(true);
       return;
-    }
+    
+    } catch (error) {
+      console.error('Error in handleInstallClick:', error);
 
-    if (!deferredPrompt) {
+    } catch (error) {
+        console.error(error);
+    }if (!deferredPrompt) {
       return;
-    }
 
     // Show the install prompt
     deferredPrompt.prompt();
@@ -97,7 +101,6 @@ const PWAInstallPrompt: React.FC<Props> = ({
     if (outcome === 'accepted') {
       onInstall?.();
     } else {
-    }
 
     // Clear the deferred prompt
     setDeferredPrompt(null);
@@ -114,7 +117,6 @@ const PWAInstallPrompt: React.FC<Props> = ({
   // Don't render if already installed or no prompt available
   if (isStandalone || (!showPrompt && !showIOSInstructions)) {
     return null;
-  }
 
   return (
     <AnimatePresence>
@@ -135,22 +137,22 @@ const PWAInstallPrompt: React.FC<Props> = ({
           exit={{ opacity: 0, y: 100, scale: 0.95 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         >
-          <div className="flex items-start space-x-3">
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                <Smartphone className="w-5 h-5 text-white" />
+          <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
+              <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <Smartphone className="w-5 h-5 text-white sm:px-4 md:px-6 lg:px-8" />
               </div>
             </div>
             
-            <div className="flex-1 min-w-0">
-              <h3 className="text-white font-semibold text-sm">
+            <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+              <h3 className="text-white font-semibold text-sm sm:px-4 md:px-6 lg:px-8">
                 Install Astral Draft
               </h3>
-              <p className="text-gray-300 text-xs mt-1 leading-relaxed">
+              <p className="text-gray-300 text-xs mt-1 leading-relaxed sm:px-4 md:px-6 lg:px-8">
                 Add to your home screen for faster access and offline support
               </p>
               
-              <div className="flex items-center space-x-3 mt-3">
+              <div className="flex items-center space-x-3 mt-3 sm:px-4 md:px-6 lg:px-8">
                 <motion.button
                   onClick={handleInstallClick}
                   className="
@@ -158,10 +160,10 @@ const PWAInstallPrompt: React.FC<Props> = ({
                     bg-blue-500 hover:bg-blue-600
                     text-white text-sm font-medium rounded-lg
                     min-h-[44px] transition-colors
-                  "
+                   sm:px-4 md:px-6 lg:px-8"
                   whileTap={{ scale: 0.95 }}
                 >
-                  <Download className="w-4 h-4" />
+                  <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                   <span>Install</span>
                 </motion.button>
                 
@@ -170,7 +172,7 @@ const PWAInstallPrompt: React.FC<Props> = ({
                   className="
                     px-4 py-2 text-gray-400 hover:text-white
                     text-sm font-medium min-h-[44px] transition-colors
-                  "
+                   sm:px-4 md:px-6 lg:px-8"
                   whileTap={{ scale: 0.95 }}
                 >
                   Maybe Later
@@ -184,9 +186,9 @@ const PWAInstallPrompt: React.FC<Props> = ({
                 p-2 text-gray-400 hover:text-white
                 rounded-lg hover:bg-white/5 transition-colors
                 min-h-[44px] min-w-[44px] flex items-center justify-center
-              "
-            >
-              <X className="w-4 h-4" />
+               sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
+              <X className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             </button>
           </div>
         </motion.div>
@@ -195,7 +197,7 @@ const PWAInstallPrompt: React.FC<Props> = ({
       {/* iOS Installation Instructions */}
       {showIOSInstructions && (
         <motion.div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -204,48 +206,48 @@ const PWAInstallPrompt: React.FC<Props> = ({
             className="
               bg-gray-800 rounded-xl p-6 max-w-sm w-full
               border border-gray-700
-            "
+             sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
           >
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                <Share className="w-6 h-6 text-white" />
+            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+              <div className="w-12 h-12 bg-blue-500 rounded-lg mx-auto mb-4 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <Share className="w-6 h-6 text-white sm:px-4 md:px-6 lg:px-8" />
               </div>
               
-              <h3 className="text-white font-semibold text-lg mb-2">
+              <h3 className="text-white font-semibold text-lg mb-2 sm:px-4 md:px-6 lg:px-8">
                 Install Astral Draft
               </h3>
               
-              <p className="text-gray-300 text-sm mb-4 leading-relaxed">
+              <p className="text-gray-300 text-sm mb-4 leading-relaxed sm:px-4 md:px-6 lg:px-8">
                 To install this app on your iPhone:
               </p>
               
-              <div className="space-y-3 text-left">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-xs font-bold">1</span>
+              <div className="space-y-3 text-left sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-white text-xs font-bold sm:px-4 md:px-6 lg:px-8">1</span>
                   </div>
-                  <div className="text-sm text-gray-300">
-                    Tap the <Share className="inline w-4 h-4 mx-1" /> share button in Safari
-                  </div>
-                </div>
-                
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-xs font-bold">2</span>
-                  </div>
-                  <div className="text-sm text-gray-300">
-                    Scroll down and tap <Plus className="inline w-4 h-4 mx-1" /> "Add to Home Screen"
+                  <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
+                    Tap the <Share className="inline w-4 h-4 mx-1 sm:px-4 md:px-6 lg:px-8" /> share button in Safari
                   </div>
                 </div>
                 
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-xs font-bold">3</span>
+                <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-white text-xs font-bold sm:px-4 md:px-6 lg:px-8">2</span>
                   </div>
-                  <div className="text-sm text-gray-300">
+                  <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
+                    Scroll down and tap <Plus className="inline w-4 h-4 mx-1 sm:px-4 md:px-6 lg:px-8" /> "Add to Home Screen"
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-white text-xs font-bold sm:px-4 md:px-6 lg:px-8">3</span>
+                  </div>
+                  <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                     Tap "Add" to install the app
                   </div>
                 </div>
@@ -257,7 +259,7 @@ const PWAInstallPrompt: React.FC<Props> = ({
                   w-full mt-6 px-4 py-3 bg-blue-500 hover:bg-blue-600
                   text-white font-medium rounded-lg transition-colors
                   min-h-[44px]
-                "
+                 sm:px-4 md:px-6 lg:px-8"
                 whileTap={{ scale: 0.95 }}
               >
                 Got it!
@@ -270,4 +272,10 @@ const PWAInstallPrompt: React.FC<Props> = ({
   );
 };
 
-export default PWAInstallPrompt;
+const PWAInstallPromptWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PWAInstallPrompt {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PWAInstallPromptWithErrorBoundary);

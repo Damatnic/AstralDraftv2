@@ -1,4 +1,5 @@
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
 import type { Team, Player } from '../../types';
@@ -16,18 +17,18 @@ const SortablePlayerCard = ({ player }: { player: Player }) => {
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="p-2 bg-white/5 rounded-lg flex items-center gap-2 touch-none cursor-grab active:cursor-grabbing">
-            <div className="w-8 h-8 flex items-center justify-center bg-black/20 rounded-md font-bold text-cyan-400 text-xs">{player.position}</div>
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className="p-2 bg-white/5 rounded-lg flex items-center gap-2 touch-none cursor-grab active:cursor-grabbing sm:px-4 md:px-6 lg:px-8">
+            <div className="w-8 h-8 flex items-center justify-center bg-black/20 rounded-md font-bold text-cyan-400 text-xs sm:px-4 md:px-6 lg:px-8">{player.position}</div>
             <div>
-                <p className="font-bold text-white text-sm">{player.name}</p>
-                <p className="text-xs text-gray-400">{player.team}</p>
+                <p className="font-bold text-white text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</p>
+                <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.team}</p>
             </div>
         </div>
     );
 };
 
 // Main VisualRoster component
-const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
+const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
     const { dispatch, state } = useAppState();
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
     
@@ -47,17 +48,17 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
     );
 
     const findContainer = (id: number) => {
+    
         if (starters.some((p: any) => p.id === id)) return 'starters';
         if (bench.some((p: any) => p.id === id)) return 'bench';
         return null;
-    }
-
-    const handleDragEnd = (event: DragEndEvent) => {
+    
+    return const handleDragEnd = (event: DragEndEvent) ;
+  } {
         const { active, over } = event;
 
         if (!over || active.id === over.id) {
             return;
-        }
 
         const activeContainer = findContainer(active.id as number);
         const overContainer = findContainer(over.id as number);
@@ -77,7 +78,7 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
                 const oldIndex = bench.findIndex((p: any) => p.id === active.id);
                 const newIndex = bench.findIndex((p: any) => p.id === over.id);
                 newBench = arrayMove(bench, oldIndex, newIndex);
-            }
+
         } else {
             // Moving between lists
             let movingPlayer: Player;
@@ -93,15 +94,14 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
                 if (starters.length >= 9) {
                     dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Starting lineup is full (9 players).", type: 'SYSTEM' } });
                     return;
-                }
+
                 const activeIndex = bench.findIndex((p: any) => p.id === active.id);
                 movingPlayer = bench[activeIndex];
                 newBench.splice(activeIndex, 1);
                 const overIndex = starters.findIndex((p: any) => p.id === over.id);
                 newStarters.splice(overIndex, 0, movingPlayer);
-            }
-        }
-        
+
+
         // Update local state for immediate feedback
         setStarters(newStarters);
         setBench(newBench);
@@ -114,31 +114,39 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
                     leagueId: activeLeague.id,
                     teamId: team.id,
                     playerIds: newStarters.map((p: any) => p.id)
-                }
+
             });
              dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Lineup updated!', type: 'SYSTEM' } });
-        }
+
     };
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <div className="p-4 space-y-6">
+            <div className="p-4 space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h3 className="font-bold text-lg text-cyan-300 mb-2">Starters ({starters.length}/9)</h3>
+                    <h3 className="font-bold text-lg text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Starters ({starters.length}/9)</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2 bg-black/10 rounded-lg min-h-[10rem] border border-transparent">
                         <SortableContext items={starters.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {starters.map((player: any) => <SortablePlayerCard key={player.id} player={player} />)}
                         </SortableContext>
-                        {starters.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8">Drag players here to start them.</p>}
+                        {starters.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8 sm:px-4 md:px-6 lg:px-8">Drag players here to start them.</p>}
                     </div>
                 </div>
                 <div>
-                    <h3 className="font-bold text-lg text-cyan-300 mb-2">Bench ({bench.length})</h3>
+                    <h3 className="font-bold text-lg text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Bench ({bench.length})</h3>
                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-2 bg-black/10 rounded-lg min-h-[10rem] border border-transparent">
                         <SortableContext items={bench.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                            {bench.map((player: any) => <SortablePlayerCard key={player.id} player={player} />)}
                         </SortableContext>
-                        {bench.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8">Your bench is empty.</p>}
+                        {bench.length === 0 && <p className="text-sm text-gray-500 col-span-full text-center p-8 sm:px-4 md:px-6 lg:px-8">Your bench is empty.</p>}
                     </div>
                 </div>
             </div>
@@ -146,4 +154,10 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
     );
 };
 
-export default VisualRoster;
+const VisualRosterWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <VisualRoster {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(VisualRosterWithErrorBoundary);

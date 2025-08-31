@@ -8,6 +8,7 @@ interface OptimizedImageProps {
   height?: number;
   className?: string;
   sizes?: string;
+
 }
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({

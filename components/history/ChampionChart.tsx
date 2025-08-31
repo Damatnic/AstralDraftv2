@@ -1,6 +1,6 @@
 
 
-
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { LeagueHistoryEntry, Team } from '../../types';
@@ -10,9 +10,10 @@ import { Tooltip } from '../ui/Tooltip';
 interface ChampionChartProps {
     history: LeagueHistoryEntry[];
     teams: Team[];
+
 }
 
-const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) => {
+const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }) => {
     const championCounts = React.useMemo(() => {
         const counts: { [teamId: number]: number } = {};
         history.forEach((entry: any) => {
@@ -33,16 +34,15 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) =>
 
     if (championCounts.length === 0) {
         return null;
-    }
 
     const maxCount = Math.max(...championCounts.map((c: any) => c.count), 1);
 
     return (
-        <div className="w-full h-56 flex items-end justify-center gap-4 px-4">
+        <div className="w-full h-56 flex items-end justify-center gap-4 px-4 sm:px-4 md:px-6 lg:px-8">
             {championCounts.map(({ team, count }, index) => (
                 <motion.div
                     key={team!.id}
-                    className="w-16 flex flex-col items-center gap-2"
+                    className="w-16 flex flex-col items-center gap-2 sm:px-4 md:px-6 lg:px-8"
                     {...{
                         initial: { opacity: 0, y: 30 },
                         animate: { opacity: 1, y: 0 },
@@ -51,16 +51,22 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) =>
                 >
                     <Tooltip content={`${count} championship${count > 1 ? 's' : ''}`}>
                         <div
-                            className="w-full bg-gradient-to-t from-yellow-500 to-yellow-300 rounded-t-md hover:shadow-lg hover:shadow-yellow-400/30 transition-shadow"
+                            className="w-full bg-gradient-to-t from-yellow-500 to-yellow-300 rounded-t-md hover:shadow-lg hover:shadow-yellow-400/30 transition-shadow sm:px-4 md:px-6 lg:px-8"
                             style={{ height: `${(count / maxCount) * 100}%` }}
                         ></div>
                     </Tooltip>
-                    <Avatar avatar={team!.avatar} className="w-12 h-12 text-3xl rounded-lg" alt={team!.name}/>
-                    <p className="text-xs text-center font-semibold truncate w-full">{team!.name}</p>
+                    <Avatar avatar={team!.avatar} className="w-12 h-12 text-3xl rounded-lg sm:px-4 md:px-6 lg:px-8" alt={team!.name}/>
+                    <p className="text-xs text-center font-semibold truncate w-full sm:px-4 md:px-6 lg:px-8">{team!.name}</p>
                 </motion.div>
             ))}
         </div>
     );
 };
 
-export default ChampionChart;
+const ChampionChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ChampionChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ChampionChartWithErrorBoundary);

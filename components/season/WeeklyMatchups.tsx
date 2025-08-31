@@ -3,6 +3,7 @@
  * Displays head-to-head matchups for each week with live scoring
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
@@ -16,17 +17,17 @@ interface Matchup {
   awayScore: number;
   status: 'upcoming' | 'live' | 'final';
   gameTime?: string;
+
 }
 
 interface WeeklyMatchupsProps {
   selectedWeek?: number;
   showAllWeeks?: boolean;
-}
 
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 
   showAllWeeks = false 
-}: any) => {
+}) => {
   const { state } = useAppState();
   const [currentWeek, setCurrentWeek] = useState(selectedWeek);
   const [viewMode, setViewMode] = useState<'current' | 'all'>('current');
@@ -68,7 +69,6 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
             homeScore = Math.floor(Math.random() * 40) + 60; // Partial scores
             awayScore = Math.floor(Math.random() * 40) + 60;
             status = 'live';
-          }
 
           weekMatchups.push({
             id: `matchup-${matchupId++}`,
@@ -80,11 +80,9 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
             status,
             gameTime: week <= 8 ? 'Sunday 1:00 PM' : 'Sunday 1:00 PM'
           });
-        }
-      }
-      
+
+
       schedule.push(...weekMatchups);
-    }
 
     // Playoffs: Weeks 15-17
     const playoffTeams = teams.slice(0, 6); // Top 6 teams make playoffs
@@ -160,7 +158,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
       case 'final': return 'border-slate-600 bg-slate-800/50';
       case 'upcoming': return 'border-blue-500 bg-blue-900/20';
       default: return 'border-slate-600 bg-slate-800/50';
-    }
+
   };
 
   const getMatchupStatusText = (status: string) => {
@@ -169,7 +167,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
       case 'final': return '✅ FINAL';
       case 'upcoming': return '⏰ UPCOMING';
       default: return '';
-    }
+
   };
 
   const isPlayoffWeek = (week: number) => week >= 15;
@@ -183,25 +181,24 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Week Navigation */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold text-white">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
             {getWeekTitle(currentWeek)}
           </h2>
           {isPlayoffWeek(currentWeek) && (
-            <span className="px-3 py-1 bg-yellow-600 text-white text-sm font-semibold rounded-full">
+            <span className="px-3 py-1 bg-yellow-600 text-white text-sm font-semibold rounded-full sm:px-4 md:px-6 lg:px-8">
               🏆 PLAYOFFS
             </span>
           )}
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <button
             onClick={() => setCurrentWeek(Math.max(1, currentWeek - 1))}
-            disabled={currentWeek === 1}
-            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-lg transition-colors"
+            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
           >
             ← Previous
           </button>
@@ -209,7 +206,6 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
           <select
             value={currentWeek}
             onChange={(e: any) => setCurrentWeek(Number(e.target.value))}
-            className="px-3 py-2 bg-slate-700 text-white rounded-lg border border-slate-600 focus:border-blue-500 focus:outline-none"
           >
             {Array.from({ length: 17 }, (_, i) => i + 1).map((week: any) => (
               <option key={week} value={week}>
@@ -220,8 +216,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
           
           <button
             onClick={() => setCurrentWeek(Math.min(17, currentWeek + 1))}
-            disabled={currentWeek === 17}
-            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-lg transition-colors"
+            className="px-3 py-2 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 disabled:text-slate-500 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
           >
             Next →
           </button>
@@ -241,30 +236,30 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
               className={`rounded-xl border-2 p-6 ${getMatchupStatusColor(matchup.status)}`}
             >
               {/* Matchup Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-slate-300">
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-sm font-semibold text-slate-300 sm:px-4 md:px-6 lg:px-8">
                     {getMatchupStatusText(matchup.status)}
                   </span>
                   {matchup.status === 'live' && (
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
                   )}
                 </div>
-                <span className="text-sm text-slate-400">{matchup.gameTime}</span>
+                <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{matchup.gameTime}</span>
               </div>
 
               {/* Teams */}
-              <div className="space-y-4">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {/* Away Team */}
-                <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{matchup.awayTeam.avatar}</span>
+                <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{matchup.awayTeam.avatar}</span>
                     <div>
-                      <div className="text-white font-semibold">{matchup.awayTeam.name}</div>
-                      <div className="text-sm text-slate-400">{matchup.awayTeam.owner.name}</div>
+                      <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{matchup.awayTeam.name}</div>
+                      <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{matchup.awayTeam.owner.name}</div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right sm:px-4 md:px-6 lg:px-8">
                     <div className={`text-2xl font-bold ${
                       matchup.status !== 'upcoming' && matchup.awayScore > matchup.homeScore 
                         ? 'text-green-400' 
@@ -273,28 +268,28 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
                       {matchup.status === 'upcoming' ? '-' : matchup.awayScore}
                     </div>
                     {matchup.status === 'live' && (
-                      <div className="text-xs text-slate-400">Projected: {matchup.awayScore + 20}</div>
+                      <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Projected: {matchup.awayScore + 20}</div>
                     )}
                   </div>
                 </div>
 
                 {/* VS Divider */}
-                <div className="flex items-center justify-center">
-                  <span className="px-3 py-1 bg-slate-600 text-slate-300 text-sm font-semibold rounded-full">
+                <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                  <span className="px-3 py-1 bg-slate-600 text-slate-300 text-sm font-semibold rounded-full sm:px-4 md:px-6 lg:px-8">
                     {matchup.status === 'upcoming' ? 'VS' : 'vs'}
                   </span>
                 </div>
 
                 {/* Home Team */}
-                <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{matchup.homeTeam.avatar}</span>
+                <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{matchup.homeTeam.avatar}</span>
                     <div>
-                      <div className="text-white font-semibold">{matchup.homeTeam.name}</div>
-                      <div className="text-sm text-slate-400">{matchup.homeTeam.owner.name}</div>
+                      <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{matchup.homeTeam.name}</div>
+                      <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{matchup.homeTeam.owner.name}</div>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right sm:px-4 md:px-6 lg:px-8">
                     <div className={`text-2xl font-bold ${
                       matchup.status !== 'upcoming' && matchup.homeScore > matchup.awayScore 
                         ? 'text-green-400' 
@@ -303,20 +298,20 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
                       {matchup.status === 'upcoming' ? '-' : matchup.homeScore}
                     </div>
                     {matchup.status === 'live' && (
-                      <div className="text-xs text-slate-400">Projected: {matchup.homeScore + 25}</div>
+                      <div className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">Projected: {matchup.homeScore + 25}</div>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Matchup Actions */}
-              <div className="mt-4 pt-4 border-t border-slate-600">
-                <div className="flex items-center justify-between">
-                  <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
+              <div className="mt-4 pt-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                  <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                     View Details
                   </button>
                   {matchup.status === 'live' && (
-                    <span className="text-xs text-green-400 font-medium">
+                    <span className="text-xs text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">
                       Updates every 5 minutes
                     </span>
                   )}
@@ -329,41 +324,41 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
 
       {/* Week Summary */}
       {currentWeekMatchups.length > 0 && (
-        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-          <h3 className="text-lg font-bold text-white mb-4">
+        <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+          <h3 className="text-lg font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
             {getWeekTitle(currentWeek)} Summary
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-              <div className="text-2xl font-bold text-white">
+            <div className="text-center p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+              <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                 {currentWeekMatchups.filter((m: any) => m.status === 'final').length}
               </div>
-              <div className="text-sm text-slate-400">Games Complete</div>
+              <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Games Complete</div>
             </div>
             
-            <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-              <div className="text-2xl font-bold text-green-400">
+            <div className="text-center p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+              <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                 {currentWeekMatchups.filter((m: any) => m.status === 'live').length}
               </div>
-              <div className="text-sm text-slate-400">Games Live</div>
+              <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Games Live</div>
             </div>
             
-            <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-400">
+            <div className="text-center p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+              <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                 {currentWeekMatchups.filter((m: any) => m.status === 'upcoming').length}
               </div>
-              <div className="text-sm text-slate-400">Games Upcoming</div>
+              <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Games Upcoming</div>
             </div>
           </div>
 
           {isPlayoffWeek(currentWeek) && (
-            <div className="mt-4 p-4 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
-              <div className="flex items-center gap-2 text-yellow-400">
-                <span className="text-lg">🏆</span>
-                <span className="font-semibold">Playoff Week</span>
+            <div className="mt-4 p-4 bg-yellow-900/20 border border-yellow-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-2 text-yellow-400 sm:px-4 md:px-6 lg:px-8">
+                <span className="text-lg sm:px-4 md:px-6 lg:px-8">🏆</span>
+                <span className="font-semibold sm:px-4 md:px-6 lg:px-8">Playoff Week</span>
               </div>
-              <p className="text-sm text-yellow-300 mt-1">
+              <p className="text-sm text-yellow-300 mt-1 sm:px-4 md:px-6 lg:px-8">
                 {currentWeek === 15 && "Wild Card Round - Win or go home!"}
                 {currentWeek === 16 && "Semifinals - Final four teams compete!"}
                 {currentWeek === 17 && "Championship Week - The ultimate showdown!"}
@@ -376,4 +371,10 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
   );
 };
 
-export default WeeklyMatchups;
+const WeeklyMatchupsWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <WeeklyMatchups {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(WeeklyMatchupsWithErrorBoundary);

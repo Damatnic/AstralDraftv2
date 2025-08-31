@@ -3,7 +3,8 @@
  * Responsive bottom navigation bar with safe area support
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, 
@@ -24,6 +25,7 @@ interface NavigationItem {
   icon: React.ComponentType<any>;
   path: string;
   badge?: number;
+
 }
 
 interface Props {
@@ -31,10 +33,10 @@ interface Props {
   onViewChange: (view: string) => void;
   notificationCount?: number;
   className?: string;
-}
 
 const primaryNavItems: NavigationItem[] = [
-  { id: 'home', label: 'Home', icon: Home, path: '/' },
+  {
+  const [isLoading, setIsLoading] = React.useState(false); id: 'home', label: 'Home', icon: Home, path: '/' },
   { id: 'predictions', label: 'Oracle', icon: Target, path: '/oracle' },
   { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
   { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
@@ -52,21 +54,21 @@ const MobileNavigation: React.FC<Props> = ({
   onViewChange, 
   notificationCount = 0,
   className = ''
-}: any) => {
+}) => {
   const [showSecondaryNav, setShowSecondaryNav] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
     const checkDevice = () => {
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-    };
     
     checkDevice();
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  const handleNavItemClick = (item: NavigationItem) => {
+  const handleNavItemClick = (item: NavigationItem) 
+} {
     onViewChange(item.id);
     setShowSecondaryNav(false);
   };
@@ -87,7 +89,7 @@ const MobileNavigation: React.FC<Props> = ({
           ${isActive 
             ? 'text-blue-400 bg-blue-400/10' 
             : 'text-gray-400 hover:text-white hover:bg-white/5'
-          }
+
           ${isSecondary ? 'w-full text-left flex-row px-4 py-3' : ''}
         `}
         whileTap={{ scale: 0.95 }}
@@ -96,11 +98,11 @@ const MobileNavigation: React.FC<Props> = ({
           backgroundColor: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent'
         }}
       >
-        <div className="relative">
+        <div className="relative sm:px-4 md:px-6 lg:px-8">
           <IconComponent className={`w-5 h-5 ${isSecondary ? 'mr-3' : 'mb-0.5'}`} />
           {showBadge && (
             <motion.div
-              className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
+              className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
@@ -134,7 +136,7 @@ const MobileNavigation: React.FC<Props> = ({
           paddingRight: 'env(safe-area-inset-right)'
         }}
       >
-        <div className="flex items-center justify-around px-2 py-2">
+        <div className="flex items-center justify-around px-2 py-2 sm:px-4 md:px-6 lg:px-8">
           {primaryNavItems.map((item: any) => renderNavItem(item))}
           
           {/* More Menu Button */}
@@ -147,12 +149,12 @@ const MobileNavigation: React.FC<Props> = ({
               ${showSecondaryNav 
                 ? 'text-blue-400 bg-blue-400/10' 
                 : 'text-gray-400 hover:text-white hover:bg-white/5'
-              }
+
             `}
             whileTap={{ scale: 0.95 }}
           >
-            <Menu className="w-5 h-5 mb-0.5" />
-            <span className="text-xs font-medium">More</span>
+            <Menu className="w-5 h-5 mb-0.5 sm:px-4 md:px-6 lg:px-8" />
+            <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">More</span>
           </motion.button>
         </div>
       </motion.nav>
@@ -163,7 +165,7 @@ const MobileNavigation: React.FC<Props> = ({
           <>
             {/* Backdrop */}
             <motion.div
-              className="fixed inset-0 bg-black/50 z-40"
+              className="fixed inset-0 bg-black/50 z-40 sm:px-4 md:px-6 lg:px-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -177,7 +179,7 @@ const MobileNavigation: React.FC<Props> = ({
                 bg-gray-800/98 backdrop-blur-sm
                 border-t border-gray-700
                 rounded-t-xl
-              "
+               sm:px-4 md:px-6 lg:px-8"
               style={{ 
                 paddingBottom: 'calc(72px + env(safe-area-inset-bottom))',
                 paddingLeft: 'env(safe-area-inset-left)',
@@ -189,18 +191,17 @@ const MobileNavigation: React.FC<Props> = ({
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             >
               {/* Panel Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                <h3 className="text-lg font-semibold text-white">More Options</h3>
+              <div className="flex items-center justify-between p-4 border-b border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">More Options</h3>
                 <button
                   onClick={() => setShowSecondaryNav(false)}
-                  className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                 </button>
               </div>
 
               {/* Secondary Nav Items */}
-              <div className="p-4 space-y-2">
+              <div className="p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {secondaryNavItems.map((item: any) => renderNavItem(item, true))}
               </div>
             </motion.div>
@@ -215,15 +216,15 @@ const MobileNavigation: React.FC<Props> = ({
             fixed top-0 left-0 right-0 z-40
             bg-gray-800/95 backdrop-blur-sm
             border-b border-gray-700
-          "
+           sm:px-4 md:px-6 lg:px-8"
           style={{ 
             paddingTop: 'env(safe-area-inset-top)',
             paddingLeft: 'env(safe-area-inset-left)',
             paddingRight: 'env(safe-area-inset-right)'
           }}
         >
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center space-x-6">
+          <div className="flex items-center justify-between px-4 py-3 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center space-x-6 sm:px-4 md:px-6 lg:px-8">
               {[...primaryNavItems, ...secondaryNavItems].map((item: any) => (
                 <motion.button
                   key={`tablet-${item.id}`}
@@ -234,14 +235,14 @@ const MobileNavigation: React.FC<Props> = ({
                     ${activeView === item.id 
                       ? 'text-blue-400 bg-blue-400/10' 
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
-                    }
+
                   `}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <item.icon className="w-5 h-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  <item.icon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
+                  <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{item.label}</span>
                   {item.id === 'notifications' && notificationCount > 0 && (
-                    <div className="bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
+                    <div className="bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8">
                       {notificationCount > 99 ? '99+' : notificationCount}
                     </div>
                   )}
@@ -255,4 +256,10 @@ const MobileNavigation: React.FC<Props> = ({
   );
 };
 
-export default MobileNavigation;
+const MobileNavigationWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileNavigation {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileNavigationWithErrorBoundary);

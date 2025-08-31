@@ -3,15 +3,16 @@
  * Beautiful loading states for the app
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { StarIcon } from 'lucide-react';
 
 // Full Page Loader
-export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Loading...' }: any) => {
+export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Loading...' }) => {
   return (
-    <div className="fixed inset-0 bg-[var(--bg-primary)] flex items-center justify-center z-50">
-      <div className="text-center">
+    <div className="fixed inset-0 bg-[var(--bg-primary)] flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
+      <div className="text-center sm:px-4 md:px-6 lg:px-8">
         <motion.div
           animate={{
             rotate: 360,
@@ -21,19 +22,19 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Load
             repeat: Infinity,
             ease: "linear"
           }}
-          className="inline-block mb-4"
+          className="inline-block mb-4 sm:px-4 md:px-6 lg:px-8"
         >
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center">
-            <StarIcon className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+            <StarIcon className="w-8 h-8 text-white sm:px-4 md:px-6 lg:px-8" />
           </div>
         </motion.div>
         
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold gradient-text">Astral Draft</h2>
-          <p className="text-sm text-[var(--text-secondary)]">{message}</p>
+        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+          <h2 className="text-xl font-semibold gradient-text sm:px-4 md:px-6 lg:px-8">Astral Draft</h2>
+          <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{message}</p>
         </div>
         
-        <div className="mt-4 flex justify-center gap-1">
+        <div className="mt-4 flex justify-center gap-1 sm:px-4 md:px-6 lg:px-8">
           {[0, 1, 2].map((i: any) => (
             <motion.div
               key={i}
@@ -46,7 +47,7 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Load
                 repeat: Infinity,
                 delay: i * 0.2,
               }}
-              className="w-2 h-2 rounded-full bg-[var(--primary)]"
+              className="w-2 h-2 rounded-full bg-[var(--primary)] sm:px-4 md:px-6 lg:px-8"
             />
           ))}
         </div>
@@ -59,7 +60,7 @@ export const FullPageLoader: React.FC<{ message?: string }> = ({ message = 'Load
 export const Spinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }> = ({
   size = 'md',
   className = ''
-}: any) => {
+}) => {
   const sizes = {
     sm: 'w-4 h-4',
     md: 'w-6 h-6',
@@ -69,13 +70,13 @@ export const Spinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }
   return (
     <div className={`${sizes[size]} ${className}`}>
       <svg
-        className="animate-spin"
+        className="animate-spin sm:px-4 md:px-6 lg:px-8"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
       >
         <circle
-          className="opacity-25"
+          className="opacity-25 sm:px-4 md:px-6 lg:px-8"
           cx="12"
           cy="12"
           r="10"
@@ -83,7 +84,7 @@ export const Spinner: React.FC<{ size?: 'sm' | 'md' | 'lg'; className?: string }
           strokeWidth="4"
         />
         <path
-          className="opacity-75"
+          className="opacity-75 sm:px-4 md:px-6 lg:px-8"
           fill="currentColor"
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
         />
@@ -99,6 +100,7 @@ interface SkeletonProps {
   width?: string | number;
   height?: string | number;
   animation?: 'pulse' | 'wave';
+
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({
@@ -107,7 +109,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   width,
   height,
   animation = 'pulse'
-}: any) => {
+}) => {
   const variantClasses = {
     text: 'h-4 rounded',
     circular: 'rounded-full',
@@ -134,30 +136,30 @@ export const Skeleton: React.FC<SkeletonProps> = ({
 // Card Skeleton
 export const CardSkeleton: React.FC = () => {
   return (
-    <div className="bg-[var(--surface-primary)] rounded-xl p-6 border border-[var(--border-primary)]">
-      <div className="flex items-center gap-4 mb-4">
+    <div className="bg-[var(--surface-primary)] rounded-xl p-6 border border-[var(--border-primary)] sm:px-4 md:px-6 lg:px-8">
+      <div className="flex items-center gap-4 mb-4 sm:px-4 md:px-6 lg:px-8">
         <Skeleton variant="circular" width={48} height={48} />
-        <div className="flex-1">
-          <Skeleton width="60%" className="mb-2" />
+        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+          <Skeleton width="60%" className="mb-2 sm:px-4 md:px-6 lg:px-8" />
           <Skeleton width="40%" />
         </div>
       </div>
-      <Skeleton className="mb-2" />
-      <Skeleton className="mb-2" />
+      <Skeleton className="mb-2 sm:px-4 md:px-6 lg:px-8" />
+      <Skeleton className="mb-2 sm:px-4 md:px-6 lg:px-8" />
       <Skeleton width="80%" />
     </div>
   );
 };
 
 // List Skeleton
-export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }: any) => {
+export const ListSkeleton: React.FC<{ count?: number }> = ({ count = 3 }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 bg-[var(--surface-primary)] rounded-lg">
+        <div key={i} className="flex items-center gap-3 p-3 bg-[var(--surface-primary)] rounded-lg sm:px-4 md:px-6 lg:px-8">
           <Skeleton variant="circular" width={40} height={40} />
-          <div className="flex-1">
-            <Skeleton width="70%" className="mb-2" />
+          <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+            <Skeleton width="70%" className="mb-2 sm:px-4 md:px-6 lg:px-8" />
             <Skeleton width="40%" />
           </div>
           <Skeleton width={60} height={24} />
@@ -176,6 +178,7 @@ interface ProgressBarProps {
   color?: 'primary' | 'success' | 'warning' | 'danger';
   size?: 'sm' | 'md' | 'lg';
   animated?: boolean;
+
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -186,7 +189,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   color = 'primary',
   size = 'md',
   animated = true
-}: any) => {
+}) => {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
   
   const colors = {
@@ -203,12 +206,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full sm:px-4 md:px-6 lg:px-8">
       {(label || showPercentage) && (
-        <div className="flex justify-between items-center mb-2">
-          {label && <span className="text-sm text-[var(--text-secondary)]">{label}</span>}
+        <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
+          {label && <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{label}</span>}
           {showPercentage && (
-            <span className="text-sm font-medium">{Math.round(percentage)}%</span>
+            <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{Math.round(percentage)}%</span>
           )}
         </div>
       )}
@@ -229,7 +232,6 @@ interface LoadingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
   loadingText?: string;
   variant?: 'primary' | 'secondary' | 'glass';
-}
 
 export const LoadingButton: React.FC<LoadingButtonProps> = ({
   loading = false,
@@ -239,7 +241,7 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
   disabled,
   className = '',
   ...props
-}: any) => {
+}) => {
   const variants = {
     primary: 'btn btn-primary',
     secondary: 'btn btn-secondary',
@@ -251,9 +253,9 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
       className={`${variants[variant]} ${className} ${loading || disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={loading || disabled}
       {...props}
-    >
+     aria-label="Action button">
       {loading ? (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <Spinner size="sm" />
           <span>{loadingText}</span>
         </div>

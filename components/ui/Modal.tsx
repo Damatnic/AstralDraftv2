@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FocusTrap } from './FocusTrap';
 
@@ -8,6 +8,7 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -16,7 +17,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   size = 'md'
-}: ModalProps) => {
+}) => {
   const sizeClasses = {
     sm: 'max-w-md',
     md: 'max-w-lg',
@@ -32,7 +33,6 @@ export const Modal: React.FC<ModalProps> = ({
     } else {
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
-    }
 
     return () => {
       document.body.style.overflow = '';
@@ -45,27 +45,34 @@ export const Modal: React.FC<ModalProps> = ({
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
         onClose();
-      }
+
     };
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscapeKey);
-    }
 
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [isOpen, onClose]);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
             onClick={onClose}
           />
           
@@ -84,14 +91,14 @@ export const Modal: React.FC<ModalProps> = ({
               aria-labelledby={title ? 'modal-title' : undefined}
             >
               {title && (
-                <div className="flex items-center justify-between p-6 border-b border-white/20">
-                  <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)]">
+                <div className="flex items-center justify-between p-6 border-b border-white/20 sm:px-4 md:px-6 lg:px-8">
+                  <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                     {title}
                   </h2>
                   <button
                     type="button"
                     onClick={onClose}
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                     aria-label="Close modal"
                   >
                     ✕
@@ -99,7 +106,7 @@ export const Modal: React.FC<ModalProps> = ({
                 </div>
               )}
               
-              <div className="p-6">
+              <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                 {children}
               </div>
             </motion.div>

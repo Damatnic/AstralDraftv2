@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Settings, Monitor, Volume2, Bell, Shield, Moon, Sun } from 'lucide-react';
 import { useEscapeKey } from '../../hooks/useEscapeKey';
@@ -6,6 +7,7 @@ import { useEscapeKey } from '../../hooks/useEscapeKey';
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
+
 }
 
 interface SettingItem {
@@ -15,7 +17,6 @@ interface SettingItem {
   type: 'toggle' | 'select' | 'slider';
   value: boolean | string | number;
   options?: string[];
-}
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   // Handle Escape key to close modal
@@ -54,7 +55,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   const settingSections = [
     {
       title: 'Display',
-      icon: <Monitor className="w-4 h-4" />,
+      icon: <Monitor className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
           id: 'darkMode',
@@ -79,12 +80,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Compact Mode',
           description: 'Show more information in less space',
           type: 'toggle'
-        }
-      ]
+
     },
     {
       title: 'Notifications',
-      icon: <Bell className="w-4 h-4" />,
+      icon: <Bell className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
           id: 'pushNotifications',
@@ -115,12 +115,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Draft Reminders',
           description: 'Remind about upcoming drafts',
           type: 'toggle'
-        }
-      ]
+
     },
     {
       title: 'Audio',
-      icon: <Volume2 className="w-4 h-4" />,
+      icon: <Volume2 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
           id: 'soundEffects',
@@ -139,12 +138,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Volume',
           description: 'Adjust sound volume',
           type: 'slider'
-        }
-      ]
+
     },
     {
       title: 'Performance',
-      icon: <Settings className="w-4 h-4" />,
+      icon: <Settings className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
           id: 'autoRefresh',
@@ -164,12 +162,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Background Sync',
           description: 'Keep data updated in background',
           type: 'toggle'
-        }
-      ]
+
     },
     {
       title: 'Privacy',
-      icon: <Shield className="w-4 h-4" />,
+      icon: <Shield className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
           id: 'profileVisibility',
@@ -190,9 +187,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Trade History',
           description: 'Show your trade history to others',
           type: 'toggle'
-        }
-      ]
-    }
+
   ];
 
   const handleSettingChange = (id: string, value: any) => {
@@ -219,7 +214,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       default:
         // Store in localStorage for persistence
         localStorage.setItem(`setting_${id}`, JSON.stringify(value));
-    }
+
   };
 
   const renderSettingControl = (item: any) => {
@@ -229,10 +224,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       case 'toggle':
         return (
           <button
-            onClick={() => handleSettingChange(item.id, !value)}
-            className={`relative w-12 h-6 rounded-full transition-all duration-200 ${
-              value ? 'bg-primary-500' : 'bg-gray-600'
-            }`}
+            onClick={() => handleSettingChange(item.id, !value)}`}
           >
             <div
               className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
@@ -247,7 +239,6 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           <select
             value={value}
             onChange={(e) => handleSettingChange(item.id, e.target.value)}
-            className="bg-dark-700 border border-white/20 rounded-lg px-3 py-1 text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
             {item.options?.map((option: string) => (
               <option key={option} value={option}>
@@ -259,36 +250,35 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
       case 'slider':
         return (
-          <div className="flex items-center gap-3 min-w-32">
+          <div className="flex items-center gap-3 min-w-32 sm:px-4 md:px-6 lg:px-8">
             <input
               type="range"
               min="0"
               max="100"
               value={value}
               onChange={(e) => handleSettingChange(item.id, parseInt(e.target.value))}
-              className="flex-1 h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer slider"
             />
-            <span className="text-sm text-gray-400 w-8">{value}%</span>
+            <span className="text-sm text-gray-400 w-8 sm:px-4 md:px-6 lg:px-8">{value}%</span>
           </div>
         );
 
       default:
         return null;
-    }
+
   };
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
         />
 
         {/* Modal */}
@@ -296,45 +286,45 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative w-full max-w-4xl max-h-[90vh] bg-dark-800/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+          className="relative w-full max-w-4xl max-h-[90vh] bg-dark-800/95 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden sm:px-4 md:px-6 lg:px-8"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-primary-500/10 to-primary-600/10">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center">
-                <Settings className="w-5 h-5 text-primary-400" />
+          <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-primary-500/10 to-primary-600/10 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+              <div className="w-10 h-10 bg-primary-500/20 rounded-xl flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                <Settings className="w-5 h-5 text-primary-400 sm:px-4 md:px-6 lg:px-8" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Settings</h2>
-                <p className="text-sm text-gray-400">Customize your experience</p>
+                <h2 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Settings</h2>
+                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Customize your experience</p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
-            >
-              <X className="w-4 h-4" />
+              className="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
+              <X className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
             </button>
           </div>
 
           {/* Content */}
-          <div className="overflow-y-auto max-h-[calc(90vh-80px)] custom-scrollbar">
-            <div className="p-6 space-y-8">
+          <div className="overflow-y-auto max-h-[calc(90vh-80px)] custom-scrollbar sm:px-4 md:px-6 lg:px-8">
+            <div className="p-6 space-y-8 sm:px-4 md:px-6 lg:px-8">
               {settingSections.map((section, sectionIndex) => (
                 <div key={section.title}>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="text-primary-400">{section.icon}</div>
-                    <h3 className="text-lg font-semibold text-white">{section.title}</h3>
+                  <div className="flex items-center gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="text-primary-400 sm:px-4 md:px-6 lg:px-8">{section.icon}</div>
+                    <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">{section.title}</h3>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {section.items.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between p-4 bg-dark-700/50 rounded-xl border border-white/5">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-white mb-1">{item.label}</h4>
-                          <p className="text-sm text-gray-400">{item.description}</p>
+                      <div key={item.id} className="flex items-center justify-between p-4 bg-dark-700/50 rounded-xl border border-white/5 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                          <h4 className="font-medium text-white mb-1 sm:px-4 md:px-6 lg:px-8">{item.label}</h4>
+                          <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{item.description}</p>
                         </div>
-                        <div className="ml-4">
+                        <div className="ml-4 sm:px-4 md:px-6 lg:px-8">
                           {renderSettingControl(item)}
                         </div>
                       </div>
@@ -346,12 +336,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-white/10 bg-dark-900/50">
-            <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-400">
+          <div className="p-6 border-t border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+              <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                 Settings are automatically saved
               </p>
-              <div className="flex gap-3">
+              <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                 <button
                   onClick={() => {
                     // Reset to defaults
@@ -374,15 +364,14 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       profileVisibility: 'league',
                       statsVisibility: 'public',
                       tradeHistory: true
-                    });
+
                   }}
-                  className="px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg transition-colors"
+                  className="px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                 >
                   Reset Defaults
                 </button>
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
                 >
                   Done
                 </button>
@@ -395,4 +384,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   );
 };
 
-export default SettingsModal;
+const SettingsModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SettingsModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SettingsModalWithErrorBoundary);

@@ -1,7 +1,6 @@
 
 
-
-
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { NotificationType } from '../../types';
@@ -13,9 +12,10 @@ import { SparklesIcon } from '../icons/SparklesIcon';
 interface NotificationProps {
   message: string;
   type: NotificationType;
+
 }
 
-const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
+const Notification: React.FC<NotificationProps> = ({ message, type }) => {
   const getIcon = () => {
     switch (type) {
       case 'DRAFT': return <CheckIcon />;
@@ -23,12 +23,12 @@ const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
       case 'WAIVER': return <PlusCircleIcon />;
       case 'SYSTEM':
       default:
-        return <SparklesIcon className="h-6 w-6 text-cyan-300" />;
-    }
-  }
+        return <SparklesIcon className="h-6 w-6 text-cyan-300 sm:px-4 md:px-6 lg:px-8" />;
+
+
   return (
     <motion.div
-      className="p-3 bg-gray-900/60 border border-cyan-300/30 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-4 min-w-[300px]"
+      className="p-3 bg-gray-900/60 border border-cyan-300/30 rounded-xl shadow-2xl backdrop-blur-md flex items-center gap-4 min-w-[300px] sm:px-4 md:px-6 lg:px-8"
       {...{
         layout: true,
         initial: { opacity: 0, y: 50, scale: 0.3 },
@@ -37,12 +37,18 @@ const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
         transition: { type: "spring", stiffness: 200, damping: 20 },
       }}
     >
-        <div className="text-2xl">{getIcon()}</div>
+        <div className="text-2xl sm:px-4 md:px-6 lg:px-8">{getIcon()}</div>
           <div>
-            <p className="font-bold text-white">{message}</p>
+            <p className="font-bold text-white sm:px-4 md:px-6 lg:px-8">{message}</p>
         </div>
     </motion.div>
   );
 };
 
-export default Notification;
+const NotificationWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <Notification {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationWithErrorBoundary);

@@ -3,7 +3,8 @@
  * Provides native-like pull-to-refresh functionality for mobile devices
  */
 
-import React, { useRef, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePullToRefresh } from '../../hooks/useAdvancedTouch';
 
@@ -16,10 +17,10 @@ interface PullToRefreshProps {
   refreshingText?: string;
   pullText?: string;
   releaseText?: string;
+
 }
 
-export const PullToRefresh: React.FC<PullToRefreshProps> = ({
-  onRefresh,
+export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
   threshold = 100,
   children,
   className = '',
@@ -27,7 +28,8 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   refreshingText = 'Refreshing...',
   pullText = 'Pull to refresh',
   releaseText = 'Release to refresh'
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const {
     containerRef,
     isPulling,
@@ -44,7 +46,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
     const handleTouchMove = (e: TouchEvent) => {
       if (isPulling && pullDistance > 10) {
         e.preventDefault();
-      }
+
     };
 
     container.addEventListener('touchmove', handleTouchMove, { passive: false });
@@ -79,7 +81,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       <AnimatePresence>
         {(isPulling || isRefreshing) && (
           <motion.div
-            className="absolute top-0 left-0 right-0 flex flex-col items-center justify-center z-10"
+            className="absolute top-0 left-0 right-0 flex flex-col items-center justify-center z-10 sm:px-4 md:px-6 lg:px-8"
             style={{
               height: Math.min(pullDistance, 80),
               transform: `translateY(-${Math.max(0, 80 - pullDistance)}px)`
@@ -88,10 +90,10 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="flex flex-col items-center justify-center bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+            <div className="flex flex-col items-center justify-center bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg sm:px-4 md:px-6 lg:px-8">
               {/* Refresh icon */}
               <motion.div
-                className="w-6 h-6 mb-1"
+                className="w-6 h-6 mb-1 sm:px-4 md:px-6 lg:px-8"
                 animate={{ rotate: isRefreshing ? 360 : getIconRotation() }}
                 transition={isRefreshing ? { repeat: Infinity, duration: 1, ease: 'linear' } : { duration: 0.3 }}
               >
@@ -102,7 +104,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="w-full h-full text-blue-600 dark:text-blue-400"
+                  className="w-full h-full text-blue-600 dark:text-blue-400 sm:px-4 md:px-6 lg:px-8"
                 >
                   <polyline points="23 4 23 10 17 10" />
                   <polyline points="1 20 1 14 7 14" />
@@ -112,7 +114,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
               
               {/* Status text */}
               <motion.span
-                className="text-xs font-medium text-gray-600 dark:text-gray-400"
+                className="text-xs font-medium text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8"
                 key={getStatusText()}
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -124,12 +126,12 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
 
             {/* Progress indicator */}
             <motion.div
-              className="w-8 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden"
+              className="w-8 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mt-2 overflow-hidden sm:px-4 md:px-6 lg:px-8"
               initial={{ width: 0 }}
               animate={{ width: 32 }}
             >
               <motion.div
-                className="h-full bg-blue-600 dark:bg-blue-400 rounded-full"
+                className="h-full bg-blue-600 dark:bg-blue-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                 style={{ width: `${pullProgress * 100}%` }}
                 transition={{ duration: 0.1 }}
               />
@@ -146,4 +148,10 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   );
 };
 
-export default PullToRefresh;
+const PullToRefreshWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PullToRefresh {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PullToRefreshWithErrorBoundary);

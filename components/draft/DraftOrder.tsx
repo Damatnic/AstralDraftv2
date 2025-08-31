@@ -3,7 +3,8 @@
  * Display and manage draft order for the league
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Team } from '../../types';
@@ -11,12 +12,13 @@ import { Team } from '../../types';
 interface DraftOrderProps {
   showRandomizeButton?: boolean;
   isCommissioner?: boolean;
+
 }
 
 const DraftOrder: React.FC<DraftOrderProps> = ({ 
   showRandomizeButton = false, 
   isCommissioner = false 
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
@@ -28,10 +30,12 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
     if (draftOrder.length === 0 && league?.teams) {
       // Use existing order or randomize
       setDraftOrder([...league.teams]);
-    }
+
   }, [league?.teams, draftOrder.length]);
 
   const randomizeDraftOrder = async () => {
+    try {
+
     if (!league?.teams) return;
     
     setIsRandomizing(true);
@@ -44,9 +48,13 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       await new Promise(resolve => setTimeout(resolve, 100));
       const shuffled = [...teams].sort(() => Math.random() - 0.5);
       setDraftOrder(shuffled);
-    }
     
-    // Final randomization
+    } catch (error) {
+      console.error('Error in randomizeDraftOrder:', error);
+
+    } catch (error) {
+        console.error(error);
+    }// Final randomization
     const finalOrder = [...teams].sort(() => Math.random() - 0.5);
     setDraftOrder(finalOrder);
     
@@ -57,7 +65,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       payload: {
         message: 'Draft order has been randomized!',
         type: 'SUCCESS'
-      }
+
     });
   };
 
@@ -74,18 +82,18 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       } else {
         // Even rounds: reverse order (snake)
         picks.push((round - 1) * 10 + (11 - position));
-      }
-    }
+
+
     return picks;
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h3 className="text-xl font-bold text-white">Draft Order</h3>
-          <p className="text-slate-400">
+          <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Draft Order</h3>
+          <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
             Snake draft format - 16 rounds, 10 teams
           </p>
         </div>
@@ -99,10 +107,10 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                 ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700 text-white'
             }`}
-          >
+           aria-label="Action button">
             {isRandomizing ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                 Randomizing...
               </div>
             ) : (
@@ -118,8 +126,16 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
           {draftOrder.map((team, index) => {
             const position = index + 1;
             const snakePicks = getSnakePickNumbers(position);
-            
-            return (
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
               <motion.div
                 key={team.id}
                 layout
@@ -133,8 +149,8 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                     : 'border-slate-600 bg-slate-700/50 hover:border-slate-500'
                 }`}
               >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white ${
                       position <= 3 ? 'bg-yellow-600' : 
                       position <= 6 ? 'bg-blue-600' : 'bg-slate-600'
@@ -142,17 +158,17 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                       {position}
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">{team.name}</h4>
-                      <p className="text-sm text-slate-400">{team.owner.name}</p>
+                      <h4 className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{team.name}</h4>
+                      <p className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">{team.owner.name}</p>
                     </div>
                   </div>
-                  <span className="text-2xl">{team.avatar}</span>
+                  <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{team.avatar}</span>
                 </div>
 
                 {/* Snake Pick Preview */}
-                <div className="border-t border-slate-600 pt-3">
-                  <p className="text-xs text-slate-400 mb-2">Pick Numbers (Snake):</p>
-                  <div className="flex flex-wrap gap-1">
+                <div className="border-t border-slate-600 pt-3 sm:px-4 md:px-6 lg:px-8">
+                  <p className="text-xs text-slate-400 mb-2 sm:px-4 md:px-6 lg:px-8">Pick Numbers (Snake):</p>
+                  <div className="flex flex-wrap gap-1 sm:px-4 md:px-6 lg:px-8">
                     {snakePicks.slice(0, 8).map((pickNum, pickIndex) => (
                       <span
                         key={pickIndex}
@@ -166,7 +182,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
                       </span>
                     ))}
                     {snakePicks.length > 8 && (
-                      <span className="px-2 py-1 text-xs rounded bg-slate-600/20 text-slate-400 border border-slate-600/30">
+                      <span className="px-2 py-1 text-xs rounded bg-slate-600/20 text-slate-400 border border-slate-600/30 sm:px-4 md:px-6 lg:px-8">
                         +{snakePicks.length - 8} more
                       </span>
                     )}
@@ -179,9 +195,9 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       </div>
 
       {/* Draft Format Explanation */}
-      <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
-        <h4 className="font-semibold text-white mb-2">Snake Draft Format</h4>
-        <div className="text-sm text-slate-400 space-y-1">
+      <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+        <h4 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Snake Draft Format</h4>
+        <div className="text-sm text-slate-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
           <p>• <strong>Round 1:</strong> Pick order 1-10 (normal order)</p>
           <p>• <strong>Round 2:</strong> Pick order 10-1 (reverse order)</p>
           <p>• <strong>Round 3:</strong> Pick order 1-10 (normal order)</p>
@@ -193,25 +209,31 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
 
       {/* Draft Statistics */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-          <div className="text-2xl font-bold text-white">10</div>
-          <div className="text-sm text-slate-400">Teams</div>
+        <div className="text-center p-4 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">10</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Teams</div>
         </div>
-        <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-          <div className="text-2xl font-bold text-white">16</div>
-          <div className="text-sm text-slate-400">Rounds</div>
+        <div className="text-center p-4 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">16</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Rounds</div>
         </div>
-        <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-          <div className="text-2xl font-bold text-white">160</div>
-          <div className="text-sm text-slate-400">Total Picks</div>
+        <div className="text-center p-4 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">160</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Total Picks</div>
         </div>
-        <div className="text-center p-4 bg-slate-700/50 rounded-lg">
-          <div className="text-2xl font-bold text-white">90s</div>
-          <div className="text-sm text-slate-400">Per Pick</div>
+        <div className="text-center p-4 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">90s</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Per Pick</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default DraftOrder;
+const DraftOrderWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <DraftOrder {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(DraftOrderWithErrorBoundary);

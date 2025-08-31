@@ -4,7 +4,8 @@
  * and how Gemini AI analyzes fantasy football data
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import './OracleGeminiAISection.css';
 
 interface AIAnalysisExample {
@@ -14,6 +15,7 @@ interface AIAnalysisExample {
     output: string;
     explanation: string;
     processingSteps: string[];
+
 }
 
 interface NLPCapability {
@@ -23,7 +25,6 @@ interface NLPCapability {
     examples: string[];
     applications: string[];
     icon: string;
-}
 
 interface PromptEngineering {
     id: string;
@@ -32,9 +33,11 @@ interface PromptEngineering {
     variables: string[];
     purpose: string;
     example: string;
+
 }
 
 const OracleGeminiAISection: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [selectedExample, setSelectedExample] = useState<string>('player-analysis');
     const [activeCapability, setActiveCapability] = useState<string>('contextual-understanding');
     const [selectedPromptCategory, setSelectedPromptCategory] = useState<string>('DATA_ANALYSIS');
@@ -64,7 +67,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Consider player-specific traits (mobility, arm strength)',
                 'Synthesize contextual factors into readable assessment',
                 'Generate actionable fantasy insights'
-            ]
+
         },
         {
             id: 'game-prediction',
@@ -79,7 +82,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Consider team defensive improvements',
                 'Predict possession flow and time of possession',
                 'Generate total and game flow prediction'
-            ]
+
         },
         {
             id: 'trend-analysis',
@@ -94,7 +97,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Analyze defensive rankings and vulnerabilities',
                 'Project current season alignment with trends',
                 'Generate specific player recommendations'
-            ]
+
         },
         {
             id: 'reasoning',
@@ -109,8 +112,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Factor game script and spread implications',
                 'Calculate confidence based on convergent factors',
                 'Explain decision logic in accessible language'
-            ]
-        }
+
     ];
 
     const nlpCapabilities: NLPCapability[] = [
@@ -209,7 +211,7 @@ const OracleGeminiAISection: React.FC = () => {
                 'Educational content creation'
             ],
             icon: '📝'
-        }
+
     ];
 
     const promptTemplates: PromptEngineering[] = [
@@ -244,51 +246,52 @@ const OracleGeminiAISection: React.FC = () => {
             variables: ['PREDICTION_ID', 'PREDICTED_OUTCOME', 'CONFIDENCE', 'ACTUAL_OUTCOME'],
             purpose: 'Analyze prediction outcomes to improve future accuracy and calibration',
             example: 'Validate prediction accuracy for player-performance-week8. Predicted: Josh Allen highest scorer (78% confidence). Actual: Josh Allen scored 31.2 points (2nd highest). Analyze: accuracy assessment, confidence calibration, key factors that influenced outcome, lessons learned. Identify prediction strengths and improvement areas.'
-        }
+
     ];
 
     // Animation for processing demo
     useEffect(() => {
-        const interval = setInterval(() => {
+    const interval = setInterval(() => {
             setProcessingDemo(prev => (prev + 1) % 6);
-        }, 2000);
+    , 2000);
         return () => clearInterval(interval);
     }, []);
 
     const selectedExampleData = aiAnalysisExamples.find((ex: any) => ex.id === selectedExample);
     const selectedCapabilityData = nlpCapabilities.find((cap: any) => cap.id === activeCapability);
-    const selectedPrompts = promptTemplates.filter((prompt: any) => prompt.category === selectedPromptCategory);
+    const selectedPrompts = promptTemplates.filter((prompt: any) 
+} prompt.category === selectedPromptCategory);
 
     return (
-        <div className="oracle-gemini-ai-section">
+        <div className="oracle-gemini-ai-section sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
-            <div className="section-header">
-                <div className="header-content">
+            <div className="section-header sm:px-4 md:px-6 lg:px-8">
+                <div className="header-content sm:px-4 md:px-6 lg:px-8">
                     <h1>🤖 Gemini AI Integration</h1>
-                    <p className="section-subtitle">
+                    <p className="section-subtitle sm:px-4 md:px-6 lg:px-8">
                         Discover how Oracle harnesses Google's most advanced AI model for 
                         natural language processing and fantasy football analysis
                     </p>
-                    <div className="progress-indicator">
-                        <div className="progress-bar">
+                    <div className="progress-indicator sm:px-4 md:px-6 lg:px-8">
+                        <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                             <div 
-                                className="progress-fill"
+                                className="progress-fill sm:px-4 md:px-6 lg:px-8"
                                 style={{ width: `${userProgress}%` }}
                             />
                         </div>
-                        <span className="progress-text">{Math.round(userProgress)}% Complete</span>
+                        <span className="progress-text sm:px-4 md:px-6 lg:px-8">{Math.round(userProgress)}% Complete</span>
                     </div>
                 </div>
-                <div className="ai-logo">
-                    <span className="gemini-icon">💎</span>
+                <div className="ai-logo sm:px-4 md:px-6 lg:px-8">
+                    <span className="gemini-icon sm:px-4 md:px-6 lg:px-8">💎</span>
                 </div>
             </div>
 
             {/* AI Overview Section */}
-            <section className="ai-overview-section">
+            <section className="ai-overview-section sm:px-4 md:px-6 lg:px-8">
                 <h2>🚀 The Power of Gemini AI</h2>
-                <div className="overview-grid">
-                    <div className="overview-card">
+                <div className="overview-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="overview-card sm:px-4 md:px-6 lg:px-8">
                         <h3>🧠 Advanced Language Model</h3>
                         <p>
                             Gemini Pro processes complex fantasy football data and transforms 
@@ -302,73 +305,72 @@ const OracleGeminiAISection: React.FC = () => {
                             <li>Sports domain expertise</li>
                         </ul>
                     </div>
-                    <div className="overview-card">
+                    <div className="overview-card sm:px-4 md:px-6 lg:px-8">
                         <h3>⚡ Real-Time Processing</h3>
                         <p>
                             Oracle leverages Gemini's speed and efficiency to generate 
                             comprehensive predictions in under 2 minutes, even with 
                             complex multi-factor analysis.
                         </p>
-                        <div className="processing-stats">
-                            <div className="stat">
-                                <span className="stat-value">&lt;2min</span>
-                                <span className="stat-label">Average Response</span>
+                        <div className="processing-stats sm:px-4 md:px-6 lg:px-8">
+                            <div className="stat sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-value sm:px-4 md:px-6 lg:px-8">&lt;2min</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Average Response</span>
                             </div>
-                            <div className="stat">
-                                <span className="stat-value">18+</span>
-                                <span className="stat-label">Data Sources</span>
+                            <div className="stat sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-value sm:px-4 md:px-6 lg:px-8">18+</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Data Sources</span>
                             </div>
-                            <div className="stat">
-                                <span className="stat-value">1000+</span>
-                                <span className="stat-label">Tokens Analyzed</span>
+                            <div className="stat sm:px-4 md:px-6 lg:px-8">
+                                <span className="stat-value sm:px-4 md:px-6 lg:px-8">1000+</span>
+                                <span className="stat-label sm:px-4 md:px-6 lg:px-8">Tokens Analyzed</span>
                             </div>
                         </div>
                     </div>
-                    <div className="overview-card">
+                    <div className="overview-card sm:px-4 md:px-6 lg:px-8">
                         <h3>🎯 Fantasy-Optimized</h3>
                         <p>
                             Custom-trained on fantasy football contexts, Gemini understands 
                             league formats, scoring systems, and strategic nuances that 
                             impact player values.
                         </p>
-                        <div className="optimization-features">
-                            <span className="feature">PPR/Standard/Half-PPR</span>
-                            <span className="feature">Playoff Implications</span>
-                            <span className="feature">Matchup Context</span>
-                            <span className="feature">Injury Analysis</span>
+                        <div className="optimization-features sm:px-4 md:px-6 lg:px-8">
+                            <span className="feature sm:px-4 md:px-6 lg:px-8">PPR/Standard/Half-PPR</span>
+                            <span className="feature sm:px-4 md:px-6 lg:px-8">Playoff Implications</span>
+                            <span className="feature sm:px-4 md:px-6 lg:px-8">Matchup Context</span>
+                            <span className="feature sm:px-4 md:px-6 lg:px-8">Injury Analysis</span>
                         </div>
                     </div>
                 </div>
             </section>
 
             {/* NLP Capabilities Section */}
-            <section className="capabilities-section">
+            <section className="capabilities-section sm:px-4 md:px-6 lg:px-8">
                 <h2>🛠️ Natural Language Processing Capabilities</h2>
-                <div className="capabilities-tabs">
+                <div className="capabilities-tabs sm:px-4 md:px-6 lg:px-8">
                     {nlpCapabilities.map((capability: any) => (
                         <button
                             key={capability.id}
                             className={`capability-tab ${activeCapability === capability.id ? 'active' : ''}`}
                             onClick={() => setActiveCapability(capability.id)}
-                            aria-pressed={activeCapability === capability.id}
                         >
-                            <span className="capability-icon">{capability.icon}</span>
-                            <span className="capability-name">{capability.name}</span>
+                            <span className="capability-icon sm:px-4 md:px-6 lg:px-8">{capability.icon}</span>
+                            <span className="capability-name sm:px-4 md:px-6 lg:px-8">{capability.name}</span>
                         </button>
                     ))}
                 </div>
                 
                 {selectedCapabilityData && (
-                    <div className="capability-details">
-                        <div className="capability-description">
+                    <div className="capability-details sm:px-4 md:px-6 lg:px-8">
+                        <div className="capability-description sm:px-4 md:px-6 lg:px-8">
                             <h3>
                                 {selectedCapabilityData.icon} {selectedCapabilityData.name}
                             </h3>
                             <p>{selectedCapabilityData.description}</p>
                         </div>
                         
-                        <div className="capability-content">
-                            <div className="capability-examples">
+                        <div className="capability-content sm:px-4 md:px-6 lg:px-8">
+                            <div className="capability-examples sm:px-4 md:px-6 lg:px-8">
                                 <h4>🎯 Example Applications</h4>
                                 <ul>
                                     {selectedCapabilityData.examples.map((example, index) => (
@@ -377,11 +379,11 @@ const OracleGeminiAISection: React.FC = () => {
                                 </ul>
                             </div>
                             
-                            <div className="capability-applications">
+                            <div className="capability-applications sm:px-4 md:px-6 lg:px-8">
                                 <h4>⚙️ Oracle Applications</h4>
-                                <div className="application-grid">
+                                <div className="application-grid sm:px-4 md:px-6 lg:px-8">
                                     {selectedCapabilityData.applications.map((app, index) => (
-                                        <div key={`app-${selectedCapabilityData.id}-${index}`} className="application-card">
+                                        <div key={`app-${selectedCapabilityData.id}-${index}`} className="application-card sm:px-4 md:px-6 lg:px-8">
                                             {app}
                                         </div>
                                     ))}
@@ -393,15 +395,14 @@ const OracleGeminiAISection: React.FC = () => {
             </section>
 
             {/* AI Analysis Examples */}
-            <section className="examples-section">
+            <section className="examples-section sm:px-4 md:px-6 lg:px-8">
                 <h2>💡 AI Analysis in Action</h2>
-                <div className="example-selector">
+                <div className="example-selector sm:px-4 md:px-6 lg:px-8">
                     {aiAnalysisExamples.map((example: any) => (
                         <button
                             key={example.id}
                             className={`example-tab ${selectedExample === example.id ? 'active' : ''}`}
                             onClick={() => setSelectedExample(example.id)}
-                            aria-pressed={selectedExample === example.id}
                         >
                             {example.type.replace('_', ' ')}
                         </button>
@@ -409,40 +410,40 @@ const OracleGeminiAISection: React.FC = () => {
                 </div>
 
                 {selectedExampleData && (
-                    <div className="example-analysis">
-                        <div className="analysis-input">
+                    <div className="example-analysis sm:px-4 md:px-6 lg:px-8">
+                        <div className="analysis-input sm:px-4 md:px-6 lg:px-8">
                             <h3>📥 Input Data</h3>
-                            <div className="input-box">
+                            <div className="input-box sm:px-4 md:px-6 lg:px-8">
                                 {selectedExampleData.input}
                             </div>
                         </div>
 
-                        <div className="processing-visualization">
+                        <div className="processing-visualization sm:px-4 md:px-6 lg:px-8">
                             <h3>⚙️ AI Processing Steps</h3>
-                            <div className="processing-steps">
+                            <div className="processing-steps sm:px-4 md:px-6 lg:px-8">
                                 {selectedExampleData.processingSteps.map((step, index) => (
                                     <div 
                                         key={`step-${selectedExampleData.id}-${index}`}
                                         className={`processing-step ${index <= processingDemo ? 'active' : ''}`}
                                     >
-                                        <div className="step-number">{index + 1}</div>
-                                        <div className="step-text">{step}</div>
+                                        <div className="step-number sm:px-4 md:px-6 lg:px-8">{index + 1}</div>
+                                        <div className="step-text sm:px-4 md:px-6 lg:px-8">{step}</div>
                                         {index <= processingDemo && (
-                                            <div className="step-indicator">✅</div>
+                                            <div className="step-indicator sm:px-4 md:px-6 lg:px-8">✅</div>
                                         )}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="analysis-output">
+                        <div className="analysis-output sm:px-4 md:px-6 lg:px-8">
                             <h3>📤 Generated Analysis</h3>
-                            <div className="output-box">
+                            <div className="output-box sm:px-4 md:px-6 lg:px-8">
                                 {selectedExampleData.output}
                             </div>
                         </div>
 
-                        <div className="analysis-explanation">
+                        <div className="analysis-explanation sm:px-4 md:px-6 lg:px-8">
                             <h3>🎓 How It Works</h3>
                             <p>{selectedExampleData.explanation}</p>
                         </div>
@@ -451,42 +452,41 @@ const OracleGeminiAISection: React.FC = () => {
             </section>
 
             {/* Prompt Engineering Section */}
-            <section className="prompts-section">
+            <section className="prompts-section sm:px-4 md:px-6 lg:px-8">
                 <h2>🔧 Prompt Engineering & Templates</h2>
-                <div className="prompt-categories">
+                <div className="prompt-categories sm:px-4 md:px-6 lg:px-8">
                     {['DATA_ANALYSIS', 'PREDICTION', 'REASONING', 'VALIDATION'].map((category: any) => (
                         <button
                             key={category}
                             className={`category-tab ${selectedPromptCategory === category ? 'active' : ''}`}
                             onClick={() => setSelectedPromptCategory(category)}
-                            aria-pressed={selectedPromptCategory === category}
                         >
                             {category.replace('_', ' ')}
                         </button>
                     ))}
                 </div>
 
-                <div className="prompt-templates">
+                <div className="prompt-templates sm:px-4 md:px-6 lg:px-8">
                     {selectedPrompts.map((prompt: any) => (
-                        <div key={prompt.id} className="prompt-template">
-                            <div className="template-header">
+                        <div key={prompt.id} className="prompt-template sm:px-4 md:px-6 lg:px-8">
+                            <div className="template-header sm:px-4 md:px-6 lg:px-8">
                                 <h3>{prompt.category.replace('_', ' ')} Template</h3>
-                                <span className="purpose-badge">{prompt.purpose}</span>
+                                <span className="purpose-badge sm:px-4 md:px-6 lg:px-8">{prompt.purpose}</span>
                             </div>
                             
-                            <div className="template-content">
-                                <div className="template-text">
+                            <div className="template-content sm:px-4 md:px-6 lg:px-8">
+                                <div className="template-text sm:px-4 md:px-6 lg:px-8">
                                     <h4>📝 Template Structure</h4>
-                                    <div className="template-box">
+                                    <div className="template-box sm:px-4 md:px-6 lg:px-8">
                                         {prompt.template}
                                     </div>
                                 </div>
                                 
-                                <div className="template-variables">
+                                <div className="template-variables sm:px-4 md:px-6 lg:px-8">
                                     <h4>🔄 Variables</h4>
-                                    <div className="variables-grid">
+                                    <div className="variables-grid sm:px-4 md:px-6 lg:px-8">
                                         {prompt.variables.map((variable: string, index: number) => (
-                                            <span key={`var-${prompt.id}-${index}`} className="variable-tag">
+                                            <span key={`var-${prompt.id}-${index}`} className="variable-tag sm:px-4 md:px-6 lg:px-8">
                                                 {variable}
                                             </span>
                                         ))}
@@ -494,9 +494,9 @@ const OracleGeminiAISection: React.FC = () => {
                                 </div>
                             </div>
 
-                            <div className="template-example">
+                            <div className="template-example sm:px-4 md:px-6 lg:px-8">
                                 <h4>💡 Example Usage</h4>
-                                <div className="example-box">
+                                <div className="example-box sm:px-4 md:px-6 lg:px-8">
                                     {prompt.example}
                                 </div>
                             </div>
@@ -506,11 +506,11 @@ const OracleGeminiAISection: React.FC = () => {
             </section>
 
             {/* Integration Architecture */}
-            <section className="integration-section">
+            <section className="integration-section sm:px-4 md:px-6 lg:px-8">
                 <h2>🔗 Oracle-Gemini Integration Architecture</h2>
-                <div className="integration-flow">
-                    <div className="flow-step">
-                        <div className="step-icon">📊</div>
+                <div className="integration-flow sm:px-4 md:px-6 lg:px-8">
+                    <div className="flow-step sm:px-4 md:px-6 lg:px-8">
+                        <div className="step-icon sm:px-4 md:px-6 lg:px-8">📊</div>
                         <h3>Data Preparation</h3>
                         <p>Oracle structures fantasy data into optimal format for Gemini analysis</p>
                         <ul>
@@ -520,10 +520,10 @@ const OracleGeminiAISection: React.FC = () => {
                         </ul>
                     </div>
                     
-                    <div className="flow-arrow">→</div>
+                    <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                     
-                    <div className="flow-step">
-                        <div className="step-icon">🤖</div>
+                    <div className="flow-step sm:px-4 md:px-6 lg:px-8">
+                        <div className="step-icon sm:px-4 md:px-6 lg:px-8">🤖</div>
                         <h3>AI Processing</h3>
                         <p>Gemini analyzes data and generates natural language insights</p>
                         <ul>
@@ -533,10 +533,10 @@ const OracleGeminiAISection: React.FC = () => {
                         </ul>
                     </div>
                     
-                    <div className="flow-arrow">→</div>
+                    <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                     
-                    <div className="flow-step">
-                        <div className="step-icon">⚡</div>
+                    <div className="flow-step sm:px-4 md:px-6 lg:px-8">
+                        <div className="step-icon sm:px-4 md:px-6 lg:px-8">⚡</div>
                         <h3>Response Processing</h3>
                         <p>Oracle validates and structures AI output for user presentation</p>
                         <ul>
@@ -547,22 +547,22 @@ const OracleGeminiAISection: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="integration-benefits">
+                <div className="integration-benefits sm:px-4 md:px-6 lg:px-8">
                     <h3>🎯 Integration Benefits</h3>
-                    <div className="benefits-grid">
-                        <div className="benefit-card">
+                    <div className="benefits-grid sm:px-4 md:px-6 lg:px-8">
+                        <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
                             <h4>🚀 Enhanced Accuracy</h4>
                             <p>Gemini's advanced reasoning improves prediction accuracy by 15-20% over traditional models</p>
                         </div>
-                        <div className="benefit-card">
+                        <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
                             <h4>📖 Readable Insights</h4>
                             <p>Natural language explanations make complex analysis accessible to all users</p>
                         </div>
-                        <div className="benefit-card">
+                        <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
                             <h4>⚡ Real-time Analysis</h4>
                             <p>Sub-2-minute response times enable dynamic prediction updates</p>
                         </div>
-                        <div className="benefit-card">
+                        <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
                             <h4>🔄 Continuous Learning</h4>
                             <p>Gemini's adaptive capabilities improve with each prediction cycle</p>
                         </div>
@@ -571,35 +571,35 @@ const OracleGeminiAISection: React.FC = () => {
             </section>
 
             {/* Key Insights */}
-            <section className="insights-section">
+            <section className="insights-section sm:px-4 md:px-6 lg:px-8">
                 <h2>🎓 Key Takeaways</h2>
-                <div className="insights-grid">
-                    <div className="insight-card">
-                        <div className="insight-icon">🧠</div>
+                <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                        <div className="insight-icon sm:px-4 md:px-6 lg:px-8">🧠</div>
                         <h3>Advanced Language Understanding</h3>
                         <p>
                             Gemini AI brings human-like reasoning to fantasy football analysis, 
                             understanding context, nuance, and complex relationships between data points.
                         </p>
                     </div>
-                    <div className="insight-card">
-                        <div className="insight-icon">⚡</div>
+                    <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                        <div className="insight-icon sm:px-4 md:px-6 lg:px-8">⚡</div>
                         <h3>Real-time Processing Power</h3>
                         <p>
                             Oracle leverages Gemini's speed to analyze massive datasets and generate 
                             comprehensive predictions in under 2 minutes.
                         </p>
                     </div>
-                    <div className="insight-card">
-                        <div className="insight-icon">🎯</div>
+                    <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                        <div className="insight-icon sm:px-4 md:px-6 lg:px-8">🎯</div>
                         <h3>Fantasy-Specific Optimization</h3>
                         <p>
                             Custom prompt engineering and domain expertise ensure Gemini's analysis 
                             is perfectly tailored for fantasy football decisions.
                         </p>
                     </div>
-                    <div className="insight-card">
-                        <div className="insight-icon">📈</div>
+                    <div className="insight-card sm:px-4 md:px-6 lg:px-8">
+                        <div className="insight-icon sm:px-4 md:px-6 lg:px-8">📈</div>
                         <h3>Continuous Improvement</h3>
                         <p>
                             Machine learning integration allows Gemini to learn from prediction 
@@ -610,17 +610,17 @@ const OracleGeminiAISection: React.FC = () => {
             </section>
 
             {/* Next Steps */}
-            <div className="next-steps">
+            <div className="next-steps sm:px-4 md:px-6 lg:px-8">
                 <h3>🚀 Continue Learning</h3>
                 <p>Ready to explore more of Oracle's advanced capabilities?</p>
-                <div className="next-buttons">
-                    <button className="next-btn primary">
+                <div className="next-buttons sm:px-4 md:px-6 lg:px-8">
+                    <button className="next-btn primary sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                         📊 Explore Data Ingestion
                     </button>
-                    <button className="next-btn secondary">
+                    <button className="next-btn secondary sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                         🔬 Machine Learning Pipeline
                     </button>
-                    <button className="next-btn secondary">
+                    <button className="next-btn secondary sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                         📈 Statistical Modeling
                     </button>
                 </div>
@@ -629,4 +629,10 @@ const OracleGeminiAISection: React.FC = () => {
     );
 };
 
-export default OracleGeminiAISection;
+const OracleGeminiAISectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleGeminiAISection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleGeminiAISectionWithErrorBoundary);

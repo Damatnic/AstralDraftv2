@@ -18,15 +18,15 @@ interface SimpleAuthContextType {
     updateUserCustomization: (customization: Partial<SimpleUser['customization']>) => Promise<boolean>;
     updateUserDisplayName: (displayName: string) => Promise<boolean>;
     clearError: () => void;
-}
 
 const SimpleAuthContext = createContext<SimpleAuthContextType | undefined>(undefined);
 
-interface Props {
-    children: ReactNode;
 }
 
-export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
+interface Props {
+    children: ReactNode;
+
+export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
     const [user, setUser] = useState<SimpleUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -35,17 +35,18 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
     useEffect(() => {
         const initializeAuth = () => {
             try {
+
                 SimpleAuthService.initialize();
                 const session = SimpleAuthService.getCurrentSession();
                 
                 if (session) {
                     setUser(session.user);
-                }
-            } catch (err) {
+
+    } catch (error) {
                 setError('Failed to initialize authentication');
             } finally {
                 setIsLoading(false);
-            }
+
         };
 
         initializeAuth();
@@ -69,12 +70,13 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
             const success = SimpleAuthService.updateUserPin(user.id, newPin);
             if (success) {
                 setUser({ ...user, pin: newPin });
-            }
+
             return success;
-        } catch (err) {
+        
+    } catch (err) {
             setError('Failed to update PIN');
             return false;
-        }
+
     }, [user]);
 
     const updateUserEmail = useCallback(async (email: string): Promise<boolean> => {
@@ -84,12 +86,13 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
             const success = SimpleAuthService.updateUserEmail(user.id, email);
             if (success) {
                 setUser({ ...user, email });
-            }
+
             return success;
-        } catch (err) {
+        
+    } catch (err) {
             setError('Failed to update email');
             return false;
-        }
+
     }, [user]);
 
     const updateUserCustomization = useCallback(async (customization: Partial<SimpleUser['customization']>): Promise<boolean> => {
@@ -102,12 +105,13 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
                     ...user,
                     customization: { ...user.customization, ...customization }
                 });
-            }
+
             return success;
-        } catch (err) {
+        
+    } catch (err) {
             setError('Failed to update customization');
             return false;
-        }
+
     }, [user]);
 
     const updateUserDisplayName = useCallback(async (displayName: string): Promise<boolean> => {
@@ -117,12 +121,13 @@ export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
             const success = SimpleAuthService.updateUserDisplayName(user.id, displayName);
             if (success) {
                 setUser({ ...user, displayName });
-            }
+
             return success;
-        } catch (err) {
+        
+    } catch (err) {
             setError('Failed to update display name');
             return false;
-        }
+
     }, [user]);
 
     const clearError = useCallback(() => {
@@ -154,7 +159,7 @@ export const useAuth = (): SimpleAuthContextType => {
     const context = useContext(SimpleAuthContext);
     if (context === undefined) {
         throw new Error('useAuth must be used within a SimpleAuthProvider');
-    }
+
     return context;
 };
 

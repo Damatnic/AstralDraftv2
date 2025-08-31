@@ -1,6 +1,7 @@
 
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import type { Player } from '../../types';
 import { NewsIcon } from '../icons/NewsIcon';
@@ -25,6 +26,7 @@ interface PlayerCardProps {
   onToggleCompare: () => void;
   isSelectedForCompare: boolean;
   isInQueue: boolean;
+
 }
 
 const positionStyles: Record<string, { border: string; bg: string; glow: string; badge: string }> = {
@@ -63,13 +65,13 @@ const positionStyles: Record<string, { border: string; bg: string; glow: string;
         bg: 'bg-gradient-to-r from-pink-500/10 via-transparent to-transparent',
         glow: 'hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]',
         badge: 'bg-gradient-to-r from-pink-500 to-pink-600'
-    }
+
 };
 
 const PlayerCard: React.FC<PlayerCardProps> = ({ 
     player, onSelect, onAddToQueue, onDraft, onNominate, onAddNote,
     isMyTurn, isNominationTurn, onToggleCompare, isSelectedForCompare, isInQueue 
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const hasNews = player.newsFeed && player.newsFeed.length > 0;
   const hasInjury = player?.injuryHistory && player?.injuryHistory.length > 0;
@@ -82,7 +84,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
         dispatch({ type: 'REMOVE_FROM_WATCHLIST', payload: player.id });
     } else {
         dispatch({ type: 'ADD_TO_WATCHLIST', payload: player.id });
-    }
+
   };
 
   const positionStyle = positionStyles[player.position] || positionStyles.WR;
@@ -106,8 +108,8 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
       }}
     >
       {/* Premium gradient overlay on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none sm:px-4 md:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent sm:px-4 md:px-6 lg:px-8" />
       </div>
         <div className="flex flex-col gap-0.5 sm:gap-1">
             <button
@@ -133,9 +135,9 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
             </button>
         </div>
 
-        <button onClick={onSelect} className="flex-grow flex items-center justify-between overflow-hidden mobile-touch-target">
-            <div className="flex-grow overflow-hidden">
-                <div className="flex items-center gap-2">
+        <button onClick={onSelect} className="flex-grow flex items-center justify-between overflow-hidden mobile-touch-target sm:px-4 md:px-6 lg:px-8">
+            <div className="flex-grow overflow-hidden sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <p className="font-bold text-sm sm:text-base text-white truncate">{player.name}</p>
                     {isValuePick && (
                         <div className="flex-shrink-0 flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] sm:text-xs font-bold rounded-full shadow-lg shadow-emerald-500/30">
@@ -143,15 +145,15 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                         </div>
                     )}
                     {hasNews && (
-                        <div className="relative flex-shrink-0">
+                        <div className="relative flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                             <NewsIcon className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 animate-pulse" />
-                            <div className="absolute inset-0 blur-sm bg-cyan-400/50 animate-pulse" />
+                            <div className="absolute inset-0 blur-sm bg-cyan-400/50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
                         </div>
                     )}
                     {hasInjury && (
-                        <div className="relative flex-shrink-0">
+                        <div className="relative flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                             <InjuryIcon className="w-3 h-3 sm:w-4 sm:h-4 text-red-400 animate-pulse" />
-                            <div className="absolute inset-0 blur-sm bg-red-400/50 animate-pulse" />
+                            <div className="absolute inset-0 blur-sm bg-red-400/50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
                         </div>
                     )}
                 </div>
@@ -159,24 +161,24 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                     <span className={`px-2 py-0.5 rounded-md ${positionStyle.badge} text-white font-bold shadow-lg`}>
                         {player.position}
                     </span>
-                    <span className="text-gray-400">{player.team}</span>
+                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.team}</span>
                 </div>
             </div>
             <div className="text-right flex-shrink-0 ml-2 sm:ml-4">
-                <div className="relative">
+                <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <p className="font-bold text-2xl sm:text-3xl bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
                         {player.rank}
                     </p>
-                    <div className="absolute inset-0 blur-md bg-gradient-to-r from-cyan-400/30 to-blue-400/30 -z-10" />
+                    <div className="absolute inset-0 blur-md bg-gradient-to-r from-cyan-400/30 to-blue-400/30 -z-10 sm:px-4 md:px-6 lg:px-8" />
                 </div>
                 <div className="space-y-0.5 text-[10px] sm:text-xs">
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         <span className="hidden sm:inline">ADP: </span>
-                        <span className="font-semibold text-gray-300">{player?.adp ?? 'N/A'}</span>
+                        <span className="font-semibold text-gray-300 sm:px-4 md:px-6 lg:px-8">{player?.adp ?? 'N/A'}</span>
                     </p>
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         <span className="hidden sm:inline">Bye: </span>
-                        <span className="font-semibold text-gray-300">{player.bye}</span>
+                        <span className="font-semibold text-gray-300 sm:px-4 md:px-6 lg:px-8">{player.bye}</span>
                     </p>
                 </div>
             </div>
@@ -215,10 +217,16 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
                         <QueueIcon />
                     </button>
                 );
-            }
+
         })()}
     </motion.div>
   );
 };
 
-export default PlayerCard;
+const PlayerCardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PlayerCard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PlayerCardWithErrorBoundary);

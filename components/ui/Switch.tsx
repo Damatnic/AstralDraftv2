@@ -6,6 +6,7 @@ interface SwitchProps {
   label?: string;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
+
 }
 
 export const Switch: React.FC<SwitchProps> = ({
@@ -14,7 +15,7 @@ export const Switch: React.FC<SwitchProps> = ({
   label,
   disabled = false,
   size = 'md'
-}: any) => {
+}) => {
   const sizeClasses = {
     sm: { track: 'w-8 h-4', thumb: 'w-3 h-3' },
     md: { track: 'w-10 h-5', thumb: 'w-4 h-4' },
@@ -24,16 +25,13 @@ export const Switch: React.FC<SwitchProps> = ({
   const { track, thumb } = sizeClasses[size];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
       <button
         type="button"
         role="switch"
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
-        className={`
-          relative inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20
-          ${checked ? 'bg-[var(--color-primary)]' : 'bg-gray-600'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           ${track}
         `}
@@ -48,7 +46,7 @@ export const Switch: React.FC<SwitchProps> = ({
       </button>
       
       {label && (
-        <span className="text-sm font-medium text-[var(--text-primary)]">
+        <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
           {label}
         </span>
       )}

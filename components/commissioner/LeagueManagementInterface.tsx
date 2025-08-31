@@ -3,7 +3,8 @@
  * Comprehensive dashboard for league administration and commissioner controls
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     SettingsIcon, 
@@ -27,10 +28,12 @@ import {
 interface Props {
     leagueId?: string;
     className?: string;
-}
 
 // Helper function to get status badge styles
+}
+
 const getStatusBadgeStyles = (status: string): string => {
+  const [isLoading, setIsLoading] = React.useState(false);
     switch (status) {
         case 'active':
             return 'bg-green-500/20 text-green-400';
@@ -40,7 +43,7 @@ const getStatusBadgeStyles = (status: string): string => {
             return 'bg-purple-500/20 text-purple-400';
         default:
             return 'bg-gray-500/20 text-gray-400';
-    }
+
 };
 
 type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
@@ -48,7 +51,7 @@ type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
 const LeagueManagementInterface: React.FC<Props> = ({ 
     leagueId, 
     className = '' 
-}: any) => {
+}) => {
     const { user, isAuthenticated } = useAuth();
     const [league, setLeague] = useState<League | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -66,6 +69,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
         const loadData = async () => {
             setLoading(true);
             try {
+
                 // Load user's leagues
                 const leagues = await leagueManagementService.getUserLeagues(user.id.toString());
                 setUserLeagues(leagues);
@@ -80,12 +84,12 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     setLeague(leagueData);
                 } else if (leagues.length > 0) {
                     setLeague(leagues[0]);
-                }
-            } catch (err) {
+
+    } catch (error) {
                 setError('Failed to load league information');
             } finally {
                 setLoading(false);
-            }
+
         };
 
         loadData();
@@ -104,6 +108,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!user) return;
         
         try {
+
             // For now, use placeholder values - in a real app, these would come from a form
             await leagueManagementService.acceptInvitation(
                 invitationId, 
@@ -115,23 +120,24 @@ const LeagueManagementInterface: React.FC<Props> = ({
             if (user.email) {
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to accept invitation');
-        }
+
     };
 
     const handleDeclineInvitation = async (invitationId: string) => {
         try {
+
             await leagueManagementService.declineInvitation(invitationId);
             // Refresh invitations
             if (user?.email) {
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to decline invitation');
-        }
+
     };
 
     // Handle setting updates
@@ -139,6 +145,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
+
             const updatedLeague = await leagueManagementService.updateLeagueSettings(
                 league.id,
                 user.id.toString(),
@@ -146,9 +153,10 @@ const LeagueManagementInterface: React.FC<Props> = ({
             );
             setLeague(updatedLeague);
             setEditingSettings(false);
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to update league settings');
-        }
+
     };
 
     // Handle member invitation
@@ -156,13 +164,15 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
+
             await leagueManagementService.inviteMember(league.id, user.id.toString(), email, message);
             // Refresh league data
             const updatedLeague = await leagueManagementService.getLeague(league.id);
             if (updatedLeague) setLeague(updatedLeague);
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to send invitation');
-        }
+
     };
 
     // Handle member removal
@@ -170,6 +180,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
+
             const updatedLeague = await leagueManagementService.removeMember(
                 league.id,
                 user.id.toString(),
@@ -177,9 +188,10 @@ const LeagueManagementInterface: React.FC<Props> = ({
                 reason
             );
             setLeague(updatedLeague);
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to remove member');
-        }
+
     };
 
     // Handle commissioner action
@@ -187,6 +199,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
         if (!league || !user || !isCommissioner) return;
 
         try {
+
             const updatedLeague = await leagueManagementService.executeCommissionerAction(
                 league.id,
                 user.id.toString(),
@@ -194,63 +207,19 @@ const LeagueManagementInterface: React.FC<Props> = ({
             );
             setLeague(updatedLeague);
             setPendingAction(null);
-        } catch (err) {
-            setError('Failed to execute action');
-        }
-    };
-
-    if (!isAuthenticated) {
-        return (
-            <Widget title="League Management" className={className}>
-                <div className="text-center py-8">
-                    <div className="text-gray-400 mb-4">
-                        Please log in to manage your leagues
-                    </div>
-                </div>
-            </Widget>
-        );
-    }
-
-    if (loading) {
-        return (
-            <Widget title="League Management" className={className}>
-                <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-                    <span className="ml-2 text-gray-400">Loading league data...</span>
-                </div>
-            </Widget>
-        );
-    }
-
-    if (error) {
-        return (
-            <Widget title="League Management" className={className}>
-                <div className="text-center py-8">
-                    <div className="text-red-400 mb-4">{error}</div>
-                    <button 
-                        onClick={() => setError(null)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-                    >
-                        Dismiss
-                    </button>
-                </div>
-            </Widget>
-        );
-    }
-
-    return (
-        <div className={`league-management-interface ${className}`}>
+        
+    `league-management-interface ${className}`}>
             {/* League Selector */}
-            <Widget title="League Management" className="bg-gray-900/50 mb-6">
-                <div className="flex flex-wrap items-center justify-between mb-4">
-                    <div className="flex items-center space-x-4">
+            <Widget title="League Management" className="bg-gray-900/50 mb-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex flex-wrap items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
                         <select
                             value={league?.id || ''}
                             onChange={(e: any) => {
                                 const selectedLeague = userLeagues.find((l: any) => l.id === e.target.value);
                                 setLeague(selectedLeague || null);
                             }}
-                            className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                            className="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white sm:px-4 md:px-6 lg:px-8"
                         >
                             <option value="">Select a League</option>
                             {userLeagues.map((l: any) => (
@@ -262,22 +231,22 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         
                         <button
                             onClick={handleCreateLeague}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2"
-                        >
-                            <PlusIcon className="w-4 h-4" />
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
+                            <PlusIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Create League</span>
                         </button>
                     </div>
 
                     {league && (
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <div className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusBadgeStyles(league?.status)}`}>
                                 {league.status.toUpperCase()}
                             </div>
                             {isCommissioner && (
-                                <div className="flex items-center space-x-1 text-yellow-400">
-                                    <CrownIcon className="w-4 h-4" />
-                                    <span className="text-xs font-medium">Commissioner</span>
+                                <div className="flex items-center space-x-1 text-yellow-400 sm:px-4 md:px-6 lg:px-8">
+                                    <CrownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Commissioner</span>
                                 </div>
                             )}
                         </div>
@@ -286,11 +255,11 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
                 {/* Pending Invitations */}
                 {invitations.length > 0 && (
-                    <div className="bg-blue-900/20 rounded-lg p-4 mb-4">
-                        <h3 className="text-lg font-semibold text-blue-400 mb-3">
+                    <div className="bg-blue-900/20 rounded-lg p-4 mb-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-blue-400 mb-3 sm:px-4 md:px-6 lg:px-8">
                             Pending Invitations ({invitations.length})
                         </h3>
-                        <div className="space-y-2">
+                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {invitations.map((invitation: any) => (
                                 <InvitationCard
                                     key={invitation.id}
@@ -305,7 +274,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
                 {/* Tab Navigation */}
                 {league && (
-                    <div className="flex space-x-1 bg-gray-800/50 rounded-lg p-1">
+                    <div className="flex space-x-1 bg-gray-800/50 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
                         {[
                             { id: 'overview', label: 'Overview', icon: BarChart3Icon },
                             { id: 'members', label: 'Members', icon: UsersIcon },
@@ -315,14 +284,9 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         ].map((tab: any) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as Tab)}
-                                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                                    activeTab === tab.id 
-                                        ? 'bg-blue-600 text-white' 
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                                }`}
+                                onClick={() => setActiveTab(tab.id as Tab)}`}
                             >
-                                <tab.icon className="w-4 h-4" />
+                                <tab.icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 <span>{tab.label}</span>
                             </button>
                         ))}
@@ -384,58 +348,58 @@ const LeagueManagementInterface: React.FC<Props> = ({
 };
 
 // Sub-components for each tab
-const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
+const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* League Info */}
-            <Widget title="League Information" className="bg-gray-900/50">
-                <div className="space-y-3">
+            <Widget title="League Information" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     <div>
-                        <div className="text-sm text-gray-400">League Name</div>
-                        <div className="text-white font-medium">{league.name}</div>
+                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">League Name</div>
+                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{league.name}</div>
                     </div>
                     <div>
-                        <div className="text-sm text-gray-400">Commissioner</div>
-                        <div className="text-white">{league.commissionerName}</div>
+                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Commissioner</div>
+                        <div className="text-white sm:px-4 md:px-6 lg:px-8">{league.commissionerName}</div>
                     </div>
                     <div>
-                        <div className="text-sm text-gray-400">Members</div>
-                        <div className="text-white">{league.members.length}/{league.maxMembers}</div>
+                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Members</div>
+                        <div className="text-white sm:px-4 md:px-6 lg:px-8">{league.members.length}/{league.maxMembers}</div>
                     </div>
                     <div>
-                        <div className="text-sm text-gray-400">Format</div>
-                        <div className="text-white">
+                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Format</div>
+                        <div className="text-white sm:px-4 md:px-6 lg:px-8">
                             {league.settings.leagueSize}-team {league.settings.scoringSystem.toUpperCase()}
                         </div>
                     </div>
                     <div>
-                        <div className="text-sm text-gray-400">Season</div>
-                        <div className="text-white">{league.seasonYear}</div>
+                        <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Season</div>
+                        <div className="text-white sm:px-4 md:px-6 lg:px-8">{league.seasonYear}</div>
                     </div>
                 </div>
             </Widget>
 
             {/* Standings Preview */}
-            <Widget title="Current Standings" className="bg-gray-900/50">
-                <div className="space-y-2">
+            <Widget title="Current Standings" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {league.members
                         .filter((m: any) => m.record)
                         .sort((a, b) => (b.record?.wins || 0) - (a.record?.wins || 0))
                         .slice(0, 5)
                         .map((member, index) => (
-                            <div key={member.userId} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-b-0">
-                                <div className="flex items-center space-x-3">
-                                    <span className="text-gray-400 text-sm w-4">#{index + 1}</span>
+                            <div key={member.userId} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-b-0 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 text-sm w-4 sm:px-4 md:px-6 lg:px-8">#{index + 1}</span>
                                     <div>
-                                        <div className="text-white font-medium">{member.teamName}</div>
-                                        <div className="text-xs text-gray-400">{member.username}</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{member.teamName}</div>
+                                        <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{member.username}</div>
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <div className="text-white font-medium">
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                         {member.record?.wins}-{member.record?.losses}
                                     </div>
-                                    <div className="text-xs text-gray-400">
+                                    <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         {member.record?.pointsFor.toFixed(1)} PF
                                     </div>
                                 </div>
@@ -445,12 +409,12 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
             </Widget>
 
             {/* Recent Activity */}
-            <Widget title="Recent Activity" className="bg-gray-900/50">
-                <div className="space-y-2">
+            <Widget title="Recent Activity" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {league.history.slice(0, 5).map((event: any) => (
-                        <div key={event.id} className="py-2 border-b border-gray-700 last:border-b-0">
-                            <div className="text-sm text-white">{event.description}</div>
-                            <div className="text-xs text-gray-400">
+                        <div key={event.id} className="py-2 border-b border-gray-700 last:border-b-0 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{event.description}</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 {new Date(event.timestamp).toLocaleDateString()}
                             </div>
                         </div>
@@ -465,29 +429,29 @@ const InvitationCard: React.FC<{
     invitation: LeagueInvitation;
     onAccept: () => void;
     onDecline: () => void;
-}> = ({ invitation, onAccept, onDecline }: any) => {
+}> = ({ invitation, onAccept, onDecline }) => {
     return (
-        <div className="bg-gray-800/50 rounded-lg p-3 flex items-center justify-between">
+        <div className="bg-gray-800/50 rounded-lg p-3 flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
             <div>
-                <div className="text-white font-medium">{invitation.leagueName}</div>
-                <div className="text-sm text-gray-400">
+                <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{invitation.leagueName}</div>
+                <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     Invited by {invitation.invitedByName}
                 </div>
                 {invitation.message && (
-                    <div className="text-xs text-gray-500 mt-1">{invitation.message}</div>
+                    <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">{invitation.message}</div>
                 )}
             </div>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                 <button
                     onClick={onAccept}
-                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
-                >
+                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     Accept
                 </button>
                 <button
                     onClick={onDecline}
-                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
-                >
+                    className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     Decline
                 </button>
             </div>
@@ -501,4 +465,10 @@ const LeagueSettingsPanel: React.FC<any> = () => <div>League Settings - Coming S
 const LeagueHistory: React.FC<any> = () => <div>League History - Coming Soon</div>;
 const CommissionerPanel: React.FC<any> = () => <div>Commissioner Panel - Coming Soon</div>;
 
-export default LeagueManagementInterface;
+const LeagueManagementInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LeagueManagementInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LeagueManagementInterfaceWithErrorBoundary);

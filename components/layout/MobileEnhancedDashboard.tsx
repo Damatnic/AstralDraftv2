@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileViewport } from '../../hooks/useMobileViewport';
@@ -7,17 +8,18 @@ interface MobileEnhancedDashboardProps {
   children: React.ReactNode;
   onRefresh?: () => Promise<void>;
   showPullToRefresh?: boolean;
-}
 
 /**
  * Enhanced mobile dashboard component that wraps content with advanced mobile interactions
  * Provides pull-to-refresh, optimized mobile viewport handling, and gesture feedback
  */
+}
+
 export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = ({
   children,
   onRefresh,
   showPullToRefresh = true
-}: any) => {
+}) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { isPortrait, safeAreaInsets, isMobile } = useMobileViewport();
   const [isInteracting, setIsInteracting] = React.useState(false);
@@ -38,28 +40,27 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
       y: 0,
       transition: { 
         duration: 0.3
-      }
+
     },
     exit: { 
       opacity: 0, 
       y: -20,
       transition: { 
         duration: 0.2
-      }
-    }
+
+
   };
 
   const contentVariants = {
     active: {
       scale: isInteracting ? 0.98 : 1,
       transition: { duration: 0.2 }
-    }
+
   };
 
   if (!isMobile) {
     // Render without mobile enhancements for desktop
-    return <div className="dashboard-content">{children}</div>;
-  }
+    return <div className="dashboard-content sm:px-4 md:px-6 lg:px-8">{children}</div>;
 
   return (
     <motion.div
@@ -83,7 +84,6 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
       animate="animate"
       exit="exit"
       onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       {/* Pull to refresh wrapper */}
       {showPullToRefresh && onRefresh ? (
@@ -92,7 +92,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
           threshold={80}
         >
           <motion.div
-            className="dashboard-content-wrapper mobile-content-safe"
+            className="dashboard-content-wrapper mobile-content-safe sm:px-4 md:px-6 lg:px-8"
             variants={contentVariants}
             animate="active"
           >
@@ -101,7 +101,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
         </PullToRefresh>
       ) : (
         <motion.div
-          className="dashboard-content-wrapper mobile-content-safe"
+          className="dashboard-content-wrapper mobile-content-safe sm:px-4 md:px-6 lg:px-8"
           variants={contentVariants}
           animate="active"
         >
@@ -113,7 +113,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
       <AnimatePresence>
         {isInteracting && (
           <motion.div
-            className="gesture-feedback-overlay"
+            className="gesture-feedback-overlay sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.1 }}
             exit={{ opacity: 0 }}
@@ -134,4 +134,10 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
   );
 };
 
-export default MobileEnhancedDashboard;
+const MobileEnhancedDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileEnhancedDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileEnhancedDashboardWithErrorBoundary);

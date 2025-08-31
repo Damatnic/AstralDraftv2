@@ -3,6 +3,7 @@
  * Comprehensive visualization of advanced statistical modeling and external data sources
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Cell } from 'recharts';
 import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from 'lucide-react';
@@ -21,12 +22,13 @@ interface AdvancedAnalyticsDashboardProps {
     week: number;
     predictionFactors: PredictionFactors | null;
     onRefresh: () => void;
+
 }
 
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     predictionFactors,
     onRefresh
-}: any) => {
+}) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [compositeScore, setCompositeScore] = useState<CompositeScore | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -38,21 +40,23 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
             
             setIsLoading(true);
             try {
+
                 const score = await oracleAdvancedAnalyticsService.calculateAdvancedCompositeScore(predictionFactors);
                 setCompositeScore(score);
-            } catch (error) {
+            
+    } catch (error) {
                 if (process.env.NODE_ENV === 'development') {
-                }
+
             } finally {
                 setIsLoading(false);
-            }
+
         };
     }, [predictionFactors]);
 
     useEffect(() => {
         if (predictionFactors) {
             calculateCompositeScore();
-        }
+
     }, [predictionFactors, calculateCompositeScore]);
 
     // Prepare chart data
@@ -134,35 +138,34 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
 
     if (!predictionFactors) {
         return (
-            <Card className="w-full">
+            <Card className="w-full sm:px-4 md:px-6 lg:px-8">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Brain className="h-5 w-5" />
+                    <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Brain className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         Advanced Analytics Dashboard
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-gray-500">Generate an advanced prediction to view detailed analytics.</p>
+                    <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Generate an advanced prediction to view detailed analytics.</p>
                 </CardContent>
             </Card>
         );
-    }
 
     return (
-        <div className="w-full space-y-6">
+        <div className="w-full space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header with Composite Score */}
-            <Card className="w-full">
+            <Card className="w-full sm:px-4 md:px-6 lg:px-8">
                 <CardHeader>
-                    <div className="flex items-center justify-between">
-                        <CardTitle className="flex items-center gap-2">
-                            <Brain className="h-5 w-5" />
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <Brain className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                             Advanced Analytics Dashboard
                         </CardTitle>
                         <button
                             onClick={onRefresh}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8"
                             disabled={isLoading}
-                        >
+                         aria-label="Action button">
                             {isLoading ? '🔄' : '↻'} Refresh
                         </button>
                     </div>
@@ -170,23 +173,23 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 <CardContent>
                     {compositeScore && (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-blue-600">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-3xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">
                                     {compositeScore.overall}%
                                 </div>
-                                <div className="text-sm text-gray-600">Composite Score</div>
+                                <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Composite Score</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-green-600">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-3xl font-bold text-green-600 sm:px-4 md:px-6 lg:px-8">
                                     {(compositeScore.confidence * 100).toFixed(1)}%
                                 </div>
-                                <div className="text-sm text-gray-600">Confidence Level</div>
+                                <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Confidence Level</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-3xl font-bold text-purple-600">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-3xl font-bold text-purple-600 sm:px-4 md:px-6 lg:px-8">
                                     {predictionFactors.ensemblePrediction.prediction.toFixed(1)}
                                 </div>
-                                <div className="text-sm text-gray-600">Predicted Points</div>
+                                <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Predicted Points</div>
                             </div>
                         </div>
                     )}
@@ -211,7 +214,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                                    <Target className="h-4 w-4" />
+                                    <Target className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Key Insights
                                 </CardTitle>
                             </CardHeader>
@@ -232,7 +235,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-                                    <Activity className="h-4 w-4" />
+                                    <Activity className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Prediction Range
                                 </CardTitle>
                             </CardHeader>
@@ -245,7 +248,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         </span>
                                     </div>
                                     
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                         <div className="flex flex-col sm:flex-row sm:justify-between text-xs sm:text-sm space-y-1 sm:space-y-0">
                                             <span>Range</span>
                                             <span>
@@ -254,7 +257,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         </div>
                                         <Progress 
                                             value={(predictionFactors.ensemblePrediction.prediction / 25) * 100} 
-                                            className="w-full"
+                                            className="w-full sm:px-4 md:px-6 lg:px-8"
                                         />
                                     </div>
 
@@ -262,7 +265,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         <h4 className="text-sm sm:text-base font-medium mb-2">Key Drivers:</h4>
                                         <div className="flex flex-wrap gap-1 sm:gap-2">
                                             {predictionFactors.ensemblePrediction.keyDrivers.map((driver, index) => (
-                                                <Badge key={index} variant="default" className="text-xs">
+                                                <Badge key={index} variant="default" className="text-xs sm:px-4 md:px-6 lg:px-8">
                                                     {driver}
                                                 </Badge>
                                             ))}
@@ -360,29 +363,29 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-blue-600">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">
                                         {(predictionFactors.playerMetrics.contestedCatchRate * 100).toFixed(1)}%
                                     </div>
-                                    <div className="text-sm text-gray-600">Contested Catch Rate</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Contested Catch Rate</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-green-600">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl font-bold text-green-600 sm:px-4 md:px-6 lg:px-8">
                                         {(predictionFactors.playerMetrics.dropsPerTarget * 100).toFixed(1)}%
                                     </div>
-                                    <div className="text-sm text-gray-600">Drop Rate</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Drop Rate</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-purple-600">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl font-bold text-purple-600 sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.playerMetrics.averageTargetDepth.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Avg Target Depth</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Avg Target Depth</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-orange-600">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl font-bold text-orange-600 sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.playerMetrics.separationRating.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Separation Rating</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Separation Rating</div>
                                 </div>
                             </div>
                         </CardContent>
@@ -390,13 +393,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 </TabsContent>
 
                 {/* Team Analytics Tab */}
-                <TabsContent value="team" className="space-y-6">
+                <TabsContent value="team" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Team Chemistry Radar */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Users className="h-4 w-4" />
+                                <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                    <Users className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Team Chemistry Analysis
                                 </CardTitle>
                             </CardHeader>
@@ -419,9 +422,9 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 <CardTitle>Team Efficiency Metrics</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="space-y-4">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <div className="flex justify-between mb-2">
+                                        <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                             <span>Offensive Efficiency</span>
                                             <span>{(predictionFactors.teamMetrics.offensiveEfficiency * 100).toFixed(1)}%</span>
                                         </div>
@@ -429,7 +432,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between mb-2">
+                                        <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                             <span>Defensive Efficiency</span>
                                             <span>{(predictionFactors.teamMetrics.defensiveEfficiency * 100).toFixed(1)}%</span>
                                         </div>
@@ -437,7 +440,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between mb-2">
+                                        <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                             <span>Red Zone Efficiency</span>
                                             <span>{(predictionFactors.teamMetrics.redZoneEfficiency * 100).toFixed(1)}%</span>
                                         </div>
@@ -445,7 +448,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                     </div>
 
                                     <div>
-                                        <div className="flex justify-between mb-2">
+                                        <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                             <span>Special Teams Efficiency</span>
                                             <span>{(predictionFactors.teamMetrics.specialTeamsEfficiency * 100).toFixed(1)}%</span>
                                         </div>
@@ -463,33 +466,33 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.passingEpa >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                         {predictionFactors.teamMetrics.passingEpa >= 0 ? '+' : ''}{predictionFactors.teamMetrics.passingEpa.toFixed(3)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Passing EPA</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Passing EPA</div>
                                     {predictionFactors.teamMetrics.passingEpa >= 0 ? (
-                                        <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1" />
+                                        <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     ) : (
-                                        <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1" />
+                                        <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     )}
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.rushingEpa >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                                         {predictionFactors.teamMetrics.rushingEpa >= 0 ? '+' : ''}{predictionFactors.teamMetrics.rushingEpa.toFixed(3)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Rushing EPA</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Rushing EPA</div>
                                     {predictionFactors.teamMetrics.rushingEpa >= 0 ? (
-                                        <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1" />
+                                        <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     ) : (
-                                        <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1" />
+                                        <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     )}
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-2xl font-bold text-blue-600">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-2xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.teamMetrics.homeFieldAdvantage.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Home Field Advantage</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Home Field Advantage</div>
                                 </div>
                             </div>
                         </CardContent>
@@ -497,7 +500,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 </TabsContent>
 
                 {/* Ensemble Models Tab */}
-                <TabsContent value="models" className="space-y-6">
+                <TabsContent value="models" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Model Predictions */}
                         <Card>
@@ -523,18 +526,18 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 <CardTitle>Model Weights & Confidence</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="space-y-4">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     {ensembleModelData.map((model, index) => (
-                                        <div key={index} className="space-y-2">
-                                            <div className="flex justify-between">
-                                                <span className="font-medium">{model.name}</span>
-                                                <span className="text-sm text-gray-600">
+                                        <div key={index} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="font-medium sm:px-4 md:px-6 lg:px-8">{model.name}</span>
+                                                <span className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">
                                                     Weight: {model.weight.toFixed(1)}% | Confidence: {model.confidence.toFixed(1)}%
                                                 </span>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-2">
-                                                <Progress value={model.weight} className="h-2" />
-                                                <Progress value={model.confidence} className="h-2" />
+                                            <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                <Progress value={model.weight} className="h-2 sm:px-4 md:px-6 lg:px-8" />
+                                                <Progress value={model.confidence} className="h-2 sm:px-4 md:px-6 lg:px-8" />
                                             </div>
                                         </div>
                                     ))}
@@ -551,23 +554,23 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <h4 className="font-medium mb-3">Model Statistics</h4>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
+                                    <h4 className="font-medium mb-3 sm:px-4 md:px-6 lg:px-8">Model Statistics</h4>
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                             <span>R-squared</span>
-                                            <span className="font-semibold">
+                                            <span className="font-semibold sm:px-4 md:px-6 lg:px-8">
                                                 {predictionFactors.regressionAnalysis.rSquared.toFixed(3)}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                             <span>Standard Error</span>
-                                            <span className="font-semibold">
+                                            <span className="font-semibold sm:px-4 md:px-6 lg:px-8">
                                                 {predictionFactors.regressionAnalysis.standardError.toFixed(2)}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
+                                        <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                             <span>Confidence Interval</span>
-                                            <span className="font-semibold">
+                                            <span className="font-semibold sm:px-4 md:px-6 lg:px-8">
                                                 [{predictionFactors.regressionAnalysis.confidenceInterval[0].toFixed(1)}, {predictionFactors.regressionAnalysis.confidenceInterval[1].toFixed(1)}]
                                             </span>
                                         </div>
@@ -575,7 +578,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 </div>
 
                                 <div>
-                                    <h4 className="font-medium mb-3">Significant Factors</h4>
+                                    <h4 className="font-medium mb-3 sm:px-4 md:px-6 lg:px-8">Significant Factors</h4>
                                     <ResponsiveContainer width="100%" height={200}>
                                         <BarChart data={regressionFactorsData} layout="horizontal">
                                             <CartesianGrid strokeDasharray="3 3" />
@@ -596,7 +599,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 </TabsContent>
 
                 {/* Market Data Tab */}
-                <TabsContent value="market" className="space-y-6">
+                <TabsContent value="market" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Market Sentiment */}
                         <Card>
@@ -622,26 +625,26 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                 <CardTitle>DFS Market Indicators</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="space-y-4">
-                                    <div className="text-center">
-                                        <div className="text-2xl font-bold text-blue-600">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                        <div className="text-2xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">
                                             {(Object.values(predictionFactors.marketData.dfsOwnershipProjections)[0] * 100).toFixed(1)}%
                                         </div>
-                                        <div className="text-sm text-gray-600">Projected Ownership</div>
+                                        <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Projected Ownership</div>
                                     </div>
 
-                                    <div className="text-center">
-                                        <div className="text-2xl font-bold text-green-600">
+                                    <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                        <div className="text-2xl font-bold text-green-600 sm:px-4 md:px-6 lg:px-8">
                                             {Object.values(predictionFactors.marketData.dfsProjectedScores)[0].toFixed(1)}
                                         </div>
-                                        <div className="text-sm text-gray-600">DFS Projected Score</div>
+                                        <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">DFS Projected Score</div>
                                     </div>
 
-                                    <div className="text-center">
-                                        <div className="text-2xl font-bold text-purple-600">
+                                    <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                        <div className="text-2xl font-bold text-purple-600 sm:px-4 md:px-6 lg:px-8">
                                             {Object.values(predictionFactors.marketData.dfsPriceValue)[0].toFixed(2)}x
                                         </div>
-                                        <div className="text-sm text-gray-600">Price Value</div>
+                                        <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Price Value</div>
                                     </div>
                                 </div>
                             </CardContent>
@@ -655,34 +658,34 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div className="text-center">
-                                    <div className="text-lg font-bold">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.marketData.spreadMovement >= 0 ? '+' : ''}{predictionFactors.marketData.spreadMovement.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Spread Movement</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Spread Movement</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-lg font-bold">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.marketData.totalMovement >= 0 ? '+' : ''}{predictionFactors.marketData.totalMovement.toFixed(1)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Total Movement</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Total Movement</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-lg font-bold">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.marketData.publicBettingPercentage.toFixed(1)}%
                                     </div>
-                                    <div className="text-sm text-gray-600">Public Betting %</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Public Betting %</div>
                                 </div>
-                                <div className="text-center">
-                                    <div className="text-lg font-bold">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
                                         {predictionFactors.marketData.socialMediaBuzz.toFixed(2)}
                                     </div>
-                                    <div className="text-sm text-gray-600">Current Total</div>
+                                    <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Current Total</div>
                                 </div>
                             </div>
 
-                            <div className="mt-4">
-                                <div className="flex justify-between mb-2">
+                            <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                     <span>Public Betting %</span>
                                     <span>{(predictionFactors.marketData.publicBettingPercentage * 100).toFixed(1)}%</span>
                                 </div>
@@ -693,25 +696,25 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 </TabsContent>
 
                 {/* Environment Tab */}
-                <TabsContent value="environment" className="space-y-6">
+                <TabsContent value="environment" className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Weather Conditions */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Cloud className="h-4 w-4" />
+                                <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                    <Cloud className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Weather Conditions
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
                                     {environmentalFactors.map((factor, index) => (
-                                        <div key={index} className="text-center">
-                                            <div className="text-xl font-bold">
+                                        <div key={index} className="text-center sm:px-4 md:px-6 lg:px-8">
+                                            <div className="text-xl font-bold sm:px-4 md:px-6 lg:px-8">
                                                 {factor.value.toFixed(1)} {factor.unit}
                                             </div>
-                                            <div className="text-sm text-gray-600 mb-2">{factor.name}</div>
-                                            <div className="text-xs text-gray-500">
+                                            <div className="text-sm text-gray-600 mb-2 sm:px-4 md:px-6 lg:px-8">{factor.name}</div>
+                                            <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                 Ideal: {factor.ideal[0]}-{factor.ideal[1]} {factor.unit}
                                             </div>
                                         </div>
@@ -723,34 +726,34 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         {/* Stadium & Travel */}
                         <Card>
                             <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <MapPin className="h-4 w-4" />
+                                <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                    <MapPin className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                                     Stadium & Travel Factors
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="space-y-4">
-                                    <div className="flex justify-between">
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                         <span>Stadium Type</span>
                                         <Badge variant="default">
                                             {predictionFactors.externalFactors.stadiumType}
                                         </Badge>
                                     </div>
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                         <span>Field Type</span>
                                         <Badge variant="default">
                                             {predictionFactors.externalFactors.fieldType}
                                         </Badge>
                                     </div>
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                         <span>Elevation</span>
                                         <span>{predictionFactors.externalFactors.elevation.toFixed(0)} ft</span>
                                     </div>
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                         <span>Travel Distance</span>
                                         <span>{predictionFactors.externalFactors.travelDistance.toFixed(0)} miles</span>
                                     </div>
-                                    <div className="flex justify-between">
+                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                         <span>Time Zone Changes</span>
                                         <span>{predictionFactors.externalFactors.timeZoneChanges}</span>
                                     </div>
@@ -766,25 +769,25 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.thursdayNightGame ? 'text-blue-600' : 'text-gray-400'}`}>
                                         {predictionFactors.externalFactors.thursdayNightGame ? 'YES' : 'NO'}
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-600">Thursday Night</div>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.mondayNightGame ? 'text-blue-600' : 'text-gray-400'}`}>
                                         {predictionFactors.externalFactors.mondayNightGame ? 'YES' : 'NO'}
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-600">Monday Night</div>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-base sm:text-lg font-bold text-green-600">
                                         {predictionFactors.externalFactors.restDays}
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-600">Rest Days</div>
                                 </div>
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-base sm:text-lg font-bold text-purple-600">
                                         {predictionFactors.externalFactors.crowdNoise.toFixed(0)} dB
                                     </div>
@@ -799,4 +802,10 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     );
 };
 
-export default AdvancedAnalyticsDashboard;
+const AdvancedAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AdvancedAnalyticsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AdvancedAnalyticsDashboardWithErrorBoundary);

@@ -8,7 +8,11 @@ export default function useCopyToClipboard() {
     }
 
     try {
+
       await navigator.clipboard.writeText(text);
+
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.warn('Copy failed', error);
     }

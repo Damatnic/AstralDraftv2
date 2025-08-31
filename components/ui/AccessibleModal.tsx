@@ -3,6 +3,7 @@
  * Enhanced with focus management, keyboard navigation, and mobile accessibility
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -25,9 +26,11 @@ interface AccessibleModalProps {
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
   initialFocus?: string; // selector for element to focus initially
+
 }
 
 const sizeClasses = {
+  const [isLoading, setIsLoading] = React.useState(false);
   sm: 'max-w-sm',
   md: 'max-w-md', 
   lg: 'max-w-lg',
@@ -47,7 +50,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   closeOnOverlayClick = true,
   showCloseButton = true,
   initialFocus
-}: any) => {
+}) => {
   const { containerRef } = useFocusTrap(isOpen);
   const { announce } = useAnnouncer();
   const titleId = React.useId();
@@ -61,17 +64,16 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       if (closeOnEscape) {
         onClose();
         announce('Modal closed', 'polite');
-      }
+
     };
 
     if (containerRef.current) {
       containerRef.current.addEventListener('focustrap:escape', handleCustomEscape as EventListener);
-    }
 
     return () => {
       if (containerRef.current) {
         containerRef.current.removeEventListener('focustrap:escape', handleCustomEscape as EventListener);
-      }
+
     };
   }, [isOpen, closeOnEscape, onClose, announce, containerRef]);
 
@@ -79,7 +81,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   React.useEffect(() => {
     if (isOpen) {
       announce(`${title} dialog opened`, 'assertive');
-    }
+
   }, [isOpen, title, announce]);
 
   // Handle initial focus
@@ -88,8 +90,8 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       const element = containerRef.current.querySelector(initialFocus);
       if (element && element instanceof HTMLElement) {
         setTimeout(() => element.focus(), 100);
-      }
-    }
+
+
   }, [isOpen, initialFocus, containerRef]);
 
   // Prevent body scroll when modal is open
@@ -101,14 +103,14 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       return () => {
         document.body.style.overflow = originalStyle;
       };
-    }
+
   }, [isOpen]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (closeOnOverlayClick && e.target === e.currentTarget) {
       onClose();
       announce('Modal closed', 'polite');
-    }
+
   };
 
   const handleCloseClick = () => {
@@ -120,7 +122,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -128,7 +130,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
         >
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -157,10 +159,10 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
             </div>
 
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
               <h2 
                 id={titleId}
-                className="text-xl font-semibold text-gray-900 dark:text-white font-display"
+                className="text-xl font-semibold text-gray-900 dark:text-white font-display sm:px-4 md:px-6 lg:px-8"
               >
                 {title}
               </h2>
@@ -173,10 +175,10 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
                     dark:text-gray-500 dark:hover:text-gray-300
                     rounded-full hover:bg-gray-100 dark:hover:bg-gray-700
                     transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500
-                  "
+                   sm:px-4 md:px-6 lg:px-8"
                   aria-label="Close dialog"
                 >
-                  <CloseIcon className="w-5 h-5" />
+                  <CloseIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                 </button>
               )}
             </div>
@@ -185,14 +187,14 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
             {description && (
               <div 
                 id={descriptionId}
-                className="px-6 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700"
+                className="px-6 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8"
               >
                 {description}
               </div>
             )}
 
             {/* Content */}
-            <div className="overflow-y-auto max-h-[calc(90vh-200px)]">
+            <div className="overflow-y-auto max-h-[calc(90vh-200px)] sm:px-4 md:px-6 lg:px-8">
               {children}
             </div>
           </motion.div>
@@ -220,4 +222,10 @@ export const useModal = (initialOpen: boolean = false) => {
   };
 };
 
-export default AccessibleModal;
+const AccessibleModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AccessibleModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AccessibleModalWithErrorBoundary);

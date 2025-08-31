@@ -3,7 +3,8 @@
  * Provides a user-friendly interface for app installation
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { usePWAInstall, useOfflineStatus, pwaUtils } from '../../utils/pwa';
 import { AccessibleButton } from './AccessibleButton';
 import './InstallPrompt.css';
@@ -13,14 +14,15 @@ interface InstallPromptProps {
   onInstall?: () => void;
   onDismiss?: () => void;
   showOfflineStatus?: boolean;
+
 }
 
-export const InstallPrompt: React.FC<InstallPromptProps> = ({
-  className = '',
+export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
   onInstall,
   onDismiss,
   showOfflineStatus = true
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const { isInstallable, isInstalled, promptInstall } = usePWAInstall();
   const { isOffline } = useOfflineStatus();
   const [dismissed, setDismissed] = React.useState(false);
@@ -29,20 +31,22 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
   // Don't show if already installed, dismissed, or not installable
   if (isInstalled || dismissed || !isInstallable) {
     return null;
-  }
 
   const platform = pwaUtils.getPlatform();
 
   const handleInstall = async () => {
     setInstalling(true);
     try {
+
       const success = await promptInstall();
       if (success) {
         onInstall?.();
-      }
+
+    } catch (error) {
+        console.error(error);
     } finally {
       setInstalling(false);
-    }
+
   };
 
   const handleDismiss = () => {
@@ -58,7 +62,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
         return 'Install App';
       default:
         return 'Install Astral Draft';
-    }
+
   };
 
   const getDescription = () => {
@@ -69,7 +73,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
         return pwaUtils.showAndroidInstallInstructions();
       default:
         return 'Install Astral Draft for a better experience with offline access and faster loading.';
-    }
+
   };
 
   return (
@@ -78,8 +82,8 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
       aria-labelledby="install-title"
       aria-describedby="install-description"
     >
-      <div className="install-prompt__content">
-        <div className="install-prompt__icon">
+      <div className="install-prompt__content sm:px-4 md:px-6 lg:px-8">
+        <div className="install-prompt__icon sm:px-4 md:px-6 lg:px-8">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
             <polyline points="7,10 12,15 17,10" />
@@ -87,23 +91,23 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
           </svg>
         </div>
         
-        <div className="install-prompt__text">
-          <h3 id="install-title" className="install-prompt__title">
+        <div className="install-prompt__text sm:px-4 md:px-6 lg:px-8">
+          <h3 id="install-title" className="install-prompt__title sm:px-4 md:px-6 lg:px-8">
             {getInstallText()}
           </h3>
-          <p id="install-description" className="install-prompt__description">
+          <p id="install-description" className="install-prompt__description sm:px-4 md:px-6 lg:px-8">
             {getDescription()}
           </p>
           
           {showOfflineStatus && isOffline && (
-            <div className="install-prompt__offline-notice">
-              <span className="install-prompt__offline-icon" aria-hidden="true">📱</span>
+            <div className="install-prompt__offline-notice sm:px-4 md:px-6 lg:px-8">
+              <span className="install-prompt__offline-icon sm:px-4 md:px-6 lg:px-8" aria-hidden="true">📱</span>
               {' '}Install for offline access
             </div>
           )}
         </div>
         
-        <div className="install-prompt__actions">
+        <div className="install-prompt__actions sm:px-4 md:px-6 lg:px-8">
           {(platform === 'desktop' || platform === 'android') && (
             <AccessibleButton
               onClick={handleInstall}
@@ -136,11 +140,12 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({
  */
 interface PWAStatusBannerProps {
   className?: string;
+
 }
 
 export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   className = ''
-}: any) => {
+}) => {
   const { isOffline } = useOfflineStatus();
   const [showBanner, setShowBanner] = React.useState(false);
 
@@ -151,7 +156,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
       // Hide banner after a delay when coming back online
       const timer = setTimeout(() => setShowBanner(false), 3000);
       return () => clearTimeout(timer);
-    }
+
   }, [isOffline]);
 
   if (!showBanner) return null;
@@ -161,15 +166,15 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
       className={`pwa-status-banner ${isOffline ? 'pwa-status-banner--offline' : 'pwa-status-banner--online'} ${className}`}
       aria-live="polite"
     >
-      <div className="pwa-status-banner__content">
+      <div className="pwa-status-banner__content sm:px-4 md:px-6 lg:px-8">
         {isOffline ? (
           <>
-            <span className="pwa-status-banner__icon" aria-hidden="true">📱</span>
+            <span className="pwa-status-banner__icon sm:px-4 md:px-6 lg:px-8" aria-hidden="true">📱</span>
             <span>You're offline. Some features may be limited.</span>
           </>
         ) : (
           <>
-            <span className="pwa-status-banner__icon" aria-hidden="true">✅</span>
+            <span className="pwa-status-banner__icon sm:px-4 md:px-6 lg:px-8" aria-hidden="true">✅</span>
             <span>Connection restored</span>
           </>
         )}
@@ -187,4 +192,10 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   );
 };
 
-export default InstallPrompt;
+const InstallPromptWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <InstallPrompt {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(InstallPromptWithErrorBoundary);

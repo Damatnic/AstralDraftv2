@@ -93,47 +93,8 @@ export const useLeague = (): UseLeagueReturn => {
       });
 
       setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-    }
-  };
-  
-  const updateLeagueSettings = (settings: Record<string, unknown>) => {
-    if (!league) return;
     
-    const updatedLeague = {
-      ...league,
-      settings: {
-        ...league.settings,
-        ...settings
-      }
-    };
-
-    // Update in leagues array
-    const updatedLeagues = state.leagues.map((l: any) => 
-      l.id === league.id ? updatedLeague : l
-    );
-    
-    dispatch({
-      type: 'SET_LEAGUES',
-      payload: updatedLeagues
-    });
-  };
-  
-  const joinLeague = async (_inviteCode: string) => {
-    if (!state.user) return;
-    
-    setIsLoading(true);
-    try {
-      // For testing, just add user to first available league
-      const availableLeague = state.leagues.find((l: any) => 
-        l.teams.length < (l.settings?.teamCount || 10)
-      );
-
-      if (availableLeague) {
-        const newTeam: Team = {
-          id: Date.now(),
-          name: `${state.user.name}'s Team`,
+    `${state.user.name}'s Team`,
           owner: state.user,
           avatar: '',
           roster: [],
@@ -167,6 +128,7 @@ export const useLeague = (): UseLeagueReturn => {
       }
       
       setIsLoading(false);
+    
     } catch (error) {
       setIsLoading(false);
     }

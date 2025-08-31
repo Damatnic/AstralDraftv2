@@ -1,9 +1,16 @@
+interface IconProps {
+  size?: number | string;
+  className?: string;
+  color?: string;
+  'aria-label'?: string;
 
 import React from 'react';
 
-export const TvIcon: React.FC<{ className?: string }> = ({ className }: any) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "h-5 w-5"}>
-        <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/>
+}
+
+export const TvIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="tv icon">
+        <rect width="24" height="24" x="2" y="7" rx="2" ry="2"/>
         <polyline points="17 2 12 7 7 2"/>
     </svg>
 );

@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { Widget } from '../ui/Widget';
@@ -28,7 +29,7 @@ const WhatsNextWidget: React.FC = () => {
                     onClick: () => {
                         dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: primaryLeague.id });
                         dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' });
-                    }
+
                 };
                 break;
             case 'DRAFTING':
@@ -39,7 +40,7 @@ const WhatsNextWidget: React.FC = () => {
                     onClick: () => {
                         dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: primaryLeague.id });
                         dispatch({ type: 'SET_VIEW', payload: 'DRAFT_ROOM' });
-                    }
+
                 };
                 break;
             case 'IN_SEASON':
@@ -55,7 +56,7 @@ const WhatsNextWidget: React.FC = () => {
                     onClick: () => {
                          dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: primaryLeague.id });
                          dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' });
-                    }
+
                 };
                 break;
              case 'DRAFT_COMPLETE':
@@ -66,7 +67,7 @@ const WhatsNextWidget: React.FC = () => {
                     onClick: () => {
                          dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: primaryLeague.id });
                          dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' });
-                    }
+
                 };
                 break;
             case 'COMPLETE':
@@ -78,23 +79,22 @@ const WhatsNextWidget: React.FC = () => {
                          dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: primaryLeague.id });
                          dispatch({ type: 'SET_SEASON_REVIEW_YEAR', payload: new Date().getFullYear() - 1 });
                          dispatch({ type: 'SET_VIEW', payload: 'SEASON_REVIEW' });
-                    }
+
                 };
                 break;
-        }
-    }
+
 
     return (
-        <Widget title="What's Next" icon={<SparklesIcon />} className="row-span-2">
-            <div className="p-4 flex flex-col justify-between h-full">
+        <Widget title="What's Next" icon={<SparklesIcon />} className="row-span-2 sm:px-4 md:px-6 lg:px-8">
+            <div className="p-4 flex flex-col justify-between h-full sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h3 className="font-bold text-lg text-white">{action.title}</h3>
-                    <p className="text-sm text-gray-300 mt-1">{action.description}</p>
+                    <h3 className="font-bold text-lg text-white sm:px-4 md:px-6 lg:px-8">{action.title}</h3>
+                    <p className="text-sm text-gray-300 mt-1 sm:px-4 md:px-6 lg:px-8">{action.description}</p>
                 </div>
                 <button 
                     onClick={action.onClick}
-                    className="w-full mt-4 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg btn-primary"
-                >
+                    className="w-full mt-4 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg btn-primary sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     {action.buttonText}
                     <ArrowRightIcon />
                 </button>
@@ -103,4 +103,10 @@ const WhatsNextWidget: React.FC = () => {
     );
 };
 
-export default WhatsNextWidget;
+const WhatsNextWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <WhatsNextWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(WhatsNextWidgetWithErrorBoundary);

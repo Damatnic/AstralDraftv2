@@ -4,7 +4,8 @@
  * Follows best practices for crisis intervention UI design
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
 import { PhoneIcon } from '../icons/PhoneIcon';
 import { MessageCircleIcon } from '../icons/MessageCircleIcon';
@@ -20,10 +21,12 @@ interface CrisisResource {
   hours: string;
   type: 'phone' | 'text' | 'both' | 'web';
   priority: 'immediate' | 'urgent' | 'support';
+
 }
 
 const crisisResources: CrisisResource[] = [
   {
+  const [isLoading, setIsLoading] = React.useState(false);
     name: '988 Suicide & Crisis Lifeline',
     number: '988',
     textNumber: '988',
@@ -86,7 +89,7 @@ const crisisResources: CrisisResource[] = [
     hours: 'Varies by location',
     type: 'web',
     priority: 'support'
-  }
+
 ];
 
 export const CrisisInterventionWidget: React.FC = () => {
@@ -99,7 +102,7 @@ export const CrisisInterventionWidget: React.FC = () => {
     if (isExpanded) {
       setLastInteraction(new Date());
       // Log anonymous usage for improvement purposes
-    }
+
   }, [isExpanded]);
 
   const handleResourceClick = (resource: CrisisResource, action: 'call' | 'text' | 'web') => {
@@ -117,7 +120,7 @@ export const CrisisInterventionWidget: React.FC = () => {
         return 'bg-orange-50 border-orange-200';
       default:
         return 'bg-blue-50 border-blue-200';
-    }
+
   };
 
   const getPriorityBadge = (priority: string) => {
@@ -128,20 +131,20 @@ export const CrisisInterventionWidget: React.FC = () => {
         return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-blue-100 text-blue-800';
-    }
+
   };
 
   return (
     <>
       {/* Floating Crisis Button - Always Visible */}
-      <div className="fixed bottom-20 right-4 z-50">
+      <div className="fixed bottom-20 right-4 z-50 sm:px-4 md:px-6 lg:px-8">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 group"
+          className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 group sm:px-4 md:px-6 lg:px-8"
           aria-label="Crisis Support Resources"
         >
-          <HeartIcon className="w-5 h-5" />
-          <span className="hidden group-hover:inline text-sm font-medium pr-1">
+          <HeartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
+          <span className="hidden group-hover:inline text-sm font-medium pr-1 sm:px-4 md:px-6 lg:px-8">
             Crisis Support
           </span>
         </button>
@@ -149,23 +152,23 @@ export const CrisisInterventionWidget: React.FC = () => {
 
       {/* Crisis Resources Modal */}
       {isExpanded && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <HeartIcon className="w-8 h-8" />
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                  <HeartIcon className="w-8 h-8 sm:px-4 md:px-6 lg:px-8" />
                   <div>
-                    <h2 className="text-2xl font-bold">Crisis Support Resources</h2>
-                    <p className="text-purple-100 text-sm mt-1">
+                    <h2 className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">Crisis Support Resources</h2>
+                    <p className="text-purple-100 text-sm mt-1 sm:px-4 md:px-6 lg:px-8">
                       You're not alone. Help is available 24/7.
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2 transition-colors"
+                  className="text-white hover:bg-white hover:bg-opacity-20 rounded-lg p-2 transition-colors sm:px-4 md:px-6 lg:px-8"
                   aria-label="Close"
                 >
                   ✕
@@ -174,11 +177,11 @@ export const CrisisInterventionWidget: React.FC = () => {
             </div>
 
             {/* Important Message */}
-            <div className="bg-red-50 border-l-4 border-red-500 p-4">
-              <div className="flex items-start gap-3">
-                <AlertTriangleIcon className="w-5 h-5 text-red-500 mt-0.5" />
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                <AlertTriangleIcon className="w-5 h-5 text-red-500 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                 <div>
-                  <p className="text-sm font-medium text-red-800">
+                  <p className="text-sm font-medium text-red-800 sm:px-4 md:px-6 lg:px-8">
                     If you're in immediate danger, call 911 or your local emergency services
                   </p>
                 </div>
@@ -186,17 +189,17 @@ export const CrisisInterventionWidget: React.FC = () => {
             </div>
 
             {/* Resources List */}
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
-              <div className="space-y-4">
+            <div className="p-6 overflow-y-auto max-h-[60vh] sm:px-4 md:px-6 lg:px-8">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {crisisResources.map((resource, index) => (
                   <div
                     key={index}
                     className={`border rounded-lg p-4 ${getPriorityColor(resource.priority)} transition-all duration-200 hover:shadow-md`}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-semibold text-gray-900">
+                    <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                          <h3 className="font-semibold text-gray-900 sm:px-4 md:px-6 lg:px-8">
                             {resource.name}
                           </h3>
                           <span className={`text-xs px-2 py-1 rounded-full ${getPriorityBadge(resource.priority)}`}>
@@ -204,17 +207,17 @@ export const CrisisInterventionWidget: React.FC = () => {
                              resource.priority === 'urgent' ? 'Urgent' : 'Support'}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-3">
+                        <p className="text-sm text-gray-600 mb-3 sm:px-4 md:px-6 lg:px-8">
                           {resource.description}
                         </p>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap gap-3 sm:px-4 md:px-6 lg:px-8">
                           {resource.number && (
                             <a
                               href={`tel:${resource.number}`}
                               onClick={() => handleResourceClick(resource, 'call')}
-                              className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                              className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
-                              <PhoneIcon className="w-4 h-4" />
+                              <PhoneIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                               Call {resource.number}
                             </a>
                           )}
@@ -222,9 +225,9 @@ export const CrisisInterventionWidget: React.FC = () => {
                             <a
                               href={`sms:${resource.textNumber}${resource.textNumber === '741741' ? '&body=HOME' : ''}`}
                               onClick={() => handleResourceClick(resource, 'text')}
-                              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
-                              <MessageCircleIcon className="w-4 h-4" />
+                              <MessageCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                               Text {resource.textNumber}
                             </a>
                           )}
@@ -234,14 +237,14 @@ export const CrisisInterventionWidget: React.FC = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={() => handleResourceClick(resource, 'web')}
-                              className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                              className="inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             >
-                              <GlobeIcon className="w-4 h-4" />
+                              <GlobeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                               Visit Website
                             </a>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 mt-2">
+                        <p className="text-xs text-gray-500 mt-2 sm:px-4 md:px-6 lg:px-8">
                           Hours: {resource.hours}
                         </p>
                       </div>
@@ -251,9 +254,9 @@ export const CrisisInterventionWidget: React.FC = () => {
               </div>
 
               {/* Self-Care Resources */}
-              <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-3">Self-Care Resources</h3>
-                <div className="space-y-2 text-sm text-gray-600">
+              <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-semibold text-gray-900 mb-3 sm:px-4 md:px-6 lg:px-8">Self-Care Resources</h3>
+                <div className="space-y-2 text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">
                   <p>• Practice deep breathing exercises</p>
                   <p>• Use grounding techniques (5-4-3-2-1 method)</p>
                   <p>• Reach out to a trusted friend or family member</p>
@@ -264,8 +267,8 @@ export const CrisisInterventionWidget: React.FC = () => {
             </div>
 
             {/* Footer */}
-            <div className="bg-gray-50 px-6 py-4 border-t">
-              <p className="text-xs text-gray-500 text-center">
+            <div className="bg-gray-50 px-6 py-4 border-t sm:px-4 md:px-6 lg:px-8">
+              <p className="text-xs text-gray-500 text-center sm:px-4 md:px-6 lg:px-8">
                 All resources are confidential. Your privacy and safety are paramount.
                 This app cares about your wellbeing.
               </p>
@@ -276,8 +279,8 @@ export const CrisisInterventionWidget: React.FC = () => {
 
       {/* Confirmation Toast */}
       {showConfirmation && (
-        <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
-          <p className="text-sm font-medium">Resource opened. You're taking a positive step.</p>
+        <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in sm:px-4 md:px-6 lg:px-8">
+          <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Resource opened. You're taking a positive step.</p>
         </div>
       )}
     </>
@@ -286,4 +289,10 @@ export const CrisisInterventionWidget: React.FC = () => {
 
 // PhoneIcon is imported from ../icons/PhoneIcon
 
-export default CrisisInterventionWidget;
+const CrisisInterventionWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <CrisisInterventionWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(CrisisInterventionWidgetWithErrorBoundary);

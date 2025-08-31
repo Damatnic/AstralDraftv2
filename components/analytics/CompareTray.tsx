@@ -1,7 +1,7 @@
 
 
-
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Player } from '../../types';
 import { Avatar } from '../ui/Avatar';
@@ -13,9 +13,10 @@ interface CompareTrayProps {
     players: Player[];
     onClear: () => void;
     onCompare: () => void;
+
 }
 
-const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }: any) => {
+const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }) => {
     const { dispatch } = useAppState();
 
     const handleRemovePlayer = (e: React.MouseEvent, player: Player) => {
@@ -23,13 +24,12 @@ const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }
         // This is a bit of a hack. Ideally the toggle function would be passed down.
         // For now, we'll just show a notification to guide the user.
         dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Click ${player.name} in the list to remove from comparison.`, type: 'SYSTEM' } });
-    }
 
     return (
         <AnimatePresence>
             {players.length > 0 && (
                 <motion.div
-                    className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl z-30"
+                    className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl z-30 sm:px-4 md:px-6 lg:px-8"
                     {...{
                         layout: true,
                         initial: { y: 100, opacity: 0 },
@@ -38,20 +38,20 @@ const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }
                         transition: { type: 'spring', stiffness: 200, damping: 30 },
                     }}
                 >
-                    <div className="mx-4 mb-4 glass-pane p-2 rounded-xl flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-2">
+                    <div className="mx-4 mb-4 glass-pane p-2 rounded-xl flex items-center justify-between gap-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                              {players.map((player: any) => (
-                                <div key={player.id} className="relative group">
-                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-12 h-12 text-2xl rounded-lg" alt={player.name} />
-                                    <button onClick={(e: any) => handleRemovePlayer(e, player)} className="absolute -top-1 -right-1 p-0.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <CloseIcon className="w-3 h-3" />
+                                <div key={player.id} className="relative group sm:px-4 md:px-6 lg:px-8">
+                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-12 h-12 text-2xl rounded-lg sm:px-4 md:px-6 lg:px-8" alt={player.name} />
+                                    <button onClick={(e: any) = aria-label="Action button"> handleRemovePlayer(e, player)} className="absolute -top-1 -right-1 p-0.5 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity sm:px-4 md:px-6 lg:px-8">
+                                        <CloseIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                     </button>
                                 </div>
                             ))}
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button onClick={onClear} className="px-3 py-1.5 text-xs font-bold bg-red-500/20 text-red-300 rounded-md hover:bg-red-500/30">Clear</button>
-                            <button onClick={onCompare} disabled={players.length < 2} className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-cyan-500 text-black rounded-md hover:bg-cyan-400 disabled:opacity-50">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <button onClick={onClear} className="px-3 py-1.5 text-xs font-bold bg-red-500/20 text-red-300 rounded-md hover:bg-red-500/30 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">Clear</button>
+                            <button onClick={onCompare} disabled={players.length < 2} className="px-4 py-2 flex items-center gap-2 text-sm font-bold bg-cyan-500 text-black rounded-md hover:bg-cyan-400 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                 <CompareIcon />
                                 Compare ({players.length})
                             </button>
@@ -63,4 +63,10 @@ const CompareTray: React.FC<CompareTrayProps> = ({ players, onClear, onCompare }
     );
 };
 
-export default CompareTray;
+const CompareTrayWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <CompareTray {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(CompareTrayWithErrorBoundary);

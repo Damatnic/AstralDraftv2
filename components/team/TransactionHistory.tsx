@@ -3,7 +3,8 @@
  * Complete history of adds, drops, trades, and waiver claims
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
@@ -18,6 +19,7 @@ interface TransactionHistoryProps {
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface Transaction {
@@ -32,9 +34,8 @@ interface Transaction {
     cost?: number;
     status: 'COMPLETED' | 'PENDING' | 'CANCELLED';
     details?: string;
-}
 
-const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }: any) => {
+const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }) => {
     const [filterType, setFilterType] = React.useState<'ALL' | Transaction['type']>('ALL');
     const [filterWeek, setFilterWeek] = React.useState<'ALL' | number>('ALL');
     const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(null);
@@ -101,7 +102,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
             playerIn: { id: 106, name: 'Christian McCaffrey', position: 'RB', team: 'SF', rank: 1, adp: 1, bye: 9, tier: 1, age: 28, auctionValue: 65, stats: { projection: 22.8, lastYear: 24.2, vorp: 8.9, weeklyProjections: {} } } as Player,
             status: 'COMPLETED',
             details: 'Round 1, Pick 1'
-        }
+
     ];
 
     const filteredTransactions = mockTransactions.filter((transaction: any) => {
@@ -113,20 +114,20 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
     const getTransactionIcon = (type: Transaction['type']) => {
         switch (type) {
             case 'ADD':
-                return <UserPlusIcon className="w-5 h-5 text-green-400" />;
+                return <UserPlusIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'DROP':
-                return <UserRemoveIcon className="w-5 h-5 text-red-400" />;
+                return <UserRemoveIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'TRADE':
-                return <ArrowRightLeftIcon className="w-5 h-5 text-blue-400" />;
+                return <ArrowRightLeftIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'WAIVER':
-                return <DollarSignIcon className="w-5 h-5 text-yellow-400" />;
+                return <DollarSignIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'DRAFT':
-                return <UserPlusIcon className="w-5 h-5 text-purple-400" />;
+                return <UserPlusIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'KEEPER':
-                return <UserPlusIcon className="w-5 h-5 text-cyan-400" />;
+                return <UserPlusIcon className="w-5 h-5 text-cyan-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
-                return <ClockIcon className="w-5 h-5 text-gray-400" />;
-        }
+                return <ClockIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const getTransactionColor = (type: Transaction['type']) => {
@@ -143,7 +144,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                 return 'border-l-yellow-500 bg-yellow-500/5';
             default:
                 return 'border-l-gray-500 bg-gray-500/5';
-        }
+
     };
 
     const formatDate = (dateString: string) => {
@@ -161,34 +162,34 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
     const availableWeeks = Array.from(new Set(mockTransactions.map((t: any) => t.week))).sort((a, b) => b - a);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Summary Stats */}
             <Widget title="Transaction Summary">
-                <div className="p-4">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="text-center p-3 bg-green-500/20 rounded-lg">
-                            <div className="text-2xl font-bold text-green-400">
+                        <div className="text-center p-3 bg-green-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                                 {mockTransactions.filter((t: any) => ['ADD', 'WAIVER', 'DRAFT', 'KEEPER'].includes(t.type)).length}
                             </div>
-                            <div className="text-xs text-gray-400">Players Acquired</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Players Acquired</div>
                         </div>
-                        <div className="text-center p-3 bg-red-500/20 rounded-lg">
-                            <div className="text-2xl font-bold text-red-400">
+                        <div className="text-center p-3 bg-red-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-red-400 sm:px-4 md:px-6 lg:px-8">
                                 {mockTransactions.filter((t: any) => t.type === 'DROP').length}
                             </div>
-                            <div className="text-xs text-gray-400">Players Dropped</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Players Dropped</div>
                         </div>
-                        <div className="text-center p-3 bg-blue-500/20 rounded-lg">
-                            <div className="text-2xl font-bold text-blue-400">
+                        <div className="text-center p-3 bg-blue-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                 {mockTransactions.filter((t: any) => t.type === 'TRADE').length}
                             </div>
-                            <div className="text-xs text-gray-400">Trades Made</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Trades Made</div>
                         </div>
-                        <div className="text-center p-3 bg-yellow-500/20 rounded-lg">
-                            <div className="text-2xl font-bold text-yellow-400">
+                        <div className="text-center p-3 bg-yellow-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">
                                 ${mockTransactions.filter((t: any) => t.type === 'WAIVER').reduce((sum, t) => sum + (t.cost || 0), 0)}
                             </div>
-                            <div className="text-xs text-gray-400">FAAB Spent</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">FAAB Spent</div>
                         </div>
                     </div>
                 </div>
@@ -196,17 +197,16 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
 
             {/* Filters */}
             <Widget title="Transaction History">
-                <div className="p-4">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                        <div className="flex-1">
-                            <label htmlFor="filter-type" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                            <label htmlFor="filter-type" className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Filter by Type
                             </label>
                             <select
                                 id="filter-type"
                                 value={filterType}
                                 onChange={(e: any) => setFilterType(e.target.value as any)}
-                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)]"
                             >
                                 {transactionTypes.map((type: any) => (
                                     <option key={type} value={type}>
@@ -216,15 +216,14 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                             </select>
                         </div>
 
-                        <div className="flex-1">
-                            <label htmlFor="filter-week" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                            <label htmlFor="filter-week" className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Filter by Week
                             </label>
                             <select
                                 id="filter-week"
                                 value={filterWeek}
                                 onChange={(e: any) => setFilterWeek(e.target.value === 'ALL' ? 'ALL' : Number(e.target.value))}
-                                className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)]"
                             >
                                 <option value="ALL">All Weeks</option>
                                 {availableWeeks.map((week: any) => (
@@ -237,11 +236,11 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                     </div>
 
                     {/* Transaction List */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {filteredTransactions.length === 0 ? (
-                            <div className="text-center py-8">
-                                <ClockIcon className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                                <p className="text-[var(--text-secondary)]">No transactions found with current filters</p>
+                            <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                                <ClockIcon className="w-12 h-12 text-gray-400 mx-auto mb-3 sm:px-4 md:px-6 lg:px-8" />
+                                <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">No transactions found with current filters</p>
                             </div>
                         ) : (
                             filteredTransactions.map((transaction: any) => (
@@ -252,12 +251,12 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                                     className={`p-4 border-l-4 rounded-lg cursor-pointer transition-all hover:bg-white/5 ${getTransactionColor(transaction.type)}`}
                                     onClick={() => setSelectedTransaction(transaction)}
                                 >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
+                                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                             {getTransactionIcon(transaction.type)}
                                             <div>
-                                                <div className="flex items-center gap-2">
-                                                    <h4 className="font-medium text-[var(--text-primary)]">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                         {transaction.description}
                                                     </h4>
                                                     {(() => {
@@ -273,34 +272,34 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                                                         );
                                                     })()}
                                                 </div>
-                                                <div className="flex items-center gap-4 text-sm text-[var(--text-secondary)] mt-1">
+                                                <div className="flex items-center gap-4 text-sm text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                                     <span>{formatDate(transaction.date)}</span>
                                                     <span>{transaction.week === 0 ? 'Pre-Season' : `Week ${transaction.week}`}</span>
                                                     {Boolean(transaction.cost) && (
-                                                        <span className="text-yellow-400">Cost: ${transaction.cost}</span>
+                                                        <span className="text-yellow-400 sm:px-4 md:px-6 lg:px-8">Cost: ${transaction.cost}</span>
                                                     )}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                             {transaction.playerIn && (
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                                     <Avatar
                                                         avatar={transaction.playerIn.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
-                                                        className="w-8 h-8 text-lg rounded-md"
+                                                        className="w-8 h-8 text-lg rounded-md sm:px-4 md:px-6 lg:px-8"
                                                     />
-                                                    <span className="text-green-400 text-sm">+{transaction.playerIn.name}</span>
+                                                    <span className="text-green-400 text-sm sm:px-4 md:px-6 lg:px-8">+{transaction.playerIn.name}</span>
                                                 </div>
                                             )}
-                                            {transaction.type === 'TRADE' && <ArrowRightLeftIcon className="w-4 h-4 text-gray-400" />}
+                                            {transaction.type === 'TRADE' && <ArrowRightLeftIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />}
                                             {transaction.playerOut && (
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                                     <Avatar
                                                         avatar={transaction.playerOut.astralIntelligence?.spiritAnimal?.[0] || '🏈'}
-                                                        className="w-8 h-8 text-lg rounded-md"
+                                                        className="w-8 h-8 text-lg rounded-md sm:px-4 md:px-6 lg:px-8"
                                                     />
-                                                    <span className="text-red-400 text-sm">-{transaction.playerOut.name}</span>
+                                                    <span className="text-red-400 text-sm sm:px-4 md:px-6 lg:px-8">-{transaction.playerOut.name}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -319,44 +318,43 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75"
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 sm:px-4 md:px-6 lg:px-8"
                         onClick={(e: any) => e.target === e.currentTarget && setSelectedTransaction(null)}
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-2xl w-full"
+                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg shadow-xl p-6 max-w-2xl w-full sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {getTransactionIcon(selectedTransaction.type)}
-                                    <h3 className="text-xl font-bold text-[var(--text-primary)]">
+                                    <h3 className="text-xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         Transaction Details
                                     </h3>
                                 </div>
                                 <button
                                     onClick={() => setSelectedTransaction(null)}
-                                    className="p-2 hover:bg-white/10 rounded-lg"
                                 >
                                     ✕
                                 </button>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 <div>
-                                    <h4 className="font-semibold text-[var(--text-primary)] mb-2">Summary</h4>
-                                    <p className="text-[var(--text-secondary)]">{selectedTransaction.description}</p>
+                                    <h4 className="font-semibold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Summary</h4>
+                                    <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{selectedTransaction.description}</p>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-1">Date & Time</h5>
-                                        <p className="text-sm text-[var(--text-secondary)]">{formatDate(selectedTransaction.date)}</p>
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">Date & Time</h5>
+                                        <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{formatDate(selectedTransaction.date)}</p>
                                     </div>
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-1">Week</h5>
-                                        <p className="text-sm text-[var(--text-secondary)]">
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">Week</h5>
+                                        <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                             {selectedTransaction.week === 0 ? 'Pre-Season' : `Week ${selectedTransaction.week}`}
                                         </p>
                                     </div>
@@ -364,25 +362,24 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
 
                                 {selectedTransaction.tradingPartner && (
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-1">Trading Partner</h5>
-                                        <div className="flex items-center gap-2">
-                                            <Avatar avatar={selectedTransaction.tradingPartner.avatar} className="w-8 h-8 text-lg rounded-md" />
-                                            <span className="text-[var(--text-secondary)]">{selectedTransaction.tradingPartner.name}</span>
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">Trading Partner</h5>
+                                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                            <Avatar avatar={selectedTransaction.tradingPartner.avatar} className="w-8 h-8 text-lg rounded-md sm:px-4 md:px-6 lg:px-8" />
+                                            <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{selectedTransaction.tradingPartner.name}</span>
                                         </div>
                                     </div>
                                 )}
 
                                 {selectedTransaction.details && (
                                     <div>
-                                        <h5 className="font-medium text-[var(--text-primary)] mb-1">Additional Details</h5>
-                                        <p className="text-sm text-[var(--text-secondary)]">{selectedTransaction.details}</p>
+                                        <h5 className="font-medium text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">Additional Details</h5>
+                                        <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{selectedTransaction.details}</p>
                                     </div>
                                 )}
 
-                                <div className="flex justify-end">
+                                <div className="flex justify-end sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setSelectedTransaction(null)}
-                                        className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
                                     >
                                         Close
                                     </button>
@@ -396,4 +393,10 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
     );
 };
 
-export default TransactionHistory;
+const TransactionHistoryWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TransactionHistory {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TransactionHistoryWithErrorBoundary);

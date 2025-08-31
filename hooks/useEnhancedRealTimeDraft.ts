@@ -73,7 +73,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     ];
 
     // Add event listeners
-    listeners.forEach(({ event, callback }: any) => {
+    listeners.forEach(({ event, callback }) => {
       realTimeDraftService.on(event, callback);
     });
 
@@ -81,7 +81,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
 
     return () => {
       // Remove event listeners
-      eventListenersRef.current.forEach(({ event, callback }: any) => {
+      eventListenersRef.current.forEach(({ event, callback }) => {
         realTimeDraftService.off(event, callback);
       });
     };
@@ -259,7 +259,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, isConnecting: true, error: null }));
     
     try {
+
       await realTimeDraftService.connect();
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -292,8 +296,12 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       const room = await realTimeDraftService.joinDraftRoom(draftRoomId);
       return room;
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -307,7 +315,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       await realTimeDraftService.leaveDraftRoom();
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -321,7 +333,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       await realTimeDraftService.makePick(pickRequest);
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -335,7 +351,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       await realTimeDraftService.setAutoPick(enabled, playerQueue);
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -349,7 +369,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       await realTimeDraftService.sendChatMessage(message);
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -363,7 +387,11 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     setState(prev => ({ ...prev, error: null }));
     
     try {
+
       await realTimeDraftService.pauseDraft(paused);
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,

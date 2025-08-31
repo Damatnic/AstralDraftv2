@@ -13,6 +13,7 @@ interface User {
     display_name: string;
     avatar_url?: string;
     created_at: string;
+
 }
 
 interface AuthState {
@@ -22,7 +23,6 @@ interface AuthState {
     isLoading: boolean;
     error: string | null;
     isInitialized: boolean;
-}
 
 // Auth actions
 type AuthAction =
@@ -113,17 +113,15 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
             const updatedUser = state.user ? { ...state.user, ...action.payload } : null;
             if (updatedUser) {
                 localStorage.setItem('user', JSON.stringify(updatedUser));
-            }
-            
+
             return {
                 ...state,
                 user: updatedUser,
             };
-        }
 
         default:
             return state;
-    }
+
 };
 
 // Context interface
@@ -143,13 +141,14 @@ interface AuthContextType {
     updateProfile: (updates: Partial<User>) => Promise<void>;
     clearError: () => void;
     checkAuth: () => Promise<void>;
-}
 
 // Create context
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Provider component
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
+}
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount
@@ -181,19 +180,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
                             localStorage.removeItem('sessionToken');
                             localStorage.removeItem('user');
                             dispatch({ type: 'AUTH_INITIALIZED' });
-                        }
+
                     } catch (validationError) {
                         // Session validation failed, clear storage
                         localStorage.removeItem('sessionToken');
                         localStorage.removeItem('user');
                         dispatch({ type: 'AUTH_INITIALIZED' });
-                    }
+
                 } else {
                     dispatch({ type: 'AUTH_INITIALIZED' });
-                }
+
             } catch (error) {
                 dispatch({ type: 'AUTH_INITIALIZED' });
-            }
+
         };
 
         initializeAuth();
@@ -219,13 +218,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
                     type: 'AUTH_FAILURE',
                     payload: result.error || 'Login failed',
                 });
-            }
+
         } catch (error) {
             dispatch({
                 type: 'AUTH_FAILURE',
                 payload: error instanceof Error ? error.message : 'Login failed',
             });
-        }
+
     };
 
     // Register function
@@ -253,30 +252,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
                     type: 'AUTH_FAILURE',
                     payload: result.error || 'Registration failed',
                 });
-            }
+
         } catch (error) {
             dispatch({
                 type: 'AUTH_FAILURE',
                 payload: error instanceof Error ? error.message : 'Registration failed',
             });
-        }
+
     };
 
     // Logout function
     const logout = async (): Promise<void> => {
         try {
+
             await authService.logout();
-        } catch (error) {
+        
+    } catch (error) {
         } finally {
             dispatch({ type: 'AUTH_LOGOUT' });
-        }
+
     };
 
     // Update profile function
     const updateProfile = async (updates: Partial<User>): Promise<void> => {
         if (!state.user) {
             throw new Error('User not authenticated');
-        }
 
         try {
             dispatch({ type: 'AUTH_START' });
@@ -291,19 +291,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
                         type: 'USER_UPDATE',
                         payload: updatedProfile,
                     });
-                }
+
             } else {
                 dispatch({
                     type: 'AUTH_FAILURE',
                     payload: 'Profile update failed',
                 });
-            }
+
         } catch (error) {
             dispatch({
                 type: 'AUTH_FAILURE',
                 payload: error instanceof Error ? error.message : 'Profile update failed',
             });
-        }
+
     };
 
     // Clear error function
@@ -325,10 +325,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
             } else {
                 // Auth is invalid, logout
                 dispatch({ type: 'AUTH_LOGOUT' });
-            }
+
         } catch (error) {
             dispatch({ type: 'AUTH_LOGOUT' });
-        }
+
     };
 
     // Memoized context value
@@ -365,7 +365,7 @@ export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
-    }
+
     return context;
 };
 
@@ -389,13 +389,12 @@ export const usePermission = (permission?: string) => {
 export const AuthInitializer: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
     children,
     fallback = <div>Loading...</div>,
-}: any) => {
+}) => {
     const { isInitialized } = useAuth();
     
     if (!isInitialized) {
         return <>{fallback}</>;
-    }
-    
+
     return <>{children}</>;
 };
 

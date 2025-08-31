@@ -1,7 +1,9 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
 
 export const HighContrastMode: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [highContrast, setHighContrast] = useState(false);
 
   useEffect(() => {
@@ -36,4 +38,10 @@ export const HighContrastMode: React.FC = () => {
   );
 };
 
-export default HighContrastMode;
+const HighContrastModeWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <HighContrastMode {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(HighContrastModeWithErrorBoundary);

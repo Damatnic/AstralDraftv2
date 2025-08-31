@@ -15,25 +15,29 @@ interface ErrorBoundaryState {
 
 // ZERO-ERROR Authentication-Aware Fallback
 const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const errorMessage = error.message.toLowerCase();
   const isAuthError = errorMessage.includes('authentication') ||
                      errorMessage.includes('login') ||
                      errorMessage.includes('session') ||
-                     errorMessage.includes('token') ||
                      errorMessage.includes('unauthorized');
 
-  const isBrowserExtensionError = errorMessage.includes('chrome-extension') ||
-                                 errorMessage.includes('moz-extension') ||
-                                 errorMessage.includes('safari-extension') ||
-                                 errorMessage.includes('message port closed') ||
-                                 errorMessage.includes('runtime.lastError');
+  const isExtensionError = errorMessage.includes('extension') ||
+                          errorMessage.includes('chrome') ||
+                          errorMessage.includes('firefox') ||
+                          errorMessage.includes('adblock') ||
+                          errorMessage.includes('devtools') ||
+                          errorMessage.includes('ublock');
 
-  // If it's a browser extension error, auto-recover
-  if (isBrowserExtensionError) {
-    React.useEffect(() => {
-      setTimeout(() => retry(), 100); // Auto-retry extension errors
-    }, [retry]);
-    
+  const handleRetry = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      retry();
+      setIsLoading(false);
+    }, 500);
+  };
+
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
         <div className="text-center">
@@ -51,60 +55,51 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
         <h2 className="text-2xl font-bold mb-4 text-white">
           {isAuthError ? 'Login System Issue' : 'Application Error'}
         </h2>
-        <p className="text-gray-300 mb-4">
-          {isAuthError 
-            ? 'There was an issue with the authentication system. Let\'s get you signed in!' 
-            : 'Something went wrong. The error has been logged and will be investigated.'}
-        </p>
-        {!isAuthError && (
-          <div className="bg-slate-900/50 rounded p-3 mb-6 text-left">
-            <p className="text-red-400 font-mono text-sm break-all">
-              {error.message || 'Unknown error occurred'}
+        
+        {isAuthError ? (
+          <div>
+            <p className="text-gray-300 mb-6">
+              There seems to be an issue with the authentication system. This could be due to a browser extension or network settings.
             </p>
-          </div>
-        )}
-        <div className="space-y-3">
-          {isAuthError ? (
-            <>
+            <div className="space-y-3">
               <button
                 onClick={() => {
-                  // Clear auth storage and force fresh login
+                  // Clear all storage and reload in demo mode
                   localStorage.clear();
                   sessionStorage.clear();
-                  window.location.href = '/';
-                }}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors"
-              >
-                🔄 Fresh Login
-              </button>
-              <button
-                onClick={() => {
-                  // Enable demo mode
-                  localStorage.setItem('astral_demo_mode', 'true');
-                  window.location.href = '/';
+                  window.location.href = window.location.origin + '?demo=true';
                 }}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition-colors"
               >
                 🎮 Demo Mode
               </button>
-            </>
-          ) : (
-            <>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p className="text-gray-300 mb-6">
+              {isExtensionError 
+                ? 'A browser extension might be interfering with the app. Try disabling extensions or using incognito mode.'
+                : 'Something went wrong. This might be a temporary issue.'}
+            </p>
+            <div className="space-y-3">
               <button
-                onClick={retry}
+                onClick={handleRetry}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+                aria-label="Try again button"
               >
                 Try Again
               </button>
               <button
                 onClick={() => window.location.reload()}
+                aria-label="Refresh page button"
                 className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded transition-colors"
               >
                 Refresh Page
               </button>
-            </>
-          )}
-        </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -136,26 +131,23 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     // Comprehensive error pattern matching for suppression
     const suppressibleErrorPatterns = [
       // Browser extension errors
-      'chrome-extension', 'moz-extension', 'safari-extension',
-      'message port closed', 'runtime.lasterror', 'tab no longer exists',
-      'receiving end does not exist', 'extension context invalidated',
-      
-      // WebSocket errors that don't affect functionality
-      'websocket connection failed', 'websocket error', 'connection refused',
-      'websocketunavailable', 'websocket unavailable',
-      
-      // Network errors that don't break the app
-      'network error', 'fetch error', 'cors error',
-      
-      // Environment/build errors that are recoverable
-      'chunk load error', 'loading css chunk', 'loading chunk'
+      'extension', 'chrome-extension', 'moz-extension', 'safari-extension',
+      'adblock', 'ublock', 'ghostery', 'privacy badger',
+      // DevTools related
+      'devtools', 'chrome devtools', 'firefox devtools',
+      // Network/Connection issues that auto-resolve
+      'network error', 'failed to fetch', 'load failed',
+      // Common non-critical React warnings
+      'validateproperties', 'unknown event handler', 'unknown prop',
+      // Browser compatibility edge cases
+      'non-configurable', 'illegal constructor'
     ];
-    
-    const isSuppressibleError = suppressibleErrorPatterns.some(pattern =>
+
+    const isSuppressible = suppressibleErrorPatterns.some(pattern => 
       errorMessage.includes(pattern) || errorStack.includes(pattern)
     );
-    
-    if (isSuppressibleError) {
+
+    if (isSuppressible) {
       // Auto-recover from suppressible errors
       setTimeout(() => {
         this.setState({ hasError: false, error: undefined, errorId: undefined });
@@ -209,8 +201,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
         if ((window as any).loggingService) {
           (window as any).loggingService.error('React Error Boundary', errorDetails, 'react-error');
         }
-      } catch (loggingError) {
-        console.error('Failed to log error to monitoring service:', loggingError);
+      } catch (error) {
+        console.error('Failed to log error to monitoring service:', error);
       }
     }
   }
@@ -222,31 +214,16 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 
   handleRetry = () => {
-    // Clear any pending retry
-    if (this.retryTimeoutId) {
-      clearTimeout(this.retryTimeoutId);
-    }
-
-    // Reset error state
     this.setState({ hasError: false, error: undefined, errorId: undefined });
-
-    // If still erroring after retry, prevent infinite retry loop
-    this.retryTimeoutId = window.setTimeout(() => {
-      if (this.state.hasError) {
-        console.warn('Error boundary retry failed, preventing further retries');
-      }
-    }, 1000);
   }
 
   render() {
-    if (this.state.hasError && this.state.error) {
-      // Use custom fallback component if provided
+    if (this.state.hasError) {
       const FallbackComponent = this.props.fallback || DefaultErrorFallback;
-      
       return (
         <FallbackComponent 
-          error={this.state.error} 
-          retry={this.handleRetry}
+          error={this.state.error!} 
+          retry={this.handleRetry} 
         />
       );
     }
@@ -255,12 +232,12 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
   }
 }
 
-// Higher-order component for easy error boundary wrapping
+// HOC for wrapping components with ErrorBoundary
 export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
 ) => {
-  const WrappedComponent = (props: P) => (
+  const WrappedComponent: React.FC<P> = (props) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
     </ErrorBoundary>
@@ -278,4 +255,10 @@ export const useErrorHandler = () => {
   }, []);
 };
 
-export default ErrorBoundary;
+const ErrorBoundaryWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <ErrorBoundary {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(ErrorBoundaryWithErrorBoundary);

@@ -3,7 +3,8 @@
  * Central integration point for all social features
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import LeagueHistoryViewer from './LeagueHistoryViewer';
@@ -31,9 +32,10 @@ export interface CommunityHubProps {
     onStoryPublish: (story: any) => void;
     onSocialInteraction: (type: string, data: any) => void;
     className?: string;
-}
 
 type SocialFeatureTab = 'feed' | 'trade_chat' | 'stories' | 'history' | 'community';
+
+}
 
 interface SocialActivity {
     id: string;
@@ -44,7 +46,6 @@ interface SocialActivity {
     description: string;
     timestamp: Date;
     relatedId?: string;
-}
 
 interface CommunityStats {
     totalMembers: number;
@@ -53,6 +54,7 @@ interface CommunityStats {
     tradesThisMonth: number;
     interactionsToday: number;
     engagementScore: number;
+
 }
 
 const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
@@ -65,7 +67,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     onStoryPublish,
     onSocialInteraction,
     className = ''
-}: any) => {
+}) => {
     const [activeTab, setActiveTab] = React.useState<SocialFeatureTab>('feed');
     const [recentActivity, setRecentActivity] = React.useState<SocialActivity[]>([]);
     const [communityStats] = React.useState<CommunityStats>({
@@ -93,7 +95,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     tradeId: 'trade_123',
                     playersGiven: ['Player A', 'Player B'],
                     playersReceived: ['Player C']
-                }
+
             },
             timestamp: new Date(Date.now() - 3600000),
             reactions: [
@@ -109,7 +111,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     reactions: [],
                     isEdited: false,
                     isPinned: false
-                }
+
             ],
             shares: 2,
             views: 28,
@@ -131,7 +133,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 text: 'Check out my season recap! It\'s been quite the journey from last place to playoff contention. Here\'s how we turned it around...',
                 media: [
                     { id: 'm1', type: 'image' as const, url: '/story-image.jpg', caption: 'Key moment from Week 8' }
-                ]
+
             },
             timestamp: new Date(Date.now() - 7200000),
             reactions: [
@@ -146,7 +148,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             visibility: 'league_only' as const,
             tags: ['story', 'comeback', 'playoffs'],
             mentions: []
-        }
+
     ], [users, teams]);
 
     const mockLeagueEvents = React.useMemo(() => [
@@ -172,7 +174,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     userId: users[1]?.id || 'user2',
                     userName: users[1]?.name || 'Manager 2',
                     role: 'secondary' as const
-                }
+
             ],
             data: {
                 finalScore: { team1: 145.6, team2: 142.3 },
@@ -194,12 +196,12 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     content: 'What an incredible finish! One of the best championship games we\'ve ever had.',
                     timestamp: new Date(),
                     likes: 5
-                }
+
             ],
             tags: ['championship', 'thriller', '2023'],
             isHighlight: true,
             visibility: 'league_only' as const
-        }
+
     ], [teams, users]);
 
     const mockMilestones = React.useMemo(() => [
@@ -238,7 +240,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             icon: '🤝',
             value: 10,
             isFirstTime: false
-        }
+
     ], [teams, users]);
 
     const handleSocialAction = (action: string, data: any) => {
@@ -271,95 +273,95 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 return 'commented on a league event';
             default:
                 return 'performed an action';
-        }
+
     };
 
     const tabs = [
         { 
             id: 'feed', 
             label: 'Social Feed', 
-            icon: <RssIcon className="w-4 h-4" />,
+            icon: <RssIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'League activity and interactions'
         },
         { 
             id: 'trade_chat', 
             label: 'Trade Hub', 
-            icon: <MessageSquareIcon className="w-4 h-4" />,
+            icon: <MessageSquareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Trade negotiations and discussions'
         },
         { 
             id: 'stories', 
             label: 'Team Stories', 
-            icon: <BookOpenIcon className="w-4 h-4" />,
+            icon: <BookOpenIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Share your fantasy journey'
         },
         { 
             id: 'history', 
             label: 'League History', 
-            icon: <HistoryIcon className="w-4 h-4" />,
+            icon: <HistoryIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Memorable moments and milestones'
         },
         { 
             id: 'community', 
             label: 'Community', 
-            icon: <UsersIcon className="w-4 h-4" />,
+            icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'League stats and member activity'
-        }
+
     ];
 
     const renderCommunityOverview = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Community Stats */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                        <UsersIcon className="w-5 h-5 text-blue-400" />
-                        <span className="font-medium text-[var(--text-primary)]">Total Members</span>
+                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <UsersIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Total Members</span>
                     </div>
-                    <div className="text-2xl font-bold text-blue-400">{communityStats.totalMembers}</div>
+                    <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">{communityStats.totalMembers}</div>
                 </div>
                 
-                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                        <SparklesIcon className="w-5 h-5 text-green-400" />
-                        <span className="font-medium text-[var(--text-primary)]">Active Today</span>
+                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <SparklesIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Active Today</span>
                     </div>
-                    <div className="text-2xl font-bold text-green-400">{communityStats.activeToday}</div>
+                    <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">{communityStats.activeToday}</div>
                 </div>
                 
-                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                        <TrendingUpIcon className="w-5 h-5 text-purple-400" />
-                        <span className="font-medium text-[var(--text-primary)]">Engagement</span>
+                <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <TrendingUpIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Engagement</span>
                     </div>
-                    <div className="text-2xl font-bold text-purple-400">{communityStats.engagementScore}%</div>
+                    <div className="text-2xl font-bold text-purple-400 sm:px-4 md:px-6 lg:px-8">{communityStats.engagementScore}%</div>
                 </div>
             </div>
 
             {/* Recent Activity */}
-            <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg">
-                <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                    <CalendarIcon className="w-5 h-5" />
+            <div className="p-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-medium text-[var(--text-primary)] mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                    <CalendarIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                     Recent Community Activity
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {recentActivity.length === 0 ? (
-                        <p className="text-[var(--text-secondary)] text-center py-4">
+                        <p className="text-[var(--text-secondary)] text-center py-4 sm:px-4 md:px-6 lg:px-8">
                             No recent activity. Be the first to engage!
                         </p>
                     ) : (
                         recentActivity.slice(0, 5).map((activity: any) => (
-                            <div key={activity.id} className="flex items-start gap-3 p-2 hover:bg-white/5 rounded">
-                                <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0" />
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-[var(--text-primary)]">
-                                        <span className="font-medium">{activity.userName}</span>
+                            <div key={activity.id} className="flex items-start gap-3 p-2 hover:bg-white/5 rounded sm:px-4 md:px-6 lg:px-8">
+                                <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                                    <p className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
+                                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{activity.userName}</span>
                                         {activity.teamName && (
-                                            <span className="text-[var(--text-secondary)]"> ({activity.teamName})</span>
+                                            <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8"> ({activity.teamName})</span>
                                         )}
                                         {' '}{activity.description}
                                     </p>
-                                    <p className="text-xs text-[var(--text-secondary)]">
+                                    <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {activity.timestamp.toLocaleTimeString()}
                                     </p>
                                 </div>
@@ -374,13 +376,13 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setActiveTab('trade_chat')}
-                    className="p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/50 rounded-lg text-left"
+                    className="p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/50 rounded-lg text-left sm:px-4 md:px-6 lg:px-8"
                 >
-                    <div className="flex items-center gap-3 mb-2">
-                        <MessageSquareIcon className="w-6 h-6 text-blue-400" />
-                        <span className="font-medium text-[var(--text-primary)]">Start Trade Chat</span>
+                    <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <MessageSquareIcon className="w-6 h-6 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Start Trade Chat</span>
                     </div>
-                    <p className="text-sm text-[var(--text-secondary)]">
+                    <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                         Begin trade negotiations with league members
                     </p>
                 </motion.button>
@@ -388,13 +390,13 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setActiveTab('stories')}
-                    className="p-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-400/50 rounded-lg text-left"
+                    className="p-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-400/50 rounded-lg text-left sm:px-4 md:px-6 lg:px-8"
                 >
-                    <div className="flex items-center gap-3 mb-2">
-                        <BookOpenIcon className="w-6 h-6 text-green-400" />
-                        <span className="font-medium text-[var(--text-primary)]">Share Your Story</span>
+                    <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <BookOpenIcon className="w-6 h-6 text-green-400 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Share Your Story</span>
                     </div>
-                    <p className="text-sm text-[var(--text-secondary)]">
+                    <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                         Document your fantasy football journey
                     </p>
                 </motion.button>
@@ -421,22 +423,22 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             case 'trade_chat':
                 // For now, return a placeholder since we need proper chat session data
                 return (
-                    <div className="p-8 text-center text-[var(--text-secondary)]">
-                        <MessageSquareIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                        <h3 className="text-lg font-medium mb-2">Trade Chat Coming Soon</h3>
+                    <div className="p-8 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                        <MessageSquareIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                        <h3 className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Trade Chat Coming Soon</h3>
                         <p>Advanced trade negotiation features will be available here.</p>
-                        <p className="text-sm mt-2">Real-time chat, proposal sharing, and trade analytics.</p>
+                        <p className="text-sm mt-2 sm:px-4 md:px-6 lg:px-8">Real-time chat, proposal sharing, and trade analytics.</p>
                     </div>
                 );
                 
             case 'stories':
                 // For now, return a placeholder since we need proper story templates
                 return (
-                    <div className="p-8 text-center text-[var(--text-secondary)]">
-                        <BookOpenIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                        <h3 className="text-lg font-medium mb-2">Team Stories Coming Soon</h3>
+                    <div className="p-8 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                        <BookOpenIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                        <h3 className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Team Stories Coming Soon</h3>
                         <p>Rich story creation tools will be available here.</p>
-                        <p className="text-sm mt-2">Templates, multimedia support, and narrative building.</p>
+                        <p className="text-sm mt-2 sm:px-4 md:px-6 lg:px-8">Templates, multimedia support, and narrative building.</p>
                     </div>
                 );
                 
@@ -457,30 +459,25 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 
             default:
                 return null;
-        }
+
     };
 
     return (
         <Widget title="Community Hub" className={`h-full flex flex-col ${className}`}>
             {/* Header with Tab Navigation */}
-            <div className="flex-shrink-0 border-b border-[var(--panel-border)]">
-                <div className="p-4 pb-0">
-                    <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-                        <HeartIcon className="w-6 h-6 text-red-400" />
+            <div className="flex-shrink-0 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="p-4 pb-0 sm:px-4 md:px-6 lg:px-8">
+                    <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <HeartIcon className="w-6 h-6 text-red-400 sm:px-4 md:px-6 lg:px-8" />
                         Community Hub
                     </h1>
                 </div>
                 
-                <div className="flex overflow-x-auto">
+                <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as SocialFeatureTab)}
-                            className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors whitespace-nowrap ${
-                                activeTab === tab.id
-                                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-500/10'
-                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
-                            }`}
+                            onClick={() => setActiveTab(tab.id as SocialFeatureTab)}`}
                             title={tab.description}
                         >
                             {tab.icon}
@@ -491,13 +488,13 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             </div>
 
             {/* Tab Content */}
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden sm:px-4 md:px-6 lg:px-8">
                 <motion.div
                     key={activeTab}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="h-full"
+                    className="h-full sm:px-4 md:px-6 lg:px-8"
                 >
                     {renderActiveTab()}
                 </motion.div>
@@ -506,4 +503,10 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     );
 };
 
-export default CommunityHubIntegration;
+const CommunityHubIntegrationWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <CommunityHubIntegration {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(CommunityHubIntegrationWithErrorBoundary);

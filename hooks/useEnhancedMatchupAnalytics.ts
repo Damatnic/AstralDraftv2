@@ -31,7 +31,7 @@ export const useEnhancedMatchupAnalytics = ({
   position = 'WR',
   autoRefresh = false,
   refreshInterval = 300000 // 5 minutes
-}: UseEnhancedMatchupAnalyticsProps) => {
+}) => {
   const [state, setState] = useState<EnhancedMatchupAnalyticsState>({
     trends: [],
     defensiveHeatMap: null,

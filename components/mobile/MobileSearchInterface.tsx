@@ -3,7 +3,8 @@
  * Touch-optimized search with filters and quick actions for mobile devices
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player, PlayerPosition } from '../../types';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
@@ -27,6 +28,7 @@ interface MobileSearchInterfaceProps {
     showFilters?: boolean;
     showSorting?: boolean;
     className?: string;
+
 }
 
 interface SearchFilters {
@@ -36,13 +38,13 @@ interface SearchFilters {
     maxRank?: number;
     injured?: boolean;
     available?: boolean;
-}
 
 interface SortOption {
     id: string;
     label: string;
     key: keyof Player | 'projection';
     direction: 'asc' | 'desc';
+
 }
 
 const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
@@ -53,7 +55,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     showFilters = true,
     showSorting = true,
     className = ''
-}: any) => {
+}) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [showAdvancedFilters, setShowAdvancedFilters] = React.useState(false);
     const [selectedSort, setSelectedSort] = React.useState<SortOption | null>(null);
@@ -96,13 +98,13 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
             case 'K': return 'text-yellow-400 bg-yellow-500/20';
             case 'DST': return 'text-red-400 bg-red-500/20';
             default: return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     const getPlayerValue = (player: Player, key: keyof Player | 'projection'): any => {
         if (key === 'projection') {
             return player.stats?.projection || 0;
-        }
+
         return player[key as keyof Player];
     };
 
@@ -116,34 +118,29 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                     !player.team.toLowerCase().includes(query) &&
                     !player.position.toLowerCase().includes(query)) {
                     return false;
-                }
-            }
+
 
             // Position filter
             if (filters.positions.length > 0 && !filters.positions.includes(player.position)) {
                 return false;
-            }
 
             // Team filter
             if (filters.teams.length > 0 && !filters.teams.includes(player.team)) {
                 return false;
-            }
 
             // Rank filter
             if (filters.minRank && player.rank < filters.minRank) {
                 return false;
-            }
+
             if (filters.maxRank && player.rank > filters.maxRank) {
                 return false;
-            }
 
             // Injury filter
             if (filters.injured !== undefined) {
                 const isInjured = getInjuryStatus(player.injuryHistory);
                 if (filters.injured !== isInjured) {
                     return false;
-                }
-            }
+
 
             return true;
         });
@@ -165,11 +162,9 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                     comparison = aValue - bValue;
                 } else {
                     comparison = String(aValue).localeCompare(String(bValue));
-                }
 
                 return selectedSort.direction === 'desc' ? -comparison : comparison;
             });
-        }
 
         return filtered;
     }, [players, searchQuery, filters, selectedSort]);
@@ -223,22 +218,20 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     return (
         <div className={`bg-[var(--panel-bg)] border-b border-[var(--panel-border)] ${className}`}>
             {/* Search Bar */}
-            <div className="p-4 pb-2">
-                <div className="relative">
-                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] w-4 h-4" />
+            <div className="p-4 pb-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="relative sm:px-4 md:px-6 lg:px-8">
+                    <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={(e: any) => handleSearchChange(e.target.value)}
-                        placeholder={placeholder}
-                        className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-blue-400"
+                        className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] placeholder-[var(--text-secondary)] focus:outline-none focus:border-blue-400 sm:px-4 md:px-6 lg:px-8"
                     />
                     {searchQuery && (
                         <button
                             onClick={() => handleSearchChange('')}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                         >
-                            <XIcon className="w-4 h-4" />
+                            <XIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         </button>
                     )}
                 </div>
@@ -246,22 +239,17 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
 
             {/* Filter Controls */}
             {(showFilters || showSorting) && (
-                <div className="px-4 pb-2">
-                    <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 overflow-x-auto">
+                <div className="px-4 pb-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                             {showFilters && (
                                 <button
-                                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors ${
-                                        hasActiveFilters
-                                            ? 'bg-blue-500/20 border-blue-400/50 text-blue-400'
-                                            : 'bg-[var(--panel-bg)] border-[var(--panel-border)] text-[var(--text-secondary)]'
-                                    }`}
+                                    onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}`}
                                 >
-                                    <FilterIcon className="w-4 h-4" />
+                                    <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     Filters
                                     {hasActiveFilters && (
-                                        <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                                        <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] text-center sm:px-4 md:px-6 lg:px-8">
                                             {filters.positions.length + filters.teams.length + 
                                              (selectedSort ? 1 : 0) + (searchQuery ? 1 : 0)}
                                         </span>
@@ -273,15 +261,15 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                             )}
 
                             {showSorting && (
-                                <div className="flex items-center gap-1">
-                                    <span className="text-xs text-[var(--text-secondary)] whitespace-nowrap">Sort by:</span>
+                                <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-xs text-[var(--text-secondary)] whitespace-nowrap sm:px-4 md:px-6 lg:px-8">Sort by:</span>
                                     <select
                                         value={selectedSort?.id || ''}
                                         onChange={(e: any) => {
                                             const option = sortOptions.find((opt: any) => opt.id === e.target.value);
                                             setSelectedSort(option || null);
                                         }}
-                                        className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-2 py-1 text-sm text-[var(--text-primary)]"
+                                        className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded px-2 py-1 text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                     >
                                         <option value="">Default</option>
                                         {sortOptions.map((option: any) => (
@@ -297,8 +285,8 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                         {hasActiveFilters && (
                             <button
                                 onClick={clearFilters}
-                                className="text-xs text-red-400 hover:text-red-300 whitespace-nowrap"
-                            >
+                                className="text-xs text-red-400 hover:text-red-300 whitespace-nowrap sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 Clear All
                             </button>
                         )}
@@ -314,21 +302,16 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="border-t border-[var(--panel-border)] px-4 py-3 overflow-hidden"
+                        className="border-t border-[var(--panel-border)] px-4 py-3 overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     >
                         {/* Position Filters */}
-                        <div className="mb-3">
-                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Positions</div>
-                            <div className="flex flex-wrap gap-2">
+                        <div className="mb-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Positions</div>
+                            <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                 {positions.map((position: any) => (
                                     <button
                                         key={position}
-                                        onClick={() => togglePositionFilter(position)}
-                                        className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                                            filters.positions.includes(position)
-                                                ? getPositionColor(position)
-                                                : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
-                                        }`}
+                                        onClick={() => togglePositionFilter(position)}`}
                                     >
                                         {position}
                                     </button>
@@ -337,19 +320,14 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                         </div>
 
                         {/* Team Filters */}
-                        <div className="mb-3">
-                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Teams</div>
-                            <div className="max-h-24 overflow-y-auto">
-                                <div className="grid grid-cols-4 gap-1">
+                        <div className="mb-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Teams</div>
+                            <div className="max-h-24 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
+                                <div className="grid grid-cols-4 gap-1 sm:px-4 md:px-6 lg:px-8">
                                     {teams.map((team: any) => (
                                         <button
                                             key={team}
-                                            onClick={() => toggleTeamFilter(team)}
-                                            className={`px-2 py-1 rounded text-xs transition-colors ${
-                                                filters.teams.includes(team)
-                                                    ? 'bg-blue-500/20 text-blue-400'
-                                                    : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-secondary)]'
-                                            }`}
+                                            onClick={() => toggleTeamFilter(team)}`}
                                         >
                                             {team}
                                         </button>
@@ -359,9 +337,9 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                         </div>
 
                         {/* Rank Range */}
-                        <div className="mb-3">
-                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Rank Range</div>
-                            <div className="flex items-center gap-2">
+                        <div className="mb-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Rank Range</div>
+                            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <input
                                     type="number"
                                     placeholder="Min"
@@ -369,10 +347,10 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     onChange={(e: any) => setFilters(prev => ({
                                         ...prev,
                                         minRank: e.target.value ? parseInt(e.target.value) : undefined
-                                    }))}
-                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm"
+                                    }}
+                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm sm:px-4 md:px-6 lg:px-8"
                                 />
-                                <span className="text-[var(--text-secondary)]">to</span>
+                                <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">to</span>
                                 <input
                                     type="number"
                                     placeholder="Max"
@@ -380,18 +358,18 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     onChange={(e: any) => setFilters(prev => ({
                                         ...prev,
                                         maxRank: e.target.value ? parseInt(e.target.value) : undefined
-                                    }))}
-                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm"
+                                    }}
+                                    className="flex-1 px-2 py-1 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded text-sm sm:px-4 md:px-6 lg:px-8"
                                 />
                             </div>
                         </div>
 
                         {/* Other Filters */}
                         <div>
-                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2">Status</div>
-                            <div className="flex gap-2">
+                            <div className="text-xs font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Status</div>
+                            <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <button
-                                    onClick={() => setFilters(prev => ({
+                                    onClick={() = aria-label="Action button"> setFilters(prev => ({
                                         ...prev,
                                         injured: prev.injured === true ? undefined : true
                                     }))}
@@ -404,7 +382,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     Injured Only
                                 </button>
                                 <button
-                                    onClick={() => setFilters(prev => ({
+                                    onClick={() = aria-label="Action button"> setFilters(prev => ({
                                         ...prev,
                                         injured: prev.injured === false ? undefined : false
                                     }))}
@@ -424,39 +402,38 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
 
             {/* Results Summary */}
             {filteredAndSortedPlayers.length !== players.length && (
-                <div className="px-4 py-2 text-xs text-[var(--text-secondary)] border-t border-[var(--panel-border)]">
+                <div className="px-4 py-2 text-xs text-[var(--text-secondary)] border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     Showing {filteredAndSortedPlayers.length} of {players.length} players
                 </div>
             )}
 
             {/* Player List */}
-            <div className="max-h-64 overflow-y-auto">
+            <div className="max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 {filteredAndSortedPlayers.map((player, index) => (
                     <motion.div
                         key={player.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.02 }}
-                        className="border-b border-[var(--panel-border)] last:border-b-0"
+                        className="border-b border-[var(--panel-border)] last:border-b-0 sm:px-4 md:px-6 lg:px-8"
                     >
                         <button
                             onClick={() => onPlayerSelect?.(player)}
-                            className="w-full p-3 text-left hover:bg-[var(--panel-border)]/50 transition-colors"
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-1">
-                                        <span className="font-medium text-[var(--text-primary)]">
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                                        <span className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {player.name}
                                         </span>
                                         {getInjuryStatus(player.injuryHistory) && (
-                                            <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs">
+                                            <span className="px-1.5 py-0.5 bg-red-500/20 text-red-400 rounded text-xs sm:px-4 md:px-6 lg:px-8">
                                                 Injured
                                             </span>
                                         )}
                                     </div>
-                                    <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
-                                        <span className="flex items-center gap-1">
+                                    <div className="flex items-center gap-3 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                        <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                                             <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                                                 getPositionColor(player.position)
                                             }`}>
@@ -470,14 +447,14 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
                                     </div>
                                 </div>
                                 
-                                <div className="text-right">
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
                                     {Boolean(player.stats?.projection) && (
-                                        <div className="text-lg font-medium text-[var(--text-primary)]">
+                                        <div className="text-lg font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {player.stats.projection?.toFixed(1)}
                                         </div>
                                     )}
                                     {player.adp && (
-                                        <div className="text-xs text-[var(--text-secondary)]">
+                                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                             ADP: {player.adp.toFixed(1)}
                                         </div>
                                     )}
@@ -489,14 +466,14 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
             </div>
 
             {filteredAndSortedPlayers.length === 0 && (
-                <div className="p-8 text-center text-[var(--text-secondary)]">
-                    <SearchIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <div className="text-sm">No players found</div>
+                <div className="p-8 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                    <SearchIcon className="w-8 h-8 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                    <div className="text-sm sm:px-4 md:px-6 lg:px-8">No players found</div>
                     {hasActiveFilters && (
                         <button
                             onClick={clearFilters}
-                            className="text-xs text-blue-400 hover:text-blue-300 mt-1"
-                        >
+                            className="text-xs text-blue-400 hover:text-blue-300 mt-1 sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
                             Clear filters to see all players
                         </button>
                     )}
@@ -506,4 +483,10 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     );
 };
 
-export default MobileSearchInterface;
+const MobileSearchInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileSearchInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileSearchInterfaceWithErrorBoundary);

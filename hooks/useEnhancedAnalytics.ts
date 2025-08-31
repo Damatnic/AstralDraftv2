@@ -27,6 +27,8 @@ export interface UseEnhancedAnalyticsReturn {
   
   // Actions
   refresh: () => Promise<void>;
+}
+
   exportData: (format?: 'json' | 'csv') => Promise<string>;
   clearCache: () => void;
   
@@ -64,9 +66,13 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
     setError(null);
 
     try {
+
       const analyticsReport = await enhancedAnalyticsService.generateAnalyticsReport(timeRange);
       setReport(analyticsReport);
       setLastUpdated(new Date().toISOString());
+    
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load analytics';
       setError(errorMessage);
@@ -84,7 +90,11 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
   // Export data
   const exportData = useCallback(async (format: 'json' | 'csv' = 'json'): Promise<string> => {
     try {
+
       return await enhancedAnalyticsService.exportAnalyticsData(format);
+
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to export data';
       throw new Error(errorMessage);

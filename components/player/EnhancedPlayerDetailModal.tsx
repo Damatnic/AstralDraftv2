@@ -3,6 +3,7 @@
  * Updated modal to use the new PlayerProfileView for comprehensive player information
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import type { Player, League } from '../../types';
@@ -15,6 +16,7 @@ interface EnhancedPlayerDetailModalProps {
     onClose: () => void;
     league?: League | null;
     dispatch: React.Dispatch<any>;
+
 }
 
 const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({ 
@@ -22,7 +24,7 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
     onClose, 
     league,
     dispatch 
-}: any) => {
+}) => {
     // Fallback league if none provided
     const defaultLeague: League = {
         id: '1',
@@ -68,4 +70,10 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
     );
 };
 
-export default EnhancedPlayerDetailModal;
+const EnhancedPlayerDetailModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedPlayerDetailModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedPlayerDetailModalWithErrorBoundary);

@@ -27,6 +27,7 @@ interface FormData {
   username: string;
   password: string;
   confirmPassword: string;
+
 }
 
 interface FormErrors {
@@ -35,7 +36,6 @@ interface FormErrors {
   password?: string;
   confirmPassword?: string;
   general?: string;
-}
 
 const ModernAuthView: React.FC = () => {
   const { dispatch } = useAppState();
@@ -57,7 +57,7 @@ const ModernAuthView: React.FC = () => {
     // Clear error for this field
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
+
   };
 
   const validateForm = (): boolean => {
@@ -68,14 +68,12 @@ const ModernAuthView: React.FC = () => {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
-    }
 
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
-    }
 
     // Register-specific validation
     if (!isLogin) {
@@ -83,12 +81,10 @@ const ModernAuthView: React.FC = () => {
         newErrors.username = 'Username is required';
       } else if (formData.username.length < 3) {
         newErrors.username = 'Username must be at least 3 characters';
-      }
 
       if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = 'Passwords do not match';
-      }
-    }
+
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -99,7 +95,6 @@ const ModernAuthView: React.FC = () => {
     
     if (!validateForm()) {
       return;
-    }
 
     setIsLoading(true);
     setErrors({});
@@ -122,13 +117,13 @@ const ModernAuthView: React.FC = () => {
                   name: authState.user.username,
                   email: authState.user.email,
                   avatar: authState.user.avatarUrl || '/default-avatar.png'
-                }
+
               });
-            }
+
           }, 1000);
         } else {
           setErrors({ general: result.error || 'Login failed' });
-        }
+
       } else {
         const result = await netlifyAuth.register(
           formData.email,
@@ -149,19 +144,19 @@ const ModernAuthView: React.FC = () => {
                   name: authState.user.username,
                   email: authState.user.email,
                   avatar: authState.user.avatarUrl || '/default-avatar.png'
-                }
+
               });
-            }
+
           }, 1000);
         } else {
           setErrors({ general: result.error || 'Registration failed' });
-        }
-      }
+
+
     } catch (error) {
       setErrors({ general: 'An unexpected error occurred. Please try again.' });
     } finally {
       setIsLoading(false);
-    }
+
   };
 
   const features = [
@@ -224,8 +219,7 @@ const ModernAuthView: React.FC = () => {
           </AnimatePresence>
 
           {/* Auth Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Field */}
+          <form onSubmit={handleSubmit}
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
               <div className="relative">
@@ -234,10 +228,7 @@ const ModernAuthView: React.FC = () => {
                   type="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleInputChange}
-                  className={`glass-input w-full pl-10 pr-4 py-3 ${
-                    errors.email ? 'border-red-500' : ''
-                  }`}
+                  onChange={handleInputChange}`}
                   placeholder="Enter your email"
                 />
               </div>
@@ -261,10 +252,7 @@ const ModernAuthView: React.FC = () => {
                       type="text"
                       name="username"
                       value={formData.username}
-                      onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 rounded-lg bg-[var(--surface-primary)] border ${
-                        errors.username ? 'border-red-500' : 'border-[var(--border-primary)]'
-                      } focus:border-[var(--primary)] focus:outline-none transition-colors`}
+                      onChange={handleInputChange} focus:border-[var(--primary)] focus:outline-none transition-colors`}
                       placeholder="Choose a username"
                     />
                   </div>
@@ -284,16 +272,12 @@ const ModernAuthView: React.FC = () => {
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
-                  onChange={handleInputChange}
-                  className={`w-full pl-10 pr-12 py-3 rounded-lg bg-[var(--surface-primary)] border ${
-                    errors.password ? 'border-red-500' : 'border-[var(--border-primary)]'
-                  } focus:border-[var(--primary)] focus:outline-none transition-colors`}
+                  onChange={handleInputChange} focus:border-[var(--primary)] focus:outline-none transition-colors`}
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
                 >
                   {showPassword ? <EyeOffIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
                 </button>
@@ -318,10 +302,7 @@ const ModernAuthView: React.FC = () => {
                       type={showPassword ? 'text' : 'password'}
                       name="confirmPassword"
                       value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 rounded-lg bg-[var(--surface-primary)] border ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-[var(--border-primary)]'
-                      } focus:border-[var(--primary)] focus:outline-none transition-colors`}
+                      onChange={handleInputChange} focus:border-[var(--primary)] focus:outline-none transition-colors`}
                       placeholder="Confirm your password"
                     />
                   </div>
@@ -358,7 +339,7 @@ const ModernAuthView: React.FC = () => {
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);
-                  setErrors({});
+                  setErrors({}
                   setFormData({ email: '', username: '', password: '', confirmPassword: '' });
                 }}
                 className="ml-1 text-[var(--primary)] hover:underline font-medium"

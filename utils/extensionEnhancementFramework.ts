@@ -70,12 +70,16 @@ export class EnhancedErrorHandler {
 
   private recoverDraftState(): boolean {
     try {
+
       // Restore from localStorage backup
       const backup = localStorage.getItem('draft_state_backup');
       if (backup) {
         console.log('Recovering draft state from backup...');
         return true;
       }
+    
+    } catch (error) {
+        console.error(error);
     } catch (e) {
       console.error('Draft recovery failed:', e);
     }
@@ -84,10 +88,14 @@ export class EnhancedErrorHandler {
 
   private recoverTradeState(): boolean {
     try {
+
       // Clear trade cache and reload
       sessionStorage.removeItem('trade_cache');
       console.log('Trade state cleared, reloading...');
       return true;
+    
+    } catch (error) {
+        console.error(error);
     } catch (e) {
       console.error('Trade recovery failed:', e);
     }
@@ -96,10 +104,14 @@ export class EnhancedErrorHandler {
 
   private reconnectWebSocket(): boolean {
     try {
+
       console.log('Attempting WebSocket reconnection...');
       // Trigger reconnection logic
       window.dispatchEvent(new CustomEvent('websocket-reconnect'));
       return true;
+    
+    } catch (error) {
+        console.error(error);
     } catch (e) {
       console.error('WebSocket reconnection failed:', e);
     }
@@ -153,6 +165,7 @@ export class EnhancedErrorHandler {
           }
         })
       });
+    
     } catch (e) {
       console.error('Failed to send error to monitoring:', e);
     }
@@ -751,8 +764,12 @@ export class ExtensionEnhancementManager {
       });
       
       try {
+
         observer.observe({ entryTypes: ['longtask'] });
-      } catch (e) {
+
+    } catch (error) {
+        console.error(error);
+    } catch (e) {
         console.log('Long task monitoring not supported');
       }
     }

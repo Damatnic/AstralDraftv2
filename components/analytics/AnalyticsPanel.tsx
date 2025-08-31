@@ -1,4 +1,5 @@
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import type { Analytics } from '../../types';
 import AnimatedNumber from '../ui/AnimatedNumber';
@@ -7,12 +8,12 @@ import { FlameIcon } from '../icons/FlameIcon';
 import { TrophyIcon } from '../icons/TrophyIcon';
 import { Tooltip } from '../ui/Tooltip';
 
-
 interface AnalyticsPanelProps {
   analytics: Analytics;
+
 }
 
-const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }: any) => (
+const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }) => (
     <div className={`p-2 bg-gray-800/50 rounded-lg flex items-center gap-3`}>
         <Tooltip content={tooltip}>
             <div className={`w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-900/50 ${color}`}>
@@ -20,22 +21,22 @@ const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: num
             </div>
         </Tooltip>
         <div>
-            <p className="text-xs text-gray-400">{label}</p>
-            <p className="text-xl font-bold text-white">
+            <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{label}</p>
+            <p className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                 <AnimatedNumber value={value} />
-                <span className="text-sm font-normal text-gray-400">{unit}</span>
+                <span className="text-sm font-normal text-gray-400 sm:px-4 md:px-6 lg:px-8">{unit}</span>
             </p>
         </div>
     </div>
 );
 
-const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
+const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }) => {
   return (
-    <div className="glass-pane flex-shrink-0 flex flex-col bg-gray-900/40 border border-cyan-300/20 rounded-2xl backdrop-blur-sm shadow-2xl shadow-black/50">
-      <div className="flex-shrink-0 p-3 text-center border-b border-cyan-300/20">
-        <h2 className="font-display text-xl font-bold text-white tracking-wider">DRAFT ANALYTICS</h2>
+    <div className="glass-pane flex-shrink-0 flex flex-col bg-gray-900/40 border border-cyan-300/20 rounded-2xl backdrop-blur-sm shadow-2xl shadow-black/50 sm:px-4 md:px-6 lg:px-8">
+      <div className="flex-shrink-0 p-3 text-center border-b border-cyan-300/20 sm:px-4 md:px-6 lg:px-8">
+        <h2 className="font-display text-xl font-bold text-white tracking-wider sm:px-4 md:px-6 lg:px-8">DRAFT ANALYTICS</h2>
       </div>
-      <div className="p-2 space-y-2">
+      <div className="p-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
             <AnalyticsCard 
                 icon={<ZapIcon />} 
                 label="Draft Efficiency"
@@ -65,4 +66,10 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
   );
 };
 
-export default AnalyticsPanel;
+const AnalyticsPanelWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AnalyticsPanel {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AnalyticsPanelWithErrorBoundary);

@@ -3,7 +3,8 @@
  * Comprehensive roster interface for managing team players
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { Player, Team } from '../../types';
@@ -14,6 +15,7 @@ interface RosterManagementProps {
   team: Team;
   isOwner?: boolean;
   showAddDropButtons?: boolean;
+
 }
 
 interface RosterSlot {
@@ -21,13 +23,12 @@ interface RosterSlot {
   player: Player | null;
   isStarter: boolean;
   isLocked?: boolean;
-}
 
 const RosterManagement: React.FC<RosterManagementProps> = ({
   team,
   isOwner = false,
   showAddDropButtons = false
-}: any) => {
+}) => {
   const { state, dispatch } = useAppState();
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<string>('');
@@ -56,7 +57,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           isStarter: true,
           isLocked: false
         });
-      }
+
     });
     
     // Bench slots
@@ -71,8 +72,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         isStarter: false,
         isLocked: false
       });
-    }
-    
+
     // IR slots
     for (let i = 0; i < (rosterFormat.IR || 0); i++) {
       slots.push({
@@ -81,8 +81,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         isStarter: false,
         isLocked: false
       });
-    }
-    
+
     return slots;
   };
 
@@ -103,7 +102,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       case 'BENCH': return 'bg-slate-600';
       case 'IR': return 'bg-red-800';
       default: return 'bg-gray-500';
-    }
+
   };
 
   const getInjuryStatusColor = (status: string) => {
@@ -114,7 +113,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       case 'OUT': return 'text-red-400';
       case 'IR': return 'text-red-600';
       default: return 'text-gray-400';
-    }
+
   };
 
   const handleAddPlayer = (position: string) => {
@@ -134,7 +133,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       payload: {
         message: `${player.name} added to ${team.name}!`,
         type: 'SUCCESS'
-      }
+
     });
     
     setShowPlayerSearch(false);
@@ -153,12 +152,12 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         payload: {
           message: `${player.name} dropped from ${team.name}`,
           type: 'INFO'
-        }
+
       });
-    }
+
   };
 
-  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }: any) => (
+  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -170,24 +169,24 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       } transition-colors`}
     >
       {/* Position Label */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
         <div className={`${getPositionColor(slot.position)} text-white text-xs font-bold px-2 py-1 rounded`}>
           {slot.position}
         </div>
         {slot.isStarter && (
-          <span className="text-xs text-green-400 font-medium">STARTER</span>
+          <span className="text-xs text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">STARTER</span>
         )}
       </div>
 
       {slot.player ? (
         /* Player Card */
-        <div className="space-y-3">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h4 className="text-white font-semibold text-sm mb-1">
+        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+              <h4 className="text-white font-semibold text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
                 {slot.player.name}
               </h4>
-              <div className="flex items-center gap-2 text-xs text-slate-400">
+              <div className="flex items-center gap-2 text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                 <span>{NFL_TEAMS[slot.player.team as keyof typeof NFL_TEAMS]?.name || slot.player.team}</span>
                 <span>•</span>
                 <span>#{slot.player.jerseyNumber}</span>
@@ -200,7 +199,6 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
             {showAddDropButtons && isOwner && (
               <button
                 onClick={() => handleDropPlayer(slot.player!)}
-                className="text-red-400 hover:text-red-300 text-xs px-2 py-1 rounded hover:bg-red-900/20 transition-colors"
               >
                 Drop
               </button>
@@ -208,33 +206,32 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           </div>
 
           {/* Player Stats */}
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="text-center p-2 bg-slate-800/50 rounded">
-              <div className="text-white font-semibold">#{slot.player.fantasyRank}</div>
-              <div className="text-slate-400">Rank</div>
+          <div className="grid grid-cols-2 gap-2 text-xs sm:px-4 md:px-6 lg:px-8">
+            <div className="text-center p-2 bg-slate-800/50 rounded sm:px-4 md:px-6 lg:px-8">
+              <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">#{slot.player.fantasyRank}</div>
+              <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Rank</div>
             </div>
-            <div className="text-center p-2 bg-slate-800/50 rounded">
-              <div className="text-white font-semibold">{slot.player.projectedPoints.toFixed(1)}</div>
-              <div className="text-slate-400">Proj</div>
+            <div className="text-center p-2 bg-slate-800/50 rounded sm:px-4 md:px-6 lg:px-8">
+              <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{slot.player.projectedPoints.toFixed(1)}</div>
+              <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Proj</div>
             </div>
           </div>
 
           {/* Bye Week Warning */}
           {slot.player.byeWeek && (
-            <div className="text-xs text-yellow-400 text-center">
+            <div className="text-xs text-yellow-400 text-center sm:px-4 md:px-6 lg:px-8">
               Bye Week {slot.player.byeWeek}
             </div>
           )}
         </div>
       ) : (
         /* Empty Slot */
-        <div className="text-center py-6">
-          <div className="text-slate-500 text-2xl mb-2">+</div>
-          <div className="text-slate-400 text-sm mb-3">Empty Slot</div>
+        <div className="text-center py-6 sm:px-4 md:px-6 lg:px-8">
+          <div className="text-slate-500 text-2xl mb-2 sm:px-4 md:px-6 lg:px-8">+</div>
+          <div className="text-slate-400 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">Empty Slot</div>
           {showAddDropButtons && isOwner && (
             <button
               onClick={() => handleAddPlayer(slot.position)}
-              className="text-blue-400 hover:text-blue-300 text-xs px-3 py-1 rounded bg-blue-900/20 hover:bg-blue-900/30 transition-colors"
             >
               Add Player
             </button>
@@ -252,33 +249,28 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         return [...benchSlots, ...irSlots];
       default:
         return rosterSlots;
-    }
+
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h3 className="text-xl font-bold text-white">
+          <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
             {team.name} Roster
           </h3>
-          <p className="text-slate-400">
+          <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
             {team.roster.length} / {Object.values(league.settings.rosterFormat).reduce((a, b) => a + b, 0)} players
           </p>
         </div>
 
         {/* View Toggle */}
-        <div className="flex bg-slate-800 rounded-lg p-1">
+        <div className="flex bg-slate-800 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
           {(['all', 'starters', 'bench'] as const).map((view: any) => (
             <button
               key={view}
-              onClick={() => setRosterView(view)}
-              className={`px-3 py-1 text-sm rounded transition-colors ${
-                rosterView === view
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              onClick={() => setRosterView(view)}`}
             >
               {view.charAt(0).toUpperCase() + view.slice(1)}
             </button>
@@ -294,32 +286,32 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       </div>
 
       {/* Team Stats Summary */}
-      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
-        <h4 className="text-lg font-semibold text-white mb-4">Team Summary</h4>
+      <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700 sm:px-4 md:px-6 lg:px-8">
+        <h4 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Team Summary</h4>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white">
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
               {team.roster.reduce((sum, player) => sum + player.projectedPoints, 0).toFixed(1)}
             </div>
-            <div className="text-sm text-slate-400">Total Projected Points</div>
+            <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Total Projected Points</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white">
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
               {team.record.wins}-{team.record.losses}
             </div>
-            <div className="text-sm text-slate-400">Record</div>
+            <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Record</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white">
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
               ${team.faab}
             </div>
-            <div className="text-sm text-slate-400">FAAB Remaining</div>
+            <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">FAAB Remaining</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white">
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
               {team.roster.filter((p: any) => p.injuryStatus === 'HEALTHY').length}
             </div>
-            <div className="text-sm text-slate-400">Healthy Players</div>
+            <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Healthy Players</div>
           </div>
         </div>
       </div>
@@ -331,23 +323,22 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8"
             onClick={() => setShowPlayerSearch(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-slate-900 rounded-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8"
               onClick={(e: any) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                   Add Player {selectedPosition && `(${selectedPosition})`}
                 </h3>
                 <button
                   onClick={() => setShowPlayerSearch(false)}
-                  className="text-slate-400 hover:text-white text-2xl"
                 >
                   ×
                 </button>
@@ -367,4 +358,10 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   );
 };
 
-export default RosterManagement;
+const RosterManagementWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <RosterManagement {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(RosterManagementWithErrorBoundary);

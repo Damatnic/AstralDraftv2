@@ -3,6 +3,7 @@
  * Comprehensive interface for managing ML training data, datasets, model training, and performance monitoring
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -40,6 +41,7 @@ interface TrainingMetrics {
     epoch: number;
     learningRate: number;
     validationAccuracy: number;
+
 }
 
 const TrainingDataManager = memo(() => {
@@ -161,7 +163,7 @@ const TrainingDataManager = memo(() => {
     const setSpecificError = useCallback((category: keyof typeof errors, message: string | null) => {
         setErrors(prev => ({ ...prev, [category]: message }));
         if (message) {
-        }
+
     }, [errors]);
 
     const clearAllErrors = useCallback(() => {
@@ -198,10 +200,12 @@ const TrainingDataManager = memo(() => {
         const currentAttempts = retryAttempts[operationType];
         
         try {
+
             const result = await operation();
             resetRetryAttempts(operationType);
             return result;
-        } catch (error) {
+        
+    } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
             
             if (currentAttempts < maxRetries) {
@@ -213,8 +217,8 @@ const TrainingDataManager = memo(() => {
                 setSpecificError(operationType === 'dataLoad' ? 'dataLoad' : 'general', errorMessage);
                 resetRetryAttempts(operationType);
                 return null;
-            }
-        }
+
+
     }, [retryAttempts, incrementRetryAttempt, resetRetryAttempts, setSpecificError]);
 
     // Load configuration function (moved up to avoid forward reference)
@@ -226,8 +230,7 @@ const TrainingDataManager = memo(() => {
             // Simulate potential loading failures
             if (Math.random() < 0.05) {
                 throw new Error('Configuration service temporarily unavailable');
-            }
-            
+
             const config = {
                 ensembleStrategy: 'weighted_average',
                 predictionThreshold: 0.75,
@@ -254,30 +257,32 @@ const TrainingDataManager = memo(() => {
         errorCategory?: keyof typeof errors
     ): Promise<T | null> => {
         try {
+
             setSpecificLoading(loadingType, true);
             if (errorCategory) {
                 setSpecificError(errorCategory, null);
-            }
-            
+
             const result = await operation();
             return result;
-        } catch (error) {
+    
+    } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Operation failed';
             
             if (errorCategory) {
                 setSpecificError(errorCategory, errorMessage);
             } else {
                 setError(errorMessage);
-            }
+
             return null;
         } finally {
             setSpecificLoading(loadingType, false);
-        }
+
     }, [setSpecificLoading, setSpecificError]);
 
     // Connection health monitoring
     const checkConnectionHealth = useCallback(async (): Promise<boolean> => {
         try {
+
             // Test connection with a lightweight operation
             const testResult = await Promise.race([
                 Promise.resolve(oracleEnsembleMLService.getCurrentModelMetrics()),
@@ -288,13 +293,14 @@ const TrainingDataManager = memo(() => {
                 setRealtimeConnected(true);
                 setSpecificError('connection', null);
                 return true;
-            }
+
             return false;
-        } catch (error) {
+
+    } catch (error) {
             setRealtimeConnected(false);
             setSpecificError('connection', 'Connection lost - attempting to reconnect...');
             return false;
-        }
+
     }, [setSpecificError]);
 
     // Load initial data
@@ -318,13 +324,15 @@ const TrainingDataManager = memo(() => {
                 if (!isTraining) return;
                 
                 try {
+
                     const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                     setModelMetrics(metrics);
                     
                     const stats = await oracleEnsembleMLService.getDatasetStatistics();
                     setDatasetStats(stats);
-                } catch (error) {
-                }
+
+    } catch (error) {
+
             }, 5000); // Refresh every 5 seconds
             
             // Set up training session monitoring
@@ -333,10 +341,10 @@ const TrainingDataManager = memo(() => {
             }, 1000); // Check training status every second
             
             setUpdateIntervals(prev => [...prev, metricsInterval, sessionInterval]);
-            
-        } catch (error) {
+    
+    } catch (error) {
             throw error;
-        }
+
     }, [isTraining]);
 
     // Enhanced data refresh for specific widgets
@@ -360,29 +368,24 @@ const TrainingDataManager = memo(() => {
             } else {
                 setSpecificError('dataLoad', 'Failed to load dataset statistics');
                 hasErrors = true;
-            }
-            
+
             if (metrics?.status === 'fulfilled') {
                 setModelMetrics(metrics.value);
             } else {
                 setSpecificError('general', 'Failed to load model metrics');
                 hasErrors = true;
-            }
-            
+
             if (history?.status === 'fulfilled') {
                 setTrainingHistory(history.value);
             } else {
-            }
-            
+
             if (report?.status === 'fulfilled') {
                 setValidationReport(report.value);
             } else {
-            }
-            
+
             if (hasErrors) {
                 throw new Error('Some data sources failed to refresh');
-            }
-            
+
             return true;
         }, 'datasetStats', 'dataLoad');
     }, [withLoadingState, clearAllErrors, setSpecificError]);
@@ -395,10 +398,11 @@ const TrainingDataManager = memo(() => {
             
             // Initialize real-time monitoring with error handling
             try {
+
                 await initializeRealtimeMonitoring();
-            } catch (error) {
+            
+    } catch (error) {
                 setSpecificError('connection', 'Real-time features limited - some data may not auto-refresh');
-            }
 
             // Load dataset statistics with enhanced error handling
             await withLoadingState(async () => {
@@ -409,29 +413,32 @@ const TrainingDataManager = memo(() => {
 
             // Load model metrics with fallback
             try {
+
                 setSpecificLoading('modelMetrics', true);
                 const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                 setModelMetrics(metrics);
-            } catch (error) {
+            
+    } catch (error) {
                 setSpecificError('general', 'Model metrics temporarily unavailable');
             } finally {
                 setSpecificLoading('modelMetrics', false);
-            }
 
             // Load training history (non-critical)
             try {
+
                 const history = oracleEnsembleMLService.getTrainingHistory();
                 setTrainingHistory(history);
-            } catch (error) {
+            
+    } catch (error) {
                 // Don't set error for non-critical data
-            }
 
             // Load validation rules (non-critical)
             try {
+
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
-            } catch (error) {
-            }
+            
+    } catch (error) {
 
             // Load system configuration with enhanced handling
             await withLoadingState(async () => {
@@ -441,19 +448,19 @@ const TrainingDataManager = memo(() => {
 
             // Load last validation report (non-critical)
             try {
+
                 const lastReport = oracleEnsembleMLService.getLastValidationReport();
                 setValidationReport(lastReport);
-            } catch (error) {
-            }
             
+    } catch (error) {
+
             // Test connection health
             const connectionHealthy = await checkConnectionHealth();
             if (connectionHealthy) {
                 setRealtimeConnected(true);
             } else {
                 setSpecificError('connection', 'Connection unstable - some features may be limited');
-            }
-            
+
             return true;
         }, 'dataLoad', 3, 2000).finally(() => {
             setIsLoading(false);
@@ -490,23 +497,26 @@ const TrainingDataManager = memo(() => {
                 // Auto-refresh model metrics during training with error handling
                 if (session?.status === 'running') {
                     try {
+
                         const metrics = oracleEnsembleMLService.getCurrentModelMetrics();
                         setModelMetrics(metrics);
-                    } catch (error) {
+
+    } catch (error) {
                         // Don't fail the entire operation for metrics refresh
-                    }
-                }
+
+
             } else if (isTraining) {
                 setIsTraining(false);
                 setCurrentSession(null);
                 // Reload data after training completion with error handling
                 try {
+
                     await refreshDataSources();
-                } catch (error) {
+
+    } catch (error) {
                     setSpecificError('dataLoad', 'Failed to refresh data after training completion');
-                }
-            }
-            
+
+
             return true;
         }, 'realtimeUpdate', 'general');
     }, [isTraining, refreshDataSources, withLoadingState, setSpecificError]);
@@ -519,16 +529,13 @@ const TrainingDataManager = memo(() => {
             // Validate training prerequisites
             if (!realtimeConnected) {
                 throw new Error('Cannot start training: Connection to ML service is not available');
-            }
-            
+
             if (datasetStats.totalRecords === 0) {
                 throw new Error('Cannot start training: No training data available');
-            }
-            
+
             if (!trainingConfig.maxEpochs || trainingConfig.maxEpochs <= 0 || !trainingConfig.batchSize || trainingConfig.batchSize <= 0) {
                 throw new Error('Cannot start training: Invalid training configuration');
-            }
-            
+
             // Get real training data from service with retry
             const trainingData = await executeWithRetry(async () => {
                 return await oracleEnsembleMLService.getStoredTrainingData();
@@ -536,8 +543,7 @@ const TrainingDataManager = memo(() => {
             
             if (!trainingData) {
                 throw new Error('Failed to retrieve training data after multiple attempts');
-            }
-            
+
             // Start training session with current configuration
             const sessionId = await oracleEnsembleMLService.startTrainingSession(
                 trainingData,
@@ -545,17 +551,17 @@ const TrainingDataManager = memo(() => {
                 `Training Session ${new Date().toLocaleString()}`,
                 (progress: TrainingProgress) => {
                     setTrainingProgress(progress);
-                }
+
             );
 
-            
             // Trigger immediate data refresh
             try {
+
                 await refreshDataSources();
-            } catch (error) {
-                // Don't fail training start for this
-            }
             
+    } catch (error) {
+                // Don't fail training start for this
+
             resetRetryAttempts('training');
             return sessionId;
         }, 'trainingData', 'training').catch((error: any) => {
@@ -577,121 +583,65 @@ const TrainingDataManager = memo(() => {
         return await withLoadingState(async () => {
             if (!currentSession) {
                 throw new Error('No active training session to stop');
-            }
-            
+
             // Attempt to cancel training session
             try {
+
                 oracleEnsembleMLService.cancelTrainingSession(currentSession.id);
-            } catch (error) {
-                // Force stop the training state even if cancellation fails
-            }
             
+    } catch (error) {
+                // Force stop the training state even if cancellation fails
+
             setIsTraining(false);
             setCurrentSession(null);
             clearAllErrors();
             
             // Refresh data after stopping training
             try {
-                await refreshDataSources();
-            } catch (error) {
-                setSpecificError('dataLoad', 'Training stopped but failed to refresh data');
-            }
-            
-            return true;
-        }, 'trainingData', 'training');
-    }, [currentSession, refreshDataSources, withLoadingState, clearAllErrors, setSpecificError]);
 
-    const exportTrainingData = async () => {
-        return await withLoadingState(async () => {
-            clearAllErrors();
+                await refreshDataSources();
             
-            // Validate prerequisites for export
-            if (!realtimeConnected) {
-                throw new Error('Cannot export data: Connection to ML service is not available');
-            }
-            
-            // Get real-time data for export with individual error handling
-            const [currentMetrics, currentStats, recentHistory] = await Promise.allSettled([
-                Promise.resolve(oracleEnsembleMLService.getCurrentModelMetrics()),
-                oracleEnsembleMLService.getDatasetStatistics(),
-                Promise.resolve(oracleEnsembleMLService.getTrainingHistory().slice(0, 10))
-            ]);
-            
-            // Process results and handle partial failures
-            const exportData: any = {
-                systemConfiguration: systemConfig,
-                validationReport,
-                realtimeStatus: {
-                    connected: realtimeConnected,
-                    lastUpdate: new Date().toISOString(),
-                    activeTraining: isTraining
-                },
-                exportDate: new Date().toISOString(),
-                version: '1.0.0',
-                errors: []
-            };
-            
-            if (currentMetrics?.status === 'fulfilled') {
-                exportData.modelMetrics = currentMetrics.value;
-            } else {
-                exportData.errors.push('Failed to export model metrics');
-            }
-            
-            if (currentStats?.status === 'fulfilled') {
-                exportData.datasetStats = currentStats.value;
-            } else {
-                exportData.errors.push('Failed to export dataset statistics');
-            }
-            
-            if (recentHistory?.status === 'fulfilled') {
-                exportData.trainingHistory = recentHistory.value;
-            } else {
-                exportData.errors.push('Failed to export training history');
-            }
-            
-            // Create and download the export file
-            try {
-                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `oracle_training_data_${new Date().toISOString().split('T')[0]}.json`;
+    } catch (error) {
+        console.error(error);
+    `oracle_training_data_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
                 URL.revokeObjectURL(url);
                 
                 return true;
-            } catch (error) {
+
+    } catch (error) {
                 throw new Error('Failed to create or download export file');
-            }
+
         }, 'export', 'general');
     };
 
     // Update configuration handlers with enhanced error handling
     const updateTrainingConfig = useCallback((updates: Partial<TrainingConfiguration>) => {
         try {
+
             // Validate configuration updates
             if (updates.maxEpochs !== undefined && updates.maxEpochs <= 0) {
                 throw new Error('Max epochs must be greater than 0');
-            }
+
             if (updates.batchSize !== undefined && updates.batchSize <= 0) {
                 throw new Error('Batch size must be greater than 0');
-            }
+
             if (updates.hyperparameters?.learningRate !== undefined && (updates.hyperparameters.learningRate <= 0 || updates.hyperparameters.learningRate >= 1)) {
                 throw new Error('Learning rate must be between 0 and 1');
-            }
+
             if (updates.trainingSplit !== undefined && (updates.trainingSplit <= 0 || updates.trainingSplit >= 1)) {
                 throw new Error('Training split must be between 0 and 1');
-            }
+
             if (updates.validationSplit !== undefined && (updates.validationSplit <= 0 || updates.validationSplit >= 1)) {
                 throw new Error('Validation split must be between 0 and 1');
-            }
-            
+
             setTrainingConfig(prev => ({ ...prev, ...updates }));
             clearAllErrors();
-        } catch (error) {
+
+    } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration update';
             setSpecificError('configuration', errorMessage);
-        }
+
     }, [clearAllErrors, setSpecificError]);
 
     // Memoized computed values for performance optimization
@@ -720,7 +670,7 @@ const TrainingDataManager = memo(() => {
             setSpecificError(errorType, null);
         } else {
             clearAllErrors();
-        }
+
     }, [setSpecificError, clearAllErrors]);
 
     // Enhanced validation handlers
@@ -731,35 +681,32 @@ const TrainingDataManager = memo(() => {
             // Validate prerequisites
             if (!realtimeConnected) {
                 throw new Error('Cannot validate data: Connection to ML service is not available');
-            }
-            
+
             if (datasetStats.totalRecords === 0) {
                 throw new Error('Cannot validate data: No dataset available for validation');
-            }
-            
+
             // Get real training data and run validation
             const trainingData = await oracleEnsembleMLService.getStoredTrainingData();
             
             if (!trainingData || (Array.isArray(trainingData) && trainingData.length === 0)) {
                 throw new Error('No training data available for validation');
-            }
-            
+
             const report = await oracleEnsembleMLService.validateDataset(trainingData);
             
             if (!report) {
                 throw new Error('Validation completed but no report was generated');
-            }
-            
+
             setValidationReport(report);
             
             // Refresh related data with error handling
             try {
+
                 const rules = oracleEnsembleMLService.getValidationRules();
                 setValidationRules(rules);
-            } catch (error) {
-                // Don't fail the entire validation for this
-            }
             
+    } catch (error) {
+                // Don't fail the entire validation for this
+
             resetRetryAttempts('validation');
             return report;
         }, 'validation', 3, 1500);
@@ -782,7 +729,7 @@ const TrainingDataManager = memo(() => {
                 return 'bg-red-600 text-red-100';
             default:
                 return 'bg-gray-600 text-gray-100';
-        }
+
     };
 
     const getQualityScoreClass = (score: number): string => {
@@ -817,7 +764,7 @@ const TrainingDataManager = memo(() => {
                 return 'bg-yellow-500/20 text-yellow-400';
             default:
                 return 'bg-gray-500/20 text-gray-400';
-        }
+
     };
 
     const getModelStatusClass = (isActive: boolean, type?: string): string => {
@@ -845,37 +792,36 @@ const TrainingDataManager = memo(() => {
     // Enhanced configuration management functions
     const handleConfigurationChange = useCallback((field: string, value: any) => {
         try {
+
             // Validate specific configuration fields
             if (field === 'predictionThreshold' && (value < 0 || value > 1)) {
                 throw new Error('Prediction threshold must be between 0 and 1');
-            }
+
             if (field === 'apiRateLimit' && value <= 0) {
                 throw new Error('API rate limit must be greater than 0');
-            }
-            
+
             setSystemConfig(prev => ({ ...prev, [field]: value }));
             setConfigurationChanged(true);
             setSpecificError('configuration', null);
-        } catch (error) {
+
+    } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Invalid configuration value';
             setSpecificError('configuration', errorMessage);
-        }
+
     }, [setSpecificError]);
 
     const saveConfiguration = useCallback(async () => {
         return await withLoadingState(async () => {
             if (!configurationChanged) {
                 throw new Error('No configuration changes to save');
-            }
-            
+
             // Validate entire configuration before saving
             if (systemConfig.predictionThreshold < 0 || systemConfig.predictionThreshold > 1) {
                 throw new Error('Invalid prediction threshold value');
-            }
+
             if (systemConfig.apiRateLimit <= 0) {
                 throw new Error('Invalid API rate limit value');
-            }
-            
+
             // FUTURE: Implement actual service call when configuration API is available
             // const success = await oracleEnsembleMLService.updateConfiguration(systemConfig);
             
@@ -885,8 +831,7 @@ const TrainingDataManager = memo(() => {
             // Simulate occasional failures for testing
             if (Math.random() < 0.1) {
                 throw new Error('Configuration service temporarily unavailable');
-            }
-            
+
             const success = true; 
             
             if (success) {
@@ -894,180 +839,11 @@ const TrainingDataManager = memo(() => {
                 
                 // Refresh data to reflect configuration changes
                 try {
+
                     await refreshDataSources();
-                } catch (error) {
-                    // Don't fail the save operation for this
-                }
-                
                 return true;
-            } else {
-                throw new Error('Configuration save operation failed');
-            }
-        }, 'configuration', 'configuration');
-    }, [systemConfig, refreshDataSources, withLoadingState, configurationChanged]);
-
-    const resetConfiguration = useCallback(async () => {
-        return await withLoadingState(async () => {
-            // FUTURE: Replace with actual service call when configuration API is available
-            // const defaultConfig = await oracleEnsembleMLService.getDefaultConfiguration();
             
-            const defaultConfig = {
-                ensembleStrategy: 'weighted_average',
-                predictionThreshold: 0.75,
-                retrainFrequency: 'weekly',
-                realTimeLearning: true,
-                apiRateLimit: 1000,
-                cacheTtl: '15_minutes',
-                logLevel: 'INFO',
-                enableMonitoring: true,
-                autoBackupModels: true,
-                alertOnAnomalies: true
-            };
-            
-            setSystemConfig(defaultConfig);
-            setConfigurationChanged(true);
-            return defaultConfig;
-        }, 'configuration', 'configuration');
-    }, [withLoadingState]);
-
-    const getAPIStatusClass = (status: string): string => {
-        switch (status) {
-            case 'connected':
-                return 'bg-green-400';
-            case 'warning':
-                return 'bg-yellow-400';
-            case 'error':
-                return 'bg-red-400';
-            default:
-                return 'bg-gray-400';
-        }
-    };
-
-    const getAPIStatusTextClass = (status: string): string => {
-        switch (status) {
-            case 'connected':
-                return 'text-green-400';
-            case 'warning':
-                return 'text-yellow-400';
-            case 'error':
-                return 'text-red-400';
-            default:
-                return 'text-gray-400';
-        }
-    };
-
-    const renderOverviewTab = () => (
-        <div className="space-y-4 sm:space-y-6">
-            {/* Enhanced Error Display with Mobile Optimization */}
-            {(error || Object.values(errors).some((e: any) => e !== null)) && (
-                <div className="space-y-2">
-                    {/* General Error */}
-                    {(error || errors.general) && (
-                        <div className="bg-red-900/50 border border-red-500 rounded-lg p-3 sm:p-4">
-                            <div className="flex items-center space-x-2 mb-2">
-                                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                                <span className="text-red-200 font-medium text-sm sm:text-base">Error</span>
-                            </div>
-                            <p className="text-red-300 text-sm sm:text-base mb-3">{error || errors.general}</p>
-                            <button 
-                                onClick={() => handleErrorDismiss('general')}
-                                className="w-full sm:w-auto px-4 py-3 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors mobile-touch-target"
-                            >
-                                Dismiss
-                            </button>
-                        </div>
-                    )}
-                    
-                    {/* Connection Error */}
-                    {errors.connection && (
-                        <div className="bg-yellow-900/50 border border-yellow-500 rounded-lg p-3 sm:p-4">
-                            <div className="flex items-center space-x-2 mb-2">
-                                <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 flex-shrink-0" />
-                                <span className="text-yellow-200 font-medium text-sm sm:text-base">Connection Issue</span>
-                            </div>
-                            <p className="text-yellow-300 text-sm sm:text-base mb-3">{errors.connection}</p>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                                <button 
-                                    onClick={() => handleErrorDismiss('connection')}
-                                    className="w-full sm:w-auto px-4 py-3 bg-yellow-600 text-white text-sm rounded-lg hover:bg-yellow-700 transition-colors mobile-touch-target"
-                                >
-                                    Dismiss
-                                </button>
-                                <button 
-                                    onClick={checkConnectionHealth}
-                                    className="w-full sm:w-auto px-4 py-3 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors mobile-touch-target"
-                                >
-                                    Retry Connection
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                    
-                    {/* Training Error */}
-                    {errors.training && (
-                        <div className="bg-red-900/50 border border-red-500 rounded-lg p-3 sm:p-4">
-                            <div className="flex items-center space-x-2 mb-2">
-                                <Brain className="w-4 h-4 sm:w-5 sm:h-5 text-red-400 flex-shrink-0" />
-                                <span className="text-red-200 font-medium text-sm sm:text-base">Training Error</span>
-                            </div>
-                            <p className="text-red-300 text-sm sm:text-base mb-3">{errors.training}</p>
-                            <div className="flex flex-col sm:flex-row gap-2">
-                                <button 
-                                    onClick={() => handleErrorDismiss('training')}
-                                    className="w-full sm:w-auto px-4 py-3 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors mobile-touch-target"
-                                >
-                                    Dismiss
-                                </button>
-                                {retryAttempts.training < 3 && (
-                                    <button 
-                                        onClick={handleTrainModels}
-                                        className="w-full sm:w-auto px-4 py-3 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors mobile-touch-target"
-                                    >
-                                        Retry Training
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Enhanced Loading Indicators with Mobile Optimization */}
-            {(isLoading || loadingStates.initialLoad) && (
-                <div className="bg-blue-900/50 border border-blue-500 rounded-lg p-3 sm:p-4 mb-4">
-                    <div className="flex items-center space-x-2">
-                        <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 animate-spin flex-shrink-0" />
-                        <span className="text-blue-200 text-sm sm:text-base">
-                            {loadingStates.initialLoad ? 'Initializing training system...' : 'Loading training data...'}
-                        </span>
-                    </div>
-                    {Object.entries(loadingStates).some(([_, loading]) => loading) && (
-                        <div className="mt-3 space-y-1">
-                            {loadingStates.datasetStats && (
-                                <div className="text-xs sm:text-sm text-blue-300">• Loading dataset statistics...</div>
-                            )}
-                            {loadingStates.modelMetrics && (
-                                <div className="text-xs sm:text-sm text-blue-300">• Loading model metrics...</div>
-                            )}
-                            {loadingStates.configuration && (
-                                <div className="text-xs sm:text-sm text-blue-300">• Loading configuration...</div>
-                            )}
-                            {loadingStates.realtimeUpdate && (
-                                <div className="text-xs sm:text-sm text-blue-300">• Updating real-time data...</div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Mobile-Optimized Metrics Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                {/* Training Status Widget - Mobile Enhanced */}
-                <Widget title="Training Status" className="bg-gray-900/50 widget-mobile-responsive">
-                    <div className="space-y-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <span className="text-gray-300 text-sm sm:text-base">Current State</span>
-                            <span className={`px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+    `px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
                                 isTraining ? 'bg-blue-600 text-blue-100' : 'bg-green-600 text-green-100'
                             }`}>
                                 {isTraining ? 'Training' : 'Ready'}
@@ -1077,28 +853,28 @@ const TrainingDataManager = memo(() => {
                         {/* Real-time Connection Status with Enhanced Mobile Details */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <span className="text-gray-300 text-sm sm:text-base">Connection</span>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                 <div className={`w-2 h-2 rounded-full ${getAPIStatusClass(realtimeConnected ? 'connected' : 'error')}`}></div>
                                 <span className={`text-xs sm:text-sm ${getAPIStatusTextClass(realtimeConnected ? 'connected' : 'error')}`}>
                                     {realtimeConnected ? 'Connected' : 'Disconnected'}
                                 </span>
                                 {errors.connection && (
-                                    <AlertTriangle className="w-3 h-3 text-yellow-400" />
+                                    <AlertTriangle className="w-3 h-3 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
                         </div>
                         
                         {/* Enhanced Data Loading Indicators */}
                         {(dataLoading || Object.values(loadingStates).some((loading: any) => loading)) && (
-                            <div className="space-y-1">
-                                <div className="flex items-center space-x-2">
-                                    <RefreshCw className="w-4 h-4 text-blue-400 animate-spin" />
-                                    <span className="text-blue-300 text-sm">
+                            <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <RefreshCw className="w-4 h-4 text-blue-400 animate-spin sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-blue-300 text-sm sm:px-4 md:px-6 lg:px-8">
                                         {loadingStates.export ? 'Exporting data...' : getLoadingStateMessage()}
                                     </span>
                                 </div>
                                 {retryAttempts.dataLoad > 0 && (
-                                    <div className="text-xs text-yellow-300">
+                                    <div className="text-xs text-yellow-300 sm:px-4 md:px-6 lg:px-8">
                                         Retry attempt {retryAttempts.dataLoad}/3
                                     </div>
                                 )}
@@ -1107,10 +883,10 @@ const TrainingDataManager = memo(() => {
                         
                         {/* Training Progress with Error Handling */}
                         {isTraining && (
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                                    <span className="text-gray-400 text-sm">Progress</span>
-                                    <span className="text-blue-400 font-semibold text-sm">{trainingProgressPercentage}%</span>
+                                    <span className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">Progress</span>
+                                    <span className="text-blue-400 font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{trainingProgressPercentage}%</span>
                                 </div>
                                 <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                     <div 
@@ -1121,18 +897,18 @@ const TrainingDataManager = memo(() => {
                                 <div className="text-xs sm:text-sm text-gray-400">
                                     {trainingProgress.currentModel} - {trainingProgress.phase}
                                     {errors.training && (
-                                        <span className="text-red-400 ml-2">(Error occurred)</span>
+                                        <span className="text-red-400 ml-2 sm:px-4 md:px-6 lg:px-8">(Error occurred)</span>
                                     )}
                                 </div>
                             </div>
                         )}
                         
                         <div className="grid grid-cols-2 gap-2 sm:gap-4 pt-4 border-t border-gray-700">
-                            <div className="text-center">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-base sm:text-lg font-bold text-green-400">{formattedTrainingMetrics.accuracy}</div>
                                 <div className="text-xs sm:text-sm text-gray-400">Accuracy</div>
                             </div>
-                            <div className="text-center">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-base sm:text-lg font-bold text-blue-400">{formattedTrainingMetrics.loss}</div>
                                 <div className="text-xs sm:text-sm text-gray-400">Loss</div>
                             </div>
@@ -1141,8 +917,8 @@ const TrainingDataManager = memo(() => {
                 </Widget>
 
                 {/* Dataset Summary Widget - Mobile Enhanced */}
-                <Widget title="Dataset Summary" className="bg-gray-900/50 widget-mobile-responsive">
-                    <div className="space-y-4">
+                <Widget title="Dataset Summary" className="bg-gray-900/50 widget-mobile-responsive sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <span className="text-gray-300 text-sm sm:text-base">Total Records</span>
                             <span className="text-lg sm:text-2xl font-bold text-white">{datasetStats.totalRecords.toLocaleString()}</span>
@@ -1163,8 +939,8 @@ const TrainingDataManager = memo(() => {
                 </Widget>
 
                 {/* Model Performance Widget - Mobile Enhanced */}
-                <Widget title="Model Performance" className="bg-gray-900/50 widget-mobile-responsive">
-                    <div className="space-y-4">
+                <Widget title="Model Performance" className="bg-gray-900/50 widget-mobile-responsive sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <span className="text-gray-300 text-sm sm:text-base">Validation Accuracy</span>
                             <span className="text-lg sm:text-xl font-bold text-green-400">{formattedTrainingMetrics.overallAccuracy}</span>
@@ -1188,17 +964,17 @@ const TrainingDataManager = memo(() => {
             {/* Mobile-Optimized Secondary Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Recent Training Sessions Widget - Mobile Enhanced */}
-                <Widget title="Recent Training Sessions" className="bg-gray-900/50 widget-mobile-responsive">
-                    <div className="space-y-3">
+                <Widget title="Recent Training Sessions" className="bg-gray-900/50 widget-mobile-responsive sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {recentTrainingSessions.map((session: any) => (
                             <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-800/50 rounded-lg gap-3 sm:gap-0 min-h-[80px] sm:min-h-[60px]">
-                                <div className="flex-1 min-w-0">
+                                <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                     <div className="font-medium text-white text-sm sm:text-base truncate">{session.name}</div>
                                     <div className="text-xs sm:text-sm text-gray-400">{new Date(session.startTime).toLocaleDateString()}</div>
                                 </div>
                                 <div className="flex items-center justify-between sm:justify-end space-x-3 flex-shrink-0">
                                     {Boolean(session.metrics.finalAccuracy) && (
-                                        <span className="text-green-400 font-semibold text-sm">{session.metrics.finalAccuracy.toFixed(3)}</span>
+                                        <span className="text-green-400 font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{session.metrics.finalAccuracy.toFixed(3)}</span>
                                     )}
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                         getSessionStatusClass(session?.status)
@@ -1210,21 +986,21 @@ const TrainingDataManager = memo(() => {
                         ))}
                         {recentTrainingSessions.length === 0 && (
                             <div className="text-center text-gray-400 py-6 sm:py-4">
-                                <Brain className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                                <p className="text-sm">No training sessions yet.</p>
-                                <p className="text-xs">Start your first training session!</p>
+                                <Brain className="w-8 h-8 mx-auto mb-2 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                                <p className="text-sm sm:px-4 md:px-6 lg:px-8">No training sessions yet.</p>
+                                <p className="text-xs sm:px-4 md:px-6 lg:px-8">Start your first training session!</p>
                             </div>
                         )}
                     </div>
                 </Widget>
 
                 {/* System Resources Widget - Mobile Enhanced */}
-                <Widget title="System Resources" className="bg-gray-900/50 widget-mobile-responsive">
-                    <div className="space-y-4">
+                <Widget title="System Resources" className="bg-gray-900/50 widget-mobile-responsive sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between text-sm mb-2 gap-1">
-                                <span className="text-gray-300">GPU Usage</span>
-                                <span className="text-white font-semibold">73%</span>
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">GPU Usage</span>
+                                <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">73%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                 <div className="bg-red-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '73%' }}></div>
@@ -1233,8 +1009,8 @@ const TrainingDataManager = memo(() => {
                         
                         <div>
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between text-sm mb-2 gap-1">
-                                <span className="text-gray-300">Memory Usage</span>
-                                <span className="text-white font-semibold">45%</span>
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Memory Usage</span>
+                                <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">45%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                 <div className="bg-yellow-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '45%' }}></div>
@@ -1243,8 +1019,8 @@ const TrainingDataManager = memo(() => {
                         
                         <div>
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between text-sm mb-2 gap-1">
-                                <span className="text-gray-300">CPU Usage</span>
-                                <span className="text-white font-semibold">28%</span>
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">CPU Usage</span>
+                                <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">28%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                 <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '28%' }}></div>
@@ -1269,10 +1045,10 @@ const TrainingDataManager = memo(() => {
     );
 
     const renderDatasetsTab = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Widget title="Data Sources" className="bg-gray-900/50">
-                    <div className="space-y-3">
+                <Widget title="Data Sources" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {[
                             { name: 'Fantasy API', status: 'active', records: '1.2M', lastUpdate: '2 min ago' },
                             { name: 'Historical Stats', status: 'active', records: '890K', lastUpdate: '5 min ago' },
@@ -1280,85 +1056,85 @@ const TrainingDataManager = memo(() => {
                             { name: 'Injury Reports', status: 'active', records: '23K', lastUpdate: '30 sec ago' }
                         ].map((source: any) => (
                             <div key={source.name} className="flex items-center justify-between p-3 sm:p-4 bg-gray-800/50 rounded-lg min-h-[60px]">
-                                <div className="flex-1 min-w-0">
+                                <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                     <div className="font-medium text-white text-sm sm:text-base truncate">{source.name}</div>
                                     <div className="text-xs sm:text-sm text-gray-400">{source.records} records</div>
                                 </div>
-                                <div className="text-right flex-shrink-0 ml-3">
-                                    <div className="flex items-center justify-end mb-1">
+                                <div className="text-right flex-shrink-0 ml-3 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-end mb-1 sm:px-4 md:px-6 lg:px-8">
                                         <div className={`w-2 h-2 rounded-full ${
                                             source?.status === 'active' ? 'bg-green-400' : 'bg-yellow-400'
                                         }`}></div>
-                                        <span className="ml-2 text-xs text-gray-400 capitalize">{source?.status}</span>
+                                        <span className="ml-2 text-xs text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{source?.status}</span>
                                     </div>
-                                    <div className="text-xs text-gray-400 whitespace-nowrap">{source.lastUpdate}</div>
+                                    <div className="text-xs text-gray-400 whitespace-nowrap sm:px-4 md:px-6 lg:px-8">{source.lastUpdate}</div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </Widget>
 
-                <Widget title="Data Quality Metrics" className="bg-gray-900/50">
-                    <div className="space-y-4">
+                <Widget title="Data Quality Metrics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {validationReport ? (
                             <>
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="text-lg font-semibold text-white">Overall Score</span>
+                                <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Overall Score</span>
                                     <span className={`text-2xl font-bold ${getQualityScoreClass(validationReport.score)}`}>
                                         {validationReport.score.toFixed(1)}%
                                     </span>
                                 </div>
                                 
-                                <div className="space-y-3">
+                                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                     <div>
-                                        <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-400">Completeness</span>
-                                            <span className="text-white">{validationReport.qualityMetrics.completeness.score.toFixed(1)}%</span>
+                                        <div className="flex justify-between text-sm mb-2 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Completeness</span>
+                                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.completeness.score.toFixed(1)}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
-                                            <div className="bg-green-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.completeness.score}%` }}></div>
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.completeness.score}%` }}></div>
                                         </div>
                                     </div>
                                     
                                     <div>
-                                        <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-400">Accuracy</span>
-                                            <span className="text-white">{validationReport.qualityMetrics.accuracy.score.toFixed(1)}%</span>
+                                        <div className="flex justify-between text-sm mb-2 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.accuracy.score.toFixed(1)}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
-                                            <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.accuracy.score}%` }}></div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div>
-                                        <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-400">Consistency</span>
-                                            <span className="text-white">{validationReport.qualityMetrics.consistency.score.toFixed(1)}%</span>
-                                        </div>
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
-                                            <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.consistency.score}%` }}></div>
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.accuracy.score}%` }}></div>
                                         </div>
                                     </div>
                                     
                                     <div>
-                                        <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-400">Validity</span>
-                                            <span className="text-white">{validationReport.qualityMetrics.validity.score.toFixed(1)}%</span>
+                                        <div className="flex justify-between text-sm mb-2 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Consistency</span>
+                                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.consistency.score.toFixed(1)}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
-                                            <div className="bg-yellow-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.validity.score}%` }}></div>
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.consistency.score}%` }}></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="flex justify-between text-sm mb-2 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Validity</span>
+                                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.validity.score.toFixed(1)}%</span>
+                                        </div>
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="bg-yellow-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.validity.score}%` }}></div>
                                         </div>
                                     </div>
                                 </div>
                             </>
                         ) : (
-                            <div className="text-center py-4">
-                                <div className="text-gray-400 mb-2">No validation report available</div>
+                            <div className="text-center py-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">No validation report available</div>
                                 <button 
                                     onClick={handleValidateData}
                                     disabled={isValidating}
-                                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                                >
+                                    className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                                 aria-label="Action button">
                                     {isValidating ? 'Validating...' : 'Run Validation'}
                                 </button>
                             </div>
@@ -1366,15 +1142,14 @@ const TrainingDataManager = memo(() => {
                     </div>
                 </Widget>
 
-                <Widget title="Dataset Actions" className="bg-gray-900/50">
-                    <div className="space-y-3">
+                <Widget title="Dataset Actions" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {/* Error display for dataset actions */}
                         {errors.dataLoad && (
-                            <div className="bg-red-900/50 border border-red-500 rounded p-2 mb-3">
-                                <div className="text-red-300 text-sm">{errors.dataLoad}</div>
+                            <div className="bg-red-900/50 border border-red-500 rounded p-2 mb-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-red-300 text-sm sm:px-4 md:px-6 lg:px-8">{errors.dataLoad}</div>
                                 <button 
                                     onClick={() => handleErrorDismiss('dataLoad')}
-                                    className="text-red-400 hover:text-red-300 text-xs mt-1"
                                 >
                                     Dismiss
                                 </button>
@@ -1384,7 +1159,7 @@ const TrainingDataManager = memo(() => {
                         <button 
                             disabled={!realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base min-h-[48px] touch-target"
-                        >
+                         aria-label="Action button">
                             <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
                             <span>Upload Dataset</span>
                         </button>
@@ -1393,9 +1168,9 @@ const TrainingDataManager = memo(() => {
                             onClick={refreshDataSources}
                             disabled={loadingStates.datasetStats || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
-                        >
+                         aria-label="Action button">
                             <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.datasetStats ? 'animate-spin' : ''}`} />
-                            <span className="truncate">
+                            <span className="truncate sm:px-4 md:px-6 lg:px-8">
                                 {loadingStates.datasetStats ? 'Refreshing...' : getConnectionDependentText('Refresh Data')}
                             </span>
                         </button>
@@ -1404,9 +1179,9 @@ const TrainingDataManager = memo(() => {
                             onClick={handleValidateData}
                             disabled={loadingStates.validation || loadingStates.datasetStats || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
-                        >
+                         aria-label="Action button">
                             <Target className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.validation ? 'animate-spin' : ''}`} />
-                            <span className="truncate">
+                            <span className="truncate sm:px-4 md:px-6 lg:px-8">
                                 {loadingStates.validation ? 'Validating...' : getConnectionDependentText('Validate Quality')}
                             </span>
                         </button>
@@ -1415,16 +1190,16 @@ const TrainingDataManager = memo(() => {
                             onClick={exportTrainingData}
                             disabled={loadingStates.export || !realtimeConnected}
                             className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50 text-sm sm:text-base min-h-[48px] touch-target"
-                        >
+                         aria-label="Action button">
                             <Download className={`w-4 h-4 sm:w-5 sm:h-5 ${loadingStates.export ? 'animate-spin' : ''}`} />
-                            <span className="truncate">
+                            <span className="truncate sm:px-4 md:px-6 lg:px-8">
                                 {loadingStates.export ? 'Exporting...' : getConnectionDependentText('Export Dataset')}
                             </span>
                         </button>
                         
                         {/* Retry attempts indicator */}
                         {(retryAttempts.dataLoad > 0 || retryAttempts.validation > 0) && (
-                            <div className="text-xs text-yellow-300 text-center pt-2 border-t border-gray-700">
+                            <div className="text-xs text-yellow-300 text-center pt-2 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
                                 {retryAttempts.dataLoad > 0 && `Data load retries: ${retryAttempts.dataLoad}/3`}
                                 {retryAttempts.validation > 0 && `Validation retries: ${retryAttempts.validation}/3`}
                             </div>
@@ -1433,15 +1208,15 @@ const TrainingDataManager = memo(() => {
                 </Widget>
             </div>
 
-            <Widget title="Dataset Management" className="bg-gray-900/50">
-                <div className="space-y-4">
+            <Widget title="Dataset Management" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <h3 className="text-lg font-semibold text-white">Available Datasets</h3>
+                        <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Available Datasets</h3>
                         <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2">
-                            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base min-h-[44px] touch-target">
+                            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base min-h-[44px] touch-target" aria-label="Action button">
                                 Add Dataset
                             </button>
-                            <button className="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm sm:text-base min-h-[44px] touch-target">
+                            <button className="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm sm:text-base min-h-[44px] touch-target" aria-label="Action button">
                                 Import
                             </button>
                         </div>
@@ -1457,35 +1232,35 @@ const TrainingDataManager = memo(() => {
                             { name: 'Draft Results', size: '34 MB', records: '78K', format: 'CSV', lastModified: '12 hours ago', quality: 93.4 }
                         ].map((dataset: any) => (
                             <div key={dataset.name} className="p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-700 min-h-[200px] flex flex-col">
-                                <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
+                                <div className="flex items-start justify-between mb-2 flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <h4 className="font-medium text-white text-sm sm:text-base truncate flex-1 min-w-0">{dataset.name}</h4>
                                     <span className={`px-2 py-1 rounded-full text-xs whitespace-nowrap flex-shrink-0 ${getDatasetQualityClass(dataset.quality)}`}>
                                         {dataset.quality}%
                                     </span>
                                 </div>
                                 <div className="space-y-1 text-xs sm:text-sm text-gray-400 flex-1">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                         <span>Size:</span>
-                                        <span className="text-white font-medium">{dataset.size}</span>
+                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{dataset.size}</span>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                         <span>Records:</span>
-                                        <span className="text-white font-medium">{dataset.records}</span>
+                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{dataset.records}</span>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                         <span>Format:</span>
-                                        <span className="text-white font-medium">{dataset.format}</span>
+                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{dataset.format}</span>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                         <span>Modified:</span>
-                                        <span className="text-white font-medium">{dataset.lastModified}</span>
+                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{dataset.lastModified}</span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col sm:flex-row gap-2 mt-3 pt-2 border-t border-gray-700">
-                                    <button className="flex-1 px-2 py-2 bg-blue-600 text-white text-xs sm:text-sm rounded hover:bg-blue-700 transition-colors min-h-[36px] touch-target">
+                                    <button className="flex-1 px-2 py-2 bg-blue-600 text-white text-xs sm:text-sm rounded hover:bg-blue-700 transition-colors min-h-[36px] touch-target" aria-label="Action button">
                                         View
                                     </button>
-                                    <button className="flex-1 px-2 py-2 bg-gray-600 text-white text-xs sm:text-sm rounded hover:bg-gray-700 transition-colors min-h-[36px] touch-target">
+                                    <button className="flex-1 px-2 py-2 bg-gray-600 text-white text-xs sm:text-sm rounded hover:bg-gray-700 transition-colors min-h-[36px] touch-target" aria-label="Action button">
                                         Edit
                                     </button>
                                 </div>
@@ -1500,18 +1275,18 @@ const TrainingDataManager = memo(() => {
     const renderValidationTab = () => (
         <div className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                <Widget title="Validation Overview" className="bg-gray-900/50">
+                <Widget title="Validation Overview" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
                         {validationReport ? (
                             <>
-                                <div className="text-center">
+                                <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-3xl sm:text-4xl font-bold mb-2 ${getQualityScoreClass(validationReport.score)}`}>
                                         {validationReport.score.toFixed(1)}%
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-400">Overall Quality Score</div>
                                 </div>
                                 
-                                <div className="flex items-center justify-between py-1">
+                                <div className="flex items-center justify-between py-1 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-300 text-sm sm:text-base">Status</span>
                                     <span className={`px-2 py-1 rounded-full text-xs ${
                                         validationReport.passed ? 'bg-green-600 text-green-100' : 'bg-red-600 text-red-100'
@@ -1520,29 +1295,29 @@ const TrainingDataManager = memo(() => {
                                     </span>
                                 </div>
                                 
-                                <div className="flex items-center justify-between py-1">
+                                <div className="flex items-center justify-between py-1 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-300 text-sm sm:text-base">Records</span>
                                     <span className="text-white text-sm sm:text-base">{validationReport.datasetProfile.recordCount.toLocaleString()}</span>
                                 </div>
                                 
-                                <div className="flex items-center justify-between py-1">
+                                <div className="flex items-center justify-between py-1 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-300 text-sm sm:text-base">Fields</span>
                                     <span className="text-white text-sm sm:text-base">{validationReport.datasetProfile.fieldCount}</span>
                                 </div>
                                 
-                                <div className="text-xs text-gray-400 text-center">
+                                <div className="text-xs text-gray-400 text-center sm:px-4 md:px-6 lg:px-8">
                                     Last validated: {new Date(validationReport.timestamp).toLocaleString()}
                                 </div>
                             </>
                         ) : (
-                            <div className="text-center py-4">
+                            <div className="text-center py-4 sm:px-4 md:px-6 lg:px-8">
                                 <AlertTriangle className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-yellow-400 opacity-50" />
                                 <p className="text-gray-400 mb-3 sm:mb-4 text-sm sm:text-base">No validation report available</p>
                                 <button 
                                     onClick={handleValidateData}
                                     disabled={isValidating}
                                     className="px-4 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 min-h-[44px] touch-target text-sm sm:text-base"
-                                >
+                                 aria-label="Action button">
                                     {isValidating ? 'Validating...' : 'Run Validation'}
                                 </button>
                             </div>
@@ -1550,98 +1325,98 @@ const TrainingDataManager = memo(() => {
                     </div>
                 </Widget>
 
-                <Widget title="Quality Dimensions" className="bg-gray-900/50">
-                    <div className="space-y-3">
+                <Widget title="Quality Dimensions" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {validationReport ? (
                             <>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Completeness</span>
-                                        <span className="text-white">{validationReport.qualityMetrics.completeness.score.toFixed(1)}%</span>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Completeness</span>
+                                        <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.completeness.score.toFixed(1)}%</span>
                                     </div>
-                                    <div className="w-full bg-gray-700 rounded-full h-2">
-                                        <div className="bg-green-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.completeness.score}%` }}></div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.completeness.score}%` }}></div>
                                     </div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                         {validationReport.qualityMetrics.completeness.missingValues} missing values
                                     </div>
                                 </div>
                                 
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Consistency</span>
-                                        <span className="text-white">{validationReport.qualityMetrics.consistency.score.toFixed(1)}%</span>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Consistency</span>
+                                        <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.consistency.score.toFixed(1)}%</span>
                                     </div>
-                                    <div className="w-full bg-gray-700 rounded-full h-2">
-                                        <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.consistency.score}%` }}></div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.consistency.score}%` }}></div>
                                     </div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                         {validationReport.qualityMetrics.consistency.duplicates} duplicates
                                     </div>
                                 </div>
                                 
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Accuracy</span>
-                                        <span className="text-white">{validationReport.qualityMetrics.accuracy.score.toFixed(1)}%</span>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</span>
+                                        <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.accuracy.score.toFixed(1)}%</span>
                                     </div>
-                                    <div className="w-full bg-gray-700 rounded-full h-2">
-                                        <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.accuracy.score}%` }}></div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.accuracy.score}%` }}></div>
                                     </div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                         {validationReport.qualityMetrics.accuracy.outliers} outliers detected
                                     </div>
                                 </div>
                                 
-                                <div className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-400">Validity</span>
-                                        <span className="text-white">{validationReport.qualityMetrics.validity.score.toFixed(1)}%</span>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Validity</span>
+                                        <span className="text-white sm:px-4 md:px-6 lg:px-8">{validationReport.qualityMetrics.validity.score.toFixed(1)}%</span>
                                     </div>
-                                    <div className="w-full bg-gray-700 rounded-full h-2">
-                                        <div className="bg-yellow-500 h-2 rounded-full" style={{ width: `${validationReport.qualityMetrics.validity.score}%` }}></div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="bg-yellow-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: `${validationReport.qualityMetrics.validity.score}%` }}></div>
                                     </div>
                                 </div>
                             </>
                         ) : (
-                            <div className="text-center text-gray-400 py-8">
+                            <div className="text-center text-gray-400 py-8 sm:px-4 md:px-6 lg:px-8">
                                 Run validation to see quality metrics
                             </div>
                         )}
                     </div>
                 </Widget>
 
-                <Widget title="Validation Actions" className="bg-gray-900/50">
-                    <div className="space-y-3">
+                <Widget title="Validation Actions" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         <button 
                             onClick={handleValidateData}
                             disabled={isValidating}
-                            className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-                        >
-                            <CheckCircle className="w-4 h-4" />
+                            className="w-full flex items-center justify-center space-x-2 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
+                            <CheckCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>{isValidating ? 'Running Validation...' : 'Run Full Validation'}</span>
                         </button>
                         
-                        <button className="w-full flex items-center justify-center space-x-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                            <Save className="w-4 h-4" />
+                        <button className="w-full flex items-center justify-center space-x-2 p-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                            <Save className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Save Report</span>
                         </button>
                         
-                        <button className="w-full flex items-center justify-center space-x-2 p-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                            <Download className="w-4 h-4" />
+                        <button className="w-full flex items-center justify-center space-x-2 p-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                            <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Export Report</span>
                         </button>
                         
-                        <div className="pt-3 border-t border-gray-700">
-                            <h4 className="text-sm font-medium text-gray-300 mb-2">Quick Actions</h4>
-                            <div className="space-y-2">
-                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded">
+                        <div className="pt-3 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                            <h4 className="text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Quick Actions</h4>
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                     Fix Missing Values
                                 </button>
-                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded">
+                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                     Remove Duplicates
                                 </button>
-                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded">
+                                <button className="w-full text-left text-sm p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                     Handle Outliers
                                 </button>
                             </div>
@@ -1652,16 +1427,16 @@ const TrainingDataManager = memo(() => {
 
             {validationReport && (
                 <>
-                    <Widget title="Validation Results" className="bg-gray-900/50">
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-lg font-semibold text-white">Rule Results ({validationReport.validationResults.length})</h3>
-                                <div className="flex space-x-2">
-                                    <span className="text-sm text-gray-400">
+                    <Widget title="Validation Results" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Rule Results ({validationReport.validationResults.length})</h3>
+                                <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         {validationReport.validationResults.filter((r: any) => r.passed).length} passed
                                     </span>
-                                    <span className="text-sm text-gray-400">•</span>
-                                    <span className="text-sm text-gray-400">
+                                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">•</span>
+                                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                         {validationReport.validationResults.filter((r: any) => !r.passed).length} failed
                                     </span>
                                 </div>
@@ -1671,19 +1446,19 @@ const TrainingDataManager = memo(() => {
                                 {validationReport.validationResults.map((result: any) => {
                                     const rule = validationRules.find((r: any) => r.id === result.ruleId);
                                     return (
-                                        <div key={result.ruleId} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <h4 className="font-medium text-white">{rule?.name || result.ruleId}</h4>
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="text-sm text-gray-400">{result.score.toFixed(1)}%</span>
+                                        <div key={result.ruleId} className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                                <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{rule?.name || result.ruleId}</h4>
+                                                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{result.score.toFixed(1)}%</span>
                                                     <span className={`px-2 py-1 rounded-full text-xs ${getValidationResultClass(result.passed, rule?.severity)}`}>
                                                         {getValidationResultText(result.passed, rule?.severity)}
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div className="text-sm text-gray-400 mb-2">{result.message}</div>
+                                            <div className="text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">{result.message}</div>
                                             {result.affectedRecords > 0 && (
-                                                <div className="text-xs text-gray-500">
+                                                <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                     Affected records: {result.affectedRecords.toLocaleString()}
                                                 </div>
                                             )}
@@ -1694,15 +1469,15 @@ const TrainingDataManager = memo(() => {
                         </div>
                     </Widget>
 
-                    <Widget title="Recommendations" className="bg-gray-900/50">
-                        <div className="space-y-4">
-                            <h3 className="text-lg font-semibold text-white">Data Quality Recommendations</h3>
-                            <div className="space-y-3">
+                    <Widget title="Recommendations" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Data Quality Recommendations</h3>
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {validationReport.recommendations.map((recommendation: any) => (
-                                    <div key={`rec-${recommendation}`} className="flex items-start space-x-3 p-3 bg-gray-800/50 rounded-lg">
-                                        <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5" />
-                                        <div className="flex-1">
-                                            <div className="text-white text-sm">{recommendation}</div>
+                                    <div key={`rec-${recommendation}`} className="flex items-start space-x-3 p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                        <AlertTriangle className="w-5 h-5 text-yellow-400 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
+                                        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="text-white text-sm sm:px-4 md:px-6 lg:px-8">{recommendation}</div>
                                         </div>
                                     </div>
                                 ))}
@@ -1717,14 +1492,14 @@ const TrainingDataManager = memo(() => {
     const renderTrainingTab = () => (
         <div className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <Widget title="Training Configuration" className="bg-gray-900/50">
+                <Widget title="Training Configuration" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
                         <div>
-                            <label htmlFor="model-type" className="block text-sm font-medium text-gray-300 mb-2">Model Type</label>
+                            <label htmlFor="model-type" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Model Type</label>
                             <select 
                                 id="model-type"
                                 value={trainingConfig.modelType}
-                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration['modelType'] })}
+                                onChange={(e: any) => updateTrainingConfig({ modelType: e.target.value as TrainingConfiguration['modelType'] }}
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value="ensemble">Ensemble (Recommended)</option>
@@ -1737,7 +1512,7 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div>
-                            <label htmlFor="training-split" className="block text-sm font-medium text-gray-300 mb-2">Training Split</label>
+                            <label htmlFor="training-split" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Training Split</label>
                             <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2">
                                 <input 
                                     id="training-split"
@@ -1746,7 +1521,7 @@ const TrainingDataManager = memo(() => {
                                     onChange={(e: any) => updateTrainingConfig({ 
                                         trainingSplit: parseInt(e.target.value) / 100,
                                         validationSplit: 1 - (parseInt(e.target.value) / 100)
-                                    })}
+                                    }}
                                     className="flex-1 bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] text-sm sm:text-base"
                                     placeholder="Training %"
                                     min="60" max="90"
@@ -1762,7 +1537,7 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div>
-                            <label htmlFor="learning-rate" className="block text-sm font-medium text-gray-300 mb-2">Learning Rate</label>
+                            <label htmlFor="learning-rate" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Learning Rate</label>
                             <input 
                                 id="learning-rate"
                                 type="range" 
@@ -1774,23 +1549,22 @@ const TrainingDataManager = memo(() => {
                                     hyperparameters: { 
                                         ...trainingConfig.hyperparameters, 
                                         learningRate: parseFloat(e.target.value) 
-                                    } 
-                                })}
-                                className="w-full min-h-[40px] touch-target"
+                                    }})}
+                                className="w-full min-h-[40px] touch-target sm:px-4 md:px-6 lg:px-8"
                             />
-                            <div className="flex justify-between text-xs text-gray-400 mt-1">
+                            <div className="flex justify-between text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 <span>0.0001</span>
-                                <span className="font-medium text-white">{trainingConfig.hyperparameters?.learningRate || 0.001}</span>
+                                <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{trainingConfig.hyperparameters?.learningRate || 0.001}</span>
                                 <span>0.1</span>
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="batch-size" className="block text-sm font-medium text-gray-300 mb-2">Batch Size</label>
+                            <label htmlFor="batch-size" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Batch Size</label>
                             <select 
                                 id="batch-size"
                                 value={trainingConfig.batchSize}
-                                onChange={(e: any) => updateTrainingConfig({ batchSize: parseInt(e.target.value) })}
+                                onChange={(e: any) => updateTrainingConfig({ batchSize: parseInt(e.target.value) }}
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value={16}>16</option>
@@ -1802,54 +1576,54 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div>
-                            <label htmlFor="max-epochs" className="block text-sm font-medium text-gray-300 mb-2">Max Epochs</label>
+                            <label htmlFor="max-epochs" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Max Epochs</label>
                             <input 
                                 id="max-epochs"
                                 type="number" 
                                 value={trainingConfig.maxEpochs}
-                                onChange={(e: any) => updateTrainingConfig({ maxEpochs: parseInt(e.target.value) })}
+                                onChange={(e: any) => updateTrainingConfig({ maxEpochs: parseInt(e.target.value) }}
                                 min="10" 
                                 max="1000"
                                 className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             />
                         </div>
 
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between py-2">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between py-2 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-gray-300 text-sm sm:text-base">Early Stopping</span>
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.earlyStoppingEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ earlyStoppingEnabled: e.target.checked })}
-                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target" 
+                                    onChange={(e: any) => updateTrainingConfig({ earlyStoppingEnabled: e.target.checked }}
+                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
-                            <div className="flex items-center justify-between py-2">
+                            <div className="flex items-center justify-between py-2 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-gray-300 text-sm sm:text-base">Cross Validation</span>
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.crossValidationEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ crossValidationEnabled: e.target.checked })}
-                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target" 
+                                    onChange={(e: any) => updateTrainingConfig({ crossValidationEnabled: e.target.checked }}
+                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
-                            <div className="flex items-center justify-between py-2">
+                            <div className="flex items-center justify-between py-2 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-gray-300 text-sm sm:text-base">Hyperparameter Tuning</span>
                                 <input 
                                     type="checkbox" 
                                     checked={trainingConfig.hyperparameterTuningEnabled}
-                                    onChange={(e: any) => updateTrainingConfig({ hyperparameterTuningEnabled: e.target.checked })}
-                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target" 
+                                    onChange={(e: any) => updateTrainingConfig({ hyperparameterTuningEnabled: e.target.checked }}
+                                    className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target sm:px-4 md:px-6 lg:px-8" 
                                 />
                             </div>
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Training Progress" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-white">Current Session</h3>
+                <Widget title="Training Progress" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Current Session</h3>
                             <span className={`px-2 py-1 rounded-full text-xs ${
                                 isTraining ? 'bg-blue-600 text-blue-100' : 'bg-green-600 text-green-100'
                             }`}>
@@ -1861,8 +1635,8 @@ const TrainingDataManager = memo(() => {
                             <div className="space-y-3 sm:space-y-4">
                                 <div>
                                     <div className="flex justify-between text-xs sm:text-sm mb-2">
-                                        <span className="text-gray-400">Overall Progress</span>
-                                        <span className="text-white font-medium">{Math.round((trainingProgress.currentStep / trainingProgress.totalSteps) * 100)}%</span>
+                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Overall Progress</span>
+                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{Math.round((trainingProgress.currentStep / trainingProgress.totalSteps) * 100)}%</span>
                                     </div>
                                     <div className="w-full bg-gray-700 rounded-full h-3 sm:h-4">
                                         <div 
@@ -1870,17 +1644,17 @@ const TrainingDataManager = memo(() => {
                                             style={{ width: `${(trainingProgress.currentStep / trainingProgress.totalSteps) * 100}%` }}
                                         ></div>
                                     </div>
-                                    <div className="text-xs text-gray-400 mt-1 truncate">
+                                    <div className="text-xs text-gray-400 mt-1 truncate sm:px-4 md:px-6 lg:px-8">
                                         {trainingProgress.currentModel} - {trainingProgress.phase}
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                    <div className="p-3 bg-gray-800/50 rounded-lg">
+                                    <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                         <div className="text-xs sm:text-sm text-gray-400">Current Epoch</div>
                                         <div className="text-lg sm:text-xl font-bold text-white">{trainingProgress.epoch || 0}</div>
                                     </div>
-                                    <div className="p-3 bg-gray-800/50 rounded-lg">
+                                    <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                         <div className="text-xs sm:text-sm text-gray-400">Learning Rate</div>
                                         <div className="text-lg sm:text-xl font-bold text-white">{trainingConfig.hyperparameters?.learningRate || 0.001}</div>
                                     </div>
@@ -1889,17 +1663,17 @@ const TrainingDataManager = memo(() => {
                         )}
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <div className="p-3 bg-gray-800/50 rounded-lg">
+                            <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-xs sm:text-sm text-gray-400">Accuracy</div>
                                 <div className="text-xl sm:text-2xl font-bold text-green-400">{(trainingProgress.accuracy || 0).toFixed(3)}</div>
                             </div>
-                            <div className="p-3 bg-gray-800/50 rounded-lg">
+                            <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-xs sm:text-sm text-gray-400">Loss</div>
                                 <div className="text-xl sm:text-2xl font-bold text-red-400">{(trainingProgress.loss || 0).toFixed(3)}</div>
                             </div>
                         </div>
 
-                        <div className="p-3 bg-gray-800/50 rounded-lg">
+                        <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="text-xs sm:text-sm text-gray-400 mb-2">Validation Accuracy</div>
                             <div className="text-xl sm:text-2xl font-bold text-blue-400">{modelMetrics.overallAccuracy.toFixed(3)}</div>
                         </div>
@@ -1908,7 +1682,7 @@ const TrainingDataManager = memo(() => {
                             <button 
                                 onClick={handleTrainModels}
                                 className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 min-h-[48px] touch-target text-sm sm:text-base font-medium"
-                            >
+                             aria-label="Action button">
                                 <Play className="w-4 h-4 sm:w-5 sm:h-5" />
                                 <span>Start Training</span>
                             </button>
@@ -1918,7 +1692,7 @@ const TrainingDataManager = memo(() => {
                             <button 
                                 onClick={handleStopTraining}
                                 className="w-full flex items-center justify-center space-x-2 p-3 sm:p-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors min-h-[48px] touch-target text-sm sm:text-base font-medium"
-                            >
+                             aria-label="Action button">
                                 <Pause className="w-4 h-4 sm:w-5 sm:h-5" />
                                 <span>Stop Training</span>
                             </button>
@@ -1927,16 +1701,16 @@ const TrainingDataManager = memo(() => {
                 </Widget>
             </div>
 
-            <Widget title="Training History" className="bg-gray-900/50">
+            <Widget title="Training History" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-3 sm:space-y-4">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <h3 className="text-base sm:text-lg font-semibold text-white">Recent Training Sessions</h3>
-                        <button className="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors min-h-[40px] touch-target text-sm sm:text-base self-start sm:self-auto">
+                        <button className="px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors min-h-[40px] touch-target text-sm sm:text-base self-start sm:self-auto" aria-label="Action button">
                             View All
                         </button>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {trainingHistory.slice(0, 4).map((session: any) => (
                             <div key={session.id} className="p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-700">
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
@@ -1947,41 +1721,41 @@ const TrainingDataManager = memo(() => {
                                 </div>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                     <div>
-                                        <div className="text-gray-400">Duration</div>
-                                        <div className="text-white font-medium">
+                                        <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Duration</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                             {session.metrics.trainingDuration ? 
                                                 `${Math.round(session.metrics.trainingDuration / 60000)}m` : 
                                                 'N/A'
-                                            }
+
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-gray-400">Accuracy</div>
-                                        <div className="text-white font-medium">
+                                        <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                             {session.metrics.finalAccuracy?.toFixed(3) || 'N/A'}
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-gray-400">Loss</div>
-                                        <div className="text-white font-medium">
+                                        <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Loss</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
                                             {session.metrics.finalLoss?.toFixed(3) || 'N/A'}
                                         </div>
                                     </div>
                                     <div>
-                                        <div className="text-gray-400">Epochs</div>
-                                        <div className="text-white font-medium">{session.metrics.epochs || 'N/A'}</div>
+                                        <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Epochs</div>
+                                        <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{session.metrics.epochs || 'N/A'}</div>
                                     </div>
                                 </div>
-                                <div className="text-xs text-gray-400 mt-2">
+                                <div className="text-xs text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">
                                     {new Date(session.startTime).toLocaleString()}
                                 </div>
                             </div>
                         ))}
                         {trainingHistory.length === 0 && (
-                            <div className="text-center text-gray-400 py-8">
-                                <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                            <div className="text-center text-gray-400 py-8 sm:px-4 md:px-6 lg:px-8">
+                                <Brain className="w-12 h-12 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                 <p>No training sessions yet.</p>
-                                <p className="text-sm">Start your first training to see history here.</p>
+                                <p className="text-sm sm:px-4 md:px-6 lg:px-8">Start your first training to see history here.</p>
                             </div>
                         )}
                     </div>
@@ -1993,37 +1767,37 @@ const TrainingDataManager = memo(() => {
     const renderPerformanceTab = () => (
         <div className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                <Widget title="Model Metrics" className="bg-gray-900/50">
+                <Widget title="Model Metrics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
-                        <div className="text-center">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
                             <div className="text-2xl sm:text-3xl font-bold text-green-400">{(modelMetrics.overallAccuracy * 100).toFixed(1)}%</div>
                             <div className="text-xs sm:text-sm text-gray-400">Overall Accuracy</div>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                            <div className="text-center">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-lg sm:text-xl font-bold text-blue-400">0.847</div>
-                                <div className="text-xs text-gray-400">Precision</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Precision</div>
                             </div>
-                            <div className="text-center">
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-lg sm:text-xl font-bold text-purple-400">0.823</div>
-                                <div className="text-xs text-gray-400">Recall</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Recall</div>
                             </div>
                         </div>
                         
-                        <div className="text-center">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
                             <div className="text-lg sm:text-xl font-bold text-yellow-400">0.834</div>
-                            <div className="text-xs text-gray-400">F1-Score</div>
+                            <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">F1-Score</div>
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Performance Trends" className="bg-gray-900/50">
+                <Widget title="Performance Trends" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
                         <div>
                             <div className="flex justify-between text-xs sm:text-sm mb-2">
-                                <span className="text-gray-400">7-Day Trend</span>
-                                <span className="text-green-400 font-medium">+2.3%</span>
+                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">7-Day Trend</span>
+                                <span className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">+2.3%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                 <div className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '85%' }}></div>
@@ -2032,8 +1806,8 @@ const TrainingDataManager = memo(() => {
                         
                         <div>
                             <div className="flex justify-between text-xs sm:text-sm mb-2">
-                                <span className="text-gray-400">30-Day Trend</span>
-                                <span className="text-green-400 font-medium">+5.7%</span>
+                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">30-Day Trend</span>
+                                <span className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">+5.7%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 sm:h-3">
                                 <div className="bg-blue-500 h-2 sm:h-3 rounded-full transition-all duration-300" style={{ width: '78%' }}></div>
@@ -2042,30 +1816,30 @@ const TrainingDataManager = memo(() => {
                         
                         <div>
                             <div className="flex justify-between text-xs sm:text-sm mb-2">
-                                <span className="text-gray-400">Model Stability</span>
-                                <span className="text-white">High</span>
+                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Model Stability</span>
+                                <span className="text-white sm:px-4 md:px-6 lg:px-8">High</span>
                             </div>
-                            <div className="w-full bg-gray-700 rounded-full h-2">
-                                <div className="bg-purple-500 h-2 rounded-full" style={{ width: '92%' }}></div>
+                            <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                <div className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '92%' }}></div>
                             </div>
                         </div>
                         
-                        <div className="pt-2 border-t border-gray-700">
-                            <div className="flex items-center justify-between text-sm">
-                                <span className="text-gray-400">Prediction Confidence</span>
-                                <span className="text-white font-semibold">87.3%</span>
+                        <div className="pt-2 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Prediction Confidence</span>
+                                <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">87.3%</span>
                             </div>
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Model Comparison" className="bg-gray-900/50">
-                    <div className="space-y-3">
+                <Widget title="Model Comparison" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {modelMetrics.models.slice(0, 4).map((model, idx) => (
-                            <div key={model.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded">
+                            <div key={model.id} className="flex items-center justify-between p-2 bg-gray-800/50 rounded sm:px-4 md:px-6 lg:px-8">
                                 <div>
-                                    <div className="text-white text-sm font-medium">{model.name}</div>
-                                    <div className="text-xs text-gray-400">{model.accuracy.toFixed(3)}</div>
+                                    <div className="text-white text-sm font-medium sm:px-4 md:px-6 lg:px-8">{model.name}</div>
+                                    <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{model.accuracy.toFixed(3)}</div>
                                 </div>
                                 <span className={`px-2 py-1 rounded-full text-xs ${getModelStatusClass(model.isActive, model.type)}`}>
                                     {getModelStatusText(model.isActive, model.type)}
@@ -2073,7 +1847,7 @@ const TrainingDataManager = memo(() => {
                             </div>
                         ))}
                         {modelMetrics.models.length === 0 && (
-                            <div className="text-center text-gray-400 py-4">
+                            <div className="text-center text-gray-400 py-4 sm:px-4 md:px-6 lg:px-8">
                                 No trained models yet. Start training to see model comparison.
                             </div>
                         )}
@@ -2082,13 +1856,13 @@ const TrainingDataManager = memo(() => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget title="Accuracy Distribution" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="text-center">
-                            <h3 className="text-lg font-semibold text-white mb-4">Prediction Accuracy by Category</h3>
+                <Widget title="Accuracy Distribution" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Prediction Accuracy by Category</h3>
                         </div>
                         
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {[
                                 { category: 'Quarterback', accuracy: 92.4, predictions: 1245 },
                                 { category: 'Running Back', accuracy: 88.7, predictions: 2156 },
@@ -2097,14 +1871,14 @@ const TrainingDataManager = memo(() => {
                                 { category: 'Kicker', accuracy: 94.8, predictions: 543 },
                                 { category: 'Defense', accuracy: 87.2, predictions: 987 }
                             ].map((item: any) => (
-                                <div key={item.category} className="space-y-2">
-                                    <div className="flex justify-between text-sm">
-                                        <span className="text-gray-300">{item.category}</span>
-                                        <span className="text-white">{item.accuracy}% ({item.predictions})</span>
+                                <div key={item.category} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{item.category}</span>
+                                        <span className="text-white sm:px-4 md:px-6 lg:px-8">{item.accuracy}% ({item.predictions})</span>
                                     </div>
-                                    <div className="w-full bg-gray-700 rounded-full h-2">
+                                    <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                                         <div 
-                                            className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full" 
+                                            className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" 
                                             style={{ width: `${item.accuracy}%` }}
                                         ></div>
                                     </div>
@@ -2114,88 +1888,88 @@ const TrainingDataManager = memo(() => {
                     </div>
                 </Widget>
 
-                <Widget title="Real-time Performance" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-white">Live Metrics</h3>
-                            <div className="flex items-center space-x-2 text-green-400">
-                                <Activity className="w-4 h-4" />
-                                <span className="text-sm">Live</span>
+                <Widget title="Real-time Performance" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Live Metrics</h3>
+                            <div className="flex items-center space-x-2 text-green-400 sm:px-4 md:px-6 lg:px-8">
+                                <Activity className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                <span className="text-sm sm:px-4 md:px-6 lg:px-8">Live</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="p-3 bg-gray-800/50 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-blue-400">847</div>
-                                <div className="text-xs text-gray-400">Predictions/min</div>
+                        <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
+                            <div className="p-3 bg-gray-800/50 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">847</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Predictions/min</div>
                             </div>
-                            <div className="p-3 bg-gray-800/50 rounded-lg text-center">
-                                <div className="text-2xl font-bold text-green-400">23ms</div>
-                                <div className="text-xs text-gray-400">Avg Response</div>
+                            <div className="p-3 bg-gray-800/50 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">23ms</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Avg Response</div>
                             </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-400">Success Rate</span>
-                                    <span className="text-white">98.7%</span>
+                                <div className="flex justify-between text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Success Rate</span>
+                                    <span className="text-white sm:px-4 md:px-6 lg:px-8">98.7%</span>
                                 </div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div className="bg-green-500 h-2 rounded-full" style={{ width: '98.7%' }}></div>
+                                <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '98.7%' }}></div>
                                 </div>
                             </div>
                             
                             <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-400">Error Rate</span>
-                                    <span className="text-white">1.3%</span>
+                                <div className="flex justify-between text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Error Rate</span>
+                                    <span className="text-white sm:px-4 md:px-6 lg:px-8">1.3%</span>
                                 </div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div className="bg-red-500 h-2 rounded-full" style={{ width: '1.3%' }}></div>
+                                <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="bg-red-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '1.3%' }}></div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="pt-4 border-t border-gray-700">
-                            <h4 className="text-white font-medium mb-2">Recent Alerts</h4>
-                            <div className="space-y-2">
-                                <div className="flex items-center space-x-2 text-sm">
-                                    <CheckCircle className="w-4 h-4 text-green-400" />
-                                    <span className="text-gray-300">Model health check passed</span>
-                                    <span className="text-gray-500">2m ago</span>
+                        <div className="pt-4 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                            <h4 className="text-white font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Recent Alerts</h4>
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                    <CheckCircle className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Model health check passed</span>
+                                    <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">2m ago</span>
                                 </div>
-                                <div className="flex items-center space-x-2 text-sm">
-                                    <AlertTriangle className="w-4 h-4 text-yellow-400" />
-                                    <span className="text-gray-300">High memory usage detected</span>
-                                    <span className="text-gray-500">15m ago</span>
+                                <div className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                    <AlertTriangle className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">High memory usage detected</span>
+                                    <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">15m ago</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="A/B Testing & Model Comparison" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-white">Model Performance Comparison</h3>
-                            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                <Widget title="A/B Testing & Model Comparison" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Model Performance Comparison</h3>
+                            <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                 New A/B Test
                             </button>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div className="p-3 bg-gray-800/50 rounded-lg">
-                                <div className="text-sm text-gray-400 mb-1">Active A/B Tests</div>
-                                <div className="text-2xl font-bold text-blue-400">3</div>
+                            <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Active A/B Tests</div>
+                                <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">3</div>
                             </div>
-                            <div className="p-3 bg-gray-800/50 rounded-lg">
-                                <div className="text-sm text-gray-400 mb-1">Completed Tests</div>
-                                <div className="text-2xl font-bold text-green-400">12</div>
+                            <div className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Completed Tests</div>
+                                <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">12</div>
                             </div>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {[
                                 {
                                     id: 'test-1',
@@ -2229,30 +2003,30 @@ const TrainingDataManager = memo(() => {
                                     significance: 0.001,
                                     progress: 100,
                                     sampleSize: 3250
-                                }
+
                             ].map((test: any) => (
-                                <div key={test.id} className="p-4 bg-gray-800/30 rounded-lg border border-gray-700">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-medium text-white">{test.name}</h4>
+                                <div key={test.id} className="p-4 bg-gray-800/30 rounded-lg border border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                        <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{test.name}</h4>
                                         <span className={`px-2 py-1 rounded-full text-xs ${getTestStatusClass(test?.status)}`}>
                                             {test?.status}
                                         </span>
                                     </div>
                                     
-                                    <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                                    <div className="grid grid-cols-2 gap-4 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <div>
-                                            <div className="text-gray-400">Model A</div>
-                                            <div className="text-white">{test.modelA}</div>
+                                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Model A</div>
+                                            <div className="text-white sm:px-4 md:px-6 lg:px-8">{test.modelA}</div>
                                         </div>
                                         <div>
-                                            <div className="text-gray-400">Model B</div>
-                                            <div className="text-white">{test.modelB}</div>
+                                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Model B</div>
+                                            <div className="text-white sm:px-4 md:px-6 lg:px-8">{test.modelB}</div>
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-4 text-sm mb-3">
+                                    <div className="grid grid-cols-3 gap-4 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">
                                         <div>
-                                            <div className="text-gray-400">Improvement</div>
+                                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Improvement</div>
                                             <div className={`font-medium ${
                                                 test.improvement.startsWith('+') ? 'text-green-400' : 'text-red-400'
                                             }`}>
@@ -2260,7 +2034,7 @@ const TrainingDataManager = memo(() => {
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="text-gray-400">Significance</div>
+                                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Significance</div>
                                             <div className={`font-medium ${
                                                 test.significance < 0.05 ? 'text-green-400' : 'text-yellow-400'
                                             }`}>
@@ -2268,17 +2042,17 @@ const TrainingDataManager = memo(() => {
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="text-gray-400">Sample Size</div>
-                                            <div className="text-white font-medium">{test.sampleSize.toLocaleString()}</div>
+                                            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Sample Size</div>
+                                            <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{test.sampleSize.toLocaleString()}</div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between text-xs">
-                                            <span className="text-gray-400">Progress</span>
-                                            <span className="text-white">{test.progress}%</span>
+                                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Progress</span>
+                                            <span className="text-white sm:px-4 md:px-6 lg:px-8">{test.progress}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                                             <div 
                                                 className={`h-2 rounded-full ${
                                                     test?.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
@@ -2289,22 +2063,22 @@ const TrainingDataManager = memo(() => {
                                     </div>
 
                                     {test?.status === 'active' && (
-                                        <div className="flex justify-end space-x-2 mt-3">
-                                            <button className="px-3 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-500 transition-colors">
+                                        <div className="flex justify-end space-x-2 mt-3 sm:px-4 md:px-6 lg:px-8">
+                                            <button className="px-3 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-500 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 Pause
                                             </button>
-                                            <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors">
+                                            <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 Details
                                             </button>
                                         </div>
                                     )}
 
                                     {test?.status === 'completed' && (
-                                        <div className="flex justify-end space-x-2 mt-3">
-                                            <button className="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 transition-colors">
+                                        <div className="flex justify-end space-x-2 mt-3 sm:px-4 md:px-6 lg:px-8">
+                                            <button className="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 View Results
                                             </button>
-                                            <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors">
+                                            <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 Deploy Winner
                                             </button>
                                         </div>
@@ -2313,23 +2087,23 @@ const TrainingDataManager = memo(() => {
                             ))}
                         </div>
 
-                        <div className="pt-4 border-t border-gray-700">
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-400">Statistical Power Analysis</span>
-                                <span className="text-sm text-white">Power: 0.85 (Adequate)</span>
+                        <div className="pt-4 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Statistical Power Analysis</span>
+                                <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">Power: 0.85 (Adequate)</span>
                             </div>
-                            <div className="mt-2 w-full bg-gray-700 rounded-full h-2">
-                                <div className="bg-green-500 h-2 rounded-full" style={{ width: '85%' }}></div>
+                            <div className="mt-2 w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '85%' }}></div>
                             </div>
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Model Performance Trends" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-semibold text-white">Historical Performance</h3>
-                            <select className="bg-gray-700 text-white rounded-lg px-3 py-1 text-sm border border-gray-600">
+                <Widget title="Model Performance Trends" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Historical Performance</h3>
+                            <select className="bg-gray-700 text-white rounded-lg px-3 py-1 text-sm border border-gray-600 sm:px-4 md:px-6 lg:px-8">
                                 <option>Last 7 days</option>
                                 <option>Last 30 days</option>
                                 <option>Last 90 days</option>
@@ -2338,68 +2112,68 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="text-center">
-                                <div className="text-lg font-bold text-green-400">↗ +2.3%</div>
-                                <div className="text-xs text-gray-400">Accuracy Trend</div>
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-lg font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">↗ +2.3%</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Accuracy Trend</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-lg font-bold text-blue-400">↗ +1.8%</div>
-                                <div className="text-xs text-gray-400">Precision Trend</div>
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-lg font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">↗ +1.8%</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Precision Trend</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-lg font-bold text-yellow-400">→ +0.1%</div>
-                                <div className="text-xs text-gray-400">Recall Trend</div>
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-lg font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">→ +0.1%</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Recall Trend</div>
                             </div>
-                            <div className="text-center">
-                                <div className="text-lg font-bold text-red-400">↘ -0.5%</div>
-                                <div className="text-xs text-gray-400">Response Time</div>
-                            </div>
-                        </div>
-
-                        <div className="space-y-3">
-                            <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-400">Model Stability Index</span>
-                                    <span className="text-white">0.94 (Excellent)</span>
-                                </div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div className="bg-green-500 h-2 rounded-full" style={{ width: '94%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-400">Performance Consistency</span>
-                                    <span className="text-white">0.89 (Good)</span>
-                                </div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div className="bg-blue-500 h-2 rounded-full" style={{ width: '89%' }}></div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="flex justify-between text-sm mb-1">
-                                    <span className="text-gray-400">Drift Detection Score</span>
-                                    <span className="text-white">0.12 (Low Risk)</span>
-                                </div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div className="bg-green-500 h-2 rounded-full" style={{ width: '88%' }}></div>
-                                </div>
+                            <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-lg font-bold text-red-400 sm:px-4 md:px-6 lg:px-8">↘ -0.5%</div>
+                                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Response Time</div>
                             </div>
                         </div>
 
-                        <div className="pt-4 border-t border-gray-700">
-                            <h4 className="text-white font-medium mb-2">Performance Alerts</h4>
-                            <div className="space-y-2">
-                                <div className="flex items-center space-x-2 text-sm">
-                                    <CheckCircle className="w-4 h-4 text-green-400" />
-                                    <span className="text-gray-300">All models performing within expected ranges</span>
-                                    <span className="text-gray-500">1h ago</span>
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                            <div>
+                                <div className="flex justify-between text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Model Stability Index</span>
+                                    <span className="text-white sm:px-4 md:px-6 lg:px-8">0.94 (Excellent)</span>
                                 </div>
-                                <div className="flex items-center space-x-2 text-sm">
-                                    <AlertTriangle className="w-4 h-4 text-yellow-400" />
-                                    <span className="text-gray-300">Minor accuracy degradation in QB predictions</span>
-                                    <span className="text-gray-500">3h ago</span>
+                                <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '94%' }}></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="flex justify-between text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Performance Consistency</span>
+                                    <span className="text-white sm:px-4 md:px-6 lg:px-8">0.89 (Good)</span>
+                                </div>
+                                <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '89%' }}></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div className="flex justify-between text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Drift Detection Score</span>
+                                    <span className="text-white sm:px-4 md:px-6 lg:px-8">0.12 (Low Risk)</span>
+                                </div>
+                                <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="bg-green-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" style={{ width: '88%' }}></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-gray-700 sm:px-4 md:px-6 lg:px-8">
+                            <h4 className="text-white font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Performance Alerts</h4>
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                    <CheckCircle className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">All models performing within expected ranges</span>
+                                    <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">1h ago</span>
+                                </div>
+                                <div className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                    <AlertTriangle className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
+                                    <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Minor accuracy degradation in QB predictions</span>
+                                    <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">3h ago</span>
                                 </div>
                             </div>
                         </div>
@@ -2412,15 +2186,14 @@ const TrainingDataManager = memo(() => {
     const renderConfigTab = () => (
         <div className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <Widget title="Model Configuration" className="bg-gray-900/50">
+                <Widget title="Model Configuration" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                     <div className="space-y-3 sm:space-y-4">
                         <div>
-                            <label htmlFor="ensemble-strategy" className="block text-sm font-medium text-gray-300 mb-2">Ensemble Strategy</label>
+                            <label htmlFor="ensemble-strategy" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Ensemble Strategy</label>
                             <select 
                                 id="ensemble-strategy" 
                                 value={systemConfig.ensembleStrategy}
                                 onChange={(e: any) => handleConfigurationChange('ensembleStrategy', e.target.value)}
-                                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value="weighted_average">Weighted Average</option>
                                 <option value="majority_voting">Majority Voting</option>
@@ -2430,7 +2203,7 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div>
-                            <label htmlFor="prediction-threshold" className="block text-sm font-medium text-gray-300 mb-2">
+                            <label htmlFor="prediction-threshold" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Prediction Threshold: {systemConfig.predictionThreshold}
                             </label>
                             <input 
@@ -2441,22 +2214,20 @@ const TrainingDataManager = memo(() => {
                                 step="0.05" 
                                 value={systemConfig.predictionThreshold}
                                 onChange={(e: any) => handleConfigurationChange('predictionThreshold', parseFloat(e.target.value))}
-                                className="w-full min-h-[40px] touch-target"
                             />
-                            <div className="flex justify-between text-xs text-gray-400 mt-1">
+                            <div className="flex justify-between text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 <span>0.5</span>
-                                <span className="font-medium text-white">{systemConfig.predictionThreshold}</span>
+                                <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{systemConfig.predictionThreshold}</span>
                                 <span>0.95</span>
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="retrain-frequency" className="block text-sm font-medium text-gray-300 mb-2">Auto-Retrain Frequency</label>
+                            <label htmlFor="retrain-frequency" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Auto-Retrain Frequency</label>
                             <select 
                                 id="retrain-frequency" 
                                 value={systemConfig.retrainFrequency}
                                 onChange={(e: any) => handleConfigurationChange('retrainFrequency', e.target.value)}
-                                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 sm:py-3 border border-gray-600 min-h-[48px] touch-target text-sm sm:text-base"
                             >
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
@@ -2465,39 +2236,36 @@ const TrainingDataManager = memo(() => {
                             </select>
                         </div>
 
-                        <div className="flex items-center justify-between py-2">
+                        <div className="flex items-center justify-between py-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="text-gray-300 text-sm sm:text-base">Enable Real-time Learning</span>
                             <input 
                                 type="checkbox" 
                                 checked={systemConfig.realTimeLearning}
                                 onChange={(e: any) => handleConfigurationChange('realTimeLearning', e.target.checked)}
-                                className="rounded bg-gray-700 border-gray-600 min-w-[20px] min-h-[20px] touch-target" 
                             />
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="System Settings" className="bg-gray-900/50">
-                    <div className="space-y-4">
+                <Widget title="System Settings" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
-                            <label htmlFor="api-rate-limit" className="block text-sm font-medium text-gray-300 mb-2">API Rate Limit</label>
+                            <label htmlFor="api-rate-limit" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">API Rate Limit</label>
                             <input 
                                 id="api-rate-limit"
                                 type="number" 
                                 value={systemConfig.apiRateLimit}
                                 onChange={(e: any) => handleConfigurationChange('apiRateLimit', parseInt(e.target.value) || 1000)}
-                                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 border border-gray-600"
                             />
-                            <div className="text-xs text-gray-400 mt-1">Requests per hour</div>
+                            <div className="text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">Requests per hour</div>
                         </div>
 
                         <div>
-                            <label htmlFor="cache-ttl" className="block text-sm font-medium text-gray-300 mb-2">Cache TTL</label>
+                            <label htmlFor="cache-ttl" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Cache TTL</label>
                             <select 
                                 id="cache-ttl" 
                                 value={systemConfig.cacheTtl}
                                 onChange={(e: any) => handleConfigurationChange('cacheTtl', e.target.value)}
-                                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 border border-gray-600"
                             >
                                 <option value="5_minutes">5 minutes</option>
                                 <option value="15_minutes">15 minutes</option>
@@ -2507,12 +2275,11 @@ const TrainingDataManager = memo(() => {
                         </div>
 
                         <div>
-                            <label htmlFor="log-level" className="block text-sm font-medium text-gray-300 mb-2">Log Level</label>
+                            <label htmlFor="log-level" className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Log Level</label>
                             <select 
                                 id="log-level" 
                                 value={systemConfig.logLevel}
                                 onChange={(e: any) => handleConfigurationChange('logLevel', e.target.value)}
-                                className="w-full bg-gray-700 text-white rounded-lg px-3 py-2 border border-gray-600"
                             >
                                 <option value="ERROR">ERROR</option>
                                 <option value="WARN">WARN</option>
@@ -2521,32 +2288,29 @@ const TrainingDataManager = memo(() => {
                             </select>
                         </div>
 
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <span className="text-gray-300">Enable Monitoring</span>
+                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Enable Monitoring</span>
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.enableMonitoring}
                                     onChange={(e: any) => handleConfigurationChange('enableMonitoring', e.target.checked)}
-                                    className="rounded bg-gray-700 border-gray-600" 
                                 />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-gray-300">Auto-backup Models</span>
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Auto-backup Models</span>
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.autoBackupModels}
                                     onChange={(e: any) => handleConfigurationChange('autoBackupModels', e.target.checked)}
-                                    className="rounded bg-gray-700 border-gray-600" 
                                 />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-gray-300">Alert on Anomalies</span>
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Alert on Anomalies</span>
                                 <input 
                                     type="checkbox" 
                                     checked={systemConfig.alertOnAnomalies}
                                     onChange={(e: any) => handleConfigurationChange('alertOnAnomalies', e.target.checked)}
-                                    className="rounded bg-gray-700 border-gray-600" 
                                 />
                             </div>
                         </div>
@@ -2554,12 +2318,12 @@ const TrainingDataManager = memo(() => {
                 </Widget>
             </div>
 
-            <Widget title="Data Sources & APIs" className="bg-gray-900/50">
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-white">API Connections</h3>
-                        <button className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                            <Target className="w-4 h-4" />
+            <Widget title="Data Sources & APIs" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">API Connections</h3>
+                        <button className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                            <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Test All</span>
                         </button>
                     </div>
@@ -2571,15 +2335,15 @@ const TrainingDataManager = memo(() => {
                             { name: 'Weather Service', status: 'warning', latency: '1.2s', lastSync: '1 hour ago' },
                             { name: 'Injury Reports API', status: 'connected', latency: '89ms', lastSync: '30 sec ago' }
                         ].map((api: any) => (
-                            <div key={api.name} className="p-4 bg-gray-800/50 rounded-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                    <h4 className="font-medium text-white">{api.name}</h4>
-                                    <div className="flex items-center space-x-2">
+                            <div key={api.name} className="p-4 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{api.name}</h4>
+                                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                         <div className={`w-2 h-2 rounded-full ${getAPIStatusClass(api?.status)}`}></div>
                                         <span className={`text-xs ${getAPIStatusTextClass(api?.status)}`}>{api?.status}</span>
                                     </div>
                                 </div>
-                                <div className="space-y-1 text-sm text-gray-400">
+                                <div className="space-y-1 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     <div>Latency: {api.latency}</div>
                                     <div>Last sync: {api.lastSync}</div>
                                 </div>
@@ -2589,17 +2353,17 @@ const TrainingDataManager = memo(() => {
                 </div>
             </Widget>
 
-            <Widget title="Backup & Recovery" className="bg-gray-900/50">
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-white">Model Backups</h3>
-                        <div className="flex space-x-2">
-                            <button className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                <Save className="w-4 h-4" />
+            <Widget title="Backup & Recovery" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">Model Backups</h3>
+                        <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <button className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                <Save className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Create Backup</span>
                             </button>
-                            <button className="flex items-center space-x-2 px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                                <Download className="w-4 h-4" />
+                            <button className="flex items-center space-x-2 px-3 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                                <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Download</span>
                             </button>
                         </div>
@@ -2612,12 +2376,12 @@ const TrainingDataManager = memo(() => {
                             { name: 'Weekly Archive', date: '2025-08-01 00:00', size: '134 MB', status: 'success' },
                             { name: 'Manual Backup', date: '2025-07-28 16:45', size: '112 MB', status: 'success' }
                         ].map((backup: any) => (
-                            <div key={`${backup.name}-${backup.date}`} className="p-3 bg-gray-800/50 rounded-lg">
-                                <div className="flex items-center justify-between mb-1">
-                                    <span className="font-medium text-white">{backup.name}</span>
-                                    <CheckCircle className="w-4 h-4 text-green-400" />
+                            <div key={`${backup.name}-${backup.date}`} className="p-3 bg-gray-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
+                                    <span className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{backup.name}</span>
+                                    <CheckCircle className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />
                                 </div>
-                                <div className="space-y-1 text-sm text-gray-400">
+                                <div className="space-y-1 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     <div>{backup.date}</div>
                                     <div>{backup.size}</div>
                                 </div>
@@ -2628,32 +2392,32 @@ const TrainingDataManager = memo(() => {
             </Widget>
 
             {/* Configuration Action Buttons */}
-            <Widget title="Configuration Management" className="bg-gray-900/50">
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <div className="text-white">
-                            <h3 className="font-semibold">Configuration Status</h3>
-                            <p className="text-sm text-gray-400 mt-1">
+            <Widget title="Configuration Management" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-white sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="font-semibold sm:px-4 md:px-6 lg:px-8">Configuration Status</h3>
+                            <p className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                                 {configurationChanged ? 'You have unsaved changes' : 'All changes saved'}
                             </p>
                         </div>
                         <div className={`w-3 h-3 rounded-full ${configurationChanged ? 'bg-yellow-400' : 'bg-green-400'}`}></div>
                     </div>
                     
-                    <div className="flex space-x-3">
+                    <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                         <button
                             onClick={saveConfiguration}
                             disabled={!configurationChanged || savingConfiguration}
-                            className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
+                            className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
                             {savingConfiguration ? (
                                 <>
-                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                                     <span>Saving...</span>
                                 </>
                             ) : (
                                 <>
-                                    <Save className="w-4 h-4" />
+                                    <Save className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Save Configuration</span>
                                 </>
                             )}
@@ -2661,33 +2425,33 @@ const TrainingDataManager = memo(() => {
                         
                         <button
                             onClick={resetConfiguration}
-                            className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                        >
-                            <RefreshCw className="w-4 h-4" />
+                            className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors sm:px-4 md:px-6 lg:px-8"
+                         aria-label="Action button">
+                            <RefreshCw className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Reset to Defaults</span>
                         </button>
 
                         <button
-                            onClick={() => {
+                            onClick={() = aria-label="Action button"> {
                                 if (configurationChanged) {
                                     saveConfiguration().then(() => {
                                         // Apply configuration immediately after saving
                                     });
-                                }
+
                             }}
                             disabled={!configurationChanged}
-                            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors sm:px-4 md:px-6 lg:px-8"
                         >
-                            <Target className="w-4 h-4" />
+                            <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Apply Changes</span>
                         </button>
                     </div>
 
                     {configurationChanged && (
-                        <div className="p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
-                            <div className="flex items-center space-x-2">
-                                <AlertTriangle className="w-4 h-4 text-yellow-400" />
-                                <span className="text-yellow-200 text-sm">
+                        <div className="p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                <AlertTriangle className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
+                                <span className="text-yellow-200 text-sm sm:px-4 md:px-6 lg:px-8">
                                     Configuration changes will take effect after saving and applying.
                                 </span>
                             </div>
@@ -2714,25 +2478,25 @@ const TrainingDataManager = memo(() => {
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                     <button
                         onClick={exportTrainingData}
-                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors mobile-touch-target"
-                    >
-                        <Download className="w-4 h-4" />
+                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors mobile-touch-target sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                        <Download className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                         <span>Export Data</span>
                     </button>
                     
                     <button
                         onClick={handleTrainModels}
                         disabled={isTraining}
-                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 mobile-touch-target"
-                    >
+                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 mobile-touch-target sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
                         {isTraining ? (
                             <>
-                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
                                 <span>Training...</span>
                             </>
                         ) : (
                             <>
-                                <Brain className="w-4 h-4" />
+                                <Brain className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Train Models</span>
                             </>
                         )}
@@ -2741,7 +2505,7 @@ const TrainingDataManager = memo(() => {
             </div>
             
             {/* Mobile-responsive tab navigation */}
-            <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-lg overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-lg overflow-x-auto scrollbar-hide sm:px-4 md:px-6 lg:px-8">
                 {[
                     { id: 'overview', label: 'Overview', icon: BarChart3 },
                     { id: 'datasets', label: 'Datasets', icon: Database },
@@ -2754,14 +2518,9 @@ const TrainingDataManager = memo(() => {
                     return (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex items-center space-x-2 px-3 py-2 sm:px-4 sm:py-2 rounded-md transition-colors whitespace-nowrap min-width-fit mobile-touch-target ${
-                                activeTab === tab.id
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                            }`}
+                            onClick={() => setActiveTab(tab.id as any)}`}
                         >
-                            <IconComponent className="w-4 h-4 flex-shrink-0" />
+                            <IconComponent className="w-4 h-4 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                             <span className="text-sm sm:text-base">{tab.label}</span>
                         </button>
                     );
@@ -2788,4 +2547,11 @@ const TrainingDataManager = memo(() => {
 TrainingDataManager.displayName = 'TrainingDataManager';
 
 export { TrainingDataManager };
-export default TrainingDataManager;
+
+const TrainingDataManagerWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TrainingDataManager {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TrainingDataManagerWithErrorBoundary);

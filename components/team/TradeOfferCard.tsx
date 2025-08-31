@@ -1,9 +1,7 @@
 
 
-
-
-
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import type { TradeOffer, League, Player, DraftPickAsset } from '../../types';
 import { players } from '../../data/players';
 import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
@@ -18,6 +16,7 @@ interface TradeOfferCardProps {
     league: League;
     myTeamId: number;
     dispatch: React.Dispatch<any>;
+
 }
 
 const statusStyles = {
@@ -28,7 +27,7 @@ const statusStyles = {
     FORCED: { bg: 'bg-green-900/20', text: 'text-green-300', label: 'Forced' },
 };
 
-const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }: any) => {
+const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }) => {
     const [isStoryModalOpen, setIsStoryModalOpen] = React.useState(false);
 
     const isIncoming = offer.toTeamId === myTeamId;
@@ -57,14 +56,16 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
             case 'TEAM_B': return { text: `${otherTeam?.name} Wins`, color: 'text-red-400' };
             case 'EVEN': return { text: 'Fair Trade', color: 'text-yellow-400' };
             default: return { text: 'Analysis available', color: 'text-cyan-400' };
-        }
+
     };
     const winnerStyle = getWinnerStyling();
 
-    const handleUpdateStatus = async (status: 'ACCEPTED' | 'REJECTED') => {
+    const handleUpdateStatus = async () => {
+    try {
         dispatch({
             type: 'UPDATE_TRADE_STATUS',
-            payload: { leagueId: league.id, tradeId: offer.id, status }
+            payload: { leagueId: league.id, tradeId: offer.id, status 
+
         });
         dispatch({
             type: 'ADD_NOTIFICATION',
@@ -92,63 +93,63 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
                         isSystemMessage: true,
                         tradeEvent: offer,
                         aiHotTake: aiHotTake || undefined,
-                    }
-                }
+
+
             });
-        }
+
     };
 
-    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }: any) => (
-        <div className="text-xs space-y-1">
+    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }) => (
+        <div className="text-xs space-y-1 sm:px-4 md:px-6 lg:px-8">
             {players.length > 0 && players.map((p: any) => p && <p key={p.id}>{p.name} ({p.position})</p>)}
-            {picks.length > 0 && picks.map((p, i) => <p key={i} className="text-cyan-300">{p.season} R{p.round} Pick</p>)}
-            {players.length === 0 && picks.length === 0 && <p className="text-gray-500 italic">Nothing</p>}
+            {picks.length > 0 && picks.map((p, i) => <p key={i} className="text-cyan-300 sm:px-4 md:px-6 lg:px-8">{p.season} R{p.round} Pick</p>)}
+            {players.length === 0 && picks.length === 0 && <p className="text-gray-500 italic sm:px-4 md:px-6 lg:px-8">Nothing</p>}
         </div>
     );
 
     return (
         <>
         <div className={`p-3 rounded-lg ${style.bg} border-l-4 ${style.text.replace('text-', 'border-')}`}>
-            <div className="flex justify-between items-start text-xs">
+            <div className="flex justify-between items-start text-xs sm:px-4 md:px-6 lg:px-8">
                 <p>{isIncoming ? `From: ${otherTeam?.name}` : `To: ${otherTeam?.name}`}</p>
                 <span className={`px-2 py-0.5 rounded-full font-semibold text-xs ${style.bg} ${style.text}`}>{style.label}</span>
             </div>
             
-            <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-start my-2">
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-start my-2 sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <p className="font-bold text-red-400 text-xs mb-1">GIVING</p>
+                    <p className="font-bold text-red-400 text-xs mb-1 sm:px-4 md:px-6 lg:px-8">GIVING</p>
                     <AssetList players={playersGiving} picks={picksGiving} />
                 </div>
-                <div className="pt-4">
-                    <ArrowRightLeftIcon className="w-5 h-5 text-gray-400" />
+                <div className="pt-4 sm:px-4 md:px-6 lg:px-8">
+                    <ArrowRightLeftIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                 </div>
                 <div>
-                    <p className="font-bold text-green-400 text-xs mb-1">GETTING</p>
+                    <p className="font-bold text-green-400 text-xs mb-1 sm:px-4 md:px-6 lg:px-8">GETTING</p>
                     <AssetList players={playersGetting} picks={picksGetting} />
                 </div>
             </div>
             
             {offer.tradeAnalysis && (
-                 <div className="text-xs mt-2 pt-2 border-t border-white/10 flex items-center justify-center gap-2">
+                 <div className="text-xs mt-2 pt-2 border-t border-white/10 flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <SparklesIcon className={`w-3 h-3 ${winnerStyle.color}`} />
                     <span className={`font-bold ${winnerStyle.color}`}>{winnerStyle.text}:</span>
-                    <span className="italic text-gray-400">"{offer.tradeAnalysis.summary}"</span>
+                    <span className="italic text-gray-400 sm:px-4 md:px-6 lg:px-8">"{offer.tradeAnalysis.summary}"</span>
                 </div>
             )}
 
             {isIncoming && offer?.status === 'PENDING' && (
-                <div className="flex justify-end gap-2 mt-2">
-                    <button onClick={() => handleUpdateStatus('REJECTED')} className="px-3 py-1 text-xs font-bold bg-red-500/20 text-red-300 rounded-md hover:bg-red-500/30">
+                <div className="flex justify-end gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
+                    <button onClick={() => handleUpdateStatus('REJECTED')}
                         Reject
                     </button>
-                    <button onClick={() => handleUpdateStatus('ACCEPTED')} className="px-3 py-1 text-xs font-bold bg-green-500/20 text-green-300 rounded-md hover:bg-green-500/30">
+                    <button onClick={() => handleUpdateStatus('ACCEPTED')}
                         Accept
                     </button>
                 </div>
             )}
             {offer?.status !== 'PENDING' && myTeamId !== -1 && (
-                 <div className="flex justify-end mt-2">
-                    <button onClick={() => setIsStoryModalOpen(true)} className="flex items-center gap-1.5 px-3 py-1 text-xs font-bold bg-purple-500/20 text-purple-300 rounded-md hover:bg-purple-500/30">
+                 <div className="flex justify-end mt-2 sm:px-4 md:px-6 lg:px-8">
+                    <button onClick={() => setIsStoryModalOpen(true)}
                         <ScrollTextIcon /> View Story
                     </button>
                 </div>
@@ -167,4 +168,10 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
     );
 };
 
-export default TradeOfferCard;
+const TradeOfferCardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeOfferCard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeOfferCardWithErrorBoundary);

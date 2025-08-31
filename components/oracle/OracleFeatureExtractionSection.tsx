@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import './OracleFeatureExtractionSection.css';
 
 interface FeatureCategory {
@@ -8,6 +9,7 @@ interface FeatureCategory {
   features: FeatureDetail[];
   color: string;
   icon: string;
+
 }
 
 interface FeatureDetail {
@@ -20,7 +22,6 @@ interface FeatureDetail {
   importance: number; // 0-100
   range?: string;
   normalization?: string;
-}
 
 interface PreprocessingStage {
   id: string;
@@ -31,6 +32,7 @@ interface PreprocessingStage {
   outputFormat: string;
   timing: string;
   dependencies: string[];
+
 }
 
 interface TransformationExample {
@@ -40,7 +42,6 @@ interface TransformationExample {
   transformedData: Record<string, any>;
   steps: string[];
   explanation: string;
-}
 
 interface FeatureEngineeringMethod {
   id: string;
@@ -50,9 +51,11 @@ interface FeatureEngineeringMethod {
   formula: string;
   examples: string[];
   benefits: string[];
+
 }
 
 const OracleFeatureExtractionSection: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('player-metrics');
   const [activeStage, setActiveStage] = useState<string>('extraction');
   const [activeExample, setActiveExample] = useState<string>('player-transform');
@@ -122,8 +125,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           importance: 70,
           range: '1-10 difficulty scale',
           normalization: 'Z-score standardization'
-        }
-      ]
+
     },
     {
       id: 'team-metrics',
@@ -175,8 +177,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           importance: 60,
           range: '0.5-2.0 performance index',
           normalization: 'Centered around 1.0'
-        }
-      ]
+
     },
     {
       id: 'game-conditions',
@@ -228,8 +229,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           importance: 25,
           range: '0-3000 miles',
           normalization: 'Logarithmic scaling'
-        }
-      ]
+
     },
     {
       id: 'historical-patterns',
@@ -270,8 +270,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           importance: 30,
           range: '0-50 average points',
           normalization: 'Venue-specific z-scores'
-        }
-      ]
+
     },
     {
       id: 'contextual-factors',
@@ -312,9 +311,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           importance: 60,
           range: '0.0-1.0 confidence',
           normalization: 'Sigmoid calibration'
-        }
-      ]
-    }
+
   ];
 
   const preprocessingStages: PreprocessingStage[] = [
@@ -367,7 +364,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       outputFormat: '18-dimensional feature vectors',
       timing: '< 50ms per vector',
       dependencies: ['All preprocessing stages', 'ML model requirements']
-    }
+
   ];
 
   const transformationExamples: TransformationExample[] = [
@@ -446,7 +443,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
         'Determine rest days from previous game'
       ],
       explanation: 'Environmental factors are quantified into numerical representations that capture their impact on player performance and game dynamics.'
-    }
+
   ];
 
   const engineeringMethods: FeatureEngineeringMethod[] = [
@@ -494,7 +491,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
       formula: 'Pattern_Score = Correlation(performance, time_factors)',
       examples: ['Prime time performance', 'Divisional game patterns', 'Season progression trends'],
       benefits: ['Captures timing effects', 'Seasonal adjustments', 'Situational performance']
-    }
+
   ];
 
   useEffect(() => {
@@ -504,13 +501,13 @@ const OracleFeatureExtractionSection: React.FC = () => {
           if (prev >= preprocessingStages.length - 1) {
             setIsTransformDemo(false);
             return 0;
-          }
+
           return prev + 1;
         });
       }, 2500);
 
       return () => clearInterval(interval);
-    }
+
   }, [isTransformDemo, preprocessingStages.length]);
 
   const startTransformDemo = () => {
@@ -523,14 +520,14 @@ const OracleFeatureExtractionSection: React.FC = () => {
   const selectedMethod = engineeringMethods.find((method: any) => method.id === activeMethod);
 
   return (
-    <div className="oracle-feature-extraction-section">
-      <div className="section-header">
-        <h2 className="section-title">
-          <span className="title-icon">🔧</span>
+    <div className="oracle-feature-extraction-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
+        <h2 className="section-title sm:px-4 md:px-6 lg:px-8">
+          <span className="title-icon sm:px-4 md:px-6 lg:px-8">🔧</span>
           {' '}
           Feature Extraction & Preprocessing
         </h2>
-        <p className="section-description">
+        <p className="section-description sm:px-4 md:px-6 lg:px-8">
           Discover how Oracle transforms raw sports data into 18-dimensional feature vectors using advanced 
           mathematical preprocessing, feature engineering, and domain-specific transformations for optimal 
           machine learning performance.
@@ -538,18 +535,18 @@ const OracleFeatureExtractionSection: React.FC = () => {
       </div>
 
       {/* Feature Categories Overview */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">📁</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">📁</span>
           {' '}
           Feature Categories & Dimensions
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle's 18-dimensional feature space encompasses 5 major categories, each contributing critical 
           information for prediction accuracy and model performance.
         </p>
 
-        <div className="feature-categories-grid">
+        <div className="feature-categories-grid sm:px-4 md:px-6 lg:px-8">
           {featureCategories.map((category: any) => (
             <button
               key={category.id}
@@ -558,14 +555,14 @@ const OracleFeatureExtractionSection: React.FC = () => {
               style={{ borderLeftColor: category.color }}
               aria-label={`Explore ${category.name} features`}
             >
-              <div className="category-header">
-                <span className="category-icon">{category.icon}</span>
-                <h4 className="category-name">{category.name}</h4>
+              <div className="category-header sm:px-4 md:px-6 lg:px-8">
+                <span className="category-icon sm:px-4 md:px-6 lg:px-8">{category.icon}</span>
+                <h4 className="category-name sm:px-4 md:px-6 lg:px-8">{category.name}</h4>
               </div>
-              <p className="category-description">{category.description}</p>
-              <div className="category-stats">
-                <span className="feature-count">{category.features.length} Features</span>
-                <span className="avg-importance">
+              <p className="category-description sm:px-4 md:px-6 lg:px-8">{category.description}</p>
+              <div className="category-stats sm:px-4 md:px-6 lg:px-8">
+                <span className="feature-count sm:px-4 md:px-6 lg:px-8">{category.features.length} Features</span>
+                <span className="avg-importance sm:px-4 md:px-6 lg:px-8">
                   Avg Importance: {Math.round(category.features.reduce((sum, f) => sum + f.importance, 0) / category.features.length)}%
                 </span>
               </div>
@@ -574,56 +571,56 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </div>
 
         {selectedCategory && (
-          <div className="category-details">
-            <div className="category-details-header">
+          <div className="category-details sm:px-4 md:px-6 lg:px-8">
+            <div className="category-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedCategory.name}</h4>
-              <span className="feature-count-badge">{selectedCategory.features.length} Features</span>
+              <span className="feature-count-badge sm:px-4 md:px-6 lg:px-8">{selectedCategory.features.length} Features</span>
             </div>
             
-            <div className="features-list">
+            <div className="features-list sm:px-4 md:px-6 lg:px-8">
               {selectedCategory.features.map((feature: any) => (
-                <div key={feature.id} className="feature-item">
-                  <div className="feature-header">
-                    <div className="feature-info">
-                      <h5 className="feature-name">{feature.name}</h5>
+                <div key={feature.id} className="feature-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="feature-header sm:px-4 md:px-6 lg:px-8">
+                    <div className="feature-info sm:px-4 md:px-6 lg:px-8">
+                      <h5 className="feature-name sm:px-4 md:px-6 lg:px-8">{feature.name}</h5>
                       <span className={`feature-type ${feature.type}`}>{feature.type}</span>
                     </div>
-                    <div className="feature-importance">
-                      <span className="importance-label">Importance</span>
-                      <div className="importance-bar">
+                    <div className="feature-importance sm:px-4 md:px-6 lg:px-8">
+                      <span className="importance-label sm:px-4 md:px-6 lg:px-8">Importance</span>
+                      <div className="importance-bar sm:px-4 md:px-6 lg:px-8">
                         <div 
-                          className="importance-fill" 
+                          className="importance-fill sm:px-4 md:px-6 lg:px-8" 
                           style={{ width: `${feature.importance}%`, backgroundColor: selectedCategory.color }}
                         />
                       </div>
-                      <span className="importance-value">{feature.importance}%</span>
+                      <span className="importance-value sm:px-4 md:px-6 lg:px-8">{feature.importance}%</span>
                     </div>
                   </div>
                   
-                  <p className="feature-description">{feature.description}</p>
+                  <p className="feature-description sm:px-4 md:px-6 lg:px-8">{feature.description}</p>
                   
-                  <div className="feature-details-grid">
-                    <div className="detail-group">
+                  <div className="feature-details-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="detail-group sm:px-4 md:px-6 lg:px-8">
                       <h6>Example Value</h6>
-                      <code className="example-value">{feature.example}</code>
+                      <code className="example-value sm:px-4 md:px-6 lg:px-8">{feature.example}</code>
                     </div>
                     
-                    <div className="detail-group">
+                    <div className="detail-group sm:px-4 md:px-6 lg:px-8">
                       <h6>Range</h6>
-                      <span className="range-value">{feature.range}</span>
+                      <span className="range-value sm:px-4 md:px-6 lg:px-8">{feature.range}</span>
                     </div>
                     
-                    <div className="detail-group">
+                    <div className="detail-group sm:px-4 md:px-6 lg:px-8">
                       <h6>Normalization</h6>
-                      <span className="normalization-value">{feature.normalization}</span>
+                      <span className="normalization-value sm:px-4 md:px-6 lg:px-8">{feature.normalization}</span>
                     </div>
                   </div>
                   
-                  <div className="preprocessing-steps">
+                  <div className="preprocessing-steps sm:px-4 md:px-6 lg:px-8">
                     <h6>Preprocessing Steps</h6>
-                    <ul className="preprocessing-list">
+                    <ul className="preprocessing-list sm:px-4 md:px-6 lg:px-8">
                       {feature.preprocessing.map((step: any) => (
-                        <li key={`${feature.id}-${step}`} className="preprocessing-step">{step}</li>
+                        <li key={`${feature.id}-${step}`} className="preprocessing-step sm:px-4 md:px-6 lg:px-8">{step}</li>
                       ))}
                     </ul>
                   </div>
@@ -635,20 +632,20 @@ const OracleFeatureExtractionSection: React.FC = () => {
       </div>
 
       {/* Preprocessing Pipeline */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">⚙️</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">⚙️</span>
           {' '}
           Preprocessing Pipeline
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle's five-stage preprocessing pipeline transforms raw sports data into ML-ready feature vectors 
           through systematic cleaning, engineering, and normalization processes.
         </p>
 
-        <div className="pipeline-demo-controls">
+        <div className="pipeline-demo-controls sm:px-4 md:px-6 lg:px-8">
           <button
-            className="demo-button"
+            className="demo-button sm:px-4 md:px-6 lg:px-8"
             onClick={startTransformDemo}
             disabled={isTransformDemo}
             aria-label="Start preprocessing pipeline demonstration"
@@ -657,7 +654,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="preprocessing-pipeline">
+        <div className="preprocessing-pipeline sm:px-4 md:px-6 lg:px-8">
           {preprocessingStages.map((stage, index) => (
             <div
               key={stage.id}
@@ -666,58 +663,58 @@ const OracleFeatureExtractionSection: React.FC = () => {
               } ${isTransformDemo && index < demoStep ? 'completed' : ''}`}
             >
               <button
-                className="stage-header"
+                className="stage-header sm:px-4 md:px-6 lg:px-8"
                 onClick={() => setActiveStage(stage.id)}
                 aria-label={`View details for ${stage.name}`}
               >
-                <div className="stage-number">{index + 1}</div>
-                <div className="stage-info">
-                  <h4 className="stage-name">{stage.name}</h4>
-                  <span className="stage-timing">{stage.timing}</span>
+                <div className="stage-number sm:px-4 md:px-6 lg:px-8">{index + 1}</div>
+                <div className="stage-info sm:px-4 md:px-6 lg:px-8">
+                  <h4 className="stage-name sm:px-4 md:px-6 lg:px-8">{stage.name}</h4>
+                  <span className="stage-timing sm:px-4 md:px-6 lg:px-8">{stage.timing}</span>
                 </div>
-                <div className="stage-status">
+                <div className="stage-status sm:px-4 md:px-6 lg:px-8">
                   {isTransformDemo && index === demoStep && (
-                    <div className="processing-indicator">Transforming...</div>
+                    <div className="processing-indicator sm:px-4 md:px-6 lg:px-8">Transforming...</div>
                   )}
                   {isTransformDemo && index < demoStep && (
-                    <div className="completed-indicator">✓</div>
+                    <div className="completed-indicator sm:px-4 md:px-6 lg:px-8">✓</div>
                   )}
                 </div>
               </button>
 
               {activeStage === stage.id && (
-                <div className="stage-details">
-                  <p className="stage-description">{stage.description}</p>
+                <div className="stage-details sm:px-4 md:px-6 lg:px-8">
+                  <p className="stage-description sm:px-4 md:px-6 lg:px-8">{stage.description}</p>
                   
-                  <div className="stage-content-grid">
-                    <div className="content-group">
+                  <div className="stage-content-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="content-group sm:px-4 md:px-6 lg:px-8">
                       <h5>Techniques Applied</h5>
-                      <ul className="techniques-list">
+                      <ul className="techniques-list sm:px-4 md:px-6 lg:px-8">
                         {stage.techniques.map((technique: any) => (
-                          <li key={`${stage.id}-${technique}`} className="technique-item">{technique}</li>
+                          <li key={`${stage.id}-${technique}`} className="technique-item sm:px-4 md:px-6 lg:px-8">{technique}</li>
                         ))}
                       </ul>
                     </div>
                     
-                    <div className="content-group">
+                    <div className="content-group sm:px-4 md:px-6 lg:px-8">
                       <h5>Dependencies</h5>
-                      <ul className="dependencies-list">
+                      <ul className="dependencies-list sm:px-4 md:px-6 lg:px-8">
                         {stage.dependencies.map((dependency: any) => (
-                          <li key={`${stage.id}-${dependency}`} className="dependency-item">{dependency}</li>
+                          <li key={`${stage.id}-${dependency}`} className="dependency-item sm:px-4 md:px-6 lg:px-8">{dependency}</li>
                         ))}
                       </ul>
                     </div>
                   </div>
                   
-                  <div className="data-flow">
-                    <div className="flow-item">
+                  <div className="data-flow sm:px-4 md:px-6 lg:px-8">
+                    <div className="flow-item sm:px-4 md:px-6 lg:px-8">
                       <h6>Input Format</h6>
-                      <span className="format-description">{stage.inputFormat}</span>
+                      <span className="format-description sm:px-4 md:px-6 lg:px-8">{stage.inputFormat}</span>
                     </div>
-                    <div className="flow-arrow">→</div>
-                    <div className="flow-item">
+                    <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+                    <div className="flow-item sm:px-4 md:px-6 lg:px-8">
                       <h6>Output Format</h6>
-                      <span className="format-description">{stage.outputFormat}</span>
+                      <span className="format-description sm:px-4 md:px-6 lg:px-8">{stage.outputFormat}</span>
                     </div>
                   </div>
                 </div>
@@ -728,18 +725,18 @@ const OracleFeatureExtractionSection: React.FC = () => {
       </div>
 
       {/* Transformation Examples */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🔄</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🔄</span>
           {' '}
           Real-World Transformation Examples
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           See how Oracle transforms actual sports data into feature vectors through step-by-step examples 
           showing the mathematical processes and domain-specific adjustments.
         </p>
 
-        <div className="example-tabs">
+        <div className="example-tabs sm:px-4 md:px-6 lg:px-8">
           {transformationExamples.map((example: any) => (
             <button
               key={example.id}
@@ -753,19 +750,19 @@ const OracleFeatureExtractionSection: React.FC = () => {
         </div>
 
         {selectedExample && (
-          <div className="transformation-example">
-            <div className="example-header">
+          <div className="transformation-example sm:px-4 md:px-6 lg:px-8">
+            <div className="example-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedExample.name}</h4>
             </div>
             
-            <div className="transformation-flow">
-              <div className="data-section">
+            <div className="transformation-flow sm:px-4 md:px-6 lg:px-8">
+              <div className="data-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Raw Input Data</h5>
-                <div className="data-display">
+                <div className="data-display sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(selectedExample.rawData).map(([key, value]) => (
-                    <div key={key} className="data-item">
-                      <span className="data-key">{key}:</span>
-                      <span className="data-value">
+                    <div key={key} className="data-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="data-key sm:px-4 md:px-6 lg:px-8">{key}:</span>
+                      <span className="data-value sm:px-4 md:px-6 lg:px-8">
                         {Array.isArray(value) ? `[${value.join(', ')}]` : String(value)}
                       </span>
                     </div>
@@ -773,25 +770,25 @@ const OracleFeatureExtractionSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="transformation-arrow">
-                <span className="arrow-text">Transform</span>
-                <div className="arrow-icon">⇓</div>
+              <div className="transformation-arrow sm:px-4 md:px-6 lg:px-8">
+                <span className="arrow-text sm:px-4 md:px-6 lg:px-8">Transform</span>
+                <div className="arrow-icon sm:px-4 md:px-6 lg:px-8">⇓</div>
               </div>
               
-              <div className="data-section">
+              <div className="data-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Processed Feature Vector</h5>
-                <div className="data-display">
+                <div className="data-display sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(selectedExample.transformedData).map(([key, value]) => (
-                    <div key={key} className="data-item">
-                      <span className="data-key">{key}:</span>
-                      <span className="data-value">
+                    <div key={key} className="data-item sm:px-4 md:px-6 lg:px-8">
+                      <span className="data-key sm:px-4 md:px-6 lg:px-8">{key}:</span>
+                      <span className="data-value sm:px-4 md:px-6 lg:px-8">
                         {(() => {
                           if (Array.isArray(value)) {
                             return `[${value.map((v: any) => typeof v === 'number' ? v.toFixed(3) : v).join(', ')}]`;
-                          }
+
                           if (typeof value === 'number') {
                             return value.toFixed(3);
-                          }
+
                           return String(value);
                         })()}
                       </span>
@@ -801,36 +798,36 @@ const OracleFeatureExtractionSection: React.FC = () => {
               </div>
             </div>
             
-            <div className="transformation-steps">
+            <div className="transformation-steps sm:px-4 md:px-6 lg:px-8">
               <h5>Transformation Steps</h5>
-              <ol className="steps-list">
+              <ol className="steps-list sm:px-4 md:px-6 lg:px-8">
                 {selectedExample.steps.map((step: any) => (
-                  <li key={`${selectedExample.id}-step-${step.slice(0, 20)}`} className="step-item">{step}</li>
+                  <li key={`${selectedExample.id}-step-${step.slice(0, 20)}`} className="step-item sm:px-4 md:px-6 lg:px-8">{step}</li>
                 ))}
               </ol>
             </div>
             
-            <div className="explanation-section">
+            <div className="explanation-section sm:px-4 md:px-6 lg:px-8">
               <h5>Technical Explanation</h5>
-              <p className="explanation-text">{selectedExample.explanation}</p>
+              <p className="explanation-text sm:px-4 md:px-6 lg:px-8">{selectedExample.explanation}</p>
             </div>
           </div>
         )}
       </div>
 
       {/* Feature Engineering Methods */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">🧪</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">🧪</span>
           {' '}
           Advanced Feature Engineering
         </h3>
-        <p className="subsection-description">
+        <p className="subsection-description sm:px-4 md:px-6 lg:px-8">
           Oracle employs sophisticated feature engineering techniques to extract maximum predictive value 
           from sports data through mathematical transformations and domain expertise.
         </p>
 
-        <div className="engineering-methods-grid">
+        <div className="engineering-methods-grid sm:px-4 md:px-6 lg:px-8">
           {engineeringMethods.map((method: any) => (
             <button
               key={method.id}
@@ -838,48 +835,48 @@ const OracleFeatureExtractionSection: React.FC = () => {
               onClick={() => setActiveMethod(method.id)}
               aria-label={`Learn about ${method.name}`}
             >
-              <div className="method-header">
-                <h4 className="method-name">{method.name}</h4>
+              <div className="method-header sm:px-4 md:px-6 lg:px-8">
+                <h4 className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</h4>
                 <span className={`method-category ${method.category}`}>
                   {method.category}
                 </span>
               </div>
-              <p className="method-description">{method.description}</p>
+              <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
             </button>
           ))}
         </div>
 
         {selectedMethod && (
-          <div className="method-details">
-            <div className="method-details-header">
+          <div className="method-details sm:px-4 md:px-6 lg:px-8">
+            <div className="method-details-header sm:px-4 md:px-6 lg:px-8">
               <h4>{selectedMethod.name}</h4>
               <span className={`category-badge ${selectedMethod.category}`}>
                 {selectedMethod.category}
               </span>
             </div>
             
-            <p className="method-full-description">{selectedMethod.description}</p>
+            <p className="method-full-description sm:px-4 md:px-6 lg:px-8">{selectedMethod.description}</p>
             
-            <div className="method-content">
-              <div className="formula-section">
+            <div className="method-content sm:px-4 md:px-6 lg:px-8">
+              <div className="formula-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Mathematical Formula</h5>
-                <code className="formula">{selectedMethod.formula}</code>
+                <code className="formula sm:px-4 md:px-6 lg:px-8">{selectedMethod.formula}</code>
               </div>
               
-              <div className="examples-section">
+              <div className="examples-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Application Examples</h5>
-                <ul className="examples-list">
+                <ul className="examples-list sm:px-4 md:px-6 lg:px-8">
                   {selectedMethod.examples.map((example: any) => (
-                    <li key={`${selectedMethod.id}-${example}`} className="example-item">{example}</li>
+                    <li key={`${selectedMethod.id}-${example}`} className="example-item sm:px-4 md:px-6 lg:px-8">{example}</li>
                   ))}
                 </ul>
               </div>
               
-              <div className="benefits-section">
+              <div className="benefits-section sm:px-4 md:px-6 lg:px-8">
                 <h5>Key Benefits</h5>
-                <ul className="benefits-list">
+                <ul className="benefits-list sm:px-4 md:px-6 lg:px-8">
                   {selectedMethod.benefits.map((benefit: any) => (
-                    <li key={`${selectedMethod.id}-${benefit}`} className="benefit-item">{benefit}</li>
+                    <li key={`${selectedMethod.id}-${benefit}`} className="benefit-item sm:px-4 md:px-6 lg:px-8">{benefit}</li>
                   ))}
                 </ul>
               </div>
@@ -889,15 +886,15 @@ const OracleFeatureExtractionSection: React.FC = () => {
       </div>
 
       {/* Key Insights */}
-      <div className="content-section">
-        <h3 className="subsection-title">
-          <span className="subsection-icon">💡</span>
+      <div className="content-section sm:px-4 md:px-6 lg:px-8">
+        <h3 className="subsection-title sm:px-4 md:px-6 lg:px-8">
+          <span className="subsection-icon sm:px-4 md:px-6 lg:px-8">💡</span>
           {' '}
           Feature Engineering Insights
         </h3>
         
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Dimensional Efficiency</h4>
             <p>
               Oracle's 18-dimensional feature space represents an optimal balance between information richness 
@@ -905,7 +902,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Domain-Specific Scaling</h4>
             <p>
               Each feature uses sport-specific normalization techniques that preserve meaningful relationships 
@@ -913,7 +910,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Temporal Weighting</h4>
             <p>
               Recent performance data receives exponential weighting to capture momentum and current form, 
@@ -921,7 +918,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Interaction Discovery</h4>
             <p>
               Machine learning automatically discovers feature interactions during training, with the most 
@@ -929,7 +926,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Real-Time Adaptation</h4>
             <p>
               Feature scaling parameters are continuously updated based on league-wide performance trends, 
@@ -937,7 +934,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
             </p>
           </div>
           
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h4>Quality Assurance</h4>
             <p>
               Every feature vector undergoes 15+ validation checks before reaching ML algorithms, with 
@@ -950,4 +947,10 @@ const OracleFeatureExtractionSection: React.FC = () => {
   );
 };
 
-export default OracleFeatureExtractionSection;
+const OracleFeatureExtractionSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleFeatureExtractionSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleFeatureExtractionSectionWithErrorBoundary);

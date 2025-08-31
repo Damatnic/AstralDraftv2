@@ -3,7 +3,8 @@
  * Displays live activity feed for Oracle predictions
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     ZapIcon, 
@@ -21,6 +22,7 @@ export interface RealtimeUpdate {
     message: string;
     timestamp: string;
     data?: any;
+
 }
 
 interface RealtimeUpdatesWidgetProps {
@@ -28,14 +30,13 @@ interface RealtimeUpdatesWidgetProps {
     className?: string;
     maxUpdates?: number;
     compact?: boolean;
-}
 
 export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     updates,
     className = '',
     maxUpdates = 10,
     compact = false
-}: any) => {
+}) => {
     const displayUpdates = updates.slice(0, maxUpdates);
 
     const getUpdateIcon = (type: RealtimeUpdate['type']) => {
@@ -50,7 +51,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                 return ClockIcon;
             default:
                 return ZapIcon;
-        }
+
     };
 
     const getUpdateColor = (type: RealtimeUpdate['type']) => {
@@ -65,7 +66,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                 return 'text-yellow-400';
             default:
                 return 'text-gray-400';
-        }
+
     };
 
     const formatTimestamp = (timestamp: string) => {
@@ -81,7 +82,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
             return `${diffMinutes}m ago`;
         } else {
             return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        }
+
     };
 
     if (compact) {
@@ -89,7 +90,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
             <div className={`space-y-2 max-h-48 overflow-y-auto ${className}`}>
                 <AnimatePresence mode="popLayout">
                     {displayUpdates.length === 0 ? (
-                        <div className="text-sm text-gray-500 italic text-center py-4">
+                        <div className="text-sm text-gray-500 italic text-center py-4 sm:px-4 md:px-6 lg:px-8">
                             No updates yet...
                         </div>
                     ) : (
@@ -107,7 +108,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                                     className="flex items-start space-x-2 p-3 md:p-2 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-colors"
                                 >
                                     <Icon className={`w-5 h-5 md:w-4 md:h-4 mt-0.5 flex-shrink-0 ${iconColor}`} />
-                                    <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                         <div className="text-sm md:text-xs text-gray-300 leading-tight">
                                             {update.message}
                                         </div>
@@ -122,17 +123,16 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                 </AnimatePresence>
             </div>
         );
-    }
 
     return (
         <Widget title="Live Updates" className={`bg-gray-900/50 ${className}`}>
-            <div className="space-y-3 max-h-64 overflow-y-auto">
+            <div className="space-y-3 max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="popLayout">
                     {displayUpdates.length === 0 ? (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            className="text-center py-8"
+                            className="text-center py-8 sm:px-4 md:px-6 lg:px-8"
                         >
                             <ActivityIcon className="w-10 h-10 md:w-8 md:h-8 text-gray-600 mx-auto mb-2" />
                             <div className="text-base md:text-sm text-gray-500">
@@ -160,16 +160,16 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                                         damping: 25,
                                         stiffness: 300
                                     }}
-                                    className="flex items-start space-x-3 p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-all duration-200 border border-transparent hover:border-gray-700/50"
+                                    className="flex items-start space-x-3 p-3 bg-gray-800/30 rounded-lg hover:bg-gray-800/50 transition-all duration-200 border border-transparent hover:border-gray-700/50 sm:px-4 md:px-6 lg:px-8"
                                 >
                                     <div className={`p-2 md:p-1.5 rounded-full bg-gray-900/50 ${iconColor}`}>
                                         <Icon className="w-4 h-4 md:w-3 md:h-3" />
                                     </div>
-                                    <div className="flex-1 min-w-0">
+                                    <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
                                         <div className="text-base md:text-sm text-gray-300 leading-relaxed">
                                             {update.message}
                                         </div>
-                                        <div className="flex items-center justify-between mt-2">
+                                        <div className="flex items-center justify-between mt-2 sm:px-4 md:px-6 lg:px-8">
                                             <div className="text-sm md:text-xs text-gray-500">
                                                 {formatTimestamp(update.timestamp)}
                                             </div>
@@ -191,9 +191,9 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="text-center py-2 border-t border-gray-800"
+                        className="text-center py-2 border-t border-gray-800 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                             Showing {maxUpdates} most recent updates
                         </div>
                     </motion.div>
@@ -203,4 +203,10 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     );
 };
 
-export default RealtimeUpdatesWidget;
+const RealtimeUpdatesWidgetWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <RealtimeUpdatesWidget {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(RealtimeUpdatesWidgetWithErrorBoundary);

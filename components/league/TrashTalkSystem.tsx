@@ -2,7 +2,8 @@
  * Trash Talk Enhancement System - Make league interactions legendary
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, Flame, Trophy, Target, Zap, Laughing } from 'lucide-react';
 
@@ -17,7 +18,6 @@ interface TrashTalkMessage {
   reactions: { emoji: string; count: number; users: string[] }[];
   type: 'general' | 'matchup_specific' | 'waiver_burn' | 'trade_roast';
   spicyLevel: 1 | 2 | 3 | 4 | 5; // Spice meter for content
-}
 
 interface TrashTalkSystemProps {
   leagueId: string;
@@ -29,14 +29,13 @@ interface TrashTalkSystemProps {
     teamName: string;
     avatar?: string;
   }>;
-}
 
-const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
-  leagueId,
+const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
   currentUserId,
   currentUserName,
   leagueMembers
-}) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [messages, setMessages] = useState<TrashTalkMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [selectedTarget, setSelectedTarget] = useState<string>('');
@@ -69,7 +68,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
       "I'm not saying your team is bad, but...",
       "May your players stay healthy and your scores stay low",
       "Your team name is the best part of your roster"
-    ]
+
   };
 
   // Spice level indicators
@@ -126,12 +125,12 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
             existingReaction.users = existingReaction.users.filter(u => u !== currentUserId);
             if (existingReaction.count === 0) {
               msg.reactions = msg.reactions.filter(r => r.emoji !== emoji);
-            }
+
           } else {
             // Add reaction
             existingReaction.count++;
             existingReaction.users.push(currentUserId);
-          }
+
         } else {
           // New reaction
           msg.reactions.push({
@@ -139,8 +138,8 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
             count: 1,
             users: [currentUserId]
           });
-        }
-      }
+
+
       return msg;
     }));
   };
@@ -152,34 +151,33 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
 
   const getMessageIcon = (type: TrashTalkMessage['type']) => {
     switch (type) {
-      case 'matchup_specific': return <Target className="w-4 h-4" />;
-      case 'waiver_burn': return <Zap className="w-4 h-4" />;
-      case 'trade_roast': return <Flame className="w-4 h-4" />;
-      default: return <MessageSquare className="w-4 h-4" />;
-    }
+      case 'matchup_specific': return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'waiver_burn': return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'trade_roast': return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      default: return <MessageSquare className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+
   };
 
   return (
-    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Flame className="w-6 h-6 text-orange-400" />
+    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700 sm:px-4 md:px-6 lg:px-8">
+      <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-white flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+          <Flame className="w-6 h-6 text-orange-400 sm:px-4 md:px-6 lg:px-8" />
           Trash Talk Hall of Fame
         </h2>
-        <div className="flex items-center gap-2 text-sm text-gray-400">
-          <Trophy className="w-4 h-4" />
+        <div className="flex items-center gap-2 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+          <Trophy className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
           10-Man League Banter
         </div>
       </div>
 
       {/* Message Composer */}
-      <div className="mb-6 p-4 bg-dark-700 rounded-lg border border-gray-600">
+      <div className="mb-6 p-4 bg-dark-700 rounded-lg border border-gray-600 sm:px-4 md:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           {/* Message Type Selector */}
           <select
             value={messageType}
             onChange={(e) => setMessageType(e.target.value as TrashTalkMessage['type'])}
-            className="bg-dark-600 border border-gray-500 rounded-lg px-3 py-2 text-white"
           >
             <option value="general">General Banter</option>
             <option value="matchup_specific">Matchup Trash Talk</option>
@@ -191,7 +189,6 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
           <select
             value={selectedTarget}
             onChange={(e) => setSelectedTarget(e.target.value)}
-            className="bg-dark-600 border border-gray-500 rounded-lg px-3 py-2 text-white"
           >
             <option value="">Everyone</option>
             {leagueMembers.filter(m => m.id !== currentUserId).map(member => (
@@ -202,15 +199,12 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
           </select>
 
           {/* Spice Level Selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400">Spice:</span>
+          <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+            <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Spice:</span>
             {spiceIndicators.map(indicator => (
               <button
                 key={indicator.level}
-                onClick={() => setSpicyLevel(indicator.level)}
-                className={`text-lg transition-all hover:scale-110 ${
-                  spicyLevel === indicator.level ? 'scale-125' : 'opacity-50'
-                }`}
+                onClick={() => setSpicyLevel(indicator.level)}`}
                 title={indicator.label}
               >
                 {indicator.emoji}
@@ -220,14 +214,13 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
         </div>
 
         {/* Template Suggestions */}
-        <div className="mb-4">
-          <div className="text-sm text-gray-400 mb-2">Quick fire templates:</div>
-          <div className="flex flex-wrap gap-2">
+        <div className="mb-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Quick fire templates:</div>
+          <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
             {trashTalkTemplates[messageType].map((template, index) => (
               <button
                 key={index}
                 onClick={() => setNewMessage(template)}
-                className="px-3 py-1 bg-primary-600/20 hover:bg-primary-600/30 text-primary-300 rounded-full text-xs transition-colors"
               >
                 {template.substring(0, 30)}...
               </button>
@@ -236,33 +229,30 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
         </div>
 
         {/* Message Input */}
-        <div className="flex gap-3">
-          <div className="flex-1">
+        <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
             <textarea
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder={selectedTarget ? 
-                `Roast ${leagueMembers.find(m => m.id === selectedTarget)?.name}...` : 
+              onChange={(e) => setNewMessage(e.target.value)}...` : 
                 'Drop some fire trash talk...'
-              }
-              className="w-full bg-dark-600 border border-gray-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 resize-none"
+
+              className="w-full bg-dark-600 border border-gray-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 resize-none sm:px-4 md:px-6 lg:px-8"
               rows={3}
             />
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">
             <button
               onClick={() => setShowGifSelector(!showGifSelector)}
-              className="p-3 bg-gray-600 hover:bg-gray-500 text-white rounded-lg transition-colors"
               title="Add GIF"
             >
-              <Laughing className="w-5 h-5" />
+              <Laughing className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
             </button>
             <button
               onClick={handleSendMessage}
               disabled={!newMessage.trim()}
-              className="p-3 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-600 text-white rounded-lg transition-colors"
-            >
-              <Flame className="w-5 h-5" />
+              className="p-3 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-600 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
+              <Flame className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
             </button>
           </div>
         </div>
@@ -279,11 +269,11 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
               {gifReactions.map(gif => (
                 <button
                   key={gif.id}
-                  onClick={() => {
+                  onClick={() = aria-label="Action button"> {
                     setNewMessage(prev => prev + ` [GIF: ${gif.name}]`);
                     setShowGifSelector(false);
                   }}
-                  className="aspect-square bg-dark-600 rounded-lg p-2 hover:bg-dark-500 transition-colors text-xs text-gray-300 flex items-center justify-center"
+                  className="aspect-square bg-dark-600 rounded-lg p-2 hover:bg-dark-500 transition-colors text-xs text-gray-300 flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                 >
                   {gif.name}
                 </button>
@@ -294,7 +284,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
       </div>
 
       {/* Messages Feed */}
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="space-y-4 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {messages.map(message => (
             <motion.div
@@ -302,42 +292,37 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="p-4 bg-dark-700 rounded-lg border border-gray-600"
+              className="p-4 bg-dark-700 rounded-lg border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-2">
+              <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   {getMessageIcon(message.type)}
-                  <span className="font-semibold text-white">{message.userName}</span>
+                  <span className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{message.userName}</span>
                   {message.targetUserName && (
                     <>
-                      <span className="text-gray-400">→</span>
-                      <span className="font-semibold text-primary-400">@{message.targetUserName}</span>
+                      <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">→</span>
+                      <span className="font-semibold text-primary-400 sm:px-4 md:px-6 lg:px-8">@{message.targetUserName}</span>
                     </>
                   )}
-                  <div className="flex items-center gap-1 ml-2">
+                  <div className="flex items-center gap-1 ml-2 sm:px-4 md:px-6 lg:px-8">
                     <span className={`text-lg ${getSpiceColor(message.spicyLevel)}`}>
                       {spiceIndicators[message.spicyLevel - 1].emoji}
                     </span>
                   </div>
                 </div>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                   {message.timestamp.toLocaleTimeString()}
                 </span>
               </div>
               
-              <p className="text-gray-200 mb-3">{message.message}</p>
+              <p className="text-gray-200 mb-3 sm:px-4 md:px-6 lg:px-8">{message.message}</p>
               
               {/* Reactions */}
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center gap-2 flex-wrap sm:px-4 md:px-6 lg:px-8">
                 {message.reactions.map(reaction => (
                   <button
                     key={reaction.emoji}
-                    onClick={() => addReaction(message.id, reaction.emoji)}
-                    className={`px-2 py-1 rounded-full text-xs flex items-center gap-1 transition-colors ${
-                      reaction.users.includes(currentUserId)
-                        ? 'bg-primary-600/30 text-primary-300'
-                        : 'bg-gray-600/30 hover:bg-gray-600/50 text-gray-400'
-                    }`}
+                    onClick={() => addReaction(message.id, reaction.emoji)}`}
                   >
                     {reaction.emoji} {reaction.count}
                   </button>
@@ -348,7 +333,6 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
                   <button
                     key={emoji}
                     onClick={() => addReaction(message.id, emoji)}
-                    className="p-1 hover:bg-gray-600/30 rounded transition-colors text-sm"
                   >
                     {emoji}
                   </button>
@@ -362,4 +346,10 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({
   );
 };
 
-export default TrashTalkSystem;
+const TrashTalkSystemWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TrashTalkSystem {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TrashTalkSystemWithErrorBoundary);

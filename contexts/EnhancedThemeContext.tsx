@@ -44,6 +44,7 @@ export interface ThemeCustomization {
   borderRadius: number;
   fontSize: number;
   spacing: number;
+
 }
 
 export interface AccessibilitySettings {
@@ -53,6 +54,7 @@ export interface AccessibilitySettings {
   focusVisible: boolean;
   colorBlindFriendly: boolean;
   screenReaderOptimized: boolean;
+
 }
 
 export interface ThemeState {
@@ -63,6 +65,7 @@ export interface ThemeState {
   accessibility: AccessibilitySettings;
   isSystemDark: boolean;
   isInitialized: boolean;
+
 }
 
 export interface ThemeActions {
@@ -75,13 +78,14 @@ export interface ThemeActions {
   toggleMode: () => void;
   exportTheme: () => string;
   importTheme: (themeData: string) => void;
-}
 
 export type ThemeContextType = ThemeState & ThemeActions;
 
 // =========================================
 // DEFAULT THEME CONFIGURATIONS
 // =========================================
+
+}
 
 const defaultCustomization: ThemeCustomization = {
   primaryColor: '#4f46e5',
@@ -159,7 +163,7 @@ const colorSchemes: Record<ColorScheme, Partial<ThemeCustomization>> = {
     accentColor: '#f59e0b',
     backgroundColor: '#0c0a09',
     surfaceColor: '#1c1917'
-  }
+
 };
 
 const seasonalThemes: Record<SeasonalTheme, Partial<ThemeCustomization>> = {
@@ -183,7 +187,7 @@ const seasonalThemes: Record<SeasonalTheme, Partial<ThemeCustomization>> = {
   offseason: {
     primaryColor: '#6b7280',
     accentColor: '#9ca3af'
-  }
+
 };
 
 // =========================================
@@ -196,7 +200,7 @@ export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeContext);
   if (!context) {
     throw new Error('useTheme must be used within a ThemeProvider');
-  }
+
   return context;
 };
 
@@ -210,6 +214,7 @@ interface ThemeProviderProps {
   defaultMode?: ThemeMode;
   enableSeasonalThemes?: boolean;
   enableSystemPreference?: boolean;
+
 }
 
 export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
@@ -280,7 +285,7 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
         ...prev.accessibility,
         reducedMotion: prefersReducedMotion.matches,
         highContrast: prefersHighContrast.matches
-      }
+
     }));
 
     prefersReducedMotion.addEventListener('change', handleMotionChange);
@@ -340,22 +345,24 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
         }));
       } else {
         setState(prev => ({ ...prev, isInitialized: true }));
-      }
+
     } catch (error) {
       console.warn('Failed to load theme from localStorage:', error);
       setState(prev => ({ ...prev, isInitialized: true }));
-    }
+
   }, [storageKey]);
 
   useEffect(() => {
     if (state.isInitialized) {
       try {
+
         const { isSystemDark, isInitialized, ...persistentState } = state;
         localStorage.setItem(storageKey, JSON.stringify(persistentState));
-      } catch (error) {
+
+    } catch (error) {
         console.warn('Failed to save theme to localStorage:', error);
-      }
-    }
+
+
   }, [state, storageKey]);
 
   // =========================================
@@ -371,7 +378,6 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
         ...computedTheme,
         ...colorSchemes[state.colorScheme]
       };
-    }
 
     // Apply seasonal theme
     if (state.seasonalTheme !== 'none' && enableSeasonalThemes) {
@@ -379,18 +385,15 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
         ...computedTheme,
         ...seasonalThemes[state.seasonalTheme]
       };
-    }
 
     // Apply accessibility adjustments
     if (state.accessibility.increasedTextSize) {
       computedTheme.fontSize = Math.max(computedTheme.fontSize * 1.25, 18);
-    }
 
     if (state.accessibility.highContrast) {
       // Increase contrast ratios
       computedTheme.shadowIntensity = Math.min(computedTheme.shadowIntensity * 2, 1);
       computedTheme.glassOpacity = Math.min(computedTheme.glassOpacity * 0.5, 0.2);
-    }
 
     return computedTheme;
   };
@@ -464,12 +467,12 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
             customization: { ...prev.customization, ...parsed.customization },
             accessibility: { ...prev.accessibility, ...parsed.accessibility }
           }));
-        }
-      } catch (error) {
+
+    } catch (error) {
         console.error('Failed to import theme:', error);
         throw new Error('Invalid theme data format');
-      }
-    }
+
+
   };
 
   // =========================================
@@ -529,7 +532,7 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
       metaThemeColor = document.createElement('meta');
       metaThemeColor.name = 'theme-color';
       document.head.appendChild(metaThemeColor);
-    }
+
     metaThemeColor.content = computedTheme.backgroundColor;
 
   }, [state]);
@@ -573,6 +576,7 @@ interface ThemeSwitcherProps {
   className?: string;
   showLabels?: boolean;
   size?: 'sm' | 'md' | 'lg';
+
 }
 
 export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
@@ -602,9 +606,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
 
   return (
     <motion.button
-      onClick={toggleMode}
-      className={`
-        ${sizes[size]} 
+      onClick={toggleMode} 
         flex items-center justify-center gap-2
         bg-glass-medium backdrop-blur-xl 
         border border-glass-border 
@@ -629,6 +631,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
 
 interface ColorSchemeSelectorProps {
   className?: string;
+
 }
 
 export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
@@ -654,12 +657,6 @@ export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
         <motion.button
           key={scheme.key}
           onClick={() => setColorScheme(scheme.key)}
-          className={`
-            p-3 rounded-xl border-2 transition-all duration-200
-            ${colorScheme === scheme.key 
-              ? 'border-white bg-glass-medium' 
-              : 'border-glass-border bg-glass-light hover:bg-glass-medium'
-            }
           `}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}

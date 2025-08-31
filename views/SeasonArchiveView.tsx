@@ -51,7 +51,6 @@ interface SeasonRecord {
         score: string;
         week: number;
     };
-}
 
 const SeasonArchiveView: React.FC = () => {
     const { state, dispatch } = useAppState();
@@ -60,7 +59,6 @@ const SeasonArchiveView: React.FC = () => {
 
     if (!league) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     // Mock historical data - in production this would come from the database
     const seasonHistory: SeasonRecord[] = [
@@ -98,7 +96,7 @@ const SeasonArchiveView: React.FC = () => {
                 loser: "End Zone Elite",
                 score: "165.3 - 78.9",
                 week: 11
-            }
+
         },
         {
             year: 2023,
@@ -134,8 +132,8 @@ const SeasonArchiveView: React.FC = () => {
                 loser: "Blitz Brigade",
                 score: "178.4 - 82.1",
                 week: 6
-            }
-        }
+
+
     ];
 
     return (
@@ -149,7 +147,7 @@ const SeasonArchiveView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} History</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} 
                     className="glass-button"
                 >
                     Back to League Hub
@@ -200,7 +198,6 @@ const SeasonArchiveView: React.FC = () => {
                             {/* Season Header */}
                             <button
                                 onClick={() => setExpandedYear(expandedYear === season.year ? null : season.year)}
-                                className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="text-2xl font-bold text-white">{season.year}</div>

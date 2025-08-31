@@ -49,7 +49,7 @@ const AutoDraftView: React.FC = () => {
       title: 'Deep Analytics',
       description: 'Comprehensive analysis of strengths, weaknesses, and value picks',
       color: 'text-orange-500'
-    }
+
   ];
 
   const strategies = [
@@ -70,7 +70,6 @@ const AutoDraftView: React.FC = () => {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => navigate(-1)}
-                className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -87,7 +86,6 @@ const AutoDraftView: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowIntro(!showIntro)}
-                className="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 
                            transition-colors flex items-center gap-2"
               >
                 <Info className="w-4 h-4" />
@@ -155,7 +153,6 @@ const AutoDraftView: React.FC = () => {
             <div className="text-center mt-8">
               <button
                 onClick={() => setShowIntro(false)}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600
                            hover:from-blue-700 hover:to-purple-700 rounded-lg
                            font-bold text-lg transition-all flex items-center
                            gap-2 mx-auto"
@@ -214,14 +211,12 @@ const AutoDraftView: React.FC = () => {
             <div className="mt-6 flex gap-4 justify-center">
               <button
                 onClick={() => navigate('/teams')}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg
                            font-medium transition-colors"
               >
                 View Teams
               </button>
               <button
                 onClick={() => window.location.reload()}
-                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg
                            font-medium transition-colors"
               >
                 Run Another Draft

@@ -3,7 +3,8 @@
  * Integrates the 10 provided player names with Oracle ML services for advanced league creation
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Modal } from '../ui/Modal';
 import { SparklesIcon } from '../icons/SparklesIcon';
@@ -31,19 +32,19 @@ interface PlayerSetup {
   avatar: string;
   isUser: boolean;
   aiProfile?: AiProfileData;
+
 }
 
 interface EnhancedCreateLeagueModalProps {
   onClose: () => void;
   user: User;
   dispatch: React.Dispatch<any>;
-}
 
 const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({ 
   onClose, 
   user, 
   dispatch 
-}: any) => {
+}) => {
   // League Configuration
   const [leagueName, setLeagueName] = useState('Astral Draft Championship');
   const [selectedPlayerCount, setSelectedPlayerCount] = useState(10);
@@ -103,39 +104,29 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
             teamName: branding.teamName,
             avatar: branding.avatar
           };
-        }
-        
+
         // Generate AI profile for non-user players
         if (!player.isUser) {
           const aiProfile = await generateAiTeamProfile(leagueName);
           if (aiProfile) {
             updates[i].aiProfile = aiProfile;
-          }
-        }
-        
+
+
         // Update state incrementally for visual feedback
         setPlayers([...updates]);
-      }
-      
+
       dispatch({ 
         type: 'ADD_NOTIFICATION', 
         payload: { 
           message: 'Successfully generated team branding and AI profiles!', 
           type: 'SYSTEM' 
-        }
+
       });
-    } catch (error) {
-      dispatch({ 
-        type: 'ADD_NOTIFICATION', 
-        payload: { 
-          message: 'Failed to generate some team branding. Please try again.', 
-          type: 'SYSTEM' 
-        }
-      });
+    });
     } finally {
       setIsGenerating(false);
       setGenerateProgress(0);
-    }
+
   };
 
   const handleUserPlayerChange = (playerName: string) => {
@@ -160,7 +151,6 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
       const userPlayer = players.find((p: any) => p.isUser);
       if (!userPlayer) {
         throw new Error('No user player selected');
-      }
 
       // Prepare AI profiles for non-user players
       const aiProfiles = players
@@ -212,30 +202,23 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         payload: { 
           message: `Enhanced league "${leagueName}" created with Oracle ML integration!`, 
           type: 'SYSTEM' 
-        }
+
       });
       
       onClose();
-    } catch (error) {
-      dispatch({ 
-        type: 'ADD_NOTIFICATION', 
-        payload: { 
-          message: 'Failed to create league. Please try again.', 
-          type: 'SYSTEM' 
-        }
-      });
+    });
     } finally {
       setIsSubmitting(false);
-    }
+
   };
 
   const renderConfigurationStep = () => (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Column */}
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           <div>
-            <label htmlFor="league-name-input" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+            <label htmlFor="league-name-input" className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
               League Name
             </label>
             <input
@@ -243,14 +226,13 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               type="text"
               value={leagueName}
               onChange={(e: any) => setLeagueName(e.target.value)}
-              className="w-full bg-black/10 border border-[var(--panel-border)] rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="player-count-range" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-              Number of Players: <span className="font-bold text-[var(--text-primary)]">{selectedPlayerCount}</span>
+            <label htmlFor="player-count-range" className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
+              Number of Players: <span className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{selectedPlayerCount}</span>
             </label>
             <input
               id="player-count-range"
@@ -259,20 +241,19 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
               max="10"
               value={selectedPlayerCount}
               onChange={(e: any) => setSelectedPlayerCount(Number(e.target.value))}
-              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">
               <span>8 players</span>
               <span>10 players (Full roster)</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
             <div>
-              <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+              <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                 Draft Format
               </span>
-              <div className="flex gap-2">
+              <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                 <button
                   type="button"
                   onClick={() => setDraftFormat('SNAKE')}
@@ -299,14 +280,13 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="scoring-select" className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+              <label htmlFor="scoring-select" className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                 Scoring Format
               </label>
               <select
                 id="scoring-select"
                 value={scoring}
                 onChange={(e: any) => setScoring(e.target.value as LeagueSettings['scoring'])}
-                className="w-full bg-black/10 border border-[var(--panel-border)] rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
               >
                 <option value="PPR">PPR</option>
                 <option value="Half-PPR">Half-PPR</option>
@@ -318,71 +298,66 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         </div>
 
         {/* Right Column - Oracle ML Integration */}
-        <div className="space-y-4">
-          <div className="p-4 bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg">
-            <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center gap-2">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="p-4 bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+            <h3 className="text-lg font-bold text-purple-300 mb-3 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
               <SparklesIcon />
               Oracle ML Features
             </h3>
             
-            <div className="space-y-3">
-              <label className="flex items-center gap-3">
+            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+              <label className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="checkbox"
                   checked={oraclePredictions}
                   onChange={(e: any) => setOraclePredictions(e.target.checked)}
-                  className="w-4 h-4 accent-purple-500"
                 />
-                <span className="text-sm">Oracle Predictions & Challenges</span>
+                <span className="text-sm sm:px-4 md:px-6 lg:px-8">Oracle Predictions & Challenges</span>
               </label>
               
-              <label className="flex items-center gap-3">
+              <label className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="checkbox"
                   checked={advancedAnalytics}
                   onChange={(e: any) => setAdvancedAnalytics(e.target.checked)}
-                  className="w-4 h-4 accent-purple-500"
                 />
-                <span className="text-sm">Advanced Player Analytics</span>
+                <span className="text-sm sm:px-4 md:px-6 lg:px-8">Advanced Player Analytics</span>
               </label>
               
-              <label className="flex items-center gap-3">
+              <label className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="checkbox"
                   checked={injuryTracking}
                   onChange={(e: any) => setInjuryTracking(e.target.checked)}
-                  className="w-4 h-4 accent-purple-500"
                 />
-                <span className="text-sm">Real-time Injury Tracking</span>
+                <span className="text-sm sm:px-4 md:px-6 lg:px-8">Real-time Injury Tracking</span>
               </label>
               
-              <label className="flex items-center gap-3">
+              <label className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="checkbox"
                   checked={tradeAnalysis}
                   onChange={(e: any) => setTradeAnalysis(e.target.checked)}
-                  className="w-4 h-4 accent-purple-500"
                 />
-                <span className="text-sm">ML-Powered Trade Analysis</span>
+                <span className="text-sm sm:px-4 md:px-6 lg:px-8">ML-Powered Trade Analysis</span>
               </label>
               
-              <label className="flex items-center gap-3">
+              <label className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <input
                   type="checkbox"
                   checked={waiverAnalysis}
                   onChange={(e: any) => setWaiverAnalysis(e.target.checked)}
-                  className="w-4 h-4 accent-purple-500"
                 />
-                <span className="text-sm">Waiver Wire Intelligence</span>
+                <span className="text-sm sm:px-4 md:px-6 lg:px-8">Waiver Wire Intelligence</span>
               </label>
             </div>
           </div>
 
           <div>
-            <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+            <span className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
               AI Assistance Level
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
               <button
                 type="button"
                 onClick={() => setAiAssistanceLevel('FULL')}
@@ -413,18 +388,18 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   );
 
   const renderPlayersStep = () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-xl font-bold">Player Setup</h3>
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+      <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+        <h3 className="text-xl font-bold sm:px-4 md:px-6 lg:px-8">Player Setup</h3>
         <button
           type="button"
           onClick={handleGenerateAllTeamBranding}
           disabled={isGenerating}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
         >
           {isGenerating ? (
             <>
-              <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+              <div className="w-4 h-4 border-2 border-t-transparent border-white rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div>
               <span>Generating... {Math.round(generateProgress)}%</span>
             </>
           ) : (
@@ -436,14 +411,13 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
         </button>
       </div>
 
-      <div className="mb-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg">
-        <span className="block text-sm font-medium text-blue-300 mb-2">
+      <div className="mb-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+        <span className="block text-sm font-medium text-blue-300 mb-2 sm:px-4 md:px-6 lg:px-8">
           Which player are you?
         </span>
         <select
           value={selectedUserPlayer}
           onChange={(e: any) => handleUserPlayerChange(e.target.value)}
-          className="w-full bg-black/10 border border-[var(--panel-border)] rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
           aria-label="Select which player you are"
         >
           {players.map((player: any) => (
@@ -465,27 +439,27 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
                 : 'bg-black/10 border-[var(--panel-border)]'
             }`}
           >
-            <div className="flex items-center gap-3 mb-3">
-              <Avatar avatar={player.avatar} className="w-12 h-12 text-2xl rounded-lg" />
-              <div className="flex-grow">
-                <div className="font-bold text-sm">{player.name}</div>
+            <div className="flex items-center gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
+              <Avatar avatar={player.avatar} className="w-12 h-12 text-2xl rounded-lg sm:px-4 md:px-6 lg:px-8" />
+              <div className="flex-grow sm:px-4 md:px-6 lg:px-8">
+                <div className="font-bold text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</div>
                 {player.isUser && (
-                  <div className="text-xs text-green-400 font-medium">You</div>
+                  <div className="text-xs text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">You</div>
                 )}
               </div>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               <input
                 type="text"
                 value={player.teamName}
-                onChange={(e: any) => handleCustomizePlayer(index, { teamName: e.target.value })}
-                className="w-full bg-black/20 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                onChange={(e: any) => handleCustomizePlayer(index, { teamName: e.target.value }}
+                className="w-full bg-black/20 border border-gray-600 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400 sm:px-4 md:px-6 lg:px-8"
                 placeholder="Team name"
               />
               
               {player.aiProfile && (
-                <div className="text-xs text-gray-400">
+                <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                   <div>Persona: {player.aiProfile.persona}</div>
                   <div>Name: {player.aiProfile.name}</div>
                 </div>
@@ -498,25 +472,25 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   );
 
   const renderReviewStep = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-bold">Review & Create League</h3>
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+      <h3 className="text-xl font-bold sm:px-4 md:px-6 lg:px-8">Review & Create League</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <div className="p-4 bg-black/10 rounded-lg">
-            <h4 className="font-bold mb-2">League Configuration</h4>
-            <div className="space-y-1 text-sm text-gray-300">
-              <div><span className="text-gray-500">Name:</span> {leagueName}</div>
-              <div><span className="text-gray-500">Players:</span> {selectedPlayerCount}</div>
-              <div><span className="text-gray-500">Draft:</span> {draftFormat}</div>
-              <div><span className="text-gray-500">Scoring:</span> {scoring}</div>
-              <div><span className="text-gray-500">AI Level:</span> {aiAssistanceLevel}</div>
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="p-4 bg-black/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-bold mb-2 sm:px-4 md:px-6 lg:px-8">League Configuration</h4>
+            <div className="space-y-1 text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
+              <div><span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Name:</span> {leagueName}</div>
+              <div><span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Players:</span> {selectedPlayerCount}</div>
+              <div><span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Draft:</span> {draftFormat}</div>
+              <div><span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Scoring:</span> {scoring}</div>
+              <div><span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">AI Level:</span> {aiAssistanceLevel}</div>
             </div>
           </div>
 
-          <div className="p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
-            <h4 className="font-bold mb-2 text-purple-300">Oracle ML Features</h4>
-            <div className="space-y-1 text-sm">
+          <div className="p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-bold mb-2 text-purple-300 sm:px-4 md:px-6 lg:px-8">Oracle ML Features</h4>
+            <div className="space-y-1 text-sm sm:px-4 md:px-6 lg:px-8">
               <div className={`${oraclePredictions ? 'text-green-400' : 'text-gray-500'}`}>
                 {oraclePredictions ? '✓' : '✗'} Oracle Predictions & Challenges
               </div>
@@ -536,18 +510,18 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="p-4 bg-black/10 rounded-lg">
-            <h4 className="font-bold mb-2">Player Roster</h4>
-            <div className="space-y-2">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="p-4 bg-black/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+            <h4 className="font-bold mb-2 sm:px-4 md:px-6 lg:px-8">Player Roster</h4>
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               {players.map((player: any) => (
-                <div key={player.name} className="flex items-center gap-2 text-sm">
-                  <Avatar avatar={player.avatar} className="w-6 h-6 text-sm rounded" />
+                <div key={player.name} className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                  <Avatar avatar={player.avatar} className="w-6 h-6 text-sm rounded sm:px-4 md:px-6 lg:px-8" />
                   <span className={player.isUser ? 'text-green-400 font-bold' : 'text-gray-300'}>
                     {player.name}
                   </span>
-                  <span className="text-gray-500">- {player.teamName}</span>
-                  {player.isUser && <span className="text-xs text-green-400">(You)</span>}
+                  <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">- {player.teamName}</span>
+                  {player.isUser && <span className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">(You)</span>}
                 </div>
               ))}
             </div>
@@ -560,34 +534,41 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   return (
     <Modal isOpen={true} onClose={onClose}>
       <motion.div 
-        className="glass-pane rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+        className="glass-pane rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8"
         initial={{ opacity: 0, y: -20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         onClick={(e: any) => e.stopPropagation()}
       >
-        <header className="p-6 border-b border-[var(--panel-border)] flex justify-between items-center">
+        <header className="p-6 border-b border-[var(--panel-border)] flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
           <div>
-            <h2 className="text-2xl font-bold font-display text-[var(--text-primary)]">
+            <h2 className="text-2xl font-bold font-display text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
               Create Enhanced League
             </h2>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
               {currentStep === 'config' && 'Step 1 of 3'}
               {currentStep === 'players' && 'Step 2 of 3'}
               {currentStep === 'review' && 'Step 3 of 3'}
             </p>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
             {['config', 'players', 'review'].map((step, index) => {
               let bgColor = 'bg-gray-800';
               if (currentStep === step) {
                 bgColor = 'bg-cyan-400';
               } else if (['config', 'players'].indexOf(currentStep) > index) {
                 bgColor = 'bg-gray-600';
-              }
-              
-              return (
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
                 <div
                   key={step}
                   className={`w-3 h-3 rounded-full transition-colors ${bgColor}`}
@@ -597,7 +578,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           </div>
         </header>
 
-        <main className="p-6">
+        <main className="p-6 sm:px-4 md:px-6 lg:px-8">
           <AnimatePresence mode="wait">
             {currentStep === 'config' && (
               <motion.div
@@ -634,7 +615,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
           </AnimatePresence>
         </main>
 
-        <footer className="p-6 flex justify-between border-t border-[var(--panel-border)]">
+        <footer className="p-6 flex justify-between border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
           <div>
             {currentStep !== 'config' && (
               <button
@@ -643,18 +624,18 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
                   if (currentStep === 'players') setCurrentStep('config');
                   if (currentStep === 'review') setCurrentStep('players');
                 }}
-                className="px-4 py-2 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors"
+                className="px-4 py-2 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8"
               >
                 Back
               </button>
             )}
           </div>
           
-          <div className="flex gap-4">
+          <div className="flex gap-4 sm:px-4 md:px-6 lg:px-8">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors"
+              className="px-4 py-2 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8"
             >
               Cancel
             </button>
@@ -664,7 +645,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="px-6 py-2 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-cyan-600 transition-colors disabled:opacity-60 disabled:cursor-wait"
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-cyan-500 text-white font-bold rounded-lg shadow-md hover:from-green-600 hover:to-cyan-600 transition-colors disabled:opacity-60 disabled:cursor-wait sm:px-4 md:px-6 lg:px-8"
               >
                 {isSubmitting ? 'Creating League...' : 'Create League'}
               </button>
@@ -675,7 +656,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
                   if (currentStep === 'config') setCurrentStep('players');
                   if (currentStep === 'players') setCurrentStep('review');
                 }}
-                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold rounded-lg shadow-md hover:from-purple-600 hover:to-blue-600 transition-colors"
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold rounded-lg shadow-md hover:from-purple-600 hover:to-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8"
               >
                 {currentStep === 'config' ? 'Configure Players' : 'Review & Create'}
               </button>
@@ -687,4 +668,10 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   );
 };
 
-export default EnhancedCreateLeagueModal;
+const EnhancedCreateLeagueModalWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedCreateLeagueModal {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedCreateLeagueModalWithErrorBoundary);

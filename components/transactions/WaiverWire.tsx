@@ -3,7 +3,8 @@
  * Manages free agent pickups and waiver claims
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useAppState } from '../../hooks/useAppState';
 import { useLeague } from '../../hooks/useLeague';
@@ -19,6 +20,7 @@ interface WaiverClaim {
   priority: number;
   status: 'pending' | 'processed' | 'failed';
   timestamp: Date;
+
 }
 
 export const WaiverWire: React.FC = () => {
@@ -80,7 +82,7 @@ export const WaiverWire: React.FC = () => {
       payload: {
         leagueId: league.id,
         claim
-      }
+
     });
     
     dispatch({
@@ -88,7 +90,7 @@ export const WaiverWire: React.FC = () => {
       payload: {
         message: `Waiver claim submitted for ${selectedPlayer.name} ($${bidAmount})`,
         type: 'SUCCESS'
-      }
+
     });
     
     setShowBidModal(false);
@@ -100,52 +102,50 @@ export const WaiverWire: React.FC = () => {
   };
   
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Waiver Wire</h2>
-          <p className="text-[var(--text-secondary)]">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Waiver Wire</h2>
+          <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
             FAAB Remaining: ${getFAABRemaining()}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[var(--text-secondary)]" />
-          <span className="text-sm text-[var(--text-secondary)]">
+        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+          <Clock className="w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
+          <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
             Waivers process: Wed 3:00 AM ET
           </span>
         </div>
       </div>
       
       {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-secondary)]" />
+      <div className="relative sm:px-4 md:px-6 lg:px-8">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
         <input
           type="text"
           placeholder="Search free agents..."
           value={searchQuery}
           onChange={(e: any) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] focus:border-cyan-400 focus:outline-none"
         />
       </div>
       
       {/* Trending Players */}
-      <div className="bg-[var(--panel-bg)] rounded-lg p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <TrendingUp className="w-5 h-5 text-cyan-400" />
-          <h3 className="font-semibold text-[var(--text-primary)]">Trending Players</h3>
+      <div className="bg-[var(--panel-bg)] rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
+          <TrendingUp className="w-5 h-5 text-cyan-400 sm:px-4 md:px-6 lg:px-8" />
+          <h3 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Trending Players</h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
           {trendingPlayers.map((player: any) => (
             <button
               key={player.id}
               onClick={() => handleAddPlayer(player)}
-              className="p-2 bg-black/20 rounded hover:bg-black/30 transition-colors text-left"
             >
-              <div className="font-medium text-sm text-[var(--text-primary)]">
+              <div className="font-medium text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                 {player.name}
               </div>
-              <div className="text-xs text-[var(--text-secondary)]">
+              <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                 {player.position} - {player.team}
               </div>
             </button>
@@ -154,38 +154,37 @@ export const WaiverWire: React.FC = () => {
       </div>
       
       {/* Free Agents List */}
-      <div className="bg-[var(--panel-bg)] rounded-lg overflow-hidden">
-        <table className="w-full">
+      <div className="bg-[var(--panel-bg)] rounded-lg overflow-hidden sm:px-4 md:px-6 lg:px-8">
+        <table className="w-full sm:px-4 md:px-6 lg:px-8">
           <thead>
-            <tr className="border-b border-[var(--panel-border)]">
-              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)]">PLAYER</th>
-              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)]">POS</th>
-              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)]">TEAM</th>
-              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)]">PROJ PTS</th>
-              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)]">% ROSTERED</th>
-              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)]">ACTION</th>
+            <tr className="border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">PLAYER</th>
+              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">POS</th>
+              <th className="text-left p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">TEAM</th>
+              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">PROJ PTS</th>
+              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">% ROSTERED</th>
+              <th className="text-center p-3 text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">ACTION</th>
             </tr>
           </thead>
           <tbody>
             {filteredPlayers.map((player: any) => (
-              <tr key={player.id} className="border-b border-[var(--panel-border)] hover:bg-white/5">
-                <td className="p-3">
-                  <div className="font-medium text-[var(--text-primary)]">{player.name}</div>
+              <tr key={player.id} className="border-b border-[var(--panel-border)] hover:bg-white/5 sm:px-4 md:px-6 lg:px-8">
+                <td className="p-3 sm:px-4 md:px-6 lg:px-8">
+                  <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.name}</div>
                 </td>
-                <td className="p-3 text-[var(--text-secondary)]">{player.position}</td>
-                <td className="p-3 text-[var(--text-secondary)]">{player.team}</td>
-                <td className="p-3 text-center text-[var(--text-primary)]">
+                <td className="p-3 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{player.position}</td>
+                <td className="p-3 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{player.team}</td>
+                <td className="p-3 text-center text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                   {player.projectedPoints?.toFixed(1)}
                 </td>
-                <td className="p-3 text-center text-[var(--text-secondary)]">
+                <td className="p-3 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                   {Math.floor(Math.random() * 40)}%
                 </td>
-                <td className="p-3 text-center">
+                <td className="p-3 text-center sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={() => handleAddPlayer(player)}
-                    className="px-3 py-1 bg-cyan-500 text-white rounded hover:bg-cyan-600 transition-colors text-sm"
                   >
-                    <Plus className="w-4 h-4 inline" />
+                    <Plus className="w-4 h-4 inline sm:px-4 md:px-6 lg:px-8" />
                   </button>
                 </td>
               </tr>
@@ -196,57 +195,55 @@ export const WaiverWire: React.FC = () => {
       
       {/* Bid Modal */}
       {showBidModal && selectedPlayer && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[var(--panel-bg)] rounded-lg p-6 max-w-md w-full mx-4"
+            className="bg-[var(--panel-bg)] rounded-lg p-6 max-w-md w-full mx-4 sm:px-4 md:px-6 lg:px-8"
           >
-            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4">
+            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">
               Submit Waiver Claim
             </h3>
             
-            <div className="space-y-4">
-              <div className="bg-black/20 rounded p-3">
-                <div className="font-medium text-[var(--text-primary)]">
+            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="bg-black/20 rounded p-3 sm:px-4 md:px-6 lg:px-8">
+                <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                   {selectedPlayer.name}
                 </div>
-                <div className="text-sm text-[var(--text-secondary)]">
+                <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                   {selectedPlayer.position} - {selectedPlayer.team}
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
+                <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                   FAAB Bid Amount
                 </label>
-                <div className="flex items-center gap-2">
-                  <DollarSign className="w-5 h-5 text-[var(--text-secondary)]" />
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                  <DollarSign className="w-5 h-5 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                   <input
                     type="number"
                     min="0"
                     max={getFAABRemaining()}
                     value={bidAmount}
                     onChange={(e: any) => setBidAmount(Number(e.target.value))}
-                    className="flex-1 px-3 py-2 bg-black/20 border border-[var(--panel-border)] rounded text-[var(--text-primary)]"
                   />
-                  <span className="text-sm text-[var(--text-secondary)]">
+                  <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                     / ${getFAABRemaining()}
                   </span>
                 </div>
               </div>
               
-              <div className="flex gap-3">
+              <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                 <button
                   onClick={() => setShowBidModal(false)}
-                  className="flex-1 px-4 py-2 border border-[var(--panel-border)] rounded text-[var(--text-primary)] hover:bg-white/10"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={submitWaiverClaim}
-                  className="flex-1 px-4 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-600"
-                >
+                  className="flex-1 px-4 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-600 sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                   Submit Claim
                 </button>
               </div>
@@ -258,4 +255,10 @@ export const WaiverWire: React.FC = () => {
   );
 };
 
-export default WaiverWire;
+const WaiverWireWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <WaiverWire {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(WaiverWireWithErrorBoundary);

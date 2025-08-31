@@ -308,8 +308,12 @@ export const usePullToRefresh = (
       setIsRefreshing(true);
       
       try {
+
         await onRefresh();
-      } finally {
+      
+    } catch (error) {
+        console.error(error);
+    } finally {
         setIsRefreshing(false);
       }
     }

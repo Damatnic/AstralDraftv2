@@ -28,6 +28,7 @@ interface MobileDashboardWidgetProps {
     trend?: 'up' | 'down' | 'stable';
     color: string;
     onClick?: () => void;
+
 }
 
 const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
@@ -38,20 +39,19 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
     trend,
     color,
     onClick
-}: any) => {
+}) => {
     const getTrendColor = (trendType: 'up' | 'down' | 'stable') => {
         switch (trendType) {
             case 'up': return 'text-green-400';
             case 'down': return 'text-red-400';
             default: return 'text-gray-400';
-        }
+
     };
 
     return (
         <motion.div
             whileTap={{ scale: 0.95 }}
-            onClick={onClick}
-            className={`glass-pane rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors ${onClick ? 'active:bg-[var(--panel-hover)]' : ''}`}
+            onClick={onClick}`}
         >
             <div className="flex items-center justify-between mb-2">
                 <div className={`p-2 rounded-lg ${color}`}>
@@ -86,13 +86,13 @@ interface QuickActionProps {
     label: string;
     color: string;
     onClick: () => void;
+
 }
 
-const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }: any) => (
+const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }) => (
     <motion.button
         whileTap={{ scale: 0.9 }}
-        onClick={onClick}
-        className={`glass-pane flex flex-col items-center gap-2 p-4 rounded-lg hover:border-blue-400/50 transition-colors ${color}`}
+        onClick={onClick}`}
     >
         <div className="w-8 h-8 flex items-center justify-center">
             {icon}
@@ -166,7 +166,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 trend="up"
                                 color="bg-blue-500"
                                 onClick={() => handleViewChange('ANALYTICS_HUB')}
-                            />
                             
                             <MobileDashboardWidget
                                 title="Weekly Rank"
@@ -176,7 +175,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 trend="stable"
                                 color="bg-green-500"
                                 onClick={() => handleViewChange('LEAGUE_STANDINGS')}
-                            />
                             
                             <MobileDashboardWidget
                                 title="My Leagues"
@@ -185,7 +183,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 subtitle="Active leagues"
                                 color="bg-purple-500"
                                 onClick={() => handleViewChange('LEAGUE_HUB')}
-                            />
                             
                             <MobileDashboardWidget
                                 title="Matchups"
@@ -194,7 +191,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 subtitle="This week"
                                 color="bg-orange-500"
                                 onClick={() => handleViewChange('MATCHUP')}
-                            />
                         </div>
 
                         {/* Quick Actions */}
@@ -208,28 +204,24 @@ const EnhancedDashboardView: React.FC = () => {
                                     label="Create League"
                                     color="bg-blue-500/10"
                                     onClick={() => handleViewChange('CREATE_LEAGUE')}
-                                />
                                 
                                 <QuickAction
                                     icon={<TrophyIcon className="w-5 h-5 text-green-400" />}
                                     label="Draft Room"
                                     color="bg-green-500/10"
                                     onClick={() => handleViewChange('DRAFT_ROOM')}
-                                />
                                 
                                 <QuickAction
                                     icon={<BarChart3Icon className="w-5 h-5 text-purple-400" />}
                                     label="Analytics"
                                     color="bg-purple-500/10"
                                     onClick={() => handleViewChange('ANALYTICS_HUB')}
-                                />
                                 
                                 <QuickAction
                                     icon={<UsersIcon className="w-5 h-5 text-orange-400" />}
                                     label="Teams"
                                     color="bg-orange-500/10"
                                     onClick={() => handleViewChange('TEAM_HUB')}
-                                />
                             </div>
                         </div>
 
@@ -242,7 +234,6 @@ const EnhancedDashboardView: React.FC = () => {
                                 <motion.div
                                     whileTap={{ scale: 0.98 }}
                                     onClick={() => handleViewChange('LEAGUE_HUB')}
-                                    className="glass-pane rounded-lg p-4 cursor-pointer hover:border-blue-400/50 transition-colors"
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <h3 className="font-medium text-[var(--text-primary)]">
@@ -316,7 +307,6 @@ const EnhancedDashboardView: React.FC = () => {
                 </MobilePullToRefresh>
             </div>
         );
-    }
 
     // Fallback to original dashboard for desktop
     return (

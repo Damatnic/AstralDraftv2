@@ -1,34 +1,19 @@
-/**
- * Share Icon Component
- */
+interface IconProps {
+  size?: number | string;
+  className?: string;
+  color?: string;
+  'aria-label'?: string;
 
 import React from 'react';
 
-interface ShareIconProps {
-    className?: string;
-    size?: number;
 }
 
-export const ShareIcon: React.FC<ShareIconProps> = ({ className = "w-5 h-5", size = 20 }: any) => {
-    return (
-        <svg 
-            className={className} 
-            width={size} 
-            height={size} 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-        >
-            <circle cx="18" cy="5" r="3"/>
+export const ShareIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="share icon">
+        <circle cx="18" cy="5" r="3"/>
             <circle cx="6" cy="12" r="3"/>
             <circle cx="18" cy="19" r="3"/>
             <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-        </svg>
-    );
-};
-
-export default ShareIcon;
+    </svg>
+);

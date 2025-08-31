@@ -10,7 +10,7 @@ import { calculateManagerStats, calculateCareerHistory } from '../utils/careerSt
 import RivalryWidget from '../components/manager/RivalryWidget';
 import AchievementsWidget from '../components/profile/AchievementsWidget';
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
     <div className="bg-white/5 p-3 rounded-lg text-center">
         <p className="text-sm text-gray-400">{label}</p>
         <p className="text-2xl font-bold text-white">{value}</p>
@@ -27,7 +27,7 @@ const ManagerView: React.FC = () => {
         for (const league of state.leagues) {
             const member = league.members.find((m: any) => m.id === managerId);
             if (member) return member;
-        }
+
         return null;
     }, [managerId, state.leagues]);
 
@@ -41,18 +41,16 @@ const ManagerView: React.FC = () => {
         return calculateCareerHistory(managerId, state.leagues);
     }, [managerId, state.leagues]);
 
-
     if (!manager) {
         return (
             <div className="w-full h-full flex flex-col items-center justify-center">
                 <p>Manager not found.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button-primary mt-4">
                     Back to League Hub
                 </button>
             </div>
         );
-    }
-    
+
     const memberSinceDate = manager.memberSince
         ? new Date(manager.memberSince).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
         : 'a long time ago';
@@ -63,7 +61,7 @@ const ManagerView: React.FC = () => {
                 <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                     Manager Profile
                 </h1>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button">
                     Back to League Hub
                 </button>
             </header>

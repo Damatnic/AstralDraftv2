@@ -1,4 +1,5 @@
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 
 interface SkeletonProps {
@@ -8,6 +9,7 @@ interface SkeletonProps {
   height?: string | number;
   rows?: number;
   animation?: 'pulse' | 'wave' | 'none';
+
 }
 
 const SkeletonLoader: React.FC<SkeletonProps> = ({ 
@@ -17,14 +19,14 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
   height,
   rows = 1,
   animation = 'pulse'
-}: any) => {
+}) => {
   const getBaseClasses = () => {
     let animationClass = '';
     if (animation === 'pulse') {
       animationClass = 'animate-pulse';
     } else if (animation === 'wave') {
       animationClass = 'animate-wave';
-    }
+
     return `${animationClass} bg-slate-700/80`;
   };
 
@@ -44,7 +46,7 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
         return 'rounded-full w-10 h-10';
       default:
         return 'rounded';
-    }
+
   };
 
   const getStyleProps = () => {
@@ -69,7 +71,6 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
         ))}
       </div>
     );
-  }
 
   return (
     <div 
@@ -81,15 +82,15 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
 
 // Specialized skeleton components
 export const PlayerCardSkeleton: React.FC = () => (
-  <div className="bg-gray-800 rounded-lg p-4 space-y-3">
-    <div className="flex items-center space-x-3">
+  <div className="bg-gray-800 rounded-lg p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
+    <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
       <SkeletonLoader variant="avatar" />
-      <div className="flex-1 space-y-2">
+      <div className="flex-1 space-y-2 sm:px-4 md:px-6 lg:px-8">
         <SkeletonLoader variant="text" width="60%" />
         <SkeletonLoader variant="text" width="40%" />
       </div>
     </div>
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
       <SkeletonLoader variant="rect" height="24px" />
       <SkeletonLoader variant="rect" height="24px" />
       <SkeletonLoader variant="rect" height="24px" />
@@ -100,17 +101,17 @@ export const PlayerCardSkeleton: React.FC = () => (
 export const TableSkeleton: React.FC<{ rows?: number; cols?: number }> = ({ 
   rows = 5, 
   cols = 4 
-}: any) => (
-  <div className="space-y-2">
+}) => (
+  <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
     {/* Header */}
-    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+    <div className="grid gap-4 sm:px-4 md:px-6 lg:px-8" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
       {Array.from({ length: cols }, (_, i) => (
         <SkeletonLoader key={`header-${i}`} variant="table" />
       ))}
     </div>
     {/* Rows */}
     {Array.from({ length: rows }, (_, rowIndex) => (
-      <div key={`row-${rowIndex}`} className="grid gap-4" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+      <div key={`row-${rowIndex}`} className="grid gap-4 sm:px-4 md:px-6 lg:px-8" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
         {Array.from({ length: cols }, (_, colIndex) => (
           <SkeletonLoader key={`cell-${rowIndex}-${colIndex}`} variant="rect" height="32px" />
         ))}
@@ -120,10 +121,10 @@ export const TableSkeleton: React.FC<{ rows?: number; cols?: number }> = ({
 );
 
 export const ChartSkeleton: React.FC = () => (
-  <div className="space-y-4">
+  <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
     <SkeletonLoader variant="text" width="30%" />
     <SkeletonLoader variant="chart" height="200px" />
-    <div className="flex justify-center space-x-4">
+    <div className="flex justify-center space-x-4 sm:px-4 md:px-6 lg:px-8">
       <SkeletonLoader variant="rect" width="80px" height="20px" />
       <SkeletonLoader variant="rect" width="80px" height="20px" />
       <SkeletonLoader variant="rect" width="80px" height="20px" />
@@ -132,9 +133,9 @@ export const ChartSkeleton: React.FC = () => (
 );
 
 export const DashboardSkeleton: React.FC = () => (
-  <div className="space-y-6">
+  <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
     {/* Header */}
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
       <SkeletonLoader variant="text" width="200px" height="32px" />
       <SkeletonLoader variant="rect" width="120px" height="40px" />
     </div>
@@ -142,7 +143,7 @@ export const DashboardSkeleton: React.FC = () => (
     {/* Stats Cards */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {Array.from({ length: 4 }, (_, i) => (
-        <div key={i} className="bg-gray-800 rounded-lg p-4 space-y-2">
+        <div key={i} className="bg-gray-800 rounded-lg p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
           <SkeletonLoader variant="text" width="60%" />
           <SkeletonLoader variant="text" width="40%" height="28px" />
         </div>
@@ -157,4 +158,10 @@ export const DashboardSkeleton: React.FC = () => (
   </div>
 );
 
-export default SkeletonLoader;
+const SkeletonLoaderWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SkeletonLoader {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SkeletonLoaderWithErrorBoundary);

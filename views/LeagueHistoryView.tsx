@@ -9,7 +9,7 @@ import { TelescopeIcon } from '../components/icons/TelescopeIcon';
 import { useLeague } from '../hooks/useLeague';
 import ChampionChart from '../components/history/ChampionChart';
 
-const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
     const history = league.history || [];
 
     return (
@@ -21,7 +21,7 @@ const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="back-btn">
                     Back to League Hub
                 </button>
             </header>
@@ -42,7 +42,7 @@ const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<
                                 <p className="font-bold text-white">{entry.season} Season</p>
                                 <button
                                     onClick={() => {
-                                        dispatch({ type: 'SET_ARCHIVE_SEASON', payload: entry.season });
+                                        dispatch({ type: 'SET_ARCHIVE_SEASON', payload: entry.season }
                                         dispatch({ type: 'SET_VIEW', payload: 'SEASON_ARCHIVE' });
                                     }}
                                     className="px-3 py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20"
@@ -68,13 +68,12 @@ const LeagueHistoryView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view its history.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="btn btn-primary mt-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     return <LeagueHistoryContent league={league} dispatch={dispatch} />;
 };
 

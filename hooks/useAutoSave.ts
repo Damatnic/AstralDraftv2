@@ -29,6 +29,7 @@ export function useAutoSave<T>({
     if (isSavingRef.current) return;
     
     try {
+
       isSavingRef.current = true;
       onSaveStart?.();
       
@@ -36,6 +37,9 @@ export function useAutoSave<T>({
       lastSavedRef.current = dataToSave;
       
       onSaveComplete?.();
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       console.error('Auto-save failed:', error);
       onSaveError?.(error as Error);

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import './OracleNeuralNetworkSection.css';
 
 interface NetworkLayer {
@@ -10,6 +11,7 @@ interface NetworkLayer {
   description: string;
   purpose: string;
   outputShape: string;
+
 }
 
 interface ActivationFunction {
@@ -21,7 +23,6 @@ interface ActivationFunction {
   advantages: string[];
   disadvantages: string[];
   useCases: string[];
-}
 
 interface TrainingTechnique {
   id: string;
@@ -31,9 +32,10 @@ interface TrainingTechnique {
   benefits: string[];
   challenges: string[];
   implementation: string;
-}
 
 // --- Learning Curve Analysis Section ---
+}
+
 interface LearningCurvePoint {
   sampleSize: number;
   trainLoss: number;
@@ -41,7 +43,6 @@ interface LearningCurvePoint {
   trainAccuracy: number;
   valAccuracy: number;
   converged: boolean;
-}
 
 interface LearningCurveConfig {
   id: string;
@@ -51,9 +52,10 @@ interface LearningCurveConfig {
   step: number;
   convergenceThreshold: number;
   expectedConvergence: number;
-}
 
 // --- Feature Importance Analysis Section ---
+}
+
 interface FeatureImportanceResult {
   featureName: string;
   permutationImportance: number;
@@ -62,7 +64,6 @@ interface FeatureImportanceResult {
   rank: number;
   category: 'high' | 'medium' | 'low';
   description: string;
-}
 
 interface SHAPAnalysis {
   globalImportance: FeatureImportanceResult[];
@@ -80,7 +81,6 @@ interface SHAPAnalysis {
     feature: string;
     values: Array<{ x: number; y: number; color: number }>;
   }>;
-}
 
 interface PermutationConfig {
   id: string;
@@ -89,6 +89,7 @@ interface PermutationConfig {
   iterations: number;
   metric: 'mse' | 'mae' | 'r2';
   randomSeed: number;
+
 }
 
 const learningCurveConfigs: LearningCurveConfig[] = [
@@ -109,7 +110,7 @@ const learningCurveConfigs: LearningCurveConfig[] = [
     step: 50,
     convergenceThreshold: 0.005,
     expectedConvergence: 1500
-  }
+
 ];
 
 // Feature importance configurations
@@ -138,7 +139,7 @@ const permutationConfigs: PermutationConfig[] = [
     iterations: 30,
     metric: 'mae',
     randomSeed: 123
-  }
+
 ];
 
 const OracleNeuralNetworkSection: React.FC = () => {
@@ -173,9 +174,17 @@ const OracleNeuralNetworkSection: React.FC = () => {
 
   // Simulate model selection analysis
   const runModelSelectionAnalysis = async () => {
+    try {
+
     setModelSelectionRunning(true);
     setModelSelectionProgress(0);
-    const results: any = {};
+    const results: any = {
+    } catch (error) {
+      console.error('Error in runModelSelectionAnalysis:', error);
+
+    } catch (error) {
+        console.error(error);
+    };
     for (let i = 0; i < modelConfigs.length; i++) {
       const model = modelConfigs[i];
       // Simulate metrics
@@ -190,42 +199,39 @@ const OracleNeuralNetworkSection: React.FC = () => {
       };
       setModelSelectionProgress(((i + 1) / modelConfigs.length) * 100);
       await new Promise(res => setTimeout(res, 60));
-    }
+
     setModelSelectionResults(results);
     setModelSelectionRunning(false);
     setModelSelectionProgress(100);
   };
   // --- Model Selection Section ---
   const renderModelSelection = () => (
-    <div className="model-selection-section">
+    <div className="model-selection-section sm:px-4 md:px-6 lg:px-8">
       <h3>🤖 Model Selection Framework</h3>
-      <div className="model-controls">
+      <div className="model-controls sm:px-4 md:px-6 lg:px-8">
         <label htmlFor="model-type-select">Model Type:</label>
         <select
           id="model-type-select"
           value={selectedModelType}
-          onChange={e => setSelectedModelType(e.target.value as 'neural_network' | 'random_forest' | 'ensemble')}
-        >
-          {modelConfigs.map((cfg: any) => (
-            <option key={cfg.id} value={cfg.id}>{cfg.name}</option>
+          onChange={e => setSelectedModelType(e.target.value as 'neural_network' | 'random_forest' | 'ensemble')} value={cfg.id}>{cfg.name}</option>
           ))}
         </select>
         <button
-          className="model-selection-run-btn"
+          className="model-selection-run-btn sm:px-4 md:px-6 lg:px-8"
           onClick={runModelSelectionAnalysis}
           disabled={modelSelectionRunning}
         >
           {modelSelectionRunning ? 'Comparing...' : 'Run Comparison'}
         </button>
-        <div className="model-selection-progress-bar">
-          <div className="model-selection-progress-fill" style={{ width: `${modelSelectionProgress}%` }}></div>
+        <div className="model-selection-progress-bar sm:px-4 md:px-6 lg:px-8">
+          <div className="model-selection-progress-fill sm:px-4 md:px-6 lg:px-8" style={{ width: `${modelSelectionProgress}%` }}></div>
         </div>
       </div>
 
       {modelSelectionResults && (
-        <div className="model-selection-results">
+        <div className="model-selection-results sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Model Comparison Table</h4>
-          <table className="model-table">
+          <table className="model-table sm:px-4 md:px-6 lg:px-8">
             <thead>
               <tr>
                 <th>Model</th>
@@ -253,7 +259,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               ))}
             </tbody>
           </table>
-          <div className="model-selection-insights">
+          <div className="model-selection-insights sm:px-4 md:px-6 lg:px-8">
             <h5>Selection Criteria</h5>
             <ul>
               <li><strong>Accuracy:</strong> How well the model predicts fantasy points on unseen data.</li>
@@ -265,7 +271,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               <li><strong>Complexity:</strong> Model architecture and maintenance requirements.</li>
             </ul>
           </div>
-          <div className="model-selection-methodology">
+          <div className="model-selection-methodology sm:px-4 md:px-6 lg:px-8">
             <h5>Methodology</h5>
             <p>
               Models are compared using simulated metrics based on typical performance in fantasy football prediction tasks. Selection criteria are explained to help users choose the best model for their needs. Interactive controls allow users to compare neural networks, random forests, and ensemble models side-by-side.
@@ -432,7 +438,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       description: 'Final layer outputting continuous prediction values',
       purpose: 'Generate final fantasy points prediction',
       outputShape: '(batch_size, 1)'
-    }
+
   ];
 
   // Activation Functions
@@ -496,7 +502,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       advantages: ['Smooth gradients', 'Better performance than ReLU', 'Stochastic regularization'],
       disadvantages: ['Computationally complex', 'Not widely supported', 'Slower than ReLU'],
       useCases: ['Transformer models', 'BERT and GPT', 'State-of-the-art NLP']
-    }
+
   ];
 
   // Training Techniques
@@ -545,7 +551,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       benefits: ['Faster training', 'Better performance with limited data', 'Leverages existing knowledge'],
       challenges: ['Domain adaptation', 'Feature mismatch', 'Catastrophic forgetting'],
       implementation: 'Pre-trained sports models with fine-tuning'
-    }
+
   ];
 
   // Simulate network training
@@ -567,7 +573,6 @@ const OracleNeuralNetworkSection: React.FC = () => {
         if (!prev || prev.epoch >= prev.totalEpochs) {
           clearInterval(interval);
           return { ...prev, isTraining: false };
-        }
 
         const newEpoch = prev.epoch + 1;
         const progress = newEpoch / prev.totalEpochs;
@@ -608,6 +613,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
   };
 
   const runLearningCurveAnalysis = async () => {
+    try {
     setLearningCurveRunning(true);
     setLearningCurveProgress(0);
     const config = learningCurveConfigs.find((c: any) => c.id === selectedLearningCurveConfig);
@@ -623,332 +629,73 @@ const OracleNeuralNetworkSection: React.FC = () => {
       const valAccuracy = Math.min(0.92, 0.42 + progress * 0.42 + Math.random() * 0.05);
       if (sample >= config.expectedConvergence && Math.abs(trainLoss - valLoss) < config.convergenceThreshold) {
         converged = true;
-      }
-      points.push({ sampleSize: sample, trainLoss, valLoss, trainAccuracy, valAccuracy, converged });
-      setLearningCurveProgress(((sample - config.minSample) / (config.maxSample - config.minSample)) * 100);
-      await new Promise(res => setTimeout(res, 30));
-    }
-    setLearningCurvePoints(points);
-    setLearningCurveRunning(false);
-    setLearningCurveProgress(100);
-  };
 
-  // Feature Importance Analysis Functions
-  const runFeatureImportanceAnalysis = async () => {
-    setFeatureImportanceRunning(true);
-    setFeatureImportanceProgress(0);
-    
-    const config = permutationConfigs.find((c: any) => c.id === selectedPermutationConfig);
-    if (!config) return;
-
-    const results: FeatureImportanceResult[] = [];
-    
-    // Simulate feature importance analysis
-    for (let i = 0; i < config.features.length; i++) {
-      const feature = config.features[i];
-      
-      // Simulate permutation importance (higher = more important)
-      const baseImportance = Math.random() * 0.8 + 0.1; // 0.1 to 0.9
-      const permutationImportance = baseImportance + (Math.random() - 0.5) * 0.2;
-      
-      // Simulate SHAP values (can be positive or negative)
-      const shapValue = (Math.random() - 0.5) * 2 * baseImportance;
-      
-      // Calculate baseline contribution
-      const baselineContribution = Math.abs(shapValue) * 0.8;
-      
-      // Determine category based on importance
-      let category: 'high' | 'medium' | 'low' = 'low';
-      if (permutationImportance > 0.6) category = 'high';
-      else if (permutationImportance > 0.3) category = 'medium';
-      
-      results.push({
-        featureName: feature,
-        permutationImportance,
-        shapValue,
-        baselineContribution,
-        rank: i + 1, // Will be reordered later
-        category,
-        description: getFeatureDescription(feature)
-      });
-      
-      setFeatureImportanceProgress(((i + 1) / config.features.length) * 50);
-      await new Promise(res => setTimeout(res, 50));
-    }
-    
-    // Sort by permutation importance and assign ranks
-    results.sort((a, b) => b.permutationImportance - a.permutationImportance);
-    results.forEach((result, index) => {
-      result.rank = index + 1;
-    });
-    
-    setFeatureImportanceResults(results);
-    
-    // Generate SHAP analysis
-    const shapAnalysisResult: SHAPAnalysis = {
-      globalImportance: results,
-      localExplanation: {
-        prediction: 18.5, // Example prediction
-        baseValue: 12.3,
-        contributions: results.slice(0, 8).map((result: any) => ({
-          feature: result.featureName,
-          value: Math.random() * 50 + 10, // Feature value
-          shapValue: result.shapValue
-        }))
-      },
-      interactionMatrix: generateInteractionMatrix(results.slice(0, 6)),
-      dependencePlots: generateDependencePlots(results.slice(0, 4))
-    };
-    
-    setShapAnalysis(shapAnalysisResult);
-    setFeatureImportanceProgress(100);
-    setFeatureImportanceRunning(false);
-  };
-
-  const getFeatureDescription = (feature: string): string => {
-    const descriptions: Record<string, string> = {
-      'passing_yards': 'Total passing yards in recent games',
-      'rushing_yards': 'Total rushing yards and efficiency metrics',
-      'receiving_yards': 'Receiving yards and target efficiency',
-      'touchdowns': 'Total touchdowns across all categories',
-      'targets': 'Number of targets and target share',
-      'completions': 'Completion rate and accuracy metrics',
-      'attempts': 'Passing attempts and volume indicators',
-      'team_strength': 'Overall team offensive and defensive ratings',
-      'opponent_ranking': 'Opponent defensive ranking and difficulty',
-      'weather_conditions': 'Weather impact on outdoor games',
-      'home_away': 'Home field advantage and travel factors',
-      'injury_status': 'Player health and injury probability',
-      'recent_form': 'Performance trend over last 4 games',
-      'season_avg': 'Season-long statistical averages',
-      'matchup_difficulty': 'Position-specific matchup analysis',
-      'snap_percentage': 'Percentage of offensive snaps played',
-      'red_zone_touches': 'Touches inside the red zone area',
-      'game_script': 'Expected game flow and script prediction'
-    };
-    return descriptions[feature] || 'Feature importance metric';
-  };
-
-  const generateInteractionMatrix = (features: FeatureImportanceResult[]): number[][] => {
-    const size = features.length;
-    const matrix: number[][] = [];
-    
-    for (let i = 0; i < size; i++) {
-      const row: number[] = [];
-      for (let j = 0; j < size; j++) {
-        if (i === j) {
-          row.push(1); // Self-interaction
-        } else {
-          // Simulate interaction strength (0 to 1)
-          row.push(Math.random() * 0.8 + 0.1);
-        }
-      }
-      matrix.push(row);
-    }
-    
-    return matrix;
-  };
-
-  const generateDependencePlots = (features: FeatureImportanceResult[]) => {
-    return features.map((feature: any) => ({
-      feature: feature.featureName,
-      values: Array.from({ length: 50 }, (_, i) => ({
-        x: i * 2, // Feature value
-        y: (Math.sin(i * 0.3) + Math.random() * 0.5) * feature.permutationImportance, // SHAP value
-        color: Math.random() // Color dimension
-      }))
-    }));
-  };
-
-  const renderOverview = () => (
-    <div className="neural-overview">
-      <h3>🧠 Neural Network Architecture Overview</h3>
-      <div className="overview-content">
-        <div className="overview-section">
-          <h4>What are Neural Networks?</h4>
-          <p>
-            Neural networks are computational models inspired by biological neural networks in animal brains. 
-            Oracle uses sophisticated deep neural networks to capture complex, non-linear relationships in fantasy football data 
-            that traditional statistical models cannot detect.
-          </p>
-          
-          <div className="network-benefits">
-            <h5>🎯 Key Advantages</h5>
-            <div className="benefits-grid">
-              <div className="benefit-card">
-                <span className="benefit-icon">🔗</span>
-                <h6>Non-Linear Modeling</h6>
-                <p>Captures complex interactions between player stats, team performance, and game conditions</p>
-              </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">📈</span>
-                <h6>Automatic Feature Learning</h6>
-                <p>Discovers hidden patterns and feature combinations without manual engineering</p>
-              </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">🎯</span>
-                <h6>High Accuracy</h6>
-                <p>Achieves superior prediction accuracy through deep hierarchical representations</p>
-              </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">⚡</span>
-                <h6>Real-Time Inference</h6>
-                <p>Fast prediction generation for live fantasy football applications</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="overview-section">
-          <h4>Oracle&apos;s Deep Learning Architecture</h4>
-          <div className="architecture-overview">
-            <div className="architecture-flow">
-              <div className="flow-stage">
-                <div className="stage-icon">📊</div>
-                <h6>Data Preprocessing</h6>
-                <p>Feature normalization, encoding, and augmentation</p>
-              </div>
-              <div className="flow-arrow">→</div>
-              <div className="flow-stage">
-                <div className="stage-icon">🧠</div>
-                <h6>Neural Network</h6>
-                <p>9-layer deep network with advanced regularization</p>
-              </div>
-              <div className="flow-arrow">→</div>
-              <div className="flow-stage">
-                <div className="stage-icon">🎯</div>
-                <h6>Prediction Output</h6>
-                <p>Fantasy points with confidence intervals</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="architecture-stats">
-            <div className="stat-card">
-              <h6>Network Depth</h6>
-              <div className="stat-value">9 Layers</div>
-            </div>
-            <div className="stat-card">
-              <h6>Total Parameters</h6>
-              <div className="stat-value">~12,000</div>
-            </div>
-            <div className="stat-card">
-              <h6>Training Accuracy</h6>
-              <div className="stat-value">94.2%</div>
-            </div>
-            <div className="stat-card">
-              <h6>Inference Time</h6>
-              <div className="stat-value">~2ms</div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="overview-section">
-          <h4>Mathematical Foundation</h4>
-          <div className="math-foundation">
-            <div className="formula-card">
-              <h6>Forward Propagation</h6>
-              <div className="formula">
-                y = f(W₃ × f(W₂ × f(W₁ × x + b₁) + b₂) + b₃)
-              </div>
-              <p>Layer-by-layer computation with weights (W) and biases (b)</p>
-            </div>
-            <div className="formula-card">
-              <h6>Activation Function</h6>
-              <div className="formula">
-                ReLU(x) = max(0, x)<br />
-                Swish(x) = x × σ(x)
-              </div>
-              <p>Non-linear transformations for pattern recognition</p>
-            </div>
-            <div className="formula-card">
-              <h6>Loss Function</h6>
-              <div className="formula">
-                Loss = MSE + λ₁||W||₂ + λ₂ × Dropout
-              </div>
-              <p>Mean squared error with L2 regularization and dropout</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderArchitecture = () => (
-    <div className="neural-architecture">
-      <h3>🏗️ Network Architecture Details</h3>
-      <div className="architecture-visualization">
-        <h4>Layer-by-Layer Breakdown</h4>
-        <div className="layers-container">
-          {networkLayers.map((layer, index) => (
-            <button
-              key={layer.id} 
-              className={`layer-card ${selectedLayer === layer.id ? 'selected' : ''}`}
+    `layer-card ${selectedLayer === layer.id ? 'selected' : ''}`}
               onClick={() => setSelectedLayer(selectedLayer === layer.id ? '' : layer.id)}
               aria-label={`Select ${layer.name} details`}
             >
-              <div className="layer-header">
-                <div className="layer-info">
+              <div className="layer-header sm:px-4 md:px-6 lg:px-8">
+                <div className="layer-info sm:px-4 md:px-6 lg:px-8">
                   <h5>{layer.name}</h5>
-                  <span className="layer-type">{layer.type}</span>
+                  <span className="layer-type sm:px-4 md:px-6 lg:px-8">{layer.type}</span>
                 </div>
-                <div className="layer-specs">
-                  <span className="neuron-count">{layer.neurons} neurons</span>
-                  <span className="activation-type">{layer.activation}</span>
+                <div className="layer-specs sm:px-4 md:px-6 lg:px-8">
+                  <span className="neuron-count sm:px-4 md:px-6 lg:px-8">{layer.neurons} neurons</span>
+                  <span className="activation-type sm:px-4 md:px-6 lg:px-8">{layer.activation}</span>
                 </div>
               </div>
               
-              <div className="layer-visual">
-                <div className="neurons-visualization">
+              <div className="layer-visual sm:px-4 md:px-6 lg:px-8">
+                <div className="neurons-visualization sm:px-4 md:px-6 lg:px-8">
                   {Array.from({ length: Math.min(layer.neurons, 8) }).map((_, neuronIndex) => (
                     <div 
                       key={`neuron-${layer.id}-${neuronIndex}`} 
                       className={`neuron ${layer.type.toLowerCase()}`}
                     ></div>
                   ))}
-                  {layer.neurons > 8 && <span className="neuron-overflow">+{layer.neurons - 8}</span>}
+                  {layer.neurons > 8 && <span className="neuron-overflow sm:px-4 md:px-6 lg:px-8">+{layer.neurons - 8}</span>}
                 </div>
                 {index < networkLayers.length - 1 && (
-                  <div className="layer-connections">
+                  <div className="layer-connections sm:px-4 md:px-6 lg:px-8">
                     {Array.from({ length: Math.min(3, Math.min(layer.neurons, networkLayers[index + 1].neurons)) }).map((_, connIndex) => (
-                      <div key={`connection-${layer.id}-${connIndex}`} className="connection-line"></div>
+                      <div key={`connection-${layer.id}-${connIndex}`} className="connection-line sm:px-4 md:px-6 lg:px-8"></div>
                     ))}
                   </div>
                 )}
               </div>
               
-              <div className="layer-description">
+              <div className="layer-description sm:px-4 md:px-6 lg:px-8">
                 <p>{layer.description}</p>
-                <div className="output-shape">Output: {layer.outputShape}</div>
+                <div className="output-shape sm:px-4 md:px-6 lg:px-8">Output: {layer.outputShape}</div>
               </div>
               
               {selectedLayer === layer.id && (
-                <div className="layer-details">
+                <div className="layer-details sm:px-4 md:px-6 lg:px-8">
                   <h6>Layer Purpose</h6>
                   <p>{layer.purpose}</p>
                   
-                  <div className="technical-details">
-                    <div className="detail-grid">
-                      <div className="detail-item">
+                  <div className="technical-details sm:px-4 md:px-6 lg:px-8">
+                    <div className="detail-grid sm:px-4 md:px-6 lg:px-8">
+                      <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                         <strong>Layer Type:</strong>
                         <span>{layer.type}</span>
                       </div>
-                      <div className="detail-item">
+                      <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                         <strong>Neuron Count:</strong>
                         <span>{layer.neurons}</span>
                       </div>
-                      <div className="detail-item">
+                      <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                         <strong>Activation:</strong>
                         <span>{layer.activation}</span>
                       </div>
-                      <div className="detail-item">
+                      <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                         <strong>Output Shape:</strong>
                         <span>{layer.outputShape}</span>
                       </div>
                     </div>
                     
                     {layer.type === 'Dense' && (
-                      <div className="parameter-calculation">
+                      <div className="parameter-calculation sm:px-4 md:px-6 lg:px-8">
                         <h6>Parameter Calculation</h6>
                         <p>
                           Parameters = (Input × Output) + Bias<br/>
@@ -958,7 +705,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                     )}
                     
                     {layer.type === 'Dropout' && (
-                      <div className="dropout-info">
+                      <div className="dropout-info sm:px-4 md:px-6 lg:px-8">
                         <h6>Dropout Configuration</h6>
                         <p>
                           Dropout Rate: {layer.id === 'dropout1' ? '30%' : '20%'}<br/>
@@ -973,27 +720,27 @@ const OracleNeuralNetworkSection: React.FC = () => {
           ))}
         </div>
         
-        <div className="architecture-summary">
+        <div className="architecture-summary sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Architecture Summary</h4>
-          <div className="summary-grid">
-            <div className="summary-card">
+          <div className="summary-grid sm:px-4 md:px-6 lg:px-8">
+            <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Total Layers</h6>
-              <div className="summary-value">{networkLayers.length}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.length}</div>
               <p>Including regularization layers</p>
             </div>
-            <div className="summary-card">
+            <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Trainable Layers</h6>
-              <div className="summary-value">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
               <p>Dense layers with weights</p>
             </div>
-            <div className="summary-card">
+            <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Total Neurons</h6>
-              <div className="summary-value">{networkLayers.reduce((sum, layer) => sum + layer.neurons, 0)}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.reduce((sum, layer) => sum + layer.neurons, 0)}</div>
               <p>Across all layers</p>
             </div>
-            <div className="summary-card">
+            <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Network Depth</h6>
-              <div className="summary-value">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
               <p>Hidden + output layers</p>
             </div>
           </div>
@@ -1003,9 +750,9 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 
   const renderActivations = () => (
-    <div className="activation-functions">
+    <div className="activation-functions sm:px-4 md:px-6 lg:px-8">
       <h3>⚡ Activation Functions</h3>
-      <div className="activations-grid">
+      <div className="activations-grid sm:px-4 md:px-6 lg:px-8">
         {activationFunctions.map((activation: any) => (
           <button 
             key={activation.id} 
@@ -1013,24 +760,24 @@ const OracleNeuralNetworkSection: React.FC = () => {
             onClick={() => setSelectedActivation(activation.id)}
             aria-label={`Select ${activation.name} activation function`}
           >
-            <div className="activation-header">
+            <div className="activation-header sm:px-4 md:px-6 lg:px-8">
               <h4>{activation.name}</h4>
-              {selectedActivation === activation.id && <span className="selected-badge">Active</span>}
+              {selectedActivation === activation.id && <span className="selected-badge sm:px-4 md:px-6 lg:px-8">Active</span>}
             </div>
             
-            <div className="activation-formula">
+            <div className="activation-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Formula:</strong>
-              <div className="formula">{activation.formula}</div>
+              <div className="formula sm:px-4 md:px-6 lg:px-8">{activation.formula}</div>
             </div>
             
-            <div className="activation-range">
+            <div className="activation-range sm:px-4 md:px-6 lg:px-8">
               <strong>Range:</strong> <span>{activation.range}</span>
             </div>
             
-            <p className="activation-description">{activation.description}</p>
+            <p className="activation-description sm:px-4 md:px-6 lg:px-8">{activation.description}</p>
             
-            <div className="activation-analysis">
-              <div className="advantages">
+            <div className="activation-analysis sm:px-4 md:px-6 lg:px-8">
+              <div className="advantages sm:px-4 md:px-6 lg:px-8">
                 <h6>✅ Advantages</h6>
                 <ul>
                   {activation.advantages.map((advantage, advIndex) => (
@@ -1038,7 +785,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <div className="disadvantages">
+              <div className="disadvantages sm:px-4 md:px-6 lg:px-8">
                 <h6>⚠️ Disadvantages</h6>
                 <ul>
                   {activation.disadvantages.map((disadvantage, disIndex) => (
@@ -1048,7 +795,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               </div>
             </div>
             
-            <div className="use-cases">
+            <div className="use-cases sm:px-4 md:px-6 lg:px-8">
               <h6>🎯 Use Cases</h6>
               <ul>
                 {activation.useCases.map((useCase, useIndex) => (
@@ -1058,37 +805,37 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
             
             {selectedActivation === activation.id && (
-              <div className="activation-visualization">
+              <div className="activation-visualization sm:px-4 md:px-6 lg:px-8">
                 <h6>📈 Function Visualization</h6>
-                <div className="function-graph">
-                  <div className="graph-container">
+                <div className="function-graph sm:px-4 md:px-6 lg:px-8">
+                  <div className="graph-container sm:px-4 md:px-6 lg:px-8">
                     <div className={`function-curve ${activation.id}`}></div>
-                    <div className="graph-axes">
-                      <div className="x-axis"></div>
-                      <div className="y-axis"></div>
+                    <div className="graph-axes sm:px-4 md:px-6 lg:px-8">
+                      <div className="x-axis sm:px-4 md:px-6 lg:px-8"></div>
+                      <div className="y-axis sm:px-4 md:px-6 lg:px-8"></div>
                     </div>
-                    <div className="graph-labels">
-                      <span className="x-label">Input (x)</span>
-                      <span className="y-label">Output f(x)</span>
+                    <div className="graph-labels sm:px-4 md:px-6 lg:px-8">
+                      <span className="x-label sm:px-4 md:px-6 lg:px-8">Input (x)</span>
+                      <span className="y-label sm:px-4 md:px-6 lg:px-8">Output f(x)</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="function-properties">
-                  <div className="property-grid">
-                    <div className="property-item">
+                <div className="function-properties sm:px-4 md:px-6 lg:px-8">
+                  <div className="property-grid sm:px-4 md:px-6 lg:px-8">
+                    <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Monotonic:</strong>
                       <span>{['relu', 'sigmoid', 'tanh', 'leaky_relu'].includes(activation.id) ? 'Yes' : 'No'}</span>
                     </div>
-                    <div className="property-item">
+                    <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Differentiable:</strong>
                       <span>{activation.id === 'relu' ? 'Except at 0' : 'Yes'}</span>
                     </div>
-                    <div className="property-item">
+                    <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Zero-Centered:</strong>
                       <span>{['tanh'].includes(activation.id) ? 'Yes' : 'No'}</span>
                     </div>
-                    <div className="property-item">
+                    <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Bounded:</strong>
                       <span>{['sigmoid', 'tanh'].includes(activation.id) ? 'Yes' : 'No'}</span>
                     </div>
@@ -1100,10 +847,10 @@ const OracleNeuralNetworkSection: React.FC = () => {
         ))}
       </div>
       
-      <div className="activation-comparison">
+      <div className="activation-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Function Comparison Matrix</h4>
-        <div className="comparison-table">
-          <div className="table-header">
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="table-header sm:px-4 md:px-6 lg:px-8">
             <span>Function</span>
             <span>Computation</span>
             <span>Gradient Flow</span>
@@ -1111,18 +858,18 @@ const OracleNeuralNetworkSection: React.FC = () => {
             <span>Memory Usage</span>
           </div>
           {activationFunctions.map((activation: any) => (
-            <div key={`comparison-${activation.id}`} className="table-row">
-              <span className="function-name">{activation.name}</span>
-              <span className="computation-score">
+            <div key={`comparison-${activation.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
+              <span className="function-name sm:px-4 md:px-6 lg:px-8">{activation.name}</span>
+              <span className="computation-score sm:px-4 md:px-6 lg:px-8">
                 {getComputationScore(activation.id)}
               </span>
-              <span className="gradient-score">
+              <span className="gradient-score sm:px-4 md:px-6 lg:px-8">
                 {getGradientScore(activation.id)}
               </span>
-              <span className="performance-score">
+              <span className="performance-score sm:px-4 md:px-6 lg:px-8">
                 {getPerformanceScore(activation.id)}
               </span>
-              <span className="memory-score">
+              <span className="memory-score sm:px-4 md:px-6 lg:px-8">
                 {getMemoryScore(activation.id)}
               </span>
             </div>
@@ -1133,21 +880,21 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 
   const renderTraining = () => (
-    <div className="training-process">
+    <div className="training-process sm:px-4 md:px-6 lg:px-8">
       <h3>🎓 Training Process & Techniques</h3>
-      <div className="training-grid">
+      <div className="training-grid sm:px-4 md:px-6 lg:px-8">
         {trainingTechniques.map((technique: any) => (
-          <div key={technique.id} className="training-card">
+          <div key={technique.id} className="training-card sm:px-4 md:px-6 lg:px-8">
             <h4>{technique.name}</h4>
-            <p className="training-description">{technique.description}</p>
+            <p className="training-description sm:px-4 md:px-6 lg:px-8">{technique.description}</p>
             
-            <div className="algorithm-section">
+            <div className="algorithm-section sm:px-4 md:px-6 lg:px-8">
               <strong>Algorithm:</strong>
               <p>{technique.algorithm}</p>
             </div>
             
-            <div className="training-analysis">
-              <div className="benefits">
+            <div className="training-analysis sm:px-4 md:px-6 lg:px-8">
+              <div className="benefits sm:px-4 md:px-6 lg:px-8">
                 <h6>✅ Benefits</h6>
                 <ul>
                   {technique.benefits.map((benefit, benefitIndex) => (
@@ -1155,7 +902,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <div className="challenges">
+              <div className="challenges sm:px-4 md:px-6 lg:px-8">
                 <h6>⚠️ Challenges</h6>
                 <ul>
                   {technique.challenges.map((challenge, challengeIndex) => (
@@ -1165,7 +912,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               </div>
             </div>
             
-            <div className="implementation">
+            <div className="implementation sm:px-4 md:px-6 lg:px-8">
               <strong>Implementation:</strong>
               <p>{technique.implementation}</p>
             </div>
@@ -1173,78 +920,78 @@ const OracleNeuralNetworkSection: React.FC = () => {
         ))}
       </div>
       
-      <div className="training-pipeline">
+      <div className="training-pipeline sm:px-4 md:px-6 lg:px-8">
         <h4>🔄 Oracle&apos;s Training Pipeline</h4>
-        <div className="pipeline-flow">
-          <div className="pipeline-stage">
-            <div className="stage-number">1</div>
+        <div className="pipeline-flow sm:px-4 md:px-6 lg:px-8">
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">1</div>
             <h5>Data Preparation</h5>
             <p>Load and preprocess fantasy football data with feature engineering</p>
           </div>
-          <div className="pipeline-arrow">→</div>
-          <div className="pipeline-stage">
-            <div className="stage-number">2</div>
+          <div className="pipeline-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">2</div>
             <h5>Model Initialization</h5>
             <p>Initialize network weights using Xavier/He initialization</p>
           </div>
-          <div className="pipeline-arrow">→</div>
-          <div className="pipeline-stage">
-            <div className="stage-number">3</div>
+          <div className="pipeline-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">3</div>
             <h5>Forward Pass</h5>
             <p>Compute predictions through the network layers</p>
           </div>
-          <div className="pipeline-arrow">→</div>
-          <div className="pipeline-stage">
-            <div className="stage-number">4</div>
+          <div className="pipeline-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">4</div>
             <h5>Loss Calculation</h5>
             <p>Compute MSE loss with regularization terms</p>
           </div>
-          <div className="pipeline-arrow">→</div>
-          <div className="pipeline-stage">
-            <div className="stage-number">5</div>
+          <div className="pipeline-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">5</div>
             <h5>Backpropagation</h5>
             <p>Calculate gradients and update weights using Adam optimizer</p>
           </div>
-          <div className="pipeline-arrow">→</div>
-          <div className="pipeline-stage">
-            <div className="stage-number">6</div>
+          <div className="pipeline-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+          <div className="pipeline-stage sm:px-4 md:px-6 lg:px-8">
+            <div className="stage-number sm:px-4 md:px-6 lg:px-8">6</div>
             <h5>Validation</h5>
             <p>Evaluate on validation set and adjust hyperparameters</p>
           </div>
         </div>
       </div>
       
-      <div className="training-hyperparameters">
+      <div className="training-hyperparameters sm:px-4 md:px-6 lg:px-8">
         <h4>⚙️ Key Hyperparameters</h4>
-        <div className="hyperparameters-grid">
-          <div className="param-card">
+        <div className="hyperparameters-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Learning Rate</h6>
-            <div className="param-value">0.001</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">0.001</div>
             <p>Initial learning rate with exponential decay</p>
           </div>
-          <div className="param-card">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Batch Size</h6>
-            <div className="param-value">64</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">64</div>
             <p>Optimal balance of memory and convergence</p>
           </div>
-          <div className="param-card">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Epochs</h6>
-            <div className="param-value">100</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">100</div>
             <p>Training iterations with early stopping</p>
           </div>
-          <div className="param-card">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Dropout Rate</h6>
-            <div className="param-value">0.2-0.3</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">0.2-0.3</div>
             <p>Regularization to prevent overfitting</p>
           </div>
-          <div className="param-card">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Weight Decay</h6>
-            <div className="param-value">1e-4</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">1e-4</div>
             <p>L2 regularization coefficient</p>
           </div>
-          <div className="param-card">
+          <div className="param-card sm:px-4 md:px-6 lg:px-8">
             <h6>Optimizer</h6>
-            <div className="param-value">Adam</div>
+            <div className="param-value sm:px-4 md:px-6 lg:px-8">Adam</div>
             <p>Adaptive moment estimation</p>
           </div>
         </div>
@@ -1253,139 +1000,139 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 
   const renderOptimization = () => (
-    <div className="optimization-section">
+    <div className="optimization-section sm:px-4 md:px-6 lg:px-8">
       <h3>🚀 Optimization & Performance</h3>
-      <div className="optimization-content">
-        <div className="optimization-techniques">
+      <div className="optimization-content sm:px-4 md:px-6 lg:px-8">
+        <div className="optimization-techniques sm:px-4 md:px-6 lg:px-8">
           <h4>Performance Optimization Strategies</h4>
-          <div className="strategies-grid">
-            <div className="strategy-card">
+          <div className="strategies-grid sm:px-4 md:px-6 lg:px-8">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>🔥 Mixed Precision Training</h5>
               <p>Use FP16 precision to reduce memory usage and increase training speed while maintaining accuracy</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> 2x faster training, 50% less memory usage
               </div>
             </div>
-            <div className="strategy-card">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>⚡ Gradient Accumulation</h5>
               <p>Simulate larger batch sizes by accumulating gradients across multiple mini-batches</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> Stable training with limited memory
               </div>
             </div>
-            <div className="strategy-card">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>📊 Dynamic Batching</h5>
               <p>Adjust batch sizes during training based on GPU memory availability and convergence</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> Optimal resource utilization
               </div>
             </div>
-            <div className="strategy-card">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>🎯 Early Stopping</h5>
               <p>Monitor validation loss and stop training when no improvement is observed</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> Prevents overfitting, saves time
               </div>
             </div>
-            <div className="strategy-card">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>📈 Learning Rate Scheduling</h5>
               <p>Dynamically adjust learning rate based on training progress and validation metrics</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> Better convergence, fine-tuning
               </div>
             </div>
-            <div className="strategy-card">
+            <div className="strategy-card sm:px-4 md:px-6 lg:px-8">
               <h5>🔄 Model Checkpointing</h5>
               <p>Save model state at regular intervals and restore from best performing checkpoint</p>
-              <div className="strategy-benefits">
+              <div className="strategy-benefits sm:px-4 md:px-6 lg:px-8">
                 <strong>Benefits:</strong> Recovery from failures, best model selection
               </div>
             </div>
           </div>
         </div>
         
-        <div className="performance-metrics">
+        <div className="performance-metrics sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Performance Metrics</h4>
-          <div className="metrics-dashboard">
-            <div className="metric-category">
+          <div className="metrics-dashboard sm:px-4 md:px-6 lg:px-8">
+            <div className="metric-category sm:px-4 md:px-6 lg:px-8">
               <h5>Training Metrics</h5>
-              <div className="metrics-grid">
-                <div className="metric-item">
-                  <div className="metric-label">Training Loss</div>
-                  <div className="metric-value">0.145</div>
-                  <div className="metric-trend">↓ -12.3%</div>
+              <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Training Loss</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">0.145</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↓ -12.3%</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">Validation Loss</div>
-                  <div className="metric-value">0.162</div>
-                  <div className="metric-trend">↓ -8.7%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Validation Loss</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">0.162</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↓ -8.7%</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">Training Accuracy</div>
-                  <div className="metric-value">94.2%</div>
-                  <div className="metric-trend">↑ +2.1%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Training Accuracy</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">94.2%</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↑ +2.1%</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">Validation Accuracy</div>
-                  <div className="metric-value">91.8%</div>
-                  <div className="metric-trend">↑ +1.9%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Validation Accuracy</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">91.8%</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↑ +1.9%</div>
                 </div>
               </div>
             </div>
             
-            <div className="metric-category">
+            <div className="metric-category sm:px-4 md:px-6 lg:px-8">
               <h5>Performance Metrics</h5>
-              <div className="metrics-grid">
-                <div className="metric-item">
-                  <div className="metric-label">Inference Time</div>
-                  <div className="metric-value">1.8ms</div>
-                  <div className="metric-trend">↓ -0.3ms</div>
+              <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Inference Time</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">1.8ms</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↓ -0.3ms</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">Memory Usage</div>
-                  <div className="metric-value">245MB</div>
-                  <div className="metric-trend">↓ -15%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Memory Usage</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">245MB</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↓ -15%</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">Throughput</div>
-                  <div className="metric-value">2,100/s</div>
-                  <div className="metric-trend">↑ +8.2%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">Throughput</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">2,100/s</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↑ +8.2%</div>
                 </div>
-                <div className="metric-item">
-                  <div className="metric-label">GPU Utilization</div>
-                  <div className="metric-value">87%</div>
-                  <div className="metric-trend">↑ +5%</div>
+                <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-label sm:px-4 md:px-6 lg:px-8">GPU Utilization</div>
+                  <div className="metric-value sm:px-4 md:px-6 lg:px-8">87%</div>
+                  <div className="metric-trend sm:px-4 md:px-6 lg:px-8">↑ +5%</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="model-deployment">
+        <div className="model-deployment sm:px-4 md:px-6 lg:px-8">
           <h4>🚀 Model Deployment & Serving</h4>
-          <div className="deployment-pipeline">
-            <div className="deployment-stage">
+          <div className="deployment-pipeline sm:px-4 md:px-6 lg:px-8">
+            <div className="deployment-stage sm:px-4 md:px-6 lg:px-8">
               <h5>Model Export</h5>
               <p>Convert trained PyTorch model to ONNX format for optimized inference</p>
-              <div className="stage-details">
+              <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                 <span>Format: ONNX</span>
                 <span>Size: 2.3MB</span>
                 <span>Optimization: Graph fusion</span>
               </div>
             </div>
-            <div className="deployment-stage">
+            <div className="deployment-stage sm:px-4 md:px-6 lg:px-8">
               <h5>Optimization</h5>
               <p>Apply quantization and pruning techniques to reduce model size and latency</p>
-              <div className="stage-details">
+              <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                 <span>Quantization: INT8</span>
                 <span>Pruning: 15% sparsity</span>
                 <span>Size reduction: 60%</span>
               </div>
             </div>
-            <div className="deployment-stage">
+            <div className="deployment-stage sm:px-4 md:px-6 lg:px-8">
               <h5>Production Serving</h5>
               <p>Deploy to high-performance inference servers with auto-scaling capabilities</p>
-              <div className="stage-details">
+              <div className="stage-details sm:px-4 md:px-6 lg:px-8">
                 <span>Runtime: TensorRT</span>
                 <span>Scaling: Auto</span>
                 <span>Latency: &lt;5ms</span>
@@ -1398,18 +1145,18 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 
   const renderDemo = () => (
-    <div className="neural-demo">
+    <div className="neural-demo sm:px-4 md:px-6 lg:px-8">
       <h3>🧪 Interactive Neural Network Demo</h3>
-      <div className="demo-controls">
+      <div className="demo-controls sm:px-4 md:px-6 lg:px-8">
         <button 
-          className="demo-button"
+          className="demo-button sm:px-4 md:px-6 lg:px-8"
           onClick={simulateTraining}
           disabled={trainingProgress?.isTraining}
         >
           {trainingProgress?.isTraining ? 'Training...' : 'Start Training Simulation'}
         </button>
         <button 
-          className="demo-button"
+          className="demo-button sm:px-4 md:px-6 lg:px-8"
           onClick={generateNetworkVisualization}
         >
           Generate Network Visualization
@@ -1417,53 +1164,53 @@ const OracleNeuralNetworkSection: React.FC = () => {
       </div>
       
       {trainingProgress && (
-        <div className="training-simulation">
+        <div className="training-simulation sm:px-4 md:px-6 lg:px-8">
           <h4>📈 Training Progress</h4>
-          <div className="progress-dashboard">
-            <div className="progress-header">
-              <div className="epoch-counter">
+          <div className="progress-dashboard sm:px-4 md:px-6 lg:px-8">
+            <div className="progress-header sm:px-4 md:px-6 lg:px-8">
+              <div className="epoch-counter sm:px-4 md:px-6 lg:px-8">
                 Epoch {trainingProgress.epoch} / {trainingProgress.totalEpochs}
               </div>
-              <div className="progress-bar">
+              <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div 
-                  className="progress-fill" 
+                  className="progress-fill sm:px-4 md:px-6 lg:px-8" 
                   style={{ width: `${(trainingProgress.epoch / trainingProgress.totalEpochs) * 100}%` }}
                 ></div>
               </div>
             </div>
             
-            <div className="metrics-display">
-              <div className="metric-group">
+            <div className="metrics-display sm:px-4 md:px-6 lg:px-8">
+              <div className="metric-group sm:px-4 md:px-6 lg:px-8">
                 <h6>Loss</h6>
-                <div className="metric-pair">
-                  <div className="metric-item">
+                <div className="metric-pair sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                     <span>Train</span>
-                    <span className="metric-value">{trainingProgress.trainLoss.toFixed(4)}</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{trainingProgress.trainLoss.toFixed(4)}</span>
                   </div>
-                  <div className="metric-item">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                     <span>Val</span>
-                    <span className="metric-value">{trainingProgress.valLoss.toFixed(4)}</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{trainingProgress.valLoss.toFixed(4)}</span>
                   </div>
                 </div>
               </div>
               
-              <div className="metric-group">
+              <div className="metric-group sm:px-4 md:px-6 lg:px-8">
                 <h6>Accuracy</h6>
-                <div className="metric-pair">
-                  <div className="metric-item">
+                <div className="metric-pair sm:px-4 md:px-6 lg:px-8">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                     <span>Train</span>
-                    <span className="metric-value">{(trainingProgress.trainAccuracy * 100).toFixed(1)}%</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(trainingProgress.trainAccuracy * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="metric-item">
+                  <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                     <span>Val</span>
-                    <span className="metric-value">{(trainingProgress.valAccuracy * 100).toFixed(1)}%</span>
+                    <span className="metric-value sm:px-4 md:px-6 lg:px-8">{(trainingProgress.valAccuracy * 100).toFixed(1)}%</span>
                   </div>
                 </div>
               </div>
               
-              <div className="metric-group">
+              <div className="metric-group sm:px-4 md:px-6 lg:px-8">
                 <h6>Learning Rate</h6>
-                <div className="metric-value single">{trainingProgress.learningRate.toExponential(3)}</div>
+                <div className="metric-value single sm:px-4 md:px-6 lg:px-8">{trainingProgress.learningRate.toExponential(3)}</div>
               </div>
             </div>
           </div>
@@ -1471,33 +1218,33 @@ const OracleNeuralNetworkSection: React.FC = () => {
       )}
       
       {networkVisualization && (
-        <div className="network-visualization">
+        <div className="network-visualization sm:px-4 md:px-6 lg:px-8">
           <h4>🧠 Network Structure</h4>
-          <div className="visualization-summary">
-            <div className="summary-item">
+          <div className="visualization-summary sm:px-4 md:px-6 lg:px-8">
+            <div className="summary-item sm:px-4 md:px-6 lg:px-8">
               <span>Total Layers:</span>
               <span>{networkVisualization.layers.length}</span>
             </div>
-            <div className="summary-item">
+            <div className="summary-item sm:px-4 md:px-6 lg:px-8">
               <span>Connections:</span>
               <span>{networkVisualization.connections}</span>
             </div>
-            <div className="summary-item">
+            <div className="summary-item sm:px-4 md:px-6 lg:px-8">
               <span>Parameters:</span>
               <span>{networkVisualization.totalParameters.toLocaleString()}</span>
             </div>
           </div>
           
-          <div className="activation-flow">
+          <div className="activation-flow sm:px-4 md:px-6 lg:px-8">
             <h5>Activation Flow</h5>
-            <div className="flow-visualization">
+            <div className="flow-visualization sm:px-4 md:px-6 lg:px-8">
               {networkVisualization.activationFlow.map((layer: any, index: number) => (
-                <div key={`flow-${layer.name.toLowerCase().replace(/\s+/g, '-')}`} className="flow-layer">
-                  <div className="layer-name">{layer.name}</div>
-                  <div className="layer-neurons">{layer.neurons} neurons</div>
-                  <div className="layer-activation">{layer.activation}</div>
+                <div key={`flow-${layer.name.toLowerCase().replace(/\s+/g, '-')}`} className="flow-layer sm:px-4 md:px-6 lg:px-8">
+                  <div className="layer-name sm:px-4 md:px-6 lg:px-8">{layer.name}</div>
+                  <div className="layer-neurons sm:px-4 md:px-6 lg:px-8">{layer.neurons} neurons</div>
+                  <div className="layer-activation sm:px-4 md:px-6 lg:px-8">{layer.activation}</div>
                   {index < networkVisualization.activationFlow.length - 1 && (
-                    <div className="flow-arrow">→</div>
+                    <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                   )}
                 </div>
               ))}
@@ -1506,31 +1253,31 @@ const OracleNeuralNetworkSection: React.FC = () => {
         </div>
       )}
       
-      <div className="demo-insights">
+      <div className="demo-insights sm:px-4 md:px-6 lg:px-8">
         <h4>💡 Key Insights</h4>
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Deep Learning Advantage</h5>
             <p>
               Neural networks can capture complex, non-linear relationships in fantasy football data 
               that traditional statistical models miss, leading to more accurate predictions.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Regularization Importance</h5>
             <p>
               Dropout and batch normalization are crucial for preventing overfitting in fantasy sports 
               where data can be noisy and patterns may not generalize well.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Architecture Design</h5>
             <p>
               Oracle&apos;s network architecture balances complexity and efficiency, using proven techniques 
               like residual connections and attention mechanisms for optimal performance.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Real-time Inference</h5>
             <p>
               Model optimization techniques ensure fast inference times (&lt;5ms) enabling real-time 
@@ -1546,26 +1293,24 @@ const OracleNeuralNetworkSection: React.FC = () => {
   // Fix: Use unique key for table rows
   // Fix: Ensure all JSX tags are properly closed and parented
   const renderLearningCurveAnalysis = () => (
-    <div className="learning-curve-section">
+    <div className="learning-curve-section sm:px-4 md:px-6 lg:px-8">
       <h3>📈 Learning Curve Analysis</h3>
-      <div className="curve-controls">
+      <div className="curve-controls sm:px-4 md:px-6 lg:px-8">
         <label htmlFor="curve-select">Experiment:</label>
-        <select id="curve-select" value={selectedLearningCurveConfig} onChange={e => setSelectedLearningCurveConfig(e.target.value)}>
-          {learningCurveConfigs.map((cfg: any) => (
-            <option key={cfg.id} value={cfg.id}>{cfg.name}</option>
+        <select id="curve-select" value={selectedLearningCurveConfig} onChange={e => setSelectedLearningCurveConfig(e.target.value)} value={cfg.id}>{cfg.name}</option>
           ))}
         </select>
-        <button className="curve-run-btn" onClick={runLearningCurveAnalysis} disabled={learningCurveRunning}>
+        <button className="curve-run-btn sm:px-4 md:px-6 lg:px-8" onClick={runLearningCurveAnalysis} disabled={learningCurveRunning}>
           {learningCurveRunning ? 'Running...' : 'Run Analysis'}
         </button>
-        <div className="curve-progress-bar">
-          <div className="curve-progress-fill" style={{ width: `${learningCurveProgress}%` }}></div>
+        <div className="curve-progress-bar sm:px-4 md:px-6 lg:px-8">
+          <div className="curve-progress-fill sm:px-4 md:px-6 lg:px-8" style={{ width: `${learningCurveProgress}%` }}></div>
         </div>
       </div>
       {learningCurvePoints && (
-        <div className="curve-results">
+        <div className="curve-results sm:px-4 md:px-6 lg:px-8">
           <h4>Results</h4>
-          <table className="curve-table">
+          <table className="curve-table sm:px-4 md:px-6 lg:px-8">
             <thead>
               <tr>
                 <th>Sample Size</th>
@@ -1589,7 +1334,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               ))}
             </tbody>
           </table>
-          <div className="curve-insights">
+          <div className="curve-insights sm:px-4 md:px-6 lg:px-8">
             <h5>Insights</h5>
             <ul>
               <li>Model performance improves as sample size increases, with diminishing returns after convergence.</li>
@@ -1605,30 +1350,26 @@ const OracleNeuralNetworkSection: React.FC = () => {
 
   // --- Feature Importance Analysis Section ---
   const renderFeatureImportanceAnalysis = () => (
-    <div className="feature-importance-section">
+    <div className="feature-importance-section sm:px-4 md:px-6 lg:px-8">
       <h3>🔍 Feature Importance Analysis</h3>
       
-      <div className="importance-controls">
-        <div className="control-group">
+      <div className="importance-controls sm:px-4 md:px-6 lg:px-8">
+        <div className="control-group sm:px-4 md:px-6 lg:px-8">
           <label htmlFor="config-select">Dataset:</label>
           <select 
             id="config-select" 
             value={selectedPermutationConfig} 
-            onChange={e => setSelectedPermutationConfig(e.target.value)}
-          >
-            {permutationConfigs.map((cfg: any) => (
-              <option key={cfg.id} value={cfg.id}>{cfg.name}</option>
+            onChange={e => setSelectedPermutationConfig(e.target.value)} value={cfg.id}>{cfg.name}</option>
             ))}
           </select>
         </div>
         
-        <div className="control-group">
+        <div className="control-group sm:px-4 md:px-6 lg:px-8">
           <label htmlFor="method-select">Method:</label>
           <select 
             id="method-select" 
             value={selectedFeatureMethod} 
             onChange={e => setSelectedFeatureMethod(e.target.value as 'permutation' | 'shap' | 'both')}
-          >
             <option value="permutation">Permutation Importance</option>
             <option value="shap">SHAP Values</option>
             <option value="both">Both Methods</option>
@@ -1636,24 +1377,24 @@ const OracleNeuralNetworkSection: React.FC = () => {
         </div>
         
         <button 
-          className="importance-run-btn" 
+          className="importance-run-btn sm:px-4 md:px-6 lg:px-8" 
           onClick={runFeatureImportanceAnalysis} 
           disabled={featureImportanceRunning}
         >
           {featureImportanceRunning ? 'Analyzing...' : 'Run Analysis'}
         </button>
         
-        <div className="importance-progress-bar">
-          <div className="importance-progress-fill" style={{ width: `${featureImportanceProgress}%` }}></div>
+        <div className="importance-progress-bar sm:px-4 md:px-6 lg:px-8">
+          <div className="importance-progress-fill sm:px-4 md:px-6 lg:px-8" style={{ width: `${featureImportanceProgress}%` }}></div>
         </div>
       </div>
 
       {featureImportanceResults && (
-        <div className="importance-results">
-          <div className="results-overview">
+        <div className="importance-results sm:px-4 md:px-6 lg:px-8">
+          <div className="results-overview sm:px-4 md:px-6 lg:px-8">
             <h4>📊 Feature Ranking</h4>
-            <div className="ranking-table">
-              <div className="table-header">
+            <div className="ranking-table sm:px-4 md:px-6 lg:px-8">
+              <div className="table-header sm:px-4 md:px-6 lg:px-8">
                 <span>Rank</span>
                 <span>Feature</span>
                 <span>Permutation</span>
@@ -1663,18 +1404,18 @@ const OracleNeuralNetworkSection: React.FC = () => {
               </div>
               {featureImportanceResults.map((result: any) => (
                 <div key={`importance-${result.featureName}`} className={`table-row ${result.category}`}>
-                  <span className="rank">#{result.rank}</span>
-                  <span className="feature-name">{result.featureName}</span>
-                  <span className="permutation-score">
-                    <div className="score-bar">
+                  <span className="rank sm:px-4 md:px-6 lg:px-8">#{result.rank}</span>
+                  <span className="feature-name sm:px-4 md:px-6 lg:px-8">{result.featureName}</span>
+                  <span className="permutation-score sm:px-4 md:px-6 lg:px-8">
+                    <div className="score-bar sm:px-4 md:px-6 lg:px-8">
                       <div 
-                        className="score-fill" 
+                        className="score-fill sm:px-4 md:px-6 lg:px-8" 
                         style={{ width: `${result.permutationImportance * 100}%` }}
                       ></div>
                     </div>
                     {result.permutationImportance.toFixed(3)}
                   </span>
-                  <span className="shap-value">
+                  <span className="shap-value sm:px-4 md:px-6 lg:px-8">
                     <div className={`shap-indicator ${result.shapValue >= 0 ? 'positive' : 'negative'}`}>
                       {result.shapValue >= 0 ? '+' : ''}{result.shapValue.toFixed(3)}
                     </div>
@@ -1682,37 +1423,37 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   <span className={`category-badge ${result.category}`}>
                     {result.category.toUpperCase()}
                   </span>
-                  <span className="description">{result.description}</span>
+                  <span className="description sm:px-4 md:px-6 lg:px-8">{result.description}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {shapAnalysis && (
-            <div className="shap-analysis">
+            <div className="shap-analysis sm:px-4 md:px-6 lg:px-8">
               <h4>🎯 SHAP Analysis</h4>
               
-              <div className="shap-sections">
-                <div className="local-explanation">
+              <div className="shap-sections sm:px-4 md:px-6 lg:px-8">
+                <div className="local-explanation sm:px-4 md:px-6 lg:px-8">
                   <h5>Local Explanation (Sample Prediction)</h5>
-                  <div className="prediction-breakdown">
-                    <div className="prediction-summary">
-                      <div className="prediction-value">
+                  <div className="prediction-breakdown sm:px-4 md:px-6 lg:px-8">
+                    <div className="prediction-summary sm:px-4 md:px-6 lg:px-8">
+                      <div className="prediction-value sm:px-4 md:px-6 lg:px-8">
                         Predicted: <strong>{shapAnalysis.localExplanation.prediction.toFixed(1)} points</strong>
                       </div>
-                      <div className="base-value">
+                      <div className="base-value sm:px-4 md:px-6 lg:px-8">
                         Base Value: {shapAnalysis.localExplanation.baseValue.toFixed(1)}
                       </div>
                     </div>
                     
-                    <div className="contributions-chart">
+                    <div className="contributions-chart sm:px-4 md:px-6 lg:px-8">
                       {shapAnalysis.localExplanation.contributions.map((contrib: any) => (
-                        <div key={`contrib-${contrib.feature}`} className="contribution-bar">
-                          <div className="contrib-feature">{contrib.feature}</div>
-                          <div className="contrib-value">
+                        <div key={`contrib-${contrib.feature}`} className="contribution-bar sm:px-4 md:px-6 lg:px-8">
+                          <div className="contrib-feature sm:px-4 md:px-6 lg:px-8">{contrib.feature}</div>
+                          <div className="contrib-value sm:px-4 md:px-6 lg:px-8">
                             Value: {contrib.value.toFixed(1)}
                           </div>
-                          <div className="contrib-shap">
+                          <div className="contrib-shap sm:px-4 md:px-6 lg:px-8">
                             <div 
                               className={`shap-bar ${contrib.shapValue >= 0 ? 'positive' : 'negative'}`}
                               style={{ 
@@ -1720,7 +1461,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                                 marginLeft: contrib.shapValue < 0 ? `${50 - Math.abs(contrib.shapValue) * 50}px` : '50px'
                               }}
                             ></div>
-                            <span className="shap-number">
+                            <span className="shap-number sm:px-4 md:px-6 lg:px-8">
                               {contrib.shapValue >= 0 ? '+' : ''}{contrib.shapValue.toFixed(2)}
                             </span>
                           </div>
@@ -1730,16 +1471,16 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="interaction-matrix">
+                <div className="interaction-matrix sm:px-4 md:px-6 lg:px-8">
                   <h5>Feature Interactions</h5>
-                  <div className="matrix-visualization">
-                    <div className="matrix-grid">
+                  <div className="matrix-visualization sm:px-4 md:px-6 lg:px-8">
+                    <div className="matrix-grid sm:px-4 md:px-6 lg:px-8">
                       {shapAnalysis.interactionMatrix.map((row, i) => (
-                        <div key={`matrix-row-${featureImportanceResults[i]?.featureName || i}`} className="matrix-row">
+                        <div key={`matrix-row-${featureImportanceResults[i]?.featureName || i}`} className="matrix-row sm:px-4 md:px-6 lg:px-8">
                           {row.map((value, j) => (
                             <div 
                               key={`matrix-cell-${featureImportanceResults[i]?.featureName || i}-${featureImportanceResults[j]?.featureName || j}`}
-                              className="matrix-cell"
+                              className="matrix-cell sm:px-4 md:px-6 lg:px-8"
                               style={{ 
                                 backgroundColor: `rgba(59, 130, 246, ${value})`,
                                 color: value > 0.5 ? 'white' : 'black'
@@ -1752,9 +1493,9 @@ const OracleNeuralNetworkSection: React.FC = () => {
                         </div>
                       ))}
                     </div>
-                    <div className="matrix-labels">
+                    <div className="matrix-labels sm:px-4 md:px-6 lg:px-8">
                       {featureImportanceResults.slice(0, 6).map((result: any) => (
-                        <div key={`label-${result.featureName}`} className="matrix-label">
+                        <div key={`label-${result.featureName}`} className="matrix-label sm:px-4 md:px-6 lg:px-8">
                           {result.featureName}
                         </div>
                       ))}
@@ -1763,18 +1504,18 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className="dependence-plots">
+              <div className="dependence-plots sm:px-4 md:px-6 lg:px-8">
                 <h5>Feature Dependence Plots</h5>
-                <div className="plots-grid">
+                <div className="plots-grid sm:px-4 md:px-6 lg:px-8">
                   {shapAnalysis.dependencePlots.map((plot: any) => (
-                    <div key={`plot-${plot.feature}`} className="dependence-plot">
+                    <div key={`plot-${plot.feature}`} className="dependence-plot sm:px-4 md:px-6 lg:px-8">
                       <h6>{plot.feature}</h6>
-                      <div className="plot-container">
-                        <div className="plot-points">
+                      <div className="plot-container sm:px-4 md:px-6 lg:px-8">
+                        <div className="plot-points sm:px-4 md:px-6 lg:px-8">
                           {plot.values.map((point, i) => (
                             <div
                               key={`point-${plot.feature}-${i}`}
-                              className="plot-point"
+                              className="plot-point sm:px-4 md:px-6 lg:px-8"
                               style={{
                                 left: `${(point.x / 100) * 100}%`,
                                 bottom: `${((point.y + 1) / 2) * 100}%`,
@@ -1783,9 +1524,9 @@ const OracleNeuralNetworkSection: React.FC = () => {
                             ></div>
                           ))}
                         </div>
-                        <div className="plot-axes">
-                          <div className="x-axis-label">Feature Value</div>
-                          <div className="y-axis-label">SHAP Value</div>
+                        <div className="plot-axes sm:px-4 md:px-6 lg:px-8">
+                          <div className="x-axis-label sm:px-4 md:px-6 lg:px-8">Feature Value</div>
+                          <div className="y-axis-label sm:px-4 md:px-6 lg:px-8">SHAP Value</div>
                         </div>
                       </div>
                     </div>
@@ -1795,31 +1536,31 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
           )}
 
-          <div className="importance-insights">
+          <div className="importance-insights sm:px-4 md:px-6 lg:px-8">
             <h4>💡 Key Insights</h4>
-            <div className="insights-grid">
-              <div className="insight-card">
+            <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="insight-card sm:px-4 md:px-6 lg:px-8">
                 <h5>🏆 Top Predictors</h5>
                 <p>
                   The most important features for fantasy prediction are <strong>{featureImportanceResults[0]?.featureName}</strong> and <strong>{featureImportanceResults[1]?.featureName}</strong>, 
                   indicating that recent performance and usage metrics are critical for accurate forecasting.
                 </p>
               </div>
-              <div className="insight-card">
+              <div className="insight-card sm:px-4 md:px-6 lg:px-8">
                 <h5>⚖️ SHAP Interpretability</h5>
                 <p>
                   SHAP values show both positive and negative contributions, helping understand not just which features matter, 
                   but how they specifically impact individual predictions in either direction.
                 </p>
               </div>
-              <div className="insight-card">
+              <div className="insight-card sm:px-4 md:px-6 lg:px-8">
                 <h5>🔗 Feature Interactions</h5>
                 <p>
                   The interaction matrix reveals how features work together. Strong interactions between position-specific metrics 
                   and matchup difficulty create complex, non-linear prediction patterns.
                 </p>
               </div>
-              <div className="insight-card">
+              <div className="insight-card sm:px-4 md:px-6 lg:px-8">
                 <h5>📈 Model Transparency</h5>
                 <p>
                   Feature importance analysis provides transparency into Oracle&apos;s decision-making process, 
@@ -1829,26 +1570,26 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="methodology-section">
+          <div className="methodology-section sm:px-4 md:px-6 lg:px-8">
             <h4>🔬 Methodology</h4>
-            <div className="methodology-grid">
-              <div className="method-card">
+            <div className="methodology-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="method-card sm:px-4 md:px-6 lg:px-8">
                 <h5>Permutation Importance</h5>
                 <p>
                   Measures feature importance by randomly shuffling feature values and observing the decrease in model performance. 
                   Higher values indicate features that are crucial for maintaining prediction accuracy.
                 </p>
-                <div className="method-formula">
+                <div className="method-formula sm:px-4 md:px-6 lg:px-8">
                   Importance = Performance(original) - Performance(permuted)
                 </div>
               </div>
-              <div className="method-card">
+              <div className="method-card sm:px-4 md:px-6 lg:px-8">
                 <h5>SHAP Values</h5>
                 <p>
                   Provides unified framework for feature attribution based on cooperative game theory. 
                   SHAP values sum to the difference between prediction and baseline, ensuring faithful explanations.
                 </p>
-                <div className="method-formula">
+                <div className="method-formula sm:px-4 md:px-6 lg:px-8">
                   φᵢ = Σ |S|!(M-|S|-1)!/M! × [f(S∪&#123;i&#125;) - f(S)]
                 </div>
               </div>
@@ -1860,13 +1601,13 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 
   return (
-    <div className="oracle-neural-section">
-      <div className="section-header">
+    <div className="oracle-neural-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2>🧠 Neural Network Architecture</h2>
         <p>Deep learning foundations powering Oracle&apos;s predictive intelligence</p>
       </div>
       
-      <div className="section-navigation">
+      <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button 
           className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
@@ -1923,7 +1664,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
         </button>
       </div>
       
-      <div className="section-content">
+      <div className="section-content sm:px-4 md:px-6 lg:px-8">
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'architecture' && renderArchitecture()}
         {activeTab === 'activations' && renderActivations()}
@@ -1938,4 +1679,10 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 };
 
-export default OracleNeuralNetworkSection;
+const OracleNeuralNetworkSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleNeuralNetworkSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleNeuralNetworkSectionWithErrorBoundary);

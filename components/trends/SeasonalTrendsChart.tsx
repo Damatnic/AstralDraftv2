@@ -3,7 +3,8 @@
  * Displays comprehensive seasonal performance analysis with charts and insights
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   ResponsiveContainer,
   LineChart,
@@ -43,6 +44,7 @@ interface SeasonalTrendsChartProps {
   playerId: string;
   playerName: string;
   className?: string;
+
 }
 
 interface ChartDataPoint {
@@ -53,23 +55,22 @@ interface ChartDataPoint {
   floor: number;
   gamesPlayed: number;
   color: string;
-}
 
 // Custom tooltip component moved outside
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload?.length) {
     const data = payload[0].payload as ChartDataPoint;
     return (
-      <div className="bg-white p-3 border rounded-lg shadow-lg">
-        <p className="font-medium">{label}</p>
-        <p className="text-lg font-bold text-blue-600">{data.averagePoints.toFixed(1)} avg pts</p>
-        <p className="text-sm">Consistency: {data.consistency.toFixed(1)}%</p>
-        <p className="text-sm">Ceiling: {data.ceiling.toFixed(1)}</p>
-        <p className="text-sm">Floor: {data.floor.toFixed(1)}</p>
-        <p className="text-sm">Games: {data.gamesPlayed}</p>
+      <div className="bg-white p-3 border rounded-lg shadow-lg sm:px-4 md:px-6 lg:px-8">
+        <p className="font-medium sm:px-4 md:px-6 lg:px-8">{label}</p>
+        <p className="text-lg font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">{data.averagePoints.toFixed(1)} avg pts</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Consistency: {data.consistency.toFixed(1)}%</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Ceiling: {data.ceiling.toFixed(1)}</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Floor: {data.floor.toFixed(1)}</p>
+        <p className="text-sm sm:px-4 md:px-6 lg:px-8">Games: {data.gamesPlayed}</p>
       </div>
     );
-  }
+
   return null;
 };
 
@@ -77,7 +78,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
   playerId,
   playerName,
   className = ''
-}: any) => {
+}) => {
   const [seasonalData, setSeasonalData] = useState<SeasonalTrendData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -89,16 +90,18 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
 
   const loadSeasonalData = async () => {
     try {
+
       setLoading(true);
       setError(null);
 
       const data = await seasonalTrendsAnalysisService.generateSeasonalTrends(playerId, [2023, 2024]);
       setSeasonalData(data);
-    } catch (err) {
+    
+    } catch (error) {
       setError('Failed to load seasonal trends data');
     } finally {
       setLoading(false);
-    }
+
   };
 
   const prepareOverviewData = (): ChartDataPoint[] => {
@@ -126,13 +129,13 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
 
   const getPatternIcon = (type: SeasonalPattern['type']) => {
     switch (type) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600" />;
-      case 'declining': return <TrendingDown className="h-4 w-4 text-red-600" />;
-      case 'consistent': return <CheckCircle className="h-4 w-4 text-blue-600" />;
-      case 'volatile': return <AlertTriangle className="h-4 w-4 text-yellow-600" />;
-      case 'injury_prone': return <AlertTriangle className="h-4 w-4 text-red-600" />;
-      default: return <Activity className="h-4 w-4" />;
-    }
+      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'declining': return <TrendingDown className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'consistent': return <CheckCircle className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'volatile': return <AlertTriangle className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
+      case 'injury_prone': return <AlertTriangle className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+      default: return <Activity className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />;
+
   };
 
   const getPatternSeverityColor = (severity: SeasonalPattern['severity']) => {
@@ -141,7 +144,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
       case 'moderate': return 'default';
       case 'low': return 'secondary';
       default: return 'outline';
-    }
+
   };
 
   const getAnalysisBadgeVariant = (trend: string) => {
@@ -149,55 +152,61 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
       case 'positive': return 'default';
       case 'negative': return 'destructive';
       default: return 'secondary';
-    }
+
   };
 
   if (loading) {
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 animate-pulse" />
+          <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+            <Clock className="h-5 w-5 animate-pulse sm:px-4 md:px-6 lg:px-8" />
             Loading Seasonal Trends...
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-96 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="h-96 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
           </div>
         </CardContent>
       </Card>
     );
-  }
 
   if (error || !seasonalData) {
     return (
       <Card className={className}>
         <CardHeader>
-          <CardTitle className="text-red-600">Error Loading Data</CardTitle>
+          <CardTitle className="text-red-600 sm:px-4 md:px-6 lg:px-8">Error Loading Data</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">{error || 'No seasonal data available'}</p>
+          <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">{error || 'No seasonal data available'}</p>
         </CardContent>
       </Card>
     );
-  }
 
   const overviewData = prepareOverviewData();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
 
   return (
     <div className={`seasonal-trends-chart ${className}`}>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
+          <CardTitle className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              <Calendar className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
               Seasonal Performance Analysis - {playerName}
             </div>
-            <div className="flex items-center gap-2">
-              {seasonalData.analysis.overallTrend === 'positive' && <TrendingUp className="h-5 w-5 text-green-600" />}
-              {seasonalData.analysis.overallTrend === 'negative' && <TrendingDown className="h-5 w-5 text-red-600" />}
-              {seasonalData.analysis.overallTrend === 'stable' && <Activity className="h-5 w-5 text-blue-600" />}
+            <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+              {seasonalData.analysis.overallTrend === 'positive' && <TrendingUp className="h-5 w-5 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
+              {seasonalData.analysis.overallTrend === 'negative' && <TrendingDown className="h-5 w-5 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
+              {seasonalData.analysis.overallTrend === 'stable' && <Activity className="h-5 w-5 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
               <Badge variant={getAnalysisBadgeVariant(seasonalData.analysis.overallTrend)}>
                 {seasonalData.analysis.overallTrend} trend
               </Badge>
@@ -215,10 +224,10 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
             onTabChange={setActiveTab}
           />
 
-          <div className="mt-6">
+          <div className="mt-6 sm:px-4 md:px-6 lg:px-8">
             {activeTab === 'overview' && (
-              <div className="space-y-6">
-                <div className="h-96">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="h-96 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={overviewData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -241,29 +250,29 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                     { period: 'Mid Season', data: seasonalData.trends.midSeason, weeks: '7-12' },
                     { period: 'Late Season', data: seasonalData.trends.lateSeason, weeks: '13-18' },
                     { period: 'Playoffs', data: seasonalData.trends.playoffs, weeks: '19-22' }
-                  ].map(({ period, data, weeks }: any) => (
+                  ].map(({ period, data, weeks }) => (
                     <Card key={period}>
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-sm">{period}</CardTitle>
-                        <p className="text-xs text-gray-500">Weeks {weeks}</p>
+                      <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
+                        <CardTitle className="text-sm sm:px-4 md:px-6 lg:px-8">{period}</CardTitle>
+                        <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Weeks {weeks}</p>
                       </CardHeader>
                       <CardContent>
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between">
+                        <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                          <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span>Avg Points:</span>
-                            <span className="font-medium">{data.averageFantasyPoints.toFixed(1)}</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{data.averageFantasyPoints.toFixed(1)}</span>
                           </div>
-                          <div className="flex justify-between">
+                          <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span>Games:</span>
-                            <span className="font-medium">{data.gamesPlayed}</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{data.gamesPlayed}</span>
                           </div>
-                          <div className="flex justify-between">
+                          <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span>Consistency:</span>
-                            <span className="font-medium">{data.consistencyScore.toFixed(0)}%</span>
+                            <span className="font-medium sm:px-4 md:px-6 lg:px-8">{data.consistencyScore.toFixed(0)}%</span>
                           </div>
-                          <div className="flex justify-between">
+                          <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                             <span>Range:</span>
-                            <span className="font-medium text-xs">{data.floor.toFixed(1)} - {data.ceiling.toFixed(1)}</span>
+                            <span className="font-medium text-xs sm:px-4 md:px-6 lg:px-8">{data.floor.toFixed(1)} - {data.ceiling.toFixed(1)}</span>
                           </div>
                         </div>
                       </CardContent>
@@ -274,8 +283,8 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
             )}
 
             {activeTab === 'patterns' && (
-              <div className="space-y-6">
-                <div className="h-80">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+                <div className="h-80 sm:px-4 md:px-6 lg:px-8">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={overviewData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -302,31 +311,31 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                   </ResponsiveContainer>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Detected Patterns</h3>
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                  <h3 className="text-lg font-semibold sm:px-4 md:px-6 lg:px-8">Detected Patterns</h3>
                   {seasonalData.patterns.length === 0 ? (
-                    <p className="text-gray-500">No significant patterns detected</p>
+                    <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">No significant patterns detected</p>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                       {seasonalData.patterns.map((pattern: any) => (
                         <Card key={`${pattern.type}-${pattern.confidence}`}>
-                          <CardContent className="pt-4">
-                            <div className="flex items-start gap-3">
+                          <CardContent className="pt-4 sm:px-4 md:px-6 lg:px-8">
+                            <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                               {getPatternIcon(pattern.type)}
-                              <div className="flex-1">
-                                <div className="flex items-center justify-between mb-2">
-                                  <h4 className="font-medium capitalize">{pattern.type.replace('_', ' ')}</h4>
-                                  <div className="flex items-center gap-2">
+                              <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                  <h4 className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{pattern.type.replace('_', ' ')}</h4>
+                                  <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <Badge variant={getPatternSeverityColor(pattern.severity)}>
                                       {pattern.severity}
                                     </Badge>
-                                    <span className="text-sm text-gray-500">
+                                    <span className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                       {(pattern.confidence * 100).toFixed(0)}% confidence
                                     </span>
                                   </div>
                                 </div>
-                                <p className="text-sm text-gray-700 mb-2">{pattern.description}</p>
-                                <p className="text-xs text-blue-600 font-medium">{pattern.fantasyImpact}</p>
+                                <p className="text-sm text-gray-700 mb-2 sm:px-4 md:px-6 lg:px-8">{pattern.description}</p>
+                                <p className="text-xs text-blue-600 font-medium sm:px-4 md:px-6 lg:px-8">{pattern.fantasyImpact}</p>
                               </div>
                             </div>
                           </CardContent>
@@ -339,29 +348,29 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
             )}
 
             {activeTab === 'analysis' && (
-              <div className="space-y-6">
+              <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Target className="h-5 w-5" />
+                      <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <Target className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         Performance Summary
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex justify-between">
+                    <CardContent className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Best Period:</span>
-                        <span className="font-medium capitalize">{seasonalData.analysis.bestPeriod.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{seasonalData.analysis.bestPeriod.replace(/([A-Z])/g, ' $1').trim()}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Worst Period:</span>
-                        <span className="font-medium capitalize">{seasonalData.analysis.worstPeriod.replace(/([A-Z])/g, ' $1').trim()}</span>
+                        <span className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{seasonalData.analysis.worstPeriod.replace(/([A-Z])/g, ' $1').trim()}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Volatility:</span>
-                        <span className="font-medium">{(seasonalData.analysis.volatility * 100).toFixed(1)}%</span>
+                        <span className="font-medium sm:px-4 md:px-6 lg:px-8">{(seasonalData.analysis.volatility * 100).toFixed(1)}%</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Overall Trend:</span>
                         <Badge variant={getAnalysisBadgeVariant(seasonalData.analysis.overallTrend)}>
                           {seasonalData.analysis.overallTrend}
@@ -372,13 +381,13 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <BarChart3 className="h-5 w-5" />
+                      <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <BarChart3 className="h-5 w-5 sm:px-4 md:px-6 lg:px-8" />
                         Volatility Analysis
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="h-40">
+                      <div className="h-40 sm:px-4 md:px-6 lg:px-8">
                         <ResponsiveContainer width="100%" height="100%">
                           <AreaChart data={overviewData}>
                             <CartesianGrid strokeDasharray="3 3" />
@@ -415,11 +424,11 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                     <CardTitle>Recommendations</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ul className="space-y-2">
+                    <ul className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                       {seasonalData.analysis.recommendations.map((rec: any) => (
-                        <li key={rec} className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm">{rec}</span>
+                        <li key={rec} className="flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
+                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                          <span className="text-sm sm:px-4 md:px-6 lg:px-8">{rec}</span>
                         </li>
                       ))}
                     </ul>
@@ -434,4 +443,10 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
   );
 };
 
-export default SeasonalTrendsChart;
+const SeasonalTrendsChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SeasonalTrendsChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SeasonalTrendsChartWithErrorBoundary);

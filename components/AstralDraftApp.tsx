@@ -4,4 +4,10 @@
 
 import OracleOnlyApp from './OracleOnlyApp';
 
-export default OracleOnlyApp;
+const OracleOnlyAppWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleOnlyApp {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleOnlyAppWithErrorBoundary);

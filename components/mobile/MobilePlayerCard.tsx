@@ -3,7 +3,8 @@
  * Touch-optimized player cards with swipe actions and condensed information
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo } from 'react';
 import { motion, PanInfo } from 'framer-motion';
 import { Player } from '../../types';
 import { 
@@ -30,6 +31,7 @@ interface MobilePlayerCardProps {
     isCompact?: boolean;
     swipeActions?: boolean;
     className?: string;
+
 }
 
 interface SwipeAction {
@@ -37,7 +39,6 @@ interface SwipeAction {
     color: string;
     label: string;
     action: () => void;
-}
 
 const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     player,
@@ -52,7 +53,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     isCompact = false,
     swipeActions = true,
     className = ''
-}: any) => {
+}) => {
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
     const [activeAction, setActiveAction] = React.useState<SwipeAction | null>(null);
@@ -70,8 +71,8 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
         // Mock trend data - in real app this would come from player data
         const trend = Math.random() > 0.5 ? 'up' : 'down';
         return trend === 'up' ? 
-            <TrendingUpIcon className="w-3 h-3 text-green-400" /> :
-            <TrendingDownIcon className="w-3 h-3 text-red-400" />;
+            <TrendingUpIcon className="w-3 h-3 text-green-400 sm:px-4 md:px-6 lg:px-8" /> :
+            <TrendingDownIcon className="w-3 h-3 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
     const getInjuryStatusDisplay = (injuryHistory: string | undefined) => {
@@ -86,31 +87,31 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                 return { status: 'Injury Prone', severity: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/30' };
             default:
                 return null;
-        }
+
     };
 
     const leftSwipeActions: SwipeAction[] = [
         {
-            icon: <XIcon className="w-5 h-5" />,
+            icon: <XIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'bg-red-500',
             label: 'Pass',
             action: () => onRemoveFromQueue?.()
-        }
+
     ];
 
     const rightSwipeActions: SwipeAction[] = [
         {
-            icon: isInQueue ? <HeartIcon className="w-5 h-5 fill-current" /> : <PlusIcon className="w-5 h-5" />,
+            icon: isInQueue ? <HeartIcon className="w-5 h-5 fill-current sm:px-4 md:px-6 lg:px-8" /> : <PlusIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: isInQueue ? 'bg-pink-500' : 'bg-green-500',
             label: isInQueue ? 'Queued' : 'Queue',
             action: () => isInQueue ? onRemoveFromQueue?.() : onAddToQueue?.()
         },
         {
-            icon: <InfoIcon className="w-5 h-5" />,
+            icon: <InfoIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'bg-blue-500',
             label: 'Details',
             action: () => onViewDetails?.()
-        }
+
     ];
 
     const handleDragStart = () => {
@@ -128,10 +129,10 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
             } else {
                 const actionIndex = Math.min(Math.floor(Math.abs(offset) / 80), rightSwipeActions.length - 1);
                 setActiveAction(rightSwipeActions[actionIndex] || null);
-            }
+
         } else {
             setActiveAction(null);
-        }
+
     };
 
     const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -143,8 +144,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
         if ((Math.abs(offset) > 120) || (Math.abs(velocity) > 500 && Math.abs(offset) > 60)) {
             if (activeAction) {
                 activeAction.action();
-            }
-        }
+
 
         // Reset state
         setDragOffset(0);
@@ -160,7 +160,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
             case 'K': return 'text-yellow-400 bg-yellow-500/20';
             case 'DST': return 'text-red-400 bg-red-500/20';
             default: return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     const injuryDisplay = getInjuryStatusDisplay(player.injuryHistory);
@@ -181,12 +181,12 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
             {swipeActions && (
                 <>
                     {/* Left Action Background */}
-                    <div className="absolute left-0 top-0 h-full w-20 bg-red-500 flex items-center justify-center">
-                        <XIcon className="w-6 h-6 text-white" />
+                    <div className="absolute left-0 top-0 h-full w-20 bg-red-500 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                        <XIcon className="w-6 h-6 text-white sm:px-4 md:px-6 lg:px-8" />
                     </div>
                     
                     {/* Right Actions Background */}
-                    <div className="absolute right-0 top-0 h-full flex">
+                    <div className="absolute right-0 top-0 h-full flex sm:px-4 md:px-6 lg:px-8">
                         {rightSwipeActions.map((action, index) => (
                             <div
                                 key={index}
@@ -194,7 +194,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                                     activeAction === action ? 'opacity-100' : 'opacity-60'
                                 }`}
                             >
-                                <div className="text-white">{action.icon}</div>
+                                <div className="text-white sm:px-4 md:px-6 lg:px-8">{action.icon}</div>
                             </div>
                         ))}
                     </div>
@@ -202,42 +202,42 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
             )}
 
             {/* Main Card Content */}
-            <div className="relative bg-[var(--panel-bg)] p-3 min-h-[80px]">
-                <div className="flex items-start justify-between">
+            <div className="relative bg-[var(--panel-bg)] p-3 min-h-[80px] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
                     {/* Player Info */}
-                    <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                    <div className="flex-1 min-w-0 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
                             <span className={`px-2 py-0.5 rounded text-xs font-medium ${getPositionColor(player.position)}`}>
                                 {player.position}
                             </span>
-                            <span className="text-xs text-[var(--text-secondary)]">
+                            <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 {player.team}
                             </span>
                             {player.rank && (
-                                <span className="text-xs text-[var(--text-secondary)]">
+                                <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                     #{player.rank}
                                 </span>
                             )}
                         </div>
                         
-                        <h3 className="font-semibold text-[var(--text-primary)] text-sm truncate mb-1">
+                        <h3 className="font-semibold text-[var(--text-primary)] text-sm truncate mb-1 sm:px-4 md:px-6 lg:px-8">
                             {player.name}
                         </h3>
 
                         {/* Stats Row */}
-                        <div className="flex items-center gap-4 text-xs">
+                        <div className="flex items-center gap-4 text-xs sm:px-4 md:px-6 lg:px-8">
                             {showProjection && player.stats.projection && (
                                 <div>
-                                    <div className="text-[var(--text-secondary)]">Proj</div>
-                                    <div className="text-sm font-medium text-[var(--text-primary)]">
+                                    <div className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Proj</div>
+                                    <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         {player.stats.projection.toFixed(1)}
                                     </div>
                                 </div>
                             )}
                             
                             <div>
-                                <div className="text-[var(--text-secondary)]">ADP</div>
-                                <div className="text-sm font-medium text-[var(--text-primary)]">
+                                <div className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">ADP</div>
+                                <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     {player.adp ? player.adp.toFixed(1) : 'N/A'}
                                 </div>
                             </div>
@@ -245,14 +245,14 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                             {!isCompact && (
                                 <>
                                     <div>
-                                        <div className="text-[var(--text-secondary)]">VORP</div>
-                                        <div className="text-sm font-medium text-[var(--text-primary)]">
+                                        <div className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">VORP</div>
+                                        <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {player.stats.vorp.toFixed(1)}
                                         </div>
                                     </div>
                                     
                                     <div>
-                                        <div className="text-[var(--text-secondary)]">Tier</div>
+                                        <div className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Tier</div>
                                         <div className={`text-sm font-medium ${getPlayerTier(player.tier).color}`}>
                                             {getPlayerTier(player.tier).text}
                                         </div>
@@ -263,18 +263,18 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                     </div>
                     
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {onViewDetails && (
                             <button
                                 onClick={onViewDetails}
-                                className="p-1.5 rounded-full bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors"
-                            >
-                                <InfoIcon className="w-4 h-4" />
+                                className="p-1.5 rounded-full bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
+                                <InfoIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                         )}
                         
                         {showTrends && (
-                            <div className="p-1">
+                            <div className="p-1 sm:px-4 md:px-6 lg:px-8">
                                 {getTrendIcon()}
                             </div>
                         )}
@@ -282,15 +282,15 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                         {isDraftable && onDraft && (
                             <button
                                 onClick={onDraft}
-                                className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors text-xs font-medium"
-                            >
+                                className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 hover:bg-green-500/30 transition-colors text-xs font-medium sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 Draft
                             </button>
                         )}
                         
                         {isInQueue && (
-                            <div className="p-1">
-                                <HeartIcon className="w-4 h-4 text-pink-400 fill-current" />
+                            <div className="p-1 sm:px-4 md:px-6 lg:px-8">
+                                <HeartIcon className="w-4 h-4 text-pink-400 fill-current sm:px-4 md:px-6 lg:px-8" />
                             </div>
                         )}
                     </div>
@@ -299,11 +299,11 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
                 {/* Injury/Status Alert */}
                 {injuryDisplay && (
                     <div className={`mt-2 flex items-center gap-2 p-2 ${injuryDisplay.bgColor} border ${injuryDisplay.borderColor} rounded text-xs`}>
-                        <AlertTriangleIcon className="w-3 h-3 flex-shrink-0" />
+                        <AlertTriangleIcon className="w-3 h-3 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                         <span className={`${injuryDisplay.severity} font-medium`}>
                             {injuryDisplay.status}
                         </span>
-                        <span className="text-[var(--text-secondary)]">
+                        <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             Injury History: {player.injuryHistory}
                         </span>
                     </div>
@@ -312,14 +312,14 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
             
             {/* Swipe Hints */}
             {swipeActions && !isDragging && (
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-4 opacity-20">
-                    <div className="flex items-center gap-1 text-red-400">
-                        <XIcon className="w-3 h-3" />
-                        <span className="text-xs">Pass</span>
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-between px-4 opacity-20 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center gap-1 text-red-400 sm:px-4 md:px-6 lg:px-8">
+                        <XIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
+                        <span className="text-xs sm:px-4 md:px-6 lg:px-8">Pass</span>
                     </div>
-                    <div className="flex items-center gap-1 text-green-400">
-                        <span className="text-xs">Queue</span>
-                        <PlusIcon className="w-3 h-3" />
+                    <div className="flex items-center gap-1 text-green-400 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-xs sm:px-4 md:px-6 lg:px-8">Queue</span>
+                        <PlusIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                     </div>
                 </div>
             )}
@@ -327,4 +327,10 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     );
 };
 
-export default MobilePlayerCard;
+const MobilePlayerCardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobilePlayerCard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobilePlayerCardWithErrorBoundary);

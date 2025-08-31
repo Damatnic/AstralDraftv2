@@ -106,6 +106,8 @@ export interface HistoricalAnalyticsActions {
     actualResult?: number,
     userPrediction?: number
   ) => Promise<void>;
+}
+
   exportData: (format?: ExportFormat, filters?: Record<string, unknown>) => Promise<string>;
   importData: (data: string, format?: ExportFormat) => Promise<{ imported: number; errors: string[] }>;
   analyzeTimeframe: (timeframe: TimeframeType) => Promise<void>;
@@ -294,10 +296,7 @@ export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}
         records: [...prev.records, record]
       }));
 
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: `Failed to record prediction: ${error instanceof Error ? error.message : String(error)}`
+    `Failed to record prediction: ${error instanceof Error ? error.message : String(error)}`
       }));
     }
   }, []);
@@ -329,10 +328,7 @@ export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}
         throw new Error('Export format not supported yet');
       }
 
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: `Failed to export data: ${error instanceof Error ? error.message : String(error)}`
+    `Failed to export data: ${error instanceof Error ? error.message : String(error)}`
       }));
       throw error;
     }
@@ -361,10 +357,7 @@ export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}
 
       return { imported, errors };
 
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: `Failed to import data: ${error instanceof Error ? error.message : String(error)}`
+    `Failed to import data: ${error instanceof Error ? error.message : String(error)}`
       }));
       return { imported: 0, errors: [error instanceof Error ? error.message : String(error)] };
     }
@@ -405,10 +398,7 @@ export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}
         } : null
       }));
 
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: `Failed to analyze timeframe: ${error instanceof Error ? error.message : String(error)}`
+    `Failed to analyze timeframe: ${error instanceof Error ? error.message : String(error)}`
       }));
     }
   }, [state.records]);
@@ -448,10 +438,7 @@ export function useHistoricalAnalytics(params: UseHistoricalAnalyticsParams = {}
         comparisonAnalysis: comparison
       }));
 
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: `Failed to compare performance: ${error instanceof Error ? error.message : String(error)}`
+    `Failed to compare performance: ${error instanceof Error ? error.message : String(error)}`
       }));
     }
   }, []);

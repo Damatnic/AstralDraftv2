@@ -3,7 +3,8 @@
  * Demonstrates the comprehensive notification system capabilities
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNotifications } from '../../contexts/NotificationContext';
 import { Widget } from '../ui/Widget';
@@ -14,6 +15,7 @@ const NotificationDemo: React.FC = () => {
     const [demoInProgress, setDemoInProgress] = useState(false);
 
     const runDemoSequence = async () => {
+    try {
         setDemoInProgress(true);
 
         // Draft Pick Reminder
@@ -25,8 +27,13 @@ const NotificationDemo: React.FC = () => {
                 priority: 'urgent',
                 actionUrl: '/draft/demo',
                 actionText: 'Make Pick',
-                data: { pickNumber: 15, timeRemaining: 45 }
-            }
+                data: { pickNumber: 15, timeRemaining: 45 
+    
+    } catch (error) {
+      console.error('Error in runDemoSequence:', error);
+
+
+
         );
 
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -41,7 +48,7 @@ const NotificationDemo: React.FC = () => {
                 actionUrl: '/oracle/predictions/demo',
                 actionText: 'View Prediction',
                 data: { confidence: 85, reasoning: 'Weather conditions favorable' }
-            }
+
         );
 
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -56,7 +63,7 @@ const NotificationDemo: React.FC = () => {
                 actionUrl: '/trades/demo',
                 actionText: 'Review Trade',
                 data: { fromTeam: 'Team Alpha' }
-            }
+
         );
 
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -71,7 +78,7 @@ const NotificationDemo: React.FC = () => {
                 actionUrl: '/achievements/demo',
                 actionText: 'View Achievement',
                 data: { achievementName: 'Oracle Master' }
-            }
+
         );
 
         await new Promise(resolve => setTimeout(resolve, 2000));
@@ -86,7 +93,7 @@ const NotificationDemo: React.FC = () => {
                 actionUrl: '/league/announcements/demo',
                 actionText: 'View Details',
                 data: { commissionerName: 'League Admin' }
-            }
+
         );
 
         setDemoInProgress(false);
@@ -110,31 +117,37 @@ const NotificationDemo: React.FC = () => {
             title: 'Maintenance Alert',
             message: 'Scheduled maintenance will begin at 2:00 AM EST',
             priority: 'low'
-        }
+
     ];
 
-    const quickTestNotification = async (testNotif: any) => {
+    const quickTestNotification = async () => {
+    try {
         await sendNotification(
             testNotif.type,
             testNotif.title,
             testNotif.message,
             {
                 priority: testNotif.priority,
-                data: { test: true }
-            }
+                data: { test: true 
+    
+    } catch (error) {
+      console.error('Error in quickTestNotification:', error);
+
+
+
         );
     };
 
     return (
-        <div className="space-y-6">
-            <Widget title="🔔 Notification System Demo" className="bg-gray-900/50">
-                <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            <Widget title="🔔 Notification System Demo" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Demo Sequence */}
-                    <div className="bg-blue-900/20 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-2">
+                    <div className="bg-blue-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                             Full Demo Sequence
                         </h3>
-                        <p className="text-gray-300 text-sm mb-4">
+                        <p className="text-gray-300 text-sm mb-4 sm:px-4 md:px-6 lg:px-8">
                             Experience a complete notification journey with draft alerts, Oracle predictions, 
                             trade proposals, achievements, and league updates.
                         </p>
@@ -146,15 +159,15 @@ const NotificationDemo: React.FC = () => {
                                     ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
                                     : 'bg-blue-600 hover:bg-blue-700 text-white'
                             }`}
-                        >
-                            <PlayIcon className="w-4 h-4" />
+                         aria-label="Action button">
+                            <PlayIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>{demoInProgress ? 'Demo Running...' : 'Start Demo Sequence'}</span>
                         </button>
                     </div>
 
                     {/* Quick Tests */}
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
+                    <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             Quick Notification Tests
                         </h3>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -164,20 +177,19 @@ const NotificationDemo: React.FC = () => {
                                     priorityClasses = 'bg-orange-500/20 text-orange-400';
                                 } else if (testNotif.priority === 'medium') {
                                     priorityClasses = 'bg-blue-500/20 text-blue-400';
-                                }
 
                                 return (
                                     <motion.button
                                         key={`${testNotif.type}-${testNotif.title}`}
                                         onClick={() => quickTestNotification(testNotif)}
-                                        className="p-3 bg-gray-700/50 hover:bg-gray-700 rounded-lg text-left transition-colors"
+                                        className="p-3 bg-gray-700/50 hover:bg-gray-700 rounded-lg text-left transition-colors sm:px-4 md:px-6 lg:px-8"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                     >
-                                        <div className="text-sm font-medium text-white mb-1">
+                                        <div className="text-sm font-medium text-white mb-1 sm:px-4 md:px-6 lg:px-8">
                                             {testNotif.title}
                                         </div>
-                                        <div className="text-xs text-gray-400 mb-2">
+                                        <div className="text-xs text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">
                                             {testNotif.message}
                                         </div>
                                         <div className={`text-xs px-2 py-1 rounded-full inline-block ${priorityClasses}`}>
@@ -190,40 +202,40 @@ const NotificationDemo: React.FC = () => {
                     </div>
 
                     {/* Settings Preview */}
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-white">
+                    <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                            <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">
                                 Notification Preferences
                             </h3>
-                            <SettingsIcon className="w-5 h-5 text-gray-400" />
+                            <SettingsIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                         </div>
                         
                         {preferences ? (
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm text-gray-300">Push Notifications</span>
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Push Notifications</span>
                                     <input
                                         type="checkbox"
                                         checked={preferences.enablePushNotifications || false}
                                         onChange={(e: any) => updatePreferences({
                                             enablePushNotifications: e.target.checked
-                                        })}
-                                        className="accent-blue-500"
+                                        }}
+                                        className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm text-gray-300">Sound Notifications</span>
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Sound Notifications</span>
                                     <input
                                         type="checkbox"
                                         checked={preferences.enableSoundNotifications || false}
                                         onChange={(e: any) => updatePreferences({
                                             enableSoundNotifications: e.target.checked
-                                        })}
-                                        className="accent-blue-500"
+                                        }}
+                                        className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm text-gray-300">Draft Alerts</span>
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Draft Alerts</span>
                                     <input
                                         type="checkbox"
                                         checked={preferences.categories?.draft?.enabled || false}
@@ -233,14 +245,13 @@ const NotificationDemo: React.FC = () => {
                                                 draft: {
                                                     ...preferences.categories?.draft,
                                                     enabled: e.target.checked
-                                                }
-                                            }
+                                                }}
                                         })}
-                                        className="accent-blue-500"
+                                        className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
                                     />
                                 </div>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm text-gray-300">Oracle Predictions</span>
+                                <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Oracle Predictions</span>
                                     <input
                                         type="checkbox"
                                         checked={preferences.categories?.oracle?.enabled || false}
@@ -250,23 +261,22 @@ const NotificationDemo: React.FC = () => {
                                                 oracle: {
                                                     ...preferences.categories?.oracle,
                                                     enabled: e.target.checked
-                                                }
-                                            }
+                                                }}
                                         })}
-                                        className="accent-blue-500"
+                                        className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
                                     />
                                 </div>
                             </div>
                         ) : (
-                            <div className="text-gray-400 text-sm">
+                            <div className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">
                                 Loading preferences...
                             </div>
                         )}
                     </div>
 
                     {/* Features List */}
-                    <div className="bg-green-900/20 rounded-lg p-4">
-                        <h3 className="text-lg font-semibold text-white mb-4">
+                    <div className="bg-green-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                        <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">
                             ✅ Notification System Features
                         </h3>
                         <div className="grid md:grid-cols-2 gap-2 text-sm text-gray-300">
@@ -294,4 +304,10 @@ const NotificationDemo: React.FC = () => {
     );
 };
 
-export default NotificationDemo;
+const NotificationDemoWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationDemo {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationDemoWithErrorBoundary);

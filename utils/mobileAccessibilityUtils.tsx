@@ -215,7 +215,7 @@ export const useKeyboardNavigation = (
 };
 
 // Screen reader only text utility
-export const VisuallyHidden: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
+export const VisuallyHidden: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <span className="sr-only">
         {children}
     </span>
@@ -239,7 +239,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     disabled,
     className = '',
     ...props
-}: any) => {
+}) => {
     const baseClasses = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
     
     const variantClasses = {
@@ -295,7 +295,7 @@ export const LiveRegion: React.FC<{
     message: string;
     politeness?: LiveRegionPoliteness;
     clearAfter?: number;
-}> = ({ message, politeness = 'polite', clearAfter = 5000 }: any) => {
+}> = ({ message, politeness = 'polite', clearAfter = 5000 }) => {
     const [currentMessage, setCurrentMessage] = React.useState(message);
 
     React.useEffect(() => {

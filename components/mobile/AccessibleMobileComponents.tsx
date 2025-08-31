@@ -27,6 +27,7 @@ interface AccessiblePullToRefreshProps {
     maxPullDistance?: number;
     disabled?: boolean;
     className?: string;
+
 }
 
 export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = ({
@@ -36,7 +37,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     maxPullDistance = 120,
     disabled = false,
     className = ''
-}: any) => {
+}) => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
     const [announcement, setAnnouncement] = React.useState('');
@@ -58,7 +59,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         if (startScrollTop.current <= 0) {
             setPullState('pulling');
             setAnnouncement('Pull to refresh started');
-        }
+
     };
 
     const handlePan = useThrottle((event: any, info: PanInfo) => {
@@ -72,8 +73,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             setPullState('idle');
             pullY.current = 0;
             return;
-        }
-        
+
         const deltaY = Math.max(0, info.offset.y);
         const dampedY = Math.min(deltaY * 0.6, maxPullDistance);
         
@@ -85,7 +85,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         } else if (dampedY < refreshThreshold && pullState !== 'pulling') {
             setPullState('pulling');
             setAnnouncement('Pull further to refresh');
-        }
+
     }, 16); // 60fps throttling
 
     const handlePanEnd = async (event: any, info: PanInfo) => {
@@ -97,19 +97,21 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             setAnnouncement('Refreshing content');
             
             try {
+
                 await onRefresh();
                 setAnnouncement('Content refreshed successfully');
-            } catch (error) {
+            
+    } catch (error) {
                 setAnnouncement('Refresh failed. Please try again.');
             } finally {
                 setIsRefreshing(false);
                 setPullState('idle');
                 pullY.current = 0;
-            }
+
         } else {
             setPullState('idle');
             pullY.current = 0;
-        }
+
     };
 
     // Keyboard support for refresh
@@ -120,13 +122,15 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         setAnnouncement('Refreshing content');
         
         try {
+
             await onRefresh();
             setAnnouncement('Content refreshed successfully');
-        } catch (error) {
+        
+    } catch (error) {
             setAnnouncement('Refresh failed. Please try again.');
         } finally {
             setIsRefreshing(false);
-        }
+
     }, [onRefresh, disabled, isRefreshing]);
 
     useKeyboardNavigation(containerRef as React.RefObject<HTMLElement>);
@@ -141,7 +145,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                 return 'text-blue-500';
             default:
                 return 'text-gray-400';
-        }
+
     };
 
     const getStatusText = () => {
@@ -154,7 +158,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                 return 'Refreshing...';
             default:
                 return '';
-        }
+
     };
 
     return (
@@ -163,11 +167,11 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             <LiveRegion politeness="polite">{announcement}</LiveRegion>
             
             {/* Refresh button for keyboard users */}
-            <div className="absolute top-2 right-2 z-10">
+            <div className="absolute top-2 right-2 z-10 sm:px-4 md:px-6 lg:px-8">
                 <AccessibleButton
                     onClick={handleKeyboardRefresh}
                     disabled={disabled || isRefreshing}
-                    className="mobile-focus-ring text-sm px-2 py-1"
+                    className="mobile-focus-ring text-sm px-2 py-1 sm:px-4 md:px-6 lg:px-8"
                     ariaLabel="Refresh content"
                 >
                     <RefreshCwIcon className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
@@ -184,7 +188,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                 onDragStart={handlePanStart}
                 onDrag={handlePan}
                 onDragEnd={handlePanEnd}
-                className="w-full h-full overflow-auto"
+                className="w-full h-full overflow-auto sm:px-4 md:px-6 lg:px-8"
                 style={{
                     transform: pullY.current > 0 ? `translateY(${pullY.current}px)` : 'none'
                 }}
@@ -215,12 +219,12 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                                 }}
                             >
                                 {pullState === 'refreshing' ? (
-                                    <RefreshCwIcon className="w-6 h-6" />
+                                    <RefreshCwIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                                 ) : (
-                                    <ChevronDownIcon className="w-6 h-6" />
+                                    <ChevronDownIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </motion.div>
-                            <span className="text-sm mt-2 font-medium">
+                            <span className="text-sm mt-2 font-medium sm:px-4 md:px-6 lg:px-8">
                                 {getStatusText()}
                             </span>
                         </motion.div>
@@ -243,6 +247,7 @@ interface AccessibleTouchAreaProps {
     disabled?: boolean;
     role?: string;
     ariaLabel?: string;
+
 }
 
 export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
@@ -254,7 +259,7 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
     disabled = false,
     role = 'button',
     ariaLabel
-}: any) => {
+}) => {
     const [isPressed, setIsPressed] = React.useState(false);
     const longPressTimer = React.useRef<NodeJS.Timeout | undefined>(undefined);
     const prefersReducedMotion = useReducedMotion();
@@ -268,21 +273,21 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
                 onLongPress();
                 announceToScreenReader('Long press action activated', 'polite');
             }, 500);
-        }
+
     };
 
     const handleTapEnd = () => {
         setIsPressed(false);
         if (longPressTimer.current) {
             clearTimeout(longPressTimer.current);
-        }
+
     };
 
     const handleTap = () => {
         if (disabled) return;
         if (onTap) {
             onTap();
-        }
+
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -292,8 +297,8 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
             event.preventDefault();
             if (onTap) {
                 onTap();
-            }
-        }
+
+
     };
 
     const handlePan = (event: any, info: PanInfo) => {
@@ -308,15 +313,15 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
                 onSwipe('right');
             } else if (offset.x < -threshold) {
                 onSwipe('left');
-            }
+
         } else {
             // Vertical swipe
             if (offset.y > threshold) {
                 onSwipe('down');
             } else if (offset.y < -threshold) {
                 onSwipe('up');
-            }
-        }
+
+
     };
 
     return (

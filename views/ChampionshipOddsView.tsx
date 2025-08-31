@@ -31,20 +31,18 @@ const ChampionshipOddsView: React.FC = () => {
                 .then(data => {
                     if (data) {
                         dispatch({ type: 'SET_CHAMPIONSHIP_PROBS', payload: { leagueId: league.id, data } });
-                    }
+
                 })
                 .finally(() => setIsLoading(false));
-        }
+
     }, [league, dispatch]);
 
     if (!league || !(league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE')) {
         return <ErrorDisplay title="Not Available" message="Championship odds are calculated during the season." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} />;
-    }
-    
+
     if (league.settings.aiAssistanceLevel === 'BASIC') {
         return <ErrorDisplay title="Feature Disabled" message="Championship Odds are disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} />;
-    }
-    
+
     const rankedTeams = [...league.teams]
         .map((team: any) => {
             const history = team.championshipProbHistory || [];
@@ -65,11 +63,10 @@ const ChampionshipOddsView: React.FC = () => {
                 <div className="flex items-center gap-2">
                      <button 
                         onClick={() => setIsSimModalOpen(true)}
-                        className="px-4 py-2 bg-purple-500/20 text-purple-300 rounded-lg text-sm hover:bg-purple-500/30 flex items-center gap-2"
                     >
                         <FlaskConicalIcon /> Run Trade Scenario
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} className="back-btn">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }} className="back-btn">
                         Back to Analytics Hub
                     </button>
                 </div>

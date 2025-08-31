@@ -3,7 +3,8 @@
  * Sophisticated trade analysis tool with fairness evaluation, impact assessment, and automated suggestions
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Avatar } from '../ui/Avatar';
@@ -24,6 +25,7 @@ interface TradeAnalyzerViewProps {
     league: League;
     currentTeam: Team;
     dispatch: React.Dispatch<any>;
+
 }
 
 export interface TradeProposal {
@@ -37,6 +39,7 @@ export interface TradeProposal {
     status: 'draft' | 'pending' | 'accepted' | 'rejected' | 'countered';
     createdAt: Date;
     message?: string;
+
 }
 
 export interface DraftPick {
@@ -45,6 +48,7 @@ export interface DraftPick {
     originalTeamId: string;
     estimatedValue: number;
     description: string;
+
 }
 
 export interface TradeAnalysis {
@@ -75,6 +79,7 @@ export interface TradeAnalysis {
     strengths: string[];
     weaknesses: string[];
     warnings: string[];
+
 }
 
 export interface TeamImpactAnalysis {
@@ -87,7 +92,6 @@ export interface TeamImpactAnalysis {
     weeklyProjectionChange: number;
     playoffOddsChange: number;
     championshipOddsChange: number;
-}
 
 export interface PositionalAnalysis {
     position: string;
@@ -96,6 +100,7 @@ export interface PositionalAnalysis {
     futureOutlook: 'bullish' | 'neutral' | 'bearish';
     replacementLevel: number;
     tradeImpact: number;
+
 }
 
 export interface RiskAssessment {
@@ -105,6 +110,7 @@ export interface RiskAssessment {
     ageRisk: number;
     situationalRisk: number;
     riskFactors: string[];
+
 }
 
 export interface ScheduleAnalysis {
@@ -113,6 +119,7 @@ export interface ScheduleAnalysis {
     playoffScheduleDiff: number;
     nextFourWeeksImpact: number;
     restOfSeasonOutlook: string;
+
 }
 
 export interface ImprovementSuggestion {
@@ -121,6 +128,7 @@ export interface ImprovementSuggestion {
     impact: number;
     confidence: number;
     suggestion: string;
+
 }
 
 export interface AlternativeOffer {
@@ -130,9 +138,10 @@ export interface AlternativeOffer {
     toPlayers: Player[];
     expectedImprovement: number;
     reasoning: string;
+
 }
 
-const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }: any) => {
+const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }) => {
     const [selectedTab, setSelectedTab] = React.useState<'builder' | 'fairness' | 'impact' | 'suggestions'>('builder');
     const [currentProposal, setCurrentProposal] = React.useState<TradeProposal | null>(null);
     const [analysis, setAnalysis] = React.useState<TradeAnalysis | null>(null);
@@ -142,27 +151,27 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
         {
             id: 'builder',
             label: 'Trade Builder',
-            icon: <ArrowRightLeftIcon className="w-4 h-4" />,
+            icon: <ArrowRightLeftIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Build and configure trade proposals'
         },
         {
             id: 'fairness',
             label: 'Fairness Analysis',
-            icon: <BarChartIcon className="w-4 h-4" />,
+            icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Evaluate trade fairness and value'
         },
         {
             id: 'impact',
             label: 'Impact Assessment',
-            icon: <TrendingUpIcon className="w-4 h-4" />,
+            icon: <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'Analyze long-term team impact'
         },
         {
             id: 'suggestions',
             label: 'Smart Suggestions',
-            icon: <SearchIcon className="w-4 h-4" />,
+            icon: <SearchIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             description: 'AI-powered trade recommendations'
-        }
+
     ];
 
     const analyzeTradeProposal = React.useCallback(async (proposal: TradeProposal) => {
@@ -185,7 +194,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             analyzeTradeProposal(currentProposal);
         } else {
             setAnalysis(null);
-        }
+
     }, [currentProposal, analyzeTradeProposal]);
 
     const handleProposalUpdate = (proposal: TradeProposal) => {
@@ -206,50 +215,58 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
     };
 
     const getRecommendationIcon = (recommendation: string) => {
-        if (recommendation.includes('accept')) return <CheckIcon className="w-5 h-5 text-green-400" />;
-        if (recommendation === 'consider') return <AlertTriangleIcon className="w-5 h-5 text-yellow-400" />;
-        return <TrendingDownIcon className="w-5 h-5 text-red-400" />;
+        if (recommendation.includes('accept')) return <CheckIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (recommendation === 'consider') return <AlertTriangleIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
+        return <TrendingDownIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
+  if (isLoading) {
     return (
-        <div className="min-h-screen bg-[var(--bg-primary)]">
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
+        <div className="min-h-screen bg-[var(--bg-primary)] sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-b border-[var(--panel-border)]">
-                <div className="p-6">
-                    <div className="flex items-center justify-between">
+            <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
+                <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                         <div>
-                            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
+                            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Trade Analyzer
                             </h1>
-                            <p className="text-[var(--text-secondary)]">
+                            <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 Advanced trade evaluation with fairness analysis and impact assessment
                             </p>
                         </div>
                         
                         {analysis && (
-                            <div className="flex items-center gap-4">
-                                <div className="text-center p-3 bg-white/10 rounded-lg">
+                            <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className={`text-2xl font-bold ${getGradeColor(analysis.overallGrade)}`}>
                                         {analysis.overallGrade}
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Overall Grade</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Overall Grade</div>
                                 </div>
                                 
-                                <div className="text-center p-3 bg-white/10 rounded-lg">
-                                    <div className="flex items-center gap-2">
+                                <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                         {getRecommendationIcon(analysis.recommendation)}
                                         <span className={`font-bold ${getRecommendationColor(analysis.recommendation)}`}>
                                             {analysis.recommendation.replace('_', ' ').toUpperCase()}
                                         </span>
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Recommendation</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Recommendation</div>
                                 </div>
                                 
-                                <div className="text-center p-3 bg-white/10 rounded-lg">
-                                    <div className="text-lg font-bold text-[var(--text-primary)]">
+                                <div className="text-center p-3 bg-white/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         {analysis.fairnessScore}/100
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">Fairness Score</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Fairness Score</div>
                                 </div>
                             </div>
                         )}
@@ -258,22 +275,17 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             </div>
 
             {/* Tab Navigation */}
-            <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)]">
-                <div className="flex overflow-x-auto">
+            <div className="border-b border-[var(--panel-border)] bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
                         <button
                             key={tab.id}
-                            onClick={() => setSelectedTab(tab.id as any)}
-                            className={`flex items-center gap-3 px-6 py-4 font-medium transition-colors relative whitespace-nowrap min-w-fit ${
-                                selectedTab === tab.id
-                                    ? 'text-blue-400 border-b-2 border-blue-400 bg-blue-500/10'
-                                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/5'
-                            }`}
+                            onClick={() => setSelectedTab(tab.id as any)}`}
                         >
                             {tab.icon}
-                            <div className="text-left">
+                            <div className="text-left sm:px-4 md:px-6 lg:px-8">
                                 <div>{tab.label}</div>
-                                <div className="text-xs opacity-70">{tab.description}</div>
+                                <div className="text-xs opacity-70 sm:px-4 md:px-6 lg:px-8">{tab.description}</div>
                             </div>
                         </button>
                     ))}
@@ -287,17 +299,17 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 sm:px-4 md:px-6 lg:px-8"
                     >
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-8 text-center"
+                            className="bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-8 text-center sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="animate-spin w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full mx-auto mb-4"></div>
-                            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">Analyzing Trade</h3>
-                            <p className="text-[var(--text-secondary)]">
+                            <div className="animate-spin w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full mx-auto mb-4 sm:px-4 md:px-6 lg:px-8"></div>
+                            <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Analyzing Trade</h3>
+                            <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 Evaluating fairness, impact, and generating recommendations...
                             </p>
                         </motion.div>
@@ -306,7 +318,7 @@ const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTe
             </AnimatePresence>
 
             {/* Tab Content */}
-            <div className="p-6">
+            <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={selectedTab}
@@ -427,8 +439,14 @@ const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league
         warnings: [
             'Consider bye week conflicts',
             'Monitor injury risk'
-        ]
+
     };
 };
 
-export default TradeAnalyzerView;
+const TradeAnalyzerViewWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TradeAnalyzerView {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TradeAnalyzerViewWithErrorBoundary);

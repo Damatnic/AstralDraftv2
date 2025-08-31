@@ -9,6 +9,7 @@ interface League {
   draftStatus: 'SCHEDULED' | 'ACTIVE' | 'COMPLETED';
   draftTime: Date;
   userTeamId: number;
+
 }
 
 const LiveDraftRoomView: React.FC = () => {
@@ -37,7 +38,7 @@ const LiveDraftRoomView: React.FC = () => {
       draftStatus: 'COMPLETED',
       draftTime: new Date(Date.now() - 24 * 60 * 60 * 1000),
       userTeamId: 5
-    }
+
   ]);
   
   const [userId] = useState('user-123'); // Mock user ID
@@ -56,7 +57,7 @@ const LiveDraftRoomView: React.FC = () => {
       case 'SCHEDULED': return 'text-blue-500 bg-blue-100';
       case 'COMPLETED': return 'text-gray-500 bg-gray-100';
       default: return 'text-gray-500 bg-gray-100';
-    }
+
   };
 
   const canJoinDraft = (league: League): boolean => {
@@ -75,7 +76,6 @@ const LiveDraftRoomView: React.FC = () => {
         onExitDraft={handleExitDraft}
       />
     );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -124,7 +124,6 @@ const LiveDraftRoomView: React.FC = () => {
                     {league.draftStatus === 'ACTIVE' && (
                       <button
                         onClick={() => handleJoinDraft(league)}
-                        className="glass-button-primary px-6 py-2 font-medium"
                       >
                         Join Draft
                       </button>
@@ -133,7 +132,6 @@ const LiveDraftRoomView: React.FC = () => {
                     {league.draftStatus === 'SCHEDULED' && canJoinDraft(league) && (
                       <button
                         onClick={() => handleJoinDraft(league)}
-                        className="glass-button-primary px-6 py-2 font-medium"
                       >
                         Enter Draft Room
                       </button>

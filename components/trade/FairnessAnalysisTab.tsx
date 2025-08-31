@@ -3,6 +3,7 @@
  * Sophisticated fairness evaluation with detailed metrics and visualizations
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
@@ -19,6 +20,7 @@ interface FairnessAnalysisTabProps {
     analysis: TradeAnalysis | null;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface ValueMetric {
@@ -28,14 +30,13 @@ interface ValueMetric {
     difference: number;
     unit: string;
     description: string;
-}
 
 const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     proposal,
     analysis,
     league,
     dispatch
-}: any) => {
+}) => {
     const valueMetrics: ValueMetric[] = React.useMemo(() => {
         if (!analysis) return [];
         
@@ -63,7 +64,7 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                 difference: analysis.seasonEndValueDiff,
                 unit: '$',
                 description: 'Estimated keeper/dynasty value'
-            }
+
         ];
     }, [proposal, analysis]);
 
@@ -83,25 +84,24 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
 
     if (!proposal || !analysis) {
         return (
-            <div className="text-center py-12 text-[var(--text-secondary)]">
-                <BarChartIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <h3 className="text-lg font-medium mb-2">No Trade to Analyze</h3>
+            <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                <BarChartIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
+                <h3 className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">No Trade to Analyze</h3>
                 <p>Build a trade proposal to see detailed fairness analysis</p>
             </div>
         );
-    }
 
     const fairnessData = getFairnessLevel(analysis.fairnessScore);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Fairness Overview */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Widget title="Fairness Score" className="bg-[var(--panel-bg)]">
-                    <div className="p-4 text-center">
-                        <div className="relative mb-4">
-                            <div className="w-24 h-24 mx-auto relative">
-                                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <Widget title="Fairness Score" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="relative mb-4 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-24 h-24 mx-auto relative sm:px-4 md:px-6 lg:px-8">
+                                <svg className="w-full h-full transform -rotate-90 sm:px-4 md:px-6 lg:px-8" viewBox="0 0 100 100">
                                     <circle
                                         cx="50"
                                         cy="50"
@@ -109,7 +109,7 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                                         fill="none"
                                         stroke="currentColor"
                                         strokeWidth="8"
-                                        className="text-gray-600/20"
+                                        className="text-gray-600/20 sm:px-4 md:px-6 lg:px-8"
                                     />
                                     <circle
                                         cx="50"
@@ -123,8 +123,8 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                                         className={fairnessData.color}
                                     />
                                 </svg>
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-2xl font-bold text-[var(--text-primary)]">
+                                <div className="absolute inset-0 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                                    <span className="text-2xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         {analysis.fairnessScore}
                                     </span>
                                 </div>
@@ -133,38 +133,38 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                         <div className={`text-sm font-medium ${fairnessData.color} mb-1`}>
                             {fairnessData.level}
                         </div>
-                        <div className="text-xs text-[var(--text-secondary)]">
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             50 is perfectly fair
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Recommendation" className="bg-[var(--panel-bg)]">
-                    <div className="p-4 text-center">
-                        <div className="mb-3">
+                <Widget title="Recommendation" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="mb-3 sm:px-4 md:px-6 lg:px-8">
                             {analysis.recommendation.includes('accept') ? (
-                                <CheckIcon className="w-12 h-12 mx-auto text-green-400" />
+                                <CheckIcon className="w-12 h-12 mx-auto text-green-400 sm:px-4 md:px-6 lg:px-8" />
                             ) : analysis.recommendation === 'consider' ? (
-                                <AlertTriangleIcon className="w-12 h-12 mx-auto text-yellow-400" />
+                                <AlertTriangleIcon className="w-12 h-12 mx-auto text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
                             ) : (
-                                <TrendingDownIcon className="w-12 h-12 mx-auto text-red-400" />
+                                <TrendingDownIcon className="w-12 h-12 mx-auto text-red-400 sm:px-4 md:px-6 lg:px-8" />
                             )}
                         </div>
-                        <div className="font-bold text-lg text-[var(--text-primary)] mb-1">
+                        <div className="font-bold text-lg text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                             {analysis.recommendation.replace('_', ' ').toUpperCase()}
                         </div>
-                        <div className="text-sm text-[var(--text-secondary)] mb-2">
+                        <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                             Confidence: {analysis.confidence}%
                         </div>
-                        <div className="text-xs text-[var(--text-secondary)]">
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             Based on value analysis
                         </div>
                     </div>
                 </Widget>
 
-                <Widget title="Trade Grade" className="bg-[var(--panel-bg)]">
-                    <div className="p-4 text-center">
-                        <div className="text-4xl font-bold mb-2">
+                <Widget title="Trade Grade" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 text-center sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-4xl font-bold mb-2 sm:px-4 md:px-6 lg:px-8">
                             <span className={`${
                                 analysis.overallGrade.startsWith('A') ? 'text-green-400' :
                                 analysis.overallGrade.startsWith('B') ? 'text-blue-400' :
@@ -174,10 +174,10 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                                 {analysis.overallGrade}
                             </span>
                         </div>
-                        <div className="text-sm text-[var(--text-secondary)] mb-2">
+                        <div className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                             Overall Grade
                         </div>
-                        <div className="text-xs text-[var(--text-secondary)]">
+                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             Considering all factors
                         </div>
                     </div>
@@ -185,49 +185,49 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
             </div>
 
             {/* Value Comparison */}
-            <Widget title="Value Analysis" icon={<BarChartIcon className="w-5 h-5" />} className="bg-[var(--panel-bg)]">
-                <div className="p-4 space-y-4">
+            <Widget title="Value Analysis" icon={<BarChartIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />} className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {valueMetrics.map((metric, index) => (
                         <motion.div
                             key={metric.name}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-white/5 rounded-lg p-4"
+                            className="bg-white/5 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                 <div>
-                                    <h4 className="font-medium text-[var(--text-primary)]">{metric.name}</h4>
-                                    <p className="text-xs text-[var(--text-secondary)]">{metric.description}</p>
+                                    <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{metric.name}</h4>
+                                    <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
                                 </div>
                                 <div className={`text-lg font-bold ${getValueDifferenceColor(metric.difference)}`}>
                                     {metric.difference > 0 ? '+' : ''}{metric.difference}{metric.unit}
                                 </div>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4 mb-3">
-                                <div className="text-center p-3 bg-blue-500/10 rounded-lg">
-                                    <div className="text-lg font-bold text-blue-400">
+                            <div className="grid grid-cols-2 gap-4 mb-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-center p-3 bg-blue-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                         {metric.yourValue}{metric.unit}
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">You Give</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">You Give</div>
                                 </div>
-                                <div className="text-center p-3 bg-green-500/10 rounded-lg">
-                                    <div className="text-lg font-bold text-green-400">
+                                <div className="text-center p-3 bg-green-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-lg font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                                         {metric.theirValue}{metric.unit}
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">You Get</div>
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">You Get</div>
                                 </div>
                             </div>
                             
                             {/* Progress bar showing relative values */}
-                            <div className="relative h-2 bg-gray-600/20 rounded-full overflow-hidden">
+                            <div className="relative h-2 bg-gray-600/20 rounded-full overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                 <div 
-                                    className="absolute left-0 top-0 h-full bg-blue-400 transition-all duration-1000"
+                                    className="absolute left-0 top-0 h-full bg-blue-400 transition-all duration-1000 sm:px-4 md:px-6 lg:px-8"
                                     style={{ width: `${(metric.yourValue / (metric.yourValue + metric.theirValue)) * 100}%` }}
                                 />
                                 <div 
-                                    className="absolute right-0 top-0 h-full bg-green-400 transition-all duration-1000"
+                                    className="absolute right-0 top-0 h-full bg-green-400 transition-all duration-1000 sm:px-4 md:px-6 lg:px-8"
                                     style={{ width: `${(metric.theirValue / (metric.yourValue + metric.theirValue)) * 100}%` }}
                                 />
                             </div>
@@ -239,25 +239,25 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
             {/* Detailed Analysis */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Strengths */}
-                <Widget title="Trade Strengths" className="bg-[var(--panel-bg)]">
-                    <div className="p-4">
+                <Widget title="Trade Strengths" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {analysis.strengths.length > 0 ? (
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.strengths.map((strength, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg"
+                                        className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        <CheckIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-                                        <span className="text-[var(--text-primary)]">{strength}</span>
+                                        <CheckIcon className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{strength}</span>
                                     </motion.div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-8 text-[var(--text-secondary)]">
+                            <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 No significant strengths identified
                             </div>
                         )}
@@ -265,25 +265,25 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
                 </Widget>
 
                 {/* Weaknesses */}
-                <Widget title="Trade Concerns" className="bg-[var(--panel-bg)]">
-                    <div className="p-4">
+                <Widget title="Trade Concerns" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         {analysis.weaknesses.length > 0 ? (
-                            <div className="space-y-3">
+                            <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.weaknesses.map((weakness, index) => (
                                     <motion.div
                                         key={index}
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: index * 0.1 }}
-                                        className="flex items-start gap-3 p-3 bg-red-500/10 rounded-lg"
+                                        className="flex items-start gap-3 p-3 bg-red-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        <AlertTriangleIcon className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                                        <span className="text-[var(--text-primary)]">{weakness}</span>
+                                        <AlertTriangleIcon className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{weakness}</span>
                                     </motion.div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-8 text-[var(--text-secondary)]">
+                            <div className="text-center py-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 No significant concerns identified
                             </div>
                         )}
@@ -293,21 +293,21 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
 
             {/* Warnings */}
             {analysis.warnings.length > 0 && (
-                <Widget title="Important Warnings" className="bg-[var(--panel-bg)]">
-                    <div className="p-4">
-                        <div className="space-y-3">
+                <Widget title="Important Warnings" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {analysis.warnings.map((warning, index) => (
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="flex items-start gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg"
+                                    className="flex items-start gap-3 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                 >
-                                    <AlertTriangleIcon className="w-6 h-6 text-yellow-400 mt-0.5 flex-shrink-0" />
+                                    <AlertTriangleIcon className="w-6 h-6 text-yellow-400 mt-0.5 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                     <div>
-                                        <div className="font-medium text-yellow-400 mb-1">Warning</div>
-                                        <span className="text-[var(--text-primary)]">{warning}</span>
+                                        <div className="font-medium text-yellow-400 mb-1 sm:px-4 md:px-6 lg:px-8">Warning</div>
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{warning}</span>
                                     </div>
                                 </motion.div>
                             ))}
@@ -317,33 +317,33 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
             )}
 
             {/* Fairness Factors */}
-            <Widget title="Fairness Factors" className="bg-[var(--panel-bg)]">
-                <div className="p-4">
+            <Widget title="Fairness Factors" className="bg-[var(--panel-bg)] sm:px-4 md:px-6 lg:px-8">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1">
+                        <div className="text-center p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {Math.round((50 + analysis.currentValueDiff) * 2)}%
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">Value Balance</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Value Balance</div>
                         </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1">
+                        <div className="text-center p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {analysis.riskAssessment.overallRisk === 'low' ? '85%' : 
                                  analysis.riskAssessment.overallRisk === 'medium' ? '65%' : '45%'}
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">Risk Score</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Risk Score</div>
                         </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1">
+                        <div className="text-center p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {Math.round(analysis.confidence)}%
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">Confidence</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Confidence</div>
                         </div>
-                        <div className="text-center p-3 bg-white/5 rounded-lg">
-                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1">
+                        <div className="text-center p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-lg font-bold text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {proposal.fromPlayers.length + proposal.toPlayers.length}
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">Players</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Players</div>
                         </div>
                     </div>
                 </div>
@@ -352,4 +352,10 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     );
 };
 
-export default FairnessAnalysisTab;
+const FairnessAnalysisTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <FairnessAnalysisTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(FairnessAnalysisTabWithErrorBoundary);

@@ -1,22 +1,15 @@
-/**
- * Heart Icon
- * Used for favorites and liking content
- */
+interface IconProps {
+  size?: number | string;
+  className?: string;
+  color?: string;
+  'aria-label'?: string;
 
 import React from 'react';
 
-interface HeartIconProps {
-    className?: string;
 }
 
-export const HeartIcon: React.FC<HeartIconProps> = ({ className = "w-4 h-4" }: any) => (
-    <svg 
-        className={className}
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-    >
+export const HeartIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className || "w-5 h-5"} role="img" aria-label="heart icon">
         <path 
             strokeLinecap="round" 
             strokeLinejoin="round" 

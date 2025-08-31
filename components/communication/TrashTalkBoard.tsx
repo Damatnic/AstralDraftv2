@@ -3,7 +3,8 @@
  * League banter and friendly competition
  */
 
-import React, { useState, useMemo } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 
@@ -24,7 +25,6 @@ interface TrashTalkPost {
   replies: TrashTalkReply[];
   isSticky?: boolean;
   moderatorNote?: string;
-}
 
 interface TrashTalkReply {
   id: string;
@@ -36,7 +36,6 @@ interface TrashTalkReply {
   reactions: {
     [emoji: string]: string[];
   };
-}
 
 const TrashTalkBoard: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -78,8 +77,8 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '😂': ['user-3', 'user-7'],
               '👀': ['user-1']
-            }
-          }
+
+
         ],
         isSticky: true
       },
@@ -126,7 +125,7 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '💀': ['user-2', 'user-3', 'user-6'],
               '🔥': ['user-9']
-            }
+
           },
           {
             id: 'reply-3',
@@ -138,9 +137,7 @@ const TrashTalkBoard: React.FC = () => {
             reactions: {
               '💯': ['user-8'],
               '🤔': ['user-1', 'user-2']
-            }
-          }
-        ]
+
       },
       {
         id: 'post-4',
@@ -175,7 +172,7 @@ const TrashTalkBoard: React.FC = () => {
           '🤫': ['user-7', 'user-8']
         },
         replies: []
-      }
+
     ];
   }, []);
 
@@ -202,13 +199,12 @@ const TrashTalkBoard: React.FC = () => {
       replies: []
     };
 
-
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
         message: 'Trash talk posted! 🔥',
         type: 'SUCCESS'
-      }
+
     });
 
     setNewPost('');
@@ -229,13 +225,12 @@ const TrashTalkBoard: React.FC = () => {
       reactions: {}
     };
 
-
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
         message: 'Reply posted! 💬',
         type: 'SUCCESS'
-      }
+
     });
 
     setReplyText('');
@@ -245,13 +240,12 @@ const TrashTalkBoard: React.FC = () => {
   const handleReaction = (postId: string, emoji: string, isReply = false, replyId?: string) => {
     if (!currentUser) return;
 
-
     dispatch({
       type: 'ADD_NOTIFICATION',
       payload: {
         message: 'Reaction added! 😊',
         type: 'INFO'
-      }
+
     });
   };
 
@@ -262,7 +256,7 @@ const TrashTalkBoard: React.FC = () => {
       case 'callout': return '🎯';
       case 'meme': return '😂';
       default: return '💬';
-    }
+
   };
 
   const getPostTypeColor = (type: string) => {
@@ -272,7 +266,7 @@ const TrashTalkBoard: React.FC = () => {
       case 'callout': return 'border-red-500 bg-red-900/20';
       case 'meme': return 'border-green-500 bg-green-900/20';
       default: return 'border-slate-600 bg-slate-700/50';
-    }
+
   };
 
   const formatTimestamp = (timestamp: Date) => {
@@ -289,27 +283,27 @@ const TrashTalkBoard: React.FC = () => {
   const reactionEmojis = ['🔥', '😂', '💀', '👀', '🍿', '💯', '🎯', '👑', '💪', '🤔'];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
         <div>
-          <h2 className="text-2xl font-bold text-white">Trash Talk Board</h2>
-          <p className="text-slate-400">League banter and friendly competition</p>
+          <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Trash Talk Board</h2>
+          <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">League banter and friendly competition</p>
         </div>
         
-        <div className="text-right">
-          <div className="text-white font-semibold">Keep it Fun!</div>
-          <div className="text-sm text-slate-400">Moderated for good vibes</div>
+        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+          <div className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">Keep it Fun!</div>
+          <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">Moderated for good vibes</div>
         </div>
       </div>
 
       {/* Post Creation */}
-      <div className="card">
-        <h3 className="text-lg font-bold text-white mb-4">🔥 Drop Some Heat</h3>
+      <div className="card sm:px-4 md:px-6 lg:px-8">
+        <h3 className="text-lg font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">🔥 Drop Some Heat</h3>
         
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {/* Post Type Selection */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
             {[
               { id: 'general', label: 'General', icon: '💬' },
               { id: 'victory', label: 'Victory Lap', icon: '🏆' },
@@ -319,12 +313,7 @@ const TrashTalkBoard: React.FC = () => {
             ].map((type: any) => (
               <button
                 key={type.id}
-                onClick={() => setPostType(type.id as any)}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  postType === type.id
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
-                }`}
+                onClick={() => setPostType(type.id as any)}`}
               >
                 {type.icon} {type.label}
               </button>
@@ -336,7 +325,6 @@ const TrashTalkBoard: React.FC = () => {
             <select
               value={targetUser}
               onChange={(e: any) => setTargetUser(e.target.value)}
-              className="form-input"
             >
               <option value="">Select target (optional)</option>
               {league?.teams?.filter((t: any) => t.owner.id !== currentUser?.id).map((team: any) => (
@@ -351,20 +339,19 @@ const TrashTalkBoard: React.FC = () => {
           <textarea
             value={newPost}
             onChange={(e: any) => setNewPost(e.target.value)}
-            placeholder="What's on your mind? Keep it spicy but respectful! 🌶️"
-            className="form-input h-24 resize-none"
+            className="form-input h-24 resize-none sm:px-4 md:px-6 lg:px-8"
             maxLength={280}
           />
 
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">
+          <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+            <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
               {280 - newPost.length} characters remaining
             </span>
             <button
               onClick={handlePostSubmit}
               disabled={!newPost.trim()}
-              className="btn btn-primary"
-            >
+              className="btn btn-primary sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
               🔥 Post Trash Talk
             </button>
           </div>
@@ -372,7 +359,7 @@ const TrashTalkBoard: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 bg-slate-800/50 rounded-lg p-2">
+      <div className="flex flex-wrap gap-2 bg-slate-800/50 rounded-lg p-2 sm:px-4 md:px-6 lg:px-8">
         {[
           { id: 'all', label: 'All Posts', icon: '📋' },
           { id: 'general', label: 'General', icon: '💬' },
@@ -383,12 +370,7 @@ const TrashTalkBoard: React.FC = () => {
         ].map((filter: any) => (
           <button
             key={filter.id}
-            onClick={() => setFilterType(filter.id as any)}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-              filterType === filter.id
-                ? 'bg-blue-600 text-white'
-                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-            }`}
+            onClick={() => setFilterType(filter.id as any)}`}
           >
             {filter.icon} {filter.label}
           </button>
@@ -396,7 +378,7 @@ const TrashTalkBoard: React.FC = () => {
       </div>
 
       {/* Posts List */}
-      <div className="space-y-4">
+      <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {filteredPosts.map((post, index) => (
             <motion.div
@@ -409,47 +391,42 @@ const TrashTalkBoard: React.FC = () => {
               }`}
             >
               {/* Post Header */}
-              <div className="flex items-start gap-3 mb-3">
-                <span className="text-2xl">{post.userAvatar}</span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-white font-semibold">{post.userName}</span>
-                    <span className="text-slate-400 text-sm">({post.teamName})</span>
-                    <span className="px-2 py-1 bg-slate-600 text-white text-xs rounded-full">
+              <div className="flex items-start gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
+                <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{post.userAvatar}</span>
+                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{post.userName}</span>
+                    <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">({post.teamName})</span>
+                    <span className="px-2 py-1 bg-slate-600 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                       {getPostTypeIcon(post.type)} {post.type}
                     </span>
                     {post.isSticky && (
-                      <span className="px-2 py-1 bg-yellow-600 text-white text-xs rounded-full">
+                      <span className="px-2 py-1 bg-yellow-600 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                         📌 Pinned
                       </span>
                     )}
                   </div>
-                  <span className="text-slate-400 text-sm">{formatTimestamp(post.timestamp)}</span>
+                  <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">{formatTimestamp(post.timestamp)}</span>
                 </div>
               </div>
 
               {/* Target User (for callouts) */}
               {post.targetUserName && (
-                <div className="mb-3 p-2 bg-red-900/20 border border-red-600/30 rounded-lg">
-                  <span className="text-red-400 text-sm">🎯 Calling out: @{post.targetUserName}</span>
+                <div className="mb-3 p-2 bg-red-900/20 border border-red-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-red-400 text-sm sm:px-4 md:px-6 lg:px-8">🎯 Calling out: @{post.targetUserName}</span>
                 </div>
               )}
 
               {/* Post Message */}
-              <p className="text-slate-300 mb-4 text-lg leading-relaxed">{post.message}</p>
+              <p className="text-slate-300 mb-4 text-lg leading-relaxed sm:px-4 md:px-6 lg:px-8">{post.message}</p>
 
               {/* Post Reactions */}
-              <div className="flex items-center gap-2 mb-4">
-                <div className="flex gap-1">
+              <div className="flex items-center gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(post.reactions).map(([emoji, userIds]) => (
                     <button
                       key={emoji}
-                      onClick={() => handleReaction(post.id, emoji)}
-                      className={`px-2 py-1 rounded-full text-sm transition-colors ${
-                        userIds.includes(currentUser?.id || '')
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
-                      }`}
+                      onClick={() => handleReaction(post.id, emoji)}`}
                     >
                       {emoji} {userIds.length}
                     </button>
@@ -457,16 +434,15 @@ const TrashTalkBoard: React.FC = () => {
                 </div>
                 
                 {/* Add Reaction Dropdown */}
-                <div className="relative group">
-                  <button className="text-slate-400 hover:text-white transition-colors px-2 py-1">
-                    <span className="text-lg">😊+</span>
+                <div className="relative group sm:px-4 md:px-6 lg:px-8">
+                  <button className="text-slate-400 hover:text-white transition-colors px-2 py-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
+                    <span className="text-lg sm:px-4 md:px-6 lg:px-8">😊+</span>
                   </button>
-                  <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 z-10">
+                  <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 z-10 sm:px-4 md:px-6 lg:px-8">
                     {reactionEmojis.map((emoji: any) => (
                       <button
                         key={emoji}
                         onClick={() => handleReaction(post.id, emoji)}
-                        className="hover:bg-slate-700 p-1 rounded transition-colors"
                       >
                         {emoji}
                       </button>
@@ -476,7 +452,6 @@ const TrashTalkBoard: React.FC = () => {
 
                 <button
                   onClick={() => setShowReplyInput(showReplyInput === post.id ? null : post.id)}
-                  className="text-slate-400 hover:text-white transition-colors px-2 py-1 text-sm"
                 >
                   💬 Reply
                 </button>
@@ -484,25 +459,20 @@ const TrashTalkBoard: React.FC = () => {
 
               {/* Replies */}
               {post.replies.length > 0 && (
-                <div className="space-y-3 pl-6 border-l-2 border-slate-600">
+                <div className="space-y-3 pl-6 border-l-2 border-slate-600 sm:px-4 md:px-6 lg:px-8">
                   {post.replies.map((reply: any) => (
-                    <div key={reply.id} className="p-3 bg-slate-800/50 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">{reply.userAvatar}</span>
-                        <span className="text-white font-medium">{reply.userName}</span>
-                        <span className="text-slate-400 text-sm">{formatTimestamp(reply.timestamp)}</span>
+                    <div key={reply.id} className="p-3 bg-slate-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-lg sm:px-4 md:px-6 lg:px-8">{reply.userAvatar}</span>
+                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{reply.userName}</span>
+                        <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">{formatTimestamp(reply.timestamp)}</span>
                       </div>
-                      <p className="text-slate-300 mb-2">{reply.message}</p>
-                      <div className="flex gap-1">
+                      <p className="text-slate-300 mb-2 sm:px-4 md:px-6 lg:px-8">{reply.message}</p>
+                      <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                         {Object.entries(reply.reactions).map(([emoji, userIds]) => (
                           <button
                             key={emoji}
-                            onClick={() => handleReaction(post.id, emoji, true, reply.id)}
-                            className={`px-2 py-1 rounded-full text-xs transition-colors ${
-                              userIds.includes(currentUser?.id || '')
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-slate-600 text-slate-300 hover:bg-slate-500'
-                            }`}
+                            onClick={() => handleReaction(post.id, emoji, true, reply.id)}`}
                           >
                             {emoji} {userIds.length}
                           </button>
@@ -519,33 +489,30 @@ const TrashTalkBoard: React.FC = () => {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 pt-4 border-t border-slate-600"
+                  className="mt-4 pt-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8"
                 >
-                  <div className="flex gap-3">
-                    <span className="text-lg">{currentUser?.avatar}</span>
-                    <div className="flex-1">
+                  <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-lg sm:px-4 md:px-6 lg:px-8">{currentUser?.avatar}</span>
+                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                       <textarea
                         value={replyText}
                         onChange={(e: any) => setReplyText(e.target.value)}
-                        placeholder="Fire back with a reply..."
-                        className="form-input h-16 resize-none mb-2"
+                        className="form-input h-16 resize-none mb-2 sm:px-4 md:px-6 lg:px-8"
                         maxLength={200}
                       />
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">
+                      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-xs text-slate-400 sm:px-4 md:px-6 lg:px-8">
                           {200 - replyText.length} characters
                         </span>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                           <button
                             onClick={() => setShowReplyInput(null)}
-                            className="btn btn-secondary btn-sm"
                           >
                             Cancel
                           </button>
                           <button
                             onClick={() => handleReply(post.id)}
-                            disabled={!replyText.trim()}
-                            className="btn btn-primary btn-sm"
+                            className="btn btn-primary btn-sm sm:px-4 md:px-6 lg:px-8"
                           >
                             Reply
                           </button>
@@ -561,12 +528,12 @@ const TrashTalkBoard: React.FC = () => {
       </div>
 
       {/* Community Guidelines */}
-      <div className="card">
-        <h4 className="text-lg font-bold text-white mb-3">🛡️ Community Guidelines</h4>
+      <div className="card sm:px-4 md:px-6 lg:px-8">
+        <h4 className="text-lg font-bold text-white mb-3 sm:px-4 md:px-6 lg:px-8">🛡️ Community Guidelines</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
-            <h5 className="text-green-400 font-semibold mb-2">✅ Encouraged</h5>
-            <ul className="text-slate-400 space-y-1">
+            <h5 className="text-green-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">✅ Encouraged</h5>
+            <ul className="text-slate-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
               <li>• Friendly competition and banter</li>
               <li>• Creative trash talk and memes</li>
               <li>• Victory celebrations (within reason)</li>
@@ -575,8 +542,8 @@ const TrashTalkBoard: React.FC = () => {
             </ul>
           </div>
           <div>
-            <h5 className="text-red-400 font-semibold mb-2">❌ Not Allowed</h5>
-            <ul className="text-slate-400 space-y-1">
+            <h5 className="text-red-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">❌ Not Allowed</h5>
+            <ul className="text-slate-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
               <li>• Personal attacks or harassment</li>
               <li>• Offensive language or slurs</li>
               <li>• Real-life threats or doxxing</li>
@@ -585,8 +552,8 @@ const TrashTalkBoard: React.FC = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg">
-          <p className="text-blue-300 text-sm">
+        <div className="mt-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+          <p className="text-blue-300 text-sm sm:px-4 md:px-6 lg:px-8">
             <strong>Remember:</strong> This is all in good fun! Keep it competitive but respectful. 
             The commissioner reserves the right to moderate content that goes too far.
           </p>
@@ -596,4 +563,10 @@ const TrashTalkBoard: React.FC = () => {
   );
 };
 
-export default TrashTalkBoard;
+const TrashTalkBoardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <TrashTalkBoard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(TrashTalkBoardWithErrorBoundary);

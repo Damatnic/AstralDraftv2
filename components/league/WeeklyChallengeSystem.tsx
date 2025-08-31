@@ -2,7 +2,8 @@
  * Weekly Challenge System - Create engaging weekly competitions and mini-games
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Target, Zap, Star, Gift, Calendar, Clock, Users, Flame, Crown } from 'lucide-react';
 
@@ -20,9 +21,11 @@ interface Challenge {
   prize?: string;
   criteria: any;
   leaderboard?: ChallengeEntry[];
+
 }
 
 interface ChallengeEntry {
+
   userId: string;
   userName: string;
   teamName: string;
@@ -30,14 +33,16 @@ interface ChallengeEntry {
   score: number;
   rank: number;
   submittedAt: Date;
-}
 
-interface WeeklyChallengeSystemProps {
+    } catch (error) {
+        console.error(error);
+    }interface WeeklyChallengeSystemProps {
   leagueId: string;
   userId: string;
   userName: string;
   week: number;
   onChallengeComplete?: (challengeId: string, score: number) => void;
+
 }
 
 const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
@@ -144,7 +149,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
         status: 'active',
         prize: '🦸 Underdog Hero Badge + Championship Bonus Points',
         criteria: { projection_deficit: 15, must_win: true }
-      }
+
     ];
 
     return challenges;
@@ -158,17 +163,17 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
       case 'medium': return 'text-yellow-400 bg-yellow-500/20';
       case 'hard': return 'text-red-400 bg-red-500/20';
       case 'legendary': return 'text-purple-400 bg-purple-500/20';
-    }
+
   };
 
   const getTypeIcon = (type: Challenge['type']) => {
     switch (type) {
-      case 'performance': return <Zap className="w-4 h-4" />;
-      case 'prediction': return <Target className="w-4 h-4" />;
-      case 'lineup': return <Users className="w-4 h-4" />;
-      case 'knowledge': return <Star className="w-4 h-4" />;
-      case 'social': return <Flame className="w-4 h-4" />;
-    }
+      case 'performance': return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'prediction': return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'lineup': return <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'knowledge': return <Star className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case 'social': return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+
   };
 
   const handleJoinChallenge = (challengeId: string) => {
@@ -180,7 +185,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
         ...prev,
         [challengeId]: { joined: true, entry: null }
       }));
-    }
+
   };
 
   const handleSubmitEntry = (challengeId: string, entry: any) => {
@@ -206,25 +211,33 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
     return 'Ending soon';
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
-    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700">
+    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Trophy className="w-6 h-6 text-gold-400" />
+      <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+          <Trophy className="w-6 h-6 text-gold-400 sm:px-4 md:px-6 lg:px-8" />
           <div>
-            <h2 className="text-2xl font-bold text-white">Weekly Challenges</h2>
-            <p className="text-gray-400">Week {week} • Earn points and badges</p>
+            <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Weekly Challenges</h2>
+            <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Week {week} • Earn points and badges</p>
           </div>
         </div>
         
-        <div className="text-right">
-          <div className="text-2xl font-bold text-gold-400">
+        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+          <div className="text-2xl font-bold text-gold-400 sm:px-4 md:px-6 lg:px-8">
             {Object.values(userEntries).reduce((total, entry) => 
               total + (entry.submitted ? Math.floor(Math.random() * 100) : 0), 0
             )}
           </div>
-          <div className="text-sm text-gray-400">Total Points</div>
+          <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Total Points</div>
         </div>
       </div>
 
@@ -235,62 +248,60 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
             key={challenge.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-dark-700 rounded-lg p-5 border border-gray-600 hover:border-primary-500/50 transition-all"
+            className="bg-dark-700 rounded-lg p-5 border border-gray-600 hover:border-primary-500/50 transition-all sm:px-4 md:px-6 lg:px-8"
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-2">
+            <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                 {getTypeIcon(challenge.type)}
-                <h3 className="font-bold text-white">{challenge.title}</h3>
+                <h3 className="font-bold text-white sm:px-4 md:px-6 lg:px-8">{challenge.title}</h3>
               </div>
               <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(challenge.difficulty)}`}>
                 {challenge.difficulty.toUpperCase()}
               </span>
             </div>
 
-            <p className="text-gray-300 text-sm mb-4">{challenge.description}</p>
+            <p className="text-gray-300 text-sm mb-4 sm:px-4 md:px-6 lg:px-8">{challenge.description}</p>
 
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-4 text-sm text-gray-400">
-                <div className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
+            <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="flex items-center gap-4 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                  <Users className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                   <span>{challenge.participants}/{challenge.maxParticipants || '∞'}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
+                <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                  <Clock className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                   <span>{formatTimeRemaining(challenge.deadline)}</span>
                 </div>
               </div>
-              <div className="text-gold-400 font-bold">
+              <div className="text-gold-400 font-bold sm:px-4 md:px-6 lg:px-8">
                 +{challenge.points} pts
               </div>
             </div>
 
             {challenge.prize && (
-              <div className="mb-4 p-2 bg-gold-500/10 border border-gold-500/30 rounded text-xs">
-                <div className="flex items-center gap-1 text-gold-400">
-                  <Gift className="w-3 h-3" />
-                  <span className="font-semibold">Prize:</span>
+              <div className="mb-4 p-2 bg-gold-500/10 border border-gold-500/30 rounded text-xs sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-1 text-gold-400 sm:px-4 md:px-6 lg:px-8">
+                  <Gift className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
+                  <span className="font-semibold sm:px-4 md:px-6 lg:px-8">Prize:</span>
                 </div>
-                <div className="text-gray-300">{challenge.prize}</div>
+                <div className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{challenge.prize}</div>
               </div>
             )}
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
               {!userEntries[challenge.id]?.joined ? (
                 <button
                   onClick={() => handleJoinChallenge(challenge.id)}
-                  className="flex-1 bg-primary-600 hover:bg-primary-500 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
                 >
                   Join Challenge
                 </button>
               ) : userEntries[challenge.id]?.submitted ? (
-                <div className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-semibold text-center">
+                <div className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-semibold text-center sm:px-4 md:px-6 lg:px-8">
                   ✓ Submitted
                 </div>
               ) : (
                 <button
                   onClick={() => setSelectedChallenge(challenge)}
-                  className="flex-1 bg-yellow-600 hover:bg-yellow-500 text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
                 >
                   Submit Entry
                 </button>
@@ -298,7 +309,6 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
               
               <button
                 onClick={() => setShowLeaderboard(showLeaderboard === challenge.id ? null : challenge.id)}
-                className="bg-dark-600 hover:bg-dark-500 text-white py-2 px-4 rounded-lg text-sm transition-colors"
               >
                 📊
               </button>
@@ -311,13 +321,13 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="mt-4 pt-4 border-t border-gray-600"
+                  className="mt-4 pt-4 border-t border-gray-600 sm:px-4 md:px-6 lg:px-8"
                 >
-                  <h4 className="font-semibold text-white text-sm mb-2">Current Standings</h4>
-                  <div className="space-y-2 max-h-40 overflow-y-auto">
+                  <h4 className="font-semibold text-white text-sm mb-2 sm:px-4 md:px-6 lg:px-8">Current Standings</h4>
+                  <div className="space-y-2 max-h-40 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                     {Array.from({ length: Math.min(5, challenge.participants) }, (_, i) => (
-                      <div key={i} className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
+                      <div key={i} className="flex items-center justify-between text-xs sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${
                             i === 0 ? 'bg-gold-400 text-black' :
                             i === 1 ? 'bg-gray-400 text-black' :
@@ -326,9 +336,9 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                           }`}>
                             {i + 1}
                           </span>
-                          <span className="text-gray-300">Team {i + 1}</span>
+                          <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">Team {i + 1}</span>
                         </div>
-                        <span className="text-gray-400">{Math.floor(Math.random() * 100)} pts</span>
+                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{Math.floor(Math.random() * 100)} pts</span>
                       </div>
                     ))}
                   </div>
@@ -346,47 +356,46 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100]"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100] sm:px-4 md:px-6 lg:px-8"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-dark-800 rounded-2xl p-6 border border-gray-700 shadow-2xl max-w-md w-full mx-4"
+              className="bg-dark-800 rounded-2xl p-6 border border-gray-700 shadow-2xl max-w-md w-full mx-4 sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">{selectedChallenge.title}</h3>
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{selectedChallenge.title}</h3>
                 <button
                   onClick={() => setSelectedChallenge(null)}
-                  className="text-gray-400 hover:text-white"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {selectedChallenge.type === 'prediction' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                       Predict your score this week:
                     </label>
                     <input
                       type="number"
                       placeholder="Enter predicted score"
-                      className="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                      className="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white sm:px-4 md:px-6 lg:px-8"
                     />
                   </div>
                 )}
 
                 {selectedChallenge.type === 'knowledge' && (
                   <div>
-                    <p className="text-sm text-gray-300 mb-3">Answer the trivia questions:</p>
-                    <div className="space-y-3">
+                    <p className="text-sm text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Answer the trivia questions:</p>
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                       <div>
-                        <p className="text-sm text-white mb-2">1. Which team won Super Bowl LVI?</p>
-                        <div className="space-y-1">
+                        <p className="text-sm text-white mb-2 sm:px-4 md:px-6 lg:px-8">1. Which team won Super Bowl LVI?</p>
+                        <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                           {['Los Angeles Rams', 'Cincinnati Bengals', 'Kansas City Chiefs', 'Tampa Bay Buccaneers'].map(option => (
-                            <label key={option} className="flex items-center gap-2 text-sm text-gray-300">
+                            <label key={option} className="flex items-center gap-2 text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                               <input type="radio" name="q1" value={option} />
                               {option}
                             </label>
@@ -399,20 +408,20 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
                 {selectedChallenge.type === 'lineup' && (
                   <div>
-                    <p className="text-sm text-gray-300 mb-3">Build your budget lineup:</p>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                    <p className="text-sm text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Build your budget lineup:</p>
+                    <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                         <span>Salary Cap:</span>
-                        <span className="text-green-400">$5,000,000</span>
+                        <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">$5,000,000</span>
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'TE', 'K', 'DEF'].map(pos => (
-                          <div key={pos} className="flex items-center gap-2">
-                            <span className="w-10 text-gray-400">{pos}:</span>
+                          <div key={pos} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                            <span className="w-10 text-gray-400 sm:px-4 md:px-6 lg:px-8">{pos}:</span>
                             <input
                               type="text"
                               placeholder="Select player"
-                              className="flex-1 bg-dark-700 border border-gray-600 rounded px-2 py-1 text-white text-xs"
+                              className="flex-1 bg-dark-700 border border-gray-600 rounded px-2 py-1 text-white text-xs sm:px-4 md:px-6 lg:px-8"
                             />
                           </div>
                         ))}
@@ -421,16 +430,15 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                   </div>
                 )}
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={() => setSelectedChallenge(null)}
-                    className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
                   <button
-                    onClick={() => handleSubmitEntry(selectedChallenge.id, {})}
-                    className="flex-1 bg-primary-600 hover:bg-primary-500 text-white py-2 px-4 rounded-lg transition-colors"
+                    onClick={() => handleSubmitEntry(selectedChallenge.id, {}}
+                    className="flex-1 bg-primary-600 hover:bg-primary-500 text-white py-2 px-4 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                   >
                     Submit Entry
                   </button>
@@ -442,23 +450,23 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
       </AnimatePresence>
 
       {/* Week Summary */}
-      <div className="mt-6 p-4 bg-dark-700 rounded-lg border border-gray-600">
-        <h3 className="font-semibold text-white mb-2">This Week's Champions</h3>
+      <div className="mt-6 p-4 bg-dark-700 rounded-lg border border-gray-600 sm:px-4 md:px-6 lg:px-8">
+        <h3 className="font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">This Week's Champions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="text-center">
-            <div className="text-gold-400 text-lg">👑</div>
-            <div className="font-semibold text-white">Score Predictor</div>
-            <div className="text-gray-400">TeamName (+100 pts)</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-gold-400 text-lg sm:px-4 md:px-6 lg:px-8">👑</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Score Predictor</div>
+            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">TeamName (+100 pts)</div>
           </div>
-          <div className="text-center">
-            <div className="text-silver-400 text-lg">🥈</div>
-            <div className="font-semibold text-white">Trivia Master</div>
-            <div className="text-gray-400">TeamName (+75 pts)</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-silver-400 text-lg sm:px-4 md:px-6 lg:px-8">🥈</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Trivia Master</div>
+            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">TeamName (+75 pts)</div>
           </div>
-          <div className="text-center">
-            <div className="text-bronze-400 text-lg">🥉</div>
-            <div className="font-semibold text-white">Budget Builder</div>
-            <div className="text-gray-400">TeamName (+60 pts)</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-bronze-400 text-lg sm:px-4 md:px-6 lg:px-8">🥉</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Budget Builder</div>
+            <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">TeamName (+60 pts)</div>
           </div>
         </div>
       </div>
@@ -466,4 +474,10 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   );
 };
 
-export default WeeklyChallengeSystem;
+const WeeklyChallengeSystemWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <WeeklyChallengeSystem {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(WeeklyChallengeSystemWithErrorBoundary);

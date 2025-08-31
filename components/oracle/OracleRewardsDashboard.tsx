@@ -1,3 +1,4 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
@@ -9,19 +10,20 @@ interface ProgressBarProps {
     max: number;
     color?: string;
     showLabel?: boolean;
+
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ 
-    current, 
+const ProgressBar: React.FC<ProgressBarProps> = ({ current, 
     max, 
     color = 'bg-blue-500',
     showLabel = true 
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const percentage = Math.min((current / max) * 100, 100);
     
     return (
-        <div className="w-full">
-            <div className="w-full bg-gray-700 rounded-full h-2">
+        <div className="w-full sm:px-4 md:px-6 lg:px-8">
+            <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                 <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${percentage}%` }}
@@ -29,7 +31,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
                 />
             </div>
             {showLabel && (
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                     <span>{current}</span>
                     <span>{max}</span>
                 </div>
@@ -41,9 +43,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 interface AchievementCardProps {
     achievement: Achievement;
     isUnlocked: boolean;
+
 }
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }: any) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }) => {
     const getDifficultyColor = (difficulty: Achievement['difficulty']) => {
         switch (difficulty) {
             case 'BRONZE':
@@ -58,7 +61,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
                 return 'border-red-500 bg-red-500/10';
             default:
                 return 'border-gray-500 bg-gray-500/10';
-        }
+
     };
 
     const getCategoryIcon = (category: Achievement['category']) => {
@@ -77,7 +80,7 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
                 return '💎';
             default:
                 return '⭐';
-        }
+
     };
 
     return (
@@ -88,34 +91,34 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
                 isUnlocked ? '' : 'opacity-50 grayscale'
             }`}
         >
-            <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center space-x-2">
-                    <span className="text-2xl">{achievement.icon}</span>
-                    <span className="text-xs">{getCategoryIcon(achievement.category)}</span>
+            <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{achievement.icon}</span>
+                    <span className="text-xs sm:px-4 md:px-6 lg:px-8">{getCategoryIcon(achievement.category)}</span>
                 </div>
-                <div className="text-right">
-                    <span className="text-xs text-gray-400 capitalize">
+                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">
                         {achievement.difficulty.toLowerCase()}
                     </span>
-                    <div className="text-sm font-bold text-yellow-400">
+                    <div className="text-sm font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">
                         +{achievement.points} pts
                     </div>
                 </div>
             </div>
-            <h4 className="font-semibold text-white text-sm mb-1">
+            <h4 className="font-semibold text-white text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
                 {achievement.title}
             </h4>
-            <p className="text-xs text-gray-300 mb-2">
+            <p className="text-xs text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                 {achievement.description}
             </p>
             {isUnlocked ? (
-                <div className="text-xs text-green-400">
+                <div className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">
                     ✅ Unlocked {achievement.unlockedAt ? 
                         new Date(achievement.unlockedAt).toLocaleDateString() : 'Recently'
-                    }
+
                 </div>
             ) : (
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                     🔒 Locked
                 </div>
             )}
@@ -126,9 +129,10 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
 interface BadgeDisplayProps {
     badge: Badge;
     size?: 'sm' | 'md' | 'lg';
+
 }
 
-const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }) => {
     const getSizeClasses = () => {
         switch (size) {
             case 'sm':
@@ -137,7 +141,7 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) 
                 return 'w-16 h-16 text-2xl';
             default:
                 return 'w-12 h-12 text-lg';
-        }
+
     };
 
     const getRarityGlow = (rarity: Badge['rarity']) => {
@@ -150,7 +154,7 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) 
                 return 'shadow-lg shadow-blue-500/20';
             default:
                 return '';
-        }
+
     };
 
     return (
@@ -169,32 +173,33 @@ interface LevelDisplayProps {
     level: number;
     currentPoints: number;
     nextLevelPoints: number;
+
 }
 
-const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }: any) => {
+const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }) => {
     const pointsInCurrentLevel = currentPoints % 500;
     
     return (
-        <div className="text-center">
-            <div className="relative">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <span className="text-2xl font-bold text-white">{level}</span>
+        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8">
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-2 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{level}</span>
                 </div>
                 <motion.div
                     initial={{ rotate: 0 }}
                     animate={{ rotate: 360 }}
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 w-20 h-20 border-4 border-transparent border-t-yellow-400 rounded-full mx-auto"
+                    className="absolute inset-0 w-20 h-20 border-4 border-transparent border-t-yellow-400 rounded-full mx-auto sm:px-4 md:px-6 lg:px-8"
                     style={{
                         borderTopColor: nextLevelPoints < 50 ? '#fbbf24' : 'transparent'
                     }}
                 />
             </div>
-            <div className="text-lg font-bold text-white">Level {level}</div>
-            <div className="text-sm text-gray-400">
+            <div className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">Level {level}</div>
+            <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                 {nextLevelPoints} points to level {level + 1}
             </div>
-            <div className="mt-2">
+            <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
                 <ProgressBar
                     current={pointsInCurrentLevel}
                     max={500}
@@ -214,9 +219,8 @@ interface RewardNotificationProps {
         levelUp?: boolean;
     };
     onClose: () => void;
-}
 
-const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }: any) => {
+const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }) => {
     React.useEffect(() => {
         const timer = setTimeout(onClose, 5000); // Auto-close after 5 seconds
         return () => clearTimeout(timer);
@@ -227,44 +231,44 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-4 right-4 bg-gray-800 border border-gray-600 rounded-lg p-4 max-w-sm z-50"
+            className="fixed bottom-4 right-4 bg-gray-800 border border-gray-600 rounded-lg p-4 max-w-sm z-50 sm:px-4 md:px-6 lg:px-8"
         >
-            <div className="flex items-center justify-between mb-2">
-                <h4 className="font-bold text-white">Rewards Earned!</h4>
+            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                <h4 className="font-bold text-white sm:px-4 md:px-6 lg:px-8">Rewards Earned!</h4>
                 <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-white"
-                >
+                    className="text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     ✕
                 </button>
             </div>
             
-            <div className="space-y-2">
+            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {rewards.points > 0 && (
-                    <div className="flex items-center space-x-2">
-                        <span className="text-yellow-400">💰</span>
-                        <span className="text-sm text-white">+{rewards.points} points</span>
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-yellow-400 sm:px-4 md:px-6 lg:px-8">💰</span>
+                        <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">+{rewards.points} points</span>
                     </div>
                 )}
                 
                 {rewards.levelUp && (
-                    <div className="flex items-center space-x-2">
-                        <span className="text-purple-400">⬆️</span>
-                        <span className="text-sm text-white">Level up!</span>
+                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-purple-400 sm:px-4 md:px-6 lg:px-8">⬆️</span>
+                        <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">Level up!</span>
                     </div>
                 )}
                 
                 {rewards.newAchievements.map((achievement: any) => (
-                    <div key={achievement.id} className="flex items-center space-x-2">
-                        <span className="text-2xl">{achievement.icon}</span>
-                        <span className="text-sm text-white">{achievement.title}</span>
+                    <div key={achievement.id} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                        <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{achievement.icon}</span>
+                        <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{achievement.title}</span>
                     </div>
                 ))}
                 
                 {rewards.newBadges.map((badge: any) => (
-                    <div key={badge.id} className="flex items-center space-x-2">
+                    <div key={badge.id} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <BadgeDisplay badge={badge} size="sm" />
-                        <span className="text-sm text-white">{badge.name}</span>
+                        <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{badge.name}</span>
                     </div>
                 ))}
             </div>
@@ -281,200 +285,17 @@ export const OracleRewardsDashboard: React.FC = () => {
     React.useEffect(() => {
         const loadRewards = async () => {
             try {
+
                 setLoading(true);
                 const rewards = await oracleRewardsService.getUserRewards();
                 const achievements = oracleRewardsService.getAvailableAchievements();
                 
                 setUserRewards(rewards);
                 setAllAchievements(achievements);
-            } catch (error) {
-            } finally {
+            finally {
                 setLoading(false);
-            }
-        };
 
-        loadRewards();
-    }, []);
-
-    const filteredAchievements = React.useMemo(() => {
-        if (selectedCategory === 'ALL') return allAchievements;
-        return allAchievements.filter((a: any) => a.category === selectedCategory);
-    }, [allAchievements, selectedCategory]);
-
-    const unlockedAchievements = React.useMemo(() => {
-        if (!userRewards) return [];
-        return userRewards.achievements;
-    }, [userRewards]);
-
-    if (loading) {
-        return (
-            <div className="space-y-6">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 mx-auto"></div>
-                    <p className="text-gray-400 mt-2">Loading rewards...</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (!userRewards) {
-        return (
-            <div className="space-y-6">
-                <Widget title="Rewards & Achievements" className="bg-gray-900/50">
-                    <div className="text-center py-8">
-                        <ZapIcon className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                        <p className="text-gray-400">Failed to load rewards data</p>
-                    </div>
-                </Widget>
-            </div>
-        );
-    }
-
-    return (
-        <div className="space-y-6">
-            {/* Header */}
-            <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center"
-            >
-                <h2 className="text-2xl font-bold text-white mb-2 flex items-center justify-center gap-2">
-                    <ZapIcon className="text-yellow-400" />
-                    Rewards & Achievements
-                </h2>
-                <p className="text-gray-400">
-                    Track your progress and unlock amazing rewards
-                </p>
-            </motion.div>
-
-            {/* Progress Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Level & XP */}
-                <Widget title="Your Level" className="bg-gray-900/50">
-                    <LevelDisplay
-                        level={userRewards.level}
-                        currentPoints={userRewards.totalPoints}
-                        nextLevelPoints={userRewards.nextLevelPoints}
-                    />
-                </Widget>
-
-                {/* Points Summary */}
-                <Widget title="Points Summary" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        <div className="text-center">
-                            <div className="text-3xl font-bold text-yellow-400">
-                                {userRewards.totalPoints.toLocaleString()}
-                            </div>
-                            <div className="text-sm text-gray-400">Total Points</div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 text-center">
-                            <div>
-                                <div className="text-lg font-bold text-blue-400">
-                                    {userRewards.weeklyPoints}
-                                </div>
-                                <div className="text-xs text-gray-400">This Week</div>
-                            </div>
-                            <div>
-                                <div className="text-lg font-bold text-purple-400">
-                                    {userRewards.seasonalPoints}
-                                </div>
-                                <div className="text-xs text-gray-400">This Season</div>
-                            </div>
-                        </div>
-
-                        {userRewards.streakMultiplier > 1 && (
-                            <div className="text-center">
-                                <div className="text-sm text-orange-400">
-                                    🔥 {userRewards.streakMultiplier.toFixed(1)}x Streak Multiplier
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </Widget>
-
-                {/* Badges Collection */}
-                <Widget title="Badge Collection" className="bg-gray-900/50">
-                    <div className="space-y-4">
-                        {userRewards.badges.length > 0 ? (
-                            <div className="grid grid-cols-3 gap-3">
-                                {userRewards.badges.slice(0, 6).map((badge: any) => (
-                                    <BadgeDisplay key={badge.id} badge={badge} />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center text-gray-400 py-4">
-                                <div className="text-4xl mb-2">🏆</div>
-                                <p className="text-sm">No badges earned yet</p>
-                                <p className="text-xs">Complete challenges to earn badges!</p>
-                            </div>
-                        )}
-                        
-                        {userRewards.badges.length > 6 && (
-                            <div className="text-center">
-                                <span className="text-sm text-gray-400">
-                                    +{userRewards.badges.length - 6} more badges
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </Widget>
-            </div>
-
-            {/* Achievement Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Widget title="Achievements" className="bg-green-500/10">
-                    <div className="text-2xl font-bold text-green-400">
-                        {unlockedAchievements.length}
-                    </div>
-                    <div className="text-sm text-gray-400">
-                        of {allAchievements.length} unlocked
-                    </div>
-                    <ProgressBar
-                        current={unlockedAchievements.length}
-                        max={allAchievements.length}
-                        color="bg-green-500"
-                        showLabel={false}
-                    />
-                </Widget>
-
-                <Widget title="Completion Rate" className="bg-blue-500/10">
-                    <div className="text-2xl font-bold text-blue-400">
-                        {((unlockedAchievements.length / allAchievements.length) * 100).toFixed(1)}%
-                    </div>
-                    <div className="text-sm text-gray-400">
-                        Overall progress
-                    </div>
-                </Widget>
-
-                <Widget title="Weekly Rank" className="bg-purple-500/10">
-                    <div className="text-2xl font-bold text-purple-400">
-                        {userRewards.weeklyRank || '—'}
-                    </div>
-                    <div className="text-sm text-gray-400">
-                        This week
-                    </div>
-                </Widget>
-
-                <Widget title="Season Rank" className="bg-yellow-500/10">
-                    <div className="text-2xl font-bold text-yellow-400">
-                        {userRewards.seasonRank || '—'}
-                    </div>
-                    <div className="text-sm text-gray-400">
-                        Overall season
-                    </div>
-                </Widget>
-            </div>
-
-            {/* Achievement Categories Filter */}
-            <Widget title="Achievements" className="bg-gray-900/50">
-                <div className="mb-4">
-                    <div className="flex flex-wrap gap-2">
-                        {(['ALL', 'PREDICTION', 'STREAK', 'ACCURACY', 'PARTICIPATION', 'SEASONAL', 'MILESTONE'] as const).map((category: any) => (
-                            <button
-                                key={category}
-                                onClick={() => setSelectedCategory(category)}
-                                className={`px-3 py-1 rounded-md text-sm font-medium transition-all ${
+    `px-3 py-1 rounded-md text-sm font-medium transition-all ${
                                     selectedCategory === category
                                         ? 'bg-blue-500 text-white'
                                         : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
@@ -503,4 +324,10 @@ export const OracleRewardsDashboard: React.FC = () => {
     );
 };
 
-export default OracleRewardsDashboard;
+const OracleRewardsDashboardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleRewardsDashboard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleRewardsDashboardWithErrorBoundary);

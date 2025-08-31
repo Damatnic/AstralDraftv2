@@ -3,6 +3,7 @@
  * Fantasy football specific player analysis and insights
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../../ui/Widget';
@@ -18,6 +19,7 @@ interface FantasyTabProps {
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface FantasyMetric {
@@ -26,7 +28,6 @@ interface FantasyMetric {
     format: 'number' | 'decimal' | 'percentage';
     trend?: 'up' | 'down' | 'stable';
     color?: string;
-}
 
 interface WeeklyProjection {
     week: number;
@@ -34,13 +35,14 @@ interface WeeklyProjection {
     confidence: number;
     matchup: string;
     difficulty: 'easy' | 'medium' | 'hard';
+
 }
 
 const FantasyTab: React.FC<FantasyTabProps> = ({
     player,
     league,
     dispatch
-}: any) => {
+}) => {
     // Helper function to safely handle injury history as string union type
     const getInjuryRisk = (injuryHistory: string | undefined): {
         level: string;
@@ -57,8 +59,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 icon: '❓',
                 riskScore: 0.5
             };
-        }
-        
+
         switch (injuryHistory) {
             case 'minimal':
                 return {
@@ -92,7 +93,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                     icon: '❓',
                     riskScore: 0.5
                 };
-        }
+
     };
 
     // Generate fantasy metrics with proper null safety
@@ -138,7 +139,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 format: 'decimal',
                 trend: 'stable',
                 color: 'text-cyan-400'
-            }
+
         ];
 
         // Add position-specific metrics
@@ -149,7 +150,6 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 format: 'decimal',
                 color: 'text-indigo-400'
             });
-        }
 
         return metrics;
     }, [player]);
@@ -171,8 +171,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 matchup: `vs TEAM`, // Would be actual opponent in real app
                 difficulty: ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)] as 'easy' | 'medium' | 'hard'
             });
-        }
-        
+
         return projections.slice(0, 8); // Show first 8 weeks
     }, [player.stats?.projection]);
 
@@ -187,18 +186,18 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             case 'number':
             default:
                 return Math.round(value).toString();
-        }
+
     };
 
     const getTrendIcon = (trend?: string) => {
         switch (trend) {
             case 'up':
-                return <TrendingUpIcon className="w-4 h-4 text-green-400" />;
+                return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
             case 'down':
-                return <TrendingUpIcon className="w-4 h-4 text-red-400 rotate-180" />;
+                return <TrendingUpIcon className="w-4 h-4 text-red-400 rotate-180 sm:px-4 md:px-6 lg:px-8" />;
             default:
-                return <BarChartIcon className="w-4 h-4 text-gray-400" />;
-        }
+                return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const getDifficultyColor = (difficulty: string) => {
@@ -207,27 +206,27 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             case 'medium': return 'text-yellow-400 bg-yellow-500/20';
             case 'hard': return 'text-red-400 bg-red-500/20';
             default: return 'text-gray-400 bg-gray-500/20';
-        }
+
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Fantasy Overview */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Key Metrics */}
                 <Widget title="Key Fantasy Metrics">
-                    <div className="space-y-4">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {fantasyMetrics.slice(0, 4).map((metric, index) => (
                             <motion.div
                                 key={metric.label}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="flex items-center justify-between py-2"
+                                className="flex items-center justify-between py-2 sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {getTrendIcon(metric.trend)}
-                                    <span className="text-sm text-[var(--text-secondary)]">
+                                    <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {metric.label}
                                     </span>
                                 </div>
@@ -241,22 +240,22 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
 
                 {/* Injury Risk Assessment */}
                 <Widget title="Injury Risk Assessment">
-                    <div className="p-4 border border-[var(--panel-border)] rounded-lg">
-                        <div className="flex items-start gap-3">
-                            <span className="text-xl">{injuryRisk.icon}</span>
-                            <div className="flex-1">
+                    <div className="p-4 border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xl sm:px-4 md:px-6 lg:px-8">{injuryRisk.icon}</span>
+                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                 <div className={`font-semibold ${injuryRisk.color}`}>
                                     {injuryRisk.level}
                                 </div>
-                                <p className="text-sm text-[var(--text-secondary)] mt-1">
+                                <p className="text-sm text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {injuryRisk.description}
                                 </p>
-                                <div className="mt-3">
-                                    <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1">
+                                <div className="mt-3 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                         <span>Risk Score</span>
                                         <span>{Math.round(injuryRisk.riskScore * 100)}%</span>
                                     </div>
-                                    <div className="h-2 bg-[var(--panel-border)] rounded-full overflow-hidden">
+                                    <div className="h-2 bg-[var(--panel-border)] rounded-full overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                         <div 
                                             className={`h-full transition-all duration-500 ${
                                                 injuryRisk.riskScore > 0.7 ? 'bg-red-400' :
@@ -282,16 +281,16 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="p-4 border border-[var(--panel-border)] rounded-lg text-center"
+                            className="p-4 border border-[var(--panel-border)] rounded-lg text-center sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="text-xs text-[var(--text-secondary)] mb-1">
+                            <div className="text-xs text-[var(--text-secondary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {metric.label}
                             </div>
                             <div className={`text-lg font-bold ${metric.color || 'text-[var(--text-primary)]'}`}>
                                 {formatValue(metric.value, metric.format)}
                             </div>
                             {metric.trend && (
-                                <div className="mt-1">
+                                <div className="mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {getTrendIcon(metric.trend)}
                                 </div>
                             )}
@@ -302,20 +301,20 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
 
             {/* Weekly Projections */}
             <Widget title="Weekly Projections">
-                <div className="space-y-3">
+                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {weeklyProjections.map((projection, index) => (
                         <motion.div
                             key={projection.week}
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: index * 0.05 }}
-                            className="flex items-center justify-between p-3 border border-[var(--panel-border)] rounded-lg hover:bg-[var(--panel-border)]/20 transition-colors"
+                            className="flex items-center justify-between p-3 border border-[var(--panel-border)] rounded-lg hover:bg-[var(--panel-border)]/20 transition-colors sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-center gap-3">
-                                <div className="text-sm font-medium text-[var(--text-primary)]">
+                            <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     Week {projection.week}
                                 </div>
-                                <div className="text-xs text-[var(--text-secondary)]">
+                                <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                     {projection.matchup}
                                 </div>
                                 <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(projection.difficulty)}`}>
@@ -323,18 +322,18 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                 </span>
                             </div>
                             
-                            <div className="flex items-center gap-4">
-                                <div className="text-right">
-                                    <div className="text-sm font-medium text-[var(--text-primary)]">
+                            <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         {formatValue(projection.projection, 'decimal')} pts
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {Math.round(projection.confidence * 100)}% confidence
                                     </div>
                                 </div>
-                                <div className="w-16 h-2 bg-[var(--panel-border)] rounded-full overflow-hidden">
+                                <div className="w-16 h-2 bg-[var(--panel-border)] rounded-full overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                     <div 
-                                        className="h-full bg-blue-400 transition-all duration-300"
+                                        className="h-full bg-blue-400 transition-all duration-300 sm:px-4 md:px-6 lg:px-8"
                                         style={{ width: `${projection.confidence * 100}%` }}
                                     />
                                 </div>
@@ -347,39 +346,39 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             {/* Fantasy Tips */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Widget title="Draft Strategy">
-                    <div className="space-y-3">
-                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg">
-                            <TrophyIcon className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <TrophyIcon className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                             <div>
-                                <div className="text-sm font-medium text-[var(--text-primary)]">
+                                <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     Draft Target
                                 </div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     Best value around round {Math.ceil((player.adp || 100) / 12)}
                                 </div>
                             </div>
                         </div>
                         
-                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg">
-                            <FireIcon className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <FireIcon className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                             <div>
-                                <div className="text-sm font-medium text-[var(--text-primary)]">
+                                <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     Upside Potential
                                 </div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {player.stats?.projection && player.stats.projection > 200 ? 'High' :
                                      player.stats?.projection && player.stats.projection > 150 ? 'Medium' : 'Low'} ceiling player
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg">
-                            <ShieldCheckIcon className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-3 p-3 border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <ShieldCheckIcon className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5 sm:px-4 md:px-6 lg:px-8" />
                             <div>
-                                <div className="text-sm font-medium text-[var(--text-primary)]">
+                                <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                     Floor Assessment
                                 </div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {injuryRisk.riskScore < 0.3 ? 'Safe' : 
                                      injuryRisk.riskScore < 0.6 ? 'Moderate' : 'Risky'} floor due to injury history
                                 </div>
@@ -389,23 +388,23 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 </Widget>
 
                 <Widget title="Season Outlook">
-                    <div className="space-y-4">
-                        <div className="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg">
-                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2">
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Fantasy Grade: {player.stats?.projection && player.stats.projection > 200 ? 'A' :
                                                player.stats?.projection && player.stats.projection > 150 ? 'B' :
                                                player.stats?.projection && player.stats.projection > 100 ? 'C' : 'D'}
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)]">
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 Based on projections, injury risk, and team situation
                             </div>
                         </div>
                         
                         <div>
-                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2">
+                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Best Matchup Weeks
                             </div>
-                            <div className="text-xs text-[var(--text-secondary)] space-y-1">
+                            <div className="text-xs text-[var(--text-secondary)] space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 {weeklyProjections
                                     .filter((p: any) => p.difficulty === 'easy')
                                     .slice(0, 3)
@@ -414,15 +413,15 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                             Week {p.week}: {formatValue(p.projection, 'decimal')} projected points
                                         </div>
                                     ))
-                                }
+
                             </div>
                         </div>
 
                         <div>
-                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2">
+                            <div className="text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                 Avoid These Weeks
                             </div>
-                            <div className="text-xs text-red-400 space-y-1">
+                            <div className="text-xs text-red-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 {weeklyProjections
                                     .filter((p: any) => p.difficulty === 'hard')
                                     .slice(0, 2)
@@ -431,7 +430,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                             Week {p.week}: Tough matchup vs {p.matchup}
                                         </div>
                                     ))
-                                }
+
                             </div>
                         </div>
                     </div>
@@ -441,4 +440,10 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
     );
 };
 
-export default FantasyTab;
+const FantasyTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <FantasyTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(FantasyTabWithErrorBoundary);

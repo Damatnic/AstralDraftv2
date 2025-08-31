@@ -3,7 +3,8 @@
  * Comprehensive statistical analysis for player profiles
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
 import { Player, League } from '../../types';
@@ -16,6 +17,7 @@ interface AdvancedStatsTabProps {
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface StatComparison {
@@ -25,7 +27,6 @@ interface StatComparison {
     rank: number;
     total: number;
     format: 'number' | 'percentage' | 'decimal';
-}
 
 interface WeeklyProjection {
     week: number;
@@ -33,9 +34,10 @@ interface WeeklyProjection {
     difficulty: 'Easy' | 'Medium' | 'Hard';
     opponent: string;
     confidence: number;
+
 }
 
-const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: any) => {
+const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }) => {
     // Mock advanced stats - in real app this would come from analytics service
     const statComparisons: StatComparison[] = [
         {
@@ -69,7 +71,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
             rank: 22,
             total: 200,
             format: 'decimal'
-        }
+
     ];
 
     const weeklyProjections: WeeklyProjection[] = [
@@ -88,9 +90,9 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
 
     const getStatIcon = (playerValue: number, positionAverage: number) => {
         const ratio = playerValue / positionAverage;
-        if (ratio >= 1.1) return <TrendingUpIcon className="w-4 h-4 text-green-400" />;
-        if (ratio <= 0.9) return <TrendingDownIcon className="w-4 h-4 text-red-400" />;
-        return <BarChartIcon className="w-4 h-4 text-gray-400" />;
+        if (ratio >= 1.1) return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
+        if (ratio <= 0.9) return <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
+        return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
     };
 
     const formatStat = (value: number, format: StatComparison['format']) => {
@@ -101,7 +103,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                 return value.toFixed(1);
             default:
                 return Math.round(value).toString();
-        }
+
     };
 
     const getDifficultyColor = (difficulty: WeeklyProjection['difficulty']) => {
@@ -112,51 +114,51 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                 return 'text-red-400 bg-red-500/20';
             default:
                 return 'text-yellow-400 bg-yellow-500/20';
-        }
+
     };
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="space-y-6"
+            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
         >
             {/* Position Rankings */}
             <Widget title="Position Rankings & Comparisons">
-                <div className="p-4">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {statComparisons.map((stat, index) => (
-                            <div key={index} className="p-4 bg-white/5 rounded-lg">
-                                <div className="flex items-center justify-between mb-2">
-                                    <h4 className="font-medium text-[var(--text-primary)]">{stat.label}</h4>
+                            <div key={index} className="p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{stat.label}</h4>
                                     {getStatIcon(stat.playerValue, stat.positionAverage)}
                                 </div>
                                 
-                                <div className="space-y-2">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[var(--text-secondary)] text-sm">Player Value</span>
+                                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Player Value</span>
                                         <span className={`font-bold ${getStatColor(stat.playerValue, stat.positionAverage)}`}>
                                             {formatStat(stat.playerValue, stat.format)}
                                         </span>
                                     </div>
                                     
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[var(--text-secondary)] text-sm">Position Avg</span>
-                                        <span className="text-[var(--text-primary)]">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Position Avg</span>
+                                        <span className="text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {formatStat(stat.positionAverage, stat.format)}
                                         </span>
                                     </div>
                                     
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-[var(--text-secondary)] text-sm">Position Rank</span>
-                                        <span className="text-blue-400 font-medium">
+                                    <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">Position Rank</span>
+                                        <span className="text-blue-400 font-medium sm:px-4 md:px-6 lg:px-8">
                                             #{stat.rank} of {stat.total}
                                         </span>
                                     </div>
                                     
                                     {/* Progress Bar */}
-                                    <div className="mt-3">
-                                        <div className="w-full bg-gray-700 rounded-full h-2">
+                                    <div className="mt-3 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                                             <div 
                                                 className={`h-2 rounded-full transition-all ${
                                                     stat.playerValue > stat.positionAverage ? 'bg-green-400' : 'bg-red-400'
@@ -177,37 +179,37 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
             {/* Advanced Metrics */}
             {player.advancedMetrics && (
                 <Widget title="Advanced Metrics">
-                    <div className="p-4">
+                    <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="text-center p-4 bg-blue-500/10 rounded-lg">
-                                <TargetIcon className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-                                <div className="text-2xl font-bold text-blue-400">
+                            <div className="text-center p-4 bg-blue-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <TargetIcon className="w-8 h-8 text-blue-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                                <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                     {player.advancedMetrics.snapCountPct}%
                                 </div>
-                                <div className="text-sm text-[var(--text-secondary)]">Snap Count %</div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Snap Count %</div>
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     Share of team's offensive snaps
                                 </div>
                             </div>
                             
-                            <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                                <TargetIcon className="w-8 h-8 text-green-400 mx-auto mb-2" />
-                                <div className="text-2xl font-bold text-green-400">
+                            <div className="text-center p-4 bg-green-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <TargetIcon className="w-8 h-8 text-green-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                                <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
                                     {player.advancedMetrics.targetSharePct}%
                                 </div>
-                                <div className="text-sm text-[var(--text-secondary)]">Target Share</div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Target Share</div>
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     Percentage of team targets
                                 </div>
                             </div>
                             
-                            <div className="text-center p-4 bg-red-500/10 rounded-lg">
-                                <TargetIcon className="w-8 h-8 text-red-400 mx-auto mb-2" />
-                                <div className="text-2xl font-bold text-red-400">
+                            <div className="text-center p-4 bg-red-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <TargetIcon className="w-8 h-8 text-red-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                                <div className="text-2xl font-bold text-red-400 sm:px-4 md:px-6 lg:px-8">
                                     {player.advancedMetrics.redZoneTouches}
                                 </div>
-                                <div className="text-sm text-[var(--text-secondary)]">Red Zone Touches</div>
-                                <div className="text-xs text-[var(--text-secondary)] mt-1">
+                                <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Red Zone Touches</div>
+                                <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     Opportunities inside the 20
                                 </div>
                             </div>
@@ -218,14 +220,14 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
 
             {/* Weekly Projections */}
             <Widget title="Upcoming Weekly Projections">
-                <div className="p-4">
-                    <div className="space-y-3">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {weeklyProjections.map((week: any) => (
-                            <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                <div className="flex items-center gap-4">
-                                    <div className="text-center min-w-[60px]">
-                                        <div className="font-bold text-[var(--text-primary)]">Week {week.week}</div>
-                                        <div className="text-xs text-[var(--text-secondary)]">{week.opponent}</div>
+                            <div key={week.week} className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                                <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="text-center min-w-[60px] sm:px-4 md:px-6 lg:px-8">
+                                        <div className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">Week {week.week}</div>
+                                        <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{week.opponent}</div>
                                     </div>
                                     
                                     <div className={`px-2 py-1 rounded text-xs font-medium ${getDifficultyColor(week.difficulty)}`}>
@@ -233,11 +235,11 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                                     </div>
                                 </div>
                                 
-                                <div className="text-right">
-                                    <div className="font-bold text-[var(--text-primary)] text-lg">
+                                <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                                    <div className="font-bold text-[var(--text-primary)] text-lg sm:px-4 md:px-6 lg:px-8">
                                         {week.projection} pts
                                     </div>
-                                    <div className="text-xs text-[var(--text-secondary)]">
+                                    <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {week.confidence}% confidence
                                     </div>
                                 </div>
@@ -245,10 +247,10 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
                         ))}
                     </div>
                     
-                    <div className="mt-4 p-3 bg-blue-500/10 rounded-lg">
-                        <div className="text-center">
-                            <div className="text-sm text-[var(--text-secondary)] mb-1">4-Week Average Projection</div>
-                            <div className="text-2xl font-bold text-blue-400">
+                    <div className="mt-4 p-3 bg-blue-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-sm text-[var(--text-secondary)] mb-1 sm:px-4 md:px-6 lg:px-8">4-Week Average Projection</div>
+                            <div className="text-2xl font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                 {(weeklyProjections.reduce((sum, w) => sum + w.projection, 0) / weeklyProjections.length).toFixed(1)} pts
                             </div>
                         </div>
@@ -258,27 +260,27 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
 
             {/* Matchup Difficulty Analysis */}
             <Widget title="Season Schedule Analysis">
-                <div className="p-4">
+                <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="text-center p-4 bg-green-500/10 rounded-lg">
-                            <div className="text-2xl font-bold text-green-400">6</div>
-                            <div className="text-sm text-[var(--text-secondary)]">Easy Matchups</div>
+                        <div className="text-center p-4 bg-green-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">6</div>
+                            <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Easy Matchups</div>
                         </div>
-                        <div className="text-center p-4 bg-yellow-500/10 rounded-lg">
-                            <div className="text-2xl font-bold text-yellow-400">7</div>
-                            <div className="text-sm text-[var(--text-secondary)]">Medium Matchups</div>
+                        <div className="text-center p-4 bg-yellow-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">7</div>
+                            <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Medium Matchups</div>
                         </div>
-                        <div className="text-center p-4 bg-red-500/10 rounded-lg">
-                            <div className="text-2xl font-bold text-red-400">4</div>
-                            <div className="text-sm text-[var(--text-secondary)]">Hard Matchups</div>
+                        <div className="text-center p-4 bg-red-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-2xl font-bold text-red-400 sm:px-4 md:px-6 lg:px-8">4</div>
+                            <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Hard Matchups</div>
                         </div>
                     </div>
                     
-                    <div className="mt-4 p-3 bg-white/5 rounded-lg">
-                        <div className="text-center">
-                            <div className="text-sm text-[var(--text-secondary)] mb-1">Overall Schedule Difficulty</div>
-                            <div className="text-xl font-bold text-yellow-400">Moderate</div>
-                            <div className="text-xs text-[var(--text-secondary)]">
+                    <div className="mt-4 p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-center sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-sm text-[var(--text-secondary)] mb-1 sm:px-4 md:px-6 lg:px-8">Overall Schedule Difficulty</div>
+                            <div className="text-xl font-bold text-yellow-400 sm:px-4 md:px-6 lg:px-8">Moderate</div>
+                            <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 Ranked 12th easiest among {player.position} players
                             </div>
                         </div>
@@ -289,4 +291,10 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: a
     );
 };
 
-export default AdvancedStatsTab;
+const AdvancedStatsTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <AdvancedStatsTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(AdvancedStatsTabWithErrorBoundary);

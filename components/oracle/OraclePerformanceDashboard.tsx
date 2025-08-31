@@ -3,6 +3,7 @@
  * Showcases UI performance optimizations for real-time Oracle interactions
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -53,10 +54,10 @@ const PerformanceMetricCard = memo(({
     };
 
     return (
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-2">
+        <div className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                 <div className={`p-2 rounded-lg ${colorClasses[color as keyof typeof colorClasses] || colorClasses.blue}`}>
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                 </div>
                 {trend && (
                     <div className={`text-xs px-2 py-1 rounded ${
@@ -68,10 +69,10 @@ const PerformanceMetricCard = memo(({
                     </div>
                 )}
             </div>
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-2xl font-bold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
                 {value.toFixed(value < 10 ? 2 : 0)}{unit}
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-400">{title}</div>
+            <div className="text-sm text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">{title}</div>
         </div>
     );
 });
@@ -87,7 +88,7 @@ const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
     );
 
     return (
-        <div className="space-y-2 max-h-40 overflow-y-auto">
+        <div className="space-y-2 max-h-40 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence>
                 {visibleUpdates.map((update, index) => (
                     <motion.div
@@ -95,13 +96,13 @@ const RealTimeUpdatesList = memo(({ updates, maxVisible = 5 }: {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
-                        className="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-gray-700 rounded"
+                        className="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-gray-700 rounded sm:px-4 md:px-6 lg:px-8"
                     >
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <div className="flex-1 text-sm text-gray-700 dark:text-gray-300">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
+                        <div className="flex-1 text-sm text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">
                             {update.message}
                         </div>
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                             {new Date(update.timestamp).toLocaleTimeString()}
                         </div>
                     </motion.div>
@@ -176,30 +177,28 @@ const SettingsPanel = memo(({
     }, [debounceMs, throttleMs, onConfigUpdate]);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                     Input Debounce (ms)
                 </label>
                 <input
                     type="number"
                     value={debounceMs}
                     onChange={(e: any) => setDebounceMs(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg"
                     min="0"
                     max="2000"
                 />
             </div>
             
             <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                     Update Throttle (ms)
                 </label>
                 <input
                     type="number"
                     value={throttleMs}
                     onChange={(e: any) => setThrottleMs(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg"
                     min="0"
                     max="1000"
                 />
@@ -207,8 +206,8 @@ const SettingsPanel = memo(({
             
             <button
                 onClick={handleSave}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+             aria-label="Action button">
                 Apply Settings
             </button>
         </div>
@@ -218,7 +217,7 @@ const SettingsPanel = memo(({
 // Main dashboard component
 const OraclePerformanceDashboard: React.FC<{
     className?: string;
-}> = ({ className = '' }: any) => {
+}> = ({ className = '' }) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Performance monitoring
@@ -270,7 +269,7 @@ const OraclePerformanceDashboard: React.FC<{
 
     // Track performance history
     useEffect(() => {
-        const interval = setInterval(() => {
+    const interval = setInterval(() => {
             setPerformanceHistory(prev => [
                 ...prev.slice(-19), // Keep last 20 entries
                 {
@@ -278,15 +277,16 @@ const OraclePerformanceDashboard: React.FC<{
                     renderTime: metrics.averageRenderTime,
                     cacheHitRate: metrics.cacheHitRate,
                     memoryUsage: metrics.memoryUsage
-                }
+
             ]);
-        }, 1000);
+    , 1000);
 
         return () => clearInterval(interval);
     }, [metrics]);
 
     // Handle performance optimization
-    const handleOptimization = useCallback(async () => {
+    const handleOptimization = useCallback(async () 
+} {
         setIsOptimizing(true);
         try {
             await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate optimization
@@ -299,7 +299,7 @@ const OraclePerformanceDashboard: React.FC<{
             });
         } finally {
             setIsOptimizing(false);
-        }
+
     }, [addUpdate]);
 
     // Handle configuration updates
@@ -314,7 +314,7 @@ const OraclePerformanceDashboard: React.FC<{
     }, [addUpdate]);
 
     const renderOverviewTab = () => (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Performance metrics grid */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <PerformanceMetricCard
@@ -352,7 +352,7 @@ const OraclePerformanceDashboard: React.FC<{
             </div>
 
             {/* Real-time updates */}
-            <Widget title="Real-Time Updates" className="bg-white dark:bg-gray-800">
+            <Widget title="Real-Time Updates" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
                 <RealTimeUpdatesList updates={updates} maxVisible={isMobile ? 3 : 5} />
             </Widget>
 
@@ -361,16 +361,16 @@ const OraclePerformanceDashboard: React.FC<{
                 <button
                     onClick={handleOptimization}
                     disabled={isOptimizing}
-                    className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors"
-                >
+                    className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                 aria-label="Action button">
                     {isOptimizing ? (
                         <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent sm:px-4 md:px-6 lg:px-8"></div>
                             <span>Optimizing...</span>
                         </>
                     ) : (
                         <>
-                            <Zap className="w-4 h-4" />
+                            <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             <span>Optimize Performance</span>
                         </>
                     )}
@@ -378,9 +378,8 @@ const OraclePerformanceDashboard: React.FC<{
                 
                 <button
                     onClick={() => setShowSettings(!showSettings)}
-                    className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
                 >
-                    <Settings className="w-4 h-4" />
+                    <Settings className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     <span>Settings</span>
                 </button>
             </div>
@@ -388,45 +387,45 @@ const OraclePerformanceDashboard: React.FC<{
     );
 
     const renderPerformanceTab = () => (
-        <div className="space-y-6">
-            <Widget title="Performance Trends" className="bg-white dark:bg-gray-800">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
+            <Widget title="Performance Trends" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
                 <PerformanceChart data={performanceHistory} height={isMobile ? 200 : 300} />
             </Widget>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget title="Batched Updates" className="bg-white dark:bg-gray-800">
-                    <div className="space-y-2">
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                <Widget title="Batched Updates" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="text-sm text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                             Processing {batchedUpdates.length} batched analytics updates
                         </div>
-                        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3">
-                            <div className="text-xs text-gray-500">
+                        <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                 Last batch: {batchedUpdates.length > 0 ? 
                                     new Date(batchedUpdates[batchedUpdates.length - 1]?.timestamp || Date.now()).toLocaleTimeString() :
                                     'No updates'
-                                }
+
                             </div>
                         </div>
                     </div>
                 </Widget>
                 
-                <Widget title="Optimization Status" className="bg-white dark:bg-gray-800">
-                    <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Virtual scrolling enabled</span>
+                <Widget title="Optimization Status" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <CheckCircle className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />
+                            <span className="text-sm sm:px-4 md:px-6 lg:px-8">Virtual scrolling enabled</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Debounced user input</span>
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <CheckCircle className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />
+                            <span className="text-sm sm:px-4 md:px-6 lg:px-8">Debounced user input</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Throttled updates</span>
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <CheckCircle className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />
+                            <span className="text-sm sm:px-4 md:px-6 lg:px-8">Throttled updates</span>
                         </div>
-                        <div className="flex items-center space-x-2">
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-sm">Intelligent caching</span>
+                        <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                            <CheckCircle className="w-4 h-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />
+                            <span className="text-sm sm:px-4 md:px-6 lg:px-8">Intelligent caching</span>
                         </div>
                     </div>
                 </Widget>
@@ -434,37 +433,35 @@ const OraclePerformanceDashboard: React.FC<{
         </div>
     );
 
+  if (isLoading) {
     return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
+  return (
         <div className={`oracle-performance-dashboard ${className}`}>
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
                         Performance Dashboard
                     </h1>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         Real-time Oracle UI performance monitoring and optimization
                     </p>
                 </div>
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={() => setActiveTab('overview')}
-                        className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                            activeTab === 'overview'
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                        }`}
+                        onClick={() => setActiveTab('overview')}`}
                     >
                         Overview
                     </button>
                     <button
-                        onClick={() => setActiveTab('performance')}
-                        className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                            activeTab === 'performance'
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                        }`}
+                        onClick={() => setActiveTab('performance')}`}
                     >
                         Performance
                     </button>
@@ -478,9 +475,9 @@ const OraclePerformanceDashboard: React.FC<{
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="mb-6"
+                        className="mb-6 sm:px-4 md:px-6 lg:px-8"
                     >
-                        <Widget title="Performance Settings" className="bg-white dark:bg-gray-800">
+                        <Widget title="Performance Settings" className="bg-white dark:bg-gray-800 sm:px-4 md:px-6 lg:px-8">
                             <SettingsPanel
                                 onConfigUpdate={handleConfigUpdate}
                                 currentConfig={oraclePerformanceOptimizationService}

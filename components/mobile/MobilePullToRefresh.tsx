@@ -3,7 +3,8 @@
  * Implements native-style pull-to-refresh functionality with smooth animations
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { RefreshCwIcon } from 'lucide-react';
 import { useThrottle } from '../../utils/mobilePerformanceUtils';
@@ -21,16 +22,17 @@ import {
     maxPullDistance?: number;
     disabled?: boolean;
     className?: string;
+
 }
 
-const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
-    onRefresh,
+const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
     children,
     refreshThreshold = 80,
     maxPullDistance = 120,
     disabled = false,
     className = ''
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
     
@@ -51,7 +53,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
             case 'refreshing':
                 announceToScreenReader('Refreshing content, please wait', 'polite');
                 break;
-        }
+
     }, [pullState]);
 
     // Keyboard accessibility for refresh
@@ -60,8 +62,8 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
             event.preventDefault();
             if (!disabled && !isRefreshing) {
                 handleRefresh();
-            }
-        }
+
+
     };
 
     const handleRefresh = async () => {
@@ -72,15 +74,17 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         announceToScreenReader('Refreshing content', 'assertive');
         
         try {
+
             await onRefresh();
             announceToScreenReader('Content refreshed successfully', 'polite');
-        } catch (error) {
+        
+    } catch (error) {
             announceToScreenReader('Failed to refresh content', 'assertive');
         } finally {
             setIsRefreshing(false);
             setPullState('idle');
             pullY.set(0);
-        }
+
     };
 
     const handlePanStart = (event: any, info: PanInfo) => {
@@ -94,7 +98,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
         // Only allow pull-to-refresh at the top of the scroll
         if (startScrollTop.current <= 0) {
             setPullState('pulling');
-        }
+
     };
 
     const handlePan = useThrottle((event: any, info: PanInfo) => {
@@ -108,8 +112,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
             setPullState('idle');
             pullY.set(0);
             return;
-        }
-        
+
         const deltaY = Math.max(0, info.offset.y);
         const dampedY = Math.min(deltaY * 0.6, maxPullDistance);
         
@@ -119,18 +122,26 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
             setPullState('ready');
         } else {
             setPullState('pulling');
-        }
+
     }, 16); // ~60fps throttling
 
-    const handlePanEnd = async (event: any, info: PanInfo) => {
+    const handlePanEnd = async () => {
+    try {
+
         if (disabled || isRefreshing) return;
         
         if (pullState === 'ready') {
             await handleRefresh();
-        } else {
+        
+    } catch (error) {
+      console.error('Error in handlePanEnd:', error);
+
+    } catch (error) {
+        console.error(error);
+    }else {
             setPullState('idle');
             pullY.set(0);
-        }
+
     };
 
     const getPullIndicatorColor = () => {
@@ -141,7 +152,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
                 return 'text-blue-400';
             default:
                 return 'text-gray-400';
-        }
+
     };
 
     const getPullIndicatorText = () => {
@@ -154,13 +165,13 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
                 return 'Refreshing...';
             default:
                 return '';
-        }
+
     };
 
     React.useEffect(() => {
         if (isRefreshing) {
             pullY.set(refreshThreshold);
-        }
+
     }, [isRefreshing, pullY, refreshThreshold]);
 
     return (
@@ -186,10 +197,10 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
                 style={{ 
                     y: useTransform(pullY, [0, refreshThreshold], [-60, 0]) 
                 }}
-                className="absolute top-0 left-0 right-0 z-10"
+                className="absolute top-0 left-0 right-0 z-10 sm:px-4 md:px-6 lg:px-8"
             >
                 <output
-                    className="flex flex-col items-center justify-center h-16 bg-[var(--panel-bg)] border-b border-[var(--panel-border)]"
+                    className="flex flex-col items-center justify-center h-16 bg-[var(--panel-bg)] border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                     aria-live="polite"
                     aria-label={getPullIndicatorText()}
                 >
@@ -205,10 +216,10 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
                                 animate={prefersReducedMotion ? {} : { rotate: 360 }}
                                 transition={prefersReducedMotion ? {} : { duration: 1, repeat: Infinity, ease: 'linear' }}
                             >
-                                <RefreshCwIcon className="w-5 h-5" />
+                                <RefreshCwIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                             </motion.div>
                         ) : (
-                            <RefreshCwIcon className="w-5 h-5" />
+                            <RefreshCwIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                         )}
                     </motion.div>
                     <motion.span
@@ -235,7 +246,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
                 drag={disabled ? false : "y"}
                 dragConstraints={{ top: 0, bottom: 0 }}
                 dragElastic={0}
-                className="h-full overflow-y-auto overscroll-behavior-y-none mobile-scrollbar"
+                className="h-full overflow-y-auto overscroll-behavior-y-none mobile-scrollbar sm:px-4 md:px-6 lg:px-8"
                 aria-label="Scrollable content"
             >
                 {children}
@@ -244,4 +255,10 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({
     );
 };
 
-export default MobilePullToRefresh;
+const MobilePullToRefreshWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobilePullToRefresh {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobilePullToRefreshWithErrorBoundary);

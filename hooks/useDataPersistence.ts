@@ -58,14 +58,16 @@ export interface OraclePredictionHistory {
 }
 
 export interface PredictionEntry {
+
   playerId: string;
   projectedPoints: number;
   actualPoints?: number;
   confidence: number;
   reasoning: string[];
-}
 
-export interface SyncStatus {
+    } catch (error) {
+        console.error(error);
+    }export interface SyncStatus {
   lastSync: number;
   status: 'synced' | 'syncing' | 'error' | 'offline';
   pendingOperations: number;
@@ -191,8 +193,12 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   // Helper functions
   const getStorageData = <T>(key: string): T[] => {
     try {
+
       const data = localStorage.getItem(key);
       return data ? JSON.parse(data) : [];
+    
+    } catch (error) {
+        console.error(error);
     } catch {
       return [];
     }
@@ -200,7 +206,11 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   const setStorageData = <T>(key: string, data: T[]): void => {
     try {
+
       localStorage.setItem(key, JSON.stringify(data));
+    
+    } catch (error) {
+        console.error(error);
     } catch (error) {
       setState(prev => ({
         ...prev,

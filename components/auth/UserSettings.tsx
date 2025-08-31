@@ -3,7 +3,8 @@
  * Allows users to update PIN, email, and customization
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/SimpleAuthContext';
 import { Widget } from '../ui/Widget';
@@ -11,9 +12,10 @@ import { ShieldIcon, MailIcon, PaletteIcon, UserIcon } from 'lucide-react';
 
 interface Props {
     className?: string;
+
 }
 
-const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
+const UserSettings: React.FC<Props> = ({ className = '' }) => {
     const { user, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName } = useAuth();
     
     const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'appearance'>('profile');
@@ -47,17 +49,18 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
+
             const success = await updateUserDisplayName(displayName.trim());
             if (success) {
                 setSuccess('Display name updated successfully!');
             } else {
                 setError('Failed to update display name');
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to update display name');
         } finally {
             setIsLoading(false);
-        }
+
     };
 
     const handleEmailUpdate = async (e: React.FormEvent) => {
@@ -68,36 +71,43 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
+
             const success = await updateUserEmail(email.trim());
             if (success) {
                 setSuccess('Email updated successfully!');
             } else {
                 setError('Failed to update email');
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to update email');
         } finally {
             setIsLoading(false);
-        }
+
     };
 
-    const handlePinUpdate = async (e: React.FormEvent) => {
+    const handlePinUpdate = async () => {
+    try {
+
         e.preventDefault();
         
         if (newPin.length !== 4 || confirmPin.length !== 4) {
             setError('PIN must be 4 digits');
             return;
-        }
+        
+    } catch (error) {
+      console.error('Error in handlePinUpdate:', error);
 
-        if (newPin !== confirmPin) {
+    } catch (error) {
+        console.error(error);
+    }if (newPin !== confirmPin) {
             setError('PINs do not match');
             return;
-        }
 
         setIsLoading(true);
         clearMessages();
 
         try {
+
             const success = await updateUserPin(newPin);
             if (success) {
                 setSuccess('PIN updated successfully!');
@@ -105,12 +115,12 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                 setConfirmPin('');
             } else {
                 setError('Failed to update PIN');
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to update PIN');
         } finally {
             setIsLoading(false);
-        }
+
     };
 
     const handleCustomizationUpdate = async () => {
@@ -118,17 +128,18 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
+
             const success = await updateUserCustomization(customization);
             if (success) {
                 setSuccess('Appearance updated successfully!');
             } else {
                 setError('Failed to update appearance');
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError('Failed to update appearance');
         } finally {
             setIsLoading(false);
-        }
+
     };
 
     const colorOptions = [
@@ -147,15 +158,15 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
 
     return (
         <Widget title="User Settings" className={`bg-gray-900/50 ${className}`}>
-            <div className="space-y-6">
+            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 {/* Tab Navigation */}
-                <div className="flex space-x-1 bg-gray-800 rounded-lg p-1">
+                <div className="flex space-x-1 bg-gray-800 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => {
                         const Icon = tab.icon;
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => {
+                                onClick={() = aria-label="Action button"> {
                                     setActiveTab(tab.id);
                                     clearMessages();
                                 }}
@@ -165,8 +176,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         : 'text-gray-400 hover:text-white hover:bg-gray-700'
                                 }`}
                             >
-                                <Icon className="w-4 h-4" />
-                                <span className="text-sm font-medium">{tab.label}</span>
+                                <Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
                             </button>
                         );
                     })}
@@ -187,62 +198,60 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                 )}
 
                 {/* Tab Content */}
-                <div className="space-y-6">
+                <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Profile Tab */}
                     {activeTab === 'profile' && (
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="space-y-6"
+                            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Display Name */}
-                            <form onSubmit={handleDisplayNameUpdate} className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-                                    <UserIcon className="w-5 h-5" />
+                            <form onSubmit={handleDisplayNameUpdate}
+                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Display Name</span>
                                 </h3>
-                                <div className="flex space-x-3">
+                                <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="text"
                                         value={displayName}
                                         onChange={(e: any) => setDisplayName(e.target.value)}
-                                        placeholder="Enter display name"
-                                        className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                         maxLength={50}
                                     />
                                     <button
                                         type="submit"
                                         disabled={isLoading || !displayName.trim() || displayName === user.displayName}
-                                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                    >
+                                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                                     aria-label="Action button">
                                         Update
                                     </button>
                                 </div>
                             </form>
 
                             {/* Email */}
-                            <form onSubmit={handleEmailUpdate} className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-                                    <MailIcon className="w-5 h-5" />
+                            <form onSubmit={handleEmailUpdate}
+                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <MailIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Recovery Email</span>
                                 </h3>
-                                <div className="flex space-x-3">
+                                <div className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
                                     <input
                                         type="email"
                                         value={email}
                                         onChange={(e: any) => setEmail(e.target.value)}
-                                        placeholder="Enter email address"
-                                        className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        className="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                     />
                                     <button
                                         type="submit"
                                         disabled={isLoading || !email.trim() || email === user.email}
-                                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
-                                    >
+                                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                                     aria-label="Action button">
                                         Update
                                     </button>
                                 </div>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                     Used for PIN recovery and important notifications
                                 </p>
                             </form>
@@ -254,38 +263,36 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="space-y-6"
+                            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <form onSubmit={handlePinUpdate} className="space-y-4">
-                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-                                    <ShieldIcon className="w-5 h-5" />
+                            <form onSubmit={handlePinUpdate}
+                                <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                    <ShieldIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                     <span>Change PIN</span>
                                 </h3>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                                             New PIN
                                         </label>
                                         <input
                                             type="password"
                                             value={newPin}
                                             onChange={(e: any) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                                            placeholder="••••"
-                                            className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                             maxLength={4}
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                                        <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                                             Confirm PIN
                                         </label>
                                         <input
                                             type="password"
                                             value={confirmPin}
                                             onChange={(e: any) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
-                                            placeholder="••••"
-                                            className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                             maxLength={4}
                                         />
                                     </div>
@@ -294,12 +301,12 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                 <button
                                     type="submit"
                                     disabled={isLoading || newPin.length !== 4 || confirmPin.length !== 4}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium"
-                                >
+                                    className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
+                                 aria-label="Action button">
                                     {isLoading ? 'Updating...' : 'Update PIN'}
                                 </button>
                                 
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                     Your PIN must be exactly 4 digits
                                 </p>
                             </form>
@@ -311,23 +318,23 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="space-y-6"
+                            className="space-y-6 sm:px-4 md:px-6 lg:px-8"
                         >
-                            <h3 className="text-lg font-semibold text-white flex items-center space-x-2">
-                                <PaletteIcon className="w-5 h-5" />
+                            <h3 className="text-lg font-semibold text-white flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                <PaletteIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
                                 <span>Customize Appearance</span>
                             </h3>
 
                             {/* Preview */}
-                            <div className="bg-gray-800 rounded-lg p-4">
-                                <p className="text-sm text-gray-400 mb-3">Preview:</p>
+                            <div className="bg-gray-800 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                <p className="text-sm text-gray-400 mb-3 sm:px-4 md:px-6 lg:px-8">Preview:</p>
                                 <div 
-                                    className="inline-flex items-center space-x-3 px-6 py-4 rounded-lg"
+                                    className="inline-flex items-center space-x-3 px-6 py-4 rounded-lg sm:px-4 md:px-6 lg:px-8"
                                     style={{ backgroundColor: customization.backgroundColor }}
                                 >
-                                    <span className="text-2xl">{customization.emoji}</span>
+                                    <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{customization.emoji}</span>
                                     <span 
-                                        className="font-semibold"
+                                        className="font-semibold sm:px-4 md:px-6 lg:px-8"
                                         style={{ color: customization.textColor }}
                                     >
                                         {user.displayName}
@@ -337,14 +344,14 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
 
                             {/* Color Selection */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-3">
+                                <label className="block text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Background Color
                                 </label>
-                                <div className="grid grid-cols-6 gap-2">
+                                <div className="grid grid-cols-6 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {colorOptions.map((color: any) => (
                                         <button
                                             key={color}
-                                            onClick={() => setCustomization({ ...customization, backgroundColor: color })}
+                                            onClick={() => setCustomization({ ...customization, backgroundColor: color }}
                                             className={`w-10 h-10 rounded-lg border-2 transition-all ${
                                                 customization.backgroundColor === color
                                                     ? 'border-white scale-110'
@@ -358,14 +365,14 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
 
                             {/* Emoji Selection */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-3">
+                                <label className="block text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Emoji
                                 </label>
-                                <div className="grid grid-cols-6 gap-2">
+                                <div className="grid grid-cols-6 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {emojiOptions.map((emoji: any) => (
                                         <button
                                             key={emoji}
-                                            onClick={() => setCustomization({ ...customization, emoji })}
+                                            onClick={() => setCustomization({ ...customization, emoji }}
                                             className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xl transition-all ${
                                                 customization.emoji === emoji
                                                     ? 'border-blue-500 bg-blue-900/50 scale-110'
@@ -381,8 +388,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                             <button
                                 onClick={handleCustomizationUpdate}
                                 disabled={isLoading}
-                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium"
-                            >
+                                className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
+                             aria-label="Action button">
                                 {isLoading ? 'Updating...' : 'Save Appearance'}
                             </button>
                         </motion.div>
@@ -393,4 +400,10 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
     );
 };
 
-export default UserSettings;
+const UserSettingsWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <UserSettings {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(UserSettingsWithErrorBoundary);

@@ -35,15 +35,15 @@ interface NotificationContextValue {
     
     // Utility
     refreshNotifications: () => Promise<void>;
-}
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 
-interface NotificationProviderProps {
-    children: React.ReactNode;
 }
 
-export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }: any) => {
+interface NotificationProviderProps {
+    children: React.ReactNode;
+
+export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
     const { user, isAuthenticated } = useAuth();
     const [notifications, setNotifications] = useState<EnhancedNotification[]>([]);
     const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
@@ -84,7 +84,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         } else {
             setNotifications([]);
             setPreferences(null);
-        }
+
     }, [isAuthenticated, user]);
 
     // Set up event listeners for real-time updates
@@ -123,73 +123,87 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         
         setLoading(true);
         try {
+
             const userNotifications = await enhancedNotificationService.getNotifications(
                 user.id.toString(),
                 { limit: 50 }
             );
             setNotifications(userNotifications);
-        } catch (error) {
+        
+    } catch (error) {
         } finally {
             setLoading(false);
-        }
+
     }, [user]);
 
     const loadPreferences = useCallback(async () => {
         if (!user) return;
         
         try {
+
             const userPreferences = await enhancedNotificationService.getUserPreferences(
                 user.id.toString()
             );
             setPreferences(userPreferences);
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const markAsRead = useCallback(async (notificationId: string) => {
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.markAsRead(user.id.toString(), notificationId);
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const markAllAsRead = useCallback(async (category?: string) => {
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.markAllAsRead(user.id.toString(), category);
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const archiveNotification = useCallback(async (notificationId: string) => {
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.archiveNotification(user.id.toString(), notificationId);
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const deleteNotification = useCallback(async (notificationId: string) => {
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.deleteNotification(user.id.toString(), notificationId);
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const updatePreferences = useCallback(async (updates: Partial<NotificationPreferences>) => {
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.updateUserPreferences(user.id.toString(), updates);
             await loadPreferences();
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user, loadPreferences]);
 
     const sendNotification = useCallback(async (
@@ -201,6 +215,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
         if (!user) return;
         
         try {
+
             await enhancedNotificationService.sendNotification(
                 user.id.toString(),
                 type,
@@ -208,18 +223,21 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
                 message,
                 options
             );
-        } catch (error) {
-        }
+
+    } catch (error) {
+
     }, [user]);
 
     const getNotificationStats = useCallback(async () => {
         if (!user) return null;
         
         try {
+
             return await enhancedNotificationService.getNotificationStats(user.id.toString());
-        } catch (error) {
+
+    } catch (error) {
             return null;
-        }
+
     }, [user]);
 
     const refreshNotifications = useCallback(async () => {
@@ -267,7 +285,7 @@ export const useNotifications = (): NotificationContextValue => {
     const context = useContext(NotificationContext);
     if (!context) {
         throw new Error('useNotifications must be used within a NotificationProvider');
-    }
+
     return context;
 };
 

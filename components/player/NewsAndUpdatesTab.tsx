@@ -3,6 +3,7 @@
  * Real-time news integration and player updates
  */
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../ui/Widget';
@@ -17,6 +18,7 @@ interface NewsAndUpdatesTabProps {
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
+
 }
 
 interface InjuryUpdate {
@@ -27,7 +29,6 @@ interface InjuryUpdate {
     description: string;
     expectedReturn?: string;
     source: string;
-}
 
 interface TradeRumor {
     id: string;
@@ -37,13 +38,14 @@ interface TradeRumor {
     details: string;
     source: string;
     impact: 'positive' | 'negative' | 'neutral';
+
 }
 
 const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     player,
     league,
     dispatch
-}: any) => {
+}) => {
     // Helper function to handle injury history as string union type
     const getInjuryStatusInfo = (injuryHistory: string | undefined) => {
         if (!injuryHistory) return null;
@@ -75,7 +77,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                 };
             default:
                 return null;
-        }
+
     };
 
     // Mock data for demonstration - in real app this would come from API
@@ -106,7 +108,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             source: 'The Athletic',
             publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
             impact: 'positive'
-        }
+
     ], [player.name, player.team]);
 
     const injuryUpdates: InjuryUpdate[] = React.useMemo(() => {
@@ -135,7 +137,6 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                 description: 'Participating fully in practice with no restrictions',
                 source: 'Beat Reporter',
             });
-        }
 
         return updates;
     }, [player.injuryHistory]);
@@ -150,7 +151,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             details: `Several contenders reportedly showing interest in ${player.name}'s services`,
             source: 'NFL Insider',
             impact: 'neutral'
-        }
+
     ], [player.name]);
 
     const formatTimeAgo = (dateString: string): string => {
@@ -173,36 +174,36 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             case 'positive': return 'text-green-400';
             case 'negative': return 'text-red-400';
             default: return 'text-gray-400';
-        }
+
     };
 
     const getImpactIcon = (impact: string) => {
         switch (impact) {
-            case 'positive': return <TrendingUpIcon className="w-4 h-4" />;
-            case 'negative': return <AlertTriangleIcon className="w-4 h-4" />;
-            default: return <NewsIcon className="w-4 h-4" />;
-        }
+            case 'positive': return <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'negative': return <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            default: return <NewsIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const injuryStatusInfo = getInjuryStatusInfo(player.injuryHistory);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Injury Status Overview */}
             {injuryStatusInfo && (
                 <Widget title="Injury Status">
                     <div className={`p-4 rounded-lg ${injuryStatusInfo.bgColor}`}>
-                        <div className="flex items-start gap-3">
-                            <span className="text-xl">{injuryStatusInfo.icon}</span>
-                            <div className="flex-1">
+                        <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-xl sm:px-4 md:px-6 lg:px-8">{injuryStatusInfo.icon}</span>
+                            <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                 <div className={`font-semibold ${injuryStatusInfo.color}`}>
                                     {injuryStatusInfo.level} Injury History
                                 </div>
-                                <p className="text-sm text-[var(--text-secondary)] mt-1">
+                                <p className="text-sm text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {injuryStatusInfo.description}
                                 </p>
                                 {injuryUpdates.length > 0 && (
-                                    <div className="mt-3 text-xs text-[var(--text-secondary)]">
+                                    <div className="mt-3 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         Last update: {formatTimeAgo(injuryUpdates[0].date)}
                                     </div>
                                 )}
@@ -214,33 +215,33 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
 
             {/* Recent News */}
             <Widget title="Recent News">
-                <div className="space-y-4">
+                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {recentNews.map((news, index) => (
                         <motion.div
                             key={news.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="p-4 border border-[var(--panel-border)] rounded-lg hover:bg-[var(--panel-border)]/20 transition-colors"
+                            className="p-4 border border-[var(--panel-border)] rounded-lg hover:bg-[var(--panel-border)]/20 transition-colors sm:px-4 md:px-6 lg:px-8"
                         >
-                            <div className="flex items-start gap-3">
+                            <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className={getImpactColor(news.impact)}>
                                     {getImpactIcon(news.impact)}
                                 </div>
-                                <div className="flex-1">
-                                    <h4 className="font-medium text-[var(--text-primary)] mb-1">
+                                <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                    <h4 className="font-medium text-[var(--text-primary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                         {news.headline}
                                     </h4>
-                                    <p className="text-sm text-[var(--text-secondary)] mb-2">
+                                    <p className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                         {news.summary}
                                     </p>
-                                    <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)]">
-                                        <div className="flex items-center gap-1">
-                                            <UserIcon className="w-3 h-3" />
+                                    <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                            <UserIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                             {news.source}
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <ClockIcon className="w-3 h-3" />
+                                        <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                            <ClockIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                             {formatTimeAgo(news.publishedAt)}
                                         </div>
                                     </div>
@@ -254,24 +255,24 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             {/* Injury Updates */}
             {injuryUpdates.length > 0 && (
                 <Widget title="Injury Updates">
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {injuryUpdates.map((update, index) => (
                             <motion.div
                                 key={update.id}
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-3 border border-[var(--panel-border)] rounded-lg"
+                                className="p-3 border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex items-start gap-3">
+                                <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                                     <AlertTriangleIcon className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
                                         update.severity === 'major' ? 'text-red-400' :
                                         update.severity === 'moderate' ? 'text-yellow-400' :
                                         'text-green-400'
                                     }`} />
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <span className="text-sm font-medium text-[var(--text-primary)] capitalize">
+                                    <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                                            <span className="text-sm font-medium text-[var(--text-primary)] capitalize sm:px-4 md:px-6 lg:px-8">
                                                 {update.type}
                                             </span>
                                             <span className={`text-xs px-2 py-0.5 rounded-full ${
@@ -282,21 +283,21 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                                                 {update.severity}
                                             </span>
                                         </div>
-                                        <p className="text-sm text-[var(--text-secondary)] mb-2">
+                                        <p className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                             {update.description}
                                         </p>
                                         {update.expectedReturn && (
-                                            <div className="text-xs text-blue-400 mb-2">
+                                            <div className="text-xs text-blue-400 mb-2 sm:px-4 md:px-6 lg:px-8">
                                                 Expected Return: {update.expectedReturn}
                                             </div>
                                         )}
-                                        <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)]">
-                                            <div className="flex items-center gap-1">
-                                                <UserIcon className="w-3 h-3" />
+                                        <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                                <UserIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                                 {update.source}
                                             </div>
-                                            <div className="flex items-center gap-1">
-                                                <ClockIcon className="w-3 h-3" />
+                                            <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                                <ClockIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                                 {formatTimeAgo(update.date)}
                                             </div>
                                         </div>
@@ -311,21 +312,21 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             {/* Trade Rumors */}
             {tradeRumors.length > 0 && (
                 <Widget title="Trade Rumors">
-                    <div className="space-y-3">
+                    <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {tradeRumors.map((rumor, index) => (
                             <motion.div
                                 key={rumor.id}
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="p-4 border border-[var(--panel-border)] rounded-lg bg-gradient-to-r from-purple-500/5 to-blue-500/5"
+                                className="p-4 border border-[var(--panel-border)] rounded-lg bg-gradient-to-r from-purple-500/5 to-blue-500/5 sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex items-start justify-between mb-2">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm font-medium text-[var(--text-primary)]">
+                                <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                                        <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             Trade Interest
                                         </span>
-                                        <span className="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded-full">
+                                        <span className="text-xs px-2 py-1 bg-purple-500/20 text-purple-400 rounded-full sm:px-4 md:px-6 lg:px-8">
                                             {Math.round(rumor.probability * 100)}% probability
                                         </span>
                                     </div>
@@ -333,16 +334,16 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                                         {rumor.impact}
                                     </span>
                                 </div>
-                                <p className="text-sm text-[var(--text-secondary)] mb-3">
+                                <p className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                     <strong>{rumor.team}:</strong> {rumor.details}
                                 </p>
-                                <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)]">
-                                    <div className="flex items-center gap-1">
-                                        <UserIcon className="w-3 h-3" />
+                                <div className="flex items-center gap-4 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                        <UserIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                         {rumor.source}
                                     </div>
-                                    <div className="flex items-center gap-1">
-                                        <ClockIcon className="w-3 h-3" />
+                                    <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                                        <ClockIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
                                         {formatTimeAgo(rumor.date)}
                                     </div>
                                 </div>
@@ -355,12 +356,12 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             {/* News Feed Empty State */}
             {recentNews.length === 0 && injuryUpdates.length === 0 && tradeRumors.length === 0 && (
                 <Widget title="No Recent News">
-                    <div className="text-center py-8">
-                        <NewsIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2">
+                    <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                        <NewsIcon className="w-12 h-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+                        <h3 className="text-lg font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                             No Recent News
                         </h3>
-                        <p className="text-[var(--text-secondary)]">
+                        <p className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             Check back later for the latest updates on {player.name}
                         </p>
                     </div>
@@ -370,4 +371,10 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     );
 };
 
-export default NewsAndUpdatesTab;
+const NewsAndUpdatesTabWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NewsAndUpdatesTab {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NewsAndUpdatesTabWithErrorBoundary);

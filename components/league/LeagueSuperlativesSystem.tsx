@@ -2,7 +2,8 @@
  * League Superlatives & Awards System - Fun recognition and award tracking
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Award, Trophy, Star, Zap, Crown, Heart, Skull, Target, TrendingUp, Clock, Gift } from 'lucide-react';
 
@@ -29,7 +30,6 @@ interface Superlative {
   criteria: string;
   rarity: 'common' | 'rare' | 'legendary';
   week?: number;
-}
 
 interface LeagueSuperlativesSystemProps {
   leagueId: string;
@@ -41,7 +41,6 @@ interface LeagueSuperlativesSystemProps {
     record: { wins: number; losses: number };
     stats: any;
   }>;
-}
 
 const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
   leagueId,
@@ -71,7 +70,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Dynasty Destroyers',
         value: 156.8,
         context: 'Dominated with an explosive performance'
-      }
+
     },
     {
       id: 'heartbreaker',
@@ -89,7 +88,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Gridiron Gladiators',
         value: '0.34 points',
         context: 'Lost by a brutal margin that hurts'
-      }
+
     },
     {
       id: 'lucky_win',
@@ -107,7 +106,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Fantasy Phenoms',
         value: 'Won by 12 (projected -18)',
         context: 'Miraculous comeback nobody saw coming'
-      }
+
     },
 
     // Season-Long Awards
@@ -126,7 +125,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Championship Chasers',
         value: '±8.2 points',
         context: 'Reliable as a Swiss watch'
-      }
+
     },
     {
       id: 'waiver_wizard',
@@ -143,7 +142,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Playoff Predators',
         value: '124.6 points',
         context: 'Master of finding hidden gems'
-      }
+
     },
     {
       id: 'trade_master',
@@ -160,7 +159,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Touchdown Titans',
         value: '4 successful trades',
         context: 'Art of the deal personified'
-      }
+
     },
 
     // Silly/Fun Awards
@@ -179,7 +178,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Victory Vampires',
         value: '87.4 points on bench',
         context: 'King of the wrong lineup decisions'
-      }
+
     },
     {
       id: 'taco_award',
@@ -196,7 +195,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Elite Eagles',
         value: 'Started injured QB',
         context: 'Sometimes fantasy football is hard'
-      }
+
     },
     {
       id: 'glass_house',
@@ -213,7 +212,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Comeback Kings',
         value: '23 trash talk messages',
         context: 'All talk, questionable walk'
-      }
+
     },
     {
       id: 'loyalty_badge',
@@ -230,8 +229,8 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         teamName: 'Draft Day Demons',
         value: 'Kept Russell Wilson 12 weeks',
         context: 'Loyalty beyond reason'
-      }
-    }
+
+
   ];
 
   const [superlatives] = useState<Superlative[]>(superlativeDefinitions);
@@ -241,7 +240,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
       case 'common': return 'text-gray-400 border-gray-500 bg-gray-500/10';
       case 'rare': return 'text-blue-400 border-blue-500 bg-blue-500/10';
       case 'legendary': return 'text-yellow-400 border-yellow-500 bg-yellow-500/10';
-    }
+
   };
 
   const getCategoryColor = (category: Superlative['category']) => {
@@ -250,49 +249,52 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
       case 'season': return 'text-purple-400 bg-purple-500/20';
       case 'silly': return 'text-orange-400 bg-orange-500/20';
       default: return 'text-gray-400 bg-gray-500/20';
-    }
+
   };
 
   const getIconComponent = (icon: string) => {
     switch (icon) {
-      case 'trophy': return <Trophy className="w-5 h-5" />;
-      case 'award': return <Award className="w-5 h-5" />;
-      case 'star': return <Star className="w-5 h-5" />;
-      case 'zap': return <Zap className="w-5 h-5" />;
-      case 'crown': return <Crown className="w-5 h-5" />;
-      case 'heart': return <Heart className="w-5 h-5" />;
-      case 'skull': return <Skull className="w-5 h-5" />;
-      case 'target': return <Target className="w-5 h-5" />;
-      default: return <Award className="w-5 h-5" />;
-    }
+      case 'trophy': return <Trophy className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'award': return <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'star': return <Star className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'zap': return <Zap className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'crown': return <Crown className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'heart': return <Heart className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'skull': return <Skull className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case 'target': return <Target className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      default: return <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+
   };
 
   const filteredSuperlatives = selectedCategory === 'all' 
     ? superlatives 
     : superlatives.filter(s => s.category === selectedCategory);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+      </div>
+    );
+
   return (
-    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700">
+    <div className="bg-dark-800 rounded-xl p-6 border border-gray-700 sm:px-4 md:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Award className="w-6 h-6 text-gold-400" />
+      <div className="flex items-center justify-between mb-6 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+          <Award className="w-6 h-6 text-gold-400 sm:px-4 md:px-6 lg:px-8" />
           <div>
-            <h2 className="text-2xl font-bold text-white">League Superlatives</h2>
-            <p className="text-gray-400">Awards, recognition, and fun callouts</p>
+            <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">League Superlatives</h2>
+            <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Awards, recognition, and fun callouts</p>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           {(['all', 'weekly', 'season', 'silly'] as const).map(category => (
             <button
               key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                selectedCategory === category
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-dark-700 text-gray-400 hover:text-white hover:bg-dark-600'
-              }`}
+              onClick={() => setSelectedCategory(category)}`}
             >
               {category === 'all' ? 'All Awards' : category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
@@ -317,48 +319,48 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
             </div>
 
             {/* Award Header */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="text-3xl">{superlative.emoji}</div>
-              <div className="flex-1">
-                <h3 className="font-bold text-white text-lg">{superlative.title}</h3>
-                <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3 mb-3 sm:px-4 md:px-6 lg:px-8">
+              <div className="text-3xl sm:px-4 md:px-6 lg:px-8">{superlative.emoji}</div>
+              <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="font-bold text-white text-lg sm:px-4 md:px-6 lg:px-8">{superlative.title}</h3>
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   <span className={`px-2 py-0.5 rounded-full text-xs ${getCategoryColor(superlative.category)}`}>
                     {superlative.category.toUpperCase()}
                   </span>
                   {superlative.week && (
-                    <span className="text-xs text-gray-400">Week {superlative.week}</span>
+                    <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Week {superlative.week}</span>
                   )}
                 </div>
               </div>
             </div>
 
-            <p className="text-gray-300 text-sm mb-4">{superlative.description}</p>
+            <p className="text-gray-300 text-sm mb-4 sm:px-4 md:px-6 lg:px-8">{superlative.description}</p>
 
             {/* Winner Display */}
             {superlative.winner && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Crown className="w-4 h-4 text-gold-400" />
-                  <span className="font-semibold text-white">{superlative.winner.userName}</span>
+              <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                  <Crown className="w-4 h-4 text-gold-400 sm:px-4 md:px-6 lg:px-8" />
+                  <span className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{superlative.winner.userName}</span>
                 </div>
-                <div className="text-sm text-gray-400">{superlative.winner.teamName}</div>
+                <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{superlative.winner.teamName}</div>
                 {superlative.winner.value && (
-                  <div className="text-sm font-bold text-primary-400">{superlative.winner.value}</div>
+                  <div className="text-sm font-bold text-primary-400 sm:px-4 md:px-6 lg:px-8">{superlative.winner.value}</div>
                 )}
               </div>
             )}
 
             {!superlative.winner && (
-              <div className="text-center py-4">
-                <Clock className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                <div className="text-sm text-gray-500">Award pending</div>
+              <div className="text-center py-4 sm:px-4 md:px-6 lg:px-8">
+                <Clock className="w-8 h-8 text-gray-500 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Award pending</div>
                 {superlative.category === 'silly' && (
                   <button
-                    onClick={(e) => {
+                    onClick={(e) = aria-label="Action button"> {
                       e.stopPropagation();
                       setShowVotingModal(superlative.id);
                     }}
-                    className="mt-2 px-3 py-1 bg-primary-600 hover:bg-primary-500 text-white text-xs rounded transition-colors"
+                    className="mt-2 px-3 py-1 bg-primary-600 hover:bg-primary-500 text-white text-xs rounded transition-colors sm:px-4 md:px-6 lg:px-8"
                   >
                     Vote Now
                   </button>
@@ -373,28 +375,28 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="mt-4 pt-4 border-t border-gray-600 space-y-3"
+                  className="mt-4 pt-4 border-t border-gray-600 space-y-3 sm:px-4 md:px-6 lg:px-8"
                 >
                   <div>
-                    <div className="text-sm text-gray-400 mb-1">Criteria:</div>
-                    <div className="text-sm text-gray-200">{superlative.criteria}</div>
+                    <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Criteria:</div>
+                    <div className="text-sm text-gray-200 sm:px-4 md:px-6 lg:px-8">{superlative.criteria}</div>
                   </div>
                   
                   {superlative.winner?.context && (
                     <div>
-                      <div className="text-sm text-gray-400 mb-1">Context:</div>
-                      <div className="text-sm text-gray-200 italic">"{superlative.winner.context}"</div>
+                      <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Context:</div>
+                      <div className="text-sm text-gray-200 italic sm:px-4 md:px-6 lg:px-8">"{superlative.winner.context}"</div>
                     </div>
                   )}
 
                   {superlative.runners_up && superlative.runners_up.length > 0 && (
                     <div>
-                      <div className="text-sm text-gray-400 mb-1">Runners-up:</div>
-                      <div className="space-y-1">
+                      <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Runners-up:</div>
+                      <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {superlative.runners_up.slice(0, 2).map((runner, index) => (
-                          <div key={runner.userId} className="flex justify-between text-sm">
-                            <span className="text-gray-300">{index + 2}. {runner.userName}</span>
-                            <span className="text-gray-400">{runner.value}</span>
+                          <div key={runner.userId} className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
+                            <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{index + 2}. {runner.userName}</span>
+                            <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{runner.value}</span>
                           </div>
                         ))}
                       </div>
@@ -414,51 +416,48 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100]"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[1100] sm:px-4 md:px-6 lg:px-8"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-dark-800 rounded-2xl p-6 border border-gray-700 shadow-2xl max-w-md w-full mx-4"
+              className="bg-dark-800 rounded-2xl p-6 border border-gray-700 shadow-2xl max-w-md w-full mx-4 sm:px-4 md:px-6 lg:px-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">Vote for Award</h3>
+              <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
+                <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Vote for Award</h3>
                 <button
                   onClick={() => setShowVotingModal(null)}
-                  className="text-gray-400 hover:text-white"
                 >
                   ✕
                 </button>
               </div>
 
-              <div className="space-y-4">
-                <div className="text-sm text-gray-300">
+              <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                   Who deserves the "{superlatives.find(s => s.id === showVotingModal)?.title}" award?
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                   {teams.slice(0, 5).map(team => (
                     <button
                       key={team.id}
-                      className="w-full p-3 bg-dark-700 hover:bg-dark-600 border border-gray-600 rounded-lg text-left transition-colors"
-                    >
-                      <div className="font-semibold text-white">{team.name}</div>
-                      <div className="text-sm text-gray-400">{team.owner}</div>
+                      className="w-full p-3 bg-dark-700 hover:bg-dark-600 border border-gray-600 rounded-lg text-left transition-colors sm:px-4 md:px-6 lg:px-8"
+                     aria-label="Action button">
+                      <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{team.name}</div>
+                      <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{team.owner}</div>
                     </button>
                   ))}
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                   <button
                     onClick={() => setShowVotingModal(null)}
-                    className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={() => setShowVotingModal(null)}
-                    className="flex-1 bg-primary-600 hover:bg-primary-500 text-white py-2 px-4 rounded-lg transition-colors"
                   >
                     Submit Vote
                   </button>
@@ -470,29 +469,29 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
       </AnimatePresence>
 
       {/* Hall of Fame Preview */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-gold-500/10 to-yellow-500/10 border border-gold-500/30 rounded-lg">
-        <h3 className="font-bold text-gold-400 mb-3 flex items-center gap-2">
-          <Trophy className="w-5 h-5" />
+      <div className="mt-6 p-4 bg-gradient-to-r from-gold-500/10 to-yellow-500/10 border border-gold-500/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
+        <h3 className="font-bold text-gold-400 mb-3 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
+          <Trophy className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
           Hall of Fame Moments
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="text-center">
-            <div className="text-2xl mb-1">🏆</div>
-            <div className="font-semibold text-white">Season High Score</div>
-            <div className="text-gold-400">186.4 points</div>
-            <div className="text-gray-400 text-xs">Mike Johnson • Week 8</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl mb-1 sm:px-4 md:px-6 lg:px-8">🏆</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Season High Score</div>
+            <div className="text-gold-400 sm:px-4 md:px-6 lg:px-8">186.4 points</div>
+            <div className="text-gray-400 text-xs sm:px-4 md:px-6 lg:px-8">Mike Johnson • Week 8</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl mb-1">💔</div>
-            <div className="font-semibold text-white">Closest Loss</div>
-            <div className="text-red-400">0.08 points</div>
-            <div className="text-gray-400 text-xs">Sarah Chen • Week 3</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl mb-1 sm:px-4 md:px-6 lg:px-8">💔</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Closest Loss</div>
+            <div className="text-red-400 sm:px-4 md:px-6 lg:px-8">0.08 points</div>
+            <div className="text-gray-400 text-xs sm:px-4 md:px-6 lg:px-8">Sarah Chen • Week 3</div>
           </div>
-          <div className="text-center">
-            <div className="text-2xl mb-1">🔥</div>
-            <div className="font-semibold text-white">Win Streak</div>
-            <div className="text-orange-400">7 weeks</div>
-            <div className="text-gray-400 text-xs">Alex Rodriguez • Weeks 5-11</div>
+          <div className="text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="text-2xl mb-1 sm:px-4 md:px-6 lg:px-8">🔥</div>
+            <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Win Streak</div>
+            <div className="text-orange-400 sm:px-4 md:px-6 lg:px-8">7 weeks</div>
+            <div className="text-gray-400 text-xs sm:px-4 md:px-6 lg:px-8">Alex Rodriguez • Weeks 5-11</div>
           </div>
         </div>
       </div>
@@ -500,4 +499,10 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
   );
 };
 
-export default LeagueSuperlativesSystem;
+const LeagueSuperlativesSystemWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <LeagueSuperlativesSystem {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(LeagueSuperlativesSystemWithErrorBoundary);

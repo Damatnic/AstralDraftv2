@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 
 interface VirtualizedListProps<T> {
   items: T[];
@@ -6,7 +6,6 @@ interface VirtualizedListProps<T> {
   containerHeight: number;
   renderItem: (item: T, index: number) => React.ReactNode;
   overscan?: number;
-}
 
 export function VirtualizedList<T>({
   items,
@@ -35,7 +34,7 @@ export function VirtualizedList<T>({
   return (
     <div
       ref={containerRef}
-      className="overflow-auto"
+      className="overflow-auto sm:px-4 md:px-6 lg:px-8"
       style={{ height: containerHeight }}
       onScroll={handleScroll}
     >
@@ -50,4 +49,3 @@ export function VirtualizedList<T>({
       </div>
     </div>
   );
-}

@@ -3,6 +3,7 @@ import { ErrorBoundary } from '../components/ui/ErrorBoundary';
 
 interface ProjectIntegrityViewProps {
   // No props currently needed, but interface ready for future expansion
+
 }
 
 const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {

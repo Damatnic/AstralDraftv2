@@ -3,7 +3,8 @@
  * Responsive layout with safe area support and mobile optimizations
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import MobileNavigation from './MobileNavigation';
 import PWAInstallPrompt from './PWAInstallPrompt';
@@ -17,17 +18,18 @@ interface Props {
   showPWAPrompt?: boolean;
   notificationCount?: number;
   className?: string;
+
 }
 
-const MobileLayout: React.FC<Props> = ({
-  children,
+const MobileLayout: React.FC<Props> = ({ children,
   activeView,
   onViewChange,
   showNavigation = true,
   showPWAPrompt = true,
   notificationCount = 0,
   className = ''
-}: any) => {
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1023px)');
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -50,19 +52,18 @@ const MobileLayout: React.FC<Props> = ({
         const viewport = window.visualViewport as any;
         const initialHeight = window.innerHeight;
         setIsKeyboardOpen(viewport.height < initialHeight * 0.75);
-      }
+
     };
 
     window.addEventListener('resize', handleResize);
     if ('visualViewport' in window && window.visualViewport) {
       window.visualViewport.addEventListener('resize', handleVisualViewport);
-    }
 
     return () => {
       window.removeEventListener('resize', handleResize);
       if ('visualViewport' in window && window.visualViewport) {
         window.visualViewport.removeEventListener('resize', handleVisualViewport);
-      }
+
     };
   }, [isMobile]);
 
@@ -74,7 +75,7 @@ const MobileLayout: React.FC<Props> = ({
         'content',
         'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
       );
-    }
+
   }, []);
 
   const getLayoutClasses = () => {
@@ -82,12 +83,10 @@ const MobileLayout: React.FC<Props> = ({
     
     if (isMobile) {
       return `${baseClasses} ${showNavigation ? 'pb-20' : ''} ${isKeyboardOpen ? 'keyboard-open' : ''}`;
-    }
-    
+
     if (isTablet) {
       return `${baseClasses} ${showNavigation ? 'pt-16' : ''}`;
-    }
-    
+
     return baseClasses;
   };
 
@@ -96,8 +95,7 @@ const MobileLayout: React.FC<Props> = ({
     
     if (isMobile) {
       return `${baseClasses} safe-area-content mobile-content`;
-    }
-    
+
     return baseClasses;
   };
 
@@ -106,7 +104,7 @@ const MobileLayout: React.FC<Props> = ({
       {/* Safe area top spacing for mobile devices */}
       {isMobile && (
         <div 
-          className="safe-area-top bg-gray-900" 
+          className="safe-area-top bg-gray-900 sm:px-4 md:px-6 lg:px-8" 
           style={{ height: 'env(safe-area-inset-top)' }}
         />
       )}
@@ -146,4 +144,10 @@ const MobileLayout: React.FC<Props> = ({
   );
 };
 
-export default MobileLayout;
+const MobileLayoutWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobileLayout {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobileLayoutWithErrorBoundary);

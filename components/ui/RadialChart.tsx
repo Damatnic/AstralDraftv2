@@ -1,4 +1,5 @@
 
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -9,24 +10,25 @@ interface RadialChartProps {
     unit?: string;
     size?: number;
     strokeWidth?: number;
+
 }
 
-const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }: any) => {
+const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit = '', size = 80, strokeWidth = 8 }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
     const progress = value / maxValue;
     const strokeDashoffset = circumference * (1 - progress);
 
     return (
-        <div className="flex flex-col items-center gap-1 text-center">
-            <div className="relative" style={{ width: size, height: size }}>
+        <div className="flex flex-col items-center gap-1 text-center sm:px-4 md:px-6 lg:px-8">
+            <div className="relative sm:px-4 md:px-6 lg:px-8" style={{ width: size, height: size }}>
                 <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
                     <circle
                         cx={size / 2}
                         cy={size / 2}
                         r={radius}
                         strokeWidth={strokeWidth}
-                        className="stroke-gray-700"
+                        className="stroke-gray-700 sm:px-4 md:px-6 lg:px-8"
                         fill="none"
                     />
                     <motion.circle
@@ -34,7 +36,7 @@ const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit 
                         cy={size / 2}
                         r={radius}
                         strokeWidth={strokeWidth}
-                        className="stroke-cyan-400"
+                        className="stroke-cyan-400 sm:px-4 md:px-6 lg:px-8"
                         fill="none"
                         strokeLinecap="round"
                         transform={`rotate(-90 ${size / 2} ${size / 2})`}
@@ -46,13 +48,19 @@ const RadialChart: React.FC<RadialChartProps> = ({ value, maxValue, label, unit 
                         }}
                     />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="font-bold text-lg text-white">{value}{unit}</span>
+                <div className="absolute inset-0 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
+                    <span className="font-bold text-lg text-white sm:px-4 md:px-6 lg:px-8">{value}{unit}</span>
                 </div>
             </div>
-            <p className="text-xs text-gray-400">{label}</p>
+            <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{label}</p>
         </div>
     );
 };
 
-export default RadialChart;
+const RadialChartWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <RadialChart {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(RadialChartWithErrorBoundary);

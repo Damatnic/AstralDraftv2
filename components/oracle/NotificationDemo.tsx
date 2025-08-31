@@ -3,7 +3,8 @@
  * For testing and demonstrating Oracle notification features
  */
 
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Target, Clock, Trophy, TrendingUp, Users, Zap } from 'lucide-react';
 import { NotificationCenter } from '../oracle/NotificationCenter';
@@ -29,7 +30,7 @@ export const NotificationDemo: React.FC = () => {
         {
             title: 'Deadline Warning',
             description: 'Show a prediction deadline warning',
-            icon: <Clock className="w-5 h-5 text-yellow-400" />,
+            icon: <Clock className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionDeadline(
                 'demo-pred-1',
                 'Will the Chiefs win their next game?',
@@ -39,7 +40,7 @@ export const NotificationDemo: React.FC = () => {
         {
             title: 'Correct Prediction',
             description: 'Celebrate a correct prediction',
-            icon: <Target className="w-5 h-5 text-green-400" />,
+            icon: <Target className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionResult(
                 'demo-pred-2',
                 'Will Patrick Mahomes throw for 300+ yards?',
@@ -50,7 +51,7 @@ export const NotificationDemo: React.FC = () => {
         {
             title: 'Incorrect Prediction',
             description: 'Show an incorrect prediction result',
-            icon: <Target className="w-5 h-5 text-red-400" />,
+            icon: <Target className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyPredictionResult(
                 'demo-pred-3',
                 'Will it rain tomorrow?',
@@ -61,37 +62,37 @@ export const NotificationDemo: React.FC = () => {
         {
             title: 'Accuracy Improved',
             description: 'Show accuracy improvement notification',
-            icon: <TrendingUp className="w-5 h-5 text-green-400" />,
+            icon: <TrendingUp className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyAccuracyUpdate(75.5, 68.2)
         },
         {
             title: 'Accuracy Decreased',
             description: 'Show accuracy decrease notification',
-            icon: <TrendingUp className="w-5 h-5 text-red-400" />,
+            icon: <TrendingUp className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyAccuracyUpdate(62.1, 68.9)
         },
         {
             title: 'Streak Milestone',
             description: 'Celebrate a 5-prediction streak',
-            icon: <Zap className="w-5 h-5 text-orange-400" />,
+            icon: <Zap className="w-5 h-5 text-orange-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyStreakMilestone(5)
         },
         {
             title: 'Ranking Improved',
             description: 'Show ranking improvement',
-            icon: <Trophy className="w-5 h-5 text-purple-400" />,
+            icon: <Trophy className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyRankingChange(3, 7)
         },
         {
             title: 'Ranking Dropped',
             description: 'Show ranking decrease',
-            icon: <Trophy className="w-5 h-5 text-gray-400" />,
+            icon: <Trophy className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => notifyRankingChange(12, 8)
         },
         {
             title: 'Custom High Priority',
             description: 'Show a high priority custom notification',
-            icon: <Bell className="w-5 h-5 text-red-400" />,
+            icon: <Bell className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => addNotification({
                 type: 'result_announced',
                 title: '🚨 Critical Update',
@@ -102,7 +103,7 @@ export const NotificationDemo: React.FC = () => {
         {
             title: 'Custom Medium Priority',
             description: 'Show a medium priority custom notification',
-            icon: <Bell className="w-5 h-5 text-blue-400" />,
+            icon: <Bell className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />,
             action: () => addNotification({
                 type: 'accuracy_update',
                 title: '📊 Weekly Summary',
@@ -110,28 +111,27 @@ export const NotificationDemo: React.FC = () => {
                 priority: 'medium',
                 actionUrl: '/oracle/analytics'
             })
-        }
+
     ];
 
     return (
-        <div className="max-w-6xl mx-auto p-6 space-y-6">
+        <div className="max-w-6xl mx-auto p-6 space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-white mb-2">
+                    <h1 className="text-3xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                         Oracle Notification System Demo
                     </h1>
-                    <p className="text-gray-400">
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         Test and explore the Oracle notification features
                     </p>
                 </div>
                 
                 {/* Notification Center */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
                     <NotificationCenter />
                     <button
                         onClick={() => setShowPreferences(!showPreferences)}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                     >
                         Settings
                     </button>
@@ -141,28 +141,28 @@ export const NotificationDemo: React.FC = () => {
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Card>
-                    <CardContent className="p-6 text-center">
-                        <Bell className="w-8 h-8 mx-auto text-blue-400 mb-2" />
-                        <p className="text-2xl font-bold text-white">{notifications.length}</p>
-                        <p className="text-sm text-gray-400">Total Notifications</p>
+                    <CardContent className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                        <Bell className="w-8 h-8 mx-auto text-blue-400 mb-2 sm:px-4 md:px-6 lg:px-8" />
+                        <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{notifications.length}</p>
+                        <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Total Notifications</p>
                     </CardContent>
                 </Card>
                 
                 <Card>
-                    <CardContent className="p-6 text-center">
-                        <Target className="w-8 h-8 mx-auto text-green-400 mb-2" />
-                        <p className="text-2xl font-bold text-white">{unreadCount}</p>
-                        <p className="text-sm text-gray-400">Unread Notifications</p>
+                    <CardContent className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                        <Target className="w-8 h-8 mx-auto text-green-400 mb-2 sm:px-4 md:px-6 lg:px-8" />
+                        <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{unreadCount}</p>
+                        <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Unread Notifications</p>
                     </CardContent>
                 </Card>
                 
                 <Card>
-                    <CardContent className="p-6 text-center">
-                        <Users className="w-8 h-8 mx-auto text-purple-400 mb-2" />
-                        <p className="text-2xl font-bold text-white">
+                    <CardContent className="p-6 text-center sm:px-4 md:px-6 lg:px-8">
+                        <Users className="w-8 h-8 mx-auto text-purple-400 mb-2 sm:px-4 md:px-6 lg:px-8" />
+                        <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">
                             {('Notification' in window && Notification.permission === 'granted') ? 'Enabled' : 'Disabled'}
                         </p>
-                        <p className="text-sm text-gray-400">Browser Notifications</p>
+                        <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Browser Notifications</p>
                     </CardContent>
                 </Card>
             </div>
@@ -193,15 +193,15 @@ export const NotificationDemo: React.FC = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
                                 onClick={demo.action}
-                                className="p-4 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors text-left group"
+                                className="p-4 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors text-left group sm:px-4 md:px-6 lg:px-8"
                             >
-                                <div className="flex items-center space-x-3 mb-2">
+                                <div className="flex items-center space-x-3 mb-2 sm:px-4 md:px-6 lg:px-8">
                                     {demo.icon}
-                                    <h3 className="font-medium text-white group-hover:text-blue-300">
+                                    <h3 className="font-medium text-white group-hover:text-blue-300 sm:px-4 md:px-6 lg:px-8">
                                         {demo.title}
                                     </h3>
                                 </div>
-                                <p className="text-sm text-gray-400">{demo.description}</p>
+                                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{demo.description}</p>
                             </motion.button>
                         ))}
                     </div>
@@ -214,36 +214,36 @@ export const NotificationDemo: React.FC = () => {
                     <CardTitle>How to Use</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="space-y-4">
-                        <div className="flex items-start space-x-3">
-                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold sm:px-4 md:px-6 lg:px-8">1</div>
                             <div>
-                                <h4 className="font-medium text-white">Enable Browser Notifications</h4>
-                                <p className="text-sm text-gray-400">Click "Settings" and enable browser notifications for the full experience.</p>
+                                <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Enable Browser Notifications</h4>
+                                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Click "Settings" and enable browser notifications for the full experience.</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-start space-x-3">
-                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                        <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold sm:px-4 md:px-6 lg:px-8">2</div>
                             <div>
-                                <h4 className="font-medium text-white">Test Notifications</h4>
-                                <p className="text-sm text-gray-400">Click any of the demo buttons above to trigger different types of notifications.</p>
+                                <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Test Notifications</h4>
+                                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Click any of the demo buttons above to trigger different types of notifications.</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-start space-x-3">
-                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                        <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold sm:px-4 md:px-6 lg:px-8">3</div>
                             <div>
-                                <h4 className="font-medium text-white">View Notifications</h4>
-                                <p className="text-sm text-gray-400">Click the bell icon to see your notification history and manage them.</p>
+                                <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">View Notifications</h4>
+                                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Click the bell icon to see your notification history and manage them.</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-start space-x-3">
-                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                        <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
+                            <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold sm:px-4 md:px-6 lg:px-8">4</div>
                             <div>
-                                <h4 className="font-medium text-white">Customize Settings</h4>
-                                <p className="text-sm text-gray-400">Use the settings panel to control which notifications you receive and when.</p>
+                                <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Customize Settings</h4>
+                                <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Use the settings panel to control which notifications you receive and when.</p>
                             </div>
                         </div>
                     </div>
@@ -253,4 +253,10 @@ export const NotificationDemo: React.FC = () => {
     );
 };
 
-export default NotificationDemo;
+const NotificationDemoWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <NotificationDemo {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(NotificationDemoWithErrorBoundary);

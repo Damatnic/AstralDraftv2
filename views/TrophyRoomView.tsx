@@ -19,8 +19,7 @@ const awardConfig: Record<LeagueAward['type'], { icon: React.ReactNode, color: s
     CLOSEST_MATCHUP: { icon: <ZapIcon />, color: 'text-blue-400', label: 'Closest Matchup' },
 };
 
-
-const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }: any) => {
+const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }) => {
     const config = awardConfig[award.type];
     if (!config) return null;
 
@@ -37,7 +36,7 @@ const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ a
     );
 };
 
-const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }: any) => {
+const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }) => {
     const champion = teams.find((t: any) => t.id === history.championTeamId);
     
     return (
@@ -77,7 +76,6 @@ const TrophyRoomView: React.FC = () => {
     
     if (!league) {
         return <ErrorDisplay title="Error" message="Please select a league to view the trophy room." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     const pastSeasons = (league.history || []).sort((a, b) => b.season - a.season);
 
@@ -90,7 +88,7 @@ const TrophyRoomView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="back-btn">
                     Back to League Hub
                 </button>
             </header>

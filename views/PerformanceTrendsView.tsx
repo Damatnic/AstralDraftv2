@@ -16,7 +16,6 @@ const PerformanceTrendsView: React.FC = () => {
 
     if (!league || !myTeam) {
         return <ErrorDisplay title="No Data Available" message="Please select a league to view performance trends." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
-    }
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -27,7 +26,7 @@ const PerformanceTrendsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} - {league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} className="back-btn">
                     Back to Team Hub
                 </button>
             </header>

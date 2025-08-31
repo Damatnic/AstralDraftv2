@@ -52,7 +52,12 @@
       "Bash(del nul)",
       "Bash(sed:*)",
       "Bash(npx lighthouse:*)",
-      "Bash(start http://localhost:8770)"
+      "Bash(start http://localhost:8770)",
+      "Bash(chmod:*)",
+      "Bash(python:*)",
+      "Bash(bash:*)",
+      "Bash(grep:*)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": [],

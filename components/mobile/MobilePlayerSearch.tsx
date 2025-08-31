@@ -3,7 +3,8 @@
  * Integrates MobileSearchInterface for player search functionality
  */
 
-import React from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo } from 'react';
 import { Player } from '../../types';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import MobileSearchInterface from './MobileSearchInterface';
@@ -14,6 +15,7 @@ interface MobilePlayerSearchProps {
     onSearch?: (query: string) => void;
     placeholder?: string;
     className?: string;
+
 }
 
 const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
@@ -22,7 +24,7 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
     onSearch,
     placeholder = "Search players...",
     className = ''
-}: any) => {
+}) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     if (!isMobile) {
@@ -33,18 +35,16 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
                     type="text"
                     placeholder={placeholder}
                     onChange={(e: any) => onSearch?.(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg"
                 />
-                <div className="mt-4 grid gap-2">
+                <div className="mt-4 grid gap-2 sm:px-4 md:px-6 lg:px-8">
                     {players.slice(0, 10).map((player: any) => (
                         <button
                             key={player.id}
                             onClick={() => onPlayerSelect?.(player)}
-                            className="w-full p-3 border rounded-lg cursor-pointer hover:bg-gray-50 text-left"
                         >
-                            <div className="flex items-center justify-between">
-                                <span className="font-medium">{player.name}</span>
-                                <span className="text-sm text-gray-500">
+                            <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                                <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                                <span className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                     {player.position} - {player.team}
                                 </span>
                             </div>
@@ -53,7 +53,6 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
                 </div>
             </div>
         );
-    }
 
     return (
         <MobileSearchInterface
@@ -68,4 +67,10 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
     );
 };
 
-export default MobilePlayerSearch;
+const MobilePlayerSearchWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <MobilePlayerSearch {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(MobilePlayerSearchWithErrorBoundary);

@@ -51,6 +51,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
   // Load user contests and available contests
   const refreshContests = useCallback(async () => {
     try {
+
       setLoading(true);
       setError(null);
 
@@ -70,6 +71,8 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
         setSelectedContest(userContestsList[0]);
       }
 
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load contests';
       setError(errorMessage);
@@ -151,6 +154,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     }
 
     try {
+
       setSubmitting(true);
       setError(null);
 
@@ -168,6 +172,8 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
       return success;
 
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to submit predictions';
       setError(errorMessage);
@@ -185,6 +191,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     }
 
     try {
+
       setSubmitting(true);
       setError(null);
 
@@ -200,6 +207,8 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
       return success;
 
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to submit bracket picks';
       setError(errorMessage);
@@ -217,6 +226,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     }
 
     try {
+
       setSubmitting(true);
       setError(null);
 
@@ -232,6 +242,8 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
       return success;
 
+    } catch (error) {
+        console.error(error);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to submit award picks';
       setError(errorMessage);

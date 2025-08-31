@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState } from 'react';
 import './OracleConfidenceEstimationSection.css';
 
 interface ConfidenceMethod {
@@ -11,6 +12,7 @@ interface ConfidenceMethod {
   implementationDetails: string;
   confidenceRange: string;
   useCases: string[];
+
 }
 
 interface UncertaintySource {
@@ -21,7 +23,6 @@ interface UncertaintySource {
   quantificationMethod: string;
   impact: 'Low' | 'Medium' | 'High';
   mitigation: string[];
-}
 
 interface CalibrationMetric {
   id: string;
@@ -30,6 +31,7 @@ interface CalibrationMetric {
   description: string;
   idealValue: string;
   interpretation: string;
+
 }
 
 interface PredictionInterval {
@@ -40,7 +42,6 @@ interface PredictionInterval {
   prediction: number;
   method: string;
   width: number;
-}
 
 // Helper functions for method ratings
 const getMethodEffectiveness = (methodId: string): string => {
@@ -231,7 +232,7 @@ function OracleConfidenceEstimationSection() {
       implementationDetails: 'Optimize temperature parameter T on validation set using NLL loss',
       confidenceRange: '0-100% calibrated confidence scores',
       useCases: ['Model calibration', 'Confidence thresholding', 'Decision making']
-    }
+
   ];
 
   // Uncertainty Sources
@@ -289,7 +290,7 @@ function OracleConfidenceEstimationSection() {
       quantificationMethod: 'Time-series analysis and trend detection',
       impact: 'Medium',
       mitigation: ['Recurrent architectures', 'Attention mechanisms', 'Adaptive learning rates']
-    }
+
   ];
 
   // Calibration Metrics
@@ -333,7 +334,7 @@ function OracleConfidenceEstimationSection() {
       description: 'Measures quality of predicted probabilities',
       idealValue: 'Lower values',
       interpretation: 'Proper scoring rule that rewards confident correct predictions and penalizes confident incorrect ones.'
-    }
+
   ];
 
   // Generate prediction intervals
@@ -377,7 +378,7 @@ function OracleConfidenceEstimationSection() {
         lowerBound: prediction - (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96),
         upperBound: prediction + (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96),
         width: 2 * (baseUncertainty * 1.2 * (confidenceLevel / 100) * 1.96)
-      }
+
     ];
   };
 
@@ -404,10 +405,10 @@ function OracleConfidenceEstimationSection() {
   };
 
   const renderOverview = () => (
-    <div className="confidence-overview">
+    <div className="confidence-overview sm:px-4 md:px-6 lg:px-8">
       <h3>🎯 Confidence Scores & Uncertainty Quantification</h3>
-      <div className="overview-content">
-        <div className="overview-section">
+      <div className="overview-content sm:px-4 md:px-6 lg:px-8">
+        <div className="overview-section sm:px-4 md:px-6 lg:px-8">
           <h4>Why Confidence Matters</h4>
           <p>
             In fantasy football, knowing how confident Oracle is in its predictions is just as important as the predictions themselves. 
@@ -415,26 +416,26 @@ function OracleConfidenceEstimationSection() {
             Oracle provides sophisticated uncertainty quantification to give you a complete picture of prediction reliability.
           </p>
           
-          <div className="confidence-benefits">
+          <div className="confidence-benefits sm:px-4 md:px-6 lg:px-8">
             <h5>🎲 Key Benefits</h5>
-            <div className="benefits-grid">
-              <div className="benefit-card">
-                <span className="benefit-icon">📊</span>
+            <div className="benefits-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
+                <span className="benefit-icon sm:px-4 md:px-6 lg:px-8">📊</span>
                 <h6>Risk Assessment</h6>
                 <p>Understand the risk level of each prediction to make better lineup decisions</p>
               </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">🎯</span>
+              <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
+                <span className="benefit-icon sm:px-4 md:px-6 lg:px-8">🎯</span>
                 <h6>Decision Support</h6>
                 <p>Use confidence levels to prioritize high-certainty predictions over risky plays</p>
               </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">⚖️</span>
+              <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
+                <span className="benefit-icon sm:px-4 md:px-6 lg:px-8">⚖️</span>
                 <h6>Balanced Strategies</h6>
                 <p>Balance safe, high-confidence picks with potentially high-reward uncertain plays</p>
               </div>
-              <div className="benefit-card">
-                <span className="benefit-icon">🔬</span>
+              <div className="benefit-card sm:px-4 md:px-6 lg:px-8">
+                <span className="benefit-icon sm:px-4 md:px-6 lg:px-8">🔬</span>
                 <h6>Model Transparency</h6>
                 <p>Understand when Oracle is uncertain and why certain predictions are more reliable</p>
               </div>
@@ -442,34 +443,34 @@ function OracleConfidenceEstimationSection() {
           </div>
         </div>
         
-        <div className="overview-section">
+        <div className="overview-section sm:px-4 md:px-6 lg:px-8">
           <h4>Oracle's Confidence Framework</h4>
-          <div className="confidence-framework">
-            <div className="framework-flow">
-              <div className="flow-stage">
-                <div className="stage-icon">🧠</div>
+          <div className="confidence-framework sm:px-4 md:px-6 lg:px-8">
+            <div className="framework-flow sm:px-4 md:px-6 lg:px-8">
+              <div className="flow-stage sm:px-4 md:px-6 lg:px-8">
+                <div className="stage-icon sm:px-4 md:px-6 lg:px-8">🧠</div>
                 <h6>Prediction Generation</h6>
                 <p>Neural network generates base prediction</p>
               </div>
-              <div className="flow-arrow">→</div>
-              <div className="flow-stage">
-                <div className="stage-icon">📈</div>
+              <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+              <div className="flow-stage sm:px-4 md:px-6 lg:px-8">
+                <div className="stage-icon sm:px-4 md:px-6 lg:px-8">📈</div>
                 <h6>Uncertainty Estimation</h6>
                 <p>Multiple methods quantify prediction uncertainty</p>
               </div>
-              <div className="flow-arrow">→</div>
-              <div className="flow-stage">
-                <div className="stage-icon">🎯</div>
+              <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
+              <div className="flow-stage sm:px-4 md:px-6 lg:px-8">
+                <div className="stage-icon sm:px-4 md:px-6 lg:px-8">🎯</div>
                 <h6>Confidence Score</h6>
                 <p>Combined confidence metric (0-100%)</p>
               </div>
             </div>
           </div>
           
-          <div className="confidence-types">
+          <div className="confidence-types sm:px-4 md:px-6 lg:px-8">
             <h5>Types of Uncertainty</h5>
-            <div className="uncertainty-grid">
-              <div className="uncertainty-card aleatoric">
+            <div className="uncertainty-grid sm:px-4 md:px-6 lg:px-8">
+              <div className="uncertainty-card aleatoric sm:px-4 md:px-6 lg:px-8">
                 <h6>🎲 Aleatoric Uncertainty</h6>
                 <p><strong>Data Uncertainty:</strong> Inherent randomness in player performance that cannot be reduced with more data</p>
                 <ul>
@@ -478,7 +479,7 @@ function OracleConfidenceEstimationSection() {
                   <li>Injury and fatigue effects</li>
                 </ul>
               </div>
-              <div className="uncertainty-card epistemic">
+              <div className="uncertainty-card epistemic sm:px-4 md:px-6 lg:px-8">
                 <h6>🧠 Epistemic Uncertainty</h6>
                 <p><strong>Model Uncertainty:</strong> Uncertainty about the model itself that can be reduced with more data or better models</p>
                 <ul>
@@ -491,34 +492,34 @@ function OracleConfidenceEstimationSection() {
           </div>
         </div>
         
-        <div className="overview-section">
+        <div className="overview-section sm:px-4 md:px-6 lg:px-8">
           <h4>Confidence Score Interpretation</h4>
-          <div className="score-interpretation">
-            <div className="confidence-levels">
-              <div className="confidence-level high">
-                <div className="level-indicator">90-100%</div>
-                <div className="level-content">
+          <div className="score-interpretation sm:px-4 md:px-6 lg:px-8">
+            <div className="confidence-levels sm:px-4 md:px-6 lg:px-8">
+              <div className="confidence-level high sm:px-4 md:px-6 lg:px-8">
+                <div className="level-indicator sm:px-4 md:px-6 lg:px-8">90-100%</div>
+                <div className="level-content sm:px-4 md:px-6 lg:px-8">
                   <h6>🟢 High Confidence</h6>
                   <p>Strong conviction in prediction. Low uncertainty across all methods. Ideal for must-start decisions.</p>
                 </div>
               </div>
-              <div className="confidence-level medium">
-                <div className="level-indicator">70-89%</div>
-                <div className="level-content">
+              <div className="confidence-level medium sm:px-4 md:px-6 lg:px-8">
+                <div className="level-indicator sm:px-4 md:px-6 lg:px-8">70-89%</div>
+                <div className="level-content sm:px-4 md:px-6 lg:px-8">
                   <h6>🟡 Medium Confidence</h6>
                   <p>Moderate certainty with some uncertainty factors. Good for lineup decisions with alternatives.</p>
                 </div>
               </div>
-              <div className="confidence-level low">
-                <div className="level-indicator">50-69%</div>
-                <div className="level-content">
+              <div className="confidence-level low sm:px-4 md:px-6 lg:px-8">
+                <div className="level-indicator sm:px-4 md:px-6 lg:px-8">50-69%</div>
+                <div className="level-content sm:px-4 md:px-6 lg:px-8">
                   <h6>🟠 Low Confidence</h6>
                   <p>Significant uncertainty present. Consider as boom-or-bust plays with careful risk management.</p>
                 </div>
               </div>
-              <div className="confidence-level very-low">
-                <div className="level-indicator">0-49%</div>
-                <div className="level-content">
+              <div className="confidence-level very-low sm:px-4 md:px-6 lg:px-8">
+                <div className="level-indicator sm:px-4 md:px-6 lg:px-8">0-49%</div>
+                <div className="level-content sm:px-4 md:px-6 lg:px-8">
                   <h6>🔴 Very Low Confidence</h6>
                   <p>High uncertainty across methods. Avoid or use sparingly in low-stakes situations.</p>
                 </div>
@@ -531,9 +532,9 @@ function OracleConfidenceEstimationSection() {
   );
 
   const renderMethods = () => (
-    <div className="confidence-methods">
+    <div className="confidence-methods sm:px-4 md:px-6 lg:px-8">
       <h3>🔬 Confidence Estimation Methods</h3>
-      <div className="methods-grid">
+      <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {confidenceMethods.map((method: any) => (
           <button
             key={method.id}
@@ -541,24 +542,24 @@ function OracleConfidenceEstimationSection() {
             onClick={() => setSelectedMethod(method.id)}
             aria-label={`Select ${method.name} method`}
           >
-            <div className="method-header">
+            <div className="method-header sm:px-4 md:px-6 lg:px-8">
               <h4>{method.name}</h4>
-              {selectedMethod === method.id && <span className="selected-badge">Selected</span>}
+              {selectedMethod === method.id && <span className="selected-badge sm:px-4 md:px-6 lg:px-8">Selected</span>}
             </div>
             
-            <p className="method-description">{method.description}</p>
+            <p className="method-description sm:px-4 md:px-6 lg:px-8">{method.description}</p>
             
-            <div className="method-formula">
+            <div className="method-formula sm:px-4 md:px-6 lg:px-8">
               <strong>Formula:</strong>
-              <div className="formula">{method.formula}</div>
+              <div className="formula sm:px-4 md:px-6 lg:px-8">{method.formula}</div>
             </div>
             
-            <div className="method-range">
+            <div className="method-range sm:px-4 md:px-6 lg:px-8">
               <strong>Confidence Range:</strong> {method.confidenceRange}
             </div>
             
-            <div className="method-analysis">
-              <div className="advantages">
+            <div className="method-analysis sm:px-4 md:px-6 lg:px-8">
+              <div className="advantages sm:px-4 md:px-6 lg:px-8">
                 <h6>✅ Advantages</h6>
                 <ul>
                   {method.advantages.map((advantage, index) => (
@@ -566,7 +567,7 @@ function OracleConfidenceEstimationSection() {
                   ))}
                 </ul>
               </div>
-              <div className="limitations">
+              <div className="limitations sm:px-4 md:px-6 lg:px-8">
                 <h6>⚠️ Limitations</h6>
                 <ul>
                   {method.limitations.map((limitation, index) => (
@@ -577,13 +578,13 @@ function OracleConfidenceEstimationSection() {
             </div>
             
             {selectedMethod === method.id && (
-              <div className="method-details">
-                <div className="implementation-details">
+              <div className="method-details sm:px-4 md:px-6 lg:px-8">
+                <div className="implementation-details sm:px-4 md:px-6 lg:px-8">
                   <h6>🔧 Implementation</h6>
                   <p>{method.implementationDetails}</p>
                 </div>
                 
-                <div className="use-cases">
+                <div className="use-cases sm:px-4 md:px-6 lg:px-8">
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, index) => (
@@ -597,10 +598,10 @@ function OracleConfidenceEstimationSection() {
         ))}
       </div>
       
-      <div className="methods-comparison">
+      <div className="methods-comparison sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Method Comparison</h4>
-        <div className="comparison-table">
-          <div className="table-header">
+        <div className="comparison-table sm:px-4 md:px-6 lg:px-8">
+          <div className="table-header sm:px-4 md:px-6 lg:px-8">
             <span>Method</span>
             <span>Computational Cost</span>
             <span>Quality</span>
@@ -608,18 +609,18 @@ function OracleConfidenceEstimationSection() {
             <span>Theoretical Foundation</span>
           </div>
           {confidenceMethods.map((method: any) => (
-            <div key={`comparison-${method.id}`} className="table-row">
-              <span className="method-name">{method.name}</span>
-              <span className="cost-score">
+            <div key={`comparison-${method.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
+              <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
+              <span className="cost-score sm:px-4 md:px-6 lg:px-8">
                 {getMethodEffectiveness(method.id)}
               </span>
-              <span className="quality-score">
+              <span className="quality-score sm:px-4 md:px-6 lg:px-8">
                 {getMethodSpeedRating(method.id)}
               </span>
-              <span className="implementation-score">
+              <span className="implementation-score sm:px-4 md:px-6 lg:px-8">
                 {getMethodScalabilityRating(method.id)}
               </span>
-              <span className="theory-score">
+              <span className="theory-score sm:px-4 md:px-6 lg:px-8">
                 {getMethodRobustnessRating(method.id)}
               </span>
             </div>
@@ -630,9 +631,9 @@ function OracleConfidenceEstimationSection() {
   );
 
   const renderUncertainty = () => (
-    <div className="uncertainty-sources">
+    <div className="uncertainty-sources sm:px-4 md:px-6 lg:px-8">
       <h3>🔍 Uncertainty Sources & Analysis</h3>
-      <div className="uncertainty-type-selector">
+      <div className="uncertainty-type-selector sm:px-4 md:px-6 lg:px-8">
         <button
           className={`type-button ${selectedUncertaintyType === 'aleatoric' ? 'active' : ''}`}
           onClick={() => setSelectedUncertaintyType('aleatoric')}
@@ -653,27 +654,27 @@ function OracleConfidenceEstimationSection() {
         </button>
       </div>
       
-      <div className="uncertainty-grid">
+      <div className="uncertainty-grid sm:px-4 md:px-6 lg:px-8">
         {uncertaintySources
           .filter((source: any) => selectedUncertaintyType === 'all' || source.type.toLowerCase() === selectedUncertaintyType)
           .map((source: any) => (
             <div key={source.id} className={`uncertainty-card ${source.type.toLowerCase()}`}>
-              <div className="uncertainty-header">
+              <div className="uncertainty-header sm:px-4 md:px-6 lg:px-8">
                 <h4>{source.name}</h4>
-                <div className="uncertainty-badges">
+                <div className="uncertainty-badges sm:px-4 md:px-6 lg:px-8">
                   <span className={`type-badge ${source.type.toLowerCase()}`}>{source.type}</span>
                   <span className={`impact-badge ${source.impact.toLowerCase()}`}>{source.impact} Impact</span>
                 </div>
               </div>
               
-              <p className="uncertainty-description">{source.description}</p>
+              <p className="uncertainty-description sm:px-4 md:px-6 lg:px-8">{source.description}</p>
               
-              <div className="quantification-method">
+              <div className="quantification-method sm:px-4 md:px-6 lg:px-8">
                 <strong>Quantification:</strong>
                 <p>{source.quantificationMethod}</p>
               </div>
               
-              <div className="mitigation-strategies">
+              <div className="mitigation-strategies sm:px-4 md:px-6 lg:px-8">
                 <h6>🛡️ Mitigation Strategies</h6>
                 <ul>
                   {source.mitigation.map((strategy, index) => (
@@ -685,28 +686,28 @@ function OracleConfidenceEstimationSection() {
           ))}
       </div>
       
-      <div className="uncertainty-framework">
+      <div className="uncertainty-framework sm:px-4 md:px-6 lg:px-8">
         <h4>🔬 Oracle's Uncertainty Decomposition</h4>
-        <div className="decomposition-formula">
-          <div className="formula-card">
+        <div className="decomposition-formula sm:px-4 md:px-6 lg:px-8">
+          <div className="formula-card sm:px-4 md:px-6 lg:px-8">
             <h6>Total Uncertainty Decomposition</h6>
-            <div className="formula">
+            <div className="formula sm:px-4 md:px-6 lg:px-8">
               σ²_total = σ²_aleatoric + σ²_epistemic
             </div>
             <p>Oracle separates total prediction uncertainty into reducible and irreducible components</p>
           </div>
           
-          <div className="formula-card">
+          <div className="formula-card sm:px-4 md:px-6 lg:px-8">
             <h6>Aleatoric Uncertainty</h6>
-            <div className="formula">
+            <div className="formula sm:px-4 md:px-6 lg:px-8">
               σ²_aleatoric = E[Var[y|x,θ]]
             </div>
             <p>Data-dependent uncertainty that cannot be reduced by collecting more data</p>
           </div>
           
-          <div className="formula-card">
+          <div className="formula-card sm:px-4 md:px-6 lg:px-8">
             <h6>Epistemic Uncertainty</h6>
-            <div className="formula">
+            <div className="formula sm:px-4 md:px-6 lg:px-8">
               σ²_epistemic = Var[E[y|x,θ]]
             </div>
             <p>Model uncertainty that can be reduced with more data or better models</p>
@@ -717,31 +718,31 @@ function OracleConfidenceEstimationSection() {
   );
 
   const renderCalibration = () => (
-    <div className="calibration-section">
+    <div className="calibration-section sm:px-4 md:px-6 lg:px-8">
       <h3>⚖️ Calibration & Reliability</h3>
-      <div className="calibration-intro">
+      <div className="calibration-intro sm:px-4 md:px-6 lg:px-8">
         <p>
           A well-calibrated model means that when it predicts 80% confidence, it should be correct about 80% of the time. 
           Oracle employs multiple calibration techniques to ensure its confidence scores are reliable and trustworthy.
         </p>
       </div>
       
-      <div className="calibration-metrics">
+      <div className="calibration-metrics sm:px-4 md:px-6 lg:px-8">
         <h4>📊 Calibration Metrics</h4>
-        <div className="metrics-grid">
+        <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
           {calibrationMetrics.map((metric: any) => (
-            <div key={metric.id} className="metric-card">
+            <div key={metric.id} className="metric-card sm:px-4 md:px-6 lg:px-8">
               <h5>{metric.name}</h5>
-              <div className="metric-formula">
+              <div className="metric-formula sm:px-4 md:px-6 lg:px-8">
                 <strong>Formula:</strong>
-                <div className="formula">{metric.formula}</div>
+                <div className="formula sm:px-4 md:px-6 lg:px-8">{metric.formula}</div>
               </div>
-              <p className="metric-description">{metric.description}</p>
-              <div className="metric-interpretation">
-                <div className="ideal-value">
+              <p className="metric-description sm:px-4 md:px-6 lg:px-8">{metric.description}</p>
+              <div className="metric-interpretation sm:px-4 md:px-6 lg:px-8">
+                <div className="ideal-value sm:px-4 md:px-6 lg:px-8">
                   <strong>Ideal Value:</strong> {metric.idealValue}
                 </div>
-                <div className="interpretation">
+                <div className="interpretation sm:px-4 md:px-6 lg:px-8">
                   <strong>Interpretation:</strong> {metric.interpretation}
                 </div>
               </div>
@@ -750,40 +751,40 @@ function OracleConfidenceEstimationSection() {
         </div>
       </div>
       
-      <div className="calibration-techniques">
+      <div className="calibration-techniques sm:px-4 md:px-6 lg:px-8">
         <h4>🔧 Calibration Techniques</h4>
-        <div className="techniques-grid">
-          <div className="technique-card">
+        <div className="techniques-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="technique-card sm:px-4 md:px-6 lg:px-8">
             <h5>🌡️ Temperature Scaling</h5>
             <p>Post-hoc calibration method that learns a single temperature parameter to rescale logits</p>
-            <div className="technique-details">
+            <div className="technique-details sm:px-4 md:px-6 lg:px-8">
               <strong>When to use:</strong> Simple, effective for most models
               <br />
               <strong>Limitations:</strong> Uniform scaling across all predictions
             </div>
           </div>
-          <div className="technique-card">
+          <div className="technique-card sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Platt Scaling</h5>
             <p>Fits a sigmoid function to map model outputs to calibrated probabilities</p>
-            <div className="technique-details">
+            <div className="technique-details sm:px-4 md:px-6 lg:px-8">
               <strong>When to use:</strong> Small datasets, binary classification
               <br />
               <strong>Limitations:</strong> Can overfit with limited data
             </div>
           </div>
-          <div className="technique-card">
+          <div className="technique-card sm:px-4 md:px-6 lg:px-8">
             <h5>🔍 Isotonic Regression</h5>
             <p>Non-parametric method that learns a monotonic mapping function</p>
-            <div className="technique-details">
+            <div className="technique-details sm:px-4 md:px-6 lg:px-8">
               <strong>When to use:</strong> Large datasets, complex calibration needs
               <br />
               <strong>Limitations:</strong> Requires more data, less interpretable
             </div>
           </div>
-          <div className="technique-card">
+          <div className="technique-card sm:px-4 md:px-6 lg:px-8">
             <h5>🧮 Histogram Binning</h5>
             <p>Divides predictions into bins and assigns calibrated probabilities</p>
-            <div className="technique-details">
+            <div className="technique-details sm:px-4 md:px-6 lg:px-8">
               <strong>When to use:</strong> Simple baseline method
               <br />
               <strong>Limitations:</strong> Loses information, sensitive to bin choice
@@ -792,37 +793,37 @@ function OracleConfidenceEstimationSection() {
         </div>
       </div>
       
-      <div className="calibration-results">
+      <div className="calibration-results sm:px-4 md:px-6 lg:px-8">
         <h4>📈 Oracle's Calibration Performance</h4>
-        <div className="results-dashboard">
-          <div className="calibration-score">
+        <div className="results-dashboard sm:px-4 md:px-6 lg:px-8">
+          <div className="calibration-score sm:px-4 md:px-6 lg:px-8">
             <h5>Overall Calibration Score</h5>
-            <div className="score-display">
-              <div className="score-value">92.3%</div>
-              <div className="score-label">Well Calibrated</div>
+            <div className="score-display sm:px-4 md:px-6 lg:px-8">
+              <div className="score-value sm:px-4 md:px-6 lg:px-8">92.3%</div>
+              <div className="score-label sm:px-4 md:px-6 lg:px-8">Well Calibrated</div>
             </div>
           </div>
           
-          <div className="calibration-breakdown">
-            <div className="breakdown-item">
-              <span className="metric-name">Expected Calibration Error</span>
-              <span className="metric-value">0.047</span>
-              <span className="metric-status good">Excellent</span>
+          <div className="calibration-breakdown sm:px-4 md:px-6 lg:px-8">
+            <div className="breakdown-item sm:px-4 md:px-6 lg:px-8">
+              <span className="metric-name sm:px-4 md:px-6 lg:px-8">Expected Calibration Error</span>
+              <span className="metric-value sm:px-4 md:px-6 lg:px-8">0.047</span>
+              <span className="metric-status good sm:px-4 md:px-6 lg:px-8">Excellent</span>
             </div>
-            <div className="breakdown-item">
-              <span className="metric-name">Maximum Calibration Error</span>
-              <span className="metric-value">0.089</span>
-              <span className="metric-status good">Good</span>
+            <div className="breakdown-item sm:px-4 md:px-6 lg:px-8">
+              <span className="metric-name sm:px-4 md:px-6 lg:px-8">Maximum Calibration Error</span>
+              <span className="metric-value sm:px-4 md:px-6 lg:px-8">0.089</span>
+              <span className="metric-status good sm:px-4 md:px-6 lg:px-8">Good</span>
             </div>
-            <div className="breakdown-item">
-              <span className="metric-name">Brier Score</span>
-              <span className="metric-value">0.123</span>
-              <span className="metric-status good">Good</span>
+            <div className="breakdown-item sm:px-4 md:px-6 lg:px-8">
+              <span className="metric-name sm:px-4 md:px-6 lg:px-8">Brier Score</span>
+              <span className="metric-value sm:px-4 md:px-6 lg:px-8">0.123</span>
+              <span className="metric-status good sm:px-4 md:px-6 lg:px-8">Good</span>
             </div>
-            <div className="breakdown-item">
-              <span className="metric-name">Negative Log-Likelihood</span>
-              <span className="metric-value">0.287</span>
-              <span className="metric-status excellent">Excellent</span>
+            <div className="breakdown-item sm:px-4 md:px-6 lg:px-8">
+              <span className="metric-name sm:px-4 md:px-6 lg:px-8">Negative Log-Likelihood</span>
+              <span className="metric-value sm:px-4 md:px-6 lg:px-8">0.287</span>
+              <span className="metric-status excellent sm:px-4 md:px-6 lg:px-8">Excellent</span>
             </div>
           </div>
         </div>
@@ -834,16 +835,16 @@ function OracleConfidenceEstimationSection() {
     const intervals = generatePredictionIntervals(confidenceLevel);
     
     return (
-      <div className="prediction-intervals">
+      <div className="prediction-intervals sm:px-4 md:px-6 lg:px-8">
         <h3>📊 Prediction Intervals</h3>
-        <div className="intervals-intro">
+        <div className="intervals-intro sm:px-4 md:px-6 lg:px-8">
           <p>
             Prediction intervals provide a range of plausible values for Oracle's predictions, 
             giving you a complete picture of uncertainty rather than just point estimates.
           </p>
         </div>
         
-        <div className="confidence-selector">
+        <div className="confidence-selector sm:px-4 md:px-6 lg:px-8">
           <label htmlFor="confidence-level">Confidence Level:</label>
           <input
             id="confidence-level"
@@ -852,36 +853,35 @@ function OracleConfidenceEstimationSection() {
             max="99"
             value={confidenceLevel}
             onChange={(e: any) => setConfidenceLevel(Number(e.target.value))}
-            className="confidence-slider"
           />
-          <span className="confidence-display">{confidenceLevel}%</span>
+          <span className="confidence-display sm:px-4 md:px-6 lg:px-8">{confidenceLevel}%</span>
         </div>
         
-        <div className="intervals-visualization">
+        <div className="intervals-visualization sm:px-4 md:px-6 lg:px-8">
           <h4>📈 Prediction Intervals for {confidenceLevel}% Confidence</h4>
-          <div className="intervals-grid">
+          <div className="intervals-grid sm:px-4 md:px-6 lg:px-8">
             {intervals.map((interval: any) => (
-              <div key={interval.id} className="interval-card">
+              <div key={interval.id} className="interval-card sm:px-4 md:px-6 lg:px-8">
                 <h5>{interval.method}</h5>
-                <div className="interval-display">
-                  <div className="prediction-point">
-                    <span className="prediction-value">{interval.prediction.toFixed(1)}</span>
-                    <span className="prediction-label">Prediction</span>
+                <div className="interval-display sm:px-4 md:px-6 lg:px-8">
+                  <div className="prediction-point sm:px-4 md:px-6 lg:px-8">
+                    <span className="prediction-value sm:px-4 md:px-6 lg:px-8">{interval.prediction.toFixed(1)}</span>
+                    <span className="prediction-label sm:px-4 md:px-6 lg:px-8">Prediction</span>
                   </div>
-                  <div className="interval-range">
-                    <div className="interval-bounds">
-                      <span className="lower-bound">{interval.lowerBound.toFixed(1)}</span>
-                      <span className="interval-separator">to</span>
-                      <span className="upper-bound">{interval.upperBound.toFixed(1)}</span>
+                  <div className="interval-range sm:px-4 md:px-6 lg:px-8">
+                    <div className="interval-bounds sm:px-4 md:px-6 lg:px-8">
+                      <span className="lower-bound sm:px-4 md:px-6 lg:px-8">{interval.lowerBound.toFixed(1)}</span>
+                      <span className="interval-separator sm:px-4 md:px-6 lg:px-8">to</span>
+                      <span className="upper-bound sm:px-4 md:px-6 lg:px-8">{interval.upperBound.toFixed(1)}</span>
                     </div>
-                    <div className="interval-width">
+                    <div className="interval-width sm:px-4 md:px-6 lg:px-8">
                       Width: {interval.width.toFixed(1)} points
                     </div>
                   </div>
                 </div>
-                <div className="interval-bar">
-                  <div className="interval-range-bar">
-                    <div className="prediction-marker"></div>
+                <div className="interval-bar sm:px-4 md:px-6 lg:px-8">
+                  <div className="interval-range-bar sm:px-4 md:px-6 lg:px-8">
+                    <div className="prediction-marker sm:px-4 md:px-6 lg:px-8"></div>
                   </div>
                 </div>
               </div>
@@ -889,22 +889,22 @@ function OracleConfidenceEstimationSection() {
           </div>
         </div>
         
-        <div className="intervals-interpretation">
+        <div className="intervals-interpretation sm:px-4 md:px-6 lg:px-8">
           <h4>🎯 Interpretation Guide</h4>
-          <div className="interpretation-grid">
-            <div className="interpretation-card">
+          <div className="interpretation-grid sm:px-4 md:px-6 lg:px-8">
+            <div className="interpretation-card sm:px-4 md:px-6 lg:px-8">
               <h6>📏 Interval Width</h6>
               <p>Narrower intervals indicate higher confidence. Wider intervals suggest more uncertainty in the prediction.</p>
             </div>
-            <div className="interpretation-card">
+            <div className="interpretation-card sm:px-4 md:px-6 lg:px-8">
               <h6>🎲 Coverage Probability</h6>
               <p>A 95% confidence interval should contain the true value 95% of the time across many predictions.</p>
             </div>
-            <div className="interpretation-card">
+            <div className="interpretation-card sm:px-4 md:px-6 lg:px-8">
               <h6>⚖️ Risk Assessment</h6>
               <p>Use interval width to assess prediction risk. Narrow intervals are safer bets.</p>
             </div>
-            <div className="interpretation-card">
+            <div className="interpretation-card sm:px-4 md:px-6 lg:px-8">
               <h6>📊 Method Comparison</h6>
               <p>Different methods may produce different intervals. Ensemble approaches often provide best estimates.</p>
             </div>
@@ -915,11 +915,11 @@ function OracleConfidenceEstimationSection() {
   };
 
   const renderDemo = () => (
-    <div className="confidence-demo">
+    <div className="confidence-demo sm:px-4 md:px-6 lg:px-8">
       <h3>🧪 Interactive Confidence Demo</h3>
-      <div className="demo-controls">
+      <div className="demo-controls sm:px-4 md:px-6 lg:px-8">
         <button
-          className="demo-button"
+          className="demo-button sm:px-4 md:px-6 lg:px-8"
           onClick={simulateConfidenceEstimation}
         >
           Generate Confidence Analysis
@@ -927,46 +927,46 @@ function OracleConfidenceEstimationSection() {
       </div>
       
       {simulationResults && (
-        <div className="simulation-results">
+        <div className="simulation-results sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Confidence Analysis Results</h4>
-          <div className="results-summary">
-            <div className="summary-metrics">
-              <div className="metric-item">
-                <div className="metric-label">Average Confidence</div>
-                <div className="metric-value-display">{(simulationResults.averageConfidence * 100).toFixed(1)}%</div>
+          <div className="results-summary sm:px-4 md:px-6 lg:px-8">
+            <div className="summary-metrics sm:px-4 md:px-6 lg:px-8">
+              <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-label sm:px-4 md:px-6 lg:px-8">Average Confidence</div>
+                <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{(simulationResults.averageConfidence * 100).toFixed(1)}%</div>
               </div>
-              <div className="metric-item">
-                <div className="metric-label">Average Uncertainty</div>
-                <div className="metric-value-display">{simulationResults.averageUncertainty.toFixed(2)}</div>
+              <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-label sm:px-4 md:px-6 lg:px-8">Average Uncertainty</div>
+                <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{simulationResults.averageUncertainty.toFixed(2)}</div>
               </div>
-              <div className="metric-item">
-                <div className="metric-label">High Confidence Predictions</div>
-                <div className="metric-value-display">{simulationResults.highConfidencePredictions}</div>
+              <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-label sm:px-4 md:px-6 lg:px-8">High Confidence Predictions</div>
+                <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{simulationResults.highConfidencePredictions}</div>
               </div>
-              <div className="metric-item">
-                <div className="metric-label">Low Confidence Predictions</div>
-                <div className="metric-value-display">{simulationResults.lowConfidencePredictions}</div>
+              <div className="metric-item sm:px-4 md:px-6 lg:px-8">
+                <div className="metric-label sm:px-4 md:px-6 lg:px-8">Low Confidence Predictions</div>
+                <div className="metric-value-display sm:px-4 md:px-6 lg:px-8">{simulationResults.lowConfidencePredictions}</div>
               </div>
             </div>
             
-            <div className="calibration-metrics">
-              <div className="calibration-item">
-                <span className="calibration-label">Calibration Score</span>
-                <span className="calibration-value">{(simulationResults.calibrationScore * 100).toFixed(1)}%</span>
-                <span className="calibration-status good">Well Calibrated</span>
+            <div className="calibration-metrics sm:px-4 md:px-6 lg:px-8">
+              <div className="calibration-item sm:px-4 md:px-6 lg:px-8">
+                <span className="calibration-label sm:px-4 md:px-6 lg:px-8">Calibration Score</span>
+                <span className="calibration-value sm:px-4 md:px-6 lg:px-8">{(simulationResults.calibrationScore * 100).toFixed(1)}%</span>
+                <span className="calibration-status good sm:px-4 md:px-6 lg:px-8">Well Calibrated</span>
               </div>
-              <div className="calibration-item">
-                <span className="calibration-label">Reliability Score</span>
-                <span className="calibration-value">{(simulationResults.reliabilityScore * 100).toFixed(1)}%</span>
-                <span className="calibration-status good">Reliable</span>
+              <div className="calibration-item sm:px-4 md:px-6 lg:px-8">
+                <span className="calibration-label sm:px-4 md:px-6 lg:px-8">Reliability Score</span>
+                <span className="calibration-value sm:px-4 md:px-6 lg:px-8">{(simulationResults.reliabilityScore * 100).toFixed(1)}%</span>
+                <span className="calibration-status good sm:px-4 md:px-6 lg:px-8">Reliable</span>
               </div>
             </div>
           </div>
           
-          <div className="predictions-sample">
+          <div className="predictions-sample sm:px-4 md:px-6 lg:px-8">
             <h5>Sample Predictions with Confidence</h5>
-            <div className="predictions-table">
-              <div className="table-header">
+            <div className="predictions-table sm:px-4 md:px-6 lg:px-8">
+              <div className="table-header sm:px-4 md:px-6 lg:px-8">
                 <span>Player</span>
                 <span>Prediction</span>
                 <span>Confidence</span>
@@ -974,14 +974,14 @@ function OracleConfidenceEstimationSection() {
                 <span>Method</span>
               </div>
               {simulationResults.predictions.slice(0, 10).map((prediction: any) => (
-                <div key={prediction.id} className="table-row">
-                  <span className="player-name">{prediction.player}</span>
-                  <span className="prediction-value">{prediction.prediction.toFixed(1)}</span>
+                <div key={prediction.id} className="table-row sm:px-4 md:px-6 lg:px-8">
+                  <span className="player-name sm:px-4 md:px-6 lg:px-8">{prediction.player}</span>
+                  <span className="prediction-value sm:px-4 md:px-6 lg:px-8">{prediction.prediction.toFixed(1)}</span>
                   <span className={`confidence-value ${getConfidenceClass(prediction.confidence)}`}>
                     {(prediction.confidence * 100).toFixed(0)}%
                   </span>
-                  <span className="uncertainty-value">±{prediction.uncertainty.toFixed(1)}</span>
-                  <span className="method-name">{prediction.method}</span>
+                  <span className="uncertainty-value sm:px-4 md:px-6 lg:px-8">±{prediction.uncertainty.toFixed(1)}</span>
+                  <span className="method-name sm:px-4 md:px-6 lg:px-8">{prediction.method}</span>
                 </div>
               ))}
             </div>
@@ -989,31 +989,31 @@ function OracleConfidenceEstimationSection() {
         </div>
       )}
       
-      <div className="demo-insights">
+      <div className="demo-insights sm:px-4 md:px-6 lg:px-8">
         <h4>💡 Key Insights</h4>
-        <div className="insights-grid">
-          <div className="insight-card">
+        <div className="insights-grid sm:px-4 md:px-6 lg:px-8">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Confidence-Based Strategies</h5>
             <p>
               Use high-confidence predictions for cash games and safe plays. 
               Reserve low-confidence, high-upside plays for tournaments where differentiation matters.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Uncertainty as Information</h5>
             <p>
               High uncertainty doesn't mean bad predictions - it indicates situations where 
               multiple outcomes are plausible, creating opportunity for strategic advantage.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Dynamic Confidence</h5>
             <p>
               Oracle's confidence adapts to changing conditions. Pre-game confidence may differ 
               from in-game confidence as new information becomes available.
             </p>
           </div>
-          <div className="insight-card">
+          <div className="insight-card sm:px-4 md:px-6 lg:px-8">
             <h5>Portfolio Approach</h5>
             <p>
               Balance your lineup with a mix of high-confidence safe plays and 
@@ -1026,13 +1026,13 @@ function OracleConfidenceEstimationSection() {
   );
 
   return (
-    <div className="oracle-confidence-section">
-      <div className="section-header">
+    <div className="oracle-confidence-section sm:px-4 md:px-6 lg:px-8">
+      <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2>🎯 Confidence Scores & Uncertainty Quantification</h2>
         <p>Understanding prediction reliability and uncertainty bounds in Oracle's AI system</p>
       </div>
       
-      <div className="section-navigation">
+      <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button
           className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
           onClick={() => setActiveTab('overview')}
@@ -1071,7 +1071,7 @@ function OracleConfidenceEstimationSection() {
         </button>
       </div>
       
-      <div className="section-content">
+      <div className="section-content sm:px-4 md:px-6 lg:px-8">
         {activeTab === 'overview' && renderOverview()}
         {activeTab === 'methods' && renderMethods()}
         {activeTab === 'uncertainty' && renderUncertainty()}
@@ -1081,6 +1081,11 @@ function OracleConfidenceEstimationSection() {
       </div>
     </div>
   );
-}
 
-export default OracleConfidenceEstimationSection;
+const OracleConfidenceEstimationSectionWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <OracleConfidenceEstimationSection {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(OracleConfidenceEstimationSectionWithErrorBoundary);

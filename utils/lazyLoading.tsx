@@ -82,8 +82,7 @@ const ErrorFallback: React.FC = () => (
   <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
     <div className="text-red-600 mb-2">⚠️ Failed to load component</div>
     <button 
-      onClick={() => window.location.reload()} 
-      className="mobile-touch-target px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
+      onClick={() => window.location.reload()}
     >
       Reload Page
     </button>
@@ -135,14 +134,12 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
           {canRetry ? (
             <button 
               onClick={this.handleRetry}
-              className="mobile-touch-target px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
             >
               Retry ({retryCount - currentRetries} attempts left)
             </button>
           ) : (
             <button 
-              onClick={() => window.location.reload()} 
-              className="mobile-touch-target px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700"
+              onClick={() => window.location.reload()}
             >
               Reload Page
             </button>

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Button } from './Button';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -7,6 +8,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export const PWAInstallButton: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstall, setShowInstall] = useState(false);
 
@@ -22,14 +24,19 @@ export const PWAInstallButton: React.FC = () => {
   }, []);
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
+    try {
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null);
-      setShowInstall(false);
+      if (!deferredPrompt) return;
+
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setShowInstall(false);
+      }
+    } catch (error) {
+      console.error('Error in handleInstall:', error);
     }
   };
 
@@ -47,4 +54,10 @@ export const PWAInstallButton: React.FC = () => {
   );
 };
 
-export default PWAInstallButton;
+const PWAInstallButtonWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PWAInstallButton {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PWAInstallButtonWithErrorBoundary);

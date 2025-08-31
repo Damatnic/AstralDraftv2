@@ -3,7 +3,8 @@
  * Modern, professional login screen with stunning visuals
  */
 
-import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SimpleAuthService from '../../services/simpleAuthService';
 import { useAppState } from '../../contexts/AppContext';
@@ -15,7 +16,7 @@ interface SimplePlayerLoginProps {
   onLogin?: (user: any) => void;
 }
 
-const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) => {
+const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
   const { dispatch } = useAppState();
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [pin, setPin] = useState('');
@@ -80,19 +81,18 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
   };
 
   const handleLogin = async () => {
-    // ZERO-ERROR LOGIN MODE - Eliminate all barriers
-    if (!selectedPlayer) {
-      setError('Please select a player first');
-      return;
-    }
-    
-    // Allow any PIN length - auto-pad with zeros if needed
-    const normalizedPin = pin.padEnd(4, '0');
-
-    setIsLoading(true);
-    setError('');
-
     try {
+      // ZERO-ERROR LOGIN MODE - Eliminate all barriers
+      if (!selectedPlayer) {
+        setError('Please select a player first');
+        return;
+      }
+
+      // Allow any PIN length - auto-pad with zeros if needed
+      const normalizedPin = pin.padEnd(4, '0');
+
+      setIsLoading(true);
+      setError('');
       // Initialize auth service with enhanced error handling
       SimpleAuthService.initialize();
       
@@ -101,7 +101,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
       if (selectedPlayer === 'player1' && normalizedPin === '7347') {
         authId = 'admin'; // Use admin account for Nick Damato with admin PIN
       }
-      
+
       // Attempt authentication with multiple fallbacks
       let session = await SimpleAuthService.authenticateUser(authId, normalizedPin);
       
@@ -109,12 +109,12 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
       if (!session && normalizedPin !== pin) {
         session = await SimpleAuthService.authenticateUser(authId, pin);
       }
-      
+
       // Fallback 2: For demo purposes, allow default PIN for all players
       if (!session && normalizedPin !== '0000') {
         session = await SimpleAuthService.authenticateUser(authId, '0000');
       }
-      
+
       if (session) {
         // SUCCESS - Force login regardless of backend state
         const userPayload = {
@@ -131,7 +131,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         if (onLogin) {
           onLogin(session.user);
         }
-        
+
         // Force clear any residual errors
         setError('');
       } else {
@@ -149,7 +149,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
           if (onLogin) {
             onLogin(demoUser as any);
           }
-          
+
           setError('');
         }
       }
@@ -169,7 +169,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
       if (onLogin) {
         onLogin(forceUser as any);
       }
-      
+
       console.log('✅ EMERGENCY LOGIN SUCCESSFUL');
     } finally {
       setIsLoading(false);
@@ -194,12 +194,12 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 sm:px-4 md:px-6 lg:px-8">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 sm:px-4 md:px-6 lg:px-8">
         {/* Dynamic gradient orbs */}
         <div 
-          className="absolute w-[800px] h-[800px] rounded-full opacity-20"
+          className="absolute w-[800px] h-[800px] rounded-full opacity-20 sm:px-4 md:px-6 lg:px-8"
           style={{
             background: 'radial-gradient(circle, rgba(94, 107, 255, 0.4) 0%, transparent 70%)',
             left: `${mousePosition.x - 50}%`,
@@ -209,7 +209,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
           }}
         />
         <div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-20"
+          className="absolute w-[600px] h-[600px] rounded-full opacity-20 sm:px-4 md:px-6 lg:px-8"
           style={{
             background: 'radial-gradient(circle, rgba(16, 185, 129, 0.4) 0%, transparent 70%)',
             right: `${100 - mousePosition.x - 20}%`,
@@ -220,13 +220,13 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
         />
         
         {/* Animated grid background */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,transparent_20%,black)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,transparent_20%,black)] sm:px-4 md:px-6 lg:px-8" />
         
         {/* Floating particles */}
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
+            className="absolute w-1 h-1 bg-white/20 rounded-full sm:px-4 md:px-6 lg:px-8"
             initial={{
               x: Math.random() * window.innerWidth,
               y: window.innerHeight + 20,
@@ -246,53 +246,53 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
-        <div className="w-full max-w-6xl">
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="w-full max-w-6xl sm:px-4 md:px-6 lg:px-8">
           {/* Premium Header */}
           <motion.div
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+            className="text-center mb-12 sm:px-4 md:px-6 lg:px-8"
           >
             <motion.div 
-              className="flex items-center justify-center mb-6"
+              className="flex items-center justify-center mb-6 sm:px-4 md:px-6 lg:px-8"
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl blur-xl opacity-50 animate-pulse" />
-                <div className="relative w-20 h-20 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl flex items-center justify-center text-4xl shadow-2xl">
+              <div className="relative sm:px-4 md:px-6 lg:px-8">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl blur-xl opacity-50 animate-pulse sm:px-4 md:px-6 lg:px-8" />
+                <div className="relative w-20 h-20 bg-gradient-to-br from-primary-500 to-accent-600 rounded-2xl flex items-center justify-center text-4xl shadow-2xl sm:px-4 md:px-6 lg:px-8">
                   🏈
                 </div>
               </div>
             </motion.div>
             
-            <h1 className="text-6xl font-black mb-3 bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent">
+            <h1 className="text-6xl font-black mb-3 bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent sm:px-4 md:px-6 lg:px-8">
               ASTRAL DRAFT
             </h1>
-            <p className="text-xl text-gray-400 font-light tracking-wide">
+            <p className="text-xl text-gray-400 font-light tracking-wide sm:px-4 md:px-6 lg:px-8">
               {demoMode ? 'Demo Mode - No Login Required!' : 'Elite Fantasy Football Platform'}
             </p>
-            <div className="flex items-center justify-center gap-4 mt-4">
+            <div className="flex items-center justify-center gap-4 mt-4 sm:px-4 md:px-6 lg:px-8">
               {demoMode ? (
                 <>
-                  <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs text-green-300 animate-pulse">
+                  <span className="px-3 py-1 bg-green-500/20 border border-green-500/30 rounded-full text-xs text-green-300 animate-pulse sm:px-4 md:px-6 lg:px-8">
                     🎮 Demo Mode Active
                   </span>
-                  <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-xs text-blue-300">
+                  <span className="px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-xs text-blue-300 sm:px-4 md:px-6 lg:px-8">
                     Zero Barriers
                   </span>
                 </>
               ) : (
                 <>
-                  <span className="px-3 py-1 bg-primary-500/20 border border-primary-500/30 rounded-full text-xs text-primary-300">
+                  <span className="px-3 py-1 bg-primary-500/20 border border-primary-500/30 rounded-full text-xs text-primary-300 sm:px-4 md:px-6 lg:px-8">
                     Season 2024
                   </span>
-                  <span className="px-3 py-1 bg-secondary-500/20 border border-secondary-500/30 rounded-full text-xs text-secondary-300">
+                  <span className="px-3 py-1 bg-secondary-500/20 border border-secondary-500/30 rounded-full text-xs text-secondary-300 sm:px-4 md:px-6 lg:px-8">
                     AI Powered
                   </span>
-                  <span className="px-3 py-1 bg-accent-500/20 border border-accent-500/30 rounded-full text-xs text-accent-300">
+                  <span className="px-3 py-1 bg-accent-500/20 border border-accent-500/30 rounded-full text-xs text-accent-300 sm:px-4 md:px-6 lg:px-8">
                     10 Team League
                   </span>
                 </>
@@ -311,19 +311,19 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                 transition={{ duration: 0.3 }}
               >
                 {/* Quick Access Section */}
-                <div className="text-center mb-8">
-                  <h2 className="text-2xl font-bold text-white mb-2">
+                <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
+                  <h2 className="text-2xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
                     {demoMode ? '🚀 Auto-Login Active!' : 'Choose Your Team'}
                   </h2>
-                  <p className="text-gray-400">
+                  <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     {demoMode 
                       ? 'Click any player to instantly access the league' 
                       : 'Select your profile to access the league'}
                   </p>
                   {demoMode && (
-                    <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <span className="text-sm text-green-300">Demo Mode: No PIN Required</span>
+                    <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full sm:px-4 md:px-6 lg:px-8">
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
+                      <span className="text-sm text-green-300 sm:px-4 md:px-6 lg:px-8">Demo Mode: No PIN Required</span>
                     </div>
                   )}
                 </div>
@@ -342,23 +342,23 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                         hover
                         interactive
                         padding="sm"
-                        className="cursor-pointer relative overflow-hidden group"
+                        className="cursor-pointer relative overflow-hidden group sm:px-4 md:px-6 lg:px-8"
                         onClick={() => handlePlayerSelect(player.id)}
                       >
                         {/* Background gradient */}
                         <div className={`absolute inset-0 bg-gradient-to-br ${player.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`} />
                         
                         {/* Content */}
-                        <div className="relative z-10 text-center py-2">
+                        <div className="relative z-10 text-center py-2 sm:px-4 md:px-6 lg:px-8">
                           <motion.div 
-                            className="text-4xl mb-3"
+                            className="text-4xl mb-3 sm:px-4 md:px-6 lg:px-8"
                             whileHover={{ scale: 1.2, rotate: 5 }}
                             transition={{ type: "spring", stiffness: 300 }}
                           >
                             {player.emoji}
                           </motion.div>
                           
-                          <h3 className="font-bold text-white text-sm mb-1">
+                          <h3 className="font-bold text-white text-sm mb-1 sm:px-4 md:px-6 lg:px-8">
                             {player.name}
                           </h3>
                           
@@ -373,7 +373,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                         </div>
                         
                         {/* Hover effect overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 sm:px-4 md:px-6 lg:px-8" />
                       </Card>
                     </motion.div>
                   ))}
@@ -384,18 +384,18 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="max-w-md mx-auto"
+                  className="max-w-md mx-auto sm:px-4 md:px-6 lg:px-8"
                 >
-                  <div className="relative my-8">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-white/10"></div>
+                  <div className="relative my-8 sm:px-4 md:px-6 lg:px-8">
+                    <div className="absolute inset-0 flex items-center sm:px-4 md:px-6 lg:px-8">
+                      <div className="w-full border-t border-white/10 sm:px-4 md:px-6 lg:px-8"></div>
                     </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="px-4 bg-dark-900 text-gray-400">Or continue with</span>
+                    <div className="relative flex justify-center text-sm sm:px-4 md:px-6 lg:px-8">
+                      <span className="px-4 bg-dark-900 text-gray-400 sm:px-4 md:px-6 lg:px-8">Or continue with</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-3 gap-3 sm:px-4 md:px-6 lg:px-8">
                     {[
                       { name: 'Google', icon: '🔍', color: 'hover:bg-red-500/10 hover:border-red-500/30' },
                       { name: 'Apple', icon: '🍎', color: 'hover:bg-gray-500/10 hover:border-gray-500/30' },
@@ -408,7 +408,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                         className={`group ${provider.color}`}
                         onClick={() => setShowSocialOptions(true)}
                       >
-                        <span className="text-xl mr-2 group-hover:scale-110 transition-transform">
+                        <span className="text-xl mr-2 group-hover:scale-110 transition-transform sm:px-4 md:px-6 lg:px-8">
                           {provider.icon}
                         </span>
                         <span className="hidden md:inline">{provider.name}</span>
@@ -420,9 +420,9 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl"
+                      className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl sm:px-4 md:px-6 lg:px-8"
                     >
-                      <p className="text-yellow-300 text-sm text-center">
+                      <p className="text-yellow-300 text-sm text-center sm:px-4 md:px-6 lg:px-8">
                         Social login coming soon! Use player profiles above for now.
                       </p>
                     </motion.div>
@@ -437,31 +437,31 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="max-w-md mx-auto"
+                className="max-w-md mx-auto sm:px-4 md:px-6 lg:px-8"
               >
-                <Card variant="elevated" padding="xl" className="relative overflow-visible">
+                <Card variant="elevated" padding="xl" className="relative overflow-visible sm:px-4 md:px-6 lg:px-8">
                   {/* Glow effect for selected player */}
                   <div 
                     className={`absolute -inset-4 bg-gradient-to-br ${getSelectedPlayerData()?.color} opacity-20 blur-2xl`}
                   />
                   
-                  <CardContent className="relative z-10">
+                  <CardContent className="relative z-10 sm:px-4 md:px-6 lg:px-8">
                     {/* Selected Player Display */}
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
                       <motion.div 
-                        className="relative inline-block mb-4"
+                        className="relative inline-block mb-4 sm:px-4 md:px-6 lg:px-8"
                         initial={{ scale: 0, rotate: -180 }}
                         animate={{ scale: 1, rotate: 0 }}
                         transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
                       >
                         <div className={`absolute inset-0 bg-gradient-to-br ${getSelectedPlayerData()?.color} rounded-full blur-xl opacity-50`} />
-                        <div className="relative w-24 h-24 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-full flex items-center justify-center text-5xl border border-white/20">
+                        <div className="relative w-24 h-24 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-full flex items-center justify-center text-5xl border border-white/20 sm:px-4 md:px-6 lg:px-8">
                           {getSelectedPlayerData()?.emoji}
                         </div>
                       </motion.div>
                       
                       <motion.h2 
-                        className="text-2xl font-bold text-white mb-1"
+                        className="text-2xl font-bold text-white mb-1 sm:px-4 md:px-6 lg:px-8"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
@@ -485,12 +485,11 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                     </div>
 
                     {/* Modern PIN Input */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                       <div onKeyPress={handleKeyPress}>
                         <SecurePinInput
                           value={pin}
                           onChange={handlePinChange}
-                          length={6}
                           label="Secure PIN Authentication"
                           placeholder="Enter PIN (or press Enter)"
                           showProgress={true}
@@ -498,39 +497,38 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                           clearClipboardDelay={2000}
                           autoFocus
                           error={error}
-                          className="text-center text-2xl tracking-[0.3em]"
+                          className="text-center text-2xl tracking-[0.3em] sm:px-4 md:px-6 lg:px-8"
                         />
                       </div>
                       
                       {/* Encouraging feedback */}
-                      <div className="flex justify-center gap-2">
-                        <div className="flex items-center gap-2">
+                      <div className="flex justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
+                        <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           <motion.div
-                            className="w-3 h-3 bg-primary-500 rounded-full"
+                            className="w-3 h-3 bg-primary-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                             animate={{ scale: [1, 1.2, 1] }}
                             transition={{ duration: 1, repeat: Infinity }}
                           />
-                          <span className="text-sm text-primary-300">
+                          <span className="text-sm text-primary-300 sm:px-4 md:px-6 lg:px-8">
                             {pin.length > 0 ? 'Ready to sign in!' : 'Enter any PIN to continue'}
                           </span>
                           <motion.div
-                            className="w-3 h-3 bg-primary-500 rounded-full"
+                            className="w-3 h-3 bg-primary-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                             animate={{ scale: [1, 1.2, 1] }}
                             transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}
                           />
                         </div>
                       </div>
 
-
                       {/* Action Buttons */}
-                      <div className="flex gap-3">
+                      <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                         <Button
                           variant="secondary"
                           size="lg"
                           onClick={handleBack}
-                          className="flex-1"
+                          className="flex-1 sm:px-4 md:px-6 lg:px-8"
                         >
-                          <span className="mr-2">←</span>
+                          <span className="mr-2 sm:px-4 md:px-6 lg:px-8">←</span>
                           Back
                         </Button>
                         <Button
@@ -539,37 +537,37 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                           onClick={handleLogin}
                           disabled={isLoading} // ZERO-ERROR: Remove PIN length restriction
                           loading={isLoading}
-                          className="flex-1"
+                          className="flex-1 sm:px-4 md:px-6 lg:px-8"
                         >
-                          {!isLoading && <span className="mr-2">🔓</span>}
+                          {!isLoading && <span className="mr-2 sm:px-4 md:px-6 lg:px-8">🔓</span>}
                           Sign In
                         </Button>
                       </div>
 
                       {/* PIN Hints with better styling */}
                       <motion.div 
-                        className="pt-4 border-t border-white/10"
+                        className="pt-4 border-t border-white/10 sm:px-4 md:px-6 lg:px-8"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
                       >
-                        <div className="text-center space-y-1">
+                        <div className="text-center space-y-1 sm:px-4 md:px-6 lg:px-8">
                           {selectedPlayer === 'player1' ? (
-                            <div className="space-y-2">
-                              <p className="text-xs text-gray-500 uppercase tracking-wider">Quick Access</p>
-                              <div className="flex justify-center gap-4">
-                                <span className="px-3 py-1 bg-primary-500/10 border border-primary-500/30 rounded-full text-xs text-primary-300">
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                              <p className="text-xs text-gray-500 uppercase tracking-wider sm:px-4 md:px-6 lg:px-8">Quick Access</p>
+                              <div className="flex justify-center gap-4 sm:px-4 md:px-6 lg:px-8">
+                                <span className="px-3 py-1 bg-primary-500/10 border border-primary-500/30 rounded-full text-xs text-primary-300 sm:px-4 md:px-6 lg:px-8">
                                   Player: 0000
                                 </span>
-                                <span className="px-3 py-1 bg-yellow-500/10 border border-yellow-500/30 rounded-full text-xs text-yellow-300">
+                                <span className="px-3 py-1 bg-yellow-500/10 border border-yellow-500/30 rounded-full text-xs text-yellow-300 sm:px-4 md:px-6 lg:px-8">
                                   Admin: 7347
                                 </span>
                               </div>
                             </div>
                           ) : (
-                            <div className="space-y-2">
-                              <p className="text-xs text-gray-500 uppercase tracking-wider">Demo Access</p>
-                              <span className="inline-block px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs text-gray-300">
+                            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+                              <p className="text-xs text-gray-500 uppercase tracking-wider sm:px-4 md:px-6 lg:px-8">Demo Access</p>
+                              <span className="inline-block px-3 py-1 bg-white/10 border border-white/20 rounded-full text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">
                                 Default PIN: 0000
                               </span>
                             </div>
@@ -585,16 +583,16 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="mt-6 flex justify-center gap-6 text-xs text-gray-500"
+                  className="mt-6 flex justify-center gap-6 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8"
                 >
-                  <span className="flex items-center gap-1">
-                    <span className="text-green-500">🔒</span> 256-bit Encryption
+                  <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-green-500 sm:px-4 md:px-6 lg:px-8">🔒</span> 256-bit Encryption
                   </span>
-                  <span className="flex items-center gap-1">
-                    <span className="text-blue-500">🛡️</span> Secure Login
+                  <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-blue-500 sm:px-4 md:px-6 lg:px-8">🛡️</span> Secure Login
                   </span>
-                  <span className="flex items-center gap-1">
-                    <span className="text-purple-500">✓</span> SSL Protected
+                  <span className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-purple-500 sm:px-4 md:px-6 lg:px-8">✓</span> SSL Protected
                   </span>
                 </motion.div>
               </motion.div>
@@ -606,19 +604,19 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}
-            className="text-center mt-12"
+            className="text-center mt-12 sm:px-4 md:px-6 lg:px-8"
           >
-            <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-4 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
               <span>© 2024 Astral Draft</span>
-              <span className="w-1 h-1 bg-gray-600 rounded-full" />
+              <span className="w-1 h-1 bg-gray-600 rounded-full sm:px-4 md:px-6 lg:px-8" />
               <span>Premium Fantasy Platform</span>
-              <span className="w-1 h-1 bg-gray-600 rounded-full" />
+              <span className="w-1 h-1 bg-gray-600 rounded-full sm:px-4 md:px-6 lg:px-8" />
               <span>v2.0.0</span>
             </div>
-            <div className="mt-2 flex items-center justify-center gap-6">
-              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors">Terms</a>
-              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors">Privacy</a>
-              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors">Support</a>
+            <div className="mt-2 flex items-center justify-center gap-6 sm:px-4 md:px-6 lg:px-8">
+              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors sm:px-4 md:px-6 lg:px-8">Terms</a>
+              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors sm:px-4 md:px-6 lg:px-8">Privacy</a>
+              <a href="#" className="text-xs text-gray-600 hover:text-primary-400 transition-colors sm:px-4 md:px-6 lg:px-8">Support</a>
             </div>
           </motion.div>
         </div>
@@ -627,4 +625,10 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) =
   );
 };
 
-export default SimplePlayerLogin;
+const SimplePlayerLoginWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <SimplePlayerLogin {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(SimplePlayerLoginWithErrorBoundary);

@@ -31,9 +31,10 @@ interface DraftRoomContainerProps {
     dispatch: React.Dispatch<any>;
     playerNotes: AppState['playerNotes'];
     playerQueues: AppState['playerQueues'];
+
 }
 
-const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }: any) => {
+const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }) => {
     const [playersToCompare, setPlayersToCompare] = React.useState<Player[]>([]);
     const [isCompareModalOpen, setIsCompareModalOpen] = React.useState(false);
     const [activeSideTab, setActiveSideTab] = React.useState('co-pilot');
@@ -65,11 +66,11 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
             const isAlreadySelected = prev.some((p: any) => p.id === player.id);
             if (isAlreadySelected) {
                 return prev.filter((p: any) => p.id !== player.id);
-            }
+
             if (prev.length >= 4) {
                 dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Comparison limit of 4 players reached.', type: 'SYSTEM' } });
                 return prev;
-            }
+
             return [...prev, player];
         });
     };
@@ -79,7 +80,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
         if (myQueue.includes(player.id)) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${player.name} is already in your queue.`, type: 'SYSTEM' } });
             return;
-        }
+
         dispatch({
             type: 'ADD_TO_QUEUE',
             payload: { leagueId: league.id, playerId: player.id }
@@ -99,7 +100,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
     return (
         <div className="w-full h-full flex flex-col relative">
             <header className="p-3 sm:p-2 text-center flex-shrink-0 border-b border-[var(--panel-border)] flex flex-col sm:flex-row sm:items-center sm:justify-between px-3 sm:px-4 gap-2 sm:gap-0">
-                <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'})} className="back-btn text-xs sm:text-sm">Back to Hub</button>
+                <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'}} className="back-btn text-xs sm:text-sm">Back to Hub</button>
                 <div className="flex-1 min-w-0">
                     <h1 className="font-display text-lg sm:text-xl md:text-2xl font-bold uppercase text-[var(--text-primary)] truncate">{league.name}</h1>
                     <p className="text-xs sm:text-sm text-[var(--text-secondary)]">Live {league.settings.draftFormat} Draft In Progress...</p>
@@ -169,10 +170,7 @@ const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPause
                                 {sidePanelTabs.map((item: any) => (
                                     <button
                                     key={item.id}
-                                    onClick={() => setActiveSideTab(item.id)}
-                                    className={`${
-                                        activeSideTab === item.id ? 'text-[var(--text-primary)] border-cyan-400' : 'text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)]'
-                                    } relative py-2 px-2 sm:px-3 text-xs sm:text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap mobile-touch-target min-w-fit`}
+                                    onClick={() => setActiveSideTab(item.id)} relative py-2 px-2 sm:px-3 text-xs sm:text-sm font-medium transition-colors focus:outline-none border-b-2 whitespace-nowrap mobile-touch-target min-w-fit`}
                                     >
                                     {item.label}
                                     </button>
@@ -224,12 +222,12 @@ const DraftRoomView: React.FC = () => {
             {!league || !state.user ? (
                 <div className="w-full h-full flex flex-col items-center justify-center">
                     <p className="text-lg">Error: {!league ? 'No active league found' : 'Please log in to access the draft room'}.</p>
-                    <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'DASHBOARD'})} className="btn btn-primary mt-4">Back to Dashboard</button>
+                    <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'DASHBOARD'}} className="btn btn-primary mt-4">Back to Dashboard</button>
                 </div>
             ) : league.status === 'PRE_DRAFT' ? (
                 <div className="w-full h-full flex flex-col items-center justify-center">
                     <p className="text-lg">The draft has not started yet.</p>
-                    <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'})} className="btn btn-primary mt-4">Back to League Hub</button>
+                    <button onClick={() => dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'}} className="btn btn-primary mt-4">Back to League Hub</button>
                 </div>
             ) : (
                 <DraftRoomContainer

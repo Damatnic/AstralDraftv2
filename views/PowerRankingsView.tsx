@@ -10,7 +10,7 @@ import PowerRankingCardSkeleton from '../components/rankings/PowerRankingCardSke
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 
-const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
     const { state } = useAppState();
     const [rankings, setRankings] = React.useState<PowerRanking[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -23,6 +23,7 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
         setIsLoading(true);
         setError(null);
         try {
+
             const data = await generatePowerRankings(league);
             if (data) {
                 // Gemini might not return sorted, so we sort here
@@ -30,12 +31,12 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                 setRankings(data);
             } else {
                 setError("The Oracle could not produce power rankings. Please try again later.");
-            }
-        } catch (err) {
+
+    } catch (error) {
             setError("An error occurred while consulting the Oracle for power rankings.");
         } finally {
             setIsLoading(false);
-        }
+
     }, [league]);
 
     React.useEffect(() => {
@@ -56,7 +57,7 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         <p className="page-subtitle">{league.name} - Week {league.currentWeek}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
                         className="back-btn"
                     >
                         Back to My Team
@@ -83,14 +84,13 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                                 />
                              ))}
                          </div>
-                        }
+
                     </Widget>
                 </main>
             </div>
         </div>
     );
 };
-
 
 const PowerRankingsView: React.FC = () => {
     const { dispatch } = useAppState();
@@ -100,13 +100,12 @@ const PowerRankingsView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view power rankings.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
-    }
-    
+
     return <PowerRankingsContent league={league} dispatch={dispatch} />;
 };
 

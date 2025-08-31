@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     SearchIcon, 
@@ -31,14 +32,15 @@ import {
 
 interface Props {
     className?: string;
-}
 
 type ResearchTab = 'search' | 'projections' | 'news' | 'trends' | 'compare' | 'insights';
 type PlayerDetailTab = 'overview' | 'stats' | 'projections' | 'news' | 'trends' | 'compare';
 
-const PlayerResearchInterface: React.FC<Props> = ({ 
-    className = '' 
-}: any) => {
+}
+
+const PlayerResearchInterface: React.FC<Props> = ({ className = '' 
+ }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
     const { isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ResearchTab>('search');
     const [loading, setLoading] = useState(false);
@@ -68,7 +70,7 @@ const PlayerResearchInterface: React.FC<Props> = ({
     useEffect(() => {
         if (isAuthenticated) {
             handleSearch();
-        }
+
     }, [isAuthenticated, searchFilter]);
 
     const handleSearch = async () => {
@@ -76,6 +78,7 @@ const PlayerResearchInterface: React.FC<Props> = ({
         setError(null);
 
         try {
+
             const results = await playerResearchService.searchPlayers(searchFilter);
             
             // Apply text search if query exists
@@ -86,14 +89,14 @@ const PlayerResearchInterface: React.FC<Props> = ({
                     player.team.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     player.position.toLowerCase().includes(searchQuery.toLowerCase())
                 );
-            }
 
             setSearchResults(filteredResults);
-        } catch (err) {
+    
+    } catch (error) {
             setError('Failed to search players');
         } finally {
             setLoading(false);
-        }
+
     };
 
     const handlePlayerSelect = useCallback(async (player: PlayerBaseInfo) => {
@@ -102,6 +105,7 @@ const PlayerResearchInterface: React.FC<Props> = ({
         setLoading(true);
 
         try {
+
             // Load all player data in parallel
             const [, projections, news, trends, insights] = await Promise.all([
                 playerResearchService.getPlayerSeasonStats(player.id, 2024),
@@ -115,11 +119,12 @@ const PlayerResearchInterface: React.FC<Props> = ({
             setPlayerNews(news);
             setPlayerTrends(trends);
             setPlayerInsights(insights);
-        } catch (err) {
+        
+    } catch (error) {
             setError('Failed to load player data');
         } finally {
             setLoading(false);
-        }
+
     }, []);
 
     const handleCompareSelect = (player: PlayerBaseInfo, slot: 1 | 2) => {
@@ -127,7 +132,6 @@ const PlayerResearchInterface: React.FC<Props> = ({
             setComparePlayer1(player);
         } else {
             setComparePlayer2(player);
-        }
 
         // Auto-compare when both players selected
         if ((slot === 1 && comparePlayer2) || (slot === 2 && comparePlayer1)) {
@@ -135,32 +139,34 @@ const PlayerResearchInterface: React.FC<Props> = ({
             const p2 = slot === 2 ? player : comparePlayer2;
             if (p1 && p2) {
                 executeComparison(p1, p2);
-            }
-        }
+
+
     };
 
     const executeComparison = async (player1: PlayerBaseInfo, player2: PlayerBaseInfo) => {
         setLoading(true);
         try {
+
             const comparisonResult = await playerResearchService.comparePlayer(player1.id, player2.id);
             setComparison(comparisonResult);
-        } catch (err) {
+        
+    } catch (error) {
             setError('Failed to compare players');
         } finally {
             setLoading(false);
-        }
+
     };
 
     const getInsightIcon = (type: ResearchInsight['type']) => {
         switch (type) {
-            case 'breakout_candidate': return <TrendingUpIcon className="w-4 h-4" />;
-            case 'buy_low': return <TargetIcon className="w-4 h-4" />;
-            case 'sell_high': return <TrendingDownIcon className="w-4 h-4" />;
-            case 'injury_concern': return <AlertCircleIcon className="w-4 h-4" />;
-            case 'schedule_boost': return <ClockIcon className="w-4 h-4" />;
-            case 'target_acquisition': return <StarIcon className="w-4 h-4" />;
-            default: return <BookOpenIcon className="w-4 h-4" />;
-        }
+            case 'breakout_candidate': return <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'buy_low': return <TargetIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'sell_high': return <TrendingDownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'injury_concern': return <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'schedule_boost': return <ClockIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case 'target_acquisition': return <StarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            default: return <BookOpenIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+
     };
 
     const getInsightColor = (type: ResearchInsight['type']): string => {
@@ -172,7 +178,7 @@ const PlayerResearchInterface: React.FC<Props> = ({
             case 'schedule_boost': return 'bg-purple-500/20 text-purple-400 border-purple-500';
             case 'target_acquisition': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
             default: return 'bg-gray-500/20 text-gray-400 border-gray-500';
-        }
+
     };
 
     const formatTrendChange = (trend: PlayerTrend) => {
@@ -183,13 +189,12 @@ const PlayerResearchInterface: React.FC<Props> = ({
     if (!isAuthenticated) {
         return (
             <Widget title="🔍 Player Research" className={className}>
-                <div className="text-center py-8">
-                    <UserIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-400">Please log in to access player research tools</p>
+                <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                    <UserIcon className="w-12 h-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+                    <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Please log in to access player research tools</p>
                 </div>
             </Widget>
         );
-    }
 
     const tabs = [
         { id: 'search', label: 'Player Search', icon: SearchIcon },
@@ -216,15 +221,15 @@ const PlayerResearchInterface: React.FC<Props> = ({
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-all cursor-pointer"
+            className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-all cursor-pointer sm:px-4 md:px-6 lg:px-8"
             onClick={onClick}
         >
-            <div className="flex items-start justify-between mb-3">
+            <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                 <div>
-                    <h3 className="font-medium text-white">{player.name}</h3>
-                    <p className="text-sm text-gray-400">{player.position} • {player.team}</p>
+                    <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{player.name}</h3>
+                    <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.position} • {player.team}</p>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <span className={`px-2 py-1 rounded text-xs font-bold ${
                         player?.status === 'active' ? 'bg-green-500/20 text-green-400' :
                         player?.status === 'injured' ? 'bg-red-500/20 text-red-400' :
@@ -235,7 +240,7 @@ const PlayerResearchInterface: React.FC<Props> = ({
                 </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-3">
+            <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mb-3 sm:px-4 md:px-6 lg:px-8">
                 <div>Age: {player?.age}</div>
                 <div>Exp: {player.experience}y</div>
                 <div>Height: {player.height}</div>
@@ -243,22 +248,22 @@ const PlayerResearchInterface: React.FC<Props> = ({
             </div>
 
             {showCompareButton && (
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={(e: any) => {
+                        onClick={(e: any) = aria-label="Action button"> {
                             e.stopPropagation();
                             handleCompareSelect(player, 1);
                         }}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs flex-1"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs flex-1 sm:px-4 md:px-6 lg:px-8"
                     >
                         Compare A
                     </button>
                     <button
-                        onClick={(e: any) => {
+                        onClick={(e: any) = aria-label="Action button"> {
                             e.stopPropagation();
                             handleCompareSelect(player, 2);
                         }}
-                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs flex-1"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs flex-1 sm:px-4 md:px-6 lg:px-8"
                     >
                         Compare B
                     </button>
@@ -271,19 +276,19 @@ const PlayerResearchInterface: React.FC<Props> = ({
         if (!selectedPlayer) return null;
 
         return (
-            <div className="space-y-4">
+            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {/* Player Header */}
-                <div className="bg-gray-800 rounded-lg p-6">
-                    <div className="flex items-start justify-between mb-4">
+                <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
+                    <div className="flex items-start justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                         <div>
-                            <h2 className="text-2xl font-bold text-white">{selectedPlayer.name}</h2>
-                            <p className="text-lg text-gray-400">{selectedPlayer.position} • {selectedPlayer.team}</p>
+                            <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{selectedPlayer.name}</h2>
+                            <p className="text-lg text-gray-400 sm:px-4 md:px-6 lg:px-8">{selectedPlayer.position} • {selectedPlayer.team}</p>
                             {selectedPlayer.college && (
-                                <p className="text-sm text-gray-500">{selectedPlayer.college}</p>
+                                <p className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">{selectedPlayer.college}</p>
                             )}
                         </div>
-                        <div className="text-right">
-                            <div className="text-sm text-gray-400">#{selectedPlayer.jersey}</div>
+                        <div className="text-right sm:px-4 md:px-6 lg:px-8">
+                            <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">#{selectedPlayer.jersey}</div>
                             <div className={`px-3 py-1 rounded text-sm font-bold ${
                                 selectedPlayer?.status === 'active' ? 'bg-green-500/20 text-green-400' :
                                 selectedPlayer?.status === 'injured' ? 'bg-red-500/20 text-red-400' :
@@ -295,16 +300,11 @@ const PlayerResearchInterface: React.FC<Props> = ({
                     </div>
 
                     {/* Detail Tabs */}
-                    <div className="flex space-x-1 bg-gray-700 p-1 rounded-lg mb-4">
+                    <div className="flex space-x-1 bg-gray-700 p-1 rounded-lg mb-4 sm:px-4 md:px-6 lg:px-8">
                         {detailTabs.map((tab: any) => (
                             <button
                                 key={tab.id}
-                                onClick={() => setPlayerDetailTab(tab.id as PlayerDetailTab)}
-                                className={`px-3 py-2 rounded-md transition-colors text-sm ${
-                                    playerDetailTab === tab.id
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-600'
-                                }`}
+                                onClick={() => setPlayerDetailTab(tab.id as PlayerDetailTab)}`}
                             >
                                 {tab.label}
                             </button>
@@ -323,40 +323,40 @@ const PlayerResearchInterface: React.FC<Props> = ({
                             {playerDetailTab === 'overview' && (
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div>
-                                        <h3 className="font-medium text-white mb-3">Physical Profile</h3>
-                                        <div className="space-y-2 text-sm">
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Age:</span>
-                                                <span className="text-white">{selectedPlayer?.age}</span>
+                                        <h3 className="font-medium text-white mb-3 sm:px-4 md:px-6 lg:px-8">Physical Profile</h3>
+                                        <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Age:</span>
+                                                <span className="text-white sm:px-4 md:px-6 lg:px-8">{selectedPlayer?.age}</span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Experience:</span>
-                                                <span className="text-white">{selectedPlayer.experience} years</span>
+                                            <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Experience:</span>
+                                                <span className="text-white sm:px-4 md:px-6 lg:px-8">{selectedPlayer.experience} years</span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Height:</span>
-                                                <span className="text-white">{selectedPlayer.height}</span>
+                                            <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Height:</span>
+                                                <span className="text-white sm:px-4 md:px-6 lg:px-8">{selectedPlayer.height}</span>
                                             </div>
-                                            <div className="flex justify-between">
-                                                <span className="text-gray-400">Weight:</span>
-                                                <span className="text-white">{selectedPlayer.weight} lbs</span>
+                                            <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Weight:</span>
+                                                <span className="text-white sm:px-4 md:px-6 lg:px-8">{selectedPlayer.weight} lbs</span>
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <div>
-                                        <h3 className="font-medium text-white mb-3">Key Insights</h3>
-                                        <div className="space-y-2">
+                                        <h3 className="font-medium text-white mb-3 sm:px-4 md:px-6 lg:px-8">Key Insights</h3>
+                                        <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             {playerInsights.slice(0, 3).map((insight: any) => (
                                                 <div
                                                     key={insight.id}
                                                     className={`rounded-lg p-3 border ${getInsightColor(insight.type)}`}
                                                 >
-                                                    <div className="flex items-center space-x-2 mb-1">
+                                                    <div className="flex items-center space-x-2 mb-1 sm:px-4 md:px-6 lg:px-8">
                                                         {getInsightIcon(insight.type)}
-                                                        <span className="font-medium text-sm">{insight.title}</span>
+                                                        <span className="font-medium text-sm sm:px-4 md:px-6 lg:px-8">{insight.title}</span>
                                                     </div>
-                                                    <p className="text-xs opacity-90">{insight.description}</p>
+                                                    <p className="text-xs opacity-90 sm:px-4 md:px-6 lg:px-8">{insight.description}</p>
                                                 </div>
                                             ))}
                                         </div>
@@ -365,27 +365,27 @@ const PlayerResearchInterface: React.FC<Props> = ({
                             )}
 
                             {playerDetailTab === 'projections' && (
-                                <div className="space-y-4">
-                                    <h3 className="font-medium text-white">Weekly Projections</h3>
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Weekly Projections</h3>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         {playerProjections.slice(0, 4).map((projection: any) => (
-                                            <div key={`${projection.week}`} className="bg-gray-700/50 rounded-lg p-4">
-                                                <div className="flex justify-between items-center mb-3">
-                                                    <h4 className="font-medium text-white">Week {projection.week}</h4>
-                                                    <span className="text-xs text-gray-400">{projection.confidence.toFixed(0)}% confident</span>
+                                            <div key={`${projection.week}`} className="bg-gray-700/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex justify-between items-center mb-3 sm:px-4 md:px-6 lg:px-8">
+                                                    <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Week {projection.week}</h4>
+                                                    <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{projection.confidence.toFixed(0)}% confident</span>
                                                 </div>
-                                                <div className="space-y-2 text-sm">
-                                                    <div className="flex justify-between">
-                                                        <span className="text-gray-400">Projected Points:</span>
-                                                        <span className="text-white font-medium">{projection.fantasyPoints.toFixed(1)}</span>
+                                                <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
+                                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Projected Points:</span>
+                                                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{projection.fantasyPoints.toFixed(1)}</span>
                                                     </div>
-                                                    <div className="flex justify-between">
-                                                        <span className="text-gray-400">Floor:</span>
-                                                        <span className="text-red-400">{projection.floor.toFixed(1)}</span>
+                                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Floor:</span>
+                                                        <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">{projection.floor.toFixed(1)}</span>
                                                     </div>
-                                                    <div className="flex justify-between">
-                                                        <span className="text-gray-400">Ceiling:</span>
-                                                        <span className="text-green-400">{projection.ceiling.toFixed(1)}</span>
+                                                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
+                                                        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Ceiling:</span>
+                                                        <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">{projection.ceiling.toFixed(1)}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -395,13 +395,13 @@ const PlayerResearchInterface: React.FC<Props> = ({
                             )}
 
                             {playerDetailTab === 'news' && (
-                                <div className="space-y-3">
-                                    <h3 className="font-medium text-white">Recent News</h3>
+                                <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Recent News</h3>
                                     {playerNews.map((news: any) => (
-                                        <div key={news.id} className="bg-gray-700/50 rounded-lg p-4">
-                                            <div className="flex items-start justify-between mb-2">
-                                                <h4 className="font-medium text-white text-sm leading-tight">{news.headline}</h4>
-                                                <div className="flex items-center space-x-2">
+                                        <div key={news.id} className="bg-gray-700/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                            <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                                <h4 className="font-medium text-white text-sm leading-tight sm:px-4 md:px-6 lg:px-8">{news.headline}</h4>
+                                                <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                                     <span className={`px-2 py-1 rounded text-xs ${
                                                         news.impact === 'positive' ? 'bg-green-500/20 text-green-400' :
                                                         news.impact === 'negative' ? 'bg-red-500/20 text-red-400' :
@@ -411,8 +411,8 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                                     </span>
                                                 </div>
                                             </div>
-                                            <p className="text-gray-400 text-sm mb-2">{news.summary}</p>
-                                            <div className="flex justify-between items-center text-xs text-gray-500">
+                                            <p className="text-gray-400 text-sm mb-2 sm:px-4 md:px-6 lg:px-8">{news.summary}</p>
+                                            <div className="flex justify-between items-center text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                 <span>{news.source}</span>
                                                 <span>{news.publishedAt.toLocaleDateString()}</span>
                                             </div>
@@ -422,17 +422,17 @@ const PlayerResearchInterface: React.FC<Props> = ({
                             )}
 
                             {playerDetailTab === 'trends' && (
-                                <div className="space-y-4">
-                                    <h3 className="font-medium text-white">Performance Trends</h3>
+                                <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Performance Trends</h3>
                                     <div className="grid md:grid-cols-2 gap-4">
                                         {playerTrends.map((trend, index) => (
-                                            <div key={index} className="bg-gray-700/50 rounded-lg p-4">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <h4 className="font-medium text-white text-sm">{trend.metric.replace('_', ' ')}</h4>
-                                                    <div className="flex items-center space-x-2">
-                                                        {trend.direction === 'up' && <TrendingUpIcon className="w-4 h-4 text-green-400" />}
-                                                        {trend.direction === 'down' && <TrendingDownIcon className="w-4 h-4 text-red-400" />}
-                                                        {trend.direction === 'stable' && <ActivityIcon className="w-4 h-4 text-gray-400" />}
+                                            <div key={index} className="bg-gray-700/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                                <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
+                                                    <h4 className="font-medium text-white text-sm sm:px-4 md:px-6 lg:px-8">{trend.metric.replace('_', ' ')}</h4>
+                                                    <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                                                        {trend.direction === 'up' && <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
+                                                        {trend.direction === 'down' && <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />}
+                                                        {trend.direction === 'stable' && <ActivityIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />}
                                                         <span className={`text-sm font-medium ${
                                                             trend.direction === 'up' ? 'text-green-400' :
                                                             trend.direction === 'down' ? 'text-red-400' :
@@ -442,8 +442,8 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <p className="text-gray-400 text-xs">{trend.description}</p>
-                                                <div className="mt-2 text-xs text-gray-500">
+                                                <p className="text-gray-400 text-xs sm:px-4 md:px-6 lg:px-8">{trend.description}</p>
+                                                <div className="mt-2 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                                     {trend.timeframe.replace('_', ' ')} • {(trend.significance * 100).toFixed(0)}% confidence
                                                 </div>
                                             </div>
@@ -460,31 +460,26 @@ const PlayerResearchInterface: React.FC<Props> = ({
 
     return (
         <div className={`space-y-6 ${className}`}>
-            <Widget title="🔍 Player Research" className="overflow-visible">
+            <Widget title="🔍 Player Research" className="overflow-visible sm:px-4 md:px-6 lg:px-8">
                 {/* Tab Navigation */}
-                <div className="flex space-x-1 mb-6 bg-gray-800 p-1 rounded-lg">
+                <div className="flex space-x-1 mb-6 bg-gray-800 p-1 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => {
                         const Icon = tab.icon;
                         return (
                             <button
                                 key={tab.id}
-                                onClick={() => setActiveTab(tab.id as ResearchTab)}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors ${
-                                    activeTab === tab.id
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-700'
-                                }`}
+                                onClick={() => setActiveTab(tab.id as ResearchTab)}`}
                             >
-                                <Icon className="w-4 h-4" />
-                                <span className="text-sm font-medium">{tab.label}</span>
+                                <Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+                                <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
                             </button>
                         );
                     })}
                 </div>
 
                 {error && (
-                    <div className="bg-red-500/20 border border-red-500 rounded-lg p-4 mb-6">
-                        <p className="text-red-400">{error}</p>
+                    <div className="bg-red-500/20 border border-red-500 rounded-lg p-4 mb-6 sm:px-4 md:px-6 lg:px-8">
+                        <p className="text-red-400 sm:px-4 md:px-6 lg:px-8">{error}</p>
                     </div>
                 )}
 
@@ -498,30 +493,28 @@ const PlayerResearchInterface: React.FC<Props> = ({
                         transition={{ duration: 0.2 }}
                     >
                         {activeTab === 'search' && (
-                            <div className="space-y-4">
+                            <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 {/* Search Controls */}
-                                <div className="flex items-center space-x-4">
-                                    <div className="flex-1 relative">
-                                        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
+                                    <div className="flex-1 relative sm:px-4 md:px-6 lg:px-8">
+                                        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                                         <input
                                             type="text"
                                             value={searchQuery}
                                             onChange={(e: any) => setSearchQuery(e.target.value)}
-                                            onKeyPress={(e: any) => e.key === 'Enter' && handleSearch()}
                                             placeholder="Search players by name, team, or position..."
-                                            className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400"
+                                            className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-2 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
                                         />
                                     </div>
                                     <button
                                         onClick={() => setShowFilters(!showFilters)}
-                                        className="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg transition-colors"
                                     >
-                                        <FilterIcon className="w-4 h-4" />
+                                        <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     </button>
                                     <button
                                         onClick={handleSearch}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
-                                    >
+                                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
+                                     aria-label="Action button">
                                         Search
                                     </button>
                                 </div>
@@ -532,19 +525,19 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
-                                        className="bg-gray-800 rounded-lg p-4 space-y-4"
+                                        className="bg-gray-800 rounded-lg p-4 space-y-4 sm:px-4 md:px-6 lg:px-8"
                                     >
                                         <div className="grid md:grid-cols-3 gap-4">
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-400 mb-2">Position</label>
+                                                <label className="block text-sm font-medium text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Position</label>
                                                 <select
                                                     multiple
                                                     value={searchFilter.positions || []}
                                                     onChange={(e: any) => {
                                                         const values = Array.from(e.target.selectedOptions, (option: HTMLOptionElement) => option.value);
-                                                        setSearchFilter(prev => ({ ...prev, positions: values }));
+                                                        setSearchFilter(prev => ({ ...prev, positions: values }
                                                     }}
-                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white sm:px-4 md:px-6 lg:px-8"
                                                 >
                                                     {positions.map((pos: any) => (
                                                         <option key={pos} value={pos}>{pos}</option>
@@ -553,15 +546,15 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                             </div>
                                             
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-400 mb-2">Team</label>
+                                                <label className="block text-sm font-medium text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Team</label>
                                                 <select
                                                     multiple
                                                     value={searchFilter.teams || []}
                                                     onChange={(e: any) => {
                                                         const values = Array.from(e.target.selectedOptions, (option: HTMLOptionElement) => option.value);
-                                                        setSearchFilter(prev => ({ ...prev, teams: values }));
+                                                        setSearchFilter(prev => ({ ...prev, teams: values }
                                                     }}
-                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white sm:px-4 md:px-6 lg:px-8"
                                                 >
                                                     {teams.map((team: any) => (
                                                         <option key={team} value={team}>{team}</option>
@@ -570,14 +563,14 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                             </div>
 
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-400 mb-2">Sort By</label>
+                                                <label className="block text-sm font-medium text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Sort By</label>
                                                 <select
                                                     value={searchFilter.sortBy}
                                                     onChange={(e: any) => setSearchFilter(prev => ({ 
                                                         ...prev, 
                                                         sortBy: e.target.value as any 
-                                                    }))}
-                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white"
+                                                    }}
+                                                    className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white sm:px-4 md:px-6 lg:px-8"
                                                 >
                                                     <option value="name">Name</option>
                                                     <option value="position">Position</option>
@@ -591,9 +584,9 @@ const PlayerResearchInterface: React.FC<Props> = ({
 
                                 {/* Search Results */}
                                 {loading ? (
-                                    <div className="flex items-center justify-center py-8">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400"></div>
-                                        <span className="ml-2 text-gray-400">Searching players...</span>
+                                    <div className="flex items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
+                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-400 sm:px-4 md:px-6 lg:px-8"></div>
+                                        <span className="ml-2 text-gray-400 sm:px-4 md:px-6 lg:px-8">Searching players...</span>
                                     </div>
                                 ) : (
                                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -613,29 +606,29 @@ const PlayerResearchInterface: React.FC<Props> = ({
                         )}
 
                         {activeTab === 'compare' && (
-                            <div className="space-y-6">
+                            <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 {/* Player Selection */}
                                 <div className="grid md:grid-cols-2 gap-6">
-                                    <div className="space-y-4">
-                                        <h3 className="font-medium text-white">Player A</h3>
+                                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                        <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Player A</h3>
                                         {comparePlayer1 ? (
                                             renderPlayerCard(comparePlayer1, () => setComparePlayer1(null))
                                         ) : (
-                                            <div className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
-                                                <UserIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                                <p className="text-gray-400">Select a player to compare</p>
+                                            <div className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center sm:px-4 md:px-6 lg:px-8">
+                                                <UserIcon className="w-8 h-8 text-gray-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                                                <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Select a player to compare</p>
                                             </div>
                                         )}
                                     </div>
                                     
-                                    <div className="space-y-4">
-                                        <h3 className="font-medium text-white">Player B</h3>
+                                    <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
+                                        <h3 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">Player B</h3>
                                         {comparePlayer2 ? (
                                             renderPlayerCard(comparePlayer2, () => setComparePlayer2(null))
                                         ) : (
-                                            <div className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center">
-                                                <UserIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                                                <p className="text-gray-400">Select a player to compare</p>
+                                            <div className="bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg p-8 text-center sm:px-4 md:px-6 lg:px-8">
+                                                <UserIcon className="w-8 h-8 text-gray-400 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
+                                                <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Select a player to compare</p>
                                             </div>
                                         )}
                                     </div>
@@ -643,34 +636,34 @@ const PlayerResearchInterface: React.FC<Props> = ({
 
                                 {/* Comparison Results */}
                                 {comparison && (
-                                    <div className="bg-gray-800 rounded-lg p-6">
-                                        <h3 className="font-medium text-white mb-4">Comparison Results</h3>
+                                    <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
+                                        <h3 className="font-medium text-white mb-4 sm:px-4 md:px-6 lg:px-8">Comparison Results</h3>
                                         
-                                        <div className="space-y-4">
+                                        <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                             {comparison.metrics.map((metric, index) => (
-                                                <div key={index} className="bg-gray-700/50 rounded-lg p-4">
-                                                    <div className="flex justify-between items-center mb-2">
-                                                        <h4 className="font-medium text-white">{metric.name}</h4>
-                                                        <span className="text-xs text-gray-400">{metric.category}</span>
+                                                <div key={index} className="bg-gray-700/50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                                    <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
+                                                        <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{metric.name}</h4>
+                                                        <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{metric.category}</span>
                                                     </div>
                                                     
-                                                    <div className="grid grid-cols-3 gap-4">
+                                                    <div className="grid grid-cols-3 gap-4 sm:px-4 md:px-6 lg:px-8">
                                                         <div className={`text-center p-2 rounded ${
                                                             metric.advantage === 'player1' ? 'bg-green-500/20 text-green-400' : 'bg-gray-600/50 text-gray-400'
                                                         }`}>
-                                                            <div className="font-bold">{metric.player1Value.toFixed(1)}</div>
-                                                            <div className="text-xs">{comparePlayer1?.name}</div>
+                                                            <div className="font-bold sm:px-4 md:px-6 lg:px-8">{metric.player1Value.toFixed(1)}</div>
+                                                            <div className="text-xs sm:px-4 md:px-6 lg:px-8">{comparePlayer1?.name}</div>
                                                         </div>
                                                         
-                                                        <div className="text-center p-2">
-                                                            <div className="text-xs text-gray-500">vs</div>
+                                                        <div className="text-center p-2 sm:px-4 md:px-6 lg:px-8">
+                                                            <div className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">vs</div>
                                                         </div>
                                                         
                                                         <div className={`text-center p-2 rounded ${
                                                             metric.advantage === 'player2' ? 'bg-green-500/20 text-green-400' : 'bg-gray-600/50 text-gray-400'
                                                         }`}>
-                                                            <div className="font-bold">{metric.player2Value.toFixed(1)}</div>
-                                                            <div className="text-xs">{comparePlayer2?.name}</div>
+                                                            <div className="font-bold sm:px-4 md:px-6 lg:px-8">{metric.player2Value.toFixed(1)}</div>
+                                                            <div className="text-xs sm:px-4 md:px-6 lg:px-8">{comparePlayer2?.name}</div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -679,16 +672,16 @@ const PlayerResearchInterface: React.FC<Props> = ({
 
                                         {/* Trade Recommendation */}
                                         {comparison.recommendedTrade && (
-                                            <div className="mt-6 bg-blue-900/20 rounded-lg p-4">
-                                                <h4 className="font-medium text-blue-400 mb-2">Trade Recommendation</h4>
-                                                <p className="text-gray-300 text-sm mb-2">{comparison.recommendedTrade.reasoning}</p>
-                                                <div className="flex justify-between items-center">
+                                            <div className="mt-6 bg-blue-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                                <h4 className="font-medium text-blue-400 mb-2 sm:px-4 md:px-6 lg:px-8">Trade Recommendation</h4>
+                                                <p className="text-gray-300 text-sm mb-2 sm:px-4 md:px-6 lg:px-8">{comparison.recommendedTrade.reasoning}</p>
+                                                <div className="flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                                     <span className={`text-sm font-medium ${
                                                         comparison.recommendedTrade.recommended ? 'text-green-400' : 'text-red-400'
                                                     }`}>
                                                         {comparison.recommendedTrade.recommended ? 'Recommended' : 'Not Recommended'}
                                                     </span>
-                                                    <span className="text-xs text-gray-400">
+                                                    <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                                         {comparison.recommendedTrade.confidenceLevel}% confidence
                                                     </span>
                                                 </div>
@@ -698,8 +691,8 @@ const PlayerResearchInterface: React.FC<Props> = ({
                                 )}
 
                                 {/* Player Search for Comparison */}
-                                <div className="bg-gray-800 rounded-lg p-4">
-                                    <h3 className="font-medium text-white mb-4">Search Players</h3>
+                                <div className="bg-gray-800 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
+                                    <h3 className="font-medium text-white mb-4 sm:px-4 md:px-6 lg:px-8">Search Players</h3>
                                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                                         {searchResults.slice(0, 6).map((player: any) => 
                                             renderPlayerCard(player, undefined, true)
@@ -710,9 +703,9 @@ const PlayerResearchInterface: React.FC<Props> = ({
                         )}
 
                         {(activeTab === 'projections' || activeTab === 'news' || activeTab === 'trends' || activeTab === 'insights') && (
-                            <div className="text-center py-8">
-                                <BookOpenIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                <p className="text-gray-400">Select a player from the search tab to view {activeTab}</p>
+                            <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
+                                <BookOpenIcon className="w-12 h-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
+                                <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Select a player from the search tab to view {activeTab}</p>
                             </div>
                         )}
                     </motion.div>
@@ -722,4 +715,10 @@ const PlayerResearchInterface: React.FC<Props> = ({
     );
 };
 
-export default PlayerResearchInterface;
+const PlayerResearchInterfaceWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <PlayerResearchInterface {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(PlayerResearchInterfaceWithErrorBoundary);

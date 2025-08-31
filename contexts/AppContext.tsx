@@ -106,7 +106,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                     isLoading: false,
                 };
             }
-            
+
             return {
                 ...state,
                 user,
@@ -114,7 +114,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 isLoading: false,
             };
         }
-        
+
         case 'LOGOUT':
             return {
                 ...initialState,
@@ -126,7 +126,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
             document.documentElement.className = newTheme;
             return { ...state, theme: newTheme };
         }
-        
+
         case 'TOGGLE_SOUND':
             return { ...state, soundEnabled: !state.soundEnabled };
             
@@ -190,7 +190,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 }))
             };
         }
-        
+
         case 'ADD_PLAYER_TO_ROSTER': {
             const { teamId, player } = action.payload;
             return {
@@ -205,7 +205,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 }))
             };
         }
-        
+
         case 'REMOVE_PLAYER_FROM_ROSTER': {
             const { teamId, playerId } = action.payload;
             return {
@@ -220,20 +220,20 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 }))
             };
         }
-        
+
         case 'SET_LINEUP': {
             const { teamId, starters, bench } = action.payload;
             // Implementation for setting lineup
             return state;
         }
-        
+
         case 'SET_SEASON_REVIEW_YEAR': {
             return {
                 ...state,
                 seasonReviewYear: action.payload
             };
         }
-        
+
         case 'EDIT_MATCHUPS': {
             return {
                 ...state,
@@ -241,7 +241,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 activeLeagueId: action.payload.leagueId
             };
         }
-        
+
         case 'SET_WEEKLY_RECAP_SCRIPT': {
             return {
                 ...state,
@@ -263,13 +263,13 @@ const appReducer = (state: AppState, action: Action): AppState => {
                 )
             };
         }
-        
+
         default:
             return state;
     }
 };
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = React.useReducer(appReducer, initialState);
 
   // Load saved user session on mount
@@ -280,6 +280,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const user = JSON.parse(savedUser);
         dispatch({ type: 'LOGIN', payload: user });
       } catch (error) {
+        console.error('Error parsing saved user:', error);
       }
     }
   }, []);

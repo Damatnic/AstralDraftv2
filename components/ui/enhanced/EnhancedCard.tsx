@@ -3,7 +3,8 @@
  * Modern card designs with animations, hover effects, and interactive features
  */
 
-import React, { forwardRef, ReactNode, HTMLAttributes, useState } from 'react';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import React, { useCallback, useMemo, forwardRef, ReactNode, HTMLAttributes, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AnimatedElement, GlowEffect, ShimmerEffect } from './AnimationLibrary';
 
@@ -46,7 +47,6 @@ interface EnhancedCardProps extends HTMLAttributes<HTMLDivElement> {
   footer?: ReactNode;
   children: ReactNode;
   animationDelay?: number;
-}
 
 // =========================================
 // CARD COMPONENT
@@ -177,12 +177,12 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
     // =========================================
 
     const LoadingSkeleton = () => (
-      <div className="animate-pulse">
-        <div className="h-4 bg-glass-border rounded w-3/4 mb-4"></div>
-        <div className="space-y-3">
-          <div className="h-3 bg-glass-border rounded"></div>
-          <div className="h-3 bg-glass-border rounded w-5/6"></div>
-          <div className="h-3 bg-glass-border rounded w-4/6"></div>
+      <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
+        <div className="h-4 bg-glass-border rounded w-3/4 mb-4 sm:px-4 md:px-6 lg:px-8"></div>
+        <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
+          <div className="h-3 bg-glass-border rounded sm:px-4 md:px-6 lg:px-8"></div>
+          <div className="h-3 bg-glass-border rounded w-5/6 sm:px-4 md:px-6 lg:px-8"></div>
+          <div className="h-3 bg-glass-border rounded w-4/6 sm:px-4 md:px-6 lg:px-8"></div>
         </div>
       </div>
     );
@@ -215,10 +215,10 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
       if (onSelect) {
         onSelect();
-      }
+
       if (onClick) {
         onClick(e);
-      }
+
     };
 
     const motionProps = {
@@ -249,9 +249,9 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
       <>
         {/* Background Pattern (optional) */}
         {variant === 'glass' && (
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-purple-600"></div>
-            <div className="absolute inset-0" style={{
+          <div className="absolute inset-0 opacity-5 sm:px-4 md:px-6 lg:px-8">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-purple-600 sm:px-4 md:px-6 lg:px-8"></div>
+            <div className="absolute inset-0 sm:px-4 md:px-6 lg:px-8" style={{
               backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)`,
               backgroundSize: '20px 20px'
             }}></div>
@@ -260,9 +260,9 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
 
         {/* Shimmer Effect */}
         {shimmer && (
-          <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 pointer-events-none sm:px-4 md:px-6 lg:px-8">
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10 sm:px-4 md:px-6 lg:px-8"
               style={{ backgroundSize: '200% 100%' }}
               animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -273,7 +273,7 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
         {/* Header */}
         {header && (
           <motion.div 
-            className="mb-4 pb-4 border-b border-glass-border"
+            className="mb-4 pb-4 border-b border-glass-border sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: animationDelay + 0.1 }}
@@ -284,7 +284,7 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
 
         {/* Main Content */}
         <motion.div
-          className="relative z-10"
+          className="relative z-10 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: animationDelay + 0.2 }}
@@ -295,7 +295,7 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
         {/* Footer */}
         {footer && (
           <motion.div 
-            className="mt-4 pt-4 border-t border-glass-border"
+            className="mt-4 pt-4 border-t border-glass-border sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: animationDelay + 0.3 }}
@@ -308,13 +308,13 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
         <AnimatePresence>
           {isHovered && glow && (
             <motion.div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none sm:px-4 md:px-6 lg:px-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-purple-500/20 rounded-2xl blur-xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-500/20 to-purple-500/20 rounded-2xl blur-xl sm:px-4 md:px-6 lg:px-8"></div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -332,26 +332,23 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
             ref={ref}
             {...motionProps}
             onClick={handleClick}
-            {...props}
           >
             {cardContent}
           </motion.div>
         </GlowEffect>
       );
-    }
 
     return (
       <motion.div
         ref={ref}
         className={classes}
         onClick={handleClick}
-        {...motionProps}
         {...props}
       >
         {cardContent}
       </motion.div>
     );
-  }
+
 );
 
 EnhancedCard.displayName = 'EnhancedCard';
@@ -366,6 +363,7 @@ interface CardHeaderProps {
   title?: string;
   subtitle?: string;
   action?: ReactNode;
+
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({
@@ -380,20 +378,19 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
       <div className={`flex items-start justify-between ${className}`}>
         <div>
           {title && (
-            <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
+            <h3 className="text-lg font-semibold text-white mb-1 sm:px-4 md:px-6 lg:px-8">{title}</h3>
           )}
           {subtitle && (
-            <p className="text-sm text-neutral-400">{subtitle}</p>
+            <p className="text-sm text-neutral-400 sm:px-4 md:px-6 lg:px-8">{subtitle}</p>
           )}
         </div>
         {action && (
-          <div className="flex-shrink-0 ml-4">
+          <div className="flex-shrink-0 ml-4 sm:px-4 md:px-6 lg:px-8">
             {action}
           </div>
         )}
       </div>
     );
-  }
 
   return (
     <div className={className}>
@@ -405,6 +402,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
 interface CardBodyProps {
   children: ReactNode;
   className?: string;
+
 }
 
 export const CardBody: React.FC<CardBodyProps> = ({
@@ -422,6 +420,7 @@ interface CardFooterProps {
   children: ReactNode;
   className?: string;
   justify?: 'start' | 'center' | 'end' | 'between';
+
 }
 
 export const CardFooter: React.FC<CardFooterProps> = ({
@@ -454,7 +453,6 @@ interface StatCardProps extends Omit<EnhancedCardProps, 'children'> {
   changeType?: 'positive' | 'negative' | 'neutral';
   icon?: ReactNode;
   subtitle?: string;
-}
 
 export const StatCard: React.FC<StatCardProps> = ({
   title,
@@ -480,12 +478,12 @@ export const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <EnhancedCard variant={variant} hover glow {...props}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <p className="text-sm font-medium text-neutral-400 mb-1">{title}</p>
-          <p className="text-3xl font-bold text-white mb-1">{value}</p>
+      <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
+        <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
+          <p className="text-sm font-medium text-neutral-400 mb-1 sm:px-4 md:px-6 lg:px-8">{title}</p>
+          <p className="text-3xl font-bold text-white mb-1 sm:px-4 md:px-6 lg:px-8">{value}</p>
           {subtitle && (
-            <p className="text-xs text-neutral-500">{subtitle}</p>
+            <p className="text-xs text-neutral-500 sm:px-4 md:px-6 lg:px-8">{subtitle}</p>
           )}
           {change !== undefined && (
             <div className={`flex items-center gap-1 text-sm mt-2 ${changeColors[changeType]}`}>
@@ -495,7 +493,7 @@ export const StatCard: React.FC<StatCardProps> = ({
           )}
         </div>
         {icon && (
-          <div className="text-2xl opacity-60">
+          <div className="text-2xl opacity-60 sm:px-4 md:px-6 lg:px-8">
             {icon}
           </div>
         )}
@@ -515,7 +513,6 @@ interface PlayerCardProps extends Omit<EnhancedCardProps, 'children'> {
   };
   showPoints?: boolean;
   actions?: ReactNode;
-}
 
 export const PlayerCard: React.FC<PlayerCardProps> = ({
   player,
@@ -532,32 +529,32 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
 
   return (
     <EnhancedCard variant={variant} interactive hover {...props}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           {player.avatar ? (
             <img
               src={player.avatar}
               alt={player.name}
-              className="w-12 h-12 rounded-full object-cover"
+              className="w-12 h-12 rounded-full object-cover sm:px-4 md:px-6 lg:px-8"
             />
           ) : (
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+            <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold sm:px-4 md:px-6 lg:px-8">
               {player.name.charAt(0)}
             </div>
           )}
           
           <div>
-            <h4 className="text-white font-semibold">{player.name}</h4>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-neutral-400">{player.position}</span>
-              <span className="text-neutral-500">•</span>
-              <span className="text-neutral-400">{player.team}</span>
+            <h4 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{player.name}</h4>
+            <div className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
+              <span className="text-neutral-400 sm:px-4 md:px-6 lg:px-8">{player.position}</span>
+              <span className="text-neutral-500 sm:px-4 md:px-6 lg:px-8">•</span>
+              <span className="text-neutral-400 sm:px-4 md:px-6 lg:px-8">{player.team}</span>
               {player.status && (
                 <>
-                  <span className="text-neutral-500">•</span>
-                  <div className="flex items-center gap-1">
+                  <span className="text-neutral-500 sm:px-4 md:px-6 lg:px-8">•</span>
+                  <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                     <div className={`w-2 h-2 rounded-full ${statusColors[player.status]}`}></div>
-                    <span className="text-xs capitalize text-neutral-400">{player.status}</span>
+                    <span className="text-xs capitalize text-neutral-400 sm:px-4 md:px-6 lg:px-8">{player.status}</span>
                   </div>
                 </>
               )}
@@ -565,15 +562,15 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           {showPoints && player.points !== undefined && (
-            <div className="text-right">
-              <div className="text-xl font-bold text-white">{player.points}</div>
-              <div className="text-xs text-neutral-400">PTS</div>
+            <div className="text-right sm:px-4 md:px-6 lg:px-8">
+              <div className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{player.points}</div>
+              <div className="text-xs text-neutral-400 sm:px-4 md:px-6 lg:px-8">PTS</div>
             </div>
           )}
           {actions && (
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
               {actions}
             </div>
           )}
@@ -593,6 +590,7 @@ interface CardGridProps {
   gap?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   staggerDelay?: number;
+
 }
 
 export const CardGrid: React.FC<CardGridProps> = ({
@@ -637,7 +635,13 @@ export const CardGrid: React.FC<CardGridProps> = ({
 // EXPORTS
 // =========================================
 
-export default EnhancedCard;
+const EnhancedCardWithErrorBoundary: React.FC = (props) => (
+  <ErrorBoundary>
+    <EnhancedCard {...props} />
+  </ErrorBoundary>
+);
+
+export default React.memo(EnhancedCardWithErrorBoundary);
 
 export type {
   CardVariant,

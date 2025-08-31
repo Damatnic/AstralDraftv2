@@ -55,7 +55,6 @@ export const calculateCareerHistory = (managerId: string, leagues: League[]) => 
     return historyEntries.sort((a, b) => b.season - a.season || a.leagueName.localeCompare(b.leagueName));
 };
 
-
 export const calculateHeadToHeadRecord = (myUserId: string, opponentUserId: string, leagues: League[]) => {
     const record = {
         regularSeason: { wins: 0, losses: 0, ties: 0 },

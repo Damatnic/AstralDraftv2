@@ -29,6 +29,7 @@ interface OracleChallenge {
     oracleConfidence: number;
     result?: number;
     points?: number;
+
 }
 
 interface UserStats {
@@ -39,11 +40,11 @@ interface UserStats {
     totalPoints: number;
     currentStreak: number;
     longestStreak: number;
-}
 
 // Helper function for generating challenges using AI prediction service
 const generateChallenges = async (week: number): Promise<OracleChallenge[]> => {
     try {
+
         // Get AI-powered predictions from the Oracle service
         const predictions = await oraclePredictionService.generateWeeklyPredictions(week);
         
@@ -57,10 +58,11 @@ const generateChallenges = async (week: number): Promise<OracleChallenge[]> => {
             oraclePrediction: prediction.oracleChoice,
             oracleConfidence: prediction.confidence
         }));
+
     } catch (error) {
         // Fallback to mock data if service fails
         return generateMockChallenges(week);
-    }
+
 };
 
 // Fallback mock challenge generation
@@ -73,7 +75,7 @@ const generateMockChallenges = (week: number): OracleChallenge[] => {
                 'Which RB will have the most rushing yards?',
                 'Which WR will have the most receiving TDs?',
                 'Who will throw the most passing yards?'
-            ]
+
         },
         {
             type: 'GAME_OUTCOME' as const,
@@ -82,7 +84,7 @@ const generateMockChallenges = (week: number): OracleChallenge[] => {
                 'Which team will win by the largest margin?',
                 'Will there be any shutouts this week?',
                 'Which game will go to overtime?'
-            ]
+
         },
         {
             type: 'WEEKLY_SCORING' as const,
@@ -91,8 +93,7 @@ const generateMockChallenges = (week: number): OracleChallenge[] => {
                 'How many teams will score over 100 points?',
                 'Which position will score the most total points?',
                 'Will any defense score a touchdown?'
-            ]
-        }
+
     ];
 
     return challengeTypes.map((categoryData, index) => {
@@ -130,7 +131,6 @@ const updateUserStats = (
     } else {
         newStats.losses = prevStats.losses + 1;
         newStats.currentStreak = 0;
-    }
 
     newStats.winRate = newStats.wins / newStats.totalChallenges;
     return newStats;
@@ -140,14 +140,14 @@ const updateUserStats = (
 const ChallengeOptions: React.FC<{
     challenge: OracleChallenge;
     onSelectOption: (challengeId: string, optionIndex: number) => void;
-}> = ({ challenge, onSelectOption }: any) => {
+}> = ({ challenge, onSelectOption }) => {
     const getOptionStyle = (optionIndex: number): string => {
         if (challenge.userPrediction === optionIndex) {
             return 'bg-green-500/20 border border-green-500/40';
-        }
+
         if (challenge.oraclePrediction === optionIndex) {
             return 'bg-blue-500/20 border border-blue-500/40';
-        }
+
         return 'bg-gray-500/10 border border-gray-500/20 hover:bg-gray-500/20';
     };
 
@@ -157,7 +157,6 @@ const ChallengeOptions: React.FC<{
                 <button
                     key={`${challenge.id}-option-${optionIndex}`}
                     onClick={() => onSelectOption(challenge.id, optionIndex)}
-                    disabled={challenge.userPrediction !== undefined}
                     className={`p-3 rounded-lg text-left transition-all ${getOptionStyle(optionIndex)}`}
                 >
                     <div className="flex items-center justify-between">
@@ -181,7 +180,7 @@ const LeaderboardEntry: React.FC<{
     name: string;
     score: number;
     isCurrentUser?: boolean;
-}> = ({ rank, name, score, isCurrentUser = false }: any) => (
+}> = ({ rank, name, score, isCurrentUser = false }) => (
     <div className={`flex items-center justify-between p-3 rounded-lg ${
         isCurrentUser ? 'bg-blue-500/20' : 'bg-gray-500/10'
     }`}>
@@ -222,52 +221,22 @@ const BeatTheOracleView: React.FC = () => {
         const savedStats = localStorage.getItem('oracleUserStats');
         if (savedStats) {
             setUserStats(JSON.parse(savedStats));
-        }
 
         // Generate new challenges for current week
         const loadChallenges = async () => {
             setLoading(true);
             try {
+
                 const currentWeek = 1; // Default week
                 const challenges = await generateChallenges(currentWeek);
                 setActiveChallenges(challenges);
                 
                 // Start real-time monitoring
                 await startRealTimeMonitoring();
-            } catch (error) {
-                // Fallback to mock challenges
-                const currentWeek = 1;
-                const mockChallenges = generateMockChallenges(currentWeek);
-                setActiveChallenges(mockChallenges);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadChallenges();
-
-        // Cleanup on unmount
-        return () => {
-            realTimeDataService.stopRealTimeUpdates();
-        };
-    }, []);
-
-    // Auto-dismiss reward notification after 5 seconds
-    React.useEffect(() => {
-        if (rewardNotification) {
-            const timer = setTimeout(() => {
-                setRewardNotification(null);
-            }, 5000);
             
-            return () => clearTimeout(timer);
-        }
-    }, [rewardNotification]);
-
-    const startRealTimeMonitoring = async () => {
-        try {
-            // Set up real-time callbacks
-            realTimeDataService.onGameUpdate((update: any) => {
-                addLiveUpdate(`🏈 Game Update: ${update.homeTeam} ${update.homeScore} - ${update.awayScore} ${update.awayTeam}`);
+    } catch (error) {
+        console.error(error);
+    `🏈 Game Update: ${update.homeTeam} ${update.homeScore} - ${update.awayScore} ${update.awayTeam}`);
             });
 
             realTimeDataService.onPlayerUpdate((update: any) => {
@@ -287,13 +256,8 @@ const BeatTheOracleView: React.FC = () => {
             await realTimeDataService.startRealTimeUpdates();
             setRealTimeActive(true);
             addLiveUpdate('🚀 Real-time monitoring activated!');
-        } catch (error) {
-        }
-    };
-
-    const addLiveUpdate = (message: string) => {
-        const update = {
-            id: `update-${Date.now()}-${Math.random()}`,
+        
+    `update-${Date.now()}-${Math.random()}`,
             message,
             timestamp: new Date().toISOString()
         };
@@ -351,59 +315,13 @@ const BeatTheOracleView: React.FC = () => {
             // Add live update for rewards
             if (rewardCalc.totalPoints > 0) {
                 addLiveUpdate(`💰 Earned ${rewardCalc.totalPoints} points! ${rewardCalc.levelUp ? '⬆️ Level up!' : ''}`);
-            }
-            
+
             if (rewardCalc.newAchievements.length > 0) {
                 rewardCalc.newAchievements.forEach((achievement: any) => {
                     addLiveUpdate(`🏆 Achievement unlocked: ${achievement.title}!`);
                 });
-            }
-        } catch (error) {
-            // Fallback to basic points if rewards service fails
-            updatedChallenge.points = isWin ? 25 : 0;
-        }
-        
-        // Update challenge in state
-        setActiveChallenges(prev => 
-            prev.map((c: any) => c.id === challengeId ? updatedChallenge : c)
-        );
 
-        // Update user stats
-        const newStats = updateUserStats(userStats, {
-            isWin,
-            points: updatedChallenge.points || 0
-        });
-        
-        setUserStats(newStats);
-        localStorage.setItem('oracleUserStats', JSON.stringify(newStats));
-        
-        setLoading(false);
-    };
-
-    return (
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-6">{/* Header */}
-            <div className="nav-header">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <ZapIcon className="text-yellow-400" />
-                        <div>
-                            <h1>Beat The Oracle</h1>
-                            <p className="page-subtitle">Challenge the AI Oracle with your fantasy football predictions</p>
-                        </div>
-                    </div>
-                    <button onClick={() => window.history.back()} className="back-btn">
-                        Back
-                    </button>
-                </div>
-            </div>
-
-            {/* Tab Navigation */}
-            <div className="w-full overflow-x-auto">
-                <div className="flex space-x-2 sm:space-x-1 pb-2 px-4 sm:px-0 min-w-max sm:min-w-0 sm:justify-center">
-                    <div className="bg-gray-800/50 rounded-lg p-1 flex space-x-1 min-w-max">
-                        <button
-                            onClick={() => setActiveTab('challenges')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
+        `px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
                                 activeTab === 'challenges'
                                     ? 'bg-blue-500 text-white'
                                     : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
@@ -412,72 +330,37 @@ const BeatTheOracleView: React.FC = () => {
                             Oracle Challenges
                         </button>
                         <button
-                            onClick={() => setActiveTab('analytics')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'analytics'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('analytics')}`}
                         >
                             Analytics
                         </button>
                         <button
-                            onClick={() => setActiveTab('rewards')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'rewards'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('rewards')}`}
                         >
                             Rewards
                         </button>
                         <button
-                            onClick={() => setActiveTab('social')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'social'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('social')}`}
                         >
                             Social
                         </button>
                         <button
-                            onClick={() => setActiveTab('ml-analytics')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'ml-analytics'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('ml-analytics')}`}
                         >
                             🤖 ML
                         </button>
                         <button
-                            onClick={() => setActiveTab('training')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'training'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('training')}`}
                         >
                             🎯 Training
                         </button>
                         <button
-                            onClick={() => setActiveTab('realtime')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'realtime'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('realtime')}`}
                         >
                             ⚡ Real-Time
                         </button>
                         <button
-                            onClick={() => setActiveTab('leaderboard')}
-                            className={`px-3 py-2 rounded-md text-sm font-medium transition-all mobile-touch-target whitespace-nowrap ${
-                                activeTab === 'leaderboard'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                            }`}
+                            onClick={() => setActiveTab('leaderboard')}`}
                         >
                             🏆 Leaderboard
                         </button>
@@ -568,7 +451,7 @@ const BeatTheOracleView: React.FC = () => {
                                                     {challenge.userPrediction === challenge.result 
                                                         ? '🎉 You won!' 
                                                         : '😔 Oracle wins this round'
-                                                    }
+
                                                 </span>
                                                 <span className="font-bold text-yellow-400">
                                                     +{challenge.points} pts
@@ -634,22 +517,12 @@ const BeatTheOracleView: React.FC = () => {
                     <div className="border-b border-[var(--panel-border)]">
                         <nav className="flex space-x-6">
                             <button
-                                onClick={() => setAnalyticsSubTab('basic')}
-                                className={`pb-2 border-b-2 transition-colors ${
-                                    analyticsSubTab === 'basic'
-                                        ? 'border-cyan-500 text-cyan-400'
-                                        : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                                }`}
+                                onClick={() => setAnalyticsSubTab('basic')}`}
                             >
                                 Basic Analytics
                             </button>
                             <button
-                                onClick={() => setAnalyticsSubTab('advanced')}
-                                className={`pb-2 border-b-2 transition-colors ${
-                                    analyticsSubTab === 'advanced'
-                                        ? 'border-cyan-500 text-cyan-400'
-                                        : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                                }`}
+                                onClick={() => setAnalyticsSubTab('advanced')}`}
                             >
                                 Advanced Analytics
                             </button>
@@ -687,7 +560,6 @@ const BeatTheOracleView: React.FC = () => {
                         <h4 className="font-bold text-white">Rewards Earned!</h4>
                         <button
                             onClick={() => setRewardNotification(null)}
-                            className="text-gray-400 hover:text-white"
                         >
                             ✕
                         </button>

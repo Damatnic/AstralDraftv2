@@ -5,13 +5,14 @@ interface TouchFeedbackProps {
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
+
 }
 
 export const TouchFeedback: React.FC<TouchFeedbackProps> = ({
   children,
   className = '',
   disabled = false
-}: any) => {
+}) => {
   return (
     <motion.div
       className={className}
