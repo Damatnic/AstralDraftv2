@@ -30,6 +30,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
         <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">You must be the league commissioner to access these tools.</p>
       </div>
     );
+  }
 
   const handleTeamNameUpdate = (team: Team) => {
     if (newTeamName.trim() && newTeamName !== team.name) {
@@ -43,8 +44,9 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
         payload: {
           message: `Team name updated to "${newTeamName.trim()}"`,
           type: 'SUCCESS'
-
+        }
       });
+    }
 
     setEditingTeam(null);
     setNewTeamName('');
@@ -61,7 +63,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
       payload: {
         message: `Commissioner added ${player.name} to roster`,
         type: 'INFO'
-
+      }
     });
   };
 
@@ -80,9 +82,9 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
         payload: {
           message: `Commissioner dropped ${player.name}`,
           type: 'INFO'
-
+        }
       });
-
+    }
   };
 
   const tabs = [
@@ -388,7 +390,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
 
       default:
         return null;
-
+    }
   };
 
   return (
@@ -410,7 +412,12 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
         {tabs.map((tab: any) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}`}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-colors ${
+              activeTab === tab.id
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+            }`}
           >
             <span>{tab.icon}</span>
             <span className="font-medium sm:px-4 md:px-6 lg:px-8">{tab.label}</span>

@@ -198,7 +198,7 @@ const StartSitToolView: React.FC = () => {
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load tool. Please select a league with an active season first.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="glass-button-primary ml-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="glass-button-primary ml-4">
                     Back to Dashboard
                 </button>
             </div>

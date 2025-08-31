@@ -29,7 +29,7 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
         (league.playerAwards || []).forEach((award: any) => {
             if (award.awardedByTeamId === team.id && award.season === currentSeason && award.awardType in initialState) {
                 initialState[award.awardType as PlayerAwardType] = award.playerId;
-
+            }
         });
         return initialState;
     });
@@ -62,9 +62,8 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
         <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg sm:px-4 md:px-6 lg:px-8"
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                animate={{ opacity: 1, scale: 1 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">

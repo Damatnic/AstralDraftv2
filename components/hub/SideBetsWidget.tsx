@@ -31,14 +31,14 @@ const SideBetCard: React.FC<{ bet: SideBet; onRespond: (betId: string, response:
             <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Stakes: <span className="italic sm:px-4 md:px-6 lg:px-8">{bet.stakes}</span></p>
             {bet?.status === 'PENDING' && isMyTurnToRespond && (
                  <div className="flex justify-end gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
-                    <button onClick={() => onRespond(bet.id, 'REJECTED')}
-                    <button onClick={() => onRespond(bet.id, 'ACCEPTED')}
+                    <button onClick={() => onRespond(bet.id, 'REJECTED')} className="px-2 py-1 text-xs bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 sm:px-4 md:px-6 lg:px-8">Reject</button>
+                    <button onClick={() => onRespond(bet.id, 'ACCEPTED')} className="px-2 py-1 text-xs bg-green-500/20 text-green-300 rounded hover:bg-green-500/30 sm:px-4 md:px-6 lg:px-8">Accept</button>
                 </div>
             )}
             {bet?.status === 'ACCEPTED' && isMyBet && (
                  <div className="flex justify-end gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
-                    <button onClick={() => onResolve(bet.id, bet.proposerId)}
-                    <button onClick={() => onResolve(bet.id, bet.accepterId)}
+                    <button onClick={() => onResolve(bet.id, bet.proposerId)} className="px-2 py-1 text-xs bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 sm:px-4 md:px-6 lg:px-8">I Won</button>
+                    <button onClick={() => onResolve(bet.id, bet.accepterId)} className="px-2 py-1 text-xs bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 sm:px-4 md:px-6 lg:px-8">They Won</button>
                 </div>
             )}
         </div>

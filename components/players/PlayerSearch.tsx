@@ -41,12 +41,14 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
     // Apply position filter
     if (selectedPosition !== 'ALL') {
       players = players.filter((player: any) => player.position === selectedPosition);
+    }
 
     // Apply search query
     if (searchQuery.trim()) {
       players = searchPlayers(searchQuery).filter((player: any) => 
         !excludePlayerIds.includes(player.id)
       );
+    }
 
     // Sort players
     players.sort((a, b) => {
@@ -59,7 +61,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
           return a.team.localeCompare(b.team);
         default:
           return a.fantasyRank - b.fantasyRank;
-
+      }
     });
 
     return players.slice(0, 50); // Limit to 50 results for performance
@@ -174,11 +176,12 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
                 </div>
                 {showAddButton && (
                   <button
-                    onClick={(e: any) = aria-label="Action button"> {
+                    onClick={(e: any) => {
                       e.preventDefault();
                       e.stopPropagation();
                       onPlayerSelect?.(player);
                     }}
+                    aria-label="Action button"
                     className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
                   >
                     Add

@@ -23,6 +23,7 @@ export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team a
         loading="lazy"
       />
     );
+  }
 
   // It's an emoji
   return (
@@ -31,3 +32,5 @@ export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team a
       </span>
   );
 };
+
+export default Avatar;

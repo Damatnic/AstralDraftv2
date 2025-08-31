@@ -134,7 +134,7 @@ const SeasonContestView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name} Side Bets & Challenges</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) 
                     className="glass-button"
                 >
                     Back to League Hub

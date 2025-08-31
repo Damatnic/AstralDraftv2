@@ -30,6 +30,7 @@ interface WaiverPeriod {
   isActive: boolean;
   nextProcessing: Date;
   currentPeriod: 'waiver' | 'free_agency';
+}
 
 const EnhancedWaiverWire: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -120,7 +121,7 @@ const EnhancedWaiverWire: React.FC = () => {
       bidAmount: 12,
       priority: 2,
       status: 'pending'
-
+    }
   ];
 
   const userBudget = faabBudgets[userTeam?.id || ''] || { remaining: 100, spent: 0 };
@@ -161,7 +162,7 @@ const EnhancedWaiverWire: React.FC = () => {
       case 'K': return 'text-orange-400 bg-orange-900/20';
       case 'DEF': return 'text-gray-400 bg-gray-900/20';
       default: return 'text-white bg-slate-900/20';
-
+    }
   };
 
   const getClaimStatusColor = (status: string) => {
@@ -170,7 +171,7 @@ const EnhancedWaiverWire: React.FC = () => {
       case 'successful': return 'text-green-400 bg-green-900/20';
       case 'failed': return 'text-red-400 bg-red-900/20';
       default: return 'text-slate-400 bg-slate-900/20';
-
+    }
   };
 
   const tabs = [
@@ -210,8 +211,7 @@ const EnhancedWaiverWire: React.FC = () => {
               <div className="text-sm text-blue-300 sm:px-4 md:px-6 lg:px-8">
                 {waiverPeriod.currentPeriod === 'waiver' 
                   ? 'Submit FAAB bids until Tuesday 11:59 PM'
-                  : 'Add players immediately (first come, first served)'
-
+                  : 'Add players immediately (first come, first served)'}
               </div>
             </div>
           </div>
@@ -230,7 +230,7 @@ const EnhancedWaiverWire: React.FC = () => {
         {tabs.map((tab: any) => (
           <button
             key={tab.id}
-            onClick={() => setSelectedTab(tab.id as any)}`}
+            onClick={() => setSelectedTab(tab.id as any)}
           >
             <span>{tab.icon}</span>
             <span className="font-medium sm:px-4 md:px-6 lg:px-8">{tab.label}</span>
@@ -303,10 +303,11 @@ const EnhancedWaiverWire: React.FC = () => {
                     </div>
                     
                     <button
-                      onClick={() = aria-label="Action button"> {
+                      onClick={() => {
                         setSelectedPlayer(player);
                         setShowBidModal(true);
                       }}
+                      aria-label="Action button"
                       className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                     >
                       {waiverPeriod.currentPeriod === 'waiver' ? 'Place Bid' : 'Add Player'}
@@ -531,7 +532,8 @@ const EnhancedWaiverWire: React.FC = () => {
               </button>
               <button
                 onClick={handlePlaceBid}
-                disabled={bidAmount <= 0 || bidAmount  aria-label="Action button"> userBudget.remaining}
+                disabled={bidAmount <= 0 || bidAmount > userBudget.remaining}
+                aria-label="Action button"
                 className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:text-slate-400 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
               >
                 Place Bid

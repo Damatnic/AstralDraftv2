@@ -31,12 +31,12 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                 setRankings(data);
             } else {
                 setError("The Oracle could not produce power rankings. Please try again later.");
-
-    } catch (error) {
+            }
+        } catch (error) {
             setError("An error occurred while consulting the Oracle for power rankings.");
         } finally {
             setIsLoading(false);
-
+        }
     }, [league]);
 
     React.useEffect(() => {
@@ -57,7 +57,7 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         <p className="page-subtitle">{league.name} - Week {league.currentWeek}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
                         className="back-btn"
                     >
                         Back to My Team
@@ -72,18 +72,20 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                             <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {Array.from({ length: league.teams.length || 8 }).map((_, i) => <PowerRankingCardSkeleton key={i} />)}
                             </div>
-                        ) :
-                         error ? <ErrorDisplay message={error} onRetry={handleRetry} /> :
-                         <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                             {rankings.map((ranking: any) => (
-                                 <PowerRankingCard 
-                                    key={ranking.teamId} 
-                                    ranking={ranking} 
-                                    team={league.teams.find((t: any) => t.id === ranking.teamId)}
-                                    isMyTeam={ranking.teamId === myTeamId}
-                                />
-                             ))}
-                         </div>
+                        ) : error ? (
+                            <ErrorDisplay message={error} onRetry={handleRetry} />
+                        ) : (
+                            <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {rankings.map((ranking: any) => (
+                                    <PowerRankingCard 
+                                       key={ranking.teamId} 
+                                       ranking={ranking} 
+                                       team={league.teams.find((t: any) => t.id === ranking.teamId)}
+                                       isMyTeam={ranking.teamId === myTeamId}
+                                    />
+                                ))}
+                            </div>
+                        )}
 
                     </Widget>
                 </main>
@@ -100,7 +102,7 @@ const PowerRankingsView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view power rankings.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
@@ -108,5 +110,7 @@ const PowerRankingsView: React.FC = () => {
 
     return <PowerRankingsContent league={league} dispatch={dispatch} />;
 };
+
+}
 
 export default PowerRankingsView;

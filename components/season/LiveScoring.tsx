@@ -34,6 +34,7 @@ interface PlayerScore {
     safeties?: number;
     pointsAllowed?: number;
   };
+}
 
 interface TeamScore {
   teamId: string;
@@ -48,6 +49,7 @@ interface LiveScoringProps {
   matchupId?: string;
   teamId?: string;
   showProjections?: boolean;
+}
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
   matchupId, 
@@ -155,6 +157,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                           (stats.pointsAllowed <= 6 ? 10 : stats.pointsAllowed <= 13 ? 7 : 
                            stats.pointsAllowed <= 20 ? 4 : stats.pointsAllowed <= 27 ? 1 : 0);
             break;
+        }
 
         return {
           playerId: `player-${team.id}-${index}`,
@@ -201,7 +204,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       case 'K': return 'text-orange-400';
       case 'DEF': return 'text-gray-400';
       default: return 'text-white';
-
+    }
   };
 
   const getGameStatusIcon = (status: string) => {
@@ -210,7 +213,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       case 'final': return '✅';
       case 'not_started': return '⏰';
       default: return '⏰';
-
+    }
   };
 
   const formatStats = (player: PlayerScore) => {
@@ -240,6 +243,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">No scoring data available</p>
       </div>
     );
+  }
 
   if (isLoading) {
     return (
@@ -248,6 +252,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
       </div>
     );
+  }
 
   return (
     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
@@ -273,12 +278,14 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           
           <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
             <button
-              onClick={() => setSelectedView('summary')}`}
+              onClick={() => setSelectedView('summary')}
+              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'summary' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
               Summary
             </button>
             <button
-              onClick={() => setSelectedView('detailed')}`}
+              onClick={() => setSelectedView('detailed')}
+              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'detailed' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
               Detailed
             </button>

@@ -32,6 +32,7 @@ const WeeklyPollWidget: React.FC = () => {
                 </div>
             </Widget>
         );
+    }
 
     return (
         <Widget title="Weekly Poll" icon={<ClipboardListIcon />}>

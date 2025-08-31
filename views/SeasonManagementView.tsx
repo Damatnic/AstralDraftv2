@@ -42,7 +42,7 @@ const SeasonManagementView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               className="back-btn"
             >
               ← Back to Dashboard
@@ -147,7 +147,7 @@ const SeasonManagementView: React.FC = () => {
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}`}
+                onClick={() => setActiveTab(tab.id as any)}
               >
                 <span className="text-2xl">{tab.icon}</span>
                 <div className="text-center">
@@ -211,7 +211,7 @@ const SeasonManagementView: React.FC = () => {
                   View detailed standings, playoff picture, and league statistics
                 </p>
                 <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ENHANCED_LEAGUE_STANDINGS' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ENHANCED_LEAGUE_STANDINGS' })}
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                 >
                   View Full Standings
@@ -276,7 +276,7 @@ const SeasonManagementView: React.FC = () => {
         {/* Quick Actions */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }}
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">
@@ -289,7 +289,7 @@ const SeasonManagementView: React.FC = () => {
           </button>
 
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' }}
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">
@@ -302,7 +302,7 @@ const SeasonManagementView: React.FC = () => {
           </button>
 
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' }}
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">

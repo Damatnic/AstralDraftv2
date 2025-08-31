@@ -25,15 +25,13 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
         const fetchReport = async () => {
             setIsLoading(true);
             try {
-
                 const result = await generateRivalryReport(myTeam, opponentTeam);
                 setReport(result);
-            
-    } catch (error) {
+            } catch (error) {
                 setError("The Oracle could not be reached for a report.");
             } finally {
                 setIsLoading(false);
-
+            }
         };
         fetchReport();
     }, [myTeam, opponentTeam]);
@@ -60,8 +58,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
                             <ReactMarkdown>{report}</ReactMarkdown>
                         </div>
                      ) :
-                     <p className="text-center text-gray-400 sm:px-4 md:px-6 lg:px-8">No report available.</p>
-
+                     <p className="text-center text-gray-400 sm:px-4 md:px-6 lg:px-8">No report available.</p>}
                 </main>
 
                 <footer className="p-4 text-center border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">

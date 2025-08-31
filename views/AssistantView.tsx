@@ -94,7 +94,7 @@ const AssistantView: React.FC = () => {
                         </span>
                     </h1>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="back-btn">
                     Back to Dashboard
                 </button>
             </header>

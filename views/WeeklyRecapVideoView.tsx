@@ -54,7 +54,7 @@ export const WeeklyRecapVideoView: React.FC = () => {
                 {script && <RecapVideoPlayer script={script} league={league} />}
             </div>
             <button
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' }}
+                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' })
                 className="glass-button mt-6"
             >
                 Back to Report

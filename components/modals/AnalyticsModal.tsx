@@ -56,7 +56,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       rank: 4,
       color: 'text-orange-400',
       bgColor: 'bg-orange-400/20'
-
+    }
   ];
 
   const teamComposition = [
@@ -110,7 +110,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       description: 'Team value increasing',
       confidence: 88,
       color: 'text-purple-400'
-
+    }
   ];
 
   const insights = [
@@ -141,7 +141,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
       description: 'Consider picking up emerging WR handcuffs',
       impact: 'Low',
       color: 'text-blue-400'
-
+    }
   ];
 
   if (!isOpen) return null;
@@ -200,7 +200,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}`}
+                  onClick={() => setActiveTab(tab.id)}
                 >
                   {tab.icon}
                   {tab.label}

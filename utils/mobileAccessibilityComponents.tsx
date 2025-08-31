@@ -14,8 +14,6 @@ interface AccessibleButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     ariaLabel?: string;
-}
-
     className?: string;
     type?: 'button' | 'submit' | 'reset';
 }
@@ -35,7 +33,8 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
         <button
             ref={buttonRef}
             type={type}
-            onClick={onClick}{disabled}
+            onClick={onClick}
+            disabled={disabled}
             aria-label={ariaLabel}
             className={`${className} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
         >

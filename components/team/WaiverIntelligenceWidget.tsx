@@ -23,15 +23,15 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
         const fetchIntel = async () => {
             setIsLoading(true);
             try {
-
                 const data = await getWaiverIntelligence(league);
                 if (data) {
                     setIntel(data);
-
-    } catch (error) {
+                }
+            } catch (error) {
+                console.error('Error fetching waiver intelligence:', error);
             } finally {
                 setIsLoading(false);
-
+            }
         };
         fetchIntel();
     }, [league.id, league.currentWeek]);
@@ -42,7 +42,7 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
                 setCurrentIndex((prevIndex: any) => (prevIndex + 1) % intel.length);
             }, 8000); // Change story every 8 seconds
             return () => clearInterval(interval);
-
+        }
     }, [intel.length]);
     
     if(isLoading) {
@@ -50,10 +50,12 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
              <Widget title="Oracle's Insight" icon={<LightbulbIcon />}>
                 <LoadingSpinner size="sm" text="Scouring the waiver wire..." />
             </Widget>
-        )
+        );
+    }
 
     if(intel.length === 0) {
         return null;
+    }
 
     const currentIntel = intel[currentIndex];
 

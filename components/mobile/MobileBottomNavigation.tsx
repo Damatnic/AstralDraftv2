@@ -43,6 +43,7 @@ interface NavigationItem {
     icon: React.ReactNode;
     color: string;
     category: 'primary' | 'secondary';
+}
 
 const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
     activeView,
@@ -94,7 +95,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
             icon: <UserIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-indigo-400',
             category: 'primary'
-
+        }
     ];
 
     const secondaryNavItems: NavigationItem[] = [
@@ -139,7 +140,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
             icon: <CalendarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             color: 'text-violet-400',
             category: 'secondary'
-
+        }
     ];
 
     const handleDrag = useThrottle((event: any, info: PanInfo) => {
@@ -154,7 +155,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
             setIsExpanded(true);
         } else if (info.offset.y > threshold) {
             setIsExpanded(false);
-
+        }
         setDragY(0);
     };
 
@@ -214,6 +215,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
 
     if (!isMobile) {
         return null;
+    }
 
     return (
         <nav 

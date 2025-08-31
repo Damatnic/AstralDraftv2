@@ -23,6 +23,7 @@ const AnnouncementsWidget: React.FC = () => {
                 </div>
             </Widget>
         );
+    }
 
     return (
         <Widget title="Announcements" icon={<MegaphoneIcon />}>

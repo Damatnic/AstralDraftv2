@@ -17,6 +17,7 @@ interface SettingItem {
   type: 'toggle' | 'select' | 'slider';
   value: boolean | string | number;
   options?: string[];
+}
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   // Handle Escape key to close modal
@@ -80,7 +81,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Compact Mode',
           description: 'Show more information in less space',
           type: 'toggle'
-
+        }
+      ]
     },
     {
       title: 'Notifications',
@@ -115,7 +117,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Draft Reminders',
           description: 'Remind about upcoming drafts',
           type: 'toggle'
-
+        }
+      ]
     },
     {
       title: 'Audio',
@@ -138,7 +141,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Volume',
           description: 'Adjust sound volume',
           type: 'slider'
-
+        }
+      ]
     },
     {
       title: 'Performance',
@@ -162,7 +166,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Background Sync',
           description: 'Keep data updated in background',
           type: 'toggle'
-
+        }
+      ]
     },
     {
       title: 'Privacy',
@@ -187,7 +192,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           label: 'Trade History',
           description: 'Show your trade history to others',
           type: 'toggle'
-
+        }
+      ]
+    }
   ];
 
   const handleSettingChange = (id: string, value: any) => {
@@ -214,7 +221,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       default:
         // Store in localStorage for persistence
         localStorage.setItem(`setting_${id}`, JSON.stringify(value));
-
+        break;
+    }
   };
 
   const renderSettingControl = (item: any) => {
@@ -224,7 +232,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
       case 'toggle':
         return (
           <button
-            onClick={() => handleSettingChange(item.id, !value)}`}
+            onClick={() => handleSettingChange(item.id, !value)}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
+              value ? 'bg-primary-500' : 'bg-gray-600'
+            }`}
           >
             <div
               className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
@@ -264,7 +275,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
       default:
         return null;
-
+    }
   };
 
   if (!isOpen) return null;
@@ -364,7 +375,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       profileVisibility: 'league',
                       statsVisibility: 'public',
                       tradeHistory: true
-
+                    });
                   }}
                   className="px-4 py-2 bg-dark-600 hover:bg-dark-500 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                 >
@@ -372,6 +383,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 </button>
                 <button
                   onClick={onClose}
+                  className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                 >
                   Done
                 </button>
@@ -384,7 +396,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   );
 };
 
-const SettingsModalWithErrorBoundary: React.FC = (props) => (
+const SettingsModalWithErrorBoundary: React.FC<SettingsModalProps> = (props) => (
   <ErrorBoundary>
     <SettingsModal {...props} />
   </ErrorBoundary>

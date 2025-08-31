@@ -21,7 +21,7 @@ const StatusIcon = ({ status }: { status: IntegrityTaskStatus }) => {
         case 'pending':
         default:
             return <div className="w-4 h-4 border-2 border-gray-500 rounded-full flex-shrink-0 self-center sm:px-4 md:px-6 lg:px-8"></div>;
-
+    }
 };
 
 const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onClose }) => {
@@ -30,7 +30,7 @@ const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onCl
         return tasks.reduce<Record<string, IntegrityTask[]>>((acc, task) => {
             if (!acc[task.category]) {
                 acc[task.category] = [];
-
+            }
             acc[task.category].push(task);
             return acc;
         }, {});
@@ -42,9 +42,8 @@ const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onCl
         <Modal isOpen={true} onClose={onClose}>
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col sm:px-4 md:px-6 lg:px-8"
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                animate={{ opacity: 1, scale: 1 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display sm:px-4 md:px-6 lg:px-8">Project Integrity Checklist Status</h2>

@@ -26,7 +26,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected })
     React.useEffect(() => {
         if (userId) {
             dispatch({ type: 'MARK_CONVERSATION_AS_READ', payload: { userId } });
-
+        }
     }, [userId, dispatch]);
 
     React.useEffect(() => {
@@ -49,7 +49,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected })
             league.members.forEach((member: any) => {
                 if (member.id !== state.user?.id) {
                     userMap.set(member.id, member);
-
+                }
             });
         });
         return Array.from(userMap.values());
@@ -63,17 +63,19 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected })
                 </div>
                 <div className="flex-grow overflow-y-auto p-2 space-y-1 sm:px-4 md:px-6 lg:px-8">
                     {allUsers.map((user: any) => (
-                        <button key={user.id} onClick={() => onUserSelected(user.id)}
+                        <button key={user.id} onClick={() => onUserSelected(user.id)}>
                             <Avatar avatar={user.avatar} className="w-8 h-8 rounded-full mr-2 sm:px-4 md:px-6 lg:px-8"/>
                             {user.name}
                         </button>
                     ))}
                 </div>
             </div>
-         )
+        );
+    }
 
     if (!finalUser) {
         return <div />;
+    }
 
     return (
         <div className="h-full flex flex-col sm:px-4 md:px-6 lg:px-8">

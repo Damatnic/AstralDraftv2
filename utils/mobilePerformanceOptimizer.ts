@@ -115,12 +115,11 @@ export class MobilePerformanceOptimizer {
       });
 
       try {
-
         this.performanceObserver.observe({ entryTypes: ['longtask'] });
-
-    } catch (error) {
+      } catch (error) {
         console.error(error);
-    `${src}?${urlParams.toString()}`;
+      }
+    }
   }
 
   private getSupportedImageFormats(): string[] {

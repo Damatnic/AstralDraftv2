@@ -86,7 +86,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                 </button>
                 <div className={`${isMobile ? 'grid grid-cols-2 sm:grid-cols-3 gap-2' : 'flex gap-2 flex-wrap justify-end'}`}>
                     {isKeeperLeague && isPreDraft && (
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'KEEPER_SELECTION' }} 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'KEEPER_SELECTION' }) 
                                  className="px-4 py-2 bg-yellow-500/80 text-white rounded-lg text-sm hover:bg-yellow-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
                             <UsersIcon /> {!isMobile && 'Select Keepers'}
                         </button>
@@ -102,7 +102,7 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                         </button>
 
                      {isInSeason && (
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'GAMEDAY_HOST' }} 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'GAMEDAY_HOST' }) 
                                 className="px-4 py-2 bg-red-500/80 text-white rounded-lg text-sm hover:bg-red-500 backdrop-blur-sm flex items-center gap-2 min-h-[44px] justify-center">
                            <TvIcon /> {!isMobile && 'Gameday Host'}
                         </button>
@@ -113,50 +113,50 @@ const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dis
                         </button>
                      )}
                      {league.status === 'COMPLETE' && (
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'SEASON_STORY' }} 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'SEASON_STORY' }) 
                                  className="px-4 py-2 bg-purple-500/80 text-white rounded-lg text-sm hover:bg-purple-500 backdrop-blur-sm min-h-[44px]">
                             {isMobile ? 'Story' : 'View My Season Story'}
                         </button>
                      )}
                      {isWaiversActive && (
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' }} 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' }) 
                                  className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                             {isMobile ? 'Waivers' : 'Waiver Wire'}
                         </button>
                     )}
                     {isSeasonStarted && (
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' }} 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WEEKLY_REPORT' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                             {isMobile ? 'Report' : 'Weekly Report'}
                         </button>
                     )}
                      {isSeasonStarted && (
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PERFORMANCE_TRENDS' }} 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PERFORMANCE_TRENDS' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                             Performance
                         </button>
                      )}
                     {isSeasonStarted && (
-                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'POWER_RANKINGS' }} 
+                        <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'POWER_RANKINGS' }) 
                                 className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                             {isMobile ? 'Rankings' : 'Power Rankings'}
                         </button>
                     )}
                     {isPlayoffs && (
-                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYOFF_BRACKET' }} 
+                         <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYOFF_BRACKET' }) 
                                  className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                             {isMobile ? 'Playoffs' : 'Playoff Bracket'}
                         </button>
                     )}
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }} 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                         Analytics
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }} 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                         Standings
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} 
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) 
                             className="px-4 py-2 bg-black/50 rounded-lg text-sm hover:bg-black/70 backdrop-blur-sm min-h-[44px]">
                         Dashboard
                     </button>
@@ -241,7 +241,7 @@ export const TeamHubView: React.FC = () => {
             {(!myTeam || !league) ? (
                 <div className="w-full h-full flex items-center justify-center">
                     <p>Team or League not found.</p>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="btn btn-primary ml-4">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="btn btn-primary ml-4">
                         Back to Dashboard
                     </button>
                 </div>

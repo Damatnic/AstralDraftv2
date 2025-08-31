@@ -10,25 +10,30 @@ interface CardProps extends Omit<HTMLMotionProps<"div">, 'children'> {
   glow?: boolean;
   glowColor?: 'primary' | 'secondary' | 'accent' | 'danger' | 'warning';
   interactive?: boolean;
+}
 
 // Card Header Props
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
+}
 
 // Card Title Props
 interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl';
+}
 
 // Card Content Props
 interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
+}
 
 // Card Footer Props
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   separated?: boolean;
+}
 
 // Main Card Component
 export const Card: React.FC<CardProps> = ({ 
@@ -260,15 +265,6 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   separated = false,
   ...props 
 }) => {
-  
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
-
   return (
     <div 
       className={`

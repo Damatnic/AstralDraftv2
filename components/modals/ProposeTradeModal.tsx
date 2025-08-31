@@ -48,6 +48,7 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
             case 'receivePlayer': [state, setState] = [playersToReceive, setPlayersToReceive]; break;
             case 'sendPick': [state, setState] = [picksToSend, setPicksToSend]; break;
             case 'receivePick': [state, setState] = [picksToReceive, setPicksToReceive]; break;
+        }
 
         const newSet = new Set(state);
         if (newSet.has(id)) newSet.delete(id);
@@ -62,22 +63,27 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
     };
 
     const handleAnalyze = async () => {
-    try {
+        try {
+            if ([playersToSend, playersToReceive, picksToSend, picksToReceive].every((s: any) => s.size === 0)) return;
+            setIsAnalyzing(true);
+            setAnalysis(null);
+            
+            const toSendP = players.filter((p: any) => playersToSend.has(p.id));
+            const toReceiveP = players.filter((p: any) => playersToReceive.has(p.id));
+            const toSendDK = Array.from(picksToSend).map(stringToPick);
+            const toReceiveDK = Array.from(picksToReceive).map(stringToPick);
+            
+            const result = await analyzeTrade(myTeam.name, otherTeam.name, toSendP, toReceiveP, toSendDK, toReceiveDK);
+            setAnalysis(result);
+        } catch (error) {
+            console.error('Analysis failed:', error);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
 
-        if ([playersToSend, playersToReceive, picksToSend, picksToReceive].every((s: any) => s.size === 0)) return;
-        setIsAnalyzing(true);
-        setAnalysis(null);
-        
-        const toSendP = players.filter((p: any) => playersToSend.has(p.id));
-        const toReceiveP = players.filter((p: any) => playersToReceive.has(p.id));
-        const toSendDK = Array.from(picksToSend).map(stringToPick);
-        const toReceiveDK = Array.from(picksToReceive).map(stringToPick);
-        
-        const result = await analyzeTrade(myTeam.name, otherTeam.name, toSendP, toReceiveP, toSendDK, toReceiveDK);
-        setAnalysis(result);
-        setIsAnalyzing(false);
-
-    `Trade offer sent to ${otherTeam.name}!`, type: 'TRADE' }});
+    const handleSendOffer = () => {
+        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Trade offer sent to ${otherTeam.name}!`, type: 'TRADE' }});
         onClose();
     };
     
@@ -88,7 +94,7 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
             case 'TEAM_B': return { text: `${otherTeam.name} wins`, color: 'text-red-400' };
             case 'EVEN': return { text: 'Fair Trade', color: 'text-yellow-400' };
             default: return { text: '', color: 'text-gray-400' };
-
+        }
     };
 
     const winnerStyle = getWinnerStyling();

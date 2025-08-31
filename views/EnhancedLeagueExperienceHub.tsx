@@ -74,7 +74,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
     name: team.name,
     teamName: team.name,
     avatar: `https://api.dicebear.com/7.x/identicon/svg?seed=${team.owner}`
-  }));
+  )};
 
   const sections = [
     { 

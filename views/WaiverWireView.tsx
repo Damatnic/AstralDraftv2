@@ -56,7 +56,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                             <span className="text-green-300 font-bold">FAAB: ${myTeam.faab}</span>
                         </div>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
                             className="back-btn"
                         >
                             Back to Team
@@ -87,7 +87,7 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                     <button
                                         key={pos}
                                         onClick={() => setPositionFilter(pos)}
-                                        `}
+                                        className={`btn btn-sm ${positionFilter === pos ? 'btn-primary' : 'btn-secondary'}`}
                                     >
                                         {pos}
                                     </button>
@@ -98,13 +98,14 @@ const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: Reac
                                 {filteredPlayers.map((player: any) => (
                                     <div key={player.id} className="player-card cursor-pointer">
                                         <div className="player-header">
-                                            <div className="player-info" onClick={() => setSelectedPlayer(player)}
+                                            <div className="player-info" onClick={() => setSelectedPlayer(player)}>
                                                 <div className="position-badge">{player.position}</div>
                                                 <h3 className="player-name">{player.name}</h3>
                                                 <p className="player-team">{player.team} • Rank #{player.rank}</p>
                                             </div>
                                             <button 
                                                 onClick={() => handleOpenClaimModal(player)}
+                                                className="btn btn-success btn-sm"
                                             >
                                                 Claim
                                             </button>
@@ -177,11 +178,12 @@ const WaiverWireView: React.FC = () => {
         return (
             <div className="w-full h-full flex items-center justify-center p-4">
                 <p>Could not load waiver wire. Please select a league first.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
+    }
 
     return <WaiverWireContent league={league} myTeam={myTeam} dispatch={dispatch} playerNotes={state.playerNotes} playerAvatars={state.playerAvatars} />;
 };

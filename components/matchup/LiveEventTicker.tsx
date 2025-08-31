@@ -31,18 +31,20 @@ const LiveEventTicker: React.FC<LiveEventTickerProps> = ({ matchupId }) => {
     React.useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
+        }
     }, [events]);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
+    // Remove isLoading check as it's not defined
+    // if (isLoading) {
+    //   return (
+    //     <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
+    //       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
+    //       <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
+    //     </div>
+    //   );
+    // }
 
-  return (
+    return (
         <div className="glass-pane p-3 rounded-xl flex-grow flex flex-col min-w-[300px] sm:px-4 md:px-6 lg:px-8">
             <h3 className="text-center font-bold text-sm mb-2 text-red-400 animate-pulse sm:px-4 md:px-6 lg:px-8">LIVE</h3>
             <div ref={scrollRef} className="flex-grow space-y-2 overflow-y-auto pr-2 sm:px-4 md:px-6 lg:px-8">

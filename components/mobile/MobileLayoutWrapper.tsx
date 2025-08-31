@@ -151,6 +151,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     // Don't apply mobile layout on desktop
     if (!isMobile && !isTablet) {
         return <>{children}</>;
+    }
 
     const bottomNavHeight = 80; // Height of bottom navigation
 
@@ -242,10 +243,12 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                 .mobile-layout-wrapper {
                     -webkit-overflow-scrolling: touch;
                     touch-action: manipulation;
+                }
 
                 .mobile-content-area {
                     position: relative;
                     z-index: 1;
+                }
 
                 /* Handle safe areas for devices with notches */
                 @supports (padding: env(safe-area-inset-top)) {
@@ -254,20 +257,23 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                         padding-left: env(safe-area-inset-left);
                         padding-right: env(safe-area-inset-right);
                         padding-bottom: env(safe-area-inset-bottom);
-
+                    }
+                }
 
                 /* Prevent zoom on input focus */
                 @media screen and (max-width: 768px) {
                     input, select, textarea {
                         font-size: 16px !important;
-
+                    }
+                }
 
                 /* Hide scrollbars on mobile but keep functionality */
                 @media screen and (max-width: 768px) {
                     ::-webkit-scrollbar {
                         width: 0px;
                         background: transparent;
-
+                    }
+                }
 
                 /* Improve touch performance */
                 * {
@@ -289,7 +295,6 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                     backface-visibility: hidden;
                     -webkit-backface-visibility: hidden;
                 }
-
             `}</style>
         </main>
     );

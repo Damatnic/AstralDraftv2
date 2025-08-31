@@ -57,7 +57,7 @@ const generateChallenges = async (week: number): Promise<OracleChallenge[]> => {
             options: prediction.options.map((opt: any) => opt.text),
             oraclePrediction: prediction.oracleChoice,
             oracleConfidence: prediction.confidence
-        }));
+        )};
 
     } catch (error) {
         // Fallback to mock data if service fails

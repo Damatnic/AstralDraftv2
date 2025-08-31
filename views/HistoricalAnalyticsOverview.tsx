@@ -244,7 +244,7 @@ export function HistoricalAnalyticsOverview({ className = '' }: Readonly<Histori
                                     label: type.replace('_', ' '),
                                     value: stats.accuracy,
                                     color: PREDICTION_TYPE_COLORS[type as PredictionType]
-                                }))}
+                                )}}
                                 height={300}
                             />
                         </motion.div>

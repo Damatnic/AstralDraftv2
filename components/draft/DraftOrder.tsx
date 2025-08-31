@@ -30,43 +30,41 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
     if (draftOrder.length === 0 && league?.teams) {
       // Use existing order or randomize
       setDraftOrder([...league.teams]);
-
+    }
   }, [league?.teams, draftOrder.length]);
 
   const randomizeDraftOrder = async () => {
     try {
-
-    if (!league?.teams) return;
-    
-    setIsRandomizing(true);
-    
-    // Animate the randomization process
-    const teams = [...league.teams];
-    
-    // Show shuffling animation
-    for (let i = 0; i < 10; i++) {
-      await new Promise(resolve => setTimeout(resolve, 100));
-      const shuffled = [...teams].sort(() => Math.random() - 0.5);
-      setDraftOrder(shuffled);
-    
+      if (!league?.teams) return;
+      
+      setIsRandomizing(true);
+      
+      // Animate the randomization process
+      const teams = [...league.teams];
+      
+      // Show shuffling animation
+      for (let i = 0; i < 10; i++) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const shuffled = [...teams].sort(() => Math.random() - 0.5);
+        setDraftOrder(shuffled);
+      }
+      
+      // Final randomization
+      const finalOrder = [...teams].sort(() => Math.random() - 0.5);
+      setDraftOrder(finalOrder);
+      
+      setIsRandomizing(false);
+      
+      dispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+          message: 'Draft order has been randomized!',
+          type: 'SUCCESS'
+        }
+      });
     } catch (error) {
       console.error('Error in randomizeDraftOrder:', error);
-
-    } catch (error) {
-        console.error(error);
-    }// Final randomization
-    const finalOrder = [...teams].sort(() => Math.random() - 0.5);
-    setDraftOrder(finalOrder);
-    
-    setIsRandomizing(false);
-    
-    dispatch({
-      type: 'ADD_NOTIFICATION',
-      payload: {
-        message: 'Draft order has been randomized!',
-        type: 'SUCCESS'
-
-    });
+    }
   };
 
   const getDraftPosition = (teamId: number): number => {
@@ -82,8 +80,8 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
       } else {
         // Even rounds: reverse order (snake)
         picks.push((round - 1) * 10 + (11 - position));
-
-
+      }
+    }
     return picks;
   };
 
@@ -127,15 +125,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
             const position = index + 1;
             const snakePicks = getSnakePickNumbers(position);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
-
-  return (
+            return (
               <motion.div
                 key={team.id}
                 layout

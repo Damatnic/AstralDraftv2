@@ -45,7 +45,8 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
         {
           q: 'How many teams should be in my league?',
           a: '10-12 teams is ideal for competitive balance. 8 teams can work for casual leagues, while 14+ teams are for experienced players who want a challenge.'
-
+        }
+      ]
     },
     {
       category: 'Draft & Players',
@@ -61,7 +62,8 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
         {
           q: 'What is the waiver wire?',
           a: 'The waiver wire contains unowned players. Submit claims during the waiver period (usually Tuesday-Wednesday) to add players to your team.'
-
+        }
+      ]
     },
     {
       category: 'Scoring & Rules',
@@ -77,7 +79,8 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
         {
           q: 'How do playoffs work?',
           a: 'Top teams (usually 4-6) make playoffs in weeks 14-17. Playoffs use single-elimination brackets with matchups based on regular season standings.'
-
+        }
+      ]
     },
     {
       category: 'Technical Issues',
@@ -93,7 +96,9 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
         {
           q: 'Can I use the app on my phone?',
           a: 'Yes! Our app is fully responsive and optimized for mobile devices. You can also install it as a PWA for native app-like experience.'
-
+        }
+      ]
+    }
   ];
 
   const guides = [
@@ -138,7 +143,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
       duration: '25 min read',
       category: 'Advanced',
       icon: '⚙️'
-
+    }
   ];
 
   const tutorials = [
@@ -176,7 +181,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
       duration: '5:17',
       thumbnail: '🎬',
       category: 'Mobile'
-
+    }
   ];
 
   const filteredFAQ = faqData.map(category => ({
@@ -249,7 +254,12 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}`}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+                    activeTab === tab.id
+                      ? 'bg-primary-500 text-white'
+                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                  }`}
                 >
                   {tab.icon}
                   {tab.label}
@@ -408,13 +418,13 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                   {/* Support Ticket Form */}
                   <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
                     <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Submit Support Ticket</h3>
-                    <form onSubmit={handleSubmitTicket}
+                    <form onSubmit={handleSubmitTicket} className="space-y-4">
                       <div className="grid md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Category</label>
                           <select
                             value={supportTicket.category}
-                            onChange={(e) => setSupportTicket(prev => ({ ...prev, category: e.target.value }}
+                            onChange={(e) => setSupportTicket(prev => ({ ...prev, category: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           >
                             <option value="general">General Question</option>
@@ -428,7 +438,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Priority</label>
                           <select
                             value={supportTicket.priority}
-                            onChange={(e) => setSupportTicket(prev => ({ ...prev, priority: e.target.value }}
+                            onChange={(e) => setSupportTicket(prev => ({ ...prev, priority: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           >
                             <option value="low">Low</option>
@@ -443,7 +453,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                         <input
                           type="text"
                           value={supportTicket.subject}
-                          onChange={(e) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }}
+                          onChange={(e) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }))}
                           placeholder="Brief description of your issue"
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           required
@@ -453,7 +463,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                         <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Description</label>
                         <textarea
                           value={supportTicket.description}
-                          onChange={(e) => setSupportTicket(prev => ({ ...prev, description: e.target.value }}
+                          onChange={(e) => setSupportTicket(prev => ({ ...prev, description: e.target.value }))}
                           placeholder="Please provide as much detail as possible about your issue"
                           rows={5}
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 resize-none sm:px-4 md:px-6 lg:px-8"

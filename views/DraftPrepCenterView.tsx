@@ -19,7 +19,7 @@ const DraftPrepCenterView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to prepare for your draft.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
@@ -41,7 +41,7 @@ const DraftPrepCenterView: React.FC = () => {
                         <p className="page-subtitle">{league.name}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) 
                         className="back-btn"
                     >
                         Back to League Hub

@@ -82,7 +82,7 @@ export const WaiverWire: React.FC = () => {
       payload: {
         leagueId: league.id,
         claim
-
+      }
     });
     
     dispatch({
@@ -90,7 +90,7 @@ export const WaiverWire: React.FC = () => {
       payload: {
         message: `Waiver claim submitted for ${selectedPlayer.name} ($${bidAmount})`,
         type: 'SUCCESS'
-
+      }
     });
     
     setShowBidModal(false);

@@ -27,6 +27,7 @@ interface TradeOpportunity {
     weakens: string[];
   };
   confidence: number;
+}
 
 const TradeOpportunityWidget: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -105,7 +106,7 @@ const TradeOpportunityWidget: React.FC = () => {
             weakens: ['QB']
           },
           confidence: 0.88
-
+        }
       ];
 
       setOpportunities(mockOpportunities);
@@ -114,7 +115,7 @@ const TradeOpportunityWidget: React.FC = () => {
       console.error('Failed to analyze trades:', error);
     } finally {
       setIsAnalyzing(false);
-
+    }
   };
 
   // Auto-analyze on mount

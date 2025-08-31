@@ -55,6 +55,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       // Sort by win percentage, then by points for
       if (b.winPercentage !== a.winPercentage) {
         return b.winPercentage - a.winPercentage;
+      }
 
       return b.pointsFor - a.pointsFor;
     }).map((standing, index) => ({
@@ -391,7 +392,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
 
       default:
         return null;
-
+    }
   };
 
   return (
@@ -401,7 +402,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
             >
               ← Back to Dashboard
@@ -430,7 +431,12 @@ const EnhancedLeagueStandingsView: React.FC = () => {
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}`}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  activeTab === tab.id
+                    ? 'bg-primary-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-slate-700'
+                }`}
               >
                 <span>{tab.icon}</span>
                 <span className="font-medium">{tab.label}</span>
@@ -455,5 +461,9 @@ const EnhancedLeagueStandingsView: React.FC = () => {
     </div>
   );
 };
+
+}
+
+}
 
 export default EnhancedLeagueStandingsView;

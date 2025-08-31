@@ -67,7 +67,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <button 
                                         onMouseEnter={() => playHoverSound()}
-                                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'CREATE_LEAGUE' }}
+                                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'CREATE_LEAGUE' })
                                         className="btn btn-success text-sm"
                                     >
                                         Create League (Wizard)
@@ -82,7 +82,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                                 </div>
                                 <button 
                                     onMouseEnter={() => playHoverSound()}
-                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'OPEN_LEAGUES' }}
+                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'OPEN_LEAGUES' })
                                     className="btn btn-secondary flex items-center justify-center gap-2 text-sm"
                                 >
                                     <GlobeIcon />
@@ -124,7 +124,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                     <p className="text-xs sm:text-sm text-secondary">Have a question? Need advice on a trade, or want to analyze your team? Ask Astral, your personal fantasy expert.</p>
                      <button 
                         onMouseEnter={() => playHoverSound()}
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ASSISTANT' }}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ASSISTANT' })
                         className="btn btn-primary flex items-center justify-center gap-2 text-sm"
                     >
                         <SparklesIcon />
@@ -139,7 +139,7 @@ const DashboardView: React.FC<DashboardViewProps> = () => {
                     <p className="text-sm text-secondary">Track your Oracle prediction accuracy over time and discover insights from your performance history.</p>
                     <button 
                         onMouseEnter={() => playHoverSound()}
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' }}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' })
                         className="btn btn-primary flex items-center justify-center gap-2"
                     >
                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

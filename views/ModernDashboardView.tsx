@@ -182,14 +182,14 @@ const ModernDashboardView: React.FC = () => {
               <h3 className="card-title">Quick Actions</h3>
               <div className="grid grid-cols-2 gap-3">
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })
                   className="btn btn-primary flex items-center justify-center gap-2"
                 >
                   <span>⚡</span>
                   Set Lineup
                 </button>
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })
                   className="btn btn-secondary flex items-center justify-center gap-2"
                 >
                   <span>🔍</span>

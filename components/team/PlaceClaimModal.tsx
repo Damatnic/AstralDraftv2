@@ -38,12 +38,13 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
                 setBid(result.suggestedBid);
                 if(result.optimalDropPlayerId) {
                     setPlayerToDropId(result.optimalDropPlayerId);
-
-
-    } catch (error) {
+                }
+            }
+        } catch (error) {
             console.error('Error in handleAnalyze:', error);
-
-        setIsAnalyzing(false);
+        } finally {
+            setIsAnalyzing(false);
+        }
     };
     
     // Automatically fetch advice on modal open
@@ -56,10 +57,12 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
         if (bid > myTeam.faab) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Error: Bid exceeds your FAAB budget.', type: 'SYSTEM' } });
             return;
+        }
 
         if (bid <= 0) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Error: Bid must be positive.', type: 'SYSTEM' } });
             return;
+        }
 
         dispatch({
             type: 'PLACE_WAIVER_CLAIM',
@@ -70,8 +73,8 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
                     playerId: playerToAdd.id,
                     bid,
                     playerToDropId
-
-
+                }
+            }
         });
         dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Waiver claim for ${playerToAdd.name} placed!`, type: 'WAIVER' } });
         onClose();

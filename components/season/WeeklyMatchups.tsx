@@ -23,6 +23,7 @@ interface Matchup {
 interface WeeklyMatchupsProps {
   selectedWeek?: number;
   showAllWeeks?: boolean;
+}
 
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 
@@ -69,6 +70,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
             homeScore = Math.floor(Math.random() * 40) + 60; // Partial scores
             awayScore = Math.floor(Math.random() * 40) + 60;
             status = 'live';
+          }
 
           weekMatchups.push({
             id: `matchup-${matchupId++}`,
@@ -80,9 +82,10 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
             status,
             gameTime: week <= 8 ? 'Sunday 1:00 PM' : 'Sunday 1:00 PM'
           });
-
-
+        }
+      }
       schedule.push(...weekMatchups);
+    }
 
     // Playoffs: Weeks 15-17
     const playoffTeams = teams.slice(0, 6); // Top 6 teams make playoffs
@@ -158,7 +161,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
       case 'final': return 'border-slate-600 bg-slate-800/50';
       case 'upcoming': return 'border-blue-500 bg-blue-900/20';
       default: return 'border-slate-600 bg-slate-800/50';
-
+    }
   };
 
   const getMatchupStatusText = (status: string) => {
@@ -167,7 +170,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
       case 'final': return '✅ FINAL';
       case 'upcoming': return '⏰ UPCOMING';
       default: return '';
-
+    }
   };
 
   const isPlayoffWeek = (week: number) => week >= 15;

@@ -45,7 +45,7 @@ const ManagerView: React.FC = () => {
         return (
             <div className="w-full h-full flex flex-col items-center justify-center">
                 <p>Manager not found.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button-primary mt-4">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button-primary mt-4">
                     Back to League Hub
                 </button>
             </div>
@@ -61,7 +61,7 @@ const ManagerView: React.FC = () => {
                 <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-[var(--text-primary)]">
                     Manager Profile
                 </h1>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }} className="glass-button">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button">
                     Back to League Hub
                 </button>
             </header>

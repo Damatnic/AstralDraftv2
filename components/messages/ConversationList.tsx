@@ -22,7 +22,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
             league.members.forEach((member: any) => {
                 if (member.id !== state.user?.id) {
                     userMap.set(member.id, member);
-
+                }
             });
         });
 
@@ -33,10 +33,11 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
             const otherUserId = dm.fromUserId === state.user?.id ? dm.toUserId : dm.fromUserId;
             if (!lastMessageTimes[otherUserId] || dm.timestamp > lastMessageTimes[otherUserId]) {
                 lastMessageTimes[otherUserId] = dm.timestamp;
+            }
 
             if (dm.toUserId === state.user?.id && !dm.isRead) {
                 unreadCounts[otherUserId] = (unreadCounts[otherUserId] || 0) + 1;
-
+            }
         });
 
         return Array.from(userMap.values())
@@ -65,7 +66,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
                 {conversations.map(({ user, unreadCount }) => (
                     <button
                         key={user.id}
-                        onClick={() => onSelectUser(user.id)}`}
+                        onClick={() => onSelectUser(user.id)}
                     >
                         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                             <Avatar avatar={user.avatar} className="w-10 h-10 text-2xl rounded-full sm:px-4 md:px-6 lg:px-8" />

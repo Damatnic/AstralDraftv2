@@ -22,6 +22,7 @@ const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentT
             const weeklyProj = player.stats.weeklyProjections[week] || player.stats.projection / 17;
             return total + weeklyProj;
         }, 0);
+    };
 
     const isFutureWeek = week > new Date().getDate(); // Simplified logic for demo
     const myScore = isFutureWeek ? calculateProjectedScore(myTeam) : myMatchupTeam.score;
@@ -31,6 +32,7 @@ const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentT
         if (isLive) return <span className="text-red-400 animate-pulse sm:px-4 md:px-6 lg:px-8">LIVE</span>;
         if (myMatchupTeam.score > 0 || opponentMatchupTeam.score > 0) return 'FINAL';
         return 'PROJECTED';
+    };
 
     return (
         <div className="glass-pane p-4 rounded-xl flex flex-col sm:flex-row items-center justify-around gap-4">

@@ -93,7 +93,7 @@ const ScheduleManagementView: React.FC = () => {
                             The league schedule will be automatically generated after the draft is complete.
                         </p>
                         <button
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }}
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })
                             className="glass-button-primary px-6 py-3"
                         >
                             Back to Commissioner Tools
@@ -135,7 +135,7 @@ const ScheduleManagementView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }} 
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }) 
                     className="glass-button"
                 >
                     Back to Tools

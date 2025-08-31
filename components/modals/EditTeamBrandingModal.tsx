@@ -53,15 +53,16 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
                         primaryColor,
                         secondaryColor,
                         motto
-
-
+                    }
+                }
             });
             
             onClose();
-    } catch (error) {
+        } catch (error) {
+            console.error('Error updating team branding:', error);
         } finally {
             setLoading(false);
-
+        }
     };
 
     return (

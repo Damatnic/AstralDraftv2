@@ -15,9 +15,9 @@ const MessagesView: React.FC = () => {
     
         setSelectedUserId(userId);
         setShowNewMessage(false);
+    };
     
-    return const handleStartNewMessage = () ;
-  } {
+    const handleStartNewMessage = () => {
         setSelectedUserId(null);
         setShowNewMessage(true);
     };
@@ -27,7 +27,7 @@ const MessagesView: React.FC = () => {
         const firstUnread = state.directMessages.find((dm: any) => dm.toUserId === state.user?.id && !dm.isRead);
         if (firstUnread) {
             setSelectedUserId(firstUnread.fromUserId);
-
+        }
     }, []);
 
     return (
@@ -42,7 +42,7 @@ const MessagesView: React.FC = () => {
                         </h1>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} 
                         className="back-btn"
                     >
                         Back to Dashboard

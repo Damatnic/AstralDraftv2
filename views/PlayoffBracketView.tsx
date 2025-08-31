@@ -21,6 +21,7 @@ interface MatchupCardProps {
 const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }) => {
     if (!matchupTeam || !team) {
         return <div className="h-10 flex items-center px-2 text-sm text-gray-500">TBD</div>;
+    }
 
     const score = matchupTeam.score > 0 ? matchupTeam.score.toFixed(2) : '-';
     return (
@@ -78,7 +79,7 @@ const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch
                         <p className="page-subtitle">{league.name}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
                         className="back-btn"
                     >
                         Back to My Team
@@ -200,11 +201,12 @@ const PlayoffBracketView: React.FC = () => {
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>The playoffs have not started yet for this league.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
+    }
 
     return <PlayoffBracketContent league={league} dispatch={dispatch} />;
 };

@@ -74,7 +74,7 @@ const EnhancedTeamHubView: React.FC = () => {
           </CardHeader>
           <CardFooter>
             <Button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="primary"
               fullWidth
             >
@@ -199,13 +199,14 @@ const EnhancedTeamHubView: React.FC = () => {
                   fullWidth 
                   icon={<ZapIcon className="w-4 h-4" />}
                   onClick={() => setShowOptimizer(true)}
+                >
                   Optimize Lineup
                 </Button>
                 <Button 
                   variant="default" 
                   fullWidth 
                   icon={<TrendingUpIcon className="w-4 h-4" />}
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
                 >
                   Trade Center
                 </Button>
@@ -213,7 +214,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   variant="outline" 
                   fullWidth 
                   icon={<DollarSignIcon className="w-4 h-4" />}
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' })}
                 >
                   Waiver Wire
                 </Button>
@@ -222,6 +223,7 @@ const EnhancedTeamHubView: React.FC = () => {
                   fullWidth 
                   icon={<SparklesIcon className="w-4 h-4" />}
                   onClick={() => setActiveTab('analytics')}
+                >
                   View Analytics
                 </Button>
               </CardContent>
@@ -313,6 +315,7 @@ const EnhancedTeamHubView: React.FC = () => {
                       variant="primary"
                       icon={<BrainCircuitIcon className="w-4 h-4" />}
                       onClick={() => setShowOptimizer(true)}
+                    >
                       AI Optimizer
                     </Button>
                   </div>
@@ -673,7 +676,7 @@ const EnhancedTeamHubView: React.FC = () => {
         
       default:
         return null;
-
+    }
   };
 
   return (
@@ -688,7 +691,7 @@ const EnhancedTeamHubView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               variant="ghost"
               icon={<ChevronLeftIcon className="w-5 h-5" />}
             >
@@ -793,7 +796,12 @@ const EnhancedTeamHubView: React.FC = () => {
               {tabs.map((tab: any) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}`}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`relative flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                    activeTab === tab.id 
+                      ? 'text-white' 
+                      : 'text-gray-400 hover:text-gray-300'
+                  }`}
                 >
                   {activeTab === tab.id && (
                     <motion.div
@@ -879,12 +887,14 @@ const EnhancedTeamHubView: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowOptimizer(false)}
+          >
             <motion.div
               className="max-w-4xl w-full max-h-[90vh] overflow-auto"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e: any) => e.stopPropagation()}
+            >
               <Card variant="elevated" className="relative">
                 <button
                   onClick={() => setShowOptimizer(false)}
@@ -907,5 +917,7 @@ const EnhancedTeamHubView: React.FC = () => {
     </div>
   );
 };
+
+}
 
 export default EnhancedTeamHubView;

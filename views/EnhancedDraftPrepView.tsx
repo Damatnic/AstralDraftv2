@@ -311,7 +311,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                   </div>
                 </div>
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' }}
+                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' })}
                   className="glass-button-primary px-6 py-3 font-semibold"
                 >
                   Start Mock Draft Now
@@ -323,7 +323,7 @@ const EnhancedDraftPrepView: React.FC = () => {
 
       default:
         return null;
-
+    }
   };
 
   return (
@@ -333,7 +333,7 @@ const EnhancedDraftPrepView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
               className="glass-button"
             >
               ← Back to Dashboard
@@ -380,7 +380,12 @@ const EnhancedDraftPrepView: React.FC = () => {
             {tabs.map((tab: any) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}`}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+                  activeTab === tab.id
+                    ? 'bg-orange-600 text-white'
+                    : 'text-gray-300 hover:text-white hover:bg-slate-700'
+                }`}
               >
                 <span>{tab.icon}</span>
                 <span className="font-medium">{tab.label}</span>

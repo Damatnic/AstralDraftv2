@@ -320,7 +320,7 @@ const CommunicationHubView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })
               className="back-btn"
             >
               ← Back to Dashboard

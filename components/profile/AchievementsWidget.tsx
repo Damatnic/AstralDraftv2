@@ -21,6 +21,7 @@ const badgeColors: Record<Badge['type'], string> = {
 const AchievementsWidget: React.FC<{ badges: Badge[] }> = ({ badges }) => {
     if (!badges || badges.length === 0) {
         return null; // Don't show the widget if there are no badges
+    }
 
     return (
         <Widget title="Achievements" icon={<TrophyIcon />}>

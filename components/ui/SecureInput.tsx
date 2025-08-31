@@ -40,6 +40,7 @@ interface SecurePasswordInputProps extends SecureInputBaseProps {
   strengthIndicator?: boolean;
   minLength?: number;
   maxLength?: number;
+}
 
 interface SecurePinInputProps extends SecureInputBaseProps {
   type: 'pin';
@@ -50,6 +51,7 @@ interface SecurePinInputProps extends SecureInputBaseProps {
   showProgress?: boolean;
   allowPaste?: boolean;
   clearClipboardDelay?: number;
+}
 
 type SecureInputProps = SecurePasswordInputProps | SecurePinInputProps;
 
@@ -144,13 +146,14 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     
     if (clearTimeoutRef.current) {
       clearTimeout(clearTimeoutRef.current);
+    }
 
     clearTimeoutRef.current = setTimeout(() => {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText('').catch(() => {
           // Silently fail if clipboard access is denied
         });
-
+      }
     }, delay);
   }, [props.type]);
   
@@ -197,7 +200,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     return () => {
       if (clearTimeoutRef.current) {
         clearTimeout(clearTimeoutRef.current);
-
+      }
     };
   }, []);
   
@@ -213,7 +216,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     } else {
       const strength = passwordStrength?.score || 0;
       return strength >= 4 ? 'high' : strength >= 2 ? 'medium' : 'low';
-
+    }
   };
   
   // Base input classes
@@ -325,10 +328,11 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
         </AnimatePresence>
       </div>
     );
+  }
 
   // Password input rendering
   const passwordProps = props as SecurePasswordInputProps;
-  const maskChar = passwordProps.maskCharacter || '•';
+  const maskCharPassword = passwordProps.maskCharacter || '•';
   const showToggleButton = passwordProps.showToggle !== false;
   
   return (
@@ -349,7 +353,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
           ref={inputRef}
           id={inputId}
           type={showPassword ? 'text' : 'password'}
-          value={showPassword ? props.value : props.value.replace(/./g, maskChar)}
+          value={showPassword ? props.value : props.value.replace(/./g, maskCharPassword)}
           onChange={handleChange}
           onFocus={handleFocus}
           className={`${getInputClasses()} ${showToggleButton ? 'pr-20' : 'pr-16'}`}
@@ -456,6 +460,8 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     </div>
   );
 };
+
+export default SecureInput;
 
 // Convenience exports
 export const SecurePasswordInput: React.FC<SecurePasswordInputProps> = (props) => (

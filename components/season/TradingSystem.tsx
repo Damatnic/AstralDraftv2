@@ -27,6 +27,7 @@ interface TradeProposal {
     teamAGrade: string;
     teamBGrade: string;
   };
+}
 
 const TradingSystem: React.FC = () => {
   const { state, dispatch } = useAppState();
@@ -65,7 +66,7 @@ const TradingSystem: React.FC = () => {
         summary: 'This trade slightly favors the team receiving Cooper Kupp due to higher projected points and better playoff schedule.',
         teamAGrade: 'B+',
         teamBGrade: 'A-'
-
+      }
     },
     {
       id: 'trade-2',
@@ -90,8 +91,8 @@ const TradingSystem: React.FC = () => {
         summary: 'This trade favors the team receiving Adams and Pollard due to positional value and depth.',
         teamAGrade: 'A',
         teamBGrade: 'B-'
-
-
+      }
+    }
   ];
 
   // Simulate trade block players
@@ -117,7 +118,7 @@ const TradingSystem: React.FC = () => {
       case 'countered': return 'text-blue-400 bg-blue-900/20 border-blue-600/30';
       case 'expired': return 'text-gray-400 bg-gray-900/20 border-gray-600/30';
       default: return 'text-slate-400 bg-slate-900/20 border-slate-600/30';
-
+    }
   };
 
   const getFairnessColor = (score: number) => {
@@ -134,9 +135,10 @@ const TradingSystem: React.FC = () => {
         payload: {
           message: 'Please select teams and players for the trade',
           type: 'ERROR'
-
+        }
       });
       return;
+    }
 
     // Simulate trade proposal
     const newTrade: TradeProposal = {
@@ -157,7 +159,7 @@ const TradingSystem: React.FC = () => {
         summary: 'Trade analysis will be generated based on player values and team needs.',
         teamAGrade: 'B+',
         teamBGrade: 'B+'
-
+      }
     };
 
     dispatch({
@@ -165,7 +167,7 @@ const TradingSystem: React.FC = () => {
       payload: {
         message: 'Trade proposal sent successfully!',
         type: 'SUCCESS'
-
+      }
     });
 
     // Reset form
@@ -182,7 +184,7 @@ const TradingSystem: React.FC = () => {
       payload: {
         message: `Trade ${action}ed successfully!`,
         type: action === 'accept' ? 'SUCCESS' : 'INFO'
-
+      }
     });
   };
 
@@ -204,7 +206,12 @@ const TradingSystem: React.FC = () => {
                   {league?.teams?.filter((team: any) => team.id !== userTeam?.id).map((team: any) => (
                     <button
                       key={team.id}
-                      onClick={() => setSelectedTeam(team.id)}`}
+                      onClick={() => setSelectedTeam(team.id)}
+                      className={`w-full p-3 rounded-lg border transition-all ${
+                        selectedTeam === team.id
+                          ? 'bg-blue-900/30 border-blue-500'
+                          : 'bg-slate-700/30 border-slate-600 hover:bg-slate-700/50'
+                      }`}
                     >
                       <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{team.avatar}</span>
@@ -234,6 +241,7 @@ const TradingSystem: React.FC = () => {
                           </div>
                           <button
                             onClick={() => setOfferedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
+                            className="text-red-400 hover:text-red-300 text-sm"
                           >
                             Remove
                           </button>
@@ -260,6 +268,7 @@ const TradingSystem: React.FC = () => {
                           </div>
                           <button
                             onClick={() => setRequestedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
+                            className="text-red-400 hover:text-red-300 text-sm"
                           >
                             Remove
                           </button>
@@ -315,6 +324,7 @@ const TradingSystem: React.FC = () => {
                 <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">No pending trades</p>
                 <button
                   onClick={() => setActiveTab('propose')}
+                  className="btn btn-primary"
                 >
                   Propose a Trade
                 </button>
@@ -407,16 +417,19 @@ const TradingSystem: React.FC = () => {
                         <>
                           <button
                             onClick={() => handleTradeAction(trade.id, 'accept')}
+                            className="btn btn-primary flex-1"
                           >
                             Accept Trade
                           </button>
                           <button
                             onClick={() => handleTradeAction(trade.id, 'counter')}
+                            className="btn btn-secondary flex-1"
                           >
                             Counter Offer
                           </button>
                           <button
                             onClick={() => handleTradeAction(trade.id, 'reject')}
+                            className="btn btn-danger flex-1"
                           >
                             Reject
                           </button>
@@ -482,7 +495,7 @@ const TradingSystem: React.FC = () => {
 
       default:
         return null;
-
+    }
   };
 
   return (
@@ -505,7 +518,12 @@ const TradingSystem: React.FC = () => {
         {tabs.map((tab: any) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}`}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`flex flex-col items-center p-3 rounded-lg transition-all ${
+              activeTab === tab.id
+                ? 'bg-blue-900/30 text-blue-400'
+                : 'bg-slate-700/30 text-slate-400 hover:bg-slate-700/50'
+            }`}
           >
             <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{tab.icon}</span>
             <div className="text-center sm:px-4 md:px-6 lg:px-8">

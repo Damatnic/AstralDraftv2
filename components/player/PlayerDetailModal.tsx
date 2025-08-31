@@ -29,6 +29,7 @@ interface PlayerDetailModalProps {
   initialTab?: string;
   league?: League | null;
   playerAvatars: { [playerId: number]: string };
+}
 
 const positionColor: Record<string, string> = {
     QB: 'from-red-500/30',
@@ -80,9 +81,16 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
                     type: 'ADD_NOTIFICATION',
                     payload: { message: `Could not generate insight for ${player.name}.`, type: 'SYSTEM' }
                 });
-
+            }
+        } catch (error) {
+            dispatch({
+                type: 'ADD_NOTIFICATION',
+                payload: { message: `Could not generate insight for ${player.name}.`, type: 'SYSTEM' }
+            });
+        } finally {
             setIsGenerating(false);
-        };
+        }
+    };
     
     const handleStartRecording = async () => {
         try {
@@ -108,14 +116,15 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
             
             mediaRecorderRef.current.start();
             setIsRecording(true);
-        });
-
+        } catch (error) {
+            console.error('Recording error:', error);
+        }
     };
     
     const handleStopRecording = () => {
         if (mediaRecorderRef.current) {
             mediaRecorderRef.current.stop();
-
+        }
         setIsRecording(false);
     };
     
@@ -173,7 +182,8 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
                 )}
             </div>
         </div>
-    )
+    );
+};
 
 const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }) => {
   const [isSimilarPlayersOpen, setIsSimilarPlayersOpen] = React.useState(false);
@@ -209,9 +219,9 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
         generatePlayerAvatar(player).then(avatarUrl => {
             if(avatarUrl) {
                 dispatch({ type: 'SET_PLAYER_AVATAR', payload: { playerId: player.id, avatarUrl } });
-
+            }
         });
-
+    }
   }, [player, generatedAvatar, dispatch]);
 
   return (

@@ -22,6 +22,7 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
     const getDisplayRoster = (): MatchupPlayer[] => {
         if (matchupTeam.roster.length > 0 && !isLive) {
             return matchupTeam.roster;
+        }
 
         // For live or future weeks, merge roster data with live/projected scores
         return team.roster.slice(0, 9).map((player: any) => {
@@ -34,6 +35,7 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
                 isHot: liveData?.isHot || false,
             };
         });
+    };
 
     const displayRoster = getDisplayRoster();
 

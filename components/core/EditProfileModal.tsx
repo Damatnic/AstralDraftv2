@@ -41,10 +41,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onC
     <Modal isOpen={true} onClose={onClose}>
       <motion.div
         className="glass-pane rounded-xl shadow-2xl w-full max-w-lg sm:px-4 md:px-6 lg:px-8"
-        onClick={(e: any) => e.stopPropagation()},
-            animate: { opacity: 1, scale: 1 },
-            exit: { opacity: 0, scale: 0.95 },
-        }}
+        onClick={(e: any) => e.stopPropagation()}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
       >
         <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
           <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -71,7 +70,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onC
             <textarea
               id="user-bio"
               value={bio}
-              onChange={e => setBio(e.target.value)} h-24 resize-none`}
+              onChange={e => setBio(e.target.value)}
+              className="h-24 resize-none form-input"
               placeholder="Tell everyone a little about your management style..."
               maxLength={150}
             />

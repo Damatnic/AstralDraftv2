@@ -19,25 +19,25 @@ const RivalryWidget: React.FC = () => {
     React.useEffect(() => {
         if (league && !rivalry && (league?.status === 'IN_SEASON' || league?.status === 'PLAYOFFS' || league?.status === 'COMPLETE')) {
             const fetchRivalry = async () => {
-    try {
-                setIsLoading(true);
-                const result = await detectTopRivalry(league);
-                if (result) {
-                    dispatch({ type: 'SET_TOP_RIVALRY', payload: { leagueId: league.id, rivalry: result 
-    
-    } catch (error) {
-      console.error('Error in fetchRivalry:', error);
-
-  } });
-
-                setIsLoading(false);
+                try {
+                    setIsLoading(true);
+                    const result = await detectTopRivalry(league);
+                    if (result) {
+                        dispatch({ type: 'SET_TOP_RIVALRY', payload: { leagueId: league.id, rivalry: result } });
+                    }
+                } catch (error) {
+                    console.error('Error in fetchRivalry:', error);
+                } finally {
+                    setIsLoading(false);
+                }
             };
             fetchRivalry();
-
+        }
     }, [league, rivalry, dispatch]);
 
     if (!league || !(league?.status === 'IN_SEASON' || league?.status === 'PLAYOFFS' || league?.status === 'COMPLETE')) {
         return null;
+    }
 
     const teamA = rivalry ? league.teams.find((t: any) => t.id === rivalry.teamAId) : null;
     const teamB = rivalry ? league.teams.find((t: any) => t.id === rivalry.teamBId) : null;

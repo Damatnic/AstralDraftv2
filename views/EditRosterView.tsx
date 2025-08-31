@@ -21,7 +21,7 @@ const EditRosterView: React.FC = () => {
         return (
             <div className="p-8 text-center">
                 <p className="text-red-400">Access Denied. You are not the commissioner of this league.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="btn btn-primary mt-4">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="btn btn-primary mt-4">
                     Back to Dashboard
                 </button>
             </div>
@@ -46,7 +46,7 @@ const EditRosterView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }} className="back-btn">
+                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' }) className="back-btn">
                     Back to Tools
                 </button>
             </header>

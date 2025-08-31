@@ -22,7 +22,7 @@ const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }) => {
         case 'down': return <ArrowDownIcon className="h-5 w-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
         case 'same': return <MinusIcon className="h-5 w-5 text-gray-500 sm:px-4 md:px-6 lg:px-8" />;
         default: return null;
-
+    }
 };
 
 const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }) => {

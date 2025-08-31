@@ -34,15 +34,14 @@ const ChatPanel: React.FC = () => {
                 message: {
                     user: state.user,
                     text: newMessage,
-
+                    timestamp: Date.now()
+                }
             },
         });
         setNewMessage('');
     };
     
     const handleGenerateTrashTalk = async () => {
-    try {
-
         if (!myTeam || !activeLeague) return;
         const matchup = activeLeague.schedule.find((m: any) => m.week === activeLeague.currentWeek && (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id));
         if (!matchup) return;
@@ -51,17 +50,18 @@ const ChatPanel: React.FC = () => {
         const opponentTeam = activeLeague.teams.find((t: any) => t.id === opponentId);
         if (!opponentTeam) return;
 
-        setIsGenerating(true);
-        const trashTalk = await generateTrashTalk(myTeam, opponentTeam);
-        if(trashTalk) {
-            setNewMessage(trashTalk);
-
-    } catch (error) {
-      console.error('Error in handleGenerateTrashTalk:', error);
-    } finally {
-      setIsGenerating(false);
-
-  };
+        try {
+            setIsGenerating(true);
+            const trashTalk = await generateTrashTalk(myTeam, opponentTeam);
+            if(trashTalk) {
+                setNewMessage(trashTalk);
+            }
+        } catch (error) {
+            console.error('Error in handleGenerateTrashTalk:', error);
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
     const handleReaction = (messageId: string, emoji: string) => {
         if (!activeLeague) return;
@@ -71,8 +71,8 @@ const ChatPanel: React.FC = () => {
                 leagueId: activeLeague.id,
                 messageId,
                 emoji,
-                userId: state.user?.id || 'guest',
-
+                userId: state.user?.id || 'guest'
+            }
         });
     };
     
@@ -83,7 +83,7 @@ const ChatPanel: React.FC = () => {
             setShowMentions(true);
         } else {
             setShowMentions(false);
-
+        }
     };
 
     const handleMentionSelect = (name: string) => {
@@ -103,7 +103,7 @@ const ChatPanel: React.FC = () => {
                     const isMyMention = msg.mentions?.includes(state.user?.id);
                     if (msg.isSystemMessage && msg.tradeEvent && activeLeague) {
                         return <TradeEventMessage key={msg.id} message={msg} league={activeLeague} onReact={handleReaction} />;
-
+                    }
                     return msg.isSystemMessage ? (
                          <div key={msg.id} className="text-center text-xs text-cyan-300/80 italic p-2 sm:px-4 md:px-6 lg:px-8">
                             <span>{msg.text}</span>
@@ -139,7 +139,12 @@ const ChatPanel: React.FC = () => {
                 {showMentions && activeLeague && (
                     <div className="absolute bottom-full left-2 w-1/2 bg-gray-900 border border-white/10 rounded-lg shadow-lg p-1 sm:px-4 md:px-6 lg:px-8">
                         {activeLeague.members.filter((m: any) => m.id !== state.user?.id).map((member: any) => (
-                            <button key={member.id} onClick={() => handleMentionSelect(member.name)}
+                            <button 
+                                key={member.id} 
+                                onClick={() => handleMentionSelect(member.name)}
+                                className="block w-full text-left px-2 py-1 hover:bg-white/10 rounded text-sm"
+                            >
+                                @{member.name}
                             </button>
                         ))}
                     </div>

@@ -21,14 +21,13 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
         const fetchAnalysis = async () => {
             setIsLoading(true);
             try {
-
                 const result = await getMatchupAnalysis(myTeam, opponentTeam);
                 setAnalysis(result);
-            
-    } catch (error) {
+            } catch (error) {
+                console.error('Error fetching matchup analysis:', error);
             } finally {
                 setIsLoading(false);
-
+            }
         };
         fetchAnalysis();
     }, [myTeam.id, opponentTeam.id]);
@@ -38,9 +37,11 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
 
     if (isLoading) {
         return <div className="p-2 bg-black/20 rounded-lg text-xs text-center sm:px-4 md:px-6 lg:px-8">Analyzing matchup...</div>;
+    }
 
     if (!analysis) {
         return null;
+    }
 
     return (
         <div className="glass-pane p-3 rounded-xl flex-grow flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">

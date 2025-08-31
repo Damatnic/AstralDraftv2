@@ -24,7 +24,6 @@ interface OptimizationStrategy {
 
 const strategies: OptimizationStrategy[] = [
   {
-  const [isLoading, setIsLoading] = React.useState(false);
     id: 'optimal',
     name: 'Optimal',
     description: 'Best projected points',
@@ -51,7 +50,7 @@ const strategies: OptimizationStrategy[] = [
     description: 'Tournament play',
     icon: '🎲',
     color: 'from-orange-500 to-orange-600'
-
+  }
 ];
 
 const LineupOptimizerWidget: React.FC = () => {
@@ -108,14 +107,14 @@ const LineupOptimizerWidget: React.FC = () => {
       console.error('Failed to optimize lineup:', error);
     } finally {
       setIsOptimizing(false);
-
+    }
   }, [userTeam]);
 
   // Auto-optimize on widget mount
   useEffect(() => {
     if (userTeam && !optimizedLineup) {
       optimizeLineup();
-
+    }
   }, [userTeam, optimizedLineup, optimizeLineup]);
 
   const getConfidenceColor = (confidence: number) => {

@@ -58,7 +58,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                     </div>
                     <div className="flex items-center gap-2">
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECTED_STANDINGS' }}
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PROJECTED_STANDINGS' })
                             className="btn btn-secondary flex items-center gap-2"
                         >
                             <TrendingUpIcon /> View Projections
@@ -76,7 +76,7 @@ const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUse
                             )}
                         </AnimatePresence>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) 
                             className="back-btn"
                         >
                             Back to My Team
@@ -169,7 +169,7 @@ const LeagueStandingsView: React.FC = () => {
             {!league || !myTeam || !state.user ? (
                 <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                     <p>Select a league to view standings.</p>
-                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                         Back to Dashboard
                     </button>
                 </div>

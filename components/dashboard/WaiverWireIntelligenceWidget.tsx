@@ -29,6 +29,7 @@ interface WaiverRecommendation {
     redZoneTargets: number;
     trend: 'rising' | 'falling' | 'stable';
   };
+}
 
 interface BreakoutCandidate {
   player: Player;
@@ -36,7 +37,6 @@ interface BreakoutCandidate {
   factors: string[];
   nextOpponent: string;
   projectedPoints: number;
-
 }
 
 const WaiverWireIntelligenceWidget: React.FC = () => {
@@ -99,7 +99,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
       points: 10.1,
       projectedPoints: 9.8,
       ownership: 31
-
+    }
   ];
 
   const analyzeWaiverWire = useCallback(async () => {

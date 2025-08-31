@@ -23,6 +23,7 @@ interface Matchup {
 interface ScheduleGeneratorProps {
   onScheduleGenerated?: (schedule: Matchup[]) => void;
   isCommissioner?: boolean;
+}
 
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   onScheduleGenerated,
@@ -84,7 +85,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         team1Id: teams[3]?.id || 4, // 4th seed
         team2Id: teams[4]?.id || 5, // 5th seed
         isPlayoff: true
-
+      }
     );
     
     // Week 16: Semifinals
@@ -101,7 +102,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
         team1Id: teams[1]?.id || 2, // 2nd seed
         team2Id: teams[4]?.id || 5, // Winner of 4v5 (placeholder)
         isPlayoff: true
-
+      }
     );
     
     // Week 17: Championship
@@ -118,33 +119,32 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
 
   const handleGenerateSchedule = async () => {
     try {
-    if (!isCommissioner) return;
-    
-    setIsGenerating(true);
-    
-    // Simulate generation delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const regularSeason = generateRegularSeason();
-    const playoffs = generatePlayoffs();
-    const fullSchedule = [...regularSeason, ...playoffs];
-    
-    setSchedule(fullSchedule);
-    onScheduleGenerated?.(fullSchedule);
-    
-    setIsGenerating(false);
-    
-    dispatch({
-      type: 'ADD_NOTIFICATION',
-      payload: {
-        message: 'Season schedule generated successfully!',
-        type: 'SUCCESS'
-
+      if (!isCommissioner) return;
+      
+      setIsGenerating(true);
+      
+      // Simulate generation delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const regularSeason = generateRegularSeason();
+      const playoffs = generatePlayoffs();
+      const fullSchedule = [...regularSeason, ...playoffs];
+      
+      setSchedule(fullSchedule);
+      onScheduleGenerated?.(fullSchedule);
+      
+      setIsGenerating(false);
+      
+      dispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+          message: 'Season schedule generated successfully!',
+          type: 'SUCCESS'
+        }
+      });
     } catch (error) {
       console.error('Error in handleGenerateSchedule:', error);
-
-
-    });
+    }
   };
 
   const getTeamName = (teamId: number): string => {
@@ -216,8 +216,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
           <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">
             {isCommissioner 
               ? 'Generate the season schedule to begin matchups'
-              : 'The commissioner will generate the schedule soon'
-
+              : 'The commissioner will generate the schedule soon'}
           </p>
           {!isCommissioner && (
             <p className="text-sm text-slate-500 sm:px-4 md:px-6 lg:px-8">
@@ -325,8 +324,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
                       ? 'This Week' 
                       : currentWeek > matchup.week 
                       ? 'Completed' 
-                      : 'Upcoming'
-
+                      : 'Upcoming'}
                   </span>
                 </div>
               </motion.div>

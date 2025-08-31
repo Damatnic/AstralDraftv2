@@ -54,7 +54,7 @@ const PlayersView: React.FC = () => {
             payload: {
               leagueId: league.id,
               players: livePlayers
-
+            }
           });
           
           dispatch({
@@ -62,15 +62,23 @@ const PlayersView: React.FC = () => {
             payload: {
               message: `✅ Loaded ${livePlayers.length} players from Sports.io API`,
               type: 'SUCCESS'
-
+            }
           });
+        }
+      } catch (error) {
+        console.error('Error loading player data:', error);
+        dispatch({
+          type: 'ADD_NOTIFICATION',
+          payload: {
+            message: 'Failed to load player data',
+            type: 'ERROR'
+          }
+        });
+      }
+    };
 
-      `${player.name} added to your roster!`,
-          type: 'SUCCESS'
-
-      });
-
-  };
+    loadLivePlayerData();
+  }, [league, dispatch]);
 
   // Player Card Component
   const PlayerCard = ({ player, index }: { player: Player; index: number }) => {
@@ -88,7 +96,7 @@ const PlayersView: React.FC = () => {
         transition={{ delay: index * 0.02 }}
         whileHover={{ y: -4, transition: { duration: 0.2 } }}
         onClick={() => handlePlayerSelect(player)}
-        `}
+        className="group cursor-pointer"
       >
         {/* Card Container with Glassmorphism */}
         <div className={`
@@ -290,7 +298,7 @@ const PlayersView: React.FC = () => {
         {/* Navigation Header */}
         <div className="nav-header mb-4">
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }}
+            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
             className="back-btn"
           >
             ← Back to Dashboard
@@ -396,12 +404,12 @@ const PlayersView: React.FC = () => {
               {/* View Mode Toggle */}
               <div className="flex items-center gap-2 ml-auto">
                 <button
-                  onClick={() => setViewMode('grid')}`}
+                  onClick={() => setViewMode('grid')}
                 >
                   <GridIcon className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}`}
+                  onClick={() => setViewMode('list')}
                 >
                   <ListIcon className="h-5 w-5" />
                 </button>

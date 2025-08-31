@@ -68,14 +68,11 @@ export const ModernNavigation: React.FC<NavigationProps> = ({
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-        className={`
-          fixed top-0 left-0 right-0 z-[1000]
-          transition-all duration-300 ease-out
-          ${scrolled 
+        className={'fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ease-out ' + (
+          scrolled 
             ? 'bg-dark-900/95 backdrop-blur-2xl border-b border-white/10 shadow-2xl' 
             : 'bg-gradient-to-b from-dark-900/80 to-transparent backdrop-blur-xl'
-
-        `}
+        )}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -244,14 +241,11 @@ const MobileNavButton: React.FC<{
   return (
     <motion.button
       onClick={onClick}
-      className={`
-        w-full flex items-center gap-3 px-4 py-3 rounded-xl
-        transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
-        ${isActive 
+      className={'w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ' + (
+        isActive 
           ? 'bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-white border border-primary-500/30' 
-          : 'text-gray-400 hover:text-white hover:bg-white/10'}
-
-      `}
+          : 'text-gray-400 hover:text-white hover:bg-white/10'
+      )}
       whileTap={{ scale: 0.98 }}
       role="menuitem"
       aria-current={isActive ? 'page' : undefined}
@@ -282,7 +276,7 @@ const UserMenu: React.FC<{
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/10 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 sm:px-4 md:px-6 lg:px-8"
-        aria-label={`User menu for ${userName} - ${teamName}`}
+        aria-label={'User menu for ' + userName + ' - ' + teamName}
         aria-expanded={open}
         aria-haspopup="menu"
         aria-controls="user-dropdown-menu"
@@ -307,6 +301,7 @@ const UserMenu: React.FC<{
             <div 
               className="fixed inset-0 z-40 sm:px-4 md:px-6 lg:px-8" 
               onClick={() => setOpen(false)}
+            />
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -374,11 +369,7 @@ const MenuButton: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`
-        w-full flex items-center gap-3 px-3 py-2 rounded-lg
-        transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
-        ${variantClasses[variant]}
-      `}
+      className={'w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ' + variantClasses[variant]}
       role="menuitem"
       aria-label={label}
     >

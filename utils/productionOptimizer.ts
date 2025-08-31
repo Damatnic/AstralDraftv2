@@ -95,7 +95,10 @@ export class ProductionOptimizer {
               onCommitFiberUnmount: () => {},
             };
           }
-        `Dev Error [${context}]:`, error);
+        } catch (error) {
+          console.error(`Dev Error [production optimizer]:`, error);
+        }
+      }
     }
   }
 

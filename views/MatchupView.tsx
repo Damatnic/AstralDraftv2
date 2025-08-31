@@ -63,7 +63,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
                             </button>
                         </div>
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }} 
+                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
                             className="back-btn"
                         >
                             Back to Team
@@ -145,7 +145,7 @@ const MatchupView: React.FC = () => {
             {(!myTeam || !league) ? (
                 <div className="w-full h-full flex items-center justify-center">
                     <p>Team or League not found.</p>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
+                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="ml-4 px-4 py-2 bg-cyan-500 rounded">
                         Back to Dashboard
                     </button>
                 </div>
@@ -155,5 +155,9 @@ const MatchupView: React.FC = () => {
         </div>
     );
 };
+
+}
+
+}
 
 export default MatchupView;

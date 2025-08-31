@@ -42,7 +42,7 @@ const ProfileView: React.FC = () => {
                 <div className="text-center">
                     <p className="text-xl text-gray-400 mb-4">Please log in to view your profile</p>
                     <button
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'AUTH' }}
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'AUTH' })}
                         className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600"
                     >
                         Go to Login
@@ -50,6 +50,7 @@ const ProfileView: React.FC = () => {
                 </div>
             </div>
         );
+    }
 
     return (
         <div className="min-h-screen">
@@ -58,7 +59,7 @@ const ProfileView: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <h1>Manager Profile</h1>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }} 
+                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} 
                         className="back-btn"
                     >
                         Back to Dashboard
@@ -85,7 +86,7 @@ const ProfileView: React.FC = () => {
                                             Edit Profile
                                         </button>
                                          <button
-                                            onClick={() => dispatch({ type: 'LOGOUT' }}
+                                            onClick={() => dispatch({ type: 'LOGOUT' })}
                                             className="btn btn-danger flex items-center gap-2 text-xs"
                                         >
                                             <LogOutIcon />
@@ -130,13 +131,13 @@ const ProfileView: React.FC = () => {
                                                 </div>
                                                 <button 
                                                     onClick={() => {
-                                                        dispatch({type: 'SET_ACTIVE_LEAGUE', payload: entry.leagueId}
+                                                        dispatch({type: 'SET_ACTIVE_LEAGUE', payload: entry.leagueId});
                                                         if (entry.isComplete) {
                                                             dispatch({type: 'SET_SEASON_REVIEW_YEAR', payload: entry.season});
                                                             dispatch({type: 'SET_VIEW', payload: 'SEASON_REVIEW'});
                                                         } else {
                                                             dispatch({type: 'SET_VIEW', payload: 'LEAGUE_HUB'});
-
+                                                        }
                                                     }}
                                                     className="btn btn-secondary text-xs"
                                                 >
