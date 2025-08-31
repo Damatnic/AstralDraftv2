@@ -431,11 +431,11 @@ export class LiveScoringService extends EventEmitter {
 
     // Passing stats
     if (stats.stats.passing) {
-      const p = stats.stats.passing;
+      const passingStats = stats.stats.passing;
       const passingPoints = 
-        (p.yards * s.passingYards) +
-        (p.touchdowns * s.passingTouchdowns) +
-        (p.interceptions * s.passingInterceptions);
+        (passingStats.yards * s.passingYards) +
+        (passingStats.touchdowns * s.passingTouchdowns) +
+        (passingStats.interceptions * s.passingInterceptions);
       
       standard += passingPoints;
       ppr += passingPoints;
@@ -443,11 +443,11 @@ export class LiveScoringService extends EventEmitter {
       
       // Bonuses
       if (s.bonuses) {
-        if (p.yards >= 400 && s.bonuses.passing400Yards) {
+        if (passingStats.yards >= 400 && s.bonuses.passing400Yards) {
           standard += s.bonuses.passing400Yards;
           ppr += s.bonuses.passing400Yards;
           halfPpr += s.bonuses.passing400Yards;
-        } else if (p.yards >= 300 && s.bonuses.passing300Yards) {
+        } else if (passingStats.yards >= 300 && s.bonuses.passing300Yards) {
           standard += s.bonuses.passing300Yards;
           ppr += s.bonuses.passing300Yards;
           halfPpr += s.bonuses.passing300Yards;
@@ -457,11 +457,11 @@ export class LiveScoringService extends EventEmitter {
 
     // Rushing stats
     if (stats.stats.rushing) {
-      const r = stats.stats.rushing;
+      const rushingStats = stats.stats.rushing;
       const rushingPoints = 
-        (r.yards * s.rushingYards) +
-        (r.touchdowns * s.rushingTouchdowns) +
-        (r.fumbles * s.fumbles);
+        (rushingStats.yards * s.rushingYards) +
+        (rushingStats.touchdowns * s.rushingTouchdowns) +
+        (rushingStats.fumbles * s.fumbles);
       
       standard += rushingPoints;
       ppr += rushingPoints;
@@ -469,11 +469,11 @@ export class LiveScoringService extends EventEmitter {
       
       // Bonuses
       if (s.bonuses) {
-        if (r.yards >= 200 && s.bonuses.rushing200Yards) {
+        if (rushingStats.yards >= 200 && s.bonuses.rushing200Yards) {
           standard += s.bonuses.rushing200Yards;
           ppr += s.bonuses.rushing200Yards;
           halfPpr += s.bonuses.rushing200Yards;
-        } else if (r.yards >= 100 && s.bonuses.rushing100Yards) {
+        } else if (rushingStats.yards >= 100 && s.bonuses.rushing100Yards) {
           standard += s.bonuses.rushing100Yards;
           ppr += s.bonuses.rushing100Yards;
           halfPpr += s.bonuses.rushing100Yards;
