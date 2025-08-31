@@ -136,7 +136,12 @@
                     'receiving end does not exist',
                     'extension context',
                     'chrome-extension',
-                    'moz-extension'
+                    'moz-extension',
+                    'react devtools',
+                    'duplicate welcome',
+                    'message events from the content script',
+                    'backendmanager',
+                    'content script'
                 ];
                 return patterns.some(function(pattern) {
                     return lowerMsg.indexOf(pattern) !== -1;
@@ -147,14 +152,17 @@
         }
         
         console.error = function() {
-            // Temporarily disable filtering to see all errors
             try {
-                originalError.apply(console, arguments);
-            } catch (e) {
-                // Fallback to basic logging if override fails
-                if (window.console && window.console.log) {
-                    window.console.log('Console error override failed:', e);
+                var args = [];
+                for (var i = 0; i < arguments.length; i++) {
+                    args.push(arguments[i]);
                 }
+                var message = args.map(absolutelySafeStringify).join(' ');
+                if (!isExtensionNoise(message)) {
+                    originalError.apply(console, args);
+                }
+            } catch (e) {
+                // Complete silence - never let console.error crash
             }
         };
         
