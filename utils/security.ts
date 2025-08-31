@@ -325,10 +325,86 @@ if (typeof window !== 'undefined') {
   }
 }
 
+/**
+ * Security validators for input sanitization
+ */
+export const SecurityValidators = {
+  email: (value: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  },
+  
+  alphanumeric: (value: string): boolean => {
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    return alphanumericRegex.test(value);
+  },
+  
+  numeric: (value: string): boolean => {
+    const numericRegex = /^\d+$/;
+    return numericRegex.test(value);
+  },
+  
+  safeText: (value: string): boolean => {
+    // Allow letters, numbers, spaces, and common punctuation
+    const safeTextRegex = /^[a-zA-Z0-9\s.,!?'"-]+$/;
+    return safeTextRegex.test(value);
+  },
+  
+  url: (value: string): boolean => {
+    try {
+      new URL(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+};
+
+/**
+ * Sanitize user input to prevent XSS and injection attacks
+ */
+export function sanitizeInput(input: string, type: 'text' | 'email' | 'numeric' | 'alphanumeric' = 'text'): string {
+  if (!input) return '';
+  
+  // Remove any script tags or dangerous HTML
+  let sanitized = input
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+\s*=/gi, '');
+  
+  // Apply type-specific sanitization
+  switch (type) {
+    case 'email':
+      sanitized = sanitized.toLowerCase().trim();
+      break;
+    case 'numeric':
+      sanitized = sanitized.replace(/[^\d]/g, '');
+      break;
+    case 'alphanumeric':
+      sanitized = sanitized.replace(/[^a-zA-Z0-9]/g, '');
+      break;
+    case 'text':
+    default:
+      // Allow common text characters but escape HTML entities
+      sanitized = sanitized
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+      break;
+  }
+  
+  return sanitized;
+}
+
 export default {
   initializeSecurity,
   initializeConsoleProtection,
   blockReactDevTools,
   isExtensionNoise,
-  safeStringify
+  safeStringify,
+  sanitizeInput,
+  SecurityValidators
 };
