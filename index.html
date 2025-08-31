@@ -769,5 +769,51 @@
         console.info('Service Workers not supported in this browser');
       }
     </script>
+
+    <!-- EMERGENCY REACT INITIALIZATION BYPASS -->
+    <script>
+    // Emergency React initialization - force mounting if primary initialization fails
+    let emergencyInitialized = false;
+    
+    const emergencyReactInit = () => {
+        if (emergencyInitialized) return;
+        
+        setTimeout(() => {
+            const rootEl = document.getElementById('root');
+            if (!rootEl || emergencyInitialized) return;
+            
+            // Check if React app has already mounted (no fallback content)
+            const hasFallbackContent = rootEl.innerHTML.includes('Emergency fallback content');
+            
+            if (hasFallbackContent && window.React && window.ReactDOM) {
+                console.log('🚨 EMERGENCY: Primary React initialization failed, attempting emergency mount...');
+                emergencyInitialized = true;
+                
+                try {
+                    // Try to get the App component from the global scope
+                    if (window.AstralDraftApp) {
+                        const root = window.ReactDOM.createRoot(rootEl);
+                        root.render(window.React.createElement(window.AstralDraftApp));
+                        console.log('✅ EMERGENCY: React app mounted successfully!');
+                    } else {
+                        console.log('⚠️ EMERGENCY: App component not found in global scope');
+                    }
+                } catch (error) {
+                    console.error('❌ EMERGENCY: Emergency React mount failed:', error);
+                }
+            }
+        }, 3000); // Wait 3 seconds for normal initialization
+    };
+    
+    // Try emergency initialization after DOM loads
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', emergencyReactInit);
+    } else {
+        emergencyReactInit();
+    }
+    
+    // Also try after main scripts load
+    window.addEventListener('load', emergencyReactInit);
+    </script>
 </body>
 </html>
