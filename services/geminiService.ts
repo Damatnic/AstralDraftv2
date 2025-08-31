@@ -509,7 +509,7 @@ export const streamAssistantResponse = async (prompt: string, leagues: League[],
         You are Astral, a hyper-intelligent and witty fantasy football assistant.
         The user you are helping is named ${user.name}.
         They are in the following leagues:
-        ${leagues.map((l: any) => `- ${l.name} (ID: ${l.id}, Status: ${l.status}, My Team: ${l.teams.find(t=>t.owner.id === user.id)?.name})`).join('\n')}
+        ${leagues.map((l: any) => `- ${l.name} (ID: ${l.id}, Status: ${l.status}, My Team: ${l.teams.find(t => t.owner.id === user.id)?.name})`).join('\n')}
         
         Use this information to provide personalized and insightful answers to the user's questions. Be conversational and helpful. Use markdown for formatting.
         The user's question is: "${prompt}"
@@ -798,7 +798,7 @@ export const generateTeamNeedsAnalysis = async (team: Team): Promise<{ position:
 export const summarizeFantasyImpact = async (headline: string): Promise<string | null> => mockApiCall("This is a major development. Expect this player's fantasy value to skyrocket.");
 export const generateLeagueSlogan = async (leagueName: string, teamNames: string[]): Promise<string | null> => mockApiCall("Where Champions Are Forged.");
 export const getWaiverWireAdvice = async (team: Team, playerToAdd: Player, availablePlayers: Player[] | undefined): Promise<WaiverWireAdvice | null> => mockApiCall({ summary: "This is a must-add player with league-winning upside.", suggestedBid: Math.floor(team.faab * 0.2), optimalDropPlayerId: team.roster[team.roster.length-1].id });
-export const getLineupSolution = async (team: Team, league: League, playerId: number): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0,9).map(p=>p.id), reasoning: "This optimized lineup gives you the best chance to win." });
+export const getLineupSolution = async (team: Team, league: League, playerId: number): Promise<AiLineupSuggestion | null> => mockApiCall({ recommendedStarters: team.roster.slice(0, 9).map(p => p.id), reasoning: "This optimized lineup gives you the best chance to win." });
 export const generateWeeklyPowerPlay = async (league: League, week: number): Promise<{ teamName: string; move: string; rationale: string; } | null> => mockApiCall({teamName: league.teams[0].name, move: "Traded for a superstar", rationale: "A bold move to push for the championship."});
 export const generateRivalryReport = async (teamA: Team, teamB: Team): Promise<string | null> => mockApiCall(`## Head-to-Head Breakdown\n\nThis is a classic rivalry. ${teamA.name} holds the slight edge in past matchups, but ${teamB.name} is looking strong this season.`);
 export const generatePlayerStory = async (player: Player, league: League): Promise<PlayerStory | null> => mockApiCall({ title: `The Rise of ${player.name}`, narrative: `${player.name} has been a revelation this season, consistently outperforming expectations and becoming a cornerstone of their team.`});

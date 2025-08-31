@@ -3,8 +3,34 @@
  * Handles 10-player + admin login system with PIN authentication
  */
 
-import { LEAGUE_MEMBERS } from '../data/leagueData';
+// Fix circular dependency by lazy loading LEAGUE_MEMBERS
 import SecurePasswordGenerator from '../utils/securePasswordGenerator';
+
+// Lazy load to avoid circular dependency issues
+let LEAGUE_MEMBERS: any[] | null = null;
+const getLeagueMembers = () => {
+    if (!LEAGUE_MEMBERS) {
+        try {
+            const module = require('../data/leagueData');
+            LEAGUE_MEMBERS = module.LEAGUE_MEMBERS || [];
+        } catch (e) {
+            // Fallback data if import fails
+            LEAGUE_MEMBERS = [
+                { id: 'user_1', name: 'Nick Damato', email: 'nick@example.com', avatar: '👑' },
+                { id: 'user_2', name: 'Jon Kornbeck', email: 'jon@example.com', avatar: '⚡' },
+                { id: 'user_3', name: 'Cason Minor', email: 'cason@example.com', avatar: '🔥' },
+                { id: 'user_4', name: 'Brittany Bergrum', email: 'brittany@example.com', avatar: '💪' },
+                { id: 'user_5', name: 'Renee McCaigue', email: 'renee@example.com', avatar: '🎯' },
+                { id: 'user_6', name: 'Jack McCaigue', email: 'jack@example.com', avatar: '🚀' },
+                { id: 'user_7', name: 'Larry McCaigue', email: 'larry@example.com', avatar: '⭐' },
+                { id: 'user_8', name: 'Kaity Lorbiecki', email: 'kaity@example.com', avatar: '💎' },
+                { id: 'user_9', name: 'David Jarvey', email: 'david@example.com', avatar: '🏆' },
+                { id: 'user_10', name: 'Nick Hartley', email: 'nickh@example.com', avatar: '🎮' }
+            ];
+        }
+    }
+    return LEAGUE_MEMBERS;
+};
 
 export interface SimpleUser {
     id: string;
@@ -56,7 +82,7 @@ class SimpleAuthService {
             username: 'admin',
             displayName: 'Nick Damato',
             pin: '7347',
-            email: LEAGUE_MEMBERS[0].email,
+            email: getLeagueMembers()[0].email,
             isAdmin: true,
             customization: {
                 backgroundColor: '#3b82f6',
@@ -71,7 +97,7 @@ class SimpleAuthService {
             username: 'player1',
             displayName: 'Nick Damato',
             pin: '0000',
-            email: LEAGUE_MEMBERS[0].email,
+            email: getLeagueMembers()[0].email,
             isAdmin: true, // Nick is also admin
             customization: {
                 backgroundColor: '#3b82f6',
@@ -85,7 +111,7 @@ class SimpleAuthService {
             username: 'player2',
             displayName: 'Jon Kornbeck',
             pin: '0000',
-            email: LEAGUE_MEMBERS[1].email,
+            email: getLeagueMembers()[1].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#ef4444',
@@ -99,7 +125,7 @@ class SimpleAuthService {
             username: 'player3',
             displayName: 'Cason Minor',
             pin: '0000',
-            email: LEAGUE_MEMBERS[2].email,
+            email: getLeagueMembers()[2].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#10b981',
@@ -113,7 +139,7 @@ class SimpleAuthService {
             username: 'player4',
             displayName: 'Brittany Bergrum',
             pin: '0000',
-            email: LEAGUE_MEMBERS[3].email,
+            email: getLeagueMembers()[3].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#f59e0b',
@@ -127,7 +153,7 @@ class SimpleAuthService {
             username: 'player5',
             displayName: 'Renee McCaigue',
             pin: '0000',
-            email: LEAGUE_MEMBERS[4].email,
+            email: getLeagueMembers()[4].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#8b5cf6',
@@ -141,7 +167,7 @@ class SimpleAuthService {
             username: 'player6',
             displayName: 'Jack McCaigue',
             pin: '0000',
-            email: LEAGUE_MEMBERS[5].email,
+            email: getLeagueMembers()[5].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#06b6d4',
@@ -155,7 +181,7 @@ class SimpleAuthService {
             username: 'player7',
             displayName: 'Larry McCaigue',
             pin: '0000',
-            email: LEAGUE_MEMBERS[6].email,
+            email: getLeagueMembers()[6].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#84cc16',
@@ -169,7 +195,7 @@ class SimpleAuthService {
             username: 'player8',
             displayName: 'Kaity Lorbiecki',
             pin: '0000',
-            email: LEAGUE_MEMBERS[7].email,
+            email: getLeagueMembers()[7].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#f97316',
@@ -183,7 +209,7 @@ class SimpleAuthService {
             username: 'player9',
             displayName: 'David Jarvey',
             pin: '0000',
-            email: LEAGUE_MEMBERS[8].email,
+            email: getLeagueMembers()[8].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#ec4899',
@@ -197,7 +223,7 @@ class SimpleAuthService {
             username: 'player10',
             displayName: 'Nick Hartley',
             pin: '0000',
-            email: LEAGUE_MEMBERS[9].email,
+            email: getLeagueMembers()[9].email,
             isAdmin: false,
             customization: {
                 backgroundColor: '#6366f1',

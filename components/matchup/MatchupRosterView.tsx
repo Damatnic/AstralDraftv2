@@ -26,7 +26,7 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
 
         // For live or future weeks, merge roster data with live/projected scores
         return team.roster.slice(0, 9).map((player: any) => {
-            const liveData = matchupTeam.roster.find((p: any) =>p.player.id === player.id);
+            const liveData = matchupTeam.roster.find((p: any) => p.player.id === player.id);
             const projectedScore = parseFloat((player.stats.weeklyProjections[week] || player.stats.projection / 17).toFixed(2));
             return {
                 player,

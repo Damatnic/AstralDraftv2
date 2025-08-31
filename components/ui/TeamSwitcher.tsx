@@ -72,7 +72,7 @@ const TeamSwitcher: React.FC = () => {
                                     <Avatar avatar={item.team.avatar} className="w-8 h-8 rounded-md sm:px-4 md:px-6 lg:px-8" />
                                     <div>
                                         <p className="font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{item.team.name}</p>
-                                        <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{state.leagues.find(l=>l.id===item.leagueId)?.name}</p>
+                                        <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{state.leagues.find(l => l.id === item.leagueId)?.name}</p>
                                     </div>
                                 </button>
                             )

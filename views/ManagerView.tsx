@@ -92,7 +92,7 @@ const ManagerView: React.FC = () => {
                         <Widget title="League History" icon={<BookOpenIcon />}>
                              <div className="p-4 space-y-3">
                                 {careerHistory.map((entry: any) => {
-                                    const league = state.leagues.find(l=>l.id===entry.leagueId);
+                                    const league = state.leagues.find(l => l.id === entry.leagueId);
                                     return (
                                         <div key={entry.key} className="bg-black/10 p-3 rounded-lg flex items-center justify-between">
                                             <div>
