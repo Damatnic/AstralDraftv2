@@ -34,7 +34,6 @@ interface PerformanceMetrics {
   effectiveType: string;
   downlink: number;
   rtt: number;
-
 }
 
 interface PerformanceIssue {
@@ -47,6 +46,7 @@ interface PerformanceIssue {
   suggestion: string;
   metric?: number;
   threshold?: number;
+}
 
 const PerformanceMonitor: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -64,11 +64,12 @@ const PerformanceMonitor: React.FC = () => {
     if (showMonitor) {
       collectInitialMetrics();
       startPerformanceMonitoring();
+    }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-
+      }
     };
   }, []);
 
@@ -81,6 +82,7 @@ const PerformanceMonitor: React.FC = () => {
         await new Promise(resolve => {
           window.addEventListener('load', resolve, { once: true });
         });
+      }
 
       const performanceMetrics = await gatherPerformanceMetrics();
       setMetrics(performanceMetrics);
@@ -89,10 +91,10 @@ const PerformanceMonitor: React.FC = () => {
       setIssues(detectedIssues);
       
       setIsCollecting(false);
-    
     } catch (error) {
+      console.error('Failed to collect performance metrics:', error);
       setIsCollecting(false);
-
+    }
   };
 
   const startPerformanceMonitoring = () => {
@@ -178,6 +180,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: metrics.lcp,
         threshold: 2500
       });
+    }
 
     // FID Analysis
     if (metrics.fid && metrics.fid > 100) {
@@ -192,6 +195,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: metrics.fid,
         threshold: 100
       });
+    }
 
     // CLS Analysis
     if (metrics.cls && metrics.cls > 0.1) {
@@ -206,6 +210,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: metrics.cls,
         threshold: 0.1
       });
+    }
 
     // Memory Usage Analysis
     const memoryUsagePercent = metrics.totalJSHeapSize > 0 ? 
@@ -223,6 +228,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: memoryUsagePercent,
         threshold: 80
       });
+    }
 
     // Cache Hit Rate Analysis
     if (metrics.cacheHitRate < 50) {
@@ -237,6 +243,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: metrics.cacheHitRate,
         threshold: 50
       });
+    }
 
     // Load Time Analysis
     if (metrics.loadComplete > 3000) {
@@ -251,6 +258,7 @@ const PerformanceMonitor: React.FC = () => {
         metric: metrics.loadComplete,
         threshold: 3000
       });
+    }
 
     return issues;
   };
@@ -274,7 +282,7 @@ const PerformanceMonitor: React.FC = () => {
         }, 10000);
       } else {
         resolve(null);
-
+      }
     });
   };
 
@@ -296,7 +304,7 @@ const PerformanceMonitor: React.FC = () => {
         }, 30000);
       } else {
         resolve(null);
-
+      }
     });
   };
 
@@ -308,8 +316,8 @@ const PerformanceMonitor: React.FC = () => {
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
               clsValue += (entry as any).value;
-
-
+            }
+          }
         });
         observer.observe({ entryTypes: ['layout-shift'] });
         
@@ -320,7 +328,7 @@ const PerformanceMonitor: React.FC = () => {
         }, 10000);
       } else {
         resolve(null);
-
+      }
     });
   };
 
@@ -330,7 +338,7 @@ const PerformanceMonitor: React.FC = () => {
       case 'warning': return '🟡';
       case 'info': return '🔵';
       default: return '⚪';
-
+    }
   };
 
   const getImpactColor = (impact: string) => {
@@ -339,7 +347,7 @@ const PerformanceMonitor: React.FC = () => {
       case 'medium': return 'text-yellow-400';
       case 'low': return 'text-green-400';
       default: return 'text-slate-400';
-
+    }
   };
 
   const formatBytes = (bytes: number) => {
@@ -358,6 +366,7 @@ const PerformanceMonitor: React.FC = () => {
   if (process.env.NODE_ENV === 'production' && 
       localStorage.getItem('show_performance_monitor') !== 'true') {
     return null;
+  }
 
   return (
     <>
@@ -365,8 +374,9 @@ const PerformanceMonitor: React.FC = () => {
       <button
         onClick={() => setIsVisible(!isVisible)}
         title="Performance Monitor"
-      >
-        <span className="text-lg sm:px-4 md:px-6 lg:px-8">⚡</span>
+        className="fixed bottom-4 left-4 z-40 bg-slate-800/90 hover:bg-slate-700/90 text-white px-3 py-2 rounded-full shadow-lg transition-colors"
+        aria-label="Toggle Performance Monitor">
+        <span className="text-lg">⚡</span>
       </button>
 
       {/* Performance Monitor Panel */}
@@ -376,44 +386,45 @@ const PerformanceMonitor: React.FC = () => {
             initial={{ opacity: 0, x: -400 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -400 }}
-            className="fixed left-4 bottom-32 z-50 w-96 max-h-96 overflow-y-auto bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl sm:px-4 md:px-6 lg:px-8"
+            className="fixed left-4 bottom-32 z-50 w-96 max-h-96 overflow-y-auto bg-slate-800/95 backdrop-blur-sm rounded-xl border border-slate-600 shadow-2xl"
           >
             {/* Header */}
-            <div className="p-4 border-b border-slate-600 sm:px-4 md:px-6 lg:px-8">
-              <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
-                <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">⚡ Performance Monitor</h3>
+            <div className="p-4 border-b border-slate-600">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">⚡ Performance Monitor</h3>
                 <button
                   onClick={() => setIsVisible(false)}
-                >
+                  className="text-white hover:text-gray-300 text-xl font-bold"
+                  aria-label="Close Performance Monitor">
                   ×
                 </button>
               </div>
               {isCollecting && (
-                <div className="mt-2 text-sm text-blue-400 sm:px-4 md:px-6 lg:px-8">Collecting metrics...</div>
+                <div className="mt-2 text-sm text-blue-400">Collecting metrics...</div>
               )}
             </div>
 
             {/* Metrics */}
             {metrics && (
-              <div className="p-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
+              <div className="p-4 space-y-4">
                 {/* Core Web Vitals */}
                 <div>
-                  <h4 className="text-white font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Core Web Vitals</h4>
-                  <div className="grid grid-cols-3 gap-2 text-xs sm:px-4 md:px-6 lg:px-8">
-                    <div className="bg-slate-700/50 p-2 rounded sm:px-4 md:px-6 lg:px-8">
-                      <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">LCP</div>
+                  <h4 className="text-white font-semibold mb-2">Core Web Vitals</h4>
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="bg-slate-700/50 p-2 rounded">
+                      <div className="text-slate-400">LCP</div>
                       <div className={`font-bold ${metrics.lcp && metrics.lcp > 2500 ? 'text-red-400' : 'text-green-400'}`}>
                         {metrics.lcp ? formatMs(metrics.lcp) : 'N/A'}
                       </div>
                     </div>
-                    <div className="bg-slate-700/50 p-2 rounded sm:px-4 md:px-6 lg:px-8">
-                      <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">FID</div>
+                    <div className="bg-slate-700/50 p-2 rounded">
+                      <div className="text-slate-400">FID</div>
                       <div className={`font-bold ${metrics.fid && metrics.fid > 100 ? 'text-red-400' : 'text-green-400'}`}>
                         {metrics.fid ? formatMs(metrics.fid) : 'N/A'}
                       </div>
                     </div>
-                    <div className="bg-slate-700/50 p-2 rounded sm:px-4 md:px-6 lg:px-8">
-                      <div className="text-slate-400 sm:px-4 md:px-6 lg:px-8">CLS</div>
+                    <div className="bg-slate-700/50 p-2 rounded">
+                      <div className="text-slate-400">CLS</div>
                       <div className={`font-bold ${metrics.cls && metrics.cls > 0.1 ? 'text-red-400' : 'text-green-400'}`}>
                         {metrics.cls ? metrics.cls.toFixed(3) : 'N/A'}
                       </div>
@@ -423,38 +434,38 @@ const PerformanceMonitor: React.FC = () => {
 
                 {/* Load Times */}
                 <div>
-                  <h4 className="text-white font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Load Times</h4>
-                  <div className="space-y-1 text-xs sm:px-4 md:px-6 lg:px-8">
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">DOM Content Loaded:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{formatMs(metrics.domContentLoaded)}</span>
+                  <h4 className="text-white font-semibold mb-2">Load Times</h4>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">DOM Content Loaded:</span>
+                      <span className="text-white">{formatMs(metrics.domContentLoaded)}</span>
                     </div>
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Load Complete:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{formatMs(metrics.loadComplete)}</span>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Load Complete:</span>
+                      <span className="text-white">{formatMs(metrics.loadComplete)}</span>
                     </div>
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">First Paint:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{formatMs(metrics.firstPaint)}</span>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">First Paint:</span>
+                      <span className="text-white">{formatMs(metrics.firstPaint)}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Memory Usage */}
                 <div>
-                  <h4 className="text-white font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Memory Usage</h4>
-                  <div className="space-y-1 text-xs sm:px-4 md:px-6 lg:px-8">
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Used:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{formatBytes(metrics.usedJSHeapSize)}</span>
+                  <h4 className="text-white font-semibold mb-2">Memory Usage</h4>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Used:</span>
+                      <span className="text-white">{formatBytes(metrics.usedJSHeapSize)}</span>
                     </div>
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Total:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{formatBytes(metrics.totalJSHeapSize)}</span>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Total:</span>
+                      <span className="text-white">{formatBytes(metrics.totalJSHeapSize)}</span>
                     </div>
-                    <div className="w-full bg-slate-600 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
+                    <div className="w-full bg-slate-600 rounded-full h-2">
                       <div 
-                        className="bg-blue-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8" 
+                        className="bg-blue-500 h-2 rounded-full" 
                         style={{ 
                           width: `${metrics.totalJSHeapSize > 0 ? (metrics.usedJSHeapSize / metrics.totalJSHeapSize) * 100 : 0}%` 
                         }}
@@ -465,15 +476,15 @@ const PerformanceMonitor: React.FC = () => {
 
                 {/* Network Info */}
                 <div>
-                  <h4 className="text-white font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Network</h4>
-                  <div className="space-y-1 text-xs sm:px-4 md:px-6 lg:px-8">
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Connection:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{metrics.effectiveType}</span>
+                  <h4 className="text-white font-semibold mb-2">Network</h4>
+                  <div className="space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Connection:</span>
+                      <span className="text-white">{metrics.effectiveType}</span>
                     </div>
-                    <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
-                      <span className="text-slate-400 sm:px-4 md:px-6 lg:px-8">Cache Hit Rate:</span>
-                      <span className="text-white sm:px-4 md:px-6 lg:px-8">{Math.round(metrics.cacheHitRate)}%</span>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Cache Hit Rate:</span>
+                      <span className="text-white">{Math.round(metrics.cacheHitRate)}%</span>
                     </div>
                   </div>
                 </div>
@@ -482,20 +493,20 @@ const PerformanceMonitor: React.FC = () => {
 
             {/* Issues */}
             {issues.length > 0 && (
-              <div className="p-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8">
-                <h4 className="text-white font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Issues ({issues.length})</h4>
-                <div className="space-y-2 max-h-32 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
+              <div className="p-4 border-t border-slate-600">
+                <h4 className="text-white font-semibold mb-2">Issues ({issues.length})</h4>
+                <div className="space-y-2 max-h-32 overflow-y-auto">
                   {issues.map((issue: any) => (
-                    <div key={issue.id} className="p-2 bg-slate-700/50 rounded text-xs sm:px-4 md:px-6 lg:px-8">
-                      <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
+                    <div key={issue.id} className="p-2 bg-slate-700/50 rounded text-xs">
+                      <div className="flex items-center gap-2 mb-1">
                         <span>{getIssueIcon(issue)}</span>
-                        <span className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{issue.title}</span>
+                        <span className="text-white font-medium">{issue.title}</span>
                         <span className={`text-xs ${getImpactColor(issue.impact)}`}>
                           {issue.impact}
                         </span>
                       </div>
-                      <div className="text-slate-400 mb-1 sm:px-4 md:px-6 lg:px-8">{issue.description}</div>
-                      <div className="text-slate-300 sm:px-4 md:px-6 lg:px-8">{issue.suggestion}</div>
+                      <div className="text-slate-400 mb-1">{issue.description}</div>
+                      <div className="text-slate-300">{issue.suggestion}</div>
                     </div>
                   ))}
                 </div>

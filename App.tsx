@@ -119,6 +119,7 @@ import AtomicErrorEliminator from './components/ui/AtomicErrorEliminator';
 import ModernNavigation from './components/ui/ModernNavigation';
 import MobileLayoutWrapper from './components/mobile/MobileLayoutWrapper';
 import ModalManager from './components/ui/ModalManager';
+import PerformanceOptimizer from './components/performance/PerformanceOptimizer';
 
 // Lazy load secondary views
 const LeagueHubView = React.lazy(() => import('./views/LeagueHubView'));
@@ -706,6 +707,16 @@ const AppContent: React.FC = () => {
             <div className="fixed top-20 right-4 z-[1080]">
                 <HighContrastMode />
             </div>
+            
+            {/* Performance Monitoring */}
+            <PerformanceOptimizer 
+                enableMonitoring={import.meta.env.PROD}
+                reportToAnalytics={import.meta.env.PROD}
+                onMetricsUpdate={(metrics) => {
+                    // Optional: Send to analytics service
+                    performanceMonitor.recordMetric('web_vitals', metrics);
+                }}
+            />
             </div>
         </AtomicErrorEliminator>
     );

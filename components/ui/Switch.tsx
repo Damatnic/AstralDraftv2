@@ -6,7 +6,6 @@ interface SwitchProps {
   label?: string;
   disabled?: boolean;
   size?: 'sm' | 'md' | 'lg';
-
 }
 
 export const Switch: React.FC<SwitchProps> = ({
@@ -25,7 +24,7 @@ export const Switch: React.FC<SwitchProps> = ({
   const { track, thumb } = sizeClasses[size];
 
   return (
-    <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+    <div className="flex items-center gap-3">
       <button
         type="button"
         role="switch"
@@ -46,7 +45,7 @@ export const Switch: React.FC<SwitchProps> = ({
       </button>
       
       {label && (
-        <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
+        <span className="text-sm font-medium text-[var(--text-primary)]">
           {label}
         </span>
       )}

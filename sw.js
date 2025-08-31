@@ -1,21 +1,34 @@
-const CACHE_NAME = 'astral-draft-cache-v5';
-const ORACLE_CACHE = 'oracle-predictions-cache-v3';
-const IMAGES_CACHE = 'astral-draft-images-v3';
-const API_CACHE = 'astral-draft-api-v3';
-const OFFLINE_CACHE = 'astral-draft-offline-v2';
+const CACHE_NAME = 'astral-draft-cache-v6';
+const ORACLE_CACHE = 'oracle-predictions-cache-v4';
+const IMAGES_CACHE = 'astral-draft-images-v4';
+const API_CACHE = 'astral-draft-api-v4';
+const OFFLINE_CACHE = 'astral-draft-offline-v3';
+const STATIC_CACHE = 'astral-draft-static-v2';
 
 const urlsToCache = [
   '/',
   '/index.html',
   '/favicon.svg',
   '/manifest.json',
-  '/offline.html',
+  '/offline.html'
+];
+
+// Critical assets for immediate caching
+const criticalAssets = [
   '/icons/oracle-badge.png',
   '/icons/oracle-challenge.png',
   '/icons/oracle-result.png',
   '/icons/oracle-achievement.png',
   '/icons/oracle-social.png',
-  '/icons/oracle-update.png'
+  '/icons/oracle-update.png',
+  '/icon-192.png',
+  '/icon-512.png'
+];
+
+// Static assets that can be cached with longer TTL
+const staticAssets = [
+  // Fonts will be cached when loaded
+  // Images will be cached on demand
 ];
 
 // Offline fallback pages
@@ -25,16 +38,34 @@ const offlinePages = [
   '/offline-analytics.html'
 ];
 
-// Mobile-optimized cache strategies
+// Enhanced cache strategies with network-first for critical data
 const CACHE_STRATEGIES = {
-  // Cache API responses for 5 minutes
-  api: { maxAge: 5 * 60 * 1000 },
-  // Cache images for 24 hours
-  images: { maxAge: 24 * 60 * 60 * 1000 },
-  // Cache Oracle predictions for 1 hour
-  oracle: { maxAge: 60 * 60 * 1000 },
-  // Cache static assets for 30 days
-  static: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+  // Cache API responses for 5 minutes with network-first
+  api: { 
+    maxAge: 5 * 60 * 1000,
+    strategy: 'network-first',
+    networkTimeout: 3000 
+  },
+  // Cache images for 24 hours with cache-first
+  images: { 
+    maxAge: 24 * 60 * 60 * 1000,
+    strategy: 'cache-first'
+  },
+  // Cache Oracle predictions for 1 hour with stale-while-revalidate
+  oracle: { 
+    maxAge: 60 * 60 * 1000,
+    strategy: 'stale-while-revalidate'
+  },
+  // Cache static assets for 30 days with cache-first
+  static: { 
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    strategy: 'cache-first'
+  },
+  // Cache JavaScript/CSS for 7 days with stale-while-revalidate
+  assets: {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    strategy: 'stale-while-revalidate'
+  },
   // Cache offline pages indefinitely
   offline: { maxAge: Infinity }
 };

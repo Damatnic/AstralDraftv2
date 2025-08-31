@@ -10,7 +10,7 @@ import SimpleAuthService from '../../services/simpleAuthService';
 import { useAppState } from '../../contexts/AppContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { SecurePinInput } from '../ui/SecureInput';
+import SecureInput from '../ui/SecureInput';
 
 interface SimplePlayerLoginProps {
   onLogin?: (user: any) => void;
@@ -487,17 +487,16 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                     {/* Modern PIN Input */}
                     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                       <div onKeyPress={handleKeyPress}>
-                        <SecurePinInput
+                        <SecureInput
+                          type="password"
                           value={pin}
-                          onChange={handlePinChange}
-                          label="Secure PIN Authentication"
+                          onSecureChange={(value) => handlePinChange(value)}
+                          validationType="number"
                           placeholder="Enter PIN (or press Enter)"
-                          showProgress={true}
-                          allowPaste={true}
-                          clearClipboardDelay={2000}
+                          maxLength={4}
                           autoFocus
-                          error={error}
-                          className="text-center text-2xl tracking-[0.3em] sm:px-4 md:px-6 lg:px-8"
+                          errorMessage={error}
+                          className="text-center text-2xl tracking-[0.3em]"
                         />
                       </div>
                       

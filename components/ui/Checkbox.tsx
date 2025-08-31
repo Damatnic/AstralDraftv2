@@ -3,6 +3,7 @@ import React from 'react';
 interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label?: string;
   error?: string;
+}
 
 export const Checkbox: React.FC<CheckboxProps> = ({
   label,
@@ -14,8 +15,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
-    <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
-      <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
+    <div className="space-y-2">
+      <div className="flex items-center gap-3">
         <input
           type="checkbox"
           id={checkboxId}
@@ -23,14 +24,14 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           {...props}
         />
         {label && (
-          <label htmlFor={checkboxId} className="text-sm font-medium text-[var(--text-primary)] cursor-pointer sm:px-4 md:px-6 lg:px-8">
+          <label htmlFor={checkboxId} className="text-sm font-medium text-[var(--text-primary)] cursor-pointer">
             {label}
           </label>
         )}
       </div>
       
       {error && (
-        <p className="text-sm text-red-400 sm:px-4 md:px-6 lg:px-8" role="alert">
+        <p className="text-sm text-red-400" role="alert">
           {error}
         </p>
       )}

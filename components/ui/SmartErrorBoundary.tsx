@@ -12,6 +12,7 @@ interface State {
   hasError: boolean;
   error?: Error;
   errorInfo?: ErrorInfo;
+}
 
 class SmartErrorBoundary extends Component<Props, State> {
   private retryCount = 0;
@@ -20,9 +21,11 @@ class SmartErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
+  }
 
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
+  }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('SmartErrorBoundary caught an error:', error, errorInfo);
@@ -30,6 +33,7 @@ class SmartErrorBoundary extends Component<Props, State> {
     // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
+    }
 
     // Store error info for debugging
     this.setState({ errorInfo });
@@ -37,14 +41,14 @@ class SmartErrorBoundary extends Component<Props, State> {
     // Auto-retry for certain types of recoverable errors
     if (this.isRecoverableError(error) && this.retryCount < this.maxRetries) {
       this.scheduleRetry();
-
-
+    }
+  }
   private isRecoverableError(error: Error): boolean {
     // Check if error might be recoverable (network issues, temporary failures)
     return error.message.includes('Network') || 
            error.message.includes('timeout') ||
            error.message.includes('Loading chunk failed');
-
+  }
   private scheduleRetry = () => {
     this.retryCount++;
     setTimeout(() => {
@@ -62,7 +66,7 @@ class SmartErrorBoundary extends Component<Props, State> {
       // Custom fallback UI or use provided fallback
       if (this.props.fallback) {
         return this.props.fallback;
-
+      }
       return (
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
@@ -85,7 +89,7 @@ class SmartErrorBoundary extends Component<Props, State> {
                 {this.isRecoverableError(this.state.error!) && this.retryCount < this.maxRetries
                   ? `Attempting to recover... (${this.retryCount}/${this.maxRetries})`
                   : "We're having trouble loading this content."
-
+                }
               </p>
               
               {process.env.NODE_ENV === 'development' && this.state.error && (
@@ -105,13 +109,14 @@ class SmartErrorBoundary extends Component<Props, State> {
               <button
                 onClick={this.handleManualRetry}
                 className="flex-1 btn-primary sm:px-4 md:px-6 lg:px-8"
-               aria-label="Action button">
+                aria-label="Try again to reload the content">
                 Try Again
               </button>
               
               <button
                 onClick={() => window.location.reload()}
-              >
+                className="flex-1 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-md transition-colors"
+                aria-label="Reload the entire page">
                 Reload Page
               </button>
             </div>
@@ -122,14 +127,16 @@ class SmartErrorBoundary extends Component<Props, State> {
           </div>
         </motion.div>
       );
+    }
 
     return this.props.children;
+  }
+}
+// Import ErrorBoundary at the top if not already imported
+// import { ErrorBoundary } from './ErrorBoundary';
 
-
-const SmartErrorBoundaryWithErrorBoundary: React.FC = (props) => (
-  <ErrorBoundary>
-    <SmartErrorBoundary {...props} />
-  </ErrorBoundary>
+const SmartErrorBoundaryWithErrorBoundary: React.FC<Props> = (props) => (
+  <SmartErrorBoundary {...props} />
 );
 
 export default React.memo(SmartErrorBoundaryWithErrorBoundary);
