@@ -49,7 +49,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                         generateAiChatMessage(teamA, teamB, matchup.teamA.score, matchup.teamB.score).then(text => {
                             if (text) {
                                 dispatch({ type: 'ADD_CHAT_MESSAGE', payload: { leagueId: league.id, message: { user: teamA.owner, text } } });
-
+                            }
                         });
 
                     if (teamB.owner.persona) {

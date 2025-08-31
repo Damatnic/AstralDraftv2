@@ -107,7 +107,7 @@ export const ModalManager: React.FC = () => {
       
       default:
         return null;
-
+    }
   };
 
   return <>{renderModal()}</>;

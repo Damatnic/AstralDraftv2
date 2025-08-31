@@ -206,12 +206,12 @@ const NavButton: React.FC<{
   return (
     <motion.button
       onClick={onClick}
-      className={`relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ${isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/10'}`}
+      className={'relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 ' + (isActive ? 'text-white' : 'text-gray-400 hover:text-white hover:bg-white/10')}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       role="menuitem"
       aria-current={isActive ? 'page' : undefined}
-      aria-label={`Navigate to ${item.label}${item.badge ? ` (${item.badge} notifications)` : ''}`}
+      aria-label={'Navigate to ' + item.label + (item.badge ? ' (' + item.badge + ' notifications)' : '')}
     >
       {/* Active indicator */}
       {isActive && (
@@ -249,13 +249,13 @@ const MobileNavButton: React.FC<{
         transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50
         ${isActive 
           ? 'bg-gradient-to-r from-primary-500/20 to-primary-600/20 text-white border border-primary-500/30' 
-          : 'text-gray-400 hover:text-white hover:bg-white/10'
+          : 'text-gray-400 hover:text-white hover:bg-white/10'}
 
       `}
       whileTap={{ scale: 0.98 }}
       role="menuitem"
       aria-current={isActive ? 'page' : undefined}
-      aria-label={`Navigate to ${item.label}${item.badge ? ` (${item.badge} notifications)` : ''}`}
+      aria-label={'Navigate to ' + item.label + (item.badge ? ' (' + item.badge + ' notifications)' : '')}
     >
       <span className="text-xl sm:px-4 md:px-6 lg:px-8">{item.icon}</span>
       <span className="font-medium sm:px-4 md:px-6 lg:px-8">{item.label}</span>

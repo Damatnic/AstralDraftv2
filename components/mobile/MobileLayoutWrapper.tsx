@@ -275,6 +275,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                     -webkit-touch-callout: none;
                     -webkit-user-select: none;
                     user-select: none;
+                }
 
                 /* Allow text selection in specific areas */
                 input, textarea, [contenteditable] {
