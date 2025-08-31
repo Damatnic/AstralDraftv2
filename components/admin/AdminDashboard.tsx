@@ -24,7 +24,7 @@ const DashboardOverview: React.FC<{
       case 'warning': return 'text-yellow-600';
       case 'critical': return 'text-red-600';
       default: return 'text-gray-600';
-
+    }
   };
 
   const getHealthIcon = (status: string) => {
@@ -33,7 +33,7 @@ const DashboardOverview: React.FC<{
       case 'warning': return '⚠️';
       case 'critical': return '🚨';
       default: return '❓';
-
+    }
   };
 
   return (
@@ -113,23 +113,83 @@ const UserManagement: React.FC = () => {
   const loadUsers = React.useCallback(async () => {
     setLoading(true);
     try {
-
       const result = await adminService.getAllUsers(1, 50, filters);
       setUsers(result.users);
       setTotalUsers(result.total);
-    finally {
+    } catch (error) {
+      console.error('Failed to load users:', error);
+    } finally {
       setLoading(false);
+    }
+  }, [filters]);
 
-    `Reason for changing status to ${status}:`);
-      if (reason) {
-        await adminService.updateUserStatus('admin_001', userId, status, reason);
-        loadUsers();
+  const handleStatusChange = async (userId: string, status: string) => {
+    const reason = prompt(`Reason for changing status to ${status}:`);
+    if (reason) {
+      await adminService.updateUserStatus('admin_001', userId, status, reason);
+      loadUsers();
+    }
+  };
 
-    `inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(user?.status)}`}>
-                      {user?.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap sm:px-4 md:px-6 lg:px-8">
+  React.useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
+  const getStatusBadgeColor = (status?: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'suspended': return 'bg-yellow-100 text-yellow-800';
+      case 'banned': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getRiskBadgeColor = (score: number) => {
+    if (score >= 80) return 'bg-red-100 text-red-800';
+    if (score >= 60) return 'bg-yellow-100 text-yellow-800';
+    return 'bg-green-100 text-green-800';
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md">
+      <div className="p-6 border-b">
+        <h2 className="text-xl font-bold">User Management</h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 text-center">Loading...</td>
+              </tr>
+            ) : (
+              <>
+                {users.map((user: any) => (
+                  <tr key={user.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{user.username}</div>
+                          <div className="text-sm text-gray-500">{user.email}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(user?.status)}`}>
+                        {user?.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap sm:px-4 md:px-6 lg:px-8">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRiskBadgeColor(user.riskScore)}`}>
                       {user.riskScore}
                     </span>
@@ -184,26 +244,69 @@ const ContestManagement: React.FC = () => {
   const loadContests = async () => {
     setLoading(true);
     try {
-
       const result = await adminService.getAllContests(1, 50);
       setContests(result.contests);
-    
     } catch (error) {
       console.error('Operation failed:', error);
     } finally {
       setLoading(false);
-
+    }
   };
 
   const handleCancelContest = async (contestId: string) => {
     try {
-
       const reason = prompt('Reason for cancelling contest:');
       if (reason) {
         await adminService.cancelContest('admin_001', contestId, reason);
         loadContests();
+      }
+    } catch (error) {
+      console.error('Failed to cancel contest:', error);
+    }
+  };
 
-    `inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(contest?.status)}`}>
+  const getStatusBadgeColor = (status?: string) => {
+    switch (status) {
+      case 'active': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'completed': return 'bg-gray-100 text-gray-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow-md">
+      <div className="p-6 border-b">
+        <h2 className="text-xl font-bold">Contest Management</h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contest</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participants</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prize Pool</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {loading ? (
+              <tr>
+                <td colSpan={6} className="px-6 py-4 text-center">Loading...</td>
+              </tr>
+            ) : (
+              <>
+                {contests.map((contest: any) => (
+                  <tr key={contest.id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{contest.name}</div>
+                      <div className="text-sm text-gray-500">{contest.type}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(contest?.status)}`}>
                       {contest?.status}
                     </span>
                   </td>
@@ -262,22 +365,22 @@ const OracleMetricsPanel: React.FC = () => {
   const loadMetrics = async () => {
     setLoading(true);
     try {
-
       const data = await adminService.getOracleMetrics();
       setMetrics(data);
-    
     } catch (error) {
       console.error('Operation failed:', error);
     } finally {
       setLoading(false);
-
+    }
   };
 
   if (loading) {
     return <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">Loading Oracle metrics...</div>;
+  }
 
   if (!metrics) {
     return <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">Failed to load Oracle metrics</div>;
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-md sm:px-4 md:px-6 lg:px-8">

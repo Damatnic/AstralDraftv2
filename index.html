@@ -137,11 +137,23 @@
                     'extension context',
                     'chrome-extension',
                     'moz-extension',
-                    'react devtools detected',
+                    'react devtools',
                     'duplicate welcome',
+                    'content script',
+                    'devtools detected',
+                    'welcome "message"',
                     'cannot read properties of undefined',
                     'reading \'length\'',
-                    'undefined.length'
+                    'undefined.length',
+                    'react_devtools',
+                    'reactdevtools',
+                    '__react',
+                    'react-devtools',
+                    'devtools extension',
+                    'browser extension',
+                    'extension error',
+                    'postmessage',
+                    'message event'
                 ];
                 return patterns.some(function(pattern) {
                     return lowerMsg.indexOf(pattern) !== -1;
@@ -251,6 +263,62 @@
         } catch (e) {
             // Ignore if we can't override valueOf
         }
+        
+        // Intercept postMessage to prevent React DevTools messages
+        var originalPostMessage = window.postMessage;
+        window.postMessage = function(message, targetOrigin, transfer) {
+            try {
+                // Check if this is a React DevTools message
+                var msgStr = '';
+                if (typeof message === 'string') {
+                    msgStr = message.toLowerCase();
+                } else if (typeof message === 'object' && message !== null) {
+                    msgStr = JSON.stringify(message).toLowerCase();
+                }
+                
+                // Block React DevTools messages
+                if (msgStr.indexOf('react') !== -1 || 
+                    msgStr.indexOf('devtools') !== -1 ||
+                    msgStr.indexOf('__react') !== -1 ||
+                    msgStr.indexOf('welcome') !== -1 ||
+                    msgStr.indexOf('duplicate') !== -1) {
+                    return; // Silently drop the message
+                }
+                
+                // Allow other messages through
+                return originalPostMessage.apply(this, arguments);
+            } catch (e) {
+                // If there's any error, just drop the message
+                return;
+            }
+        };
+        
+        // Also override addEventListener for 'message' events to filter them
+        var originalMessageHandler = null;
+        window.addEventListener('message', function(event) {
+            try {
+                // Check if this is a React DevTools related message
+                var data = event.data;
+                var dataStr = '';
+                if (typeof data === 'string') {
+                    dataStr = data.toLowerCase();
+                } else if (typeof data === 'object' && data !== null) {
+                    dataStr = JSON.stringify(data).toLowerCase();
+                }
+                
+                // Block React DevTools messages
+                if (dataStr.indexOf('react') !== -1 || 
+                    dataStr.indexOf('devtools') !== -1 ||
+                    dataStr.indexOf('__react') !== -1 ||
+                    dataStr.indexOf('welcome') !== -1) {
+                    event.stopImmediatePropagation();
+                    event.preventDefault();
+                    return false;
+                }
+            } catch (e) {
+                // Silence any errors
+            }
+        }, true); // Use capture phase to intercept early
         
     })();
     </script>

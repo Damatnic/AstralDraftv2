@@ -19,6 +19,7 @@ interface Player {
   adp: number;
   projectedPoints: number;
   tier: number;
+}
 
 const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
   userId,
@@ -65,7 +66,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-
+    }
   }, [chatMessages]);
 
   // Timer animation effect
@@ -74,14 +75,14 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
       timerRef.current.classList.add('timer-warning');
     } else if (timerRef.current) {
       timerRef.current.classList.remove('timer-warning');
-
+    }
   }, [timeRemaining, isMyTurn]);
 
   const handleMakePick = () => {
     if (selectedPlayer && isMyTurn) {
       makePick(selectedPlayer.id);
       setSelectedPlayer(null);
-
+    }
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -89,7 +90,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
     if (chatInput.trim()) {
       sendChatMessage(chatInput.trim());
       setChatInput('');
-
+    }
   };
 
   const formatTime = (seconds: number): string => {
