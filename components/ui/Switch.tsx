@@ -31,6 +31,9 @@ export const Switch: React.FC<SwitchProps> = ({
         aria-checked={checked}
         disabled={disabled}
         onClick={() => onChange(!checked)}
+        className={`
+          inline-block relative rounded-full transition-colors duration-200
+          ${checked ? 'bg-blue-500' : 'bg-gray-300'}
           ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
           ${track}
         `}
