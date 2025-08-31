@@ -3,6 +3,9 @@
  * ULTRA-NUCLEAR ERROR PREVENTION SYSTEM
  */
 
+// Import security module for comprehensive protection
+import './utils/security';
+
 // IMMEDIATE ERROR SUPPRESSION - Before any imports
 (() => {
     'use strict';
@@ -38,7 +41,10 @@
             'receiving end does not exist',
             'extension context',
             'chrome-extension',
-            'moz-extension'
+            'moz-extension',
+            'react devtools',
+            'duplicate welcome',
+            'content script'
         ];
         return noise.some(n => msg.toLowerCase().includes(n));
     };
