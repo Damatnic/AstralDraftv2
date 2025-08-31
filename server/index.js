@@ -25,11 +25,16 @@ const tradeRoutes = require('./routes/trades');
 const waiverRoutes = require('./routes/waivers');
 const matchupRoutes = require('./routes/matchups');
 const oracleRoutes = require('./routes/oracle');
+const mfaRoutes = require('./routes/mfa');
+const oauthRoutes = require('./routes/oauth');
 
 // Import services
 const sportsDataService = require('./services/sportsDataService');
 const waiverProcessor = require('./services/waiverProcessor');
 const scoringEngine = require('./services/scoringEngine');
+const mfaService = require('./services/mfaService');
+const securityAuditService = require('./services/securityAuditService');
+const securityMiddleware = require('./middleware/securityMiddleware');
 
 // Import WebSocket handlers
 const draftSocketHandler = require('./websocket/draftHandler');
@@ -90,27 +95,41 @@ app.use(helmet({
 app.use(compression());
 app.use(morgan('combined'));
 
+// Enhanced security middleware
+app.use(securityMiddleware.securityHeaders());
+app.use(securityMiddleware.ipBlocking());
+app.use(securityMiddleware.botDetection());
+app.use(securityMiddleware.xssProtection());
+app.use(securityMiddleware.sqlInjectionProtection());
+app.use(securityMiddleware.requestSizeLimit('10mb'));
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true
 }));
 
-// Rate limiting
-const limiter = rateLimit({
+// Enhanced rate limiting
+const generalLimiter = securityMiddleware.createAdvancedRateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  max: 100
 });
-app.use('/api/', limiter);
+app.use('/api/', generalLimiter);
+
+const speedLimit = securityMiddleware.createSpeedLimit({
+  windowMs: 15 * 60 * 1000,
+  delayAfter: 50,
+  delayMs: 500
+});
+app.use('/api/', speedLimit);
 
 // Stricter rate limiting for auth endpoints
-const authLimiter = rateLimit({
+const authLimiter = securityMiddleware.createAdvancedRateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: 'Too many authentication attempts, please try again later.'
+  max: 5
 });
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
+app.use('/api/mfa/', authLimiter);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -145,6 +164,8 @@ app.set('io', io);
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/mfa', mfaRoutes);
+app.use('/api/oauth', oauthRoutes);
 app.use('/api/leagues', leagueRoutes);
 app.use('/api/players', playerRoutes);
 app.use('/api/draft', draftRoutes);

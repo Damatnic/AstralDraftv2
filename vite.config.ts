@@ -16,7 +16,23 @@ export default defineConfig(({ mode }: { mode: string }) => {
             plugins: [],
             presets: []
           }
-        })
+        }),
+        // Add PWA plugin for enhanced caching
+        ...(isProduction ? [{
+          name: 'performance-hints',
+          generateBundle(options: any, bundle: any) {
+            // Analyze bundle and provide performance hints
+            Object.keys(bundle).forEach(fileName => {
+              const chunk = bundle[fileName];
+              if (chunk.type === 'chunk' && chunk.code) {
+                const size = new TextEncoder().encode(chunk.code).length;
+                if (size > 500 * 1024) { // 500KB
+                  console.warn(`⚠️ Large chunk detected: ${fileName} (${(size/1024).toFixed(2)}KB)`);
+                }
+              }
+            });
+          }
+        }] : [])
       ],
       define: {
         'global': 'globalThis',
@@ -36,6 +52,9 @@ export default defineConfig(({ mode }: { mode: string }) => {
         target: 'es2020',
         minify: isProduction ? ('esbuild' as const) : false,
         sourcemap: isProduction ? false : true,
+        // Performance optimizations
+        cssMinify: isProduction,
+        assetsInlineLimit: 4096, // Inline assets under 4KB
         rollupOptions: {
           output: {
             manualChunks: (id) => {
@@ -128,8 +147,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
         },
         emptyOutDir: true,
         chunkSizeWarningLimit: 500, // Reduced from 1000 to encourage smaller chunks
-        cssCodeSplit: true, // Enable CSS code splitting
-        reportCompressedSize: true
+        cssCodeSplit: true // Enable CSS code splitting
       },
       optimizeDeps: {
         include: [
