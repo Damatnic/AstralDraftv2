@@ -61,12 +61,12 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm sm:px-4 md:px-6 lg:px-8"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
           />
           
@@ -85,14 +85,14 @@ export const Modal: React.FC<ModalProps> = ({
               aria-labelledby={title ? 'modal-title' : undefined}
             >
               {title && (
-                <div className="flex items-center justify-between p-6 border-b border-white/20 sm:px-4 md:px-6 lg:px-8">
-                  <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
+                <div className="flex items-center justify-between p-6 border-b border-white/20">
+                  <h2 id="modal-title" className="text-xl font-semibold text-[var(--text-primary)]">
                     {title}
                   </h2>
                   <button
                     type="button"
                     onClick={onClose}
-                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
+                    className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-2xl min-h-[44px] min-w-[44px] flex items-center justify-center"
                     aria-label="Close modal"
                   >
                     ✕
@@ -100,7 +100,7 @@ export const Modal: React.FC<ModalProps> = ({
                 </div>
               )}
               
-              <div className="p-6 sm:px-4 md:px-6 lg:px-8">
+              <div className="p-6">
                 {children}
               </div>
             </motion.div>

@@ -108,7 +108,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
       case 'DEF': return 'text-purple-600';
       case 'K': return 'text-yellow-600';
       default: return 'text-gray-600';
-
+    }
   };
 
   const getTierColor = (tier: number): string => {
@@ -117,7 +117,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
       case 2: return 'bg-blue-100 border-blue-400';
       case 3: return 'bg-green-100 border-green-400';
       default: return 'bg-gray-100 border-gray-400';
-
+    }
   };
 
   const filteredPlayers = availablePlayers.filter((player: any) => {
@@ -127,25 +127,27 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
 
   if (!isConnected && connectionStatus !== 'CONNECTING') {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
-        <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 sm:px-4 md:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">Connection Issue</h2>
-          <p className="text-gray-600 mb-6 sm:px-4 md:px-6 lg:px-8">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Connection Issue</h2>
+          <p className="text-gray-600 mb-6">
             Unable to connect to the draft room. Please check your connection and try again.
           </p>
-          <div className="flex space-x-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex space-x-4">
             <button
               type="button"
-              onClick={(e) = aria-label="Action button"> { e.preventDefault(); connect(); }}
-              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] sm:px-4 md:px-6 lg:px-8"
+              onClick={(e) => { e.preventDefault(); connect(); }}
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors min-h-[44px]"
+              aria-label="Retry connection to draft room"
             >
               Retry Connection
             </button>
             {onExitDraft && (
               <button
                 type="button"
-                onClick={(e) = aria-label="Action button"> { e.preventDefault(); onExitDraft(); }}
-                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors min-h-[44px] sm:px-4 md:px-6 lg:px-8"
+                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors min-h-[44px]"
+                aria-label="Exit draft room"
               >
                 Exit Draft
               </button>
@@ -154,29 +156,30 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
         </div>
       </div>
     );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white sm:px-4 md:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-900 text-white">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex items-center justify-between max-w-7xl mx-auto sm:px-4 md:px-6 lg:px-8">
-          <div className="flex items-center space-x-6 sm:px-4 md:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold sm:px-4 md:px-6 lg:px-8">Draft Room</h1>
-            <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
-              <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Round {currentRound}</span>
-              <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Pick {currentPick}</span>
-              <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="bg-gray-800 border-b border-gray-700 p-4">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          <div className="flex items-center space-x-6">
+            <h1 className="text-2xl font-bold">Draft Room</h1>
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-400">Round {currentRound}</span>
+              <span className="text-sm text-gray-400">Pick {currentPick}</span>
+              <div className="flex items-center space-x-2">
                 <div className={`w-2 h-2 rounded-full ${
                   connectionStatus === 'CONNECTED' ? 'bg-green-400' :
                   connectionStatus === 'CONNECTING' ? 'bg-yellow-400' : 
                   'bg-red-400'
                 }`} />
-                <span className="text-sm text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{connectionStatus.toLowerCase()}</span>
+                <span className="text-sm text-gray-400 capitalize">{connectionStatus.toLowerCase()}</span>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
+          <div className="flex items-center space-x-4">
             {/* Timer */}
             <div
               ref={timerRef}
@@ -192,8 +195,9 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             {/* Timer controls */}
             <button
               type="button"
-              onClick={(e) = aria-label="Action button"> { e.preventDefault(); toggleTimer(); }}
-              className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
+              onClick={(e) => { e.preventDefault(); toggleTimer(); }}
+              className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label={isPaused ? 'Resume draft timer' : 'Pause draft timer'}
             >
               {isPaused ? 'Resume' : 'Pause'}
             </button>
@@ -201,8 +205,9 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             {onExitDraft && (
               <button
                 type="button"
-                onClick={(e) = aria-label="Action button"> { e.preventDefault(); onExitDraft(); }}
-                className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
+                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Exit draft room"
               >
                 Exit Draft
               </button>
@@ -218,13 +223,14 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
-            className="bg-red-600 text-white p-4 text-center sm:px-4 md:px-6 lg:px-8"
+            className="bg-red-600 text-white p-4 text-center"
           >
             <span>{error}</span>
             <button
               type="button"
-              onClick={(e) = aria-label="Action button"> { e.preventDefault(); clearError(); }}
-              className="ml-4 underline hover:no-underline min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
+              onClick={(e) => { e.preventDefault(); clearError(); }}
+              className="ml-4 underline hover:no-underline min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Dismiss error message"
             >
               Dismiss
             </button>
@@ -235,9 +241,9 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
       <div className="max-w-7xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Available Players */}
         <div className="lg:col-span-2">
-          <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
-              <h2 className="text-xl font-semibold sm:px-4 md:px-6 lg:px-8">Available Players</h2>
+          <div className="bg-gray-800 rounded-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-semibold">Available Players</h2>
               <select
                 value={filterPosition}
                 onChange={(e: any) => setFilterPosition(e.target.value)}
@@ -252,7 +258,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
               </select>
             </div>
             
-            <div className="space-y-2 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
+            <div className="space-y-2 max-h-96 overflow-y-auto">
               {filteredPlayers.map((player: any) => (
                 <motion.div
                   key={player.id}
@@ -262,18 +268,26 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
                       ? 'border-blue-400 bg-blue-900/30'
                       : `${getTierColor(player?.tier)} bg-gray-700 border-gray-600 hover:border-gray-500`
                   }`}
-                  onClick={(e) => { e.preventDefault(); setSelectedPlayer(player); }}
+                  onClick={() => setSelectedPlayer(player)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedPlayer(player);
+                    }
+                  }}
+                  tabIndex={0}
+                  role="button"
                 >
-                  <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                        <span className="font-semibold sm:px-4 md:px-6 lg:px-8">{player.name}</span>
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold">{player.name}</span>
                         <span className={`text-sm font-medium ${getPositionColor(player.position)}`}>
                           {player.position}
                         </span>
-                        <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.team}</span>
+                        <span className="text-sm text-gray-400">{player.team}</span>
                       </div>
-                      <div className="flex items-center space-x-4 mt-1 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                      <div className="flex items-center space-x-4 mt-1 text-sm text-gray-400">
                         <span>ADP: {player?.adp}</span>
                         <span>Proj: {player.projectedPoints}</span>
                         <span>Tier {player?.tier}</span>
@@ -285,16 +299,19 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             </div>
             
             {/* Draft Button */}
-            <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
+            <div className="mt-4">
               <button
                 type="button"
-                onClick={(e) = aria-label="Action button"> { e.preventDefault(); handleMakePick(); }}
+                onClick={handleMakePick}
                 disabled={!selectedPlayer || !isMyTurn}
                 className={`w-full py-3 rounded-lg font-semibold transition-colors min-h-[44px] ${
                   selectedPlayer && isMyTurn
                     ? 'bg-green-600 hover:bg-green-700 text-white'
                     : 'bg-gray-600 text-gray-400 cursor-not-allowed'
                 }`}
+                aria-label={!isMyTurn ? "Waiting for your turn" : 
+                           !selectedPlayer ? "Select a player to draft" : 
+                           `Draft ${selectedPlayer.name}`}
               >
                 {!isMyTurn ? "Not Your Turn" : 
                  !selectedPlayer ? "Select a Player" : 
@@ -307,21 +324,21 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
         {/* Right Panel */}
         <div className="lg:col-span-2 space-y-6">
           {/* Draft Board */}
-          <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
-            <h2 className="text-xl font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Recent Picks</h2>
-            <div className="space-y-2 max-h-64 overflow-y-auto mobile-scroll custom-scrollbar sm:px-4 md:px-6 lg:px-8">
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Recent Picks</h2>
+            <div className="space-y-2 max-h-64 overflow-y-auto mobile-scroll custom-scrollbar">
               {picks.slice(-10).reverse().map((pick, index) => (
                 <motion.div
                   key={`${pick.pickNumber}-${pick.timestamp}`}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="flex items-center justify-between p-2 bg-gray-700 rounded-lg sm:px-4 md:px-6 lg:px-8"
+                  className="flex items-center justify-between p-2 bg-gray-700 rounded-lg"
                 >
                   <div>
-                    <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Pick #{pick.pickNumber}</span>
-                    <span className="ml-2 font-medium sm:px-4 md:px-6 lg:px-8">Team {pick.teamId}</span>
+                    <span className="text-sm text-gray-400">Pick #{pick.pickNumber}</span>
+                    <span className="ml-2 font-medium">Team {pick.teamId}</span>
                   </div>
-                  <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-sm text-gray-400">
                     Player ID: {pick.playerId}
                   </span>
                 </motion.div>
@@ -330,24 +347,24 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
           </div>
 
           {/* Participants */}
-          <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
-            <h2 className="text-xl font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Participants</h2>
-            <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Participants</h2>
+            <div className="space-y-2">
               {participants.map((participant: any) => (
                 <div
                   key={participant.userId}
-                  className="flex items-center justify-between p-2 bg-gray-700 rounded-lg sm:px-4 md:px-6 lg:px-8"
+                  className="flex items-center justify-between p-2 bg-gray-700 rounded-lg"
                 >
-                  <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center space-x-2">
                     <div className={`w-2 h-2 rounded-full ${
                       participant.isOnline ? 'bg-green-400' : 'bg-gray-400'
                     }`} />
                     <span>Team {participant.teamId}</span>
                     {participant.userId === userId && (
-                      <span className="text-xs bg-blue-600 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">You</span>
+                      <span className="text-xs bg-blue-600 px-2 py-1 rounded">You</span>
                     )}
                   </div>
-                  <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                  <span className="text-sm text-gray-400">
                     {participant.isOnline ? 'Online' : 'Offline'}
                   </span>
                 </div>
@@ -356,11 +373,11 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
           </div>
 
           {/* Chat */}
-          <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
-            <h2 className="text-xl font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Chat</h2>
+          <div className="bg-gray-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Chat</h2>
             <div
               ref={chatContainerRef}
-              className="space-y-2 max-h-48 overflow-y-auto mb-4 mobile-scroll custom-scrollbar sm:px-4 md:px-6 lg:px-8"
+              className="space-y-2 max-h-48 overflow-y-auto mb-4 mobile-scroll custom-scrollbar"
             >
               {chatMessages.map((message, index) => (
                 <div
@@ -369,35 +386,38 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
                     message.isTradeProposal ? 'bg-orange-900/30 border border-orange-600' : 'bg-gray-700'
                   }`}
                 >
-                  <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                    <span className="text-sm font-medium text-blue-400 sm:px-4 md:px-6 lg:px-8">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium text-blue-400">
                       User {message.userId}
                     </span>
                     {message.isTradeProposal && (
-                      <span className="text-xs bg-orange-600 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">Trade</span>
+                      <span className="text-xs bg-orange-600 px-2 py-1 rounded">Trade</span>
                     )}
-                    <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
+                    <span className="text-xs text-gray-400">
                       {new Date(message.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
-                  <p className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{message.message}</p>
+                  <p className="text-sm mt-1">{message.message}</p>
                 </div>
               ))}
             </div>
             
-            <form onSubmit={handleSendMessage}
+            <form onSubmit={handleSendMessage} className="flex gap-2">
               <input
                 type="text"
                 value={chatInput}
-                onChange={(e: any) => setChatInput(e.target.value)}
-                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 min-h-[44px] sm:px-4 md:px-6 lg:px-8"
-                autocomplete="off"
-                data-form-type="chat"
+                onChange={(e) => setChatInput(e.target.value)}
+                className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 min-h-[44px]"
+                autoComplete="off"
+                placeholder="Type a message..."
+                aria-label="Chat message input"
               />
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
-               aria-label="Action button">
+                disabled={!chatInput.trim()}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-4 py-2 rounded-lg text-sm transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Send chat message"
+              >
                 Send
               </button>
             </form>

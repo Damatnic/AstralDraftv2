@@ -104,8 +104,8 @@ export const Button: React.FC<ButtonProps> = ({
 
   // Loading spinner component
   const LoadingSpinner = () => (
-    <div className="absolute inset-0 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
-      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin sm:px-4 md:px-6 lg:px-8" />
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
     </div>
   );
 
@@ -114,16 +114,16 @@ export const Button: React.FC<ButtonProps> = ({
     <>
       {/* Shimmer effect */}
       {(variant === 'primary' || variant === 'success' || variant === 'danger') && !disabled && !loading && (
-        <div className="absolute inset-0 -top-px rounded-xl overflow-hidden -z-10 sm:px-4 md:px-6 lg:px-8">
+        <div className="absolute inset-0 -top-px rounded-xl overflow-hidden -z-10">
           <div className="absolute inset-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/15 to-transparent 
-                          transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000 sm:px-4 md:px-6 lg:px-8" />
+                          transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
         </div>
       )}
       
       {/* Glow effect on hover */}
       {variant === 'primary' && !disabled && !loading && (
-        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-20 sm:px-4 md:px-6 lg:px-8">
-          <div className="absolute inset-0 rounded-xl bg-primary-500/20 blur-xl sm:px-4 md:px-6 lg:px-8" />
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-20">
+          <div className="absolute inset-0 rounded-xl bg-primary-500/20 blur-xl" />
         </div>
       )}
     </>
@@ -141,11 +141,11 @@ export const Button: React.FC<ButtonProps> = ({
       
       <span className={`relative flex items-center gap-2 ${loading ? 'opacity-0' : ''}`}>
         {icon && iconPosition === 'left' && (
-          <span className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">{icon}</span>
+          <span className="flex-shrink-0">{icon}</span>
         )}
         {children}
         {icon && iconPosition === 'right' && (
-          <span className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">{icon}</span>
+          <span className="flex-shrink-0">{icon}</span>
         )}
       </span>
       
