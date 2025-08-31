@@ -127,7 +127,7 @@
         
         function isExtensionNoise(msg) {
             try {
-                if (!msg || typeof msg !== 'string') return true; // Silence unknown messages
+                if (!msg || typeof msg !== 'string') return false; // Don't silence unknown messages
                 var lowerMsg = msg.toLowerCase();
                 var patterns = [
                     'message port closed',
@@ -136,16 +136,13 @@
                     'receiving end does not exist',
                     'extension context',
                     'chrome-extension',
-                    'moz-extension',
-                    'cannot read properties of undefined',
-                    'reading \'length\'',
-                    'undefined.length'
+                    'moz-extension'
                 ];
                 return patterns.some(function(pattern) {
                     return lowerMsg.indexOf(pattern) !== -1;
                 });
             } catch (e) {
-                return true; // If we can't determine, silence it
+                return false; // If we can't determine, don't silence it
             }
         }
         
