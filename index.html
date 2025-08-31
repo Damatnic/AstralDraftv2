@@ -329,14 +329,8 @@
         console.warn = console.error;
         console.log = console.error;
         
-        // TEMPORARILY DISABLED: ABSOLUTE error suppression for debugging
-        // window.onerror = function() { return true; };
-        
-        // Enable error reporting for React debugging
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error('🚨 JS ERROR DETECTED:', { message, source, lineno, colno, error });
-            return false; // Show the error
-        };
+        // PRODUCTION: ABSOLUTE error suppression for clean UX
+        window.onerror = function() { return true; };
         
         // Wrap ALL event listeners to prevent crashes
         if (window.addEventListener) {
@@ -355,38 +349,26 @@
                 return originalAddEventListener.call(this, type, safeListener, options);
             };
             
-            // TEMPORARILY DISABLED: Error handlers for React debugging
-            // window.addEventListener('error', function(e) {
-            //     try {
-            //         e.preventDefault();
-            //         e.stopImmediatePropagation();
-            //     } catch (ex) {
-            //         // Ignore
-            //     }
-            //     return false;
-            // }, true);
-            
-            // Enable error visibility for debugging
+            // PRODUCTION: Suppress all error events for clean UX
             window.addEventListener('error', function(e) {
-                console.error('🚨 CAPTURED ERROR:', e.error || e.message);
-                // Don't prevent default - let the error show
-            });
+                try {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                } catch (ex) {
+                    // Ignore
+                }
+                return false;
+            }, true);
             
-            // TEMPORARILY DISABLED: Unhandled rejection suppression for debugging
-            // window.addEventListener('unhandledrejection', function(e) {
-            //     try {
-            //         e.preventDefault();
-            //         e.stopImmediatePropagation();
-            //     } catch (ex) {
-            //         // Ignore
-            //     }
-            // }, true);
-            
-            // Enable promise rejection visibility
+            // PRODUCTION: Suppress unhandled promise rejections for clean UX
             window.addEventListener('unhandledrejection', function(e) {
-                console.error('🚨 UNHANDLED PROMISE REJECTION:', e.reason);
-                // Don't prevent default - let the error show
-            });
+                try {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                } catch (ex) {
+                    // Ignore
+                }
+            }, true);
         }
         
         // Override setTimeout and setInterval to prevent crashes
@@ -768,13 +750,11 @@
               }
             });
             
-            // Development logging (safe for production)
-            console.log('SW registered successfully:', registration);
+            // Production: Service worker registered successfully
             
           } catch (registrationError) {
             // Enhanced error handling - don't break the app if SW fails
-            // Log service worker registration issues (non-critical)
-            console.warn('SW registration failed (non-critical):', registrationError);
+            // Service worker registration failed (non-critical)
             
             // Gracefully degrade without service worker
             // PWA features will be disabled but app remains functional
@@ -785,54 +765,8 @@
         // Service workers not supported
         window.__SW_DISABLED = true;
         // Service workers not supported - graceful degradation
-        console.info('Service Workers not supported in this browser');
       }
     </script>
 
-    <!-- EMERGENCY REACT INITIALIZATION BYPASS -->
-    <script>
-    // Emergency React initialization - force mounting if primary initialization fails
-    let emergencyInitialized = false;
-    
-    const emergencyReactInit = () => {
-        if (emergencyInitialized) return;
-        
-        setTimeout(() => {
-            const rootEl = document.getElementById('root');
-            if (!rootEl || emergencyInitialized) return;
-            
-            // Check if React app has already mounted (no fallback content)
-            const hasFallbackContent = rootEl.innerHTML.includes('Emergency fallback content');
-            
-            if (hasFallbackContent && window.React && window.ReactDOM) {
-                console.log('🚨 EMERGENCY: Primary React initialization failed, attempting emergency mount...');
-                emergencyInitialized = true;
-                
-                try {
-                    // Try to get the App component from the global scope
-                    if (window.AstralDraftApp) {
-                        const root = window.ReactDOM.createRoot(rootEl);
-                        root.render(window.React.createElement(window.AstralDraftApp));
-                        console.log('✅ EMERGENCY: React app mounted successfully!');
-                    } else {
-                        console.log('⚠️ EMERGENCY: App component not found in global scope');
-                    }
-                } catch (error) {
-                    console.error('❌ EMERGENCY: Emergency React mount failed:', error);
-                }
-            }
-        }, 3000); // Wait 3 seconds for normal initialization
-    };
-    
-    // Try emergency initialization after DOM loads
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', emergencyReactInit);
-    } else {
-        emergencyReactInit();
-    }
-    
-    // Also try after main scripts load
-    window.addEventListener('load', emergencyReactInit);
-    </script>
 </body>
 </html>
