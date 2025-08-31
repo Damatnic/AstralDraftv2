@@ -477,10 +477,34 @@
               swPath = '/sw.js';
             }
             
-            const registration = await navigator.serviceWorker.register(swPath, {
+            // Try service workers with progressive fallbacks
+            let registration;
+            const swOptions = {
               scope: currentPath === '/' ? '/' : currentPath,
-              updateViaCache: 'none' // Ensure fresh updates
-            });
+              updateViaCache: 'none'
+            };
+            
+            try {
+              registration = await navigator.serviceWorker.register(swPath, swOptions);
+            } catch (swError) {
+              console.warn('Primary SW failed, trying simple version:', swError.message);
+              try {
+                registration = await navigator.serviceWorker.register('/sw-simple.js', {
+                  scope: '/',
+                  updateViaCache: 'none'
+                });
+              } catch (simpleError) {
+                console.warn('Simple SW failed, trying minimal version:', simpleError.message);
+                try {
+                  registration = await navigator.serviceWorker.register('/sw-minimal.js', {
+                    scope: '/',
+                    updateViaCache: 'none'
+                  });
+                } catch (minimalError) {
+                  throw new Error(`All service workers failed: ${swError.message}`);
+                }
+              }
+            }
             
             // Enhanced registration handling
             registration.addEventListener('updatefound', () => {

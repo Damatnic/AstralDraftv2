@@ -217,16 +217,16 @@ async function staleWhileRevalidateStrategy(request) {
   const cachedResponse = await cache.match(request);
   
   const networkResponsePromise = fetch(request)
-    .then((networkResponse) => {
+    .then(async (networkResponse) => {
       if (networkResponse.ok) {
         // Check for partial responses which cannot be cached
-      if (networkResponse.status !== 206) {
-        try {
-          await cache.put(request, networkResponse.clone());
-        } catch (cacheError) {
-          console.warn('[SW] Failed to cache response:', cacheError);
+        if (networkResponse.status !== 206) {
+          try {
+            await cache.put(request, networkResponse.clone());
+          } catch (cacheError) {
+            console.warn('[SW] Failed to cache response:', cacheError);
+          }
         }
-      }
       }
       return networkResponse;
     })
