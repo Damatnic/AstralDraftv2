@@ -372,10 +372,13 @@ export const usePWAInstall = (): PWAInstallPrompt => {
                 setInstallPrompt(null);
                 setIsInstallable(false);
             }
+        } catch (error) {
+            console.error(error);
+        }
+    }, [installPrompt]);
 
-    } catch (error) {
-        console.error(error);
-    `${src}-${width}-${height}-${quality}-${format}`;
+    const optimizeImage = useCallback((src: string, width?: number, height?: number, quality: number = 0.8, format: 'webp' | 'jpeg' = 'jpeg') => {
+        const cacheKey = `${src}-${width}-${height}-${quality}-${format}`;
         if (imageCache.current.has(cacheKey)) {
             const cached = imageCache.current.get(cacheKey);
             return cached || src;
@@ -427,9 +430,19 @@ export const usePWAInstall = (): PWAInstallPrompt => {
 
                     imageCache.current.set(cacheKey, optimizedDataUrl);
                     resolve(optimizedDataUrl);
-                
-    `Gesture "${gestureName}" took ${duration.toFixed(2)}ms`);
-        }
+                } catch (error) {
+                    console.error('Image optimization failed:', error);
+                    resolve(src);
+                }
+            };
+            
+            img.onerror = () => {
+                console.error('Image load failed');
+                resolve(src);
+            };
+            
+            img.src = src;
+        });
     }, []);
 
     useEffect(() => {

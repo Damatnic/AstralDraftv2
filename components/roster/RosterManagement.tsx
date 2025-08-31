@@ -23,6 +23,7 @@ interface RosterSlot {
   player: Player | null;
   isStarter: boolean;
   isLocked?: boolean;
+}
 
 const RosterManagement: React.FC<RosterManagementProps> = ({
   team,
@@ -57,7 +58,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           isStarter: true,
           isLocked: false
         });
-
+      }
     });
     
     // Bench slots
@@ -72,6 +73,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         isStarter: false,
         isLocked: false
       });
+    }
 
     // IR slots
     for (let i = 0; i < (rosterFormat.IR || 0); i++) {
@@ -81,6 +83,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         isStarter: false,
         isLocked: false
       });
+    }
 
     return slots;
   };
@@ -102,7 +105,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       case 'BENCH': return 'bg-slate-600';
       case 'IR': return 'bg-red-800';
       default: return 'bg-gray-500';
-
+    }
   };
 
   const getInjuryStatusColor = (status: string) => {
@@ -113,7 +116,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       case 'OUT': return 'text-red-400';
       case 'IR': return 'text-red-600';
       default: return 'text-gray-400';
-
+    }
   };
 
   const handleAddPlayer = (position: string) => {
@@ -133,7 +136,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
       payload: {
         message: `${player.name} added to ${team.name}!`,
         type: 'SUCCESS'
-
+      }
     });
     
     setShowPlayerSearch(false);
@@ -152,9 +155,9 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         payload: {
           message: `${player.name} dropped from ${team.name}`,
           type: 'INFO'
-
+        }
       });
-
+    }
   };
 
   const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }) => (
@@ -249,7 +252,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
         return [...benchSlots, ...irSlots];
       default:
         return rosterSlots;
-
+    }
   };
 
   return (
@@ -270,7 +273,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
           {(['all', 'starters', 'bench'] as const).map((view: any) => (
             <button
               key={view}
-              onClick={() => setRosterView(view)}`}
+              onClick={() => setRosterView(view)}
             >
               {view.charAt(0).toUpperCase() + view.slice(1)}
             </button>

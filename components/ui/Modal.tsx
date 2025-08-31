@@ -33,6 +33,7 @@ export const Modal: React.FC<ModalProps> = ({
     } else {
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
+    }
 
     return () => {
       document.body.style.overflow = '';
@@ -45,24 +46,17 @@ export const Modal: React.FC<ModalProps> = ({
     const handleEscapeKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && isOpen) {
         onClose();
-
+      }
     };
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscapeKey);
+    }
 
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [isOpen, onClose]);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
 
   return (
     <AnimatePresence>

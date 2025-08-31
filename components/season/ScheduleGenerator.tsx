@@ -61,9 +61,11 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
           team2Id,
           isPlayoff: false
         });
-
+      }
+      
       matchups.push(...weekMatchups);
-
+    }
+    
     return matchups;
   };
 
@@ -167,13 +169,14 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
     return 'Season';
   };
 
-  if (isLoading) {
+  if (isGenerating) {
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
         <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
       </div>
     );
+  }
 
   return (
     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
@@ -359,7 +362,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   );
 };
 
-const ScheduleGeneratorWithErrorBoundary: React.FC = (props) => (
+const ScheduleGeneratorWithErrorBoundary: React.FC<ScheduleGeneratorProps> = (props) => (
   <ErrorBoundary>
     <ScheduleGenerator {...props} />
   </ErrorBoundary>

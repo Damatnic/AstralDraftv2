@@ -33,6 +33,7 @@ interface LineupSuggestion {
     reasoning: string;
     improvements: string[];
     riskLevel: 'Low' | 'Medium' | 'High';
+}
 
 interface OptimizerSettings {
     optimizeFor: 'ceiling' | 'floor' | 'projection';
@@ -91,13 +92,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     'Consider streaming defense with better matchup'
                 ],
                 riskLevel: 'Medium'
-            
-    } catch (error) {
-      console.error('Error in generateOptimizations:', error);
-
-    } catch (error) {
-        console.error(error);
-    },
+            },
             {
                 id: '2',
                 name: 'Safe Floor',
@@ -125,12 +120,16 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     'Target quarterbacks in projected shootouts'
                 ],
                 riskLevel: 'High'
-
+            }
         ];
 
         setSuggestions(mockSuggestions);
         setSelectedSuggestion(mockSuggestions[0]);
         setIsOptimizing(false);
+    } catch (error) {
+        console.error('Error in generateOptimizations:', error);
+        setIsOptimizing(false);
+    }
     };
 
     const applyLineup = (suggestion: LineupSuggestion) => {
@@ -142,7 +141,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                 leagueId: league.id,
                 teamId: team.id,
                 playerIds: suggestion.starters.map((p: any) => p.id)
-
+            }
         });
 
         dispatch({
@@ -150,7 +149,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
             payload: {
                 message: `Applied "${suggestion.name}" lineup optimization`,
                 type: 'SYSTEM'
-
+            }
         });
     };
 
@@ -162,7 +161,9 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                     ? 'border-blue-500 bg-blue-500/10'
                     : 'border-[var(--panel-border)] hover:border-gray-500'
             }`}
-            onClick={() = role="button" tabIndex={0}> setSelectedSuggestion(suggestion)}
+            onClick={() => setSelectedSuggestion(suggestion)}
+            role="button"
+            tabIndex={0}
         >
             <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                 <h4 className="font-semibold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{suggestion.name}</h4>
@@ -202,10 +203,11 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
 
             {canEdit && (
                 <button
-                    onClick={(e: any) = aria-label="Action button"> {
+                    onClick={(e: any) => {
                         e.stopPropagation();
                         applyLineup(suggestion);
                     }}
+                    aria-label="Action button"
                     className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                 >
                     Apply This Lineup
@@ -226,7 +228,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                             </label>
                             <select
                                 value={settings.optimizeFor}
-                                onChange={(e: any) => setSettings(prev => ({ ...prev, optimizeFor: e.target.value as any }}
+                                onChange={(e: any) => setSettings(prev => ({ ...prev, optimizeFor: e.target.value as any }))}
                                 className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="projection">Projected Points</option>
@@ -241,7 +243,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                             </label>
                             <select
                                 value={settings.riskTolerance}
-                                onChange={(e: any) => setSettings(prev => ({ ...prev, riskTolerance: e.target.value as any }}
+                                onChange={(e: any) => setSettings(prev => ({ ...prev, riskTolerance: e.target.value as any }))}
                                 className="w-full px-3 py-2 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="conservative">Conservative</option>
@@ -259,7 +261,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                                     <input
                                         type="checkbox"
                                         checked={settings.considerMatchups}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerMatchups: e.target.checked }}
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerMatchups: e.target.checked }))}
                                         className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Matchups
@@ -268,7 +270,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                                     <input
                                         type="checkbox"
                                         checked={settings.considerWeather}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerWeather: e.target.checked }}
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerWeather: e.target.checked }))}
                                         className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Weather
@@ -277,7 +279,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
                                     <input
                                         type="checkbox"
                                         checked={settings.considerInjuries}
-                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerInjuries: e.target.checked }}
+                                        onChange={(e: any) => setSettings(prev => ({ ...prev, considerInjuries: e.target.checked }))}
                                         className="rounded sm:px-4 md:px-6 lg:px-8"
                                     />
                                     Consider Injuries

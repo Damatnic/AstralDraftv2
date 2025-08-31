@@ -11,6 +11,7 @@ interface TabsProps {
   items: Tab[];
   activeTab: string;
   onTabChange: (tabId: string) => void;
+}
 
 export const Tabs: React.FC<TabsProps> = ({
   items,
@@ -34,8 +35,11 @@ export const Tabs: React.FC<TabsProps> = ({
               aria-controls={`panel-${tab.id}`}
               disabled={tab.disabled}
               onClick={() => handleTabChange(tab.id)}
-                ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-              `}
+              className={`px-4 py-2 font-medium text-sm transition-colors border-b-2 ${
+                activeTab === tab.id 
+                  ? 'border-blue-500 text-blue-600' 
+                  : 'border-transparent text-gray-400 hover:text-gray-300'
+              } ${tab.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {tab.label}
             </button>

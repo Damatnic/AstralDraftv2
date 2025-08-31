@@ -69,14 +69,14 @@ const ChampionshipProbabilityWidget: React.FC = () => {
       console.error('Failed to calculate probabilities:', error);
     } finally {
       setIsCalculating(false);
-
+    }
   };
 
   // Auto-calculate on mount
   useEffect(() => {
     if (league && probabilities.length === 0) {
       calculateProbabilities();
-
+    }
   }, [league]);
 
   // Get user team probability data

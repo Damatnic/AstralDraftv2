@@ -28,6 +28,7 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
         if (!opponentId || !terms.trim() || !stakes.trim()) {
             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "All fields are required.", type: 'SYSTEM' } });
             return;
+        }
 
         dispatch({
             type: 'PROPOSE_SIDE_BET',
@@ -37,9 +38,9 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
                     proposerId: myTeam.id,
                     accepterId: Number(opponentId),
                     terms,
-                    stakes,
-
-
+                    stakes
+                }
+            }
         });
         dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Side bet proposed!', type: 'SYSTEM' } });
         onClose();
@@ -52,9 +53,9 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
         <Modal isOpen={true} onClose={onClose}>
             <motion.form
                 onSubmit={handleSubmit}
-                onClick={e => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                }}
+                onClick={e => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-xl font-bold font-display flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">

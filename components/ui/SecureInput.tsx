@@ -169,8 +169,9 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
       const passwordProps = props as SecurePasswordInputProps;
       if (passwordProps.maxLength) {
         value = value.slice(0, passwordProps.maxLength);
-
-
+      }
+    }
+    
     props.onChange(value);
   };
   
@@ -179,7 +180,7 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
     if (props.type === 'pin' && !(props as SecurePinInputProps).allowPaste) {
       e.preventDefault();
       return;
-
+    }
     clearClipboard();
   };
   
@@ -240,7 +241,8 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
       stateClasses = 'border-primary-500/70 focus:border-primary-500 bg-primary-500/5 shadow-lg shadow-primary-500/20';
     } else {
       stateClasses = 'border-white/20 hover:border-white/30';
-
+    }
+    
     return `${baseClasses} ${stateClasses} ${props.className || ''}`;
   };
   
@@ -461,8 +463,6 @@ export const SecureInput: React.FC<SecureInputProps> = (props) => {
   );
 };
 
-export default SecureInput;
-
 // Convenience exports
 export const SecurePasswordInput: React.FC<SecurePasswordInputProps> = (props) => (
   <SecureInput {...props} type="password" />
@@ -472,7 +472,7 @@ export const SecurePinInput: React.FC<SecurePinInputProps> = (props) => (
   <SecureInput {...props} type="pin" />
 );
 
-const SecureInputWithErrorBoundary: React.FC = (props) => (
+const SecureInputWithErrorBoundary: React.FC<SecureInputProps> = (props) => (
   <ErrorBoundary>
     <SecureInput {...props} />
   </ErrorBoundary>

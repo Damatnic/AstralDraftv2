@@ -4,10 +4,9 @@ import React, { useMemo } from 'react';
 
 interface ReactionPickerProps {
   onSelect: (emoji: string) => void;
+}
 
 const emojis = ['👍', '😂', '🔥', '🤔', '😢', '🤯'];
-
-}
 
 const ReactionPicker: React.FC<ReactionPickerProps> = ({ onSelect }) => {
   return (

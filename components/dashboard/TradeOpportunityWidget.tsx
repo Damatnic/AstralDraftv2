@@ -122,7 +122,7 @@ const TradeOpportunityWidget: React.FC = () => {
   useEffect(() => {
     if (userTeam && opportunities.length === 0) {
       analyzeTradeOpportunities();
-
+    }
   }, [userTeam]);
 
   const getFairnessColor = (score: number) => {
@@ -139,7 +139,7 @@ const TradeOpportunityWidget: React.FC = () => {
         return { bg: 'bg-red-500/20', border: 'border-red-500/30', text: 'text-red-400' };
       default:
         return { bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', text: 'text-yellow-400' };
-
+    }
   };
 
   const getWinProbColor = (change: number) => {

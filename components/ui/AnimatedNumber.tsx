@@ -24,15 +24,7 @@ const AnimatedNumber = ({ value }) => {
             },
         });
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
-
-  return () => controls.stop();
+        return () => controls.stop();
     }, [value]);
 
     return <span ref={ref}>{value}</span>;

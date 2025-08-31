@@ -25,18 +25,10 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent
                 backgroundColor: ["#16a34a", "rgba(0,0,0,0.1)"],
                 transition: { duration: 1.5, ease: "easeOut" },
             });
-
+        }
     }, [latestEvent, player.id, controls]);
 
-  if (isLoading) {
     return (
-      <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
-        <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
-      </div>
-    );
-
-  return (
         <motion.div
             {...{ animate: controls }}
             className="grid grid-cols-[3rem_1fr_4rem_4rem] gap-2 items-center p-2 rounded-md sm:px-4 md:px-6 lg:px-8"

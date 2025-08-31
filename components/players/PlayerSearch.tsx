@@ -74,7 +74,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       onPlayerSelect(player);
     } else {
       dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });
-
+    }
   };
 
   const getInjuryStatusColor = (status: string) => {
@@ -85,7 +85,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       case 'OUT': return 'text-red-400';
       case 'IR': return 'text-red-600';
       default: return 'text-gray-400';
-
+    }
   };
 
   const getPositionColor = (position: string) => {
@@ -97,7 +97,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
       case 'K': return 'bg-purple-600';
       case 'DST': return 'bg-gray-600';
       default: return 'bg-gray-500';
-
+    }
   };
 
   return (
@@ -224,7 +224,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
   );
 };
 
-const PlayerSearchWithErrorBoundary: React.FC = (props) => (
+const PlayerSearchWithErrorBoundary: React.FC<PlayerSearchProps> = (props) => (
   <ErrorBoundary>
     <PlayerSearch {...props} />
   </ErrorBoundary>

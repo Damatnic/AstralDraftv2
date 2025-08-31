@@ -124,7 +124,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
           snapCount: 60 + Math.random() * 30,
           redZoneTargets: Math.floor(Math.random() * 5),
           trend: Math.random() > 0.6 ? 'rising' : Math.random() > 0.3 ? 'stable' : 'falling'
-
+        }
       }));
 
       // Generate breakout candidates
@@ -142,14 +142,14 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
       console.error('Failed to analyze waiver wire:', error);
     } finally {
       setIsAnalyzing(false);
-
+    }
   }, [userTeam, mockPlayers]);
 
   // Auto-analyze on mount
   useEffect(() => {
     if (userTeam && recommendations.length === 0) {
       analyzeWaiverWire();
-
+    }
   }, [userTeam, recommendations.length, analyzeWaiverWire]);
 
   const getReasoningForType = (index: number): string => {
@@ -179,7 +179,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
       case 'injury_replacement': return '🏥';
       case 'buy_low': return '💎';
       default: return '📊';
-
+    }
   };
 
   const getTypeColor = (type: string) => {
@@ -189,7 +189,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
       case 'injury_replacement': return 'from-orange-500 to-red-500';
       case 'buy_low': return 'from-blue-500 to-indigo-500';
       default: return 'from-gray-500 to-gray-600';
-
+    }
   };
 
   const getTrendIcon = (trend: string) => {
@@ -197,7 +197,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
       case 'rising': return { icon: '↗️', color: 'text-green-400' };
       case 'falling': return { icon: '↘️', color: 'text-red-400' };
       default: return { icon: '→', color: 'text-gray-400' };
-
+    }
   };
 
   const filteredRecommendations = selectedPosition === 'ALL' 
@@ -236,7 +236,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
           {['recommendations', 'breakouts', 'trends'].map((mode) => (
             <button
               key={mode}
-              onClick={() => setViewMode(mode as any)}`}
+              onClick={() => setViewMode(mode as any)}
             >
               {mode.charAt(0).toUpperCase() + mode.slice(1)}
             </button>
@@ -251,7 +251,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
             {['ALL', 'RB', 'WR', 'TE'].map((pos) => (
               <button
                 key={pos}
-                onClick={() => setSelectedPosition(pos)}`}
+                onClick={() => setSelectedPosition(pos)}
               >
                 {pos}
               </button>

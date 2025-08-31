@@ -26,6 +26,7 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
       animationClass = 'animate-pulse';
     } else if (animation === 'wave') {
       animationClass = 'animate-wave';
+    }
 
     return `${animationClass} bg-slate-700/80`;
   };
@@ -46,7 +47,7 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
         return 'rounded-full w-10 h-10';
       default:
         return 'rounded';
-
+    }
   };
 
   const getStyleProps = () => {
@@ -71,6 +72,7 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
         ))}
       </div>
     );
+  }
 
   return (
     <div 
