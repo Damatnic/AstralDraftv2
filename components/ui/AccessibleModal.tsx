@@ -3,7 +3,7 @@
  * Enhanced with focus management, keyboard navigation, and mobile accessibility
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 

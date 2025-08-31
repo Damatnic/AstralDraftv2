@@ -1,6 +1,6 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { NotificationType } from '../../types';

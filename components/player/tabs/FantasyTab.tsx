@@ -3,7 +3,7 @@
  * Fantasy football specific player analysis and insights
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Widget } from '../../ui/Widget';
@@ -28,6 +28,7 @@ interface FantasyMetric {
     format: 'number' | 'decimal' | 'percentage';
     trend?: 'up' | 'down' | 'stable';
     color?: string;
+}
 
 interface WeeklyProjection {
     week: number;
@@ -59,6 +60,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 icon: '❓',
                 riskScore: 0.5
             };
+        }
 
         switch (injuryHistory) {
             case 'minimal':
@@ -93,7 +95,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                     icon: '❓',
                     riskScore: 0.5
                 };
-
+        }
     };
 
     // Generate fantasy metrics with proper null safety
@@ -139,7 +141,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 format: 'decimal',
                 trend: 'stable',
                 color: 'text-cyan-400'
-
+            }
         ];
 
         // Add position-specific metrics
@@ -150,6 +152,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 format: 'decimal',
                 color: 'text-indigo-400'
             });
+        }
 
         return metrics;
     }, [player]);
@@ -171,6 +174,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 matchup: `vs TEAM`, // Would be actual opponent in real app
                 difficulty: ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)] as 'easy' | 'medium' | 'hard'
             });
+        }
 
         return projections.slice(0, 8); // Show first 8 weeks
     }, [player.stats?.projection]);
@@ -186,7 +190,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             case 'number':
             default:
                 return Math.round(value).toString();
-
+        }
     };
 
     const getTrendIcon = (trend?: string) => {
@@ -197,7 +201,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 return <TrendingUpIcon className="w-4 h-4 text-red-400 rotate-180 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
-
+        }
     };
 
     const getDifficultyColor = (difficulty: string) => {
@@ -206,7 +210,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             case 'medium': return 'text-yellow-400 bg-yellow-500/20';
             case 'hard': return 'text-red-400 bg-red-500/20';
             default: return 'text-gray-400 bg-gray-500/20';
-
+        }
     };
 
     return (
@@ -413,7 +417,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                             Week {p.week}: {formatValue(p.projection, 'decimal')} projected points
                                         </div>
                                     ))
-
+                                }
                             </div>
                         </div>
 
@@ -430,7 +434,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                             Week {p.week}: Tough matchup vs {p.matchup}
                                         </div>
                                     ))
-
+                                }
                             </div>
                         </div>
                     </div>

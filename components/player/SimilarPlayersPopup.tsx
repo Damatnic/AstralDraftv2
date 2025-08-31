@@ -24,17 +24,16 @@ const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompa
 
     React.useEffect(() => {
         const fetchSimilar = async () => {
-    try {
-
-            setIsLoading(true);
-            const names = await findSimilarPlayers(playerToCompare);
-            setSimilarPlayerNames(names);
-            setIsLoading(false);
-
-    } catch (error) {
-      console.error('Error in fetchSimilar:', error);
-
-  };
+            try {
+                setIsLoading(true);
+                const names = await findSimilarPlayers(playerToCompare);
+                setSimilarPlayerNames(names);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error in fetchSimilar:', error);
+                setIsLoading(false);
+            }
+        };
         fetchSimilar();
     }, [playerToCompare]);
 
@@ -51,17 +50,17 @@ const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompa
     return (
         <motion.div
             className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8"
-            onClick={onClose},
-                animate: { opacity: 1 },
-                exit: { opacity: 0 },
-            }}
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
         >
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-md sm:px-4 md:px-6 lg:px-8"
-                onClick={(e: any) => e.stopPropagation()},
-                    animate: { opacity: 1, scale: 1 },
-                    exit: { opacity: 0, scale: 0.95 },
-                }}
+                onClick={(e: any) => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
             >
                 <header className="p-4 border-b border-[var(--panel-border)] flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                     <h2 className="text-lg font-bold font-display sm:px-4 md:px-6 lg:px-8">
@@ -91,7 +90,7 @@ const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompa
                      ) : (
                         <p className="text-center text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Could not find similar players.</p>
                      )
-
+                    }
                 </main>
             </motion.div>
         </motion.div>

@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React, { useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { Player, NewsItem } from '../../../types';
@@ -32,15 +32,14 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
         setIsLoading(true);
         const result = await summarizeFantasyImpact(news.headline);
         if (result) {
-            dispatch({ type: 'SET_NEWS_IMPACT', payload: { headline: news.headline, analysis: result 
-    
+            dispatch({ type: 'SET_NEWS_IMPACT', payload: { headline: news.headline, analysis: result } });
+        }
+        setIsLoading(false);
     } catch (error) {
       console.error('Error in handleAnalyze:', error);
-
-  } });
-
-        setIsLoading(false);
-    };
+      setIsLoading(false);
+    }
+  };
 
     return (
         <div className="bg-white/5 p-3 rounded-lg text-sm sm:px-4 md:px-6 lg:px-8">
@@ -72,21 +71,20 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
     const { astralIntelligence: intel, newsFeed } = player;
 
     const handleGenerateNickname = async () => {
-    try {
-        setIsGeneratingNickname(true);
-        const newNickname = await generatePlayerNickname(player);
-        if (newNickname) {
-            dispatch({ type: 'SET_PLAYER_NICKNAME', payload: { playerId: player.id, nickname: newNickname 
-    
-    } catch (error) {
-      console.error('Error in handleGenerateNickname:', error);
-
-  } });
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Nickname for ${player.name} generated!`, type: 'SYSTEM' } });
-        } else {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not generate a nickname.', type: 'SYSTEM' } });
-
-        setIsGeneratingNickname(false);
+        try {
+            setIsGeneratingNickname(true);
+            const newNickname = await generatePlayerNickname(player);
+            if (newNickname) {
+                dispatch({ type: 'SET_PLAYER_NICKNAME', payload: { playerId: player.id, nickname: newNickname } });
+                dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Nickname for ${player.name} generated!`, type: 'SYSTEM' } });
+            } else {
+                dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not generate a nickname.', type: 'SYSTEM' } });
+            }
+            setIsGeneratingNickname(false);
+        } catch (error) {
+            console.error('Error in handleGenerateNickname:', error);
+            setIsGeneratingNickname(false);
+        }
     };
 
     return (
@@ -140,7 +138,7 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
 
             {!intel && (!newsFeed || newsFeed.length === 0) && !nickname &&
                 <p className="text-gray-500 text-center py-4 sm:px-4 md:px-6 lg:px-8">No special intelligence available. Try generating a nickname!</p>
-
+            }
         </motion.div>
     );
 };

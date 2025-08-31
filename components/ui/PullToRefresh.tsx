@@ -3,7 +3,7 @@
  * Provides native-like pull-to-refresh functionality for mobile devices
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePullToRefresh } from '../../hooks/useAdvancedTouch';

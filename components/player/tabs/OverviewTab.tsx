@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { Player } from '../../../types';

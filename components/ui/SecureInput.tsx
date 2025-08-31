@@ -10,7 +10,7 @@
  * - Mobile-friendly touch interactions
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { EyeIcon, EyeOffIcon, ShieldCheckIcon, KeyIcon, LockIcon, AlertTriangleIcon } from 'lucide-react';

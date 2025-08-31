@@ -1,6 +1,6 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';

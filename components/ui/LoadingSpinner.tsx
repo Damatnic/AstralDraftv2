@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React from 'react';
 
 interface LoadingSpinnerProps {

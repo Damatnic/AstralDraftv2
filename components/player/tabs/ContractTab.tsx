@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Player } from '../../../types';
@@ -22,6 +22,7 @@ const ContractTab: React.FC<ContractTabProps> = ({ player }) => {
 
     if (!contract) {
         return <p className="text-gray-500 text-center py-8 sm:px-4 md:px-6 lg:px-8">No contract information available for this player.</p>
+    }
 
     return (
         <motion.div

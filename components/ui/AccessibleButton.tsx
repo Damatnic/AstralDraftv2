@@ -3,7 +3,7 @@
  * Enhanced with proper ARIA attributes, keyboard navigation, and mobile touch targets
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { getButtonA11yProps, useAnnouncer } from '../../utils/accessibility';

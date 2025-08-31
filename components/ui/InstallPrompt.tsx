@@ -3,7 +3,7 @@
  * Provides a user-friendly interface for app installation
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useCallback } from 'react';
 import { usePWAInstall, useOfflineStatus, pwaUtils } from '../../utils/pwa';
 import { AccessibleButton } from './AccessibleButton';

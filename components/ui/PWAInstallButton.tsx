@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useCallback, useState, useEffect } from 'react';
 import { Button } from './Button';
 

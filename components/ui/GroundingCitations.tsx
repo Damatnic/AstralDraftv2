@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useMemo } from 'react';
 import type { GroundingChunk } from '../../types';
 import { LinkIcon } from '../icons/LinkIcon';

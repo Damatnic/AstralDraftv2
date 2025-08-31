@@ -57,7 +57,14 @@
       "Bash(python:*)",
       "Bash(bash:*)",
       "Bash(grep:*)",
-      "Bash(awk:*)"
+      "Bash(awk:*)",
+      "Bash(for file in components/player/tabs/*.tsx)",
+      "Bash(do sed -i \"s|import { ErrorBoundary } from ''../ui/ErrorBoundary''|import { ErrorBoundary } from ''../../ui/ErrorBoundary''|g\" \"$file\")",
+      "Bash(done)",
+      "Bash(for file in components/*/*.tsx components/*/*/*.tsx)",
+      "Bash(do if [ -f \"$file\" ])",
+      "Bash(then sed -i \"s|import { ErrorBoundary } from ''../ui/ErrorBoundary''|import { ErrorBoundary } from ''../../ui/ErrorBoundary''|g\" \"$file\")",
+      "Bash(fi)"
     ],
     "deny": [],
     "ask": [],

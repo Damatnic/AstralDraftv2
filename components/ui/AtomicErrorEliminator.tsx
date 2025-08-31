@@ -3,7 +3,7 @@
  * Intercepts ALL React rendering and prevents ANY error from crashing the app
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React, { useMemo, Component, ReactNode, ErrorInfo } from 'react';
 
 // Override React.createElement at the most fundamental level

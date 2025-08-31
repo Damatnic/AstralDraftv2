@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Player, League, PlayerStory } from '../../../types';
@@ -23,15 +23,13 @@ const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
             setIsLoading(true);
             setError(null);
             try {
-
                 const result = await generatePlayerStory(player, league);
                 setStory(result);
-            
-    } catch (error) {
+            } catch (error) {
                 setError("The Oracle couldn't write this player's story.");
             } finally {
                 setIsLoading(false);
-
+            }
         };
         fetchStory();
     }, [player, league]);

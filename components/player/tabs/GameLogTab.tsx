@@ -1,5 +1,5 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React from 'react';
 import { motion } from 'framer-motion';
 import type { Player, League, MatchupPlayer } from '../../../types';
@@ -16,6 +16,7 @@ const GameLogTab: React.FC<GameLogTabProps> = ({ player }) => {
 
     if (!league || league?.status === 'PRE_DRAFT' || league?.status === 'DRAFTING') {
         return <p className="text-gray-500 text-center py-8 sm:px-4 md:px-6 lg:px-8">The season has not started yet.</p>;
+    }
 
     const gameLog = React.useMemo(() => {
         const log: { week: number; opponent: any; projected: number; actual: number; }[] = [];
@@ -39,12 +40,14 @@ const GameLogTab: React.FC<GameLogTabProps> = ({ player }) => {
                 projected: playerData.projectedScore,
                 actual: playerData.actualScore,
             });
+        }
 
         return log;
     }, [player, league]);
 
     if (gameLog.length === 0) {
         return <p className="text-gray-500 text-center py-8 sm:px-4 md:px-6 lg:px-8">No game data available for this player yet.</p>;
+    }
 
     return (
         <motion.div

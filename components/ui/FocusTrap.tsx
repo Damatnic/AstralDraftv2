@@ -29,13 +29,13 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }) => {
         if (document.activeElement === firstElement) {
           e.preventDefault();
           lastElement?.focus();
-
+        }
       } else {
         if (document.activeElement === lastElement) {
           e.preventDefault();
           firstElement?.focus();
-
-
+        }
+      }
     };
 
     document.addEventListener('keydown', handleTabKey);
@@ -53,6 +53,7 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }) => {
         <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
       </div>
     );
+  }
 
   return (
     <div ref={containerRef}>

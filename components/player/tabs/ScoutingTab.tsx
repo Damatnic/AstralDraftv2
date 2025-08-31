@@ -1,6 +1,6 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from '../../ui/ErrorBoundary';
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import type { Player } from '../../../types';
@@ -16,6 +16,7 @@ const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }) => {
 
   if (!report) {
       return <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">No scouting report available for this player.</p>
+  }
 
   return (
     <motion.div

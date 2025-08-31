@@ -3,7 +3,7 @@
  * Handles all application modals in one place
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorBoundary } from './ErrorBoundary';
 import React from 'react';
 import { useModal } from '../../contexts/ModalContext';
 import { useAppState } from '../../contexts/AppContext';
