@@ -6,7 +6,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
     const isProduction = mode === 'production';
     
     return {
-      base: './',
+      base: '/',
       plugins: [
         react({
           // Use classic JSX runtime to avoid jsxDEV issues
