@@ -487,25 +487,15 @@
             };
             
             try {
-              registration = await navigator.serviceWorker.register(swPath, swOptions);
-            } catch (swError) {
-              console.warn('Primary SW failed, trying simple version:', swError.message);
-              try {
-                registration = await navigator.serviceWorker.register('/sw-simple.js', {
-                  scope: '/',
-                  updateViaCache: 'none'
-                });
-              } catch (simpleError) {
-                console.warn('Simple SW failed, trying minimal version:', simpleError.message);
-                try {
-                  registration = await navigator.serviceWorker.register('/sw-minimal.js', {
-                    scope: '/',
-                    updateViaCache: 'none'
-                  });
-                } catch (minimalError) {
-                  throw new Error(`All service workers failed: ${swError.message}`);
-                }
-              }
+              registration = await navigator.serviceWorker.register('/sw-emergency.js', {
+                scope: '/',
+                updateViaCache: 'none'
+              });
+              console.log('Emergency SW registered successfully');
+            } catch (emergencyError) {
+              console.warn('Emergency SW failed, disabling PWA features');
+              window.__SW_DISABLED = true;
+              return; // Exit service worker registration completely
             }
             
             // Enhanced registration handling
