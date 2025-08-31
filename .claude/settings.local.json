@@ -64,7 +64,8 @@
       "Bash(for file in components/*/*.tsx components/*/*/*.tsx)",
       "Bash(do if [ -f \"$file\" ])",
       "Bash(then sed -i \"s|import { ErrorBoundary } from ''../ui/ErrorBoundary''|import { ErrorBoundary } from ''../../ui/ErrorBoundary''|g\" \"$file\")",
-      "Bash(fi)"
+      "Bash(fi)",
+      "WebFetch(domain:astraldraft.netlify.app)"
     ],
     "deny": [],
     "ask": [],
