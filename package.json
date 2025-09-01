@@ -4,6 +4,10 @@
   "type": "module",
   "description": "Elite Fantasy Football",
   "main": "index.tsx",
+  "engines": {
+    "node": ">=20.17.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "prestart": "node scripts/startup-check.js",
     "dev": "vite --port 8765",
