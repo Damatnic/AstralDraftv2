@@ -282,7 +282,8 @@ const OraclePerformanceDashboard: React.FC<{
     , 1000);
 
         return () => clearInterval(interval);
-    }, [metrics]);
+    }
+  }, [metrics]);
 
     // Handle performance optimization
     const handleOptimization = useCallback(async () 

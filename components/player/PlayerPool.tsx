@@ -20,7 +20,7 @@ interface PlayerPoolProps {
   onToggleCompare: (player: Player) => void;
   queuedPlayerIds: number[];
   draftFormat: 'SNAKE' | 'AUCTION';
-  isNominationTurn: boolean;
+  isNominationTurn: boolean;}
 
 const INITIAL_LOAD_COUNT = 50;
 const LOAD_MORE_COUNT = 50;

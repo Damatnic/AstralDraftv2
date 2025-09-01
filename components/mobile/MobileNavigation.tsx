@@ -64,6 +64,7 @@ const MobileNavigation: React.FC<Props> = ({
     checkDevice();
     window.addEventListener('resize', checkDevice);
     return () => window.removeEventListener('resize', checkDevice);
+    }
   }, []);
 
   const handleNavItemClick = (item: NavigationItem) => {

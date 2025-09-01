@@ -34,7 +34,7 @@ interface NotificationContextValue {
     getNotificationStats: () => Promise<any>;
     
     // Utility
-    refreshNotifications: () => Promise<void>;
+    refreshNotifications: () => Promise<void>;}
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 

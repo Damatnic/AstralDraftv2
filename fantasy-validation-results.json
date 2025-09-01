@@ -1,0 +1,634 @@
+{
+  "timestamp": "2025-09-01T00:25:37.953Z",
+  "workflows": [
+    {
+      "name": "Draft System",
+      "components": [
+        {
+          "name": "Live Draft Room",
+          "path": "components/draft/LiveDraftRoom.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Snake Draft",
+          "path": "components/draft/EnhancedSnakeDraftRoom.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Auction Draft",
+          "path": "components/draft/AuctionPanel.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Turn Timer",
+          "path": "components/draft/TurnTimer.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Roster Panel",
+          "path": "components/draft/MyRosterPanel.tsx",
+          "exists": true,
+          "score": 3,
+          "maxScore": 7,
+          "percentage": 43,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": false,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "AI Co-Pilot",
+          "path": "components/draft/AiCoPilotPanel.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "AI Draft Coach",
+          "path": "components/draft/EnhancedAiDraftCoach.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "AI Chat Assistant",
+          "path": "components/draft/GeniusAiChat.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        }
+      ],
+      "status": "passed",
+      "score": 43,
+      "maxScore": 56,
+      "percentage": 77
+    },
+    {
+      "name": "Roster Management",
+      "components": [
+        {
+          "name": "Roster Manager",
+          "path": "components/team/EnhancedRosterManager.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Watchlist",
+          "path": "components/team/WatchlistWidget.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Trade Center",
+          "path": "components/team/TradeCenterWidget.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Transaction History",
+          "path": "components/team/TransactionHistory.tsx",
+          "exists": true,
+          "score": 4,
+          "maxScore": 7,
+          "percentage": 57,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Team Optimizer",
+          "path": "components/optimization/TeamOptimizationDashboard.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        }
+      ],
+      "status": "passed",
+      "score": 29,
+      "maxScore": 35,
+      "percentage": 83
+    },
+    {
+      "name": "Analytics Systems",
+      "components": [
+        {
+          "name": "Advanced Analytics",
+          "path": "components/analytics/AdvancedAnalyticsDashboard.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "ML Analytics",
+          "path": "components/analytics/MLAnalyticsDashboard.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Real-Time Analytics",
+          "path": "components/analytics/RealTimeAnalyticsDashboard.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Oracle Analytics",
+          "path": "components/analytics/OracleAnalyticsDashboard.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Championship Probability",
+          "path": "components/analytics/ChampionshipProbChart.tsx",
+          "exists": true,
+          "score": 4,
+          "maxScore": 7,
+          "percentage": 57,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Positional Scarcity",
+          "path": "components/analytics/PositionalScarcityChart.tsx",
+          "exists": true,
+          "score": 3,
+          "maxScore": 7,
+          "percentage": 43,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": false,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Team Needs Analysis",
+          "path": "components/analytics/TeamNeedsAnalysis.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        }
+      ],
+      "status": "passed",
+      "score": 42,
+      "maxScore": 49,
+      "percentage": 86
+    },
+    {
+      "name": "Mobile Experience",
+      "components": [
+        {
+          "name": "Mobile Layout",
+          "path": "components/mobile/MobileLayout.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": false,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Mobile Draft",
+          "path": "components/mobile/MobileDraftInterface.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Mobile Navigation",
+          "path": "components/mobile/MobileNavigation.tsx",
+          "exists": true,
+          "score": 4,
+          "maxScore": 7,
+          "percentage": 57,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": false
+          }
+        },
+        {
+          "name": "Mobile Player Card",
+          "path": "components/mobile/MobilePlayerCard.tsx",
+          "exists": true,
+          "score": 5,
+          "maxScore": 7,
+          "percentage": 71,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": false,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Pull to Refresh",
+          "path": "components/mobile/MobilePullToRefresh.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Offline Indicator",
+          "path": "components/mobile/MobileOfflineIndicator.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Responsive Nav",
+          "path": "components/navigation/MobileResponsiveNav.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        }
+      ],
+      "status": "passed",
+      "score": 40,
+      "maxScore": 49,
+      "percentage": 82
+    },
+    {
+      "name": "AI Features",
+      "components": [
+        {
+          "name": "AI Fantasy Assistant",
+          "path": "components/ai/AIFantasyAssistant.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Conversational Oracle",
+          "path": "components/ai/ConversationalOracle.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Oracle ML Dashboard",
+          "path": "components/oracle/EnhancedOracleMLDashboard.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Ensemble ML Widget",
+          "path": "components/oracle/EnsembleMLWidget.tsx",
+          "exists": true,
+          "score": 7,
+          "maxScore": 7,
+          "percentage": 100,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": true,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        },
+        {
+          "name": "Gemini AI Integration",
+          "path": "components/oracle/OracleGeminiAISection.tsx",
+          "exists": true,
+          "score": 6,
+          "maxScore": 7,
+          "percentage": 86,
+          "checks": {
+            "hasExport": true,
+            "hasReactImport": true,
+            "hasHooks": true,
+            "hasAccessibility": true,
+            "hasErrorHandling": false,
+            "hasLoading": true,
+            "hasResponsive": true
+          }
+        }
+      ],
+      "status": "passed",
+      "score": 34,
+      "maxScore": 35,
+      "percentage": 97
+    }
+  ],
+  "features": [],
+  "integrations": [
+    {
+      "name": "WebSocket Service",
+      "file": "services/webSocketManager.ts",
+      "status": "active"
+    },
+    {
+      "name": "Auth Service",
+      "file": "services/authService.ts",
+      "status": "active"
+    },
+    {
+      "name": "Socket Service",
+      "file": "src/services/socketService.ts",
+      "status": "active"
+    },
+    {
+      "name": "Memory Cleanup",
+      "file": "utils/memoryCleanup.ts",
+      "status": "active"
+    },
+    {
+      "name": "Performance Utils",
+      "file": "utils/performanceOptimization.ts",
+      "status": "active"
+    },
+    {
+      "name": "Mobile Lazy Loading",
+      "file": "utils/mobileLazyLoader.ts",
+      "status": "active"
+    }
+  ],
+  "performance": {},
+  "accessibility": {},
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5
+  }
+}

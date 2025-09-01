@@ -87,8 +87,8 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }) => {
     useEffect(() => {
         if (isActive) {
             loadData();
-
-    }, [isActive]);
+    }
+  }, [isActive]);
 
     const loadData = async () => {
         setLoading(true);
@@ -1064,7 +1064,7 @@ interface CreateLeagueModalProps {
     setFormData: React.Dispatch<React.SetStateAction<CreateLeagueFormData>>;
     onSubmit: () => void;
     onClose: () => void;
-    loading: boolean;
+    loading: boolean;}
 
 const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ 
     formData, 
@@ -1399,8 +1399,8 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
     useEffect(() => {
         if (selectedLeague) {
             loadGroupPredictions();
-
-    }, [selectedLeague]);
+    }
+  }, [selectedLeague]);
 
     const loadGroupPredictions = async () => {
         if (!selectedLeague) return;

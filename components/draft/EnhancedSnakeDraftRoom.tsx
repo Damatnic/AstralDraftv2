@@ -27,7 +27,7 @@ interface PlayerRowProps {
   onAddToQueue: () => void;
   onRemoveFromQueue: () => void;
   onAddToWatchlist: () => void;
-  onRemoveFromWatchlist: () => void;
+  onRemoveFromWatchlist: () => void;}
 
 const PlayerRow: React.FC<PlayerRowProps> = ({ player,
   isInQueue,
@@ -239,7 +239,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit })
   useEffect(() => {
     if (isUserTurn && !isComplete) {
       getRecommendations();
-
+    }
   }, [isUserTurn, isComplete, getRecommendations]);
 
   const renderPlayersList = () => {

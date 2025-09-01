@@ -78,8 +78,8 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = '
         if (offlineState.isOffline && showBanner) {
             const timer = setTimeout(() => setShowBanner(false), 5000);
             return () => clearTimeout(timer);
-
-    }, [offlineState.isOffline, showBanner]);
+    }
+  }, [offlineState.isOffline, showBanner]);
 
     const getStatusIcon = () => {
         if (offlineState.syncInProgress) {
@@ -157,8 +157,8 @@ const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = '
         if (!offlineState.isOffline && offlineState.pendingActions.length > 0) {
             mobileOfflineService.syncPendingActions();
             announceToScreenReader('Manually syncing pending changes', 'polite');
-
-    };
+    }
+  };
 
     const handleSyncNow = (e: React.MouseEvent) => {
         e.stopPropagation();

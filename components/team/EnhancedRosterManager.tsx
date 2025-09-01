@@ -212,7 +212,8 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
             if (!acc[player.position]) acc[player.position] = [];
             acc[player.position].push(player);
             return acc;
-        }, {} as Record<PlayerPosition, Player[]>);
+    }
+  }, {} as Record<PlayerPosition, Player[]>);
 
         // Sort each position by projection (descending)
         Object.keys(grouped).forEach((pos: any) => {

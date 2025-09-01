@@ -5,7 +5,7 @@ import type { Team } from '../../types';
 import { Tooltip } from '../ui/Tooltip';
 
 interface MyTeamCompositionChartProps {
-    team: Team;
+    team: Team;}
 
 const positionOrder = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 

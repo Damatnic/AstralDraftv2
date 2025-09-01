@@ -31,7 +31,8 @@ const TeamSwitcher: React.FC = () => {
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [wrapperRef]);
+    }
+  }, [wrapperRef]);
     
     const handleSwitch = (leagueId: string) => {
         dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: leagueId });

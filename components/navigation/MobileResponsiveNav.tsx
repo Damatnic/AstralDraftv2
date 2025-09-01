@@ -44,7 +44,7 @@ interface NavItem {
 
 interface MobileResponsiveNavProps {
   currentView: View;
-  onViewChange: (view: View) => void;
+  onViewChange: (view: View) => void;}
 
 const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }) => {
   const { state, dispatch } = useAppState();

@@ -161,7 +161,7 @@ interface SocialFeedProps {
     onReport: (itemId: string, reason: string) => void;
     onVote: (pollId: string, optionId: string) => void;
     onFilter: (filter: SocialFeedFilter) => void;
-    className?: string;
+    className?: string;}
 
 const SocialFeed: React.FC<SocialFeedProps> = ({
     feedItems,

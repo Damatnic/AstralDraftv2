@@ -43,8 +43,8 @@ const AuctionPanel: React.FC<AuctionPanelProps> = ({ nominatingTeam, nominatedPl
         const currentMyBidNumber = parseInt(myBidString, 10);
         if (isNaN(currentMyBidNumber) || currentMyBidNumber <= currentBid) {
            setMyBidString((currentBid + 1).toString());
-
-    }, [currentBid]);
+    }
+  }, [currentBid]);
 
     const handleBidSubmit = (e: React.FormEvent) => {
         e.preventDefault();

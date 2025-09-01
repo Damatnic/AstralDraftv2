@@ -47,7 +47,7 @@ interface SwipeablePlayerCard {
     player: Player;
     onSwipeLeft: () => void;
     onSwipeRight: () => void;
-    onTap: () => void;
+    onTap: () => void;}
 
 const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
     player,
@@ -237,8 +237,8 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
         if (playerQueue.length > 0) {
             onDraftPlayer(playerQueue[0].id);
             setPlayerQueue(prev => prev.slice(1));
-
-    };
+    }
+  };
 
     const positions = ['all', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 

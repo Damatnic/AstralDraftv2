@@ -48,8 +48,8 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
     useEffect(() => {
         if (playerId) {
             generateQuickPrediction();
-
-    }, [playerId]);
+    }
+  }, [playerId]);
 
     const generateQuickPrediction = async () => {
         setLoading(true);

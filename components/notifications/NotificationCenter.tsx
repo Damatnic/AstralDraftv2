@@ -55,8 +55,8 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     useEffect(() => {
         if (isOpen) {
             refreshNotifications();
-
-    }, [isOpen, refreshNotifications]);
+    }
+  }, [isOpen, refreshNotifications]);
 
     // Setup real-time notification listener
     useEffect(() => {

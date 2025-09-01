@@ -44,14 +44,15 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   React.useEffect(() => {
     if (sheetRef.current && containerRef.current) {
       containerRef.current = sheetRef.current;
-
+    }
   }, [containerRef]);
 
   React.useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
-    };
+    }
+  };
 
     document.addEventListener('keydown', handleKeydown);
     return () => document.removeEventListener('keydown', handleKeydown);
@@ -268,14 +269,15 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   React.useEffect(() => {
     if (isOpen && drawerRef.current && containerRef.current) {
       containerRef.current = drawerRef.current;
-
+    }
   }, [isOpen, containerRef]);
 
   React.useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
-    };
+    }
+  };
 
     document.addEventListener('keydown', handleKeydown);
     return () => {
@@ -408,7 +410,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   const handleTouchStart = (e: React.TouchEvent) => {
     if (containerRef.current?.scrollTop === 0) {
       setStartY(e.touches[0].clientY);
-
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -421,7 +423,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
       e.preventDefault();
       setPullDistance(distance);
       setIsPulling(distance > threshold);
-
+    }
   };
 
   const handleTouchEnd = async () => {

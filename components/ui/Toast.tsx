@@ -21,7 +21,7 @@ export const Toast: React.FC<ToastProps> = ({
     if (visible && duration > 0) {
       const timer = setTimeout(onClose, duration);
       return () => clearTimeout(timer);
-
+    }
   }, [visible, duration, onClose]);
 
   const typeStyles = {

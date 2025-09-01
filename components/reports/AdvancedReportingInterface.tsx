@@ -59,8 +59,8 @@ const AdvancedReportingInterface: React.FC<Props> = ({ className = ''
     useEffect(() => {
         if (isAuthenticated) {
             loadReportingData();
-
-    }, [isAuthenticated, activeTab, selectedCategory]);
+    }
+  }, [isAuthenticated, activeTab, selectedCategory]);
 
     const loadReportingData = async () => {
         setLoading(true);

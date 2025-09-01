@@ -31,7 +31,8 @@ export function withMobileLazyLoading<P extends object>(
       if (loadOnMobile && isMobile && !shouldLoad) {
         const timer = setTimeout(() => {
           setShouldLoad(true);
-        }, loadDelay);
+    }
+  }, loadDelay);
 
         return () => clearTimeout(timer);
       }

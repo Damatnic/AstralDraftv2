@@ -49,7 +49,7 @@ interface Props {
 interface MobileTouchState {
     startX: number;
     startY: number;
-    startTime: number;
+    startTime: number;}
 
 const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
@@ -99,9 +99,8 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
             viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
             if (!document.querySelector('meta[name=viewport]')) {
                 document.head.appendChild(viewport);
-
-
-    }, [isMobile]);
+    }
+  }, [isMobile]);
 
     // Mobile touch handlers
     const handleTouchStart = useCallback((e: React.TouchEvent) => {

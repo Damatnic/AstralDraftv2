@@ -111,7 +111,8 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
 
     const interval = setInterval(() => {
       loadAnalyticsData();
-    }, state.refreshInterval);
+    }
+  }, state.refreshInterval);
 
     return () => clearInterval(interval);
   }, [state.autoRefresh, state.refreshInterval]);

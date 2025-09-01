@@ -29,7 +29,7 @@ interface ValueMetric {
     theirValue: number;
     difference: number;
     unit: string;
-    description: string;
+    description: string;}
 
 const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     proposal,

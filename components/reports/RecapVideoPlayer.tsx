@@ -11,7 +11,7 @@ import useSound from '../../hooks/useSound';
 
 interface RecapVideoPlayerProps {
     script: RecapVideoScene[];
-    league: League;
+    league: League;}
 
 const sceneDuration = 5000; // 5 seconds per scene
 

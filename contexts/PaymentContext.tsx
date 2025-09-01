@@ -82,7 +82,7 @@ interface PaymentContextType {
   hasActivePremium: () => boolean;
   hasActiveAnalytics: () => boolean;
   hasActiveUltimate: () => boolean;
-  canAccessPremiumFeature: (feature: string) => boolean;
+  canAccessPremiumFeature: (feature: string) => boolean;}
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
 
@@ -248,7 +248,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
     if (token) {
       refreshSubscriptions();
       refreshPaymentHistory();
-
+    }
   }, []);
 
   // Premium feature checks

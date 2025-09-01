@@ -20,7 +20,8 @@ const InsightDisplay: React.FC<{
         if (insights.length > 1) {
             const timer = setInterval(() => {
                 setCurrentIndex(prev => (prev + 1) % insights.length);
-            }, 6000); // Cycle every 6 seconds
+    }
+  }, 6000); // Cycle every 6 seconds
             return () => clearInterval(timer);
 
     }, [insights]);

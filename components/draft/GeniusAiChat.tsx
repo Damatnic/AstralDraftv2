@@ -27,7 +27,7 @@ interface Props {
   currentPick: number;
   leagueSettings: any;
   draftHistory: any[];
-  onPlayerSelect?: (player: Player) => void;
+  onPlayerSelect?: (player: Player) => void;}
 
 const QUICK_QUESTIONS = [
   "Who's the best sleeper RB available?",
@@ -89,8 +89,7 @@ const GeniusAiChat: React.FC<Props> = ({
 
     // Add user message
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()
-    }`,
+      id: `user-${Date.now()}`,
       type: 'user',
       message: messageText,
       timestamp: new Date()
@@ -191,7 +190,7 @@ const GeniusAiChat: React.FC<Props> = ({
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
-
+    }
   };
 
   const renderMessage = (message: ChatMessage) => {

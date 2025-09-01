@@ -393,7 +393,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
         'Convert injury status to risk probability (questionable = 35%)',
         'Calculate target share percentage (42/156 = 26.9%)',
         'Assess matchup difficulty based on opponent ranking'
-      ],
+        ],
       explanation: 'Player statistics are transformed into normalized values that ML algorithms can process effectively. Each transformation preserves the relative importance while ensuring consistent scaling.'
     },
     {

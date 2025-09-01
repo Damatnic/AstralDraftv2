@@ -1,0 +1,125 @@
+{
+  "timestamp": "2025-09-01T01:06:18.680Z",
+  "totalTests": 16,
+  "passed": 11,
+  "failed": 5,
+  "warnings": 0,
+  "sections": {
+    "Build System": {
+      "tests": [
+        {
+          "name": "TypeScript Errors",
+          "status": "failed",
+          "details": "5055 errors (too many)"
+        },
+        {
+          "name": "Index HTML Size",
+          "status": "passed",
+          "details": "34.50KB"
+        },
+        {
+          "name": "Build Artifacts",
+          "status": "passed",
+          "details": "All required files present"
+        }
+      ],
+      "passed": 2,
+      "failed": 1
+    },
+    "Security": {
+      "tests": [
+        {
+          "name": "API Key Security",
+          "status": "failed",
+          "details": "Exposed API keys detected!"
+        },
+        {
+          "name": "CSP Headers",
+          "status": "passed",
+          "details": "Content Security Policy present"
+        }
+      ],
+      "passed": 1,
+      "failed": 1
+    },
+    "Accessibility": {
+      "tests": [
+        {
+          "name": "ARIA Coverage",
+          "status": "failed",
+          "details": "Only 45.3% components have ARIA"
+        },
+        {
+          "name": "Keyboard Navigation",
+          "status": "failed",
+          "details": "Only 0/3 components support keyboard"
+        }
+      ],
+      "passed": 0,
+      "failed": 2
+    },
+    "Performance": {
+      "tests": [
+        {
+          "name": "Lazy Loading",
+          "status": "passed",
+          "details": "16 components lazy loaded"
+        },
+        {
+          "name": "Memoization",
+          "status": "passed",
+          "details": "762 memoization usages found"
+        }
+      ],
+      "passed": 2,
+      "failed": 0
+    },
+    "Memory Management": {
+      "tests": [
+        {
+          "name": "Cleanup Handlers",
+          "status": "passed",
+          "details": "614 cleanup implementations found"
+        },
+        {
+          "name": "WebSocket Cleanup",
+          "status": "failed",
+          "details": "WebSocket cleanup missing"
+        }
+      ],
+      "passed": 1,
+      "failed": 1
+    },
+    "Fantasy Features": {
+      "tests": [
+        {
+          "name": "Draft Room",
+          "status": "passed",
+          "details": "Component properly structured"
+        },
+        {
+          "name": "Player Pool",
+          "status": "passed",
+          "details": "Component properly structured"
+        },
+        {
+          "name": "Trade Center",
+          "status": "passed",
+          "details": "Component properly structured"
+        },
+        {
+          "name": "Roster Manager",
+          "status": "passed",
+          "details": "Component properly structured"
+        },
+        {
+          "name": "League Hub",
+          "status": "passed",
+          "details": "Component properly structured"
+        }
+      ],
+      "passed": 5,
+      "failed": 0
+    }
+  }
+}

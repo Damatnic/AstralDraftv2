@@ -338,12 +338,20 @@ class AuthService {
    */
   private saveToStorage(): void {
     try {
+      // SECURITY: Use sessionStorage instead of localStorage for sensitive data
+      // Tokens should be stored in httpOnly cookies (server-side)
       if (this.currentUser) {
-        localStorage.setItem(this.storageKeys.user, JSON.stringify(this.currentUser));
+        // Only store non-sensitive user info
+        const safeUser = {
+          id: this.currentUser.id,
+          username: this.currentUser.username,
+          display_name: this.currentUser.display_name,
+          avatar_url: this.currentUser.avatar_url
+        };
+        sessionStorage.setItem(this.storageKeys.user, JSON.stringify(safeUser));
       }
-      if (this.sessionToken) {
-        localStorage.setItem(this.storageKeys.token, this.sessionToken);
-      }
+      // DO NOT store tokens in localStorage - security vulnerability
+      // Tokens are now managed via httpOnly cookies
     } catch (error) {
       console.error('Failed to save auth data:', error);
     }
@@ -351,14 +359,13 @@ class AuthService {
 
   private loadFromStorage(): void {
     try {
-      const userJson = localStorage.getItem(this.storageKeys.user);
-      const token = localStorage.getItem(this.storageKeys.token);
-
-      if (userJson && token) {
-        this.currentUser = JSON.parse(userJson);
-        this.sessionToken = token;
-        
-        // Validate session on load
+      // SECURITY: Load from sessionStorage instead
+      const userJson = sessionStorage.getItem(this.storageKeys.user);
+      
+      if (userJson) {
+        const safeUser = JSON.parse(userJson);
+        // Token is now managed via httpOnly cookies
+        // Validate session with server to get full user data
         this.validateSession();
       }
     } catch (error) {
@@ -369,6 +376,10 @@ class AuthService {
 
   private clearStorage(): void {
     try {
+      // Clear from both storage types for migration
+      sessionStorage.removeItem(this.storageKeys.user);
+      sessionStorage.removeItem(this.storageKeys.token);
+      // Also clear old localStorage entries
       localStorage.removeItem(this.storageKeys.user);
       localStorage.removeItem(this.storageKeys.token);
     } catch (error) {

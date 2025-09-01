@@ -43,7 +43,7 @@ interface SeasonComparison {
     totalPoints: number;
     avgPoints: number;
     rank: number;
-    adp: number;
+    adp: number;}
 
 const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
     // Mock performance data - in real app this would come from stats API

@@ -56,8 +56,8 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     useEffect(() => {
         if (predictionFactors) {
             calculateCompositeScore();
-
-    }, [predictionFactors, calculateCompositeScore]);
+    }
+  }, [predictionFactors, calculateCompositeScore]);
 
     // Prepare chart data
     const playerMetricsData = useMemo(() => {

@@ -28,7 +28,7 @@ interface ComparisonMetric {
     player1Value: number;
     player2Value: number;
     format: 'number' | 'decimal' | 'percentage';
-    higherIsBetter: boolean;
+    higherIsBetter: boolean;}
 
 const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     player,

@@ -121,8 +121,8 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     React.useEffect(() => {
         if (isMyTurn && availablePlayers.length > 0) {
             generateRecommendations();
-
-    }, [isMyTurn, currentPick, availablePlayers, currentTeam]);
+    }
+  }, [isMyTurn, currentPick, availablePlayers, currentTeam]);
 
     // Update opponent models based on recent picks
     React.useEffect(() => {
@@ -350,8 +350,8 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     const handleRecommendationAction = (recommendation: CoachRecommendation) => {
         if (recommendation.player && recommendation.type === 'pick') {
             onPlayerSelect(recommendation.player);
-
-    };
+    }
+  };
 
     const tabs = [
         { id: 'recommendations', label: 'Recommendations', icon: <BrainCircuitIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },

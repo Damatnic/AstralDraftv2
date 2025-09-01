@@ -25,8 +25,8 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
     useEffect(() => {
         if (isActive) {
             loadMLAnalytics();
-
-    }, [isActive]);
+    }
+  }, [isActive]);
 
     const loadMLAnalytics = async () => {
         setLoading(true);

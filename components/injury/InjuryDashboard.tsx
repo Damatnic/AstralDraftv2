@@ -43,7 +43,7 @@ interface PlayerSearchResult {
   name: string;
   position: string;
   team: string;
-  currentInjuryStatus?: string;
+  currentInjuryStatus?: string;}
 
 const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }) => {
   const [isLoading, setIsLoading] = React.useState(false);

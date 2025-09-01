@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import type { League } from '../../types';
 
 interface ChampionshipProbChartProps {
-    league: League;
+    league: League;}
 
 const teamColors = [
     '#34d399', '#f87171', '#60a5fa', '#facc15', '#a78bfa', '#fb923c',

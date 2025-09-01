@@ -23,7 +23,7 @@ interface SeasonManagementProps {
 
 interface SeasonAction {
     type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';
-    data?: any;
+    data?: any;}
 
 const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }) => {
     const [showConfirmAction, setShowConfirmAction] = React.useState<SeasonAction | null>(null);

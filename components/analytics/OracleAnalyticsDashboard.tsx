@@ -91,8 +91,8 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     useEffect(() => {
         if (user?.id) {
             loadAnalyticsData();
-
-    }, [user, selectedSeason, selectedWeeks]);
+    }
+  }, [user, selectedSeason, selectedWeeks]);
 
     const getPlayerNumber = (user: any): number => {
         if (user.isAdmin) return 0; // Admin is player 0 for Oracle

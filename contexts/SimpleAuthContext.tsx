@@ -17,7 +17,7 @@ interface SimpleAuthContextType {
     updateUserEmail: (email: string) => Promise<boolean>;
     updateUserCustomization: (customization: Partial<SimpleUser['customization']>) => Promise<boolean>;
     updateUserDisplayName: (displayName: string) => Promise<boolean>;
-    clearError: () => void;
+    clearError: () => void;}
 
 const SimpleAuthContext = createContext<SimpleAuthContextType | undefined>(undefined);
 

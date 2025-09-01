@@ -187,7 +187,8 @@ interface LeaderboardEntry {
               unique.push(user);
 
             return unique;
-          }, [] as any[])
+    }
+  }, [] as any[])
           .slice(0, 20);
 
         // Generate mock leaderboard data

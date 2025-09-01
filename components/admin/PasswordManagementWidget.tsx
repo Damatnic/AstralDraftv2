@@ -25,7 +25,7 @@ interface SecurityReport {
   securePasswords: number;
   weakPasswords: number;
   mainUsersProtected: boolean;
-  recommendations: string[];
+  recommendations: string[];}
 
 const PasswordManagementWidget: React.FC = () => {
   const [passwordStatus, setPasswordStatus] = useState<PasswordStatus[]>([]);

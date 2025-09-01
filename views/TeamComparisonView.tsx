@@ -27,8 +27,8 @@ const TeamComparisonView: React.FC = () => {
             generateTeamComparison(teamA, teamB, league)
                 .then(setComparison)
                 .finally(() => setIsLoading(false));
-
-    }, [teamA, teamB, league]);
+    }
+  }, [teamA, teamB, league]);
 
     if (!league || !teamA || !teamB) {
         return <ErrorDisplay title="Error" message="Could not find teams to compare." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} />;

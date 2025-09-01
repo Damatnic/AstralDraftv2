@@ -134,7 +134,7 @@ interface TeamStoryBuilderProps {
     onPublish: (storyId: string) => void;
     onPreview: (content: StoryContent) => void;
     isLoading?: boolean;
-    className?: string;
+    className?: string;}
 
 const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     team,
@@ -312,15 +312,15 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     const handlePublish = () => {
         if (currentStory.id) {
             onPublish(currentStory.id);
-
-    };
+    }
+  };
 
     const handlePreview = () => {
         if (currentStory.content) {
             onPreview(currentStory.content);
             setShowPreview(true);
-
-    };
+    }
+  };
 
     const renderSectionEditor = (section: StorySection) => {
         const isActive = activeSection === section.id;

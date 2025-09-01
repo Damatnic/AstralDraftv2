@@ -229,7 +229,8 @@ const OracleArchitectureOverview: React.FC = () => {
     , 100);
 
         return () => clearInterval(interval);
-    }, []);
+    }
+  }, []);
 
     // Helper functions
     const getLayerIcon = (layerId: string): string 

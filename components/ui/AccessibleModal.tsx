@@ -64,8 +64,8 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       if (closeOnEscape) {
         onClose();
         announce('Modal closed', 'polite');
-
-    };
+    }
+  };
 
     if (containerRef.current) {
       containerRef.current.addEventListener('focustrap:escape', handleCustomEscape as EventListener);
@@ -90,8 +90,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
       const element = containerRef.current.querySelector(initialFocus);
       if (element && element instanceof HTMLElement) {
         setTimeout(() => element.focus(), 100);
-
-
+    }
   }, [isOpen, initialFocus, containerRef]);
 
   // Prevent body scroll when modal is open
@@ -110,7 +109,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
     if (closeOnOverlayClick && e.target === e.currentTarget) {
       onClose();
       announce('Modal closed', 'polite');
-
+    }
   };
 
   const handleCloseClick = () => {

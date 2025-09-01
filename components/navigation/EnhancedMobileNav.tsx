@@ -30,7 +30,7 @@ interface EnhancedMobileNavProps {
   currentView: View;
   onNavigate: (view: View) => void;
   onToggleMenu?: () => void;
-  className?: string;
+  className?: string;}
 
 const navigationItems: NavigationItem[] = [
   {
@@ -97,7 +97,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
     const index = navigationItems.findIndex((item: any) => item.view === currentView);
     if (index !== -1) {
       setActiveIndex(index);
-
+    }
   }, [currentView]);
 
   const handleNavItemPress = useCallback((item: NavigationItem, index: number) => {

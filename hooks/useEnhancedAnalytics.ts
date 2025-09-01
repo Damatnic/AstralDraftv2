@@ -126,7 +126,8 @@ export const useEnhancedAnalytics = (options: UseEnhancedAnalyticsOptions = {}):
 
     const interval = setInterval(() => {
       loadAnalytics();
-    }, refreshInterval);
+    }
+  }, refreshInterval);
 
     return () => clearInterval(interval);
   }, [autoRefresh, isAuthenticated, refreshInterval, loadAnalytics]);

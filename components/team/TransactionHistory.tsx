@@ -33,7 +33,7 @@ interface Transaction {
     tradingPartner?: Team;
     cost?: number;
     status: 'COMPLETED' | 'PENDING' | 'CANCELLED';
-    details?: string;
+    details?: string;}
 
 const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }) => {
     const [filterType, setFilterType] = React.useState<'ALL' | Transaction['type']>('ALL');

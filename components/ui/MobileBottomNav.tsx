@@ -12,7 +12,7 @@ interface NavItem {
 interface MobileBottomNavProps {
   activeView: string;
   onViewChange: (view: string) => void;
-  notificationCount?: number;
+  notificationCount?: number;}
 
 const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Home', icon: '🏠', view: 'DASHBOARD' },

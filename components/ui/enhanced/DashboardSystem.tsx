@@ -93,7 +93,7 @@ export interface DashboardContextType {
 
 // =========================================
 // DASHBOARD CONTEXT
-// =========================================
+// =========================================}
 
 const DashboardContext = React.createContext<DashboardContextType | null>(null);
 

@@ -222,7 +222,7 @@ const UserManagement: React.FC = () => {
                     </div>
                   </td>
                 </tr>
-              )))}
+              ))}
             </>
           )}
         </tbody>
@@ -343,7 +343,7 @@ const ContestManagement: React.FC = () => {
                     </div>
                   </td>
                 </tr>
-              )))}
+              ))}
             </>
           )}
         </tbody>
@@ -493,26 +493,17 @@ const AdminDashboard: React.FC = () => {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-
       const data = await adminService.getDashboardData();
       setDashboardData(data);
-    finally {
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    } finally {
       setLoading(false);
+    }
+  };
 
-    `${
-                  activeTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2`}
-              >
-                <span>{tab.icon}</span>
-                <span>{tab.name}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
-
+  return (
+    <>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'overview' && dashboardData && (
@@ -598,7 +589,7 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

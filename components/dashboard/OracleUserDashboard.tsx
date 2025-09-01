@@ -60,7 +60,7 @@ interface PersonalizedInsight {
     description: string;
     actionable?: string;
     priority: 'high' | 'medium' | 'low';
-    metric?: number;
+    metric?: number;}
 
 const OracleUserDashboard: React.FC = () => {
     const [userStats, setUserStats] = useState<UserStats | null>(null);

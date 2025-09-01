@@ -38,7 +38,7 @@ interface UserProgress {
     quizResults: Record<number, boolean>;
     practiceScores: Record<number, number>;
     startTime: string;
-    lastAccessed: string;
+    lastAccessed: string;}
 
 const OracleBeginnerTutorial: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -102,7 +102,7 @@ export const CrisisInterventionWidget: React.FC = () => {
     if (isExpanded) {
       setLastInteraction(new Date());
       // Log anonymous usage for improvement purposes
-
+    }
   }, [isExpanded]);
 
   const handleResourceClick = (resource: CrisisResource, action: 'call' | 'text' | 'web') => {

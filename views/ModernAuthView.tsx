@@ -35,7 +35,7 @@ interface FormErrors {
   username?: string;
   password?: string;
   confirmPassword?: string;
-  general?: string;
+  general?: string;}
 
 const ModernAuthView: React.FC = () => {
   const { dispatch } = useAppState();

@@ -255,7 +255,8 @@ const OracleGeminiAISection: React.FC = () => {
             setProcessingDemo(prev => (prev + 1) % 6);
     , 2000);
         return () => clearInterval(interval);
-    }, []);
+    }
+  }, []);
 
     const selectedExampleData = aiAnalysisExamples.find((ex: any) => ex.id === selectedExample);
     const selectedCapabilityData = nlpCapabilities.find((cap: any) => cap.id === activeCapability);

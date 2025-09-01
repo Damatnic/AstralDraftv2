@@ -50,8 +50,8 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     useEffect(() => {
         if (playerId) {
             generatePrediction();
-
-    }, [playerId]);
+    }
+  }, [playerId]);
 
     const generatePrediction = async () => {
         setLoading(true);

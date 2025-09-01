@@ -52,8 +52,8 @@ const MobileLayout: React.FC<Props> = ({ children,
         const viewport = window.visualViewport as any;
         const initialHeight = window.innerHeight;
         setIsKeyboardOpen(viewport.height < initialHeight * 0.75);
-
-    };
+    }
+  };
 
     window.addEventListener('resize', handleResize);
     if ('visualViewport' in window && window.visualViewport) {
@@ -75,7 +75,7 @@ const MobileLayout: React.FC<Props> = ({ children,
         'content',
         'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'
       );
-
+    }
   }, []);
 
   const getLayoutClasses = () => {

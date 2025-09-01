@@ -24,7 +24,7 @@ interface MobileOracleInterfaceProps {
 
 interface SwipeDirection {
     deltaX: number;
-    deltaY: number;
+    deltaY: number;}
 
 const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({ week,
     onSubmitPrediction,
@@ -72,8 +72,8 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({ week,
         const handleQuickSubmit = () => {
             if (selectedOption !== null) {
                 handleSubmitPrediction();
-
-        };
+    }
+  };
 
         document.addEventListener('oracle-navigate', handleOracleNavigate as EventListener);
         document.addEventListener('oracle-quick-submit', handleQuickSubmit);

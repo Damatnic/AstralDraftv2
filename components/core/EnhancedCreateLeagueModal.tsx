@@ -38,7 +38,7 @@ interface PlayerSetup {
 interface EnhancedCreateLeagueModalProps {
   onClose: () => void;
   user: User;
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<any>;}
 
 const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({ 
   onClose, 

@@ -42,7 +42,7 @@ interface LeaderboardEntry {
 interface OracleLeaderboardProps {
     currentUserId?: string;
     showAchievements?: boolean;
-    compact?: boolean;
+    compact?: boolean;}
 
 const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     currentUserId,
@@ -137,8 +137,8 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
         if (!compact) {
             const interval = setInterval(fetchLeaderboard, 30000);
             return () => clearInterval(interval);
-
-    }, [filters, compact]);
+    }
+  }, [filters, compact]);
 
     // Handle filter changes
     const handleFilterChange = (key: keyof LeaderboardFilters, value: any) => {

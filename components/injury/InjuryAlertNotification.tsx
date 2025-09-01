@@ -36,7 +36,7 @@ interface NotificationSettings {
   autoHideDuration: number; // seconds
   showRecommendations: boolean;
   groupSimilar: boolean;
-  soundEnabled: boolean;
+  soundEnabled: boolean;}
 
 const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ className = '',
   maxAlerts = 5,
@@ -65,7 +65,8 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
     if (settings.autoHide) {
       const timer = setTimeout(() => {
         setAlerts(prev => prev.slice(0, -1));
-      }, settings.autoHideDuration * 1000);
+    }
+  }, settings.autoHideDuration * 1000);
 
       return () => clearTimeout(timer);
 

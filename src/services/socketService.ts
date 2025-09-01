@@ -1,10 +1,12 @@
 /**
  * Socket Service
  * Manages WebSocket connections for real-time features
+ * Enhanced with automatic memory cleanup and leak prevention
  */
 
 import { io, Socket } from 'socket.io-client';
 import { authService } from './authService';
+import { memoryManager } from '../../utils/memoryCleanup';
 
 class SocketService {
   private socket: Socket | null = null;
@@ -13,6 +15,11 @@ class SocketService {
   private reconnectDelay = 1000;
   private isConnecting = false;
   private eventListeners: Map<string, Function[]> = new Map();
+  private cleanupFunctions: Set<() => void> = new Set();
+  private connectionTimer: NodeJS.Timeout | null = null;
+  private visibilityHandler: (() => void) | null = null;
+  private onlineHandler: (() => void) | null = null;
+  private offlineHandler: (() => void) | null = null;
 
   /**
    * Connect to WebSocket server
@@ -38,14 +45,14 @@ class SocketService {
 
       this.setupEventHandlers();
       
-      // Wait for connection
+      // Wait for connection with managed timeout
       await new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
+        const timeout = memoryManager.registerTimer(() => {
           reject(new Error('Connection timeout'));
         }, 10000);
 
         this.socket!.on('connect', () => {
-          clearTimeout(timeout);
+          memoryManager.clearTimer(timeout);
           this.isConnecting = false;
           this.reconnectAttempts = 0;
           console.log('✅ WebSocket connected');
@@ -53,7 +60,7 @@ class SocketService {
         });
 
         this.socket!.on('connect_error', (error: any) => {
-          clearTimeout(timeout);
+          memoryManager.clearTimer(timeout);
           this.isConnecting = false;
           console.error('❌ WebSocket connection error:', error);
           reject(error);
@@ -68,15 +75,41 @@ class SocketService {
   }
 
   /**
-   * Disconnect from WebSocket server
+   * Disconnect from WebSocket server with full cleanup
    */
   disconnect(): void {
+    // Clear any pending reconnect timer
+    if (this.connectionTimer) {
+      memoryManager.clearTimer(this.connectionTimer);
+      this.connectionTimer = null;
+    }
+
+    // Remove all event listeners
+    this.eventListeners.forEach((listeners, event) => {
+      listeners.forEach(listener => {
+        this.socket?.off(event, listener);
+      });
+    });
+    this.eventListeners.clear();
+
+    // Execute all cleanup functions
+    this.cleanupFunctions.forEach(cleanup => {
+      try {
+        cleanup();
+      } catch (error) {
+        console.error('Cleanup error:', error);
+      }
+    });
+    this.cleanupFunctions.clear();
+
+    // Disconnect socket
     if (this.socket) {
+      this.socket.removeAllListeners();
       this.socket.disconnect();
       this.socket = null;
-      this.eventListeners.clear();
-      console.log('🔌 WebSocket disconnected');
     }
+
+    console.log('🔌 WebSocket disconnected with full cleanup');
   }
 
   /**
@@ -147,7 +180,8 @@ class SocketService {
     
     console.log(`🔄 Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
     
-    setTimeout(() => {
+    this.connectionTimer = memoryManager.registerTimer(() => {
+      this.connectionTimer = null;
       this.connect().catch(error => {
         console.error('Reconnection failed:', error);
       });
@@ -340,11 +374,11 @@ class SocketService {
   }
 
   /**
-   * Set up automatic connection management
+   * Set up automatic connection management with proper cleanup
    */
   setupAutoConnection(): void {
     // Connect when user logs in
-    authService.onAuthStateChange((isAuthenticated, user) => {
+    const authCleanup = authService.onAuthStateChange((isAuthenticated, user) => {
       if (isAuthenticated && user) {
         this.connect().catch(error => {
           console.error('Auto-connection failed:', error);
@@ -353,9 +387,10 @@ class SocketService {
         this.disconnect();
       }
     });
+    this.cleanupFunctions.add(authCleanup);
 
-    // Handle page visibility changes
-    document.addEventListener('visibilitychange', () => {
+    // Handle page visibility changes with cleanup
+    this.visibilityHandler = () => {
       if (document.visibilityState === 'visible' && authService.isAuthenticated()) {
         // Page became visible and user is authenticated
         if (!this.isConnected()) {
@@ -363,21 +398,57 @@ class SocketService {
             console.error('Visibility reconnection failed:', error);
           });
         }
+      } else if (document.visibilityState === 'hidden') {
+        // Optional: disconnect when page is hidden to save resources
+        // this.disconnect();
       }
-    });
+    };
+    
+    const visibilityCleanup = memoryManager.addEventListener(
+      document,
+      'visibilitychange',
+      this.visibilityHandler
+    );
+    this.cleanupFunctions.add(visibilityCleanup);
 
-    // Handle online/offline events
-    window.addEventListener('online', () => {
+    // Handle online/offline events with cleanup
+    this.onlineHandler = () => {
       if (authService.isAuthenticated() && !this.isConnected()) {
         this.connect().catch(error => {
           console.error('Online reconnection failed:', error);
         });
       }
-    });
+    };
+    
+    const onlineCleanup = memoryManager.addEventListener(
+      window,
+      'online',
+      this.onlineHandler
+    );
+    this.cleanupFunctions.add(onlineCleanup);
 
-    window.addEventListener('offline', () => {
+    this.offlineHandler = () => {
       console.log('🔌 Going offline, WebSocket will disconnect');
+    };
+    
+    const offlineCleanup = memoryManager.addEventListener(
+      window,
+      'offline',
+      this.offlineHandler
+    );
+    this.cleanupFunctions.add(offlineCleanup);
+
+    // Register global cleanup
+    memoryManager.registerCleanup(() => {
+      this.disconnect();
     });
+  }
+
+  /**
+   * Clean up all resources
+   */
+  cleanup(): void {
+    this.disconnect();
   }
 }
 

@@ -357,8 +357,8 @@ export const Typewriter: React.FC<TypewriterProps> = ({
           clearInterval(interval);
           setIsComplete(true);
           onComplete?.();
-
-      }, speed);
+    }
+  }, speed);
 
       return () => clearInterval(interval);
     }, delay);
@@ -371,7 +371,8 @@ export const Typewriter: React.FC<TypewriterProps> = ({
 
     const cursorInterval = setInterval(() => {
       setShowCursor(prev => !prev);
-    }, 500);
+    }
+  }, 500);
 
     return () => clearInterval(cursorInterval);
   }, [cursor, isComplete]);
@@ -411,8 +412,8 @@ export const Parallax: React.FC<ParallaxProps> = ({
         const rect = ref.current.getBoundingClientRect();
         const scrollPercent = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
         setScrollY(scrollPercent * offset);
-
-    };
+    }
+  };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

@@ -70,7 +70,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
     if (autoOptimize) {
       const interval = setInterval(runOptimization, 60 * 60 * 1000); // Every hour
       return () => clearInterval(interval);
-
+    }
   }, [autoOptimize]);
 
   const runOptimization = async () => {

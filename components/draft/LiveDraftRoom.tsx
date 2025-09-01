@@ -23,7 +23,7 @@ interface DraftPick {
 
 interface LiveDraftRoomProps {
   isActive?: boolean;
-  onDraftComplete?: () => void;
+  onDraftComplete?: () => void;}
 
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false, 
   onDraftComplete 
@@ -112,7 +112,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
       const timer = setTimeout(() => {
         setShowParticles(false);
         setRecentPick(null);
-      }, 3000);
+    }
+  }, 3000);
       return () => clearTimeout(timer);
 
   }, [recentPick]);
@@ -121,7 +122,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
   useEffect(() => {
     if (typeof window !== 'undefined') {
       audioRef.current = new Audio();
-
+    }
   }, []);
 
   const playSound = (type: 'pick' | 'timer' | 'turn') => {

@@ -41,7 +41,7 @@ interface SystemStatus {
   database: 'healthy' | 'degraded' | 'down';
   authentication: 'healthy' | 'degraded' | 'down';
   monitoring: 'healthy' | 'degraded' | 'down';
-  backups: 'healthy' | 'degraded' | 'down';
+  backups: 'healthy' | 'degraded' | 'down';}
 
 const SecurityDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -14,8 +14,8 @@ const AiCoPilotPanel: React.FC = () => {
     React.useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-
-    }, [commentary]);
+    }
+  }, [commentary]);
 
     return (
         <div className="h-full flex flex-col text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">

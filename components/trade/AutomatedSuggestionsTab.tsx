@@ -34,7 +34,7 @@ interface SmartSuggestion {
     confidence: number;
     impact: number;
     players?: Player[];
-    reasoning: string;
+    reasoning: string;}
 
 const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
     proposal,

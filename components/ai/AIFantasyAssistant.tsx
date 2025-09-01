@@ -24,6 +24,7 @@ interface AIResponse {
   suggestions: string[];
   actionable: boolean;
   data?: any;
+}
 
 const AIFantasyAssistant: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -44,7 +45,7 @@ const AIFantasyAssistant: React.FC = () => {
   useEffect(() => {
     if (isVisible && inputRef.current) {
       inputRef.current.focus();
-
+    }
   }, [isVisible]);
 
   // Initialize with welcome message
@@ -61,19 +62,17 @@ const AIFantasyAssistant: React.FC = () => {
           'Find waiver wire targets',
           'Help me with a trade',
           'Injury impact analysis'
-
+        ]
       };
       setMessages([welcomeMessage]);
-
+    }
   }, [currentUser?.name, messages.length]);
 
   const handleSendMessage = async () => {
-    try {
     if (!inputMessage.trim()) return;
 
     const userMessage: ChatMessage = {
-      id: `user-${Date.now()
-    }`,
+      id: `user-${Date.now()}`,
       type: 'user',
       content: inputMessage.trim(),
       timestamp: new Date()
@@ -100,7 +99,9 @@ const AIFantasyAssistant: React.FC = () => {
         setMessages(prev => [...prev, assistantMessage]);
         setIsTyping(false);
       }, 1500);
-    `,
+    } catch (error) {
+      const errorMessage: ChatMessage = {
+        id: `error-${Date.now()}`,
         type: 'assistant',
         content: 'Sorry, I encountered an error. Please try again or rephrase your question.',
         timestamp: new Date(),
@@ -108,7 +109,7 @@ const AIFantasyAssistant: React.FC = () => {
       };
       setMessages(prev => [...prev, errorMessage]);
       setIsTyping(false);
-
+    }
   };
 
   const getAIResponse = async (message: string): Promise<AIResponse> => {
@@ -209,7 +210,7 @@ const AIFantasyAssistant: React.FC = () => {
         'Waiver targets',
         'Team analysis',
         'Injury impact'
-      ],
+        ],
       actionable: false
     };
   };
@@ -223,7 +224,7 @@ const AIFantasyAssistant: React.FC = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
-
+    }
   };
 
   return (

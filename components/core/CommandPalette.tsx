@@ -51,8 +51,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
     React.useEffect(() => {
         if (!state.isCommandPaletteOpen) {
             setQuery('');
-
-    }, [state.isCommandPaletteOpen]);
+    }
+  }, [state.isCommandPaletteOpen]);
 
     const handleSelectLeague = (id: string) => {
         dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: id });

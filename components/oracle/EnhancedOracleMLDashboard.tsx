@@ -50,8 +50,8 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
     useEffect(() => {
         if (isVisible) {
             loadDashboardData();
-
-    }, [isVisible]);
+    }
+  }, [isVisible]);
 
     const loadDashboardData = async () => {
         try {
@@ -205,7 +205,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
                             {modelPerformance.map((entry: any) => (
                                 <Cell key={`cell-${entry.modelName}`} fill={[
                                     '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'
-                                ][modelPerformance.indexOf(entry)]} />
+        ][modelPerformance.indexOf(entry)]} />
                             ))}
                         </Pie>
                         <Tooltip formatter={(value: number) => `${(value * 100).toFixed(1)}%`} />

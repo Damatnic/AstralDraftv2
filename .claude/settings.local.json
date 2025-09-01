@@ -65,7 +65,12 @@
       "Bash(do if [ -f \"$file\" ])",
       "Bash(then sed -i \"s|import { ErrorBoundary } from ''../ui/ErrorBoundary''|import { ErrorBoundary } from ''../../ui/ErrorBoundary''|g\" \"$file\")",
       "Bash(fi)",
-      "WebFetch(domain:astraldraft.netlify.app)"
+      "WebFetch(domain:astraldraft.netlify.app)",
+      "Bash(npx serve:*)",
+      "Bash(npm test:*)",
+      "Bash(dir:*)",
+      "Bash(npm run test:integration:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": [],

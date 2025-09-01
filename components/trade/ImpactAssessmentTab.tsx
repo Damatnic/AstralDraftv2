@@ -28,7 +28,7 @@ interface ImpactMetric {
     value: number;
     unit: string;
     description: string;
-    isPositive: boolean;
+    isPositive: boolean;}
 
 const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
     proposal,

@@ -70,8 +70,8 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
     useEffect(() => {
         if (isAuthenticated) {
             handleSearch();
-
-    }, [isAuthenticated, searchFilter]);
+    }
+  }, [isAuthenticated, searchFilter]);
 
     const handleSearch = async () => {
         setLoading(true);

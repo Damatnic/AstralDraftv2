@@ -6,7 +6,7 @@ import { players as allPlayers } from '../../data/players';
 import { Tooltip } from '../ui/Tooltip';
 
 interface PositionalScarcityChartProps {
-    availablePlayers: Player[];
+    availablePlayers: Player[];}
 
 const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
 const ELITE_TIER_THRESHOLD = 3;

@@ -22,7 +22,7 @@ interface TabsTriggerProps {
 interface TabsContentProps {
   value: string;
   children: React.ReactNode;
-  className?: string;
+  className?: string;}
 
 const TabsContext = React.createContext<{
   value: string;

@@ -56,7 +56,7 @@ type AccessibilityContextType = AccessibilityState & AccessibilityActions;
 
 // =========================================
 // ACCESSIBILITY CONTEXT
-// =========================================
+// =========================================}
 
 const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
@@ -382,7 +382,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleClick();
-
+    }
   };
 
   const handleFocus = (e: FocusEvent<HTMLButtonElement>) => {

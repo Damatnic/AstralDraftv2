@@ -50,7 +50,7 @@ export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
 }
 
 interface TeamManagementViewProps {
-  onBack?: () => void;
+  onBack?: () => void;}
 
 const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }) => {
   // State management

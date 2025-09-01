@@ -272,7 +272,8 @@ export const useMLPlayerPredictions = (options: UseMLPlayerPredictionsOptions = 
 
     const interval = setInterval(() => {
       refreshServiceStatus();
-    }, refreshInterval);
+    }
+  }, refreshInterval);
 
     return () => clearInterval(interval);
   }, [autoRefresh, refreshInterval, refreshServiceStatus]);

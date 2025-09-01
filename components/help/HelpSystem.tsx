@@ -27,7 +27,7 @@ interface HelpCategory {
   name: string;
   icon: string;
   description: string;
-  articles: string[];
+  articles: string[];}
 
 const HelpSystem: React.FC = () => {
   const { state } = useAppState();

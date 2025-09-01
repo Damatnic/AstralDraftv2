@@ -30,7 +30,8 @@ const NotificationToast: React.FC<NotificationToastProps> = ({ notification,
         const timer = setTimeout(() => {
             setIsVisible(false);
             setTimeout(onDismiss, 300); // Wait for exit animation
-        }, autoHideDuration);
+    }
+  }, autoHideDuration);
 
         // Progress bar animation
         const progressTimer = setInterval(() => {
@@ -170,8 +171,8 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
         if (unreadNotifications.length > 0) {
             const newToastIds = unreadNotifications.map((n: any) => n.id);
             setDisplayedToasts(prev => [...prev, ...newToastIds].slice(-maxToasts));
-
-    }, [notifications, displayedToasts, maxToasts]);
+    }
+  }, [notifications, displayedToasts, maxToasts]);
 
     const handleDismissToast = (notificationId: string) => {
         setDisplayedToasts(prev => prev.filter((id: any) => id !== notificationId));

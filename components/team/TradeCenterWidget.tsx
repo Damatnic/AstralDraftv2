@@ -33,7 +33,8 @@ export const TradeCenterWidget: React.FC<{
             playTradeSound();
 
         prevIncomingOffersCount.current = incomingOffers.length;
-    }, [incomingOffers.length, playTradeSound]);
+    }
+  }, [incomingOffers.length, playTradeSound]);
 
     const myBlockedPlayers = React.useMemo(() => {
         const playerMap = new Map(players.map((p: any) => [p.id, p]));

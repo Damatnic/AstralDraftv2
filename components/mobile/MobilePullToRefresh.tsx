@@ -53,8 +53,8 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
             case 'refreshing':
                 announceToScreenReader('Refreshing content, please wait', 'polite');
                 break;
-
-    }, [pullState]);
+    }
+  }, [pullState]);
 
     // Keyboard accessibility for refresh
     const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -62,9 +62,8 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
             event.preventDefault();
             if (!disabled && !isRefreshing) {
                 handleRefresh();
-
-
-    };
+    }
+  };
 
     const handleRefresh = async () => {
         if (disabled || isRefreshing) return;
@@ -98,8 +97,8 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
         // Only allow pull-to-refresh at the top of the scroll
         if (startScrollTop.current <= 0) {
             setPullState('pulling');
-
-    };
+    }
+  };
 
     const handlePan = useThrottle((event: any, info: PanInfo) => {
         if (disabled || isRefreshing || pullState === 'idle') return;
@@ -171,8 +170,8 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
     React.useEffect(() => {
         if (isRefreshing) {
             pullY.set(refreshThreshold);
-
-    }, [isRefreshing, pullY, refreshThreshold]);
+    }
+  }, [isRefreshing, pullY, refreshThreshold]);
 
     return (
         <section 

@@ -6,6 +6,8 @@
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSafeInterval, useMemoryCleanup, useSafeEventListener } from '../../hooks/useMemoryCleanup';
+import { memoryManager } from '../../utils/memoryCleanup';
 
 interface PerformanceMetrics {
   // Core Web Vitals
@@ -54,7 +56,9 @@ const PerformanceMonitor: React.FC = () => {
   const [issues, setIssues] = useState<PerformanceIssue[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [isCollecting, setIsCollecting] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { setInterval, clearInterval } = useSafeInterval();
+  const memoryScope = useMemoryCleanup();
+  const observersRef = useRef<PerformanceObserver[]>([]);
 
   useEffect(() => {
     // Only show in development or when explicitly enabled
@@ -67,9 +71,15 @@ const PerformanceMonitor: React.FC = () => {
     }
 
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      // Clean up all observers
+      observersRef.current.forEach(observer => {
+        try {
+          observer.disconnect();
+        } catch (error) {
+          console.error('Failed to disconnect observer:', error);
+        }
+      });
+      observersRef.current = [];
     };
   }, []);
 
@@ -77,10 +87,16 @@ const PerformanceMonitor: React.FC = () => {
     try {
       setIsCollecting(true);
       
-      // Wait for page to be fully loaded
+      // Wait for page to be fully loaded with cleanup
       if (document.readyState !== 'complete') {
         await new Promise(resolve => {
-          window.addEventListener('load', resolve, { once: true });
+          const cleanup = memoryScope.addEventListener(
+            window,
+            'load',
+            resolve as EventListener,
+            { once: true }
+          );
+          // Cleanup will be handled automatically by memoryScope
         });
       }
 
@@ -98,8 +114,8 @@ const PerformanceMonitor: React.FC = () => {
   };
 
   const startPerformanceMonitoring = () => {
-    // Update metrics every 30 seconds
-    intervalRef.current = setInterval(async () => {
+    // Update metrics every 30 seconds with managed interval
+    setInterval(async () => {
       const updatedMetrics = await gatherPerformanceMetrics();
       setMetrics(updatedMetrics);
       
@@ -275,9 +291,17 @@ const PerformanceMonitor: React.FC = () => {
         });
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
         
-        // Timeout after 10 seconds
-        setTimeout(() => {
+        // Track observer for cleanup
+        observersRef.current.push(observer);
+        
+        // Timeout after 10 seconds with managed timer
+        const timeout = memoryManager.registerTimer(() => {
           observer.disconnect();
+          // Remove from tracking
+          const index = observersRef.current.indexOf(observer);
+          if (index > -1) {
+            observersRef.current.splice(index, 1);
+          }
           resolve(null);
         }, 10000);
       } else {
@@ -297,9 +321,17 @@ const PerformanceMonitor: React.FC = () => {
         });
         observer.observe({ entryTypes: ['first-input'] });
         
-        // Timeout after 30 seconds
-        setTimeout(() => {
+        // Track observer for cleanup
+        observersRef.current.push(observer);
+        
+        // Timeout after 30 seconds with managed timer
+        const timeout = memoryManager.registerTimer(() => {
           observer.disconnect();
+          // Remove from tracking
+          const index = observersRef.current.indexOf(observer);
+          if (index > -1) {
+            observersRef.current.splice(index, 1);
+          }
           resolve(null);
         }, 30000);
       } else {
@@ -321,9 +353,17 @@ const PerformanceMonitor: React.FC = () => {
         });
         observer.observe({ entryTypes: ['layout-shift'] });
         
-        // Resolve after 10 seconds
-        setTimeout(() => {
+        // Track observer for cleanup
+        observersRef.current.push(observer);
+        
+        // Resolve after 10 seconds with managed timer
+        const timeout = memoryManager.registerTimer(() => {
           observer.disconnect();
+          // Remove from tracking
+          const index = observersRef.current.indexOf(observer);
+          if (index > -1) {
+            observersRef.current.splice(index, 1);
+          }
           resolve(clsValue);
         }, 10000);
       } else {

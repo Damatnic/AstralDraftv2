@@ -33,7 +33,7 @@ interface VictoryCelebrationProps {
   userName: string;
   teamName: string;
   leagueId: string;
-  onCelebrationComplete?: () => void;
+  onCelebrationComplete?: () => void;}
 
 const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   userId,

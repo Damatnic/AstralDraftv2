@@ -38,7 +38,7 @@ interface SwipeAction {
     icon: React.ReactNode;
     color: string;
     label: string;
-    action: () => void;
+    action: () => void;}
 
 const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     player,
@@ -149,7 +149,8 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
         // Reset state
         setDragOffset(0);
         setActiveAction(null);
-    };
+    }
+  };
 
     const getPositionColor = (position: string) => {
         switch (position) {

@@ -5,7 +5,7 @@ import type { Team, PlayerPosition } from '../../types';
 import { UserIcon } from '../icons/UserIcon';
 
 interface MyRosterPanelProps {
-    team: Team | undefined;
+    team: Team | undefined;}
 
 const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 

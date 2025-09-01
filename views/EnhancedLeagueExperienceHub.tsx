@@ -36,7 +36,7 @@ interface LeagueStats {
   completedChallenges: number;
   achievementPoints: number;
   rivalries: number;
-  activeStreaks: number;
+  activeStreaks: number;}
 
 const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = ({
   leagueId,

@@ -29,8 +29,8 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         // Check current notification permission
         if ('Notification' in window) {
             setHasPermission(Notification.permission === 'granted');
-
-    }, []);
+    }
+  }, []);
 
     const handlePreferenceChange = (key: keyof NotificationPreferences, value: boolean | number) => {
         const newPreferences = { ...preferences, [key]: value };

@@ -22,8 +22,8 @@ const SeasonStoryView: React.FC = () => {
             generateNarrativeSeasonStory(myTeam, league)
                 .then(setStoryData)
                 .finally(() => setIsLoading(false));
-
-    }, [myTeam, league]);
+    }
+  }, [myTeam, league]);
     
     if (!league || !myTeam) {
         return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;

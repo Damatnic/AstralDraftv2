@@ -8,7 +8,7 @@ interface TurnTimerProps {
     teams: Team[];
     draftPicks: DraftPick[];
     isMyTurn: boolean;
-    isPaused: boolean;
+    isPaused: boolean;}
 
 const PICK_TIME_SECONDS = 60;
 
@@ -27,8 +27,8 @@ const TurnTimer: React.FC<TurnTimerProps> = ({ currentPick, teams, draftPicks, i
         const interval = setInterval(() => {
             if (!isPaused) {
                 setTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
-
-        }, 1000);
+    }
+  }, 1000);
 
         return () => clearInterval(interval);
     }, [currentPick, isPaused, isDraftComplete]);

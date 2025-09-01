@@ -38,7 +38,8 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
             handleFetchNeeds();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [team.id, league?.status]);
+    }
+  }, [team.id, league?.status]);
 
     return (
         <Widget title="Team Needs Analysis" icon={<SparklesIcon />}>

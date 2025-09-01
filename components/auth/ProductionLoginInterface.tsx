@@ -296,33 +296,40 @@ const ProductionLoginInterface: React.FC = () => {
     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
       <div className="relative sm:px-4 md:px-6 lg:px-8">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none sm:px-4 md:px-6 lg:px-8">
-          <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{icon}</div>
+          <div className="text-gray-400 sm:px-4 md:px-6 lg:px-8" aria-hidden="true">{icon}</div>
         </div>
         <input
           type={showPasswordToggle ? (showPassword ? 'text' : 'password') : type}
           placeholder={placeholder}
           value={value}
           onChange={(e: any) => onChange(e.target.value)}
-            ${showPasswordToggle ? 'pr-12' : 'pr-4'}
-          `}
+          aria-label={placeholder}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${placeholder.toLowerCase().replace(/\s+/g, '-')}-error` : undefined}
+          className={`w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 pl-10 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all ${showPasswordToggle ? 'pr-12' : 'pr-4'}`}
         />
         {showPasswordToggle && (
           <button
             type="button"
             onClick={onTogglePassword}
             className="absolute inset-y-0 right-0 pr-3 flex items-center sm:px-4 md:px-6 lg:px-8"
-           aria-label="Action button">
+            aria-label={showPassword ? 'Hide password' : 'Show password'}>
             {showPassword ? (
-              <EyeOffIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" />
+              <EyeOffIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             ) : (
-              <EyeIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" />
+              <EyeIcon className="w-5 h-5 text-gray-400 hover:text-white sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             )}
           </button>
         )}
       </div>
       {error && (
-        <div className="flex items-center space-x-1 text-red-400 text-sm sm:px-4 md:px-6 lg:px-8">
-          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+        <div 
+          id={`${placeholder.toLowerCase().replace(/\s+/g, '-')}-error`}
+          role="alert"
+          aria-live="polite"
+          className="flex items-center space-x-1 text-red-400 text-sm sm:px-4 md:px-6 lg:px-8"
+        >
+          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
           <span>{error}</span>
         </div>
       )}
@@ -331,10 +338,10 @@ const ProductionLoginInterface: React.FC = () => {
 
   // Login view
   const LoginView = () => (
-    <form onSubmit={handleLogin}
+    <form onSubmit={handleLogin} aria-label="Login form"
       <div className="text-center mb-8 sm:px-4 md:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Welcome Back</h1>
-        <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Sign in to your Astral Draft account</p>
+        <h1 id="login-title" className="text-3xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">Welcome Back</h1>
+        <p id="login-description" className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Sign in to your Astral Draft account</p>
       </div>
 
       <InputField
@@ -359,11 +366,13 @@ const ProductionLoginInterface: React.FC = () => {
       />
 
       <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
-        <label className="flex items-center sm:px-4 md:px-6 lg:px-8">
+        <label className="flex items-center sm:px-4 md:px-6 lg:px-8 cursor-pointer">
           <input
             type="checkbox"
+            id="remember-me"
             checked={loginData.rememberMe}
             onChange={(e: any) => setLoginData({ ...loginData, rememberMe: e.target.checked }}
+            aria-label="Remember me"
             className="rounded border-gray-600 text-blue-500 focus:ring-blue-500 bg-gray-800 sm:px-4 md:px-6 lg:px-8"
           />
           <span className="ml-2 text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Remember me</span>
@@ -377,8 +386,12 @@ const ProductionLoginInterface: React.FC = () => {
       </div>
 
       {errors.general && (
-        <div className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
-          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+        <div 
+          role="alert"
+          aria-live="assertive"
+          className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8"
+        >
+          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
           <span>{errors.general}</span>
         </div>
       )}
@@ -387,10 +400,10 @@ const ProductionLoginInterface: React.FC = () => {
         type="submit"
         disabled={isLoading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
-       aria-label="Action button">
+       aria-label="Submit">
         {isLoading ? (
           <>
-            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" />
+            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Signing in...</span>
           </>
         ) : (
@@ -495,8 +508,12 @@ const ProductionLoginInterface: React.FC = () => {
       </label>
 
       {errors.general && (
-        <div className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
-          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+        <div 
+          role="alert"
+          aria-live="assertive"
+          className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8"
+        >
+          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
           <span>{errors.general}</span>
         </div>
       )}
@@ -505,10 +522,10 @@ const ProductionLoginInterface: React.FC = () => {
         type="submit"
         disabled={isLoading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
-       aria-label="Action button">
+       aria-label="Submit">
         {isLoading ? (
           <>
-            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" />
+            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Creating account...</span>
           </>
         ) : (
@@ -542,8 +559,12 @@ const ProductionLoginInterface: React.FC = () => {
       />
 
       {errors.general && (
-        <div className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
-          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
+        <div 
+          role="alert"
+          aria-live="assertive"
+          className="flex items-center space-x-2 text-red-400 text-sm bg-red-900/20 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8"
+        >
+          <AlertCircleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
           <span>{errors.general}</span>
         </div>
       )}
@@ -559,10 +580,10 @@ const ProductionLoginInterface: React.FC = () => {
         type="submit"
         disabled={isLoading}
         className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
-       aria-label="Action button">
+       aria-label="Submit">
         {isLoading ? (
           <>
-            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" />
+            <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
             <span>Sending reset link...</span>
           </>
         ) : (
@@ -600,10 +621,10 @@ const ProductionLoginInterface: React.FC = () => {
           type="submit"
           disabled={isLoading}
           className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white font-medium py-3 rounded-lg transition-colors flex items-center justify-center space-x-2 sm:px-4 md:px-6 lg:px-8"
-         aria-label="Action button">
+         aria-label="Submit">
           {isLoading ? (
             <>
-              <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" />
+              <LoaderIcon className="w-5 h-5 animate-spin sm:px-4 md:px-6 lg:px-8" aria-hidden="true" />
               <span>Verifying...</span>
             </>
           ) : (
@@ -619,7 +640,7 @@ const ProductionLoginInterface: React.FC = () => {
           onClick={handleResendVerification}
           disabled={isLoading}
           className="text-blue-400 hover:text-blue-300 font-medium disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
-         aria-label="Action button">
+         aria-label="Submit">
           Resend verification
         </button>
       </div>

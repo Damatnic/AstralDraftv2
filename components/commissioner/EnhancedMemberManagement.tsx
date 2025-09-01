@@ -26,7 +26,7 @@ interface EnhancedMemberManagementProps {
 interface MemberAction {
     type: 'PROMOTE_TO_COMMISSIONER' | 'REMOVE_MEMBER' | 'EDIT_TEAM_NAME' | 'CHANGE_AVATAR' | 'TOGGLE_ADMIN';
     memberId: string;
-    data?: any;
+    data?: any;}
 
 const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }) => {
     const [selectedMember, setSelectedMember] = React.useState<string | null>(null);
