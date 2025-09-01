@@ -32,7 +32,7 @@ const initializeApp = () => {
     const root = createRoot(rootElement);
     
     // Use minimal app first to test basic functionality
-    const useMinimalApp = false;
+    const useMinimalApp = true;
     
     if (useMinimalApp) {
       console.log('🎯 Loading MinimalApp...');

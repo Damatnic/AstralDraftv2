@@ -5,12 +5,9 @@ const MinimalApp: React.FC = () => {
   const [count, setCount] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  // Simulate app loading
+  // Remove artificial loading delay - load immediately
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
+    setIsLoading(false);
   }, []);
 
   if (isLoading) {
