@@ -119,3 +119,5 @@ vendor/bundle/
 *.gem
 .mise.toml
 .tool-versions
+server/.env
+*.env

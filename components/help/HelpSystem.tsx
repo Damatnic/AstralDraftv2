@@ -7,6 +7,7 @@ import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useMemo } from 'react';
 import { useAppState } from '../../contexts/AppContext';
 import { loadFramerMotion } from '../../utils/dynamicImports';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface HelpArticle {
   id: string;
@@ -637,7 +638,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                       <div 
                         className="prose prose-invert max-w-none sm:px-4 md:px-6 lg:px-8"
                         dangerouslySetInnerHTML={{ 
-                          __html: formatContent(selectedArticleData?.content || '') 
+                          __html: DOMPurify.sanitize(formatContent(selectedArticleData?.content || ''))
                         }}
                       />
 

@@ -167,7 +167,7 @@ class DatabaseSeeder {
       {
         username: 'admin',
         email: 'admin@astral.com',
-        password: 'admin1234',
+        password: process.env.ADMIN_DEFAULT_PASSWORD || 'changeme-admin-password',
         displayName: 'Admin User',
         avatar: '⚙️',
         emailVerified: true,

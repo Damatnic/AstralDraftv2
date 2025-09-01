@@ -69,7 +69,7 @@ const DEFAULT_TEST_USERS = [
   {
     id: '1',
     email: 'commissioner@astraldraft.com',
-    password: 'draft2024',
+    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
     name: 'Commissioner Mike',
     avatar: '👨‍💼',
     role: 'commissioner' as const,
@@ -79,7 +79,7 @@ const DEFAULT_TEST_USERS = [
   {
     id: '2',
     email: 'player@astraldraft.com',
-    password: 'touchdown',
+    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
     name: 'John Football',
     avatar: '🏈',
     role: 'user' as const,
@@ -89,7 +89,7 @@ const DEFAULT_TEST_USERS = [
   {
     id: '3',
     email: 'demo@astraldraft.com',
-    password: 'demo123',
+    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
     name: 'Demo User',
     avatar: '🎮',
     role: 'user' as const,
