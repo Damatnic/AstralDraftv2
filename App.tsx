@@ -147,25 +147,8 @@ const AppContent: React.FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
-    // EMERGENCY: Auto-login for testing
-    useEffect(() => {
-        console.log('🔐 EMERGENCY AUTO-LOGIN: Current user state:', state.user);
-        if (!state.user) {
-            console.log('🚀 AUTO-LOGIN: No user detected, logging in automatically...');
-            // Auto-login as the first user in the league
-            const autoUser = {
-                id: 1,
-                name: 'John Smith',
-                email: 'john@example.com',
-                teamName: 'Cosmic Crushers',
-                avatar: '🏆',
-                isCommissioner: true,
-                isAuthenticated: true
-            };
-            dispatch({ type: 'LOGIN', payload: autoUser });
-            console.log('✅ AUTO-LOGIN: User logged in as', autoUser.name);
-        }
-    }, [state.user, dispatch]);
+    // Authentication is handled by SimplePlayerLogin component
+    // Users must authenticate properly to access the application
 
     // Initialize performance monitoring and error handling
     useEffect(() => {
