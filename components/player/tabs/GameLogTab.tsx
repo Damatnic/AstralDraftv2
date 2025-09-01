@@ -11,7 +11,7 @@ interface GameLogTabProps {
 
 }
 
-const GameLogTab: React.FC<GameLogTabProps> = ({ player }) => {
+const GameLogTab: React.FC<GameLogTabProps> = ({ player }: any) => {
     const { league } = useLeague();
 
     if (!league || league?.status === 'PRE_DRAFT' || league?.status === 'DRAFTING') {
@@ -95,7 +95,7 @@ const GameLogTab: React.FC<GameLogTabProps> = ({ player }) => {
     );
 };
 
-const GameLogTabWithErrorBoundary: React.FC = (props) => (
+const GameLogTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <GameLogTab {...props} />
   </ErrorBoundary>

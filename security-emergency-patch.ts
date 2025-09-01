@@ -270,7 +270,7 @@ export class RateLimiter {
     const attempts = this.attempts.get(identifier) || [];
     
     // Clean old attempts
-    const recentAttempts = attempts.filter(time => now - time < this.WINDOW_MS);
+    const recentAttempts = attempts.filter((time: any) => now - time < this.WINDOW_MS);
     
     if (recentAttempts.length >= this.MAX_ATTEMPTS) {
       return true;

@@ -16,7 +16,7 @@ interface SimplePlayerLoginProps {
   onLogin?: (user: any) => void;
 }
 
-const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
+const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }: any) => {
   const { dispatch } = useAppState();
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [pin, setPin] = useState('');
@@ -150,7 +150,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
         setError('');
       } else {
         // Last resort: Demo mode login (always allow for zero barriers)
-        const selectedPlayerData = playerData.find(p => p.id === selectedPlayer);
+        const selectedPlayerData = playerData.find((p: any) => p.id === selectedPlayer);
         const demoUser = {
           id: selectedPlayer,
           name: selectedPlayerData?.name || 'Demo User',
@@ -178,9 +178,9 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
       
       const forceUser = {
         id: selectedPlayer || 'emergency',
-        name: playerData.find(p => p.id === selectedPlayer)?.name || 'Emergency User',
+        name: playerData.find((p: any) => p.id === selectedPlayer)?.name || 'Emergency User',
         email: 'emergency@astraldraft.com',
-        avatar: playerData.find(p => p.id === selectedPlayer)?.emoji || '🔓'
+        avatar: playerData.find((p: any) => p.id === selectedPlayer)?.emoji || '🔓'
       };
       
       dispatch({ type: 'LOGIN', payload: forceUser });
@@ -509,7 +509,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                         <SecureInput
                           type="password"
                           value={pin}
-                          onSecureChange={(value) => handlePinChange(value)}
+                          onSecureChange={(value: any) => handlePinChange(value)}
                           validationType="number"
                           placeholder="Enter PIN (or press Enter)"
                           maxLength={4}
@@ -541,7 +541,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
                       {/* Action Buttons */}
                       <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                         <Button
-                          variant="secondary"
+                          variant="default"
                           size="lg"
                           onClick={handleBack}
                           className="flex-1 sm:px-4 md:px-6 lg:px-8"
@@ -643,7 +643,7 @@ const SimplePlayerLogin: React.FC<SimplePlayerLoginProps> = ({ onLogin }) => {
   );
 };
 
-const SimplePlayerLoginWithErrorBoundary: React.FC = (props) => (
+const SimplePlayerLoginWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SimplePlayerLogin {...props} />
   </ErrorBoundary>

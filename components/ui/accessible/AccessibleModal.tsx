@@ -43,7 +43,7 @@ const AccessibleModal: React.FC<AccessibleModalProps> = ({
   ariaLabelledBy,
   ariaDescribedBy,
   role = 'dialog'
-}) => {
+}: any) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const focusTrapRef = useRef<FocusTrap | null>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);

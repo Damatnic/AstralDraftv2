@@ -15,7 +15,7 @@ interface Props {
 
 }
 
-const UserSettings: React.FC<Props> = ({ className = '' }) => {
+const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
     const { user, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName } = useAuth();
     
     const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'appearance'>('profile');
@@ -400,7 +400,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }) => {
     );
 };
 
-const UserSettingsWithErrorBoundary: React.FC = (props) => (
+const UserSettingsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <UserSettings {...props} />
   </ErrorBoundary>

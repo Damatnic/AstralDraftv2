@@ -201,7 +201,7 @@ const VirtualizedPredictionList = memo(({
 const OptimizedOracleRealTimePredictionInterface: React.FC<{
     week?: number;
     className?: string;
-}> = ({ week = 1, className = '' }) => {
+}> = ({ week = 1, className = '' }: any) => {
     const { user } = useAuth();
     const isMobile = useMediaQuery('(max-width: 768px)');
     

@@ -497,7 +497,7 @@ class AdvancedTradeMarketplaceService {
     const trends = Array.from(this.marketTrends.values());
     
     if (filter && filter !== 'all') {
-      return trends.filter(t => t.type === filter);
+      return trends.filter((t: any) => t.type === filter);
     }
     
     return trends;
@@ -523,10 +523,10 @@ class AdvancedTradeMarketplaceService {
         
         // Remove giving players, add receiving players
         const newTeam1Roster = team1Roster
-          .filter(p => !trade.givingPlayers.includes(p))
+          .filter((p: any) => !trade.givingPlayers.includes(p))
           .concat(trade.receivingPlayers);
         const newTeam2Roster = team2Roster
-          .filter(p => !trade.receivingPlayers.includes(p))
+          .filter((p: any) => !trade.receivingPlayers.includes(p))
           .concat(trade.givingPlayers);
         
         resultingRosters.set(trade.proposedBy, newTeam1Roster);
@@ -598,7 +598,7 @@ class AdvancedTradeMarketplaceService {
         if (otherTeamId === teamId) continue;
         
         // Check if they have what we need
-        const hasNeededPlayers = otherBlock.playersAvailable.some(p => 
+        const hasNeededPlayers = otherBlock.playersAvailable.some((p: any) => 
           teamNeeds.includes(p.position) && p.availability !== 'untouchable'
         );
         
@@ -662,7 +662,7 @@ class AdvancedTradeMarketplaceService {
     players: TradeBlockPlayer[]
   ): Promise<TradeBlockPlayer[]> {
     // Calculate interest based on views, inquiries, and offers
-    return players.map(player => ({
+    return players.map((player: any) => ({
       ...player,
       interestLevel: Math.min(100, player.interestLevel + Math.random() * 10)
     }));
@@ -671,11 +671,11 @@ class AdvancedTradeMarketplaceService {
   private calculateTradeReputation(teamId: string): TradeReputation {
     const history = this.tradeHistory.get(teamId) || [];
     const offers = Array.from(this.activeOffers.values())
-      .filter(o => o.fromTeam === teamId || o.toTeam === teamId);
+      .filter((o: any) => o.fromTeam === teamId || o.toTeam === teamId);
 
     const totalTrades = history.length;
-    const fairTrades = history.filter(t => t.fairnessScore >= 60).length;
-    const acceptedOffers = offers.filter(o => o.status === 'accepted').length;
+    const fairTrades = history.filter((t: any) => t.fairnessScore >= 60).length;
+    const acceptedOffers = offers.filter((o: any) => o.status === 'accepted').length;
     const totalOffers = offers.length;
     
     const badges: TradeBadge[] = [];
@@ -740,13 +740,13 @@ class AdvancedTradeMarketplaceService {
     }
 
     // Check if they have matching needs/assets
-    const team1Needs = team1.playersWanted.map(w => w.position);
-    const team2Assets = team2.playersAvailable.map(p => p.position);
-    const team2Needs = team2.playersWanted.map(w => w.position);
-    const team1Assets = team1.playersAvailable.map(p => p.position);
+    const team1Needs = team1.playersWanted.map((w: any) => w.position);
+    const team2Assets = team2.playersAvailable.map((p: any) => p.position);
+    const team2Needs = team2.playersWanted.map((w: any) => w.position);
+    const team1Assets = team1.playersAvailable.map((p: any) => p.position);
 
-    const hasMatch1 = team1Needs.some(need => team2Assets.includes(need));
-    const hasMatch2 = team2Needs.some(need => team1Assets.includes(need));
+    const hasMatch1 = team1Needs.some((need: any) => team2Assets.includes(need));
+    const hasMatch2 = team2Needs.some((need: any) => team1Assets.includes(need));
 
     return hasMatch1 && hasMatch2;
   }
@@ -758,11 +758,11 @@ class AdvancedTradeMarketplaceService {
     try {
       // Find players that match needs
       const team1Gives = team1.playersAvailable
-        .filter(p => team2.playersWanted.some(w => w.position === p.position))
+        .filter((p: any) => team2.playersWanted.some((w: any) => w.position === p.position))
         .slice(0, 2);
       
       const team2Gives = team2.playersAvailable
-        .filter(p => team1.playersWanted.some(w => w.position === p.position))
+        .filter((p: any) => team1.playersWanted.some((w: any) => w.position === p.position))
         .slice(0, 2);
 
       if (team1Gives.length === 0 || team2Gives.length === 0) {
@@ -774,8 +774,8 @@ class AdvancedTradeMarketplaceService {
         id: `auto_${Date.now()}`,
         proposedBy: team1.teamId,
         proposedTo: team2.teamId,
-        givingPlayers: team1Gives.map(p => p.playerId),
-        receivingPlayers: team2Gives.map(p => p.playerId),
+        givingPlayers: team1Gives.map((p: any) => p.playerId),
+        receivingPlayers: team2Gives.map((p: any) => p.playerId),
         status: 'proposed',
         proposedAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
@@ -899,8 +899,8 @@ class AdvancedTradeMarketplaceService {
         teamId,
         teamName: block.teamName,
         tradeActivity: this.calculateTradeActivity(block),
-        primaryNeeds: block.playersWanted.map(w => w.position),
-        primaryAssets: block.playersAvailable.map(p => p.position),
+        primaryNeeds: block.playersWanted.map((w: any) => w.position),
+        primaryAssets: block.playersAvailable.map((p: any) => p.position),
         openToTrades: block.playersAvailable.length > 0
       });
     }
@@ -949,7 +949,7 @@ class AdvancedTradeMarketplaceService {
     // Simplified clustering - would use actual graph clustering algorithm
     return [{
       clusterId: 'cluster_1',
-      teams: nodes.slice(0, 3).map(n => n.teamId),
+      teams: nodes.slice(0, 3).map((n: any) => n.teamId),
       commonInterests: ['RB', 'WR'],
       tradeVolume: 5,
       description: 'Active trading group focused on skill positions'
@@ -964,12 +964,12 @@ class AdvancedTradeMarketplaceService {
     const insights: NetworkInsight[] = [];
 
     // Position scarcity insight
-    const rbNeeds = nodes.filter(n => n.primaryNeeds.includes('RB')).length;
+    const rbNeeds = nodes.filter((n: any) => n.primaryNeeds.includes('RB')).length;
     if (rbNeeds > nodes.length * 0.6) {
       insights.push({
         type: 'position_scarcity',
         description: 'High demand for RBs across the league',
-        affectedTeams: nodes.filter(n => n.primaryNeeds.includes('RB')).map(n => n.teamId),
+        affectedTeams: nodes.filter((n: any) => n.primaryNeeds.includes('RB')).map((n: any) => n.teamId),
         actionableAdvice: 'RB owners can demand premium value in trades',
         confidence: 0.9
       });

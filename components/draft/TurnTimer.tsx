@@ -14,7 +14,7 @@ const PICK_TIME_SECONDS = 60;
 
 }
 
-const TurnTimer: React.FC<TurnTimerProps> = ({ currentPick, teams, draftPicks, isMyTurn, isPaused }) => {
+const TurnTimer: React.FC<TurnTimerProps> = ({ currentPick, teams, draftPicks, isMyTurn, isPaused }: any) => {
     const [timeLeft, setTimeLeft] = React.useState(PICK_TIME_SECONDS);
     
     const isDraftComplete = draftPicks.length > 0 && currentPick > draftPicks.length;
@@ -84,7 +84,7 @@ const TurnTimer: React.FC<TurnTimerProps> = ({ currentPick, teams, draftPicks, i
     );
 };
 
-const TurnTimerWithErrorBoundary: React.FC = (props) => (
+const TurnTimerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TurnTimer {...props} />
   </ErrorBoundary>

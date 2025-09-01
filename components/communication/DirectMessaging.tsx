@@ -475,7 +475,7 @@ const DirectMessaging: React.FC = () => {
   );
 };
 
-const DirectMessagingWithErrorBoundary: React.FC = (props) => (
+const DirectMessagingWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DirectMessaging {...props} />
   </ErrorBoundary>

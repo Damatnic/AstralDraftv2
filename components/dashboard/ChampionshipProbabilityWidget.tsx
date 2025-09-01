@@ -81,7 +81,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
 
   // Get user team probability data
   const userProbability = useMemo(() => {
-    return probabilities.find(p => p.teamId === userTeam?.id);
+    return probabilities.find((p: any) => p.teamId === userTeam?.id);
   }, [probabilities, userTeam]);
 
   // Get trend icon and color
@@ -291,7 +291,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
                 <div className="bg-dark-800/50 rounded-lg p-2 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
                   <p className="text-xs text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">Top Contenders</p>
                   <p className="text-sm font-bold text-white sm:px-4 md:px-6 lg:px-8">
-                    {probabilities.filter(t => t.championshipProbability > 15).length}
+                    {probabilities.filter((t: any) => t.championshipProbability > 15).length}
                   </p>
                 </div>
               </div>
@@ -333,7 +333,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
   );
 };
 
-const ChampionshipProbabilityWidgetWithErrorBoundary: React.FC = (props) => (
+const ChampionshipProbabilityWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChampionshipProbabilityWidget {...props} />
   </ErrorBoundary>

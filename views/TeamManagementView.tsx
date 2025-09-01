@@ -52,7 +52,7 @@ export type TabType = 'roster' | 'lineup' | 'transactions' | 'analytics';
 interface TeamManagementViewProps {
   onBack?: () => void;}
 
-const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }) => {
+const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) => {
   // State management
   const [activeTab, setActiveTab] = useState<TabType>('roster');
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);

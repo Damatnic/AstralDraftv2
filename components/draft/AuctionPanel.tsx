@@ -20,7 +20,7 @@ interface AuctionPanelProps {
 
 }
 
-const BidHistory: React.FC<{ history: AuctionState['bidHistory'], teams: Team[] }> = ({ history, teams }) => (
+const BidHistory: React.FC<{ history: AuctionState['bidHistory'], teams: Team[] }> = ({ history, teams }: any) => (
     <div className="text-xs text-gray-400 flex flex-wrap-reverse items-center gap-x-3 gap-y-1 sm:px-4 md:px-6 lg:px-8">
         <span>History:</span>
         {history.slice().reverse().slice(0, 5).map((item, index) => {
@@ -35,7 +35,7 @@ const BidHistory: React.FC<{ history: AuctionState['bidHistory'], teams: Team[] 
     </div>
 );
 
-const AuctionPanel: React.FC<AuctionPanelProps> = ({ nominatingTeam, nominatedPlayer, currentBid, highBidder, timeLeft, myBudget, onPlaceBid, myTeamId, bidHistory, teams }) => {
+const AuctionPanel: React.FC<AuctionPanelProps> = ({ nominatingTeam, nominatedPlayer, currentBid, highBidder, timeLeft, myBudget, onPlaceBid, myTeamId, bidHistory, teams }: any) => {
     const [myBidString, setMyBidString] = React.useState((currentBid + 1).toString());
     const isMeHighBidder = !!(myTeamId && highBidder && highBidder.id === myTeamId);
 
@@ -113,7 +113,7 @@ const AuctionPanel: React.FC<AuctionPanelProps> = ({ nominatingTeam, nominatedPl
     );
 };
 
-const AuctionPanelWithErrorBoundary: React.FC = (props) => (
+const AuctionPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AuctionPanel {...props} />
   </ErrorBoundary>

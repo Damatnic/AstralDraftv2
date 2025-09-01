@@ -104,11 +104,11 @@ const MinimalApp: React.FC = () => {
             fontWeight: 'bold',
             transition: 'all 0.2s'
           }}
-          onMouseOver={(e) => {
+          onMouseOver={(e: any) => {
             (e.target as HTMLButtonElement).style.background = '#059669';
             (e.target as HTMLButtonElement).style.transform = 'translateY(-2px)';
           }}
-          onMouseOut={(e) => {
+          onMouseOut={(e: any) => {
             (e.target as HTMLButtonElement).style.background = '#10b981';
             (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
           }}

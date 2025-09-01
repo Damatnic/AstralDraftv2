@@ -635,7 +635,7 @@ export class MLTradeAnalyzer {
     // Monte Carlo simulation of remaining season
     // Returns playoff probabilities for each team
     const simulations: any = {};
-    standings.forEach(team => {
+    standings.forEach((team: any) => {
       simulations[team.id] = {
         playoffProbability: Math.random() * 0.5 + 0.25 // Mock probability
       };

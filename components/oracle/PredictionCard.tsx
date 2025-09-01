@@ -39,7 +39,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
     onClick,
     className = '',
     compact = false
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Format time remaining
@@ -238,7 +238,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({
     );
 };
 
-const PredictionCardWithErrorBoundary: React.FC = (props) => (
+const PredictionCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PredictionCard {...props} />
   </ErrorBoundary>

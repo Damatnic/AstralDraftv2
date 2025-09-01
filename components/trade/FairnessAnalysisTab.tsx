@@ -36,7 +36,7 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     analysis,
     league,
     dispatch
-}) => {
+}: any) => {
     const valueMetrics: ValueMetric[] = React.useMemo(() => {
         if (!analysis) return [];
         
@@ -352,7 +352,7 @@ const FairnessAnalysisTab: React.FC<FairnessAnalysisTabProps> = ({
     );
 };
 
-const FairnessAnalysisTabWithErrorBoundary: React.FC = (props) => (
+const FairnessAnalysisTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <FairnessAnalysisTab {...props} />
   </ErrorBoundary>

@@ -17,7 +17,7 @@ import { PaperPlaneIcon } from '../icons/PaperPlaneIcon';
 import { EmptyTumbleweedIcon } from '../icons/EmptyTumbleweedIcon';
 
 export const TradeCenterWidget: React.FC<{
-  const [isLoading, setIsLoading] = React.useState(false); league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
+  const [isLoading, setIsLoading] = React.useState(false); league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }: any) => {
     const [isBlockModalOpen, setIsBlockModalOpen] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState('incoming');
     

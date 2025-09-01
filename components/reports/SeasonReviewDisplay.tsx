@@ -11,7 +11,7 @@ interface SeasonReviewDisplayProps {
 
 }
 
-const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team }) => (
+const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][0], team?: Team }> = ({ superlative, team }: any) => (
     <div className="bg-white/5 p-4 rounded-lg sm:px-4 md:px-6 lg:px-8">
         <h4 className="font-bold text-white sm:px-4 md:px-6 lg:px-8">{superlative.title}</h4>
         <p className="text-sm text-yellow-300 font-semibold sm:px-4 md:px-6 lg:px-8">{superlative.teamName}</p>
@@ -19,7 +19,7 @@ const SuperlativeCard: React.FC<{ superlative: SeasonReviewData['superlatives'][
     </div>
 );
 
-const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams }) => {
+const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams }: any) => {
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -62,7 +62,7 @@ const SeasonReviewDisplay: React.FC<SeasonReviewDisplayProps> = ({ review, teams
     );
 };
 
-const SeasonReviewDisplayWithErrorBoundary: React.FC = (props) => (
+const SeasonReviewDisplayWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SeasonReviewDisplay {...props} />
   </ErrorBoundary>

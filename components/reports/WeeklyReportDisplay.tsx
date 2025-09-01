@@ -12,7 +12,7 @@ interface WeeklyReportDisplayProps {
 
 }
 
-const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => {
+const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }: any) => {
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -57,7 +57,7 @@ const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }) => 
     );
 };
 
-const WeeklyReportDisplayWithErrorBoundary: React.FC = (props) => (
+const WeeklyReportDisplayWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyReportDisplay {...props} />
   </ErrorBoundary>

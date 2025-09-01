@@ -33,12 +33,12 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
     const safeProps = props && typeof props === 'object' ? { ...props } : {};
     
     // Make sure children array is safe
-    const safeChildren = children.filter(child => child !== undefined && child !== null);
+    const safeChildren = children.filter((child: any) => child !== undefined && child !== null);
     
     // Special handling for components that might access .length
     if (safeProps && typeof safeProps === 'object') {
       // Override any array-like props to have safe length access
-      Object.keys(safeProps).forEach(key => {
+      Object.keys(safeProps).forEach((key: any) => {
         const value = safeProps[key];
         if (Array.isArray(value)) {
           Object.defineProperty(value, 'length', {
@@ -68,7 +68,7 @@ const safeGetProp = (props: any, key: string, fallback: any = undefined) => {
     if (!element) return originalCreateElement.call(React, 'div', {}, 'Invalid element');
     
     const safeProps = props && typeof props === 'object' ? { ...props } : {};
-    const safeChildren = children.filter(child => child !== undefined && child !== null);
+    const safeChildren = children.filter((child: any) => child !== undefined && child !== null);
     
     return originalCloneElement.call(React, element, safeProps, ...safeChildren);
     
@@ -295,7 +295,7 @@ export const SafeSpan = withAtomicErrorProtection('span' as any);
 export const SafeButton = withAtomicErrorProtection('button' as any);
 export const SafeInput = withAtomicErrorProtection('input' as any);
 
-const AtomicErrorEliminatorWithErrorBoundary: React.FC = (props) => (
+const AtomicErrorEliminatorWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AtomicErrorEliminator {...props} />
   </ErrorBoundary>

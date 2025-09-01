@@ -14,7 +14,7 @@ interface WaiverIntelligenceWidgetProps {
 
 }
 
-const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ league }) => {
+const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ league }: any) => {
     const [intel, setIntel] = React.useState<WaiverIntelligence[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -89,7 +89,7 @@ const WaiverIntelligenceWidget: React.FC<WaiverIntelligenceWidgetProps> = ({ lea
     );
 };
 
-const WaiverIntelligenceWidgetWithErrorBoundary: React.FC = (props) => (
+const WaiverIntelligenceWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WaiverIntelligenceWidget {...props} />
   </ErrorBoundary>

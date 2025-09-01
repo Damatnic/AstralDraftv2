@@ -289,7 +289,7 @@ export const CrisisInterventionWidget: React.FC = () => {
 
 // PhoneIcon is imported from ../icons/PhoneIcon
 
-const CrisisInterventionWidgetWithErrorBoundary: React.FC = (props) => (
+const CrisisInterventionWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CrisisInterventionWidget {...props} />
   </ErrorBoundary>

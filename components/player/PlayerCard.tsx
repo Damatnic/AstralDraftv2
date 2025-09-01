@@ -71,7 +71,7 @@ const positionStyles: Record<string, { border: string; bg: string; glow: string;
 const PlayerCard: React.FC<PlayerCardProps> = ({ 
     player, onSelect, onAddToQueue, onDraft, onNominate, onAddNote,
     isMyTurn, isNominationTurn, onToggleCompare, isSelectedForCompare, isInQueue 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const hasNews = player.newsFeed && player.newsFeed.length > 0;
   const hasInjury = player?.injuryHistory && player?.injuryHistory.length > 0;
@@ -223,7 +223,7 @@ const PlayerCard: React.FC<PlayerCardProps> = ({
   );
 };
 
-const PlayerCardWithErrorBoundary: React.FC = (props) => (
+const PlayerCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerCard {...props} />
   </ErrorBoundary>

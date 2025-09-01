@@ -147,7 +147,7 @@ describe('PlayerService', () => {
 
       expect(result.success).toBe(true);
       expect(result.data).toHaveLength(2);
-      expect(result.data.every(player => player.position === 'QB')).toBe(true);
+      expect(result.data.every((player: any) => player.position === 'QB')).toBe(true);
     });
 
     test('should validate position parameter', async () => {
@@ -162,7 +162,7 @@ describe('PlayerService', () => {
     test('should fetch player statistics', async () => {
       const mockStats = {
         passingYards: 4544,
-        passingTDs: 37,
+        passingTouchdowns: 37,
         interceptions: 15,
       };
       mockFetchSuccess(mockStats);

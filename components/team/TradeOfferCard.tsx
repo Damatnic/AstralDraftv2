@@ -27,7 +27,7 @@ const statusStyles = {
     FORCED: { bg: 'bg-green-900/20', text: 'text-green-300', label: 'Forced' },
 };
 
-const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }) => {
+const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId, dispatch }: any) => {
     const [isStoryModalOpen, setIsStoryModalOpen] = React.useState(false);
 
     const isIncoming = offer.toTeamId === myTeamId;
@@ -99,7 +99,7 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
 
     };
 
-    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }) => (
+    const AssetList: React.FC<{ players: (Player | undefined)[], picks: DraftPickAsset[] }> = ({ players, picks }: any) => (
         <div className="text-xs space-y-1 sm:px-4 md:px-6 lg:px-8">
             {players.length > 0 && players.map((p: any) => p && <p key={p.id}>{p.name} ({p.position})</p>)}
             {picks.length > 0 && picks.map((p, i) => <p key={i} className="text-cyan-300 sm:px-4 md:px-6 lg:px-8">{p.season} R{p.round} Pick</p>)}
@@ -168,7 +168,7 @@ const TradeOfferCard: React.FC<TradeOfferCardProps> = ({ offer, league, myTeamId
     );
 };
 
-const TradeOfferCardWithErrorBoundary: React.FC = (props) => (
+const TradeOfferCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeOfferCard {...props} />
   </ErrorBoundary>

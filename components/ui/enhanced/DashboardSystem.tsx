@@ -165,7 +165,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
   onEdit,
   onRemove,
   onResize
-}) => {
+}: any) => {
   const {
     attributes,
     listeners,
@@ -285,7 +285,7 @@ const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
   widget,
   children,
   className = ''
-}) => {
+}: any) => {
   return (
     <div className={`
       h-full bg-glass-medium backdrop-blur-xl 
@@ -309,7 +309,7 @@ const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
   );
 };
 
-export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
+export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
   const data = widget.props || {};
   
   return (
@@ -333,7 +333,7 @@ export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
   );
 };
 
-export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
+export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
   return (
     <BaseWidget widget={widget}>
       <div className="flex items-center justify-center h-full text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -346,7 +346,7 @@ export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
   );
 };
 
-export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
+export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
   const items = widget.props?.items || [];
   
   return (
@@ -373,7 +373,7 @@ export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }) => {
 // WIDGET FACTORY
 // =========================================
 
-const WidgetFactory: React.FC<{ widget: Widget }> = ({ widget }) => {
+const WidgetFactory: React.FC<{ widget: Widget }> = ({ widget }: any) => {
   const components = {
     stat: StatWidget,
     chart: ChartWidget,
@@ -412,7 +412,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   onWidgetUpdate,
   onWidgetRemove,
   columns = 6
-}) => {
+}: any) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState(widgets);
 
@@ -439,7 +439,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
     const { active, over } = event;
 
     if (active.id !== over?.id) {
-      setItems((items) => {
+      setItems((items: any) => {
         const oldIndex = items.findIndex(item => item.id === active.id);
         const newIndex = items.findIndex(item => item.id === over?.id);
 
@@ -458,7 +458,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
     setActiveId(null);
   }, [columns, onWidgetUpdate]);
 
-  const visibleWidgets = items.filter(widget => widget.isVisible !== false);
+  const visibleWidgets = items.filter((widget: any) => widget.isVisible !== false);
 
   return (
     <DndContext
@@ -468,7 +468,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
       onDragEnd={handleDragEnd}
     >
       <SortableContext
-        items={visibleWidgets.map(w => w.id)}
+        items={visibleWidgets.map((w: any) => w.id)}
         strategy={rectSortingStrategy}
       >
         <motion.div 
@@ -479,12 +479,12 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
           layout
         >
           <AnimatePresence>
-            {visibleWidgets.map((widget) => (
+            {visibleWidgets.map((widget: any) => (
               <SortableWidget
                 key={widget.id}
                 widget={widget}
                 isEditing={isEditing}
-                onEdit={(w) => console.log('Edit widget:', w)}
+                onEdit={(w: any) => console.log('Edit widget:', w)}
                 onRemove={onWidgetRemove}
                 onResize={(id, size) => onWidgetUpdate(id, { size })}
               >
@@ -513,7 +513,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
   isOpen,
   onClose,
   onAddWidget
-}) => {
+}: any) => {
   const availableWidgets: { type: WidgetType; title: string; icon: string; description: string; defaultSize: WidgetSize }[] = [
     { type: 'stat', title: 'Stat Card', icon: '📊', description: 'Display key statistics', defaultSize: 'sm' },
     { type: 'chart', title: 'Chart', icon: '📈', description: 'Visual data representation', defaultSize: 'md' },
@@ -570,7 +570,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
               </div>
 
               <div className="grid gap-4 sm:px-4 md:px-6 lg:px-8">
-                {availableWidgets.map((widget) => (
+                {availableWidgets.map((widget: any) => (
                   <motion.button
                     key={widget.type}
                     onClick={() => handleAddWidget(widget)}
@@ -612,7 +612,7 @@ interface DashboardProviderProps {
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   children,
   storageKey = 'astral-draft-dashboard'
-}) => {
+}: any) => {
   const [layouts, setLayouts] = useState<DashboardLayout[]>([]);
   const [currentLayout, setCurrentLayoutState] = useState<DashboardLayout | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -689,22 +689,22 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     },
 
     updateLayout: (layout: DashboardLayout) => {
-      setLayouts(prev => prev.map(l => l.id === layout.id ? { ...layout, modified: new Date() } : l));
+      setLayouts(prev => prev.map((l: any) => l.id === layout.id ? { ...layout, modified: new Date() } : l));
       if (currentLayout?.id === layout.id) {
         setCurrentLayoutState({ ...layout, modified: new Date() });
 
     },
 
     deleteLayout: (layoutId: string) => {
-      setLayouts(prev => prev.filter(l => l.id !== layoutId));
+      setLayouts(prev => prev.filter((l: any) => l.id !== layoutId));
       if (currentLayout?.id === layoutId) {
-        const remaining = layouts.filter(l => l.id !== layoutId);
+        const remaining = layouts.filter((l: any) => l.id !== layoutId);
         setCurrentLayoutState(remaining[0] || null);
 
     },
 
     setCurrentLayout: (layoutId: string) => {
-      const layout = layouts.find(l => l.id === layoutId);
+      const layout = layouts.find((l: any) => l.id === layoutId);
       if (layout) {
         setCurrentLayoutState(layout);
 
@@ -725,7 +725,7 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       };
 
       setCurrentLayoutState(updatedLayout);
-      setLayouts(prev => prev.map(l => l.id === updatedLayout.id ? updatedLayout : l));
+      setLayouts(prev => prev.map((l: any) => l.id === updatedLayout.id ? updatedLayout : l));
     },
 
     updateWidget: (widgetId: string, updates: Partial<Widget>) => {
@@ -733,14 +733,14 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
       const updatedLayout = {
         ...currentLayout,
-        widgets: currentLayout.widgets.map(w => 
+        widgets: currentLayout.widgets.map((w: any) => 
           w.id === widgetId ? { ...w, ...updates } : w
         ),
         modified: new Date()
       };
 
       setCurrentLayoutState(updatedLayout);
-      setLayouts(prev => prev.map(l => l.id === updatedLayout.id ? updatedLayout : l));
+      setLayouts(prev => prev.map((l: any) => l.id === updatedLayout.id ? updatedLayout : l));
     },
 
     removeWidget: (widgetId: string) => {
@@ -748,12 +748,12 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
       const updatedLayout = {
         ...currentLayout,
-        widgets: currentLayout.widgets.filter(w => w.id !== widgetId),
+        widgets: currentLayout.widgets.filter((w: any) => w.id !== widgetId),
         modified: new Date()
       };
 
       setCurrentLayoutState(updatedLayout);
-      setLayouts(prev => prev.map(l => l.id === updatedLayout.id ? updatedLayout : l));
+      setLayouts(prev => prev.map((l: any) => l.id === updatedLayout.id ? updatedLayout : l));
     },
 
     toggleEditMode: () => {

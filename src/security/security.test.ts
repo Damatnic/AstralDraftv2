@@ -9,7 +9,7 @@ import { escapeHtml } from '../utils/stringUtils';
 
 // Mock DOMPurify for testing
 const mockDOMPurify = {
-  sanitize: jest.fn((input) => input.replace(/<script.*?>.*?<\/script>/gi, '')),
+  sanitize: jest.fn((input: any) => input.replace(/<script.*?>.*?<\/script>/gi, '')),
 };
 
 jest.mock('isomorphic-dompurify', () => ({

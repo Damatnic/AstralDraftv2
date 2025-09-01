@@ -15,7 +15,7 @@ interface PlayerRowProps {
 
 }
 
-const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent }) => {
+const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent }: any) => {
     const controls = useAnimation();
     const { player, projectedScore, actualScore, isHot } = playerData;
 
@@ -53,7 +53,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ playerData, position, latestEvent
     );
 };
 
-const PlayerRowWithErrorBoundary: React.FC = (props) => (
+const PlayerRowWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerRow {...props} />
   </ErrorBoundary>

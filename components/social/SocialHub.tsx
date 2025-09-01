@@ -102,7 +102,7 @@ const getBadgeRarityStyles = (rarity: string): string => {
 const SocialHub: React.FC<Props> = ({ 
     leagueId, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<SocialTab>('feed');
     const [loading, setLoading] = useState(false);
@@ -756,7 +756,7 @@ const SocialHub: React.FC<Props> = ({
     );
 };
 
-const SocialHubWithErrorBoundary: React.FC = (props) => (
+const SocialHubWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SocialHub {...props} />
   </ErrorBoundary>

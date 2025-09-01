@@ -15,7 +15,7 @@ interface CreatePollModalProps {
 
 }
 
-const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) => {
+const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [question, setQuestion] = React.useState('');
     const [options, setOptions] = React.useState(['', '']);
@@ -117,7 +117,7 @@ const CreatePollModal: React.FC<CreatePollModalProps> = ({ leagueId, onClose }) 
     );
 };
 
-const CreatePollModalWithErrorBoundary: React.FC = (props) => (
+const CreatePollModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CreatePollModal {...props} />
   </ErrorBoundary>

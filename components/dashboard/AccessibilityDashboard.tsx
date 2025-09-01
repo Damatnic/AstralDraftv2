@@ -41,7 +41,7 @@ interface AccessibilityDashboardProps {
 
 }
 
-export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = ''  }) => {
+export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = ''  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<AccessibilityMetrics | null>(null);
   const [history, setHistory] = useState<AccessibilityMetrics[]>([]);
@@ -255,7 +255,7 @@ interface MetricCardProps {
 
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }) => {
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }: any) => {
   const getTrendIcon = () => {
     switch (trend) {
       case 'improving': return '📈';
@@ -296,7 +296,7 @@ interface ViolationTrendChartProps {
 
 }
 
-const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }) => {
+const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) => {
   const chartData = {
     labels: data.map((d: any) => d.date),
     datasets: [
@@ -358,7 +358,7 @@ interface ViolationDistributionChartProps {
 
 }
 
-const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }) => {
+const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }: any) => {
   const chartData = {
     labels: ['Critical', 'Serious', 'Moderate', 'Minor'],
     datasets: [{
@@ -407,7 +407,7 @@ interface ComponentStatusTableProps {
 
 }
 
-const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }) => {
+const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }: any) => {
   const getStatusIcon = (status: ComponentAccessibilityMetric['status']) => {
     switch (status) {
       case 'passing': return '✅';
@@ -507,7 +507,7 @@ interface WCAGComplianceChartProps {
 
 }
 
-const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }) => {
+const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }: any) => {
   const chartData = {
     labels: ['Level A', 'Level AA', 'Level AAA'],
     datasets: [{
@@ -550,7 +550,7 @@ const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagComplianc
   return <Bar data={chartData} options={options} />;
 };
 
-const AccessibilityDashboardWithErrorBoundary: React.FC = (props) => (
+const AccessibilityDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AccessibilityDashboard {...props} />
   </ErrorBoundary>

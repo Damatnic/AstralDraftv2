@@ -35,7 +35,7 @@ interface Transaction {
     status: 'COMPLETED' | 'PENDING' | 'CANCELLED';
     details?: string;}
 
-const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }) => {
+const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, dispatch }: any) => {
     const [filterType, setFilterType] = React.useState<'ALL' | Transaction['type']>('ALL');
     const [filterWeek, setFilterWeek] = React.useState<'ALL' | number>('ALL');
     const [selectedTransaction, setSelectedTransaction] = React.useState<Transaction | null>(null);
@@ -393,7 +393,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({ team, league, d
     );
 };
 
-const TransactionHistoryWithErrorBoundary: React.FC = (props) => (
+const TransactionHistoryWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TransactionHistory {...props} />
   </ErrorBoundary>

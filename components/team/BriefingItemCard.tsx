@@ -31,7 +31,7 @@ const itemConfig = {
     ON_THE_HOT_SEAT: { icon: <FireIcon />, color: 'text-orange-400' },
 };
 
-const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onGetAdvice, onClaimPlayer }) => {
+const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onGetAdvice, onClaimPlayer }: any) => {
     const config = itemConfig[item.type] || { icon: <SparklesIcon />, color: 'text-gray-400' };
 
     const handleCardClick = () => {
@@ -103,7 +103,7 @@ const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onG
     );
 };
 
-const BriefingItemCardWithErrorBoundary: React.FC = (props) => (
+const BriefingItemCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <BriefingItemCard {...props} />
   </ErrorBoundary>

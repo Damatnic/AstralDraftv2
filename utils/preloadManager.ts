@@ -139,7 +139,7 @@ class PreloadManager {
   async preloadMultiple(ids: string[]): Promise<{ [key: string]: any }> {
     const results: { [key: string]: any } = {};
     
-    const promises = ids.map(async (id) => {
+    const promises = ids.map(async (id: any) => {
       results[id] = await this.preloadResource(id);
     });
     
@@ -222,8 +222,8 @@ class PreloadManager {
    */
   private setupViewportPreloading(): void {
     if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
+      const observer = new IntersectionObserver((entries: any) => {
+        entries.forEach((entry: any) => {
           if (entry.isIntersecting) {
             const preloadId = (entry.target as HTMLElement).dataset.preloadViewport;
             if (preloadId) {
@@ -238,7 +238,7 @@ class PreloadManager {
 
       // Observe elements with viewport preloading
       document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[data-preload-viewport]').forEach((element) => {
+        document.querySelectorAll('[data-preload-viewport]').forEach((element: any) => {
           observer.observe(element);
         });
       });
@@ -265,7 +265,7 @@ class PreloadManager {
       byTiming: {} as { [key: string]: number }
     };
 
-    this.resources.forEach((resource) => {
+    this.resources.forEach((resource: any) => {
       if (resource.loading) stats.loading++;
       if (resource.error) stats.failed++;
       

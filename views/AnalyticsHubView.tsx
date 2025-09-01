@@ -23,7 +23,7 @@ interface AnalyticsHubViewProps {
 
 }
 
-const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const draftedPlayerIds = new Set(league.draftPicks.map((p: any) => p.playerId));
     const availablePlayers = players.filter((p: any) => !draftedPlayerIds.has(p.id));
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
@@ -51,7 +51,7 @@ const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<a
     );
 };
 
-const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -72,7 +72,7 @@ const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.
     );
 };
 
-const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const [activeTab, setActiveTab] = React.useState('league');
     const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
     

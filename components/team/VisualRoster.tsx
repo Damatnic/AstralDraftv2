@@ -28,7 +28,7 @@ const SortablePlayerCard = ({ player }: { player: Player }) => {
 };
 
 // Main VisualRoster component
-const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
+const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
     const { dispatch, state } = useAppState();
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
     
@@ -154,7 +154,7 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }) => {
     );
 };
 
-const VisualRosterWithErrorBoundary: React.FC = (props) => (
+const VisualRosterWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <VisualRoster {...props} />
   </ErrorBoundary>

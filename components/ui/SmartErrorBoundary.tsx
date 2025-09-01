@@ -135,7 +135,7 @@ class SmartErrorBoundary extends Component<Props, State> {
 // Import ErrorBoundary at the top if not already imported
 // import { ErrorBoundary } from './ErrorBoundary';
 
-const SmartErrorBoundaryWithErrorBoundary: React.FC<Props> = (props) => (
+const SmartErrorBoundaryWithErrorBoundary: React.FC<Props> = (props: any) => (
   <SmartErrorBoundary {...props} />
 );
 

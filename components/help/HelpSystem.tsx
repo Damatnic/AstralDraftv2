@@ -728,7 +728,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
   );
 };
 
-const HelpSystemWithErrorBoundary: React.FC = (props) => (
+const HelpSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <HelpSystem {...props} />
   </ErrorBoundary>

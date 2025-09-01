@@ -159,7 +159,7 @@ const PasswordManagementWidget: React.FC = () => {
         <div>
           <h4 className="font-medium mb-3 sm:px-4 md:px-6 lg:px-8">User Password Status</h4>
           <div className="space-y-2 max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-            {passwordStatus.map((user) => (
+            {passwordStatus.map((user: any) => (
               <div 
                 key={user.id} 
                 className="flex items-center justify-between p-3 bg-white border rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -289,7 +289,7 @@ const PasswordManagementWidget: React.FC = () => {
   );
 };
 
-const PasswordManagementWidgetWithErrorBoundary: React.FC = (props) => (
+const PasswordManagementWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PasswordManagementWidget {...props} />
   </ErrorBoundary>

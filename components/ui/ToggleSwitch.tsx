@@ -19,7 +19,7 @@ const spring = {
     damping: 30
 };
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ id, checked, onChange }) => {
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ id, checked, onChange }: any) => {
     return (
         <div 
             id={id}
@@ -41,7 +41,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ id, checked, onChange }) =>
     );
 };
 
-const ToggleSwitchWithErrorBoundary: React.FC = (props) => (
+const ToggleSwitchWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ToggleSwitch {...props} />
   </ErrorBoundary>

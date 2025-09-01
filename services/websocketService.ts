@@ -87,17 +87,17 @@ class ResilientWebSocketService extends EventEmitter {
         this.handleOpen();
       };
 
-      this.socket.onclose = (event) => {
+      this.socket.onclose = (event: any) => {
         clearTimeout(connectionTimeout);
         this.handleClose(event);
       };
 
-      this.socket.onerror = (error) => {
+      this.socket.onerror = (error: any) => {
         clearTimeout(connectionTimeout);
         this.handleError(error);
       };
 
-      this.socket.onmessage = (event) => {
+      this.socket.onmessage = (event: any) => {
         this.handleMessage(event);
       };
 

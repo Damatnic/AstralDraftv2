@@ -50,7 +50,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   onViewChange,
   week = 1,
   className = ''
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [selectedPrediction, setSelectedPrediction] = useState<string | null>(null);
@@ -366,7 +366,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   );
 };
 
-const EnhancedMobileOracleInterfaceWithErrorBoundary: React.FC = (props) => (
+const EnhancedMobileOracleInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedMobileOracleInterface {...props} />
   </ErrorBoundary>

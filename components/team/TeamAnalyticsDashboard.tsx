@@ -49,7 +49,7 @@ interface MatchupPreview {
         advantage: 'favor' | 'against' | 'neutral';
     }[];
 
-const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }) => {
+const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, league, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'overview' | 'trends' | 'projections' | 'matchup'>('overview');
 
     // Mock data - in real app this would come from analytics service
@@ -370,7 +370,7 @@ const TeamAnalyticsDashboard: React.FC<TeamAnalyticsDashboardProps> = ({ team, l
     );
 };
 
-const TeamAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const TeamAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamAnalyticsDashboard {...props} />
   </ErrorBoundary>

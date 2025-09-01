@@ -69,7 +69,7 @@ const RivalryWidget: React.FC = () => {
     );
 };
 
-const RivalryWidgetWithErrorBoundary: React.FC = (props) => (
+const RivalryWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RivalryWidget {...props} />
   </ErrorBoundary>

@@ -31,7 +31,7 @@ import { UsersIcon } from '../components/icons/UsersIcon';
 import ProposeTradeModal from '../components/team/ProposeTradeModal';
 import { useResponsiveBreakpoint } from '../utils/mobileOptimizationUtils';
 
-const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }) => {
+const TeamHubContent: React.FC<{ league: League; team: Team; dispatch: React.Dispatch<any> }> = ({ league, team, dispatch }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const isWaiversActive = league.status === 'DRAFT_COMPLETE' || league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE';

@@ -151,7 +151,7 @@ describe('EnhancedDraftRoomView', () => {
     });
 
     const playerCards = screen.getAllByTestId(/player-/);
-    playerCards.forEach(card => {
+    playerCards.forEach((card: any) => {
       expect(card).toHaveAttribute('aria-disabled', 'true');
     });
   });

@@ -35,7 +35,7 @@ function generateMockDraftLog(): any[] {
   const draftLog: any[] = [];
   const playersPerTeam = 16;
   const topPlayers = NFL_PLAYERS_2024
-    .filter(p => p.adp && p.adp <= 160)
+    .filter((p: any) => p.adp && p.adp <= 160)
     .sort((a, b) => (a.adp || 999) - (b.adp || 999));
 
   let pickNumber = 1;
@@ -46,7 +46,7 @@ function generateMockDraftLog(): any[] {
     const isEvenRound = round % 2 === 0;
     const teamOrder = isEvenRound ? [...TEAMS_2025].reverse() : TEAMS_2025;
 
-    teamOrder.forEach(team => {
+    teamOrder.forEach((team: any) => {
       if (playerIndex < topPlayers.length) {
         const player = topPlayers[playerIndex];
         draftLog.push({

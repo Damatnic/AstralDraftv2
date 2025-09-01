@@ -13,7 +13,7 @@ interface MemberManagementWidgetProps {
 
 }
 
-const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league, dispatch }) => {
+const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league, dispatch }: any) => {
     const handleKick = (user: User) => {
         if (window.confirm(`Are you sure you want to remove ${user.name} from the league? This action is permanent.`)) {
             dispatch({ type: 'KICK_MEMBER', payload: { leagueId: league.id, userId: user.id } });
@@ -59,7 +59,7 @@ const MemberManagementWidget: React.FC<MemberManagementWidgetProps> = ({ league,
     );
 };
 
-const MemberManagementWidgetWithErrorBoundary: React.FC = (props) => (
+const MemberManagementWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MemberManagementWidget {...props} />
   </ErrorBoundary>

@@ -42,7 +42,7 @@ const getSideDisplayText = (side: DebateSide) => {
     return 'Neutral';
 };
 
-const SocialTab: React.FC<SocialTabProps> = ({ isActive }) => {
+const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
     const [activeSubTab, setActiveSubTab] = useState<'leagues' | 'predictions' | 'debates'>('leagues');
     const [userLeagues, setUserLeagues] = useState<OracleLeague[]>([]);
     const [publicLeagues, setPublicLeagues] = useState<OracleLeague[]>([]);
@@ -500,7 +500,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
     onVoteInDebate,
     onAddReaction,
     loading
-}) => {
+}: any) => {
     const getDebateStatusColor = (status: string) => {
         if (status === 'ACTIVE') return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
         if (status === 'CLOSED') return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
@@ -770,7 +770,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
     getDebateStatusColor,
     getSideColor,
     loading
-}) => {
+}: any) => {
     const sideAVotes = debate.votes.filter((v: any) => v.side === 'SIDE_A').length;
     const sideBVotes = debate.votes.filter((v: any) => v.side === 'SIDE_B').length;
     const totalVotes = sideAVotes + sideBVotes;
@@ -991,7 +991,7 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
     showJoinButton = false, 
     onJoin, 
     onClick 
-}) => (
+}: any) => (
     <button 
         className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow text-left w-full sm:px-4 md:px-6 lg:px-8"
         onClick={onClick}
@@ -1072,7 +1072,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
     onSubmit, 
     onClose, 
     loading 
-}) => (
+}: any) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             <div className="p-6 sm:px-4 md:px-6 lg:px-8">
@@ -1221,7 +1221,7 @@ interface LeagueDetailsModalProps {
 
 }
 
-const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose }) => {
+const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose }: any) => {
     const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
 
     return (
@@ -1385,7 +1385,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
     userLeagues, 
     selectedLeague, 
     onSelectLeague 
-}) => {
+}: any) => {
     const [groupPredictions, setGroupPredictions] = useState<GroupPrediction[]>([]);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -1643,7 +1643,7 @@ interface GroupPredictionCardProps {
 
 }
 
-const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, onRefresh }) => {
+const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, onRefresh }: any) => {
     const [showDetails, setShowDetails] = useState(false);
     const [showSubmitForm, setShowSubmitForm] = useState(false);
     const [submitForm, setSubmitForm] = useState({
@@ -1858,7 +1858,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
     );
 };
 
-const SocialTabWithErrorBoundary: React.FC = (props) => (
+const SocialTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SocialTab {...props} />
   </ErrorBoundary>

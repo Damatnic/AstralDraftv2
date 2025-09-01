@@ -16,7 +16,7 @@ interface CompareTrayProps {
 
 }
 
-const CompareTray: FC<CompareTrayProps> = ({ players, onClear, onCompare }) => {
+const CompareTray: FC<CompareTrayProps> = ({ players, onClear, onCompare }: any) => {
     const { dispatch } = useAppState();
 
     const handleRemovePlayer = (e: MouseEvent<HTMLButtonElement>, player: Player) => {
@@ -64,7 +64,7 @@ const CompareTray: FC<CompareTrayProps> = ({ players, onClear, onCompare }) => {
     );
 };
 
-const CompareTrayWithErrorBoundary: FC<CompareTrayProps> = (props) => (
+const CompareTrayWithErrorBoundary: FC<CompareTrayProps> = (props: any) => (
   <ErrorBoundary>
     <CompareTray {...props} />
   </ErrorBoundary>

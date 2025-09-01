@@ -53,8 +53,8 @@ class PerformanceOptimizer {
   private setupLazyLoading() {
     if (!this.config.enableLazyLoading || !('IntersectionObserver' in window)) return;
 
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    this.observer = new IntersectionObserver((entries: any) => {
+      entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
           const target = entry.target as HTMLElement;
           
@@ -82,7 +82,7 @@ class PerformanceOptimizer {
     });
 
     // Observe existing lazy elements
-    document.querySelectorAll('[data-src], [data-lazy-component]').forEach((el) => {
+    document.querySelectorAll('[data-src], [data-lazy-component]').forEach((el: any) => {
       this.observer?.observe(el);
     });
   }
@@ -91,7 +91,7 @@ class PerformanceOptimizer {
     if (!this.config.enableImageOptimization) return;
 
     // Convert images to modern formats and optimize loading
-    document.querySelectorAll('img').forEach((img) => {
+    document.querySelectorAll('img').forEach((img: any) => {
       this.optimizeImage(img);
     });
 
@@ -119,7 +119,7 @@ class PerformanceOptimizer {
 
   private setupResponsiveImages() {
     // Create WebP/AVIF sources for better compression
-    document.querySelectorAll('img[data-responsive]').forEach((img) => {
+    document.querySelectorAll('img[data-responsive]').forEach((img: any) => {
       this.createResponsiveImage(img as HTMLImageElement);
     });
   }
@@ -149,7 +149,7 @@ class PerformanceOptimizer {
   }
 
   private supportsAVIF(): boolean {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<boolean>((resolve: any) => {
       const avif = new Image();
       avif.onload = avif.onerror = () => resolve(avif.height === 2);
       avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgABogQEAwgMg8f8D///8WfhwB8+ErK42A=';
@@ -174,7 +174,7 @@ class PerformanceOptimizer {
 
   private performMemoryCleanup() {
     // Clear unused images from memory
-    document.querySelectorAll('img').forEach((img) => {
+    document.querySelectorAll('img').forEach((img: any) => {
       const rect = img.getBoundingClientRect();
       if (rect.top > window.innerHeight * 2 || rect.bottom < -window.innerHeight) {
         // Image is far from viewport, clear its data
@@ -204,7 +204,7 @@ class PerformanceOptimizer {
 
   private observeCLS() {
     if ('LayoutShiftList' in window) {
-      new PerformanceObserver((list) => {
+      new PerformanceObserver((list: any) => {
         let clsValue = 0;
         for (const entry of list.getEntries() as any[]) {
           if (!entry.hadRecentInput) {
@@ -218,7 +218,7 @@ class PerformanceOptimizer {
 
   private observeLCP() {
     if ('LargestContentfulPaint' in window) {
-      new PerformanceObserver((list) => {
+      new PerformanceObserver((list: any) => {
         const entries = list.getEntries() as any[];
         const lastEntry = entries[entries.length - 1];
         this.reportMetric('LCP', lastEntry.startTime);
@@ -228,7 +228,7 @@ class PerformanceOptimizer {
 
   private observeFID() {
     if ('FirstInputDelay' in window) {
-      new PerformanceObserver((list) => {
+      new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries() as any[]) {
           this.reportMetric('FID', entry.processingStart - entry.startTime);
         }
@@ -238,7 +238,7 @@ class PerformanceOptimizer {
 
   private observeFCP() {
     if ('PerformancePaintTiming' in window) {
-      new PerformanceObserver((list) => {
+      new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if (entry.name === 'first-contentful-paint') {
             this.reportMetric('FCP', entry.startTime);
@@ -249,7 +249,7 @@ class PerformanceOptimizer {
   }
 
   private monitorResourcePerformance() {
-    new PerformanceObserver((list) => {
+    new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'resource') {
           const resource = entry as PerformanceResourceTiming;
@@ -382,7 +382,7 @@ class PerformanceOptimizer {
 
   private enableDataSaverMode() {
     // Disable non-critical images
-    document.querySelectorAll('img[data-critical="false"]').forEach((img) => {
+    document.querySelectorAll('img[data-critical="false"]').forEach((img: any) => {
       (img as HTMLImageElement).style.display = 'none';
     });
 
@@ -427,7 +427,7 @@ export class WebVitalsMonitor {
     let sessionValue = 0;
     let sessionEntries: any[] = [];
 
-    new PerformanceObserver((list) => {
+    new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries() as any[]) {
         if (!entry.hadRecentInput) {
           const firstSessionEntry = sessionEntries[0];
@@ -452,7 +452,7 @@ export class WebVitalsMonitor {
   }
 
   private monitorLCP() {
-    new PerformanceObserver((list) => {
+    new PerformanceObserver((list: any) => {
       const entries = list.getEntries() as any[];
       const lastEntry = entries[entries.length - 1];
       this.metrics.set('LCP', lastEntry.startTime);
@@ -461,7 +461,7 @@ export class WebVitalsMonitor {
   }
 
   private monitorFID() {
-    new PerformanceObserver((list) => {
+    new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries() as any[]) {
         const fid = entry.processingStart - entry.startTime;
         this.metrics.set('FID', fid);
@@ -471,7 +471,7 @@ export class WebVitalsMonitor {
   }
 
   private monitorTTFB() {
-    new PerformanceObserver((list) => {
+    new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries()) {
         if (entry.entryType === 'navigation') {
           const nav = entry as PerformanceNavigationTiming;

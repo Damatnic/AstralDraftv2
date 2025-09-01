@@ -113,7 +113,7 @@ export const Container: React.FC<ContainerProps> = ({
   padding = true,
   center = true,
   className = ''
-}) => {
+}: any) => {
   const maxWidthClasses = {
     xs: 'max-w-xs',
     sm: 'max-w-sm',
@@ -219,7 +219,7 @@ export const Show: React.FC<ShowProps> = ({
   above,
   below,
   only
-}) => {
+}: any) => {
   const currentBreakpoint = useCurrentBreakpoint();
   const breakpointOrder: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
   
@@ -255,7 +255,7 @@ export const Show: React.FC<ShowProps> = ({
   );
 };
 
-export const Hide: React.FC<ShowProps> = (props) => {
+export const Hide: React.FC<ShowProps> = (props: any) => {
   const { children, above, below, only } = props;
   
   // Invert the logic for Hide component
@@ -279,7 +279,7 @@ export const Hide: React.FC<ShowProps> = (props) => {
     // Hide only these breakpoints - show all others
     const allBreakpoints: Breakpoint[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl'];
     const onlyBreakpoints = Array.isArray(only) ? only : [only];
-    const otherBreakpoints = allBreakpoints.filter(bp => !onlyBreakpoints.includes(bp));
+    const otherBreakpoints = allBreakpoints.filter((bp: any) => !onlyBreakpoints.includes(bp));
     invertedProps.only = otherBreakpoints;
 
   return <Show {...invertedProps} />;
@@ -333,7 +333,7 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
   size,
   weight,
   className = ''
-}) => {
+}: any) => {
   const currentSize = size ? useResponsiveValue(size) : undefined;
   const currentWeight = weight ? useResponsiveValue(weight) : undefined;
 
@@ -423,7 +423,7 @@ export const ResponsiveSpacing: React.FC<ResponsiveSpacingProps> = ({
   m, mx, my, mt, mb, ml, mr,
   p, px, py, pt, pb, pl, pr,
   className = ''
-}) => {
+}: any) => {
   const currentBreakpoint = useCurrentBreakpoint();
   const spacingClasses: string[] = [];
 
@@ -479,7 +479,7 @@ export const AspectRatio: React.FC<AspectRatioProps> = ({
   children,
   ratio = '16/9',
   className = ''
-}) => {
+}: any) => {
   const aspectRatioValue = typeof ratio === 'number' 
     ? `${ratio * 100}%` 
     : `calc(100% / (${ratio}))`;

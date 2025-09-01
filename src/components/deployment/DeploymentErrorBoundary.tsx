@@ -64,7 +64,7 @@ class DeploymentErrorBoundary extends Component<Props, State> {
 
   componentWillUnmount() {
     // Clear any pending retry timeouts
-    this.retryTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.retryTimeouts.forEach((timeout: any) => clearTimeout(timeout));
   }
 
   handleRetry = () => {

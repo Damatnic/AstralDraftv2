@@ -173,7 +173,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = () => {
     );
 };
 
-const CommandPaletteWithErrorBoundary: React.FC = (props) => (
+const CommandPaletteWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CommandPalette {...props} />
   </ErrorBoundary>

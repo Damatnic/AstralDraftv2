@@ -36,7 +36,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     className = '',
     maxUpdates = 10,
     compact = false
-}) => {
+}: any) => {
     const displayUpdates = updates.slice(0, maxUpdates);
 
     const getUpdateIcon = (type: RealtimeUpdate['type']) => {
@@ -203,7 +203,7 @@ export const RealtimeUpdatesWidget: React.FC<RealtimeUpdatesWidgetProps> = ({
     );
 };
 
-const RealtimeUpdatesWidgetWithErrorBoundary: React.FC = (props) => (
+const RealtimeUpdatesWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RealtimeUpdatesWidget {...props} />
   </ErrorBoundary>

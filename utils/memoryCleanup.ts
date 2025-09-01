@@ -93,7 +93,7 @@ class MemoryCleanupManager {
     // Clear all non-essential caches
     if ('caches' in window) {
       caches.keys().then(names => {
-        names.forEach(name => {
+        names.forEach((name: any) => {
           if (!name.includes('essential')) {
             caches.delete(name);
           }
@@ -256,17 +256,17 @@ class MemoryCleanupManager {
     console.log('[Memory Cleanup] Starting comprehensive cleanup...');
     
     // Clear all timers
-    this.timers.forEach(timer => clearTimeout(timer));
+    this.timers.forEach((timer: any) => clearTimeout(timer));
     this.timers.clear();
     
     // Clear all intervals
-    this.intervals.forEach(interval => clearInterval(interval));
+    this.intervals.forEach((interval: any) => clearInterval(interval));
     this.intervals.clear();
     
     // Remove all event listeners
     this.listeners.forEach((typeMap, target) => {
       typeMap.forEach((listeners, type) => {
-        listeners.forEach(listener => {
+        listeners.forEach((listener: any) => {
           target.removeEventListener(type, listener);
         });
       });
@@ -274,11 +274,11 @@ class MemoryCleanupManager {
     this.listeners.clear();
     
     // Disconnect all observers
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer: any) => observer.disconnect());
     this.observers.clear();
     
     // Abort all controllers
-    this.abortControllers.forEach(controller => {
+    this.abortControllers.forEach((controller: any) => {
       if (!controller.signal.aborted) {
         controller.abort();
       }
@@ -286,7 +286,7 @@ class MemoryCleanupManager {
     this.abortControllers.clear();
     
     // Execute all cleanup callbacks
-    this.cleanupCallbacks.forEach(callback => {
+    this.cleanupCallbacks.forEach((callback: any) => {
       try {
         callback();
       } catch (error) {
@@ -406,15 +406,15 @@ class ComponentMemoryScope {
    */
   cleanup() {
     // Clear all scope timers
-    this.scopeTimers.forEach(timer => this.manager.clearTimer(timer));
+    this.scopeTimers.forEach((timer: any) => this.manager.clearTimer(timer));
     this.scopeTimers.clear();
     
     // Clear all scope intervals
-    this.scopeIntervals.forEach(interval => this.manager.clearInterval(interval));
+    this.scopeIntervals.forEach((interval: any) => this.manager.clearInterval(interval));
     this.scopeIntervals.clear();
     
     // Execute all scope cleanups
-    this.scopeCleanups.forEach(cleanup => {
+    this.scopeCleanups.forEach((cleanup: any) => {
       try {
         cleanup();
       } catch (error) {

@@ -22,7 +22,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
           name: 'performance-hints',
           generateBundle(options: any, bundle: any) {
             // Analyze bundle and provide performance hints
-            Object.keys(bundle).forEach(fileName => {
+            Object.keys(bundle).forEach((fileName: any) => {
               const chunk = bundle[fileName];
               if (chunk.type === 'chunk' && chunk.code) {
                 const size = new TextEncoder().encode(chunk.code).length;

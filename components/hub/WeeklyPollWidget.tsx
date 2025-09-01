@@ -69,7 +69,7 @@ const WeeklyPollWidget: React.FC = () => {
     );
 };
 
-const WeeklyPollWidgetWithErrorBoundary: React.FC = (props) => (
+const WeeklyPollWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyPollWidget {...props} />
   </ErrorBoundary>

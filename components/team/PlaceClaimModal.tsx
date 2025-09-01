@@ -17,7 +17,7 @@ interface PlaceClaimModalProps {
 
 }
 
-const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }) => {
+const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { league } = useLeague();
     const [bid, setBid] = React.useState(1);
@@ -156,7 +156,7 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
     );
 };
 
-const PlaceClaimModalWithErrorBoundary: React.FC = (props) => (
+const PlaceClaimModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlaceClaimModal {...props} />
   </ErrorBoundary>

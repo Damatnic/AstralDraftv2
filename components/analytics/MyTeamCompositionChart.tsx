@@ -19,7 +19,7 @@ const positionColors: { [key: string]: string } = {
     DST: 'from-purple-500 to-purple-700',
 };
 
-const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team }) => {
+const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team }: any) => {
     const composition = React.useMemo(() => {
         const counts: { [key: string]: number } = { QB: 0, RB: 0, WR: 0, TE: 0, K: 0, DST: 0 };
         team.roster.forEach((player: any) => {
@@ -39,7 +39,7 @@ const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team })
         <div className="p-4 sm:px-4 md:px-6 lg:px-8">
              <h4 className="font-bold text-sm text-center mb-4 text-gray-300 sm:px-4 md:px-6 lg:px-8">Roster Composition</h4>
              <div className="flex justify-around items-end h-48 gap-2 sm:px-4 md:px-6 lg:px-8">
-                {composition.map(({ position, count }) => (
+                {composition.map(({ position, count }: any) => (
                      <Tooltip content="This is a tooltip">
                         <div className="flex flex-col items-center gap-1 w-full sm:px-4 md:px-6 lg:px-8">
                             <div 
@@ -55,7 +55,7 @@ const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team })
     );
 };
 
-const MyTeamCompositionChartWithErrorBoundary: React.FC = (props) => (
+const MyTeamCompositionChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MyTeamCompositionChart {...props} />
   </ErrorBoundary>

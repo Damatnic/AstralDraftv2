@@ -246,7 +246,7 @@ export class DynastyLeagueService {
     const teamContracts = this.contracts.get(teamId) || [];
     
     // Check franchise tag limit
-    const currentTags = teamContracts.filter(c => c.contractType === 'franchise').length;
+    const currentTags = teamContracts.filter((c: any) => c.contractType === 'franchise').length;
     if (currentTags >= settings.franchiseTagsPerTeam) {
       throw new Error('Franchise tag limit reached');
     }
@@ -392,7 +392,7 @@ export class DynastyLeagueService {
     const standings = await fantasyDataService.getStandings(leagueId);
     const draftOrder = standings
       .sort((a, b) => a.wins - b.wins)
-      .map(team => team.id);
+      .map((team: any) => team.id);
 
     // Create draft picks
     const picks: RookieDraftPick[] = [];
@@ -534,8 +534,8 @@ export class DynastyLeagueService {
     const tradeRecord: DraftPickTrade = {
       tradeId: `trade_${Date.now()}`,
       picks: [
-        ...trade.teamAPicks.map(p => ({ ...p, originalOwner: trade.teamA })),
-        ...trade.teamBPicks.map(p => ({ ...p, originalOwner: trade.teamB }))
+        ...trade.teamAPicks.map((p: any) => ({ ...p, originalOwner: trade.teamA })),
+        ...trade.teamBPicks.map((p: any) => ({ ...p, originalOwner: trade.teamB }))
       ],
       players: [], // Would fetch player details
       faabAmount: 0

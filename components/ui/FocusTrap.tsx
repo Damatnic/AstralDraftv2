@@ -5,7 +5,7 @@ interface FocusTrapProps {
   active: boolean;
 }
 
-export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }) => {
+export const FocusTrap: React.FC<FocusTrapProps> = ({ children, active }: any) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

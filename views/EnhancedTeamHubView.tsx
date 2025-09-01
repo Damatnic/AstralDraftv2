@@ -25,7 +25,7 @@ import { SparklesIcon } from '../components/icons/SparklesIcon';
 import { BrainCircuitIcon } from '../components/icons/BrainCircuitIcon';
 
 // Icon for back navigation
-const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }) => (
+const ChevronLeftIcon: React.FC<{ className?: string }> = ({ className }: any) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
   </svg>
@@ -916,7 +916,7 @@ const EnhancedTeamHubView: React.FC = () => {
       </AnimatePresence>
     </div>
   );
-};
+}
 
 }
 

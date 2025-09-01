@@ -14,7 +14,7 @@ interface SuspenseLoaderProps {
 const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({ 
   message = "Loading...", 
   size = 'md' 
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'w-6 h-6',
     md: 'w-8 h-8', 
@@ -31,7 +31,7 @@ const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({
   );
 };
 
-const SuspenseLoaderWithErrorBoundary: React.FC = (props) => (
+const SuspenseLoaderWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SuspenseLoader {...props} />
   </ErrorBoundary>

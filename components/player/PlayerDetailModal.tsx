@@ -47,7 +47,7 @@ interface MyNotesTabProps {
 
 }
 
-const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
+const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) => {
     const [noteText, setNoteText] = React.useState(note?.text || '');
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [isRecording, setIsRecording] = React.useState(false);
@@ -185,7 +185,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}) => {
     );
 };
 
-const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }) => {
+const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }: any) => {
   const [isSimilarPlayersOpen, setIsSimilarPlayersOpen] = React.useState(false);
   
   const tabItems = [
@@ -286,7 +286,7 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
   );
 };
 
-const PlayerDetailModalWithErrorBoundary: React.FC = (props) => (
+const PlayerDetailModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerDetailModal {...props} />
   </ErrorBoundary>

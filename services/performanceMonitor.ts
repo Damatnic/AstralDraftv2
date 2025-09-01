@@ -12,7 +12,7 @@ class PerformanceMonitor {
     if ('PerformanceObserver' in window) {
       // Long task monitoring
       try {
-        const longTaskObserver = new PerformanceObserver((list) => {
+        const longTaskObserver = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             this.recordMetric('longTask', entry.duration);
             if (entry.duration > 50 && process.env.NODE_ENV === 'development') {
@@ -28,7 +28,7 @@ class PerformanceMonitor {
 
       // Layout shift monitoring
       try {
-        const clsObserver = new PerformanceObserver((list) => {
+        const clsObserver = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             if (!(entry as any).hadRecentInput) {
               this.recordMetric('layoutShift', (entry as any).value);
@@ -43,7 +43,7 @@ class PerformanceMonitor {
 
       // Resource timing
       try {
-        const resourceObserver = new PerformanceObserver((list) => {
+        const resourceObserver = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             const resource = entry as PerformanceResourceTiming;
             this.recordMetric('resourceLoad', resource.duration);
@@ -151,7 +151,7 @@ class PerformanceMonitor {
 
   private getFirstContentfulPaint() {
     const entries = performance.getEntriesByType('paint');
-    const fcp = entries.find(entry => entry.name === 'first-contentful-paint');
+    const fcp = entries.find((entry: any) => entry.name === 'first-contentful-paint');
     return fcp ? fcp.startTime : null;
   }
 
@@ -212,7 +212,7 @@ class PerformanceMonitor {
 
   // Clean up observers
   destroy() {
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer: any) => observer.disconnect());
     this.observers = [];
     this.metrics.clear();
   }

@@ -34,7 +34,7 @@ interface Props {
 
 const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { user, isAuthenticated } = useAuth();
     
@@ -571,7 +571,7 @@ const OracleRealTimePredictionInterface: React.FC<Props> = ({ week = 1,
     );
 };
 
-const OracleRealTimePredictionInterfaceWithErrorBoundary: React.FC = (props) => (
+const OracleRealTimePredictionInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleRealTimePredictionInterface {...props} />
   </ErrorBoundary>

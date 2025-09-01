@@ -16,7 +16,7 @@ export const Toast: React.FC<ToastProps> = ({
   duration = 4000,
   onClose,
   visible
-}) => {
+}: any) => {
   useEffect(() => {
     if (visible && duration > 0) {
       const timer = setTimeout(onClose, duration);

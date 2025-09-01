@@ -58,7 +58,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   enabled = true,
   showWidget = import.meta.env.DEV,
   onPerformanceIssue
-}) => {
+}: any) => {
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [budgets, setBudgets] = useState<PerformanceBudget[]>([]);
   const [score, setScore] = useState<number>(100);
@@ -129,7 +129,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
     // Bundle size estimation
     const resourceEntries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
     const jsSize = resourceEntries
-      .filter(entry => entry.name.includes('.js'))
+      .filter((entry: any) => entry.name.includes('.js'))
       .reduce((sum, entry) => sum + (entry.transferSize || 0), 0);
 
     if (jsSize > 0) {
@@ -149,8 +149,8 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
     const currentMetrics = [...metrics];
     const budgetStatus: PerformanceBudget[] = [];
 
-    PERFORMANCE_BUDGETS.forEach(budget => {
-      const metric = currentMetrics.find(m => m.name === budget.metric);
+    PERFORMANCE_BUDGETS.forEach((budget: any) => {
+      const metric = currentMetrics.find((m: any) => m.name === budget.metric);
       const currentValue = metric?.value || 0;
       
       let status: 'within-budget' | 'approaching-limit' | 'over-budget';
@@ -176,7 +176,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   const calculatePerformanceScore = useCallback(() => {
     if (metrics.length === 0) return 100;
 
-    const scores = metrics.map(metric => {
+    const scores = metrics.map((metric: any) => {
       switch (metric.rating) {
         case 'good': return 100;
         case 'needs-improvement': return 70;
@@ -206,7 +206,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [enabled, collectWebVitals, collectCustomMetrics, calculateBudgetStatus, calculatePerformanceScore, autoOptimize]);
 
   const performAutoOptimizations = useCallback((currentMetrics: PerformanceMetric[]) => {
-    currentMetrics.forEach(metric => {
+    currentMetrics.forEach((metric: any) => {
       if (metric.rating === 'poor') {
         switch (metric.name) {
           case 'LCP':
@@ -216,7 +216,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
             break;
           case 'CLS':
             // Add size attributes to images
-            document.querySelectorAll('img:not([width]):not([height])').forEach(img => {
+            document.querySelectorAll('img:not([width]):not([height])').forEach((img: any) => {
               if (img instanceof HTMLImageElement) {
                 img.style.aspectRatio = '16/9'; // Prevent layout shift
               }
@@ -293,7 +293,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   const generateRecommendations = useCallback(() => {
     const recommendations: string[] = [];
 
-    metrics.forEach(metric => {
+    metrics.forEach((metric: any) => {
       if (metric.rating === 'poor') {
         switch (metric.name) {
           case 'LCP':
@@ -408,7 +408,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                 Core Web Vitals
               </h4>
               <div className="space-y-2">
-                {metrics.filter(m => ['FCP', 'LCP', 'FID', 'CLS'].includes(m.name)).map(metric => (
+                {metrics.filter((m: any) => ['FCP', 'LCP', 'FID', 'CLS'].includes(m.name)).map((metric: any) => (
                   <div key={metric.name} className="flex items-center justify-between text-xs">
                     <span className="text-gray-600 dark:text-gray-400">{metric.name}</span>
                     <div className="flex items-center space-x-2">
@@ -431,7 +431,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                 Performance Budgets
               </h4>
               <div className="space-y-2">
-                {budgets.map(budget => (
+                {budgets.map((budget: any) => (
                   <div key={budget.metric} className="text-xs">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 dark:text-gray-400">{budget.metric}</span>

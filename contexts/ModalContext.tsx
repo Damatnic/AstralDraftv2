@@ -29,7 +29,7 @@ interface ModalProviderProps {
   children: ReactNode;
 }
 
-export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
+export const ModalProvider: React.FC<ModalProviderProps> = ({ children }: any) => {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
   const [modalData, setModalData] = useState<any>(null);
 

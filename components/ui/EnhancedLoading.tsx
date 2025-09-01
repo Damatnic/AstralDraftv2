@@ -13,7 +13,7 @@ const EnhancedLoading: React.FC<LoadingProps> = ({
   text = 'Loading...',
   fullScreen = false,
   className = ''
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'h-4 w-4',
     md: 'h-8 w-8',

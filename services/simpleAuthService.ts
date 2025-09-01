@@ -529,7 +529,7 @@ class SimpleAuthService {
     }> {
         try {
             const users = this.getAllUsers();
-            return users.map(user => {
+            return users.map((user: any) => {
                 const isMainUser = user.id === 'admin' || user.id === 'player1';
                 const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
                 
@@ -564,7 +564,7 @@ class SimpleAuthService {
             let weakCount = 0;
             const recommendations: string[] = [];
             
-            users.forEach(user => {
+            users.forEach((user: any) => {
                 const validation = SecurePasswordGenerator.validatePasswordStrength(user.pin);
                 if (validation.strength === 'strong') {
                     secureCount++;
@@ -577,8 +577,8 @@ class SimpleAuthService {
             });
             
             const mainUsersProtected = users
-                .filter(u => u.id === 'admin' || u.id === 'player1')
-                .every(u => u.pin && u.pin !== '0000');
+                .filter((u: any) => u.id === 'admin' || u.id === 'player1')
+                .every((u: any) => u.pin && u.pin !== '0000');
             
             if (weakCount > 0) {
                 recommendations.push('Run generateRandomPasswordsForUsers() to secure all non-main users');

@@ -11,7 +11,7 @@ interface StoryHighlightCardProps {
 
 }
 
-const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, description, player }) => {
+const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, description, player }: any) => {
     return (
         <div className="glass-pane p-4 rounded-xl flex items-start gap-4 sm:px-4 md:px-6 lg:px-8">
             <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center bg-cyan-400/10 text-cyan-300 rounded-lg text-2xl sm:px-4 md:px-6 lg:px-8">
@@ -34,7 +34,7 @@ const StoryHighlightCard: React.FC<StoryHighlightCardProps> = ({ icon, title, de
     );
 };
 
-const StoryHighlightCardWithErrorBoundary: React.FC = (props) => (
+const StoryHighlightCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <StoryHighlightCard {...props} />
   </ErrorBoundary>

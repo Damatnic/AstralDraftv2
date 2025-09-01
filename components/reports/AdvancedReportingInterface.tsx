@@ -35,7 +35,7 @@ type ReportingTab = 'templates' | 'reports' | 'insights' | 'dashboards' | 'custo
 }
 
 const AdvancedReportingInterface: React.FC<Props> = ({ className = '' 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { user, isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ReportingTab>('templates');
@@ -447,7 +447,7 @@ const AdvancedReportingInterface: React.FC<Props> = ({ className = ''
     );
 };
 
-const AdvancedReportingInterfaceWithErrorBoundary: React.FC = (props) => (
+const AdvancedReportingInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdvancedReportingInterface {...props} />
   </ErrorBoundary>

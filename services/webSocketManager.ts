@@ -108,7 +108,7 @@ class WebSocketManager {
           resolve(ws);
         };
 
-        ws.onmessage = (event) => {
+        ws.onmessage = (event: any) => {
           connection.lastActivity = Date.now();
           
           try {
@@ -125,7 +125,7 @@ class WebSocketManager {
           }
         };
 
-        ws.onerror = (error) => {
+        ws.onerror = (error: any) => {
           console.error(`[WebSocket] Error for ${id}:`, error);
           this.emit(id, 'error', error);
           
@@ -135,7 +135,7 @@ class WebSocketManager {
           }
         };
 
-        ws.onclose = (event) => {
+        ws.onclose = (event: any) => {
           memoryManager.clearTimer(connectTimeout);
           console.log(`[WebSocket] Closed: ${id}`, {
             code: event.code,
@@ -334,7 +334,7 @@ class WebSocketManager {
     if (connection) {
       const listeners = connection.listeners.get(event);
       if (listeners) {
-        listeners.forEach(callback => {
+        listeners.forEach((callback: any) => {
           try {
             callback(data);
           } catch (error) {
@@ -347,7 +347,7 @@ class WebSocketManager {
     // Global listeners
     const globalListeners = this.globalListeners.get(event);
     if (globalListeners) {
-      globalListeners.forEach(callback => {
+      globalListeners.forEach((callback: any) => {
         try {
           callback({ connectionId: id, ...data });
         } catch (error) {

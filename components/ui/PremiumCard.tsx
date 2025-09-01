@@ -19,7 +19,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
   pulse = false,
   className = '',
   ...props
-}) => {
+}: any) => {
   const paddingClasses = {
     none: '',
     sm: 'p-3',
@@ -124,7 +124,7 @@ export const PremiumCard: React.FC<PremiumCardProps> = ({
 export const CardHeader: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = '' 
-}) => (
+}: any) => (
   <div className={`pb-4 mb-4 border-b border-white/10 ${className}`}>
     {children}
   </div>
@@ -133,7 +133,7 @@ export const CardHeader: React.FC<{ children: React.ReactNode; className?: strin
 export const CardTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = '' 
-}) => (
+}: any) => (
   <h3 className={`text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent ${className}`}>
     {children}
   </h3>
@@ -142,7 +142,7 @@ export const CardTitle: React.FC<{ children: React.ReactNode; className?: string
 export const CardDescription: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = '' 
-}) => (
+}: any) => (
   <p className={`text-sm text-gray-400 mt-1 ${className}`}>
     {children}
   </p>
@@ -151,7 +151,7 @@ export const CardDescription: React.FC<{ children: React.ReactNode; className?: 
 export const CardContent: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = '' 
-}) => (
+}: any) => (
   <div className={`${className}`}>
     {children}
   </div>
@@ -160,7 +160,7 @@ export const CardContent: React.FC<{ children: React.ReactNode; className?: stri
 export const CardFooter: React.FC<{ children: React.ReactNode; className?: string }> = ({ 
   children, 
   className = '' 
-}) => (
+}: any) => (
   <div className={`pt-4 mt-4 border-t border-white/10 ${className}`}>
     {children}
   </div>
@@ -173,7 +173,7 @@ export const StatCard: React.FC<{
   change?: number;
   icon?: React.ReactNode;
   trend?: 'up' | 'down' | 'neutral';
-}> = ({ title, value, change, icon, trend = 'neutral' }) => {
+}> = ({ title, value, change, icon, trend = 'neutral' }: any) => {
   const trendColors = {
     up: 'text-emerald-400',
     down: 'text-red-400',

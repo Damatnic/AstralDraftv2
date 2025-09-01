@@ -21,9 +21,9 @@ interface MatchupCardProps {
 
 }
 
-const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId, onViewMatchup }) => {
-  const teamA = teams.find(t => t.id === matchup.teamA.teamId);
-  const teamB = teams.find(t => t.id === matchup.teamB.teamId);
+const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId, onViewMatchup }: any) => {
+  const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
+  const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
   
   if (!teamA || !teamB) return null;
   
@@ -105,7 +105,7 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
   if (!league || league.status === 'PRE_DRAFT' || league.status === 'DRAFTING') {
     return null;
 
-  const currentWeekMatchups = league.schedule.filter(m => m.week === league.currentWeek);
+  const currentWeekMatchups = league.schedule.filter((m: any) => m.week === league.currentWeek);
   const isPlayoffs = league.currentWeek > league.settings.regularSeasonWeeks;
   
   const handleViewMatchup = (matchup: Matchup) => {
@@ -162,19 +162,19 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
           <div className="grid grid-cols-3 gap-4 text-center sm:px-4 md:px-6 lg:px-8">
             <div>
               <div className="text-2xl font-bold text-cyan-400 sm:px-4 md:px-6 lg:px-8">
-                {currentWeekMatchups.filter(m => !m.isComplete).length}
+                {currentWeekMatchups.filter((m: any) => !m.isComplete).length}
               </div>
               <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Games Live</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-green-400 sm:px-4 md:px-6 lg:px-8">
-                {Math.max(...currentWeekMatchups.map(m => Math.max(m.teamA.score, m.teamB.score))).toFixed(1)}
+                {Math.max(...currentWeekMatchups.map((m: any) => Math.max(m.teamA.score, m.teamB.score))).toFixed(1)}
               </div>
               <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">High Score</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-purple-400 sm:px-4 md:px-6 lg:px-8">
-                {currentWeekMatchups.filter(m => Math.abs(m.teamA.score - m.teamB.score) < 5).length}
+                {currentWeekMatchups.filter((m: any) => Math.abs(m.teamA.score - m.teamB.score) < 5).length}
               </div>
               <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Close Games</div>
             </div>
@@ -185,7 +185,7 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
   );
 };
 
-const CurrentWeekMatchupsWidgetWithErrorBoundary: React.FC = (props) => (
+const CurrentWeekMatchupsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CurrentWeekMatchupsWidget {...props} />
   </ErrorBoundary>

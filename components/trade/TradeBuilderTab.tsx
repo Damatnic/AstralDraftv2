@@ -33,7 +33,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     proposal,
     onProposalUpdate,
     dispatch
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const [selectedTeam, setSelectedTeam] = React.useState<Team | null>(null);
     const [fromPlayers, setFromPlayers] = React.useState<Player[]>([]);
@@ -547,7 +547,7 @@ const TradeBuilderTab: React.FC<TradeBuilderTabProps> = ({ league,
     );
 };
 
-const TradeBuilderTabWithErrorBoundary: React.FC = (props) => (
+const TradeBuilderTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeBuilderTab {...props} />
   </ErrorBoundary>

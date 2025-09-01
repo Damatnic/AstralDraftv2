@@ -299,7 +299,7 @@ class FantasyDataService {
   ): Promise<number> {
     try {
       const projections = await Promise.all(
-        lineup.map(playerId => this.getPlayerProjections(playerId, week))
+        lineup.map((playerId: any) => this.getPlayerProjections(playerId, week))
       );
 
       return projections.reduce((total, proj) => {

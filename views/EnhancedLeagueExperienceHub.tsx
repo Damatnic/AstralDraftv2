@@ -44,7 +44,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
   userName,
   teamName,
   currentWeek
-}) => {
+}: any) => {
   const [activeSection, setActiveSection] = useState<string>('overview');
   const [leagueStats, setLeagueStats] = useState<LeagueStats>({
     totalMessages: 247,
@@ -69,7 +69,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
     { id: 'team10', name: 'Draft Day Demons', owner: 'Quinn Anderson', record: { wins: 6, losses: 5 }, stats: {} }
   ];
 
-  const mockLeagueMembers = mockTeams.map(team => ({
+  const mockLeagueMembers = mockTeams.map((team: any) => ({
     id: team.id,
     name: team.name,
     teamName: team.name,
@@ -230,7 +230,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
               { label: 'Join Challenge', section: 'challenges', icon: Target, color: 'bg-green-600' },
               { label: 'Upload Memory', section: 'memories', icon: Camera, color: 'bg-pink-600' },
               { label: 'Check Rivalries', section: 'rivalries', icon: Flame, color: 'bg-orange-600' }
-            ].map(action => (
+            ].map((action: any) => (
               <button
                 key={action.label}
                 onClick={() => setActiveSection(action.section)} hover:opacity-80 text-white p-3 rounded-lg transition-opacity flex items-center gap-2 text-sm font-semibold`}
@@ -324,8 +324,8 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         return (
           <TeamIdentityCustomizer
             teamId={userId}
-            onSave={(identity) => console.log('Saving identity:', identity)}
-            onPreview={(identity) => console.log('Previewing identity:', identity)}
+            onSave={(identity: any) => console.log('Saving identity:', identity)}
+            onPreview={(identity: any) => console.log('Previewing identity:', identity)}
           />
         );
       case 'memories':
@@ -377,7 +377,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
 
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-            {sections.map(section => (
+            {sections.map((section: any) => (
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}`}

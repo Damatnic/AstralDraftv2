@@ -470,16 +470,16 @@ class AdvancedAnalyticsDashboardService {
       
       // Identify key games
       const mustWinGames = weeks
-        .filter(w => w.mustWin)
-        .map(w => w.week);
+        .filter((w: any) => w.mustWin)
+        .map((w: any) => w.week);
       
       const trapGames = weeks
-        .filter(w => w.difficulty < 4 && w.winProbability < 0.6)
-        .map(w => w.week);
+        .filter((w: any) => w.difficulty < 4 && w.winProbability < 0.6)
+        .map((w: any) => w.week);
 
       // Get playoff schedule
       const playoffWeeks = [14, 15, 16, 17];
-      const playoffSchedule = weeks.filter(w => playoffWeeks.includes(w.week));
+      const playoffSchedule = weeks.filter((w: any) => playoffWeeks.includes(w.week));
 
       // Identify advantages and disadvantages
       const advantages = this.identifyScheduleAdvantages(weeks);
@@ -567,7 +567,7 @@ class AdvancedAnalyticsDashboardService {
       let bustWeeks = 0;
       let averageWeeks = 0;
       
-      const categorizedScores = weeklyScores.map(ws => {
+      const categorizedScores = weeklyScores.map((ws: any) => {
         const vsAverage = ws.score - average;
         let performance: 'boom' | 'bust' | 'average';
         
@@ -633,7 +633,7 @@ class AdvancedAnalyticsDashboardService {
       const affectedPlayers: any[] = [];
       
       for (const injury of injuries) {
-        const player = roster.find(p => p.playerId === injury.playerId);
+        const player = roster.find((p: any) => p.playerId === injury.playerId);
         if (!player) continue;
         
         const pointsLost = await this.calculatePointsLostToInjury(player, injury);
@@ -1070,7 +1070,7 @@ class AdvancedAnalyticsDashboardService {
       
       tiers.push({
         tier: tierNames[i],
-        teams: tierTeams.map(t => t.team),
+        teams: tierTeams.map((t: any) => t.team),
         description: `${tierNames[i]} tier teams`,
         averageRating: tierTeams.reduce((sum, t) => sum + t.rating, 0) / tierTeams.length
       });
@@ -1131,10 +1131,10 @@ class AdvancedAnalyticsDashboardService {
   private identifyScheduleAdvantages(weeks: WeekAnalysis[]): string[] {
     const advantages: string[] = [];
     
-    const homeGames = weeks.filter(w => w.restAdvantage === 'team').length;
+    const homeGames = weeks.filter((w: any) => w.restAdvantage === 'team').length;
     if (homeGames > 9) advantages.push('Favorable home schedule');
     
-    const easyGames = weeks.filter(w => w.difficulty < 4).length;
+    const easyGames = weeks.filter((w: any) => w.difficulty < 4).length;
     if (easyGames > 6) advantages.push('Multiple games against weak opponents');
     
     return advantages;
@@ -1143,10 +1143,10 @@ class AdvancedAnalyticsDashboardService {
   private identifyScheduleDisadvantages(weeks: WeekAnalysis[]): string[] {
     const disadvantages: string[] = [];
     
-    const toughGames = weeks.filter(w => w.difficulty > 7).length;
+    const toughGames = weeks.filter((w: any) => w.difficulty > 7).length;
     if (toughGames > 6) disadvantages.push('Difficult strength of schedule');
     
-    const divisionGames = weeks.filter(w => w.divisionGame).length;
+    const divisionGames = weeks.filter((w: any) => w.divisionGame).length;
     if (divisionGames > 8) disadvantages.push('Many divisional games');
     
     return disadvantages;
@@ -1192,7 +1192,7 @@ class AdvancedAnalyticsDashboardService {
   }
 
   private calculateVolatility(weeklyScores: any[]): number {
-    const scores = weeklyScores.map(w => w.score);
+    const scores = weeklyScores.map((w: any) => w.score);
     const mean = scores.reduce((sum, s) => sum + s, 0) / scores.length;
     const variance = scores.reduce((sum, s) => sum + Math.pow(s - mean, 2), 0) / scores.length;
     return Math.sqrt(variance) / mean;
@@ -1237,7 +1237,7 @@ class AdvancedAnalyticsDashboardService {
       recommendations.push('High injury risk - prioritize depth acquisitions');
     }
     
-    if (affectedPlayers.some(p => p.position === 'RB')) {
+    if (affectedPlayers.some((p: any) => p.position === 'RB')) {
       recommendations.push('Consider handcuff RBs for injury insurance');
     }
     

@@ -42,7 +42,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
   maxAlerts = 5,
   showSettings = true,
   onDismiss
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [alerts, setAlerts] = useState<InjuryAlert[]>([]);
   const [dismissedAlerts, setDismissedAlerts] = useState<Set<string>>(new Set());
@@ -404,7 +404,7 @@ const InjuryAlertNotification: React.FC<InjuryAlertNotificationProps> = ({ class
   );
 };
 
-const InjuryAlertNotificationWithErrorBoundary: React.FC = (props) => (
+const InjuryAlertNotificationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <InjuryAlertNotification {...props} />
   </ErrorBoundary>

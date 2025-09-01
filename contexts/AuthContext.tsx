@@ -148,7 +148,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 // Provider component
 }
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount
@@ -389,7 +389,7 @@ export const usePermission = (permission?: string) => {
 export const AuthInitializer: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
     children,
     fallback = <div>Loading...</div>,
-}) => {
+}: any) => {
     const { isInitialized } = useAuth();
     
     if (!isInitialized) {

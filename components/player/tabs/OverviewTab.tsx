@@ -12,14 +12,14 @@ interface OverviewTabProps {
 
 }
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
         <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{label}</p>
         <p className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{value}</p>
     </div>
 );
 
-const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }) => {
+const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }: any) => {
   const { league } = useLeague();
   const awards = (league?.playerAwards || []).filter((a: any) => a.playerId === player.id);
   const teamMap = new Map(league?.teams.map((t: any) => [t.id, t.name]));
@@ -78,7 +78,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ player, onFindSimilar }) => {
   );
 };
 
-const OverviewTabWithErrorBoundary: React.FC = (props) => (
+const OverviewTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OverviewTab {...props} />
   </ErrorBoundary>

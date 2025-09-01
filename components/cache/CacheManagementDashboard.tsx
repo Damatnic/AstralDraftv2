@@ -255,7 +255,7 @@ const CacheManagementDashboard: React.FC = () => {
     );
 };
 
-const CacheManagementDashboardWithErrorBoundary: React.FC = (props) => (
+const CacheManagementDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CacheManagementDashboard {...props} />
   </ErrorBoundary>

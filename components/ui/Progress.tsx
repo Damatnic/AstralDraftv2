@@ -19,7 +19,7 @@ export const Progress: React.FC<ProgressProps> = ({
   showLabel = false,
   label,
   className = ''
-}) => {
+}: any) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   const sizeClasses = {

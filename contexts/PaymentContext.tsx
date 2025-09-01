@@ -99,7 +99,7 @@ interface PaymentProviderProps {
 
 }
 
-export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) => {
+export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: any) => {
   // Stripe instance
   const [stripe, setStripe] = useState<Stripe | null>(null);
   

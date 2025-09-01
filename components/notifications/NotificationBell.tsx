@@ -15,7 +15,7 @@ interface NotificationBellProps {
 
 }
 
-const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: any) => {
     const { unreadCount } = useNotifications();
     const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
 
@@ -61,7 +61,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }) =
     );
 };
 
-const NotificationBellWithErrorBoundary: React.FC = (props) => (
+const NotificationBellWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationBell {...props} />
   </ErrorBoundary>

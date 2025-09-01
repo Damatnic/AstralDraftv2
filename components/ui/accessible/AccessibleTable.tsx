@@ -71,7 +71,7 @@ function AccessibleTable<T extends Record<string, any>>({
     }
 
     announceToScreenReader(
-      `Sorted by ${columns.find(c => c.key === columnKey)?.label} ${newDirection === 'asc' ? 'ascending' : 'descending'}`,
+      `Sorted by ${columns.find((c: any) => c.key === columnKey)?.label} ${newDirection === 'asc' ? 'ascending' : 'descending'}`,
       'polite'
     );
   };
@@ -205,7 +205,7 @@ function AccessibleTable<T extends Record<string, any>>({
                     : 'none'
                 }
                 onClick={() => column.sortable && handleSort(column.key as string)}
-                onKeyDown={(e) => {
+                onKeyDown={(e: any) => {
                   if (column.sortable && (e.key === KEYBOARD_KEYS.ENTER || e.key === KEYBOARD_KEYS.SPACE)) {
                     e.preventDefault();
                     handleSort(column.key as string);
@@ -280,7 +280,7 @@ function AccessibleTable<T extends Record<string, any>>({
                         data-row={rowIndex}
                         data-col={colIndex}
                         tabIndex={focusedCell.row === rowIndex && focusedCell.col === colIndex ? 0 : -1}
-                        onKeyDown={(e) => handleKeyDown(e, rowIndex, colIndex)}
+                        onKeyDown={(e: any) => handleKeyDown(e, rowIndex, colIndex)}
                         onFocus={() => setFocusedCell({ row: rowIndex, col: colIndex })}
                         aria-label={column.ariaLabel ? column.ariaLabel(row) : undefined}
                       >

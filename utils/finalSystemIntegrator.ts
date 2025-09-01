@@ -79,7 +79,7 @@ export class FinalSystemIntegrator {
   }
 
   private async performAllSystemChecks(): Promise<void> {
-    const checkPromises = Array.from(this.systemChecks.keys()).map(async (systemName) => {
+    const checkPromises = Array.from(this.systemChecks.keys()).map(async (systemName: any) => {
       try {
 
         const check = await this.performSystemCheck(systemName);
@@ -373,8 +373,8 @@ export const useSystemIntegration = () => {
   return {
     healthReport,
     isHealthy: healthReport.overallHealth === 'healthy',
-    criticalSystems: healthReport.systems.filter(s => s.status === 'critical'),
-    degradedSystems: healthReport.systems.filter(s => s.status === 'degraded'),
+    criticalSystems: healthReport.systems.filter((s: any) => s.status === 'critical'),
+    degradedSystems: healthReport.systems.filter((s: any) => s.status === 'degraded'),
     integrator: finalSystemIntegrator
   };
 };

@@ -75,7 +75,7 @@ const MobileNavMenu: React.FC = () => {
     );
 };
 
-const MobileNavMenuWithErrorBoundary: React.FC = (props) => (
+const MobileNavMenuWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileNavMenu {...props} />
   </ErrorBoundary>

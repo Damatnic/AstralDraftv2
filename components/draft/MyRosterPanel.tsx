@@ -11,7 +11,7 @@ const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
 }
 
-const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }) => {
+const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
     if (!team) {
         return (
             <div className="h-full flex flex-col items-center justify-center text-center p-4 sm:px-4 md:px-6 lg:px-8">
@@ -34,7 +34,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }) => {
                 </h3>
             </div>
             <div className="flex-grow space-y-2 sm:space-y-3 overflow-y-auto pr-1">
-                {rosterByPosition.map(({ position, players }) => (
+                {rosterByPosition.map(({ position, players }: any) => (
                     <div key={position}>
                         <h4 className="font-bold text-xs sm:text-sm text-cyan-300 px-1 mb-1">{position} ({players.length})</h4>
                         <div className="space-y-0.5 sm:space-y-1">
@@ -55,7 +55,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }) => {
     );
 };
 
-const MyRosterPanelWithErrorBoundary: React.FC = (props) => (
+const MyRosterPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MyRosterPanel {...props} />
   </ErrorBoundary>

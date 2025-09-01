@@ -72,7 +72,7 @@ const PerformanceMonitor: React.FC = () => {
 
     return () => {
       // Clean up all observers
-      observersRef.current.forEach(observer => {
+      observersRef.current.forEach((observer: any) => {
         try {
           observer.disconnect();
         } catch (error) {
@@ -559,7 +559,7 @@ const PerformanceMonitor: React.FC = () => {
   );
 };
 
-const PerformanceMonitorWithErrorBoundary: React.FC = (props) => (
+const PerformanceMonitorWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PerformanceMonitor {...props} />
   </ErrorBoundary>

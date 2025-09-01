@@ -133,7 +133,7 @@ export class SecurePasswordGenerator {
     }
     
     // If any digit appears 3 or more times, it's weak
-    return Array.from(digitCount.values()).some(count => count >= 3);
+    return Array.from(digitCount.values()).some((count: any) => count >= 3);
   }
 
   /**

@@ -59,7 +59,7 @@ export class RealTimeDataPipeline {
           resolve();
         });
 
-        this.socket.on('connect_error', (error) => {
+        this.socket.on('connect_error', (error: any) => {
           console.error('Connection error:', error);
           this.handleConnectionError(error);
           if (this.reconnectAttempts >= this.maxReconnectAttempts) {
@@ -111,7 +111,7 @@ export class RealTimeDataPipeline {
    */
   unsubscribe(subscriptionId: string): void {
     for (const [channel, subscribers] of this.subscribers.entries()) {
-      const subscriber = Array.from(subscribers).find(s => s.id === subscriptionId);
+      const subscriber = Array.from(subscribers).find((s: any) => s.id === subscriptionId);
       if (subscriber) {
         subscribers.delete(subscriber);
         
@@ -128,7 +128,7 @@ export class RealTimeDataPipeline {
    * Stream live game data with intelligent updates
    */
   streamLiveScores(callback: (scores: LiveScore[]) => void): string {
-    return this.subscribe('live-scores', (data) => {
+    return this.subscribe('live-scores', (data: any) => {
       const scores = this.processLiveScores(data);
       callback(scores);
     }, {
@@ -142,7 +142,7 @@ export class RealTimeDataPipeline {
    * Stream player updates with delta compression
    */
   streamPlayerUpdates(callback: (updates: PlayerUpdate[]) => void): string {
-    return this.subscribe('player-updates', (data) => {
+    return this.subscribe('player-updates', (data: any) => {
       const updates = this.processPlayerUpdates(data);
       callback(updates);
     }, {
@@ -156,7 +156,7 @@ export class RealTimeDataPipeline {
    * Stream injury updates with immediate notification
    */
   streamInjuryUpdates(callback: (injuries: InjuryUpdate[]) => void): string {
-    return this.subscribe('injury-updates', (data) => {
+    return this.subscribe('injury-updates', (data: any) => {
       const injuries = this.processInjuryUpdates(data);
       callback(injuries);
     }, {
@@ -169,7 +169,7 @@ export class RealTimeDataPipeline {
    * Stream news and social media sentiment
    */
   streamNewsSentiment(callback: (news: NewsUpdate[]) => void): string {
-    return this.subscribe('news-sentiment', (data) => {
+    return this.subscribe('news-sentiment', (data: any) => {
       const news = this.processNewsUpdates(data);
       callback(news);
     }, {
@@ -201,7 +201,7 @@ export class RealTimeDataPipeline {
         compression: true
       });
 
-      this.socket.once(`batch-response-${requestId}`, (response) => {
+      this.socket.once(`batch-response-${requestId}`, (response: any) => {
         clearTimeout(timeout);
         const processedResponse = this.processBatchResponse(response);
         resolve(processedResponse);
@@ -380,7 +380,7 @@ export class RealTimeDataPipeline {
     // Process and enhance live score data
     const scores: LiveScore[] = data.scores || [];
     
-    return scores.map(score => ({
+    return scores.map((score: any) => ({
       ...score,
       trend: this.calculateScoreTrend(score),
       projected: this.projectFinalScore(score),

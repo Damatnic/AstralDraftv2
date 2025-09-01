@@ -17,7 +17,7 @@ export const Accordion: React.FC<AccordionProps> = ({
   items,
   allowMultiple = false,
   defaultOpen = []
-}) => {
+}: any) => {
   const [openItems, setOpenItems] = useState<string[]>(defaultOpen);
 
   const toggleItem = (itemId: string) => {

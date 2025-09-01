@@ -87,7 +87,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
         rollupOptions: {
           output: {
             // Aggressive manual chunking strategy
-            manualChunks: (id) => {
+            manualChunks: (id: any) => {
               // Core React (essential)
               if (id.includes('react') || id.includes('react-dom')) {
                 if (id.includes('react-dom')) return 'react-dom';
@@ -141,7 +141,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
                   'warning', 'object-assign', 'prop-types'
                 ];
                 
-                if (smallPackages.some(pkg => packageName.includes(pkg))) {
+                if (smallPackages.some((pkg: any) => packageName.includes(pkg))) {
                   return 'vendor-small';
                 }
                 
@@ -166,7 +166,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
             
             // Optimize chunk names
             entryFileNames: isProduction ? '[name].[hash:8].js' : '[name].js',
-            chunkFileNames: (chunkInfo) => {
+            chunkFileNames: (chunkInfo: any) => {
               const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId : '';
               
               // Critical chunks get shorter hashes
@@ -193,7 +193,7 @@ export default defineConfig(({ mode }: { mode: string }) => {
             },
             
             // Optimize asset file names
-            assetFileNames: (assetInfo) => {
+            assetFileNames: (assetInfo: any) => {
               const info = assetInfo.name?.split('.');
               const ext = info?.[info.length - 1];
               

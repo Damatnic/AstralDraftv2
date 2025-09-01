@@ -45,7 +45,7 @@ export class MobileTouchEnhancer {
     document.addEventListener('touchcancel', this.handleTouchCancel);
     
     // Prevent iOS bounce on body
-    document.body.addEventListener('touchmove', (e) => {
+    document.body.addEventListener('touchmove', (e: any) => {
       if ((e.target as Element)?.closest('.scrollable') === null) {
         e.preventDefault();
       }
@@ -197,7 +197,7 @@ export class MobileTouchEnhancer {
     return (
       interactiveTags.includes(target.tagName) ||
       interactiveRoles.includes(target.getAttribute('role') || '') ||
-      interactiveClasses.some(cls => target.classList.contains(cls)) ||
+      interactiveClasses.some((cls: any) => target.classList.contains(cls)) ||
       target.hasAttribute('onclick') ||
       target.hasAttribute('data-interactive')
     );

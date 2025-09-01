@@ -18,7 +18,7 @@ interface DraftOrderProps {
 const DraftOrder: React.FC<DraftOrderProps> = ({ 
   showRandomizeButton = false, 
   isCommissioner = false 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [draftOrder, setDraftOrder] = useState<Team[]>([]);
@@ -220,7 +220,7 @@ const DraftOrder: React.FC<DraftOrderProps> = ({
   );
 };
 
-const DraftOrderWithErrorBoundary: React.FC = (props) => (
+const DraftOrderWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftOrder {...props} />
   </ErrorBoundary>

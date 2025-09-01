@@ -26,7 +26,7 @@ const SeasonReviewLoader: React.FC = () => (
     </div>
 );
 
-const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }) => {
+const SeasonReviewContent: React.FC<{ league: League; seasonYear: number; dispatch: React.Dispatch<any> }> = ({ league, seasonYear, dispatch }: any) => {
     const [review, setReview] = React.useState<SeasonReviewData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);

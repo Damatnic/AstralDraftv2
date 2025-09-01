@@ -223,7 +223,7 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
   defaultMode = 'system',
   enableSeasonalThemes = true,
   enableSystemPreference = true
-}) => {
+}: any) => {
   // =========================================
   // STATE MANAGEMENT
   // =========================================
@@ -403,26 +403,26 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
   // =========================================
 
   const actions: ThemeActions = {
-    setMode: (mode) => {
+    setMode: (mode: any) => {
       setState(prev => ({ ...prev, mode }));
     },
 
-    setColorScheme: (colorScheme) => {
+    setColorScheme: (colorScheme: any) => {
       setState(prev => ({ ...prev, colorScheme }));
     },
 
-    setSeasonalTheme: (seasonalTheme) => {
+    setSeasonalTheme: (seasonalTheme: any) => {
       setState(prev => ({ ...prev, seasonalTheme }));
     },
 
-    updateCustomization: (updates) => {
+    updateCustomization: (updates: any) => {
       setState(prev => ({
         ...prev,
         customization: { ...prev.customization, ...updates }
       }));
     },
 
-    updateAccessibility: (updates) => {
+    updateAccessibility: (updates: any) => {
       setState(prev => ({
         ...prev,
         accessibility: { ...prev.accessibility, ...updates }
@@ -456,7 +456,7 @@ export const EnhancedThemeProvider: React.FC<ThemeProviderProps> = ({
       return JSON.stringify(exportData, null, 2);
     },
 
-    importTheme: (themeData) => {
+    importTheme: (themeData: any) => {
       try {
         const parsed = JSON.parse(themeData);
         if (parsed.version === '1.0') {
@@ -583,7 +583,7 @@ export const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({
   className = '',
   showLabels = true,
   size = 'md'
-}) => {
+}: any) => {
   const { mode, toggleMode } = useTheme();
 
   const icons = {
@@ -636,7 +636,7 @@ interface ColorSchemeSelectorProps {
 
 export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
   className = ''
-}) => {
+}: any) => {
   const { colorScheme, setColorScheme } = useTheme();
 
   const schemes: { key: ColorScheme; name: string; colors: string[] }[] = [
@@ -653,7 +653,7 @@ export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
 
   return (
     <div className={`grid grid-cols-3 gap-2 ${className}`}>
-      {schemes.map((scheme) => (
+      {schemes.map((scheme: any) => (
         <motion.button
           key={scheme.key}
           onClick={() => setColorScheme(scheme.key)}

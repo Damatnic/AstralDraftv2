@@ -29,7 +29,7 @@ const TabsContext = React.createContext<{
   onValueChange: (value: string) => void;
 } | null>(null);
 
-export const Tabs: React.FC<TabsProps> = ({ value, onValueChange, children, className = '' }) => {
+export const Tabs: React.FC<TabsProps> = ({ value, onValueChange, children, className = '' }: any) => {
   const contextValue = React.useMemo(() => ({ value, onValueChange }), [value, onValueChange]);
   
   return (
@@ -41,7 +41,7 @@ export const Tabs: React.FC<TabsProps> = ({ value, onValueChange, children, clas
   );
 };
 
-export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) => {
+export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }: any) => {
   return (
     <div className={`inline-flex h-10 items-center justify-center rounded-md bg-gray-800 p-1 text-gray-400 ${className}`}>
       {children}
@@ -49,7 +49,7 @@ export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) 
   );
 };
 
-export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, className = '' }) => {
+export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, className = '' }: any) => {
   const context = React.useContext(TabsContext);
   if (!context) {
     throw new Error('TabsTrigger must be used within a Tabs component');
@@ -66,7 +66,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
   );
 };
 
-export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className = '' }) => {
+export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className = '' }: any) => {
   const context = React.useContext(TabsContext);
   if (!context) {
     throw new Error('TabsContent must be used within a Tabs component');

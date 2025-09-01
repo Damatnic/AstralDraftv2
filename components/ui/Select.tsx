@@ -12,7 +12,7 @@ export const Select: React.FC<SelectProps> = ({
   className = '',
   id,
   ...props
-}) => {
+}: any) => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
 
   return (

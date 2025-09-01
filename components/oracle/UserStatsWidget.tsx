@@ -27,7 +27,7 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
     stats, 
     className = '',
     compact = false 
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     const statItems = [
@@ -126,7 +126,7 @@ export const UserStatsWidget: React.FC<UserStatsWidgetProps> = ({
     );
 };
 
-const UserStatsWidgetWithErrorBoundary: React.FC = (props) => (
+const UserStatsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <UserStatsWidget {...props} />
   </ErrorBoundary>

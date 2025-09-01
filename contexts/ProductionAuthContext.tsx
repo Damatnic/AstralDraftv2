@@ -203,7 +203,7 @@ const apiRequest = async (
 };
 
 // Production Auth Provider
-export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ProductionAuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
     isAuthenticated: false,

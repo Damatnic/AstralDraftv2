@@ -325,7 +325,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     // RENDER LOGIC
     // =========================================
     
-    const ButtonWrapper: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const ButtonWrapper: React.FC<{ children: ReactNode }> = ({ children }: any) => {
       let content = children;
 
       if (ripple && !disabled && !loading) {
@@ -389,7 +389,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
   orientation = 'horizontal',
   spacing = 'sm',
   variant = 'separated'
-}) => {
+}: any) => {
   const spacingClasses = {
     none: '',
     sm: orientation === 'horizontal' ? 'space-x-2' : 'space-y-2',
@@ -451,7 +451,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   children,
   className = '',
   ...props
-}) => {
+}: any) => {
   const positionClasses = {
     'bottom-right': 'fixed bottom-6 right-6',
     'bottom-left': 'fixed bottom-6 left-6',
@@ -481,7 +481,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
 // EXPORTS
 // =========================================
 
-const EnhancedButtonWithErrorBoundary: React.FC = (props) => (
+const EnhancedButtonWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedButton {...props} />
   </ErrorBoundary>

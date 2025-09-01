@@ -12,7 +12,7 @@ export const SkipLink: React.FC = () => {
   );
 };
 
-const SkipLinkWithErrorBoundary: React.FC = (props) => (
+const SkipLinkWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SkipLink {...props} />
   </ErrorBoundary>

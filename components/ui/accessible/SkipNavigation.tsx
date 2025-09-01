@@ -22,15 +22,15 @@ const defaultLinks: SkipLink[] = [
 
 const SkipNavigation: React.FC<SkipNavigationProps> = ({ 
   links = defaultLinks 
-}) => {
+}: any) => {
   return (
     <div className="skip-navigation">
-      {links.map((link) => (
+      {links.map((link: any) => (
         <a
           key={link.id}
           href={`#${link.id}`}
           className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:no-underline focus:rounded-br-lg"
-          onClick={(e) => {
+          onClick={(e: any) => {
             e.preventDefault();
             const target = document.getElementById(link.id);
             if (target) {

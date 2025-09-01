@@ -317,7 +317,7 @@ const DraftSimulationDemo: React.FC = () => {
     );
 };
 
-const DraftSimulationDemoWithErrorBoundary: React.FC = (props) => (
+const DraftSimulationDemoWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftSimulationDemo {...props} />
   </ErrorBoundary>

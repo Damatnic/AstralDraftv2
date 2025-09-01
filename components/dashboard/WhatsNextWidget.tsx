@@ -103,7 +103,7 @@ const WhatsNextWidget: React.FC = () => {
     );
 };
 
-const WhatsNextWidgetWithErrorBoundary: React.FC = (props) => (
+const WhatsNextWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WhatsNextWidget {...props} />
   </ErrorBoundary>

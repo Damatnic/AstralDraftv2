@@ -23,7 +23,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
     onOptimize,
     onWarmCache,
     onClearCache
-}) => {
+}: any) => {
     const [userId, setUserId] = useState('user123');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [optimizationResults, setOptimizationResults] = useState<any>(null);
@@ -290,7 +290,7 @@ const OracleCacheManager: React.FC = () => {
     );
 };
 
-const OracleCacheManagerWithErrorBoundary: React.FC = (props) => (
+const OracleCacheManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleCacheManager {...props} />
   </ErrorBoundary>

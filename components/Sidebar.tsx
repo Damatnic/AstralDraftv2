@@ -22,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   position = 'left',
   overlay = false,
   className = ''
-}) => {
+}: any) => {
   const sidebarStyles = {
     width: typeof width === 'number' ? `${width}px` : width,
     [position]: isOpen ? '0' : '-100%',

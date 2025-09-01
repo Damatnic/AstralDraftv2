@@ -79,7 +79,7 @@ interface SimpleLoaderProps {
   message?: string;
 }
 
-const SimpleLoader: FC<SimpleLoaderProps> = ({ message = "Loading..." }) => (
+const SimpleLoader: FC<SimpleLoaderProps> = ({ message = "Loading..." }: any) => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
     <div className="text-center space-y-6">
       <div className="relative inline-flex">
@@ -180,7 +180,7 @@ const AppContent: FC = () => {
                 const stack = String((error as Error).stack || '').toLowerCase();
                 
                 // Check if this matches any suppressible error pattern
-                const isSuppressedError = GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => 
+                const isSuppressedError = GLOBAL_SUPPRESSED_ERROR_PATTERNS.some((pattern: any) => 
                     message.includes(pattern.toLowerCase()) || 
                     stack.includes(pattern.toLowerCase())
                 );
@@ -205,7 +205,7 @@ const AppContent: FC = () => {
             const colno = event.colno || 0;
             
             // Check against global suppression patterns
-            const isSuppressibleError = GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => 
+            const isSuppressibleError = GLOBAL_SUPPRESSED_ERROR_PATTERNS.some((pattern: any) => 
                 message.toLowerCase().includes(pattern.toLowerCase()) || 
                 filename.toLowerCase().includes(pattern.toLowerCase())
             ) || filename.includes('extension://');
@@ -241,8 +241,8 @@ const AppContent: FC = () => {
             const extensionSignatures = ERROR_CONSTANTS.EXTENSION_ERROR_PATTERNS;
             
             try {
-                return extensionSignatures.some(sig => lowerMessage.includes(sig)) ||
-                       (GLOBAL_SUPPRESSED_ERROR_PATTERNS && GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => lowerMessage.includes(pattern.toLowerCase())));
+                return extensionSignatures.some((sig: any) => lowerMessage.includes(sig)) ||
+                       (GLOBAL_SUPPRESSED_ERROR_PATTERNS && GLOBAL_SUPPRESSED_ERROR_PATTERNS.some((pattern: any) => lowerMessage.includes(pattern.toLowerCase())));
             } catch {
                 return false;
             }
@@ -652,7 +652,7 @@ const AppContent: FC = () => {
             <PerformanceOptimizer 
                 enableMonitoring={import.meta.env.PROD}
                 reportToAnalytics={import.meta.env.PROD}
-                onMetricsUpdate={(metrics) => {
+                onMetricsUpdate={(metrics: any) => {
                     // Optional: Send to analytics service
                     performanceMonitor.recordMetric('web_vitals', metrics);
                 }}
@@ -667,7 +667,7 @@ interface NuclearErrorBoundaryProps {
   children: ReactNode;
 }
 
-const NuclearErrorBoundary: FC<NuclearErrorBoundaryProps> = ({ children }) => {
+const NuclearErrorBoundary: FC<NuclearErrorBoundaryProps> = ({ children }: any) => {
   const [hasError, setHasError] = React.useState(false);
   const [errorCount, setErrorCount] = React.useState(0);
 

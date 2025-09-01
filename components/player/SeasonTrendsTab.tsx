@@ -45,7 +45,7 @@ interface SeasonComparison {
     rank: number;
     adp: number;}
 
-const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
+const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
     // Mock performance data - in real app this would come from stats API
     const weeklyPerformance: WeeklyPerformance[] = [
         { week: 1, points: 18.5, projected: 16.2, opponent: 'MIA', result: 'over', matchupDifficulty: 'medium' },
@@ -316,7 +316,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }) => {
     );
 };
 
-const SeasonTrendsTabWithErrorBoundary: React.FC = (props) => (
+const SeasonTrendsTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SeasonTrendsTab {...props} />
   </ErrorBoundary>

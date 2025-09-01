@@ -39,7 +39,7 @@ type PlayerDetailTab = 'overview' | 'stats' | 'projections' | 'news' | 'trends' 
 }
 
 const PlayerResearchInterface: React.FC<Props> = ({ className = '' 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { isAuthenticated } = useAuth();
     const [activeTab, setActiveTab] = useState<ResearchTab>('search');
@@ -715,7 +715,7 @@ const PlayerResearchInterface: React.FC<Props> = ({ className = ''
     );
 };
 
-const PlayerResearchInterfaceWithErrorBoundary: React.FC = (props) => (
+const PlayerResearchInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerResearchInterface {...props} />
   </ErrorBoundary>

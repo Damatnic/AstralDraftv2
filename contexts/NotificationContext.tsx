@@ -43,7 +43,7 @@ const NotificationContext = createContext<NotificationContextValue | null>(null)
 interface NotificationProviderProps {
     children: React.ReactNode;
 
-export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
+export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }: any) => {
     const { user, isAuthenticated } = useAuth();
     const [notifications, setNotifications] = useState<EnhancedNotification[]>([]);
     const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);

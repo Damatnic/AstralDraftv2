@@ -41,7 +41,7 @@ const ActivityFeedWidget: React.FC = () => {
     );
 };
 
-const ActivityFeedWidgetWithErrorBoundary: React.FC = (props) => (
+const ActivityFeedWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ActivityFeedWidget {...props} />
   </ErrorBoundary>

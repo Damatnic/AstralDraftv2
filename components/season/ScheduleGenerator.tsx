@@ -28,7 +28,7 @@ interface ScheduleGeneratorProps {
 const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   onScheduleGenerated,
   isCommissioner = false
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [schedule, setSchedule] = useState<Matchup[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -362,7 +362,7 @@ const ScheduleGenerator: React.FC<ScheduleGeneratorProps> = ({
   );
 };
 
-const ScheduleGeneratorWithErrorBoundary: React.FC<ScheduleGeneratorProps> = (props) => (
+const ScheduleGeneratorWithErrorBoundary: React.FC<ScheduleGeneratorProps> = (props: any) => (
   <ErrorBoundary>
     <ScheduleGenerator {...props} />
   </ErrorBoundary>

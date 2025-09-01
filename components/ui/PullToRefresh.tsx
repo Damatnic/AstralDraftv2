@@ -28,7 +28,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
   refreshingText = 'Refreshing...',
   pullText = 'Pull to refresh',
   releaseText = 'Release to refresh'
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const {
     containerRef,
@@ -148,7 +148,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh,
   );
 };
 
-const PullToRefreshWithErrorBoundary: React.FC = (props) => (
+const PullToRefreshWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PullToRefresh {...props} />
   </ErrorBoundary>

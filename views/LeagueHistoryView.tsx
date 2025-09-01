@@ -9,7 +9,7 @@ import { TelescopeIcon } from '../components/icons/TelescopeIcon';
 import { useLeague } from '../hooks/useLeague';
 import ChampionChart from '../components/history/ChampionChart';
 
-const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const LeagueHistoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const history = league.history || [];
 
     return (

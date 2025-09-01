@@ -13,7 +13,7 @@ interface MockDraftModalProps {
 
 }
 
-const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch }) => {
+const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch }: any) => {
     const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
     const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
 
@@ -92,7 +92,7 @@ const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch
     );
 };
 
-const MockDraftModalWithErrorBoundary: React.FC = (props) => (
+const MockDraftModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MockDraftModal {...props} />
   </ErrorBoundary>

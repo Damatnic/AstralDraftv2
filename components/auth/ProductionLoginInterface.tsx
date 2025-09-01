@@ -292,7 +292,7 @@ const ProductionLoginInterface: React.FC = () => {
     showPasswordToggle?: boolean;
     onTogglePassword?: () => void;
     showPassword?: boolean;
-  }> = ({ type, placeholder, value, onChange, error, icon, showPasswordToggle, onTogglePassword, showPassword }) => (
+  }> = ({ type, placeholder, value, onChange, error, icon, showPasswordToggle, onTogglePassword, showPassword }: any) => (
     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
       <div className="relative sm:px-4 md:px-6 lg:px-8">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none sm:px-4 md:px-6 lg:px-8">
@@ -684,7 +684,7 @@ const ProductionLoginInterface: React.FC = () => {
   );
 };
 
-const ProductionLoginInterfaceWithErrorBoundary: React.FC = (props) => (
+const ProductionLoginInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ProductionLoginInterface {...props} />
   </ErrorBoundary>

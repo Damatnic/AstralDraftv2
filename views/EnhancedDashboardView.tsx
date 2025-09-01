@@ -39,7 +39,7 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
     trend,
     color,
     onClick
-}) => {
+}: any) => {
     const getTrendColor = (trendType: 'up' | 'down' | 'stable') => {
         switch (trendType) {
             case 'up': return 'text-green-400';
@@ -89,7 +89,7 @@ interface QuickActionProps {
 
 }
 
-const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }) => (
+const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }: any) => (
     <motion.button
         whileTap={{ scale: 0.9 }}
         onClick={onClick}`}

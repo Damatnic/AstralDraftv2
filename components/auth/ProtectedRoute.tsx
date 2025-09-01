@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredRole,
   fallback,
   showError = true
-}) => {
+}: any) => {
   const { user, isAuthenticated } = useAuth();
   
   // Convert user to UserWithRoles format (assuming roles are available)
@@ -102,7 +102,7 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
   roles,
   fallback = null,
   mode = 'any'
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
@@ -135,7 +135,7 @@ export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   permissions,
   fallback = null,
   mode = 'all'
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
@@ -166,7 +166,7 @@ export const ConditionalRender: React.FC<ConditionalRenderProps> = ({
   children,
   condition,
   fallback = null
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
@@ -189,7 +189,7 @@ interface UserRoleBadgeProps {
 export const UserRoleBadge: React.FC<UserRoleBadgeProps> = ({
   className = '',
   showIcon = true
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
@@ -233,7 +233,7 @@ interface PermissionListProps {
 export const PermissionList: React.FC<PermissionListProps> = ({
   className = '',
   showCategories = true
-}) => {
+}: any) => {
   const { user } = useAuth();
   const userWithRoles: UserWithRoles | null = user ? {
     ...user,
@@ -313,7 +313,7 @@ export const useRBAC = () => {
   };
 };
 
-const ProtectedRouteWithErrorBoundary: React.FC = (props) => (
+const ProtectedRouteWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ProtectedRoute {...props} />
   </ErrorBoundary>

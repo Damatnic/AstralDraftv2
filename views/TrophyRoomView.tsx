@@ -19,7 +19,7 @@ const awardConfig: Record<LeagueAward['type'], { icon: React.ReactNode, color: s
     CLOSEST_MATCHUP: { icon: <ZapIcon />, color: 'text-blue-400', label: 'Closest Matchup' },
 };
 
-const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }) => {
+const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }: any) => {
     const config = awardConfig[award.type];
     if (!config) return null;
 
@@ -36,7 +36,7 @@ const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ a
     );
 };
 
-const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }) => {
+const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }: any) => {
     const champion = teams.find((t: any) => t.id === history.championTeamId);
     
     return (

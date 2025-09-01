@@ -35,7 +35,7 @@ const NotificationCenter: React.FC<NotificationCenterProps> = ({
     isOpen, 
     onClose, 
     className = '' 
-}) => {
+}: any) => {
     const {
         notifications,
         unreadCount,
@@ -276,7 +276,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     getIcon,
     getPriorityColor,
     formatTimeAgo
-}) => {
+}: any) => {
     const [showActions, setShowActions] = useState(false);
 
     const handleAction = (actionFn: () => void) => {
@@ -376,7 +376,7 @@ interface NotificationSettingsProps {
 
 }
 
-const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }) => {
+const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences, onClose }: any) => {
     const { updatePreferences } = useNotifications();
     const [localPreferences, setLocalPreferences] = useState(preferences || {});
 
@@ -470,7 +470,7 @@ const NotificationSettings: React.FC<NotificationSettingsProps> = ({ preferences
     );
 };
 
-const NotificationCenterWithErrorBoundary: React.FC = (props) => (
+const NotificationCenterWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationCenter {...props} />
   </ErrorBoundary>

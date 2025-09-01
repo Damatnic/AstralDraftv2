@@ -197,7 +197,7 @@ const GameWeekStatusWidget: React.FC = () => {
   );
 };
 
-const GameWeekStatusWidgetWithErrorBoundary: React.FC = (props) => (
+const GameWeekStatusWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <GameWeekStatusWidget {...props} />
   </ErrorBoundary>

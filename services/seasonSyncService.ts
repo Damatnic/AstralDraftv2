@@ -56,8 +56,8 @@ export function updateMatchupScores(
   playerStats: Map<number, PlayerStatUpdate>,
   teams: any[]
 ): Matchup {
-  const teamA = teams.find(t => t.id === matchup.teamA.teamId);
-  const teamB = teams.find(t => t.id === matchup.teamB.teamId);
+  const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
+  const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
   
   if (!teamA || !teamB) return matchup;
   
@@ -185,7 +185,7 @@ export function getTimeUntilNextGameSlate(): {
   const dayOfWeek = now.getDay();
   const hour = now.getHours();
   
-  let targetDate = new Date(now);
+  const targetDate = new Date(now);
   let slateType: 'Thursday' | 'Sunday Early' | 'Sunday Late' | 'Sunday Night' | 'Monday';
   
   // Determine next game slate

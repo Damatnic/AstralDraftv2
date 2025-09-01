@@ -16,7 +16,7 @@ import {
 // Dashboard overview component
 const DashboardOverview: React.FC<{
   data: AdminDashboardData['overview'] 
-}> = ({ data }) => {
+}> = ({ data }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const getHealthColor = (status: string) => {
     switch (status) {
@@ -593,7 +593,7 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-const AdminDashboardWithErrorBoundary: React.FC = (props) => (
+const AdminDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdminDashboard {...props} />
   </ErrorBoundary>

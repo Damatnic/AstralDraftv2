@@ -141,7 +141,7 @@ export interface AlternativeOffer {
 
 }
 
-const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }) => {
+const TradeAnalyzerView: React.FC<TradeAnalyzerViewProps> = ({ league, currentTeam, dispatch }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'builder' | 'fairness' | 'impact' | 'suggestions'>('builder');
     const [currentProposal, setCurrentProposal] = React.useState<TradeProposal | null>(null);
     const [analysis, setAnalysis] = React.useState<TradeAnalysis | null>(null);
@@ -443,7 +443,7 @@ const generateMockAnalysis = (proposal: TradeProposal, currentTeam: Team, league
     };
 };
 
-const TradeAnalyzerViewWithErrorBoundary: React.FC = (props) => (
+const TradeAnalyzerViewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeAnalyzerView {...props} />
   </ErrorBoundary>

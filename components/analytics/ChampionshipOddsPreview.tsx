@@ -13,7 +13,7 @@ interface ChampionshipOddsPreviewProps {
 
 }
 
-const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ league, dispatch }) => {
+const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ league, dispatch }: any) => {
     
     const topContenders = [...league.teams]
         .map((team: any) => {
@@ -50,7 +50,7 @@ const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ leagu
     );
 };
 
-const ChampionshipOddsPreviewWithErrorBoundary: React.FC = (props) => (
+const ChampionshipOddsPreviewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChampionshipOddsPreview {...props} />
   </ErrorBoundary>

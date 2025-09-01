@@ -6,14 +6,14 @@ import { BookOpenIcon } from '../components/icons/BookOpenIcon';
 import type { League } from '../types';
 import { useLeague } from '../hooks/useLeague';
 
-const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, value }) => (
+const RuleItem: React.FC<{ label: string, value: string | number }> = ({ label, value }: any) => (
     <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
         <span className="font-semibold text-gray-300">{label}</span>
         <span className="font-bold text-white">{value}</span>
     </div>
 );
 
-const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const LeagueRulesContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const settings = league.settings;
 
     return (

@@ -28,7 +28,7 @@ const MobileLayout: React.FC<Props> = ({ children,
   showPWAPrompt = true,
   notificationCount = 0,
   className = ''
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1023px)');
@@ -144,7 +144,7 @@ const MobileLayout: React.FC<Props> = ({ children,
   );
 };
 
-const MobileLayoutWithErrorBoundary: React.FC = (props) => (
+const MobileLayoutWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileLayout {...props} />
   </ErrorBoundary>

@@ -10,14 +10,14 @@ interface ContractTabProps {
 
 }
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-4 rounded-lg text-center flex-1 sm:px-4 md:px-6 lg:px-8">
         <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{label}</p>
         <p className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">{value}</p>
     </div>
 );
 
-const ContractTab: React.FC<ContractTabProps> = ({ player }) => {
+const ContractTab: React.FC<ContractTabProps> = ({ player }: any) => {
     const { contract } = player;
 
     if (!contract) {
@@ -50,7 +50,7 @@ const ContractTab: React.FC<ContractTabProps> = ({ player }) => {
     );
 };
 
-const ContractTabWithErrorBoundary: React.FC = (props) => (
+const ContractTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ContractTab {...props} />
   </ErrorBoundary>

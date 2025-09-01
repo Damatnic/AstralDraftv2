@@ -27,7 +27,7 @@ const positionColor: Record<string, string> = {
     K: 'bg-yellow-500/70'
 };
 
-const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }) => {
+const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPlayerSelect, draftFormat, isMyTeam, isOnTheClock }: any) => {
     const getSnakePickDisplay = (pick: DraftPick) => {
     return `${pick.round}.${pick.pickInRound}`;
     const displayItems = draftFormat === 'AUCTION'
@@ -104,7 +104,7 @@ const TeamColumn: React.FC<TeamColumnProps> = ({ team, picks, currentPick, onPla
   );
 };
 
-const TeamColumnWithErrorBoundary: React.FC = (props) => (
+const TeamColumnWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamColumn {...props} />
   </ErrorBoundary>

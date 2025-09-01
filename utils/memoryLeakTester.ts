@@ -145,7 +145,7 @@ class MemoryLeakTester {
     // Check window listeners
     if (typeof window !== 'undefined') {
       const windowListeners = (window as any).getEventListeners?.(window) || {};
-      Object.keys(windowListeners).forEach(event => {
+      Object.keys(windowListeners).forEach((event: any) => {
         const count = windowListeners[event].length;
         listeners.set(`window.${event}`, count);
         
@@ -158,7 +158,7 @@ class MemoryLeakTester {
     // Check document listeners
     if (typeof document !== 'undefined') {
       const docListeners = (document as any).getEventListeners?.(document) || {};
-      Object.keys(docListeners).forEach(event => {
+      Object.keys(docListeners).forEach((event: any) => {
         const count = docListeners[event].length;
         listeners.set(`document.${event}`, count);
         
@@ -256,7 +256,7 @@ class MemoryLeakTester {
     }
 
     // Check for suspicious patterns
-    listenerAudit.suspicious.forEach(issue => issues.push(issue));
+    listenerAudit.suspicious.forEach((issue: any) => issues.push(issue));
 
     // Check timer leak ratios
     if (timerAudit.timerLeakRatio > 0.2) {
@@ -270,7 +270,7 @@ class MemoryLeakTester {
     }
 
     // Check component tests
-    this.componentTests.forEach(test => {
+    this.componentTests.forEach((test: any) => {
       if (test.mountCount > test.unmountCount + 1) {
         issues.push(`Component leak: ${test.componentName} (${test.mountCount} mounts, ${test.unmountCount} unmounts)`);
       }
@@ -369,13 +369,13 @@ class MemoryLeakTester {
   <h2>Issues Found (${audit.issues.length})</h2>
   ${audit.issues.length === 0 
     ? '<p class="status pass">No issues detected!</p>'
-    : audit.issues.map(issue => `<div class="issue">⚠️ ${issue}</div>`).join('')
+    : audit.issues.map((issue: any) => `<div class="issue">⚠️ ${issue}</div>`).join('')
   }
 
   <h2>Recommendations</h2>
   ${audit.recommendations.length === 0
     ? '<p class="status pass">No recommendations - system is healthy!</p>'
-    : audit.recommendations.map(rec => `<div class="recommendation">✅ ${rec}</div>`).join('')
+    : audit.recommendations.map((rec: any) => `<div class="recommendation">✅ ${rec}</div>`).join('')
   }
 
   <h2>Component Lifecycle Tests</h2>
@@ -390,7 +390,7 @@ class MemoryLeakTester {
       </tr>
     </thead>
     <tbody>
-      ${audit.components.map(comp => `
+      ${audit.components.map((comp: any) => `
         <tr>
           <td>${comp.componentName}</td>
           <td>${comp.mountCount}</td>
@@ -418,7 +418,7 @@ class MemoryLeakTester {
       </tr>
     </thead>
     <tbody>
-      ${audit.testResults.map(result => `
+      ${audit.testResults.map((result: any) => `
         <tr>
           <td>${result.testName}</td>
           <td>

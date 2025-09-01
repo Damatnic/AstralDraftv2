@@ -52,7 +52,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     leagueStats,
     onRefresh,
     className = ''
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeTab, setActiveTab] = React.useState<'overview' | 'performance' | 'trends' | 'roster'>('overview');
     const [selectedTimeframe, setSelectedTimeframe] = React.useState<'week' | 'month' | 'season'>('week');
@@ -416,7 +416,7 @@ const MobileAnalyticsDashboard: React.FC<MobileAnalyticsDashboardProps> = ({
     );
 };
 
-const MobileAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const MobileAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileAnalyticsDashboard {...props} />
   </ErrorBoundary>

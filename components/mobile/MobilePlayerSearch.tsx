@@ -24,7 +24,7 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
     onSearch,
     placeholder = "Search players...",
     className = ''
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     if (!isMobile) {
@@ -67,7 +67,7 @@ const MobilePlayerSearch: React.FC<MobilePlayerSearchProps> = ({
     );
 };
 
-const MobilePlayerSearchWithErrorBoundary: React.FC = (props) => (
+const MobilePlayerSearchWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobilePlayerSearch {...props} />
   </ErrorBoundary>

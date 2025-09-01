@@ -51,8 +51,8 @@ class PerformanceOptimizer {
    */
   private trackLCP(): void {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
+      const observer = new PerformanceObserver((list: any) => {
+        list.getEntries().forEach((entry: any) => {
           this.recordMetric('LCP', entry.startTime);
           console.log('🎯 LCP:', entry.startTime.toFixed(2) + 'ms');
         });
@@ -66,7 +66,7 @@ class PerformanceOptimizer {
    */
   private trackFID(): void {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver((list: any) => {
         list.getEntries().forEach((entry: any) => {
           const fid = entry.processingStart - entry.startTime;
           this.recordMetric('FID', fid);
@@ -83,7 +83,7 @@ class PerformanceOptimizer {
   private trackCLS(): void {
     if ('PerformanceObserver' in window) {
       let clsValue = 0;
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver((list: any) => {
         list.getEntries().forEach((entry: any) => {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
@@ -180,7 +180,7 @@ class PerformanceOptimizer {
     const scripts = Array.from(document.scripts);
     let totalBundleSize = 0;
     
-    scripts.forEach(script => {
+    scripts.forEach((script: any) => {
       if (script.src && script.src.includes('assets/')) {
         // Estimate bundle size from resource timing
         const resourceEntry = performance.getEntriesByName(script.src)[0] as PerformanceResourceTiming;
@@ -237,7 +237,7 @@ class PerformanceOptimizer {
   getPerformanceSummary(): { [key: string]: PerformanceMetric[] } {
     const summary: { [key: string]: PerformanceMetric[] } = {};
     
-    this.metrics.forEach(metric => {
+    this.metrics.forEach((metric: any) => {
       if (!summary[metric.name]) {
         summary[metric.name] = [];
       }
@@ -252,7 +252,7 @@ class PerformanceOptimizer {
    */
   getBundleAnalysis(): BundleAnalytics | null {
     const scripts = Array.from(document.scripts);
-    const chunks = scripts.filter(script => 
+    const chunks = scripts.filter((script: any) => 
       script.src && script.src.includes('assets/') && script.src.includes('.js')
     );
     
@@ -263,7 +263,7 @@ class PerformanceOptimizer {
     let largestChunk = '';
     let largestChunkSize = 0;
     
-    chunks.forEach(script => {
+    chunks.forEach((script: any) => {
       const resourceEntry = performance.getEntriesByName(script.src)[0] as PerformanceResourceTiming;
       if (resourceEntry) {
         const size = resourceEntry.transferSize || 0;
@@ -327,7 +327,7 @@ class PerformanceOptimizer {
     }
     
     // Custom Metrics
-    Object.keys(summary).forEach(metricName => {
+    Object.keys(summary).forEach((metricName: any) => {
       if (!['LCP', 'FID', 'CLS'].includes(metricName)) {
         const metric = summary[metricName][summary[metricName].length - 1];
         report += `🔧 ${metricName}: ${metric.value.toFixed(2)}ms\\n`;

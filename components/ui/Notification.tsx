@@ -15,7 +15,7 @@ interface NotificationProps {
 
 }
 
-const Notification: React.FC<NotificationProps> = ({ message, type }) => {
+const Notification: React.FC<NotificationProps> = ({ message, type }: any) => {
   const getIcon = () => {
     switch (type) {
       case 'DRAFT': return <CheckIcon />;
@@ -45,7 +45,7 @@ const Notification: React.FC<NotificationProps> = ({ message, type }) => {
   );
 };
 
-const NotificationWithErrorBoundary: React.FC = (props) => (
+const NotificationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <Notification {...props} />
   </ErrorBoundary>

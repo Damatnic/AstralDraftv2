@@ -202,7 +202,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
 
   const filteredRecommendations = selectedPosition === 'ALL' 
     ? recommendations 
-    : recommendations.filter(r => r.player.position === selectedPosition);
+    : recommendations.filter((r: any) => r.player.position === selectedPosition);
 
   return (
     <Card variant="gradient" className="bg-gradient-to-br from-dark-800/90 to-dark-900/90 backdrop-blur-xl border-green-500/20 sm:px-4 md:px-6 lg:px-8">
@@ -233,7 +233,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
 
         {/* View Mode Tabs */}
         <div className="flex gap-1 mt-3 sm:px-4 md:px-6 lg:px-8">
-          {['recommendations', 'breakouts', 'trends'].map((mode) => (
+          {['recommendations', 'breakouts', 'trends'].map((mode: any) => (
             <button
               key={mode}
               onClick={() => setViewMode(mode as any)}
@@ -248,7 +248,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
         {/* Position Filter */}
         {viewMode === 'recommendations' && (
           <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
-            {['ALL', 'RB', 'WR', 'TE'].map((pos) => (
+            {['ALL', 'RB', 'WR', 'TE'].map((pos: any) => (
               <button
                 key={pos}
                 onClick={() => setSelectedPosition(pos)}
@@ -441,7 +441,7 @@ const WaiverWireIntelligenceWidget: React.FC = () => {
   );
 };
 
-const WaiverWireIntelligenceWidgetWithErrorBoundary: React.FC = (props) => (
+const WaiverWireIntelligenceWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WaiverWireIntelligenceWidget {...props} />
   </ErrorBoundary>

@@ -70,7 +70,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
   onNavigate,
   onToggleMenu,
   className = ''
-}) => {
+}: any) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPressed, setIsPressed] = useState<string | null>(null);
   const [longPressTarget, setLongPressTarget] = useState<string | null>(null);
@@ -256,7 +256,7 @@ export const EnhancedMobileNav: React.FC<EnhancedMobileNavProps> = ({
   );
 };
 
-const EnhancedMobileNavWithErrorBoundary: React.FC = (props) => (
+const EnhancedMobileNavWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedMobileNav {...props} />
   </ErrorBoundary>

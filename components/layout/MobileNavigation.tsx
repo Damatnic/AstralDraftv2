@@ -282,7 +282,7 @@ const MobileNavigation: React.FC = () => {
   );
 };
 
-const MobileNavigationWithErrorBoundary: React.FC = (props) => (
+const MobileNavigationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileNavigation {...props} />
   </ErrorBoundary>

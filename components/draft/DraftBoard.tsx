@@ -16,7 +16,7 @@ interface DraftBoardProps {
 
 }
 
-const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }) => {
+const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick, onPlayerSelect, draftFormat, teamOnClockId }: any) => {
   const { state } = useAppState();
   const myTeamId = teams.find((t: any) => t.owner.id === state.user?.id)?.id;
   const rounds = draftFormat === 'SNAKE' ? 16 : teams[0]?.roster.length || 16;
@@ -59,7 +59,7 @@ const DraftBoard: React.FC<DraftBoardProps> = ({ teams, draftPicks, currentPick,
   );
 };
 
-const DraftBoardWithErrorBoundary: React.FC = (props) => (
+const DraftBoardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftBoard {...props} />
   </ErrorBoundary>

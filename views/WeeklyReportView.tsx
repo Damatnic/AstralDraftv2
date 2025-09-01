@@ -10,7 +10,7 @@ import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 import { FilmIcon } from '../components/icons/FilmIcon';
 
-const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const WeeklyReportContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const [report, setReport] = React.useState<WeeklyReportData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);

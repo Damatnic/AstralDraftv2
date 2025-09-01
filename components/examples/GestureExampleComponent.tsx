@@ -9,7 +9,7 @@ interface GestureExampleComponentProps {
 
 export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = ({ 
   className = '' 
-}) => {
+}: any) => {
   const [gestureLog, setGestureLog] = useState<string[]>([]);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -201,7 +201,7 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
   );
 };
 
-const GestureExampleComponentWithErrorBoundary: React.FC = (props) => (
+const GestureExampleComponentWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <GestureExampleComponent {...props} />
   </ErrorBoundary>

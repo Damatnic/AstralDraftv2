@@ -43,19 +43,19 @@ export class MemoryLeakPrevention {
 
   static cleanup(): void {
     // Clear all intervals
-    this.intervals.forEach(id => clearInterval(id));
+    this.intervals.forEach((id: any) => clearInterval(id));
     this.intervals.clear();
 
     // Clear all timeouts
-    this.timeouts.forEach(id => clearTimeout(id));
+    this.timeouts.forEach((id: any) => clearTimeout(id));
     this.timeouts.clear();
 
     // Cancel all animation frames
-    this.animationFrames.forEach(id => cancelAnimationFrame(id));
+    this.animationFrames.forEach((id: any) => cancelAnimationFrame(id));
     this.animationFrames.clear();
 
     // Disconnect all observers
-    this.observers.forEach(observer => observer.disconnect());
+    this.observers.forEach((observer: any) => observer.disconnect());
     this.observers.clear();
 
     // Remove all event listeners
@@ -67,7 +67,7 @@ export class MemoryLeakPrevention {
     this.eventListeners.clear();
 
     // Close all websockets
-    this.websockets.forEach(ws => {
+    this.websockets.forEach((ws: any) => {
       if (ws.readyState === WebSocket.OPEN) {
         ws.close();
       }
@@ -138,7 +138,7 @@ export function addResourceHints(): void {
     'https://api.stripe.com',
   ];
 
-  preconnectDomains.forEach(domain => {
+  preconnectDomains.forEach((domain: any) => {
     const link = document.createElement('link');
     link.rel = 'preconnect';
     link.href = domain;
@@ -152,7 +152,7 @@ export function addResourceHints(): void {
     'https://stats.g.doubleclick.net',
   ];
 
-  dnsPrefetchDomains.forEach(domain => {
+  dnsPrefetchDomains.forEach((domain: any) => {
     const link = document.createElement('link');
     link.rel = 'dns-prefetch';
     link.href = domain;
@@ -164,7 +164,7 @@ export function addResourceHints(): void {
     '/fonts/inter-var.woff2',
   ];
 
-  criticalFonts.forEach(font => {
+  criticalFonts.forEach((font: any) => {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'font';
@@ -234,7 +234,7 @@ export class CoreWebVitalsMonitor {
 
     // Largest Contentful Paint
     try {
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver((list: any) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1] as any;
         this.metrics.LCP = lastEntry.renderTime || lastEntry.loadTime;
@@ -247,7 +247,7 @@ export class CoreWebVitalsMonitor {
 
     // First Input Delay
     try {
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver((list: any) => {
         const entries = list.getEntries();
         const firstEntry = entries[0] as any;
         this.metrics.FID = firstEntry.processingStart - firstEntry.startTime;
@@ -261,7 +261,7 @@ export class CoreWebVitalsMonitor {
     // Cumulative Layout Shift
     try {
       let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries() as any[]) {
           if (!entry.hadRecentInput) {
             clsValue += entry.value;
@@ -278,7 +278,7 @@ export class CoreWebVitalsMonitor {
     // First Contentful Paint & Time to First Byte
     if ('performance' in window && 'getEntriesByType' in performance) {
       const paintEntries = performance.getEntriesByType('paint');
-      paintEntries.forEach((entry) => {
+      paintEntries.forEach((entry: any) => {
         if (entry.name === 'first-contentful-paint') {
           this.metrics.FCP = entry.startTime;
         }
@@ -357,12 +357,12 @@ export function analyzeBundleSize(): void {
   const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
 
   const resources = [
-    ...scripts.map(s => ({ url: s.src, type: 'script' })),
-    ...styles.map(s => ({ url: (s as HTMLLinkElement).href, type: 'style' })),
+    ...scripts.map((s: any) => ({ url: s.src, type: 'script' })),
+    ...styles.map((s: any) => ({ url: (s as HTMLLinkElement).href, type: 'style' })),
   ];
 
   Promise.all(
-    resources.map(async (resource) => {
+    resources.map(async (resource: any) => {
       try {
         const response = await fetch(resource.url);
         const text = await response.text();

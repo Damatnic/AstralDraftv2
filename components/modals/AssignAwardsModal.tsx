@@ -20,7 +20,7 @@ const awardTypes: { type: PlayerAwardType, label: string, description: string }[
     { type: 'BIGGEST_BUST', label: 'Biggest Bust', description: 'The player who most disappointed relative to their expectations.' },
 ];
 
-const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dispatch, onClose }) => {
+const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dispatch, onClose }: any) => {
     const [selectedAwards, setSelectedAwards] = React.useState<Record<PlayerAwardType, number | null>>(() => {
         const initialState: Record<PlayerAwardType, number | null> = {
             MVP: null, DRAFT_GEM: null, WAIVER_HERO: null, BIGGEST_BUST: null
@@ -71,7 +71,7 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
                     </h2>
                 </header>
                 <main className="p-4 space-y-4 max-h-[60vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-                    {awardTypes.map(({ type, label, description }) => (
+                    {awardTypes.map(({ type, label, description }: any) => (
                         <div key={type}>
                             <label htmlFor={`award-${type}`} className={labelClasses}>{label}</label>
                             <p className="text-xs text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">{description}</p>
@@ -99,7 +99,7 @@ const AssignAwardsModal: React.FC<AssignAwardsModalProps> = ({ team, league, dis
     );
 };
 
-const AssignAwardsModalWithErrorBoundary: React.FC = (props) => (
+const AssignAwardsModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AssignAwardsModal {...props} />
   </ErrorBoundary>

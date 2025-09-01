@@ -10,7 +10,7 @@ interface AvatarProps {
 
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }) => {
+export const Avatar: React.FC<AvatarProps> = ({ avatar, className, alt = 'Team avatar', generatedAvatarUrl }: any) => {
   const isImageUrl = generatedAvatarUrl || (avatar && (avatar.startsWith('data:image') || avatar.startsWith('https')));
 
   if (isImageUrl) {

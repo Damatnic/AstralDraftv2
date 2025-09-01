@@ -30,7 +30,7 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({ week,
     onSubmitPrediction,
     onViewAnalytics,
     onViewRewards
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const [challenges, setChallenges] = React.useState<MobileOracleChallenge[]>([]);
     const [currentChallengeIndex, setCurrentChallengeIndex] = React.useState(0);
@@ -411,7 +411,7 @@ const MobileOracleInterface: React.FC<MobileOracleInterfaceProps> = ({ week,
     );
 };
 
-const MobileOracleInterfaceWithErrorBoundary: React.FC = (props) => (
+const MobileOracleInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileOracleInterface {...props} />
   </ErrorBoundary>

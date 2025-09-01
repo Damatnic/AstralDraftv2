@@ -21,7 +21,7 @@ interface UserActions {
 
 const UserContext = createContext<(UserState & UserActions) | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
     (state: UserState, action: any) => {
       switch (action.type) {
@@ -105,7 +105,7 @@ interface LeagueActions {
 
 const LeagueContext = createContext<(LeagueState & LeagueActions) | undefined>(undefined);
 
-export const LeagueProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LeagueProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
     (state: LeagueState, action: any) => {
       switch (action.type) {
@@ -119,10 +119,10 @@ export const LeagueProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           return { 
             ...state, 
             activeLeagueId: action.payload,
-            activeLeague: state.leagues.find(l => l.id === action.payload) || null
+            activeLeague: state.leagues.find((l: any) => l.id === action.payload) || null
           };
         case 'UPDATE_LEAGUE':
-          const updatedLeagues = state.leagues.map(l => 
+          const updatedLeagues = state.leagues.map((l: any) => 
             l.id === action.payload.leagueId 
               ? { ...l, ...action.payload.updates }
               : l
@@ -130,7 +130,7 @@ export const LeagueProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           return {
             ...state,
             leagues: updatedLeagues,
-            activeLeague: updatedLeagues.find(l => l.id === state.activeLeagueId) || null
+            activeLeague: updatedLeagues.find((l: any) => l.id === state.activeLeagueId) || null
           };
         default:
           return state;
@@ -186,7 +186,7 @@ interface UIActions {
 
 const UIContext = createContext<(UIState & UIActions) | undefined>(undefined);
 
-export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UIProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
     (state: UIState, action: any) => {
       switch (action.type) {
@@ -297,7 +297,7 @@ interface PlayerDataActions {
 
 const PlayerDataContext = createContext<(PlayerDataState & PlayerDataActions) | undefined>(undefined);
 
-export const PlayerDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const PlayerDataProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   const [state, dispatch] = useReducer(
     (state: PlayerDataState, action: any) => {
       switch (action.type) {
@@ -317,7 +317,7 @@ export const PlayerDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         case 'REMOVE_FROM_WATCHLIST':
           return { 
             ...state, 
-            watchlist: state.watchlist.filter(id => id !== action.payload)
+            watchlist: state.watchlist.filter((id: any) => id !== action.payload)
           };
         case 'UPDATE_PLAYER_NOTE':
           return { 
@@ -373,7 +373,7 @@ export const usePlayerData = () => {
 };
 
 // ============= Combined Provider =============
-export const OptimizedProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const OptimizedProviders: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   return (
     <UserProvider>
       <UIProvider>

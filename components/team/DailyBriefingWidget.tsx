@@ -19,7 +19,7 @@ interface DailyBriefingWidgetProps {
 
 }
 
-const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () => void, onDismiss: () => void }> = ({ suggestion, onAccept, onDismiss }) => {
+const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () => void, onDismiss: () => void }> = ({ suggestion, onAccept, onDismiss }: any) => {
     const suggestedPlayers = suggestion.recommendedStarters.map((id: any) => players.find((p: any) => p.id === id)).filter(Boolean) as Player[];
 
     return (
@@ -49,7 +49,7 @@ const LineupSuggestion: React.FC<{ suggestion: AiLineupSuggestion, onAccept: () 
     );
 };
 
-export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam, league, dispatch }) => {
+export const DailyBriefingWidget: React.FC<DailyBriefingWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [briefing, setBriefing] = React.useState<DailyBriefingItem[] | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [isAdviceLoading, setIsAdviceLoading] = React.useState(false);

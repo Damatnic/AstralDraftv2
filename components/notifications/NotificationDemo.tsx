@@ -304,7 +304,7 @@ const NotificationDemo: React.FC = () => {
     );
 };
 
-const NotificationDemoWithErrorBoundary: React.FC = (props) => (
+const NotificationDemoWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationDemo {...props} />
   </ErrorBoundary>

@@ -26,7 +26,7 @@ interface AutoDraftInterfaceProps {
 
 const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete,
   userId = 1 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
   const [draftResults, setDraftResults] = useState<TeamDraftResult[] | null>(null);
@@ -120,7 +120,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
       setDraftResults(results);
       
       // Find user's team result
-      const userTeamResult = results.find(r => r.team.id === userId);
+      const userTeamResult = results.find((r: any) => r.team.id === userId);
       setUserResult(userTeamResult || null);
       
       if (onDraftComplete) {
@@ -195,7 +195,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           <div>
             <label className="block text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Scoring Format</label>
             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-              {(['standard', 'ppr', 'half_ppr'] as const).map(type => (
+              {(['standard', 'ppr', 'half_ppr'] as const).map((type: any) => (
                 <button
                   key={type}
                   onClick={() => setScoringType(type)}`}
@@ -210,7 +210,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           <div>
             <label className="block text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Draft Strategy</label>
             <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
-              {strategies.map(strategy => (
+              {strategies.map((strategy: any) => (
                 <button
                   key={strategy.id}
                   onClick={() => setSelectedStrategy(strategy.id)}`}
@@ -222,7 +222,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
               ))}
             </div>
             <p className="text-xs text-gray-400 mt-2 sm:px-4 md:px-6 lg:px-8">
-              {strategies.find(s => s.id === selectedStrategy)?.description}
+              {strategies.find((s: any) => s.id === selectedStrategy)?.description}
             </p>
           </div>
         </div>
@@ -340,8 +340,8 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
 
         {/* Position Summary */}
         <div className="grid grid-cols-6 gap-2 mb-6 sm:px-4 md:px-6 lg:px-8">
-          {(['QB', 'RB', 'WR', 'TE', 'K', 'DST'] as PlayerPosition[]).map(pos => {
-            const count = team.roster.filter(p => p.position === pos).length;
+          {(['QB', 'RB', 'WR', 'TE', 'K', 'DST'] as PlayerPosition[]).map((pos: any) => {
+            const count = team.roster.filter((p: any) => p.position === pos).length;
             const isStrength = analytics.positionStrengths.includes(pos);
             const isWeakness = analytics.positionWeaknesses.includes(pos);
             
@@ -380,7 +380,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             <div className="flex items-center gap-2 text-purple-400 sm:px-4 md:px-6 lg:px-8">
               <Sparkles className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">
-                Sleepers: {analytics.sleepers.map(p => p.name).join(', ')}
+                Sleepers: {analytics.sleepers.map((p: any) => p.name).join(', ')}
               </span>
             </div>
           )}
@@ -627,7 +627,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             {analytics.sleepers.length > 0 && (
               <div className="p-3 bg-purple-900/30 border border-purple-500 rounded-lg sm:px-4 md:px-6 lg:px-8">
                 <div className="font-bold text-purple-400 mb-1 sm:px-4 md:px-6 lg:px-8">Sleeper Picks</div>
-                {analytics.sleepers.slice(0, 3).map(player => (
+                {analytics.sleepers.slice(0, 3).map((player: any) => (
                   <div key={player.id} className="flex items-center justify-between mt-1 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</span>
                     <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.position}</span>
@@ -645,7 +645,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             Player Tiers
           </h4>
           <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
-            {[1, 2, 3, 4, 5].map(tier => {
+            {[1, 2, 3, 4, 5].map((tier: any) => {
               const count = tierCounts[tier] || 0;
               const percentage = (count / roster.length) * 100;
               
@@ -728,7 +728,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
 
                   {/* Top players */}
                   <div className="mt-3 flex gap-2 flex-wrap sm:px-4 md:px-6 lg:px-8">
-                    {result.roster.slice(0, 5).map(player => (
+                    {result.roster.slice(0, 5).map((player: any) => (
                       <span 
                         key={player.id}
                         className="text-xs bg-gray-600 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8"
@@ -780,7 +780,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                 { id: 'roster', label: 'Roster', icon: Users },
                 { id: 'analytics', label: 'Analytics', icon: BarChart },
                 { id: 'league', label: 'League Results', icon: Trophy }
-              ].map(tab => (
+              ].map((tab: any) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}`}
@@ -816,7 +816,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
   );
 };
 
-const AutoDraftInterfaceWithErrorBoundary: React.FC = (props) => (
+const AutoDraftInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AutoDraftInterface {...props} />
   </ErrorBoundary>

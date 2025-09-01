@@ -50,7 +50,7 @@ const GeniusAiChat: React.FC<Props> = ({
   leagueSettings,
   draftHistory,
   onPlayerSelect
-}) => {
+}: any) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -354,7 +354,7 @@ const GeniusAiChat: React.FC<Props> = ({
   );
 };
 
-const GeniusAiChatWithErrorBoundary: React.FC = (props) => (
+const GeniusAiChatWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <GeniusAiChat {...props} />
   </ErrorBoundary>

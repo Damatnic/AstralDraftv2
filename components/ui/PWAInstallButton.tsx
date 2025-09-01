@@ -54,7 +54,7 @@ export const PWAInstallButton: React.FC = () => {
   );
 };
 
-const PWAInstallButtonWithErrorBoundary: React.FC = (props) => (
+const PWAInstallButtonWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PWAInstallButton {...props} />
   </ErrorBoundary>

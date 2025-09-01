@@ -265,7 +265,7 @@ const PWAInstallPrompt: React.FC = () => {
   );
 };
 
-const PWAInstallPromptWithErrorBoundary: React.FC = (props) => (
+const PWAInstallPromptWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PWAInstallPrompt {...props} />
   </ErrorBoundary>

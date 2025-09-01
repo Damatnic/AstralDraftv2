@@ -36,7 +36,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   tradeId, 
   isVisible, 
   onClose 
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [newMessage, setNewMessage] = useState('');
   const [showCounterOffer, setShowCounterOffer] = useState(false);
@@ -355,7 +355,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
   );
 };
 
-const TradeDiscussionWithErrorBoundary: React.FC = (props) => (
+const TradeDiscussionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeDiscussion {...props} />
   </ErrorBoundary>

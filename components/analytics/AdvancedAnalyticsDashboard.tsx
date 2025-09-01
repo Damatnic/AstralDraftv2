@@ -53,7 +53,7 @@ interface AdvancedAnalyticsDashboardProps {
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     predictionFactors,
     onRefresh
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = useState('overview');
     const [compositeScore, setCompositeScore] = useState<CompositeScore | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -828,7 +828,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     );
 };
 
-const AdvancedAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const AdvancedAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdvancedAnalyticsDashboard {...props} />
   </ErrorBoundary>

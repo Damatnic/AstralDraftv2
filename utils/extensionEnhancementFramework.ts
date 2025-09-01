@@ -219,7 +219,7 @@ export class AccessibilityEnhancer {
   private addAriaLabels(element: HTMLElement): void {
     // Add aria-label to buttons without text
     const buttons = element.querySelectorAll('button:not([aria-label])');
-    buttons.forEach((btn) => {
+    buttons.forEach((btn: any) => {
       const button = btn as HTMLButtonElement;
       if (!button.textContent?.trim()) {
         button.setAttribute('aria-label', 'Interactive button');
@@ -228,7 +228,7 @@ export class AccessibilityEnhancer {
 
     // Add aria-label to inputs
     const inputs = element.querySelectorAll('input:not([aria-label]):not([aria-labelledby])');
-    inputs.forEach((input) => {
+    inputs.forEach((input: any) => {
       const inputEl = input as HTMLInputElement;
       const label = inputEl.placeholder || inputEl.name || 'Input field';
       inputEl.setAttribute('aria-label', label);
@@ -238,9 +238,9 @@ export class AccessibilityEnhancer {
   private ensureKeyboardNavigation(element: HTMLElement): void {
     // Make clickable elements keyboard accessible
     const clickables = element.querySelectorAll('[onClick]:not([tabIndex])');
-    clickables.forEach((el) => {
+    clickables.forEach((el: any) => {
       el.setAttribute('tabIndex', '0');
-      el.addEventListener('keydown', (e) => {
+      el.addEventListener('keydown', (e: any) => {
         const event = e as KeyboardEvent;
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -253,7 +253,7 @@ export class AccessibilityEnhancer {
   private addFocusIndicators(element: HTMLElement): void {
     // Add visible focus indicators
     const focusableElements = element.querySelectorAll('button, a, input, select, textarea, [tabIndex]');
-    focusableElements.forEach((el) => {
+    focusableElements.forEach((el: any) => {
       el.classList.add('focus-visible:ring-2', 'focus-visible:ring-primary-500', 'focus-visible:ring-offset-2');
     });
   }
@@ -261,7 +261,7 @@ export class AccessibilityEnhancer {
   private ensureColorContrast(element: HTMLElement): void {
     // Check and fix color contrast issues
     const textElements = element.querySelectorAll('p, span, div, h1, h2, h3, h4, h5, h6');
-    textElements.forEach((el) => {
+    textElements.forEach((el: any) => {
       const styles = window.getComputedStyle(el as HTMLElement);
       const color = styles.color;
       const bgColor = styles.backgroundColor;
@@ -321,14 +321,14 @@ export class MobileEnhancer {
   private addTouchSupport(element: HTMLElement): void {
     // Convert click events to touch events
     const clickables = element.querySelectorAll('[onClick]');
-    clickables.forEach((el) => {
-      el.addEventListener('touchstart', (e) => {
+    clickables.forEach((el: any) => {
+      el.addEventListener('touchstart', (e: any) => {
         this.touchStartTime = Date.now();
         const touch = (e as TouchEvent).touches[0];
         this.touchStartPos = { x: touch.clientX, y: touch.clientY };
       }, { passive: true });
 
-      el.addEventListener('touchend', (e) => {
+      el.addEventListener('touchend', (e: any) => {
         const touchDuration = Date.now() - this.touchStartTime;
         const touch = (e as TouchEvent).changedTouches[0];
         const touchEndPos = { x: touch.clientX, y: touch.clientY };
@@ -352,7 +352,7 @@ export class MobileEnhancer {
     
     // Ensure minimum touch target size (44x44px)
     const touchTargets = element.querySelectorAll('button, a, [onClick]');
-    touchTargets.forEach((target) => {
+    touchTargets.forEach((target: any) => {
       const el = target as HTMLElement;
       el.style.minHeight = '44px';
       el.style.minWidth = '44px';
@@ -363,13 +363,13 @@ export class MobileEnhancer {
     let touchStartX = 0;
     let touchStartY = 0;
 
-    element.addEventListener('touchstart', (e) => {
+    element.addEventListener('touchstart', (e: any) => {
       const touch = (e as TouchEvent).touches[0];
       touchStartX = touch.clientX;
       touchStartY = touch.clientY;
     }, { passive: true });
 
-    element.addEventListener('touchend', (e) => {
+    element.addEventListener('touchend', (e: any) => {
       const touch = (e as TouchEvent).changedTouches[0];
       const deltaX = touch.clientX - touchStartX;
       const deltaY = touch.clientY - touchStartY;
@@ -389,7 +389,7 @@ export class MobileEnhancer {
 
   private optimizeImages(element: HTMLElement): void {
     const images = element.querySelectorAll('img');
-    images.forEach((img) => {
+    images.forEach((img: any) => {
       // Add lazy loading
       img.loading = 'lazy';
       
@@ -439,8 +439,8 @@ export class PerformanceOptimizer {
   }
 
   private implementLazyLoading(element: HTMLElement): void {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    const observer = new IntersectionObserver((entries: any) => {
+      entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
           const target = entry.target as HTMLElement;
           
@@ -463,7 +463,7 @@ export class PerformanceOptimizer {
 
     // Observe elements with data-lazy attribute
     const lazyElements = element.querySelectorAll('[data-lazy]');
-    lazyElements.forEach((el) => observer.observe(el));
+    lazyElements.forEach((el: any) => observer.observe(el));
     
     // Store observer for cleanup
     this.observers.set(element.id || 'default', observer);
@@ -472,7 +472,7 @@ export class PerformanceOptimizer {
   private implementVirtualScrolling(element: HTMLElement): void {
     // Implement virtual scrolling for large lists
     const lists = element.querySelectorAll('[data-virtual-scroll]');
-    lists.forEach((list) => {
+    lists.forEach((list: any) => {
       const items = Array.from(list.children);
       const visibleItems = 10; // Number of visible items
       
@@ -505,7 +505,7 @@ export class PerformanceOptimizer {
   private optimizeAnimations(element: HTMLElement): void {
     // Use CSS transforms instead of position changes
     const animatedElements = element.querySelectorAll('[data-animate]');
-    animatedElements.forEach((el) => {
+    animatedElements.forEach((el: any) => {
       (el as HTMLElement).style.willChange = 'transform';
     });
     
@@ -517,7 +517,7 @@ export class PerformanceOptimizer {
 
   private debounceEventHandlers(element: HTMLElement): void {
     const inputs = element.querySelectorAll('input, textarea');
-    inputs.forEach((input) => {
+    inputs.forEach((input: any) => {
       const originalHandler = (input as any).oninput;
       if (originalHandler) {
         (input as any).oninput = this.debounce(originalHandler, 300);
@@ -549,7 +549,7 @@ export class PerformanceOptimizer {
 
   cleanup(): void {
     // Clean up observers
-    this.observers.forEach((observer) => observer.disconnect());
+    this.observers.forEach((observer: any) => observer.disconnect());
     this.observers.clear();
   }
 }
@@ -574,7 +574,7 @@ export class ButtonEnhancer {
     button.style.position = 'relative';
     button.style.overflow = 'hidden';
     
-    button.addEventListener('click', (e) => {
+    button.addEventListener('click', (e: any) => {
       const ripple = document.createElement('span');
       ripple.classList.add('ripple');
       
@@ -613,8 +613,8 @@ export class ButtonEnhancer {
   }
 
   private static addDisabledStateHandling(button: HTMLButtonElement): void {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+    const observer = new MutationObserver((mutations: any) => {
+      mutations.forEach((mutation: any) => {
         if (mutation.attributeName === 'disabled') {
           if (button.disabled) {
             button.classList.add('opacity-50', 'cursor-not-allowed');
@@ -692,7 +692,7 @@ export class ExtensionEnhancementManager {
   }
 
   private setupGlobalErrorHandling(): void {
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', (event: any) => {
       this.errorHandler.handleError(
         new Error(event.message),
         event.filename || 'unknown',
@@ -700,7 +700,7 @@ export class ExtensionEnhancementManager {
       );
     });
 
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', (event: any) => {
       this.errorHandler.handleError(
         new Error(event.reason),
         'promise',
@@ -711,7 +711,7 @@ export class ExtensionEnhancementManager {
 
   private enhanceExistingComponents(): void {
     const components = document.querySelectorAll('[data-component]');
-    components.forEach((component) => {
+    components.forEach((component: any) => {
       this.enhanceComponent(component as HTMLElement);
     });
   }
@@ -727,15 +727,15 @@ export class ExtensionEnhancementManager {
     
     // Enhance buttons
     const buttons = element.querySelectorAll('button');
-    buttons.forEach((button) => {
+    buttons.forEach((button: any) => {
       ButtonEnhancer.enhance(button as HTMLButtonElement);
     });
   }
 
   private observeNewComponents(): void {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
+    const observer = new MutationObserver((mutations: any) => {
+      mutations.forEach((mutation: any) => {
+        mutation.addedNodes.forEach((node: any) => {
           if (node.nodeType === 1) { // Element node
             const element = node as HTMLElement;
             if (element.dataset?.component) {
@@ -755,7 +755,7 @@ export class ExtensionEnhancementManager {
   private initializePerformanceMonitoring(): void {
     // Monitor long tasks
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if ((entry as any).duration > 50) {
             console.warn('Long task detected:', entry);

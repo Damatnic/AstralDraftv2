@@ -23,7 +23,7 @@ const widgetLabels: { [key: string]: string } = {
     assistant: 'AI Assistant',
 };
 
-const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClose }) => {
+const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [layout, setLayout] = React.useState(state.dashboardLayout);
 
@@ -72,7 +72,7 @@ const CustomizeDashboardModal: React.FC<CustomizeDashboardModalProps> = ({ onClo
     );
 };
 
-const CustomizeDashboardModalWithErrorBoundary: React.FC = (props) => (
+const CustomizeDashboardModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CustomizeDashboardModal {...props} />
   </ErrorBoundary>

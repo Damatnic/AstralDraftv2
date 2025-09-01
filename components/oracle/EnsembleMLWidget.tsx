@@ -18,7 +18,7 @@ interface Props {
 
 }
 
-const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
+const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }: any) => {
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -269,7 +269,7 @@ const EnsembleMLWidget: React.FC<Props> = ({ playerId, compact = true }) => {
     );
 };
 
-const EnsembleMLWidgetWithErrorBoundary: React.FC = (props) => (
+const EnsembleMLWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnsembleMLWidget {...props} />
   </ErrorBoundary>

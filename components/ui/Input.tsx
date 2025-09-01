@@ -15,7 +15,7 @@ export const Input: React.FC<InputProps> = ({
   className = '',
   id,
   ...props
-}) => {
+}: any) => {
   const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
   
   const getInputClasses = () => {

@@ -58,7 +58,7 @@ class BundleAnalyzer {
   private analyzeLoadedChunks(): void {
     const scripts = Array.from(document.scripts);
     
-    scripts.forEach(script => {
+    scripts.forEach((script: any) => {
       if (script.src && script.src.includes('assets/')) {
         const resourceEntry = performance.getEntriesByName(script.src)[0] as PerformanceResourceTiming;
         
@@ -131,11 +131,11 @@ class BundleAnalyzer {
     const criticalViews = ['dashboard', 'team-hub', 'login'];
     const highPriorityViews = ['players', 'matchup', 'league-hub'];
     
-    if (criticalViews.some(view => chunkName.toLowerCase().includes(view))) {
+    if (criticalViews.some((view: any) => chunkName.toLowerCase().includes(view))) {
       return 'critical';
     }
     
-    if (highPriorityViews.some(view => chunkName.toLowerCase().includes(view))) {
+    if (highPriorityViews.some((view: any) => chunkName.toLowerCase().includes(view))) {
       return 'high';
     }
     
@@ -150,9 +150,9 @@ class BundleAnalyzer {
     const originalImport = window.import || (() => {});
     
     // Monitor script loading
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
+    const observer = new MutationObserver((mutations: any) => {
+      mutations.forEach((mutation: any) => {
+        mutation.addedNodes.forEach((node: any) => {
           if (node.nodeType === Node.ELEMENT_NODE) {
             const element = node as Element;
             if (element.tagName === 'SCRIPT' && element.getAttribute('src')?.includes('assets/')) {
@@ -190,8 +190,8 @@ class BundleAnalyzer {
   private setupPerformanceObservers(): void {
     if ('PerformanceObserver' in window) {
       // Monitor resource loading
-      const resourceObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
+      const resourceObserver = new PerformanceObserver((list: any) => {
+        list.getEntries().forEach((entry: any) => {
           if (entry.name.includes('assets/') && entry.name.endsWith('.js')) {
             this.updateChunkPerformance(entry as PerformanceResourceTiming);
           }
@@ -209,7 +209,7 @@ class BundleAnalyzer {
     const filename = entry.name.split('/').pop() || '';
     const chunkName = filename.split('-')[0];
     
-    const chunk = this.chunks.find(c => c.name === chunkName);
+    const chunk = this.chunks.find((c: any) => c.name === chunkName);
     if (chunk) {
       chunk.loadTime = entry.responseEnd - entry.requestStart;
     }
@@ -282,7 +282,7 @@ class BundleAnalyzer {
     const largestChunk = this.chunks.reduce((largest, chunk) => 
       chunk.size > largest.size ? chunk : largest, this.chunks[0]);
     
-    const criticalChunks = this.chunks.filter(chunk => chunk.priority === 'critical');
+    const criticalChunks = this.chunks.filter((chunk: any) => chunk.priority === 'critical');
     const criticalSize = criticalChunks.reduce((sum, chunk) => sum + chunk.gzippedSize, 0);
     
     const averageLoadTime = this.loadTimes.size > 0 ? 
@@ -313,13 +313,13 @@ class BundleAnalyzer {
     }
     
     // Large chunk recommendations
-    const largeChunks = this.chunks.filter(chunk => chunk.size > 100 * 1024);
-    largeChunks.forEach(chunk => {
+    const largeChunks = this.chunks.filter((chunk: any) => chunk.size > 100 * 1024);
+    largeChunks.forEach((chunk: any) => {
       recommendations.push(`📦 Large chunk detected: ${chunk.name} (${(chunk.size / 1024).toFixed(0)}KB) - consider splitting`);
     });
     
     // Vendor chunk recommendations
-    const vendorChunks = this.chunks.filter(chunk => chunk.type === 'vendor');
+    const vendorChunks = this.chunks.filter((chunk: any) => chunk.type === 'vendor');
     const totalVendorSize = vendorChunks.reduce((sum, chunk) => sum + chunk.size, 0);
     if (totalVendorSize > 300 * 1024) {
       recommendations.push('📚 Vendor bundles are large - separate framework code from other libraries');
@@ -357,14 +357,14 @@ class BundleAnalyzer {
     }
     
     // Large chunks that can be split
-    const largeChunks = this.chunks.filter(chunk => chunk.size > 150 * 1024);
+    const largeChunks = this.chunks.filter((chunk: any) => chunk.size > 150 * 1024);
     if (largeChunks.length > 0) {
       criticalIssues.push(`${largeChunks.length} chunks exceed 150KB - split immediately`);
       potentialSavings += largeChunks.reduce((sum, chunk) => sum + chunk.size * 0.3, 0); // 30% estimated savings
     }
     
     // Optimization suggestions
-    const vendorSize = this.chunks.filter(chunk => chunk.type === 'vendor').reduce((sum, chunk) => sum + chunk.size, 0);
+    const vendorSize = this.chunks.filter((chunk: any) => chunk.type === 'vendor').reduce((sum, chunk) => sum + chunk.size, 0);
     if (vendorSize > 200 * 1024) {
       suggestions.push('Split vendor libraries into multiple chunks based on usage patterns');
       potentialSavings += vendorSize * 0.2; // 20% estimated savings
@@ -377,7 +377,7 @@ class BundleAnalyzer {
     }
     
     // Tree shaking opportunities
-    const utilityChunks = this.chunks.filter(chunk => chunk.name.includes('utils') || chunk.name.includes('vendor'));
+    const utilityChunks = this.chunks.filter((chunk: any) => chunk.name.includes('utils') || chunk.name.includes('vendor'));
     if (utilityChunks.length > 0) {
       const avgUtilitySize = utilityChunks.reduce((sum, chunk) => sum + chunk.size, 0) / utilityChunks.length;
       if (avgUtilitySize > 80 * 1024) {
@@ -400,8 +400,8 @@ class BundleAnalyzer {
     // This would need to analyze actual bundle contents
     // For now, return common duplicates
     const commonDuplicates = ['lodash', 'react', 'moment'];
-    return commonDuplicates.filter(lib => {
-      const libChunks = this.chunks.filter(chunk => chunk.name.toLowerCase().includes(lib));
+    return commonDuplicates.filter((lib: any) => {
+      const libChunks = this.chunks.filter((chunk: any) => chunk.name.toLowerCase().includes(lib));
       return libChunks.length > 1;
     });
   }
@@ -431,7 +431,7 @@ class BundleAnalyzer {
     // Critical issues
     if (analysis.optimization.criticalIssues.length > 0) {
       report += '🚨 Critical Issues:\\n';
-      analysis.optimization.criticalIssues.forEach(issue => {
+      analysis.optimization.criticalIssues.forEach((issue: any) => {
         report += `   • ${issue}\\n`;
       });
       report += '\\n';
@@ -440,7 +440,7 @@ class BundleAnalyzer {
     // Recommendations
     if (analysis.recommendations.length > 0) {
       report += '💡 Recommendations:\\n';
-      analysis.recommendations.slice(0, 8).forEach(rec => {
+      analysis.recommendations.slice(0, 8).forEach((rec: any) => {
         report += `   • ${rec}\\n`;
       });
       report += '\\n';

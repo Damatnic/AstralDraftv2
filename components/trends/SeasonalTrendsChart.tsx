@@ -57,7 +57,7 @@ interface ChartDataPoint {
   color: string;
 
 // Custom tooltip component moved outside
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload?.length) {
     const data = payload[0].payload as ChartDataPoint;
     return (
@@ -78,7 +78,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
   playerId,
   playerName,
   className = ''
-}) => {
+}: any) => {
   const [seasonalData, setSeasonalData] = useState<SeasonalTrendData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -250,7 +250,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
                     { period: 'Mid Season', data: seasonalData.trends.midSeason, weeks: '7-12' },
                     { period: 'Late Season', data: seasonalData.trends.lateSeason, weeks: '13-18' },
                     { period: 'Playoffs', data: seasonalData.trends.playoffs, weeks: '19-22' }
-                  ].map(({ period, data, weeks }) => (
+                  ].map(({ period, data, weeks }: any) => (
                     <Card key={period}>
                       <CardHeader className="pb-2 sm:px-4 md:px-6 lg:px-8">
                         <CardTitle className="text-sm sm:px-4 md:px-6 lg:px-8">{period}</CardTitle>
@@ -443,7 +443,7 @@ const SeasonalTrendsChart: React.FC<SeasonalTrendsChartProps> = ({
   );
 };
 
-const SeasonalTrendsChartWithErrorBoundary: React.FC = (props) => (
+const SeasonalTrendsChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SeasonalTrendsChart {...props} />
   </ErrorBoundary>

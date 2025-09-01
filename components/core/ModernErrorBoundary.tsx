@@ -189,7 +189,7 @@ class ModernErrorBoundary extends Component<Props, State> {
     return this.props.children;
 
 
-const ModernErrorBoundaryWithErrorBoundary: React.FC = (props) => (
+const ModernErrorBoundaryWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ModernErrorBoundary {...props} />
   </ErrorBoundary>

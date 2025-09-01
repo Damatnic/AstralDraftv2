@@ -13,7 +13,7 @@ interface MessageThreadProps {
 
 }
 
-const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }) => {
+const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { state, dispatch } = useAppState();
     const [text, setText] = React.useState('');
@@ -112,7 +112,7 @@ const MessageThread: React.FC<MessageThreadProps> = ({ userId, onUserSelected })
     );
 };
 
-const MessageThreadWithErrorBoundary: React.FC = (props) => (
+const MessageThreadWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MessageThread {...props} />
   </ErrorBoundary>

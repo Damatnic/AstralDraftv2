@@ -14,7 +14,7 @@ interface EditProfileModalProps {
 
 }
 
-const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }) => {
+const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [avatar, setAvatar] = React.useState(user.avatar);
@@ -87,7 +87,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onC
   );
 };
 
-const EditProfileModalWithErrorBoundary: React.FC = (props) => (
+const EditProfileModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EditProfileModal {...props} />
   </ErrorBoundary>

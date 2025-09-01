@@ -44,7 +44,7 @@ interface OptimizerSettings {
 
 }
 
-const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }) => {
+const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatch, canEdit }: any) => {
     const [isOptimizing, setIsOptimizing] = React.useState(false);
     const [suggestions, setSuggestions] = React.useState<LineupSuggestion[]>([]);
     const [selectedSuggestion, setSelectedSuggestion] = React.useState<LineupSuggestion | null>(null);
@@ -421,7 +421,7 @@ const LineupOptimizer: React.FC<LineupOptimizerProps> = ({ team, league, dispatc
     );
 };
 
-const LineupOptimizerWithErrorBoundary: React.FC = (props) => (
+const LineupOptimizerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LineupOptimizer {...props} />
   </ErrorBoundary>

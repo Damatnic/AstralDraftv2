@@ -20,7 +20,7 @@ interface ConversationalOracleProps {
     availablePlayers: Player[];
 }
 
-const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }) => {
+const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }: any) => {
     const [messages, setMessages] = React.useState<Message[]>([
         { id: 1, sender: 'ai', text: "Welcome to the Oracle. Ask me anything about your draft strategy." }
     ]);
@@ -131,7 +131,7 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
     );
 };
 
-const ConversationalOracleWithErrorBoundary: React.FC = (props) => (
+const ConversationalOracleWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ConversationalOracle {...props} />
   </ErrorBoundary>

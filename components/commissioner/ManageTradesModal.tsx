@@ -19,7 +19,7 @@ interface ManageTradesModalProps {
 
 }
 
-const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }) => {
+const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }: any) => {
     const { state, dispatch } = useAppState();
     const pendingOffers = league.tradeOffers.filter((o: any) => o?.status === 'PENDING');
     const isTradeDeadlinePassed = league.currentWeek > league.settings.tradeDeadline;
@@ -93,7 +93,7 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
     );
 };
 
-const ManageTradesModalWithErrorBoundary: React.FC = (props) => (
+const ManageTradesModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ManageTradesModal {...props} />
   </ErrorBoundary>

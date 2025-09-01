@@ -51,7 +51,7 @@ interface ChartConfig {
 const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   className = '',
   onExport
-}) => {
+}: any) => {
   const { isAuthenticated } = useAuth();
   const {
     report,
@@ -633,7 +633,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
   );
 };
 
-const EnhancedAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const EnhancedAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedAnalyticsDashboard {...props} />
   </ErrorBoundary>

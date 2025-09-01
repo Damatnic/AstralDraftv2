@@ -1034,7 +1034,7 @@ const OracleEnsemblePredictionSection: React.FC = () => {
   );
 };
 
-const OracleEnsemblePredictionSectionWithErrorBoundary: React.FC = (props) => (
+const OracleEnsemblePredictionSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleEnsemblePredictionSection {...props} />
   </ErrorBoundary>

@@ -563,7 +563,7 @@ const TrashTalkBoard: React.FC = () => {
   );
 };
 
-const TrashTalkBoardWithErrorBoundary: React.FC = (props) => (
+const TrashTalkBoardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TrashTalkBoard {...props} />
   </ErrorBoundary>

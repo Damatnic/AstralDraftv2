@@ -53,7 +53,7 @@ interface MobileTouchState {
 
 const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1, 
     className = '' 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const { user, isAuthenticated } = useAuth();
     
@@ -669,7 +669,7 @@ const EnhancedOracleMobileInterface: React.FC<Props> = ({ week = 1,
     );
 };
 
-const EnhancedOracleMobileInterfaceWithErrorBoundary: React.FC = (props) => (
+const EnhancedOracleMobileInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedOracleMobileInterface {...props} />
   </ErrorBoundary>

@@ -25,7 +25,7 @@ interface SeasonAction {
     type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';
     data?: any;}
 
-const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }) => {
+const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }: any) => {
     const [showConfirmAction, setShowConfirmAction] = React.useState<SeasonAction | null>(null);
     const [manualScoreMode, setManualScoreMode] = React.useState(false);
     const [selectedMatchup, setSelectedMatchup] = React.useState<string | null>(null);
@@ -399,7 +399,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch })
     );
 };
 
-const SeasonManagementWithErrorBoundary: React.FC = (props) => (
+const SeasonManagementWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SeasonManagement {...props} />
   </ErrorBoundary>

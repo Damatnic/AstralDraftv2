@@ -546,7 +546,7 @@ const EnhancedWaiverWire: React.FC = () => {
   );
 };
 
-const EnhancedWaiverWireWithErrorBoundary: React.FC = (props) => (
+const EnhancedWaiverWireWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedWaiverWire {...props} />
   </ErrorBoundary>

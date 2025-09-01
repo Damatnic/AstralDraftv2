@@ -12,7 +12,7 @@ interface ProposeSideBetModalProps {
 
 }
 
-const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) => {
+const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }: any) => {
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [opponentId, setOpponentId] = React.useState<string>('');
@@ -104,7 +104,7 @@ const ProposeSideBetModal: React.FC<ProposeSideBetModalProps> = ({ onClose }) =>
     );
 };
 
-const ProposeSideBetModalWithErrorBoundary: React.FC = (props) => (
+const ProposeSideBetModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ProposeSideBetModal {...props} />
   </ErrorBoundary>

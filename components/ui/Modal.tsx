@@ -17,7 +17,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   size = 'md'
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'max-w-md',
     md: 'max-w-lg',

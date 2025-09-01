@@ -11,7 +11,7 @@ interface ProfileModalProps {
 
 }
 
-export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, user }) => {
+export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, user }: any) => {
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
@@ -137,7 +137,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
           {/* Tabs */}
           <div className="border-b border-white/10 bg-dark-900/50">
             <div className="flex px-6 gap-1">
-              {tabs.map((tab) => (
+              {tabs.map((tab: any) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -177,7 +177,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                           <input
                             type="text"
                             value={profileData.displayName}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, displayName: e.target.value }))}
+                            onChange={(e: any) => setProfileData(prev => ({ ...prev, displayName: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500"
                           />
                         </div>
@@ -186,7 +186,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                           <input
                             type="text"
                             value={profileData.teamName}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, teamName: e.target.value }))}
+                            onChange={(e: any) => setProfileData(prev => ({ ...prev, teamName: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500"
                           />
                         </div>
@@ -194,7 +194,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                           <label className="block text-sm font-medium text-gray-300 mb-2">Bio</label>
                           <textarea
                             value={profileData.bio}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
+                            onChange={(e: any) => setProfileData(prev => ({ ...prev, bio: e.target.value }))}
                             rows={3}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500 resize-none"
                           />
@@ -235,7 +235,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                           <input
                             type="text"
                             value={profileData.location}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
+                            onChange={(e: any) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500"
                           />
                         ) : (
@@ -248,7 +248,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                           <input
                             type="text"
                             value={profileData.favoriteTeam}
-                            onChange={(e) => setProfileData(prev => ({ ...prev, favoriteTeam: e.target.value }))}
+                            onChange={(e: any) => setProfileData(prev => ({ ...prev, favoriteTeam: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500"
                           />
                         ) : (
@@ -313,7 +313,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
               {activeTab === 'achievements' && (
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
-                    {achievements.map((achievement) => (
+                    {achievements.map((achievement: any) => (
                       <div key={achievement.id} className={`bg-dark-700/50 rounded-xl p-4 border ${getRarityColor(achievement.rarity)}`}>
                         <div className="flex items-center gap-3">
                           <div className="text-2xl">{achievement.icon}</div>
@@ -402,7 +402,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
   );
 };
 
-const ProfileModalWithErrorBoundary: React.FC = (props) => (
+const ProfileModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ProfileModal {...props} />
   </ErrorBoundary>

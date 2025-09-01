@@ -75,7 +75,7 @@ export const VirtualList = <T,>({
                         right: 0
                     }}
                 >
-                    {visibleItems.map(({ item, index, key }) => (
+                    {visibleItems.map(({ item, index, key }: any) => (
                         <div
                             key={key}
                             style={{
@@ -187,7 +187,7 @@ export const VirtualGrid = React.memo(<T,>({
                     position: 'relative'
                 }}
             >
-                {visibleItems.map(({ item, index, key, x, y }) => (
+                {visibleItems.map(({ item, index, key, x, y }: any) => (
                     <div
                         key={key}
                         style={{

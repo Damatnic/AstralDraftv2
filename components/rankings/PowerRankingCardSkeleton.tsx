@@ -27,7 +27,7 @@ const PowerRankingCardSkeleton: React.FC = () => {
     );
 };
 
-const PowerRankingCardSkeletonWithErrorBoundary: React.FC = (props) => (
+const PowerRankingCardSkeletonWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PowerRankingCardSkeleton {...props} />
   </ErrorBoundary>

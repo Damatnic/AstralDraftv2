@@ -21,7 +21,7 @@ import { AwardIcon } from '../components/icons/AwardIcon';
 import { NewspaperIcon } from '../components/icons/NewspaperIcon';
 import SideBetsWidget from '../components/hub/SideBetsWidget';
 
-const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.Dispatch<any> }> = ({ league, user, dispatch }) => {
+const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.Dispatch<any> }> = ({ league, user, dispatch }: any) => {
     const isCommissioner = user.id === league.commissionerId;
     const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
     const isDraftComplete = league.status === 'DRAFT_COMPLETE';

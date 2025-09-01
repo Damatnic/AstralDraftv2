@@ -24,7 +24,7 @@ import { SettingsIcon } from '../components/icons/SettingsIcon';
 import { CalendarIcon } from '../components/icons/CalendarIcon';
 import { FileTextIcon } from '../components/icons/FileTextIcon';
 
-const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const CommissionerToolsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const { state } = useAppState();
     const [isPollModalOpen, setIsPollModalOpen] = React.useState(false);
     const [isAnnouncementModalOpen, setIsAnnouncementModalOpen] = React.useState(false);

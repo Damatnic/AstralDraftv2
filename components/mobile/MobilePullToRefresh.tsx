@@ -31,7 +31,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
     maxPullDistance = 120,
     disabled = false,
     className = ''
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
@@ -254,7 +254,7 @@ const MobilePullToRefresh: React.FC<MobilePullToRefreshProps> = ({ onRefresh,
     );
 };
 
-const MobilePullToRefreshWithErrorBoundary: React.FC = (props) => (
+const MobilePullToRefreshWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobilePullToRefresh {...props} />
   </ErrorBoundary>

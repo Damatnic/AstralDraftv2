@@ -30,7 +30,7 @@ const MockAppProvider: React.FC<{ children: React.ReactNode; initialState?: Part
   );
 };
 
-const MockModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const MockModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
   return (
     <div data-testid="mock-modal-provider">
       {children}
@@ -42,7 +42,7 @@ const MockModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }
 const AllTheProviders: React.FC<{ 
   children: React.ReactNode;
   initialAppState?: Partial<any>;
-}> = ({ children, initialAppState }) => {
+}> = ({ children, initialAppState }: any) => {
   return (
     <MockAppProvider initialState={initialAppState}>
       <MockModalProvider>
@@ -62,7 +62,7 @@ const customRender = (
   const { initialAppState, ...renderOptions } = options || {};
   
   return render(ui, { 
-    wrapper: (props) => <AllTheProviders {...props} initialAppState={initialAppState} />,
+    wrapper: (props: any) => <AllTheProviders {...props} initialAppState={initialAppState} />,
     ...renderOptions 
   });
 };

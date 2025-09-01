@@ -84,7 +84,7 @@ interface AccessibilityProviderProps {
 export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
   children,
   storageKey = 'astral-draft-accessibility'
-}) => {
+}: any) => {
   const [state, setState] = useState<AccessibilityState>({
     screenReaderMode: false,
     highContrastMode: false,
@@ -250,7 +250,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
       setState(prev => ({ ...prev, focusIndicatorMode: !prev.focusIndicatorMode }));
     },
 
-    setColorBlindMode: (mode) => {
+    setColorBlindMode: (mode: any) => {
       setState(prev => ({ ...prev, colorBlindMode: mode }));
     },
 
@@ -271,7 +271,7 @@ export const AccessibilityProvider: React.FC<AccessibilityProviderProps> = ({
       setTimeout(() => {
         setState(prev => ({
           ...prev,
-          announcements: prev.announcements.filter(a => a.id !== announcement.id)
+          announcements: prev.announcements.filter((a: any) => a.id !== announcement.id)
         }));
       }, 5000);
     },
@@ -303,7 +303,7 @@ interface LiveRegionProps {
 
 }
 
-const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
+const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }: any) => {
   return (
     <>
       <div
@@ -313,9 +313,9 @@ const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
         role="status"
       >
         {announcements
-          .filter(a => a.priority === 'polite')
+          .filter((a: any) => a.priority === 'polite')
           .slice(-1)
-          .map(a => (
+          .map((a: any) => (
             <div key={a.id}>{a.message}</div>
           ))
 
@@ -328,9 +328,9 @@ const LiveRegion: React.FC<LiveRegionProps> = ({ announcements }) => {
         role="alert"
       >
         {announcements
-          .filter(a => a.priority === 'assertive')
+          .filter((a: any) => a.priority === 'assertive')
           .slice(-1)
-          .map(a => (
+          .map((a: any) => (
             <div key={a.id}>{a.message}</div>
           ))
 
@@ -555,7 +555,7 @@ export const SkipLink: React.FC<SkipLinkProps> = ({
   href,
   children,
   className = ''
-}) => {
+}: any) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleFocus = () => setIsVisible(true);
@@ -597,7 +597,7 @@ export const FocusTrap: React.FC<FocusTrapProps> = ({
   active = true,
   restoreFocus = true,
   className = ''
-}) => {
+}: any) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lastFocusedElement = useRef<HTMLElement | null>(null);
 
@@ -685,7 +685,7 @@ export const AccessibilityPanel: React.FC = () => {
       <AccessibleButton
         onClick={() => setIsOpen(true)}
         aria-label="Open accessibility settings"
-        variant="secondary"
+        variant="default"
         className="fixed top-4 right-4 z-50 sm:px-4 md:px-6 lg:px-8"
       >
         ♿ A11y
@@ -717,7 +717,7 @@ export const AccessibilityPanel: React.FC = () => {
                     <AccessibleButton
                       onClick={() => setIsOpen(false)}
                       aria-label="Close accessibility settings"
-                      variant="secondary"
+                      variant="default"
                       size="sm"
                     >
                       ✕
@@ -760,7 +760,7 @@ export const AccessibilityPanel: React.FC = () => {
                           <label className="block text-white mb-2 sm:px-4 md:px-6 lg:px-8">Color Blind Support</label>
                           <select
                             value={colorBlindMode}
-                            onChange={(e) => setColorBlindMode(e.target.value as any)}
+                            onChange={(e: any) => setColorBlindMode(e.target.value as any)}
                           >
                             <option value="none">None</option>
                             <option value="protanopia">Protanopia (Red-blind)</option>

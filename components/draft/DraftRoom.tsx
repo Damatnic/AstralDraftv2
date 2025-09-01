@@ -25,7 +25,7 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
   userId,
   teamId,
   onExitDraft
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const {
     isConnected,
@@ -269,7 +269,7 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
                       : `${getTierColor(player?.tier)} bg-gray-700 border-gray-600 hover:border-gray-500`
                   }`}
                   onClick={() => setSelectedPlayer(player)}
-                  onKeyDown={(e) => {
+                  onKeyDown={(e: any) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       setSelectedPlayer(player);
@@ -406,7 +406,7 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
               <input
                 type="text"
                 value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
+                onChange={(e: any) => setChatInput(e.target.value)}
                 className="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 min-h-[44px]"
                 autoComplete="off"
                 placeholder="Type a message..."
@@ -428,7 +428,7 @@ const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
   );
 };
 
-const DraftRoomWithErrorBoundary: React.FC = (props) => (
+const DraftRoomWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftRoom {...props} />
   </ErrorBoundary>

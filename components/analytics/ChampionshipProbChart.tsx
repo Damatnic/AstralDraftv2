@@ -11,7 +11,7 @@ const teamColors = [
     '#f472b6', '#38bdf8', '#a3e635', '#4ade80', '#c084fc', '#fb7185'
 ];
 
-const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }) => {
+const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league }: any) => {
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
@@ -98,7 +98,7 @@ const ChampionshipProbChart: React.FC<ChampionshipProbChartProps> = ({ league })
     );
 };
 
-const ChampionshipProbChartWithErrorBoundary: React.FC = (props) => (
+const ChampionshipProbChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChampionshipProbChart {...props} />
   </ErrorBoundary>

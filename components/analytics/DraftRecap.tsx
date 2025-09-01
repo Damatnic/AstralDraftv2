@@ -17,7 +17,7 @@ interface DraftRecapProps {
 
 }
 
-const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) => {
+const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }: any) => {
     const getIcon = (title: string) => {
         const lowerTitle = title.toLowerCase();
         if (lowerTitle.includes('steal') || lowerTitle.includes('value')) return <GemIcon />;
@@ -39,7 +39,7 @@ const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }) 
     );
 };
 
-const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }) => {
+const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
     const [recap, setRecap] = React.useState<DraftRecapData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -102,7 +102,7 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }) => {
     );
 };
 
-const DraftRecapWithErrorBoundary: React.FC = (props) => (
+const DraftRecapWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftRecap {...props} />
   </ErrorBoundary>

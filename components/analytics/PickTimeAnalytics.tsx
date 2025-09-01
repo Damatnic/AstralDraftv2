@@ -10,7 +10,7 @@ interface PickTimeAnalyticsProps {
 
 }
 
-const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }) => {
+const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }: any) => {
     const analyticsData = React.useMemo(() => {
         const pickTimes: { [teamId: number]: number[] } = {};
 
@@ -67,7 +67,7 @@ const PickTimeAnalytics: React.FC<PickTimeAnalyticsProps> = ({ league }) => {
     );
 };
 
-const PickTimeAnalyticsWithErrorBoundary: React.FC = (props) => (
+const PickTimeAnalyticsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PickTimeAnalytics {...props} />
   </ErrorBoundary>

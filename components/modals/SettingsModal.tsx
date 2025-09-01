@@ -19,7 +19,7 @@ interface SettingItem {
   options?: string[];
 }
 
-export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
+export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
@@ -249,7 +249,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
         return (
           <select
             value={value}
-            onChange={(e) => handleSettingChange(item.id, e.target.value)}
+            onChange={(e: any) => handleSettingChange(item.id, e.target.value)}
           >
             {item.options?.map((option: string) => (
               <option key={option} value={option}>
@@ -267,7 +267,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               min="0"
               max="100"
               value={value}
-              onChange={(e) => handleSettingChange(item.id, parseInt(e.target.value))}
+              onChange={(e: any) => handleSettingChange(item.id, parseInt(e.target.value))}
             />
             <span className="text-sm text-gray-400 w-8 sm:px-4 md:px-6 lg:px-8">{value}%</span>
           </div>
@@ -329,7 +329,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   </div>
                   
                   <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-                    {section.items.map((item) => (
+                    {section.items.map((item: any) => (
                       <div key={item.id} className="flex items-center justify-between p-4 bg-dark-700/50 rounded-xl border border-white/5 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                           <h4 className="font-medium text-white mb-1 sm:px-4 md:px-6 lg:px-8">{item.label}</h4>
@@ -396,7 +396,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   );
 };
 
-const SettingsModalWithErrorBoundary: React.FC<SettingsModalProps> = (props) => (
+const SettingsModalWithErrorBoundary: React.FC<SettingsModalProps> = (props: any) => (
   <ErrorBoundary>
     <SettingsModal {...props} />
   </ErrorBoundary>

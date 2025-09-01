@@ -273,7 +273,7 @@ export function getWeekMatchups(
   allMatchups: Matchup[],
   week: number
 ): Matchup[] {
-  return allMatchups.filter(m => m.week === week);
+  return allMatchups.filter((m: any) => m.week === week);
 }
 
 /**
@@ -286,7 +286,7 @@ export function getTeamUpcomingMatchups(
   weeksAhead: number = 3
 ): Matchup[] {
   return allMatchups
-    .filter(m => 
+    .filter((m: any) => 
       (m.teamA.teamId === teamId || m.teamB.teamId === teamId) &&
       m.week > currentWeek &&
       m.week <= currentWeek + weeksAhead
@@ -303,7 +303,7 @@ export function calculateStrengthOfSchedule(
   currentWeek: number,
   teamRecords: Map<number, { wins: number; losses: number }>
 ): number {
-  const remainingMatchups = allMatchups.filter(m =>
+  const remainingMatchups = allMatchups.filter((m: any) =>
     (m.teamA.teamId === teamId || m.teamB.teamId === teamId) &&
     m.week > currentWeek &&
     !m.isPlayoffs
@@ -312,7 +312,7 @@ export function calculateStrengthOfSchedule(
   let totalOpponentWinPct = 0;
   let opponentCount = 0;
   
-  remainingMatchups.forEach(matchup => {
+  remainingMatchups.forEach((matchup: any) => {
     const opponentId = matchup.teamA.teamId === teamId 
       ? matchup.teamB.teamId 
       : matchup.teamA.teamId;
@@ -341,7 +341,7 @@ export function validateSchedule(matchups: Matchup[]): {
   
   // Group matchups by week
   const weekMap = new Map<number, Matchup[]>();
-  matchups.forEach(m => {
+  matchups.forEach((m: any) => {
     if (!weekMap.has(m.week)) {
       weekMap.set(m.week, []);
     }
@@ -352,7 +352,7 @@ export function validateSchedule(matchups: Matchup[]): {
   weekMap.forEach((weekMatchups, week) => {
     const teamsThisWeek = new Set<number>();
     
-    weekMatchups.forEach(matchup => {
+    weekMatchups.forEach((matchup: any) => {
       // Check for duplicate teams in same week
       if (teamsThisWeek.has(matchup.teamA.teamId)) {
         errors.push(`Team ${matchup.teamA.teamId} scheduled twice in week ${week}`);

@@ -281,7 +281,7 @@ export const SecureInputDemo: React.FC = () => {
             ✅ Validate All Inputs
           </Button>
           <Button
-            variant="secondary"
+            variant="default"
             size="lg"
             onClick={clearDemo}
             className="px-8 sm:px-4 md:px-6 lg:px-8"
@@ -319,7 +319,7 @@ export const SecureInputDemo: React.FC = () => {
   );
 };
 
-const SecureInputDemoWithErrorBoundary: React.FC = (props) => (
+const SecureInputDemoWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SecureInputDemo {...props} />
   </ErrorBoundary>

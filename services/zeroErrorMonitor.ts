@@ -154,7 +154,7 @@ export class ZeroErrorMonitor {
 
     private extractMessage(args: any[]): string {
         return args
-            .map(arg => {
+            .map((arg: any) => {
                 if (typeof arg === 'string') return arg;
                 if (arg instanceof Error) return arg.message + ' ' + (arg.stack || '');
                 if (typeof arg === 'object') return JSON.stringify(arg);
@@ -165,7 +165,7 @@ export class ZeroErrorMonitor {
     }
 
     private isSuppressible(message: string): boolean {
-        return this.suppressiblePatterns.some(pattern => 
+        return this.suppressiblePatterns.some((pattern: any) => 
             message.toLowerCase().includes(pattern.toLowerCase())
         );
     }

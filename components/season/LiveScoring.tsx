@@ -55,7 +55,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   matchupId, 
   teamId, 
   showProjections = true 
-}) => {
+}: any) => {
   const { state } = useAppState();
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
@@ -405,7 +405,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   );
 };
 
-const LiveScoringWithErrorBoundary: React.FC = (props) => (
+const LiveScoringWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LiveScoring {...props} />
   </ErrorBoundary>

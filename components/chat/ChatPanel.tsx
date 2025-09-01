@@ -171,7 +171,7 @@ const ChatPanel: React.FC = () => {
     );
 };
 
-const ChatPanelWithErrorBoundary: React.FC = (props) => (
+const ChatPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChatPanel {...props} />
   </ErrorBoundary>

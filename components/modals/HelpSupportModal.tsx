@@ -10,7 +10,7 @@ interface HelpSupportModalProps {
 
 }
 
-export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onClose }) => {
+export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
@@ -184,14 +184,14 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
     }
   ];
 
-  const filteredFAQ = faqData.map(category => ({
+  const filteredFAQ = faqData.map((category: any) => ({
     ...category,
     questions: category.questions.filter(
       item =>
         item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.a.toLowerCase().includes(searchQuery.toLowerCase())
     )
-  })).filter(category => category.questions.length > 0);
+  })).filter((category: any) => category.questions.length > 0);
 
   const handleSubmitTicket = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,7 +251,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
           {/* Tabs */}
           <div className="border-b border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="flex px-6 gap-1 sm:px-4 md:px-6 lg:px-8">
-              {tabs.map((tab) => (
+              {tabs.map((tab: any) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -280,7 +280,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                       type="text"
                       placeholder="Search frequently asked questions..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={(e: any) => setSearchQuery(e.target.value)}
                     />
                   </div>
 
@@ -424,7 +424,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Category</label>
                           <select
                             value={supportTicket.category}
-                            onChange={(e) => setSupportTicket(prev => ({ ...prev, category: e.target.value }))}
+                            onChange={(e: any) => setSupportTicket(prev => ({ ...prev, category: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           >
                             <option value="general">General Question</option>
@@ -438,7 +438,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Priority</label>
                           <select
                             value={supportTicket.priority}
-                            onChange={(e) => setSupportTicket(prev => ({ ...prev, priority: e.target.value }))}
+                            onChange={(e: any) => setSupportTicket(prev => ({ ...prev, priority: e.target.value }))}
                             className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           >
                             <option value="low">Low</option>
@@ -453,7 +453,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                         <input
                           type="text"
                           value={supportTicket.subject}
-                          onChange={(e) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }))}
+                          onChange={(e: any) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }))}
                           placeholder="Brief description of your issue"
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
                           required
@@ -463,7 +463,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                         <label className="block text-sm font-medium text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">Description</label>
                         <textarea
                           value={supportTicket.description}
-                          onChange={(e) => setSupportTicket(prev => ({ ...prev, description: e.target.value }))}
+                          onChange={(e: any) => setSupportTicket(prev => ({ ...prev, description: e.target.value }))}
                           placeholder="Please provide as much detail as possible about your issue"
                           rows={5}
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 resize-none sm:px-4 md:px-6 lg:px-8"
@@ -488,7 +488,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
   );
 };
 
-const HelpSupportModalWithErrorBoundary: React.FC = (props) => (
+const HelpSupportModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <HelpSupportModal {...props} />
   </ErrorBoundary>

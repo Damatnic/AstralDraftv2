@@ -103,7 +103,7 @@ const EnhancedAiDraftCoach: React.FC<EnhancedAiDraftCoachProps> = ({
     recentPicks,
     onPlayerSelect,
     onStrategyUpdate
-}) => {
+}: any) => {
     const [selectedTab, setSelectedTab] = React.useState<'recommendations' | 'opponents' | 'market' | 'strategy'>('recommendations');
     const [recommendations, setRecommendations] = React.useState<CoachRecommendation[]>([]);
     const [opponentModels, setOpponentModels] = React.useState<OpponentModel[]>([]);
@@ -677,7 +677,7 @@ const inferDraftStrategy = (picks: DraftPick[], roster: Player[]): string => {
     return 'Balanced';
 };
 
-const EnhancedAiDraftCoachWithErrorBoundary: React.FC = (props) => (
+const EnhancedAiDraftCoachWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedAiDraftCoach {...props} />
   </ErrorBoundary>

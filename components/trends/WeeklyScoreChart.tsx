@@ -8,7 +8,7 @@ interface WeeklyScoreChartProps {
 
 }
 
-const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }) => {
+const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }: any) => {
     const chartRef = React.useRef<SVGSVGElement>(null);
     const [tooltip, setTooltip] = React.useState<{ x: number, y: number, content: React.ReactNode } | null>(null);
 
@@ -141,7 +141,7 @@ const WeeklyScoreChart: React.FC<WeeklyScoreChartProps> = ({ team, league }) => 
     );
 };
 
-const WeeklyScoreChartWithErrorBoundary: React.FC = (props) => (
+const WeeklyScoreChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyScoreChart {...props} />
   </ErrorBoundary>

@@ -113,7 +113,7 @@ export const ModalManager: React.FC = () => {
   return <>{renderModal()}</>;
 };
 
-const ModalManagerWithErrorBoundary: React.FC = (props) => (
+const ModalManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ModalManager {...props} />
   </ErrorBoundary>

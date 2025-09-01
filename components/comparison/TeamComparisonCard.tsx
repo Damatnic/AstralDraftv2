@@ -14,7 +14,7 @@ interface TeamComparisonCardProps {
 
 }
 
-const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths, weaknesses }) => {
+const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths, weaknesses }: any) => {
     return (
         <Widget title={team.name} icon={<Avatar avatar={team.avatar} className="w-6 h-6 rounded-md sm:px-4 md:px-6 lg:px-8" />}>
             <div className="p-2 space-y-4 h-full overflow-y-auto sm:px-4 md:px-6 lg:px-8">
@@ -54,7 +54,7 @@ const TeamComparisonCard: React.FC<TeamComparisonCardProps> = ({ team, strengths
     );
 };
 
-const TeamComparisonCardWithErrorBoundary: React.FC = (props) => (
+const TeamComparisonCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamComparisonCard {...props} />
   </ErrorBoundary>

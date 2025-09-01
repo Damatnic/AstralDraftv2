@@ -15,7 +15,7 @@ interface MatchupRosterViewProps {
 
 }
 
-const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }) => {
+const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }: any) => {
     const { state } = useAppState();
     const latestEvent = (state.gamedayEvents[matchupId] || []).slice(-1)[0];
 
@@ -61,7 +61,7 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
     );
 };
 
-const MatchupRosterViewWithErrorBoundary: React.FC = (props) => (
+const MatchupRosterViewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MatchupRosterView {...props} />
   </ErrorBoundary>

@@ -16,8 +16,9 @@ const gradeColor = (grade: string) => {
     if (['A+', 'A', 'A-'].includes(grade)) return 'text-green-400 border-green-400/50';
     if (['B+', 'B', 'B-'].includes(grade)) return 'text-yellow-400 border-yellow-400/50';
     return 'text-red-400 border-red-400/50';
+};
 
-const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
+const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }: any) => {
     const [grade, setGrade] = React.useState<DraftGrade | null>(team.draftGrade || null);
     const [isLoading, setIsLoading] = React.useState(!team.draftGrade);
 
@@ -71,7 +72,7 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
     );
 };
 
-const DraftGradeCardWithErrorBoundary: React.FC = (props) => (
+const DraftGradeCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftGradeCard {...props} />
   </ErrorBoundary>

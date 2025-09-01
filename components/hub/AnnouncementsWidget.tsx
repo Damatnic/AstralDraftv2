@@ -36,7 +36,7 @@ const AnnouncementsWidget: React.FC = () => {
     );
 };
 
-const AnnouncementsWidgetWithErrorBoundary: React.FC = (props) => (
+const AnnouncementsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AnnouncementsWidget {...props} />
   </ErrorBoundary>

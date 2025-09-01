@@ -22,7 +22,7 @@ const MatchupCard: React.FC<{
     league: ReturnType<typeof useLeague>['league'],
     onSwap?: () => void,
     isPlayoffs?: boolean 
-}> = ({ matchup, league, onSwap, isPlayoffs }) => {
+}> = ({ matchup, league, onSwap, isPlayoffs }: any) => {
     const teamA = league?.teams.find((t: any) => t.id === matchup.teamA.teamId);
     const teamB = league?.teams.find((t: any) => t.id === matchup.teamB.teamId);
 

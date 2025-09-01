@@ -16,7 +16,7 @@ interface AiCoManagerWidgetProps {
 
 }
 
-const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }) => {
+const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<AiLineupSuggestion | null>(null);
 
@@ -82,7 +82,7 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
     );
 };
 
-const AiCoManagerWidgetWithErrorBoundary: React.FC = (props) => (
+const AiCoManagerWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AiCoManagerWidget {...props} />
   </ErrorBoundary>

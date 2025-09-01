@@ -18,7 +18,7 @@ const sceneDuration = 5000; // 5 seconds per scene
 }
 
 const TitleScene: React.FC<{
-  const [isLoading, setIsLoading] = React.useState(false); scene: RecapVideoScene }> = ({ scene }) => (
+  const [isLoading, setIsLoading] = React.useState(false); scene: RecapVideoScene }> = ({ scene }: any) => (
     <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black sm:px-4 md:px-6 lg:px-8"
         {...{
@@ -35,7 +35,7 @@ const TitleScene: React.FC<{
     </motion.div>
 );
 
-const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }) => {
+const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
     const teamA = league.teams.find((t: any) => t.name === scene.teamAName);
     const teamB = league.teams.find((t: any) => t.name === scene.teamBName);
     return (
@@ -69,7 +69,7 @@ const MatchupScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ sc
     )
 };
 
-const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }) => {
+const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = ({ scene, league }: any) => {
     const team = league.teams.find((t: any) => t.name === scene.playerTeam);
     return (
          <motion.div
@@ -94,7 +94,7 @@ const TopPerformerScene: React.FC<{ scene: RecapVideoScene, league: League }> = 
     )
 };
 
-const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
+const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }: any) => (
      <motion.div
         className="w-full h-full flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 to-black sm:px-4 md:px-6 lg:px-8"
         {...{
@@ -114,7 +114,7 @@ const OutroScene: React.FC<{ scene: RecapVideoScene }> = ({ scene }) => (
     </motion.div>
 );
 
-const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }) => {
+const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }: any) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [isPlaying, setIsPlaying] = React.useState(true);
     const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -181,7 +181,7 @@ const RecapVideoPlayer: React.FC<RecapVideoPlayerProps> = ({ script, league }) =
     );
 };
 
-const RecapVideoPlayerWithErrorBoundary: React.FC = (props) => (
+const RecapVideoPlayerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RecapVideoPlayer {...props} />
   </ErrorBoundary>

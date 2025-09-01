@@ -151,7 +151,7 @@ export class WaiverWireEngine {
       return scoreB - scoreA;
     });
 
-    return replacements.slice(0, 3).map(r => r.player);
+    return replacements.slice(0, 3).map((r: any) => r.player);
   }
 
   /**
@@ -170,14 +170,14 @@ export class WaiverWireEngine {
 
     // Calculate trending players
     const playerActivity = new Map<string, number>();
-    recentTransactions.forEach(t => {
+    recentTransactions.forEach((t: any) => {
       const count = playerActivity.get(t.playerId) || 0;
       playerActivity.set(t.playerId, count + 1);
     });
 
     // Calculate position trends
     const positionActivity = new Map<string, number>();
-    recentTransactions.forEach(t => {
+    recentTransactions.forEach((t: any) => {
       const count = positionActivity.get(t.position) || 0;
       positionActivity.set(t.position, count + 1);
     });

@@ -34,7 +34,7 @@ interface WeeklyRecapProps {
 
 }
 
-const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }) => {
+const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }: any) => {
   const { state } = useAppState();
   const [selectedWeek, setSelectedWeek] = useState(week);
 
@@ -405,7 +405,7 @@ const WeeklyRecap: React.FC<WeeklyRecapProps> = ({ week = 8 }) => {
   );
 };
 
-const WeeklyRecapWithErrorBoundary: React.FC = (props) => (
+const WeeklyRecapWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyRecap {...props} />
   </ErrorBoundary>

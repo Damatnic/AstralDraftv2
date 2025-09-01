@@ -59,8 +59,8 @@ class LazyComponentManager {
   private setupIntersectionObserver() {
     if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
+        (entries: any) => {
+          entries.forEach((entry: any) => {
             if (entry.isIntersecting) {
               const element = entry.target as HTMLElement;
               const componentPath = element.dataset.lazyComponent;
@@ -90,7 +90,7 @@ class LazyComponentManager {
     // Use requestIdleCallback to avoid blocking main thread
     if ('requestIdleCallback' in window) {
       window.requestIdleCallback(() => {
-        criticalComponents.forEach((path) => {
+        criticalComponents.forEach((path: any) => {
           this.loadComponent(path, 'low');
         });
       });
@@ -116,7 +116,7 @@ class LazyComponentManager {
     this.loadingStats.totalLoads++;
 
     const loadPromise = this.performComponentLoad(componentPath, priority)
-      .then((component) => {
+      .then((component: any) => {
         const loadTime = performance.now() - startTime;
         
         // Update cache
@@ -134,7 +134,7 @@ class LazyComponentManager {
 
         return component;
       })
-      .catch((error) => {
+      .catch((error: any) => {
         const loadTime = performance.now() - startTime;
         
         // Cache error for retry logic
@@ -208,7 +208,7 @@ class LazyComponentManager {
   }
 
   private waitForIdleTime(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       if ('requestIdleCallback' in window) {
         window.requestIdleCallback(() => resolve(), { timeout: 2000 });
       } else {
@@ -319,7 +319,7 @@ class LazyComponentManager {
 const SmartLoader: React.FC<{ message?: string; size?: 'sm' | 'md' | 'lg' }> = ({ 
   message = 'Loading...', 
   size = 'md' 
-}) => {
+}: any) => {
   const sizeClasses = {
     sm: 'w-6 h-6',
     md: 'w-8 h-8',
@@ -340,7 +340,7 @@ const SmartLoader: React.FC<{ message?: string; size?: 'sm' | 'md' | 'lg' }> = (
 };
 
 // Default Error Boundary Component
-const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }: any) => (
   <div className="flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
     <div className="text-gray-400 dark:text-gray-600 text-4xl mb-4">⚠️</div>
     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
@@ -466,7 +466,7 @@ export const LazyRoute: React.FC<{
   preload?: boolean;
   priority?: 'high' | 'normal' | 'low';
   fallback?: React.ComponentType;
-}> = ({ component, preload, priority, fallback }) => {
+}> = ({ component, preload, priority, fallback }: any) => {
   return (
     <LazyComponentLoader
       componentPath={`views/${component}`}

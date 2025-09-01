@@ -98,7 +98,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
 
 // Feature-specific error boundaries
-const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
+const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) => (
   <div className="text-center p-8 bg-gray-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
     <h3 className="text-xl font-bold text-red-400 mb-2 sm:px-4 md:px-6 lg:px-8">Draft Feature Error</h3>
     <p className="text-gray-300 mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -113,7 +113,7 @@ const DraftErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
   </div>
 );
 
-const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
+const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) => (
   <div className="text-center p-8 bg-gray-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
     <h3 className="text-xl font-bold text-purple-400 mb-2 sm:px-4 md:px-6 lg:px-8">Oracle Feature Error</h3>
     <p className="text-gray-300 mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -128,7 +128,7 @@ const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }) => (
   </div>
 );
 
-export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
   <ErrorBoundary
     onError={(error, errorInfo) => {
       // Could send to analytics: trackEvent('error', 'draft', error.message);
@@ -139,7 +139,7 @@ export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ ch
   </ErrorBoundary>
 );
 
-export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
   <ErrorBoundary
     onError={(error, errorInfo) => {
     }}

@@ -40,7 +40,7 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 }));
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = jest.fn((cb) => setTimeout(cb, 0));
+global.requestAnimationFrame = jest.fn((cb: any) => setTimeout(cb, 0));
 global.cancelAnimationFrame = jest.fn();
 
 // Mock WebSocket for real-time features
@@ -56,7 +56,7 @@ global.WebSocket = jest.fn().mockImplementation(() => ({
 Object.defineProperty(global, 'crypto', {
   value: {
     randomUUID: jest.fn(() => 'mocked-uuid'),
-    getRandomValues: jest.fn((arr) => arr.fill(Math.random() * 255)),
+    getRandomValues: jest.fn((arr: any) => arr.fill(Math.random() * 255)),
   },
 });
 

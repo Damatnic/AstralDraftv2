@@ -13,7 +13,7 @@ interface AdminLoginProps {
 
 }
 
-const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
+const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -180,7 +180,7 @@ const AdminRoute: React.FC = () => {
   );
 };
 
-const AdminRouteWithErrorBoundary: React.FC = (props) => (
+const AdminRouteWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdminRoute {...props} />
   </ErrorBoundary>

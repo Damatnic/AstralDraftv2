@@ -400,7 +400,7 @@ interface DraftSimulationSettingsProps {
 const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> = ({
     settings,
     onSettingsChange
-}) => {
+}: any) => {
     const updateSetting = <K extends keyof SimulationSettings>(
         key: K,
         value: SimulationSettings[K]
@@ -544,7 +544,7 @@ const DraftBoard: React.FC<DraftBoardProps> = ({
     draftBoard, 
     currentPick, 
     settings 
-}) => {
+}: any) => {
     return (
         <Widget title="Draft Board" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
@@ -603,7 +603,7 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
     teams,
     selectedTeam,
     onTeamSelect
-}) => {
+}: any) => {
     return (
         <Widget title="Teams" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
@@ -636,7 +636,7 @@ interface TeamRosterProps {
 
 }
 
-const TeamRoster: React.FC<TeamRosterProps> = ({ team }) => {
+const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
     return (
         <Widget title={`${team.name} Roster`} className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
@@ -675,7 +675,7 @@ interface DraftAnalyticsProps {
 
 }
 
-const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }) => {
+const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }: any) => {
     return (
         <Widget title="Draft Analytics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -714,7 +714,7 @@ const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }) => {
     );
 };
 
-const DraftSimulationInterfaceWithErrorBoundary: React.FC = (props) => (
+const DraftSimulationInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftSimulationInterface {...props} />
   </ErrorBoundary>

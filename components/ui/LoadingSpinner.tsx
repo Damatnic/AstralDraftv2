@@ -14,7 +14,7 @@ const sizeClasses = {
     lg: 'w-16 h-16',
 };
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', text }) => {
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', text }: any) => {
     return (
         <div className="flex flex-col items-center justify-center gap-4 py-8 sm:px-4 md:px-6 lg:px-8">
             <div className={`
@@ -31,7 +31,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', text }) =>
     );
 };
 
-const LoadingSpinnerWithErrorBoundary: React.FC = (props) => (
+const LoadingSpinnerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LoadingSpinner {...props} />
   </ErrorBoundary>

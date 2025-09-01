@@ -11,7 +11,7 @@ interface BreadcrumbItem {
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
 
-export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
+export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }: any) => {
   return (
     <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
       {items.map((item, index) => (

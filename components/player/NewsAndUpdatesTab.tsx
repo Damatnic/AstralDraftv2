@@ -45,7 +45,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     player,
     league,
     dispatch
-}) => {
+}: any) => {
     // Helper function to handle injury history as string union type
     const getInjuryStatusInfo = (injuryHistory: string | undefined) => {
         if (!injuryHistory) return null;
@@ -371,7 +371,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     );
 };
 
-const NewsAndUpdatesTabWithErrorBoundary: React.FC = (props) => (
+const NewsAndUpdatesTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NewsAndUpdatesTab {...props} />
   </ErrorBoundary>

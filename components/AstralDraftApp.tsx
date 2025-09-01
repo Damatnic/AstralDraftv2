@@ -4,7 +4,7 @@
 
 import OracleOnlyApp from './OracleOnlyApp';
 
-const OracleOnlyAppWithErrorBoundary: React.FC = (props) => (
+const OracleOnlyAppWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleOnlyApp {...props} />
   </ErrorBoundary>

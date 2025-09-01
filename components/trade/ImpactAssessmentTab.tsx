@@ -36,7 +36,7 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
     league,
     currentTeam,
     dispatch
-}) => {
+}: any) => {
     const impactMetrics: ImpactMetric[] = React.useMemo(() => {
         if (!analysis) return [];
         
@@ -388,7 +388,7 @@ const ImpactAssessmentTab: React.FC<ImpactAssessmentTabProps> = ({
     );
 };
 
-const ImpactAssessmentTabWithErrorBoundary: React.FC = (props) => (
+const ImpactAssessmentTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ImpactAssessmentTab {...props} />
   </ErrorBoundary>

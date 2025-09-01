@@ -11,7 +11,7 @@ interface PowerBalanceChartProps {
 
 }
 
-const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
+const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }: any) => {
     const chartData = React.useMemo(() => {
         return leagues.filter((l: any) => !l.isMock).map((league: any) => {
             const myTeam = league.teams.find((t: any) => t.owner.id === 'user_1');
@@ -34,7 +34,7 @@ const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
                     <p className="text-center text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Join a league to see your power balance.</p>
                 ) : (
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
-                        {chartData.map(({ leagueName, winPct }) => (
+                        {chartData.map(({ leagueName, winPct }: any) => (
                             <div key={leagueName}>
                                 <p className="text-xs font-semibold text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">{leagueName}</p>
                                 <div className="relative w-full h-5 bg-black/20 rounded-full sm:px-4 md:px-6 lg:px-8">
@@ -61,7 +61,7 @@ const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }) => {
     );
 };
 
-const PowerBalanceChartWithErrorBoundary: React.FC = (props) => (
+const PowerBalanceChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PowerBalanceChart {...props} />
   </ErrorBoundary>

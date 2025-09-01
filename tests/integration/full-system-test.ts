@@ -67,7 +67,7 @@ describe('Integration Test Suite - All Systems', () => {
       ]);
       
       expect(modules).toHaveLength(6);
-      modules.forEach(mod => {
+      modules.forEach((mod: any) => {
         expect(mod).toBeDefined();
         expect(mod.default || mod).toBeTruthy();
       });
@@ -186,7 +186,7 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Test that optimized contexts don't break accessibility
       const buttons = container.querySelectorAll('button');
-      buttons.forEach(button => {
+      buttons.forEach((button: any) => {
         // All buttons should be keyboard accessible
         expect(parseInt(button.getAttribute('tabIndex') || '0')).toBeGreaterThanOrEqual(0);
         
@@ -265,7 +265,7 @@ describe('Integration Test Suite - All Systems', () => {
       const playerCards = screen.getAllByRole('article');
       expect(playerCards.length).toBeGreaterThan(0);
       
-      playerCards.forEach(card => {
+      playerCards.forEach((card: any) => {
         expect(card).toHaveAttribute('tabIndex');
         expect(card).toHaveAttribute('aria-label');
       });
@@ -323,7 +323,7 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Verify performance on mobile
       const paintTiming = performance.getEntriesByType('paint');
-      const fcp = paintTiming.find(entry => entry.name === 'first-contentful-paint');
+      const fcp = paintTiming.find((entry: any) => entry.name === 'first-contentful-paint');
       expect(fcp?.startTime).toBeLessThan(2500); // 2.5s FCP on mobile
     });
   });
@@ -337,7 +337,7 @@ describe('Integration Test Suite - All Systems', () => {
       );
       
       // Measure LCP
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver((list: any) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
         expect(lastEntry.startTime).toBeLessThan(2500); // 2.5s LCP
@@ -346,10 +346,10 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Measure FID
       let fidMeasured = false;
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver((list: any) => {
         if (!fidMeasured) {
           const entries = list.getEntries();
-          entries.forEach(entry => {
+          entries.forEach((entry: any) => {
             expect(entry.processingStart - entry.startTime).toBeLessThan(100); // 100ms FID
           });
           fidMeasured = true;
@@ -363,7 +363,7 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Measure CLS
       let cumulativeScore = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if (!entry.hadRecentInput) {
             cumulativeScore += entry.value;
@@ -413,7 +413,7 @@ describe('Integration Test Suite - All Systems', () => {
       );
       
       const focusStartTime = performance.now();
-      focusableElements.forEach(el => {
+      focusableElements.forEach((el: any) => {
         el.focus();
       });
       const focusTime = performance.now() - focusStartTime;
@@ -431,7 +431,7 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Test that CSP doesn't block legitimate resources
       const scripts = container.querySelectorAll('script');
-      scripts.forEach(script => {
+      scripts.forEach((script: any) => {
         if (script.src) {
           expect(script.src).toMatch(/^(https?:\/\/localhost|\/)/);
         }
@@ -439,7 +439,7 @@ describe('Integration Test Suite - All Systems', () => {
       
       // Test WebSocket connections work with security
       const ws = new WebSocket('ws://localhost:3001');
-      await new Promise((resolve) => {
+      await new Promise((resolve: any) => {
         ws.onopen = resolve;
         ws.onerror = () => resolve(false);
       });
@@ -605,8 +605,8 @@ export class PerformanceMetrics {
       timestamp: Date.now(),
       domContentLoaded: navigation?.domContentLoadedEventEnd - navigation?.domContentLoadedEventStart,
       loadComplete: navigation?.loadEventEnd - navigation?.loadEventStart,
-      firstPaint: paint.find(p => p.name === 'first-paint')?.startTime,
-      firstContentfulPaint: paint.find(p => p.name === 'first-contentful-paint')?.startTime,
+      firstPaint: paint.find((p: any) => p.name === 'first-paint')?.startTime,
+      firstContentfulPaint: paint.find((p: any) => p.name === 'first-contentful-paint')?.startTime,
       memory: performance.memory?.usedJSHeapSize
     });
   }
@@ -625,7 +625,7 @@ export class PerformanceMetrics {
   }
   
   private average(key: string) {
-    const values = this.metrics.map(m => m[key]).filter(v => v !== undefined);
+    const values = this.metrics.map((m: any) => m[key]).filter((v: any) => v !== undefined);
     return values.reduce((a, b) => a + b, 0) / values.length;
   }
 }

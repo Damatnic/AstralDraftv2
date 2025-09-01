@@ -13,7 +13,7 @@ interface CurrentMatchupWidgetProps {
 
 }
 
-const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }) => {
+const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const nextMatchup = league.schedule.find((m: any) => 
         m.week === league.currentWeek && 
         (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id)
@@ -52,7 +52,7 @@ const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, lea
     );
 };
 
-const CurrentMatchupWidgetWithErrorBoundary: React.FC = (props) => (
+const CurrentMatchupWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CurrentMatchupWidget {...props} />
   </ErrorBoundary>

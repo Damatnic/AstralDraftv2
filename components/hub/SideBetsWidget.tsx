@@ -10,7 +10,7 @@ import { AnimatePresence } from 'framer-motion';
 import ProposeSideBetModal from '../modals/ProposeSideBetModal';
 import { Avatar } from '../ui/Avatar';
 
-const SideBetCard: React.FC<{ bet: SideBet; onRespond: (betId: string, response: 'ACCEPTED' | 'REJECTED') => void; onResolve: (betId: string, winnerId: number) => void; isMyBet: boolean; isMyTurnToRespond: boolean; }> = ({ bet, onRespond, onResolve, isMyBet, isMyTurnToRespond }) => {
+const SideBetCard: React.FC<{ bet: SideBet; onRespond: (betId: string, response: 'ACCEPTED' | 'REJECTED') => void; onResolve: (betId: string, winnerId: number) => void; isMyBet: boolean; isMyTurnToRespond: boolean; }> = ({ bet, onRespond, onResolve, isMyBet, isMyTurnToRespond }: any) => {
     const { league, myTeam } = useLeague();
     if (!league || !myTeam) return null;
 
@@ -96,7 +96,7 @@ const SideBetsWidget: React.FC = () => {
     );
 };
 
-const SideBetsWidgetWithErrorBoundary: React.FC = (props) => (
+const SideBetsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SideBetsWidget {...props} />
   </ErrorBoundary>

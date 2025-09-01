@@ -35,7 +35,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   initialPlayers = [],
   week = 1,
   season = 2024
-}) => {
+}: any) => {
   // State management
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>(initialPlayers);
   const [searchQuery, setSearchQuery] = useState('');
@@ -652,7 +652,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
   );
 };
 
-const PlayerComparisonToolWithErrorBoundary: React.FC = (props) => (
+const PlayerComparisonToolWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerComparisonTool {...props} />
   </ErrorBoundary>

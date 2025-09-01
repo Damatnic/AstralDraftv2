@@ -55,7 +55,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     showFilters = true,
     showSorting = true,
     className = ''
-}) => {
+}: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [showAdvancedFilters, setShowAdvancedFilters] = React.useState(false);
     const [selectedSort, setSelectedSort] = React.useState<SortOption | null>(null);
@@ -483,7 +483,7 @@ const MobileSearchInterface: React.FC<MobileSearchInterfaceProps> = ({
     );
 };
 
-const MobileSearchInterfaceWithErrorBoundary: React.FC = (props) => (
+const MobileSearchInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileSearchInterface {...props} />
   </ErrorBoundary>

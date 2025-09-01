@@ -26,7 +26,7 @@ const SimpleAuthContext = createContext<SimpleAuthContextType | undefined>(undef
 interface Props {
     children: ReactNode;
 
-export const SimpleAuthProvider: React.FC<Props> = ({ children }) => {
+export const SimpleAuthProvider: React.FC<Props> = ({ children }: any) => {
     const [user, setUser] = useState<SimpleUser | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

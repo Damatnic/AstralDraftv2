@@ -12,7 +12,7 @@ export const TouchFeedback: React.FC<TouchFeedbackProps> = ({
   children,
   className = '',
   disabled = false
-}) => {
+}: any) => {
   return (
     <motion.div
       className={className}

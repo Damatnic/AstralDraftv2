@@ -75,7 +75,8 @@
       "Bash(npm audit:*)",
       "Bash(npm outdated)",
       "Bash(npx jest:*)",
-      "Bash(npm run deploy:check:*)"
+      "Bash(npm run deploy:check:*)",
+      "Bash(rg:*)"
     ],
     "deny": [],
     "ask": [],

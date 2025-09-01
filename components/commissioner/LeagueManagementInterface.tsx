@@ -51,7 +51,7 @@ type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
 const LeagueManagementInterface: React.FC<Props> = ({ 
     leagueId, 
     className = '' 
-}) => {
+}: any) => {
     const { user, isAuthenticated } = useAuth();
     const [league, setLeague] = useState<League | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -348,7 +348,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
 };
 
 // Sub-components for each tab
-const LeagueOverview: React.FC<{ league: League }> = ({ league }) => {
+const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* League Info */}
@@ -429,7 +429,7 @@ const InvitationCard: React.FC<{
     invitation: LeagueInvitation;
     onAccept: () => void;
     onDecline: () => void;
-}> = ({ invitation, onAccept, onDecline }) => {
+}> = ({ invitation, onAccept, onDecline }: any) => {
     return (
         <div className="bg-gray-800/50 rounded-lg p-3 flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -465,7 +465,7 @@ const LeagueSettingsPanel: React.FC<any> = () => <div>League Settings - Coming S
 const LeagueHistory: React.FC<any> = () => <div>League History - Coming Soon</div>;
 const CommissionerPanel: React.FC<any> = () => <div>Commissioner Panel - Coming Soon</div>;
 
-const LeagueManagementInterfaceWithErrorBoundary: React.FC = (props) => (
+const LeagueManagementInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueManagementInterface {...props} />
   </ErrorBoundary>

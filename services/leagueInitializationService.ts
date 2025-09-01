@@ -51,7 +51,7 @@ function generateMockDraftLog(league: League): any[] {
   const draftLog: any[] = [];
   const playersPerTeam = 16; // 16 rounds
   const topPlayers = league.allPlayers
-    .filter(p => p.adp && p.adp <= 160)
+    .filter((p: any) => p.adp && p.adp <= 160)
     .sort((a, b) => (a.adp || 999) - (b.adp || 999));
 
   let pickNumber = 1;
@@ -62,7 +62,7 @@ function generateMockDraftLog(league: League): any[] {
     const isEvenRound = round % 2 === 0;
     const teamOrder = isEvenRound ? [...league.teams].reverse() : league.teams;
 
-    teamOrder.forEach(team => {
+    teamOrder.forEach((team: any) => {
       if (playerIndex < topPlayers.length) {
         const player = topPlayers[playerIndex];
         draftLog.push({
@@ -91,7 +91,7 @@ function generateMockDraftLog(league: League): any[] {
  * Get current week matchups
  */
 export function getCurrentWeekMatchups(league: League): Matchup[] {
-  return league.schedule.filter(m => m.week === league.currentWeek);
+  return league.schedule.filter((m: any) => m.week === league.currentWeek);
 }
 
 /**
@@ -99,7 +99,7 @@ export function getCurrentWeekMatchups(league: League): Matchup[] {
  */
 export function getTeamNextMatchup(league: League, teamId: number): Matchup | null {
   const currentWeekMatchups = getCurrentWeekMatchups(league);
-  return currentWeekMatchups.find(m => 
+  return currentWeekMatchups.find((m: any) => 
     m.teamA.teamId === teamId || m.teamB.teamId === teamId
   ) || null;
 }
@@ -108,8 +108,8 @@ export function getTeamNextMatchup(league: League, teamId: number): Matchup | nu
  * Calculate current standings
  */
 export function calculateStandings(league: League): any[] {
-  const standings = league.teams.map(team => {
-    const teamMatchups = league.schedule.filter(m => 
+  const standings = league.teams.map((team: any) => {
+    const teamMatchups = league.schedule.filter((m: any) => 
       (m.teamA.teamId === team.id || m.teamB.teamId === team.id) && 
       m.isComplete
     );
@@ -120,7 +120,7 @@ export function calculateStandings(league: League): any[] {
     let pointsFor = 0;
     let pointsAgainst = 0;
 
-    teamMatchups.forEach(matchup => {
+    teamMatchups.forEach((matchup: any) => {
       const isTeamA = matchup.teamA.teamId === team.id;
       const teamScore = isTeamA ? matchup.teamA.score : matchup.teamB.score;
       const opponentScore = isTeamA ? matchup.teamB.score : matchup.teamA.score;

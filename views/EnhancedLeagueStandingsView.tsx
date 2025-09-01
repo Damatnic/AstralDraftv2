@@ -79,7 +79,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'eliminated': return 'text-red-400';
       default: return 'text-slate-400';
 
-  };
+  }
 
   const getPlayoffStatusText = (status: string, position: number) => {
     switch (status) {
@@ -88,7 +88,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       case 'eliminated': return 'Eliminated';
       default: return '';
 
-  };
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {

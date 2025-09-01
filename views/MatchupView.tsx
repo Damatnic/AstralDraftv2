@@ -13,7 +13,7 @@ import MatchupAnalysisWidget from '../components/matchup/MatchupAnalysisWidget';
 import LiveEventTicker from '../components/matchup/LiveEventTicker';
 import { useLiveData } from '../hooks/useLiveData';
 
-const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
+const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
     const [viewedWeek, setViewedWeek] = React.useState(league.currentWeek);
     const [isReportModalOpen, setIsReportModalOpen] = React.useState(false);
 
@@ -134,7 +134,7 @@ const MatchupViewContent: React.FC<{ league: League, myTeam: Team, dispatch: Rea
             </div>
         </div>
     );
-};
+}
 
 const MatchupView: React.FC = () => {
     const { dispatch } = useAppState();

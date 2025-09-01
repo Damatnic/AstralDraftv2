@@ -45,7 +45,7 @@ interface PlayerSearchResult {
   team: string;
   currentInjuryStatus?: string;}
 
-const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }) => {
+const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [dashboardData, setDashboardData] = useState<InjuryDashboardData | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -607,7 +607,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }) =>
   );
 };
 
-const InjuryDashboardWithErrorBoundary: React.FC = (props) => (
+const InjuryDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <InjuryDashboard {...props} />
   </ErrorBoundary>

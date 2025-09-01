@@ -29,7 +29,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   team,
   isOwner = false,
   showAddDropButtons = false
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [showPlayerSearch, setShowPlayerSearch] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<string>('');
@@ -160,7 +160,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
     }
   };
 
-  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }) => (
+  const RosterSlotComponent: React.FC<{ slot: RosterSlot; index: number }> = ({ slot, index }: any) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -361,7 +361,7 @@ const RosterManagement: React.FC<RosterManagementProps> = ({
   );
 };
 
-const RosterManagementWithErrorBoundary: React.FC = (props) => (
+const RosterManagementWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RosterManagement {...props} />
   </ErrorBoundary>

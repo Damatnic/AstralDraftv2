@@ -53,7 +53,7 @@ export async function runMobileTests() {
 // Auto-run if called directly
 if (require.main === module) {
   runMobileTests()
-    .then(({ report, needsImmediateAttention }) => {
+    .then(({ report, needsImmediateAttention }: any) => {
       console.log('\n📄 Full Report:');
       console.log(report);
       

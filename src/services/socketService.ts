@@ -86,14 +86,14 @@ class SocketService {
 
     // Remove all event listeners
     this.eventListeners.forEach((listeners, event) => {
-      listeners.forEach(listener => {
+      listeners.forEach((listener: any) => {
         this.socket?.off(event, listener);
       });
     });
     this.eventListeners.clear();
 
     // Execute all cleanup functions
-    this.cleanupFunctions.forEach(cleanup => {
+    this.cleanupFunctions.forEach((cleanup: any) => {
       try {
         cleanup();
       } catch (error) {

@@ -34,7 +34,7 @@ interface DraftRoomContainerProps {
 
 }
 
-const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }) => {
+const DraftRoomContainer: React.FC<DraftRoomContainerProps> = ({ league, isPaused, user, dispatch, playerNotes, playerQueues }: any) => {
     const [playersToCompare, setPlayersToCompare] = React.useState<Player[]>([]);
     const [isCompareModalOpen, setIsCompareModalOpen] = React.useState(false);
     const [activeSideTab, setActiveSideTab] = React.useState('co-pilot');

@@ -170,7 +170,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
     onEventComment,
     onShareEvent,
     className = ''
-}) => {
+}: any) => {
     const [selectedView, setSelectedView] = React.useState<'timeline' | 'milestones' | 'stats'>('timeline');
     const [timelineFilter, setTimelineFilter] = React.useState<TimelineFilter>({
         seasons: [],
@@ -740,7 +740,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
     );
 };
 
-const LeagueHistoryViewerWithErrorBoundary: React.FC = (props) => (
+const LeagueHistoryViewerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueHistoryViewer {...props} />
   </ErrorBoundary>

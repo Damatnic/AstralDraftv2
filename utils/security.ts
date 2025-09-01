@@ -101,7 +101,7 @@ export function isExtensionNoise(message: any): boolean {
     if (!msgStr) return true;
     
     // Check against all patterns
-    return EXTENSION_NOISE_PATTERNS.some(pattern => 
+    return EXTENSION_NOISE_PATTERNS.some((pattern: any) => 
       msgStr.includes(pattern.toLowerCase())
     );
   } catch {
@@ -170,11 +170,11 @@ export function initializeConsoleProtection(): void {
     return function(...args: any[]) {
       try {
         // Check if any argument contains extension noise
-        const hasNoise = args.some(arg => isExtensionNoise(arg));
+        const hasNoise = args.some((arg: any) => isExtensionNoise(arg));
         
         if (!hasNoise) {
           // Also check the combined message
-          const combinedMessage = args.map(arg => {
+          const combinedMessage = args.map((arg: any) => {
             if (typeof arg === 'string') return arg;
             if (arg instanceof Error) return arg.message;
             return safeStringify(arg);
@@ -199,7 +199,7 @@ export function initializeConsoleProtection(): void {
   console.debug = createFilteredMethod(originalConsole.debug);
   
   // Intercept window error events
-  window.addEventListener('error', (event) => {
+  window.addEventListener('error', (event: any) => {
     if (isExtensionNoise(event.message) || 
         isExtensionNoise(event.error) ||
         (event.filename && event.filename.includes('extension://'))) {
@@ -210,7 +210,7 @@ export function initializeConsoleProtection(): void {
   }, true);
   
   // Intercept unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
+  window.addEventListener('unhandledrejection', (event: any) => {
     if (isExtensionNoise(event.reason)) {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -248,7 +248,7 @@ export function blockReactDevTools(): void {
   };
   
   // Also filter incoming messages
-  window.addEventListener('message', (event) => {
+  window.addEventListener('message', (event: any) => {
     try {
       const dataStr = typeof event.data === 'string'
         ? event.data
@@ -294,13 +294,13 @@ export function initializeSecurity(): void {
   // Additional security hardening
   if (process.env.NODE_ENV === 'production') {
     // Disable right-click in production
-    document.addEventListener('contextmenu', (e) => {
+    document.addEventListener('contextmenu', (e: any) => {
       e.preventDefault();
       return false;
     });
     
     // Disable dev tools shortcuts
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', (e: any) => {
       // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
       if (e.key === 'F12' || 
           (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key))) {

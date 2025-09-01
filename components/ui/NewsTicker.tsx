@@ -57,7 +57,7 @@ const NewsTicker: React.FC = () => {
     );
 };
 
-const NewsTickerWithErrorBoundary: React.FC = (props) => (
+const NewsTickerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NewsTicker {...props} />
   </ErrorBoundary>

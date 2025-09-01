@@ -53,7 +53,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
   week,
   teams = [],
   onTeamClick
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('compact');
@@ -208,7 +208,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as any)}
+            onChange={(e: any) => setSortBy(e.target.value as any)}
           >
             <option value="powerScore">Power Score</option>
             <option value="record">Record</option>
@@ -330,7 +330,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
                         <div>
                           <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">Strengths:</span>
                           <ul className="text-gray-300 ml-2 sm:px-4 md:px-6 lg:px-8">
-                            {team.analysis.strengths.map(strength => (
+                            {team.analysis.strengths.map((strength: any) => (
                               <li key={strength}>• {strength}</li>
                             ))}
                           </ul>
@@ -338,7 +338,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
                         <div>
                           <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">Weaknesses:</span>
                           <ul className="text-gray-300 ml-2 sm:px-4 md:px-6 lg:px-8">
-                            {team.analysis.weaknesses.map(weakness => (
+                            {team.analysis.weaknesses.map((weakness: any) => (
                               <li key={weakness}>• {weakness}</li>
                             ))}
                           </ul>
@@ -396,25 +396,25 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Current Playoff Teams:</span>
             <div className="text-green-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(0, 4).map(team => team.teamName.split(' ')[0]).join(', ')}
+              {rankings.slice(0, 4).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">On the Bubble:</span>
             <div className="text-yellow-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(4, 6).map(team => team.teamName.split(' ')[0]).join(', ')}
+              {rankings.slice(4, 6).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Long Shots:</span>
             <div className="text-orange-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(6, 8).map(team => team.teamName.split(' ')[0]).join(', ')}
+              {rankings.slice(6, 8).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
           <div>
             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Eliminated:</span>
             <div className="text-red-400 font-semibold sm:px-4 md:px-6 lg:px-8">
-              {rankings.slice(8).map(team => team.teamName.split(' ')[0]).join(', ')}
+              {rankings.slice(8).map((team: any) => team.teamName.split(' ')[0]).join(', ')}
             </div>
           </div>
         </div>
@@ -423,7 +423,7 @@ const WeeklyPowerRankings: React.FC<WeeklyPowerRankingsProps> = ({ leagueId,
   );
 };
 
-const WeeklyPowerRankingsWithErrorBoundary: React.FC = (props) => (
+const WeeklyPowerRankingsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyPowerRankings {...props} />
   </ErrorBoundary>

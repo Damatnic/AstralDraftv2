@@ -46,7 +46,7 @@ interface MobileResponsiveNavProps {
   currentView: View;
   onViewChange: (view: View) => void;}
 
-const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }) => {
+const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, onViewChange }: any) => {
   const { state, dispatch } = useAppState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -336,7 +336,7 @@ const MobileResponsiveNav: React.FC<MobileResponsiveNavProps> = ({ currentView, 
   );
 };
 
-const MobileResponsiveNavWithErrorBoundary: React.FC = (props) => (
+const MobileResponsiveNavWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileResponsiveNav {...props} />
   </ErrorBoundary>

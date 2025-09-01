@@ -18,7 +18,7 @@ interface AddPlayerModalProps {
 
 }
 
-const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }) => {
+const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }: any) => {
     const [search, setSearch] = React.useState('');
 
     const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: any) => p.id)));
@@ -84,7 +84,7 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
     );
 };
 
-const AddPlayerModalWithErrorBoundary: React.FC = (props) => (
+const AddPlayerModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AddPlayerModal {...props} />
   </ErrorBoundary>

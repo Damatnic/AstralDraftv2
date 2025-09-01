@@ -54,7 +54,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
     userId,
     userInfo,
     onPredictionUpdate
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     // State management
     const [predictionUpdate] = useState<LivePredictionUpdate | null>(null);
@@ -461,7 +461,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                 <h4 className="font-medium sm:px-4 md:px-6 lg:px-8">{poll.title}</h4>
                                 <p className="text-sm text-gray-600 mt-1 sm:px-4 md:px-6 lg:px-8">{poll.question}</p>
                                 <div className="mt-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
-                                    {optionResults.map(({ option, percentage }) => (
+                                    {optionResults.map(({ option, percentage }: any) => (
                                         <div key={option.id} className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
                                                 <span>{option.text}</span>
@@ -551,7 +551,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
     );
 };
 
-const OracleRealTimeDashboardWithErrorBoundary: React.FC = (props) => (
+const OracleRealTimeDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleRealTimeDashboard {...props} />
   </ErrorBoundary>

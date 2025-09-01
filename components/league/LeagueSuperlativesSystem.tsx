@@ -46,7 +46,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
   leagueId,
   currentWeek,
   teams
-}) => {
+}: any) => {
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'weekly' | 'season' | 'silly'>('all');
   const [expandedAward, setExpandedAward] = useState<string | null>(null);
   const [showVotingModal, setShowVotingModal] = useState<string | null>(null);
@@ -268,7 +268,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
 
   const filteredSuperlatives = selectedCategory === 'all' 
     ? superlatives 
-    : superlatives.filter(s => s.category === selectedCategory);
+    : superlatives.filter((s: any) => s.category === selectedCategory);
 
   if (isLoading) {
     return (
@@ -291,7 +291,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         </div>
         
         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-          {(['all', 'weekly', 'season', 'silly'] as const).map(category => (
+          {(['all', 'weekly', 'season', 'silly'] as const).map((category: any) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}`}
@@ -304,7 +304,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
 
       {/* Awards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredSuperlatives.map(superlative => (
+        {filteredSuperlatives.map((superlative: any) => (
           <motion.div
             key={superlative.id}
             layout
@@ -435,11 +435,11 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
 
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                  Who deserves the "{superlatives.find(s => s.id === showVotingModal)?.title}" award?
+                  Who deserves the "{superlatives.find((s: any) => s.id === showVotingModal)?.title}" award?
                 </div>
 
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
-                  {teams.slice(0, 5).map(team => (
+                  {teams.slice(0, 5).map((team: any) => (
                     <button
                       key={team.id}
                       className="w-full p-3 bg-dark-700 hover:bg-dark-600 border border-gray-600 rounded-lg text-left transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -499,7 +499,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
   );
 };
 
-const LeagueSuperlativesSystemWithErrorBoundary: React.FC = (props) => (
+const LeagueSuperlativesSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueSuperlativesSystem {...props} />
   </ErrorBoundary>

@@ -742,7 +742,7 @@ const OracleDataIngestionSection: React.FC = () => {
   );
 };
 
-const OracleDataIngestionSectionWithErrorBoundary: React.FC = (props) => (
+const OracleDataIngestionSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleDataIngestionSection {...props} />
   </ErrorBoundary>

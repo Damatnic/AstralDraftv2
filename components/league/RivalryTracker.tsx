@@ -79,7 +79,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
   userId,
   currentWeek,
   teams
-}) => {
+}: any) => {
   const [selectedRivalry, setSelectedRivalry] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'matrix'>('grid');
   const [filterIntensity, setFilterIntensity] = useState<number>(0);
@@ -252,7 +252,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
 
   };
 
-  const filteredRivalries = rivalries.filter(r => r.intensity >= filterIntensity);
+  const filteredRivalries = rivalries.filter((r: any) => r.intensity >= filterIntensity);
 
   if (isLoading) {
     return (
@@ -279,7 +279,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
             <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Min Intensity:</span>
             <select
               value={filterIntensity}
-              onChange={(e) => setFilterIntensity(Number(e.target.value))}
+              onChange={(e: any) => setFilterIntensity(Number(e.target.value))}
             >
               <option value={0}>All (0+)</option>
               <option value={5}>Competitive (5+)</option>
@@ -298,7 +298,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
       {viewMode === 'grid' ? (
         // Grid View
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-          {filteredRivalries.map(rivalry => (
+          {filteredRivalries.map((rivalry: any) => (
             <motion.div
               key={rivalry.id}
               layout
@@ -493,7 +493,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
             <div className="grid grid-cols-11 gap-2 sm:px-4 md:px-6 lg:px-8">
               {/* Header row */}
               <div></div>
-              {teams.slice(0, 10).map(team => (
+              {teams.slice(0, 10).map((team: any) => (
                 <div key={team.id} className="text-center text-xs text-gray-400 p-1 sm:px-4 md:px-6 lg:px-8">
                   {team.name.substring(0, 8)}
                 </div>
@@ -567,7 +567,7 @@ const RivalryTracker: React.FC<RivalryTrackerProps> = ({
   );
 };
 
-const RivalryTrackerWithErrorBoundary: React.FC = (props) => (
+const RivalryTrackerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RivalryTracker {...props} />
   </ErrorBoundary>

@@ -20,7 +20,7 @@ interface ShareTeamCardModalProps {
 
 }
 
-const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }) => {
+const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }: any) => {
     const { state, dispatch } = useAppState();
     const [slogan, setSlogan] = React.useState<string | null>(team.motto || state.teamSlogans[team.id] || null);
     const [isLoadingSlogan, setIsLoadingSlogan] = React.useState(!slogan);
@@ -81,7 +81,7 @@ const ShareTeamCardModal: React.FC<ShareTeamCardModalProps> = ({ team, onClose }
     );
 };
 
-const ShareTeamCardModalWithErrorBoundary: React.FC = (props) => (
+const ShareTeamCardModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ShareTeamCardModal {...props} />
   </ErrorBoundary>

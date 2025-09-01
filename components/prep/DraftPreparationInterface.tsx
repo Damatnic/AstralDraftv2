@@ -46,7 +46,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
     userId,
     leagueSettings,
     onClose
-}) => {
+}: any) => {
     // State Management
     const [activeTab, setActiveTab] = useState<'cheatsheets' | 'rankings' | 'strategy' | 'mockdraft'>('cheatsheets');
     const [loading, setLoading] = useState(false);
@@ -806,7 +806,7 @@ export const DraftPreparationInterface: React.FC<DraftPreparationInterfaceProps>
     );
 };
 
-const DraftPreparationInterfaceWithErrorBoundary: React.FC = (props) => (
+const DraftPreparationInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftPreparationInterface {...props} />
   </ErrorBoundary>

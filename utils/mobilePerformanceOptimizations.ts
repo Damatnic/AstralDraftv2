@@ -70,7 +70,7 @@ export class TouchOptimizer {
         heavy: [30]
       };
 
-      document.addEventListener('touchstart', (e) => {
+      document.addEventListener('touchstart', (e: any) => {
         const target = e.target as Element;
         if (target.matches('button, [role="button"], .interactive')) {
           navigator.vibrate(patterns[intensity]);
@@ -217,7 +217,7 @@ export class NetworkAdapter {
 
   private notifyCallbacks(): void {
     if (this.networkInfo) {
-      this.callbacks.forEach(callback => callback(this.networkInfo!));
+      this.callbacks.forEach((callback: any) => callback(this.networkInfo!));
     }
   }
 
@@ -329,7 +329,7 @@ export class BatteryOptimizer {
 
   private notifyCallbacks(): void {
     if (this.batteryInfo) {
-      this.callbacks.forEach(callback => callback(this.batteryInfo!));
+      this.callbacks.forEach((callback: any) => callback(this.batteryInfo!));
     }
   }
 
@@ -362,14 +362,14 @@ export class GestureOptimizer {
     let startY = 0;
     let startTime = 0;
 
-    element.addEventListener('touchstart', (e) => {
+    element.addEventListener('touchstart', (e: any) => {
       const touch = e.touches[0];
       startX = touch.clientX;
       startY = touch.clientY;
       startTime = Date.now();
     }, { passive: true });
 
-    element.addEventListener('touchend', (e) => {
+    element.addEventListener('touchend', (e: any) => {
       const touch = e.changedTouches[0];
       const deltaX = touch.clientX - startX;
       const deltaY = touch.clientY - startY;
@@ -399,14 +399,14 @@ export class GestureOptimizer {
     let pulling = false;
     const pullThreshold = 100;
 
-    element.addEventListener('touchstart', (e) => {
+    element.addEventListener('touchstart', (e: any) => {
       if (element.scrollTop === 0) {
         startY = e.touches[0].clientY;
         pulling = true;
       }
     }, { passive: true });
 
-    element.addEventListener('touchmove', (e) => {
+    element.addEventListener('touchmove', (e: any) => {
       if (pulling && element.scrollTop === 0) {
         const deltaY = e.touches[0].clientY - startY;
         if (deltaY > 0) {
@@ -417,7 +417,7 @@ export class GestureOptimizer {
       }
     });
 
-    element.addEventListener('touchend', (e) => {
+    element.addEventListener('touchend', (e: any) => {
       if (pulling) {
         const deltaY = e.changedTouches[0].clientY - startY;
         element.style.transform = '';
@@ -474,14 +474,14 @@ export class MobilePerformanceManager {
 
     // Monitor network changes
     if (this.config.enableNetworkAdaptation) {
-      this.networkAdapter.subscribe((info) => {
+      this.networkAdapter.subscribe((info: any) => {
         this.adaptToNetwork(info);
       });
     }
 
     // Monitor battery changes
     if (this.config.enableBatteryOptimization) {
-      this.batteryOptimizer.subscribe((info) => {
+      this.batteryOptimizer.subscribe((info: any) => {
         this.adaptToBattery(info);
       });
     }
@@ -495,7 +495,7 @@ export class MobilePerformanceManager {
     }
 
     // Listen for changes
-    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e: any) => {
       if (e.matches) {
         document.body.classList.add('reduced-motion');
       } else {

@@ -53,7 +53,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     isCompact = false,
     swipeActions = true,
     className = ''
-}) => {
+}: any) => {
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
     const [activeAction, setActiveAction] = React.useState<SwipeAction | null>(null);
@@ -328,7 +328,7 @@ const MobilePlayerCard: React.FC<MobilePlayerCardProps> = ({
     );
 };
 
-const MobilePlayerCardWithErrorBoundary: React.FC = (props) => (
+const MobilePlayerCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobilePlayerCard {...props} />
   </ErrorBoundary>

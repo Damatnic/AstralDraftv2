@@ -317,7 +317,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
         trend?: 'up' | 'down' | 'stable';
         icon: React.ReactNode;
         color: string;
-    }> = ({ title, value, subtitle, trend, icon, color }) => (
+    }> = ({ title, value, subtitle, trend, icon, color }: any) => (
         <Card className="bg-gray-800/50 border-gray-700">
             <CardContent className="p-4">
                 <div className="flex items-center justify-between">
@@ -647,7 +647,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC<any> = (props) => (
+const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC<any> = (props: any) => (
   <ErrorBoundary>
     <AdvancedOracleAnalyticsDashboard {...props} />
   </ErrorBoundary>

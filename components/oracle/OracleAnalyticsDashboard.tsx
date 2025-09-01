@@ -11,7 +11,7 @@ import AdvancedEnsembleMLDashboard from './AdvancedEnsembleMLDashboard';
 interface PerformanceChartProps {
     data: Array<{ week: number; accuracy: number; userWins: number; totalPredictions: number }>;
 
-const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }) => {
+const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const maxAccuracy = Math.max(...data.map((d: any) => d.accuracy), 1);
     const maxUserWins = Math.max(...data.map((d: any) => d.userWins), 1);
@@ -69,7 +69,7 @@ interface ConfidenceAnalysisProps {
 
 }
 
-const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }) => {
+const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }: any) => {
     const predictionTypes = Object.keys(confidenceByType);
 
     return (
@@ -135,7 +135,7 @@ interface InsightCardProps {
 
 }
 
-const InsightCard: React.FC<InsightCardProps> = ({ insight }) => {
+const InsightCard: React.FC<InsightCardProps> = ({ insight }: any) => {
     const getInsightIcon = (type: UserInsight['type']) => {
         switch (type) {
             case 'SUCCESS_PATTERN':
@@ -198,7 +198,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
     subtitle, 
     trend = 'neutral',
     color = 'text-blue-400'
-}) => {
+}: any) => {
     const getTrendIcon = () => {
         switch (trend) {
             case 'up':
@@ -401,7 +401,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleAnalyticsDashboard {...props} />
   </ErrorBoundary>

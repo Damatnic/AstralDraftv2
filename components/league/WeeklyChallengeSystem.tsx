@@ -51,7 +51,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   userName,
   week,
   onChallengeComplete
-}) => {
+}: any) => {
   const [activeChallenges, setActiveChallenges] = useState<Challenge[]>([]);
   const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(null);
   const [userEntries, setUserEntries] = useState<{[key: string]: any}>({});
@@ -177,7 +177,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   };
 
   const handleJoinChallenge = (challengeId: string) => {
-    const challenge = challenges.find(c => c.id === challengeId);
+    const challenge = challenges.find((c: any) => c.id === challengeId);
     if (challenge && !userEntries[challengeId]) {
       setSelectedChallenge(challenge);
       // In real implementation, this would create an entry
@@ -243,7 +243,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
 
       {/* Active Challenges Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        {challenges.filter(c => c.status === 'active').map(challenge => (
+        {challenges.filter((c: any) => c.status === 'active').map((challenge: any) => (
           <motion.div
             key={challenge.id}
             initial={{ opacity: 0, y: 20 }}
@@ -394,7 +394,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                       <div>
                         <p className="text-sm text-white mb-2 sm:px-4 md:px-6 lg:px-8">1. Which team won Super Bowl LVI?</p>
                         <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                          {['Los Angeles Rams', 'Cincinnati Bengals', 'Kansas City Chiefs', 'Tampa Bay Buccaneers'].map(option => (
+                          {['Los Angeles Rams', 'Cincinnati Bengals', 'Kansas City Chiefs', 'Tampa Bay Buccaneers'].map((option: any) => (
                             <label key={option} className="flex items-center gap-2 text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                               <input type="radio" name="q1" value={option} />
                               {option}
@@ -415,7 +415,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
                         <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">$5,000,000</span>
                       </div>
                       <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                        {['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'TE', 'K', 'DEF'].map(pos => (
+                        {['QB', 'RB1', 'RB2', 'WR1', 'WR2', 'TE', 'K', 'DEF'].map((pos: any) => (
                           <div key={pos} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="w-10 text-gray-400 sm:px-4 md:px-6 lg:px-8">{pos}:</span>
                             <input
@@ -474,7 +474,7 @@ const WeeklyChallengeSystem: React.FC<WeeklyChallengeSystemProps> = ({
   );
 };
 
-const WeeklyChallengeSystemWithErrorBoundary: React.FC = (props) => (
+const WeeklyChallengeSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyChallengeSystem {...props} />
   </ErrorBoundary>

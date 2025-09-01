@@ -30,7 +30,7 @@ interface PlayerProfileViewProps {
 
 }
 
-const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }) => {
+const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, dispatch, onClose }: any) => {
     const [selectedTab, setSelectedTab] = React.useState<string>('overview');
     const [isFavorited, setIsFavorited] = React.useState(false);
     const [showShareMenu, setShowShareMenu] = React.useState(false);
@@ -250,7 +250,7 @@ const PlayerProfileView: React.FC<PlayerProfileViewProps> = ({ player, league, d
 };
 
 // Overview Section Component
-const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }) => {
+const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player, league }: any) => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Player Bio & Info */}
@@ -384,7 +384,7 @@ const OverviewSection: React.FC<{ player: Player; league: League }> = ({ player,
     );
 };
 
-const PlayerProfileViewWithErrorBoundary: React.FC = (props) => (
+const PlayerProfileViewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerProfileView {...props} />
   </ErrorBoundary>

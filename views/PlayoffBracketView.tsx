@@ -18,7 +18,7 @@ interface MatchupCardProps {
 
 }
 
-const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }) => {
+const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({ matchupTeam, team }: any) => {
     if (!matchupTeam || !team) {
         return <div className="h-10 flex items-center px-2 text-sm text-gray-500">TBD</div>;
     }
@@ -36,7 +36,7 @@ const MatchupCardTeam: React.FC<{ matchupTeam?: MatchupTeam, team?: Team }> = ({
     );
 };
 
-const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }) => {
+const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }: any) => {
     const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
     const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
     const winnerId = matchup.teamA.score > matchup.teamB.score ? matchup.teamA.teamId : matchup.teamA.score < matchup.teamB.score ? matchup.teamB.teamId : undefined;
@@ -60,7 +60,7 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams }) => {
     );
 };
 
-const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const PlayoffBracketContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const { isMobile } = useResponsiveBreakpoint();
     const semifinals = league.playoffBracket?.[15] || [];
     const championship = league.playoffBracket?.[16]?.[0];

@@ -217,7 +217,7 @@ const SettingsPanel = memo(({
 // Main dashboard component
 const OraclePerformanceDashboard: React.FC<{
     className?: string;
-}> = ({ className = '' }) => {
+}> = ({ className = '' }: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     
     // Performance monitoring

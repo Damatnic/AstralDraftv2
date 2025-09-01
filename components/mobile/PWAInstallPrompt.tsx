@@ -18,7 +18,7 @@ interface Props {
 const PWAInstallPrompt: React.FC<Props> = ({ onInstall, 
   onDismiss,
   className = ''
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -272,7 +272,7 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
   );
 };
 
-const PWAInstallPromptWithErrorBoundary: React.FC = (props) => (
+const PWAInstallPromptWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PWAInstallPrompt {...props} />
   </ErrorBoundary>

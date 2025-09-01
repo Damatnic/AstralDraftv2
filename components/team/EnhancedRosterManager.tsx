@@ -49,7 +49,7 @@ interface PositionGroupProps {
 const SortablePlayerCard: React.FC<{
   const [isLoading, setIsLoading] = React.useState(false); player: Player; onAction: (player: Player, action: 'view' | 'edit' | 'remove') => void; canEdit: boolean; isStarter?: boolean }> = ({ 
     player, onAction, canEdit, isStarter 
-}) => {
+}: any) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
 
     const style = {
@@ -120,7 +120,7 @@ const SortablePlayerCard: React.FC<{
     );
 };
 
-const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxStarters, onPlayerAction, canEdit }) => {
+const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxStarters, onPlayerAction, canEdit }: any) => {
     const starters = players.slice(0, maxStarters);
     const bench = players.slice(maxStarters);
 
@@ -185,7 +185,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
     );
 };
 
-const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, league, dispatch, canEdit }) => {
+const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, league, dispatch, canEdit }: any) => {
     const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
     const [rosterByPosition, setRosterByPosition] = React.useState<Record<PlayerPosition, Player[]>>({
         QB: [],
@@ -465,7 +465,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
     );
 };
 
-const EnhancedRosterManagerWithErrorBoundary: React.FC = (props) => (
+const EnhancedRosterManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedRosterManager {...props} />
   </ErrorBoundary>

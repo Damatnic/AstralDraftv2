@@ -74,7 +74,7 @@ export const TestEnvironmentSetup: React.FC = () => {
   );
 };
 
-const TestEnvironmentSetupWithErrorBoundary: React.FC = (props) => (
+const TestEnvironmentSetupWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TestEnvironmentSetup {...props} />
   </ErrorBoundary>

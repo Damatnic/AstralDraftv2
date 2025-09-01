@@ -50,7 +50,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
   closeOnOverlayClick = true,
   showCloseButton = true,
   initialFocus
-}) => {
+}: any) => {
   const { containerRef } = useFocusTrap(isOpen);
   const { announce } = useAnnouncer();
   const titleId = React.useId();
@@ -221,7 +221,7 @@ export const useModal = (initialOpen: boolean = false) => {
   };
 };
 
-const AccessibleModalWithErrorBoundary: React.FC = (props) => (
+const AccessibleModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AccessibleModal {...props} />
   </ErrorBoundary>

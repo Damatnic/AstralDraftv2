@@ -38,7 +38,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player,
   onRemoveFromQueue,
   onAddToWatchlist,
   onRemoveFromWatchlist
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const recommendation = recommendations.find((rec: any) => rec.player.id === player.id);
   
@@ -115,7 +115,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
   autoDraftConfig,
   onEnableAutoDraft,
   onDisableAutoDraft
-}) => {
+}: any) => {
   const [strategy, setStrategy] = useState(autoDraftConfig.strategy);
   const [riskTolerance, setRiskTolerance] = useState(autoDraftConfig.riskTolerance);
   const [avoidInjuryProne, setAvoidInjuryProne] = useState(autoDraftConfig.avoidInjuryProne);
@@ -191,7 +191,7 @@ const AutoDraftPanel: React.FC<AutoDraftPanelProps> = ({
   );
 };
 
-const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }) => {
+const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit }: any) => {
   const [activeTab, setActiveTab] = useState<'players' | 'queue' | 'watchlist' | 'analytics' | 'ai-assistant'>('players');
   const [showAiChat, setShowAiChat] = useState(false);
   
@@ -510,7 +510,7 @@ const EnhancedSnakeDraftRoom: React.FC<Props> = ({ league, userTeamId, onExit })
   );
 };
 
-const EnhancedSnakeDraftRoomWithErrorBoundary: React.FC = (props) => (
+const EnhancedSnakeDraftRoomWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedSnakeDraftRoom {...props} />
   </ErrorBoundary>

@@ -54,7 +54,7 @@ const SwipeablePlayerCard: React.FC<SwipeablePlayerCard> = ({
     onSwipeLeft,
     onSwipeRight,
     onTap
-}) => {
+}: any) => {
     const [dragOffset, setDragOffset] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
 
@@ -187,7 +187,7 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
     onAutoPickToggle,
     onPauseResume,
     className = ''
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [activeView, setActiveView] = React.useState<'players' | 'picks' | 'queue'>('players');
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -474,7 +474,7 @@ const MobileDraftInterface: React.FC<MobileDraftInterfaceProps> = ({
     );
 };
 
-const MobileDraftInterfaceWithErrorBoundary: React.FC = (props) => (
+const MobileDraftInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileDraftInterface {...props} />
   </ErrorBoundary>

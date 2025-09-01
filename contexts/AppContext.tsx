@@ -273,7 +273,7 @@ interface AppProviderProps {
   children: ReactNode;
 }
 
-export const AppProvider: FC<AppProviderProps> = ({ children }) => {
+export const AppProvider: FC<AppProviderProps> = ({ children }: any) => {
   const [state, dispatch] = React.useReducer(appReducer, initialState);
 
   // Load saved user session on mount

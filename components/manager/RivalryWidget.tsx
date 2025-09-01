@@ -11,7 +11,7 @@ interface RivalryWidgetProps {
 
 }
 
-const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }) => {
+const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }: any) => {
     const { state } = useAppState();
 
     const record = React.useMemo(() => {
@@ -45,7 +45,7 @@ const RivalryWidget: React.FC<RivalryWidgetProps> = ({ opponentManagerId }) => {
     );
 };
 
-const RivalryWidgetWithErrorBoundary: React.FC = (props) => (
+const RivalryWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RivalryWidget {...props} />
   </ErrorBoundary>

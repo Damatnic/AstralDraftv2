@@ -11,7 +11,7 @@ interface InjuryReportWidgetProps {
 
 }
 
-const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }) => {
+const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }: any) => {
     const { dispatch } = useAppState();
 
     const injuredPlayers = myTeam.roster.filter((p: any) => 
@@ -52,7 +52,7 @@ const InjuryReportWidget: React.FC<InjuryReportWidgetProps> = ({ myTeam }) => {
     );
 };
 
-const InjuryReportWidgetWithErrorBoundary: React.FC = (props) => (
+const InjuryReportWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <InjuryReportWidget {...props} />
   </ErrorBoundary>

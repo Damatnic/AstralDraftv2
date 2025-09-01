@@ -21,7 +21,7 @@ interface PinInputProps {
     onBack: () => void;
 }
 
-const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }) => {
+const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }: any) => {
     const [pin, setPin] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -134,7 +134,7 @@ const PinInput: React.FC<PinInputProps> = ({ user, onSuccess, onBack }) => {
     );
 };
 
-const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }) => {
+const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }: any) => {
     const [users, setUsers] = useState<SimpleUser[]>([]);
     const [selectedUser, setSelectedUser] = useState<SimpleUser | null>(null);
 
@@ -251,7 +251,7 @@ const SimpleLoginInterface: React.FC<Props> = ({ onLogin, className = '' }) => {
     );
 };
 
-const SimpleLoginInterfaceWithErrorBoundary: React.FC = (props) => (
+const SimpleLoginInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SimpleLoginInterface {...props} />
   </ErrorBoundary>

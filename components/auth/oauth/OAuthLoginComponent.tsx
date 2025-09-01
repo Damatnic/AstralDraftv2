@@ -19,7 +19,7 @@ const OAuthButton: React.FC<OAuthButtonProps> = ({
   isLoading = false, 
   onClick, 
   className = '' 
-}) => {
+}: any) => {
   const getProviderIcon = (providerId: string) => {
     switch (providerId) {
       case 'google':
@@ -88,7 +88,7 @@ export const OAuthLoginComponent: React.FC<OAuthLoginComponentProps> = ({
   onSuccess,
   onError,
   className = ''
-}) => {
+}: any) => {
   const { isAuthenticated } = useAuth();
   const [providers, setProviders] = useState<any[]>([]);
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
@@ -219,7 +219,7 @@ interface LinkedAccountsManagerProps {
 
 export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
   className = ''
-}) => {
+}: any) => {
   const { isAuthenticated } = useAuth();
   const [linkedAccounts, setLinkedAccounts] = useState<any[]>([]);
   const [availableProviders, setAvailableProviders] = useState<any[]>([]);
@@ -369,7 +369,7 @@ export const LinkedAccountsManager: React.FC<LinkedAccountsManagerProps> = ({
   );
 };
 
-const OAuthLoginComponentWithErrorBoundary: React.FC = (props) => (
+const OAuthLoginComponentWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OAuthLoginComponent {...props} />
   </ErrorBoundary>

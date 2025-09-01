@@ -41,7 +41,7 @@ export const generateSrcSet = (
   const srcsetEntries: string[] = [];
   
   Object.entries(sizes).forEach(([breakpoint, width]) => {
-    formats.forEach(fmt => {
+    formats.forEach((fmt: any) => {
       // For now, return original src with width parameter
       // In production, this would integrate with image CDN
       const optimizedSrc = `${baseSrc}?w=${width}&q=${quality}&f=${fmt}`;
@@ -145,8 +145,8 @@ export class LazyImageLoader {
       return;
     }
 
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    this.observer = new IntersectionObserver((entries: any) => {
+      entries.forEach((entry: any) => {
         if (entry.isIntersecting) {
           const img = entry.target as HTMLImageElement;
           this.loadImage(img);
@@ -205,7 +205,7 @@ export class LazyImageLoader {
 
   destroy(): void {
     if (this.observer) {
-      this.images.forEach(img => this.observer?.unobserve(img));
+      this.images.forEach((img: any) => this.observer?.unobserve(img));
       this.observer.disconnect();
       this.images.clear();
     }
@@ -320,7 +320,7 @@ export const compressImage = (
       ctx?.drawImage(img, 0, 0, width, height);
       
       canvas.toBlob(
-        (blob) => {
+        (blob: any) => {
           if (blob) {
             resolve(blob);
           } else {
@@ -341,7 +341,7 @@ export const compressImage = (
  * Critical image preloading for above-the-fold content
  */
 export const preloadCriticalImages = async (images: string[]): Promise<void> => {
-  const preloadPromises = images.map(src => preloadImage(src, { priority: true }));
+  const preloadPromises = images.map((src: any) => preloadImage(src, { priority: true }));
   
   try {
     await Promise.allSettled(preloadPromises);

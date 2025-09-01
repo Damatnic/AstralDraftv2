@@ -34,7 +34,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
   currentUserId,
   currentUserName,
   leagueMembers
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [messages, setMessages] = useState<TrashTalkMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -99,7 +99,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
       userName: currentUserName,
       message: newMessage,
       targetUserId: selectedTarget || undefined,
-      targetUserName: selectedTarget ? leagueMembers.find(m => m.id === selectedTarget)?.name : undefined,
+      targetUserName: selectedTarget ? leagueMembers.find((m: any) => m.id === selectedTarget)?.name : undefined,
       timestamp: new Date(),
       reactions: [],
       type: messageType,
@@ -115,16 +115,16 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
   };
 
   const addReaction = (messageId: string, emoji: string) => {
-    setMessages(prev => prev.map(msg => {
+    setMessages(prev => prev.map((msg: any) => {
       if (msg.id === messageId) {
-        const existingReaction = msg.reactions.find(r => r.emoji === emoji);
+        const existingReaction = msg.reactions.find((r: any) => r.emoji === emoji);
         if (existingReaction) {
           if (existingReaction.users.includes(currentUserId)) {
             // Remove reaction
             existingReaction.count--;
-            existingReaction.users = existingReaction.users.filter(u => u !== currentUserId);
+            existingReaction.users = existingReaction.users.filter((u: any) => u !== currentUserId);
             if (existingReaction.count === 0) {
-              msg.reactions = msg.reactions.filter(r => r.emoji !== emoji);
+              msg.reactions = msg.reactions.filter((r: any) => r.emoji !== emoji);
 
           } else {
             // Add reaction
@@ -177,7 +177,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           {/* Message Type Selector */}
           <select
             value={messageType}
-            onChange={(e) => setMessageType(e.target.value as TrashTalkMessage['type'])}
+            onChange={(e: any) => setMessageType(e.target.value as TrashTalkMessage['type'])}
           >
             <option value="general">General Banter</option>
             <option value="matchup_specific">Matchup Trash Talk</option>
@@ -188,10 +188,10 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           {/* Target Player Selector */}
           <select
             value={selectedTarget}
-            onChange={(e) => setSelectedTarget(e.target.value)}
+            onChange={(e: any) => setSelectedTarget(e.target.value)}
           >
             <option value="">Everyone</option>
-            {leagueMembers.filter(m => m.id !== currentUserId).map(member => (
+            {leagueMembers.filter((m: any) => m.id !== currentUserId).map((member: any) => (
               <option key={member.id} value={member.id}>
                 @ {member.name}
               </option>
@@ -201,7 +201,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           {/* Spice Level Selector */}
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Spice:</span>
-            {spiceIndicators.map(indicator => (
+            {spiceIndicators.map((indicator: any) => (
               <button
                 key={indicator.level}
                 onClick={() => setSpicyLevel(indicator.level)}`}
@@ -233,7 +233,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
             <textarea
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}...` : 
+              onChange={(e: any) => setNewMessage(e.target.value)}...` : 
                 'Drop some fire trash talk...'
 
               className="w-full bg-dark-600 border border-gray-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 resize-none sm:px-4 md:px-6 lg:px-8"
@@ -266,7 +266,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
               exit={{ opacity: 0, height: 0 }}
               className="mt-4 grid grid-cols-3 md:grid-cols-6 gap-2"
             >
-              {gifReactions.map(gif => (
+              {gifReactions.map((gif: any) => (
                 <button
                   key={gif.id}
                   onClick={() = aria-label="Action button"> {
@@ -286,7 +286,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
       {/* Messages Feed */}
       <div className="space-y-4 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
-          {messages.map(message => (
+          {messages.map((message: any) => (
             <motion.div
               key={message.id}
               initial={{ opacity: 0, y: 20 }}
@@ -319,7 +319,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
               
               {/* Reactions */}
               <div className="flex items-center gap-2 flex-wrap sm:px-4 md:px-6 lg:px-8">
-                {message.reactions.map(reaction => (
+                {message.reactions.map((reaction: any) => (
                   <button
                     key={reaction.emoji}
                     onClick={() => addReaction(message.id, reaction.emoji)}`}
@@ -329,7 +329,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
                 ))}
                 
                 {/* Quick reaction buttons */}
-                {['🔥', '😂', '💀', '👑', '🤡'].map(emoji => (
+                {['🔥', '😂', '💀', '👑', '🤡'].map((emoji: any) => (
                   <button
                     key={emoji}
                     onClick={() => addReaction(message.id, emoji)}
@@ -346,7 +346,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
   );
 };
 
-const TrashTalkSystemWithErrorBoundary: React.FC = (props) => (
+const TrashTalkSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TrashTalkSystem {...props} />
   </ErrorBoundary>

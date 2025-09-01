@@ -1679,7 +1679,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
   );
 };
 
-const OracleNeuralNetworkSectionWithErrorBoundary: React.FC = (props) => (
+const OracleNeuralNetworkSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleNeuralNetworkSection {...props} />
   </ErrorBoundary>

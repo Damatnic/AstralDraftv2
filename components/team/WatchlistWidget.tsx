@@ -13,7 +13,7 @@ import { generateWatchlistInsights } from '../../services/geminiService';
 import { EyeIcon } from '../icons/EyeIcon';
 
 const InsightDisplay: React.FC<{
-  const [isLoading, setIsLoading] = React.useState(false); insights: WatchlistInsight[] }> = ({ insights }) => {
+  const [isLoading, setIsLoading] = React.useState(false); insights: WatchlistInsight[] }> = ({ insights }: any) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
 
     React.useEffect(() => {
@@ -138,7 +138,7 @@ const WatchlistWidget: React.FC = () => {
     );
 };
 
-const WatchlistWidgetWithErrorBoundary: React.FC = (props) => (
+const WatchlistWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WatchlistWidget {...props} />
   </ErrorBoundary>

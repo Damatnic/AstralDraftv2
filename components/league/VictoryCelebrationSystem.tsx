@@ -41,7 +41,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   teamName,
   leagueId,
   onCelebrationComplete
-}) => {
+}: any) => {
   const [activeAchievements, setActiveAchievements] = useState<Achievement[]>([]);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationType, setCelebrationType] = useState<VictoryType | null>(null);
@@ -234,7 +234,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
     const newAchievements: Achievement[] = [];
     
     // Mock achievement checking logic
-    achievementDefinitions.forEach(achievement => {
+    achievementDefinitions.forEach((achievement: any) => {
       // In real implementation, check actual game data and user stats
       if (Math.random() > 0.8) { // Mock 20% chance of unlocking
         newAchievements.push({
@@ -451,7 +451,7 @@ const VictoryCelebrationSystem: React.FC<VictoryCelebrationProps> = ({
   );
 };
 
-const VictoryCelebrationSystemWithErrorBoundary: React.FC = (props) => (
+const VictoryCelebrationSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <VictoryCelebrationSystem {...props} />
   </ErrorBoundary>

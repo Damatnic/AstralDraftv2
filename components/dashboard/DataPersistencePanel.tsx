@@ -303,7 +303,7 @@ const DataPersistencePanel: React.FC = () => {
   );
 };
 
-const DataPersistencePanelWithErrorBoundary: React.FC = (props) => (
+const DataPersistencePanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DataPersistencePanel {...props} />
   </ErrorBoundary>

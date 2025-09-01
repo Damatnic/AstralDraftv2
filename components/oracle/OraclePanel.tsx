@@ -275,7 +275,7 @@ export const OraclePanel: React.FC = () => {
   );
 };
 
-const OraclePanelWithErrorBoundary: React.FC = (props) => (
+const OraclePanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OraclePanel {...props} />
   </ErrorBoundary>

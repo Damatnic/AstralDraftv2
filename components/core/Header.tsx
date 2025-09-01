@@ -57,7 +57,7 @@ const Header: React.FC = () => {
     );
 };
 
-const HeaderWithErrorBoundary: React.FC = (props) => (
+const HeaderWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <Header {...props} />
   </ErrorBoundary>

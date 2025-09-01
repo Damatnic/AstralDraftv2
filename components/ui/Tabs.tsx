@@ -16,7 +16,7 @@ export const Tabs: React.FC<TabsProps> = ({
   items,
   activeTab,
   onTabChange
-}) => {
+}: any) => {
 
   const handleTabChange = (tabId: string) => {
     onTabChange(tabId);
@@ -34,7 +34,7 @@ export const Tabs: React.FC<TabsProps> = ({
               aria-controls={`panel-${tab.id}`}
               disabled={tab.disabled}
               onClick={() => handleTabChange(tab.id)}
-              onKeyDown={(e) => {
+              onKeyDown={(e: any) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   handleTabChange(tab.id);

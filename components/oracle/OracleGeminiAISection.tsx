@@ -630,7 +630,7 @@ const OracleGeminiAISection: React.FC = () => {
     );
 };
 
-const OracleGeminiAISectionWithErrorBoundary: React.FC = (props) => (
+const OracleGeminiAISectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleGeminiAISection {...props} />
   </ErrorBoundary>

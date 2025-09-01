@@ -8,7 +8,7 @@ import { FlameIcon } from '../icons/FlameIcon';
 import { StarIcon } from '../icons/StarIcon';
 import { BarChartIcon } from 'lucide-react';
 
-const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; color: string }> = ({ icon, label, value, color }) => (
+const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; color: string }> = ({ icon, label, value, color }: any) => (
     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
         <div className={`w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-lg bg-black/20 ${color}`}>
             {icon}
@@ -55,7 +55,7 @@ const PerformanceMetricsWidget: React.FC = () => {
     );
 };
 
-const PerformanceMetricsWidgetWithErrorBoundary: React.FC = (props) => (
+const PerformanceMetricsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PerformanceMetricsWidget {...props} />
   </ErrorBoundary>

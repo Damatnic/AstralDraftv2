@@ -10,7 +10,7 @@ interface FuturePicksWidgetProps {
 
 }
 
-const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }) => {
+const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }: any) => {
     const picksBySeason = (team.futureDraftPicks || []).reduce((acc, pick) => {
         if (!acc[pick.season]) {
             acc[pick.season] = [];
@@ -42,7 +42,7 @@ const FuturePicksWidget: React.FC<FuturePicksWidgetProps> = ({ team }) => {
     );
 };
 
-const FuturePicksWidgetWithErrorBoundary: React.FC = (props) => (
+const FuturePicksWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <FuturePicksWidget {...props} />
   </ErrorBoundary>

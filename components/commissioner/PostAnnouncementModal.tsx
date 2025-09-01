@@ -13,7 +13,7 @@ interface PostAnnouncementModalProps {
 
 }
 
-const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }) => {
+const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId, onClose }: any) => {
     const { dispatch } = useAppState();
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
@@ -75,7 +75,7 @@ const PostAnnouncementModal: React.FC<PostAnnouncementModalProps> = ({ leagueId,
     );
 };
 
-const PostAnnouncementModalWithErrorBoundary: React.FC = (props) => (
+const PostAnnouncementModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PostAnnouncementModal {...props} />
   </ErrorBoundary>

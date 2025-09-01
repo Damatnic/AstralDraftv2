@@ -361,7 +361,7 @@ const AIFantasyAssistant: React.FC = () => {
   );
 };
 
-const AIFantasyAssistantWithErrorBoundary: React.FC<any> = (props) => (
+const AIFantasyAssistantWithErrorBoundary: React.FC<any> = (props: any) => (
   <ErrorBoundary>
     <AIFantasyAssistant {...props} />
   </ErrorBoundary>

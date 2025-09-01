@@ -24,7 +24,7 @@ const StatusIcon = ({ status }: { status: IntegrityTaskStatus }) => {
     }
 };
 
-const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onClose }) => {
+const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onClose }: any) => {
     
     const groupedTasks = React.useMemo(() => {
         return tasks.reduce<Record<string, IntegrityTask[]>>((acc, task) => {
@@ -75,7 +75,7 @@ const ChecklistReportModal: React.FC<ChecklistReportModalProps> = ({ tasks, onCl
     );
 };
 
-const ChecklistReportModalWithErrorBoundary: React.FC = (props) => (
+const ChecklistReportModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChecklistReportModal {...props} />
   </ErrorBoundary>

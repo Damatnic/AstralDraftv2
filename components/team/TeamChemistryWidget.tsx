@@ -14,7 +14,7 @@ interface TeamChemistryWidgetProps {
 
 }
 
-const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, league, dispatch }) => {
+const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const report = myTeam.chemistryReport;
 
@@ -63,7 +63,7 @@ const TeamChemistryWidget: React.FC<TeamChemistryWidgetProps> = ({ myTeam, leagu
     );
 };
 
-const TeamChemistryWidgetWithErrorBoundary: React.FC = (props) => (
+const TeamChemistryWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamChemistryWidget {...props} />
   </ErrorBoundary>

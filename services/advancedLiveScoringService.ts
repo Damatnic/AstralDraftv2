@@ -465,10 +465,10 @@ class AdvancedLiveScoringService extends EventEmitter {
     
     const filterCallback = (alert: LiveAlert) => {
       // Apply filters
-      if (filter.teams && !filter.teams.some(t => alert.affectedTeams.includes(t))) {
+      if (filter.teams && !filter.teams.some((t: any) => alert.affectedTeams.includes(t))) {
         return;
       }
-      if (filter.players && !filter.players.some(p => alert.affectedPlayers.includes(p))) {
+      if (filter.players && !filter.players.some((p: any) => alert.affectedPlayers.includes(p))) {
         return;
       }
       if (filter.types && !filter.types.includes(alert.type)) {
@@ -537,7 +537,7 @@ class AdvancedLiveScoringService extends EventEmitter {
             if (!teamId || this.hasTeamPlayers(teamId, rzOpp.keyPlayers)) {
               opportunities.push({
                 team: rzOpp.team,
-                players: rzOpp.keyPlayers.map(p => p.playerId),
+                players: rzOpp.keyPlayers.map((p: any) => p.playerId),
                 scenario: 'Red zone opportunity',
                 likelihood: rzOpp.likelihood,
                 potentialPoints: this.calculateRedZonePoints(rzOpp),
@@ -782,9 +782,9 @@ class AdvancedLiveScoringService extends EventEmitter {
     // Calculate totals
     teamScore.currentScore = teamScore.lineup.reduce((sum, p) => sum + p.currentPoints, 0);
     teamScore.projectedScore = teamScore.lineup.reduce((sum, p) => sum + p.projectedPoints, 0);
-    teamScore.playersPlaying = teamScore.lineup.filter(p => p.gameStatus === 'in_progress').length;
-    teamScore.playersFinished = teamScore.lineup.filter(p => p.gameStatus === 'finished').length;
-    teamScore.playersYetToPlay = teamScore.lineup.filter(p => p.gameStatus === 'not_started').length;
+    teamScore.playersPlaying = teamScore.lineup.filter((p: any) => p.gameStatus === 'in_progress').length;
+    teamScore.playersFinished = teamScore.lineup.filter((p: any) => p.gameStatus === 'finished').length;
+    teamScore.playersYetToPlay = teamScore.lineup.filter((p: any) => p.gameStatus === 'not_started').length;
   }
 
   private async updatePlayerStatus(player: LivePlayerStatus): Promise<void> {
@@ -916,7 +916,7 @@ class AdvancedLiveScoringService extends EventEmitter {
       title: `${play.playType.toUpperCase()} Alert!`,
       message: play.description,
       affectedTeams: [], // Would populate with actual teams
-      affectedPlayers: play.involvedPlayers.map(p => p.playerId),
+      affectedPlayers: play.involvedPlayers.map((p: any) => p.playerId),
       fantasyImpact: `${play.fantasyImpact.reduce((sum, impact) => sum + impact.pointsGained, 0)} fantasy points scored`,
       timestamp: play.timestamp
     };

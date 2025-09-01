@@ -11,7 +11,7 @@ interface TrophyCaseWidgetProps {
 
 }
 
-const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, league }) => {
+const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, league }: any) => {
     const awards = team.awards || [];
 
     return (
@@ -37,7 +37,7 @@ const TrophyCaseWidget: React.FC<TrophyCaseWidgetProps> = ({ team, league }) => 
     );
 };
 
-const TrophyCaseWidgetWithErrorBoundary: React.FC = (props) => (
+const TrophyCaseWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TrophyCaseWidget {...props} />
   </ErrorBoundary>

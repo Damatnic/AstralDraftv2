@@ -65,7 +65,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   expanded,
   announceOnClick,
   announceOnDisabled
-}) => {
+}: any) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
@@ -168,7 +168,7 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   pressed,
   expanded,
   announceOnClick
-}) => {
+}: any) => {
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
@@ -223,7 +223,7 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
   );
 };
 
-const AccessibleButtonWithErrorBoundary: React.FC = (props) => (
+const AccessibleButtonWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AccessibleButton {...props} />
   </ErrorBoundary>

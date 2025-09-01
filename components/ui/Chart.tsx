@@ -11,7 +11,7 @@ export const Chart: React.FC<ChartProps> = ({
   type = 'bar', 
   height = 200,
   loading = false 
-}) => {
+}: any) => {
   if (loading) {
     return (
       <div className="glass-pane p-4 animate-pulse sm:px-4 md:px-6 lg:px-8" style={{ height }}>

@@ -575,7 +575,7 @@ const TradingSystem: React.FC = () => {
   );
 };
 
-const TradingSystemWithErrorBoundary: React.FC = (props) => (
+const TradingSystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradingSystem {...props} />
   </ErrorBoundary>

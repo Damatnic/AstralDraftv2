@@ -10,7 +10,7 @@ interface FinalStandingsTableProps {
 
 }
 
-const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }) => {
+const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }: any) => {
     return (
         <div className="p-2 sm:px-4 md:px-6 lg:px-8">
             <table className="w-full text-sm text-left sm:px-4 md:px-6 lg:px-8">
@@ -50,7 +50,7 @@ const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, te
     );
 };
 
-const FinalStandingsTableWithErrorBoundary: React.FC = (props) => (
+const FinalStandingsTableWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <FinalStandingsTable {...props} />
   </ErrorBoundary>

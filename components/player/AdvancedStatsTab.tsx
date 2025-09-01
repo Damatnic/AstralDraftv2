@@ -37,7 +37,7 @@ interface WeeklyProjection {
 
 }
 
-const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }) => {
+const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }: any) => {
     // Mock advanced stats - in real app this would come from analytics service
     const statComparisons: StatComparison[] = [
         {
@@ -291,7 +291,7 @@ const AdvancedStatsTab: React.FC<AdvancedStatsTabProps> = ({ player, league }) =
     );
 };
 
-const AdvancedStatsTabWithErrorBoundary: React.FC = (props) => (
+const AdvancedStatsTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdvancedStatsTab {...props} />
   </ErrorBoundary>

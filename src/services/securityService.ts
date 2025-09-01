@@ -89,7 +89,7 @@ class SecurityService {
   }
 
   private setupCSPReporting(): void {
-    document.addEventListener('securitypolicyviolation', (event) => {
+    document.addEventListener('securitypolicyviolation', (event: any) => {
       this.reportViolation({
         type: 'content_security',
         severity: 'high',
@@ -109,10 +109,10 @@ class SecurityService {
   private setupXSSProtection(): void {
     if (!window.MutationObserver) return;
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
+    const observer = new MutationObserver((mutations: any) => {
+      mutations.forEach((mutation: any) => {
         if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => {
+          mutation.addedNodes.forEach((node: any) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
               this.scanElementForXSS(node as Element);
             }
@@ -134,7 +134,7 @@ class SecurityService {
     const outerHTML = element.outerHTML;
 
     // Check for XSS patterns
-    this.XSS_PATTERNS.forEach((pattern) => {
+    this.XSS_PATTERNS.forEach((pattern: any) => {
       if (pattern.test(innerHTML) || pattern.test(outerHTML)) {
         this.reportViolation({
           type: 'xss',
@@ -151,7 +151,7 @@ class SecurityService {
     });
 
     // Check attributes for dangerous content
-    Array.from(element.attributes).forEach((attr) => {
+    Array.from(element.attributes).forEach((attr: any) => {
       if (attr.name.startsWith('on') && attr.value) {
         this.reportViolation({
           type: 'xss',
@@ -180,9 +180,9 @@ class SecurityService {
     };
 
     // Override console methods to prevent sensitive data leakage
-    Object.keys(originalMethods).forEach((method) => {
+    Object.keys(originalMethods).forEach((method: any) => {
       (console as any)[method] = (...args: any[]) => {
-        const filteredArgs = args.map((arg) => this.sanitizeOutput(arg));
+        const filteredArgs = args.map((arg: any) => this.sanitizeOutput(arg));
         (originalMethods as any)[method](...filteredArgs);
       };
     });
@@ -195,7 +195,7 @@ class SecurityService {
     
     if (typeof data === 'object' && data !== null) {
       const sanitized = { ...data };
-      Object.keys(sanitized).forEach((key) => {
+      Object.keys(sanitized).forEach((key: any) => {
         if (this.isSensitiveKey(key)) {
           sanitized[key] = '***REDACTED***';
         } else if (typeof sanitized[key] === 'string') {
@@ -213,7 +213,7 @@ class SecurityService {
       'password', 'pass', 'pwd', 'secret', 'token', 'key', 'api_key', 
       'apikey', 'auth', 'authorization', 'credential', 'private'
     ];
-    return sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive));
+    return sensitiveKeys.some((sensitive: any) => key.toLowerCase().includes(sensitive));
   }
 
   private setupStorageMonitoring(): void {
@@ -253,7 +253,7 @@ class SecurityService {
     }
 
     // Check for XSS patterns
-    this.XSS_PATTERNS.forEach((pattern) => {
+    this.XSS_PATTERNS.forEach((pattern: any) => {
       if (pattern.test(input)) {
         violations.push(`XSS pattern detected: ${pattern.source}`);
         sanitized = sanitized.replace(pattern, '');
@@ -261,7 +261,7 @@ class SecurityService {
     });
 
     // Check for injection patterns
-    this.INJECTION_PATTERNS.forEach((pattern) => {
+    this.INJECTION_PATTERNS.forEach((pattern: any) => {
       if (pattern.test(input)) {
         violations.push(`Injection pattern detected: ${pattern.source}`);
         sanitized = sanitized.replace(pattern, '');
@@ -292,12 +292,12 @@ class SecurityService {
   }
 
   public containsSensitiveData(text: string): boolean {
-    return this.SENSITIVE_DATA_PATTERNS.some(pattern => pattern.test(text));
+    return this.SENSITIVE_DATA_PATTERNS.some((pattern: any) => pattern.test(text));
   }
 
   public removeSensitiveData(text: string): string {
     let cleaned = text;
-    this.SENSITIVE_DATA_PATTERNS.forEach((pattern) => {
+    this.SENSITIVE_DATA_PATTERNS.forEach((pattern: any) => {
       cleaned = cleaned.replace(pattern, '***REDACTED***');
     });
     return cleaned;
@@ -320,7 +320,7 @@ class SecurityService {
       /123456/
     ];
 
-    if (testPatterns.some(pattern => pattern.test(apiKey))) {
+    if (testPatterns.some((pattern: any) => pattern.test(apiKey))) {
       this.reportViolation({
         type: 'unauthorized_access',
         severity: 'medium',
@@ -360,7 +360,7 @@ class SecurityService {
 
     return window.crypto.subtle.digest('SHA-256', dataBuffer).then(hashBuffer => {
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+      return hashArray.map((byte: any) => byte.toString(16).padStart(2, '0')).join('');
     });
   }
 
@@ -418,7 +418,7 @@ class SecurityService {
     }, {} as Record<string, number>);
 
     const recentViolations = this.violations
-      .filter(v => Date.now() - v.timestamp.getTime() < 24 * 60 * 60 * 1000) // Last 24 hours
+      .filter((v: any) => Date.now() - v.timestamp.getTime() < 24 * 60 * 60 * 1000) // Last 24 hours
       .slice(-10); // Last 10 violations
 
     return {

@@ -13,7 +13,7 @@ interface ConversationListProps {
 
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }) => {
+const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onSelectUser, onStartNewMessage, isNewMessageActive }: any) => {
     const { state } = useAppState();
 
     const conversations = React.useMemo(() => {
@@ -63,7 +63,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
                 </button>
             </div>
             <div className="flex-grow overflow-y-auto p-2 space-y-1 sm:px-4 md:px-6 lg:px-8">
-                {conversations.map(({ user, unreadCount }) => (
+                {conversations.map(({ user, unreadCount }: any) => (
                     <button
                         key={user.id}
                         onClick={() => onSelectUser(user.id)}
@@ -84,7 +84,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ selectedUserId, onS
     );
 };
 
-const ConversationListWithErrorBoundary: React.FC = (props) => (
+const ConversationListWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ConversationList {...props} />
   </ErrorBoundary>

@@ -21,7 +21,7 @@ interface TradeScenarioModalProps {
 
 }
 
-const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle: () => void }> = ({ player, isSelected, onToggle }) => (
+const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle: () => void }> = ({ player, isSelected, onToggle }: any) => (
     <div
         onClick={onToggle}
         className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
@@ -35,7 +35,7 @@ const PlayerSelectItem: React.FC<{ player: Player; isSelected: boolean; onToggle
     </div>
 );
 
-const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: League, myTeamId: number, opponentTeamId: number }> = ({ result, league, myTeamId, opponentTeamId }) => {
+const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: League, myTeamId: number, opponentTeamId: number }> = ({ result, league, myTeamId, opponentTeamId }: any) => {
     const changes = result.after.map((after: any) => {
         const before = result.before.find((b: any) => b.teamId === after.teamId);
         const change = before ? after.probability - before.probability : 0;
@@ -57,7 +57,7 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
         <div className="p-4 bg-black/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
             <h4 className="font-bold text-lg text-center text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Simulation Results</h4>
             <div className="space-y-2 max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-                {changes.map(({ team, before, after, change }) => (
+                {changes.map(({ team, before, after, change }: any) => (
                     <div key={team?.id} className={`p-2 rounded-md flex items-center justify-between text-sm ${team?.id === myTeamId || team?.id === opponentTeamId ? 'bg-cyan-900/50' : ''}`}>
                         <span>{team?.name}</span>
                         <div className="flex items-center gap-2 font-mono sm:px-4 md:px-6 lg:px-8">
@@ -78,7 +78,7 @@ const SimulationResult: React.FC<{ result: ChampionshipOddsSimulation, league: L
     );
 };
 
-const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose }) => {
+const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose }: any) => {
     const { myTeam } = useLeague();
     const [opponentId, setOpponentId] = React.useState<number | null>(null);
     const [playersToSend, setPlayersToSend] = React.useState<Set<number>>(new Set());
@@ -183,7 +183,7 @@ const TradeScenarioModal: React.FC<TradeScenarioModalProps> = ({ league, onClose
     );
 };
 
-const TradeScenarioModalWithErrorBoundary: React.FC = (props) => (
+const TradeScenarioModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeScenarioModal {...props} />
   </ErrorBoundary>

@@ -146,7 +146,7 @@ const LineupOptimizerWidget: React.FC = () => {
             </div>
           </div>
           <Button
-            variant="secondary"
+            variant="default"
             size="sm"
             onClick={() => setShowDetails(!showDetails)}
             className="text-xs sm:px-4 md:px-6 lg:px-8"
@@ -159,7 +159,7 @@ const LineupOptimizerWidget: React.FC = () => {
       <CardContent className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         {/* Strategy Selection */}
         <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
-          {strategies.map((strategy) => (
+          {strategies.map((strategy: any) => (
             <motion.button
               key={strategy.id}
               whileHover={{ scale: 1.02 }}
@@ -342,7 +342,7 @@ const LineupOptimizerWidget: React.FC = () => {
   );
 };
 
-const LineupOptimizerWidgetWithErrorBoundary: React.FC = (props) => (
+const LineupOptimizerWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LineupOptimizerWidget {...props} />
   </ErrorBoundary>

@@ -18,7 +18,7 @@ interface NotificationCenterProps {
 
 export const NotificationCenter: React.FC<NotificationCenterProps> = ({ className = '',
     maxVisible = 5
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [notifications, setNotifications] = useState<OracleNotification[]>([]);
@@ -290,7 +290,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({ classNam
     );
 };
 
-const NotificationCenterWithErrorBoundary: React.FC = (props) => (
+const NotificationCenterWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationCenter {...props} />
   </ErrorBoundary>

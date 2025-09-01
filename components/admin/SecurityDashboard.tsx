@@ -326,7 +326,7 @@ const SecurityDashboard: FC = () => {
             Recent Security Events
           </h2>
           <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-            {recentEvents.map((event) => (
+            {recentEvents.map((event: any) => (
               <div key={event.id} className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 py-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
                   <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -425,7 +425,7 @@ const SecurityDashboard: FC = () => {
   );
 };
 
-const SecurityDashboardWithErrorBoundary: React.FC = (props) => (
+const SecurityDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SecurityDashboard {...props} />
   </ErrorBoundary>

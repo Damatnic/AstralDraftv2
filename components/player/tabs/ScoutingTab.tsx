@@ -11,7 +11,7 @@ interface ScoutingTabProps {
 
 }
 
-const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }) => {
+const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }: any) => {
   const { scoutingReport: report, contract } = player;
 
   if (!report) {
@@ -62,7 +62,7 @@ const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }) => {
   );
 };
 
-const ScoutingTabWithErrorBoundary: React.FC = (props) => (
+const ScoutingTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ScoutingTab {...props} />
   </ErrorBoundary>

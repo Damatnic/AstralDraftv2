@@ -174,7 +174,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     onVote,
     onFilter,
     className = ''
-}) => {
+}: any) => {
     const [filter, setFilter] = React.useState<SocialFeedFilter>({
         types: [],
         users: [],
@@ -690,7 +690,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     );
 };
 
-const SocialFeedWithErrorBoundary: React.FC = (props) => (
+const SocialFeedWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SocialFeed {...props} />
   </ErrorBoundary>

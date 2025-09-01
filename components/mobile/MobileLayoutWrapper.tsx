@@ -40,7 +40,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     onViewChange,
     showBottomNav = true,
     className = ''
-}) => {
+}: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isTablet = useMediaQuery('(max-width: 1024px)');
@@ -300,7 +300,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     );
 };
 
-const MobileLayoutWrapperWithErrorBoundary: React.FC = (props) => (
+const MobileLayoutWrapperWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileLayoutWrapper {...props} />
   </ErrorBoundary>

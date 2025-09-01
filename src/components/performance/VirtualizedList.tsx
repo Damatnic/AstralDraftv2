@@ -224,7 +224,7 @@ export function VirtualizedList<T>({
   const renderStickyItems = useCallback(() => {
     if (!sticky) return null;
 
-    return sticky.indices.map(index => {
+    return sticky.indices.map((index: any) => {
       const item = items[index];
       if (!item) return null;
 
@@ -397,7 +397,7 @@ export const VirtualizedPlayerList: React.FC<{
   containerHeight, 
   onPlayerClick,
   selectedPlayers = new Set()
-}) => {
+}: any) => {
   const { scrollToIndex, isScrolling, scrollTo, handleScroll } = useVirtualizedList(
     players,
     containerHeight

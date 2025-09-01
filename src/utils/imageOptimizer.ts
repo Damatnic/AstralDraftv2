@@ -73,7 +73,7 @@ class ImageOptimizer {
   }
 
   private testImageFormat(dataURL: string): Promise<boolean> {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
       const img = new Image();
       img.onload = () => resolve(img.width > 0 && img.height > 0);
       img.onerror = () => resolve(false);
@@ -84,8 +84,8 @@ class ImageOptimizer {
   private setupIntersectionObserver() {
     if ('IntersectionObserver' in window) {
       this.observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
+        (entries: any) => {
+          entries.forEach((entry: any) => {
             if (entry.isIntersecting) {
               const img = entry.target as HTMLImageElement;
               this.loadLazyImage(img);
@@ -103,8 +103,8 @@ class ImageOptimizer {
 
   private setupPerformanceMonitoring() {
     if ('PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
+      const observer = new PerformanceObserver((list: any) => {
+        list.getEntries().forEach((entry: any) => {
           if (entry.entryType === 'resource' && 
               (entry.name.includes('.jpg') || 
                entry.name.includes('.png') || 
@@ -206,7 +206,7 @@ class ImageOptimizer {
     const matches = sizes.match(/(\d+)px/g);
     if (!matches) return '800';
     
-    const widths = matches.map(m => parseInt(m.replace('px', '')));
+    const widths = matches.map((m: any) => parseInt(m.replace('px', '')));
     return Math.max(...widths).toString();
   }
 
@@ -222,7 +222,7 @@ class ImageOptimizer {
     const format = this.getOptimalFormat(options.format || 'auto');
     
     // Generate srcSet
-    const srcSet = breakpoints.map(width => {
+    const srcSet = breakpoints.map((width: any) => {
       const params = new URLSearchParams({
         w: width.toString(),
         q: (options.quality || 85).toString(),
@@ -338,7 +338,7 @@ class ImageOptimizer {
   public optimizeExistingImages() {
     const images = document.querySelectorAll('img:not([data-optimized])');
     
-    images.forEach((img) => {
+    images.forEach((img: any) => {
       this.optimizeImageElement(img as HTMLImageElement);
     });
   }
@@ -379,7 +379,7 @@ class ImageOptimizer {
   }
 
   public preloadImages(sources: string[], options: ImageOptimizationOptions = {}): Promise<HTMLImageElement[]> {
-    const promises = sources.map(src => this.preloadImage(src, options));
+    const promises = sources.map((src: any) => this.preloadImage(src, options));
     return Promise.all(promises);
   }
 
@@ -433,7 +433,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   sizes,
   className = '',
   ...props
-}) => {
+}: any) => {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [hasError, setHasError] = React.useState(false);
   const [placeholderSrc, setPlaceholderSrc] = React.useState<string>('');

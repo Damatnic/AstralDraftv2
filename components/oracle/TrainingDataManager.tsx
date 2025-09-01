@@ -2548,7 +2548,7 @@ TrainingDataManager.displayName = 'TrainingDataManager';
 
 export { TrainingDataManager };
 
-const TrainingDataManagerWithErrorBoundary: React.FC = (props) => (
+const TrainingDataManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TrainingDataManager {...props} />
   </ErrorBoundary>

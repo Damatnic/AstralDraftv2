@@ -30,7 +30,7 @@ const LOAD_MORE_COUNT = 50;
 const PlayerPool: React.FC<PlayerPoolProps> = ({ players, onPlayerSelect, onAddToQueue, onDraftPlayer, onNominatePlayer,
     onAddNote, isMyTurn, playersToCompare, onToggleCompare, queuedPlayerIds,
     draftFormat, isNominationTurn 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { state } = useAppState();
   const [search, setSearch] = React.useState('');
@@ -151,7 +151,7 @@ const PlayerPool: React.FC<PlayerPoolProps> = ({ players, onPlayerSelect, onAddT
   );
 };
 
-const PlayerPoolWithErrorBoundary: React.FC = (props) => (
+const PlayerPoolWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerPool {...props} />
   </ErrorBoundary>

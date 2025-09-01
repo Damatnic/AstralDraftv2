@@ -947,7 +947,7 @@ const OracleFeatureExtractionSection: React.FC = () => {
   );
 };
 
-const OracleFeatureExtractionSectionWithErrorBoundary: React.FC = (props) => (
+const OracleFeatureExtractionSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleFeatureExtractionSection {...props} />
   </ErrorBoundary>

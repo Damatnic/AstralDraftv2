@@ -15,7 +15,7 @@ interface EditHeaderModalProps {
 
 }
 
-const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }) => {
+const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, currentHeader, dispatch, onClose }: any) => {
     const [imageUrl, setImageUrl] = React.useState(currentHeader || '');
 
     const handleSave = () => {
@@ -61,7 +61,7 @@ const EditHeaderModal: React.FC<EditHeaderModalProps> = ({ leagueId, teamId, cur
     );
 };
 
-const EditHeaderModalWithErrorBoundary: React.FC = (props) => (
+const EditHeaderModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EditHeaderModal {...props} />
   </ErrorBoundary>

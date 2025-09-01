@@ -19,7 +19,7 @@ interface NotificationPreferencesProps {
 export const NotificationPreferencesComponent: React.FC<NotificationPreferencesProps> = ({
     className = '',
     onClose
-}) => {
+}: any) => {
     const [preferences, setPreferences] = useState<NotificationPreferences>(
         notificationService.getPreferences()
     );
@@ -58,7 +58,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         enabled: boolean;
         onChange: (enabled: boolean) => void;
         disabled?: boolean;
-    }> = ({ enabled, onChange, disabled = false }) => (
+    }> = ({ enabled, onChange, disabled = false }: any) => (
         <button
             onClick={() => !disabled && onChange(!enabled)}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
@@ -80,7 +80,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
         enabled: boolean;
         onChange: (enabled: boolean) => void;
         disabled?: boolean;
-    }> = ({ icon, title, description, enabled, onChange, disabled = false }) => (
+    }> = ({ icon, title, description, enabled, onChange, disabled = false }: any) => (
         <div className="flex items-center justify-between p-4 border-b border-gray-700 last:border-b-0 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-start space-x-3 flex-1 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex-shrink-0 mt-1 sm:px-4 md:px-6 lg:px-8">
@@ -285,7 +285,7 @@ export const NotificationPreferencesComponent: React.FC<NotificationPreferencesP
     );
 };
 
-const NotificationPreferencesComponentWithErrorBoundary: React.FC = (props) => (
+const NotificationPreferencesComponentWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationPreferencesComponent {...props} />
   </ErrorBoundary>

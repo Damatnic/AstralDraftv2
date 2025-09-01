@@ -146,7 +146,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     onPreview,
     isLoading = false,
     className = ''
-}) => {
+}: any) => {
     const [currentStory, setCurrentStory] = React.useState<Partial<TeamStory>>(
         story || {
             teamId: team.id,
@@ -783,7 +783,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     );
 };
 
-const TeamStoryBuilderWithErrorBoundary: React.FC = (props) => (
+const TeamStoryBuilderWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamStoryBuilder {...props} />
   </ErrorBoundary>

@@ -386,7 +386,7 @@ const TradeOpportunityWidget: React.FC = () => {
                   Propose Trade
                 </Button>
                 <Button
-                  variant="secondary"
+                  variant="default"
                   size="sm"
                   className="flex-1 sm:px-4 md:px-6 lg:px-8"
                   onClick={() => console.log('Negotiate')}
@@ -414,7 +414,7 @@ const TradeOpportunityWidget: React.FC = () => {
   );
 };
 
-const TradeOpportunityWidgetWithErrorBoundary: React.FC = (props) => (
+const TradeOpportunityWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeOpportunityWidget {...props} />
   </ErrorBoundary>

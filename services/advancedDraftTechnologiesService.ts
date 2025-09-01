@@ -565,7 +565,7 @@ class AdvancedDraftTechnologiesService {
       const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
       
       for (const position of positions) {
-        const positionPlayers = availablePlayers.filter(p => p.position === position);
+        const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
         const tiers = await this.clusterPlayersIntoTiers(positionPlayers, draftContext);
         tierList[position] = tiers;
       }
@@ -656,7 +656,7 @@ class AdvancedDraftTechnologiesService {
     const players: NFLPlayer[] = [];
     
     await Promise.all(
-      playerIds.map(async (playerId) => {
+      playerIds.map(async (playerId: any) => {
         try {
           const player = await productionSportsDataService.getPlayerDetails(playerId);
           if (player) {
@@ -814,7 +814,7 @@ class AdvancedDraftTechnologiesService {
     const positions = ['QB', 'RB', 'WR', 'TE'];
 
     for (const position of positions) {
-      const positionPlayers = availablePlayers.filter(p => p.position === position);
+      const positionPlayers = availablePlayers.filter((p: any) => p.position === position);
       const topTier = positionPlayers.slice(0, 5);
       const dropOff = topTier.length > 0 
         ? (topTier[0].stats?.fantasyPoints || 0) - (topTier[topTier.length - 1].stats?.fantasyPoints || 0)
@@ -851,7 +851,7 @@ class AdvancedDraftTechnologiesService {
 
     for (const position of positions) {
       const positionPlayers = availablePlayers
-        .filter(p => p.position === position)
+        .filter((p: any) => p.position === position)
         .sort((a, b) => (b.stats?.fantasyPoints || 0) - (a.stats?.fantasyPoints || 0));
 
       for (let i = 0; i < positionPlayers.length - 1; i++) {
@@ -932,9 +932,9 @@ class AdvancedDraftTechnologiesService {
 
     // Check for undervalued positions after runs
     for (const run of positionRuns) {
-      const otherPositions = ['QB', 'RB', 'WR', 'TE'].filter(p => p !== run.position);
+      const otherPositions = ['QB', 'RB', 'WR', 'TE'].filter((p: any) => p !== run.position);
       for (const position of otherPositions) {
-        const available = availablePlayers.filter(p => p.position === position);
+        const available = availablePlayers.filter((p: any) => p.position === position);
         if (available.length > 5) {
           inefficiencies.push({
             type: 'undervalued_position',
@@ -969,7 +969,7 @@ class AdvancedDraftTechnologiesService {
     const availablePlayers = await this.getAvailablePlayersData(draftContext.availablePlayers);
     
     const samePosition = availablePlayers
-      .filter(p => p.position === player.position && p.playerId !== player.playerId)
+      .filter((p: any) => p.position === player.position && p.playerId !== player.playerId)
       .slice(0, 3);
 
     for (const alt of samePosition) {
@@ -1135,7 +1135,7 @@ class AdvancedDraftTechnologiesService {
     const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
     for (const position of positions) {
-      const positionPlayers = playerData.filter(p => p.position === position);
+      const positionPlayers = playerData.filter((p: any) => p.position === position);
       const required = rosterSettings[position] || 1;
       const quality = positionPlayers.reduce((sum, p) => sum + (p.stats?.fantasyPoints || 0), 0) / required;
       
@@ -1156,8 +1156,8 @@ class AdvancedDraftTechnologiesService {
     return {
       bestPicks: sorted.slice(0, 5),
       worstPicks: sorted.slice(-5),
-      steals: pickAnalysis.filter(p => p.actualValue > p.expectedValue + 5),
-      reaches: pickAnalysis.filter(p => p.actualValue < p.expectedValue - 5)
+      steals: pickAnalysis.filter((p: any) => p.actualValue > p.expectedValue + 5),
+      reaches: pickAnalysis.filter((p: any) => p.actualValue < p.expectedValue - 5)
     };
   }
 
@@ -1235,7 +1235,7 @@ class AdvancedDraftTechnologiesService {
       Playoff Probability: 65%
       
       Best Picks:
-      ${pickAnalysis.slice(0, 3).map(p => `- ${p.playerName} (Round ${p.round})`).join('\n')}
+      ${pickAnalysis.slice(0, 3).map((p: any) => `- ${p.playerName} (Round ${p.round})`).join('\n')}
       
       Trade Targets:
       - Look to package WR depth for RB upgrade

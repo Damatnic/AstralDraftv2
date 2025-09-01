@@ -30,7 +30,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
     prediction, 
     onSubmit,
     className = ''
-}) => {
+}: any) => {
     const [selectedChoice, setSelectedChoice] = useState<number | null>(prediction.userChoice ?? null);
     const [confidence, setConfidence] = useState(prediction.userConfidence ?? 75);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -368,7 +368,7 @@ export const PredictionDetail: React.FC<PredictionDetailProps> = ({
     );
 };
 
-const PredictionDetailWithErrorBoundary: React.FC = (props) => (
+const PredictionDetailWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PredictionDetail {...props} />
   </ErrorBoundary>

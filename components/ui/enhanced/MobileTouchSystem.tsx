@@ -130,7 +130,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
       setRipples(prev => [...prev, { id, x, y }]);
       setTimeout(() => {
-        setRipples(prev => prev.filter(ripple => ripple.id !== id));
+        setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
 
     if (onLongPress) {
@@ -169,7 +169,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
 
       setRipples(prev => [...prev, { id, x, y }]);
       setTimeout(() => {
-        setRipples(prev => prev.filter(ripple => ripple.id !== id));
+        setRipples(prev => prev.filter((ripple: any) => ripple.id !== id));
       }, 600);
 
     if (onLongPress) {
@@ -225,7 +225,7 @@ export const TouchButton: React.FC<TouchButtonProps> = ({
       {children}
       
       {/* Ripple Effects */}
-      {ripples.map(ripple => (
+      {ripples.map((ripple: any) => (
         <motion.div
           key={ripple.id}
           className="absolute rounded-full pointer-events-none sm:px-4 md:px-6 lg:px-8"
@@ -332,7 +332,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   threshold = 100,
   className = '',
   refreshIndicator
-}) => {
+}: any) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [pullDistance, setPullDistance] = useState(0);
   const y = useMotionValue(0);
@@ -415,11 +415,11 @@ export const TouchCardStack: React.FC<TouchCardStackProps> = ({
   children,
   onSwipe,
   className = ''
-}) => {
+}: any) => {
   const [cards, setCards] = useState(children.map((child, index) => ({ child, id: index })));
 
   const handleSwipe = (direction: 'left' | 'right', cardId: number) => {
-    setCards(prev => prev.filter(card => card.id !== cardId));
+    setCards(prev => prev.filter((card: any) => card.id !== cardId));
     onSwipe?.(direction, cardId);
     haptic.trigger('medium');
   };

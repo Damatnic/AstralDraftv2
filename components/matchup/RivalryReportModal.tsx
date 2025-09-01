@@ -16,7 +16,7 @@ interface RivalryReportModalProps {
 
 }
 
-const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponentTeam, onClose }) => {
+const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponentTeam, onClose }: any) => {
     const [report, setReport] = React.useState<string | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -71,7 +71,7 @@ const RivalryReportModal: React.FC<RivalryReportModalProps> = ({ myTeam, opponen
     );
 };
 
-const RivalryReportModalWithErrorBoundary: React.FC = (props) => (
+const RivalryReportModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RivalryReportModal {...props} />
   </ErrorBoundary>

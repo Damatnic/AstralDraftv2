@@ -57,7 +57,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
   teamId,
   currentWeek,
   scoringSystem
-}) => {
+}: any) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [optimizedTeam, setOptimizedTeam] = useState<OptimizedTeam | null>(null);
@@ -158,7 +158,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
               {/* Strategy selector */}
               <select
                 value={optimizationStrategy}
-                onChange={(e) => setOptimizationStrategy(e.target.value as any)}
+                onChange={(e: any) => setOptimizationStrategy(e.target.value as any)}
               >
                 <option value="win_now">Win Now</option>
                 <option value="balanced">Balanced</option>
@@ -188,7 +188,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
 
           {/* Tabs */}
           <div className="flex gap-1 mt-6 sm:px-4 md:px-6 lg:px-8">
-            {tabs.map((tab) => {
+            {tabs.map((tab: any) => {
               const Icon = tab.icon;
               return (
                 <button
@@ -229,7 +229,7 @@ export const TeamOptimizationDashboard: React.FC<TeamOptimizationDashboardProps>
 };
 
 // Overview Tab Component
-const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }) => {
+const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }: any) => {
   if (!optimizedTeam) {
     return (
       <motion.div
@@ -348,7 +348,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
             <div>
               <h4 className="text-red-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Weaknesses</h4>
               <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
-                {optimizedTeam.roster.weaknesses.map((weakness) => (
+                {optimizedTeam.roster.weaknesses.map((weakness: any) => (
                   <div key={weakness} className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <AlertTriangle className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />
                     <span className="text-white/80 sm:px-4 md:px-6 lg:px-8">{weakness}</span>
@@ -417,7 +417,7 @@ const OverviewTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
 };
 
 // Lineup Tab Component
-const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }> = ({ optimizedTeam, week }) => {
+const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }> = ({ optimizedTeam, week }: any) => {
   if (!optimizedTeam) {
     return (
       <motion.div
@@ -494,7 +494,7 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
       <div className="bg-white/10 backdrop-blur-xl rounded-xl p-6 border border-white/10 sm:px-4 md:px-6 lg:px-8">
         <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Start/Sit Decisions</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {lineup.startSitDecisions.slice(0, 6).map((decision) => (
+          {lineup.startSitDecisions.slice(0, 6).map((decision: any) => (
             <div
               key={decision.player.id}
               className="flex items-center justify-between p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -528,7 +528,7 @@ const LineupTab: React.FC<{ optimizedTeam: OptimizedTeam | null; week: number }>
 };
 
 // Trades Tab Component
-const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }) => {
+const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }: any) => {
   if (tradeTargets.length === 0) {
     return (
       <motion.div
@@ -603,14 +603,14 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }) 
                   <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-red-400 sm:px-4 md:px-6 lg:px-8">Give:</span>
                     <span className="text-white sm:px-4 md:px-6 lg:px-8">
-                      {pkg.give.map(p => p.name).join(', ')}
+                      {pkg.give.map((p: any) => p.name).join(', ')}
                     </span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-white/40 sm:px-4 md:px-6 lg:px-8" />
                   <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-green-400 sm:px-4 md:px-6 lg:px-8">Get:</span>
                     <span className="text-white sm:px-4 md:px-6 lg:px-8">
-                      {pkg.receive.map(p => p.name).join(', ')}
+                      {pkg.receive.map((p: any) => p.name).join(', ')}
                     </span>
                   </div>
                 </div>
@@ -624,7 +624,7 @@ const TradesTab: React.FC<{ tradeTargets: TradeTarget[] }> = ({ tradeTargets }) 
 };
 
 // Waivers Tab Component
-const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets }) => {
+const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets }: any) => {
   if (waiverTargets.length === 0) {
     return (
       <motion.div
@@ -695,7 +695,7 @@ const WaiversTab: React.FC<{ waiverTargets: WaiverTarget[] }> = ({ waiverTargets
 };
 
 // Strategy Tab Component
-const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }) => {
+const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimizedTeam }: any) => {
   if (!optimizedTeam) {
     return (
       <motion.div
@@ -797,7 +797,7 @@ const StrategyTab: React.FC<{ optimizedTeam: OptimizedTeam | null }> = ({ optimi
   );
 };
 
-const TeamOptimizationDashboardWithErrorBoundary: React.FC = (props) => (
+const TeamOptimizationDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamOptimizationDashboard {...props} />
   </ErrorBoundary>

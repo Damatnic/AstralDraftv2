@@ -1344,7 +1344,7 @@ const OracleStatisticalModelingSection: React.FC = () => {
   );
 };
 
-const OracleStatisticalModelingSectionWithErrorBoundary: React.FC = (props) => (
+const OracleStatisticalModelingSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleStatisticalModelingSection {...props} />
   </ErrorBoundary>

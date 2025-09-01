@@ -51,7 +51,7 @@ const AiCoPilotPanel: React.FC = () => {
     );
 };
 
-const AiCoPilotPanelWithErrorBoundary: React.FC = (props) => (
+const AiCoPilotPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AiCoPilotPanel {...props} />
   </ErrorBoundary>

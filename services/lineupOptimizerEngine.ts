@@ -108,9 +108,9 @@ export class LineupOptimizerEngine {
     
     for (const [position, players] of positionGroups.entries()) {
       const sortedPlayers = players
-        .map(p => ({
+        .map((p: any) => ({
           player: p,
-          projection: projections.find(proj => proj.player.id === p.id)!
+          projection: projections.find((proj: any) => proj.player.id === p.id)!
         }))
         .sort((a, b) => b.projection.projectedPoints - a.projection.projectedPoints);
       
@@ -193,7 +193,7 @@ export class LineupOptimizerEngine {
     team: Team,
     week: number
   ): Promise<FlexRecommendation[]> {
-    const eligiblePlayers = team.players.filter(p => 
+    const eligiblePlayers = team.players.filter((p: any) => 
       ['RB', 'WR', 'TE'].includes(p.position)
     );
     
@@ -201,7 +201,7 @@ export class LineupOptimizerEngine {
     
     // Sort by projected points considering position value
     const recommendations = projections
-      .map(proj => ({
+      .map((proj: any) => ({
         player: proj.player,
         projectedPoints: proj.projectedPoints,
         positionValue: this.calculatePositionValue(proj.player.position),
@@ -226,7 +226,7 @@ export class LineupOptimizerEngine {
   }
 
   private getAvailablePlayers(team: Team, excludeInjured?: boolean): Player[] {
-    return team.players.filter(p => {
+    return team.players.filter((p: any) => {
       if (excludeInjured && p.injuryStatus && p.injuryStatus !== 'Healthy') {
         return false;
       }
@@ -297,9 +297,9 @@ export class LineupOptimizerEngine {
     for (const [position, requirement] of Object.entries(requirements)) {
       if (position === 'FLEX') continue; // Handle flex last
       
-      const positionPlayers = sortedProjections.filter(p => 
+      const positionPlayers = sortedProjections.filter((p: any) => 
         p.player.position === position && 
-        !lineup.starters.some(s => s.id === p.player.id)
+        !lineup.starters.some((s: any) => s.id === p.player.id)
       );
       
       for (let i = 0; i < requirement.min && i < positionPlayers.length; i++) {
@@ -309,9 +309,9 @@ export class LineupOptimizerEngine {
     }
     
     // Fill flex position
-    const flexEligible = sortedProjections.filter(p => 
+    const flexEligible = sortedProjections.filter((p: any) => 
       requirements.FLEX.eligible.includes(p.player.position) &&
-      !lineup.starters.some(s => s.id === p.player.id)
+      !lineup.starters.some((s: any) => s.id === p.player.id)
     );
     
     if (flexEligible.length > 0) {
@@ -326,8 +326,8 @@ export class LineupOptimizerEngine {
     
     // Remaining players go to bench
     lineup.bench = projections
-      .filter(p => !lineup.starters.some(s => s.id === p.player.id))
-      .map(p => p.player)
+      .filter((p: any) => !lineup.starters.some((s: any) => s.id === p.player.id))
+      .map((p: any) => p.player)
       .slice(0, 6);
     
     return lineup;
@@ -383,7 +383,7 @@ export class LineupOptimizerEngine {
     requirements: LineupRequirements
   ): Promise<LineupConfiguration> {
     // Focus on high variance, low ownership plays
-    const contrarianScores = projections.map(p => ({
+    const contrarianScores = projections.map((p: any) => ({
       ...p,
       contrarianScore: (p.ceiling / p.projectedPoints) * (1 - (p.player.ownership || 50) / 100)
     }));
@@ -411,9 +411,9 @@ export class LineupOptimizerEngine {
     for (const [position, requirement] of Object.entries(requirements)) {
       if (position === 'FLEX') continue;
       
-      const positionPlayers = sortedProjections.filter(p => 
+      const positionPlayers = sortedProjections.filter((p: any) => 
         p.player.position === position && 
-        !lineup.starters.some(s => s.id === p.player.id)
+        !lineup.starters.some((s: any) => s.id === p.player.id)
       );
       
       for (let i = 0; i < requirement.min && i < positionPlayers.length; i++) {
@@ -423,9 +423,9 @@ export class LineupOptimizerEngine {
     }
     
     // Fill flex
-    const flexEligible = sortedProjections.filter(p => 
+    const flexEligible = sortedProjections.filter((p: any) => 
       ['RB', 'WR', 'TE'].includes(p.player.position) &&
-      !lineup.starters.some(s => s.id === p.player.id)
+      !lineup.starters.some((s: any) => s.id === p.player.id)
     );
     
     if (flexEligible.length > 0) {
@@ -440,8 +440,8 @@ export class LineupOptimizerEngine {
     lineup: LineupConfiguration,
     projections: PlayerProjection[]
   ): LineupAnalysis {
-    const starterProjections = lineup.starters.map(s => 
-      projections.find(p => p.player.id === s.id)!
+    const starterProjections = lineup.starters.map((s: any) => 
+      projections.find((p: any) => p.player.id === s.id)!
     );
     
     const totalProjected = starterProjections.reduce((sum, p) => sum + p.projectedPoints, 0);
@@ -473,9 +473,9 @@ export class LineupOptimizerEngine {
     let bonus = 1.0;
     
     // Check for QB-WR/TE stacks
-    const qb = starters.find(p => p.position === 'QB');
+    const qb = starters.find((p: any) => p.position === 'QB');
     if (qb) {
-      const sameTeamReceivers = starters.filter(p => 
+      const sameTeamReceivers = starters.filter((p: any) => 
         ['WR', 'TE'].includes(p.position) && p.team === qb.team
       );
       
@@ -511,8 +511,8 @@ export class LineupOptimizerEngine {
     lineup: LineupConfiguration,
     projections: PlayerProjection[]
   ): number {
-    const starterProjections = lineup.starters.map(s => 
-      projections.find(p => p.player.id === s.id)!
+    const starterProjections = lineup.starters.map((s: any) => 
+      projections.find((p: any) => p.player.id === s.id)!
     );
     
     const avgConfidence = starterProjections.reduce((sum, p) => 
@@ -560,7 +560,7 @@ export class LineupOptimizerEngine {
   private groupByPosition(players: Player[]): Map<string, Player[]> {
     const groups = new Map<string, Player[]>();
     
-    players.forEach(player => {
+    players.forEach((player: any) => {
       const group = groups.get(player.position) || [];
       group.push(player);
       groups.set(player.position, group);
@@ -572,7 +572,7 @@ export class LineupOptimizerEngine {
   private groupProjectionsByPosition(projections: PlayerProjection[]): Map<string, PlayerProjection[]> {
     const groups = new Map<string, PlayerProjection[]>();
     
-    projections.forEach(proj => {
+    projections.forEach((proj: any) => {
       const group = groups.get(proj.player.position) || [];
       group.push(proj);
       groups.set(proj.player.position, group);
@@ -660,7 +660,7 @@ export class LineupOptimizerEngine {
     let remainingSalary = salaryCap;
     
     // Score each player based on strategy
-    const scoredPlayers = projections.map(p => ({
+    const scoredPlayers = projections.map((p: any) => ({
       player: p.player,
       score: (p.projectedPoints * strategy.ceilingWeight) +
              (p.floor * strategy.floorWeight) +
@@ -677,7 +677,7 @@ export class LineupOptimizerEngine {
     for (const [position, requirement] of Object.entries(requirements)) {
       if (position === 'FLEX') continue;
       
-      const positionPlayers = scoredPlayers.filter(p => 
+      const positionPlayers = scoredPlayers.filter((p: any) => 
         p.player.position === position &&
         p.player.salary <= remainingSalary &&
         !lineup.includes(p.player)
@@ -695,7 +695,7 @@ export class LineupOptimizerEngine {
   private projectOwnership(lineup: Player[]): Map<string, number> {
     const ownership = new Map<string, number>();
     
-    lineup.forEach(player => {
+    lineup.forEach((player: any) => {
       // Simplified ownership projection
       const base = player.ownership || 15;
       const adjustment = (player.projectedPoints / player.salary) * 10;
@@ -711,11 +711,11 @@ export class LineupOptimizerEngine {
   ): Player[] {
     // Find low ownership, high ceiling plays
     return projections
-      .filter(p => {
+      .filter((p: any) => {
         const own = ownership.get(p.player.id) || 20;
         return own < 10 && p.ceiling > p.projectedPoints * 1.5;
       })
-      .map(p => p.player)
+      .map((p: any) => p.player)
       .slice(0, 3);
   }
 

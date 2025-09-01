@@ -53,7 +53,7 @@ const MobileNavigation: React.FC<Props> = ({
   onViewChange, 
   notificationCount = 0,
   className = ''
-}) => {
+}: any) => {
   const [showSecondaryNav, setShowSecondaryNav] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -257,7 +257,7 @@ const MobileNavigation: React.FC<Props> = ({
   );
 };
 
-const MobileNavigationWithErrorBoundary: React.FC = (props) => (
+const MobileNavigationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileNavigation {...props} />
   </ErrorBoundary>

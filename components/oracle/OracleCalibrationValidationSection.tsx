@@ -5284,7 +5284,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
   );
 };
 
-const OracleCalibrationValidationSectionWithErrorBoundary: React.FC = (props) => (
+const OracleCalibrationValidationSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleCalibrationValidationSection {...props} />
   </ErrorBoundary>

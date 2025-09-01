@@ -13,7 +13,7 @@ interface AnalyticsPanelProps {
 
 }
 
-const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }) => (
+const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: number; unit: string; color: string; tooltip: string; }> = ({ icon, label, value, unit, color, tooltip }: any) => (
     <div className={`p-2 bg-gray-800/50 rounded-lg flex items-center gap-3`}>
         <Tooltip content={tooltip}>
             <div className={`w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-lg bg-gray-900/50 ${color}`}>
@@ -30,7 +30,7 @@ const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: num
     </div>
 );
 
-const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }) => {
+const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
   return (
     <div className="glass-pane flex-shrink-0 flex flex-col bg-gray-900/40 border border-cyan-300/20 rounded-2xl backdrop-blur-sm shadow-2xl shadow-black/50 sm:px-4 md:px-6 lg:px-8">
       <div className="flex-shrink-0 p-3 text-center border-b border-cyan-300/20 sm:px-4 md:px-6 lg:px-8">
@@ -66,7 +66,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }) => {
   );
 };
 
-const AnalyticsPanelWithErrorBoundary: React.FC = (props) => (
+const AnalyticsPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AnalyticsPanel {...props} />
   </ErrorBoundary>

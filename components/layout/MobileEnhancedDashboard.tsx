@@ -19,7 +19,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
   children,
   onRefresh,
   showPullToRefresh = true
-}) => {
+}: any) => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { isPortrait, safeAreaInsets, isMobile } = useMobileViewport();
   const [isInteracting, setIsInteracting] = React.useState(false);
@@ -134,7 +134,7 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
   );
 };
 
-const MobileEnhancedDashboardWithErrorBoundary: React.FC = (props) => (
+const MobileEnhancedDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileEnhancedDashboard {...props} />
   </ErrorBoundary>

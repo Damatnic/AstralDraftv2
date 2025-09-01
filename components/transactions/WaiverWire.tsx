@@ -255,7 +255,7 @@ export const WaiverWire: React.FC = () => {
   );
 };
 
-const WaiverWireWithErrorBoundary: React.FC = (props) => (
+const WaiverWireWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WaiverWire {...props} />
   </ErrorBoundary>

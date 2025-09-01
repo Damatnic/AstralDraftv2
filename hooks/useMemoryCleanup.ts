@@ -90,7 +90,7 @@ export function useSafeEventListener(
     const eventTarget = target || window;
     if (!eventTarget) return;
 
-    const eventListener: EventListener = (event) => {
+    const eventListener: EventListener = (event: any) => {
       if (savedListener.current) {
         savedListener.current(event);
       }
@@ -396,7 +396,7 @@ export function useSafeRAF() {
   const rafIds = useRef<Set<number>>(new Set());
 
   const requestAnimationFrame = useCallback((callback: FrameRequestCallback): number => {
-    const id = window.requestAnimationFrame((time) => {
+    const id = window.requestAnimationFrame((time: any) => {
       rafIds.current.delete(id);
       callback(time);
     });
@@ -411,7 +411,7 @@ export function useSafeRAF() {
 
   useEffect(() => {
     return () => {
-      rafIds.current.forEach(id => window.cancelAnimationFrame(id));
+      rafIds.current.forEach((id: any) => window.cancelAnimationFrame(id));
       rafIds.current.clear();
     };
   }, []);

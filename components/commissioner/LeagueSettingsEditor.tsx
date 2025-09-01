@@ -46,7 +46,7 @@ interface SettingsFormData {
     tradingEnabled: boolean;
     waiverPeriod: number;
 
-const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onClose, onSave }) => {
+const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onClose, onSave }: any) => {
     const [formData, setFormData] = React.useState<SettingsFormData>({
         draftFormat: league.settings.draftFormat,
         teamCount: league.settings.teamCount,
@@ -388,7 +388,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
     );
 };
 
-const LeagueSettingsEditorWithErrorBoundary: React.FC = (props) => (
+const LeagueSettingsEditorWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueSettingsEditor {...props} />
   </ErrorBoundary>

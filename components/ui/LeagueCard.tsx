@@ -8,7 +8,7 @@ interface LeagueCardProps {
 
 }
 
-export const LeagueCard: React.FC<LeagueCardProps> = ({ league, onJoin }) => {
+export const LeagueCard: React.FC<LeagueCardProps> = ({ league, onJoin }: any) => {
     const isPreDraft = league?.status === 'PRE_DRAFT';
     return (
         <div className="p-4 bg-white/5 rounded-lg flex items-center justify-between hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8">

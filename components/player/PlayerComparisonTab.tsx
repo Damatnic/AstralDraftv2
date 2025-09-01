@@ -34,7 +34,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     player,
     league,
     dispatch
-}) => {
+}: any) => {
     const { state } = useAppState();
     const [comparePlayer, setComparePlayer] = React.useState<Player | null>(null);
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -460,7 +460,7 @@ const PlayerComparisonTab: React.FC<PlayerComparisonTabProps> = ({
     );
 };
 
-const PlayerComparisonTabWithErrorBoundary: React.FC = (props) => (
+const PlayerComparisonTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PlayerComparisonTab {...props} />
   </ErrorBoundary>

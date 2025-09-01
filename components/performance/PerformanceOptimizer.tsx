@@ -50,7 +50,7 @@ class WebVitalsMonitor {
 
     try {
       // FCP Observer
-      this.observePerformanceEntries(['paint'], (entries) => {
+      this.observePerformanceEntries(['paint'], (entries: any) => {
         for (const entry of entries) {
           if (entry.name === 'first-contentful-paint') {
             this.updateMetric('FCP', entry.startTime);
@@ -59,20 +59,20 @@ class WebVitalsMonitor {
       });
 
       // LCP Observer
-      this.observePerformanceEntries(['largest-contentful-paint'], (entries) => {
+      this.observePerformanceEntries(['largest-contentful-paint'], (entries: any) => {
         const lastEntry = entries[entries.length - 1];
         this.updateMetric('LCP', lastEntry.startTime);
       });
 
       // FID Observer
-      this.observePerformanceEntries(['first-input'], (entries) => {
+      this.observePerformanceEntries(['first-input'], (entries: any) => {
         const firstEntry = entries[0];
         const fid = firstEntry.processingStart - firstEntry.startTime;
         this.updateMetric('FID', fid);
       });
 
       // CLS Observer
-      this.observePerformanceEntries(['layout-shift'], (entries) => {
+      this.observePerformanceEntries(['layout-shift'], (entries: any) => {
         for (const entry of entries) {
           const layoutShift = entry as any;
           if (!layoutShift.hadRecentInput) {
@@ -99,7 +99,7 @@ class WebVitalsMonitor {
     callback: (entries: PerformanceEntry[]) => void
   ): void {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver((list: any) => {
         callback(list.getEntries());
       });
       observer.observe({ entryTypes });
@@ -136,7 +136,7 @@ class WebVitalsMonitor {
   }
 
   private notifyCallbacks(): void {
-    this.callbacks.forEach(callback => callback({ ...this.metrics }));
+    this.callbacks.forEach((callback: any) => callback({ ...this.metrics }));
   }
 
   public subscribe(callback: (metrics: PerformanceMetrics) => void): () => void {
@@ -224,7 +224,7 @@ export const usePerformanceMonitoring = (
   });
 
   React.useEffect(() => {
-    const unsubscribe = webVitalsMonitor.subscribe((newMetrics) => {
+    const unsubscribe = webVitalsMonitor.subscribe((newMetrics: any) => {
       setMetrics(newMetrics);
       onMetricsUpdate?.(newMetrics);
     });
@@ -301,7 +301,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
   enableMonitoring = true,
   reportToAnalytics = false,
   onMetricsUpdate
-}) => {
+}: any) => {
   const performanceRef = useRef<HTMLDivElement>(null);
 
   const { metrics, score } = usePerformanceMonitoring(onMetricsUpdate);
@@ -326,8 +326,8 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
     const optimizeImages = () => {
       const images = document.querySelectorAll('img[data-src]');
       const imageObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
+        (entries: any) => {
+          entries.forEach((entry: any) => {
             if (entry.isIntersecting) {
               const img = entry.target as HTMLImageElement;
               const src = img.dataset.src;
@@ -342,7 +342,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
         { rootMargin: '50px' }
       );
 
-      images.forEach(img => imageObserver.observe(img));
+      images.forEach((img: any) => imageObserver.observe(img));
     };
 
     if (enableMonitoring) {
@@ -365,7 +365,7 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
   useEffect(() => {
     if (!enableMonitoring || !('PerformanceObserver' in window)) return;
 
-    const longTaskObserver = new PerformanceObserver((list) => {
+    const longTaskObserver = new PerformanceObserver((list: any) => {
       for (const entry of list.getEntries()) {
         if (entry.duration > 50) {
           console.warn('Long task detected:', {

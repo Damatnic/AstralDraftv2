@@ -16,7 +16,7 @@ interface SortableItemProps {
 
 }
 
-const SortableItem: React.FC<SortableItemProps> = ({ player, rank }) => {
+const SortableItem: React.FC<SortableItemProps> = ({ player, rank }: any) => {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
     const style = {
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
@@ -36,7 +36,7 @@ const SortableItem: React.FC<SortableItemProps> = ({ player, rank }) => {
     );
 };
 
-const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }) => {
+const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }: any) => {
     const { state, dispatch } = useAppState();
     const [activePosition, setActivePosition] = React.useState<PlayerPosition>('RB');
     const [rankedPlayers, setRankedPlayers] = React.useState<Player[]>([]);
@@ -118,7 +118,7 @@ const MyRankingsEditor: React.FC<{ leagueId: string }> = ({ leagueId }) => {
     );
 };
 
-const MyRankingsEditorWithErrorBoundary: React.FC = (props) => (
+const MyRankingsEditorWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MyRankingsEditor {...props} />
   </ErrorBoundary>

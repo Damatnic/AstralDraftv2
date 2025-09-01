@@ -13,7 +13,7 @@ interface ChampionChartProps {
 
 }
 
-const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }) => {
+const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }: any) => {
     const championCounts = React.useMemo(() => {
         const counts: { [teamId: number]: number } = {};
         history.forEach((entry: any) => {
@@ -63,7 +63,7 @@ const ChampionChart: React.FC<ChampionChartProps> = ({ history, teams }) => {
     );
 };
 
-const ChampionChartWithErrorBoundary: React.FC = (props) => (
+const ChampionChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ChampionChart {...props} />
   </ErrorBoundary>

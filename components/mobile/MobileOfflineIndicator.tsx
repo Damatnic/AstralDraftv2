@@ -34,7 +34,7 @@ interface OfflineIndicatorProps {
 const MobileOfflineIndicator: React.FC<OfflineIndicatorProps> = ({ className = '',
     position = 'top',
     showDetails = false
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [offlineState, setOfflineState] = React.useState(mobileOfflineService.getState());
@@ -356,7 +356,7 @@ action.retryCount
     );
 };
 
-const MobileOfflineIndicatorWithErrorBoundary: React.FC = (props) => (
+const MobileOfflineIndicatorWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileOfflineIndicator {...props} />
   </ErrorBoundary>

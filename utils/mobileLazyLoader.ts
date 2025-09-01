@@ -185,7 +185,7 @@ export const MobileOptimizedWrapper: React.FC<{
   children: React.ReactNode;
   componentId: string;
   fallback?: React.ReactNode;
-}> = ({ children, componentId, fallback = null }) => {
+}> = ({ children, componentId, fallback = null }: any) => {
   const { elementRef, isLoaded } = useMobileLazyLoad(componentId);
 
   return React.createElement(

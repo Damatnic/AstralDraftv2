@@ -10,7 +10,7 @@ interface MainLayoutProps {
 
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }: any) => {
     return (
         <>
             <Header />
@@ -23,7 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     );
 };
 
-const MainLayoutWithErrorBoundary: React.FC = (props) => (
+const MainLayoutWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MainLayout {...props} />
   </ErrorBoundary>

@@ -152,7 +152,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: FC<AuthProviderProps> = ({ children }: any) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount
@@ -391,7 +391,7 @@ export const usePermission = (permission?: string) => {
 export const AuthInitializer: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
     children,
     fallback = <div>Loading...</div>,
-}) => {
+}: any) => {
     const { isInitialized } = useAuth();
     
     if (!isInitialized) {

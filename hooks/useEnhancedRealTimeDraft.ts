@@ -73,7 +73,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
     ];
 
     // Add event listeners
-    listeners.forEach(({ event, callback }) => {
+    listeners.forEach(({ event, callback }: any) => {
       realTimeDraftService.on(event, callback);
     });
 
@@ -81,7 +81,7 @@ export function useEnhancedRealTimeDraft(options: UseEnhancedRealTimeDraftOption
 
     return () => {
       // Remove event listeners
-      eventListenersRef.current.forEach(({ event, callback }) => {
+      eventListenersRef.current.forEach(({ event, callback }: any) => {
         realTimeDraftService.off(event, callback);
       });
     };

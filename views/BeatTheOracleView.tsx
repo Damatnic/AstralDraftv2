@@ -140,7 +140,7 @@ const updateUserStats = (
 const ChallengeOptions: React.FC<{
     challenge: OracleChallenge;
     onSelectOption: (challengeId: string, optionIndex: number) => void;
-}> = ({ challenge, onSelectOption }) => {
+}> = ({ challenge, onSelectOption }: any) => {
     const getOptionStyle = (optionIndex: number): string => {
         if (challenge.userPrediction === optionIndex) {
             return 'bg-green-500/20 border border-green-500/40';
@@ -180,7 +180,7 @@ const LeaderboardEntry: React.FC<{
     name: string;
     score: number;
     isCurrentUser?: boolean;
-}> = ({ rank, name, score, isCurrentUser = false }) => (
+}> = ({ rank, name, score, isCurrentUser = false }: any) => (
     <div className={`flex items-center justify-between p-3 rounded-lg ${
         isCurrentUser ? 'bg-blue-500/20' : 'bg-gray-500/10'
     }`}>

@@ -490,7 +490,7 @@ const OracleUserDashboard: React.FC = () => {
     );
 };
 
-const OracleUserDashboardWithErrorBoundary: React.FC = (props) => (
+const OracleUserDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleUserDashboard {...props} />
   </ErrorBoundary>

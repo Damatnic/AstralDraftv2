@@ -27,7 +27,7 @@ interface LiveDraftRoomProps {
 
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false, 
   onDraftComplete 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const [currentPick, setCurrentPick] = useState(1);
@@ -701,7 +701,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
   );
 };
 
-const LiveDraftRoomWithErrorBoundary: React.FC = (props) => (
+const LiveDraftRoomWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LiveDraftRoom {...props} />
   </ErrorBoundary>

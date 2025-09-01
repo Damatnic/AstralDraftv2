@@ -15,7 +15,7 @@ interface InviteMemberModalProps {
 
 }
 
-const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }) => {
+const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }: any) => {
     const { dispatch } = useAppState();
     const [email, setEmail] = React.useState('');
     const [copiedLink, setCopiedLink] = React.useState<string | null>(null);
@@ -82,7 +82,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
     );
 };
 
-const InviteMemberModalWithErrorBoundary: React.FC = (props) => (
+const InviteMemberModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <InviteMemberModal {...props} />
   </ErrorBoundary>

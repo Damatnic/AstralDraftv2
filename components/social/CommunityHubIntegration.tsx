@@ -67,7 +67,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     onStoryPublish,
     onSocialInteraction,
     className = ''
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = React.useState<SocialFeatureTab>('feed');
     const [recentActivity, setRecentActivity] = React.useState<SocialActivity[]>([]);
     const [communityStats] = React.useState<CommunityStats>({
@@ -503,7 +503,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     );
 };
 
-const CommunityHubIntegrationWithErrorBoundary: React.FC = (props) => (
+const CommunityHubIntegrationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CommunityHubIntegration {...props} />
   </ErrorBoundary>

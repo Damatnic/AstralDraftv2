@@ -14,7 +14,7 @@ interface SeasonOutlookWidgetProps {
 
 }
 
-const SeasonOutlookWidget: React.FC<SeasonOutlookWidgetProps> = ({ myTeam, league, dispatch }) => {
+const SeasonOutlookWidget: React.FC<SeasonOutlookWidgetProps> = ({ myTeam, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const outlook = myTeam.seasonOutlook;
 
@@ -61,7 +61,7 @@ const SeasonOutlookWidget: React.FC<SeasonOutlookWidgetProps> = ({ myTeam, leagu
     );
 };
 
-const SeasonOutlookWidgetWithErrorBoundary: React.FC = (props) => (
+const SeasonOutlookWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SeasonOutlookWidget {...props} />
   </ErrorBoundary>

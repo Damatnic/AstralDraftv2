@@ -46,7 +46,7 @@ interface StepProps {
 // Step 1: Basic Information
 }
 
-const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -109,7 +109,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ settings, updateSettings, errors }
 };
 
 // Step 2: Scoring Settings
-const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     const scoringPresets = {
         standard: { description: "Standard scoring (no points for receptions)" },
         ppr: { description: "Point Per Reception (1 point per catch)" },
@@ -159,7 +159,7 @@ const ScoringStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) 
 };
 
 // Step 3: Draft Settings
-const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) => {
+const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }: any) => {
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -224,7 +224,7 @@ const DraftStep: React.FC<StepProps> = ({ settings, updateSettings, errors }) =>
 };
 
 // Step 4: Review & Create
-const ReviewStep: React.FC<StepProps> = ({ settings }) => {
+const ReviewStep: React.FC<StepProps> = ({ settings }: any) => {
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div className="bg-[var(--panel-bg)] p-6 rounded-lg border border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
@@ -505,7 +505,7 @@ const LeagueCreationWizard: React.FC = () => {
     );
 };
 
-const LeagueCreationWizardWithErrorBoundary: React.FC = (props) => (
+const LeagueCreationWizardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueCreationWizard {...props} />
   </ErrorBoundary>

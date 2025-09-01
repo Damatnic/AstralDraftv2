@@ -10,7 +10,7 @@ const TrainingDataManager = memo(() => {
     );
 });
 
-const TrainingDataManagerWithErrorBoundary: React.FC = (props) => (
+const TrainingDataManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TrainingDataManager {...props} />
   </ErrorBoundary>

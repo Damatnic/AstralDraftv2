@@ -277,7 +277,7 @@ const FriendOnboardingGuide: React.FC = () => {
   );
 };
 
-const FriendOnboardingGuideWithErrorBoundary: React.FC = (props) => (
+const FriendOnboardingGuideWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <FriendOnboardingGuide {...props} />
   </ErrorBoundary>

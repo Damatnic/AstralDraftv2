@@ -30,7 +30,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -183,7 +183,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   threshold = 50,
   children,
   className = ''
-}) => {
+}: any) => {
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
@@ -262,7 +262,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
   children,
   className = '',
   overlay = true
-}) => {
+}: any) => {
   const drawerRef = React.useRef<HTMLDivElement>(null);
   const { containerRef } = useFocusTrap(isOpen);
 
@@ -340,7 +340,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
   activeTab,
   onTabChange,
   className = ''
-}) => {
+}: any) => {
   // Simple keyboard navigation implementation
   const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
     const currentIndex = tabs.findIndex((tab: any) => tab.id === activeTab);
@@ -400,7 +400,7 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({
   children,
   className = '',
   threshold = 80
-}) => {
+}: any) => {
   const [isPulling, setIsPulling] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [pullDistance, setPullDistance] = React.useState(0);

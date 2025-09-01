@@ -59,7 +59,7 @@ export const GlassEffect: React.FC<GlassEffectProps> = ({ children,
   className = '',
   interactive = false,
   glowOnHover = false
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -198,7 +198,7 @@ export const NeonEffect: React.FC<NeonEffectProps> = ({
   flicker = false,
   animate = false,
   className = ''
-}) => {
+}: any) => {
   const intensitySettings = {
     low: { blur: 5, spread: 2, opacity: 0.4 },
     medium: { blur: 10, spread: 4, opacity: 0.6 },
@@ -289,7 +289,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   animationSpeed = 1,
   className = '',
   interactive = false
-}) => {
+}: any) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -309,7 +309,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   };
 
   const updateParticles = (width: number, height: number) => {
-    particlesRef.current.forEach(particle => {
+    particlesRef.current.forEach((particle: any) => {
       // Update position
       particle.x += particle.vx;
       particle.y += particle.vy;
@@ -346,7 +346,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   const drawParticles = (ctx: CanvasRenderingContext2D) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    particlesRef.current.forEach(particle => {
+    particlesRef.current.forEach((particle: any) => {
       const opacity = 1 - (particle.life / particle.maxLife);
       
       ctx.fillStyle = particleColor + Math.floor(opacity * 255).toString(16).padStart(2, '0');
@@ -361,7 +361,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
 
     // Draw connections between nearby particles
     particlesRef.current.forEach((particle, i) => {
-      particlesRef.current.slice(i + 1).forEach(otherParticle => {
+      particlesRef.current.slice(i + 1).forEach((otherParticle: any) => {
         const dx = particle.x - otherParticle.x;
         const dy = particle.y - otherParticle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -448,7 +448,7 @@ export const HolographicEffect: React.FC<HolographicEffectProps> = ({
   speed = 8,
   intensity = 1,
   className = ''
-}) => {
+}: any) => {
   return (
     <motion.div
       className={`relative ${className}`}
@@ -502,7 +502,7 @@ export const LiquidBackground: React.FC<LiquidBackgroundProps> = ({
   speed = 10,
   blur = 40,
   className = ''
-}) => {
+}: any) => {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       {colors.map((color, index) => (
@@ -547,7 +547,7 @@ export const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   className = '',
   colors = ['#4f46e5', '#06b6d4', '#10b981'],
   speed = 15
-}) => {
+}: any) => {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       <motion.div
@@ -590,7 +590,7 @@ export const GradientText: React.FC<GradientTextProps> = ({
   gradient = ['#4f46e5', '#06b6d4', '#10b981'],
   animate = false,
   className = ''
-}) => {
+}: any) => {
   const gradientString = `linear-gradient(135deg, ${gradient.join(', ')})`;
 
   return (
@@ -633,7 +633,7 @@ export const FloatingElements: React.FC<FloatingElementsProps> = ({
   speed = 3,
   range = 20,
   className = ''
-}) => {
+}: any) => {
   return (
     <div className={`relative ${className}`}>
       {children.map((child, index) => (

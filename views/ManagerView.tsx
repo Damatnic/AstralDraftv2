@@ -10,7 +10,7 @@ import { calculateManagerStats, calculateCareerHistory } from '../utils/careerSt
 import RivalryWidget from '../components/manager/RivalryWidget';
 import AchievementsWidget from '../components/profile/AchievementsWidget';
 
-const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, value }: any) => (
     <div className="bg-white/5 p-3 rounded-lg text-center">
         <p className="text-sm text-gray-400">{label}</p>
         <p className="text-2xl font-bold text-white">{value}</p>
@@ -92,7 +92,7 @@ const ManagerView: React.FC = () => {
                         <Widget title="League History" icon={<BookOpenIcon />}>
                              <div className="p-4 space-y-3">
                                 {careerHistory.map((entry: any) => {
-                                    const league = state.leagues.find(l => l.id === entry.leagueId);
+                                    const league = state.leagues.find((l: any) => l.id === entry.leagueId);
                                     return (
                                         <div key={entry.key} className="bg-black/10 p-3 rounded-lg flex items-center justify-between">
                                             <div>

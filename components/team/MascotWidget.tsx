@@ -15,7 +15,7 @@ interface MascotWidgetProps {
 
 }
 
-export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }) => {
+export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const mascotUrl = team.mascotUrl;
 

@@ -38,7 +38,7 @@ export const HighContrastMode: React.FC = () => {
   );
 };
 
-const HighContrastModeWithErrorBoundary: React.FC = (props) => (
+const HighContrastModeWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <HighContrastMode {...props} />
   </ErrorBoundary>

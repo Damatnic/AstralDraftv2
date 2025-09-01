@@ -968,7 +968,7 @@ const OracleBeginnerTutorial: React.FC = () => {
     );
 };
 
-const OracleBeginnerTutorialWithErrorBoundary: React.FC = (props) => (
+const OracleBeginnerTutorialWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleBeginnerTutorial {...props} />
   </ErrorBoundary>

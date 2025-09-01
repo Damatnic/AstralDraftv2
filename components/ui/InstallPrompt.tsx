@@ -21,7 +21,7 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
   onInstall,
   onDismiss,
   showOfflineStatus = true
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { isInstallable, isInstalled, promptInstall } = usePWAInstall();
   const { isOffline } = useOfflineStatus();
@@ -145,7 +145,7 @@ interface PWAStatusBannerProps {
 
 export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   className = ''
-}) => {
+}: any) => {
   const { isOffline } = useOfflineStatus();
   const [showBanner, setShowBanner] = React.useState(false);
 
@@ -192,7 +192,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
   );
 };
 
-const InstallPromptWithErrorBoundary: React.FC = (props) => (
+const InstallPromptWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <InstallPrompt {...props} />
   </ErrorBoundary>

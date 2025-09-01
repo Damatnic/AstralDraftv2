@@ -14,7 +14,7 @@ interface CommissionerToolsProps {
 
 }
 
-const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }) => {
+const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = false }: any) => {
   const { state, dispatch } = useAppState();
   const [activeTab, setActiveTab] = useState<'teams' | 'settings' | 'players' | 'schedule'>('teams');
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
@@ -441,7 +441,7 @@ const CommissionerTools: React.FC<CommissionerToolsProps> = ({ isCommissioner = 
   );
 };
 
-const CommissionerToolsWithErrorBoundary: React.FC = (props) => (
+const CommissionerToolsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CommissionerTools {...props} />
   </ErrorBoundary>

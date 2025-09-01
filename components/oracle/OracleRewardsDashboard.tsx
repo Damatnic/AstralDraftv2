@@ -17,7 +17,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ current,
     max, 
     color = 'bg-blue-500',
     showLabel = true 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const percentage = Math.min((current / max) * 100, 100);
     
@@ -46,7 +46,7 @@ interface AchievementCardProps {
 
 }
 
-const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }) => {
+const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }: any) => {
     const getDifficultyColor = (difficulty: Achievement['difficulty']) => {
         switch (difficulty) {
             case 'BRONZE':
@@ -132,7 +132,7 @@ interface BadgeDisplayProps {
 
 }
 
-const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) => {
     const getSizeClasses = () => {
         switch (size) {
             case 'sm':
@@ -176,7 +176,7 @@ interface LevelDisplayProps {
 
 }
 
-const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }) => {
+const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }: any) => {
     const pointsInCurrentLevel = currentPoints % 500;
     
     return (
@@ -220,7 +220,7 @@ interface RewardNotificationProps {
     };
     onClose: () => void;
 
-const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }) => {
+const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }: any) => {
     React.useEffect(() => {
         const timer = setTimeout(onClose, 5000); // Auto-close after 5 seconds
         return () => clearTimeout(timer);
@@ -324,7 +324,7 @@ export const OracleRewardsDashboard: React.FC = () => {
     );
 };
 
-const OracleRewardsDashboardWithErrorBoundary: React.FC = (props) => (
+const OracleRewardsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleRewardsDashboard {...props} />
   </ErrorBoundary>

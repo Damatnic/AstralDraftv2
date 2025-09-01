@@ -13,7 +13,7 @@ interface StoryTabProps {
 
 }
 
-const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
+const StoryTab: React.FC<StoryTabProps> = ({ player, league }: any) => {
     const [story, setStory] = React.useState<PlayerStory | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
@@ -55,7 +55,7 @@ const StoryTab: React.FC<StoryTabProps> = ({ player, league }) => {
     );
 };
 
-const StoryTabWithErrorBoundary: React.FC = (props) => (
+const StoryTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <StoryTab {...props} />
   </ErrorBoundary>

@@ -28,7 +28,7 @@ interface WeeklyMatchupsProps {
 const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({ 
   selectedWeek = 1, 
   showAllWeeks = false 
-}) => {
+}: any) => {
   const { state } = useAppState();
   const [currentWeek, setCurrentWeek] = useState(selectedWeek);
   const [viewMode, setViewMode] = useState<'current' | 'all'>('current');
@@ -374,7 +374,7 @@ const WeeklyMatchups: React.FC<WeeklyMatchupsProps> = ({
   );
 };
 
-const WeeklyMatchupsWithErrorBoundary: React.FC = (props) => (
+const WeeklyMatchupsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WeeklyMatchups {...props} />
   </ErrorBoundary>

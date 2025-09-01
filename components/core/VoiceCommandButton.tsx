@@ -156,7 +156,7 @@ const VoiceCommandButton: React.FC = () => {
     );
 };
 
-const VoiceCommandButtonWithErrorBoundary: React.FC = (props) => (
+const VoiceCommandButtonWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <VoiceCommandButton {...props} />
   </ErrorBoundary>

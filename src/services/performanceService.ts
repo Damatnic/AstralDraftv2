@@ -71,7 +71,7 @@ class PerformanceService {
   private setupWebVitalsObservers(): void {
     try {
       // First Contentful Paint
-      const paintObserver = new PerformanceObserver((list) => {
+      const paintObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if (entry.name === 'first-contentful-paint') {
             this.webVitals.fcp = entry.startTime;
@@ -83,7 +83,7 @@ class PerformanceService {
       this.observers.push(paintObserver);
 
       // Largest Contentful Paint
-      const lcpObserver = new PerformanceObserver((list) => {
+      const lcpObserver = new PerformanceObserver((list: any) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
         this.webVitals.lcp = lastEntry.startTime;
@@ -93,7 +93,7 @@ class PerformanceService {
       this.observers.push(lcpObserver);
 
       // First Input Delay
-      const fidObserver = new PerformanceObserver((list) => {
+      const fidObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           const fid = (entry as any).processingStart - entry.startTime;
           this.webVitals.fid = fid;
@@ -105,7 +105,7 @@ class PerformanceService {
 
       // Cumulative Layout Shift
       let clsValue = 0;
-      const clsObserver = new PerformanceObserver((list) => {
+      const clsObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if (!(entry as any).hadRecentInput) {
             clsValue += (entry as any).value;
@@ -124,7 +124,7 @@ class PerformanceService {
 
   private setupResourceTimingObserver(): void {
     try {
-      const resourceObserver = new PerformanceObserver((list) => {
+      const resourceObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           this.analyzeResourceTiming(entry as PerformanceResourceTiming);
         }
@@ -138,7 +138,7 @@ class PerformanceService {
 
   private setupNavigationTimingObserver(): void {
     try {
-      const navObserver = new PerformanceObserver((list) => {
+      const navObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           this.analyzeNavigationTiming(entry as PerformanceNavigationTiming);
         }
@@ -152,7 +152,7 @@ class PerformanceService {
 
   private setupLongTaskObserver(): void {
     try {
-      const longTaskObserver = new PerformanceObserver((list) => {
+      const longTaskObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           this.recordMetric('long_task', entry.duration, {
             startTime: entry.startTime,
@@ -346,7 +346,7 @@ class PerformanceService {
   }
 
   public cleanup(): void {
-    this.observers.forEach(observer => {
+    this.observers.forEach((observer: any) => {
       try {
         observer.disconnect();
       } catch (error) {

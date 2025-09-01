@@ -15,7 +15,7 @@ interface ManageTradeBlockModalProps {
 
 }
 
-const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, leagueId, dispatch, onClose }) => {
+const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, leagueId, dispatch, onClose }: any) => {
     const originalBlockedIds = React.useMemo(() => new Set(team.tradeBlock || []), [team.tradeBlock]);
     const [selectedIds, setSelectedIds] = React.useState<Set<number>>(originalBlockedIds);
 
@@ -93,7 +93,7 @@ const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, lea
     );
 };
 
-const ManageTradeBlockModalWithErrorBoundary: React.FC = (props) => (
+const ManageTradeBlockModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ManageTradeBlockModal {...props} />
   </ErrorBoundary>

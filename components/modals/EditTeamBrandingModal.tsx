@@ -15,7 +15,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
     leagueId,
     dispatch,
     onClose
-}) => {
+}: any) => {
     const [teamName, setTeamName] = React.useState(team.name || '');
     const [teamLogo, setTeamLogo] = React.useState(team.logo || '');
     const [primaryColor, setPrimaryColor] = React.useState(team.primaryColor || '#3B82F6');
@@ -260,7 +260,7 @@ const EditTeamBrandingModal: React.FC<EditTeamBrandingModalProps> = ({
     );
 };
 
-const EditTeamBrandingModalWithErrorBoundary: React.FC = (props) => (
+const EditTeamBrandingModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EditTeamBrandingModal {...props} />
   </ErrorBoundary>

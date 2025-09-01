@@ -17,7 +17,7 @@ export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = (
   onQuickAction,
   className = '',
   children
-}) => {
+}: any) => {
   const [feedbackVisible, setFeedbackVisible] = useState(false);
   const [feedbackText, setFeedbackText] = useState('');
   const [feedbackPosition, setFeedbackPosition] = useState({ x: 0, y: 0 });
@@ -226,7 +226,7 @@ export const MobileGestureNavigation: React.FC<MobileGestureNavigationProps> = (
   );
 };
 
-const MobileGestureNavigationWithErrorBoundary: React.FC = (props) => (
+const MobileGestureNavigationWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MobileGestureNavigation {...props} />
   </ErrorBoundary>

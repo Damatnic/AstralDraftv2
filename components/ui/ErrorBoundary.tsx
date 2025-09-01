@@ -14,7 +14,7 @@ interface ErrorBoundaryState {
 }
 
 // ZERO-ERROR Authentication-Aware Fallback
-const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => {
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const errorMessage = error.message.toLowerCase();
   const isAuthError = errorMessage.includes('authentication') ||
@@ -143,7 +143,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
       'non-configurable', 'illegal constructor'
     ];
 
-    const isSuppressible = suppressibleErrorPatterns.some(pattern => 
+    const isSuppressible = suppressibleErrorPatterns.some((pattern: any) => 
       errorMessage.includes(pattern) || errorStack.includes(pattern)
     );
 
@@ -237,7 +237,7 @@ export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
 ) => {
-  const WrappedComponent: React.FC<P> = (props) => (
+  const WrappedComponent: React.FC<P> = (props: any) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
     </ErrorBoundary>
@@ -255,7 +255,7 @@ export const useErrorHandler = () => {
   }, []);
 };
 
-const ErrorBoundaryWithErrorBoundary: React.FC = (props) => (
+const ErrorBoundaryWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ErrorBoundary {...props} />
   </ErrorBoundary>

@@ -16,7 +16,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   title = "Something went wrong", 
   message, 
   onRetry 
-}) => {
+}: any) => {
   return (
     <div className="flex items-center justify-center min-h-[200px] p-8 sm:px-4 md:px-6 lg:px-8">
       <div className="text-center max-w-md sm:px-4 md:px-6 lg:px-8">
@@ -36,7 +36,7 @@ const ErrorDisplay: React.FC<ErrorDisplayProps> = ({
   );
 };
 
-const ErrorDisplayWithErrorBoundary: React.FC = (props) => (
+const ErrorDisplayWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ErrorDisplay {...props} />
   </ErrorBoundary>

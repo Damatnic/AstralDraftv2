@@ -23,7 +23,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
   showAddButton = false,
   filterPosition,
   excludePlayerIds = []
-}) => {
+}: any) => {
   const { state, dispatch } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPosition, setSelectedPosition] = useState(filterPosition || 'ALL');
@@ -113,7 +113,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
             placeholder="Search players by name, team, or position..."
             value={searchQuery}
             onChange={(e: any) => setSearchQuery(e.target.value)}
-            autocomplete="off"
+            autoComplete="off"
             data-form-type="search"
           />
         </div>
@@ -126,7 +126,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
             <select
               value={selectedPosition}
               onChange={(e: any) => setSelectedPosition(e.target.value)}
-              autocomplete="off"
+              autoComplete="off"
             >
               {positions.map((pos: any) => (
                 <option key={pos} value={pos}>{pos}</option>
@@ -140,7 +140,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
             <select
               value={sortBy}
               onChange={(e: any) => setSortBy(e.target.value as 'rank' | 'name' | 'team')}
-              autocomplete="off"
+              autoComplete="off"
             >
               <option value="rank">Fantasy Rank</option>
               <option value="name">Name</option>
@@ -224,7 +224,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
   );
 };
 
-const PlayerSearchWithErrorBoundary: React.FC<PlayerSearchProps> = (props) => (
+const PlayerSearchWithErrorBoundary: React.FC<PlayerSearchProps> = (props: any) => (
   <ErrorBoundary>
     <PlayerSearch {...props} />
   </ErrorBoundary>

@@ -114,7 +114,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     onArchiveChat,
     isLoading = false,
     className = ''
-}) => {
+}: any) => {
     const [newMessage, setNewMessage] = React.useState('');
     const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
     const [showTradeBuilder, setShowTradeBuilder] = React.useState(false);
@@ -493,7 +493,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     );
 };
 
-const TradeNegotiationChatWithErrorBoundary: React.FC = (props) => (
+const TradeNegotiationChatWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeNegotiationChat {...props} />
   </ErrorBoundary>

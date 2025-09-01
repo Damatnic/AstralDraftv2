@@ -18,7 +18,7 @@ interface Props {
 
 const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId, 
     onPredictionGenerated 
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
@@ -362,7 +362,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     );
 };
 
-const AdvancedEnsembleMLDashboardWithErrorBoundary: React.FC = (props) => (
+const AdvancedEnsembleMLDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AdvancedEnsembleMLDashboard {...props} />
   </ErrorBoundary>

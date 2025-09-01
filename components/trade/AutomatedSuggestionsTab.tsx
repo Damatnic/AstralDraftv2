@@ -43,7 +43,7 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
     currentTeam,
     onProposalUpdate,
     dispatch
-}) => {
+}: any) => {
     const [selectedSuggestion, setSelectedSuggestion] = React.useState<SmartSuggestion | null>(null);
     const [showAlternatives, setShowAlternatives] = React.useState(false);
 
@@ -416,7 +416,7 @@ const AutomatedSuggestionsTab: React.FC<AutomatedSuggestionsTabProps> = ({
     );
 };
 
-const AutomatedSuggestionsTabWithErrorBoundary: React.FC = (props) => (
+const AutomatedSuggestionsTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AutomatedSuggestionsTab {...props} />
   </ErrorBoundary>

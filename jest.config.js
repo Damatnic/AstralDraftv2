@@ -47,11 +47,6 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
-  globals: {
-    'ts-jest': {
-      useESM: true
-    }
-  },
   transformIgnorePatterns: [
     'node_modules/(?!(.*\\.mjs$|@testing-library|framer-motion|lucide-react))'
   ],

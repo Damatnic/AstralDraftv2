@@ -34,7 +34,7 @@ interface SimpleTradeAnalysis {
 
 export const TradeAnalysisInterface: React.FC<{
     className?: string;
-}> = ({ className = '' }) => {
+}> = ({ className = '' }: any) => {
     const [proposal, setProposal] = useState<SimpleTradeProposal>({
         fromPlayers: [],
         toPlayers: []
@@ -390,7 +390,7 @@ export const TradeAnalysisInterface: React.FC<{
     );
 };
 
-const TradeAnalysisInterfaceWithErrorBoundary: React.FC = (props) => (
+const TradeAnalysisInterfaceWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeAnalysisInterface {...props} />
   </ErrorBoundary>

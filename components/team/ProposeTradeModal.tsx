@@ -18,7 +18,7 @@ interface ProposeTradeModalProps {
 
 }
 
-const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }) => (
+const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: boolean; onToggle: () => void; }> = ({ label, subtext, isSelected, onToggle }: any) => (
     <div
         onClick={onToggle}
         className={`flex items-center gap-3 p-2 rounded-md cursor-pointer transition-colors ${
@@ -33,7 +33,7 @@ const AssetSelectItem: React.FC<{ label: string; subtext: string; isSelected: bo
     </div>
 );
 
-const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam, leagueId, dispatch, onClose, initialOffer }) => {
+const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam, leagueId, dispatch, onClose, initialOffer }: any) => {
     const [playersToSend, setPlayersToSend] = React.useState<Set<number>>(new Set(initialOffer?.playersToSend));
     const [playersToReceive, setPlayersToReceive] = React.useState<Set<number>>(new Set(initialOffer?.playersToReceive));
     const [picksToSend, setPicksToSend] = React.useState<Set<string>>(new Set()); // key: "season-round"
@@ -173,7 +173,7 @@ const ProposeTradeModal: React.FC<ProposeTradeModalProps> = ({ myTeam, otherTeam
     );
 };
 
-const ProposeTradeModalWithErrorBoundary: React.FC = (props) => (
+const ProposeTradeModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <ProposeTradeModal {...props} />
   </ErrorBoundary>

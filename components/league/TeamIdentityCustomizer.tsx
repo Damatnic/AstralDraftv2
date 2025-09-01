@@ -55,7 +55,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   currentIdentity,
   onSave,
   onPreview
-}) => {
+}: any) => {
   const [identity, setIdentity] = useState<TeamIdentity>(currentIdentity || {
     teamId,
     teamName: '',
@@ -176,7 +176,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   const toggleTrait = (trait: string) => {
     const currentTraits = identity.teamPersonality.traits;
     const newTraits = currentTraits.includes(trait)
-      ? currentTraits.filter(t => t !== trait)
+      ? currentTraits.filter((t: any) => t !== trait)
       : [...currentTraits, trait].slice(0, 5); // Max 5 traits
     
     updateIdentity({
@@ -197,7 +197,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <div key={style} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
               <div className="text-sm text-gray-400 capitalize sm:px-4 md:px-6 lg:px-8">{style} Style</div>
               <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
-                {presets.map(preset => (
+                {presets.map((preset: any) => (
                   <button
                     key={preset.name}
                     onClick={() => handleColorPreset(preset)}
@@ -225,7 +225,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <input
               type="color"
               value={identity.primaryColor}
-              onChange={(e) => updateIdentity({ primaryColor: e.target.value }}
+              onChange={(e: any) => updateIdentity({ primaryColor: e.target.value }}
               className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
@@ -234,7 +234,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <input
               type="color"
               value={identity.secondaryColor}
-              onChange={(e) => updateIdentity({ secondaryColor: e.target.value }}
+              onChange={(e: any) => updateIdentity({ secondaryColor: e.target.value }}
               className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
@@ -243,7 +243,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
             <input
               type="color"
               value={identity.accentColor}
-              onChange={(e) => updateIdentity({ accentColor: e.target.value }}
+              onChange={(e: any) => updateIdentity({ accentColor: e.target.value }}
               className="w-full h-10 rounded border border-gray-600 sm:px-4 md:px-6 lg:px-8"
             />
           </div>
@@ -257,7 +257,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       <div>
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Logo</h4>
         <div className="grid grid-cols-8 gap-2 sm:px-4 md:px-6 lg:px-8">
-          {logoEmojis.map(emoji => (
+          {logoEmojis.map((emoji: any) => (
             <button
               key={emoji}
               onClick={() => updateIdentity({ logo: emoji, logoType: 'emoji' }}
@@ -278,7 +278,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <input
           type="text"
           value={identity.motto}
-          onChange={(e) => updateIdentity({ motto: e.target.value }}
+          onChange={(e: any) => updateIdentity({ motto: e.target.value }}
           placeholder="Enter your team motto..."
           className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
           maxLength={50}
@@ -293,7 +293,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       <div>
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Walk-up Song</h4>
         <div className="space-y-2 max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-          {walkupSongs.map(song => (
+          {walkupSongs.map((song: any) => (
             <button
               key={`${song.name}-${song.artist}`}
               onClick={() => updateIdentity({ walkupSong: song }}
@@ -326,7 +326,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       <div>
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Victory Celebration</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {celebrations.map(celebration => (
+          {celebrations.map((celebration: any) => (
             <button
               key={celebration.name}
               onClick={() => updateIdentity({ endZoneCelebration: celebration }}
@@ -351,7 +351,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
         <input
           type="text"
           value={identity.customBanner.text}
-          onChange={(e) => updateIdentity({ 
+          onChange={(e: any) => updateIdentity({ 
             customBanner: { ...identity.customBanner, text: e.target.value }})}
           placeholder="Victory message..."
           className="w-full bg-dark-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 sm:px-4 md:px-6 lg:px-8"
@@ -366,7 +366,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
       <div>
         <h4 className="font-semibold text-white mb-3 sm:px-4 md:px-6 lg:px-8">Team Personality</h4>
         <div className="grid grid-cols-5 gap-2 sm:px-4 md:px-6 lg:px-8">
-          {(Object.keys(personalityTraits) as Array<keyof typeof personalityTraits>).map(style => (
+          {(Object.keys(personalityTraits) as Array<keyof typeof personalityTraits>).map((style: any) => (
             <button
               key={style}
               onClick={() = aria-label="Action button"> updateIdentity({ 
@@ -393,7 +393,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
           <span className="text-sm text-gray-400 ml-2 sm:px-4 md:px-6 lg:px-8">({identity.teamPersonality.traits.length}/5)</span>
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-          {personalityTraits[identity.teamPersonality.style].map(trait => (
+          {personalityTraits[identity.teamPersonality.style].map((trait: any) => (
             <button
               key={trait}
               onClick={() => toggleTrait(trait)}`}
@@ -453,7 +453,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
               { id: 'audio', label: 'Walk-up Song', icon: Music },
               { id: 'celebration', label: 'Celebrations', icon: Crown },
               { id: 'personality', label: 'Personality', icon: Shirt }
-            ].map(tab => (
+            ].map((tab: any) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}`}
@@ -496,7 +496,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
               
               {/* Team Traits */}
               <div className="flex flex-wrap gap-1 justify-center sm:px-4 md:px-6 lg:px-8">
-                {identity.teamPersonality.traits.slice(0, 3).map(trait => (
+                {identity.teamPersonality.traits.slice(0, 3).map((trait: any) => (
                   <span 
                     key={trait}
                     className="px-2 py-1 rounded-full text-xs font-semibold sm:px-4 md:px-6 lg:px-8"
@@ -601,7 +601,7 @@ const TeamIdentityCustomizer: React.FC<TeamIdentityCustomizerProps> = ({
   );
 };
 
-const TeamIdentityCustomizerWithErrorBoundary: React.FC = (props) => (
+const TeamIdentityCustomizerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamIdentityCustomizer {...props} />
   </ErrorBoundary>

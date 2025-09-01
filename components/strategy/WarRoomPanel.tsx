@@ -15,7 +15,7 @@ interface WarRoomPanelProps {
 
 }
 
-const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }) => {
+const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }: any) => {
     // We have player IDs, we need the full player objects, maintaining order
     const queuedPlayers = React.useMemo(() => {
         const playerMap = new Map(players.map((p: any) => [p.id, p]));
@@ -84,7 +84,7 @@ const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }
     );
 };
 
-const WarRoomPanelWithErrorBoundary: React.FC = (props) => (
+const WarRoomPanelWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <WarRoomPanel {...props} />
   </ErrorBoundary>

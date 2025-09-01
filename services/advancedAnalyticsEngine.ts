@@ -145,8 +145,8 @@ export class PlayerPerformanceModel {
     const boomThreshold = projection * 1.5;
     const bustThreshold = projection * 0.5;
     
-    const boomGames = history.filter(pts => pts >= boomThreshold).length;
-    const bustGames = history.filter(pts => pts <= bustThreshold).length;
+    const boomGames = history.filter((pts: any) => pts >= boomThreshold).length;
+    const bustGames = history.filter((pts: any) => pts <= bustThreshold).length;
     
     return {
       boomProb: boomGames / history.length,
@@ -203,12 +203,12 @@ export class PlayerPerformanceModel {
   }
 
   private prepareNeuralInputs(player: Player): number[] {
-    return this.extractFeatures(player).map(f => f / 100); // Normalize
+    return this.extractFeatures(player).map((f: any) => f / 100); // Normalize
   }
 
   private forwardPass(inputs: number[]): number {
     // Simplified neural network forward pass
-    const hiddenLayer = inputs.map(i => Math.tanh(i * 2));
+    const hiddenLayer = inputs.map((i: any) => Math.tanh(i * 2));
     return hiddenLayer.reduce((sum, val) => sum + val, 0) * 15;
   }
 
@@ -338,18 +338,18 @@ export class TradeAnalysisEngine {
     const positionCounts = new Map<string, number>();
     
     // Count current positions
-    team.players.forEach(p => {
+    team.players.forEach((p: any) => {
       const count = positionCounts.get(p.position) || 0;
       positionCounts.set(p.position, count + 1);
     });
     
     // Adjust for trade
-    playersLost.forEach(p => {
+    playersLost.forEach((p: any) => {
       const count = positionCounts.get(p.position) || 0;
       positionCounts.set(p.position, count - 1);
     });
     
-    playersGained.forEach(p => {
+    playersGained.forEach((p: any) => {
       const count = positionCounts.get(p.position) || 0;
       positionCounts.set(p.position, count + 1);
     });
@@ -483,7 +483,7 @@ export class ChampionshipProbabilityCalculator {
     const results: Map<string, SimulationResults> = new Map();
     
     // Initialize results
-    league.teams.forEach(team => {
+    league.teams.forEach((team: any) => {
       results.set(team.id, {
         playoffs: 0,
         firstRound: 0,
@@ -536,7 +536,7 @@ export class ChampionshipProbabilityCalculator {
     
     return {
       standings,
-      playoffTeams: playoffTeams.map(t => t.teamId),
+      playoffTeams: playoffTeams.map((t: any) => t.teamId),
       champion: champion.teamId
     };
   }
@@ -569,7 +569,7 @@ export class ChampionshipProbabilityCalculator {
     let totalProjection = 0;
     
     // Project each starter
-    for (const player of team.players.filter(p => p.isStarter)) {
+    for (const player of team.players.filter((p: any) => p.isStarter)) {
       const projection = await this.performanceModel.generateProjection(
         player,
         'average',
@@ -628,7 +628,7 @@ export class ChampionshipProbabilityCalculator {
 
   private updateResults(results: Map<string, SimulationResults>, simulation: SeasonSimulation): void {
     // Update playoff appearances
-    simulation.playoffTeams.forEach(teamId => {
+    simulation.playoffTeams.forEach((teamId: any) => {
       const teamResults = results.get(teamId)!;
       teamResults.playoffs++;
     });

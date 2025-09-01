@@ -50,7 +50,7 @@ const MobileBottomNavigation: React.FC<MobileBottomNavigationProps> = ({
     onViewChange,
     notificationCount = 0,
     className = ''
-}) => {
+}: any) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const [isExpanded, setIsExpanded] = React.useState(false);
     const [dragY, setDragY] = React.useState(0);

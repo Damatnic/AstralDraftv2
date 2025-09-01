@@ -54,7 +54,7 @@ const Breadcrumbs: React.FC = () => {
     );
 };
 
-const BreadcrumbsWithErrorBoundary: React.FC = (props) => (
+const BreadcrumbsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <Breadcrumbs {...props} />
   </ErrorBoundary>

@@ -71,12 +71,12 @@ class SportsIOPlayerService {
       } else {
         // Fallback to mock data filtered by position
         const fallbackPlayers = this.getFallbackPlayers();
-        return fallbackPlayers.filter(player => player.position === position);
+        return fallbackPlayers.filter((player: any) => player.position === position);
       }
     } catch (error) {
       console.error(`❌ Failed to fetch ${position} players:`, error);
       const fallbackPlayers = this.getFallbackPlayers();
-      return fallbackPlayers.filter(player => player.position === position);
+      return fallbackPlayers.filter((player: any) => player.position === position);
     }
   }
 
@@ -104,11 +104,11 @@ class SportsIOPlayerService {
         // Stats from Sports.io
         stats: {
           passingYards: sportsPlayer.stats?.passing_yards || 0,
-          passingTDs: sportsPlayer.stats?.passing_tds || 0,
+          passingTouchdowns: sportsPlayer.stats?.passing_tds || 0,
           rushingYards: sportsPlayer.stats?.rushing_yards || 0,
-          rushingTDs: sportsPlayer.stats?.rushing_tds || 0,
+          rushingTouchdowns: sportsPlayer.stats?.rushing_tds || 0,
           receivingYards: sportsPlayer.stats?.receiving_yards || 0,
-          receivingTDs: sportsPlayer.stats?.receiving_tds || 0,
+          receivingTouchdowns: sportsPlayer.stats?.receiving_tds || 0,
           receptions: sportsPlayer.stats?.receptions || 0,
         },
         

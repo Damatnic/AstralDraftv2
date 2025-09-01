@@ -147,7 +147,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
         icon: React.ReactNode;
         trend?: 'up' | 'down' | 'neutral';
         trendValue?: string;
-    }> = ({ title, value, description, icon, trend, trendValue }) => (
+    }> = ({ title, value, description, icon, trend, trendValue }: any) => (
         <Card>
             <CardContent className="flex items-center p-4 sm:p-6">
                 <div className="flex items-center space-x-3 sm:space-x-4 w-full">
@@ -453,7 +453,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const OracleAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleAnalyticsDashboard {...props} />
   </ErrorBoundary>

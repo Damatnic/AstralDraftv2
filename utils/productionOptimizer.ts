@@ -124,7 +124,7 @@ export class ProductionOptimizer {
       
       if ('caches' in window) {
         caches.keys().then(names => {
-          names.forEach(name => caches.delete(name));
+          names.forEach((name: any) => caches.delete(name));
         });
       }
       

@@ -193,7 +193,7 @@ const OracleDashboardContainer: React.FC = () => {
     );
 };
 
-const OracleDashboardContainerWithErrorBoundary: React.FC = (props) => (
+const OracleDashboardContainerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleDashboardContainer {...props} />
   </ErrorBoundary>

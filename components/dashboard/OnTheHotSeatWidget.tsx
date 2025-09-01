@@ -16,7 +16,7 @@ const OnTheHotSeatWidget: React.FC = () => {
     );
 };
 
-const OnTheHotSeatWidgetWithErrorBoundary: React.FC = (props) => (
+const OnTheHotSeatWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OnTheHotSeatWidget {...props} />
   </ErrorBoundary>

@@ -10,7 +10,7 @@ interface AnalyticsModalProps {
 
 }
 
-export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose }) => {
+export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose }: any) => {
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
@@ -179,7 +179,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
             <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
               <select
                 value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
+                onChange={(e: any) => setTimeRange(e.target.value)}
               >
                 <option value="season">Full Season</option>
                 <option value="recent">Last 4 Weeks</option>
@@ -197,7 +197,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
           {/* Tabs */}
           <div className="border-b border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="flex px-6 gap-1 sm:px-4 md:px-6 lg:px-8">
-              {tabs.map((tab) => (
+              {tabs.map((tab: any) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -409,7 +409,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
   );
 };
 
-const AnalyticsModalWithErrorBoundary: React.FC = (props) => (
+const AnalyticsModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AnalyticsModal {...props} />
   </ErrorBoundary>

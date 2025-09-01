@@ -37,7 +37,7 @@ const MockDraftHistory: React.FC = () => {
     );
 };
 
-const MockDraftHistoryWithErrorBoundary: React.FC = (props) => (
+const MockDraftHistoryWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MockDraftHistory {...props} />
   </ErrorBoundary>

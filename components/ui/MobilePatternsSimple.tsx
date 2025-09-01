@@ -29,7 +29,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({ isOpen,
   className = '',
   snapPoints = [0.4, 0.8],
   initialSnap = 0
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [currentSnap, setCurrentSnap] = React.useState(initialSnap);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -166,7 +166,7 @@ export const SwipeGesture: React.FC<SwipeGestureProps> = ({
   threshold = 50,
   children,
   className = ''
-}) => {
+}: any) => {
   const [touchStart, setTouchStart] = React.useState<{ x: number; y: number } | null>(null);
   const [touchEnd, setTouchEnd] = React.useState<{ x: number; y: number } | null>(null);
 
@@ -235,7 +235,7 @@ export const MobileTabs: React.FC<MobileTabsProps> = ({
   activeTab,
   onTabChange,
   className = ''
-}) => {
+}: any) => {
   const handleKeyDown = (e: React.KeyboardEvent, tabId: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();

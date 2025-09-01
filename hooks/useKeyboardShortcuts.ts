@@ -18,7 +18,7 @@ export const useKeyboardShortcuts = (shortcuts: KeyboardShortcut[]) => {
       return;
     }
 
-    const matchingShortcut = shortcuts.find(shortcut => {
+    const matchingShortcut = shortcuts.find((shortcut: any) => {
       return (
         shortcut.key.toLowerCase() === event.key.toLowerCase() &&
         \!\!shortcut.ctrlKey === event.ctrlKey &&

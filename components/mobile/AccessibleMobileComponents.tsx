@@ -37,7 +37,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     maxPullDistance = 120,
     disabled = false,
     className = ''
-}) => {
+}: any) => {
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
     const [announcement, setAnnouncement] = React.useState('');
@@ -259,7 +259,7 @@ export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
     disabled = false,
     role = 'button',
     ariaLabel
-}) => {
+}: any) => {
     const [isPressed, setIsPressed] = React.useState(false);
     const longPressTimer = React.useRef<NodeJS.Timeout | undefined>(undefined);
     const prefersReducedMotion = useReducedMotion();

@@ -48,7 +48,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     currentUserId,
     showAchievements = true,
     compact = false
-}) => {
+}: any) => {
     const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -378,7 +378,7 @@ const OracleLeaderboard: React.FC<OracleLeaderboardProps> = ({
     );
 };
 
-const OracleLeaderboardWithErrorBoundary: React.FC = (props) => (
+const OracleLeaderboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleLeaderboard {...props} />
   </ErrorBoundary>

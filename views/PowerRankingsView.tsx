@@ -10,7 +10,7 @@ import PowerRankingCardSkeleton from '../components/rankings/PowerRankingCardSke
 import { useLeague } from '../hooks/useLeague';
 import ErrorDisplay from '../components/core/ErrorDisplay';
 
-const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const { state } = useAppState();
     const [rankings, setRankings] = React.useState<PowerRanking[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -109,7 +109,7 @@ const PowerRankingsView: React.FC = () => {
         );
 
     return <PowerRankingsContent league={league} dispatch={dispatch} />;
-};
+}
 
 }
 

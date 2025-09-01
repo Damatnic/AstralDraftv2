@@ -23,7 +23,7 @@ const eventIcons: { [key: string]: React.ReactNode } = {
     MR_IRRELEVANT: <SparklesIcon />,
 };
 
-const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }) => {
+const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team }> = ({ event, player, team }: any) => {
     const icon = eventIcons[event.type] || <SparklesIcon />;
     return (
         <div className="flex items-start gap-4">
@@ -46,7 +46,7 @@ const HighlightCard: React.FC<{ event: DraftEvent, player?: Player, team?: Team 
     );
 };
 
-const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }) => {
+const DraftStoryContent: React.FC<{ league: League, dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
     const [highlights, setHighlights] = React.useState<DraftEvent[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);

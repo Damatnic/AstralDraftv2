@@ -38,7 +38,7 @@ interface EnhancedMLDashboardProps {
 const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
     isVisible = true,
     onPredictionTest
-}) => {
+}: any) => {
     const [activeTab, setActiveTab] = useState<'performance' | 'calibration' | 'predictions' | 'insights'>('performance');
     const [modelPerformance, setModelPerformance] = useState<MLPerformanceData[]>([]);
     const [calibrationMetrics, setCalibrationMetrics] = useState<CalibrationMetrics | null>(null);
@@ -546,7 +546,7 @@ const EnhancedOracleMLDashboard: React.FC<EnhancedMLDashboardProps> = ({
     );
 };
 
-const EnhancedOracleMLDashboardWithErrorBoundary: React.FC = (props) => (
+const EnhancedOracleMLDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedOracleMLDashboard {...props} />
   </ErrorBoundary>

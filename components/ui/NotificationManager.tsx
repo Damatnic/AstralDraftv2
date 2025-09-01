@@ -36,7 +36,7 @@ const NotificationManager: React.FC = () => {
     );
 };
 
-const NotificationManagerWithErrorBoundary: React.FC = (props) => (
+const NotificationManagerWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationManager {...props} />
   </ErrorBoundary>

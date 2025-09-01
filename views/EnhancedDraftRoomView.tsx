@@ -205,7 +205,7 @@ const EnhancedDraftRoomView: React.FC = () => {
 
 
     return order;
-  };
+  }
 
   // Draft timer logic
   useEffect(() => {

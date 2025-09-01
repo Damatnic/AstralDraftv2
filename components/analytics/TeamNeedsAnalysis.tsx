@@ -14,7 +14,7 @@ interface TeamNeedsAnalysisProps {
 
 }
 
-const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }) => {
+const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dispatch }: any) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const needs = team.teamNeeds;
 
@@ -77,7 +77,7 @@ const TeamNeedsAnalysis: React.FC<TeamNeedsAnalysisProps> = ({ team, league, dis
     );
 };
 
-const TeamNeedsAnalysisWithErrorBoundary: React.FC = (props) => (
+const TeamNeedsAnalysisWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TeamNeedsAnalysis {...props} />
   </ErrorBoundary>

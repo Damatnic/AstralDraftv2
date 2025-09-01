@@ -15,7 +15,7 @@ interface TradeEventMessageProps {
 
 }
 
-const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }) => {
+const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }: any) => {
     const { tradeEvent, aiHotTake, reactions } = message;
 
     if (!tradeEvent) return null;
@@ -31,7 +31,7 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
     const offeredPicks = tradeEvent.draftPicksOffered || [];
     const requestedPicks = tradeEvent.draftPicksRequested || [];
 
-    const AssetChip: React.FC<{ children: React.ReactNode, isPick?: boolean }> = ({ children, isPick }) => (
+    const AssetChip: React.FC<{ children: React.ReactNode, isPick?: boolean }> = ({ children, isPick }: any) => (
         <div className={`px-1.5 py-0.5 rounded text-xs ${isPick ? 'bg-cyan-900/80' : 'bg-black/20'}`}>{children}</div>
     );
 
@@ -84,7 +84,7 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
     );
 };
 
-const TradeEventMessageWithErrorBoundary: React.FC = (props) => (
+const TradeEventMessageWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeEventMessage {...props} />
   </ErrorBoundary>

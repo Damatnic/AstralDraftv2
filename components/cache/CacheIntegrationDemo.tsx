@@ -279,7 +279,7 @@ const CacheIntegrationDemo: React.FC = () => {
     );
 };
 
-const CacheIntegrationDemoWithErrorBoundary: React.FC = (props) => (
+const CacheIntegrationDemoWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <CacheIntegrationDemo {...props} />
   </ErrorBoundary>

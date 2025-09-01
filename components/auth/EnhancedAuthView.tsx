@@ -466,7 +466,7 @@ const EnhancedAuthView: React.FC = () => {
   );
 };
 
-const EnhancedAuthViewWithErrorBoundary: React.FC = (props) => (
+const EnhancedAuthViewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedAuthView {...props} />
   </ErrorBoundary>

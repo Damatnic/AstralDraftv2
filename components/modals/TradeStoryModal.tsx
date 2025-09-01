@@ -15,7 +15,7 @@ interface TradeStoryModalProps {
 
 }
 
-const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClose }) => {
+const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClose }: any) => {
     const [story, setStory] = React.useState<TradeStory | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -69,7 +69,7 @@ const TradeStoryModal: React.FC<TradeStoryModalProps> = ({ offer, league, onClos
     );
 };
 
-const TradeStoryModalWithErrorBoundary: React.FC = (props) => (
+const TradeStoryModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeStoryModal {...props} />
   </ErrorBoundary>

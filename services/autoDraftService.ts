@@ -112,7 +112,7 @@ class AutoDraftService {
     
     // Optimize user team if specified
     if (config.userTeamId) {
-      const userResult = results.find(r => r.team.id === config.userTeamId);
+      const userResult = results.find((r: any) => r.team.id === config.userTeamId);
       if (userResult) {
         this.optimizeUserTeam(userResult, config);
       }
@@ -142,7 +142,7 @@ class AutoDraftService {
     };
     
     // Create user team configuration
-    const userTeam = TEAMS_2025.find(t => t.id === userId) || TEAMS_2025[0];
+    const userTeam = TEAMS_2025.find((t: any) => t.id === userId) || TEAMS_2025[0];
     const roster: Player[] = [];
     
     // Execute value-based drafting
@@ -273,7 +273,7 @@ class AutoDraftService {
     config: AutoDraftConfig
   ): Promise<DraftPick | null> {
     // Get available players
-    const available = this.availablePlayers.filter(p => !this.draftedPlayers.has(p.id));
+    const available = this.availablePlayers.filter((p: any) => !this.draftedPlayers.has(p.id));
     
     if (available.length === 0) return null;
     
@@ -314,7 +314,7 @@ class AutoDraftService {
     scoringType: string
   ): Player | null {
     const positions = Array.isArray(position) ? position : [position];
-    const available = this.availablePlayers.filter(p => 
+    const available = this.availablePlayers.filter((p: any) => 
       !this.draftedPlayers.has(p.id) && 
       positions.includes(p.position)
     );
@@ -322,7 +322,7 @@ class AutoDraftService {
     if (available.length === 0) return null;
     
     // Evaluate each player
-    const evaluations = available.map(player => ({
+    const evaluations = available.map((player: any) => ({
       player,
       evaluation: this.evaluatePlayer(player, currentRoster, round, scoringType)
     }));
@@ -340,16 +340,16 @@ class AutoDraftService {
     currentRoster: Player[],
     scoringType: string
   ): Player | null {
-    const available = this.availablePlayers.filter(p => !this.draftedPlayers.has(p.id));
+    const available = this.availablePlayers.filter((p: any) => !this.draftedPlayers.has(p.id));
     
     // Check position limits
     const needsPositions = this.getNeededPositions(currentRoster);
-    const validPlayers = available.filter(p => needsPositions.includes(p.position));
+    const validPlayers = available.filter((p: any) => needsPositions.includes(p.position));
     
     if (validPlayers.length === 0) return null;
     
     // Find best value
-    const evaluations = validPlayers.map(player => ({
+    const evaluations = validPlayers.map((player: any) => ({
       player,
       value: this.calculatePlayerValue(player, currentRoster, scoringType)
     }));
@@ -420,7 +420,7 @@ class AutoDraftService {
     }
     
     // Adjust for position need
-    const positionCount = roster.filter(p => p.position === player.position).length;
+    const positionCount = roster.filter((p: any) => p.position === player.position).length;
     const requirements = this.rosterRequirements[player.position as keyof RosterRequirements];
     
     if (requirements && 'min' in requirements) {
@@ -438,11 +438,11 @@ class AutoDraftService {
    * Calculate positional scarcity
    */
   private calculatePositionalScarcity(position: PlayerPosition, round: number): number {
-    const available = this.availablePlayers.filter(p => 
+    const available = this.availablePlayers.filter((p: any) => 
       !this.draftedPlayers.has(p.id) && p.position === position
     );
     
-    const topTierAvailable = available.filter(p => p.tier && p.tier <= 3).length;
+    const topTierAvailable = available.filter((p: any) => p.tier && p.tier <= 3).length;
     const totalAvailable = available.length;
     
     // Early rounds - focus on scarce elite talent
@@ -470,13 +470,13 @@ class AutoDraftService {
   private calculateTierDrop(player: Player): number {
     if (!player.tier) return 0;
     
-    const sameTierPlayers = this.availablePlayers.filter(p => 
+    const sameTierPlayers = this.availablePlayers.filter((p: any) => 
       !this.draftedPlayers.has(p.id) && 
       p.position === player.position && 
       p.tier === player.tier
     );
     
-    const nextTierPlayers = this.availablePlayers.filter(p => 
+    const nextTierPlayers = this.availablePlayers.filter((p: any) => 
       !this.draftedPlayers.has(p.id) && 
       p.position === player.position && 
       p.tier === (player.tier! + 1)
@@ -531,7 +531,7 @@ class AutoDraftService {
   private calculateStackingBonus(player: Player, roster: Player[]): number {
     // QB-WR stack
     if (player.position === 'WR') {
-      const hasQBFromTeam = roster.some(p => 
+      const hasQBFromTeam = roster.some((p: any) => 
         p.position === 'QB' && p.team === player.team
       );
       if (hasQBFromTeam) return 0.15;
@@ -539,7 +539,7 @@ class AutoDraftService {
     
     // WR-WR stack (risky but high ceiling)
     if (player.position === 'WR') {
-      const wrFromTeam = roster.filter(p => 
+      const wrFromTeam = roster.filter((p: any) => 
         p.position === 'WR' && p.team === player.team
       ).length;
       if (wrFromTeam === 1) return 0.05;
@@ -553,7 +553,7 @@ class AutoDraftService {
    * Calculate bye week penalty
    */
   private calculateByeWeekPenalty(player: Player, roster: Player[]): number {
-    const sameByePlayers = roster.filter(p => 
+    const sameByePlayers = roster.filter((p: any) => 
       p.bye === player.bye && p.position === player.position
     ).length;
     
@@ -596,7 +596,7 @@ class AutoDraftService {
     const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
     
     for (const pos of positions) {
-      const count = roster.filter(p => p.position === pos).length;
+      const count = roster.filter((p: any) => p.position === pos).length;
       const req = this.rosterRequirements[pos as keyof RosterRequirements];
       
       if (req && 'max' in req && count < req.max) {
@@ -616,7 +616,7 @@ class AutoDraftService {
     // Fill required starters
     const addStarter = (position: PlayerPosition, count: number) => {
       const players = roster
-        .filter(p => p.position === position && !starters.includes(p))
+        .filter((p: any) => p.position === position && !starters.includes(p))
         .sort((a, b) => (b.projectedPoints || 0) - (a.projectedPoints || 0))
         .slice(0, count);
       starters.push(...players);
@@ -629,7 +629,7 @@ class AutoDraftService {
     
     // Fill FLEX spots (RB/WR/TE)
     const flexEligible = roster
-      .filter(p => ['RB', 'WR', 'TE'].includes(p.position) && !starters.includes(p))
+      .filter((p: any) => ['RB', 'WR', 'TE'].includes(p.position) && !starters.includes(p))
       .sort((a, b) => (b.projectedPoints || 0) - (a.projectedPoints || 0))
       .slice(0, 2);
     starters.push(...flexEligible);
@@ -645,7 +645,7 @@ class AutoDraftService {
    */
   private selectBench(roster: Player[]): Player[] {
     const starters = this.selectOptimalStarters(roster);
-    return roster.filter(p => !starters.includes(p));
+    return roster.filter((p: any) => !starters.includes(p));
   }
 
   /**
@@ -665,7 +665,7 @@ class AutoDraftService {
     
     const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
     for (const pos of positions) {
-      const players = roster.filter(p => p.position === pos);
+      const players = roster.filter((p: any) => p.position === pos);
       const avgRank = players.reduce((sum, p) => sum + p.rank, 0) / players.length;
       
       if (avgRank <= 50) positionStrengths.push(pos);
@@ -702,7 +702,7 @@ class AutoDraftService {
       .slice(0, 3);
     
     // Find handcuffs
-    const handcuffs = roster.filter(p => 
+    const handcuffs = roster.filter((p: any) => 
       p.role === 'backup' && p.handcuffValue === 'high'
     );
     
@@ -743,14 +743,14 @@ class AutoDraftService {
    * Generate draft results for all teams
    */
   private generateDraftResults(teams: DraftTeam[], config: AutoDraftConfig): TeamDraftResult[] {
-    return teams.map(draftTeam => {
+    return teams.map((draftTeam: any) => {
       const teamId = parseInt(draftTeam.id.split('_')[1]);
       const roster = this.teamRosters.get(teamId) || [];
-      const team = TEAMS_2025.find(t => t.id === teamId)!;
+      const team = TEAMS_2025.find((t: any) => t.id === teamId)!;
       
       return {
         team: { ...team, roster },
-        draftPicks: this.draftHistory.filter(p => p.teamId === teamId),
+        draftPicks: this.draftHistory.filter((p: any) => p.teamId === teamId),
         roster,
         starters: this.selectOptimalStarters(roster),
         bench: this.selectBench(roster),
@@ -777,7 +777,7 @@ class AutoDraftService {
     console.log('- Strengths:', result.analytics.positionStrengths);
     console.log('- Weaknesses:', result.analytics.positionWeaknesses);
     if (tradeTargets.length > 0) {
-      console.log('- Trade Targets:', tradeTargets.map(p => p.name));
+      console.log('- Trade Targets:', tradeTargets.map((p: any) => p.name));
     }
   }
 
@@ -788,8 +788,8 @@ class AutoDraftService {
     const weakPositions = this.analyzeTeamStrength(roster, 'ppr').positionWeaknesses;
     
     return this.availablePlayers
-      .filter(p => weakPositions.includes(p.position))
-      .filter(p => p.rank <= 50)
+      .filter((p: any) => weakPositions.includes(p.position))
+      .filter((p: any) => p.rank <= 50)
       .slice(0, 5);
   }
 

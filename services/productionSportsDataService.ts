@@ -654,7 +654,7 @@ class ProductionSportsDataService {
         return [];
       }
       
-      return events.map(event => {
+      return events.map((event: any) => {
         try {
           return this.parseESPNGame(event);
         } catch (error) {

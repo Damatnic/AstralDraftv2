@@ -13,7 +13,7 @@ interface MatchupAnalysisWidgetProps {
 
 }
 
-const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }) => {
+const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }: any) => {
     const [analysis, setAnalysis] = React.useState<MatchupAnalysis | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
@@ -70,7 +70,7 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
     );
 };
 
-const MatchupAnalysisWidgetWithErrorBoundary: React.FC = (props) => (
+const MatchupAnalysisWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MatchupAnalysisWidget {...props} />
   </ErrorBoundary>

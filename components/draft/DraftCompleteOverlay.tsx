@@ -13,7 +13,7 @@ interface DraftCompleteOverlayProps {
 
 }
 
-const DraftCompleteOverlay: React.FC<DraftCompleteOverlayProps> = ({ league, dispatch  }) => {
+const DraftCompleteOverlay: React.FC<DraftCompleteOverlayProps> = ({ league, dispatch  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const triggerConfetti = useConfetti();
     
@@ -68,7 +68,7 @@ const DraftCompleteOverlay: React.FC<DraftCompleteOverlayProps> = ({ league, dis
     );
 };
 
-const DraftCompleteOverlayWithErrorBoundary: React.FC = (props) => (
+const DraftCompleteOverlayWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <DraftCompleteOverlay {...props} />
   </ErrorBoundary>

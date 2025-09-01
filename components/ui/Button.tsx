@@ -22,7 +22,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className = '',
   ...props
-}) => {
+}: any) => {
   // Premium base classes with enhanced styling
   const baseClasses = `
     relative inline-flex items-center justify-center gap-2 

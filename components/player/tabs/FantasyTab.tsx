@@ -43,7 +43,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
     player,
     league,
     dispatch
-}) => {
+}: any) => {
     // Helper function to safely handle injury history as string union type
     const getInjuryRisk = (injuryHistory: string | undefined): {
         level: string;
@@ -444,7 +444,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
     );
 };
 
-const FantasyTabWithErrorBoundary: React.FC = (props) => (
+const FantasyTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <FantasyTab {...props} />
   </ErrorBoundary>

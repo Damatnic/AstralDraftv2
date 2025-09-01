@@ -14,14 +14,14 @@ interface IntelligenceTabProps {
 
 }
 
-const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}) => (
+const IntelCard: React.FC<{ label: string; value: string; icon: string }> = ({ label, value, icon}: any) => (
     <div className="bg-white/5 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
         <p className="text-sm text-gray-400 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">{icon} {label}</p>
         <p className="font-semibold text-white mt-1 sm:px-4 md:px-6 lg:px-8">{value}</p>
     </div>
 );
 
-const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
+const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }: any) => {
     const { state, dispatch } = useAppState();
     const [isLoading, setIsLoading] = React.useState(false);
     const analysis = state.newsImpactAnalyses[news.headline];
@@ -64,7 +64,7 @@ const NewsItemCard: React.FC<{ news: NewsItem }> = ({ news }) => {
     );
 };
 
-const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
+const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }: any) => {
     const { state, dispatch } = useAppState();
     const nickname = state.playerNicknames[player.id];
     const [isGeneratingNickname, setIsGeneratingNickname] = React.useState(false);
@@ -143,7 +143,7 @@ const IntelligenceTab: React.FC<IntelligenceTabProps> = ({ player }) => {
     );
 };
 
-const IntelligenceTabWithErrorBoundary: React.FC = (props) => (
+const IntelligenceTabWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <IntelligenceTab {...props} />
   </ErrorBoundary>

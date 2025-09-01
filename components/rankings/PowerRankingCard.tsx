@@ -16,7 +16,7 @@ interface PowerRankingCardProps {
 
 }
 
-const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }) => {
+const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }: any) => {
     switch (trend) {
         case 'up': return <ArrowUpIcon className="h-5 w-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
         case 'down': return <ArrowDownIcon className="h-5 w-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -25,7 +25,7 @@ const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }) => {
     }
 };
 
-const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }) => {
+const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }: any) => {
     if (!team) return null;
 
     return (
@@ -60,7 +60,7 @@ const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMy
     );
 };
 
-const PowerRankingCardWithErrorBoundary: React.FC = (props) => (
+const PowerRankingCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <PowerRankingCard {...props} />
   </ErrorBoundary>

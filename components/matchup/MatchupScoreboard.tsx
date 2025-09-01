@@ -15,7 +15,7 @@ interface MatchupScoreboardProps {
 
 }
 
-const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }) => {
+const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentTeam, myMatchupTeam, opponentMatchupTeam, week, isLive }: any) => {
     
     const calculateProjectedScore = (team: Team) => {
         return team.roster.slice(0, 9).reduce((total, player) => {
@@ -63,7 +63,7 @@ const MatchupScoreboard: React.FC<MatchupScoreboardProps> = ({ myTeam, opponentT
     );
 };
 
-const MatchupScoreboardWithErrorBoundary: React.FC = (props) => (
+const MatchupScoreboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MatchupScoreboard {...props} />
   </ErrorBoundary>

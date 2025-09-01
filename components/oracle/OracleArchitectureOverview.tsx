@@ -627,7 +627,7 @@ const OracleArchitectureOverview: React.FC = () => {
     );
 };
 
-const OracleArchitectureOverviewWithErrorBoundary: React.FC = (props) => (
+const OracleArchitectureOverviewWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleArchitectureOverview {...props} />
   </ErrorBoundary>

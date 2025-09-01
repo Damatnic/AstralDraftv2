@@ -153,7 +153,7 @@ export class OracleErrorBoundary extends Component<Props, State> {
         return children;
 
 
-const OracleErrorBoundaryWithErrorBoundary: React.FC = (props) => (
+const OracleErrorBoundaryWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleErrorBoundary {...props} />
   </ErrorBoundary>

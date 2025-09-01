@@ -28,7 +28,7 @@ interface MemberAction {
     memberId: string;
     data?: any;}
 
-const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }) => {
+const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ league, dispatch }: any) => {
     const [selectedMember, setSelectedMember] = React.useState<string | null>(null);
     const [editMode, setEditMode] = React.useState<{ memberId: string; field: string } | null>(null);
     const [editValue, setEditValue] = React.useState('');
@@ -359,7 +359,7 @@ const EnhancedMemberManagement: React.FC<EnhancedMemberManagementProps> = ({ lea
     );
 };
 
-const EnhancedMemberManagementWithErrorBoundary: React.FC = (props) => (
+const EnhancedMemberManagementWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedMemberManagement {...props} />
   </ErrorBoundary>

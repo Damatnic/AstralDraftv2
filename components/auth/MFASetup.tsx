@@ -21,7 +21,7 @@ interface SetupData {
 
 }
 
-const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }) => {
+const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [step, setStep] = useState<'status' | 'setup' | 'verify' | 'complete'>('status');
   const [mfaStatus, setMfaStatus] = useState<MFAStatus | null>(null);
@@ -366,7 +366,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }) => {
               type="text"
               maxLength={6}
               value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
+              onChange={(e: any) => setVerificationCode(e.target.value.replace(/\D/g, ''))}
               placeholder="000000"
               autoComplete="one-time-code"
             />
@@ -458,7 +458,7 @@ const MFASetup: React.FC<MFASetupProps> = ({ onComplete, onCancel  }) => {
   );
 };
 
-const MFASetupWithErrorBoundary: React.FC = (props) => (
+const MFASetupWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MFASetup {...props} />
   </ErrorBoundary>

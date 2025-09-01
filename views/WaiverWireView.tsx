@@ -9,7 +9,7 @@ import PlayerDetailModal from '../components/player/PlayerDetailModal';
 import { useLeague } from '../hooks/useLeague';
 import WaiverIntelligenceWidget from '../components/team/WaiverIntelligenceWidget';
 
-const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any>; playerNotes: AppState['playerNotes'], playerAvatars: AppState['playerAvatars'] }> = ({ league, myTeam, dispatch, playerNotes, playerAvatars }) => {
+const WaiverWireContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any>; playerNotes: AppState['playerNotes'], playerAvatars: AppState['playerAvatars'] }> = ({ league, myTeam, dispatch, playerNotes, playerAvatars }: any) => {
     const [search, setSearch] = React.useState('');
     const [positionFilter, setPositionFilter] = React.useState<string>('ALL');
     const [isClaimModalOpen, setIsClaimModalOpen] = React.useState(false);

@@ -54,7 +54,7 @@ class ErrorTrackingService {
 
   private setupGlobalErrorHandlers(): void {
     // JavaScript errors
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', (event: any) => {
       this.captureError(
         new Error(event.message),
         {
@@ -70,7 +70,7 @@ class ErrorTrackingService {
     });
 
     // Unhandled Promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', (event: any) => {
       this.captureError(
         new Error(`Unhandled promise rejection: ${event.reason}`),
         {
@@ -99,7 +99,7 @@ class ErrorTrackingService {
     if ('PerformanceObserver' in window) {
       // Web Vitals monitoring
       try {
-        const observer = new PerformanceObserver((list) => {
+        const observer = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             this.capturePerformanceMetric(entry);
           }
@@ -240,7 +240,7 @@ class ErrorTrackingService {
     const payload = {
       sessionId: this.sessionId,
       timestamp: new Date().toISOString(),
-      errors: errors.map(error => ({
+      errors: errors.map((error: any) => ({
         ...error,
         error: {
           name: error.error.name,
@@ -291,7 +291,7 @@ class ErrorTrackingService {
     // Web Vitals
     if ('PerformanceObserver' in window) {
       try {
-        const paintObserver = new PerformanceObserver((list) => {
+        const paintObserver = new PerformanceObserver((list: any) => {
           for (const entry of list.getEntries()) {
             if (entry.name === 'first-contentful-paint') {
               metrics.firstContentfulPaint = entry.startTime;

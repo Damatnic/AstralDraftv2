@@ -9,7 +9,7 @@ interface GroundingCitationsProps {
 
 }
 
-const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }) => {
+const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }: any) => {
     const webChunks = chunks.filter((c: any) => c.web && c.web.uri && c.web.title);
 
     if (webChunks.length === 0) {
@@ -36,7 +36,7 @@ const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }) => {
     );
 };
 
-const GroundingCitationsWithErrorBoundary: React.FC = (props) => (
+const GroundingCitationsWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <GroundingCitations {...props} />
   </ErrorBoundary>

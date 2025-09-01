@@ -37,7 +37,7 @@ const DefaultLoadingFallback: React.FC = () => (
 );
 
 // Default error fallback
-const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
+const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }: any) => (
   <div className="flex items-center justify-center min-h-[200px] bg-red-900/20 rounded-lg border border-red-500/30 backdrop-blur-sm">
     <div className="text-center p-6">
       <div className="text-red-400 text-4xl mb-4">⚠️</div>
@@ -186,7 +186,7 @@ export const createLazyComponent = <P extends object = {}>({
     }
   });
 
-  const WrappedComponent: React.ComponentType<P> = (props) => (
+  const WrappedComponent: React.ComponentType<P> = (props: any) => (
     <LazyLoadWrapper
       fallback={fallback}
       errorFallback={errorFallback}

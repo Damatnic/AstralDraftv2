@@ -13,7 +13,7 @@ interface MLAnalyticsDashboardProps {
 
 }
 
-const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive }) => {
+const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive }: any) => {
     const [activeTab, setActiveTab] = useState<'performance' | 'features' | 'patterns' | 'insights'>('performance');
     const [modelPerformance, setModelPerformance] = useState<ModelPerformance[]>([]);
     const [featureImportance, setFeatureImportance] = useState<FeatureImportance[]>([]);
@@ -465,7 +465,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
     );
 };
 
-const MLAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const MLAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MLAnalyticsDashboard {...props} />
   </ErrorBoundary>

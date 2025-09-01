@@ -14,7 +14,7 @@ interface TradeWhispererWidgetProps {
 
 }
 
-const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }) => {
+const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }: any) => {
     const { league, myTeam } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<TradeSuggestion | null>(null);
@@ -74,7 +74,7 @@ const TradeWhispererWidget: React.FC<TradeWhispererWidgetProps> = ({ onPropose }
     );
 };
 
-const TradeWhispererWidgetWithErrorBoundary: React.FC = (props) => (
+const TradeWhispererWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeWhispererWidget {...props} />
   </ErrorBoundary>

@@ -58,7 +58,7 @@ const TradeAnalysisDashboard: React.FC<TradeAnalysisDashboardProps> = ({
   activeProposals = [],
   onTradeAction,
   className = ''
-}) => {
+}: any) => {
   const [selectedTab, setSelectedTab] = useState<'analyze' | 'compare' | 'recommendations'>('analyze');
   const [selectedProposal, setSelectedProposal] = useState<TradeProposal | null>(null);
   const [customGivingPlayers, setCustomGivingPlayers] = useState<string[]>([]);
@@ -216,7 +216,7 @@ const AnalyzeTradesTab: React.FC<{
   onCustomAnalyze,
   onTradeAction,
   currentRoster
-}) => {
+}: any) => {
   return (
     <div className="analyze-trades-tab sm:px-4 md:px-6 lg:px-8">
       {/* Active Proposals Section */}
@@ -328,7 +328,7 @@ const CompareTradesTab: React.FC<{
   tradeComparison: any;
   currentRoster: FantasyRoster;
   opponentRoster?: FantasyRoster;
-}> = ({ tradeComparison, currentRoster, opponentRoster }) => {
+}> = ({ tradeComparison, currentRoster, opponentRoster }: any) => {
   return (
     <div className="compare-trades-tab sm:px-4 md:px-6 lg:px-8">
       <h3>Trade Comparison</h3>
@@ -363,7 +363,7 @@ const CompareTradesTab: React.FC<{
 const RecommendationsTab: React.FC<{
   tradeRecommendations: any;
   currentRoster: FantasyRoster;
-}> = ({ tradeRecommendations }) => {
+}> = ({ tradeRecommendations }: any) => {
   return (
     <div className="recommendations-tab sm:px-4 md:px-6 lg:px-8">
       <h3>Trade Recommendations</h3>
@@ -421,7 +421,7 @@ const TradeAnalysisDisplay: React.FC<{
   analysis: TradeAnalysis;
   onTradeAction?: (action: 'accept' | 'reject' | 'counter') => void;
   showActions?: boolean;
-}> = ({ analysis, onTradeAction, showActions = false }) => {
+}> = ({ analysis, onTradeAction, showActions = false }: any) => {
   return (
     <div className="trade-analysis-display sm:px-4 md:px-6 lg:px-8">
       {/* Overall Score and Recommendation */}
@@ -537,7 +537,7 @@ const TradeAnalysisDisplay: React.FC<{
 };
 
 // Trade score display component
-const TradeScoreDisplay: React.FC<TradeScoreDisplayProps> = ({ analysis, compact = false }) => {
+const TradeScoreDisplay: React.FC<TradeScoreDisplayProps> = ({ analysis, compact = false }: any) => {
   const getScoreColor = (score: number) => {
     if (score >= 75) return 'excellent';
     if (score >= 60) return 'good';
@@ -573,7 +573,7 @@ const TradeScoreDisplay: React.FC<TradeScoreDisplayProps> = ({ analysis, compact
 };
 
 // Player value card component
-const PlayerValueCard: React.FC<PlayerValueCardProps> = ({ player, isGiving }) => {
+const PlayerValueCard: React.FC<PlayerValueCardProps> = ({ player, isGiving }: any) => {
   return (
     <div className={`player-value-card ${isGiving ? 'giving' : 'receiving'}`}>
       <div className="player-info sm:px-4 md:px-6 lg:px-8">
@@ -606,7 +606,7 @@ const TradeRecommendationComponent: React.FC<TradeRecommendationProps> = ({
   onAccept,
   onReject,
   onCounter
-}) => {
+}: any) => {
   const getRecommendationStyle = (recommendation: string) => {
     switch (recommendation) {
       case 'accept': return 'recommendation-accept';
@@ -650,7 +650,7 @@ const PlayerSelector: React.FC<{
   selectedPlayers: string[];
   onSelectionChange: (players: string[]) => void;
   placeholder: string;
-}> = ({ availablePlayers, selectedPlayers, onSelectionChange, placeholder }) => {
+}> = ({ availablePlayers, selectedPlayers, onSelectionChange, placeholder }: any) => {
   
   if (isLoading) {
     return (
@@ -682,7 +682,7 @@ const PlayerSelector: React.FC<{
   );
 };
 
-const TradeAnalysisDashboardWithErrorBoundary: React.FC = (props) => (
+const TradeAnalysisDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <TradeAnalysisDashboard {...props} />
   </ErrorBoundary>

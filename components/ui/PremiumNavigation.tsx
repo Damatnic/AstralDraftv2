@@ -28,7 +28,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
   teamName = 'My Team',
   leagueName = 'Fantasy League',
   onLogout
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -163,7 +163,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
 
             {/* Desktop Navigation Items */}
             <div className="hidden lg:flex items-center gap-2">
-              {navItems.map((item) => (
+              {navItems.map((item: any) => (
                 <NavButton
                   key={item.id}
                   item={item}
@@ -205,7 +205,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
               className="lg:hidden mt-4 glass-panel mx-4 rounded-2xl overflow-hidden"
             >
               <div className="p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
-                {navItems.map((item) => (
+                {navItems.map((item: any) => (
                   <MobileNavItem
                     key={item.id}
                     item={item}
@@ -233,7 +233,7 @@ const NavButton: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }) => {
+}> = ({ item, isActive, onClick }: any) => {
   return (
     <motion.button
       onClick={onClick}
@@ -280,7 +280,7 @@ const MobileNavItem: React.FC<{
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
-}> = ({ item, isActive, onClick }) => {
+}> = ({ item, isActive, onClick }: any) => {
   return (
     <motion.button
       onClick={onClick}
@@ -326,7 +326,7 @@ const UserMenu: React.FC<{
   userName: string;
   teamName: string;
   onLogout?: () => void;
-}> = ({ userName, teamName, onLogout }) => {
+}> = ({ userName, teamName, onLogout }: any) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (

@@ -21,7 +21,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({ notification,
     onDismiss,
     onMarkAsRead,
     autoHideDuration = 5000
- }) => {
+ }: any) => {
   const [isLoading, setIsLoading] = React.useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [progress, setProgress] = useState(100);
@@ -158,7 +158,7 @@ interface NotificationToastContainerProps {
 export const NotificationToastContainer: React.FC<NotificationToastContainerProps> = ({
     maxToasts = 3,
     position = 'top-right'
-}) => {
+}: any) => {
     const { notifications, markAsRead } = useNotifications();
     const [displayedToasts, setDisplayedToasts] = useState<string[]>([]);
 
@@ -211,7 +211,7 @@ export const NotificationToastContainer: React.FC<NotificationToastContainerProp
     );
 };
 
-const NotificationToastWithErrorBoundary: React.FC = (props) => (
+const NotificationToastWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <NotificationToast {...props} />
   </ErrorBoundary>

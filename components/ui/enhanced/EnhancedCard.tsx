@@ -372,7 +372,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   title,
   subtitle,
   action
-}) => {
+}: any) => {
   if (title || subtitle) {
     return (
       <div className={`flex items-start justify-between ${className}`}>
@@ -408,7 +408,7 @@ interface CardBodyProps {
 export const CardBody: React.FC<CardBodyProps> = ({
   children,
   className = ''
-}) => {
+}: any) => {
   return (
     <div className={`flex-1 ${className}`}>
       {children}
@@ -427,7 +427,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   children,
   className = '',
   justify = 'between'
-}) => {
+}: any) => {
   const justifyClasses = {
     start: 'justify-start',
     center: 'justify-center',
@@ -463,7 +463,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   variant = 'glass',
   ...props
-}) => {
+}: any) => {
   const changeColors = {
     positive: 'text-success-400',
     negative: 'text-danger-400',
@@ -520,7 +520,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
   actions,
   variant = 'glass',
   ...props
-}) => {
+}: any) => {
   const statusColors = {
     active: 'bg-success-500',
     bye: 'bg-warning-500',
@@ -599,7 +599,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
   gap = 'md',
   className = '',
   staggerDelay = 0.1
-}) => {
+}: any) => {
   const columnClasses = {
     1: 'grid-cols-1',
     2: 'grid-cols-1 md:grid-cols-2',
@@ -635,7 +635,7 @@ export const CardGrid: React.FC<CardGridProps> = ({
 // EXPORTS
 // =========================================
 
-const EnhancedCardWithErrorBoundary: React.FC = (props) => (
+const EnhancedCardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedCard {...props} />
   </ErrorBoundary>

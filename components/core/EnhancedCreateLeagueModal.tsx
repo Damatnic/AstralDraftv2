@@ -44,7 +44,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   onClose, 
   user, 
   dispatch 
-}) => {
+}: any) => {
   // League Configuration
   const [leagueName, setLeagueName] = useState('Astral Draft Championship');
   const [selectedPlayerCount, setSelectedPlayerCount] = useState(10);
@@ -668,7 +668,7 @@ const EnhancedCreateLeagueModal: React.FC<EnhancedCreateLeagueModalProps> = ({
   );
 };
 
-const EnhancedCreateLeagueModalWithErrorBoundary: React.FC = (props) => (
+const EnhancedCreateLeagueModalWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <EnhancedCreateLeagueModal {...props} />
   </ErrorBoundary>

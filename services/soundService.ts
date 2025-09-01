@@ -102,7 +102,7 @@ class SoundService {
    * Preload multiple sounds
    */
   async preloadSounds(paths: string[]): Promise<void> {
-    await Promise.all(paths.map(path => this.loadSound(path)));
+    await Promise.all(paths.map((path: any) => this.loadSound(path)));
   }
 
   /**

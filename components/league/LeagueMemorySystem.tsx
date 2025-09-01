@@ -50,7 +50,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   userId,
   userName,
   onUpload
-}) => {
+}: any) => {
   const [memories, setMemories] = useState<LeagueMemory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<'all' | LeagueMemory['category']>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid');
@@ -69,18 +69,18 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   useEffect(() => {
     const filtered = selectedCategory === 'all' 
       ? allMemories 
-      : allMemories.filter(m => m.category === selectedCategory);
+      : allMemories.filter((m: any) => m.category === selectedCategory);
     setMemories(filtered);
   }, [selectedCategory, allMemories]);
 
   const handleLike = (memoryId: string) => {
-    setMemories(prev => prev.map(memory => {
+    setMemories(prev => prev.map((memory: any) => {
       if (memory.id === memoryId) {
-        const isLiked = memory.likes.some(like => like.userId === userId);
+        const isLiked = memory.likes.some((like: any) => like.userId === userId);
         return {
           ...memory,
           likes: isLiked
-            ? memory.likes.filter(like => like.userId !== userId)
+            ? memory.likes.filter((like: any) => like.userId !== userId)
             : [...memory.likes, { userId, userName }]
         };
 
@@ -91,7 +91,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   const handleComment = (memoryId: string, comment: string) => {
     if (!comment.trim()) return;
 
-    setMemories(prev => prev.map(memory => {
+    setMemories(prev => prev.map((memory: any) => {
       if (memory.id === memoryId) {
         return {
           ...memory,
@@ -165,12 +165,12 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
         
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-            {(['all', 'draft', 'game_day', 'celebration', 'trash_talk', 'general'] as const).map(category => (
+            {(['all', 'draft', 'game_day', 'celebration', 'trash_talk', 'general'] as const).map((category: any) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}`}
               >
-                {category === 'all' ? 'All' : category.replace('_', ' ').split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                {category === 'all' ? 'All' : category.replace('_', ' ').split(' ').map((w: any) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
               </button>
             ))}
           </div>
@@ -214,7 +214,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       {/* Memories Display */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {memories.map(memory => (
+          {memories.map((memory: any) => (
             <motion.div
               key={memory.id}
               layout
@@ -263,7 +263,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1 mb-3 sm:px-4 md:px-6 lg:px-8">
-                  {memory.tags.slice(0, 3).map(tag => (
+                  {memory.tags.slice(0, 3).map((tag: any) => (
                     <span key={tag} className="px-2 py-0.5 bg-dark-600 text-gray-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
@@ -291,13 +291,13 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                         handleLike(memory.id);
                       }}
                       className={`flex items-center gap-1 text-xs transition-colors ${
-                        memory.likes.some(like => like.userId === userId)
+                        memory.likes.some((like: any) => like.userId === userId)
                           ? 'text-red-400 hover:text-red-300'
                           : 'text-gray-500 hover:text-red-400'
                       }`}
                     >
                       <Heart className={`w-3 h-3 ${
-                        memory.likes.some(like => like.userId === userId) ? 'fill-current' : ''
+                        memory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                       }`} />
                       {memory.likes.length}
                     </button>
@@ -321,7 +321,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
       ) : (
         // Timeline View
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
-          {memories.map(memory => (
+          {memories.map((memory: any) => (
             <motion.div
               key={memory.id}
               layout
@@ -364,7 +364,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1 mb-3 sm:px-4 md:px-6 lg:px-8">
-                  {memory.tags.map(tag => (
+                  {memory.tags.map((tag: any) => (
                     <span key={tag} className="px-2 py-1 bg-dark-600 text-gray-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
@@ -377,7 +377,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                     onClick={() => handleLike(memory.id)}`}
                   >
                     <Heart className={`w-4 h-4 ${
-                      memory.likes.some(like => like.userId === userId) ? 'fill-current' : ''
+                      memory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                     }`} />
                     {memory.likes.length} likes
                   </button>
@@ -432,7 +432,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
-                  {selectedMemory.tags.map(tag => (
+                  {selectedMemory.tags.map((tag: any) => (
                     <span key={tag} className="px-3 py-1 bg-primary-600/20 text-primary-300 text-sm rounded-full sm:px-4 md:px-6 lg:px-8">
                       #{tag}
                     </span>
@@ -445,7 +445,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                     onClick={() => handleLike(selectedMemory.id)}`}
                   >
                     <Heart className={`w-5 h-5 ${
-                      selectedMemory.likes.some(like => like.userId === userId) ? 'fill-current' : ''
+                      selectedMemory.likes.some((like: any) => like.userId === userId) ? 'fill-current' : ''
                     }`} />
                     {selectedMemory.likes.length} likes
                   </button>
@@ -456,7 +456,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                   <h3 className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">Comments</h3>
                   
-                  {selectedMemory.comments.map(comment => (
+                  {selectedMemory.comments.map((comment: any) => (
                     <div key={comment.id} className="p-3 bg-dark-700 rounded-lg sm:px-4 md:px-6 lg:px-8">
                       <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="font-semibold text-white text-sm sm:px-4 md:px-6 lg:px-8">{comment.userName}</span>
@@ -470,9 +470,9 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
                   <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                     <input
                       value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
+                      onChange={(e: any) => setNewComment(e.target.value)}
                       className="flex-1 bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 text-sm sm:px-4 md:px-6 lg:px-8"
-                      onKeyPress={(e) => {
+                      onKeyPress={(e: any) => {
                         if (e.key === 'Enter') {
                           handleComment(selectedMemory.id, newComment);
 
@@ -577,7 +577,7 @@ const LeagueMemorySystem: React.FC<LeagueMemorySystemProps> = ({
   );
 };
 
-const LeagueMemorySystemWithErrorBoundary: React.FC = (props) => (
+const LeagueMemorySystemWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LeagueMemorySystem {...props} />
   </ErrorBoundary>

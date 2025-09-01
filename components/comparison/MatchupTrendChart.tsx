@@ -55,7 +55,7 @@ interface ChartDataPoint extends MatchupTrend {
   weatherIcon: string;
 
 // Move tooltip component outside to avoid lint issues
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload?.length) {
     const data = payload[0].payload as ChartDataPoint;
     return (
@@ -78,7 +78,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   playerId,
   playerName,
   className = ''
-}) => {
+}: any) => {
   const [trends, setTrends] = useState<MatchupTrend[]>([]);
   const [defensiveHeatMap, setDefensiveHeatMap] = useState<DefensiveHeatMap | null>(null);
   const [weatherAnalysis, setWeatherAnalysis] = useState<WeatherTrendAnalysis | null>(null);
@@ -674,7 +674,7 @@ const MatchupTrendChart: React.FC<MatchupTrendChartProps> = ({
   );
 };
 
-const MatchupTrendChartWithErrorBoundary: React.FC = (props) => (
+const MatchupTrendChartWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <MatchupTrendChart {...props} />
   </ErrorBoundary>

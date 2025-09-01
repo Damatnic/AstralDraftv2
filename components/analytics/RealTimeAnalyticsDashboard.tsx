@@ -565,7 +565,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
   );
 };
 
-const RealTimeAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const RealTimeAnalyticsDashboardWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <RealTimeAnalyticsDashboard {...props} />
   </ErrorBoundary>

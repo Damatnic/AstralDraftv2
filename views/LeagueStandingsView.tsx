@@ -13,7 +13,7 @@ import { CompareIcon } from '../components/icons/CompareIcon';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
 
-const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUserId: string; dispatch: React.Dispatch<any> }> = ({ league, myTeamId, myUserId, dispatch }) => {
+const LeagueStandingsContent: React.FC<{ league: League; myTeamId: number; myUserId: string; dispatch: React.Dispatch<any> }> = ({ league, myTeamId, myUserId, dispatch }: any) => {
     const [selectedTeams, setSelectedTeams] = React.useState<Set<number>>(new Set());
     
     const sortedTeams = [...league.teams].sort((a, b) => {

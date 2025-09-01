@@ -25,7 +25,7 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
   children,
   disabled = false,
   className = ''
-}) => {
+}: any) => {
   const baseStyle = NAVIGATION_BUTTON_STYLES[variant];
   const disabledStyle = disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer';
   const combinedClassName = `${baseStyle} ${disabledStyle} ${className}`.trim();
@@ -56,7 +56,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
   customBackRoute,
   label = 'Back',
   className = ''
-}) => {
+}: any) => {
   const handleBack = createBackHandler(dispatch, currentRoute, customBackRoute);
   
   return (
@@ -81,7 +81,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
   currentRoute,
   showCommonRoutes = true,
   customRoutes = []
-}) => {
+}: any) => {
   const commonRoutes = showCommonRoutes ? [
     { label: 'Dashboard', route: 'DASHBOARD', variant: 'secondary' as const },
     { label: 'League Hub', route: 'LEAGUE_HUB', variant: 'secondary' as const },
@@ -92,7 +92,7 @@ export const QuickNavigation: React.FC<QuickNavigationProps> = ({
 
   return (
     <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
-      {allRoutes.map(({ label, route, variant = 'secondary' }) => (
+      {allRoutes.map(({ label, route, variant = 'secondary' }: any) => (
         <NavigationButton
           key={route}
           variant={variant}
@@ -121,7 +121,7 @@ export const BreadcrumbNavigation: React.FC<BreadcrumbNavigationProps> = ({
   leagueName,
   teamName,
   className = ''
-}) => {
+}: any) => {
   const breadcrumbs = generateBreadcrumbs(currentRoute, leagueName, teamName);
 
   if (breadcrumbs.length <= 1) {
@@ -179,7 +179,7 @@ export const ViewHeader: React.FC<ViewHeaderProps> = ({
   teamName,
   actions,
   className = ''
-}) => {
+}: any) => {
   return (
     <header className={`flex-shrink-0 mb-6 ${className}`}>
       {showBreadcrumbs && (

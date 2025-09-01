@@ -1082,7 +1082,7 @@ function OracleConfidenceEstimationSection() {
     </div>
   );
 
-const OracleConfidenceEstimationSectionWithErrorBoundary: React.FC = (props) => (
+const OracleConfidenceEstimationSectionWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <OracleConfidenceEstimationSection {...props} />
   </ErrorBoundary>

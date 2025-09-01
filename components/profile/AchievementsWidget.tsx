@@ -18,7 +18,7 @@ const badgeColors: Record<Badge['type'], string> = {
     WIN_STREAK_3: 'border-orange-400/50 bg-orange-500/10 text-orange-300',
 };
 
-const AchievementsWidget: React.FC<{ badges: Badge[] }> = ({ badges }) => {
+const AchievementsWidget: React.FC<{ badges: Badge[] }> = ({ badges }: any) => {
     if (!badges || badges.length === 0) {
         return null; // Don't show the widget if there are no badges
     }
@@ -40,7 +40,7 @@ const AchievementsWidget: React.FC<{ badges: Badge[] }> = ({ badges }) => {
     );
 };
 
-const AchievementsWidgetWithErrorBoundary: React.FC = (props) => (
+const AchievementsWidgetWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <AchievementsWidget {...props} />
   </ErrorBoundary>

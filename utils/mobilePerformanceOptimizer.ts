@@ -105,7 +105,7 @@ export class MobilePerformanceOptimizer {
 
     // Performance observer for render optimizations
     if ('PerformanceObserver' in window) {
-      this.performanceObserver = new PerformanceObserver((list) => {
+      this.performanceObserver = new PerformanceObserver((list: any) => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === 'longtask' && entry.duration > 50) {
             console.warn(`Long task detected: ${entry.duration}ms`, entry);
@@ -245,7 +245,7 @@ export class MobilePerformanceOptimizer {
   private clearImageCache(): void {
     // Clear cached images
     const images = document.querySelectorAll('img[data-cached]');
-    images.forEach(img => {
+    images.forEach((img: any) => {
       img.removeAttribute('data-cached');
     });
   }

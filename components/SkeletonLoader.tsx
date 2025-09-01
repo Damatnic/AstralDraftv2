@@ -19,7 +19,7 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
   height,
   rows = 1,
   animation = 'pulse'
-}) => {
+}: any) => {
   const getBaseClasses = () => {
     let animationClass = '';
     if (animation === 'pulse') {
@@ -103,7 +103,7 @@ export const PlayerCardSkeleton: React.FC = () => (
 export const TableSkeleton: React.FC<{ rows?: number; cols?: number }> = ({ 
   rows = 5, 
   cols = 4 
-}) => (
+}: any) => (
   <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
     {/* Header */}
     <div className="grid gap-4 sm:px-4 md:px-6 lg:px-8" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
@@ -160,7 +160,7 @@ export const DashboardSkeleton: React.FC = () => (
   </div>
 );
 
-const SkeletonLoaderWithErrorBoundary: React.FC = (props) => (
+const SkeletonLoaderWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <SkeletonLoader {...props} />
   </ErrorBoundary>

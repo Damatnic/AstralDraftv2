@@ -10,7 +10,7 @@ interface LiveDraftLogProps {
 
 }
 
-const LiveDraftLog: React.FC<LiveDraftLogProps> = ({ draftPicks, teams }) => {
+const LiveDraftLog: React.FC<LiveDraftLogProps> = ({ draftPicks, teams }: any) => {
     const completedPicks = draftPicks.filter((p: any) => p.playerId).sort((a, b) => b.overall - a.overall);
 
     return (
@@ -42,7 +42,7 @@ const LiveDraftLog: React.FC<LiveDraftLogProps> = ({ draftPicks, teams }) => {
     );
 };
 
-const LiveDraftLogWithErrorBoundary: React.FC = (props) => (
+const LiveDraftLogWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>
     <LiveDraftLog {...props} />
   </ErrorBoundary>
