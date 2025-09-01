@@ -1,55 +1,14 @@
-// ULTRA-NUCLEAR ERROR ELIMINATION - BEFORE EVERYTHING ELSE
-(() => {
-    'use strict';
-    
-    // Immediate console override to prevent ANY undefined.length errors
-    const safeStringify = (arg: any): string => {
-        try {
-            if (arg === null || arg === undefined) return '';
-            if (typeof arg === 'string') return arg;
-            if (typeof arg === 'number' || typeof arg === 'boolean') return String(arg);
-            if (Array.isArray(arg)) return arg.map(safeStringify).join(' ');
-            if (typeof arg === 'object') return JSON.stringify(arg);
-            return String(arg);
-        } catch {
-            return '[unparseable]';
-        }
-    };
-    
-    const originalConsoleError = console.error;
-    const originalConsoleWarn = console.warn;
-    const originalConsoleLog = console.log;
-    
-    console.error = function() {
-        try {
-            const args = Array.prototype.slice.call(arguments);
-            const message = args.map(safeStringify).join(' ');
-            const isExtensionNoise = [
-                'message port closed',
-                'runtime.lasterror',
-                'could not establish connection',
-                'receiving end does not exist',
-                'extension context',
-                'chrome-extension',
-                'moz-extension'
-            ].some(pattern => message.toLowerCase().includes(pattern));
-            
-            if (!isExtensionNoise) {
-                originalConsoleError.apply(console, args);
-            }
-        } catch (e) {
-            // Complete silence on error
-        }
-    };
-    
-    console.warn = console.error;
-    console.log = console.error;
-    
-    // Ultra-aggressive global error suppression
-    window.onerror = function() { return true; };
-    window.addEventListener('error', (e) => { e.preventDefault(); e.stopImmediatePropagation(); return false; }, true);
-    window.addEventListener('unhandledrejection', (e) => { e.preventDefault(); e.stopImmediatePropagation(); }, true);
-})();
+// Simple error logging for production debugging
+if (typeof window !== 'undefined') {
+  window.onerror = function(message, source, lineno, colno, error) {
+    console.log('App error:', { message, source, lineno, colno, error });
+    return false; // Allow default error handling
+  };
+  
+  window.addEventListener('unhandledrejection', function(event) {
+    console.log('Unhandled promise rejection:', event.reason);
+  });
+}
 
 // Critical: Import React first to prevent Children undefined error
 import React from 'react';
@@ -154,147 +113,51 @@ const createFallbackUI = (error: any, phase: string) => {
   `;
 };
 
-// Initialize with enhanced error handling and retry logic
-const initializeApp = async () => {
-  let retryCount = 0;
-  const maxRetries = 3;
+// Simple app initialization
+const initializeApp = () => {
+  console.log('🚀 Starting app initialization...');
+  
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    console.error('Root element not found!');
+    return;
+  }
 
-  const attemptInitialization = async () => {
-    try {
-      // EMERGENCY DIAGNOSTIC LOGGING
-      console.log('🚀 EMERGENCY DIAGNOSTIC: Starting app initialization...');
-      
-      // Verify DOM is ready
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        console.error('❌ CRITICAL: Root element not found in DOM!');
-        throw new Error('Root element not found in DOM');
-      }
-      console.log('✅ Root element found:', rootElement);
-
-      // Verify React is properly loaded
-      if (!React || !React.createElement || !createRoot) {
-        console.error('❌ CRITICAL: React modules not loaded!', {
-          React: !!React,
-          createElement: !!(React && React.createElement),
-          createRoot: !!createRoot
-        });
-        throw new Error('React modules not properly loaded');
-      }
-      console.log('✅ React modules loaded successfully');
-
-      // Create root with proper error handling
-      console.log('📦 Creating React root...');
-      const root = createRoot(rootElement, {
-        onRecoverableError: (error) => {
-          console.warn('⚠️ Recoverable error in React root:', error);
-          if (import.meta.env.PROD && window.loggingService) {
-            window.loggingService.warn('React recoverable error', { error: error.message }, 'react-recoverable');
+  console.log('✅ Root element found');
+  
+  try {
+    const root = createRoot(rootElement);
+    
+    root.render(
+      React.createElement(React.StrictMode, null,
+        React.createElement(ErrorBoundary, {
+          onError: (error, errorInfo) => {
+            console.error('Error Boundary triggered:', error, errorInfo);
           }
-        }
-      });
-
-      // EMERGENCY: Add basic content to verify rendering works
-      console.log('🎨 Rendering React app...');
-      
-      // First try to render a simple test element
-      const testElement = React.createElement('div', {
-        style: { 
-          minHeight: '100vh', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          fontSize: '24px',
-          fontWeight: 'bold'
-        }
-      }, '🏈 Astral Draft Loading...');
-      
-      // Try rendering test element first
-      root.render(testElement);
-      console.log('✅ Test element rendered successfully!');
-      
-      // Wait a moment then render the actual app
-      setTimeout(() => {
-        console.log('🚀 Rendering full application...');
-        root.render(
-          React.createElement(React.StrictMode, null,
-            React.createElement(ErrorBoundary, {
-              onError: (error, errorInfo) => {
-                console.error('❌ Error Boundary triggered:', error, errorInfo);
-                reportInitializationError(error, 'React Error Boundary');
-              }
-            },
-              React.createElement(App)
-            )
-          )
-        );
-        console.log('✅ Full app render initiated');
-      }, 100);
-
-      // Mark initialization as successful
-      console.log('✅ App initialized successfully');
-
-    } catch (error) {
-      retryCount++;
-      const errorDetails = reportInitializationError(error, 'React Initialization');
-
-      if (retryCount < maxRetries) {
-        console.warn(`Initialization attempt ${retryCount} failed, retrying in ${retryCount * 1000}ms...`);
-        
-        // Exponential backoff retry
-        setTimeout(() => attemptInitialization(), retryCount * 1000);
-        return;
-      }
-
-      // Max retries reached, show fallback UI
-      console.error('Max initialization retries reached, showing fallback UI');
-      const rootElement = document.getElementById('root');
-      if (rootElement) {
-        rootElement.innerHTML = createFallbackUI(error, 'React Initialization');
-      } else {
-        // Last resort - create fallback in body
-        document.body.innerHTML = createFallbackUI(error, 'DOM Setup');
-      }
-    }
-  };
-
-  await attemptInitialization();
-};
-
-// Enhanced DOM ready detection with timeout
-const initialize = () => {
-  // Set a maximum wait time for DOM to be ready
-  const initTimeout = setTimeout(() => {
-    console.error('DOM initialization timeout');
-    const error = new Error('DOM failed to become ready within timeout period');
-    document.body.innerHTML = createFallbackUI(error, 'DOM Ready Timeout');
-  }, 10000);
-
-  const onReady = () => {
-    clearTimeout(initTimeout);
-    initializeApp().catch(error => {
-      console.error('Failed to initialize app:', error);
-      document.body.innerHTML = createFallbackUI(error, 'App Initialization');
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', onReady, { once: true });
-  } else {
-    // DOM is already ready
-    onReady();
+        },
+          React.createElement(App)
+        )
+      )
+    );
+    
+    console.log('✅ App rendered successfully');
+  } catch (error) {
+    console.error('Failed to render app:', error);
+    rootElement.innerHTML = `
+      <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #dc2626; color: white; font-family: system-ui;">
+        <div style="text-align: center; padding: 20px;">
+          <h1>Application Error</h1>
+          <p>Failed to start the application</p>
+          <button onclick="window.location.reload()" style="margin-top: 20px; padding: 10px 20px; background: white; color: #dc2626; border: none; border-radius: 4px; cursor: pointer;">Refresh Page</button>
+        </div>
+      </div>
+    `;
   }
 };
 
-// Global error handler for unhandled initialization errors
-window.addEventListener('error', (event) => {
-  if (event.filename && event.filename.includes('index.tsx')) {
-    console.error('Global error in index.tsx:', event.error);
-    reportInitializationError(event.error, 'Global Error Handler');
-  }
-});
-
-// Start initialization
-initialize();
+// Start when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+  initializeApp();
+}
