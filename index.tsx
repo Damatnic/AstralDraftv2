@@ -34,9 +34,9 @@ if (!window.requestIdleCallback) {
   };
 }
 
-// Import CSS after React is established
-import './index.css';
-import './styles/mobile-responsive.css';
+// Import CSS after React is established (commented out for testing)
+// import './index.css';
+// import './styles/mobile-responsive.css';
 
 // Import error boundary first
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
