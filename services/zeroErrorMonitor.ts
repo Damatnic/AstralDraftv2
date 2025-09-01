@@ -5,6 +5,7 @@
  */
 
 export class ZeroErrorMonitor {
+}
     private static instance: ZeroErrorMonitor;
     private errorCount = 0;
     private suppressedCount = 0;
@@ -13,49 +14,54 @@ export class ZeroErrorMonitor {
 
     private suppressiblePatterns = [
         // Browser Extension Errors
-        'chrome-extension://', 'moz-extension://', 'safari-extension://',
-        'message port closed', 'runtime.lasterror', 'unchecked runtime.lasterror',
-        'tab no longer exists', 'receiving end does not exist',
-        'extension context invalidated', 'extension host has crashed',
-        'could not establish connection', 'the message port closed before a response was received',
+        &apos;chrome-extension://&apos;, &apos;moz-extension://&apos;, &apos;safari-extension://&apos;,
+        &apos;message port closed&apos;, &apos;runtime.lasterror&apos;, &apos;unchecked runtime.lasterror&apos;,
+        &apos;tab no longer exists&apos;, &apos;receiving end does not exist&apos;,
+        &apos;extension context invalidated&apos;, &apos;extension host has crashed&apos;,
+        &apos;could not establish connection&apos;, &apos;the message port closed before a response was received&apos;,
 
         // WebSocket Errors (Non-Critical)
-        'websocket connection failed', 'websocket error', 'websocket connection to',
-        'websocket unavailable', 'connection refused', 'enotfound',
+        &apos;websocket connection failed&apos;, &apos;websocket error&apos;, &apos;websocket connection to&apos;,
+        &apos;websocket unavailable&apos;, &apos;connection refused&apos;, &apos;enotfound&apos;,
 
         // Network Errors (Recoverable)
-        'network error', 'fetch failed', 'cors error', 'net::err_',
-        'failed to fetch', 'load failed', 'loading failed',
+        &apos;network error&apos;, &apos;fetch failed&apos;, &apos;cors error&apos;, &apos;net::err_&apos;,
+        &apos;failed to fetch&apos;, &apos;load failed&apos;, &apos;loading failed&apos;,
 
         // Build/Environment Errors (Non-Critical)
-        'chunk load error', 'loading css chunk', 'loading chunk',
-        'dynamically imported module', 'import error',
+        &apos;chunk load error&apos;, &apos;loading css chunk&apos;, &apos;loading chunk&apos;,
+        &apos;dynamically imported module&apos;, &apos;import error&apos;,
 
         // API Errors (Already Handled)
-        'espn api error', '404 (not found)', 'api unavailable',
-        'rate limit exceeded', 'service unavailable',
+        &apos;espn api error&apos;, &apos;404 (not found)&apos;, &apos;api unavailable&apos;,
+        &apos;rate limit exceeded&apos;, &apos;service unavailable&apos;,
 
         // Development-Only Warnings
-        'development mode', 'dev tools', 'source map',
-        'hot reload', 'hmr', 'fast refresh'
+        &apos;development mode&apos;, &apos;dev tools&apos;, &apos;source map&apos;,
+        &apos;hot reload&apos;, &apos;hmr&apos;, &apos;fast refresh&apos;
     ];
 
     private constructor() {
+}
         this.initializeMonitoring();
     }
 
     public static getInstance(): ZeroErrorMonitor {
+}
         if (!ZeroErrorMonitor.instance) {
+}
             ZeroErrorMonitor.instance = new ZeroErrorMonitor();
         }
         return ZeroErrorMonitor.instance;
     }
 
     private initializeMonitoring(): void {
+}
         if (this.monitoring) return;
 
         // Store original console methods
         this.originalConsole = {
+}
             error: console.error.bind(console),
             warn: console.warn.bind(console),
             log: console.log.bind(console)
@@ -66,23 +72,27 @@ export class ZeroErrorMonitor {
         console.warn = this.filterWarning.bind(this);
 
         // Global error handlers
-        window.addEventListener('error', this.handleGlobalError.bind(this));
-        window.addEventListener('unhandledrejection', this.handleUnhandledRejection.bind(this));
+        window.addEventListener(&apos;error&apos;, this.handleGlobalError.bind(this));
+        window.addEventListener(&apos;unhandledrejection&apos;, this.handleUnhandledRejection.bind(this));
 
         this.monitoring = true;
         
         if (import.meta.env.DEV) {
-            this.originalConsole.log('🛡️ Zero-Error Monitor activated - All suppressible errors will be filtered');
+}
+            this.originalConsole.log(&apos;🛡️ Zero-Error Monitor activated - All suppressible errors will be filtered&apos;);
         }
     }
 
     private filterError(...args: any[]): void {
+}
         const message = this.extractMessage(args);
         
         if (this.isSuppressible(message)) {
+}
             this.suppressedCount++;
             
             if (import.meta.env.DEV) {
+}
                 // Only show in dev mode for debugging
                 this.originalConsole.log(`🔇 Suppressed error: ${message.substring(0, 100)}...`);
             }
@@ -95,12 +105,15 @@ export class ZeroErrorMonitor {
     }
 
     private filterWarning(...args: any[]): void {
+}
         const message = this.extractMessage(args);
         
         if (this.isSuppressible(message)) {
+}
             this.suppressedCount++;
             
             if (import.meta.env.DEV) {
+}
                 this.originalConsole.log(`🔇 Suppressed warning: ${message.substring(0, 100)}...`);
             }
             return;
@@ -111,18 +124,21 @@ export class ZeroErrorMonitor {
     }
 
     private handleGlobalError(event: ErrorEvent): void {
-        const message = event.message || '';
-        const filename = event.filename || '';
-        const stack = event.error?.stack || '';
+}
+        const message = event.message || &apos;&apos;;
+        const filename = event.filename || &apos;&apos;;
+        const stack = event.error?.stack || &apos;&apos;;
 
         const errorContext = `${message} ${filename} ${stack}`;
 
         if (this.isSuppressible(errorContext)) {
+}
             this.suppressedCount++;
             event.preventDefault();
             event.stopImmediatePropagation();
             
             if (import.meta.env.DEV) {
+}
                 this.originalConsole.log(`🔇 Suppressed global error: ${message.substring(0, 100)}...`);
             }
             return false;
@@ -134,15 +150,18 @@ export class ZeroErrorMonitor {
     }
 
     private handleUnhandledRejection(event: PromiseRejectionEvent): void {
+}
         const reason = event.reason;
         const message = this.extractMessage([reason]);
 
         if (this.isSuppressible(message)) {
+}
             this.suppressedCount++;
             event.preventDefault();
             event.stopImmediatePropagation();
             
             if (import.meta.env.DEV) {
+}
                 this.originalConsole.log(`🔇 Suppressed promise rejection: ${message.substring(0, 100)}...`);
             }
             return;
@@ -153,18 +172,21 @@ export class ZeroErrorMonitor {
     }
 
     private extractMessage(args: any[]): string {
+}
         return args
             .map((arg: any) => {
-                if (typeof arg === 'string') return arg;
-                if (arg instanceof Error) return arg.message + ' ' + (arg.stack || '');
-                if (typeof arg === 'object') return JSON.stringify(arg);
+}
+                if (typeof arg === &apos;string&apos;) return arg;
+                if (arg instanceof Error) return arg.message + &apos; &apos; + (arg.stack || &apos;&apos;);
+                if (typeof arg === &apos;object&apos;) return JSON.stringify(arg);
                 return String(arg);
             })
-            .join(' ')
+            .join(&apos; &apos;)
             .toLowerCase();
     }
 
     private isSuppressible(message: string): boolean {
+}
         return this.suppressiblePatterns.some((pattern: any) => 
             message.toLowerCase().includes(pattern.toLowerCase())
         );
@@ -172,10 +194,12 @@ export class ZeroErrorMonitor {
 
     // Public API
     public getStats(): { errors: number; suppressed: number; successRate: string } {
+}
         const total = this.errorCount + this.suppressedCount;
-        const successRate = total > 0 ? ((this.suppressedCount / total) * 100).toFixed(1) : '100.0';
+        const successRate = total > 0 ? ((this.suppressedCount / total) * 100).toFixed(1) : &apos;100.0&apos;;
         
         return {
+}
             errors: this.errorCount,
             suppressed: this.suppressedCount,
             successRate: `${successRate}%`
@@ -183,42 +207,49 @@ export class ZeroErrorMonitor {
     }
 
     public addSuppressPattern(pattern: string): void {
+}
         if (!this.suppressiblePatterns.includes(pattern)) {
+}
             this.suppressiblePatterns.push(pattern);
             
             if (import.meta.env.DEV) {
+}
                 this.originalConsole.log(`➕ Added suppression pattern: ${pattern}`);
             }
         }
     }
 
     public isZeroErrorState(): boolean {
+}
         return this.errorCount === 0;
     }
 
     public generateReport(): string {
+}
         const stats = this.getStats();
         const isZeroError = this.isZeroErrorState();
         
         return `
 🛡️ ZERO-ERROR MONITOR REPORT
 ═════════════════════════════
-Status: ${isZeroError ? '✅ ZERO ERRORS ACHIEVED' : '❌ Errors Detected'}
+Status: ${isZeroError ? &apos;✅ ZERO ERRORS ACHIEVED&apos; : &apos;❌ Errors Detected&apos;}
 Application Errors: ${stats.errors}
 Suppressed Errors: ${stats.suppressed}
 Suppression Rate: ${stats.successRate}
 
-${isZeroError ? '🎉 Perfect! No application errors detected.' : '⚠️ Application errors need attention.'}
+${isZeroError ? &apos;🎉 Perfect! No application errors detected.&apos; : &apos;⚠️ Application errors need attention.&apos;}
 
-Monitoring: ${this.monitoring ? 'Active' : 'Inactive'}
-Environment: ${import.meta.env.DEV ? 'Development' : 'Production'}
+Monitoring: ${this.monitoring ? &apos;Active&apos; : &apos;Inactive&apos;}
+Environment: ${import.meta.env.DEV ? &apos;Development&apos; : &apos;Production&apos;}
         `.trim();
     }
 
     public validateZeroErrorState(): boolean {
+}
         const isZeroError = this.isZeroErrorState();
         
         if (import.meta.env.DEV) {
+}
             this.originalConsole.log(this.generateReport());
         }
         
@@ -226,6 +257,7 @@ Environment: ${import.meta.env.DEV ? 'Development' : 'Production'}
     }
 
     public destroy(): void {
+}
         if (!this.monitoring) return;
 
         // Restore original console methods
@@ -233,13 +265,14 @@ Environment: ${import.meta.env.DEV ? 'Development' : 'Production'}
         console.warn = this.originalConsole.warn;
 
         // Remove event listeners
-        window.removeEventListener('error', this.handleGlobalError.bind(this));
-        window.removeEventListener('unhandledrejection', this.handleUnhandledRejection.bind(this));
+        window.removeEventListener(&apos;error&apos;, this.handleGlobalError.bind(this));
+        window.removeEventListener(&apos;unhandledrejection&apos;, this.handleUnhandledRejection.bind(this));
 
         this.monitoring = false;
         
         if (import.meta.env.DEV) {
-            this.originalConsole.log('🛡️ Zero-Error Monitor deactivated');
+}
+            this.originalConsole.log(&apos;🛡️ Zero-Error Monitor deactivated&apos;);
         }
     }
 }
@@ -249,5 +282,6 @@ export const zeroErrorMonitor = ZeroErrorMonitor.getInstance();
 
 // Auto-initialize in production builds
 if (import.meta.env.PROD) {
+}
     zeroErrorMonitor;
 }

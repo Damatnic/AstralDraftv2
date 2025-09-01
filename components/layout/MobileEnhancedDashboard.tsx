@@ -1,10 +1,10 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useMobileViewport } from '../../hooks/useMobileViewport';
-import PullToRefresh from '../ui/PullToRefresh';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useMobileViewport } from &apos;../../hooks/useMobileViewport&apos;;
+import PullToRefresh from &apos;../ui/PullToRefresh&apos;;
 
 interface MobileEnhancedDashboardProps {
+}
   children: React.ReactNode;
   onRefresh?: () => Promise<void>;
   showPullToRefresh?: boolean;
@@ -16,49 +16,61 @@ interface MobileEnhancedDashboardProps {
 }
 
 export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = ({
+}
   children,
   onRefresh,
   showPullToRefresh = true
 }: any) => {
+}
   const containerRef = React.useRef<HTMLDivElement>(null);
   const { isPortrait, safeAreaInsets, isMobile } = useMobileViewport();
   const [isInteracting, setIsInteracting] = React.useState(false);
 
   // Handle touch interaction states
   const handleTouchStart = React.useCallback(() => {
+}
     setIsInteracting(true);
   }, []);
 
   const handleTouchEnd = React.useCallback(() => {
+}
     setIsInteracting(false);
   }, []);
 
   const dashboardVariants = {
+}
     initial: { opacity: 0, y: 20 },
-    animate: { 
+    animate: {
+}
       opacity: 1, 
       y: 0,
-      transition: { 
+      transition: {
+}
         duration: 0.3
 
     },
-    exit: { 
+    exit: {
+}
       opacity: 0, 
       y: -20,
-      transition: { 
+      transition: {
+}
         duration: 0.2
 
 
   };
 
   const contentVariants = {
+}
     active: {
+}
       scale: isInteracting ? 0.98 : 1,
       transition: { duration: 0.2 }
 
   };
 
   if (!isMobile) {
+}
     // Render without mobile enhancements for desktop
     return <div className="dashboard-content sm:px-4 md:px-6 lg:px-8">{children}</div>;
 
@@ -66,18 +78,20 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
     <motion.div
       ref={containerRef}
       className={`
+}
         mobile-enhanced-dashboard
         mobile-viewport-container
-        ${isPortrait ? 'portrait' : 'landscape'}
-        ${isInteracting ? 'gesture-active' : ''}
+        ${isPortrait ? &apos;portrait&apos; : &apos;landscape&apos;}
+        ${isInteracting ? &apos;gesture-active&apos; : &apos;&apos;}
       `}
       style={{
+}
         paddingTop: safeAreaInsets.top,
         paddingBottom: safeAreaInsets.bottom,
         paddingLeft: safeAreaInsets.left,
         paddingRight: safeAreaInsets.right,
-        minHeight: '100vh',
-        overflowX: 'hidden'
+        minHeight: &apos;100vh&apos;,
+        overflowX: &apos;hidden&apos;
       }}
       variants={dashboardVariants}
       initial="initial"
@@ -87,7 +101,8 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
     >
       {/* Pull to refresh wrapper */}
       {showPullToRefresh && onRefresh ? (
-        <PullToRefresh
+}
+        <PullToRefresh>
           onRefresh={onRefresh}
           threshold={80}
         >
@@ -112,19 +127,21 @@ export const MobileEnhancedDashboard: React.FC<MobileEnhancedDashboardProps> = (
       {/* Touch interaction feedback */}
       <AnimatePresence>
         {isInteracting && (
+}
           <motion.div
             className="gesture-feedback-overlay sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.1 }}
             exit={{ opacity: 0 }}
             style={{
-              position: 'fixed',
+}
+              position: &apos;fixed&apos;,
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              background: 'rgba(59, 130, 246, 0.05)',
-              pointerEvents: 'none',
+              background: &apos;rgba(59, 130, 246, 0.05)&apos;,
+              pointerEvents: &apos;none&apos;,
               zIndex: 10
             }}
           />

@@ -4,14 +4,15 @@
  * Integrates with live sports APIs for genuine prediction generation
  */
 
-import { productionSportsDataService, type NFLGame } from './productionSportsDataService';
-import { generateOraclePrediction } from './geminiService';
+import { productionSportsDataService, type NFLGame } from &apos;./productionSportsDataService&apos;;
+import { generateOraclePrediction } from &apos;./geminiService&apos;;
 
 export interface ProductionOraclePrediction {
+}
   id: string;
   week: number;
   season: number;
-  type: 'PLAYER_PERFORMANCE' | 'GAME_OUTCOME' | 'WEEKLY_SCORING' | 'WEATHER_IMPACT' | 'INJURY_IMPACT';
+  type: &apos;PLAYER_PERFORMANCE&apos; | &apos;GAME_OUTCOME&apos; | &apos;WEEKLY_SCORING&apos; | &apos;WEATHER_IMPACT&apos; | &apos;INJURY_IMPACT&apos;;
   question: string;
   options: PredictionOption[];
   oracleChoice: number;
@@ -22,8 +23,9 @@ export interface ProductionOraclePrediction {
   gameId?: string;
   playerId?: string;
   timestamp: string;
-  status: 'open' | 'closed' | 'resolved';
+  status: &apos;open&apos; | &apos;closed&apos; | &apos;resolved&apos;;
   resolution?: {
+}
     correctAnswer: number;
     actualValue?: number;
     resolvedAt: string;
@@ -32,6 +34,7 @@ export interface ProductionOraclePrediction {
 }
 
 export interface PredictionOption {
+}
   id: number;
   text: string;
   probability: number;
@@ -40,6 +43,7 @@ export interface PredictionOption {
 }
 
 export interface UserPredictionSubmission {
+}
   predictionId: string;
   userId: string;
   choice: number;
@@ -49,6 +53,7 @@ export interface UserPredictionSubmission {
 }
 
 export interface WeeklyPredictionSummary {
+}
   week: number;
   season: number;
   totalPredictions: number;
@@ -60,6 +65,7 @@ export interface WeeklyPredictionSummary {
 }
 
 export interface UserPredictionSummary {
+}
   userId: string;
   username: string;
   correctPredictions: number;
@@ -70,29 +76,35 @@ export interface UserPredictionSummary {
 }
 
 class ProductionOraclePredictionService {
+}
   private readonly predictions: Map<string, ProductionOraclePrediction> = new Map();
   private readonly userSubmissions: Map<string, UserPredictionSubmission[]> = new Map();
   private currentWeek: number = 1;
   private currentSeason: number = 2024;
 
   constructor() {
+}
     // Initialize service asynchronously, but not in test environment
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== &apos;test&apos;) {
+}
       setTimeout(() => this.initializeService(), 0);
     }
   }
 
   private async initializeService(): Promise<void> {
+}
     try {
+}
       // Set current week based on actual NFL schedule
       await this.updateCurrentWeek();
       
       // Generate initial predictions for current week
       await this.generateWeeklyPredictions(this.currentWeek);
       
-      console.log('✅ Production Oracle Prediction Service initialized');
+      console.log(&apos;✅ Production Oracle Prediction Service initialized&apos;);
     } catch (error) {
-      console.error('❌ Failed to initialize Oracle service:', error);
+}
+      console.error(&apos;❌ Failed to initialize Oracle service:&apos;, error);
     }
   }
 
@@ -100,15 +112,19 @@ class ProductionOraclePredictionService {
    * Generate real predictions for a specific week using live NFL data
    */
   async generateWeeklyPredictions(week: number, season: number = this.currentSeason): Promise<ProductionOraclePrediction[]> {
+}
     try {
+}
       console.log(`🔮 Generating Oracle predictions for Week ${week}, ${season}...`);
 
       const games = await productionSportsDataService.getCurrentWeekGames(week, season);
       const newPredictions: ProductionOraclePrediction[] = [];
 
       for (const game of games) {
+}
         // Only create predictions for future games
         if (new Date(game.date) > new Date()) {
+}
           // Generate game outcome predictions
           const gameOutcomePrediction = await this.createGameOutcomePrediction(game);
           if (gameOutcomePrediction) newPredictions.push(gameOutcomePrediction);
@@ -118,7 +134,8 @@ class ProductionOraclePredictionService {
           newPredictions.push(...playerPredictions);
 
           // Generate weather impact predictions (for outdoor games)
-          if (game.weather && game.weather.conditions !== 'clear') {
+          if (game.weather && game.weather.conditions !== &apos;clear&apos;) {
+}
             const weatherPrediction = await this.createWeatherImpactPrediction(game);
             if (weatherPrediction) newPredictions.push(weatherPrediction);
           }
@@ -127,6 +144,7 @@ class ProductionOraclePredictionService {
 
       // Store predictions
       newPredictions.forEach((prediction: any) => {
+}
         this.predictions.set(prediction.id, prediction);
       });
 
@@ -134,7 +152,8 @@ class ProductionOraclePredictionService {
       return newPredictions;
 
     } catch (error) {
-      console.error('Failed to generate weekly predictions:', error);
+}
+      console.error(&apos;Failed to generate weekly predictions:&apos;, error);
       return [];
     }
   }
@@ -143,10 +162,12 @@ class ProductionOraclePredictionService {
    * Get all predictions for a specific week
    */
   async getPredictionsForWeek(week: number, season: number = this.currentSeason): Promise<ProductionOraclePrediction[]> {
+}
     const weekPredictions = Array.from(this.predictions.values())
       .filter((p: any) => p.week === week && p.season === season);
 
     if (weekPredictions.length === 0) {
+}
       // Generate predictions if none exist
       return await this.generateWeeklyPredictions(week, season);
     }
@@ -158,6 +179,7 @@ class ProductionOraclePredictionService {
    * Get a specific prediction by ID
    */
   getPredictionById(predictionId: string): ProductionOraclePrediction | null {
+}
     return this.predictions.get(predictionId) || null;
   }
 
@@ -170,31 +192,39 @@ class ProductionOraclePredictionService {
     choice: number,
     confidence: number
   ): Promise<{ success: boolean; prediction?: ProductionOraclePrediction; error?: string }> {
+}
     try {
+}
       const prediction = this.predictions.get(predictionId);
       
       if (!prediction) {
-        return { success: false, error: 'Prediction not found' };
+}
+        return { success: false, error: &apos;Prediction not found&apos; };
       }
 
-      if (prediction.status !== 'open') {
-        return { success: false, error: 'Prediction is no longer open for submissions' };
+      if (prediction.status !== &apos;open&apos;) {
+}
+        return { success: false, error: &apos;Prediction is no longer open for submissions&apos; };
       }
 
       if (new Date() > new Date(prediction.deadline)) {
-        return { success: false, error: 'Prediction deadline has passed' };
+}
+        return { success: false, error: &apos;Prediction deadline has passed&apos; };
       }
 
       if (choice < 0 || choice >= prediction.options.length) {
-        return { success: false, error: 'Invalid choice' };
+}
+        return { success: false, error: &apos;Invalid choice&apos; };
       }
 
       if (confidence < 1 || confidence > 100) {
-        return { success: false, error: 'Confidence must be between 1 and 100' };
+}
+        return { success: false, error: &apos;Confidence must be between 1 and 100&apos; };
       }
 
       // Create user submission
       const submission: UserPredictionSubmission = {
+}
         predictionId,
         userId,
         choice,
@@ -204,18 +234,21 @@ class ProductionOraclePredictionService {
 
       // Store submission
       if (!this.userSubmissions.has(predictionId)) {
+}
         this.userSubmissions.set(predictionId, []);
       }
       
       const submissions = this.userSubmissions.get(predictionId);
       
       if (!submissions) {
-        return { success: false, error: 'Failed to access submissions' };
+}
+        return { success: false, error: &apos;Failed to access submissions&apos; };
       }
       
       // Remove any existing submission from this user
       const existingIndex = submissions.findIndex(s => s.userId === userId);
       if (existingIndex >= 0) {
+}
         submissions.splice(existingIndex, 1);
       }
       
@@ -226,8 +259,9 @@ class ProductionOraclePredictionService {
       return { success: true, prediction };
 
     } catch (error) {
-      console.error('Failed to submit user prediction:', error);
-      return { success: false, error: 'Failed to submit prediction' };
+}
+      console.error(&apos;Failed to submit user prediction:&apos;, error);
+      return { success: false, error: &apos;Failed to submit prediction&apos; };
     }
   }
 
@@ -235,28 +269,35 @@ class ProductionOraclePredictionService {
    * Resolve predictions based on actual game results
    */
   async resolvePredictions(week: number, season: number = this.currentSeason): Promise<number> {
+}
     try {
+}
       const liveScores = await productionSportsDataService.getLiveScores();
       const weekPredictions = Array.from(this.predictions.values())
-        .filter((p: any) => p.week === week && p.season === season && p.status === 'open');
+        .filter((p: any) => p.week === week && p.season === season && p.status === &apos;open&apos;);
 
       let resolvedCount = 0;
 
       for (const prediction of weekPredictions) {
+}
         if (prediction.gameId) {
+}
           const game = liveScores.find((g: any) => g.id === prediction.gameId);
           
-          if (game && game.status === 'completed') {
+          if (game && game.status === &apos;completed&apos;) {
+}
             const resolution = this.calculatePredictionResult(prediction, game);
             
             if (resolution) {
+}
               prediction.resolution = {
+}
                 correctAnswer: resolution.correctAnswer,
                 actualValue: resolution.actualValue,
                 resolvedAt: new Date().toISOString(),
                 explanation: resolution.explanation
               };
-              prediction.status = 'resolved';
+              prediction.status = &apos;resolved&apos;;
               
               // Calculate points for user submissions
               await this.calculateUserPoints(prediction);
@@ -272,7 +313,8 @@ class ProductionOraclePredictionService {
       return resolvedCount;
 
     } catch (error) {
-      console.error('Failed to resolve predictions:', error);
+}
+      console.error(&apos;Failed to resolve predictions:&apos;, error);
       return 0;
     }
   }
@@ -281,6 +323,7 @@ class ProductionOraclePredictionService {
    * Get leaderboard for a specific week
    */
   getWeeklyLeaderboard(week: number, season: number = this.currentSeason): UserPredictionSummary[] {
+}
     const weekPredictions = Array.from(this.predictions.values())
       .filter((p: any) => p.week === week && p.season === season);
 
@@ -288,11 +331,15 @@ class ProductionOraclePredictionService {
 
     // Calculate stats for each user
     weekPredictions.forEach((prediction: any) => {
+}
       const submissions = this.userSubmissions.get(prediction.id) || [];
       
       submissions.forEach((submission: any) => {
+}
         if (!userStats.has(submission.userId)) {
+}
           userStats.set(submission.userId, {
+}
             userId: submission.userId,
             username: `User_${submission.userId.slice(-4)}`, // Mock username
             correctPredictions: 0,
@@ -310,6 +357,7 @@ class ProductionOraclePredictionService {
         userStat.totalPoints += submission.points || 0;
 
         if (prediction.resolution && submission.choice === prediction.resolution.correctAnswer) {
+}
           userStat.correctPredictions++;
         }
       });
@@ -318,6 +366,7 @@ class ProductionOraclePredictionService {
     // Calculate accuracy and sort by points
     const leaderboard = Array.from(userStats.values())
       .map((user: any) => ({
+}
         ...user,
         accuracy: user.totalPredictions > 0 ? (user.correctPredictions / user.totalPredictions) * 100 : 0
       }))
@@ -331,15 +380,18 @@ class ProductionOraclePredictionService {
    * Get Oracle accuracy statistics
    */
   getOracleAccuracy(week?: number, season: number = this.currentSeason): { 
+}
     totalPredictions: number; 
     correctPredictions: number; 
     accuracy: number;
     confidenceAccuracy: number;
   } {
+}
     let predictions = Array.from(this.predictions.values())
-      .filter((p: any) => p.season === season && p.status === 'resolved');
+      .filter((p: any) => p.season === season && p.status === &apos;resolved&apos;);
 
     if (week !== undefined) {
+}
       predictions = predictions.filter((p: any) => p.week === week);
     }
 
@@ -355,8 +407,10 @@ class ProductionOraclePredictionService {
     let actualConfidenceScore = 0;
 
     predictions.forEach((p: any) => {
+}
       totalConfidenceScore += p.confidence;
       if (p.resolution && p.oracleChoice === p.resolution.correctAnswer) {
+}
         actualConfidenceScore += p.confidence;
       }
     });
@@ -364,29 +418,36 @@ class ProductionOraclePredictionService {
     const confidenceAccuracy = totalConfidenceScore > 0 ? (actualConfidenceScore / totalConfidenceScore) * 100 : 0;
 
     return {
+}
       totalPredictions,
       correctPredictions,
       accuracy,
-      confidenceAccuracy
+//       confidenceAccuracy
     };
   }
 
   // Private helper methods
 
   private async updateCurrentWeek(): Promise<void> {
+}
     try {
+}
       const games = await productionSportsDataService.getCurrentWeekGames();
       if (games.length > 0) {
+}
         this.currentWeek = games[0].week;
         this.currentSeason = games[0].season;
       }
     } catch (error) {
-      console.error('Failed to update current week:', error);
+}
+      console.error(&apos;Failed to update current week:&apos;, error);
     }
   }
 
   private async createGameOutcomePrediction(game: NFLGame): Promise<ProductionOraclePrediction | null> {
+}
     try {
+}
       // Use AI to analyze the matchup
       const analysisPrompt = `Analyze the NFL matchup between ${game.awayTeam.name} (${game.awayTeam.record.wins}-${game.awayTeam.record.losses}) and ${game.homeTeam.name} (${game.homeTeam.record.wins}-${game.homeTeam.record.losses}). Consider team records, home field advantage, and recent performance. Who is more likely to win?`;
       
@@ -404,13 +465,15 @@ class ProductionOraclePredictionService {
       const confidence = Math.round(Math.max(adjustedHomeProbability, adjustedAwayProbability) * 100);
 
       return {
+}
         id: `game_${game.id}`,
         week: game.week,
         season: game.season,
-        type: 'GAME_OUTCOME',
+        type: &apos;GAME_OUTCOME&apos;,
         question: `Who will win: ${game.awayTeam.name} @ ${game.homeTeam.name}?`,
         options: [
           {
+}
             id: 0,
             text: `${game.awayTeam.name} wins`,
             probability: adjustedAwayProbability,
@@ -420,6 +483,7 @@ class ProductionOraclePredictionService {
             ]
           },
           {
+}
             id: 1,
             text: `${game.homeTeam.name} wins`,
             probability: adjustedHomeProbability,
@@ -442,69 +506,78 @@ class ProductionOraclePredictionService {
         deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
         gameId: game.id,
         timestamp: new Date().toISOString(),
-        status: 'open'
+        status: &apos;open&apos;
       };
 
     } catch (error) {
-      console.error('Failed to create game outcome prediction:', error);
+}
+      console.error(&apos;Failed to create game outcome prediction:&apos;, error);
       return null;
     }
   }
 
   private async createPlayerPerformancePredictions(game: NFLGame): Promise<ProductionOraclePrediction[]> {
+}
     const predictions: ProductionOraclePrediction[] = [];
 
     try {
+}
       // For now, create a simplified player performance prediction
       // In a real implementation, this would fetch specific player data and create multiple predictions
       
       const qbPrediction: ProductionOraclePrediction = {
+}
         id: `qb_performance_${game.id}`,
         week: game.week,
         season: game.season,
-        type: 'PLAYER_PERFORMANCE',
-        question: `Which team's QB will have more passing yards in ${game.awayTeam.name} @ ${game.homeTeam.name}?`,
+        type: &apos;PLAYER_PERFORMANCE&apos;,
+        question: `Which team&apos;s QB will have more passing yards in ${game.awayTeam.name} @ ${game.homeTeam.name}?`,
         options: [
           {
+}
             id: 0,
             text: `${game.awayTeam.name} QB`,
             probability: 0.5,
-            supportingData: ['Away team QB performance']
+            supportingData: [&apos;Away team QB performance&apos;]
           },
           {
+}
             id: 1,
             text: `${game.homeTeam.name} QB`,
             probability: 0.5,
-            supportingData: ['Home team QB performance']
+            supportingData: [&apos;Home team QB performance&apos;]
           }
         ],
         oracleChoice: 1, // Slight bias toward home team
         confidence: 60,
-        reasoning: 'Home QBs typically perform slightly better due to familiar conditions and crowd support.',
+        reasoning: &apos;Home QBs typically perform slightly better due to familiar conditions and crowd support.&apos;,
         dataPoints: [
-          'Home field advantage for QBs',
-          'Weather conditions impact',
-          'Team passing game strength'
+          &apos;Home field advantage for QBs&apos;,
+          &apos;Weather conditions impact&apos;,
+          &apos;Team passing game strength&apos;
         ],
         deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
         gameId: game.id,
         timestamp: new Date().toISOString(),
-        status: 'open'
+        status: &apos;open&apos;
       };
 
       predictions.push(qbPrediction);
 
     } catch (error) {
-      console.error('Failed to create player performance predictions:', error);
+}
+      console.error(&apos;Failed to create player performance predictions:&apos;, error);
     }
 
     return predictions;
   }
 
   private async createWeatherImpactPrediction(game: NFLGame): Promise<ProductionOraclePrediction | null> {
+}
     if (!game.weather) return null;
 
     try {
+}
       const isBadWeather = game.weather.windSpeed > 15 || 
                           game.weather.precipitation > 0 || 
                           game.weather.temperature < 32;
@@ -512,21 +585,24 @@ class ProductionOraclePredictionService {
       if (!isBadWeather) return null;
 
       return {
+}
         id: `weather_${game.id}`,
         week: game.week,
         season: game.season,
-        type: 'WEATHER_IMPACT',
+        type: &apos;WEATHER_IMPACT&apos;,
         question: `Will weather conditions significantly impact the ${game.awayTeam.name} @ ${game.homeTeam.name} game?`,
         options: [
           {
+}
             id: 0,
-            text: 'Minimal weather impact (total points within normal range)',
+            text: &apos;Minimal weather impact (total points within normal range)&apos;,
             probability: 0.3,
-            supportingData: ['Teams adapt well to conditions']
+            supportingData: [&apos;Teams adapt well to conditions&apos;]
           },
           {
+}
             id: 1,
-            text: 'Significant weather impact (lower scoring game)',
+            text: &apos;Significant weather impact (lower scoring game)&apos;,
             probability: 0.7,
             supportingData: [
               `Wind speed: ${game.weather.windSpeed} mph`,
@@ -547,11 +623,12 @@ class ProductionOraclePredictionService {
         deadline: new Date(new Date(game.date).getTime() - 15 * 60 * 1000).toISOString(),
         gameId: game.id,
         timestamp: new Date().toISOString(),
-        status: 'open'
+        status: &apos;open&apos;
       };
 
     } catch (error) {
-      console.error('Failed to create weather impact prediction:', error);
+}
+      console.error(&apos;Failed to create weather impact prediction:&apos;, error);
       return null;
     }
   }
@@ -560,33 +637,41 @@ class ProductionOraclePredictionService {
     prediction: ProductionOraclePrediction, 
     game: NFLGame
   ): { correctAnswer: number; actualValue?: number; explanation: string } | null {
+}
     
     if (!game.homeScore || !game.awayScore) return null;
 
     switch (prediction.type) {
-      case 'GAME_OUTCOME': {
+}
+      case &apos;GAME_OUTCOME&apos;: {
+}
         const homeWon = game.homeScore > game.awayScore;
         return {
+}
           correctAnswer: homeWon ? 1 : 0,
           explanation: `${homeWon ? game.homeTeam.name : game.awayTeam.name} won ${homeWon ? game.homeScore : game.awayScore}-${homeWon ? game.awayScore : game.homeScore}`
         };
       }
 
-      case 'WEATHER_IMPACT': {
+      case &apos;WEATHER_IMPACT&apos;: {
+}
         const totalPoints = game.homeScore + game.awayScore;
         const isLowScoring = totalPoints < 45; // Threshold for weather impact
         return {
+}
           correctAnswer: isLowScoring ? 1 : 0,
           actualValue: totalPoints,
-          explanation: `Total points: ${totalPoints}. ${isLowScoring ? 'Weather significantly impacted scoring' : 'Weather had minimal impact'}`
+          explanation: `Total points: ${totalPoints}. ${isLowScoring ? &apos;Weather significantly impacted scoring&apos; : &apos;Weather had minimal impact&apos;}`
         };
       }
 
-      case 'PLAYER_PERFORMANCE': {
+      case &apos;PLAYER_PERFORMANCE&apos;: {
+}
         // This would require specific player stats - simplified for now
         return {
+}
           correctAnswer: Math.random() > 0.5 ? 1 : 0, // Mock resolution
-          explanation: 'Player performance resolved based on actual stats'
+          explanation: &apos;Player performance resolved based on actual stats&apos;
         };
       }
 
@@ -596,10 +681,13 @@ class ProductionOraclePredictionService {
   }
 
   private async calculateUserPoints(prediction: ProductionOraclePrediction): Promise<void> {
+}
     const submissions = this.userSubmissions.get(prediction.id) || [];
     
     submissions.forEach((submission: any) => {
+}
       if (prediction.resolution) {
+}
         const isCorrect = submission.choice === prediction.resolution.correctAnswer;
         const basePoints = isCorrect ? 100 : 0;
         const confidenceBonus = isCorrect ? Math.round(submission.confidence * 0.5) : 0;

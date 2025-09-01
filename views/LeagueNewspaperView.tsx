@@ -1,18 +1,18 @@
 
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { NewspaperIcon } from '../components/icons/NewspaperIcon';
-import { generateLeagueNewspaperContent } from '../services/geminiService';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import type { NewspaperContent } from '../types';
-import ReactMarkdown from 'react-markdown';
-import { motion } from 'framer-motion';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { NewspaperIcon } from &apos;../components/icons/NewspaperIcon&apos;;
+import { generateLeagueNewspaperContent } from &apos;../services/geminiService&apos;;
+import LoadingSpinner from &apos;../components/ui/LoadingSpinner&apos;;
+import type { NewspaperContent } from &apos;../types&apos;;
+import ReactMarkdown from &apos;react-markdown&apos;;
+import { motion } from &apos;framer-motion&apos;;
 
 const LeagueNewspaperView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [newspaper, setNewspaper] = React.useState<NewspaperContent | null>(null);
@@ -21,15 +21,18 @@ const LeagueNewspaperView: React.FC = () => {
     const [selectedWeek, setSelectedWeek] = React.useState(league ? (league.currentWeek > 1 ? league.currentWeek - 1 : 1) : 1);
     
     const maxWeek = league ? league.currentWeek - 1 : 0;
-    const cacheKey = league ? `${league.id}_${selectedWeek}` : '';
+    const cacheKey = league ? `${league.id}_${selectedWeek}` : &apos;&apos;;
 
     React.useEffect(() => {
+}
         if (!league || !cacheKey || maxWeek < 1) {
+}
             setIsLoading(false);
             return;
 
         const cachedNewspaper = state.leagueNewspapers[cacheKey];
         if (cachedNewspaper) {
+}
             setNewspaper(cachedNewspaper);
             setIsLoading(false);
             return;
@@ -38,11 +41,14 @@ const LeagueNewspaperView: React.FC = () => {
         setError(null);
         generateLeagueNewspaperContent(league, selectedWeek)
             .then(data => {
+}
                 if (data) {
+}
                     setNewspaper(data);
-                    dispatch({ type: 'SET_LEAGUE_NEWSPAPER', payload: { key: cacheKey, newspaper: data } });
+                    dispatch({ type: &apos;SET_LEAGUE_NEWSPAPER&apos;, payload: { key: cacheKey, newspaper: data } });
                 } else {
-                    setError("The Oracle could not write this week's newspaper.");
+}
+                    setError("The Oracle could not write this week&apos;s newspaper.");
 
             })
             .catch(() => setError("An error occurred while consulting the Oracle."))
@@ -51,10 +57,12 @@ const LeagueNewspaperView: React.FC = () => {
     }, [league, selectedWeek, cacheKey, state.leagueNewspapers, dispatch, maxWeek]);
 
     if (!league) {
-        return <ErrorDisplay title="Error" message="Please select a league." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+}
+        return <ErrorDisplay title="Error" message="Please select a league." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
 
      if (maxWeek < 1) {
-        return <ErrorDisplay title="Not Available" message="The newspaper will be published after Week 1 is complete." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })} />;
+}
+        return <ErrorDisplay title="Not Available" message="The newspaper will be published after Week 1 is complete." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; })} />;
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
@@ -75,7 +83,7 @@ const LeagueNewspaperView: React.FC = () => {
                             &gt;
                         </button>
                     </div>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="glass-button">
+                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) className="glass-button">
                         Back to League Hub
                     </button>
                 </div>
@@ -83,11 +91,13 @@ const LeagueNewspaperView: React.FC = () => {
             <main className="flex-grow glass-pane rounded-2xl overflow-hidden">
                 <div className="p-6 md:p-8 h-full overflow-y-auto">
                     {isLoading ? <LoadingSpinner text="The Oracle is on deadline..." /> :
+}
                      error ? <ErrorDisplay message={error} /> :
                      newspaper ? (
                         <motion.div
                             key={selectedWeek}
                             {...{
+}
                                 initial: { opacity: 0 },
                                 animate: { opacity: 1 },
                             }}
@@ -102,6 +112,7 @@ const LeagueNewspaperView: React.FC = () => {
                                 </div>
                                 <div className="space-y-6">
                                     {newspaper.articles.map((article, i) => (
+}
                                         <div key={i} className="prose prose-sm prose-invert prose-headings:text-cyan-300">
                                             <h4>{article.headline}</h4>
                                             <ReactMarkdown>{article.content}</ReactMarkdown>

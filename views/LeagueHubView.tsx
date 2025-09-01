@@ -1,62 +1,73 @@
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { Widget } from '../components/ui/Widget';
-import ChatPanel from '../components/chat/ChatPanel';
-import { UserIcon } from '../components/icons/UserIcon';
-import { SettingsIcon } from '../components/icons/SettingsIcon';
-import type { League, User } from '../types';
-import { BookOpenIcon } from '../components/icons/BookOpenIcon';
-import { MaskIcon } from '../components/icons/MaskIcon';
-import { generateAiChatMessage, generateLeagueSlogan } from '../services/geminiService';
-import { Avatar } from '../components/ui/Avatar';
-import { GavelIcon } from '../components/icons/GavelIcon';
-import { useLeague } from '../hooks/useLeague';
-import { BrainCircuitIcon } from '../components/icons/BrainCircuitIcon';
-import AnnouncementsWidget from '../components/hub/AnnouncementsWidget';
-import WeeklyPollWidget from '../components/hub/WeeklyPollWidget';
-import RivalryWidget from '../components/hub/RivalryWidget';
-import { ChartBarIcon } from '../components/icons/ChartBarIcon';
-import { AwardIcon } from '../components/icons/AwardIcon';
-import { NewspaperIcon } from '../components/icons/NewspaperIcon';
-import SideBetsWidget from '../components/hub/SideBetsWidget';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ChatPanel from &apos;../components/chat/ChatPanel&apos;;
+import { UserIcon } from &apos;../components/icons/UserIcon&apos;;
+import { SettingsIcon } from &apos;../components/icons/SettingsIcon&apos;;
+import type { League, User } from &apos;../types&apos;;
+import { BookOpenIcon } from &apos;../components/icons/BookOpenIcon&apos;;
+import { MaskIcon } from &apos;../components/icons/MaskIcon&apos;;
+import { generateAiChatMessage, generateLeagueSlogan } from &apos;../services/geminiService&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
+import { GavelIcon } from &apos;../components/icons/GavelIcon&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { BrainCircuitIcon } from &apos;../components/icons/BrainCircuitIcon&apos;;
+import AnnouncementsWidget from &apos;../components/hub/AnnouncementsWidget&apos;;
+import WeeklyPollWidget from &apos;../components/hub/WeeklyPollWidget&apos;;
+import RivalryWidget from &apos;../components/hub/RivalryWidget&apos;;
+import { ChartBarIcon } from &apos;../components/icons/ChartBarIcon&apos;;
+import { AwardIcon } from &apos;../components/icons/AwardIcon&apos;;
+import { NewspaperIcon } from &apos;../components/icons/NewspaperIcon&apos;;
+import SideBetsWidget from &apos;../components/hub/SideBetsWidget&apos;;
 
 const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.Dispatch<any> }> = ({ league, user, dispatch }: any) => {
+}
     const isCommissioner = user.id === league.commissionerId;
-    const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS';
-    const isDraftComplete = league.status === 'DRAFT_COMPLETE';
-    const isPreDraft = league.status === 'PRE_DRAFT';
+    const isSeasonStarted = league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;;
+    const isDraftComplete = league.status === &apos;DRAFT_COMPLETE&apos;;
+    const isPreDraft = league.status === &apos;PRE_DRAFT&apos;;
     const isHistoryAvailable = league.history && league.history.length > 0;
     const [slogan, setSlogan] = React.useState<string | null>(null);
 
     const prevWeekRef = React.useRef(league.currentWeek);
     
     React.useEffect(() => {
+}
         generateLeagueSlogan(league.name, league.teams.map((t: any) => t.name)).then(setSlogan);
     }, [league.name, league.teams]);
 
     React.useEffect(() => {
+}
         if (league.currentWeek > prevWeekRef.current) {
+}
             const justCompletedWeek = league.currentWeek - 1;
             const matchups = league.schedule.filter((m: any) => m.week === justCompletedWeek);
 
             matchups.forEach((matchup: any) => {
+}
                 const teamA = league.teams.find((t: any) => t.id === matchup.teamA.teamId);
                 const teamB = league.teams.find((t: any) => t.id === matchup.teamB.teamId);
 
                 if (teamA && teamB) {
+}
                     if (teamA.owner.persona) {
+}
                         generateAiChatMessage(teamA, teamB, matchup.teamA.score, matchup.teamB.score).then(text => {
+}
                             if (text) {
-                                dispatch({ type: 'ADD_CHAT_MESSAGE', payload: { leagueId: league.id, message: { user: teamA.owner, text } } });
+}
+                                dispatch({ type: &apos;ADD_CHAT_MESSAGE&apos;, payload: { leagueId: league.id, message: { user: teamA.owner, text } } });
                             }
                         });
                     }
 
                     if (teamB.owner.persona) {
+}
                         generateAiChatMessage(teamB, teamA, matchup.teamB.score, matchup.teamA.score).then(text => {
+}
                             if (text) {
-                                dispatch({ type: 'ADD_CHAT_MESSAGE', payload: { leagueId: league.id, message: { user: teamB.owner, text } } });
+}
+                                dispatch({ type: &apos;ADD_CHAT_MESSAGE&apos;, payload: { leagueId: league.id, message: { user: teamB.owner, text } } });
                             }
                         });
                     }
@@ -67,20 +78,23 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
     }, [league.currentWeek, league.schedule, league.teams, league.id, dispatch]);
 
     const handleProcessWaivers = () => {
-        dispatch({ type: 'PROCESS_WAIVERS', payload: { leagueId: league.id } });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Waivers are being processed...', type: 'SYSTEM' } });
+}
+        dispatch({ type: &apos;PROCESS_WAIVERS&apos;, payload: { leagueId: league.id } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Waivers are being processed...&apos;, type: &apos;SYSTEM&apos; } });
     };
 
     const handleAdvanceWeek = () => {
-        dispatch({ type: 'ADVANCE_WEEK', payload: { leagueId: league.id } });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Advancing to Week ${league.currentWeek + 1}...`, type: 'SYSTEM' } });
+}
+        dispatch({ type: &apos;ADVANCE_WEEK&apos;, payload: { leagueId: league.id } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Advancing to Week ${league.currentWeek + 1}...`, type: &apos;SYSTEM&apos; } });
     };
 
     const handleSetReady = (isReady: boolean) => {
-        dispatch({ type: 'SET_USER_READY', payload: { leagueId: league.id, userId: user.id, isReady } });
+}
+        dispatch({ type: &apos;SET_USER_READY&apos;, payload: { leagueId: league.id, userId: user.id, isReady } });
     };
 
-    const allHumanPlayersReady = league.members.filter((m: any) => !m.id.startsWith('ai_')).every((m: any) => m.isReady);
+    const allHumanPlayersReady = league.members.filter((m: any) => !m.id.startsWith(&apos;ai_&apos;)).every((m: any) => m.isReady);
 
     return (
         <div className="min-h-screen">
@@ -89,52 +103,57 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                 <div className="flex justify-between items-center">
                     <div>
                         <h1>{league.name}</h1>
-                        <p className="page-subtitle">{league.status.replace('_', ' ')}</p>
+                        <p className="page-subtitle">{league.status.replace(&apos;_&apos;, &apos; &apos;)}</p>
                         {slogan && (
+}
                             <p className="text-sm text-cyan-300/80 font-semibold italic mt-1">"{slogan}"</p>
                         )}
                     </div>
                     <div className="flex items-center gap-2 flex-wrap justify-end">
                         {isCommissioner && (
+}
                             <button 
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'COMMISSIONER_TOOLS' })} 
+                                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;COMMISSIONER_TOOLS&apos; })} 
                                 className="btn btn-danger flex items-center gap-2"
                             >
                                <GavelIcon /> Commissioner Tools
                             </button>
                         )}
                         {isSeasonStarted && (
+}
                             <button 
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_NEWSPAPER' })} 
+                                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_NEWSPAPER&apos; })} 
                                 className="btn btn-secondary flex items-center gap-2"
                             >
                                 <NewspaperIcon /> League Newspaper
                             </button>
                         )}
                         {isSeasonStarted && (
+}
                             <button 
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STATS' })} 
+                                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_STATS&apos; })} 
                                 className="btn btn-secondary flex items-center gap-2"
                             >
                                 <ChartBarIcon /> League Stats
                             </button>
                         )}
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TROPHY_ROOM' })} 
+                            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TROPHY_ROOM&apos; })} 
                             className="btn btn-warning flex items-center gap-2"
                         >
                             <AwardIcon /> Trophy Room
                         </button>
                         {isHistoryAvailable && (
+}
                             <button 
-                                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HISTORY' })} 
+                                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HISTORY&apos; })} 
                                 className="btn btn-warning flex items-center gap-2"
                             >
                                 <BookOpenIcon /> League History
                             </button>
                         )}
                         <button 
-                            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} 
+                            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} 
                             className="back-btn"
                         >
                             Back to Dashboard
@@ -149,11 +168,13 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                         <Widget title="League Members" icon={<UserIcon />}>
                             <div className="space-y-3 p-4">
                                 {league.members.map((member: any) => (
+}
                                     <div key={member.id} className="flex items-center gap-3">
                                         <Avatar avatar={member.avatar} className="w-8 h-8 text-xl rounded-md" />
                                         <div className="flex-grow">
-                                            <span className="font-semibold">{member.name} {member.id === user.id && '(You)'}</span>
+                                            <span className="font-semibold">{member.name} {member.id === user.id && &apos;(You)&apos;}</span>
                                             {member.persona && (
+}
                                                 <div className="flex items-center gap-1 text-xs text-cyan-300/80">
                                                     <MaskIcon className="w-3 h-3"/>
                                                     <span>{member.persona}</span>
@@ -161,6 +182,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                                             )}
                                         </div>
                                         {member.isReady ? (
+}
                                             <span className="text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full">Ready</span>
                                         ) : (
                                              <span className="text-xs bg-gray-500/20 text-gray-400 px-2 py-0.5 rounded-full">Not Ready</span>
@@ -181,7 +203,7 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                                     <p><strong>Teams:</strong> {league.settings.teamCount}</p>
                                     <p><strong>Scoring:</strong> {league.settings.scoring}</p>
                                     <button 
-                                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_RULES' })} 
+                                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_RULES&apos; })} 
                                         className="btn btn-secondary w-full mt-2"
                                     >
                                         View All Rules
@@ -190,25 +212,27 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                             </Widget>
                         </div>
                         <div className="sm:col-span-2 p-4 flex flex-col items-center justify-center text-center">
-                            {league.status === 'PRE_DRAFT' && (
+                            {league.status === &apos;PRE_DRAFT&apos; && (
+}
                                 <div className="flex gap-4">
                                      <button
-                                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' })}
+                                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DRAFT_PREP_CENTER&apos; })}
                                         className="btn flex items-center gap-3 text-xl px-8 py-4"
                                     >
                                         <BrainCircuitIcon /> Draft Prep Center
                                     </button>
                                    {isCommissioner ? (
+}
                                         <div className="flex flex-col gap-2 items-center">
                                             <button
-                                                onClick={() => dispatch({ type: 'START_DRAFT' })}
+                                                onClick={() => dispatch({ type: &apos;START_DRAFT&apos; })}
                                                 disabled={!allHumanPlayersReady}
                                                 className="btn btn-success text-xl px-8 py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 START DRAFT
                                             </button>
                                             <button
-                                                onClick={() => dispatch({ type: 'SET_ALL_USERS_READY', payload: { leagueId: league.id }})}
+                                                onClick={() => dispatch({ type: &apos;SET_ALL_USERS_READY&apos;, payload: { leagueId: league.id }})}
                                                 className="btn btn-secondary text-xs"
                                             >
                                                 Mark All Users Ready
@@ -218,14 +242,15 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
                                          <button
                                             onClick={() => handleSetReady(!user.isReady)}
                                         >
-                                            {user.isReady ? "I'm Not Ready" : "I'm Ready"}
+                                            {user.isReady ? "I&apos;m Not Ready" : "I&apos;m Ready"}
                                         </button>
                                     )}
                                 </div>
                             )}
-                            {league.status === 'DRAFTING' ? (
+                            {league.status === &apos;DRAFTING&apos; ? (
+}
                                  <button 
-                                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_ROOM' })} 
+                                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DRAFT_ROOM&apos; })} 
                                     className="btn text-xl px-8 py-4"
                                 >
                                     ENTER DRAFT
@@ -255,15 +280,17 @@ const LeagueHubContent: React.FC<{ league: League; user: User; dispatch: React.D
 };
 
 export const LeagueHubView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
 
     return (
         <div className="w-full h-full">
             {!league || !state.user ? (
+}
                 <div className="w-full h-full flex flex-col items-center justify-center">
-                    <p className="text-lg">Error: {!league ? 'No active league found' : 'Please log in to access the league hub'}.</p>
-                     <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded text-black font-bold">
+                    <p className="text-lg">Error: {!league ? &apos;No active league found&apos; : &apos;Please log in to access the league hub&apos;}.</p>
+                     <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} className="mt-4 px-4 py-2 bg-cyan-500 rounded text-black font-bold">
                         Back to Dashboard
                     </button>
                 </div>

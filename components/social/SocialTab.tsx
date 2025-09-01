@@ -1,21 +1,24 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
 import oracleSocialService, { 
+}
     OracleLeague, 
     LeagueSettings,
     GroupPrediction,
     Debate,
-    DebateSide
-} from '../../services/oracleSocialService';
+//     DebateSide
+} from &apos;../../services/oracleSocialService&apos;;
 
-type ReactionType = '👍' | '👎' | '🔥' | '💯' | '🤔' | '😂';
+type ReactionType = &apos;👍&apos; | &apos;👎&apos; | &apos;🔥&apos; | &apos;💯&apos; | &apos;🤔&apos; | &apos;😂&apos;;
 
 interface SocialTabProps {
+}
     isActive: boolean;
 
 }
 
 interface CreateLeagueFormData {
+}
     name: string;
     description: string;
     isPublic: boolean;
@@ -24,26 +27,30 @@ interface CreateLeagueFormData {
 
 // Helper functions
 const getPredictionStatusColor = (status: string) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
-    if (status === 'OPEN') return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-    if (status === 'CLOSED') return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-    return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+    if (status === &apos;OPEN&apos;) return &apos;bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400&apos;;
+    if (status === &apos;CLOSED&apos;) return &apos;bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400&apos;;
+    return &apos;bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300&apos;;
 };
 
 const getMemberRoleColor = (role: string) => {
-    if (role === 'CREATOR') return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-    if (role === 'ADMIN') return 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400';
-    return 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300';
+}
+    if (role === &apos;CREATOR&apos;) return &apos;bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400&apos;;
+    if (role === &apos;ADMIN&apos;) return &apos;bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400&apos;;
+    return &apos;bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300&apos;;
 };
 
 const getSideDisplayText = (side: DebateSide) => {
-    if (side === 'SIDE_A') return 'Side A';
-    if (side === 'SIDE_B') return 'Side B';
-    return 'Neutral';
+}
+    if (side === &apos;SIDE_A&apos;) return &apos;Side A&apos;;
+    if (side === &apos;SIDE_B&apos;) return &apos;Side B&apos;;
+    return &apos;Neutral&apos;;
 };
 
 const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
-    const [activeSubTab, setActiveSubTab] = useState<'leagues' | 'predictions' | 'debates'>('leagues');
+}
+    const [activeSubTab, setActiveSubTab] = useState<&apos;leagues&apos; | &apos;predictions&apos; | &apos;debates&apos;>(&apos;leagues&apos;);
     const [userLeagues, setUserLeagues] = useState<OracleLeague[]>([]);
     const [publicLeagues, setPublicLeagues] = useState<OracleLeague[]>([]);
     const [showCreateLeague, setShowCreateLeague] = useState(false);
@@ -52,47 +59,54 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
     // Form data states
     const [createLeagueForm, setCreateLeagueForm] = useState<CreateLeagueFormData>({
-        name: '',
-        description: '',
+}
+        name: &apos;&apos;,
+        description: &apos;&apos;,
         isPublic: true,
         maxMembers: 50,
         settings: {
-            challengeFrequency: 'WEEKLY',
-            pointsSystem: 'STANDARD',
+}
+            challengeFrequency: &apos;WEEKLY&apos;,
+            pointsSystem: &apos;STANDARD&apos;,
             allowDebates: true,
             allowGroupPredictions: true,
             autoStartChallenges: true,
             minimumParticipants: 2,
             enableTrashtalk: true,
-            moderationLevel: 'MODERATED',
+            moderationLevel: &apos;MODERATED&apos;,
             customRules: []
 
     });
 
-    const [joinCode, setJoinCode] = useState('');
+    const [joinCode, setJoinCode] = useState(&apos;&apos;);
 
     // Debates state
     const [debates, setDebates] = useState<Debate[]>([]);
     const [showCreateDebate, setShowCreateDebate] = useState(false);
     const [selectedDebate, setSelectedDebate] = useState<Debate | null>(null);
     const [createDebateForm, setCreateDebateForm] = useState({
-        title: '',
-        topic: '',
-        description: '',
-        leagueId: ''
+}
+        title: &apos;&apos;,
+        topic: &apos;&apos;,
+        description: &apos;&apos;,
+        leagueId: &apos;&apos;
     });
-    const [debatePostContent, setDebatePostContent] = useState('');
-    const [selectedSide, setSelectedSide] = useState<DebateSide>('NEUTRAL');
+    const [debatePostContent, setDebatePostContent] = useState(&apos;&apos;);
+    const [selectedSide, setSelectedSide] = useState<DebateSide>(&apos;NEUTRAL&apos;);
 
     useEffect(() => {
+}
         if (isActive) {
+}
             loadData();
     }
   }, [isActive]);
 
     const loadData = async () => {
+}
         setLoading(true);
         try {
+}
 
             const [leagues, publicLeaguesData] = await Promise.all([
                 oracleSocialService.getUserLeagues(),
@@ -103,20 +117,25 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             
             // Load debates for selected league
             if (selectedLeague) {
+}
                 const leagueDebates = await oracleSocialService.getLeagueDebates(selectedLeague.id);
                 setDebates(leagueDebates);
 
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleCreateLeague = async () => {
+}
         if (!createLeagueForm.name.trim()) return;
 
         setLoading(true);
         try {
+}
             await oracleSocialService.createLeague(
                 createLeagueForm.name,
                 createLeagueForm.description,
@@ -126,66 +145,82 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             );
             setShowCreateLeague(false);
             setCreateLeagueForm({
-                name: '',
-                description: '',
+}
+                name: &apos;&apos;,
+                description: &apos;&apos;,
                 isPublic: true,
                 maxMembers: 50,
                 settings: {
-                    challengeFrequency: 'WEEKLY',
-                    pointsSystem: 'STANDARD',
+}
+                    challengeFrequency: &apos;WEEKLY&apos;,
+                    pointsSystem: &apos;STANDARD&apos;,
                     allowDebates: true,
                     allowGroupPredictions: true,
                     autoStartChallenges: true,
                     minimumParticipants: 2,
                     enableTrashtalk: true,
-                    moderationLevel: 'MODERATED',
+                    moderationLevel: &apos;MODERATED&apos;,
                     customRules: []
 
             });
             loadData();
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleJoinLeague = async (leagueId: string) => {
+}
         setLoading(true);
         try {
+}
 
             const success = await oracleSocialService.joinLeague(leagueId);
             if (success) {
+}
                 loadData();
 
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleJoinByCode = async () => {
+}
         if (!joinCode.trim()) return;
 
         setLoading(true);
         try {
+}
 
-            const success = await oracleSocialService.joinLeague('', joinCode);
+            const success = await oracleSocialService.joinLeague(&apos;&apos;, joinCode);
             if (success) {
-                setJoinCode('');
+}
+                setJoinCode(&apos;&apos;);
                 loadData();
 
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     // Debate handlers
     const handleCreateDebate = async () => {
+}
         if (!createDebateForm.title.trim() || !createDebateForm.leagueId) return;
 
         setLoading(true);
         try {
+}
 
             await oracleSocialService.createDebate(
                 createDebateForm.leagueId,
@@ -195,68 +230,86 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             );
             setShowCreateDebate(false);
             setCreateDebateForm({
-                title: '',
-                topic: '',
-                description: '',
-                leagueId: ''
+}
+                title: &apos;&apos;,
+                topic: &apos;&apos;,
+                description: &apos;&apos;,
+                leagueId: &apos;&apos;
             });
             loadData();
     
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleJoinDebate = async (debateId: string, side: DebateSide) => {
+}
         setLoading(true);
         try {
+}
 
             await oracleSocialService.joinDebate(debateId, side);
             loadData();
         
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handlePostInDebate = async (debateId: string) => {
+}
         if (!debatePostContent.trim()) return;
 
         setLoading(true);
         try {
+}
 
             await oracleSocialService.postInDebate(debateId, debatePostContent, selectedSide);
-            setDebatePostContent('');
+            setDebatePostContent(&apos;&apos;);
             loadData();
         
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
-    const handleVoteInDebate = async (debateId: string, side: 'SIDE_A' | 'SIDE_B') => {
+    const handleVoteInDebate = async (debateId: string, side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos;) => {
+}
         setLoading(true);
         try {
+}
 
             await oracleSocialService.voteInDebate(debateId, side);
             loadData();
         
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleAddReaction = async (postId: string, reaction: ReactionType) => {
+}
         try {
+}
 
             await oracleSocialService.addReaction(postId, reaction);
             loadData();
 
     } catch (error) {
+}
 
     };
 
@@ -268,17 +321,17 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             <div className="border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <nav className="flex space-x-8 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={() => setActiveSubTab('leagues')}`}
+                        onClick={() => setActiveSubTab(&apos;leagues&apos;)}`}
                     >
                         🏆 Leagues
                     </button>
                     <button
-                        onClick={() => setActiveSubTab('predictions')}`}
+                        onClick={() => setActiveSubTab(&apos;predictions&apos;)}`}
                     >
                         🔮 Group Predictions
                     </button>
                     <button
-                        onClick={() => setActiveSubTab('debates')}`}
+                        onClick={() => setActiveSubTab(&apos;debates&apos;)}`}
                     >
                         ⚔️ Debates
                     </button>
@@ -286,6 +339,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             </div>
 
             {loading && (
+}
                 <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
                     <p className="mt-2 text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">Loading...</p>
@@ -293,7 +347,8 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
             )}
 
             {/* Tab Content */}
-            {activeSubTab === 'leagues' && (
+            {activeSubTab === &apos;leagues&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Create/Join League Section */}
                     <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
@@ -323,7 +378,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                                             disabled={!joinCode.trim() || loading}
                                             className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                                          aria-label="Action button">
-                                            Join
+//                                             Join
                                         </button>
                                     </div>
                                 </div>
@@ -349,19 +404,21 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                             Your Leagues ({userLeagues.length})
                         </h3>
                         {userLeagues.length === 0 ? (
+}
                             <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">🏆</div>
                                 <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                                    You haven't joined any leagues yet. Create one or browse public leagues below!
+                                    You haven&apos;t joined any leagues yet. Create one or browse public leagues below!
                                 </p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {userLeagues.map((league: any) => (
-                                    <LeagueCard 
+}
+                                    <LeagueCard>
                                         key={league.id} 
                                         league={league} 
-                                        isOwned={league.creatorId === 'current-user'}
+                                        isOwned={league.creatorId === &apos;current-user&apos;}
                                         onClick={() => setSelectedLeague(league)}
                                     />
                                 ))}
@@ -375,6 +432,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                             Public Leagues ({publicLeagues.length})
                         </h3>
                         {publicLeagues.length === 0 ? (
+}
                             <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">🌐</div>
                                 <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -384,7 +442,8 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {publicLeagues.map((league: any) => (
-                                    <LeagueCard 
+}
+                                    <LeagueCard>
                                         key={league.id} 
                                         league={league} 
                                         onJoin={() => handleJoinLeague(league.id)}
@@ -397,7 +456,8 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
                     {/* Create League Modal */}
                     {showCreateLeague && (
-                        <CreateLeagueModal
+}
+                        <CreateLeagueModal>
                             formData={createLeagueForm}
                             setFormData={setCreateLeagueForm}
                             onSubmit={handleCreateLeague}
@@ -407,7 +467,8 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
                     {/* League Details Modal */}
                     {selectedLeague && (
-                        <LeagueDetailsModal
+}
+                        <LeagueDetailsModal>
                             league={selectedLeague}
                             onClose={() => setSelectedLeague(null)}
                         />
@@ -415,16 +476,18 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
                 </div>
             )}
             
-            {activeSubTab === 'predictions' && (
-                <GroupPredictionsTab 
+            {activeSubTab === &apos;predictions&apos; && (
+}
+                <GroupPredictionsTab>
                     userLeagues={userLeagues}
                     selectedLeague={selectedLeague}
                     onSelectLeague={setSelectedLeague}
                 />
             )}
             
-            {activeSubTab === 'debates' && (
-                <DebatesTab 
+            {activeSubTab === &apos;debates&apos; && (
+}
+                <DebatesTab>
                     userLeagues={userLeagues}
                     selectedLeague={selectedLeague}
                     onSelectLeague={setSelectedLeague}
@@ -453,6 +516,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ isActive }: any) => {
 
 // Debates Tab Component
 interface DebatesTabProps {
+}
     userLeagues: OracleLeague[];
     selectedLeague: OracleLeague | null;
     onSelectLeague: (league: OracleLeague | null) => void;
@@ -460,6 +524,7 @@ interface DebatesTabProps {
     showCreateDebate: boolean;
     onShowCreateDebate: (show: boolean) => void;
     createDebateForm: {
+}
         title: string;
         topic: string;
         description: string;
@@ -475,11 +540,12 @@ interface DebatesTabProps {
     onCreateDebate: () => void;
     onJoinDebate: (debateId: string, side: DebateSide) => void;
     onPostInDebate: (debateId: string) => void;
-    onVoteInDebate: (debateId: string, side: 'SIDE_A' | 'SIDE_B') => void;
+    onVoteInDebate: (debateId: string, side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos;) => void;
     onAddReaction: (postId: string, reaction: ReactionType) => void;
     loading: boolean;
 
 const DebatesTab: React.FC<DebatesTabProps> = ({
+}
     userLeagues,
     selectedLeague,
     onSelectLeague,
@@ -499,21 +565,25 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
     onPostInDebate,
     onVoteInDebate,
     onAddReaction,
-    loading
+//     loading
 }: any) => {
+}
     const getDebateStatusColor = (status: string) => {
-        if (status === 'ACTIVE') return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-        if (status === 'CLOSED') return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+}
+        if (status === &apos;ACTIVE&apos;) return &apos;bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400&apos;;
+        if (status === &apos;CLOSED&apos;) return &apos;bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400&apos;;
+        return &apos;bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300&apos;;
     };
 
     const getSideColor = (side: DebateSide) => {
-        if (side === 'SIDE_A') return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400';
-        if (side === 'SIDE_B') return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300';
+}
+        if (side === &apos;SIDE_A&apos;) return &apos;bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400&apos;;
+        if (side === &apos;SIDE_B&apos;) return &apos;bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400&apos;;
+        return &apos;bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300&apos;;
     };
 
     if (!selectedLeague) {
+}
         return (
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
@@ -537,6 +607,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                         Select a League for Debates
                     </h3>
                     {userLeagues.length === 0 ? (
+}
                         <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">🏆</div>
                             <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -546,6 +617,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {userLeagues.map((league: any) => (
+}
                                 <button
                                     key={league.id}
                                     onClick={() => onSelectLeague(league)}
@@ -609,6 +681,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
 
             {/* Create Debate Modal */}
             {showCreateDebate && (
+}
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                         <div className="p-6 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
@@ -626,6 +699,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                                     type="text"
                                     value={createDebateForm.title}
                                     onChange={(e: any) => onUpdateCreateDebateForm({
+}
                                         ...createDebateForm,
                                         title: e.target.value,
                                         leagueId: selectedLeague.id
@@ -642,6 +716,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                                     id="debate-topic"
                                     value={createDebateForm.topic}
                                     onChange={(e: any) => onUpdateCreateDebateForm({
+}
                                         ...createDebateForm,
                                         topic: e.target.value
                                     }}
@@ -658,12 +733,13 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                             </div>
                             <div>
                                 <label htmlFor="debate-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
-                                    Description
+//                                     Description
                                 </label>
                                 <textarea
                                     id="debate-description"
                                     value={createDebateForm.description}
                                     onChange={(e: any) => onUpdateCreateDebateForm({
+}
                                         ...createDebateForm,
                                         description: e.target.value
                                     }}
@@ -677,14 +753,14 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                             <button
                                 onClick={() => onShowCreateDebate(false)}
                             >
-                                Cancel
+//                                 Cancel
                             </button>
                             <button
                                 onClick={onCreateDebate}
                                 disabled={!createDebateForm.title.trim() || loading}
                                 className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
-                                {loading ? 'Creating...' : 'Start Debate'}
+                                {loading ? &apos;Creating...&apos; : &apos;Start Debate&apos;}
                             </button>
                         </div>
                     </div>
@@ -694,6 +770,7 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
             {/* Debates List */}
             <div>
                 {debates.length === 0 ? (
+}
                     <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
                         <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">⚔️</div>
                         <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -711,7 +788,8 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
                 ) : (
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {debates.map((debate: any) => (
-                            <DebateCard
+}
+                            <DebateCard>
                                 key={debate.id}
                                 debate={debate}
                                 onSelectDebate={onSelectDebate}
@@ -738,10 +816,11 @@ const DebatesTab: React.FC<DebatesTabProps> = ({
 
 // Debate Card Component
 interface DebateCardProps {
+}
     debate: Debate;
     onSelectDebate: (debate: Debate | null) => void;
     onJoinDebate: (debateId: string, side: DebateSide) => void;
-    onVoteInDebate: (debateId: string, side: 'SIDE_A' | 'SIDE_B') => void;
+    onVoteInDebate: (debateId: string, side: &apos;SIDE_A&apos; | &apos;SIDE_B&apos;) => void;
     onPostInDebate: (debateId: string) => void;
     onAddReaction: (postId: string, reaction: ReactionType) => void;
     debatePostContent: string;
@@ -756,6 +835,7 @@ interface DebateCardProps {
 }
 
 const DebateCard: React.FC<DebateCardProps> = ({
+}
     debate,
     onSelectDebate,
     onJoinDebate,
@@ -769,16 +849,17 @@ const DebateCard: React.FC<DebateCardProps> = ({
     isExpanded,
     getDebateStatusColor,
     getSideColor,
-    loading
+//     loading
 }: any) => {
-    const sideAVotes = debate.votes.filter((v: any) => v.side === 'SIDE_A').length;
-    const sideBVotes = debate.votes.filter((v: any) => v.side === 'SIDE_B').length;
+}
+    const sideAVotes = debate.votes.filter((v: any) => v.side === &apos;SIDE_A&apos;).length;
+    const sideBVotes = debate.votes.filter((v: any) => v.side === &apos;SIDE_B&apos;).length;
     const totalVotes = sideAVotes + sideBVotes;
     const sideAPercentage = totalVotes > 0 ? (sideAVotes / totalVotes) * 100 : 0;
     const sideBPercentage = totalVotes > 0 ? (sideBVotes / totalVotes) * 100 : 0;
 
-    const userParticipant = debate.participants.find((p: any) => p.userId === 'current-user');
-    const userVote = debate.votes.find((v: any) => v.userId === 'current-user');
+    const userParticipant = debate.participants.find((p: any) => p.userId === &apos;current-user&apos;);
+    const userVote = debate.votes.find((v: any) => v.userId === &apos;current-user&apos;);
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden sm:px-4 md:px-6 lg:px-8">
@@ -793,6 +874,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                 {debate?.status}
                             </span>
                             {debate.topic && (
+}
                                 <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     {debate.topic}
                                 </span>
@@ -809,28 +891,31 @@ const DebateCard: React.FC<DebateCardProps> = ({
                     <button
                         onClick={() => onSelectDebate(isExpanded ? null : debate)}
                     >
-                        {isExpanded ? '▼' : '▶'}
+                        {isExpanded ? &apos;▼&apos; : &apos;▶&apos;}
                     </button>
                 </div>
 
                 {/* Voting Section */}
-                {debate?.status === 'ACTIVE' && (
+                {debate?.status === &apos;ACTIVE&apos; && (
+}
                     <div className="space-y-3 mb-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className="text-sm font-medium text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Community Vote</span>
                             {userVote && (
+}
                                 <span className="text-xs text-green-600 dark:text-green-400 sm:px-4 md:px-6 lg:px-8">
-                                    You voted for {userVote.side === 'SIDE_A' ? 'Side A' : 'Side B'}
+                                    You voted for {userVote.side === &apos;SIDE_A&apos; ? &apos;Side A&apos; : &apos;Side B&apos;}
                                 </span>
                             )}
                         </div>
                         <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                             <button
-                                onClick={() => onVoteInDebate(debate.id, 'SIDE_A')}
+                                onClick={() => onVoteInDebate(debate.id, &apos;SIDE_A&apos;)}
                                 className={`p-3 rounded-lg border transition-colors ${
-                                    userVote?.side === 'SIDE_A'
-                                        ? 'bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-400'
-                                        : 'border-gray-300 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+}
+                                    userVote?.side === &apos;SIDE_A&apos;
+                                        ? &apos;bg-blue-100 border-blue-300 text-blue-800 dark:bg-blue-900/30 dark:border-blue-600 dark:text-blue-400&apos;
+                                        : &apos;border-gray-300 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-blue-900/20&apos;
                                 }`}
                             >
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -839,11 +924,12 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                 </div>
                             </button>
                             <button
-                                onClick={() => onVoteInDebate(debate.id, 'SIDE_B')}
+                                onClick={() => onVoteInDebate(debate.id, &apos;SIDE_B&apos;)}
                                 className={`p-3 rounded-lg border transition-colors ${
-                                    userVote?.side === 'SIDE_B'
-                                        ? 'bg-red-100 border-red-300 text-red-800 dark:bg-red-900/30 dark:border-red-600 dark:text-red-400'
-                                        : 'border-gray-300 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20'
+}
+                                    userVote?.side === &apos;SIDE_B&apos;
+                                        ? &apos;bg-red-100 border-red-300 text-red-800 dark:bg-red-900/30 dark:border-red-600 dark:text-red-400&apos;
+                                        : &apos;border-gray-300 dark:border-gray-600 hover:bg-red-50 dark:hover:bg-red-900/20&apos;
                                 }`}
                             >
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -857,35 +943,38 @@ const DebateCard: React.FC<DebateCardProps> = ({
 
                 {/* Expanded Content */}
                 {isExpanded && (
+}
                     <div className="space-y-6 border-t border-gray-200 dark:border-gray-700 pt-6 sm:px-4 md:px-6 lg:px-8">
                         {/* Join Debate Section */}
-                        {debate?.status === 'ACTIVE' && !userParticipant && (
+                        {debate?.status === &apos;ACTIVE&apos; && !userParticipant && (
+}
                             <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                                 <h5 className="font-medium text-blue-900 dark:text-blue-300 mb-3 sm:px-4 md:px-6 lg:px-8">
                                     Join the Debate
                                 </h5>
                                 <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <button
-                                        onClick={() => onJoinDebate(debate.id, 'SIDE_A')}
+                                        onClick={() => onJoinDebate(debate.id, &apos;SIDE_A&apos;)}
                                     >
                                         Side A
                                     </button>
                                     <button
-                                        onClick={() => onJoinDebate(debate.id, 'SIDE_B')}
+                                        onClick={() => onJoinDebate(debate.id, &apos;SIDE_B&apos;)}
                                     >
                                         Side B
                                     </button>
                                     <button
-                                        onClick={() => onJoinDebate(debate.id, 'NEUTRAL')}
+                                        onClick={() => onJoinDebate(debate.id, &apos;NEUTRAL&apos;)}
                                     >
-                                        Neutral
+//                                         Neutral
                                     </button>
                                 </div>
                             </div>
                         )}
 
                         {/* Post in Debate */}
-                        {userParticipant && debate?.status === 'ACTIVE' && (
+                        {userParticipant && debate?.status === &apos;ACTIVE&apos; && (
+}
                             <div className="bg-gray-50 dark:bg-gray-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center gap-4 mb-3 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">
@@ -906,7 +995,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                         onClick={() => onPostInDebate(debate.id)}
                                         className="bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                                     >
-                                        {loading ? 'Posting...' : 'Post Argument'}
+                                        {loading ? &apos;Posting...&apos; : &apos;Post Argument&apos;}
                                     </button>
                                 </div>
                             </div>
@@ -918,12 +1007,14 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                 Discussion ({debate.posts.length})
                             </h5>
                             {debate.posts.length === 0 ? (
+}
                                 <div className="text-center py-6 text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                     No posts yet. Be the first to share your perspective!
                                 </div>
                             ) : (
                                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                     {debate.posts.map((post: any) => (
+}
                                         <div
                                             key={post.id}
                                             className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
@@ -937,6 +1028,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                                         {getSideDisplayText(post.side)}
                                                     </span>
                                                     {post.isPinned && (
+}
                                                         <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 sm:px-4 md:px-6 lg:px-8">
                                                             📌 Pinned
                                                         </span>
@@ -950,9 +1042,10 @@ const DebateCard: React.FC<DebateCardProps> = ({
                                             
                                             {/* Reactions */}
                                             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                                                {['👍', '👎', '🔥', '💯', '🤔', '😂'].map((reaction: any) => {
+                                                {[&apos;👍&apos;, &apos;👎&apos;, &apos;🔥&apos;, &apos;💯&apos;, &apos;🤔&apos;, &apos;😂&apos;].map((reaction: any) => {
+}
                                                     const count = post.reactions.filter((r: any) => r.type === reaction).length;
-                                                    const userReacted = post.reactions.some((r: any) => r.type === reaction && r.userId === 'current-user');
+                                                    const userReacted = post.reactions.some((r: any) => r.type === reaction && r.userId === &apos;current-user&apos;);
                                                     return (
                                                         <button
                                                             key={reaction}
@@ -977,6 +1070,7 @@ const DebateCard: React.FC<DebateCardProps> = ({
 
 // League Card Component
 interface LeagueCardProps {
+}
     league: OracleLeague;
     isOwned?: boolean;
     showJoinButton?: boolean;
@@ -986,11 +1080,12 @@ interface LeagueCardProps {
 }
 
 const LeagueCard: React.FC<LeagueCardProps> = ({ 
+}
     league, 
     isOwned = false, 
     showJoinButton = false, 
     onJoin, 
-    onClick 
+//     onClick 
 }: any) => (
     <button 
         className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg transition-shadow text-left w-full sm:px-4 md:px-6 lg:px-8"
@@ -1005,8 +1100,9 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
                 </p>
             </div>
             {isOwned && (
+}
                 <span className="bg-gold-100 text-gold-800 text-xs px-2 py-1 rounded-full sm:px-4 md:px-6 lg:px-8">
-                    Owner
+//                     Owner
                 </span>
             )}
         </div>
@@ -1014,9 +1110,10 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
         <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400 mb-3 sm:px-4 md:px-6 lg:px-8">
             <span>{league.currentMembers}/{league.maxMembers} members</span>
             <span className={`px-2 py-1 rounded-full text-xs ${
-                league?.status === 'ACTIVE' 
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+}
+                league?.status === &apos;ACTIVE&apos; 
+                    ? &apos;bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400&apos;
+                    : &apos;bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300&apos;
             }`}>
                 {league?.status}
             </span>
@@ -1024,6 +1121,7 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
 
         <div className="flex flex-wrap gap-1 mb-3 sm:px-4 md:px-6 lg:px-8">
             {league.tags.slice(0, 3).map((tag: any) => (
+}
                 <span key={tag} className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">
                     {tag}
                 </span>
@@ -1031,8 +1129,10 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
         </div>
 
         {showJoinButton && onJoin && (
+}
             <button
                 onClick={(e: any) = aria-label="Action button"> {
+}
                     e.stopPropagation();
                     onJoin();
                 }}
@@ -1043,6 +1143,7 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
         )}
 
         {league.joinCode && (
+}
             <div className="mt-2 text-center sm:px-4 md:px-6 lg:px-8">
                 <span className="text-xs text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     Join Code: <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded sm:px-4 md:px-6 lg:px-8">{league.joinCode}</code>
@@ -1054,12 +1155,14 @@ const LeagueCard: React.FC<LeagueCardProps> = ({
 
 // Group Prediction Card Component
 interface GroupPredictionCardProps {
+}
     prediction: GroupPrediction;
 
 // Create League Modal Component
 }
 
 interface CreateLeagueModalProps {
+}
     formData: CreateLeagueFormData;
     setFormData: React.Dispatch<React.SetStateAction<CreateLeagueFormData>>;
     onSubmit: () => void;
@@ -1067,11 +1170,12 @@ interface CreateLeagueModalProps {
     loading: boolean;}
 
 const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({ 
+}
     formData, 
     setFormData, 
     onSubmit, 
     onClose, 
-    loading 
+//     loading 
 }: any) => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto sm:px-4 md:px-6 lg:px-8">
@@ -1107,7 +1211,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
 
                     <div>
                         <label htmlFor="league-description-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                            Description
+//                             Description
                         </label>
                         <textarea
                             id="league-description-input"
@@ -1137,12 +1241,12 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
 
                         <div>
                             <label htmlFor="visibility-select" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                                Visibility
+//                                 Visibility
                             </label>
                             <select
                                 id="visibility-select"
-                                value={formData.isPublic ? 'public' : 'private'}
-                                onChange={(e: any) => setFormData(prev => ({ ...prev, isPublic: e.target.value === 'public' }}
+                                value={formData.isPublic ? &apos;public&apos; : &apos;private&apos;}
+                                onChange={(e: any) => setFormData(prev => ({ ...prev, isPublic: e.target.value === &apos;public&apos; }}
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8"
                             >
                                 <option value="public">Public</option>
@@ -1161,6 +1265,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                                     type="checkbox"
                                     checked={formData.settings.allowDebates}
                                     onChange={(e: any) => setFormData(prev => ({
+}
                                         ...prev,
                                         settings: { ...prev.settings, allowDebates: e.target.checked }}))}
                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -1173,6 +1278,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                                     type="checkbox"
                                     checked={formData.settings.allowGroupPredictions}
                                     onChange={(e: any) => setFormData(prev => ({
+}
                                         ...prev,
                                         settings: { ...prev.settings, allowGroupPredictions: e.target.checked }}))}
                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -1185,6 +1291,7 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                                     type="checkbox"
                                     checked={formData.settings.enableTrashtalk}
                                     onChange={(e: any) => setFormData(prev => ({
+}
                                         ...prev,
                                         settings: { ...prev.settings, enableTrashtalk: e.target.checked }}))}
                                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -1199,14 +1306,14 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
                         onClick={onClose}
                         className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
-                        Cancel
+//                         Cancel
                     </button>
                     <button
                         onClick={onSubmit}
                         disabled={!formData.name.trim() || loading}
                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                      aria-label="Action button">
-                        {loading ? 'Creating...' : 'Create League'}
+                        {loading ? &apos;Creating...&apos; : &apos;Create League&apos;}
                     </button>
                 </div>
             </div>
@@ -1216,13 +1323,15 @@ const CreateLeagueModal: React.FC<CreateLeagueModalProps> = ({
 
 // League Details Modal Component
 interface LeagueDetailsModalProps {
+}
     league: OracleLeague;
     onClose: () => void;
 
 }
 
 const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose }: any) => {
-    const [activeTab, setActiveTab] = useState<'overview' | 'members' | 'settings'>('overview');
+}
+    const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;members&apos; | &apos;settings&apos;>(&apos;overview&apos;);
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
@@ -1248,7 +1357,8 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                     {/* Tabs */}
                     <div className="border-b border-gray-200 dark:border-gray-700 mb-6 sm:px-4 md:px-6 lg:px-8">
                         <nav className="flex space-x-8 sm:px-4 md:px-6 lg:px-8">
-                            {['overview', 'members', 'settings'].map((tab: any) => (
+                            {[&apos;overview&apos;, &apos;members&apos;, &apos;settings&apos;].map((tab: any) => (
+}
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab as any)}`}
@@ -1260,7 +1370,8 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                     </div>
 
                     {/* Tab Content */}
-                    {activeTab === 'overview' && (
+                    {activeTab === &apos;overview&apos; && (
+}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
@@ -1284,6 +1395,7 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                                 </div>
                                 
                                 {league.joinCode && (
+}
                                     <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-medium text-gray-900 dark:text-white mb-2 sm:px-4 md:px-6 lg:px-8">Join Code</h4>
                                         <code className="bg-white dark:bg-gray-800 px-3 py-2 rounded border text-lg font-mono sm:px-4 md:px-6 lg:px-8">
@@ -1297,6 +1409,7 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                                 <h4 className="font-medium text-gray-900 dark:text-white mb-2 sm:px-4 md:px-6 lg:px-8">Tags</h4>
                                 <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {league.tags.map((tag: any) => (
+}
                                         <span key={tag} className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm px-3 py-1 rounded-full sm:px-4 md:px-6 lg:px-8">
                                             {tag}
                                         </span>
@@ -1306,13 +1419,15 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                         </div>
                     )}
 
-                    {activeTab === 'members' && (
+                    {activeTab === &apos;members&apos; && (
+}
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             <h4 className="font-medium text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
                                 Members ({league.members.length})
                             </h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {league.members.map((member: any) => (
+}
                                     <div key={member.userId} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                                         <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -1336,7 +1451,8 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                         </div>
                     )}
 
-                    {activeTab === 'settings' && (
+                    {activeTab === &apos;settings&apos; && (
+}
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             <h4 className="font-medium text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">League Settings</h4>
                             <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-3 sm:px-4 md:px-6 lg:px-8">
@@ -1351,13 +1467,13 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
                                 <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Debates Allowed:</span>
                                     <span className="text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
-                                        {league.settings.allowDebates ? 'Yes' : 'No'}
+                                        {league.settings.allowDebates ? &apos;Yes&apos; : &apos;No&apos;}
                                     </span>
                                 </div>
                                 <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-700 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Group Predictions:</span>
                                     <span className="text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
-                                        {league.settings.allowGroupPredictions ? 'Yes' : 'No'}
+                                        {league.settings.allowGroupPredictions ? &apos;Yes&apos; : &apos;No&apos;}
                                     </span>
                                 </div>
                                 <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
@@ -1375,6 +1491,7 @@ const LeagueDetailsModal: React.FC<LeagueDetailsModalProps> = ({ league, onClose
 
 // Group Predictions Tab Component
 interface GroupPredictionsTabProps {
+}
     userLeagues: OracleLeague[];
     selectedLeague: OracleLeague | null;
     onSelectLeague: (league: OracleLeague | null) => void;
@@ -1382,50 +1499,61 @@ interface GroupPredictionsTabProps {
 }
 
 const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({ 
+}
     userLeagues, 
     selectedLeague, 
-    onSelectLeague 
+//     onSelectLeague 
 }: any) => {
+}
     const [groupPredictions, setGroupPredictions] = useState<GroupPrediction[]>([]);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [loading, setLoading] = useState(false);
     const [createPredictionForm, setCreatePredictionForm] = useState({
-        title: '',
-        description: '',
-        type: 'MAJORITY_VOTE' as GroupPrediction['type'],
+}
+        title: &apos;&apos;,
+        description: &apos;&apos;,
+        type: &apos;MAJORITY_VOTE&apos; as GroupPrediction[&apos;type&apos;],
         closesInHours: 24
     });
 
     useEffect(() => {
+}
         if (selectedLeague) {
+}
             loadGroupPredictions();
     }
   }, [selectedLeague]);
 
     const loadGroupPredictions = async () => {
+}
         if (!selectedLeague) return;
         
         setLoading(true);
         try {
+}
 
             const predictions = await oracleSocialService.getLeagueGroupPredictions(selectedLeague.id);
             setGroupPredictions(predictions);
         
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     const handleCreatePrediction = async () => {
+}
         if (!selectedLeague || !createPredictionForm.title.trim()) return;
 
         setLoading(true);
         try {
+}
 
             await oracleSocialService.createGroupPrediction(
                 selectedLeague.id,
-                'current-challenge', // In real app, this would be dynamic
+                &apos;current-challenge&apos;, // In real app, this would be dynamic
                 createPredictionForm.title,
                 createPredictionForm.description,
                 createPredictionForm.type,
@@ -1434,21 +1562,25 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
             
             setShowCreateForm(false);
             setCreatePredictionForm({
-                title: '',
-                description: '',
-                type: 'MAJORITY_VOTE',
+}
+                title: &apos;&apos;,
+                description: &apos;&apos;,
+                type: &apos;MAJORITY_VOTE&apos;,
                 closesInHours: 24
             });
             
             await loadGroupPredictions();
     
     } catch (error) {
+}
         } finally {
+}
             setLoading(false);
 
     };
 
     if (!selectedLeague) {
+}
         return (
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
@@ -1463,10 +1595,11 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {userLeagues.map((league: any) => (
-                        <LeagueCard
+}
+                        <LeagueCard>
                             key={league.id}
                             league={league}
-                            isOwned={league.creatorId === 'current-user'}
+                            isOwned={league.creatorId === &apos;current-user&apos;}
                             onClick={() => onSelectLeague(league)}
                         />
                     ))}
@@ -1495,6 +1628,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                 </div>
                 
                 {selectedLeague.settings.allowGroupPredictions && (
+}
                     <button
                         onClick={() => setShowCreateForm(true)}
                     >
@@ -1505,6 +1639,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 
             {/* Create Prediction Modal */}
             {showCreateForm && (
+}
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -1514,7 +1649,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             <div>
                                 <label htmlFor="prediction-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                                    Title
+//                                     Title
                                 </label>
                                 <input
                                     id="prediction-title"
@@ -1528,7 +1663,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                             
                             <div>
                                 <label htmlFor="prediction-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                                    Description
+//                                     Description
                                 </label>
                                 <textarea
                                     id="prediction-description"
@@ -1547,7 +1682,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                 <select
                                     id="prediction-type"
                                     value={createPredictionForm.type}
-                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, type: e.target.value as GroupPrediction['type'] }}
+                                    onChange={(e: any) => setCreatePredictionForm(prev => ({ ...prev, type: e.target.value as GroupPrediction[&apos;type&apos;] }}
                                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
                                 >
                                     <option value="MAJORITY_VOTE">Majority Vote</option>
@@ -1576,14 +1711,14 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                             <button
                                 onClick={() => setShowCreateForm(false)}
                             >
-                                Cancel
+//                                 Cancel
                             </button>
                             <button
                                 onClick={handleCreatePrediction}
                                 disabled={!createPredictionForm.title.trim() || loading}
                                 className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
-                                {loading ? 'Creating...' : 'Create'}
+                                {loading ? &apos;Creating...&apos; : &apos;Create&apos;}
                             </button>
                         </div>
                     </div>
@@ -1592,7 +1727,9 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 
             {/* Group Predictions List */}
             {(() => {
+}
                 if (loading) {
+}
                     return (
                         <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto sm:px-4 md:px-6 lg:px-8"></div>
@@ -1601,6 +1738,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                     );
 
                 if (groupPredictions.length === 0) {
+}
                     return (
                         <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-4xl mb-4 sm:px-4 md:px-6 lg:px-8">🔮</div>
@@ -1611,6 +1749,7 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                                 Be the first to create a group prediction for this league!
                             </p>
                             {selectedLeague.settings.allowGroupPredictions && (
+}
                                 <button
                                     onClick={() => setShowCreateForm(true)}
                                 >
@@ -1623,7 +1762,8 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
                 return (
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {groupPredictions.map((prediction: any) => (
-                            <GroupPredictionCard
+}
+                            <GroupPredictionCard>
                                 key={prediction.id}
                                 prediction={prediction}
                                 onRefresh={loadGroupPredictions}
@@ -1638,31 +1778,36 @@ const GroupPredictionsTab: React.FC<GroupPredictionsTabProps> = ({
 
 // Group Prediction Card Component
 interface GroupPredictionCardProps {
+}
     prediction: GroupPrediction;
     onRefresh: () => void;
 
 }
 
 const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, onRefresh }: any) => {
+}
     const [showDetails, setShowDetails] = useState(false);
     const [showSubmitForm, setShowSubmitForm] = useState(false);
     const [submitForm, setSubmitForm] = useState({
-        prediction: '',
+}
+        prediction: &apos;&apos;,
         confidence: 50,
-        reasoning: ''
+        reasoning: &apos;&apos;
     });
     const [loading, setLoading] = useState(false);
 
-    const isParticipating = prediction.participants.some((p: any) => p.userId === 'current-user');
-    const userParticipation = prediction.participants.find((p: any) => p.userId === 'current-user');
+    const isParticipating = prediction.participants.some((p: any) => p.userId === &apos;current-user&apos;);
+    const userParticipation = prediction.participants.find((p: any) => p.userId === &apos;current-user&apos;);
     const timeLeft = new Date(prediction.closesAt).getTime() - Date.now();
-    const isOpen = prediction?.status === 'OPEN' && timeLeft > 0;
+    const isOpen = prediction?.status === &apos;OPEN&apos; && timeLeft > 0;
 
     const handleSubmitPrediction = async () => {
+}
         if (!submitForm.prediction.trim()) return;
 
         setLoading(true);
         try {
+}
 
             await oracleSocialService.submitGroupPrediction(
                 prediction.id,
@@ -1672,12 +1817,13 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
             );
             
             setShowSubmitForm(false);
-            setSubmitForm({ prediction: '', confidence: 50, reasoning: '' });
+            setSubmitForm({ prediction: &apos;&apos;, confidence: 50, reasoning: &apos;&apos; });
             onRefresh();
-        finally {
+  } finally {
+}
             setLoading(false);
 
-    `${days} day${days !== 1 ? 's' : ''} left`;
+    `${days} day${days !== 1 ? &apos;s&apos; : &apos;&apos;} left`;
 
         return `${hours}h ${minutes}m left`;
     };
@@ -1696,6 +1842,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                 
                 <div className="ml-4 text-right sm:px-4 md:px-6 lg:px-8">
                     <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+}
                         getPredictionStatusColor(prediction?.status)
                     }`}>
                         {prediction?.status}
@@ -1709,11 +1856,12 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
             <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     <span>👥 {prediction.participants.length} participants</span>
-                    <span>📊 {prediction.type.replace('_', ' ')}</span>
+                    <span>📊 {prediction.type.replace(&apos;_&apos;, &apos; &apos;)}</span>
                     <span>🏆 {prediction.rewards.winnerPoints} pts</span>
                 </div>
                 
                 {isOpen && !isParticipating && (
+}
                     <button
                         onClick={() => setShowSubmitForm(true)}
                     >
@@ -1722,6 +1870,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                 )}
                 
                 {isParticipating && (
+}
                     <span className="text-green-600 dark:text-green-400 text-sm font-medium sm:px-4 md:px-6 lg:px-8">
                         ✓ Participated
                     </span>
@@ -1729,6 +1878,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
             </div>
 
             {userParticipation && (
+}
                 <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 mb-4 sm:px-4 md:px-6 lg:px-8">
                     <p className="text-sm text-green-800 dark:text-green-200 sm:px-4 md:px-6 lg:px-8">
                         <strong>Your Prediction:</strong> {userParticipation.prediction} 
@@ -1737,6 +1887,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                         </span>
                     </p>
                     {userParticipation.reasoning && (
+}
                         <p className="text-xs text-green-700 dark:text-green-300 mt-1 sm:px-4 md:px-6 lg:px-8">
                             {userParticipation.reasoning}
                         </p>
@@ -1745,6 +1896,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
             )}
 
             {prediction.result && (
+}
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 mb-4 sm:px-4 md:px-6 lg:px-8">
                     <p className="text-sm text-blue-800 dark:text-blue-200 sm:px-4 md:px-6 lg:px-8">
                         <strong>Group Result:</strong> {prediction.result.prediction} 
@@ -1758,14 +1910,16 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
             <button
                 onClick={() => setShowDetails(!showDetails)}
             >
-                {showDetails ? 'Hide Details' : 'Show Details'}
+                {showDetails ? &apos;Hide Details&apos; : &apos;Show Details&apos;}
             </button>
 
             {showDetails && (
+}
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                     <h5 className="font-medium text-gray-900 dark:text-white mb-3 sm:px-4 md:px-6 lg:px-8">Participants</h5>
                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                         {prediction.participants.map((participant: any) => (
+}
                             <div key={participant.userId} className="flex justify-between items-center text-sm sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
                                     {participant.username}
@@ -1786,6 +1940,7 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
 
             {/* Submit Prediction Modal */}
             {showSubmitForm && (
+}
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -1841,14 +1996,14 @@ const GroupPredictionCard: React.FC<GroupPredictionCardProps> = ({ prediction, o
                             <button
                                 onClick={() => setShowSubmitForm(false)}
                             >
-                                Cancel
+//                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmitPrediction}
                                 disabled={!submitForm.prediction.trim() || loading}
                                 className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
-                                {loading ? 'Submitting...' : 'Submit'}
+                                {loading ? &apos;Submitting...&apos; : &apos;Submit&apos;}
                             </button>
                         </div>
                     </div>

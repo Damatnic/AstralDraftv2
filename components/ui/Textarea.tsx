@@ -1,23 +1,26 @@
-import React from 'react';
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+}
   label?: string;
   error?: string;
   success?: string;
 
 export const Textarea: React.FC<TextareaProps> = ({
+}
   label,
   error,
   success,
-  className = '',
+  className = &apos;&apos;,
   id,
   ...props
 }: any) => {
+}
   const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
       {label && (
+}
         <label htmlFor={textareaId} className="block text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
           {label}
         </label>
@@ -26,19 +29,22 @@ export const Textarea: React.FC<TextareaProps> = ({
       <textarea
         id={textareaId}
         className={`glass-input w-full resize-vertical ${
-          error ? 'border-red-500' : success ? 'border-green-500' : ''
+}
+          error ? &apos;border-red-500&apos; : success ? &apos;border-green-500&apos; : &apos;&apos;
         } ${className}`}
         rows={4}
         {...props}
       />
       
       {error && (
+}
         <p className="text-sm text-red-400 sm:px-4 md:px-6 lg:px-8" role="alert">
           {error}
         </p>
       )}
       
       {success && !error && (
+}
         <p className="text-sm text-green-400 sm:px-4 md:px-6 lg:px-8">
           {success}
         </p>

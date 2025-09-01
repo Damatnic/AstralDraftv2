@@ -1,13 +1,15 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Cloud, Download, Upload, Database, Clock, Wifi, WifiOff } from 'lucide-react';
-import useDataPersistence from '../../hooks/useDataPersistence';
-import { useAuth } from '../../contexts/AuthContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useEffect } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Cloud, Download, Upload, Database, Clock, Wifi, WifiOff } from &apos;lucide-react&apos;;
+import useDataPersistence from &apos;../../hooks/useDataPersistence&apos;;
+import { useAuth } from &apos;../../contexts/AuthContext&apos;;
 
 const DataPersistencePanel: React.FC = () => {
+}
   const { user } = useAuth();
   const {
+}
     isLoading,
     isOnline,
     syncStatus,
@@ -17,106 +19,128 @@ const DataPersistencePanel: React.FC = () => {
     exportUserData,
     cleanup,
     getUserPreferences,
-    saveUserPreferences
+//     saveUserPreferences
   } = useDataPersistence();
 
-  const [lastAction, setLastAction] = useState<string>('');
+  const [lastAction, setLastAction] = useState<string>(&apos;&apos;);
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
+}
     if (isInitialized && user) {
+}
       // Load user preferences on mount
       getUserPreferences().then(prefs => {
+}
         if (prefs) {
+}
 
       });
 
   }, [isInitialized, user, getUserPreferences]);
 
   const handleForceSync = async () => {
+}
     try {
+}
 
-      setLastAction('Starting sync...');
+      setLastAction(&apos;Starting sync...&apos;);
       await forceSync();
-      setLastAction('✅ Sync completed successfully');
+      setLastAction(&apos;✅ Sync completed successfully&apos;);
     
     } catch (error) {
-      setLastAction(`❌ Sync failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      setLastAction(`❌ Sync failed: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
 
   };
 
   const handleExportData = async () => {
+}
     if (!user) return;
     
     try {
+}
 
       setIsExporting(true);
-      setLastAction('Exporting user data...');
+      setLastAction(&apos;Exporting user data...&apos;);
       const exportData = await exportUserData();
       
       // Create downloadable file
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-        type: 'application/json'
+}
+        type: &apos;application/json&apos;
       });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement(&apos;a&apos;);
       link.href = url;
-      link.download = `astral-draft-export-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `astral-draft-export-${new Date().toISOString().split(&apos;T&apos;)[0]}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      setLastAction('✅ Data exported successfully');
+      setLastAction(&apos;✅ Data exported successfully&apos;);
     `);
     
     } catch (error) {
+}
         console.error(error);
     } finally {
+}
       setIsExporting(false);
 
   };
 
   const handleCleanup = async () => {
+}
     try {
+}
 
-      setLastAction('Cleaning up old data...');
+      setLastAction(&apos;Cleaning up old data...&apos;);
       await cleanup();
-      setLastAction('✅ Cleanup completed');
+      setLastAction(&apos;✅ Cleanup completed&apos;);
     
     } catch (error) {
+}
         console.error(error);
-    `❌ Cleanup failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    `❌ Cleanup failed: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
 
   };
 
   const handleTestPreferences = async () => {
+}
     if (!user) return;
     
     try {
-      setLastAction('Testing preferences save/load...');
+}
+      setLastAction(&apos;Testing preferences save/load...&apos;);
       
       const testPreferences = {
+}
         userId: user.id,
-        theme: 'dark' as const,
+        theme: &apos;dark&apos; as const,
         notifications: {
+}
           draftReminders: true,
           oraclePredictions: true,
           leagueUpdates: false,
           mobileOnly: true
         },
         dashboard: {
-          layout: 'grid',
-          widgets: ['oracle', 'analytics'],
+}
+          layout: &apos;grid&apos;,
+          widgets: [&apos;oracle&apos;, &apos;analytics&apos;],
           refreshInterval: 60000
         },
         draft: {
+}
           autoQueue: true,
           pickReminders: true,
-          defaultSort: 'projected',
-          columns: ['name', 'position', 'team']
+          defaultSort: &apos;projected&apos;,
+          columns: [&apos;name&apos;, &apos;position&apos;, &apos;team&apos;]
         },
         oracle: {
+}
           showConfidence: true,
           autoSubmit: false,
           defaultStake: 10
@@ -128,15 +152,18 @@ const DataPersistencePanel: React.FC = () => {
       const savedPrefs = await getUserPreferences();
       
       if (savedPrefs && savedPrefs.oracle.defaultStake === 10) {
-        setLastAction('✅ Preferences test successful');
+}
+        setLastAction(&apos;✅ Preferences test successful&apos;);
       } else {
-        setLastAction('❌ Preferences test failed - data mismatch');
+}
+        setLastAction(&apos;❌ Preferences test failed - data mismatch&apos;);
 
     `);
 
   };
 
   if (!isInitialized) {
+}
     return (
       <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
         <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
@@ -161,6 +188,7 @@ const DataPersistencePanel: React.FC = () => {
         </div>
         <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
           {isOnline ? (
+}
             <div className="flex items-center space-x-1 text-green-600 sm:px-4 md:px-6 lg:px-8">
               <Wifi className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">Online</span>
@@ -185,7 +213,7 @@ const DataPersistencePanel: React.FC = () => {
             {syncStatus?.pendingChanges || 0} pending
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
-            Last: {syncStatus?.lastSync || 'Never'}
+            Last: {syncStatus?.lastSync || &apos;Never&apos;}
           </p>
         </div>
 
@@ -208,7 +236,7 @@ const DataPersistencePanel: React.FC = () => {
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Local Storage</span>
           </div>
           <p className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
-            Active
+//             Active
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
             IndexedDB ready
@@ -218,6 +246,7 @@ const DataPersistencePanel: React.FC = () => {
         <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center space-x-2 mb-2 sm:px-4 md:px-6 lg:px-8">
             {isLoading ? (
+}
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
             ) : (
               <div className="h-4 w-4 bg-green-500 rounded-full sm:px-4 md:px-6 lg:px-8"></div>
@@ -225,16 +254,17 @@ const DataPersistencePanel: React.FC = () => {
             <span className="text-sm font-medium text-gray-600 dark:text-gray-300 sm:px-4 md:px-6 lg:px-8">Status</span>
           </div>
           <p className="text-lg font-semibold text-gray-900 dark:text-white sm:px-4 md:px-6 lg:px-8">
-            {isLoading ? 'Processing' : 'Ready'}
+            {isLoading ? &apos;Processing&apos; : &apos;Ready&apos;}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
-            {error ? 'Error detected' : 'All systems operational'}
+            {error ? &apos;Error detected&apos; : &apos;All systems operational&apos;}
           </p>
         </div>
       </div>
 
       {/* Error Display */}
       {error && (
+}
         <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
           <p className="text-sm text-red-700 dark:text-red-300 sm:px-4 md:px-6 lg:px-8">{error}</p>
         </div>
@@ -242,6 +272,7 @@ const DataPersistencePanel: React.FC = () => {
 
       {/* Last Action */}
       {lastAction && (
+}
         <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
           <p className="text-sm text-blue-700 dark:text-blue-300 sm:px-4 md:px-6 lg:px-8">{lastAction}</p>
         </div>

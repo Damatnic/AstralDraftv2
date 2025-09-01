@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import OracleGeminiAISection from './OracleGeminiAISection';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import OracleGeminiAISection from &apos;./OracleGeminiAISection&apos;;
 
-describe('OracleGeminiAISection', () => {
-  it('renders without crashing', () => {
+describe(&apos;OracleGeminiAISection&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<OracleGeminiAISection />);
-    expect(screen.getByTestId('oraclegeminiaisection')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;oraclegeminiaisection&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<OracleGeminiAISection />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<OracleGeminiAISection />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

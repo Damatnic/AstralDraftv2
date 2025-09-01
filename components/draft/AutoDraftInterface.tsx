@@ -3,84 +3,95 @@
  * UI for executing automatic drafts for the entire league
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useCallback, useEffect } from &apos;react&apos;;
 import { 
+}
   Zap, Play, Settings, TrendingUp, Users, Trophy, 
   AlertCircle, CheckCircle, Target, Brain, Sparkles,
   ChevronRight, Info, BarChart, Shield, Gauge
-} from 'lucide-react';
-import { Player, Team, PlayerPosition } from '../../types';
+} from &apos;lucide-react&apos;;
+import { Player, Team, PlayerPosition } from &apos;../../types&apos;;
 import autoDraftService, { 
+}
   TeamDraftResult, 
   AutoDraftConfig,
-  RosterRequirements 
-} from '../../services/autoDraftService';
-import { TEAMS_2025 } from '../../data/leagueData';
+//   RosterRequirements 
+} from &apos;../../services/autoDraftService&apos;;
+import { TEAMS_2025 } from &apos;../../data/leagueData&apos;;
 
 interface AutoDraftInterfaceProps {
+}
   onDraftComplete?: (results: TeamDraftResult[]) => void;
   userId?: number;
 
 }
 
 const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete,
+}
   userId = 1 
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDrafting, setIsDrafting] = useState(false);
   const [draftResults, setDraftResults] = useState<TeamDraftResult[] | null>(null);
   const [userResult, setUserResult] = useState<TeamDraftResult | null>(null);
-  const [currentPick, setCurrentPick] = useState<string>('');
+  const [currentPick, setCurrentPick] = useState<string>(&apos;&apos;);
   const [draftProgress, setDraftProgress] = useState(0);
-  const [selectedStrategy, setSelectedStrategy] = useState<string>('balanced');
-  const [scoringType, setScoringType] = useState<'standard' | 'ppr' | 'half_ppr'>('ppr');
+  const [selectedStrategy, setSelectedStrategy] = useState<string>(&apos;balanced&apos;);
+  const [scoringType, setScoringType] = useState<&apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos;>(&apos;ppr&apos;);
   const [showSettings, setShowSettings] = useState(false);
-  const [activeTab, setActiveTab] = useState<'overview' | 'roster' | 'analytics' | 'league'>('overview');
+  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;roster&apos; | &apos;analytics&apos; | &apos;league&apos;>(&apos;overview&apos;);
 
   // Draft strategies
   const strategies = [
     { 
-      id: 'balanced', 
-      name: 'Balanced', 
-      icon: '⚖️',
-      description: 'Mix of RB/WR with value-based picks',
-      color: 'bg-blue-500'
+}
+      id: &apos;balanced&apos;, 
+      name: &apos;Balanced&apos;, 
+      icon: &apos;⚖️&apos;,
+      description: &apos;Mix of RB/WR with value-based picks&apos;,
+      color: &apos;bg-blue-500&apos;
     },
     { 
-      id: 'rb_heavy', 
-      name: 'RB Heavy', 
-      icon: '🏃',
-      description: 'Prioritize running backs early',
-      color: 'bg-green-500'
+}
+      id: &apos;rb_heavy&apos;, 
+      name: &apos;RB Heavy&apos;, 
+      icon: &apos;🏃&apos;,
+      description: &apos;Prioritize running backs early&apos;,
+      color: &apos;bg-green-500&apos;
     },
     { 
-      id: 'wr_heavy', 
-      name: 'WR Heavy', 
-      icon: '🎯',
-      description: 'Load up on wide receivers',
-      color: 'bg-purple-500'
+}
+      id: &apos;wr_heavy&apos;, 
+      name: &apos;WR Heavy&apos;, 
+      icon: &apos;🎯&apos;,
+      description: &apos;Load up on wide receivers&apos;,
+      color: &apos;bg-purple-500&apos;
     },
     { 
-      id: 'zero_rb', 
-      name: 'Zero RB', 
-      icon: '🚫',
-      description: 'Skip RBs early, focus on WR/TE',
-      color: 'bg-red-500'
+}
+      id: &apos;zero_rb&apos;, 
+      name: &apos;Zero RB&apos;, 
+      icon: &apos;🚫&apos;,
+      description: &apos;Skip RBs early, focus on WR/TE&apos;,
+      color: &apos;bg-red-500&apos;
     },
     { 
-      id: 'hero_rb', 
-      name: 'Hero RB', 
-      icon: '🦸',
-      description: 'One elite RB, then WRs',
-      color: 'bg-orange-500'
+}
+      id: &apos;hero_rb&apos;, 
+      name: &apos;Hero RB&apos;, 
+      icon: &apos;🦸&apos;,
+      description: &apos;One elite RB, then WRs&apos;,
+      color: &apos;bg-orange-500&apos;
     },
     { 
-      id: 'best_available', 
-      name: 'Best Available', 
-      icon: '📊',
-      description: 'Pure value-based drafting',
-      color: 'bg-indigo-500'
+}
+      id: &apos;best_available&apos;, 
+      name: &apos;Best Available&apos;, 
+      icon: &apos;📊&apos;,
+      description: &apos;Pure value-based drafting&apos;,
+      color: &apos;bg-indigo-500&apos;
 
   ];
 
@@ -88,27 +99,32 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Execute full league auto-draft
    */
   const executeAutoDraft = useCallback(async () => {
+}
     setIsDrafting(true);
     setDraftProgress(0);
-    setCurrentPick('Initializing draft...');
+    setCurrentPick(&apos;Initializing draft...&apos;);
 
     try {
+}
       // Simulate draft progress
       const progressInterval = setInterval(() => {
+}
         setDraftProgress(prev => Math.min(prev + 5, 95));
       }, 500);
 
       const config: AutoDraftConfig = {
+}
         leagueSize: 10,
         scoringType,
         userTeamId: userId,
         userStrategy: {
+}
           type: selectedStrategy as any,
-          riskTolerance: 'moderate',
-          positionPriority: ['RB', 'WR', 'QB', 'TE', 'RB', 'WR', 'DST', 'K'] as PlayerPosition[],
+          riskTolerance: &apos;moderate&apos;,
+          positionPriority: [&apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;DST&apos;, &apos;K&apos;] as PlayerPosition[],
           rookiePreference: 0.4,
           valueBased: true,
-          targetADP: selectedStrategy === 'balanced'
+          targetADP: selectedStrategy === &apos;balanced&apos;
         },
         simulateFullLeague: true
       };
@@ -119,18 +135,21 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
       setDraftProgress(100);
       setDraftResults(results);
       
-      // Find user's team result
+      // Find user&apos;s team result
       const userTeamResult = results.find((r: any) => r.team.id === userId);
       setUserResult(userTeamResult || null);
       
       if (onDraftComplete) {
+}
         onDraftComplete(results);
 
-      setCurrentPick('Draft complete!');
+      setCurrentPick(&apos;Draft complete!&apos;);
     } catch (error) {
-      console.error('Draft failed:', error);
-      setCurrentPick('Draft failed. Please try again.');
+}
+      console.error(&apos;Draft failed:&apos;, error);
+      setCurrentPick(&apos;Draft failed. Please try again.&apos;);
     } finally {
+}
       setIsDrafting(false);
 
   }, [selectedStrategy, scoringType, userId, onDraftComplete]);
@@ -139,20 +158,24 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Generate optimal team for user only
    */
   const generateOptimalTeam = useCallback(async () => {
+}
     setIsDrafting(true);
-    setCurrentPick('Generating optimal team...');
+    setCurrentPick(&apos;Generating optimal team...&apos;);
 
     try {
+}
 
       const result = await autoDraftService.generateOptimalUserTeam(userId);
       setUserResult(result);
       setDraftResults([result]);
-      setCurrentPick('Optimal team generated!');
+      setCurrentPick(&apos;Optimal team generated!&apos;);
     
     } catch (error) {
-      console.error('Failed to generate optimal team:', error);
-      setCurrentPick('Generation failed. Please try again.');
+}
+      console.error(&apos;Failed to generate optimal team:&apos;, error);
+      setCurrentPick(&apos;Generation failed. Please try again.&apos;);
     } finally {
+}
       setIsDrafting(false);
 
   }, [userId]);
@@ -161,15 +184,17 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Format position with color
    */
   const getPositionColor = (position: PlayerPosition): string => {
+}
     const colors: Record<PlayerPosition, string> = {
-      QB: 'text-red-500',
-      RB: 'text-green-500',
-      WR: 'text-blue-500',
-      TE: 'text-orange-500',
-      K: 'text-purple-500',
-      DST: 'text-gray-500'
+}
+      QB: &apos;text-red-500&apos;,
+      RB: &apos;text-green-500&apos;,
+      WR: &apos;text-blue-500&apos;,
+      TE: &apos;text-orange-500&apos;,
+      K: &apos;text-purple-500&apos;,
+      DST: &apos;text-gray-500&apos;
     };
-    return colors[position] || 'text-gray-400';
+    return colors[position] || &apos;text-gray-400&apos;;
   };
 
   /**
@@ -185,22 +210,24 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
         <button
           onClick={() => setShowSettings(!showSettings)}
         >
-          {showSettings ? 'Hide' : 'Show'}
+          {showSettings ? &apos;Hide&apos; : &apos;Show&apos;}
         </button>
       </div>
 
       {showSettings && (
+}
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           {/* Scoring Type */}
           <div>
             <label className="block text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Scoring Format</label>
             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-              {(['standard', 'ppr', 'half_ppr'] as const).map((type: any) => (
+              {([&apos;standard&apos;, &apos;ppr&apos;, &apos;half_ppr&apos;] as const).map((type: any) => (
+}
                 <button
                   key={type}
                   onClick={() => setScoringType(type)}`}
                 >
-                  {type === 'ppr' ? 'PPR' : type === 'half_ppr' ? 'Half PPR' : 'Standard'}
+                  {type === &apos;ppr&apos; ? &apos;PPR&apos; : type === &apos;half_ppr&apos; ? &apos;Half PPR&apos; : &apos;Standard&apos;}
                 </button>
               ))}
             </div>
@@ -211,6 +238,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             <label className="block text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Draft Strategy</label>
             <div className="grid grid-cols-3 gap-2 sm:px-4 md:px-6 lg:px-8">
               {strategies.map((strategy: any) => (
+}
                 <button
                   key={strategy.id}
                   onClick={() => setSelectedStrategy(strategy.id)}`}
@@ -257,6 +285,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                      flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
          aria-label="Action button">
           {isDrafting ? (
+}
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white sm:px-4 md:px-6 lg:px-8" />
               Drafting...
@@ -277,6 +306,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                      flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
          aria-label="Action button">
           {isDrafting ? (
+}
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white sm:px-4 md:px-6 lg:px-8" />
               Generating...
@@ -291,6 +321,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
       </div>
 
       {isDrafting && (
+}
         <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
             <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">{currentPick}</span>
@@ -311,6 +342,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Render user team overview
    */
   const renderUserTeamOverview = () => {
+}
     if (!userResult) return null;
 
     const { team, analytics, starters, bench } = userResult;
@@ -340,7 +372,8 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
 
         {/* Position Summary */}
         <div className="grid grid-cols-6 gap-2 mb-6 sm:px-4 md:px-6 lg:px-8">
-          {(['QB', 'RB', 'WR', 'TE', 'K', 'DST'] as PlayerPosition[]).map((pos: any) => {
+          {([&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;] as PlayerPosition[]).map((pos: any) => {
+}
             const count = team.roster.filter((p: any) => p.position === pos).length;
             const isStrength = analytics.positionStrengths.includes(pos);
             const isWeakness = analytics.positionWeaknesses.includes(pos);
@@ -349,9 +382,10 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
               <div 
                 key={pos}
                 className={`p-3 rounded-lg text-center ${
-                  isStrength ? 'bg-green-900/50 border border-green-500' :
-                  isWeakness ? 'bg-red-900/50 border border-red-500' :
-                  'bg-gray-700'
+}
+                  isStrength ? &apos;bg-green-900/50 border border-green-500&apos; :
+                  isWeakness ? &apos;bg-red-900/50 border border-red-500&apos; :
+                  &apos;bg-gray-700&apos;
                 }`}
               >
                 <div className={`font-bold ${getPositionColor(pos)}`}>
@@ -368,6 +402,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
         {/* Key Insights */}
         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
           {analytics.bestValue && (
+}
             <div className="flex items-center gap-2 text-green-400 sm:px-4 md:px-6 lg:px-8">
               <TrendingUp className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">
@@ -377,28 +412,31 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           )}
           
           {analytics.sleepers.length > 0 && (
+}
             <div className="flex items-center gap-2 text-purple-400 sm:px-4 md:px-6 lg:px-8">
               <Sparkles className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">
-                Sleepers: {analytics.sleepers.map((p: any) => p.name).join(', ')}
+                Sleepers: {analytics.sleepers.map((p: any) => p.name).join(&apos;, &apos;)}
               </span>
             </div>
           )}
 
           {analytics.positionStrengths.length > 0 && (
+}
             <div className="flex items-center gap-2 text-blue-400 sm:px-4 md:px-6 lg:px-8">
               <Shield className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">
-                Strengths: {analytics.positionStrengths.join(', ')}
+                Strengths: {analytics.positionStrengths.join(&apos;, &apos;)}
               </span>
             </div>
           )}
 
           {analytics.positionWeaknesses.length > 0 && (
+}
             <div className="flex items-center gap-2 text-orange-400 sm:px-4 md:px-6 lg:px-8">
               <AlertCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-sm sm:px-4 md:px-6 lg:px-8">
-                Needs Improvement: {analytics.positionWeaknesses.join(', ')}
+                Needs Improvement: {analytics.positionWeaknesses.join(&apos;, &apos;)}
               </span>
             </div>
           )}
@@ -411,6 +449,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Render roster tab
    */
   const renderRosterTab = () => {
+}
     if (!userResult) return null;
 
     const { starters, bench } = userResult;
@@ -425,6 +464,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           </h4>
           <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
             {starters.map((player, idx) => (
+}
               <div 
                 key={player.id}
                 className="flex items-center justify-between p-3 bg-gray-700 rounded-lg
@@ -453,10 +493,11 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
         <div className="bg-gray-800 rounded-lg p-6 sm:px-4 md:px-6 lg:px-8">
           <h4 className="text-lg font-bold mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <Shield className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
-            Bench
+//             Bench
           </h4>
           <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
             {bench.map((player, idx) => (
+}
               <div 
                 key={player.id}
                 className="flex items-center justify-between p-3 bg-gray-700 rounded-lg
@@ -488,18 +529,21 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Render analytics tab
    */
   const renderAnalyticsTab = () => {
+}
     if (!userResult) return null;
 
     const { analytics, roster } = userResult;
 
     // Calculate position distribution
     const positionCounts = roster.reduce((acc, player) => {
+}
       acc[player.position] = (acc[player.position] || 0) + 1;
       return acc;
     }, {} as Record<PlayerPosition, number>);
 
     // Calculate tier distribution
     const tierCounts = roster.reduce((acc, player) => {
+}
       const tier = player.tier || 5;
       acc[tier] = (acc[tier] || 0) + 1;
       return acc;
@@ -533,8 +577,9 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
               <div className="flex justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
                 <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Schedule Strength</span>
                 <span className="font-bold text-blue-400 sm:px-4 md:px-6 lg:px-8">
-                  {analytics.strengthOfSchedule > 0 ? 'Easy' : 
-                   analytics.strengthOfSchedule < 0 ? 'Hard' : 'Average'}
+                  {analytics.strengthOfSchedule > 0 ? &apos;Easy&apos; : 
+}
+                   analytics.strengthOfSchedule < 0 ? &apos;Hard&apos; : &apos;Average&apos;}
                 </span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
@@ -550,13 +595,15 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                 <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Team Balance</span>
                 <span className="font-bold text-purple-400 sm:px-4 md:px-6 lg:px-8">
                   {analytics.positionStrengths.length > analytics.positionWeaknesses.length ? 
-                   'Strong' : 'Needs Work'}
+}
+                   &apos;Strong&apos; : &apos;Needs Work&apos;}
                 </span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                 <div 
                   className="bg-purple-500 h-2 rounded-full sm:px-4 md:px-6 lg:px-8"
                   style={{ 
+}
                     width: `${(analytics.positionStrengths.length / 6) * 100}%` 
                   }}
                 />
@@ -573,6 +620,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           </h4>
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {Object.entries(positionCounts).map(([pos, count]) => (
+}
               <div key={pos} className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <span className={`font-bold w-10 ${getPositionColor(pos as PlayerPosition)}`}>
                   {pos}
@@ -599,6 +647,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           </h4>
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {analytics.bestValue && (
+}
               <div className="p-3 bg-green-900/30 border border-green-500 rounded-lg sm:px-4 md:px-6 lg:px-8">
                 <div className="font-bold text-green-400 mb-1 sm:px-4 md:px-6 lg:px-8">Best Value Pick</div>
                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -611,12 +660,14 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             )}
 
             {analytics.biggestReach && (
+}
               <div className="p-3 bg-orange-900/30 border border-orange-500 rounded-lg sm:px-4 md:px-6 lg:px-8">
                 <div className="font-bold text-orange-400 mb-1 sm:px-4 md:px-6 lg:px-8">Biggest Reach</div>
                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                   <span>{analytics.biggestReach.name}</span>
                   <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                     {analytics.biggestReach.position} - Reached by {
+}
                       Math.abs((analytics.biggestReach.adp || 50) - roster.indexOf(analytics.biggestReach))
                     } spots
                   </span>
@@ -625,9 +676,11 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
             )}
 
             {analytics.sleepers.length > 0 && (
+}
               <div className="p-3 bg-purple-900/30 border border-purple-500 rounded-lg sm:px-4 md:px-6 lg:px-8">
                 <div className="font-bold text-purple-400 mb-1 sm:px-4 md:px-6 lg:px-8">Sleeper Picks</div>
                 {analytics.sleepers.slice(0, 3).map((player: any) => (
+}
                   <div key={player.id} className="flex items-center justify-between mt-1 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</span>
                     <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.position}</span>
@@ -646,6 +699,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           </h4>
           <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
             {[1, 2, 3, 4, 5].map((tier: any) => {
+}
               const count = tierCounts[tier] || 0;
               const percentage = (count / roster.length) * 100;
               
@@ -655,11 +709,12 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                   <div className="flex-1 bg-gray-700 rounded-full h-4 relative sm:px-4 md:px-6 lg:px-8">
                     <div 
                       className={`absolute inset-y-0 left-0 rounded-full ${
-                        tier === 1 ? 'bg-yellow-500' :
-                        tier === 2 ? 'bg-blue-500' :
-                        tier === 3 ? 'bg-green-500' :
-                        tier === 4 ? 'bg-orange-500' :
-                        'bg-gray-500'
+}
+                        tier === 1 ? &apos;bg-yellow-500&apos; :
+                        tier === 2 ? &apos;bg-blue-500&apos; :
+                        tier === 3 ? &apos;bg-green-500&apos; :
+                        tier === 4 ? &apos;bg-orange-500&apos; :
+                        &apos;bg-gray-500&apos;
                       }`}
                       style={{ width: `${percentage}%` }}
                     />
@@ -678,6 +733,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
    * Render league results tab
    */
   const renderLeagueTab = () => {
+}
     if (!draftResults || draftResults.length === 0) return null;
 
     return (
@@ -689,14 +745,16 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
           </h4>
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {draftResults
+}
               .sort((a, b) => b.analytics.projectedPoints - a.analytics.projectedPoints)
               .map((result, idx) => (
                 <div 
                   key={result.team.id}
                   className={`p-4 rounded-lg transition-all ${
+}
                     result.team.id === userId 
-                      ? 'bg-blue-900/30 border border-blue-500' 
-                      : 'bg-gray-700 hover:bg-gray-600'
+                      ? &apos;bg-blue-900/30 border border-blue-500&apos; 
+                      : &apos;bg-gray-700 hover:bg-gray-600&apos;
                   }`}
                 >
                   <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -708,6 +766,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                         <div className="font-bold flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           {result.team.name}
                           {result.team.id === userId && (
+}
                             <span className="text-xs bg-blue-600 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8">YOU</span>
                           )}
                         </div>
@@ -721,7 +780,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                         {Math.round(result.analytics.projectedPoints)} pts
                       </div>
                       <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                        Strengths: {result.analytics.positionStrengths.join(', ') || 'Balanced'}
+                        Strengths: {result.analytics.positionStrengths.join(&apos;, &apos;) || &apos;Balanced&apos;}
                       </div>
                     </div>
                   </div>
@@ -729,6 +788,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                   {/* Top players */}
                   <div className="mt-3 flex gap-2 flex-wrap sm:px-4 md:px-6 lg:px-8">
                     {result.roster.slice(0, 5).map((player: any) => (
+}
                       <span 
                         key={player.id}
                         className="text-xs bg-gray-600 px-2 py-1 rounded sm:px-4 md:px-6 lg:px-8"
@@ -737,6 +797,7 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
                       </span>
                     ))}
                     {result.roster.length > 5 && (
+}
                       <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         +{result.roster.length - 5} more
                       </span>
@@ -772,14 +833,16 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
 
         {/* Results Section */}
         {(userResult || draftResults) && (
+}
           <>
             {/* Tabs */}
             <div className="flex gap-2 mb-6 border-b border-gray-700 sm:px-4 md:px-6 lg:px-8">
               {[
-                { id: 'overview', label: 'Overview', icon: Info },
-                { id: 'roster', label: 'Roster', icon: Users },
-                { id: 'analytics', label: 'Analytics', icon: BarChart },
-                { id: 'league', label: 'League Results', icon: Trophy }
+}
+                { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: Info },
+                { id: &apos;roster&apos;, label: &apos;Roster&apos;, icon: Users },
+                { id: &apos;analytics&apos;, label: &apos;Analytics&apos;, icon: BarChart },
+                { id: &apos;league&apos;, label: &apos;League Results&apos;, icon: Trophy }
               ].map((tab: any) => (
                 <button
                   key={tab.id}
@@ -793,16 +856,17 @@ const AutoDraftInterface: React.FC<AutoDraftInterfaceProps> = ({ onDraftComplete
 
             {/* Tab Content */}
             <div className="animate-fade-in sm:px-4 md:px-6 lg:px-8">
-              {activeTab === 'overview' && renderUserTeamOverview()}
-              {activeTab === 'roster' && renderRosterTab()}
-              {activeTab === 'analytics' && renderAnalyticsTab()}
-              {activeTab === 'league' && renderLeagueTab()}
+              {activeTab === &apos;overview&apos; && renderUserTeamOverview()}
+              {activeTab === &apos;roster&apos; && renderRosterTab()}
+              {activeTab === &apos;analytics&apos; && renderAnalyticsTab()}
+              {activeTab === &apos;league&apos; && renderLeagueTab()}
             </div>
           </>
         )}
 
         {/* Empty State */}
         {!userResult && !draftResults && !isDrafting && (
+}
           <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
             <Brain className="w-16 h-16 text-gray-600 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
             <h3 className="text-xl font-bold mb-2 sm:px-4 md:px-6 lg:px-8">Ready to Draft</h3>

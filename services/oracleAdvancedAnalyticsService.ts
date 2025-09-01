@@ -4,6 +4,7 @@
  */
 
 export interface PlayerMetrics {
+}
   playerEfficiencyRating: number;
   targetShare: number;
   redZoneTargetShare: number;
@@ -19,6 +20,7 @@ export interface PlayerMetrics {
 }
 
 export interface TeamMetrics {
+}
   teamChemistryScore: number;
   offlineChemistry: number;
   passingChemistry: number;
@@ -35,6 +37,7 @@ export interface TeamMetrics {
 }
 
 export interface MarketData {
+}
   mediaSentimentScore: number;
   socialMediaBuzz: number;
   injuryReportSentiment: number;
@@ -45,6 +48,7 @@ export interface MarketData {
 }
 
 export interface WeatherData {
+}
   temperature: number;
   windSpeed: number;
   precipitation: number;
@@ -53,9 +57,11 @@ export interface WeatherData {
 }
 
 export interface PredictionFactors {
+}
   playerMetrics: PlayerMetrics;
   teamMetrics: TeamMetrics;
   marketData: MarketData & {
+}
     dfsOwnershipProjections: Record<string, number>;
     dfsProjectedScores: Record<string, number>;
     dfsPriceValue: Record<string, number>;
@@ -64,11 +70,13 @@ export interface PredictionFactors {
   playerId: string;
   week: number;
   ensemblePrediction: {
+}
     baselinePrediction: number;
     adjustmentFactors: number[];
     confidenceIntervals: [number, number];
     primaryDrivers: string[];
     modelPredictions: Array<{
+}
       name: string;
       prediction: number;
       confidence: number;
@@ -79,24 +87,28 @@ export interface PredictionFactors {
     keyDrivers: string[];
   };
   regressionAnalysis: {
+}
     r2Score: number;
     rSquared: number; // Alias for r2Score
     featureImportance: Record<string, number>;
     residualAnalysis: number[];
     significantFactors: Array<{
+}
       name: string;
       coefficient: number;
-      impact: 'POSITIVE' | 'NEGATIVE';
+      impact: &apos;POSITIVE&apos; | &apos;NEGATIVE&apos;;
       significance: number;
     }>;
     standardError: number;
     confidenceInterval: [number, number];
   };
   externalFactors: {
+}
     gameScript: number;
     paceOfPlay: number;
     targetedDefense: string;
     detailedWeather: {
+}
       temperature: number;
       conditions: string;
       windSpeed: number;
@@ -115,9 +127,11 @@ export interface PredictionFactors {
 }
 
 export interface CompositeScore {
+}
   overall: number;
   confidence: number;
   breakdown: {
+}
     player: number;
     team: number;
     market: number;
@@ -129,12 +143,15 @@ export interface CompositeScore {
 }
 
 class OracleAdvancedAnalyticsService {
+}
   
   /**
    * Calculate advanced composite score from prediction factors
    */
   async calculateAdvancedCompositeScore(factors: PredictionFactors): Promise<CompositeScore> {
+}
     try {
+}
       // Simulate advanced calculation
       const playerScore = this.calculatePlayerScore(factors.playerMetrics);
       const teamScore = this.calculateTeamScore(factors.teamMetrics);
@@ -145,9 +162,11 @@ class OracleAdvancedAnalyticsService {
       const confidence = this.calculateConfidence(factors);
       
       return {
+}
         overall: Math.round(overall),
         confidence: Math.round(confidence),
         breakdown: {
+}
           player: Math.round(playerScore),
           team: Math.round(teamScore),
           market: Math.round(marketScore),
@@ -162,19 +181,22 @@ class OracleAdvancedAnalyticsService {
         ]
       };
     } catch (error) {
+}
       // Fallback composite score
       return {
+}
         overall: 75,
         confidence: 65,
         breakdown: {
+}
           player: 80,
           team: 75,
           market: 70,
           weather: 85
         },
-        riskFactors: ['Weather conditions uncertain'],
-        opportunities: ['Positive matchup factors'],
-        reasoning: ['Fallback calculation used due to service error']
+        riskFactors: [&apos;Weather conditions uncertain&apos;],
+        opportunities: [&apos;Positive matchup factors&apos;],
+        reasoning: [&apos;Fallback calculation used due to service error&apos;]
       };
     }
   }
@@ -183,12 +205,16 @@ class OracleAdvancedAnalyticsService {
    * Get comprehensive prediction factors for a player
    */
   async getPredictionFactors(playerId: string, week: number): Promise<PredictionFactors> {
+}
     try {
+}
       // In production, this would fetch from multiple data sources
       return {
+}
         playerId,
         week,
         playerMetrics: {
+}
           playerEfficiencyRating: 85 + Math.random() * 30,
           targetShare: 0.15 + Math.random() * 0.15,
           redZoneTargetShare: 0.12 + Math.random() * 0.15,
@@ -203,6 +229,7 @@ class OracleAdvancedAnalyticsService {
           averageTargetDepth: 8 + Math.random() * 6
         },
         teamMetrics: {
+}
           teamChemistryScore: 70 + Math.random() * 25,
           offlineChemistry: 75 + Math.random() * 20,
           passingChemistry: 80 + Math.random() * 15,
@@ -212,57 +239,65 @@ class OracleAdvancedAnalyticsService {
           offensiveEfficiency: 70 + Math.random() * 25
         },
         marketData: {
+}
           mediaSentimentScore: -0.5 + Math.random(),
           socialMediaBuzz: 40 + Math.random() * 40,
           injuryReportSentiment: -0.3 + Math.random() * 0.6,
           beatReporterConfidence: 0.6 + Math.random() * 0.3,
           dfsOwnershipProjections: {
+}
             DraftKings: 0.05 + Math.random() * 0.25,
             FanDuel: 0.05 + Math.random() * 0.25,
             Yahoo: 0.05 + Math.random() * 0.2
           },
           dfsProjectedScores: {
+}
             DraftKings: 10 + Math.random() * 15,
             FanDuel: 10 + Math.random() * 15,
             Yahoo: 10 + Math.random() * 15
           },
           dfsPriceValue: {
+}
             DraftKings: 2.5 + Math.random() * 1.5,
             FanDuel: 2.5 + Math.random() * 1.5,
             Yahoo: 2.5 + Math.random() * 1.5
           }
         },
         weatherData: {
+}
           temperature: 65 + Math.random() * 20,
           windSpeed: 5 + Math.random() * 15,
           precipitation: Math.random() * 30,
           humidity: 40 + Math.random() * 40,
-          conditions: ['Clear', 'Cloudy', 'Light Rain', 'Windy'][Math.floor(Math.random() * 4)]
+          conditions: [&apos;Clear&apos;, &apos;Cloudy&apos;, &apos;Light Rain&apos;, &apos;Windy&apos;][Math.floor(Math.random() * 4)]
         },
         ensemblePrediction: {
+}
           baselinePrediction: 12 + Math.random() * 8,
           adjustmentFactors: [0.9 + Math.random() * 0.2, 0.85 + Math.random() * 0.3, 1.0 + Math.random() * 0.15],
           confidenceIntervals: [8.5 + Math.random() * 3, 18.5 + Math.random() * 4] as [number, number],
-          primaryDrivers: ['Target Share', 'Red Zone Usage', 'Matchup Rating', 'Weather Impact'],
+          primaryDrivers: [&apos;Target Share&apos;, &apos;Red Zone Usage&apos;, &apos;Matchup Rating&apos;, &apos;Weather Impact&apos;],
           modelPredictions: [
-            { name: 'Neural Network', prediction: 14.5 + Math.random() * 5, confidence: 85 + Math.random() * 10, weight: 0.3 },
-            { name: 'Random Forest', prediction: 13.8 + Math.random() * 5, confidence: 82 + Math.random() * 10, weight: 0.25 },
-            { name: 'XGBoost', prediction: 15.2 + Math.random() * 5, confidence: 88 + Math.random() * 10, weight: 0.25 },
-            { name: 'Linear Regression', prediction: 12.5 + Math.random() * 5, confidence: 75 + Math.random() * 10, weight: 0.2 }
+            { name: &apos;Neural Network&apos;, prediction: 14.5 + Math.random() * 5, confidence: 85 + Math.random() * 10, weight: 0.3 },
+            { name: &apos;Random Forest&apos;, prediction: 13.8 + Math.random() * 5, confidence: 82 + Math.random() * 10, weight: 0.25 },
+            { name: &apos;XGBoost&apos;, prediction: 15.2 + Math.random() * 5, confidence: 88 + Math.random() * 10, weight: 0.25 },
+            { name: &apos;Linear Regression&apos;, prediction: 12.5 + Math.random() * 5, confidence: 75 + Math.random() * 10, weight: 0.2 }
           ],
           prediction: 14.2 + Math.random() * 6,
           predictionRange: [10.5 + Math.random() * 3, 18.5 + Math.random() * 4] as [number, number],
           keyDrivers: [
-            'High target share (28%)',
-            'Favorable matchup vs 28th ranked defense',
-            'Expected game script (+7 point spread)',
-            'Red zone opportunities (3.2 avg)'
+            &apos;High target share (28%)&apos;,
+            &apos;Favorable matchup vs 28th ranked defense&apos;,
+            &apos;Expected game script (+7 point spread)&apos;,
+            &apos;Red zone opportunities (3.2 avg)&apos;
           ]
         },
         regressionAnalysis: {
+}
           r2Score: 0.75 + Math.random() * 0.2,
           rSquared: 0.75 + Math.random() * 0.2, // Same as r2Score
           featureImportance: {
+}
             targetShare: 0.25 + Math.random() * 0.1,
             redZoneShare: 0.2 + Math.random() * 0.05,
             snapCount: 0.15 + Math.random() * 0.05,
@@ -270,29 +305,31 @@ class OracleAdvancedAnalyticsService {
           },
           residualAnalysis: Array(10).fill(0).map(() => -2 + Math.random() * 4),
           significantFactors: [
-            { name: 'Target Share', coefficient: 0.42, impact: 'POSITIVE' as const, significance: 0.001 },
-            { name: 'Red Zone Targets', coefficient: 0.35, impact: 'POSITIVE' as const, significance: 0.002 },
-            { name: 'Snap Count %', coefficient: 0.28, impact: 'POSITIVE' as const, significance: 0.005 },
-            { name: 'Opponent DVOA', coefficient: -0.22, impact: 'NEGATIVE' as const, significance: 0.01 },
-            { name: 'Weather Impact', coefficient: -0.15, impact: 'NEGATIVE' as const, significance: 0.05 }
+            { name: &apos;Target Share&apos;, coefficient: 0.42, impact: &apos;POSITIVE&apos; as const, significance: 0.001 },
+            { name: &apos;Red Zone Targets&apos;, coefficient: 0.35, impact: &apos;POSITIVE&apos; as const, significance: 0.002 },
+            { name: &apos;Snap Count %&apos;, coefficient: 0.28, impact: &apos;POSITIVE&apos; as const, significance: 0.005 },
+            { name: &apos;Opponent DVOA&apos;, coefficient: -0.22, impact: &apos;NEGATIVE&apos; as const, significance: 0.01 },
+            { name: &apos;Weather Impact&apos;, coefficient: -0.15, impact: &apos;NEGATIVE&apos; as const, significance: 0.05 }
           ],
           standardError: 2.1 + Math.random() * 0.8,
           confidenceInterval: [11.5 + Math.random() * 2, 17.5 + Math.random() * 2] as [number, number]
         },
         externalFactors: {
+}
           gameScript: -0.5 + Math.random(),
           paceOfPlay: 65 + Math.random() * 10,
-          targetedDefense: ['Man', 'Zone', 'Blitz', 'Standard'][Math.floor(Math.random() * 4)],
+          targetedDefense: [&apos;Man&apos;, &apos;Zone&apos;, &apos;Blitz&apos;, &apos;Standard&apos;][Math.floor(Math.random() * 4)],
           detailedWeather: {
+}
             temperature: 65 + Math.random() * 20,
-            conditions: ['Clear', 'Cloudy', 'Light Rain', 'Windy'][Math.floor(Math.random() * 4)],
+            conditions: [&apos;Clear&apos;, &apos;Cloudy&apos;, &apos;Light Rain&apos;, &apos;Windy&apos;][Math.floor(Math.random() * 4)],
             windSpeed: 5 + Math.random() * 15,
             humidity: 40 + Math.random() * 40
           },
           restDays: Math.floor(4 + Math.random() * 10), // Between 4-14 days
           travelDistance: Math.floor(Math.random() * 2500), // 0-2500 miles
-          stadiumType: ['Dome', 'Open', 'Retractable'][Math.floor(Math.random() * 3)],
-          fieldType: ['Grass', 'Turf', 'FieldTurf'][Math.floor(Math.random() * 3)],
+          stadiumType: [&apos;Dome&apos;, &apos;Open&apos;, &apos;Retractable&apos;][Math.floor(Math.random() * 3)],
+          fieldType: [&apos;Grass&apos;, &apos;Turf&apos;, &apos;FieldTurf&apos;][Math.floor(Math.random() * 3)],
           elevation: Math.floor(Math.random() * 5000), // 0-5000 feet
           timeZoneChanges: Math.floor(Math.random() * 4) - 1, // -1 to 3 time zones
           thursdayNightGame: Math.random() > 0.85,
@@ -301,6 +338,7 @@ class OracleAdvancedAnalyticsService {
         }
       };
     } catch (error) {
+}
       throw new Error(`Failed to get prediction factors: ${error}`);
     }
   }
@@ -309,6 +347,7 @@ class OracleAdvancedAnalyticsService {
    * Private calculation methods
    */
   private calculatePlayerScore(metrics: PlayerMetrics): number {
+}
     return (
       metrics.playerEfficiencyRating * 0.3 +
       metrics.targetShare * 100 * 0.25 +
@@ -320,6 +359,7 @@ class OracleAdvancedAnalyticsService {
   }
 
   private calculateTeamScore(metrics: TeamMetrics): number {
+}
     return (
       metrics.teamChemistryScore * 0.25 +
       metrics.offlineChemistry * 0.2 +
@@ -331,6 +371,7 @@ class OracleAdvancedAnalyticsService {
   }
 
   private calculateMarketScore(market: MarketData): number {
+}
     const sentimentScore = (market.mediaSentimentScore + 1) * 50;
     const buzzScore = market.socialMediaBuzz;
     const injuryScore = (market.injuryReportSentiment + 1) * 50;
@@ -340,6 +381,7 @@ class OracleAdvancedAnalyticsService {
   }
 
   private calculateWeatherScore(weather: WeatherData): number {
+}
     let score = 100;
     
     // Temperature impact
@@ -358,6 +400,7 @@ class OracleAdvancedAnalyticsService {
   }
 
   private calculateConfidence(factors: PredictionFactors): number {
+}
     let confidence = 80;
     
     // Reduce confidence for extreme weather
@@ -374,52 +417,64 @@ class OracleAdvancedAnalyticsService {
   }
 
   private identifyRiskFactors(factors: PredictionFactors): string[] {
+}
     const risks: string[] = [];
     
     if (factors.weatherData.windSpeed > 15) {
-      risks.push('High wind conditions may affect passing game');
+}
+      risks.push(&apos;High wind conditions may affect passing game&apos;);
     }
     
     if (factors.weatherData.precipitation > 20) {
-      risks.push('Rain/snow could impact offensive production');
+}
+      risks.push(&apos;Rain/snow could impact offensive production&apos;);
     }
     
     if (factors.marketData.injuryReportSentiment < -0.3) {
-      risks.push('Negative injury report sentiment');
+}
+      risks.push(&apos;Negative injury report sentiment&apos;);
     }
     
     if (factors.teamMetrics.teamChemistryScore < 65) {
-      risks.push('Below-average team chemistry could limit upside');
+}
+      risks.push(&apos;Below-average team chemistry could limit upside&apos;);
     }
     
     if (factors.playerMetrics.snapCountPercentage < 0.70) {
-      risks.push('Limited snap count may reduce opportunity');
+}
+      risks.push(&apos;Limited snap count may reduce opportunity&apos;);
     }
     
     return risks;
   }
 
   private identifyOpportunities(factors: PredictionFactors): string[] {
+}
     const opportunities: string[] = [];
     
     if (factors.playerMetrics.targetShare > 0.25) {
-      opportunities.push('High target share indicates strong volume potential');
+}
+      opportunities.push(&apos;High target share indicates strong volume potential&apos;);
     }
     
     if (factors.playerMetrics.redZoneTargetShare > 0.20) {
-      opportunities.push('Strong red zone usage suggests TD upside');
+}
+      opportunities.push(&apos;Strong red zone usage suggests TD upside&apos;);
     }
     
     if (factors.marketData.mediaSentimentScore > 0.5) {
-      opportunities.push('Positive media coverage trending upward');
+}
+      opportunities.push(&apos;Positive media coverage trending upward&apos;);
     }
     
     if (factors.teamMetrics.passingChemistry > 85) {
-      opportunities.push('Excellent passing chemistry with QB');
+}
+      opportunities.push(&apos;Excellent passing chemistry with QB&apos;);
     }
     
-    if (factors.weatherData.conditions === 'Clear' && factors.weatherData.temperature > 70) {
-      opportunities.push('Ideal weather conditions for offensive production');
+    if (factors.weatherData.conditions === &apos;Clear&apos; && factors.weatherData.temperature > 70) {
+}
+      opportunities.push(&apos;Ideal weather conditions for offensive production&apos;);
     }
     
     return opportunities;
@@ -429,33 +484,39 @@ class OracleAdvancedAnalyticsService {
    * Get weather description for reasoning
    */
   private getWeatherDescription(weather: WeatherData): string {
-    if (weather.precipitation > 20) return 'Rainy conditions expected';
-    if (weather.windSpeed > 15) return 'High wind conditions';
-    if (weather.temperature < 32) return 'Cold weather game';
-    if (weather.temperature > 85) return 'Hot weather conditions';
-    return 'Favorable weather conditions';
+}
+    if (weather.precipitation > 20) return &apos;Rainy conditions expected&apos;;
+    if (weather.windSpeed > 15) return &apos;High wind conditions&apos;;
+    if (weather.temperature < 32) return &apos;Cold weather game&apos;;
+    if (weather.temperature > 85) return &apos;Hot weather conditions&apos;;
+    return &apos;Favorable weather conditions&apos;;
   }
 
   /**
    * Get historical prediction accuracy
    */
   async getHistoricalAccuracy(): Promise<{
+}
     overall: number;
     byPosition: Record<string, number>;
     byWeather: Record<string, number>;
   }> {
+}
     return {
+}
       overall: 73.2,
       byPosition: {
+}
         QB: 76.8,
         RB: 71.5,
         WR: 72.9,
         TE: 69.4
       },
       byWeather: {
+}
         Clear: 78.1,
         Cloudy: 73.6,
-        'Light Rain': 68.9,
+        &apos;Light Rain&apos;: 68.9,
         Windy: 65.2
       }
     };

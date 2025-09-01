@@ -3,9 +3,10 @@
  * Handles Core Web Vitals monitoring and optimization
  */
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from &apos;react&apos;;
 
 interface PerformanceMetrics {
+}
   FCP: number | null;  // First Contentful Paint
   LCP: number | null;  // Largest Contentful Paint
   FID: number | null;  // First Input Delay
@@ -15,6 +16,7 @@ interface PerformanceMetrics {
 }
 
 interface PerformanceOptimizerProps {
+}
   enableMonitoring?: boolean;
   reportToAnalytics?: boolean;
   onMetricsUpdate?: (metrics: PerformanceMetrics) => void;
@@ -24,7 +26,9 @@ interface PerformanceOptimizerProps {
  * Web Vitals measurement utilities
  */
 class WebVitalsMonitor {
+}
   private metrics: PerformanceMetrics = {
+}
     FCP: null,
     LCP: null,
     FID: null,
@@ -39,48 +43,60 @@ class WebVitalsMonitor {
   private clsEntries: PerformanceEntry[] = [];
 
   constructor() {
+}
     this.initializeObservers();
   }
 
   private initializeObservers(): void {
+}
     // Only run in browser environment
-    if (typeof window === 'undefined' || !('PerformanceObserver' in window)) {
+    if (typeof window === &apos;undefined&apos; || !(&apos;PerformanceObserver&apos; in window)) {
+}
       return;
     }
 
     try {
+}
       // FCP Observer
-      this.observePerformanceEntries(['paint'], (entries: any) => {
+      this.observePerformanceEntries([&apos;paint&apos;], (entries: any) => {
+}
         for (const entry of entries) {
-          if (entry.name === 'first-contentful-paint') {
-            this.updateMetric('FCP', entry.startTime);
+}
+          if (entry.name === &apos;first-contentful-paint&apos;) {
+}
+            this.updateMetric(&apos;FCP&apos;, entry.startTime);
           }
         }
       });
 
       // LCP Observer
-      this.observePerformanceEntries(['largest-contentful-paint'], (entries: any) => {
+      this.observePerformanceEntries([&apos;largest-contentful-paint&apos;], (entries: any) => {
+}
         const lastEntry = entries[entries.length - 1];
-        this.updateMetric('LCP', lastEntry.startTime);
+        this.updateMetric(&apos;LCP&apos;, lastEntry.startTime);
       });
 
       // FID Observer
-      this.observePerformanceEntries(['first-input'], (entries: any) => {
+      this.observePerformanceEntries([&apos;first-input&apos;], (entries: any) => {
+}
         const firstEntry = entries[0];
         const fid = firstEntry.processingStart - firstEntry.startTime;
-        this.updateMetric('FID', fid);
+        this.updateMetric(&apos;FID&apos;, fid);
       });
 
       // CLS Observer
-      this.observePerformanceEntries(['layout-shift'], (entries: any) => {
+      this.observePerformanceEntries([&apos;layout-shift&apos;], (entries: any) => {
+}
         for (const entry of entries) {
+}
           const layoutShift = entry as any;
           if (!layoutShift.hadRecentInput) {
+}
             this.clsValue += layoutShift.value;
             this.clsEntries.push(entry);
           }
         }
-        this.updateMetric('CLS', this.clsValue);
+        this.updateMetric(&apos;CLS&apos;, this.clsValue);
       });
 
       // TTFB
@@ -90,7 +106,8 @@ class WebVitalsMonitor {
       this.estimateTTI();
 
     } catch (error) {
-      console.warn('Performance monitoring not available:', error);
+}
+      console.warn(&apos;Performance monitoring not available:&apos;, error);
     }
   }
 
@@ -98,32 +115,42 @@ class WebVitalsMonitor {
     entryTypes: string[],
     callback: (entries: PerformanceEntry[]) => void
   ): void {
+}
     try {
+}
       const observer = new PerformanceObserver((list: any) => {
+}
         callback(list.getEntries());
       });
       observer.observe({ entryTypes });
     } catch (error) {
+}
       // Fallback for older browsers
-      console.warn(`Performance observer for ${entryTypes.join(', ')} not supported`);
+      console.warn(`Performance observer for ${entryTypes.join(&apos;, &apos;)} not supported`);
     }
   }
 
   private measureTTFB(): void {
-    const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+}
+    const navTiming = performance.getEntriesByType(&apos;navigation&apos;)[0] as PerformanceNavigationTiming;
     if (navTiming) {
+}
       const ttfb = navTiming.responseStart - navTiming.requestStart;
-      this.updateMetric('TTFB', ttfb);
+      this.updateMetric(&apos;TTFB&apos;, ttfb);
     }
   }
 
   private estimateTTI(): void {
+}
     // Simple TTI approximation - when page is interactive
     const checkTTI = () => {
-      if (document.readyState === 'complete') {
+}
+      if (document.readyState === &apos;complete&apos;) {
+}
         const tti = performance.now();
-        this.updateMetric('TTI', tti);
+        this.updateMetric(&apos;TTI&apos;, tti);
       } else {
+}
         setTimeout(checkTTI, 100);
       }
     };
@@ -131,25 +158,29 @@ class WebVitalsMonitor {
   }
 
   private updateMetric(metric: keyof PerformanceMetrics, value: number): void {
+}
     this.metrics[metric] = value;
     this.notifyCallbacks();
   }
 
   private notifyCallbacks(): void {
+}
     this.callbacks.forEach((callback: any) => callback({ ...this.metrics }));
   }
 
   public subscribe(callback: (metrics: PerformanceMetrics) => void): () => void {
+}
     this.callbacks.add(callback);
-    // Return unsubscribe function
-    return () => this.callbacks.delete(callback);
+    // Return unsubscribe function return() => this.callbacks.delete(callback);
   }
 
   public getMetrics(): PerformanceMetrics {
+}
     return { ...this.metrics };
   }
 
-  public getScore(): { score: number; rating: 'good' | 'needs-improvement' | 'poor' } {
+  public getScore(): { score: number; rating: &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos; } {
+}
     const { FCP, LCP, FID, CLS } = this.metrics;
     
     let score = 0;
@@ -157,6 +188,7 @@ class WebVitalsMonitor {
 
     // FCP: Good (< 1.8s), Needs Improvement (1.8s - 3.0s), Poor (> 3.0s)
     if (FCP !== null) {
+}
       validMetrics++;
       if (FCP < 1800) score += 100;
       else if (FCP < 3000) score += 50;
@@ -165,6 +197,7 @@ class WebVitalsMonitor {
 
     // LCP: Good (< 2.5s), Needs Improvement (2.5s - 4.0s), Poor (> 4.0s)
     if (LCP !== null) {
+}
       validMetrics++;
       if (LCP < 2500) score += 100;
       else if (LCP < 4000) score += 50;
@@ -173,6 +206,7 @@ class WebVitalsMonitor {
 
     // FID: Good (< 100ms), Needs Improvement (100ms - 300ms), Poor (> 300ms)
     if (FID !== null) {
+}
       validMetrics++;
       if (FID < 100) score += 100;
       else if (FID < 300) score += 50;
@@ -181,6 +215,7 @@ class WebVitalsMonitor {
 
     // CLS: Good (< 0.1), Needs Improvement (0.1 - 0.25), Poor (> 0.25)
     if (CLS !== null) {
+}
       validMetrics++;
       if (CLS < 0.1) score += 100;
       else if (CLS < 0.25) score += 50;
@@ -189,16 +224,18 @@ class WebVitalsMonitor {
 
     const averageScore = validMetrics > 0 ? score / validMetrics : 0;
     
-    let rating: 'good' | 'needs-improvement' | 'poor';
-    if (averageScore >= 75) rating = 'good';
-    else if (averageScore >= 50) rating = 'needs-improvement';
-    else rating = 'poor';
+    let rating: &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos;;
+    if (averageScore >= 75) rating = &apos;good&apos;;
+    else if (averageScore >= 50) rating = &apos;needs-improvement&apos;;
+    else rating = &apos;poor&apos;;
 
     return { score: Math.round(averageScore), rating };
   }
 
   public destroy(): void {
+}
     if (this.observer) {
+}
       this.observer.disconnect();
     }
     this.callbacks.clear();
@@ -214,7 +251,9 @@ const webVitalsMonitor = new WebVitalsMonitor();
 export const usePerformanceMonitoring = (
   onMetricsUpdate?: (metrics: PerformanceMetrics) => void
 ) => {
+}
   const [metrics, setMetrics] = React.useState<PerformanceMetrics>({
+}
     FCP: null,
     LCP: null,
     FID: null,
@@ -224,7 +263,9 @@ export const usePerformanceMonitoring = (
   });
 
   React.useEffect(() => {
+}
     const unsubscribe = webVitalsMonitor.subscribe((newMetrics: any) => {
+}
       setMetrics(newMetrics);
       onMetricsUpdate?.(newMetrics);
     });
@@ -233,6 +274,7 @@ export const usePerformanceMonitoring = (
   }, [onMetricsUpdate]);
 
   return {
+}
     metrics,
     score: webVitalsMonitor.getScore(),
     getMetrics: () => webVitalsMonitor.getMetrics()
@@ -243,21 +285,24 @@ export const usePerformanceMonitoring = (
  * Resource prioritization utilities
  */
 export class ResourcePriorityManager {
+}
   private criticalResources = new Set<string>();
   private prefetchedResources = new Set<string>();
 
   public markAsCritical(url: string): void {
+}
     this.criticalResources.add(url);
-    this.preloadResource(url, 'high');
+    this.preloadResource(url, &apos;high&apos;);
   }
 
   public prefetchResource(url: string): void {
+}
     if (this.prefetchedResources.has(url)) return;
     
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement(&apos;link&apos;);
+    link.rel = &apos;prefetch&apos;;
     link.href = url;
-    link.crossOrigin = 'anonymous';
+    link.crossOrigin = &apos;anonymous&apos;;
     
     document.head.appendChild(link);
     this.prefetchedResources.add(url);
@@ -265,27 +310,30 @@ export class ResourcePriorityManager {
 
   public preloadResource(
     url: string, 
-    priority: 'high' | 'low' = 'low',
-    as: 'script' | 'style' | 'image' | 'font' = 'script'
+    priority: &apos;high&apos; | &apos;low&apos; = &apos;low&apos;,
+    as: &apos;script&apos; | &apos;style&apos; | &apos;image&apos; | &apos;font&apos; = &apos;script&apos;
   ): void {
-    const link = document.createElement('link');
-    link.rel = 'preload';
+}
+    const link = document.createElement(&apos;link&apos;);
+    link.rel = &apos;preload&apos;;
     link.href = url;
     link.as = as;
-    link.crossOrigin = 'anonymous';
+    link.crossOrigin = &apos;anonymous&apos;;
     
-    if (priority === 'high') {
-      link.setAttribute('importance', 'high');
+    if (priority === &apos;high&apos;) {
+}
+      link.setAttribute(&apos;importance&apos;, &apos;high&apos;);
     }
     
     document.head.appendChild(link);
   }
 
   public preconnect(origin: string): void {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
+}
+    const link = document.createElement(&apos;link&apos;);
+    link.rel = &apos;preconnect&apos;;
     link.href = origin;
-    link.crossOrigin = 'anonymous';
+    link.crossOrigin = &apos;anonymous&apos;;
     
     document.head.appendChild(link);
   }
@@ -298,22 +346,28 @@ export const resourceManager = new ResourcePriorityManager();
  * Core Web Vitals optimization component
  */
 const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
+}
   enableMonitoring = true,
   reportToAnalytics = false,
-  onMetricsUpdate
+//   onMetricsUpdate
 }: any) => {
+}
   const performanceRef = useRef<HTMLDivElement>(null);
 
   const { metrics, score } = usePerformanceMonitoring(onMetricsUpdate);
 
   // Report to analytics if enabled
   useEffect(() => {
+}
     if (reportToAnalytics && metrics.LCP && metrics.FCP) {
+}
       // Report to your analytics service
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'web_vitals', {
-          custom_parameter_1: 'core_web_vitals',
-          metric_name: 'performance_score',
+      if (typeof gtag !== &apos;undefined&apos;) {
+}
+        gtag(&apos;event&apos;, &apos;web_vitals&apos;, {
+}
+          custom_parameter_1: &apos;core_web_vitals&apos;,
+          metric_name: &apos;performance_score&apos;,
           metric_value: score.score,
           metric_rating: score.rating
         });
@@ -323,52 +377,65 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
 
   // Optimize images based on viewport
   useEffect(() => {
+}
     const optimizeImages = () => {
-      const images = document.querySelectorAll('img[data-src]');
+}
+      const images = document.querySelectorAll(&apos;img[data-src]&apos;);
       const imageObserver = new IntersectionObserver(
         (entries: any) => {
+}
           entries.forEach((entry: any) => {
+}
             if (entry.isIntersecting) {
+}
               const img = entry.target as HTMLImageElement;
               const src = img.dataset.src;
               if (src) {
+}
                 img.src = src;
-                img.removeAttribute('data-src');
+                img.removeAttribute(&apos;data-src&apos;);
                 imageObserver.unobserve(img);
               }
             }
           });
         },
-        { rootMargin: '50px' }
+        { rootMargin: &apos;50px&apos; }
       );
 
       images.forEach((img: any) => imageObserver.observe(img));
     };
 
     if (enableMonitoring) {
+}
       optimizeImages();
     }
   }, [enableMonitoring]);
 
   // Preload critical resources
   useEffect(() => {
+}
     // Preload next likely navigation targets
-    resourceManager.prefetchResource('/api/players');
-    resourceManager.prefetchResource('/api/league');
+    resourceManager.prefetchResource(&apos;/api/players&apos;);
+    resourceManager.prefetchResource(&apos;/api/league&apos;);
     
     // Preconnect to external services
-    resourceManager.preconnect('https://fonts.googleapis.com');
-    resourceManager.preconnect('https://api.sportsdata.io');
+    resourceManager.preconnect(&apos;https://fonts.googleapis.com&apos;);
+    resourceManager.preconnect(&apos;https://api.sportsdata.io&apos;);
   }, []);
 
   // Monitor long tasks
   useEffect(() => {
-    if (!enableMonitoring || !('PerformanceObserver' in window)) return;
+}
+    if (!enableMonitoring || !(&apos;PerformanceObserver&apos; in window)) return;
 
     const longTaskObserver = new PerformanceObserver((list: any) => {
+}
       for (const entry of list.getEntries()) {
+}
         if (entry.duration > 50) {
-          console.warn('Long task detected:', {
+}
+          console.warn(&apos;Long task detected:&apos;, {
+}
             duration: entry.duration,
             startTime: entry.startTime,
             name: entry.name
@@ -378,8 +445,10 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
     });
 
     try {
-      longTaskObserver.observe({ entryTypes: ['longtask'] });
+}
+      longTaskObserver.observe({ entryTypes: [&apos;longtask&apos;] });
     } catch (error) {
+}
       // Long task API not supported
     }
 
@@ -388,33 +457,40 @@ const PerformanceOptimizer: React.FC<PerformanceOptimizerProps> = ({
 
   // Development mode performance warnings
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development' && enableMonitoring) {
+}
+    if (process.env.NODE_ENV === &apos;development&apos; && enableMonitoring) {
+}
       const { FCP, LCP, CLS, FID } = metrics;
       
       if (FCP && FCP > 3000) {
+}
         console.warn(`⚠️ Slow FCP: ${FCP.toFixed(2)}ms (target: <1800ms)`);
       }
       
       if (LCP && LCP > 4000) {
+}
         console.warn(`⚠️ Slow LCP: ${LCP.toFixed(2)}ms (target: <2500ms)`);
       }
       
       if (CLS && CLS > 0.25) {
+}
         console.warn(`⚠️ High CLS: ${CLS.toFixed(3)} (target: <0.1)`);
       }
       
       if (FID && FID > 300) {
+}
         console.warn(`⚠️ Slow FID: ${FID.toFixed(2)}ms (target: <100ms)`);
       }
     }
   }, [metrics, enableMonitoring]);
 
   if (!enableMonitoring) {
+}
     return null;
   }
 
   return (
-    <div ref={performanceRef} style={{ display: 'none' }}>
+    <div ref={performanceRef} style={{ display: &apos;none&apos; }}>
       {/* Hidden performance monitoring component */}
       <div data-testid="performance-monitor" />
     </div>

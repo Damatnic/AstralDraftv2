@@ -3,19 +3,22 @@
  * Helps users install the app as a native mobile app
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 
 interface BeforeInstallPromptEvent extends Event {
+}
   readonly platforms: string[];
   readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
+}
+    outcome: &apos;accepted&apos; | &apos;dismissed&apos;;
     platform: string;
   }>;
   prompt(): Promise<void>;
 
 const PWAInstallPrompt: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
@@ -24,9 +27,11 @@ const PWAInstallPrompt: React.FC = () => {
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
+}
     // Check if app is already installed
     const checkInstallation = () => {
-      const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+}
+      const isStandaloneMode = window.matchMedia(&apos;(display-mode: standalone)&apos;).matches;
       const isIOSStandalone = (window.navigator as any).standalone === true;
       const isInstalled = isStandaloneMode || isIOSStandalone;
       
@@ -36,6 +41,7 @@ const PWAInstallPrompt: React.FC = () => {
 
     // Check if device is iOS
     const checkIOS = () => {
+}
       const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent);
       setIsIOS(isIOSDevice);
     };
@@ -45,12 +51,15 @@ const PWAInstallPrompt: React.FC = () => {
 
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
+}
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       
       // Show install prompt after a delay if not already installed
       if (!isInstalled) {
+}
         setTimeout(() => {
+}
           setShowInstallPrompt(true);
         }, 5000); // Show after 5 seconds
 
@@ -58,57 +67,67 @@ const PWAInstallPrompt: React.FC = () => {
 
     // Listen for app installed event
     const handleAppInstalled = () => {
+}
       setIsInstalled(true);
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    window.addEventListener('appinstalled', handleAppInstalled);
+    window.addEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
+    window.addEventListener(&apos;appinstalled&apos;, handleAppInstalled);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+}
+      window.removeEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
+      window.removeEventListener(&apos;appinstalled&apos;, handleAppInstalled);
     };
   }, [isInstalled]);
 
   const handleInstallClick = async () => {
+}
     if (!deferredPrompt) return;
 
     try {
+}
 
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
 
-      if (outcome === 'accepted') {
+      if (outcome === &apos;accepted&apos;) {
+}
         setIsInstalled(true);
 
       setShowInstallPrompt(false);
       setDeferredPrompt(null);
 
     } catch (error) {
+}
 
   };
 
   const handleDismiss = () => {
+}
     setShowInstallPrompt(false);
     
-    // Don't show again for this session
-    sessionStorage.setItem('pwa-install-dismissed', 'true');
+    // Don&apos;t show again for this session
+    sessionStorage.setItem(&apos;pwa-install-dismissed&apos;, &apos;true&apos;);
   };
 
   const handleIOSInstallInstructions = () => {
+}
     setShowInstallPrompt(true);
   };
 
-  // Don't show if already installed or dismissed this session
-  if (isInstalled || sessionStorage.getItem('pwa-install-dismissed')) {
+  // Don&apos;t show if already installed or dismissed this session
+  if (isInstalled || sessionStorage.getItem(&apos;pwa-install-dismissed&apos;)) {
+}
     return null;
 
   return (
     <>
       {/* Install Button for iOS users */}
       {isIOS && !isStandalone && (
+}
         <button
           onClick={handleIOSInstallInstructions}
           className="fixed bottom-4 right-4 z-50 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -121,6 +140,7 @@ const PWAInstallPrompt: React.FC = () => {
       {/* Install Prompt Modal */}
       <AnimatePresence>
         {showInstallPrompt && (
+}
           <div className="fixed inset-0 bg-black/50 flex items-end md:items-center justify-center z-50 p-4">
             <motion.div
               initial={{ opacity: 0, y: 100, scale: 0.9 }}
@@ -150,6 +170,7 @@ const PWAInstallPrompt: React.FC = () => {
               {/* Content */}
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 {isIOS ? (
+}
                   /* iOS Installation Instructions */
                   <div>
                     <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Install on iOS:</h4>
@@ -214,6 +235,7 @@ const PWAInstallPrompt: React.FC = () => {
                     Maybe Later
                   </button>
                   {!isIOS && deferredPrompt && (
+}
                     <button
                       onClick={handleInstallClick}
                       className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
@@ -222,6 +244,7 @@ const PWAInstallPrompt: React.FC = () => {
                     </button>
                   )}
                   {isIOS && (
+}
                     <button
                       onClick={handleDismiss}
                       className="btn btn-primary flex-1 sm:px-4 md:px-6 lg:px-8"
@@ -247,6 +270,7 @@ const PWAInstallPrompt: React.FC = () => {
 
       {/* Floating Install Button (for supported browsers) */}
       {deferredPrompt && !showInstallPrompt && !isIOS && (
+}
         <motion.button
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}

@@ -4,6 +4,7 @@
  */
 
 import {
+}
   // Request types
   LoginRequest,
   RegisterRequest,
@@ -19,9 +20,10 @@ import {
   SearchRequest,
   UploadFileRequest,
   CommissionerActionRequest,
-} from './requests';
+} from &apos;./requests&apos;;
 
 import {
+}
   // Response types
   LoginResponse,
   RegisterResponse,
@@ -35,20 +37,23 @@ import {
   AnalyticsResponse,
   ApiResponse,
   ErrorResponse,
-} from './responses';
+} from &apos;./responses&apos;;
 
 // ==================== ENDPOINT CONFIGURATION ====================
 
 export interface EndpointConfig {
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+}
+  method: &apos;GET&apos; | &apos;POST&apos; | &apos;PUT&apos; | &apos;PATCH&apos; | &apos;DELETE&apos;;
   path: string;
   authenticated: boolean;
   roles?: string[];
   rateLimit?: {
+}
     requests: number;
     window: number; // seconds
   };
   cache?: {
+}
     ttl: number; // seconds
     tags?: string[];
   };
@@ -57,6 +62,7 @@ export interface EndpointConfig {
 // ==================== TYPE-SAFE ENDPOINT DEFINITIONS ====================
 
 export interface TypedEndpoint<TRequest = void, TResponse = any> extends EndpointConfig {
+}
   requestType?: new () => TRequest;
   responseType?: new () => TResponse;
 }
@@ -64,50 +70,58 @@ export interface TypedEndpoint<TRequest = void, TResponse = any> extends Endpoin
 // ==================== AUTHENTICATION ENDPOINTS ====================
 
 export const AuthEndpoints = {
+}
   login: {
-    method: 'POST',
-    path: '/auth/login',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/login&apos;,
     authenticated: false,
     rateLimit: { requests: 5, window: 300 },
   } as TypedEndpoint<LoginRequest, LoginResponse>,
 
   register: {
-    method: 'POST',
-    path: '/auth/register',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/register&apos;,
     authenticated: false,
     rateLimit: { requests: 3, window: 3600 },
   } as TypedEndpoint<RegisterRequest, RegisterResponse>,
 
   logout: {
-    method: 'POST',
-    path: '/auth/logout',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/logout&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ success: boolean }>>,
 
   refresh: {
-    method: 'POST',
-    path: '/auth/refresh',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/refresh&apos;,
     authenticated: false,
     rateLimit: { requests: 10, window: 300 },
   } as TypedEndpoint<RefreshTokenRequest, RefreshTokenResponse>,
 
   forgotPassword: {
-    method: 'POST',
-    path: '/auth/forgot-password',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/forgot-password&apos;,
     authenticated: false,
     rateLimit: { requests: 3, window: 1800 },
   } as TypedEndpoint<{ email: string }, ApiResponse<{ message: string }>>,
 
   resetPassword: {
-    method: 'POST',
-    path: '/auth/reset-password',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/reset-password&apos;,
     authenticated: false,
     rateLimit: { requests: 5, window: 300 },
   } as TypedEndpoint<{ token: string; password: string }, ApiResponse<{ success: boolean }>>,
 
   verifyEmail: {
-    method: 'POST',
-    path: '/auth/verify-email',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/auth/verify-email&apos;,
     authenticated: false,
   } as TypedEndpoint<{ token: string }, ApiResponse<{ verified: boolean }>>,
 } as const;
@@ -115,42 +129,49 @@ export const AuthEndpoints = {
 // ==================== USER ENDPOINTS ====================
 
 export const UserEndpoints = {
+}
   getProfile: {
-    method: 'GET',
-    path: '/users/profile',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/users/profile&apos;,
     authenticated: true,
     cache: { ttl: 300 },
   } as TypedEndpoint<void, UserProfileResponse>,
 
   updateProfile: {
-    method: 'PATCH',
-    path: '/users/profile',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/users/profile&apos;,
     authenticated: true,
   } as TypedEndpoint<UpdateUserProfileRequest, UserProfileResponse>,
 
   uploadAvatar: {
-    method: 'POST',
-    path: '/users/avatar',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/users/avatar&apos;,
     authenticated: true,
   } as TypedEndpoint<UploadFileRequest, ApiResponse<{ avatarUrl: string }>>,
 
   getStats: {
-    method: 'GET',
-    path: '/users/stats',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/users/stats&apos;,
     authenticated: true,
     cache: { ttl: 600 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   getAchievements: {
-    method: 'GET',
-    path: '/users/achievements',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/users/achievements&apos;,
     authenticated: true,
     cache: { ttl: 1800 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   updatePreferences: {
-    method: 'PATCH',
-    path: '/users/preferences',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/users/preferences&apos;,
     authenticated: true,
   } as TypedEndpoint<any, ApiResponse<any>>,
 } as const;
@@ -158,77 +179,89 @@ export const UserEndpoints = {
 // ==================== LEAGUE ENDPOINTS ====================
 
 export const LeagueEndpoints = {
+}
   list: {
-    method: 'GET',
-    path: '/leagues',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues&apos;,
     authenticated: true,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   create: {
-    method: 'POST',
-    path: '/leagues',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues&apos;,
     authenticated: true,
     rateLimit: { requests: 5, window: 3600 },
   } as TypedEndpoint<CreateLeagueRequest, CreateLeagueResponse>,
 
   get: {
-    method: 'GET',
-    path: '/leagues/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:id&apos;,
     authenticated: true,
     cache: { ttl: 120 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   update: {
-    method: 'PATCH',
-    path: '/leagues/:id',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/leagues/:id&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<any, ApiResponse<any>>,
 
   delete: {
-    method: 'DELETE',
-    path: '/leagues/:id',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/leagues/:id&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ success: boolean }>>,
 
   join: {
-    method: 'POST',
-    path: '/leagues/:id/join',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:id/join&apos;,
     authenticated: true,
   } as TypedEndpoint<{ teamName: string; password?: string }, ApiResponse<any>>,
 
   leave: {
-    method: 'POST',
-    path: '/leagues/:id/leave',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:id/leave&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ success: boolean }>>,
 
   invite: {
-    method: 'POST',
-    path: '/leagues/:id/invite',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:id/invite&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<{ emails: string[] }, ApiResponse<{ invitesSent: number }>>,
 
   getStandings: {
-    method: 'GET',
-    path: '/leagues/:id/standings',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:id/standings&apos;,
     authenticated: true,
     cache: { ttl: 300 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   getSchedule: {
-    method: 'GET',
-    path: '/leagues/:id/schedule',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:id/schedule&apos;,
     authenticated: true,
     cache: { ttl: 600 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   getActivity: {
-    method: 'GET',
-    path: '/leagues/:id/activity',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:id/activity&apos;,
     authenticated: true,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
@@ -237,61 +270,71 @@ export const LeagueEndpoints = {
 // ==================== DRAFT ENDPOINTS ====================
 
 export const DraftEndpoints = {
+}
   getState: {
-    method: 'GET',
-    path: '/drafts/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/drafts/:id&apos;,
     authenticated: true,
     cache: { ttl: 5 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   start: {
-    method: 'POST',
-    path: '/drafts/:id/start',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/start&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ started: boolean }>>,
 
   pause: {
-    method: 'POST',
-    path: '/drafts/:id/pause',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/pause&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ paused: boolean }>>,
 
   resume: {
-    method: 'POST',
-    path: '/drafts/:id/resume',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/resume&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ resumed: boolean }>>,
 
   makePick: {
-    method: 'POST',
-    path: '/drafts/:id/pick',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/pick&apos;,
     authenticated: true,
   } as TypedEndpoint<MakeDraftPickRequest, DraftPickResponse>,
 
   updateQueue: {
-    method: 'PATCH',
-    path: '/drafts/:id/queue',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/drafts/:id/queue&apos;,
     authenticated: true,
   } as TypedEndpoint<{ playerIds: string[] }, ApiResponse<{ updated: boolean }>>,
 
   toggleAutoDraft: {
-    method: 'PATCH',
-    path: '/drafts/:id/autodraft',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/drafts/:id/autodraft&apos;,
     authenticated: true,
   } as TypedEndpoint<{ enabled: boolean }, ApiResponse<{ enabled: boolean }>>,
 
   bid: {
-    method: 'POST',
-    path: '/drafts/:id/bid',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/bid&apos;,
     authenticated: true,
   } as TypedEndpoint<{ playerId: string; amount: number }, ApiResponse<any>>,
 
   nominate: {
-    method: 'POST',
-    path: '/drafts/:id/nominate',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/drafts/:id/nominate&apos;,
     authenticated: true,
   } as TypedEndpoint<{ playerId: string }, ApiResponse<any>>,
 } as const;
@@ -299,69 +342,80 @@ export const DraftEndpoints = {
 // ==================== PLAYER ENDPOINTS ====================
 
 export const PlayerEndpoints = {
+}
   list: {
-    method: 'GET',
-    path: '/players',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players&apos;,
     authenticated: true,
     cache: { ttl: 300 },
   } as TypedEndpoint<GetPlayersRequest, PlayerListResponse>,
 
   get: {
-    method: 'GET',
-    path: '/players/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/:id&apos;,
     authenticated: true,
     cache: { ttl: 600 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   getStats: {
-    method: 'GET',
-    path: '/players/:id/stats',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/:id/stats&apos;,
     authenticated: true,
     cache: { ttl: 1800 },
   } as TypedEndpoint<{ season?: number }, ApiResponse<any>>,
 
   getNews: {
-    method: 'GET',
-    path: '/players/:id/news',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/:id/news&apos;,
     authenticated: true,
     cache: { ttl: 300 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   getProjections: {
-    method: 'GET',
-    path: '/players/:id/projections',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/:id/projections&apos;,
     authenticated: true,
     cache: { ttl: 3600 },
   } as TypedEndpoint<{ week?: number }, ApiResponse<any>>,
 
   search: {
-    method: 'GET',
-    path: '/players/search',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/search&apos;,
     authenticated: true,
     cache: { ttl: 180 },
   } as TypedEndpoint<SearchRequest, PlayerListResponse>,
 
   compare: {
-    method: 'POST',
-    path: '/players/compare',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/players/compare&apos;,
     authenticated: true,
   } as TypedEndpoint<{ playerIds: string[] }, ApiResponse<any>>,
 
   watchlist: {
-    method: 'GET',
-    path: '/players/watchlist',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/players/watchlist&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   addToWatchlist: {
-    method: 'POST',
-    path: '/players/:id/watchlist',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/players/:id/watchlist&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ added: boolean }>>,
 
   removeFromWatchlist: {
-    method: 'DELETE',
-    path: '/players/:id/watchlist',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/players/:id/watchlist&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ removed: boolean }>>,
 } as const;
@@ -369,53 +423,62 @@ export const PlayerEndpoints = {
 // ==================== TRADE ENDPOINTS ====================
 
 export const TradeEndpoints = {
+}
   list: {
-    method: 'GET',
-    path: '/leagues/:leagueId/trades',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:leagueId/trades&apos;,
     authenticated: true,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, TradeListResponse>,
 
   propose: {
-    method: 'POST',
-    path: '/leagues/:leagueId/trades',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:leagueId/trades&apos;,
     authenticated: true,
     rateLimit: { requests: 10, window: 3600 },
   } as TypedEndpoint<ProposeTradeRequest, ApiResponse<any>>,
 
   get: {
-    method: 'GET',
-    path: '/trades/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/trades/:id&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   respond: {
-    method: 'POST',
-    path: '/trades/:id/respond',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/trades/:id/respond&apos;,
     authenticated: true,
-  } as TypedEndpoint<{ action: 'ACCEPT' | 'REJECT' | 'COUNTER' }, ApiResponse<any>>,
+  } as TypedEndpoint<{ action: &apos;ACCEPT&apos; | &apos;REJECT&apos; | &apos;COUNTER&apos; }, ApiResponse<any>>,
 
   cancel: {
-    method: 'DELETE',
-    path: '/trades/:id',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/trades/:id&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ cancelled: boolean }>>,
 
   analyze: {
-    method: 'POST',
-    path: '/trades/:id/analyze',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/trades/:id/analyze&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   vote: {
-    method: 'POST',
-    path: '/trades/:id/vote',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/trades/:id/vote&apos;,
     authenticated: true,
-  } as TypedEndpoint<{ vote: 'APPROVE' | 'VETO' }, ApiResponse<{ voted: boolean }>>,
+  } as TypedEndpoint<{ vote: &apos;APPROVE&apos; | &apos;VETO&apos; }, ApiResponse<{ voted: boolean }>>,
 
   history: {
-    method: 'GET',
-    path: '/leagues/:leagueId/trades/history',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:leagueId/trades/history&apos;,
     authenticated: true,
     cache: { ttl: 3600 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
@@ -424,107 +487,124 @@ export const TradeEndpoints = {
 // ==================== WAIVER ENDPOINTS ====================
 
 export const WaiverEndpoints = {
+}
   list: {
-    method: 'GET',
-    path: '/leagues/:leagueId/waivers',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:leagueId/waivers&apos;,
     authenticated: true,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, WaiverListResponse>,
 
   submit: {
-    method: 'POST',
-    path: '/leagues/:leagueId/waivers',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:leagueId/waivers&apos;,
     authenticated: true,
     rateLimit: { requests: 20, window: 3600 },
   } as TypedEndpoint<SubmitWaiverClaimRequest, ApiResponse<any>>,
 
   cancel: {
-    method: 'DELETE',
-    path: '/waivers/:id',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/waivers/:id&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ cancelled: boolean }>>,
 
   process: {
-    method: 'POST',
-    path: '/leagues/:leagueId/waivers/process',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/leagues/:leagueId/waivers/process&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ processed: number }>>,
 
   advice: {
-    method: 'POST',
-    path: '/waivers/advice',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/waivers/advice&apos;,
     authenticated: true,
   } as TypedEndpoint<{ playerId: string; teamId: string }, ApiResponse<any>>,
 
   priority: {
-    method: 'GET',
-    path: '/leagues/:leagueId/waivers/priority',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:leagueId/waivers/priority&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   updatePriority: {
-    method: 'PATCH',
-    path: '/leagues/:leagueId/waivers/priority',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/leagues/:leagueId/waivers/priority&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<{ order: string[] }, ApiResponse<{ updated: boolean }>>,
 } as const;
 
 // ==================== ANALYTICS ENDPOINTS ====================
 
 export const AnalyticsEndpoints = {
+}
   team: {
-    method: 'GET',
-    path: '/analytics/teams/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/teams/:id&apos;,
     authenticated: true,
     cache: { ttl: 600 },
   } as TypedEndpoint<GetAnalyticsRequest, AnalyticsResponse>,
 
   player: {
-    method: 'GET',
-    path: '/analytics/players/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/players/:id&apos;,
     authenticated: true,
     cache: { ttl: 1800 },
   } as TypedEndpoint<GetAnalyticsRequest, AnalyticsResponse>,
 
   league: {
-    method: 'GET',
-    path: '/analytics/leagues/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/leagues/:id&apos;,
     authenticated: true,
     cache: { ttl: 600 },
   } as TypedEndpoint<GetAnalyticsRequest, AnalyticsResponse>,
 
   predictions: {
-    method: 'GET',
-    path: '/analytics/predictions',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/predictions&apos;,
     authenticated: true,
     cache: { ttl: 1800 },
   } as TypedEndpoint<{ playerIds?: string[]; week?: number }, ApiResponse<any[]>>,
 
   trends: {
-    method: 'GET',
-    path: '/analytics/trends',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/trends&apos;,
     authenticated: true,
     cache: { ttl: 3600 },
   } as TypedEndpoint<{ type: string; timeframe: string }, ApiResponse<any>>,
 
   powerRankings: {
-    method: 'GET',
-    path: '/analytics/leagues/:id/power-rankings',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/leagues/:id/power-rankings&apos;,
     authenticated: true,
     cache: { ttl: 86400 },
   } as TypedEndpoint<{ week?: number }, ApiResponse<any[]>>,
 
   lineupOptimizer: {
-    method: 'POST',
-    path: '/analytics/lineup-optimizer',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/analytics/lineup-optimizer&apos;,
     authenticated: true,
   } as TypedEndpoint<{ teamId: string; week: number }, ApiResponse<any>>,
 
   projections: {
-    method: 'GET',
-    path: '/analytics/projections',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/analytics/projections&apos;,
     authenticated: true,
     cache: { ttl: 7200 },
   } as TypedEndpoint<{ week?: number; position?: string }, ApiResponse<any[]>>,
@@ -533,42 +613,49 @@ export const AnalyticsEndpoints = {
 // ==================== MESSAGE ENDPOINTS ====================
 
 export const MessageEndpoints = {
+}
   leagueChat: {
-    method: 'GET',
-    path: '/leagues/:leagueId/messages',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/leagues/:leagueId/messages&apos;,
     authenticated: true,
     cache: { ttl: 30 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   directMessages: {
-    method: 'GET',
-    path: '/messages/:userId',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/messages/:userId&apos;,
     authenticated: true,
     cache: { ttl: 30 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   send: {
-    method: 'POST',
-    path: '/messages',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/messages&apos;,
     authenticated: true,
     rateLimit: { requests: 30, window: 300 },
   } as TypedEndpoint<SendMessageRequest, ApiResponse<any>>,
 
   markRead: {
-    method: 'PATCH',
-    path: '/messages/read',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/messages/read&apos;,
     authenticated: true,
   } as TypedEndpoint<{ messageIds: string[] }, ApiResponse<{ marked: number }>>,
 
   delete: {
-    method: 'DELETE',
-    path: '/messages/:id',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/messages/:id&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ deleted: boolean }>>,
 
   getConversations: {
-    method: 'GET',
-    path: '/messages/conversations',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/messages/conversations&apos;,
     authenticated: true,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
@@ -577,34 +664,40 @@ export const MessageEndpoints = {
 // ==================== NOTIFICATION ENDPOINTS ====================
 
 export const NotificationEndpoints = {
+}
   list: {
-    method: 'GET',
-    path: '/notifications',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/notifications&apos;,
     authenticated: true,
     cache: { ttl: 30 },
   } as TypedEndpoint<void, ApiResponse<any[]>>,
 
   markRead: {
-    method: 'PATCH',
-    path: '/notifications/read',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/notifications/read&apos;,
     authenticated: true,
   } as TypedEndpoint<{ notificationIds: string[] }, ApiResponse<{ marked: number }>>,
 
   markAllRead: {
-    method: 'PATCH',
-    path: '/notifications/read-all',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/notifications/read-all&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ marked: number }>>,
 
   updateSettings: {
-    method: 'PATCH',
-    path: '/notifications/settings',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/notifications/settings&apos;,
     authenticated: true,
   } as TypedEndpoint<any, ApiResponse<any>>,
 
   registerPushToken: {
-    method: 'POST',
-    path: '/notifications/push-token',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/notifications/push-token&apos;,
     authenticated: true,
   } as TypedEndpoint<{ token: string; platform: string }, ApiResponse<{ registered: boolean }>>,
 } as const;
@@ -612,23 +705,27 @@ export const NotificationEndpoints = {
 // ==================== FILE UPLOAD ENDPOINTS ====================
 
 export const FileEndpoints = {
+}
   upload: {
-    method: 'POST',
-    path: '/files/upload',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/files/upload&apos;,
     authenticated: true,
     rateLimit: { requests: 20, window: 3600 },
   } as TypedEndpoint<UploadFileRequest, ApiResponse<{ url: string; id: string }>>,
 
   get: {
-    method: 'GET',
-    path: '/files/:id',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/files/:id&apos;,
     authenticated: false,
     cache: { ttl: 86400 },
   } as TypedEndpoint<void, any>,
 
   delete: {
-    method: 'DELETE',
-    path: '/files/:id',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/files/:id&apos;,
     authenticated: true,
   } as TypedEndpoint<void, ApiResponse<{ deleted: boolean }>>,
 } as const;
@@ -636,76 +733,88 @@ export const FileEndpoints = {
 // ==================== COMMISSIONER ENDPOINTS ====================
 
 export const CommissionerEndpoints = {
+}
   forceAction: {
-    method: 'POST',
-    path: '/commissioner/:leagueId/force-action',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/commissioner/:leagueId/force-action&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<CommissionerActionRequest, ApiResponse<{ success: boolean }>>,
 
   editRoster: {
-    method: 'PATCH',
-    path: '/commissioner/:leagueId/rosters/:teamId',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/commissioner/:leagueId/rosters/:teamId&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<any, ApiResponse<{ updated: boolean }>>,
 
   adjustScore: {
-    method: 'PATCH',
-    path: '/commissioner/:leagueId/scores/:matchupId',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/commissioner/:leagueId/scores/:matchupId&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<{ adjustments: Record<string, number> }, ApiResponse<{ adjusted: boolean }>>,
 
   manageTrade: {
-    method: 'PATCH',
-    path: '/commissioner/trades/:tradeId',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/commissioner/trades/:tradeId&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
-  } as TypedEndpoint<{ action: 'APPROVE' | 'VETO' | 'REVERSE' }, ApiResponse<{ success: boolean }>>,
+    roles: [&apos;COMMISSIONER&apos;],
+  } as TypedEndpoint<{ action: &apos;APPROVE&apos; | &apos;VETO&apos; | &apos;REVERSE&apos; }, ApiResponse<{ success: boolean }>>,
 
   kickUser: {
-    method: 'DELETE',
-    path: '/commissioner/:leagueId/members/:userId',
+}
+    method: &apos;DELETE&apos;,
+    path: &apos;/commissioner/:leagueId/members/:userId&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<{ reason: string }, ApiResponse<{ removed: boolean }>>,
 
   resetDraft: {
-    method: 'POST',
-    path: '/commissioner/:leagueId/draft/reset',
+}
+    method: &apos;POST&apos;,
+    path: &apos;/commissioner/:leagueId/draft/reset&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<void, ApiResponse<{ reset: boolean }>>,
 
   updateSettings: {
-    method: 'PATCH',
-    path: '/commissioner/:leagueId/settings',
+}
+    method: &apos;PATCH&apos;,
+    path: &apos;/commissioner/:leagueId/settings&apos;,
     authenticated: true,
-    roles: ['COMMISSIONER'],
+    roles: [&apos;COMMISSIONER&apos;],
   } as TypedEndpoint<any, ApiResponse<{ updated: boolean }>>,
 } as const;
 
 // ==================== HEALTH CHECK ENDPOINT ====================
 
 export const SystemEndpoints = {
+}
   health: {
-    method: 'GET',
-    path: '/health',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/health&apos;,
     authenticated: false,
     cache: { ttl: 30 },
   } as TypedEndpoint<void, ApiResponse<any>>,
 
   version: {
-    method: 'GET',
-    path: '/version',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/version&apos;,
     authenticated: false,
     cache: { ttl: 3600 },
   } as TypedEndpoint<void, ApiResponse<{ version: string; build: string }>>,
 
   status: {
-    method: 'GET',
-    path: '/status',
+}
+    method: &apos;GET&apos;,
+    path: &apos;/status&apos;,
     authenticated: false,
     cache: { ttl: 60 },
   } as TypedEndpoint<void, ApiResponse<any>>,
@@ -714,6 +823,7 @@ export const SystemEndpoints = {
 // ==================== ENDPOINT COLLECTIONS ====================
 
 export const AllEndpoints = {
+}
   auth: AuthEndpoints,
   users: UserEndpoints,
   leagues: LeagueEndpoints,
@@ -732,9 +842,10 @@ export const AllEndpoints = {
 // ==================== UTILITY TYPES ====================
 
 export type EndpointPath = string;
-export type EndpointMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type EndpointMethod = &apos;GET&apos; | &apos;POST&apos; | &apos;PUT&apos; | &apos;PATCH&apos; | &apos;DELETE&apos;;
 
 export interface ApiEndpoint {
+}
   method: EndpointMethod;
   path: EndpointPath;
   authenticated: boolean;
@@ -744,6 +855,7 @@ export interface ApiEndpoint {
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   EndpointConfig,
   TypedEndpoint,
   EndpointPath,
@@ -752,6 +864,7 @@ export type {
 };
 
 export {
+}
   AuthEndpoints,
   UserEndpoints,
   LeagueEndpoints,

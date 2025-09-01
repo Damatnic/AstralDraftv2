@@ -5,12 +5,13 @@
  */
 
 // Type Definitions
-export type RiskLevel = 'low' | 'medium' | 'high';
-export type ScoringSystem = 'standard' | 'ppr' | 'half_ppr' | 'super_flex';
-export type WaiverPriority = 'rolling' | 'waiver_budget' | 'reverse_standings';
+export type RiskLevel = &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+export type ScoringSystem = &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;super_flex&apos;;
+export type WaiverPriority = &apos;rolling&apos; | &apos;waiver_budget&apos; | &apos;reverse_standings&apos;;
 
 // Player and Draft Data Interfaces
 export interface DraftPlayer {
+}
     id: string;
     name: string;
     position: string;
@@ -34,6 +35,7 @@ export interface DraftPlayer {
 }
 
 export interface CustomRankings {
+}
     id: string;
     name: string;
     description: string;
@@ -46,6 +48,7 @@ export interface CustomRankings {
 }
 
 export interface PlayerRanking {
+}
     playerId: string;
     rank: number;
     tier: number;
@@ -56,6 +59,7 @@ export interface PlayerRanking {
 }
 
 export interface RankingSettings {
+}
     scoringSystem: ScoringSystem;
     leagueSize: number;
     teamCount: number;
@@ -68,6 +72,7 @@ export interface RankingSettings {
 }
 
 export interface RankingCategory {
+}
     id: string;
     name: string;
     position: string;
@@ -76,6 +81,7 @@ export interface RankingCategory {
 }
 
 export interface RankingTier {
+}
     tier: number;
     label: string;
     color: string;
@@ -84,6 +90,7 @@ export interface RankingTier {
 }
 
 export interface CheatSheet {
+}
     id: string;
     name: string;
     userId: string;
@@ -91,23 +98,25 @@ export interface CheatSheet {
     customizations: CheatSheetCustomization;
     generatedAt: Date;
     data: CheatSheetData;
-    format: 'pdf' | 'web' | 'mobile';
+    format: &apos;pdf&apos; | &apos;web&apos; | &apos;mobile&apos;;
     settings: CheatSheetSettings;
 }
 
 export interface CheatSheetTemplate {
+}
     id: string;
     name: string;
-    layout: 'grid' | 'list' | 'tiers' | 'custom';
+    layout: &apos;grid&apos; | &apos;list&apos; | &apos;tiers&apos; | &apos;custom&apos;;
     sections: CheatSheetSection[];
     colorScheme: string;
-    density: 'compact' | 'normal' | 'spacious';
+    density: &apos;compact&apos; | &apos;normal&apos; | &apos;spacious&apos;;
 }
 
 export interface CheatSheetSection {
+}
     id: string;
     title: string;
-    type: 'player_rankings' | 'targets' | 'sleepers' | 'avoid' | 'strategy_notes' | 'bye_weeks';
+    type: &apos;player_rankings&apos; | &apos;targets&apos; | &apos;sleepers&apos; | &apos;avoid&apos; | &apos;strategy_notes&apos; | &apos;bye_weeks&apos;;
     position?: string;
     visible: boolean;
     order: number;
@@ -115,17 +124,19 @@ export interface CheatSheetSection {
 }
 
 export interface CheatSheetCustomization {
+}
     highlightTargets: boolean;
     showTiers: boolean;
     showByeWeeks: boolean;
     showRiskLevels: boolean;
     colorCodePositions: boolean;
     includeNotes: boolean;
-    fontSize: 'small' | 'medium' | 'large';
+    fontSize: &apos;small&apos; | &apos;medium&apos; | &apos;large&apos;;
     columnsPerPage: number;
 }
 
 export interface CheatSheetData {
+}
     players: DraftPlayer[];
     targets: string[];
     sleepers: string[];
@@ -136,6 +147,7 @@ export interface CheatSheetData {
 }
 
 export interface CheatSheetSettings {
+}
     autoUpdate: boolean;
     includeInjuredPlayers: boolean;
     maxPlayersPerTier: number;
@@ -145,10 +157,11 @@ export interface CheatSheetSettings {
 }
 
 export interface DraftStrategy {
+}
     id: string;
     name: string;
     description: string;
-    type: 'early_rb' | 'late_rb' | 'wr_heavy' | 'balanced' | 'zero_rb' | 'hero_rb' | 'late_qb' | 'qb_streaming';
+    type: &apos;early_rb&apos; | &apos;late_rb&apos; | &apos;wr_heavy&apos; | &apos;balanced&apos; | &apos;zero_rb&apos; | &apos;hero_rb&apos; | &apos;late_qb&apos; | &apos;qb_streaming&apos;;
     rounds: StrategyRound[];
     considerations: string[];
     pros: string[];
@@ -156,10 +169,11 @@ export interface DraftStrategy {
     leagueSizes: number[];
     scoringFormats: string[];
     success_rate: number;
-    difficulty: 'beginner' | 'intermediate' | 'advanced';
+    difficulty: &apos;beginner&apos; | &apos;intermediate&apos; | &apos;advanced&apos;;
 }
 
 export interface StrategyRound {
+}
     round: number;
     positions: string[];
     targets: string[];
@@ -169,6 +183,7 @@ export interface StrategyRound {
 }
 
 export interface MockDraftResult {
+}
     id: string;
     userId: string;
     strategy: string;
@@ -185,6 +200,7 @@ export interface MockDraftResult {
 }
 
 export interface DraftedPlayer extends DraftPlayer {
+}
     round: number;
     pick: number;
     draftedBy: string;
@@ -193,6 +209,7 @@ export interface DraftedPlayer extends DraftPlayer {
 }
 
 export interface DraftPick {
+}
     round: number;
     pick: number;
     playerId: string;
@@ -202,6 +219,7 @@ export interface DraftPick {
 }
 
 export interface MockDraftAnalysis {
+}
     teamGrade: string; // A+ to F
     strengthPositions: string[];
     weakPositions: string[];
@@ -215,16 +233,18 @@ export interface MockDraftAnalysis {
 }
 
 export interface MockDraftSettings {
+}
     leagueSize: number;
     scoringFormat: string;
-    draftType: 'snake' | 'linear';
+    draftType: &apos;snake&apos; | &apos;linear&apos;;
     timePerPick: number;
     autopickEnabled: boolean;
     strategy: string;
-    difficulty: 'easy' | 'medium' | 'hard';
+    difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
 }
 
 export interface ByeWeekAnalysis {
+}
     conflicts: ByeWeekConflict[];
     coverage: Record<string, number>;
     recommendations: string[];
@@ -232,92 +252,98 @@ export interface ByeWeekAnalysis {
 }
 
 export interface ByeWeekConflict {
+}
     week: number;
     positions: string[];
     players: string[];
-    severity: 'low' | 'medium' | 'high';
+    severity: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
     impact: string;
 }
 
 export interface DraftPrepFilter {
+}
     positions?: string[];
     tiers?: number[];
     adpRange?: [number, number];
     riskLevel?: RiskLevel[];
     tags?: string[];
-    availability?: 'all' | 'available' | 'targeted';
-    sortBy?: 'rank' | 'adp' | 'projected_points' | 'value' | 'upside';
-    sortOrder?: 'asc' | 'desc';
+    availability?: &apos;all&apos; | &apos;available&apos; | &apos;targeted&apos;;
+    sortBy?: &apos;rank&apos; | &apos;adp&apos; | &apos;projected_points&apos; | &apos;value&apos; | &apos;upside&apos;;
+    sortOrder?: &apos;asc&apos; | &apos;desc&apos;;
 }
 
 // Main Draft Preparation Service
 class DraftPreparationService {
-    private readonly baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+}
+    private readonly baseUrl = process.env.REACT_APP_API_URL || &apos;http://localhost:3001&apos;;
     
     // Mock data for demonstration
     private readonly mockPlayers: DraftPlayer[] = [
         {
-            id: '1',
-            name: 'Josh Allen',
-            position: 'QB',
-            team: 'BUF',
+}
+            id: &apos;1&apos;,
+            name: &apos;Josh Allen&apos;,
+            position: &apos;QB&apos;,
+            team: &apos;BUF&apos;,
             byeWeek: 12,
             adp: 15.2,
             projectedPoints: 387.5,
             tier: 1,
             rank: 1,
             value: 45.3,
-            riskLevel: 'low',
+            riskLevel: &apos;low&apos;,
             upside: 95,
             floor: 320,
             ceiling: 450,
             consistency: 88,
             injuries: [],
-            tags: ['elite', 'rushing_upside', 'safe'],
+            tags: [&apos;elite&apos;, &apos;rushing_upside&apos;, &apos;safe&apos;],
             sleeper: false,
             breakout: false,
             rookie: false
         },
         {
-            id: '2',
-            name: 'Christian McCaffrey',
-            position: 'RB',
-            team: 'SF',
+}
+            id: &apos;2&apos;,
+            name: &apos;Christian McCaffrey&apos;,
+            position: &apos;RB&apos;,
+            team: &apos;SF&apos;,
             byeWeek: 9,
             adp: 2.1,
             projectedPoints: 285.8,
             tier: 1,
             rank: 1,
             value: 52.7,
-            riskLevel: 'medium',
+            riskLevel: &apos;medium&apos;,
             upside: 98,
             floor: 180,
             ceiling: 350,
             consistency: 75,
-            injuries: ['ankle sprain 2023'],
-            tags: ['elite', 'injury_history', 'high_ceiling'],
+            injuries: [&apos;ankle sprain 2023&apos;],
+            tags: [&apos;elite&apos;, &apos;injury_history&apos;, &apos;high_ceiling&apos;],
             sleeper: false,
             breakout: false,
             rookie: false
         },
         {
-            id: '3',
-            name: 'Cooper Kupp',
-            position: 'WR',
-            team: 'LAR',
+}
+            id: &apos;3&apos;,
+            name: &apos;Cooper Kupp&apos;,
+            position: &apos;WR&apos;,
+            team: &apos;LAR&apos;,
             byeWeek: 6,
             adp: 8.5,
             projectedPoints: 245.2,
             tier: 1,
             rank: 1,
             value: 38.1,
-            riskLevel: 'low',
+            riskLevel: &apos;low&apos;,
             upside: 92,
             floor: 200,
             ceiling: 290,
             consistency: 91,
             injuries: [],
-            tags: ['target_monster', 'consistent', 'safe'],
+            tags: [&apos;target_monster&apos;, &apos;consistent&apos;, &apos;safe&apos;],
             sleeper: false,
             breakout: false,
             rookie: false
@@ -326,90 +352,96 @@ class DraftPreparationService {
 
     private readonly mockStrategies: DraftStrategy[] = [
         {
-            id: 'zero_rb',
-            name: 'Zero RB Strategy',
-            description: 'Draft WRs and other positions early, wait on RBs until middle/late rounds',
-            type: 'zero_rb',
+}
+            id: &apos;zero_rb&apos;,
+            name: &apos;Zero RB Strategy&apos;,
+            description: &apos;Draft WRs and other positions early, wait on RBs until middle/late rounds&apos;,
+            type: &apos;zero_rb&apos;,
             rounds: [
                 {
+}
                     round: 1,
-                    positions: ['WR', 'TE'],
-                    targets: ['Elite WR1s', 'Travis Kelce'],
-                    avoid: ['RB'],
-                    notes: 'Target elite wide receivers with high target share',
+                    positions: [&apos;WR&apos;, &apos;TE&apos;],
+                    targets: [&apos;Elite WR1s&apos;, &apos;Travis Kelce&apos;],
+                    avoid: [&apos;RB&apos;],
+                    notes: &apos;Target elite wide receivers with high target share&apos;,
                     flexibility: 0.2
                 },
                 {
+}
                     round: 2,
-                    positions: ['WR', 'QB'],
-                    targets: ['WR1s', 'Elite QBs'],
-                    avoid: ['RB'],
-                    notes: 'Continue building WR depth or secure elite QB',
+                    positions: [&apos;WR&apos;, &apos;QB&apos;],
+                    targets: [&apos;WR1s&apos;, &apos;Elite QBs&apos;],
+                    avoid: [&apos;RB&apos;],
+                    notes: &apos;Continue building WR depth or secure elite QB&apos;,
                     flexibility: 0.4
                 }
             ],
             considerations: [
-                'Requires strong waiver wire management',
-                'High risk, high reward strategy',
-                'Need to hit on late-round RBs'
+                &apos;Requires strong waiver wire management&apos;,
+                &apos;High risk, high reward strategy&apos;,
+                &apos;Need to hit on late-round RBs&apos;
             ],
             pros: [
-                'Secure elite WR production',
-                'RB value often available later',
-                'Less injury risk early'
+                &apos;Secure elite WR production&apos;,
+                &apos;RB value often available later&apos;,
+                &apos;Less injury risk early&apos;
             ],
             cons: [
-                'Thin at RB to start season',
-                'Requires active management',
-                'Can backfire if late RBs fail'
+                &apos;Thin at RB to start season&apos;,
+                &apos;Requires active management&apos;,
+                &apos;Can backfire if late RBs fail&apos;
             ],
             leagueSizes: [10, 12, 14],
-            scoringFormats: ['ppr', 'half_ppr'],
+            scoringFormats: [&apos;ppr&apos;, &apos;half_ppr&apos;],
             success_rate: 68,
-            difficulty: 'advanced'
+            difficulty: &apos;advanced&apos;
         },
         {
-            id: 'robust_rb',
-            name: 'Robust RB Strategy',
-            description: 'Secure multiple strong RBs early to build foundation',
-            type: 'early_rb',
+}
+            id: &apos;robust_rb&apos;,
+            name: &apos;Robust RB Strategy&apos;,
+            description: &apos;Secure multiple strong RBs early to build foundation&apos;,
+            type: &apos;early_rb&apos;,
             rounds: [
                 {
+}
                     round: 1,
-                    positions: ['RB'],
-                    targets: ['Elite RB1s'],
-                    avoid: ['QB', 'TE'],
-                    notes: 'Secure bellcow RB with high touch volume',
+                    positions: [&apos;RB&apos;],
+                    targets: [&apos;Elite RB1s&apos;],
+                    avoid: [&apos;QB&apos;, &apos;TE&apos;],
+                    notes: &apos;Secure bellcow RB with high touch volume&apos;,
                     flexibility: 0.1
                 },
                 {
+}
                     round: 2,
-                    positions: ['RB', 'WR'],
-                    targets: ['RB1s', 'Elite WRs'],
-                    avoid: ['QB', 'TE'],
-                    notes: 'Double down on RB or pivot to elite WR',
+                    positions: [&apos;RB&apos;, &apos;WR&apos;],
+                    targets: [&apos;RB1s&apos;, &apos;Elite WRs&apos;],
+                    avoid: [&apos;QB&apos;, &apos;TE&apos;],
+                    notes: &apos;Double down on RB or pivot to elite WR&apos;,
                     flexibility: 0.6
                 }
             ],
             considerations: [
-                'RB injury risk higher',
-                'Positional scarcity at RB',
-                'Workload sustainability'
+                &apos;RB injury risk higher&apos;,
+                &apos;Positional scarcity at RB&apos;,
+                &apos;Workload sustainability&apos;
             ],
             pros: [
-                'Strong RB foundation',
-                'Positional scarcity advantage',
-                'Clear early strategy'
+                &apos;Strong RB foundation&apos;,
+                &apos;Positional scarcity advantage&apos;,
+                &apos;Clear early strategy&apos;
             ],
             cons: [
-                'Higher injury risk',
-                'May miss elite WRs',
-                'Less roster flexibility'
+                &apos;Higher injury risk&apos;,
+                &apos;May miss elite WRs&apos;,
+                &apos;Less roster flexibility&apos;
             ],
             leagueSizes: [8, 10, 12],
-            scoringFormats: ['standard', 'half_ppr'],
+            scoringFormats: [&apos;standard&apos;, &apos;half_ppr&apos;],
             success_rate: 72,
-            difficulty: 'beginner'
+            difficulty: &apos;beginner&apos;
         }
     ];
 
@@ -417,29 +449,35 @@ class DraftPreparationService {
      * Get all available players for draft preparation
      */
     async getDraftPlayers(filter: DraftPrepFilter = {}): Promise<DraftPlayer[]> {
+}
         try {
+}
             let filteredPlayers = [...this.mockPlayers];
 
             // Apply filters
             if (filter.positions?.length) {
+}
                 filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.positions!.includes(p.position)
                 );
             }
 
             if (filter.tiers?.length) {
+}
                 filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.tiers!.includes(p.tier)
                 );
             }
 
             if (filter.riskLevel?.length) {
+}
                 filteredPlayers = filteredPlayers.filter((p: any) => 
                     filter.riskLevel!.includes(p.riskLevel)
                 );
             }
 
             if (filter.adpRange) {
+}
                 filteredPlayers = filteredPlayers.filter((p: any) => 
                     p.adp >= filter.adpRange![0] && p.adp <= filter.adpRange![1]
                 );
@@ -447,27 +485,30 @@ class DraftPreparationService {
 
             // Apply sorting
             if (filter.sortBy) {
+}
                 filteredPlayers.sort((a, b) => {
+}
                     let aVal: number, bVal: number;
                     
                     switch (filter.sortBy) {
-                        case 'rank':
+}
+                        case &apos;rank&apos;:
                             aVal = a.rank;
                             bVal = b.rank;
                             break;
-                        case 'adp':
+                        case &apos;adp&apos;:
                             aVal = a.adp;
                             bVal = b.adp;
                             break;
-                        case 'projected_points':
+                        case &apos;projected_points&apos;:
                             aVal = a.projectedPoints;
                             bVal = b.projectedPoints;
                             break;
-                        case 'value':
+                        case &apos;value&apos;:
                             aVal = a.value;
                             bVal = b.value;
                             break;
-                        case 'upside':
+                        case &apos;upside&apos;:
                             aVal = a.upside;
                             bVal = b.upside;
                             break;
@@ -475,14 +516,15 @@ class DraftPreparationService {
                             return 0;
                     }
                     
-                    return filter.sortOrder === 'desc' ? bVal - aVal : aVal - bVal;
+                    return filter.sortOrder === &apos;desc&apos; ? bVal - aVal : aVal - bVal;
                 });
             }
 
             return filteredPlayers;
         } catch (error) {
-            console.error('Failed to get draft players:', error);
-            throw new Error('Failed to get draft players');
+}
+            console.error(&apos;Failed to get draft players:&apos;, error);
+            throw new Error(&apos;Failed to get draft players&apos;);
         }
     }
 
@@ -490,11 +532,14 @@ class DraftPreparationService {
      * Get available draft strategies
      */
     async getDraftStrategies(): Promise<DraftStrategy[]> {
+}
         try {
+}
             return this.mockStrategies;
         } catch (error) {
-            console.error('Failed to get draft strategies:', error);
-            throw new Error('Failed to get draft strategies');
+}
+            console.error(&apos;Failed to get draft strategies:&apos;, error);
+            throw new Error(&apos;Failed to get draft strategies&apos;);
         }
     }
 
@@ -502,32 +547,39 @@ class DraftPreparationService {
      * Get draft strategy by ID
      */
     async getDraftStrategy(strategyId: string): Promise<DraftStrategy | null> {
+}
         try {
+}
             return this.mockStrategies.find((s: any) => s.id === strategyId) || null;
         } catch (error) {
-            console.error('Failed to get draft strategy:', error);
-            throw new Error('Failed to get draft strategy');
+}
+            console.error(&apos;Failed to get draft strategy:&apos;, error);
+            throw new Error(&apos;Failed to get draft strategy&apos;);
         }
     }
 
     /**
      * Create custom player rankings
      */
-    async createCustomRankings(rankings: Omit<CustomRankings, 'id' | 'lastUpdated'>): Promise<CustomRankings> {
+    async createCustomRankings(rankings: Omit<CustomRankings, &apos;id&apos; | &apos;lastUpdated&apos;>): Promise<CustomRankings> {
+}
         try {
+}
             const newRankings: CustomRankings = {
+}
                 ...rankings,
                 id: `rankings-${Date.now()}`,
                 lastUpdated: new Date()
             };
 
             // In production, this would save to database
-            console.log('Created custom rankings:', newRankings);
+            console.log(&apos;Created custom rankings:&apos;, newRankings);
             
             return newRankings;
         } catch (error) {
-            console.error('Failed to create custom rankings:', error);
-            throw new Error('Failed to create custom rankings');
+}
+            console.error(&apos;Failed to create custom rankings:&apos;, error);
+            throw new Error(&apos;Failed to create custom rankings&apos;);
         }
     }
 
@@ -535,18 +587,22 @@ class DraftPreparationService {
      * Update custom player rankings
      */
     async updateCustomRankings(rankingsId: string, updates: Partial<CustomRankings>): Promise<CustomRankings> {
+}
         try {
+}
             // Mock update - in production would update database
             const updatedRankings: CustomRankings = {
+}
                 id: rankingsId,
-                name: updates.name || 'Updated Rankings',
-                description: updates.description || '',
-                userId: updates.userId || 'user-1',
+                name: updates.name || &apos;Updated Rankings&apos;,
+                description: updates.description || &apos;&apos;,
+                userId: updates.userId || &apos;user-1&apos;,
                 isPublic: updates.isPublic || false,
                 lastUpdated: new Date(),
                 rankings: updates.rankings || [],
                 settings: updates.settings || {
-                    scoringSystem: 'ppr',
+}
+                    scoringSystem: &apos;ppr&apos;,
                     leagueSize: 12,
                     teamCount: 12,
                     startingPositions: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, K: 1, DST: 1 },
@@ -554,15 +610,16 @@ class DraftPreparationService {
                     includeDefense: true,
                     includeKicker: true,
                     tradingEnabled: true,
-                    waiverPriority: 'rolling'
+                    waiverPriority: &apos;rolling&apos;
                 },
                 categories: updates.categories || []
             };
 
             return updatedRankings;
         } catch (error) {
-            console.error('Failed to update custom rankings:', error);
-            throw new Error('Failed to update custom rankings');
+}
+            console.error(&apos;Failed to update custom rankings:&apos;, error);
+            throw new Error(&apos;Failed to update custom rankings&apos;);
         }
     }
 
@@ -575,25 +632,29 @@ class DraftPreparationService {
         customizations: CheatSheetCustomization,
         settings: CheatSheetSettings
     ): Promise<CheatSheet> {
+}
         try {
+}
             const players = await this.getDraftPlayers();
             
             // Generate cheat sheet data
             const cheatSheetData: CheatSheetData = {
+}
                 players: players.slice(0, 200), // Top 200 players
-                targets: players.filter((p: any) => p.tags.includes('target') || p.sleeper).map((p: any) => p.id),
+                targets: players.filter((p: any) => p.tags.includes(&apos;target&apos;) || p.sleeper).map((p: any) => p.id),
                 sleepers: players.filter((p: any) => p.sleeper).map((p: any) => p.id),
-                avoid: players.filter((p: any) => p.riskLevel === 'high' && p.injuries.length > 0).map((p: any) => p.id),
+                avoid: players.filter((p: any) => p.riskLevel === &apos;high&apos; && p.injuries.length > 0).map((p: any) => p.id),
                 strategies: await this.getDraftStrategies(),
                 notes: [
-                    'Focus on positional scarcity',
-                    'Monitor injury reports before draft',
-                    'Have backup plans for each pick'
+                    &apos;Focus on positional scarcity&apos;,
+                    &apos;Monitor injury reports before draft&apos;,
+                    &apos;Have backup plans for each pick&apos;
                 ],
                 byeWeekAnalysis: this.generateByeWeekAnalysis(players.slice(0, 100))
             };
 
             const cheatSheet: CheatSheet = {
+}
                 id: `cheatsheet-${Date.now()}`,
                 name: `${template.name} Cheat Sheet`,
                 userId,
@@ -601,14 +662,15 @@ class DraftPreparationService {
                 customizations,
                 generatedAt: new Date(),
                 data: cheatSheetData,
-                format: 'web',
-                settings
+                format: &apos;web&apos;,
+//                 settings
             };
 
             return cheatSheet;
         } catch (error) {
-            console.error('Failed to generate cheat sheet:', error);
-            throw new Error('Failed to generate cheat sheet');
+}
+            console.error(&apos;Failed to generate cheat sheet:&apos;, error);
+            throw new Error(&apos;Failed to generate cheat sheet&apos;);
         }
     }
 
@@ -616,12 +678,15 @@ class DraftPreparationService {
      * Run mock draft simulation
      */
     async runMockDraft(settings: MockDraftSettings, strategy: string): Promise<MockDraftResult> {
+}
         try {
+}
             const players = await this.getDraftPlayers();
             const draftStrategy = await this.getDraftStrategy(strategy);
             
             if (!draftStrategy) {
-                throw new Error('Draft strategy not found');
+}
+                throw new Error(&apos;Draft strategy not found&apos;);
             }
 
             // Simulate draft picks
@@ -629,20 +694,23 @@ class DraftPreparationService {
             const allPicks: DraftPick[] = [];
             const userTeam: DraftedPlayer[] = [];
             
-            // User's draft position (random for demo)
+            // User&apos;s draft position (random for demo)
             const userPosition = Math.floor(Math.random() * settings.leagueSize) + 1;
             
             for (let pick = 1; pick <= totalPicks; pick++) {
+}
                 const round = Math.ceil(pick / settings.leagueSize);
                 const pickInRound = ((pick - 1) % settings.leagueSize) + 1;
                 
-                // Determine if it's user's pick
+                // Determine if it&apos;s user&apos;s pick
                 let isUserPick = false;
-                if (settings.draftType === 'snake') {
+                if (settings.draftType === &apos;snake&apos;) {
+}
                     isUserPick = (round % 2 === 1) ? 
                         (pickInRound === userPosition) : 
                         (pickInRound === settings.leagueSize - userPosition + 1);
                 } else {
+}
                     isUserPick = pickInRound === userPosition;
                 }
 
@@ -656,10 +724,11 @@ class DraftPreparationService {
                 const selectedPlayer = availablePlayers[0]; // Simple selection for demo
                 
                 const draftPick: DraftPick = {
+}
                     round,
                     pick: pickInRound,
                     playerId: selectedPlayer.id,
-                    teamName: isUserPick ? 'Your Team' : `Team ${pickInRound}`,
+                    teamName: isUserPick ? &apos;Your Team&apos; : `Team ${pickInRound}`,
                     timeSelected: new Date(),
                     autopick: !isUserPick
                 };
@@ -667,11 +736,13 @@ class DraftPreparationService {
                 allPicks.push(draftPick);
 
                 if (isUserPick) {
+}
                     const draftedPlayer: DraftedPlayer = {
+}
                         ...selectedPlayer,
                         round,
                         pick: pickInRound,
-                        draftedBy: 'Your Team',
+                        draftedBy: &apos;Your Team&apos;,
                         timeSelected: new Date(),
                         valueAtPick: selectedPlayer.value - pick
                     };
@@ -683,8 +754,9 @@ class DraftPreparationService {
             const analysis = this.generateMockDraftAnalysis(userTeam, allPicks);
 
             const mockDraftResult: MockDraftResult = {
+}
                 id: `mock-${Date.now()}`,
-                userId: 'user-1',
+                userId: &apos;user-1&apos;,
                 strategy,
                 completed: true,
                 totalRounds: 15,
@@ -695,13 +767,14 @@ class DraftPreparationService {
                 analysis,
                 timestamp: new Date(),
                 duration: 1800, // 30 minutes
-                settings
+//                 settings
             };
 
             return mockDraftResult;
         } catch (error) {
-            console.error('Failed to run mock draft:', error);
-            throw new Error('Failed to run mock draft');
+}
+            console.error(&apos;Failed to run mock draft:&apos;, error);
+            throw new Error(&apos;Failed to run mock draft&apos;);
         }
     }
 
@@ -709,11 +782,14 @@ class DraftPreparationService {
      * Generate bye week analysis
      */
     private generateByeWeekAnalysis(players: DraftPlayer[]): ByeWeekAnalysis {
+}
         const byeWeeks: Record<number, DraftPlayer[]> = {};
         
         // Group players by bye week
         players.forEach((player: any) => {
+}
             if (!byeWeeks[player.byeWeek]) {
+}
                 byeWeeks[player.byeWeek] = [];
             }
             byeWeeks[player.byeWeek].push(player);
@@ -724,27 +800,31 @@ class DraftPreparationService {
         
         // Analyze each bye week
         Object.entries(byeWeeks).forEach(([week, weekPlayers]) => {
+}
             const weekNum = parseInt(week);
             const positions = [...new Set(weekPlayers.map((p: any) => p.position))];
             
             if (weekPlayers.length > 3) { // Arbitrary threshold
+}
                 conflicts.push({
+}
                     week: weekNum,
                     positions,
                     players: weekPlayers.map((p: any) => p.name),
-                    severity: weekPlayers.length > 5 ? 'high' : 'medium',
+                    severity: weekPlayers.length > 5 ? &apos;high&apos; : &apos;medium&apos;,
                     impact: `${weekPlayers.length} key players on bye`
                 });
             }
         });
 
         return {
+}
             conflicts,
             coverage,
             recommendations: [
-                'Avoid drafting too many players with the same bye week',
-                'Plan ahead for bye week coverage',
-                'Consider streaming options for thin weeks'
+                &apos;Avoid drafting too many players with the same bye week&apos;,
+                &apos;Plan ahead for bye week coverage&apos;,
+                &apos;Consider streaming options for thin weeks&apos;
             ],
             worstWeeks: conflicts.map((c: any) => c.week).slice(0, 3)
         };
@@ -754,10 +834,12 @@ class DraftPreparationService {
      * Generate mock draft analysis
      */
     private generateMockDraftAnalysis(userTeam: DraftedPlayer[], _allPicks: DraftPick[]): MockDraftAnalysis {
+}
         const positionCounts: Record<string, number> = {};
         let totalProjectedPoints = 0;
 
         userTeam.forEach((player: any) => {
+}
             positionCounts[player.position] = (positionCounts[player.position] || 0) + 1;
             totalProjectedPoints += player.projectedPoints;
         });
@@ -766,17 +848,18 @@ class DraftPreparationService {
             .filter(([, count]) => count >= 3)
             .map(([position]) => position);
 
-        const weakPositions = ['QB', 'RB', 'WR', 'TE']
+        const weakPositions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;]
             .filter((pos: any) => (positionCounts[pos] || 0) < 2);
 
         return {
-            teamGrade: 'B+',
+}
+            teamGrade: &apos;B+&apos;,
             strengthPositions,
             weakPositions,
             recommendations: [
-                'Strong depth at WR position',
-                'Consider adding RB depth',
-                'Monitor waiver wire for TE options'
+                &apos;Strong depth at WR position&apos;,
+                &apos;Consider adding RB depth&apos;,
+                &apos;Monitor waiver wire for TE options&apos;
             ],
             bestPicks: userTeam.filter((p: any) => p.valueAtPick > 10).slice(0, 3),
             questionablePicks: userTeam.filter((p: any) => p.valueAtPick < -5).slice(0, 2),

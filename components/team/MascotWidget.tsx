@@ -1,14 +1,15 @@
 
-import React, { useCallback } from 'react';
-import { useAppState } from '../../contexts/AppContext';
-import { Widget } from '../ui/Widget';
-import { PawPrintIcon } from '../icons/PawPrintIcon';
-import { generateTeamMascot } from '../../services/geminiService';
-import type { League, Team } from '../../types';
-import LoadingSpinner from '../ui/LoadingSpinner';
-import { LazyImage } from '../ui/LazyImage';
+import React, { useCallback } from &apos;react&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { PawPrintIcon } from &apos;../icons/PawPrintIcon&apos;;
+import { generateTeamMascot } from &apos;../../services/geminiService&apos;;
+import type { League, Team } from &apos;../../types&apos;;
+import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
+import { LazyImage } from &apos;../ui/LazyImage&apos;;
 
 interface MascotWidgetProps {
+}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -16,25 +17,33 @@ interface MascotWidgetProps {
 }
 
 export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispatch }: any) => {
+}
     const [isLoading, setIsLoading] = React.useState(false);
     const mascotUrl = team.mascotUrl;
 
     const handleGenerate = async () => {
+}
         setIsLoading(true);
         try {
+}
             const newMascotUrl = await generateTeamMascot(team);
             if (newMascotUrl) {
+}
                 dispatch({
-                    type: 'SET_TEAM_MASCOT',
+}
+                    type: &apos;SET_TEAM_MASCOT&apos;,
                     payload: { leagueId: league.id, teamId: team.id, mascotUrl: newMascotUrl }
                 });
-                dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Mascot generated!', type: 'SYSTEM' }});
+                dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Mascot generated!&apos;, type: &apos;SYSTEM&apos; }});
             } else {
-                 dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Could not generate a mascot.', type: 'SYSTEM' }});
+}
+                 dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Could not generate a mascot.&apos;, type: &apos;SYSTEM&apos; }});
 
     } catch (error) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'An error occurred while generating the mascot.', type: 'SYSTEM' }});
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;An error occurred while generating the mascot.&apos;, type: &apos;SYSTEM&apos; }});
         } finally {
+}
             setIsLoading(false);
 
     };
@@ -43,9 +52,10 @@ export const MascotWidget: React.FC<MascotWidgetProps> = ({ team, league, dispat
         <Widget title="Team Mascot" icon={<PawPrintIcon />}>
             <div className="p-4 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                 {isLoading ? (
+}
                     <LoadingSpinner size="sm" text="The Oracle is sketching..." />
                 ) : mascotUrl ? (
-                    <LazyImage 
+                    <LazyImage>
                       src={mascotUrl} 
                       alt={`${team.name} Mascot`} 
                       className="w-32 h-32 rounded-lg object-cover sm:px-4 md:px-6 lg:px-8"

@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PWAInstallPrompt from './PWAInstallPrompt';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PWAInstallPrompt from &apos;./PWAInstallPrompt&apos;;
 
-describe('PWAInstallPrompt', () => {
-  it('renders without crashing', () => {
+describe(&apos;PWAInstallPrompt&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PWAInstallPrompt />);
-    expect(screen.getByTestId('pwainstallprompt')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;pwainstallprompt&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PWAInstallPrompt />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PWAInstallPrompt />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

@@ -3,12 +3,13 @@
  * Real-time scoring updates and player performance tracking
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useEffect, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface PlayerScore {
+}
   playerId: string;
   playerName: string;
   position: string;
@@ -16,8 +17,9 @@ interface PlayerScore {
   points: number;
   projectedPoints: number;
   isPlaying: boolean;
-  gameStatus: 'not_started' | 'in_progress' | 'final';
+  gameStatus: &apos;not_started&apos; | &apos;in_progress&apos; | &apos;final&apos;;
   stats: {
+}
     passingYards?: number;
     passingTDs?: number;
     rushingYards?: number;
@@ -37,6 +39,7 @@ interface PlayerScore {
 }
 
 interface TeamScore {
+}
   teamId: string;
   teamName: string;
   totalPoints: number;
@@ -46,42 +49,48 @@ interface TeamScore {
 }
 
 interface LiveScoringProps {
+}
   matchupId?: string;
   teamId?: string;
   showProjections?: boolean;
 }
 
 const LiveScoring: React.FC<LiveScoringProps> = ({ 
+}
   matchupId, 
   teamId, 
   showProjections = true 
 }: any) => {
+}
   const { state } = useAppState();
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
-  const [selectedView, setSelectedView] = useState<'summary' | 'detailed'>('summary');
+  const [selectedView, setSelectedView] = useState<&apos;summary&apos; | &apos;detailed&apos;>(&apos;summary&apos;);
 
   const league = state.leagues[0];
 
   // Simulate live scoring data
   const liveScores = useMemo((): TeamScore[] => {
+}
     if (!league?.teams) return [];
 
     return league.teams.map((team: any) => {
+}
       // Get starting lineup (simulate 9 starters)
       const startingLineup = [
-        { position: 'QB', name: 'Josh Allen', team: 'BUF' },
-        { position: 'RB', name: 'Christian McCaffrey', team: 'SF' },
-        { position: 'RB', name: 'Austin Ekeler', team: 'LAC' },
-        { position: 'WR', name: 'Cooper Kupp', team: 'LAR' },
-        { position: 'WR', name: 'Davante Adams', team: 'LV' },
-        { position: 'TE', name: 'Travis Kelce', team: 'KC' },
-        { position: 'FLEX', name: 'Tyreek Hill', team: 'MIA' },
-        { position: 'K', name: 'Justin Tucker', team: 'BAL' },
-        { position: 'DEF', name: 'San Francisco', team: 'SF' }
+        { position: &apos;QB&apos;, name: &apos;Josh Allen&apos;, team: &apos;BUF&apos; },
+        { position: &apos;RB&apos;, name: &apos;Christian McCaffrey&apos;, team: &apos;SF&apos; },
+        { position: &apos;RB&apos;, name: &apos;Austin Ekeler&apos;, team: &apos;LAC&apos; },
+        { position: &apos;WR&apos;, name: &apos;Cooper Kupp&apos;, team: &apos;LAR&apos; },
+        { position: &apos;WR&apos;, name: &apos;Davante Adams&apos;, team: &apos;LV&apos; },
+        { position: &apos;TE&apos;, name: &apos;Travis Kelce&apos;, team: &apos;KC&apos; },
+        { position: &apos;FLEX&apos;, name: &apos;Tyreek Hill&apos;, team: &apos;MIA&apos; },
+        { position: &apos;K&apos;, name: &apos;Justin Tucker&apos;, team: &apos;BAL&apos; },
+        { position: &apos;DEF&apos;, name: &apos;San Francisco&apos;, team: &apos;SF&apos; }
       ];
 
       const playerScores: PlayerScore[] = startingLineup.map((player, index) => {
+}
         const basePoints = Math.random() * 25; // 0-25 base points
         const projectedPoints = Math.random() * 20 + 10; // 10-30 projected
         const isPlaying = Math.random() > 0.1; // 90% chance playing
@@ -91,8 +100,10 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         let actualPoints = 0;
 
         switch (player.position) {
-          case 'QB':
+}
+          case &apos;QB&apos;:
             stats = {
+}
               passingYards: Math.floor(Math.random() * 200) + 150,
               passingTouchdowns: Math.floor(Math.random() * 3) + 1,
               rushingYards: Math.floor(Math.random() * 50),
@@ -102,8 +113,9 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                           (stats.rushingYards * 0.1) + (stats.rushingTDs * 6);
             break;
             
-          case 'RB':
+          case &apos;RB&apos;:
             stats = {
+}
               rushingYards: Math.floor(Math.random() * 100) + 30,
               rushingTouchdowns: Math.random() > 0.6 ? 1 : 0,
               receivingYards: Math.floor(Math.random() * 50),
@@ -114,9 +126,10 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                           (stats.receivingYards * 0.1) + (stats.receptions * 1) + (stats.receivingTDs * 6);
             break;
             
-          case 'WR':
-          case 'FLEX':
+          case &apos;WR&apos;:
+          case &apos;FLEX&apos;:
             stats = {
+}
               receivingYards: Math.floor(Math.random() * 80) + 20,
               receptions: Math.floor(Math.random() * 8) + 2,
               receivingTouchdowns: Math.random() > 0.7 ? 1 : 0,
@@ -126,8 +139,9 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                           (stats.receivingTDs * 6) + (stats.rushingYards * 0.1);
             break;
             
-          case 'TE':
+          case &apos;TE&apos;:
             stats = {
+}
               receivingYards: Math.floor(Math.random() * 60) + 15,
               receptions: Math.floor(Math.random() * 6) + 1,
               receivingTouchdowns: Math.random() > 0.8 ? 1 : 0
@@ -135,16 +149,18 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
             actualPoints = (stats.receivingYards * 0.1) + (stats.receptions * 1) + (stats.receivingTDs * 6);
             break;
             
-          case 'K':
+          case &apos;K&apos;:
             stats = {
+}
               fieldGoals: Math.floor(Math.random() * 3) + 1,
               extraPoints: Math.floor(Math.random() * 4) + 1
             };
             actualPoints = (stats.fieldGoals * 3) + (stats.extraPoints * 1);
             break;
             
-          case 'DEF':
+          case &apos;DEF&apos;:
             stats = {
+}
               defensiveTDs: Math.random() > 0.9 ? 1 : 0,
               interceptions: Math.floor(Math.random() * 2),
               fumbleRecoveries: Math.floor(Math.random() * 2),
@@ -160,6 +176,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         }
 
         return {
+}
           playerId: `player-${team.id}-${index}`,
           playerName: player.name,
           position: player.position,
@@ -167,26 +184,29 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           points: Math.round(actualPoints * 10) / 10,
           projectedPoints: Math.round(projectedPoints * 10) / 10,
           isPlaying,
-          gameStatus: Math.random() > 0.3 ? 'in_progress' : 'final',
-          stats
+          gameStatus: Math.random() > 0.3 ? &apos;in_progress&apos; : &apos;final&apos;,
+//           stats
         };
       });
 
       return {
+}
         teamId: team.id,
         teamName: team.name,
         totalPoints: Math.round(playerScores.reduce((sum, p) => sum + p.points, 0) * 10) / 10,
         projectedPoints: Math.round(playerScores.reduce((sum, p) => sum + p.projectedPoints, 0) * 10) / 10,
-        playerScores
+//         playerScores
       };
     });
   }, [league?.teams]);
 
   // Simulate live updates
   useEffect(() => {
+}
     if (!isLive) return;
 
     const interval = setInterval(() => {
+}
       setLastUpdate(new Date());
       // In a real app, this would fetch new data from the API
     }, 30000); // Update every 30 seconds
@@ -195,28 +215,33 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   }, [isLive]);
 
   const getPositionColor = (position: string) => {
+}
     switch (position) {
-      case 'QB': return 'text-red-400';
-      case 'RB': return 'text-green-400';
-      case 'WR': return 'text-blue-400';
-      case 'TE': return 'text-yellow-400';
-      case 'FLEX': return 'text-purple-400';
-      case 'K': return 'text-orange-400';
-      case 'DEF': return 'text-gray-400';
-      default: return 'text-white';
+}
+      case &apos;QB&apos;: return &apos;text-red-400&apos;;
+      case &apos;RB&apos;: return &apos;text-green-400&apos;;
+      case &apos;WR&apos;: return &apos;text-blue-400&apos;;
+      case &apos;TE&apos;: return &apos;text-yellow-400&apos;;
+      case &apos;FLEX&apos;: return &apos;text-purple-400&apos;;
+      case &apos;K&apos;: return &apos;text-orange-400&apos;;
+      case &apos;DEF&apos;: return &apos;text-gray-400&apos;;
+      default: return &apos;text-white&apos;;
     }
   };
 
   const getGameStatusIcon = (status: string) => {
+}
     switch (status) {
-      case 'in_progress': return '🔴';
-      case 'final': return '✅';
-      case 'not_started': return '⏰';
-      default: return '⏰';
+}
+      case &apos;in_progress&apos;: return &apos;🔴&apos;;
+      case &apos;final&apos;: return &apos;✅&apos;;
+      case &apos;not_started&apos;: return &apos;⏰&apos;;
+      default: return &apos;⏰&apos;;
     }
   };
 
   const formatStats = (player: PlayerScore) => {
+}
     const stats = player.stats;
     const statLines: string[] = [];
 
@@ -232,12 +257,13 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
     if (stats.sacks) statLines.push(`${stats.sacks} sacks`);
     if (stats.interceptions) statLines.push(`${stats.interceptions} INT`);
 
-    return statLines.slice(0, 3).join(', ');
+    return statLines.slice(0, 3).join(&apos;, &apos;);
   };
 
   const selectedTeamScore = teamId ? liveScores.find((score: any) => score.teamId === teamId) : liveScores[0];
 
   if (!selectedTeamScore) {
+}
     return (
       <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
         <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">No scoring data available</p>
@@ -246,6 +272,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
   }
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -261,6 +288,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
         <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Live Scoring</h2>
           {isLive && (
+}
             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse sm:px-4 md:px-6 lg:px-8"></div>
               <span className="text-green-400 text-sm font-medium sm:px-4 md:px-6 lg:px-8">LIVE</span>
@@ -278,16 +306,16 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
           
           <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
             <button
-              onClick={() => setSelectedView('summary')}
-              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'summary' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              onClick={() => setSelectedView(&apos;summary&apos;)}
+              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === &apos;summary&apos; ? &apos;bg-blue-500 text-white&apos; : &apos;bg-gray-700 text-gray-300 hover:bg-gray-600&apos;}`}
             >
-              Summary
+//               Summary
             </button>
             <button
-              onClick={() => setSelectedView('detailed')}
-              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === 'detailed' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              onClick={() => setSelectedView(&apos;detailed&apos;)}
+              className={`px-3 py-1 rounded-md text-sm font-semibold transition-colors ${selectedView === &apos;detailed&apos; ? &apos;bg-blue-500 text-white&apos; : &apos;bg-gray-700 text-gray-300 hover:bg-gray-600&apos;}`}
             >
-              Detailed
+//               Detailed
             </button>
           </div>
         </div>
@@ -309,6 +337,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
               {selectedTeamScore.totalPoints}
             </div>
             {showProjections && (
+}
               <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                 Proj: {selectedTeamScore.projectedPoints}
               </div>
@@ -318,10 +347,12 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
 
         {/* Progress Bar */}
         {showProjections && (
+}
           <div className="w-full bg-slate-700 rounded-full h-2 mb-4 sm:px-4 md:px-6 lg:px-8">
             <div
               className="bg-blue-500 h-2 rounded-full transition-all duration-500 sm:px-4 md:px-6 lg:px-8"
               style={{
+}
                 width: `${Math.min(100, (selectedTeamScore.totalPoints / selectedTeamScore.projectedPoints) * 100)}%`
               }}
             ></div>
@@ -333,6 +364,7 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
       <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {selectedTeamScore.playerScores.map((player, index) => (
+}
             <motion.div
               key={player.playerId}
               initial={{ opacity: 0, y: 20 }}
@@ -356,13 +388,15 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                         {getGameStatusIcon(player.gameStatus)}
                       </span>
                       {!player.isPlaying && (
+}
                         <span className="px-2 py-1 bg-red-900/50 text-red-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
-                          OUT
+//                           OUT
                         </span>
                       )}
                     </div>
                     
-                    {selectedView === 'detailed' && (
+                    {selectedView === &apos;detailed&apos; && (
+}
                       <div className="text-sm text-slate-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                         {formatStats(player)}
                       </div>
@@ -372,11 +406,13 @@ const LiveScoring: React.FC<LiveScoringProps> = ({
                 
                 <div className="text-right sm:px-4 md:px-6 lg:px-8">
                   <div className={`text-xl font-bold ${
-                    player.points > player.projectedPoints ? 'text-green-400' : 'text-white'
+}
+                    player.points > player.projectedPoints ? &apos;text-green-400&apos; : &apos;text-white&apos;
                   }`}>
                     {player.points}
                   </div>
                   {showProjections && (
+}
                     <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
                       {player.projectedPoints}
                     </div>

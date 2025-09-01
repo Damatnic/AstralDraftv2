@@ -3,21 +3,23 @@
  * Integrates user dashboard with performance analytics and insights
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import OracleUserDashboard from './OracleUserDashboard';
-import { Widget } from '../ui/Widget';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import OracleUserDashboard from &apos;./OracleUserDashboard&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
 import { 
+}
     Brain, 
     TrendingUp, 
     Target, 
     Users, 
     BarChart3,
     Settings,
-    RefreshCw
-} from 'lucide-react';
+//     RefreshCw
+} from &apos;lucide-react&apos;;
 
 interface DashboardTab {
+}
     id: string;
     label: string;
     icon: React.ReactNode;
@@ -26,11 +28,14 @@ interface DashboardTab {
 }
 
 const OracleDashboardContainer: React.FC = () => {
-    const [activeTab, setActiveTab] = useState<string>('overview');
+}
+    const [activeTab, setActiveTab] = useState<string>(&apos;overview&apos;);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const handleRefresh = async () => {
+}
     try {
+}
 
         setIsRefreshing(true);
         // Simulate refresh delay
@@ -38,20 +43,23 @@ const OracleDashboardContainer: React.FC = () => {
         setIsRefreshing(false);
 
     } catch (error) {
-      console.error('Error in handleRefresh:', error);
+}
+      console.error(&apos;Error in handleRefresh:&apos;, error);
 
   };
 
     const tabs: DashboardTab[] = [
         {
-            id: 'overview',
-            label: 'Overview',
+}
+            id: &apos;overview&apos;,
+            label: &apos;Overview&apos;,
             icon: <BarChart3 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             component: <OracleUserDashboard />
         },
         {
-            id: 'analytics',
-            label: 'Analytics',
+}
+            id: &apos;analytics&apos;,
+            label: &apos;Analytics&apos;,
             icon: <TrendingUp className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             component: (
                 <Widget title="Advanced Analytics">
@@ -66,8 +74,9 @@ const OracleDashboardContainer: React.FC = () => {
             )
         },
         {
-            id: 'comparison',
-            label: 'Comparisons',
+}
+            id: &apos;comparison&apos;,
+            label: &apos;Comparisons&apos;,
             icon: <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             component: (
                 <Widget title="User Comparisons">
@@ -82,8 +91,9 @@ const OracleDashboardContainer: React.FC = () => {
             )
         },
         {
-            id: 'insights',
-            label: 'AI Insights',
+}
+            id: &apos;insights&apos;,
+            label: &apos;AI Insights&apos;,
             icon: <Brain className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             component: (
                 <Widget title="AI-Powered Insights">
@@ -98,8 +108,9 @@ const OracleDashboardContainer: React.FC = () => {
             )
         },
         {
-            id: 'goals',
-            label: 'Goals',
+}
+            id: &apos;goals&apos;,
+            label: &apos;Goals&apos;,
             icon: <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
             component: (
                 <Widget title="Performance Goals">
@@ -136,13 +147,13 @@ const OracleDashboardContainer: React.FC = () => {
                             disabled={isRefreshing}
                             className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
                          aria-label="Action button">
-                            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                            {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                            <RefreshCw className={`w-4 h-4 ${isRefreshing ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+                            {isRefreshing ? &apos;Refreshing...&apos; : &apos;Refresh&apos;}
                         </button>
                         
                         <button className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                             <Settings className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            Settings
+//                             Settings
                         </button>
                     </div>
                 </div>
@@ -152,6 +163,7 @@ const OracleDashboardContainer: React.FC = () => {
             <div className="dashboard-tabs mb-6 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex space-x-1 bg-gray-800 p-1 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
+}
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}`}

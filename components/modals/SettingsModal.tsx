@@ -1,29 +1,33 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Settings, Monitor, Volume2, Bell, Shield, Moon, Sun } from 'lucide-react';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { X, Settings, Monitor, Volume2, Bell, Shield, Moon, Sun } from &apos;lucide-react&apos;;
+import { useEscapeKey } from &apos;../../hooks/useEscapeKey&apos;;
 
 interface SettingsModalProps {
+}
   isOpen: boolean;
   onClose: () => void;
 
 }
 
 interface SettingItem {
+}
   id: string;
   label: string;
   description: string;
-  type: 'toggle' | 'select' | 'slider';
+  type: &apos;toggle&apos; | &apos;select&apos; | &apos;slider&apos;;
   value: boolean | string | number;
   options?: string[];
 }
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }: any) => {
+}
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
   const [settings, setSettings] = useState<Record<string, any>>({
+}
     // Display Settings
     darkMode: true,
     highContrast: false,
@@ -48,156 +52,180 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
     backgroundSync: true,
     
     // Privacy Settings
-    profileVisibility: 'league',
-    statsVisibility: 'public',
+    profileVisibility: &apos;league&apos;,
+    statsVisibility: &apos;public&apos;,
     tradeHistory: true
   });
 
   const settingSections = [
     {
-      title: 'Display',
+}
+      title: &apos;Display&apos;,
       icon: <Monitor className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
-          id: 'darkMode',
-          label: 'Dark Mode',
-          description: 'Use dark theme throughout the app',
-          type: 'toggle'
+}
+          id: &apos;darkMode&apos;,
+          label: &apos;Dark Mode&apos;,
+          description: &apos;Use dark theme throughout the app&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'highContrast',
-          label: 'High Contrast',
-          description: 'Increase contrast for better accessibility',
-          type: 'toggle'
+}
+          id: &apos;highContrast&apos;,
+          label: &apos;High Contrast&apos;,
+          description: &apos;Increase contrast for better accessibility&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'reducedMotion',
-          label: 'Reduced Motion',
-          description: 'Minimize animations and transitions',
-          type: 'toggle'
+}
+          id: &apos;reducedMotion&apos;,
+          label: &apos;Reduced Motion&apos;,
+          description: &apos;Minimize animations and transitions&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'compactMode',
-          label: 'Compact Mode',
-          description: 'Show more information in less space',
-          type: 'toggle'
+}
+          id: &apos;compactMode&apos;,
+          label: &apos;Compact Mode&apos;,
+          description: &apos;Show more information in less space&apos;,
+          type: &apos;toggle&apos;
         }
       ]
     },
     {
-      title: 'Notifications',
+}
+      title: &apos;Notifications&apos;,
       icon: <Bell className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
-          id: 'pushNotifications',
-          label: 'Push Notifications',
-          description: 'Receive real-time notifications',
-          type: 'toggle'
+}
+          id: &apos;pushNotifications&apos;,
+          label: &apos;Push Notifications&apos;,
+          description: &apos;Receive real-time notifications&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'emailNotifications',
-          label: 'Email Notifications',
-          description: 'Get updates via email',
-          type: 'toggle'
+}
+          id: &apos;emailNotifications&apos;,
+          label: &apos;Email Notifications&apos;,
+          description: &apos;Get updates via email&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'tradeNotifications',
-          label: 'Trade Alerts',
-          description: 'Notify when trades are proposed or completed',
-          type: 'toggle'
+}
+          id: &apos;tradeNotifications&apos;,
+          label: &apos;Trade Alerts&apos;,
+          description: &apos;Notify when trades are proposed or completed&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'waiverNotifications',
-          label: 'Waiver Alerts',
-          description: 'Notify about waiver wire activity',
-          type: 'toggle'
+}
+          id: &apos;waiverNotifications&apos;,
+          label: &apos;Waiver Alerts&apos;,
+          description: &apos;Notify about waiver wire activity&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'draftReminders',
-          label: 'Draft Reminders',
-          description: 'Remind about upcoming drafts',
-          type: 'toggle'
+}
+          id: &apos;draftReminders&apos;,
+          label: &apos;Draft Reminders&apos;,
+          description: &apos;Remind about upcoming drafts&apos;,
+          type: &apos;toggle&apos;
         }
       ]
     },
     {
-      title: 'Audio',
+}
+      title: &apos;Audio&apos;,
       icon: <Volume2 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
-          id: 'soundEffects',
-          label: 'Sound Effects',
-          description: 'Play sounds for interactions',
-          type: 'toggle'
+}
+          id: &apos;soundEffects&apos;,
+          label: &apos;Sound Effects&apos;,
+          description: &apos;Play sounds for interactions&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'notificationSounds',
-          label: 'Notification Sounds',
-          description: 'Play sounds for notifications',
-          type: 'toggle'
+}
+          id: &apos;notificationSounds&apos;,
+          label: &apos;Notification Sounds&apos;,
+          description: &apos;Play sounds for notifications&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'volume',
-          label: 'Volume',
-          description: 'Adjust sound volume',
-          type: 'slider'
+}
+          id: &apos;volume&apos;,
+          label: &apos;Volume&apos;,
+          description: &apos;Adjust sound volume&apos;,
+          type: &apos;slider&apos;
         }
       ]
     },
     {
-      title: 'Performance',
+}
+      title: &apos;Performance&apos;,
       icon: <Settings className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
-          id: 'autoRefresh',
-          label: 'Auto Refresh',
-          description: 'Automatically refresh live data',
-          type: 'toggle'
+}
+          id: &apos;autoRefresh&apos;,
+          label: &apos;Auto Refresh&apos;,
+          description: &apos;Automatically refresh live data&apos;,
+          type: &apos;toggle&apos;
         },
         {
-          id: 'refreshInterval',
-          label: 'Refresh Interval',
-          description: 'How often to refresh data (seconds)',
-          type: 'select',
-          options: ['15', '30', '60', '120']
+}
+          id: &apos;refreshInterval&apos;,
+          label: &apos;Refresh Interval&apos;,
+          description: &apos;How often to refresh data (seconds)&apos;,
+          type: &apos;select&apos;,
+          options: [&apos;15&apos;, &apos;30&apos;, &apos;60&apos;, &apos;120&apos;]
         },
         {
-          id: 'backgroundSync',
-          label: 'Background Sync',
-          description: 'Keep data updated in background',
-          type: 'toggle'
+}
+          id: &apos;backgroundSync&apos;,
+          label: &apos;Background Sync&apos;,
+          description: &apos;Keep data updated in background&apos;,
+          type: &apos;toggle&apos;
         }
       ]
     },
     {
-      title: 'Privacy',
+}
+      title: &apos;Privacy&apos;,
       icon: <Shield className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
       items: [
         {
-          id: 'profileVisibility',
-          label: 'Profile Visibility',
-          description: 'Who can see your profile',
-          type: 'select',
-          options: ['public', 'league', 'private']
+}
+          id: &apos;profileVisibility&apos;,
+          label: &apos;Profile Visibility&apos;,
+          description: &apos;Who can see your profile&apos;,
+          type: &apos;select&apos;,
+          options: [&apos;public&apos;, &apos;league&apos;, &apos;private&apos;]
         },
         {
-          id: 'statsVisibility',
-          label: 'Stats Visibility',
-          description: 'Who can see your statistics',
-          type: 'select',
-          options: ['public', 'league', 'private']
+}
+          id: &apos;statsVisibility&apos;,
+          label: &apos;Stats Visibility&apos;,
+          description: &apos;Who can see your statistics&apos;,
+          type: &apos;select&apos;,
+          options: [&apos;public&apos;, &apos;league&apos;, &apos;private&apos;]
         },
         {
-          id: 'tradeHistory',
-          label: 'Trade History',
-          description: 'Show your trade history to others',
-          type: 'toggle'
+}
+          id: &apos;tradeHistory&apos;,
+          label: &apos;Trade History&apos;,
+          description: &apos;Show your trade history to others&apos;,
+          type: &apos;toggle&apos;
         }
       ]
     }
   ];
 
   const handleSettingChange = (id: string, value: any) => {
+}
     setSettings(prev => ({ ...prev, [id]: value }));
     
     // Apply settings immediately
@@ -205,18 +233,20 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
   };
 
   const applySettingChange = (id: string, value: any) => {
+}
     switch (id) {
-      case 'darkMode':
-        document.documentElement.classList.toggle('light', !value);
+}
+      case &apos;darkMode&apos;:
+        document.documentElement.classList.toggle(&apos;light&apos;, !value);
         break;
-      case 'highContrast':
-        document.documentElement.classList.toggle('high-contrast', value);
+      case &apos;highContrast&apos;:
+        document.documentElement.classList.toggle(&apos;high-contrast&apos;, value);
         break;
-      case 'reducedMotion':
-        document.documentElement.classList.toggle('reduce-animations', value);
+      case &apos;reducedMotion&apos;:
+        document.documentElement.classList.toggle(&apos;reduce-animations&apos;, value);
         break;
-      case 'compactMode':
-        document.documentElement.classList.toggle('compact-mode', value);
+      case &apos;compactMode&apos;:
+        document.documentElement.classList.toggle(&apos;compact-mode&apos;, value);
         break;
       default:
         // Store in localStorage for persistence
@@ -226,32 +256,37 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
   };
 
   const renderSettingControl = (item: any) => {
+}
     const value = settings[item.id];
 
     switch (item.type) {
-      case 'toggle':
+}
+      case &apos;toggle&apos;:
         return (
           <button
             onClick={() => handleSettingChange(item.id, !value)}
             className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
-              value ? 'bg-primary-500' : 'bg-gray-600'
+}
+              value ? &apos;bg-primary-500&apos; : &apos;bg-gray-600&apos;
             }`}
           >
             <div
               className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 ${
-                value ? 'translate-x-7' : 'translate-x-1'
+}
+                value ? &apos;translate-x-7&apos; : &apos;translate-x-1&apos;
               }`}
             />
           </button>
         );
 
-      case 'select':
+      case &apos;select&apos;:
         return (
           <select
             value={value}
             onChange={(e: any) => handleSettingChange(item.id, e.target.value)}
           >
             {item.options?.map((option: string) => (
+}
               <option key={option} value={option}>
                 {option.charAt(0).toUpperCase() + option.slice(1)}
               </option>
@@ -259,7 +294,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
           </select>
         );
 
-      case 'slider':
+      case &apos;slider&apos;:
         return (
           <div className="flex items-center gap-3 min-w-32 sm:px-4 md:px-6 lg:px-8">
             <input
@@ -322,6 +357,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
           <div className="overflow-y-auto max-h-[calc(90vh-80px)] custom-scrollbar sm:px-4 md:px-6 lg:px-8">
             <div className="p-6 space-y-8 sm:px-4 md:px-6 lg:px-8">
               {settingSections.map((section, sectionIndex) => (
+}
                 <div key={section.title}>
                   <div className="flex items-center gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="text-primary-400 sm:px-4 md:px-6 lg:px-8">{section.icon}</div>
@@ -330,6 +366,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
                   
                   <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {section.items.map((item: any) => (
+}
                       <div key={item.id} className="flex items-center justify-between p-4 bg-dark-700/50 rounded-xl border border-white/5 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                           <h4 className="font-medium text-white mb-1 sm:px-4 md:px-6 lg:px-8">{item.label}</h4>
@@ -355,8 +392,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
               <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                 <button
                   onClick={() => {
+}
                     // Reset to defaults
                     setSettings({
+}
                       darkMode: true,
                       highContrast: false,
                       reducedMotion: false,
@@ -370,10 +409,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
                       notificationSounds: true,
                       volume: 70,
                       autoRefresh: true,
-                      refreshInterval: '30',
+                      refreshInterval: &apos;30&apos;,
                       backgroundSync: true,
-                      profileVisibility: 'league',
-                      statsVisibility: 'public',
+                      profileVisibility: &apos;league&apos;,
+                      statsVisibility: &apos;public&apos;,
                       tradeHistory: true
                     });
                   }}
@@ -385,7 +424,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }:
                   onClick={onClose}
                   className="px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                 >
-                  Done
+//                   Done
                 </button>
               </div>
             </div>

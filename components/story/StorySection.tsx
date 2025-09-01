@@ -1,14 +1,15 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
 
 interface StorySectionProps {
+}
     title: string;
     children: React.ReactNode;
 
 }
 
 const StorySection: React.FC<StorySectionProps> = ({ title, children }: any) => {
+}
     return (
         <section>
             <h2 className="font-display text-2xl font-bold mb-4 border-b-2 border-cyan-400/30 pb-2 sm:px-4 md:px-6 lg:px-8">

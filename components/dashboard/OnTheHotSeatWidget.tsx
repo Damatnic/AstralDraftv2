@@ -1,10 +1,10 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { Widget } from '../ui/Widget';
-import { FireIcon } from '../icons/FireIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { FireIcon } from &apos;../icons/FireIcon&apos;;
 
 const OnTheHotSeatWidget: React.FC = () => {
+}
     // This is a placeholder component to fix a build error.
     // The full implementation will be added in a future update.
     return (

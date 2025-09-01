@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import TradeAnalysisDashboard from './TradeAnalysisDashboard';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import TradeAnalysisDashboard from &apos;./TradeAnalysisDashboard&apos;;
 
-describe('TradeAnalysisDashboard', () => {
-  it('renders without crashing', () => {
+describe(&apos;TradeAnalysisDashboard&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<TradeAnalysisDashboard />);
-    expect(screen.getByTestId('tradeanalysisdashboard')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;tradeanalysisdashboard&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<TradeAnalysisDashboard />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<TradeAnalysisDashboard />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

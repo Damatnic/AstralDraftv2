@@ -4,19 +4,21 @@
  * and ML-powered recommendations
  */
 
-import { Player, Team, League, LineupSlot, ScoringSettings } from '../types';
-import { playerPerformanceModel } from './advancedAnalyticsEngine';
+import { Player, Team, League, LineupSlot, ScoringSettings } from &apos;../types&apos;;
+import { playerPerformanceModel } from &apos;./advancedAnalyticsEngine&apos;;
 
 /**
  * Advanced Lineup Optimizer
  * Provides optimal lineup recommendations based on multiple factors
  */
 export class LineupOptimizerEngine {
+}
   private scoringSettings: ScoringSettings;
   private correlationMatrix: Map<string, Map<string, number>> = new Map();
   private stackingBonus = 1.05; // 5% bonus for QB-WR stacks
   
   constructor(scoringSettings: ScoringSettings) {
+}
     this.scoringSettings = scoringSettings;
     this.initializeCorrelations();
   }
@@ -29,6 +31,7 @@ export class LineupOptimizerEngine {
     week: number,
     options?: OptimizationOptions
   ): Promise<LineupRecommendation> {
+}
     const availablePlayers = this.getAvailablePlayers(team, options?.excludeInjured);
     const lineupRequirements = this.getLineupRequirements();
     
@@ -39,7 +42,7 @@ export class LineupOptimizerEngine {
     const optimalLineup = await this.findOptimalLineup(
       playerProjections,
       lineupRequirements,
-      options
+//       options
     );
     
     // Generate alternatives
@@ -47,13 +50,14 @@ export class LineupOptimizerEngine {
       playerProjections,
       lineupRequirements,
       optimalLineup,
-      options
+//       options
     );
     
     // Analyze the lineup
     const analysis = this.analyzeLineup(optimalLineup, playerProjections);
     
     return {
+}
       optimal: optimalLineup,
       alternatives,
       analysis,
@@ -69,11 +73,14 @@ export class LineupOptimizerEngine {
     lineupB: LineupConfiguration,
     week: number
   ): Promise<LineupComparison> {
+}
     const projectionsA = await this.projectLineupPoints(lineupA, week);
     const projectionsB = await this.projectLineupPoints(lineupB, week);
     
     return {
+}
       lineupA: {
+}
         projectedPoints: projectionsA.total,
         floor: projectionsA.floor,
         ceiling: projectionsA.ceiling,
@@ -81,13 +88,14 @@ export class LineupOptimizerEngine {
         stackBonus: projectionsA.stackBonus
       },
       lineupB: {
+}
         projectedPoints: projectionsB.total,
         floor: projectionsB.floor,
         ceiling: projectionsB.ceiling,
         volatility: projectionsB.volatility,
         stackBonus: projectionsB.stackBonus
       },
-      recommendation: projectionsA.total > projectionsB.total ? 'A' : 'B',
+      recommendation: projectionsA.total > projectionsB.total ? &apos;A&apos; : &apos;B&apos;,
       confidenceDelta: Math.abs(projectionsA.total - projectionsB.total) / projectionsA.total,
       analysis: this.generateComparisonAnalysis(projectionsA, projectionsB)
     };
@@ -100,6 +108,7 @@ export class LineupOptimizerEngine {
     team: Team,
     week: number
   ): Promise<StartSitRecommendation[]> {
+}
     const recommendations: StartSitRecommendation[] = [];
     const projections = await this.generatePlayerProjections(team.players, week);
     
@@ -107,8 +116,10 @@ export class LineupOptimizerEngine {
     const positionGroups = this.groupByPosition(team.players);
     
     for (const [position, players] of positionGroups.entries()) {
+}
       const sortedPlayers = players
         .map((p: any) => ({
+}
           player: p,
           projection: projections.find((proj: any) => proj.player.id === p.id)!
         }))
@@ -118,17 +129,19 @@ export class LineupOptimizerEngine {
       const startCount = this.getStartCountForPosition(position);
       
       sortedPlayers.forEach((item, index) => {
+}
         const shouldStart = index < startCount;
         const confidence = this.calculateStartSitConfidence(
           item.projection,
           sortedPlayers,
           index,
-          startCount
+//           startCount
         );
         
         recommendations.push({
+}
           player: item.player,
-          recommendation: shouldStart ? 'START' : 'SIT',
+          recommendation: shouldStart ? &apos;START&apos; : &apos;SIT&apos;,
           projectedPoints: item.projection.projectedPoints,
           confidence,
           reasoning: this.generateStartSitReasoning(
@@ -136,7 +149,7 @@ export class LineupOptimizerEngine {
             sortedPlayers,
             shouldStart,
             index,
-            startCount
+//             startCount
           )
         });
       });
@@ -151,12 +164,13 @@ export class LineupOptimizerEngine {
   async optimizeForDFS(
     availablePlayers: Player[],
     salaryCap: number,
-    contestType: 'GPP' | 'CASH'
+    contestType: &apos;GPP&apos; | &apos;CASH&apos;
   ): Promise<DFSLineupRecommendation> {
+}
     const projections = await this.generatePlayerProjections(availablePlayers, 0);
     
     // Different strategies for tournament vs cash games
-    const strategy = contestType === 'GPP' ? 
+    const strategy = contestType === &apos;GPP&apos; ? 
       this.tournamentStrategy : 
       this.cashGameStrategy;
     
@@ -164,18 +178,19 @@ export class LineupOptimizerEngine {
     const optimalLineup = await this.solveDFSOptimization(
       projections,
       salaryCap,
-      strategy
+//       strategy
     );
     
     // Calculate ownership projections
     const ownershipProjections = this.projectOwnership(optimalLineup);
     
     // Generate GPP leverage plays
-    const leveragePlays = contestType === 'GPP' ? 
+    const leveragePlays = contestType === &apos;GPP&apos; ? 
       this.identifyLeveragePlays(projections, ownershipProjections) : 
       [];
     
     return {
+}
       lineup: optimalLineup,
       totalSalary: optimalLineup.reduce((sum, p) => sum + (p.salary || 0), 0),
       projectedPoints: optimalLineup.reduce((sum, p) => sum + p.projectedPoints, 0),
@@ -193,8 +208,9 @@ export class LineupOptimizerEngine {
     team: Team,
     week: number
   ): Promise<FlexRecommendation[]> {
+}
     const eligiblePlayers = team.players.filter((p: any) => 
-      ['RB', 'WR', 'TE'].includes(p.position)
+      [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;].includes(p.position)
     );
     
     const projections = await this.generatePlayerProjections(eligiblePlayers, week);
@@ -202,6 +218,7 @@ export class LineupOptimizerEngine {
     // Sort by projected points considering position value
     const recommendations = projections
       .map((proj: any) => ({
+}
         player: proj.player,
         projectedPoints: proj.projectedPoints,
         positionValue: this.calculatePositionValue(proj.player.position),
@@ -209,6 +226,7 @@ export class LineupOptimizerEngine {
         recommendation: this.generateFlexRecommendation(proj)
       }))
       .sort((a, b) => {
+}
         const scoreA = a.projectedPoints * a.positionValue;
         const scoreB = b.projectedPoints * b.positionValue;
         return scoreB - scoreA;
@@ -218,16 +236,20 @@ export class LineupOptimizerEngine {
   }
 
   private initializeCorrelations(): void {
+}
     // Initialize player correlation matrix for stacking
     // QB-WR same team correlation
-    this.correlationMatrix.set('QB-WR-same', new Map([['correlation', 0.25]]));
-    this.correlationMatrix.set('QB-TE-same', new Map([['correlation', 0.15]]));
-    this.correlationMatrix.set('RB-DEF-same', new Map([['correlation', 0.10]]));
+    this.correlationMatrix.set(&apos;QB-WR-same&apos;, new Map([[&apos;correlation&apos;, 0.25]]));
+    this.correlationMatrix.set(&apos;QB-TE-same&apos;, new Map([[&apos;correlation&apos;, 0.15]]));
+    this.correlationMatrix.set(&apos;RB-DEF-same&apos;, new Map([[&apos;correlation&apos;, 0.10]]));
   }
 
   private getAvailablePlayers(team: Team, excludeInjured?: boolean): Player[] {
+}
     return team.players.filter((p: any) => {
-      if (excludeInjured && p.injuryStatus && p.injuryStatus !== 'Healthy') {
+}
+      if (excludeInjured && p.injuryStatus && p.injuryStatus !== &apos;Healthy&apos;) {
+}
         return false;
       }
       return !p.isSuspended;
@@ -235,12 +257,14 @@ export class LineupOptimizerEngine {
   }
 
   private getLineupRequirements(): LineupRequirements {
+}
     return {
+}
       QB: { min: 1, max: 1 },
       RB: { min: 2, max: 2 },
       WR: { min: 2, max: 2 },
       TE: { min: 1, max: 1 },
-      FLEX: { min: 1, max: 1, eligible: ['RB', 'WR', 'TE'] },
+      FLEX: { min: 1, max: 1, eligible: [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;] },
       K: { min: 1, max: 1 },
       DEF: { min: 1, max: 1 }
     };
@@ -250,9 +274,11 @@ export class LineupOptimizerEngine {
     players: Player[],
     week: number
   ): Promise<PlayerProjection[]> {
+}
     const projections: PlayerProjection[] = [];
     
     for (const player of players) {
+}
       const projection = await playerPerformanceModel.generateProjection(
         player,
         this.getOpponentForWeek(player.team, week),
@@ -261,6 +287,7 @@ export class LineupOptimizerEngine {
       );
       
       projections.push({
+}
         player,
         projectedPoints: projection.projectedPoints,
         floor: projection.floor,
@@ -280,7 +307,9 @@ export class LineupOptimizerEngine {
     requirements: LineupRequirements,
     options?: OptimizationOptions
   ): Promise<LineupConfiguration> {
+}
     const lineup: LineupConfiguration = {
+}
       starters: [],
       bench: [],
       totalProjected: 0
@@ -288,6 +317,7 @@ export class LineupOptimizerEngine {
     
     // Sort projections by value (points * confidence)
     const sortedProjections = [...projections].sort((a, b) => {
+}
       const valueA = a.projectedPoints * a.confidence;
       const valueB = b.projectedPoints * b.confidence;
       return valueB - valueA;
@@ -295,7 +325,8 @@ export class LineupOptimizerEngine {
     
     // Fill required positions first
     for (const [position, requirement] of Object.entries(requirements)) {
-      if (position === 'FLEX') continue; // Handle flex last
+}
+      if (position === &apos;FLEX&apos;) continue; // Handle flex last
       
       const positionPlayers = sortedProjections.filter((p: any) => 
         p.player.position === position && 
@@ -303,6 +334,7 @@ export class LineupOptimizerEngine {
       );
       
       for (let i = 0; i < requirement.min && i < positionPlayers.length; i++) {
+}
         lineup.starters.push(positionPlayers[i].player);
         lineup.totalProjected += positionPlayers[i].projectedPoints;
       }
@@ -315,12 +347,14 @@ export class LineupOptimizerEngine {
     );
     
     if (flexEligible.length > 0) {
+}
       lineup.starters.push(flexEligible[0].player);
       lineup.totalProjected += flexEligible[0].projectedPoints;
     }
     
     // Apply stacking bonus if applicable
     if (options?.preferStacking) {
+}
       lineup.totalProjected *= this.calculateStackingBonus(lineup.starters);
     }
     
@@ -339,6 +373,7 @@ export class LineupOptimizerEngine {
     optimal: LineupConfiguration,
     options?: OptimizationOptions
   ): Promise<LineupConfiguration[]> {
+}
     const alternatives: LineupConfiguration[] = [];
     
     // Generate high-ceiling lineup
@@ -351,6 +386,7 @@ export class LineupOptimizerEngine {
     
     // Generate contrarian lineup
     if (options?.includeContrarian) {
+}
       const contrarianLineup = await this.generateContrarianLineup(projections, requirements);
       alternatives.push(contrarianLineup);
     }
@@ -362,28 +398,32 @@ export class LineupOptimizerEngine {
     projections: PlayerProjection[],
     requirements: LineupRequirements
   ): Promise<LineupConfiguration> {
+}
     // Sort by ceiling instead of projected points
     const sortedByCeiling = [...projections].sort((a, b) => b.ceiling - a.ceiling);
     
-    return this.buildLineupFromProjections(sortedByCeiling, requirements, 'ceiling');
+    return this.buildLineupFromProjections(sortedByCeiling, requirements, &apos;ceiling&apos;);
   }
 
   private async optimizeForFloor(
     projections: PlayerProjection[],
     requirements: LineupRequirements
   ): Promise<LineupConfiguration> {
+}
     // Sort by floor for safety
     const sortedByFloor = [...projections].sort((a, b) => b.floor - a.floor);
     
-    return this.buildLineupFromProjections(sortedByFloor, requirements, 'floor');
+    return this.buildLineupFromProjections(sortedByFloor, requirements, &apos;floor&apos;);
   }
 
   private async generateContrarianLineup(
     projections: PlayerProjection[],
     requirements: LineupRequirements
   ): Promise<LineupConfiguration> {
+}
     // Focus on high variance, low ownership plays
     const contrarianScores = projections.map((p: any) => ({
+}
       ...p,
       contrarianScore: (p.ceiling / p.projectedPoints) * (1 - (p.player.ownership || 50) / 100)
     }));
@@ -392,7 +432,7 @@ export class LineupOptimizerEngine {
       b.contrarianScore - a.contrarianScore
     );
     
-    return this.buildLineupFromProjections(sortedContrarian, requirements, 'contrarian');
+    return this.buildLineupFromProjections(sortedContrarian, requirements, &apos;contrarian&apos;);
   }
 
   private buildLineupFromProjections(
@@ -400,16 +440,19 @@ export class LineupOptimizerEngine {
     requirements: LineupRequirements,
     strategy: string
   ): LineupConfiguration {
+}
     const lineup: LineupConfiguration = {
+}
       starters: [],
       bench: [],
       totalProjected: 0,
-      strategy
+//       strategy
     };
     
     // Similar logic to findOptimalLineup but with different sorting
     for (const [position, requirement] of Object.entries(requirements)) {
-      if (position === 'FLEX') continue;
+}
+      if (position === &apos;FLEX&apos;) continue;
       
       const positionPlayers = sortedProjections.filter((p: any) => 
         p.player.position === position && 
@@ -417,6 +460,7 @@ export class LineupOptimizerEngine {
       );
       
       for (let i = 0; i < requirement.min && i < positionPlayers.length; i++) {
+}
         lineup.starters.push(positionPlayers[i].player);
         lineup.totalProjected += positionPlayers[i].projectedPoints;
       }
@@ -424,11 +468,12 @@ export class LineupOptimizerEngine {
     
     // Fill flex
     const flexEligible = sortedProjections.filter((p: any) => 
-      ['RB', 'WR', 'TE'].includes(p.player.position) &&
+      [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;].includes(p.player.position) &&
       !lineup.starters.some((s: any) => s.id === p.player.id)
     );
     
     if (flexEligible.length > 0) {
+}
       lineup.starters.push(flexEligible[0].player);
       lineup.totalProjected += flexEligible[0].projectedPoints;
     }
@@ -440,6 +485,7 @@ export class LineupOptimizerEngine {
     lineup: LineupConfiguration,
     projections: PlayerProjection[]
   ): LineupAnalysis {
+}
     const starterProjections = lineup.starters.map((s: any) => 
       projections.find((p: any) => p.player.id === s.id)!
     );
@@ -457,6 +503,7 @@ export class LineupOptimizerEngine {
     ) / starterProjections.length;
     
     return {
+}
       totalProjected,
       floor: totalFloor,
       ceiling: totalCeiling,
@@ -470,16 +517,19 @@ export class LineupOptimizerEngine {
   }
 
   private calculateStackingBonus(starters: Player[]): number {
+}
     let bonus = 1.0;
     
     // Check for QB-WR/TE stacks
-    const qb = starters.find((p: any) => p.position === 'QB');
+    const qb = starters.find((p: any) => p.position === &apos;QB&apos;);
     if (qb) {
+}
       const sameTeamReceivers = starters.filter((p: any) => 
-        ['WR', 'TE'].includes(p.position) && p.team === qb.team
+        [&apos;WR&apos;, &apos;TE&apos;].includes(p.position) && p.team === qb.team
       );
       
       if (sameTeamReceivers.length > 0) {
+}
         bonus *= this.stackingBonus;
       }
     }
@@ -488,11 +538,13 @@ export class LineupOptimizerEngine {
   }
 
   private analyzePositionStrength(projections: PlayerProjection[]): Map<string, number> {
+}
     const strengths = new Map<string, number>();
     
     const positionGroups = this.groupProjectionsByPosition(projections);
     
     for (const [position, group] of positionGroups.entries()) {
+}
       const avgProjection = group.reduce((sum, p) => sum + p.projectedPoints, 0) / group.length;
       const leagueAvg = this.getLeagueAverageForPosition(position);
       strengths.set(position, avgProjection / leagueAvg);
@@ -502,6 +554,7 @@ export class LineupOptimizerEngine {
   }
 
   private identifyWeakestLink(projections: PlayerProjection[]): PlayerProjection {
+}
     return projections.reduce((weakest, current) => 
       current.confidence < weakest.confidence ? current : weakest
     );
@@ -511,6 +564,7 @@ export class LineupOptimizerEngine {
     lineup: LineupConfiguration,
     projections: PlayerProjection[]
   ): number {
+}
     const starterProjections = lineup.starters.map((s: any) => 
       projections.find((p: any) => p.player.id === s.id)!
     );
@@ -526,6 +580,7 @@ export class LineupOptimizerEngine {
     lineup: LineupConfiguration,
     week: number
   ): Promise<LineupProjection> {
+}
     const projections = await this.generatePlayerProjections(lineup.starters, week);
     
     const total = projections.reduce((sum, p) => sum + p.projectedPoints, 0);
@@ -533,6 +588,7 @@ export class LineupOptimizerEngine {
     const ceiling = projections.reduce((sum, p) => sum + p.ceiling, 0);
     
     return {
+}
       total,
       floor,
       ceiling,
@@ -545,22 +601,28 @@ export class LineupOptimizerEngine {
     projectionsA: LineupProjection,
     projectionsB: LineupProjection
   ): string {
+}
     const diff = projectionsA.total - projectionsB.total;
     const pctDiff = (diff / projectionsA.total) * 100;
     
     if (Math.abs(pctDiff) < 2) {
-      return 'Both lineups are very close in projected points. Consider other factors like ceiling/floor.';
+}
+      return &apos;Both lineups are very close in projected points. Consider other factors like ceiling/floor.&apos;;
     } else if (pctDiff > 0) {
-      return `Lineup A projects ${Math.abs(pctDiff).toFixed(1)}% more points with ${projectionsA.volatility < projectionsB.volatility ? 'lower' : 'higher'} volatility.`;
+}
+      return `Lineup A projects ${Math.abs(pctDiff).toFixed(1)}% more points with ${projectionsA.volatility < projectionsB.volatility ? &apos;lower&apos; : &apos;higher&apos;} volatility.`;
     } else {
-      return `Lineup B projects ${Math.abs(pctDiff).toFixed(1)}% more points with ${projectionsB.volatility < projectionsA.volatility ? 'lower' : 'higher'} volatility.`;
+}
+      return `Lineup B projects ${Math.abs(pctDiff).toFixed(1)}% more points with ${projectionsB.volatility < projectionsA.volatility ? &apos;lower&apos; : &apos;higher&apos;} volatility.`;
     }
   }
 
   private groupByPosition(players: Player[]): Map<string, Player[]> {
+}
     const groups = new Map<string, Player[]>();
     
     players.forEach((player: any) => {
+}
       const group = groups.get(player.position) || [];
       group.push(player);
       groups.set(player.position, group);
@@ -570,9 +632,11 @@ export class LineupOptimizerEngine {
   }
 
   private groupProjectionsByPosition(projections: PlayerProjection[]): Map<string, PlayerProjection[]> {
+}
     const groups = new Map<string, PlayerProjection[]>();
     
     projections.forEach((proj: any) => {
+}
       const group = groups.get(proj.player.position) || [];
       group.push(proj);
       groups.set(proj.player.position, group);
@@ -582,7 +646,9 @@ export class LineupOptimizerEngine {
   }
 
   private getStartCountForPosition(position: string): number {
+}
     const counts: Record<string, number> = {
+}
       QB: 1,
       RB: 2,
       WR: 2,
@@ -599,10 +665,13 @@ export class LineupOptimizerEngine {
     index: number,
     startCount: number
   ): number {
+}
     if (index < startCount - 1) {
+}
       // Clear starter
       return 0.9;
     } else if (index === startCount - 1 || index === startCount) {
+}
       // Borderline
       const diff = Math.abs(
         projection.projectedPoints - 
@@ -610,6 +679,7 @@ export class LineupOptimizerEngine {
       );
       return 0.5 + Math.min(0.4, diff / 10);
     } else {
+}
       // Clear sit
       return 0.9;
     }
@@ -622,12 +692,16 @@ export class LineupOptimizerEngine {
     index: number,
     startCount: number
   ): string {
+}
     if (shouldStart) {
+}
       if (index === 0) {
+}
         return `Top projected ${item.player.position} with ${item.projection.projectedPoints.toFixed(1)} points`;
       }
       return `Projected for ${item.projection.projectedPoints.toFixed(1)} points, ${index + 1} of ${sortedPlayers.length} at position`;
     } else {
+}
       const starter = sortedPlayers[startCount - 1];
       const diff = starter.projection.projectedPoints - item.projection.projectedPoints;
       return `Projected ${diff.toFixed(1)} points behind the last starter`;
@@ -635,7 +709,8 @@ export class LineupOptimizerEngine {
   }
 
   private tournamentStrategy = {
-    name: 'Tournament (GPP)',
+}
+    name: &apos;Tournament (GPP)&apos;,
     ceilingWeight: 0.7,
     floorWeight: 0.3,
     ownershipWeight: -0.2,
@@ -643,7 +718,8 @@ export class LineupOptimizerEngine {
   };
 
   private cashGameStrategy = {
-    name: 'Cash Game',
+}
+    name: &apos;Cash Game&apos;,
     ceilingWeight: 0.3,
     floorWeight: 0.7,
     ownershipWeight: 0.1,
@@ -655,12 +731,14 @@ export class LineupOptimizerEngine {
     salaryCap: number,
     strategy: any
   ): Promise<Player[]> {
+}
     // Simplified knapsack solution for DFS
     const lineup: Player[] = [];
     let remainingSalary = salaryCap;
     
     // Score each player based on strategy
     const scoredPlayers = projections.map((p: any) => ({
+}
       player: p.player,
       score: (p.projectedPoints * strategy.ceilingWeight) +
              (p.floor * strategy.floorWeight) +
@@ -675,7 +753,8 @@ export class LineupOptimizerEngine {
     const requirements = this.getLineupRequirements();
     
     for (const [position, requirement] of Object.entries(requirements)) {
-      if (position === 'FLEX') continue;
+}
+      if (position === &apos;FLEX&apos;) continue;
       
       const positionPlayers = scoredPlayers.filter((p: any) => 
         p.player.position === position &&
@@ -684,6 +763,7 @@ export class LineupOptimizerEngine {
       );
       
       for (let i = 0; i < requirement.min && i < positionPlayers.length; i++) {
+}
         lineup.push(positionPlayers[i].player);
         remainingSalary -= positionPlayers[i].player.salary || 0;
       }
@@ -693,9 +773,11 @@ export class LineupOptimizerEngine {
   }
 
   private projectOwnership(lineup: Player[]): Map<string, number> {
+}
     const ownership = new Map<string, number>();
     
     lineup.forEach((player: any) => {
+}
       // Simplified ownership projection
       const base = player.ownership || 15;
       const adjustment = (player.projectedPoints / player.salary) * 10;
@@ -709,9 +791,11 @@ export class LineupOptimizerEngine {
     projections: PlayerProjection[],
     ownership: Map<string, number>
   ): Player[] {
+}
     // Find low ownership, high ceiling plays
     return projections
       .filter((p: any) => {
+}
         const own = ownership.get(p.player.id) || 20;
         return own < 10 && p.ceiling > p.projectedPoints * 1.5;
       })
@@ -720,6 +804,7 @@ export class LineupOptimizerEngine {
   }
 
   private calculateDFSConfidence(lineup: Player[], strategy: any): number {
+}
     // Base confidence on salary usage and projected points
     const salaryUsed = lineup.reduce((sum, p) => sum + (p.salary || 0), 0);
     const salaryEfficiency = salaryUsed / 60000; // Assuming 60k cap
@@ -731,7 +816,9 @@ export class LineupOptimizerEngine {
   }
 
   private calculatePositionValue(position: string): number {
+}
     const values: Record<string, number> = {
+}
       RB: 1.2,
       WR: 1.1,
       TE: 1.0
@@ -740,32 +827,41 @@ export class LineupOptimizerEngine {
   }
 
   private generateFlexRecommendation(projection: PlayerProjection): string {
+}
     if (projection.projectedPoints > 12) {
-      return 'Strong Flex Play';
+}
+      return &apos;Strong Flex Play&apos;;
     } else if (projection.projectedPoints > 8) {
-      return 'Solid Flex Option';
+}
+      return &apos;Solid Flex Option&apos;;
     } else {
-      return 'Consider Alternatives';
+}
+      return &apos;Consider Alternatives&apos;;
     }
   }
 
   private calculateMatchupRating(player: Player, week: number): number {
+}
     // Simplified matchup rating
     return Math.random() * 10;
   }
 
   private getOpponentForWeek(team: string, week: number): string {
+}
     // Mock implementation
-    return 'OPP';
+    return &apos;OPP&apos;;
   }
 
   private getWeatherForGame(team: string, week: number): any {
+}
     // Mock implementation
-    return { condition: 'clear', temperature: 72, windSpeed: 5 };
+    return { condition: &apos;clear&apos;, temperature: 72, windSpeed: 5 };
   }
 
   private getLeagueAverageForPosition(position: string): number {
+}
     const averages: Record<string, number> = {
+}
       QB: 18,
       RB: 12,
       WR: 10,
@@ -779,13 +875,15 @@ export class LineupOptimizerEngine {
 
 // Type definitions
 interface OptimizationOptions {
+}
   excludeInjured?: boolean;
   preferStacking?: boolean;
   includeContrarian?: boolean;
-  riskTolerance?: 'conservative' | 'balanced' | 'aggressive';
+  riskTolerance?: &apos;conservative&apos; | &apos;balanced&apos; | &apos;aggressive&apos;;
 }
 
 interface LineupRecommendation {
+}
   optimal: LineupConfiguration;
   alternatives: LineupConfiguration[];
   analysis: LineupAnalysis;
@@ -793,6 +891,7 @@ interface LineupRecommendation {
 }
 
 interface LineupConfiguration {
+}
   starters: Player[];
   bench: Player[];
   totalProjected: number;
@@ -800,6 +899,7 @@ interface LineupConfiguration {
 }
 
 interface LineupAnalysis {
+}
   totalProjected: number;
   floor: number;
   ceiling: number;
@@ -812,6 +912,7 @@ interface LineupAnalysis {
 }
 
 interface PlayerProjection {
+}
   player: Player;
   projectedPoints: number;
   floor: number;
@@ -823,7 +924,9 @@ interface PlayerProjection {
 }
 
 interface LineupRequirements {
+}
   [position: string]: {
+}
     min: number;
     max: number;
     eligible?: string[];
@@ -831,14 +934,16 @@ interface LineupRequirements {
 }
 
 interface LineupComparison {
+}
   lineupA: LineupStats;
   lineupB: LineupStats;
-  recommendation: 'A' | 'B';
+  recommendation: &apos;A&apos; | &apos;B&apos;;
   confidenceDelta: number;
   analysis: string;
 }
 
 interface LineupStats {
+}
   projectedPoints: number;
   floor: number;
   ceiling: number;
@@ -847,14 +952,16 @@ interface LineupStats {
 }
 
 interface StartSitRecommendation {
+}
   player: Player;
-  recommendation: 'START' | 'SIT';
+  recommendation: &apos;START&apos; | &apos;SIT&apos;;
   projectedPoints: number;
   confidence: number;
   reasoning: string;
 }
 
 interface DFSLineupRecommendation {
+}
   lineup: Player[];
   totalSalary: number;
   projectedPoints: number;
@@ -865,6 +972,7 @@ interface DFSLineupRecommendation {
 }
 
 interface FlexRecommendation {
+}
   player: Player;
   projectedPoints: number;
   positionValue: number;
@@ -873,6 +981,7 @@ interface FlexRecommendation {
 }
 
 interface LineupProjection {
+}
   total: number;
   floor: number;
   ceiling: number;
@@ -882,6 +991,7 @@ interface LineupProjection {
 
 // Export singleton instance
 export const lineupOptimizer = new LineupOptimizerEngine({
+}
   passingTD: 4,
   passingYards: 0.04,
   rushingTD: 6,

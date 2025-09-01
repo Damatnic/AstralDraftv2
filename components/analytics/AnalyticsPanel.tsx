@@ -1,14 +1,14 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { Analytics } from '../../types';
-import AnimatedNumber from '../ui/AnimatedNumber';
-import { ZapIcon } from '../icons/ZapIcon';
-import { FlameIcon } from '../icons/FlameIcon';
-import { TrophyIcon } from '../icons/TrophyIcon';
-import { Tooltip } from '../ui/Tooltip';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { Analytics } from &apos;../../types&apos;;
+import AnimatedNumber from &apos;../ui/AnimatedNumber&apos;;
+import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
+import { FlameIcon } from &apos;../icons/FlameIcon&apos;;
+import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface AnalyticsPanelProps {
+}
   analytics: Analytics;
 
 }
@@ -31,13 +31,14 @@ const AnalyticsCard: React.FC<{ icon: React.ReactNode; label: string; value: num
 );
 
 const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
+}
   return (
     <div className="glass-pane flex-shrink-0 flex flex-col bg-gray-900/40 border border-cyan-300/20 rounded-2xl backdrop-blur-sm shadow-2xl shadow-black/50 sm:px-4 md:px-6 lg:px-8">
       <div className="flex-shrink-0 p-3 text-center border-b border-cyan-300/20 sm:px-4 md:px-6 lg:px-8">
         <h2 className="font-display text-xl font-bold text-white tracking-wider sm:px-4 md:px-6 lg:px-8">DRAFT ANALYTICS</h2>
       </div>
       <div className="p-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
-            <AnalyticsCard 
+            <AnalyticsCard>
                 icon={<ZapIcon />} 
                 label="Draft Efficiency"
                 value={analytics.draftEfficiency}
@@ -45,7 +46,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
                 color="text-green-400"
                 tooltip="Measures how well your picks align with expert rankings and ADP."
             />
-             <AnalyticsCard 
+             <AnalyticsCard>
                 icon={<FlameIcon />} 
                 label="Value Picks Found"
                 value={analytics.valuePicks}
@@ -53,7 +54,7 @@ const AnalyticsPanel: React.FC<AnalyticsPanelProps> = ({ analytics }: any) => {
                 color="text-orange-400"
                 tooltip="Number of players drafted significantly later than their ADP."
             />
-             <AnalyticsCard 
+             <AnalyticsCard>
                 icon={<TrophyIcon />} 
                 label="Championship Prob."
                 value={analytics.championshipProbability}

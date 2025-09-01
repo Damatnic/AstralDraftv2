@@ -3,9 +3,10 @@
  * Comprehensive historical prediction tracking, trend analysis, and performance metrics
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
 import { 
+}
     FiBarChart, 
     FiTrendingUp, 
     FiTrendingDown, 
@@ -14,9 +15,10 @@ import {
     FiDownload, 
     FiRefreshCw, 
     FiTarget, 
-    FiZap 
-} from 'react-icons/fi';
+//     FiZap 
+} from &apos;react-icons/fi&apos;;
 import { 
+}
     LineChart, 
     Line, 
     AreaChart, 
@@ -27,15 +29,16 @@ import {
     YAxis, 
     CartesianGrid, 
     Tooltip, 
-    ResponsiveContainer 
-} from 'recharts';
-import { logger } from '../services/loggingService';
+//     ResponsiveContainer 
+} from &apos;recharts&apos;;
+import { logger } from &apos;../services/loggingService&apos;;
 
 // Type definitions
-export type TimeframeType = '7d' | '30d' | '90d' | '1y' | 'all';
-export type PredictionType = 'game_outcome' | 'player_performance' | 'trade_analysis' | 'draft_pick';
+export type TimeframeType = &apos;7d&apos; | &apos;30d&apos; | &apos;90d&apos; | &apos;1y&apos; | &apos;all&apos;;
+export type PredictionType = &apos;game_outcome&apos; | &apos;player_performance&apos; | &apos;trade_analysis&apos; | &apos;draft_pick&apos;;
 
 export interface AnalyticsData {
+}
   date: string;
   accuracy: number;
   predictions: number;
@@ -45,15 +48,17 @@ export interface AnalyticsData {
 }
 
 export interface TrendData {
+}
   metric: string;
   current: number;
   previous: number;
   change: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
 
 }
 
 export interface PredictionMetrics {
+}
   total: number;
   correct: number;
   accuracy: number;
@@ -61,6 +66,7 @@ export interface PredictionMetrics {
   byType: Record<PredictionType, { total: number; correct: number; accuracy: number }>;
 
 export interface PerformanceMetrics {
+}
   overallAccuracy: number;
   weeklyGrowth: number;
   bestStreak: number;
@@ -71,12 +77,14 @@ export interface PerformanceMetrics {
 }
 
 const HistoricalAnalyticsView: React.FC = () => {
+}
   // State management
-  const [timeframe, setTimeframe] = useState<TimeframeType>('30d');
-  const [selectedType, setSelectedType] = useState<PredictionType | 'all'>('all');
+  const [timeframe, setTimeframe] = useState<TimeframeType>(&apos;30d&apos;);
+  const [selectedType, setSelectedType] = useState<PredictionType | &apos;all&apos;>(&apos;all&apos;);
   const [isLoading, setIsLoading] = useState(false);
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData[]>([]);
   const [performanceMetrics, setPerformanceMetrics] = useState<PerformanceMetrics>({
+}
     overallAccuracy: 0,
     weeklyGrowth: 0,
     bestStreak: 0,
@@ -88,7 +96,9 @@ const HistoricalAnalyticsView: React.FC = () => {
 
   // Load analytics data
   const loadAnalyticsData = React.useCallback(async (): Promise<void> => {
+}
     try {
+}
 
       setIsLoading(true);
       
@@ -104,18 +114,21 @@ const HistoricalAnalyticsView: React.FC = () => {
       logger.info(`Loaded analytics data for timeframe: ${timeframe}, type: ${selectedType}`);
     
     } catch (error) {
+}
         console.error(error);
     `oracle-analytics-${timeframe}.csv`;
       link.click();
       window.URL.revokeObjectURL(url);
       
-      logger.info('Analytics data exported successfully');
+      logger.info(&apos;Analytics data exported successfully&apos;);
 
     } catch (error) {
+}
         console.error(error);
     `${value.toFixed(1)}%`;
   const formatChange = (value: number): string => {
-    const sign = value >= 0 ? '+' : '';
+}
+    const sign = value >= 0 ? &apos;+&apos; : &apos;&apos;;
     return `${sign}${value.toFixed(1)}`;
   };
 
@@ -150,7 +163,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                 onClick={loadAnalyticsData}
                 className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
               >
-                <FiRefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <FiRefreshCw className={`w-4 h-4 ${isLoading ? &apos;animate-spin&apos; : &apos;&apos;}`} />
                 <span>Refresh</span>
               </button>
             </div>
@@ -176,7 +189,7 @@ const HistoricalAnalyticsView: React.FC = () => {
               <label className="text-gray-300 font-medium">Type:</label>
               <select
                 value={selectedType}
-                onChange={(e: any) => setSelectedType(e.target.value as PredictionType | 'all')}
+                onChange={(e: any) => setSelectedType(e.target.value as PredictionType | &apos;all&apos;)}
               >
                 <option value="all">All predictions</option>
                 <option value="game_outcome">Game outcomes</option>
@@ -258,18 +271,19 @@ const HistoricalAnalyticsView: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {trendData.map((trend, index) => (
+}
               <div key={index} className="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg">
                 <div>
                   <div className="text-sm text-gray-400 mb-1">{trend.metric}</div>
                   <div className="text-xl font-bold text-white">
-                    {trend.metric === 'Volume' ? trend.current : formatPercentage(trend.current)}
+                    {trend.metric === &apos;Volume&apos; ? trend.current : formatPercentage(trend.current)}
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   {getTrendIcon(trend.trend)}
                   <span className={`text-sm font-medium ${getTrendColor(trend.trend)}`}>
                     {formatChange(trend.change)}
-                    {trend.metric !== 'Volume' && '%'}
+                    {trend.metric !== &apos;Volume&apos; && &apos;%&apos;}
                   </span>
                 </div>
               </div>
@@ -295,27 +309,28 @@ const HistoricalAnalyticsView: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={analyticsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis 
+                  <XAxis>
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
-                    tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date: any) => new Date(date).toLocaleDateString(&apos;en-US&apos;, { month: &apos;short&apos;, day: &apos;numeric&apos; })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
-                  <Tooltip 
+                  <Tooltip>
                     contentStyle={{ 
-                      backgroundColor: '#1F2937', 
-                      border: '1px solid #374151',
-                      borderRadius: '8px'
+}
+                      backgroundColor: &apos;#1F2937&apos;, 
+                      border: &apos;1px solid #374151&apos;,
+                      borderRadius: &apos;8px&apos;
                     }}
-                    labelStyle={{ color: '#F3F4F6' }}
+                    labelStyle={{ color: &apos;#F3F4F6&apos; }}
                   />
-                  <Line 
+                  <Line>
                     type="monotone" 
                     dataKey="accuracy" 
                     stroke="#8B5CF6" 
                     strokeWidth={2}
-                    dot={{ fill: '#8B5CF6', strokeWidth: 2, r: 4 }}
+                    dot={{ fill: &apos;#8B5CF6&apos;, strokeWidth: 2, r: 4 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -338,20 +353,21 @@ const HistoricalAnalyticsView: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={analyticsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis 
+                  <XAxis>
                     dataKey="date" 
                     stroke="#9CA3AF"
                     fontSize={12}
-                    tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    tickFormatter={(date: any) => new Date(date).toLocaleDateString(&apos;en-US&apos;, { month: &apos;short&apos;, day: &apos;numeric&apos; })}
                   />
                   <YAxis stroke="#9CA3AF" fontSize={12} />
-                  <Tooltip 
+                  <Tooltip>
                     contentStyle={{ 
-                      backgroundColor: '#1F2937', 
-                      border: '1px solid #374151',
-                      borderRadius: '8px'
+}
+                      backgroundColor: &apos;#1F2937&apos;, 
+                      border: &apos;1px solid #374151&apos;,
+                      borderRadius: &apos;8px&apos;
                     }}
-                    labelStyle={{ color: '#F3F4F6' }}
+                    labelStyle={{ color: &apos;#F3F4F6&apos; }}
                   />
                   <Bar dataKey="predictions" fill="#3B82F6" />
                 </BarChart>
@@ -376,22 +392,23 @@ const HistoricalAnalyticsView: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={analyticsData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis 
+                <XAxis>
                   dataKey="date" 
                   stroke="#9CA3AF"
                   fontSize={12}
-                  tickFormatter={(date: any) => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  tickFormatter={(date: any) => new Date(date).toLocaleDateString(&apos;en-US&apos;, { month: &apos;short&apos;, day: &apos;numeric&apos; })}
                 />
                 <YAxis stroke="#9CA3AF" fontSize={12} />
-                <Tooltip 
+                <Tooltip>
                   contentStyle={{ 
-                    backgroundColor: '#1F2937', 
-                    border: '1px solid #374151',
-                    borderRadius: '8px'
+}
+                    backgroundColor: &apos;#1F2937&apos;, 
+                    border: &apos;1px solid #374151&apos;,
+                    borderRadius: &apos;8px&apos;
                   }}
-                  labelStyle={{ color: '#F3F4F6' }}
+                  labelStyle={{ color: &apos;#F3F4F6&apos; }}
                 />
-                <Area 
+                <Area>
                   type="monotone" 
                   dataKey="confidence" 
                   stackId="1"
@@ -399,7 +416,7 @@ const HistoricalAnalyticsView: React.FC = () => {
                   fill="#10B981"
                   fillOpacity={0.3}
                 />
-                <Area 
+                <Area>
                   type="monotone" 
                   dataKey="winRate" 
                   stackId="2"
@@ -414,6 +431,7 @@ const HistoricalAnalyticsView: React.FC = () => {
 
         {/* Loading Indicator */}
         {isLoading && (
+}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -3,11 +3,12 @@
  * Optimized components for rendering large lists and grids on mobile
  */
 
-import React, { useCallback } from 'react';
-import { useVirtualScroll } from '../../hooks/useVirtualScroll';
-import { useOptimizedScroll } from '../../utils/mobilePerformanceUtils';
+import React, { useCallback } from &apos;react&apos;;
+import { useVirtualScroll } from &apos;../../hooks/useVirtualScroll&apos;;
+import { useOptimizedScroll } from &apos;../../utils/mobilePerformanceUtils&apos;;
 
 interface VirtualListProps<T> {
+}
     items: T[];
     itemHeight: number;
     containerHeight: number;
@@ -17,20 +18,24 @@ interface VirtualListProps<T> {
     onScroll?: (scrollTop: number) => void;
 
 export const VirtualList = <T,>({
+}
     items,
     itemHeight,
     containerHeight,
     renderItem,
     overscan = 5,
-    className = '',
-    onScroll
+    className = &apos;&apos;,
+//     onScroll
 }: VirtualListProps<T>): React.ReactElement => {
+}
     const {
+}
         visibleRange,
         offsetY,
         containerProps,
-        viewportProps
+//         viewportProps
     } = useVirtualScroll({
+}
         itemHeight,
         containerHeight,
         overscan,
@@ -39,21 +44,28 @@ export const VirtualList = <T,>({
 
     // Track scroll for external callback
     React.useEffect(() => {
+}
         if (onScroll) {
+}
             const element = containerProps.ref.current;
             if (element) {
+}
                 const handleScroll = () => onScroll(element.scrollTop);
-                element.addEventListener('scroll', handleScroll, { passive: true });
-                return () => element.removeEventListener('scroll', handleScroll);
+                element.addEventListener(&apos;scroll&apos;, handleScroll, { passive: true });
+                return () => element.removeEventListener(&apos;scroll&apos;, handleScroll);
 
 
     }, [onScroll, containerProps.ref]);
 
     const visibleItems = React.useMemo(() => {
+}
         const result = [];
         for (let i = visibleRange.start; i <= visibleRange.end; i++) {
+}
             if (items[i]) {
+}
                 result.push({
+}
                     item: items[i],
                     index: i,
                     key: i
@@ -68,8 +80,9 @@ export const VirtualList = <T,>({
             <div {...viewportProps}>
                 <div
                     style={{
+}
                         transform: `translateY(${offsetY}px)`,
-                        position: 'absolute',
+                        position: &apos;absolute&apos;,
                         top: 0,
                         left: 0,
                         right: 0
@@ -79,8 +92,9 @@ export const VirtualList = <T,>({
                         <div
                             key={key}
                             style={{
+}
                                 height: itemHeight,
-                                position: 'relative'
+                                position: &apos;relative&apos;
                             }}
                         >
                             {renderItem(item, index)}
@@ -94,6 +108,7 @@ export const VirtualList = <T,>({
 
 // Optimized grid variant for card layouts
 interface VirtualGridProps<T> {
+}
     items: T[];
     itemWidth: number;
     itemHeight: number;
@@ -105,6 +120,7 @@ interface VirtualGridProps<T> {
     className?: string;
 
 export const VirtualGrid = React.memo(<T,>({
+}
     items,
     itemWidth,
     itemHeight,
@@ -113,8 +129,9 @@ export const VirtualGrid = React.memo(<T,>({
     renderItem,
     gap = 8,
     overscan = 3,
-    className = ''
+    className = &apos;&apos;
 }: VirtualGridProps<T>): React.ReactElement => {
+}
     const [scrollTop, setScrollTop] = React.useState(0);
     const containerRef = React.useRef<HTMLDivElement>(null);
 
@@ -125,11 +142,13 @@ export const VirtualGrid = React.memo(<T,>({
 
     // Calculate visible range
     const visibleRange = React.useMemo(() => {
+}
         const rowsInViewport = Math.ceil(containerHeight / rowHeight);
         const startRow = Math.max(0, Math.floor(scrollTop / rowHeight) - overscan);
         const endRow = Math.min(totalRows - 1, startRow + rowsInViewport + overscan * 2);
         
         return { 
+}
             startRow, 
             endRow,
             startIndex: startRow * columnsPerRow,
@@ -139,19 +158,25 @@ export const VirtualGrid = React.memo(<T,>({
 
     // Handle scroll
     useOptimizedScroll(() => {
+}
         const element = containerRef.current;
         if (element) {
+}
             setScrollTop(element.scrollTop);
 
     });
 
     const visibleItems = React.useMemo(() => {
+}
         const result = [];
         for (let i = visibleRange.startIndex; i <= visibleRange.endIndex; i++) {
+}
             if (items[i]) {
+}
                 const row = Math.floor(i / columnsPerRow);
                 const col = i % columnsPerRow;
                 result.push({
+}
                     item: items[i],
                     index: i,
                     key: i,
@@ -164,6 +189,7 @@ export const VirtualGrid = React.memo(<T,>({
     }, [items, visibleRange, columnsPerRow, itemWidth, gap, rowHeight]);
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -176,22 +202,25 @@ export const VirtualGrid = React.memo(<T,>({
             ref={containerRef}
             className={className}
             style={{
+}
                 height: containerHeight,
-                overflow: 'auto',
-                position: 'relative'
+                overflow: &apos;auto&apos;,
+                position: &apos;relative&apos;
             }}
         >
             <div
                 style={{
+}
                     height: totalRows * rowHeight,
-                    position: 'relative'
+                    position: &apos;relative&apos;
                 }}
             >
                 {visibleItems.map(({ item, index, key, x, y }: any) => (
                     <div
                         key={key}
                         style={{
-                            position: 'absolute',
+}
+                            position: &apos;absolute&apos;,
                             left: x,
                             top: y,
                             width: itemWidth,

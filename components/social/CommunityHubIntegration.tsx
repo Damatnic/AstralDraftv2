@@ -3,14 +3,15 @@
  * Central integration point for all social features
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import LeagueHistoryViewer from './LeagueHistoryViewer';
-import SocialFeed from './SocialFeed';
-import { Player, Team, User, League } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import LeagueHistoryViewer from &apos;./LeagueHistoryViewer&apos;;
+import SocialFeed from &apos;./SocialFeed&apos;;
+import { Player, Team, User, League } from &apos;../../types&apos;;
 import { 
+}
     MessageSquareIcon, 
     BookOpenIcon, 
     HistoryIcon, 
@@ -19,10 +20,11 @@ import {
     HeartIcon,
     SparklesIcon,
     TrendingUpIcon,
-    CalendarIcon
-} from 'lucide-react';
+//     CalendarIcon
+} from &apos;lucide-react&apos;;
 
 export interface CommunityHubProps {
+}
     league: League;
     currentUser: User;
     teams: Team[];
@@ -33,13 +35,14 @@ export interface CommunityHubProps {
     onSocialInteraction: (type: string, data: any) => void;
     className?: string;
 
-type SocialFeatureTab = 'feed' | 'trade_chat' | 'stories' | 'history' | 'community';
+type SocialFeatureTab = &apos;feed&apos; | &apos;trade_chat&apos; | &apos;stories&apos; | &apos;history&apos; | &apos;community&apos;;
 
 }
 
 interface SocialActivity {
+}
     id: string;
-    type: 'trade_completed' | 'story_published' | 'milestone_achieved' | 'comment_posted' | 'reaction_added';
+    type: &apos;trade_completed&apos; | &apos;story_published&apos; | &apos;milestone_achieved&apos; | &apos;comment_posted&apos; | &apos;reaction_added&apos;;
     userId: string;
     userName: string;
     teamName?: string;
@@ -48,6 +51,7 @@ interface SocialActivity {
     relatedId?: string;
 
 interface CommunityStats {
+}
     totalMembers: number;
     activeToday: number;
     storiesThisWeek: number;
@@ -58,6 +62,7 @@ interface CommunityStats {
 }
 
 const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
+}
     league,
     currentUser,
     teams,
@@ -66,11 +71,13 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     onTradeProposal,
     onStoryPublish,
     onSocialInteraction,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
-    const [activeTab, setActiveTab] = React.useState<SocialFeatureTab>('feed');
+}
+    const [activeTab, setActiveTab] = React.useState<SocialFeatureTab>(&apos;feed&apos;);
     const [recentActivity, setRecentActivity] = React.useState<SocialActivity[]>([]);
     const [communityStats] = React.useState<CommunityStats>({
+}
         totalMembers: users.length,
         activeToday: Math.floor(users.length * 0.6),
         storiesThisWeek: 12,
@@ -82,31 +89,35 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     // Mock data for demonstration
     const mockFeedItems = React.useMemo(() => [
         {
-            id: '1',
-            type: 'trade_announcement' as const,
-            userId: users[0]?.id || 'user1',
-            userName: users[0]?.name || 'Manager 1',
+}
+            id: &apos;1&apos;,
+            type: &apos;trade_announcement&apos; as const,
+            userId: users[0]?.id || &apos;user1&apos;,
+            userName: users[0]?.name || &apos;Manager 1&apos;,
             userAvatar: users[0]?.avatar,
             teamId: teams[0]?.id,
-            teamName: teams[0]?.name || 'Team 1',
+            teamName: teams[0]?.name || &apos;Team 1&apos;,
             content: {
-                text: 'Just completed a huge trade! Really excited about the depth this adds to my roster. What do you all think about the value?',
+}
+                text: &apos;Just completed a huge trade! Really excited about the depth this adds to my roster. What do you all think about the value?&apos;,
                 data: {
-                    tradeId: 'trade_123',
-                    playersGiven: ['Player A', 'Player B'],
-                    playersReceived: ['Player C']
+}
+                    tradeId: &apos;trade_123&apos;,
+                    playersGiven: [&apos;Player A&apos;, &apos;Player B&apos;],
+                    playersReceived: [&apos;Player C&apos;]
 
             },
             timestamp: new Date(Date.now() - 3600000),
             reactions: [
-                { id: 'r1', userId: 'user2', userName: 'User 2', emoji: '🔥', timestamp: new Date() }
+                { id: &apos;r1&apos;, userId: &apos;user2&apos;, userName: &apos;User 2&apos;, emoji: &apos;🔥&apos;, timestamp: new Date() }
             ],
             comments: [
                 {
-                    id: 'c1',
-                    userId: 'user3',
-                    userName: 'User 3',
-                    content: 'Great move! That player fits your team perfectly.',
+}
+                    id: &apos;c1&apos;,
+                    userId: &apos;user3&apos;,
+                    userName: &apos;User 3&apos;,
+                    content: &apos;Great move! That player fits your team perfectly.&apos;,
                     timestamp: new Date(Date.now() - 1800000),
                     reactions: [],
                     isEdited: false,
@@ -117,137 +128,151 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             views: 28,
             isPinned: false,
             isHighlighted: true,
-            visibility: 'league_only' as const,
-            tags: ['trade', 'depth', 'strategy'],
+            visibility: &apos;league_only&apos; as const,
+            tags: [&apos;trade&apos;, &apos;depth&apos;, &apos;strategy&apos;],
             mentions: []
         },
         {
-            id: '2',
-            type: 'team_story' as const,
-            userId: users[1]?.id || 'user2',
-            userName: users[1]?.name || 'Manager 2',
+}
+            id: &apos;2&apos;,
+            type: &apos;team_story&apos; as const,
+            userId: users[1]?.id || &apos;user2&apos;,
+            userName: users[1]?.name || &apos;Manager 2&apos;,
             userAvatar: users[1]?.avatar,
             teamId: teams[1]?.id,
-            teamName: teams[1]?.name || 'Team 2',
+            teamName: teams[1]?.name || &apos;Team 2&apos;,
             content: {
-                text: 'Check out my season recap! It\'s been quite the journey from last place to playoff contention. Here\'s how we turned it around...',
+}
+                text: &apos;Check out my season recap! It\&apos;s been quite the journey from last place to playoff contention. Here\&apos;s how we turned it around...&apos;,
                 media: [
-                    { id: 'm1', type: 'image' as const, url: '/story-image.jpg', caption: 'Key moment from Week 8' }
+                    { id: &apos;m1&apos;, type: &apos;image&apos; as const, url: &apos;/story-image.jpg&apos;, caption: &apos;Key moment from Week 8&apos; }
 
             },
             timestamp: new Date(Date.now() - 7200000),
             reactions: [
-                { id: 'r2', userId: 'user1', userName: 'User 1', emoji: '👏', timestamp: new Date() },
-                { id: 'r3', userId: 'user3', userName: 'User 3', emoji: '❤️', timestamp: new Date() }
+                { id: &apos;r2&apos;, userId: &apos;user1&apos;, userName: &apos;User 1&apos;, emoji: &apos;👏&apos;, timestamp: new Date() },
+                { id: &apos;r3&apos;, userId: &apos;user3&apos;, userName: &apos;User 3&apos;, emoji: &apos;❤️&apos;, timestamp: new Date() }
             ],
             comments: [],
             shares: 1,
             views: 15,
             isPinned: false,
             isHighlighted: false,
-            visibility: 'league_only' as const,
-            tags: ['story', 'comeback', 'playoffs'],
+            visibility: &apos;league_only&apos; as const,
+            tags: [&apos;story&apos;, &apos;comeback&apos;, &apos;playoffs&apos;],
             mentions: []
 
     ], [users, teams]);
 
     const mockLeagueEvents = React.useMemo(() => [
         {
-            id: 'event1',
-            type: 'championship' as const,
-            title: 'Season 2023 Championship',
-            description: 'Epic championship battle between the top two teams. Came down to Monday Night Football!',
-            date: new Date('2023-12-18'),
+}
+            id: &apos;event1&apos;,
+            type: &apos;championship&apos; as const,
+            title: &apos;Season 2023 Championship&apos;,
+            description: &apos;Epic championship battle between the top two teams. Came down to Monday Night Football!&apos;,
+            date: new Date(&apos;2023-12-18&apos;),
             season: 2023,
             week: 16,
             participants: [
                 {
+}
                     teamId: teams[0]?.id || 1,
-                    teamName: teams[0]?.name || 'Team 1',
-                    userId: users[0]?.id || 'user1',
-                    userName: users[0]?.name || 'Manager 1',
-                    role: 'primary' as const
+                    teamName: teams[0]?.name || &apos;Team 1&apos;,
+                    userId: users[0]?.id || &apos;user1&apos;,
+                    userName: users[0]?.name || &apos;Manager 1&apos;,
+                    role: &apos;primary&apos; as const
                 },
                 {
+}
                     teamId: teams[1]?.id || 2,
-                    teamName: teams[1]?.name || 'Team 2',
-                    userId: users[1]?.id || 'user2',
-                    userName: users[1]?.name || 'Manager 2',
-                    role: 'secondary' as const
+                    teamName: teams[1]?.name || &apos;Team 2&apos;,
+                    userId: users[1]?.id || &apos;user2&apos;,
+                    userName: users[1]?.name || &apos;Manager 2&apos;,
+                    role: &apos;secondary&apos; as const
 
             ],
             data: {
+}
                 finalScore: { team1: 145.6, team2: 142.3 },
                 margin: 3.3,
-                clinchingPlayer: 'Travis Kelce'
+                clinchingPlayer: &apos;Travis Kelce&apos;
             },
             stats: {
+}
                 fantasyPoints: 145.6,
                 significance: 10
             },
             reactions: [
-                { id: 'r1', userId: 'user3', userName: 'User 3', emoji: '🔥', timestamp: new Date() }
+                { id: &apos;r1&apos;, userId: &apos;user3&apos;, userName: &apos;User 3&apos;, emoji: &apos;🔥&apos;, timestamp: new Date() }
             ],
             comments: [
                 {
-                    id: 'c1',
-                    userId: 'user4',
-                    userName: 'User 4',
-                    content: 'What an incredible finish! One of the best championship games we\'ve ever had.',
+}
+                    id: &apos;c1&apos;,
+                    userId: &apos;user4&apos;,
+                    userName: &apos;User 4&apos;,
+                    content: &apos;What an incredible finish! One of the best championship games we\&apos;ve ever had.&apos;,
                     timestamp: new Date(),
                     likes: 5
 
             ],
-            tags: ['championship', 'thriller', '2023'],
+            tags: [&apos;championship&apos;, &apos;thriller&apos;, &apos;2023&apos;],
             isHighlight: true,
-            visibility: 'league_only' as const
+            visibility: &apos;league_only&apos; as const
 
     ], [teams, users]);
 
     const mockMilestones = React.useMemo(() => [
         {
-            id: 'milestone1',
-            title: 'Perfect Week Achievement',
-            description: 'Started the optimal lineup and scored the highest weekly total in league history',
-            achievedDate: new Date('2023-10-15'),
+}
+            id: &apos;milestone1&apos;,
+            title: &apos;Perfect Week Achievement&apos;,
+            description: &apos;Started the optimal lineup and scored the highest weekly total in league history&apos;,
+            achievedDate: new Date(&apos;2023-10-15&apos;),
             achievedBy: {
+}
                 teamId: teams[0]?.id || 1,
-                teamName: teams[0]?.name || 'Team 1',
-                userId: users[0]?.id || 'user1',
-                userName: users[0]?.name || 'Manager 1',
-                role: 'primary' as const
+                teamName: teams[0]?.name || &apos;Team 1&apos;,
+                userId: users[0]?.id || &apos;user1&apos;,
+                userName: users[0]?.name || &apos;Manager 1&apos;,
+                role: &apos;primary&apos; as const
             },
-            category: 'scoring' as const,
-            rarity: 'legendary' as const,
-            icon: '🏆',
+            category: &apos;scoring&apos; as const,
+            rarity: &apos;legendary&apos; as const,
+            icon: &apos;🏆&apos;,
             value: 187.4,
             isFirstTime: true
         },
         {
-            id: 'milestone2',
-            title: 'Trade Master',
-            description: 'Completed 10 successful trades in a single season',
-            achievedDate: new Date('2023-11-01'),
+}
+            id: &apos;milestone2&apos;,
+            title: &apos;Trade Master&apos;,
+            description: &apos;Completed 10 successful trades in a single season&apos;,
+            achievedDate: new Date(&apos;2023-11-01&apos;),
             achievedBy: {
+}
                 teamId: teams[1]?.id || 2,
-                teamName: teams[1]?.name || 'Team 2',
-                userId: users[1]?.id || 'user2',
-                userName: users[1]?.name || 'Manager 2',
-                role: 'primary' as const
+                teamName: teams[1]?.name || &apos;Team 2&apos;,
+                userId: users[1]?.id || &apos;user2&apos;,
+                userName: users[1]?.name || &apos;Manager 2&apos;,
+                role: &apos;primary&apos; as const
             },
-            category: 'trading' as const,
-            rarity: 'epic' as const,
-            icon: '🤝',
+            category: &apos;trading&apos; as const,
+            rarity: &apos;epic&apos; as const,
+            icon: &apos;🤝&apos;,
             value: 10,
             isFirstTime: false
 
     ], [teams, users]);
 
     const handleSocialAction = (action: string, data: any) => {
+}
         onSocialInteraction(action, data);
         
         // Update activity feed
         const newActivity: SocialActivity = {
+}
             id: `activity_${Date.now()}`,
             type: action as any,
             userId: currentUser.id,
@@ -262,50 +287,57 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     };
 
     const getActivityDescription = (action: string, data: any): string => {
+}
         switch (action) {
-            case 'trade_proposal':
-                return 'proposed a new trade';
-            case 'story_publish':
-                return 'published a team story';
-            case 'event_reaction':
-                return 'reacted to a league event';
-            case 'event_comment':
-                return 'commented on a league event';
+}
+            case &apos;trade_proposal&apos;:
+                return &apos;proposed a new trade&apos;;
+            case &apos;story_publish&apos;:
+                return &apos;published a team story&apos;;
+            case &apos;event_reaction&apos;:
+                return &apos;reacted to a league event&apos;;
+            case &apos;event_comment&apos;:
+                return &apos;commented on a league event&apos;;
             default:
-                return 'performed an action';
+                return &apos;performed an action&apos;;
 
     };
 
     const tabs = [
         { 
-            id: 'feed', 
-            label: 'Social Feed', 
+}
+            id: &apos;feed&apos;, 
+            label: &apos;Social Feed&apos;, 
             icon: <RssIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: 'League activity and interactions'
+            description: &apos;League activity and interactions&apos;
         },
         { 
-            id: 'trade_chat', 
-            label: 'Trade Hub', 
+}
+            id: &apos;trade_chat&apos;, 
+            label: &apos;Trade Hub&apos;, 
             icon: <MessageSquareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: 'Trade negotiations and discussions'
+            description: &apos;Trade negotiations and discussions&apos;
         },
         { 
-            id: 'stories', 
-            label: 'Team Stories', 
+}
+            id: &apos;stories&apos;, 
+            label: &apos;Team Stories&apos;, 
             icon: <BookOpenIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: 'Share your fantasy journey'
+            description: &apos;Share your fantasy journey&apos;
         },
         { 
-            id: 'history', 
-            label: 'League History', 
+}
+            id: &apos;history&apos;, 
+            label: &apos;League History&apos;, 
             icon: <HistoryIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: 'Memorable moments and milestones'
+            description: &apos;Memorable moments and milestones&apos;
         },
         { 
-            id: 'community', 
-            label: 'Community', 
+}
+            id: &apos;community&apos;, 
+            label: &apos;Community&apos;, 
             icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />,
-            description: 'League stats and member activity'
+            description: &apos;League stats and member activity&apos;
 
     ];
 
@@ -346,6 +378,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 </h3>
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {recentActivity.length === 0 ? (
+}
                         <p className="text-[var(--text-secondary)] text-center py-4 sm:px-4 md:px-6 lg:px-8">
                             No recent activity. Be the first to engage!
                         </p>
@@ -357,9 +390,10 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                                     <p className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                         <span className="font-medium sm:px-4 md:px-6 lg:px-8">{activity.userName}</span>
                                         {activity.teamName && (
+}
                                             <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8"> ({activity.teamName})</span>
                                         )}
-                                        {' '}{activity.description}
+                                        {&apos; &apos;}{activity.description}
                                     </p>
                                     <p className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {activity.timestamp.toLocaleTimeString()}
@@ -375,7 +409,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <motion.button
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => setActiveTab('trade_chat')}
+                    onClick={() => setActiveTab(&apos;trade_chat&apos;)}
                     className="p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/50 rounded-lg text-left sm:px-4 md:px-6 lg:px-8"
                 >
                     <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -389,7 +423,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 
                 <motion.button
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => setActiveTab('stories')}
+                    onClick={() => setActiveTab(&apos;stories&apos;)}
                     className="p-4 bg-gradient-to-r from-green-500/20 to-blue-500/20 border border-green-400/50 rounded-lg text-left sm:px-4 md:px-6 lg:px-8"
                 >
                     <div className="flex items-center gap-3 mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -405,22 +439,24 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
     );
 
     const renderActiveTab = () => {
+}
         switch (activeTab) {
-            case 'feed':
+}
+            case &apos;feed&apos;:
                 return (
-                    <SocialFeed
+                    <SocialFeed>
                         feedItems={mockFeedItems}
                         currentUser={currentUser}
-                        onReaction={(itemId, emoji) => handleSocialAction('feed_reaction', { itemId, emoji })}
-                        onComment={(itemId, content) => handleSocialAction('feed_comment', { itemId, content })}
-                        onShare={(itemId: any) => handleSocialAction('feed_share', { itemId })}
-                        onPin={(itemId: any) => handleSocialAction('feed_pin', { itemId })}
-                        onReport={(itemId, reason) => handleSocialAction('feed_report', { itemId, reason })}
-                        onVote={(pollId, optionId) => handleSocialAction('poll_vote', { pollId, optionId })}
+                        onReaction={(itemId, emoji) => handleSocialAction(&apos;feed_reaction&apos;, { itemId, emoji })}
+                        onComment={(itemId, content) => handleSocialAction(&apos;feed_comment&apos;, { itemId, content })}
+                        onShare={(itemId: any) => handleSocialAction(&apos;feed_share&apos;, { itemId })}
+                        onPin={(itemId: any) => handleSocialAction(&apos;feed_pin&apos;, { itemId })}
+                        onReport={(itemId, reason) => handleSocialAction(&apos;feed_report&apos;, { itemId, reason })}
+                        onVote={(pollId, optionId) => handleSocialAction(&apos;poll_vote&apos;, { pollId, optionId })}
                     />
                 );
                 
-            case 'trade_chat':
+            case &apos;trade_chat&apos;:
                 // For now, return a placeholder since we need proper chat session data
                 return (
                     <div className="p-8 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
@@ -431,7 +467,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     </div>
                 );
                 
-            case 'stories':
+            case &apos;stories&apos;:
                 // For now, return a placeholder since we need proper story templates
                 return (
                     <div className="p-8 text-center text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
@@ -442,19 +478,19 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                     </div>
                 );
                 
-            case 'history':
+            case &apos;history&apos;:
                 return (
-                    <LeagueHistoryViewer
+                    <LeagueHistoryViewer>
                         league={league}
                         events={mockLeagueEvents}
                         milestones={mockMilestones}
-                        onEventReaction={(eventId, emoji) => handleSocialAction('event_reaction', { eventId, emoji })}
-                        onEventComment={(eventId, content) => handleSocialAction('event_comment', { eventId, content })}
-                        onShareEvent={(eventId: any) => handleSocialAction('event_share', { eventId })}
+                        onEventReaction={(eventId, emoji) => handleSocialAction(&apos;event_reaction&apos;, { eventId, emoji })}
+                        onEventComment={(eventId, content) => handleSocialAction(&apos;event_comment&apos;, { eventId, content })}
+                        onShareEvent={(eventId: any) => handleSocialAction(&apos;event_share&apos;, { eventId })}
                     />
                 );
                 
-            case 'community':
+            case &apos;community&apos;:
                 return renderCommunityOverview();
                 
             default:
@@ -475,6 +511,7 @@ const CommunityHubIntegration: React.FC<CommunityHubProps> = ({
                 
                 <div className="flex overflow-x-auto sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => (
+}
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id as SocialFeatureTab)}`}

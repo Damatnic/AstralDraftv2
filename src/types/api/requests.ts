@@ -6,23 +6,27 @@
 // ==================== BASE REQUEST TYPES ====================
 
 export interface BaseRequest {
+}
   timestamp?: string;
   requestId?: string;
   clientVersion?: string;
 }
 
 export interface PaginationParams {
+}
   page?: number;
   limit?: number;
   offset?: number;
 }
 
 export interface SortParams {
+}
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: &apos;asc&apos; | &apos;desc&apos;;
 }
 
 export interface FilterParams {
+}
   filters?: Record<string, any>;
   search?: string;
 }
@@ -32,6 +36,7 @@ export interface PaginatedRequest extends BaseRequest, PaginationParams, SortPar
 // ==================== AUTHENTICATION REQUESTS ====================
 
 export interface LoginRequest extends BaseRequest {
+}
   email: string;
   password: string;
   rememberMe?: boolean;
@@ -40,6 +45,7 @@ export interface LoginRequest extends BaseRequest {
 }
 
 export interface RegisterRequest extends BaseRequest {
+}
   username: string;
   email: string;
   password: string;
@@ -53,15 +59,18 @@ export interface RegisterRequest extends BaseRequest {
 }
 
 export interface RefreshTokenRequest extends BaseRequest {
+}
   refreshToken: string;
 }
 
 export interface ForgotPasswordRequest extends BaseRequest {
+}
   email: string;
   captcha?: string;
 }
 
 export interface ResetPasswordRequest extends BaseRequest {
+}
   token: string;
   email: string;
   password: string;
@@ -69,12 +78,14 @@ export interface ResetPasswordRequest extends BaseRequest {
 }
 
 export interface ChangePasswordRequest extends BaseRequest {
+}
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
 
 export interface VerifyEmailRequest extends BaseRequest {
+}
   token: string;
   email: string;
 }
@@ -82,6 +93,7 @@ export interface VerifyEmailRequest extends BaseRequest {
 // ==================== USER REQUESTS ====================
 
 export interface UpdateUserProfileRequest extends BaseRequest {
+}
   firstName?: string;
   lastName?: string;
   displayName?: string;
@@ -89,12 +101,14 @@ export interface UpdateUserProfileRequest extends BaseRequest {
   avatar?: string;
   banner?: string;
   location?: {
+}
     city: string;
     state: string;
     country: string;
     timezone: string;
   };
   socialLinks?: {
+}
     twitter?: string;
     instagram?: string;
     facebook?: string;
@@ -102,19 +116,22 @@ export interface UpdateUserProfileRequest extends BaseRequest {
     website?: string;
   };
   favoriteNFLTeam?: string;
-  fantasyExperience?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
+  fantasyExperience?: &apos;BEGINNER&apos; | &apos;INTERMEDIATE&apos; | &apos;ADVANCED&apos; | &apos;EXPERT&apos;;
   yearsPlaying?: number;
 }
 
 export interface UpdateUserPreferencesRequest extends BaseRequest {
+}
   notifications?: {
+}
     email?: Record<string, boolean>;
     push?: Record<string, boolean>;
     inApp?: Record<string, boolean>;
-    frequency?: 'REAL_TIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
+    frequency?: &apos;REAL_TIME&apos; | &apos;HOURLY&apos; | &apos;DAILY&apos; | &apos;WEEKLY&apos;;
   };
   privacy?: {
-    profileVisibility?: 'PUBLIC' | 'FRIENDS' | 'LEAGUES_ONLY' | 'PRIVATE';
+}
+    profileVisibility?: &apos;PUBLIC&apos; | &apos;FRIENDS&apos; | &apos;LEAGUES_ONLY&apos; | &apos;PRIVATE&apos;;
     showRealName?: boolean;
     showEmail?: boolean;
     showLocation?: boolean;
@@ -123,20 +140,22 @@ export interface UpdateUserPreferencesRequest extends BaseRequest {
     allowLeagueInvites?: boolean;
   };
   display?: {
-    theme?: 'LIGHT' | 'DARK' | 'SYSTEM';
+}
+    theme?: &apos;LIGHT&apos; | &apos;DARK&apos; | &apos;SYSTEM&apos;;
     language?: string;
     timezone?: string;
     dateFormat?: string;
-    timeFormat?: '12H' | '24H';
+    timeFormat?: &apos;12H&apos; | &apos;24H&apos;;
     compactMode?: boolean;
-    fontSize?: 'SMALL' | 'MEDIUM' | 'LARGE' | 'EXTRA_LARGE';
+    fontSize?: &apos;SMALL&apos; | &apos;MEDIUM&apos; | &apos;LARGE&apos; | &apos;EXTRA_LARGE&apos;;
     highContrast?: boolean;
     reducedMotion?: boolean;
   };
   gameplay?: {
-    defaultDraftStrategy?: 'CONSERVATIVE' | 'AGGRESSIVE' | 'BALANCED';
+}
+    defaultDraftStrategy?: &apos;CONSERVATIVE&apos; | &apos;AGGRESSIVE&apos; | &apos;BALANCED&apos;;
     autoLineupOptimization?: boolean;
-    riskTolerance?: 'LOW' | 'MEDIUM' | 'HIGH';
+    riskTolerance?: &apos;LOW&apos; | &apos;MEDIUM&apos; | &apos;HIGH&apos;;
     favoritePositions?: string[];
     favoriteTeams?: string[];
     customRankings?: boolean;
@@ -144,8 +163,10 @@ export interface UpdateUserPreferencesRequest extends BaseRequest {
 }
 
 export interface UploadAvatarRequest extends BaseRequest {
+}
   file: File;
   crop?: {
+}
     x: number;
     y: number;
     width: number;
@@ -156,18 +177,21 @@ export interface UploadAvatarRequest extends BaseRequest {
 // ==================== LEAGUE REQUESTS ====================
 
 export interface CreateLeagueRequest extends BaseRequest {
+}
   name: string;
   description?: string;
   avatar?: string;
-  type: 'REDRAFT' | 'KEEPER' | 'DYNASTY' | 'BESTBALL';
+  type: &apos;REDRAFT&apos; | &apos;KEEPER&apos; | &apos;DYNASTY&apos; | &apos;BESTBALL&apos;;
   isPublic?: boolean;
   password?: string;
   
   settings: {
+}
     teamCount: number;
-    scoringFormat: 'STANDARD' | 'PPR' | 'HALF_PPR' | 'CUSTOM';
+    scoringFormat: &apos;STANDARD&apos; | &apos;PPR&apos; | &apos;HALF_PPR&apos; | &apos;CUSTOM&apos;;
     
     roster: {
+}
       qb: number;
       rb: number;
       wr: number;
@@ -181,13 +205,15 @@ export interface CreateLeagueRequest extends BaseRequest {
     };
     
     draft: {
-      type: 'SNAKE' | 'AUCTION' | 'LINEAR';
+}
+      type: &apos;SNAKE&apos; | &apos;AUCTION&apos; | &apos;LINEAR&apos;;
       date?: string;
       timePerPick: number;
       allowAutoDraft: boolean;
     };
     
     season: {
+}
       regularSeasonWeeks: number;
       playoffTeams: number;
       playoffWeeks: number;
@@ -195,12 +221,14 @@ export interface CreateLeagueRequest extends BaseRequest {
     };
     
     waivers: {
-      type: 'FAAB' | 'ROLLING' | 'REVERSE_STANDINGS';
+}
+      type: &apos;FAAB&apos; | &apos;ROLLING&apos; | &apos;REVERSE_STANDINGS&apos;;
       faabBudget?: number;
       waiverPeriod: number;
     };
     
     customScoring?: {
+}
       passing: Record<string, number>;
       rushing: Record<string, number>;
       receiving: Record<string, number>;
@@ -213,6 +241,7 @@ export interface CreateLeagueRequest extends BaseRequest {
 }
 
 export interface UpdateLeagueRequest extends BaseRequest {
+}
   leagueId: string;
   name?: string;
   description?: string;
@@ -221,6 +250,7 @@ export interface UpdateLeagueRequest extends BaseRequest {
 }
 
 export interface JoinLeagueRequest extends BaseRequest {
+}
   inviteCode?: string;
   password?: string;
   teamName: string;
@@ -228,17 +258,20 @@ export interface JoinLeagueRequest extends BaseRequest {
 }
 
 export interface LeaveLeagueRequest extends BaseRequest {
+}
   leagueId: string;
   reason?: string;
 }
 
 export interface InviteToLeagueRequest extends BaseRequest {
+}
   leagueId: string;
   emails: string[];
   customMessage?: string;
 }
 
 export interface KickFromLeagueRequest extends BaseRequest {
+}
   leagueId: string;
   userId: string;
   reason: string;
@@ -247,6 +280,7 @@ export interface KickFromLeagueRequest extends BaseRequest {
 // ==================== TEAM REQUESTS ====================
 
 export interface UpdateTeamRequest extends BaseRequest {
+}
   teamId: string;
   name?: string;
   abbreviation?: string;
@@ -256,14 +290,16 @@ export interface UpdateTeamRequest extends BaseRequest {
 }
 
 export interface SetLineupRequest extends BaseRequest {
+}
   teamId: string;
   week?: number;
   lineup: Record<string, string | null>; // position -> playerId
 }
 
 export interface UpdateRosterRequest extends BaseRequest {
+}
   teamId: string;
-  action: 'ADD' | 'DROP' | 'MOVE_TO_IR' | 'ACTIVATE_FROM_IR';
+  action: &apos;ADD&apos; | &apos;DROP&apos; | &apos;MOVE_TO_IR&apos; | &apos;ACTIVATE_FROM_IR&apos;;
   playerId: string;
   position?: string;
   dropPlayerId?: string;
@@ -272,6 +308,7 @@ export interface UpdateRosterRequest extends BaseRequest {
 // ==================== DRAFT REQUESTS ====================
 
 export interface StartDraftRequest extends BaseRequest {
+}
   leagueId: string;
   draftDate?: string;
   randomizeOrder?: boolean;
@@ -279,39 +316,46 @@ export interface StartDraftRequest extends BaseRequest {
 }
 
 export interface MakeDraftPickRequest extends BaseRequest {
+}
   draftId: string;
   playerId: string;
   price?: number; // For auction drafts
 }
 
 export interface AutoDraftToggleRequest extends BaseRequest {
+}
   draftId: string;
   teamId: string;
   enabled: boolean;
 }
 
 export interface UpdateDraftQueueRequest extends BaseRequest {
+}
   draftId: string;
   teamId: string;
   playerIds: string[];
 }
 
 export interface PauseDraftRequest extends BaseRequest {
+}
   draftId: string;
   reason?: string;
 }
 
 export interface ResumeDraftRequest extends BaseRequest {
+}
   draftId: string;
 }
 
 export interface AuctionBidRequest extends BaseRequest {
+}
   draftId: string;
   playerId: string;
   amount: number;
 }
 
 export interface NominatePlayerRequest extends BaseRequest {
+}
   draftId: string;
   playerId: string;
 }
@@ -319,15 +363,18 @@ export interface NominatePlayerRequest extends BaseRequest {
 // ==================== TRADE REQUESTS ====================
 
 export interface ProposeTradeRequest extends BaseRequest {
+}
   leagueId: string;
   toTeamId: string;
   playersOffered: string[];
   playersRequested: string[];
   picksOffered?: Array<{
+}
     round: number;
     year: number;
   }>;
   picksRequested?: Array<{
+}
     round: number;
     year: number;
   }>;
@@ -338,16 +385,20 @@ export interface ProposeTradeRequest extends BaseRequest {
 }
 
 export interface RespondToTradeRequest extends BaseRequest {
+}
   tradeId: string;
-  action: 'ACCEPT' | 'REJECT' | 'COUNTER';
+  action: &apos;ACCEPT&apos; | &apos;REJECT&apos; | &apos;COUNTER&apos;;
   counterOffer?: {
+}
     playersOffered: string[];
     playersRequested: string[];
     picksOffered?: Array<{
+}
       round: number;
       year: number;
     }>;
     picksRequested?: Array<{
+}
       round: number;
       year: number;
     }>;
@@ -358,19 +409,22 @@ export interface RespondToTradeRequest extends BaseRequest {
 }
 
 export interface CancelTradeRequest extends BaseRequest {
+}
   tradeId: string;
   reason?: string;
 }
 
 export interface VoteOnTradeRequest extends BaseRequest {
+}
   tradeId: string;
-  vote: 'APPROVE' | 'VETO';
+  vote: &apos;APPROVE&apos; | &apos;VETO&apos;;
   reason?: string;
 }
 
 // ==================== WAIVER REQUESTS ====================
 
 export interface SubmitWaiverClaimRequest extends BaseRequest {
+}
   leagueId: string;
   playerId: string;
   bid: number;
@@ -379,15 +433,18 @@ export interface SubmitWaiverClaimRequest extends BaseRequest {
 }
 
 export interface CancelWaiverClaimRequest extends BaseRequest {
+}
   claimId: string;
 }
 
 export interface ProcessWaiversRequest extends BaseRequest {
+}
   leagueId: string;
   week?: number;
 }
 
 export interface UpdateWaiverPriorityRequest extends BaseRequest {
+}
   leagueId: string;
   teamId: string;
   claimIds: string[]; // Ordered by priority
@@ -396,9 +453,10 @@ export interface UpdateWaiverPriorityRequest extends BaseRequest {
 // ==================== PLAYER REQUESTS ====================
 
 export interface GetPlayersRequest extends PaginatedRequest {
+}
   positions?: string[];
   teams?: string[];
-  availability?: 'AVAILABLE' | 'DRAFTED' | 'FREE_AGENT' | 'WAIVER';
+  availability?: &apos;AVAILABLE&apos; | &apos;DRAFTED&apos; | &apos;FREE_AGENT&apos; | &apos;WAIVER&apos;;
   minRank?: number;
   maxRank?: number;
   injuryStatus?: string[];
@@ -408,6 +466,7 @@ export interface GetPlayersRequest extends PaginatedRequest {
 }
 
 export interface GetPlayerDetailRequest extends BaseRequest {
+}
   playerId: string;
   includeStats?: boolean;
   includeNews?: boolean;
@@ -416,11 +475,13 @@ export interface GetPlayerDetailRequest extends BaseRequest {
 }
 
 export interface UpdatePlayerWatchlistRequest extends BaseRequest {
-  action: 'ADD' | 'REMOVE';
+}
+  action: &apos;ADD&apos; | &apos;REMOVE&apos;;
   playerId: string;
 }
 
 export interface GetPlayerProjectionsRequest extends BaseRequest {
+}
   playerIds?: string[];
   positions?: string[];
   week?: number;
@@ -430,23 +491,27 @@ export interface GetPlayerProjectionsRequest extends BaseRequest {
 // ==================== ANALYTICS REQUESTS ====================
 
 export interface GetAnalyticsRequest extends BaseRequest {
-  type: 'TEAM' | 'PLAYER' | 'LEAGUE' | 'MATCHUP';
+}
+  type: &apos;TEAM&apos; | &apos;PLAYER&apos; | &apos;LEAGUE&apos; | &apos;MATCHUP&apos;;
   entityId: string;
-  timeframe?: 'WEEK' | 'MONTH' | 'SEASON' | 'ALL_TIME';
+  timeframe?: &apos;WEEK&apos; | &apos;MONTH&apos; | &apos;SEASON&apos; | &apos;ALL_TIME&apos;;
   metrics?: string[];
   compareWith?: string[];
 }
 
 export interface GetPredictionsRequest extends BaseRequest {
+}
   playerIds?: string[];
   week?: number;
   includeConfidence?: boolean;
-  scenario?: 'OPTIMISTIC' | 'REALISTIC' | 'PESSIMISTIC';
+  scenario?: &apos;OPTIMISTIC&apos; | &apos;REALISTIC&apos; | &apos;PESSIMISTIC&apos;;
 }
 
 export interface UpdateCustomRankingsRequest extends BaseRequest {
+}
   leagueId: string;
   rankings: Array<{
+}
     playerId: string;
     rank: number;
     position: string;
@@ -456,11 +521,13 @@ export interface UpdateCustomRankingsRequest extends BaseRequest {
 // ==================== MESSAGING REQUESTS ====================
 
 export interface SendMessageRequest extends BaseRequest {
-  type: 'LEAGUE_CHAT' | 'DIRECT_MESSAGE' | 'TRADE_DISCUSSION';
+}
+  type: &apos;LEAGUE_CHAT&apos; | &apos;DIRECT_MESSAGE&apos; | &apos;TRADE_DISCUSSION&apos;;
   targetId: string; // leagueId or userId or tradeId
   content: string;
   attachments?: Array<{
-    type: 'IMAGE' | 'FILE' | 'LINK';
+}
+    type: &apos;IMAGE&apos; | &apos;FILE&apos; | &apos;LINK&apos;;
     url: string;
     name?: string;
   }>;
@@ -469,19 +536,23 @@ export interface SendMessageRequest extends BaseRequest {
 }
 
 export interface MarkMessagesReadRequest extends BaseRequest {
+}
   messageIds: string[];
 }
 
 export interface DeleteMessageRequest extends BaseRequest {
+}
   messageId: string;
 }
 
 // ==================== SEARCH REQUESTS ====================
 
 export interface SearchRequest extends PaginatedRequest {
+}
   query: string;
-  type: 'PLAYERS' | 'LEAGUES' | 'USERS' | 'ALL';
+  type: &apos;PLAYERS&apos; | &apos;LEAGUES&apos; | &apos;USERS&apos; | &apos;ALL&apos;;
   filters?: {
+}
     positions?: string[];
     availability?: string;
     minRank?: number;
@@ -493,27 +564,32 @@ export interface SearchRequest extends PaginatedRequest {
 // ==================== NOTIFICATION REQUESTS ====================
 
 export interface UpdateNotificationSettingsRequest extends BaseRequest {
+}
   email?: Record<string, boolean>;
   push?: Record<string, boolean>;
   inApp?: Record<string, boolean>;
 }
 
 export interface MarkNotificationsReadRequest extends BaseRequest {
+}
   notificationIds: string[];
 }
 
 export interface RegisterPushTokenRequest extends BaseRequest {
+}
   token: string;
-  platform: 'ios' | 'android' | 'web';
+  platform: &apos;ios&apos; | &apos;android&apos; | &apos;web&apos;;
 }
 
 // ==================== FILE UPLOAD REQUESTS ====================
 
 export interface UploadFileRequest extends BaseRequest {
+}
   file: File;
-  type: 'AVATAR' | 'LEAGUE_LOGO' | 'TEAM_LOGO' | 'ATTACHMENT';
+  type: &apos;AVATAR&apos; | &apos;LEAGUE_LOGO&apos; | &apos;TEAM_LOGO&apos; | &apos;ATTACHMENT&apos;;
   entityId?: string;
   crop?: {
+}
     x: number;
     y: number;
     width: number;
@@ -524,8 +600,9 @@ export interface UploadFileRequest extends BaseRequest {
 // ==================== COMMISSIONER REQUESTS ====================
 
 export interface CommissionerActionRequest extends BaseRequest {
+}
   leagueId: string;
-  action: 'FORCE_TRADE' | 'REVERSE_TRADE' | 'EDIT_ROSTER' | 'ADJUST_SCORE' | 'RESET_DRAFT' | 'KICK_USER';
+  action: &apos;FORCE_TRADE&apos; | &apos;REVERSE_TRADE&apos; | &apos;EDIT_ROSTER&apos; | &apos;ADJUST_SCORE&apos; | &apos;RESET_DRAFT&apos; | &apos;KICK_USER&apos;;
   targetId: string; // teamId, tradeId, etc.
   data: Record<string, any>;
   reason: string;
@@ -533,21 +610,24 @@ export interface CommissionerActionRequest extends BaseRequest {
 }
 
 export interface UpdateLeagueSettingsRequest extends BaseRequest {
+}
   leagueId: string;
   settings: Record<string, any>;
   reason?: string;
 }
 
 export interface ProcessCommissionerVoteRequest extends BaseRequest {
+}
   leagueId: string;
   voteId: string;
-  decision: 'APPROVE' | 'REJECT';
+  decision: &apos;APPROVE&apos; | &apos;REJECT&apos;;
   reason?: string;
 }
 
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   BaseRequest,
   PaginationParams,
   SortParams,

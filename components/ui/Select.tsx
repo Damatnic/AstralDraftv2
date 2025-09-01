@@ -1,23 +1,27 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from &apos;react&apos;;
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+}
   label?: string;
   error?: string;
   options: { value: string; label: string }[];
 
 export const Select: React.FC<SelectProps> = ({
+}
   label,
   error,
   options,
-  className = '',
+  className = &apos;&apos;,
   id,
   ...props
 }: any) => {
+}
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
       {label && (
+}
         <label htmlFor={selectId} className="block text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
           {label}
         </label>
@@ -25,10 +29,11 @@ export const Select: React.FC<SelectProps> = ({
       
       <select
         id={selectId}
-        className={`glass-input w-full ${error ? 'border-red-500' : ''} ${className}`}
+        className={`glass-input w-full ${error ? &apos;border-red-500&apos; : &apos;&apos;} ${className}`}
         {...props}
       >
         {options.map((option: any) => (
+}
           <option key={option.value} value={option.value} className="bg-[var(--color-bg-primary)] text-white sm:px-4 md:px-6 lg:px-8">
             {option.label}
           </option>
@@ -36,6 +41,7 @@ export const Select: React.FC<SelectProps> = ({
       </select>
       
       {error && (
+}
         <p className="text-sm text-red-400 sm:px-4 md:px-6 lg:px-8" role="alert">
           {error}
         </p>

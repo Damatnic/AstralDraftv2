@@ -3,63 +3,78 @@
  * Handles Stripe payment processing for contest entries and subscriptions
  */
 
-import React, { useCallback, useState, useEffect, useMemo } from 'react';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { usePayment } from '../../contexts/PaymentContext';
+import React, { useCallback, useState, useEffect, useMemo } from &apos;react&apos;;
+import { Elements, PaymentElement, useStripe, useElements } from &apos;@stripe/react-stripe-js&apos;;
+import { usePayment } from &apos;../../contexts/PaymentContext&apos;;
 
 // Checkout form component
 const CheckoutForm: React.FC<{
-  paymentType: 'contest' | 'subscription';
+}
+  paymentType: &apos;contest&apos; | &apos;subscription&apos;;
   onSuccess: () => void;
   onError: (error: string) => void;
 }> = ({ paymentType, onSuccess, onError }: any) => {
+}
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>(&apos;&apos;);
 
   const getButtonText = useMemo(() => {
-    return paymentType === 'contest' ? 'Pay Contest Entry Fee' : 'Start Subscription';
+}
+    return paymentType === &apos;contest&apos; ? &apos;Pay Contest Entry Fee&apos; : &apos;Start Subscription&apos;;
   }, [paymentType]);
 
   const handleSubmit = async () => {
+}
     try {
+}
 
     event.preventDefault();
 
     if (!stripe || !elements) {
+}
       return;
     
     } catch (error) {
-      console.error('Error in handleSubmit:', error);
+}
+      console.error(&apos;Error in handleSubmit:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }setIsLoading(true);
 
     const { error } = await stripe.confirmPayment({
+}
       elements,
       confirmParams: {
+}
         return_url: `${window.location.origin}/payment/success`,
       },
     });
 
     if (error) {
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        setMessage(error.message || 'Payment failed');
-        onError(error.message || 'Payment failed');
+}
+      if (error.type === &apos;card_error&apos; || error.type === &apos;validation_error&apos;) {
+}
+        setMessage(error.message || &apos;Payment failed&apos;);
+        onError(error.message || &apos;Payment failed&apos;);
       } else {
-        setMessage('An unexpected error occurred.');
-        onError('An unexpected error occurred.');
+}
+        setMessage(&apos;An unexpected error occurred.&apos;);
+        onError(&apos;An unexpected error occurred.&apos;);
 
     } else {
+}
       onSuccess();
 
     setIsLoading(false);
   };
 
   const paymentElementOptions = {
-    layout: 'tabs' as const,
+}
+    layout: &apos;tabs&apos; as const,
   };
 
   return (
@@ -70,24 +85,27 @@ const CheckoutForm: React.FC<{
         disabled={isLoading || !stripe || !elements}
         id="submit"
         className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+}
           isLoading || !stripe || !elements
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-600 text-white hover:bg-blue-700'
+            ? &apos;bg-gray-300 text-gray-500 cursor-not-allowed&apos;
+            : &apos;bg-blue-600 text-white hover:bg-blue-700&apos;
         }`}
        aria-label="Action button">
         <span id="button-text">
           {isLoading ? (
+}
             <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 sm:px-4 md:px-6 lg:px-8"></div>
               Processing...
             </div>
           ) : (
-            getButtonText
+//             getButtonText
           )}
         </span>
       </button>
       
       {message && (
+}
         <div className="text-red-600 text-sm mt-2 sm:px-4 md:px-6 lg:px-8">
           {message}
         </div>
@@ -98,29 +116,36 @@ const CheckoutForm: React.FC<{
 
 // Contest entry payment component
 export const ContestEntryPayment: React.FC<{
+}
   contestId: string;
-  entryType: 'CONTEST_ENTRY_SMALL' | 'CONTEST_ENTRY_MEDIUM' | 'CONTEST_ENTRY_LARGE';
+  entryType: &apos;CONTEST_ENTRY_SMALL&apos; | &apos;CONTEST_ENTRY_MEDIUM&apos; | &apos;CONTEST_ENTRY_LARGE&apos;;
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ contestId, entryType, onSuccess, onCancel }: any) => {
+}
   const { stripe, products, createContestEntryPayment } = usePayment();
-  const [clientSecret, setClientSecret] = useState<string>('');
+  const [clientSecret, setClientSecret] = useState<string>(&apos;&apos;);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>(&apos;&apos;);
 
   const product = products[entryType];
 
   useEffect(() => {
+}
     const initializePayment = async () => {
+}
       try {
+}
 
         setIsLoading(true);
         const paymentIntent = await createContestEntryPayment(contestId, entryType);
         setClientSecret(paymentIntent.clientSecret);
       
     } catch (error) {
-        setError(error instanceof Error ? error.message : 'Failed to initialize payment');
+}
+        setError(error instanceof Error ? error.message : &apos;Failed to initialize payment&apos;);
       } finally {
+}
         setIsLoading(false);
 
     };
@@ -129,6 +154,7 @@ export const ContestEntryPayment: React.FC<{
   }, [contestId, entryType, createContestEntryPayment]);
 
   if (isLoading && !clientSecret) {
+}
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
@@ -139,6 +165,7 @@ export const ContestEntryPayment: React.FC<{
     );
 
   if (error) {
+}
     return (
       <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
         <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -148,16 +175,18 @@ export const ContestEntryPayment: React.FC<{
             onClick={onCancel}
             className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
-            Close
+//             Close
           </button>
         </div>
       </div>
     );
 
   const stripeOptions = {
+}
     clientSecret,
     appearance: {
-      theme: 'stripe' as const,
+}
+      theme: &apos;stripe&apos; as const,
     },
   };
 
@@ -172,8 +201,9 @@ export const ContestEntryPayment: React.FC<{
       </div>
 
       {clientSecret && stripe && (
+}
         <Elements options={stripeOptions} stripe={stripe}>
-          <CheckoutForm
+          <CheckoutForm>
             paymentType="contest"
             onSuccess={onSuccess}
             onError={setError}
@@ -186,7 +216,7 @@ export const ContestEntryPayment: React.FC<{
           onClick={onCancel}
           className="text-gray-500 hover:text-gray-700 text-sm sm:px-4 md:px-6 lg:px-8"
          aria-label="Action button">
-          Cancel
+//           Cancel
         </button>
       </div>
     </div>
@@ -195,40 +225,48 @@ export const ContestEntryPayment: React.FC<{
 
 // Subscription payment component
 export const SubscriptionPayment: React.FC<{
-  subscriptionType: 'ORACLE_PREMIUM' | 'ANALYTICS_PRO' | 'ORACLE_ULTIMATE';
+}
+  subscriptionType: &apos;ORACLE_PREMIUM&apos; | &apos;ANALYTICS_PRO&apos; | &apos;ORACLE_ULTIMATE&apos;;
   trialDays?: number;
   onSuccess: () => void;
   onCancel: () => void;
 }> = ({ subscriptionType, trialDays = 7, onSuccess, onCancel }: any) => {
+}
   const { products, createSubscription } = usePayment();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>(&apos;&apos;);
 
   const product = products[subscriptionType];
 
   const handleSubscriptionCreation = async () => {
+}
     try {
+}
 
       setIsLoading(true);
       await createSubscription(subscriptionType, trialDays);
       onSuccess();
-    finally {
+  } finally {
+}
       setIsLoading(false);
 
     `w-full py-3 px-4 rounded-lg font-medium transition-colors ${
-            isLoading
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-blue-600 text-white hover:bg-blue-700'
+}
+//             isLoading
+              ? &apos;bg-gray-300 text-gray-500 cursor-not-allowed&apos;
+              : &apos;bg-blue-600 text-white hover:bg-blue-700&apos;
           }`}
          aria-label="Action button">
           {isLoading ? (
+}
             <div className="flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2 sm:px-4 md:px-6 lg:px-8"></div>
               Creating subscription...
             </div>
           ) : (
             (() => {
-              const buttonText = trialDays > 0 ? 'Free Trial' : 'Subscription';
+}
+              const buttonText = trialDays > 0 ? &apos;Free Trial&apos; : &apos;Subscription&apos;;
               return `Start ${buttonText}`;
             })()
           )}
@@ -238,13 +276,14 @@ export const SubscriptionPayment: React.FC<{
           onClick={onCancel}
           className="w-full py-2 px-4 text-gray-500 hover:text-gray-700 text-sm sm:px-4 md:px-6 lg:px-8"
          aria-label="Action button">
-          Cancel
+//           Cancel
         </button>
       </div>
 
       <div className="mt-6 text-xs text-gray-500 text-center sm:px-4 md:px-6 lg:px-8">
         <p>You can cancel anytime. No commitments.</p>
         {trialDays > 0 && (
+}
           <p className="mt-1 sm:px-4 md:px-6 lg:px-8">
             Trial ends in {trialDays} days. You won&apos;t be charged until then.
           </p>
@@ -256,9 +295,11 @@ export const SubscriptionPayment: React.FC<{
 
 // Payment success component
 export const PaymentSuccess: React.FC<{
-  type: 'contest' | 'subscription';
+}
+  type: &apos;contest&apos; | &apos;subscription&apos;;
   onClose: () => void;
 }> = ({ type, onClose }: any) => {
+}
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -267,16 +308,17 @@ export const PaymentSuccess: React.FC<{
           Payment Successful!
         </h3>
         <p className="text-gray-600 mb-6 sm:px-4 md:px-6 lg:px-8">
-          {type === 'contest' 
-            ? 'You have successfully entered the contest. Good luck!'
-            : 'Your subscription has been activated. Enjoy your premium features!'
+          {type === &apos;contest&apos; 
+}
+            ? &apos;You have successfully entered the contest. Good luck!&apos;
+            : &apos;Your subscription has been activated. Enjoy your premium features!&apos;
 
         </p>
         <button
           onClick={onClose}
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8"
          aria-label="Action button">
-          Continue
+//           Continue
         </button>
       </div>
     </div>

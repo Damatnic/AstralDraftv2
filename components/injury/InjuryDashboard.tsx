@@ -3,12 +3,13 @@
  * Comprehensive injury monitoring dashboard with real-time alerts and management tools
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Tabs } from '../ui/Tabs';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect, useCallback } from &apos;react&apos;;
+import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+import { Badge } from &apos;../ui/Badge&apos;;
+import { Tabs } from &apos;../ui/Tabs&apos;;
 import {
+}
   Activity,
   AlertTriangle,
   TrendingUp,
@@ -24,50 +25,58 @@ import {
   CheckCircle,
   Calendar,
   BarChart3,
-  Search
-} from 'lucide-react';
+//   Search
+} from &apos;lucide-react&apos;;
 import {
+}
   injuryTrackingService,
   InjuryDashboardData,
   InjuryAlert,
-  MonitoredPlayer
-} from '../../services/injuryTrackingService';
+//   MonitoredPlayer
+} from &apos;../../services/injuryTrackingService&apos;;
 
 interface InjuryDashboardProps {
+}
   className?: string;
 
 }
 
 interface PlayerSearchResult {
+}
   playerId: string;
   name: string;
   position: string;
   team: string;
   currentInjuryStatus?: string;}
 
-const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: any) => {
+const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = &apos;&apos;  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [dashboardData, setDashboardData] = useState<InjuryDashboardData | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
   const [loading, setLoading] = useState(true);
   const [alerts, setAlerts] = useState<InjuryAlert[]>([]);
   const [monitoredPlayers, setMonitoredPlayers] = useState<MonitoredPlayer[]>([]);
   const [showAddPlayer, setShowAddPlayer] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
   const [searchResults, setSearchResults] = useState<PlayerSearchResult[]>([]);
 
   useEffect(() => {
+}
     loadDashboardData();
     setupSubscriptions();
     injuryTrackingService.startMonitoring();
 
     return () => {
+}
       injuryTrackingService.stopMonitoring();
     };
   }, []);
 
   const loadDashboardData = async () => {
+}
     try {
+}
 
       setLoading(true);
       const data = await injuryTrackingService.getInjuryDashboard();
@@ -75,50 +84,59 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
       setMonitoredPlayers(injuryTrackingService.getMonitoredPlayers());
     
     } catch (error) {
+}
     } finally {
+}
       setLoading(false);
 
   };
 
   const setupSubscriptions = () => {
+}
     injuryTrackingService.onInjuryAlert((alert: any) => {
+}
       setAlerts(prev => [alert, ...prev.slice(0, 9)]); // Keep last 10 alerts
     });
 
     injuryTrackingService.onInjuryStatusUpdate(() => {
+}
       loadDashboardData(); // Refresh dashboard on updates
     });
   };
 
   const handleAddPlayer = (playerId: string, playerName: string, position: string) => {
+}
     injuryTrackingService.addMonitoredPlayer(
       playerId,
       playerName,
       {}, // Default preferences
-      'MEDIUM',
-      ['WATCHLIST']
+      &apos;MEDIUM&apos;,
+      [&apos;WATCHLIST&apos;]
     );
     setMonitoredPlayers(injuryTrackingService.getMonitoredPlayers());
     setShowAddPlayer(false);
-    setSearchQuery('');
+    setSearchQuery(&apos;&apos;);
     setSearchResults([]);
   };
 
   const handleRemovePlayer = (playerId: string) => {
+}
     injuryTrackingService.removeMonitoredPlayer(playerId);
     setMonitoredPlayers(injuryTrackingService.getMonitoredPlayers());
   };
 
   const handlePlayerSearch = useCallback(async (query: string) => {
+}
     if (query.length < 2) {
+}
       setSearchResults([]);
       return;
 
     // Mock search results - in production, would search player database
     const mockResults: PlayerSearchResult[] = [
-      { playerId: 'search_1', name: 'Test Player 1', position: 'RB', team: 'TB' },
-      { playerId: 'search_2', name: 'Test Player 2', position: 'WR', team: 'KC' },
-      { playerId: 'search_3', name: 'Test Player 3', position: 'QB', team: 'BUF' }
+      { playerId: &apos;search_1&apos;, name: &apos;Test Player 1&apos;, position: &apos;RB&apos;, team: &apos;TB&apos; },
+      { playerId: &apos;search_2&apos;, name: &apos;Test Player 2&apos;, position: &apos;WR&apos;, team: &apos;KC&apos; },
+      { playerId: &apos;search_3&apos;, name: &apos;Test Player 3&apos;, position: &apos;QB&apos;, team: &apos;BUF&apos; }
     ].filter((player: any) => 
       player.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -127,63 +145,75 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
   }, []);
 
   const getInjuryStatusIcon = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return <CheckCircle className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'questionable': return <AlertCircle className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'doubtful': return <AlertTriangle className="h-4 w-4 text-orange-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'out': return <X className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;healthy&apos;: return <CheckCircle className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;questionable&apos;: return <AlertCircle className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;doubtful&apos;: return <AlertTriangle className="h-4 w-4 text-orange-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;out&apos;: return <X className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Activity className="h-4 w-4 text-gray-600 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
   const getInjuryStatusBadgeVariant = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return 'default';
-      case 'questionable': return 'secondary';
-      case 'doubtful': return 'destructive';
-      case 'out': return 'destructive';
-      default: return 'outline';
+}
+      case &apos;healthy&apos;: return &apos;default&apos;;
+      case &apos;questionable&apos;: return &apos;secondary&apos;;
+      case &apos;doubtful&apos;: return &apos;destructive&apos;;
+      case &apos;out&apos;: return &apos;destructive&apos;;
+      default: return &apos;outline&apos;;
 
   };
 
   const getSeverityColor = (severity: string) => {
+}
     switch (severity) {
-      case 'LOW': return 'text-green-600';
-      case 'MEDIUM': return 'text-yellow-600';
-      case 'HIGH': return 'text-orange-600';
-      case 'CRITICAL': return 'text-red-600';
-      default: return 'text-gray-600';
+}
+      case &apos;LOW&apos;: return &apos;text-green-600&apos;;
+      case &apos;MEDIUM&apos;: return &apos;text-yellow-600&apos;;
+      case &apos;HIGH&apos;: return &apos;text-orange-600&apos;;
+      case &apos;CRITICAL&apos;: return &apos;text-red-600&apos;;
+      default: return &apos;text-gray-600&apos;;
 
   };
 
   const getSeverityBorderColor = (severity: string) => {
+}
     switch (severity) {
-      case 'CRITICAL': return 'border-l-red-500';
-      case 'HIGH': return 'border-l-orange-500';
-      case 'MEDIUM': return 'border-l-yellow-500';
-      default: return 'border-l-green-500';
+}
+      case &apos;CRITICAL&apos;: return &apos;border-l-red-500&apos;;
+      case &apos;HIGH&apos;: return &apos;border-l-orange-500&apos;;
+      case &apos;MEDIUM&apos;: return &apos;border-l-yellow-500&apos;;
+      default: return &apos;border-l-green-500&apos;;
 
   };
 
   const getTrendBadgeVariant = (trend: string) => {
+}
     switch (trend) {
-      case 'INCREASING': return 'destructive';
-      case 'DECREASING': return 'default';
-      default: return 'secondary';
+}
+      case &apos;INCREASING&apos;: return &apos;destructive&apos;;
+      case &apos;DECREASING&apos;: return &apos;default&apos;;
+      default: return &apos;secondary&apos;;
 
   };
 
   const formatTimeAgo = (timestamp: string) => {
+}
     const diff = Date.now() - new Date(timestamp).getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     
     if (hours > 0) return `${hours}h ago`;
     if (minutes > 0) return `${minutes}m ago`;
-    return 'Just now';
+    return &apos;Just now&apos;;
   };
 
   if (loading) {
+}
     return (
       <Card className={className}>
         <CardHeader>
@@ -201,6 +231,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
     );
 
   if (!dashboardData) {
+}
     return (
       <Card className={className}>
         <CardHeader>
@@ -226,6 +257,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                 {dashboardData.totalMonitoredPlayers} monitored
               </Badge>
               {dashboardData.activeInjuries > 0 && (
+}
                 <Badge variant="error">
                   {dashboardData.activeInjuries} injured
                 </Badge>
@@ -286,22 +318,25 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
             </Card>
           </div>
 
-          <Tabs
+          <Tabs>
             items={[
-              { id: 'overview', label: 'Overview' },
-              { id: 'monitored', label: 'Monitored Players' },
-              { id: 'alerts', label: 'Alerts' },
-              { id: 'trends', label: 'Trends' }
+}
+              { id: &apos;overview&apos;, label: &apos;Overview&apos; },
+              { id: &apos;monitored&apos;, label: &apos;Monitored Players&apos; },
+              { id: &apos;alerts&apos;, label: &apos;Alerts&apos; },
+              { id: &apos;trends&apos;, label: &apos;Trends&apos; }
             ]}
             activeTab={activeTab}
             onTabChange={setActiveTab}
           />
 
           <div className="mt-6 sm:px-4 md:px-6 lg:px-8">
-            {activeTab === 'overview' && (
+            {activeTab === &apos;overview&apos; && (
+}
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 {/* Critical Updates */}
                 {dashboardData.criticalUpdates.length > 0 && (
+}
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 text-red-600 sm:px-4 md:px-6 lg:px-8">
@@ -312,6 +347,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                     <CardContent>
                       <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {dashboardData.criticalUpdates.map((injury: any) => (
+}
                           <div key={injury.id} className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                               {getInjuryStatusIcon(injury?.status)}
@@ -344,6 +380,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                   <CardContent>
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                       {dashboardData.replacementRecommendations.map((player: any) => (
+}
                         <div key={player.playerId} className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200 sm:px-4 md:px-6 lg:px-8">
                           <div>
                             <p className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</p>
@@ -370,6 +407,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                   <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {Object.entries(dashboardData.weeklyImpact.positionBreakdown).map(([position, count]) => (
+}
                         <div key={position} className="text-center p-3 bg-gray-50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <p className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">{count.toFixed(0)}</p>
                           <p className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{position} affected</p>
@@ -381,7 +419,8 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
               </div>
             )}
 
-            {activeTab === 'monitored' && (
+            {activeTab === &apos;monitored&apos; && (
+}
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                   <h3 className="text-lg font-semibold sm:px-4 md:px-6 lg:px-8">Monitored Players ({monitoredPlayers.length})</h3>
@@ -395,6 +434,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
 
                 {/* Add Player Modal */}
                 {showAddPlayer && (
+}
                   <Card className="border-blue-200 bg-blue-50 sm:px-4 md:px-6 lg:px-8">
                     <CardHeader>
                       <CardTitle className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -416,6 +456,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                           placeholder="Search for players..."
                           value={searchQuery}
                           onChange={(e: any) => {
+}
                             setSearchQuery(e.target.value);
                             handlePlayerSearch(e.target.value);
                           }}
@@ -423,8 +464,10 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                         />
                         
                         {searchResults.length > 0 && (
+}
                           <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {searchResults.map((player: any) => (
+}
                               <button
                                 key={player.playerId}
                                 type="button"
@@ -447,6 +490,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                 {/* Monitored Players List */}
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                   {monitoredPlayers.map((player: any) => {
+}
                     const status = injuryTrackingService.getPlayerInjuryStatus(player.playerId);
                     return (
                       <Card key={player.playerId}>
@@ -460,11 +504,13 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                                   Priority: {player.priority} • Added: {new Date(player.addedAt).toLocaleDateString()}
                                 </p>
                                 {status && (
+}
                                   <p className="text-sm sm:px-4 md:px-6 lg:px-8">
                                     Status: <Badge variant={getInjuryStatusBadgeVariant(status?.status)}>
                                       {status?.status}
                                     </Badge>
-                                    {status?.injuryType !== 'None' && (
+                                    {status?.injuryType !== &apos;None&apos; && (
+}
                                       <span className="ml-2 text-gray-600 sm:px-4 md:px-6 lg:px-8">({status?.injuryType})</span>
                                     )}
                                   </p>
@@ -492,6 +538,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                 </div>
 
                 {monitoredPlayers.length === 0 && (
+}
                   <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                     <Users className="h-12 w-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />
                     <p className="text-gray-600 mb-4 sm:px-4 md:px-6 lg:px-8">No players being monitored</p>
@@ -505,13 +552,16 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
               </div>
             )}
 
-            {activeTab === 'alerts' && (
+            {activeTab === &apos;alerts&apos; && (
+}
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                 <h3 className="text-lg font-semibold sm:px-4 md:px-6 lg:px-8">Recent Alerts</h3>
                 
                 {alerts.length > 0 ? (
+}
                   <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {alerts.map((alert: any) => {
+}
                       const borderColor = getSeverityBorderColor(alert.severity);
                       return (
                         <Card key={alert.id} className={`border-l-4 ${borderColor}`}>
@@ -520,7 +570,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                               <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
                                   <span className={`font-medium ${getSeverityColor(alert.severity)}`}>
-                                    {alert.alertType.replace('_', ' ')}
+                                    {alert.alertType.replace(&apos;_&apos;, &apos; &apos;)}
                                   </span>
                                   <Badge variant="outline">{alert.severity}</Badge>
                                 </div>
@@ -528,10 +578,12 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                                 <p className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{alert.team}</p>
                                 
                                 {alert.fantasyActions.length > 0 && (
+}
                                   <div className="mt-3 sm:px-4 md:px-6 lg:px-8">
                                     <p className="text-sm font-medium text-gray-700 mb-1 sm:px-4 md:px-6 lg:px-8">Recommended Actions:</p>
                                     <ul className="text-sm text-gray-600 space-y-1 sm:px-4 md:px-6 lg:px-8">
                                       {alert.fantasyActions.map((action: any) => (
+}
                                         <li key={action} className="flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
                                           <span className="text-blue-600 sm:px-4 md:px-6 lg:px-8">•</span>
                                           {action}
@@ -544,6 +596,7 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                               <div className="text-right text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                 <p>{formatTimeAgo(alert.timestamp)}</p>
                                 {alert.actionRequired && (
+}
                                   <Badge variant="error" className="mt-1 sm:px-4 md:px-6 lg:px-8">Action Required</Badge>
                                 )}
                               </div>
@@ -562,7 +615,8 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
               </div>
             )}
 
-            {activeTab === 'trends' && (
+            {activeTab === &apos;trends&apos; && (
+}
               <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                 <Card>
                   <CardHeader>
@@ -574,14 +628,15 @@ const InjuryDashboard: React.FC<InjuryDashboardProps> = ({ className = ''  }: an
                   <CardContent>
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                       {dashboardData?.injuryTrends.map((trend: any) => {
+}
                         const badgeVariant = getTrendBadgeVariant(trend.trend);
                         return (
                           <div key={trend.position} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                                {trend.trend === 'INCREASING' && <TrendingUp className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
-                                {trend.trend === 'DECREASING' && <TrendingDown className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
-                                {trend.trend === 'STABLE' && <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
+                                {trend.trend === &apos;INCREASING&apos; && <TrendingUp className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />}
+                                {trend.trend === &apos;DECREASING&apos; && <TrendingDown className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />}
+                                {trend.trend === &apos;STABLE&apos; && <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />}
                                 <span className="font-medium sm:px-4 md:px-6 lg:px-8">{trend.position}</span>
                               </div>
                               <Badge variant={badgeVariant}>

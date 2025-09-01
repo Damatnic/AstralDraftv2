@@ -4,12 +4,13 @@
  */
 
 export interface SeasonContest {
+}
   id: string;
   name: string;
   description: string;
   season: number;
-  status: 'UPCOMING' | 'ACTIVE' | 'COMPLETED';
-  contestType: 'WEEKLY_PREDICTIONS' | 'PLAYOFF_BRACKET' | 'SEASON_AWARDS' | 'MILESTONE_PREDICTIONS';
+  status: &apos;UPCOMING&apos; | &apos;ACTIVE&apos; | &apos;COMPLETED&apos;;
+  contestType: &apos;WEEKLY_PREDICTIONS&apos; | &apos;PLAYOFF_BRACKET&apos; | &apos;SEASON_AWARDS&apos; | &apos;MILESTONE_PREDICTIONS&apos;;
   startDate: Date;
   endDate: Date;
   entryFee?: number;
@@ -26,6 +27,7 @@ export interface SeasonContest {
 }
 
 export interface ContestParticipant {
+}
   userId: string;
   userName: string;
   avatar: string;
@@ -41,15 +43,17 @@ export interface ContestParticipant {
 }
 
 export interface ContestRules {
-  scoringSystem: 'POINTS' | 'ACCURACY' | 'CONFIDENCE' | 'HYBRID';
+}
+  scoringSystem: &apos;POINTS&apos; | &apos;ACCURACY&apos; | &apos;CONFIDENCE&apos; | &apos;HYBRID&apos;;
   allowLateEntries: boolean;
   requireAllPredictions: boolean;
-  tiebreaker: 'TOTAL_POINTS' | 'WEEKLY_WINS' | 'RECENT_PERFORMANCE' | 'HEAD_TO_HEAD';
+  tiebreaker: &apos;TOTAL_POINTS&apos; | &apos;WEEKLY_WINS&apos; | &apos;RECENT_PERFORMANCE&apos; | &apos;HEAD_TO_HEAD&apos;;
   bonusCategories: BonusCategory[];
   penalties: PenaltyRule[];
 }
 
 export interface ContestScoring {
+}
   correctPrediction: number;
   partialCredit: number;
   confidenceMultiplier: boolean;
@@ -61,6 +65,7 @@ export interface ContestScoring {
 }
 
 export interface ContestLeaderboard {
+}
   rankings: ContestRanking[];
   weeklyWinners: { [week: number]: string };
   streakLeaders: StreakLeader[];
@@ -70,27 +75,30 @@ export interface ContestLeaderboard {
 }
 
 export interface WeeklyContest {
+}
   week: number;
   theme: string;
   predictions: PredictionCategory[];
   bonusQuestions: BonusQuestion[];
   deadline: Date;
-  status: 'UPCOMING' | 'OPEN' | 'LOCKED' | 'COMPLETED';
+  status: &apos;UPCOMING&apos; | &apos;OPEN&apos; | &apos;LOCKED&apos; | &apos;COMPLETED&apos;;
   results?: WeeklyResults;
 }
 
 export interface PredictionCategory {
+}
   id: string;
   name: string;
-  type: 'GAME_OUTCOME' | 'PLAYER_PERFORMANCE' | 'TEAM_STATS' | 'PROP_BET';
+  type: &apos;GAME_OUTCOME&apos; | &apos;PLAYER_PERFORMANCE&apos; | &apos;TEAM_STATS&apos; | &apos;PROP_BET&apos;;
   question: string;
   options: PredictionOption[];
   points: number;
   confidenceEnabled: boolean;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
+  difficulty: &apos;EASY&apos; | &apos;MEDIUM&apos; | &apos;HARD&apos; | &apos;EXPERT&apos;;
 }
 
 export interface PredictionOption {
+}
   id: string;
   label: string;
   odds?: number;
@@ -98,6 +106,7 @@ export interface PredictionOption {
 }
 
 export interface WeeklyPrediction {
+}
   week: number;
   predictions: { [categoryId: string]: PredictionSubmission };
   submittedAt: Date;
@@ -107,6 +116,7 @@ export interface WeeklyPrediction {
 }
 
 export interface PredictionSubmission {
+}
   categoryId: string;
   selectedOptionId: string;
   confidence?: number; // 1-5 scale
@@ -116,25 +126,28 @@ export interface PredictionSubmission {
 }
 
 export interface PlayoffBracket {
+}
   id: string;
   name: string;
   rounds: BracketRound[];
   seedingComplete: boolean;
   currentRound: number;
-  status: 'SEEDING' | 'ROUND_1' | 'DIVISIONAL' | 'CONFERENCE' | 'SUPER_BOWL' | 'COMPLETED';
+  status: &apos;SEEDING&apos; | &apos;ROUND_1&apos; | &apos;DIVISIONAL&apos; | &apos;CONFERENCE&apos; | &apos;SUPER_BOWL&apos; | &apos;COMPLETED&apos;;
   scoringRules: BracketScoring;
 }
 
 export interface BracketRound {
+}
   round: number;
   name: string;
   games: BracketGame[];
   pointValue: number;
   deadline: Date;
-  status: 'UPCOMING' | 'OPEN' | 'LOCKED' | 'COMPLETED';
+  status: &apos;UPCOMING&apos; | &apos;OPEN&apos; | &apos;LOCKED&apos; | &apos;COMPLETED&apos;;
 }
 
 export interface BracketGame {
+}
   id: string;
   round: number;
   team1: string;
@@ -147,6 +160,7 @@ export interface BracketGame {
 }
 
 export interface BracketPick {
+}
   gameId: string;
   predictedWinner: string;
   confidence?: number;
@@ -156,13 +170,15 @@ export interface BracketPick {
 }
 
 export interface AwardsPredictions {
+}
   categories: AwardCategory[];
   deadline: Date;
-  status: 'OPEN' | 'LOCKED' | 'COMPLETED';
+  status: &apos;OPEN&apos; | &apos;LOCKED&apos; | &apos;COMPLETED&apos;;
   results?: { [categoryId: string]: string };
 }
 
 export interface AwardCategory {
+}
   id: string;
   name: string;
   description: string;
@@ -171,6 +187,7 @@ export interface AwardCategory {
 }
 
 export interface AwardNominee {
+}
   id: string;
   name: string;
   team: string;
@@ -179,6 +196,7 @@ export interface AwardNominee {
 }
 
 export interface AwardPick {
+}
   categoryId: string;
   nomineeId: string;
   confidence?: number;
@@ -188,21 +206,24 @@ export interface AwardPick {
 }
 
 export interface MilestonePredictions {
+}
   categories: MilestoneCategory[];
-  status: 'OPEN' | 'LOCKED' | 'COMPLETED';
+  status: &apos;OPEN&apos; | &apos;LOCKED&apos; | &apos;COMPLETED&apos;;
 }
 
 export interface MilestoneCategory {
+}
   id: string;
   name: string;
   description: string;
-  type: 'OVER_UNDER' | 'EXACT_NUMBER' | 'FIRST_TO_ACHIEVE' | 'BINARY';
+  type: &apos;OVER_UNDER&apos; | &apos;EXACT_NUMBER&apos; | &apos;FIRST_TO_ACHIEVE&apos; | &apos;BINARY&apos;;
   target: number | string;
   pointValue: number;
   deadline: Date;
 }
 
 export interface MilestonePick {
+}
   categoryId: string;
   prediction: number | string | boolean;
   confidence?: number;
@@ -212,16 +233,18 @@ export interface MilestonePick {
 }
 
 export interface BonusQuestion {
+}
   id: string;
   question: string;
-  type: 'MULTIPLE_CHOICE' | 'NUMERIC' | 'TRUE_FALSE';
+  type: &apos;MULTIPLE_CHOICE&apos; | &apos;NUMERIC&apos; | &apos;TRUE_FALSE&apos;;
   options?: string[];
   correctAnswer?: string | number | boolean;
   pointValue: number;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: &apos;EASY&apos; | &apos;MEDIUM&apos; | &apos;HARD&apos;;
 }
 
 export interface BonusCategory {
+}
   id: string;
   name: string;
   description: string;
@@ -230,6 +253,7 @@ export interface BonusCategory {
 }
 
 export interface PenaltyRule {
+}
   id: string;
   name: string;
   description: string;
@@ -238,6 +262,7 @@ export interface PenaltyRule {
 }
 
 export interface StreakBonus {
+}
   minStreak: number;
   bonusPerCorrect: number;
   maxBonus: number;
@@ -245,6 +270,7 @@ export interface StreakBonus {
 }
 
 export interface WeeklyBonus {
+}
   week: number;
   name: string;
   description: string;
@@ -253,6 +279,7 @@ export interface WeeklyBonus {
 }
 
 export interface ContestRanking {
+}
   rank: number;
   userId: string;
   userName: string;
@@ -260,20 +287,22 @@ export interface ContestRanking {
   weeklyAverage: number;
   accuracy: number;
   streak: number;
-  trend: 'UP' | 'DOWN' | 'STABLE';
+  trend: &apos;UP&apos; | &apos;DOWN&apos; | &apos;STABLE&apos;;
   rankChange: number;
   badges: ContestBadge[];
 }
 
 export interface StreakLeader {
+}
   userId: string;
   userName: string;
   currentStreak: number;
   longestStreak: number;
-  streakType: 'CORRECT_PREDICTIONS' | 'WEEKLY_WINS' | 'TOP_10_FINISHES';
+  streakType: &apos;CORRECT_PREDICTIONS&apos; | &apos;WEEKLY_WINS&apos; | &apos;TOP_10_FINISHES&apos;;
 }
 
 export interface RankingChange {
+}
   userId: string;
   userName: string;
   previousRank: number;
@@ -283,25 +312,28 @@ export interface RankingChange {
 }
 
 export interface ProjectedFinish {
+}
   userId: string;
   userName: string;
   currentRank: number;
   projectedRank: number;
   probability: number;
-  trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
+  trend: &apos;IMPROVING&apos; | &apos;DECLINING&apos; | &apos;STABLE&apos;;
 }
 
 export interface ContestBadge {
+}
   id: string;
   name: string;
   description: string;
   icon: string;
-  rarity: 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+  rarity: &apos;COMMON&apos; | &apos;RARE&apos; | &apos;EPIC&apos; | &apos;LEGENDARY&apos;;
   earnedDate: Date;
   criteria: string;
 }
 
 export interface WeeklyResults {
+}
   week: number;
   correctAnswers: { [categoryId: string]: string };
   topPerformers: string[];
@@ -312,6 +344,7 @@ export interface WeeklyResults {
 }
 
 export interface BracketScoring {
+}
   wildCardRound: number;
   divisionalRound: number;
   conferenceChampionship: number;
@@ -321,17 +354,21 @@ export interface BracketScoring {
 }
 
 class SeasonContestService {
+}
   private readonly contests: Map<string, SeasonContest> = new Map();
   private readonly userParticipation: Map<string, string[]> = new Map(); // userId -> contestIds
 
   /**
    * Create a new season contest
    */
-  createContest(contestData: Omit<SeasonContest, 'id' | 'participants' | 'leaderboard'>): SeasonContest {
+  createContest(contestData: Omit<SeasonContest, &apos;id&apos; | &apos;participants&apos; | &apos;leaderboard&apos;>): SeasonContest {
+}
     const contest: SeasonContest = {
+}
       id: this.generateContestId(),
       participants: [],
       leaderboard: {
+}
         rankings: [],
         weeklyWinners: {},
         streakLeaders: [],
@@ -350,21 +387,25 @@ class SeasonContestService {
    * Join a contest
    */
   joinContest(contestId: string, userId: string, userName: string, avatar: string): boolean {
+}
     const contest = this.contests.get(contestId);
     if (!contest) return false;
 
     // Check if contest is full
     if (contest.maxParticipants && contest.participants.length >= contest.maxParticipants) {
+}
       return false;
     }
 
     // Check if user already joined
     if (contest.participants.some((p: any) => p.userId === userId)) {
+}
       return false;
     }
 
     // Add participant
     const participant: ContestParticipant = {
+}
       userId,
       userName,
       avatar,
@@ -396,6 +437,7 @@ class SeasonContestService {
     week: number, 
     predictions: { [categoryId: string]: PredictionSubmission }
   ): boolean {
+}
     const contest = this.contests.get(contestId);
     if (!contest) return false;
 
@@ -403,10 +445,11 @@ class SeasonContestService {
     if (!participant) return false;
 
     const weeklyContest = contest.weeks?.find((w: any) => w.week === week);
-    if (!weeklyContest || weeklyContest.status !== 'OPEN') return false;
+    if (!weeklyContest || weeklyContest.status !== &apos;OPEN&apos;) return false;
 
     // Validate predictions
     for (const prediction of Object.values(predictions)) {
+}
       const category = weeklyContest.predictions.find((p: any) => p.id === prediction.categoryId);
       if (!category) return false;
       
@@ -416,6 +459,7 @@ class SeasonContestService {
 
     // Store predictions
     participant.predictions[week] = {
+}
       week,
       predictions,
       submittedAt: new Date()
@@ -428,6 +472,7 @@ class SeasonContestService {
    * Submit bracket predictions
    */
   submitBracketPredictions(contestId: string, userId: string, picks: BracketPick[]): boolean {
+}
     const contest = this.contests.get(contestId);
     if (!contest?.bracket) return false;
 
@@ -442,6 +487,7 @@ class SeasonContestService {
    * Submit award predictions
    */
   submitAwardPredictions(contestId: string, userId: string, picks: AwardPick[]): boolean {
+}
     const contest = this.contests.get(contestId);
     if (!contest?.awards) return false;
 
@@ -460,14 +506,16 @@ class SeasonContestService {
     week: number, 
     results: { [categoryId: string]: string }
   ): void {
+}
     const contest = this.contests.get(contestId);
     if (!contest) return;
 
     const weeklyContest = contest.weeks?.find((w: any) => w.week === week);
     if (!weeklyContest) return;
 
-    // Score each participant's predictions
+    // Score each participant&apos;s predictions
     for (const participant of contest.participants) {
+}
       const weeklyPrediction = participant.predictions[week];
       if (!weeklyPrediction) continue;
 
@@ -477,6 +525,7 @@ class SeasonContestService {
 
       // Score each prediction
       for (const [categoryId, prediction] of Object.entries(weeklyPrediction.predictions)) {
+}
         const category = weeklyContest.predictions.find((p: any) => p.id === categoryId);
         if (!category) continue;
 
@@ -486,10 +535,12 @@ class SeasonContestService {
         prediction.isCorrect = isCorrect;
         
         if (isCorrect) {
+}
           let points = category.points;
           
           // Apply confidence multiplier
           if (category.confidenceEnabled && prediction.confidence && contest.scoring.confidenceMultiplier) {
+}
             points *= prediction.confidence;
           }
           
@@ -502,8 +553,10 @@ class SeasonContestService {
           // correctCount++;
           currentStreak++;
         } else {
+}
           prediction.pointsEarned = 0;
           if (contest.scoring.streakBonus.resetOnIncorrect) {
+}
             currentStreak = 0;
           }
         }
@@ -511,6 +564,7 @@ class SeasonContestService {
 
       // Apply streak bonus
       if (currentStreak >= contest.scoring.streakBonus.minStreak) {
+}
         const streakBonus = Math.min(
           currentStreak * contest.scoring.streakBonus.bonusPerCorrect,
           contest.scoring.streakBonus.maxBonus
@@ -521,7 +575,9 @@ class SeasonContestService {
       // Apply weekly bonuses
       const weeklyBonuses = contest.scoring.weeklyBonuses.filter((b: any) => b.week === week);
       for (const bonus of weeklyBonuses) {
+}
         if (this.evaluateBonusCondition(bonus.condition, participant, weeklyPrediction)) {
+}
           weeklyScore += bonus.bonus;
         }
       }
@@ -533,8 +589,9 @@ class SeasonContestService {
     }
 
     // Mark weekly contest as completed
-    weeklyContest.status = 'COMPLETED';
+    weeklyContest.status = &apos;COMPLETED&apos;;
     weeklyContest.results = {
+}
       week,
       correctAnswers: results,
       topPerformers: this.getWeeklyTopPerformers(contest, week),
@@ -552,13 +609,15 @@ class SeasonContestService {
    * Get contest by ID
    */
   getContest(contestId: string): SeasonContest | undefined {
+}
     return this.contests.get(contestId);
   }
 
   /**
-   * Get user's contests
+   * Get user&apos;s contests
    */
   getUserContests(userId: string): SeasonContest[] {
+}
     const contestIds = this.userParticipation.get(userId) || [];
     return contestIds.map((id: any) => this.contests.get(id)).filter((contest): contest is SeasonContest => contest !== undefined);
   }
@@ -567,13 +626,15 @@ class SeasonContestService {
    * Get active contests
    */
   getActiveContests(): SeasonContest[] {
-    return Array.from(this.contests.values()).filter((contest: any) => contest.status === 'ACTIVE');
+}
+    return Array.from(this.contests.values()).filter((contest: any) => contest.status === &apos;ACTIVE&apos;);
   }
 
   /**
    * Get leaderboard for contest
    */
   getLeaderboard(contestId: string): ContestLeaderboard | undefined {
+}
     const contest = this.contests.get(contestId);
     return contest?.leaderboard;
   }
@@ -582,13 +643,15 @@ class SeasonContestService {
    * Generate weekly contest template
    */
   generateWeeklyContest(week: number, theme: string): WeeklyContest {
+}
     return {
+}
       week,
       theme,
       predictions: this.generateWeeklyPredictions(week),
       bonusQuestions: this.generateBonusQuestions(week),
       deadline: this.getWeekDeadline(week),
-      status: 'UPCOMING'
+      status: &apos;UPCOMING&apos;
     };
   }
 
@@ -596,14 +659,17 @@ class SeasonContestService {
    * Create playoff bracket template
    */
   createPlayoffBracket(): PlayoffBracket {
+}
     return {
+}
       id: this.generateId(),
-      name: 'NFL Playoff Bracket',
+      name: &apos;NFL Playoff Bracket&apos;,
       rounds: this.generateBracketRounds(),
       seedingComplete: false,
       currentRound: 1,
-      status: 'SEEDING',
+      status: &apos;SEEDING&apos;,
       scoringRules: {
+}
         wildCardRound: 10,
         divisionalRound: 15,
         conferenceChampionship: 25,
@@ -615,6 +681,7 @@ class SeasonContestService {
   }
 
   private updateLeaderboard(contestId: string): void {
+}
     const contest = this.contests.get(contestId);
     if (!contest) return;
 
@@ -623,6 +690,7 @@ class SeasonContestService {
 
     // Update rankings
     contest.leaderboard.rankings = sortedParticipants.map((participant, index) => {
+}
       const previousRank = participant.currentRank;
       const newRank = index + 1;
       const rankChange = previousRank - newRank;
@@ -630,6 +698,7 @@ class SeasonContestService {
       participant.currentRank = newRank;
 
       return {
+}
         rank: newRank,
         userId: participant.userId,
         userName: participant.userName,
@@ -654,14 +723,17 @@ class SeasonContestService {
   }
 
   private generateContestId(): string {
+}
     return `contest_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   private generateId(): string {
+}
     return `${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 
   private getCurrentWeek(): number {
+}
     // Calculate current NFL week based on season start date
     const now = new Date();
     const seasonStart = new Date(now.getFullYear(), 8, 8); // Approximate NFL season start (September 8)
@@ -673,11 +745,13 @@ class SeasonContestService {
   }
 
   private getCurrentStreak(participant: ContestParticipant, week?: number): number {
+}
     // Calculate current streak of correct predictions
     const currentWeek = week || this.getCurrentWeek();
     let streak = 0;
     
     for (let w = currentWeek; w >= 1; w--) {
+}
       const weeklyPrediction = participant.predictions[w];
       if (!weeklyPrediction) break;
       
@@ -687,8 +761,10 @@ class SeasonContestService {
       
       const allCorrect = predictions.every((p: any) => p.isCorrect);
       if (allCorrect) {
+}
         streak++;
       } else {
+}
         break;
       }
     }
@@ -697,33 +773,38 @@ class SeasonContestService {
   }
 
   private evaluateBonusCondition(condition: string, participant: ContestParticipant, prediction: WeeklyPrediction): boolean {
+}
     // Evaluate bonus conditions based on prediction patterns and performance
     switch (condition.toLowerCase()) {
-      case 'perfect_week':
+}
+      case &apos;perfect_week&apos;:
         // All predictions correct for the week
         return Object.values(prediction.predictions).every((p: any) => p.isCorrect);
       
-      case 'high_confidence':
+      case &apos;high_confidence&apos;:
         // All predictions made with high confidence (80%+)
         return Object.values(prediction.predictions).every((p: any) => (p.confidence || 0) >= 80);
       
-      case 'contrarian_pick': {
+      case &apos;contrarian_pick&apos;: {
+}
         // Made prediction against majority - simplified check for now
         return Object.values(prediction.predictions).some((p: any) => p.confidence != null && p.confidence < 60);
       }
       
-      case 'streak_active':
+      case &apos;streak_active&apos;:
         // Currently on a streak of 3+ correct weeks
         return this.getCurrentStreak(participant) >= 3;
       
-      case 'upset_special': {
+      case &apos;upset_special&apos;: {
+}
         // Correctly predicted an upset (low confidence prediction that was correct)
         return Object.values(prediction.predictions).some((p: any) => 
           p.isCorrect && p.confidence != null && p.confidence < 50
         );
       }
       
-      case 'early_bird': {
+      case &apos;early_bird&apos;: {
+}
         // Made prediction before deadline
         const deadline = this.getWeekDeadline(prediction.week);
         return prediction.submittedAt < deadline;
@@ -735,6 +816,7 @@ class SeasonContestService {
   }
 
   private getWeeklyTopPerformers(contest: SeasonContest, week: number): string[] {
+}
     return contest.participants
       .filter((p: any) => p.weeklyScores[week] !== undefined)
       .sort((a, b) => (b.weeklyScores[week] || 0) - (a.weeklyScores[week] || 0))
@@ -743,7 +825,9 @@ class SeasonContestService {
   }
 
   private calculateWeeklyAverage(contest: SeasonContest, week?: number, userId?: string): number {
+}
     if (userId) {
+}
       const participant = contest.participants.find((p: any) => p.userId === userId);
       if (!participant) return 0;
       
@@ -752,6 +836,7 @@ class SeasonContestService {
     }
 
     if (week) {
+}
       const weeklyScores = contest.participants
         .map((p: any) => p.weeklyScores[week])
         .filter((score): score is number => score !== undefined);
@@ -763,10 +848,12 @@ class SeasonContestService {
   }
 
   private calculateActualDifficulty(weeklyContest: WeeklyContest, results: { [categoryId: string]: string }): { [categoryId: string]: number } {
+}
     // Calculate actual difficulty based on prediction accuracy across all participants
     const difficulty: { [categoryId: string]: number } = {};
     
     for (const category of weeklyContest.predictions) {
+}
       const correctAnswerIndex = results[category.id];
       if (!correctAnswerIndex) continue;
       
@@ -775,16 +862,17 @@ class SeasonContestService {
       // For now, use category difficulty as baseline
       let baseDifficulty: number;
       switch (category.difficulty) {
-        case 'EASY':
+}
+        case &apos;EASY&apos;:
           baseDifficulty = 0.8;
           break;
-        case 'MEDIUM':
+        case &apos;MEDIUM&apos;:
           baseDifficulty = 0.5;
           break;
-        case 'HARD':
+        case &apos;HARD&apos;:
           baseDifficulty = 0.3;
           break;
-        case 'EXPERT':
+        case &apos;EXPERT&apos;:
           baseDifficulty = 0.1;
           break;
         default:
@@ -802,18 +890,21 @@ class SeasonContestService {
   }
 
   private identifySurprises(weeklyContest: WeeklyContest, results: { [categoryId: string]: string }): string[] {
+}
     // Identify surprising results based on predicted vs actual difficulty
     const surprises: string[] = [];
     const actualDifficulty = this.calculateActualDifficulty(weeklyContest, results);
     
     for (const category of weeklyContest.predictions) {
+}
       const expectedDifficulty = this.getDifficultyPercentage(category.difficulty);
       const actualDiff = actualDifficulty[category.id] || 50;
       
       // If actual difficulty varies significantly from expected (>30% difference)
       const diffVariance = Math.abs(expectedDifficulty - actualDiff);
       if (diffVariance > 30) {
-        const surpriseType = actualDiff > expectedDifficulty ? 'easier' : 'harder';
+}
+        const surpriseType = actualDiff > expectedDifficulty ? &apos;easier&apos; : &apos;harder&apos;;
         surprises.push(`${category.name} was much ${surpriseType} than expected`);
       }
     }
@@ -821,17 +912,20 @@ class SeasonContestService {
     return surprises;
   }
 
-  private getDifficultyPercentage(difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT'): number {
+  private getDifficultyPercentage(difficulty: &apos;EASY&apos; | &apos;MEDIUM&apos; | &apos;HARD&apos; | &apos;EXPERT&apos;): number {
+}
     switch (difficulty) {
-      case 'EASY': return 80;
-      case 'MEDIUM': return 50;
-      case 'HARD': return 30;
-      case 'EXPERT': return 10;
+}
+      case &apos;EASY&apos;: return 80;
+      case &apos;MEDIUM&apos;: return 50;
+      case &apos;HARD&apos;: return 30;
+      case &apos;EXPERT&apos;: return 10;
       default: return 50;
     }
   }
 
   private generateWeeklyAnalysis(weeklyContest: WeeklyContest, results: { [categoryId: string]: string }): string {
+}
     // Generate comprehensive weekly analysis
     const surprises = this.identifySurprises(weeklyContest, results);
     const totalQuestions = weeklyContest.predictions.length;
@@ -844,22 +938,27 @@ class SeasonContestService {
     const avgDifficulty = Object.values(difficulties).reduce((a, b) => a + b, 0) / Object.values(difficulties).length;
     
     if (avgDifficulty > 70) {
+}
       analysis += "This was an easier week with several predictable outcomes. ";
     } else if (avgDifficulty < 40) {
+}
       analysis += "This was a challenging week with many upsets and surprising results. ";
     } else {
+}
       analysis += "This week provided a balanced mix of predictable and challenging predictions. ";
     }
     
     // Surprise analysis
     if (surprises.length > 0) {
-      const topSurprises = surprises.slice(0, 3).map((s: any) => '• ' + s).join('\n');
-      analysis += '\n\nKey surprises:\n' + topSurprises;
+}
+      const topSurprises = surprises.slice(0, 3).map((s: any) => &apos;• &apos; + s).join(&apos;\n&apos;);
+      analysis += &apos;\n\nKey surprises:\n&apos; + topSurprises;
     }
     
     // Participation analysis
     analysis += `\n\nContest featured ${totalQuestions} main predictions`;
     if (bonusQuestions > 0) {
+}
       analysis += ` and ${bonusQuestions} bonus questions`;
     }
     analysis += `.`;
@@ -871,17 +970,22 @@ class SeasonContestService {
   }
 
   private awardWeeklyBadges(_contestId: string, _week: number): void {
+}
     // Implementation for awarding weekly badges
   }
 
   private calculateAccuracy(participant: ContestParticipant): number {
+}
     let totalPredictions = 0;
     let correctPredictions = 0;
 
     for (const weeklyPrediction of Object.values(participant.predictions)) {
+}
       for (const prediction of Object.values(weeklyPrediction.predictions)) {
+}
         totalPredictions++;
         if (prediction.isCorrect) {
+}
           correctPredictions++;
         }
       }
@@ -890,20 +994,23 @@ class SeasonContestService {
     return totalPredictions > 0 ? (correctPredictions / totalPredictions) * 100 : 0;
   }
 
-  private determineTrend(participant: ContestParticipant): 'UP' | 'DOWN' | 'STABLE' {
+  private determineTrend(participant: ContestParticipant): &apos;UP&apos; | &apos;DOWN&apos; | &apos;STABLE&apos; {
+}
     // Determine trend based on recent performance (last 3 weeks)
     const currentWeek = this.getCurrentWeek();
     const recentWeeks = Math.min(3, currentWeek);
     const scores: number[] = [];
     
     for (let i = currentWeek - recentWeeks + 1; i <= currentWeek; i++) {
+}
       const weeklyScore = participant.weeklyScores[i];
       if (weeklyScore !== undefined) {
+}
         scores.push(weeklyScore);
       }
     }
     
-    if (scores.length < 2) return 'STABLE';
+    if (scores.length < 2) return &apos;STABLE&apos;;
     
     // Calculate trend based on linear regression slope
     const n = scores.length;
@@ -914,17 +1021,19 @@ class SeasonContestService {
     
     const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
     
-    if (slope > 0.5) return 'UP';
-    if (slope < -0.5) return 'DOWN';
-    return 'STABLE';
+    if (slope > 0.5) return &apos;UP&apos;;
+    if (slope < -0.5) return &apos;DOWN&apos;;
+    return &apos;STABLE&apos;;
   }
 
   private calculateStreakLeaders(contest: SeasonContest): StreakLeader[] {
+}
     // Calculate streak leaders from participants
     return contest.participants
       .map((participant: any) => ({
+}
         userId: participant.userId,
-        userName: participant.userName || 'Unknown User',
+        userName: participant.userName || &apos;Unknown User&apos;,
         currentStreak: this.getCurrentStreak(participant),
         longestStreak: this.getLongestStreak(participant),
         streakType: this.getStreakType(participant)
@@ -935,6 +1044,7 @@ class SeasonContestService {
   }
 
   private getLongestStreak(participant: ContestParticipant): number {
+}
     // Calculate longest streak for participant across all weeks
     let longestStreak = 0;
     let currentStreak = 0;
@@ -944,6 +1054,7 @@ class SeasonContestService {
       .sort((a, b) => a - b);
     
     for (const week of weeks) {
+}
       const weeklyPrediction = participant.predictions[week];
       if (!weeklyPrediction) continue;
       
@@ -952,9 +1063,11 @@ class SeasonContestService {
       
       const allCorrect = predictions.every((p: any) => p.isCorrect);
       if (allCorrect) {
+}
         currentStreak++;
         longestStreak = Math.max(longestStreak, currentStreak);
       } else {
+}
         currentStreak = 0;
       }
     }
@@ -962,12 +1075,14 @@ class SeasonContestService {
     return longestStreak;
   }
 
-  private getStreakType(_participant: ContestParticipant): 'WEEKLY_WINS' | 'CORRECT_PREDICTIONS' | 'TOP_10_FINISHES' {
+  private getStreakType(_participant: ContestParticipant): &apos;WEEKLY_WINS&apos; | &apos;CORRECT_PREDICTIONS&apos; | &apos;TOP_10_FINISHES&apos; {
+}
     // For now, default to correct predictions streak
-    return 'CORRECT_PREDICTIONS';
+    return &apos;CORRECT_PREDICTIONS&apos;;
   }
 
   private calculateRecentMovers(contest: SeasonContest): RankingChange[] {
+}
     // Calculate recent movers based on ranking changes over last 2 weeks
     const currentWeek = this.getCurrentWeek();
     const currentRankings = this.calculateCurrentRankings(contest);
@@ -979,19 +1094,22 @@ class SeasonContestService {
     const rankingChanges: RankingChange[] = [];
     
     for (const currentRanking of currentRankings) {
+}
       const previousRanking = previousRankings.find((p: any) => p.userId === currentRanking.userId);
       if (!previousRanking) continue;
       
       const change = previousRanking.rank - currentRanking.rank;
       
       if (Math.abs(change) >= 3) { // Significant movement
+}
         rankingChanges.push({
+}
           userId: currentRanking.userId,
           userName: currentRanking.userName,
           previousRank: previousRanking.rank,
           currentRank: currentRanking.rank,
           change,
-          reason: change > 0 ? 'Strong recent performance' : 'Recent struggles'
+          reason: change > 0 ? &apos;Strong recent performance&apos; : &apos;Recent struggles&apos;
         });
       }
     }
@@ -1001,8 +1119,10 @@ class SeasonContestService {
   }
 
   private calculateCurrentRankings(contest: SeasonContest): ContestRanking[] {
+}
     return contest.participants
       .map((participant: any) => {
+}
         const totalScore = Object.values(participant.weeklyScores).reduce((sum, score) => sum + score, 0);
         const weeklyAverage = this.calculateWeeklyAverage(contest, undefined, participant.userId);
         const accuracy = this.calculateAccuracy(participant);
@@ -1010,9 +1130,10 @@ class SeasonContestService {
         const trend = this.determineTrend(participant);
         
         return {
+}
           rank: 0, // Will be set after sorting
           userId: participant.userId,
-          userName: participant.userName || 'Unknown User',
+          userName: participant.userName || &apos;Unknown User&apos;,
           totalScore,
           weeklyAverage,
           accuracy,
@@ -1027,9 +1148,11 @@ class SeasonContestService {
   }
 
   private calculateHistoricalRankings(contest: SeasonContest, week: number): ContestRanking[] {
+}
     // Calculate rankings as they would have been at specified week
     return contest.participants
       .map((participant: any) => {
+}
         const totalScore = Object.entries(participant.weeklyScores)
           .filter(([w]) => parseInt(w) <= week)
           .reduce((sum, [, score]) => sum + score, 0);
@@ -1038,14 +1161,15 @@ class SeasonContestService {
         const streak = this.getCurrentStreak(participant, week);
         
         return {
+}
           rank: 0, // Will be set after sorting
           userId: participant.userId,
-          userName: participant.userName || 'Unknown User',
+          userName: participant.userName || &apos;Unknown User&apos;,
           totalScore,
           weeklyAverage: totalScore / week,
           accuracy,
           streak,
-          trend: 'STABLE' as const,
+          trend: &apos;STABLE&apos; as const,
           rankChange: 0,
           badges: []
         };
@@ -1055,6 +1179,7 @@ class SeasonContestService {
   }
 
   private calculateProjectedFinishes(contest: SeasonContest): ProjectedFinish[] {
+}
     // Calculate projected finishes based on current performance and trends
     const currentRankings = this.calculateCurrentRankings(contest);
     const totalWeeks = 18; // NFL regular season
@@ -1063,17 +1188,19 @@ class SeasonContestService {
     
     return currentRankings
       .map((ranking: any) => {
+}
         // Project future performance based on recent trend
         let projectedChange = 0;
         
         switch (ranking.trend) {
-          case 'UP':
+}
+          case &apos;UP&apos;:
             projectedChange = Math.min(remainingWeeks * 0.5, 3); // Positive momentum
             break;
-          case 'DOWN':
+          case &apos;DOWN&apos;:
             projectedChange = Math.max(remainingWeeks * -0.5, -3); // Negative momentum
             break;
-          case 'STABLE':
+          case &apos;STABLE&apos;:
             projectedChange = (Math.random() - 0.5) * 2; // Random variance
             break;
         }
@@ -1086,69 +1213,77 @@ class SeasonContestService {
           (ranking.accuracy / 100) * 0.7 + (ranking.streak > 0 ? 0.2 : 0.1)));
         
         // Determine trend
-        let trend: 'IMPROVING' | 'DECLINING' | 'STABLE';
+        let trend: &apos;IMPROVING&apos; | &apos;DECLINING&apos; | &apos;STABLE&apos;;
         if (projectedRank < ranking.rank) {
-          trend = 'IMPROVING';
+}
+          trend = &apos;IMPROVING&apos;;
         } else if (projectedRank > ranking.rank) {
-          trend = 'DECLINING';
+}
+          trend = &apos;DECLINING&apos;;
         } else {
-          trend = 'STABLE';
+}
+          trend = &apos;STABLE&apos;;
         }
         
         return {
+}
           userId: ranking.userId,
           userName: ranking.userName,
           currentRank: ranking.rank,
           projectedRank,
           probability,
-          trend
+//           trend
         };
       })
       .slice(0, 10);
   }
 
   private generateWeeklyPredictions(week: number): PredictionCategory[] {
+}
     // Generate prediction categories based on the current week
     const baseCategories: PredictionCategory[] = [
       {
+}
         id: `week-${week}-game-outcomes`,
-        name: 'Game Outcomes',
-        type: 'GAME_OUTCOME',
-        question: 'Which teams will win their games this week?',
+        name: &apos;Game Outcomes&apos;,
+        type: &apos;GAME_OUTCOME&apos;,
+        question: &apos;Which teams will win their games this week?&apos;,
         options: [
-          { id: 'team-a', label: 'Team A wins' },
-          { id: 'team-b', label: 'Team B wins' }
+          { id: &apos;team-a&apos;, label: &apos;Team A wins&apos; },
+          { id: &apos;team-b&apos;, label: &apos;Team B wins&apos; }
         ],
         points: 5,
         confidenceEnabled: true,
-        difficulty: 'MEDIUM'
+        difficulty: &apos;MEDIUM&apos;
       },
       {
+}
         id: `week-${week}-player-performance`,
-        name: 'Player Performance',
-        type: 'PLAYER_PERFORMANCE',
-        question: 'Which player will have the highest fantasy points?',
+        name: &apos;Player Performance&apos;,
+        type: &apos;PLAYER_PERFORMANCE&apos;,
+        question: &apos;Which player will have the highest fantasy points?&apos;,
         options: [
-          { id: 'player-1', label: 'Star QB' },
-          { id: 'player-2', label: 'Elite RB' },
-          { id: 'player-3', label: 'Top WR' }
+          { id: &apos;player-1&apos;, label: &apos;Star QB&apos; },
+          { id: &apos;player-2&apos;, label: &apos;Elite RB&apos; },
+          { id: &apos;player-3&apos;, label: &apos;Top WR&apos; }
         ],
         points: 10,
         confidenceEnabled: true,
-        difficulty: 'HARD'
+        difficulty: &apos;HARD&apos;
       },
       {
+}
         id: `week-${week}-team-stats`,
-        name: 'Team Statistics',
-        type: 'TEAM_STATS',
-        question: 'Which team will score the most points this week?',
+        name: &apos;Team Statistics&apos;,
+        type: &apos;TEAM_STATS&apos;,
+        question: &apos;Which team will score the most points this week?&apos;,
         options: [
-          { id: 'team-high', label: 'High-scoring offense' },
-          { id: 'team-avg', label: 'Average team' }
+          { id: &apos;team-high&apos;, label: &apos;High-scoring offense&apos; },
+          { id: &apos;team-avg&apos;, label: &apos;Average team&apos; }
         ],
         points: 7,
         confidenceEnabled: false,
-        difficulty: 'EASY'
+        difficulty: &apos;EASY&apos;
       }
     ];
     
@@ -1156,36 +1291,41 @@ class SeasonContestService {
   }
 
   private generateBonusQuestions(week: number): BonusQuestion[] {
+}
     // Generate bonus questions for the week
     return [
       {
+}
         id: `bonus-${week}-upset`,
-        question: 'Will there be an upset (underdog wins by 7+ points)?',
-        type: 'TRUE_FALSE',
-        options: ['Yes', 'No'],
+        question: &apos;Will there be an upset (underdog wins by 7+ points)?&apos;,
+        type: &apos;TRUE_FALSE&apos;,
+        options: [&apos;Yes&apos;, &apos;No&apos;],
         pointValue: 15,
-        difficulty: 'MEDIUM'
+        difficulty: &apos;MEDIUM&apos;
       },
       {
+}
         id: `bonus-${week}-total-points`,
-        question: 'What will be the total points scored across all games?',
-        type: 'MULTIPLE_CHOICE',
-        options: ['Under 350', '350-450', 'Over 450'],
+        question: &apos;What will be the total points scored across all games?&apos;,
+        type: &apos;MULTIPLE_CHOICE&apos;,
+        options: [&apos;Under 350&apos;, &apos;350-450&apos;, &apos;Over 450&apos;],
         pointValue: 10,
-        difficulty: 'HARD'
+        difficulty: &apos;HARD&apos;
       },
       {
+}
         id: `bonus-${week}-defensive`,
-        question: 'Which team will have the most defensive takeaways?',
-        type: 'MULTIPLE_CHOICE',
-        options: ['Team Defense A', 'Team Defense B', 'Team Defense C'],
+        question: &apos;Which team will have the most defensive takeaways?&apos;,
+        type: &apos;MULTIPLE_CHOICE&apos;,
+        options: [&apos;Team Defense A&apos;, &apos;Team Defense B&apos;, &apos;Team Defense C&apos;],
         pointValue: 12,
-        difficulty: 'HARD'
+        difficulty: &apos;HARD&apos;
       }
     ];
   }
 
   private getWeekDeadline(week: number): Date {
+}
     // Calculate deadline based on week (typically Thursday before games start)
     const now = new Date();
     const currentYear = now.getFullYear();
@@ -1208,39 +1348,44 @@ class SeasonContestService {
   }
 
   private generateBracketRounds(): BracketRound[] {
+}
     // Generate playoff bracket rounds for NFL season
     const rounds: BracketRound[] = [
       {
+}
         round: 1,
-        name: 'Wild Card',
+        name: &apos;Wild Card&apos;,
         games: [],
         pointValue: 10,
         deadline: this.getWeekDeadline(19),
-        status: 'UPCOMING'
+        status: &apos;UPCOMING&apos;
       },
       {
+}
         round: 2,
-        name: 'Divisional',
+        name: &apos;Divisional&apos;,
         games: [],
         pointValue: 15,
         deadline: this.getWeekDeadline(20),
-        status: 'UPCOMING'
+        status: &apos;UPCOMING&apos;
       },
       {
+}
         round: 3,
-        name: 'Conference',
+        name: &apos;Conference&apos;,
         games: [],
         pointValue: 20,
         deadline: this.getWeekDeadline(21),
-        status: 'UPCOMING'
+        status: &apos;UPCOMING&apos;
       },
       {
+}
         round: 4,
-        name: 'Super Bowl',
+        name: &apos;Super Bowl&apos;,
         games: [],
         pointValue: 30,
         deadline: this.getWeekDeadline(22),
-        status: 'UPCOMING'
+        status: &apos;UPCOMING&apos;
       }
     ];
     return rounds;

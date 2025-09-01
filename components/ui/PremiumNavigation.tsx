@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './Button';
-import type { View } from '../../types';
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Button } from &apos;./Button&apos;;
+import type { View } from &apos;../../types&apos;;
 
 interface NavigationProps {
+}
   currentView: View;
   onViewChange: (view: View) => void;
   userName?: string;
@@ -14,6 +15,7 @@ interface NavigationProps {
 }
 
 interface NavItem {
+}
   id: View;
   label: string;
   icon: string;
@@ -23,76 +25,87 @@ interface NavItem {
   bgGradient: string;
 
 export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
+}
   onViewChange,
-  userName = 'Guest',
-  teamName = 'My Team',
-  leagueName = 'Fantasy League',
-  onLogout
+  userName = &apos;Guest&apos;,
+  teamName = &apos;My Team&apos;,
+  leagueName = &apos;Fantasy League&apos;,
+//   onLogout
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+}
     const handleScroll = () => {
+}
       setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener(&apos;scroll&apos;, handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+}
+      window.removeEventListener(&apos;scroll&apos;, handleScroll);
     };
   }, []);
 
   const navItems: NavItem[] = [
     {
-      id: 'DASHBOARD' as View,
-      label: 'Dashboard',
-      icon: '🏠',
-      description: 'League overview',
-      color: 'from-blue-500 to-blue-600',
-      bgGradient: 'from-blue-500/20 to-blue-600/10'
+}
+      id: &apos;DASHBOARD&apos; as View,
+      label: &apos;Dashboard&apos;,
+      icon: &apos;🏠&apos;,
+      description: &apos;League overview&apos;,
+      color: &apos;from-blue-500 to-blue-600&apos;,
+      bgGradient: &apos;from-blue-500/20 to-blue-600/10&apos;
     },
     {
-      id: 'TEAM_HUB' as View,
-      label: 'My Team',
-      icon: '🏈',
-      description: 'Manage roster',
-      color: 'from-emerald-500 to-emerald-600',
-      bgGradient: 'from-emerald-500/20 to-emerald-600/10',
-      badge: 'PRO'
+}
+      id: &apos;TEAM_HUB&apos; as View,
+      label: &apos;My Team&apos;,
+      icon: &apos;🏈&apos;,
+      description: &apos;Manage roster&apos;,
+      color: &apos;from-emerald-500 to-emerald-600&apos;,
+      bgGradient: &apos;from-emerald-500/20 to-emerald-600/10&apos;,
+      badge: &apos;PRO&apos;
     },
     {
-      id: 'PLAYERS' as View,
-      label: 'Players',
-      icon: '👥',
-      description: 'Research hub',
-      color: 'from-purple-500 to-purple-600',
-      bgGradient: 'from-purple-500/20 to-purple-600/10'
+}
+      id: &apos;PLAYERS&apos; as View,
+      label: &apos;Players&apos;,
+      icon: &apos;👥&apos;,
+      description: &apos;Research hub&apos;,
+      color: &apos;from-purple-500 to-purple-600&apos;,
+      bgGradient: &apos;from-purple-500/20 to-purple-600/10&apos;
     },
     {
-      id: 'DRAFT_ROOM' as View,
-      label: 'Draft',
-      icon: '📋',
-      description: 'Live draft room',
-      color: 'from-orange-500 to-red-600',
-      bgGradient: 'from-orange-500/20 to-red-600/10',
-      badge: 'LIVE'
+}
+      id: &apos;DRAFT_ROOM&apos; as View,
+      label: &apos;Draft&apos;,
+      icon: &apos;📋&apos;,
+      description: &apos;Live draft room&apos;,
+      color: &apos;from-orange-500 to-red-600&apos;,
+      bgGradient: &apos;from-orange-500/20 to-red-600/10&apos;,
+      badge: &apos;LIVE&apos;
     },
     {
-      id: 'TRADES' as View,
-      label: 'Trades',
-      icon: '🤝',
-      description: 'Trade center',
-      color: 'from-pink-500 to-rose-600',
-      bgGradient: 'from-pink-500/20 to-rose-600/10',
+}
+      id: &apos;TRADES&apos; as View,
+      label: &apos;Trades&apos;,
+      icon: &apos;🤝&apos;,
+      description: &apos;Trade center&apos;,
+      color: &apos;from-pink-500 to-rose-600&apos;,
+      bgGradient: &apos;from-pink-500/20 to-rose-600/10&apos;,
       badge: 3
     },
     {
-      id: 'MESSAGES' as View,
-      label: 'Messages',
-      icon: '💬',
-      description: 'League chat',
-      color: 'from-indigo-500 to-indigo-600',
-      bgGradient: 'from-indigo-500/20 to-indigo-600/10',
+}
+      id: &apos;MESSAGES&apos; as View,
+      label: &apos;Messages&apos;,
+      icon: &apos;💬&apos;,
+      description: &apos;League chat&apos;,
+      color: &apos;from-indigo-500 to-indigo-600&apos;,
+      bgGradient: &apos;from-indigo-500/20 to-indigo-600/10&apos;,
       badge: 5
 
   ];
@@ -104,11 +117,13 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`
+}
           fixed top-0 left-0 right-0 z-[1000]
           transition-all duration-500 ease-out
           ${scrolled 
-            ? 'glass-panel py-3 shadow-2xl border-b border-white/10' 
-            : 'bg-gradient-to-b from-dark-900/95 via-dark-900/80 to-transparent py-4'
+}
+            ? &apos;glass-panel py-3 shadow-2xl border-b border-white/10&apos; 
+            : &apos;bg-gradient-to-b from-dark-900/95 via-dark-900/80 to-transparent py-4&apos;
 
         `}
       >
@@ -130,6 +145,7 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
                   animate={{ rotate: mobileMenuOpen ? 90 : 0 }}
                 >
                   {mobileMenuOpen ? (
+}
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -164,7 +180,8 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
             {/* Desktop Navigation Items */}
             <div className="hidden lg:flex items-center gap-2">
               {navItems.map((item: any) => (
-                <NavButton
+}
+                <NavButton>
                   key={item.id}
                   item={item}
                   isActive={currentView === item.id}
@@ -197,20 +214,23 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
         {/* Mobile Navigation Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
+}
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: &apos;auto&apos; }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
               className="lg:hidden mt-4 glass-panel mx-4 rounded-2xl overflow-hidden"
             >
               <div className="p-4 space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {navItems.map((item: any) => (
-                  <MobileNavItem
+}
+                  <MobileNavItem>
                     key={item.id}
                     item={item}
                     isActive={currentView === item.id}
                     onClick={() => {
+}
                       onViewChange(item.id);
                       setMobileMenuOpen(false);
                     }}
@@ -230,19 +250,23 @@ export const PremiumNavigation: React.FC<NavigationProps> = ({ currentView,
 
 // Desktop Navigation Button Component
 const NavButton: React.FC<{
+}
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
 }> = ({ item, isActive, onClick }: any) => {
+}
   return (
     <motion.button
       onClick={onClick}
       className={`
+}
         relative px-4 py-2 rounded-xl font-medium text-sm
         transition-all duration-300
         ${isActive 
-          ? 'bg-gradient-to-r ' + item.color + ' text-white shadow-lg' 
-          : 'text-gray-300 hover:text-white hover:bg-white/10'
+}
+          ? &apos;bg-gradient-to-r &apos; + item.color + &apos; text-white shadow-lg&apos; 
+          : &apos;text-gray-300 hover:text-white hover:bg-white/10&apos;
 
       `}
       whileHover={{ scale: 1.05 }}
@@ -252,11 +276,14 @@ const NavButton: React.FC<{
         <span className="text-lg sm:px-4 md:px-6 lg:px-8">{item.icon}</span>
         <span>{item.label}</span>
         {item.badge && (
+}
           <span className={`
+}
             px-2 py-0.5 rounded-full text-xs font-bold
-            ${typeof item.badge === 'number' 
-              ? 'bg-red-500 text-white' 
-              : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+            ${typeof item.badge === &apos;number&apos; 
+}
+              ? &apos;bg-red-500 text-white&apos; 
+              : &apos;bg-gradient-to-r from-amber-500 to-orange-500 text-white&apos;
 
           `}>
             {item.badge}
@@ -265,6 +292,7 @@ const NavButton: React.FC<{
       </div>
       
       {isActive && (
+}
         <motion.div
           className="absolute inset-0 rounded-xl bg-white/10 sm:px-4 md:px-6 lg:px-8"
           layoutId="activeNav"
@@ -277,19 +305,23 @@ const NavButton: React.FC<{
 
 // Mobile Navigation Item Component
 const MobileNavItem: React.FC<{
+}
   item: NavItem;
   isActive: boolean;
   onClick: () => void;
 }> = ({ item, isActive, onClick }: any) => {
+}
   return (
     <motion.button
       onClick={onClick}
       className={`
+}
         w-full p-4 rounded-xl text-left
         transition-all duration-300
         ${isActive 
-          ? 'bg-gradient-to-r ' + item.bgGradient + ' border border-white/20' 
-          : 'hover:bg-white/5'
+}
+          ? &apos;bg-gradient-to-r &apos; + item.bgGradient + &apos; border border-white/20&apos; 
+          : &apos;hover:bg-white/5&apos;
 
       `}
       whileHover={{ x: 4 }}
@@ -299,18 +331,21 @@ const MobileNavItem: React.FC<{
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{item.icon}</span>
           <div>
-            <p className={`font-semibold ${isActive ? 'text-white' : 'text-gray-200'}`}>
+            <p className={`font-semibold ${isActive ? &apos;text-white&apos; : &apos;text-gray-200&apos;}`}>
               {item.label}
             </p>
             <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{item.description}</p>
           </div>
         </div>
         {item.badge && (
+}
           <span className={`
+}
             px-2 py-1 rounded-full text-xs font-bold
-            ${typeof item.badge === 'number' 
-              ? 'bg-red-500/20 text-red-300 border border-red-500/30' 
-              : 'bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/30'
+            ${typeof item.badge === &apos;number&apos; 
+}
+              ? &apos;bg-red-500/20 text-red-300 border border-red-500/30&apos; 
+              : &apos;bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/30&apos;
 
           `}>
             {item.badge}
@@ -323,10 +358,12 @@ const MobileNavItem: React.FC<{
 
 // User Menu Component
 const UserMenu: React.FC<{
+}
   userName: string;
   teamName: string;
   onLogout?: () => void;
 }> = ({ userName, teamName, onLogout }: any) => {
+}
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -344,7 +381,7 @@ const UserMenu: React.FC<{
           <p className="text-sm font-semibold text-white sm:px-4 md:px-6 lg:px-8">{userName}</p>
           <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{teamName}</p>
         </div>
-        <svg className={`w-4 h-4 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} 
+        <svg className={`w-4 h-4 text-gray-400 transition-transform ${dropdownOpen ? &apos;rotate-180&apos; : &apos;&apos;}`} 
           fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -352,6 +389,7 @@ const UserMenu: React.FC<{
 
       <AnimatePresence>
         {dropdownOpen && (
+}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}

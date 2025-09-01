@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import OracleArchitectureOverview from './OracleArchitectureOverview';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import OracleArchitectureOverview from &apos;./OracleArchitectureOverview&apos;;
 
-describe('OracleArchitectureOverview', () => {
-  it('renders without crashing', () => {
+describe(&apos;OracleArchitectureOverview&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<OracleArchitectureOverview />);
-    expect(screen.getByTestId('oraclearchitectureoverview')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;oraclearchitectureoverview&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<OracleArchitectureOverview />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<OracleArchitectureOverview />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

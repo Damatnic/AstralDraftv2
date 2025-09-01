@@ -3,205 +3,220 @@
  * Tests the full draft experience from login to pick submission
  */
 
-describe('Complete Draft Flow', () => {
+describe(&apos;Complete Draft Flow&apos;, () => {
+}
   beforeEach(() => {
+}
     // Mock API responses
-    cy.intercept('GET', '/api/players', { fixture: 'players.json' }).as('getPlayers');
-    cy.intercept('GET', '/api/draft/current', { fixture: 'draft-state.json' }).as('getDraft');
-    cy.intercept('POST', '/api/draft/pick', { fixture: 'draft-pick-success.json' }).as('makePick');
+    cy.intercept(&apos;GET&apos;, &apos;/api/players&apos;, { fixture: &apos;players.json&apos; }).as(&apos;getPlayers&apos;);
+    cy.intercept(&apos;GET&apos;, &apos;/api/draft/current&apos;, { fixture: &apos;draft-state.json&apos; }).as(&apos;getDraft&apos;);
+    cy.intercept(&apos;POST&apos;, &apos;/api/draft/pick&apos;, { fixture: &apos;draft-pick-success.json&apos; }).as(&apos;makePick&apos;);
     
-    cy.visit('/');
+    cy.visit(&apos;/&apos;);
   });
 
-  it('should complete a full draft simulation', () => {
+  it(&apos;should complete a full draft simulation&apos;, () => {
+}
     // Step 1: Login
-    cy.get('[data-testid="team-name-input"]').type('Cypress Test Team');
-    cy.get('[data-testid="join-league-button"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Cypress Test Team&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
 
     // Step 2: Navigate to draft room
-    cy.get('[data-testid="draft-room-link"]').should('be.visible');
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
     // Step 3: Wait for draft room to load
-    cy.wait('@getDraft');
-    cy.wait('@getPlayers');
+    cy.wait(&apos;@getDraft&apos;);
+    cy.wait(&apos;@getPlayers&apos;);
     
-    cy.get('[data-testid="draft-room"]').should('be.visible');
-    cy.get('[data-testid="draft-timer"]').should('be.visible');
+    cy.get(&apos;[data-testid="draft-room"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="draft-timer"]&apos;).should(&apos;be.visible&apos;);
 
     // Step 4: Verify available players are displayed
-    cy.get('[data-testid^="player-"]').should('have.length.greaterThan', 0);
-    cy.get('[data-testid="player-1"]').should('contain', 'Josh Allen');
+    cy.get(&apos;[data-testid^="player-"]&apos;).should(&apos;have.length.greaterThan&apos;, 0);
+    cy.get(&apos;[data-testid="player-1"]&apos;).should(&apos;contain&apos;, &apos;Josh Allen&apos;);
 
     // Step 5: Make first pick
-    cy.get('[data-testid="player-1"]').click();
-    cy.get('[data-testid="confirm-pick"]').should('be.visible');
-    cy.get('[data-testid="confirm-pick"]').click();
+    cy.get(&apos;[data-testid="player-1"]&apos;).click();
+    cy.get(&apos;[data-testid="confirm-pick"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="confirm-pick"]&apos;).click();
 
     // Step 6: Wait for pick to be processed
-    cy.wait('@makePick');
+    cy.wait(&apos;@makePick&apos;);
 
     // Step 7: Verify pick was successful
-    cy.get('[data-testid="my-roster"]').should('contain', 'Josh Allen');
-    cy.get('[data-testid="draft-pick-confirmation"]').should('be.visible');
+    cy.get(&apos;[data-testid="my-roster"]&apos;).should(&apos;contain&apos;, &apos;Josh Allen&apos;);
+    cy.get(&apos;[data-testid="draft-pick-confirmation"]&apos;).should(&apos;be.visible&apos;);
 
     // Step 8: Verify draft state updated
-    cy.get('[data-testid="current-pick"]').should('not.contain', 'Pick 1');
-    cy.get('[data-testid="draft-timer"]').should('be.visible');
+    cy.get(&apos;[data-testid="current-pick"]&apos;).should(&apos;not.contain&apos;, &apos;Pick 1&apos;);
+    cy.get(&apos;[data-testid="draft-timer"]&apos;).should(&apos;be.visible&apos;);
   });
 
-  it('should handle draft timer countdown', () => {
+  it(&apos;should handle draft timer countdown&apos;, () => {
+}
     // Login and navigate to draft
-    cy.get('[data-testid="team-name-input"]').type('Timer Test Team');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Timer Test Team&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
     // Wait for draft room
-    cy.wait('@getDraft');
+    cy.wait(&apos;@getDraft&apos;);
     
     // Check timer is present and counting down
-    cy.get('[data-testid="draft-timer"]').should('be.visible');
-    cy.get('[data-testid="timer-display"]').should('match', /\d+:\d+/);
+    cy.get(&apos;[data-testid="draft-timer"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="timer-display"]&apos;).should(&apos;match&apos;, /\d+:\d+/);
 
     // Wait a few seconds and verify timer decreased
     cy.wait(3000);
-    cy.get('[data-testid="timer-display"]').should('not.contain', '1:30');
+    cy.get(&apos;[data-testid="timer-display"]&apos;).should(&apos;not.contain&apos;, &apos;1:30&apos;);
   });
 
-  it('should filter players by position', () => {
+  it(&apos;should filter players by position&apos;, () => {
+}
     // Login and navigate to draft
-    cy.get('[data-testid="team-name-input"]').type('Filter Test Team');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Filter Test Team&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait('@getPlayers');
+    cy.wait(&apos;@getPlayers&apos;);
 
     // Test position filtering
-    cy.get('[data-testid="position-filter-QB"]').click();
-    cy.get('[data-testid^="player-"]').each(($player) => {
-      cy.wrap($player).should('contain', 'QB');
+    cy.get(&apos;[data-testid="position-filter-QB"]&apos;).click();
+    cy.get(&apos;[data-testid^="player-"]&apos;).each(($player) => {
+}
+      cy.wrap($player).should(&apos;contain&apos;, &apos;QB&apos;);
     });
 
     // Test RB filtering
-    cy.get('[data-testid="position-filter-RB"]').click();
-    cy.get('[data-testid^="player-"]').each(($player) => {
-      cy.wrap($player).should('contain', 'RB');
+    cy.get(&apos;[data-testid="position-filter-RB"]&apos;).click();
+    cy.get(&apos;[data-testid^="player-"]&apos;).each(($player) => {
+}
+      cy.wrap($player).should(&apos;contain&apos;, &apos;RB&apos;);
     });
   });
 
-  it('should search players by name', () => {
-    cy.get('[data-testid="team-name-input"]').type('Search Test Team');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+  it(&apos;should search players by name&apos;, () => {
+}
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Search Test Team&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait('@getPlayers');
+    cy.wait(&apos;@getPlayers&apos;);
 
     // Search for specific player
-    cy.get('[data-testid="player-search"]').type('Josh');
-    cy.get('[data-testid^="player-"]').should('have.length.lessThan', 10);
-    cy.get('[data-testid="player-1"]').should('contain', 'Josh');
+    cy.get(&apos;[data-testid="player-search"]&apos;).type(&apos;Josh&apos;);
+    cy.get(&apos;[data-testid^="player-"]&apos;).should(&apos;have.length.lessThan&apos;, 10);
+    cy.get(&apos;[data-testid="player-1"]&apos;).should(&apos;contain&apos;, &apos;Josh&apos;);
 
     // Clear search
-    cy.get('[data-testid="player-search"]').clear();
-    cy.get('[data-testid^="player-"]').should('have.length.greaterThan', 10);
+    cy.get(&apos;[data-testid="player-search"]&apos;).clear();
+    cy.get(&apos;[data-testid^="player-"]&apos;).should(&apos;have.length.greaterThan&apos;, 10);
   });
 
-  it('should display draft board correctly', () => {
-    cy.get('[data-testid="team-name-input"]').type('Draft Board Test');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+  it(&apos;should display draft board correctly&apos;, () => {
+}
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Draft Board Test&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait(['@getDraft', '@getPlayers']);
+    cy.wait([&apos;@getDraft&apos;, &apos;@getPlayers&apos;]);
 
     // Verify draft board elements
-    cy.get('[data-testid="draft-board"]').should('be.visible');
-    cy.get('[data-testid="current-pick-indicator"]').should('be.visible');
-    cy.get('[data-testid="draft-order"]').should('be.visible');
-    cy.get('[data-testid="recent-picks"]').should('be.visible');
+    cy.get(&apos;[data-testid="draft-board"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="current-pick-indicator"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="draft-order"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="recent-picks"]&apos;).should(&apos;be.visible&apos;);
   });
 
-  it('should handle auto-pick when timer expires', () => {
+  it(&apos;should handle auto-pick when timer expires&apos;, () => {
+}
     // Mock a draft state where time is almost up
-    cy.intercept('GET', '/api/draft/current', { 
-      fixture: 'draft-state-low-time.json' 
-    }).as('getDraftLowTime');
+    cy.intercept(&apos;GET&apos;, &apos;/api/draft/current&apos;, { 
+}
+      fixture: &apos;draft-state-low-time.json&apos; 
+    }).as(&apos;getDraftLowTime&apos;);
 
-    cy.get('[data-testid="team-name-input"]').type('Auto Pick Test');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Auto Pick Test&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait('@getDraftLowTime');
+    cy.wait(&apos;@getDraftLowTime&apos;);
 
     // Wait for auto-pick to trigger
-    cy.get('[data-testid="auto-pick-notification"]', { timeout: 15000 })
-      .should('be.visible');
+    cy.get(&apos;[data-testid="auto-pick-notification"]&apos;, { timeout: 15000 })
+      .should(&apos;be.visible&apos;);
     
     // Verify a pick was made automatically
-    cy.get('[data-testid="my-roster"]').should('not.be.empty');
+    cy.get(&apos;[data-testid="my-roster"]&apos;).should(&apos;not.be.empty&apos;);
   });
 
-  it('should be responsive on mobile devices', () => {
-    cy.viewport('iphone-x');
+  it(&apos;should be responsive on mobile devices&apos;, () => {
+}
+    cy.viewport(&apos;iphone-x&apos;);
 
-    cy.get('[data-testid="team-name-input"]').type('Mobile Test');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Mobile Test&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait(['@getDraft', '@getPlayers']);
+    cy.wait([&apos;@getDraft&apos;, &apos;@getPlayers&apos;]);
 
     // Verify mobile-specific elements
-    cy.get('[data-testid="mobile-draft-interface"]').should('be.visible');
-    cy.get('[data-testid="mobile-player-list"]').should('be.visible');
+    cy.get(&apos;[data-testid="mobile-draft-interface"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="mobile-player-list"]&apos;).should(&apos;be.visible&apos;);
     
     // Test mobile navigation
-    cy.get('[data-testid="mobile-menu-toggle"]').click();
-    cy.get('[data-testid="mobile-navigation"]').should('be.visible');
+    cy.get(&apos;[data-testid="mobile-menu-toggle"]&apos;).click();
+    cy.get(&apos;[data-testid="mobile-navigation"]&apos;).should(&apos;be.visible&apos;);
   });
 
-  it('should handle errors gracefully', () => {
+  it(&apos;should handle errors gracefully&apos;, () => {
+}
     // Mock API error
-    cy.intercept('POST', '/api/draft/pick', {
+    cy.intercept(&apos;POST&apos;, &apos;/api/draft/pick&apos;, {
+}
       statusCode: 500,
-      body: { error: 'Draft pick failed' }
-    }).as('makePickError');
+      body: { error: &apos;Draft pick failed&apos; }
+    }).as(&apos;makePickError&apos;);
 
-    cy.get('[data-testid="team-name-input"]').type('Error Test Team');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Error Test Team&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait('@getDraft');
+    cy.wait(&apos;@getDraft&apos;);
 
     // Try to make a pick that will fail
-    cy.get('[data-testid="player-1"]').click();
-    cy.get('[data-testid="confirm-pick"]').click();
+    cy.get(&apos;[data-testid="player-1"]&apos;).click();
+    cy.get(&apos;[data-testid="confirm-pick"]&apos;).click();
 
-    cy.wait('@makePickError');
+    cy.wait(&apos;@makePickError&apos;);
 
     // Verify error is displayed
-    cy.get('[data-testid="error-message"]').should('be.visible');
-    cy.get('[data-testid="error-message"]').should('contain', 'Draft pick failed');
+    cy.get(&apos;[data-testid="error-message"]&apos;).should(&apos;be.visible&apos;);
+    cy.get(&apos;[data-testid="error-message"]&apos;).should(&apos;contain&apos;, &apos;Draft pick failed&apos;);
     
     // Verify user can retry
-    cy.get('[data-testid="retry-button"]').should('be.visible');
+    cy.get(&apos;[data-testid="retry-button"]&apos;).should(&apos;be.visible&apos;);
   });
 
-  it('should maintain accessibility standards', () => {
-    cy.get('[data-testid="team-name-input"]').type('Accessibility Test');
-    cy.get('[data-testid="join-league-button"]').click();
-    cy.get('[data-testid="draft-room-link"]').click();
+  it(&apos;should maintain accessibility standards&apos;, () => {
+}
+    cy.get(&apos;[data-testid="team-name-input"]&apos;).type(&apos;Accessibility Test&apos;);
+    cy.get(&apos;[data-testid="join-league-button"]&apos;).click();
+    cy.get(&apos;[data-testid="draft-room-link"]&apos;).click();
 
-    cy.wait(['@getDraft', '@getPlayers']);
+    cy.wait([&apos;@getDraft&apos;, &apos;@getPlayers&apos;]);
 
     // Test keyboard navigation
-    cy.get('[data-testid="player-1"]').focus();
-    cy.get('[data-testid="player-1"]').should('have.focus');
+    cy.get(&apos;[data-testid="player-1"]&apos;).focus();
+    cy.get(&apos;[data-testid="player-1"]&apos;).should(&apos;have.focus&apos;);
     
     // Test ARIA labels
-    cy.get('[data-testid="draft-timer"]').should('have.attr', 'aria-live');
-    cy.get('[data-testid="player-1"]').should('have.attr', 'aria-label');
+    cy.get(&apos;[data-testid="draft-timer"]&apos;).should(&apos;have.attr&apos;, &apos;aria-live&apos;);
+    cy.get(&apos;[data-testid="player-1"]&apos;).should(&apos;have.attr&apos;, &apos;aria-label&apos;);
     
     // Test focus management
-    cy.get('[data-testid="player-1"]').click();
-    cy.get('[data-testid="confirm-pick"]').should('have.focus');
+    cy.get(&apos;[data-testid="player-1"]&apos;).click();
+    cy.get(&apos;[data-testid="confirm-pick"]&apos;).should(&apos;have.focus&apos;);
   });
 });

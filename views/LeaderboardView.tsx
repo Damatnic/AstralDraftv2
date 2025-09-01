@@ -3,35 +3,38 @@
  * Shows rankings, achievements, and performance using oracleScoringService
  */
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../components/ui/Widget';
-import { Avatar } from '../components/ui/Avatar';
-import { TrophyIcon } from '../components/icons/TrophyIcon';
-import { StarIcon } from '../components/icons/StarIcon';
-import { FlameIcon } from '../components/icons/FlameIcon';
-import { CrownIcon } from '../components/icons/CrownIcon';
-import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
-import { type Achievement } from '../services/oracleScoringService';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
+import { TrophyIcon } from &apos;../components/icons/TrophyIcon&apos;;
+import { StarIcon } from &apos;../components/icons/StarIcon&apos;;
+import { FlameIcon } from &apos;../components/icons/FlameIcon&apos;;
+import { CrownIcon } from &apos;../components/icons/CrownIcon&apos;;
+import { TrendingUpIcon } from &apos;../components/icons/TrendingUpIcon&apos;;
+import { type Achievement } from &apos;../services/oracleScoringService&apos;;
 
 interface LeaderboardFilter {
-  timeframe: 'weekly' | 'monthly' | 'season' | 'all-time';
-  category: 'overall' | 'accuracy' | 'streak' | 'consistency';
+}
+  timeframe: &apos;weekly&apos; | &apos;monthly&apos; | &apos;season&apos; | &apos;all-time&apos;;
+  category: &apos;overall&apos; | &apos;accuracy&apos; | &apos;streak&apos; | &apos;consistency&apos;;
   league?: string;
 
 }
 
 interface LeaderboardTab {
+}
   id: string;
   label: string;
   icon: React.ReactNode;
   description: string;
 
 interface LeaderboardEntry {
+}
 
   userId: string;
   user: {
+}
     id: string;
     name: string;
     avatar: string;
@@ -50,13 +53,16 @@ interface LeaderboardEntry {
   streak: number;
 
     } catch (error) {
+}
         console.error(error);
     }const LeaderboardView: React.FC = () => {
+}
   const { state } = useAppState();
-  const [activeTab, setActiveTab] = React.useState('overall');
+  const [activeTab, setActiveTab] = React.useState(&apos;overall&apos;);
   const [filter, setFilter] = React.useState<LeaderboardFilter>({
-    timeframe: 'season',
-    category: 'overall'
+}
+    timeframe: &apos;season&apos;,
+    category: &apos;overall&apos;
   });
   const [leaderboardData, setLeaderboardData] = React.useState<LeaderboardEntry[]>([]);
   const [achievements, setAchievements] = React.useState<(Achievement & { points: number; category: string })[]>([]);
@@ -64,14 +70,18 @@ interface LeaderboardEntry {
 
   // Mock data generator for leaderboard
   const generateMockLeaderboardData = (users: any[]): LeaderboardEntry[] => {
+}
     return users.map((user, index) => {
+}
       const baseScore = Math.max(50, 1000 - (index * 50) + Math.random() * 100);
       const predictions = Math.floor(20 + Math.random() * 30);
       const correct = Math.floor(predictions * (0.6 + Math.random() * 0.3));
       
       return {
+}
         userId: user.id,
         user: {
+}
           id: user.id,
           name: user.name,
           avatar: user.avatar
@@ -93,97 +103,112 @@ interface LeaderboardEntry {
   };
 
   const generateMockAchievements = (): (Achievement & { points: number; category: string })[] => {
+}
     return [
       {
-        id: 'first_prediction',
-        name: 'First Steps',
-        description: 'Made your first Oracle prediction',
-        icon: '👶',
-        tier: 'bronze',
-        requirement: { type: 'prediction_count', value: 1 },
+}
+        id: &apos;first_prediction&apos;,
+        name: &apos;First Steps&apos;,
+        description: &apos;Made your first Oracle prediction&apos;,
+        icon: &apos;👶&apos;,
+        tier: &apos;bronze&apos;,
+        requirement: { type: &apos;prediction_count&apos;, value: 1 },
         points: 50,
-        category: 'milestone'
+        category: &apos;milestone&apos;
       },
       {
-        id: 'accuracy_master',
-        name: 'Accuracy Master',
-        description: 'Achieved 80% accuracy over 20 predictions',
-        icon: '🎯',
-        tier: 'gold',
-        requirement: { type: 'accuracy', value: 80 },
+}
+        id: &apos;accuracy_master&apos;,
+        name: &apos;Accuracy Master&apos;,
+        description: &apos;Achieved 80% accuracy over 20 predictions&apos;,
+        icon: &apos;🎯&apos;,
+        tier: &apos;gold&apos;,
+        requirement: { type: &apos;accuracy&apos;, value: 80 },
         points: 200,
-        category: 'accuracy'
+        category: &apos;accuracy&apos;
       },
       {
-        id: 'streak_legend',
-        name: 'Streak Legend',
-        description: 'Achieved a 10-game winning streak',
-        icon: '🔥',
-        tier: 'platinum',
-        requirement: { type: 'streak', value: 10 },
+}
+        id: &apos;streak_legend&apos;,
+        name: &apos;Streak Legend&apos;,
+        description: &apos;Achieved a 10-game winning streak&apos;,
+        icon: &apos;🔥&apos;,
+        tier: &apos;platinum&apos;,
+        requirement: { type: &apos;streak&apos;, value: 10 },
         points: 300,
-        category: 'streak'
+        category: &apos;streak&apos;
       },
       {
-        id: 'oracle_slayer',
-        name: 'Oracle Slayer',
-        description: 'Beat the Oracle 5 times in a row',
-        icon: '⚔️',
-        tier: 'legendary',
-        requirement: { type: 'oracle_beats', value: 5 },
+}
+        id: &apos;oracle_slayer&apos;,
+        name: &apos;Oracle Slayer&apos;,
+        description: &apos;Beat the Oracle 5 times in a row&apos;,
+        icon: &apos;⚔️&apos;,
+        tier: &apos;legendary&apos;,
+        requirement: { type: &apos;oracle_beats&apos;, value: 5 },
         points: 500,
-        category: 'accuracy'
+        category: &apos;accuracy&apos;
       },
       {
-        id: 'perfect_week',
-        name: 'Perfect Week',
-        description: 'Got 100% accuracy for a full week',
-        icon: '💯',
-        tier: 'platinum',
-        requirement: { type: 'perfect_week', value: 1 },
+}
+        id: &apos;perfect_week&apos;,
+        name: &apos;Perfect Week&apos;,
+        description: &apos;Got 100% accuracy for a full week&apos;,
+        icon: &apos;💯&apos;,
+        tier: &apos;platinum&apos;,
+        requirement: { type: &apos;perfect_week&apos;, value: 1 },
         points: 400,
-        category: 'streak'
+        category: &apos;streak&apos;
 
     ];
   };
 
   const tabs: LeaderboardTab[] = [
     {
-      id: 'overall',
-      label: 'Overall Rankings',
+}
+      id: &apos;overall&apos;,
+      label: &apos;Overall Rankings&apos;,
       icon: <TrophyIcon />,
-      description: 'Complete leaderboard with all scoring categories'
+      description: &apos;Complete leaderboard with all scoring categories&apos;
     },
     {
-      id: 'weekly',
-      label: 'Weekly Champions',
+}
+      id: &apos;weekly&apos;,
+      label: &apos;Weekly Champions&apos;,
       icon: <CrownIcon />,
-      description: 'Top performers for the current week'
+      description: &apos;Top performers for the current week&apos;
     },
     {
-      id: 'streaks',
-      label: 'Hot Streaks',
+}
+      id: &apos;streaks&apos;,
+      label: &apos;Hot Streaks&apos;,
       icon: <FlameIcon />,
-      description: 'Longest winning and losing streaks'
+      description: &apos;Longest winning and losing streaks&apos;
     },
     {
-      id: 'achievements',
-      label: 'Achievements',
+}
+      id: &apos;achievements&apos;,
+      label: &apos;Achievements&apos;,
       icon: <StarIcon />,
-      description: 'Badges and milestones unlocked'
+      description: &apos;Badges and milestones unlocked&apos;
 
   ];
 
   // Load leaderboard data
   React.useEffect(() => {
+}
     const loadLeaderboardData = async () => {
+}
       setIsLoading(true);
       try {
+}
         // Get unique users from all leagues
         const uniqueUsers = state.leagues
           .flatMap(league => league.members)
           .reduce((unique, user) => {
+}
             if (!unique.find((u: any) => u.id === user.id)) {
+}
               unique.push(user);
 
             return unique;
@@ -199,7 +224,9 @@ interface LeaderboardEntry {
         const mockAchievements = generateMockAchievements();
         setAchievements(mockAchievements);
       } catch (error) {
+}
       } finally {
+}
         setIsLoading(false);
 
     };
@@ -208,7 +235,9 @@ interface LeaderboardEntry {
   }, [filter, state.leagues]);
 
   const getRankIcon = (rank: number) => {
+}
     switch (rank) {
+}
       case 1:
         return <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-black font-bold text-sm">1</div>;
       case 2:
@@ -221,11 +250,12 @@ interface LeaderboardEntry {
   };
 
   const getScoreColor = (score: number, maxScore: number) => {
+}
     const percentage = (score / maxScore) * 100;
-    if (percentage >= 80) return 'text-green-400';
-    if (percentage >= 60) return 'text-yellow-400';
-    if (percentage >= 40) return 'text-orange-400';
-    return 'text-red-400';
+    if (percentage >= 80) return &apos;text-green-400&apos;;
+    if (percentage >= 60) return &apos;text-yellow-400&apos;;
+    if (percentage >= 40) return &apos;text-orange-400&apos;;
+    return &apos;text-red-400&apos;;
   };
 
   const renderOverallLeaderboard = () => (
@@ -234,7 +264,7 @@ interface LeaderboardEntry {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <select
           value={filter.timeframe}
-          onChange={(e: any) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter['timeframe'] }}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, timeframe: e.target.value as LeaderboardFilter[&apos;timeframe&apos;] }}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="weekly">This Week</option>
@@ -245,7 +275,7 @@ interface LeaderboardEntry {
         
         <select
           value={filter.category}
-          onChange={(e: any) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter['category'] }}
+          onChange={(e: any) => setFilter(prev => ({ ...prev, category: e.target.value as LeaderboardFilter[&apos;category&apos;] }}
           className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
         >
           <option value="overall">Overall Score</option>
@@ -255,13 +285,15 @@ interface LeaderboardEntry {
         </select>
 
         {state.leagues.length > 1 && (
+}
           <select
-            value={filter.league || ''}
+            value={filter.league || &apos;&apos;}
             onChange={(e: any) => setFilter(prev => ({ ...prev, league: e.target.value || undefined }}
             className="form-input bg-slate-800 border-slate-600 text-white rounded-lg px-4 py-2"
           >
             <option value="">All Leagues</option>
             {state.leagues.map((league: any) => (
+}
               <option key={league.id} value={league.id}>{league.name}</option>
             ))}
           </select>
@@ -270,6 +302,7 @@ interface LeaderboardEntry {
 
       {/* Top 3 Podium */}
       {leaderboardData.length >= 3 && (
+}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {/* 2nd Place */}
           <motion.div 
@@ -332,12 +365,14 @@ interface LeaderboardEntry {
       <Widget title="Complete Rankings" className="overflow-hidden">
         <div className="space-y-2">
           {leaderboardData.map((scoreCard, index) => (
+}
             <motion.div
               key={scoreCard.user.id}
               className={`
+}
                 flex items-center gap-4 p-4 rounded-lg transition-all duration-200
-                ${index < 3 ? 'bg-gradient-to-r from-slate-800 to-slate-700 border border-accent-500/30' : 'bg-slate-800/50 hover:bg-slate-800'}
-                ${scoreCard.user.id === state.user?.id ? 'ring-2 ring-accent-500/50' : ''}
+                ${index < 3 ? &apos;bg-gradient-to-r from-slate-800 to-slate-700 border border-accent-500/30&apos; : &apos;bg-slate-800/50 hover:bg-slate-800&apos;}
+                ${scoreCard.user.id === state.user?.id ? &apos;ring-2 ring-accent-500/50&apos; : &apos;&apos;}
               `}
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -355,6 +390,7 @@ interface LeaderboardEntry {
                   <h4 className="font-semibold text-white text-sm">
                     {scoreCard.user.name}
                     {scoreCard.user.id === state.user?.id && (
+}
                       <span className="ml-2 text-xs text-accent-400">(You)</span>
                     )}
                   </h4>
@@ -407,6 +443,7 @@ interface LeaderboardEntry {
     <Widget title="Weekly Champions" className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[...Array(12)].map((_, weekIndex) => {
+}
           const week = weekIndex + 1;
           const champion = leaderboardData[weekIndex % leaderboardData.length];
           if (!champion) return null;
@@ -449,6 +486,7 @@ interface LeaderboardEntry {
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <Widget title="🔥 Hot Streaks" className="space-y-3">
         {leaderboardData
+}
           .filter((user: any) => user.streak > 0)
           .sort((a, b) => b.streak - a.streak)
           .slice(0, 10)
@@ -469,6 +507,7 @@ interface LeaderboardEntry {
 
       <Widget title="❄️ Cold Streaks" className="space-y-3">
         {leaderboardData
+}
           .filter((user: any) => user.streak < 0)
           .sort((a, b) => a.streak - b.streak)
           .slice(0, 10)
@@ -496,6 +535,7 @@ interface LeaderboardEntry {
         <h3 className="text-lg font-semibold text-white mb-4">🏆 Recent Unlocks</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {achievements.slice(0, 6).map((achievement, index) => (
+}
             <motion.div
               key={`${achievement.id}-${index}`}
               className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg p-4 border border-accent-500/30"
@@ -522,7 +562,8 @@ interface LeaderboardEntry {
           <h3 className="text-lg font-semibold text-white mb-4">🎯 Accuracy Masters</h3>
           <div className="space-y-2">
             {achievements
-              .filter((ach: any) => ach.category === 'accuracy')
+}
+              .filter((ach: any) => ach.category === &apos;accuracy&apos;)
               .slice(0, 5)
               .map((achievement, index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
@@ -541,7 +582,8 @@ interface LeaderboardEntry {
           <h3 className="text-lg font-semibold text-white mb-4">🔥 Streak Legends</h3>
           <div className="space-y-2">
             {achievements
-              .filter((ach: any) => ach.category === 'streak')
+}
+              .filter((ach: any) => ach.category === &apos;streak&apos;)
               .slice(0, 5)
               .map((achievement, index) => (
                 <div key={achievement.id} className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
@@ -560,17 +602,20 @@ interface LeaderboardEntry {
   );
 
   if (isLoading) {
+}
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-slate-700 rounded w-1/3"></div>
           <div className="grid grid-cols-3 gap-4">
             {[...Array(3)].map((_, i) => (
+}
               <div key={i} className="h-40 bg-slate-700 rounded-xl"></div>
             ))}
           </div>
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
+}
               <div key={i} className="h-16 bg-slate-700 rounded-lg"></div>
             ))}
           </div>
@@ -593,6 +638,7 @@ interface LeaderboardEntry {
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 mb-8 border-b border-slate-700">
         {tabs.map((tab: any) => (
+}
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
@@ -613,10 +659,10 @@ interface LeaderboardEntry {
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
         >
-          {activeTab === 'overall' && renderOverallLeaderboard()}
-          {activeTab === 'weekly' && renderWeeklyChampions()}
-          {activeTab === 'streaks' && renderStreaks()}
-          {activeTab === 'achievements' && renderAchievements()}
+          {activeTab === &apos;overall&apos; && renderOverallLeaderboard()}
+          {activeTab === &apos;weekly&apos; && renderWeeklyChampions()}
+          {activeTab === &apos;streaks&apos; && renderStreaks()}
+          {activeTab === &apos;achievements&apos; && renderAchievements()}
         </motion.div>
       </AnimatePresence>
     </div>

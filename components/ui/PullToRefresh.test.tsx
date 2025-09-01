@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PullToRefresh from './PullToRefresh';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PullToRefresh from &apos;./PullToRefresh&apos;;
 
-describe('PullToRefresh', () => {
-  it('renders without crashing', () => {
+describe(&apos;PullToRefresh&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PullToRefresh />);
-    expect(screen.getByTestId('pulltorefresh')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;pulltorefresh&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PullToRefresh />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PullToRefresh />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

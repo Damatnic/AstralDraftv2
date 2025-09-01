@@ -2,11 +2,12 @@
  * Authentication Context for Astral Draft
  * Integrates with secure backend authentication system
  */
-import React, { createContext, useContext, useReducer, useEffect, ReactNode, useMemo } from 'react';
-import { authService } from '../services/authService';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode, useMemo } from &apos;react&apos;;
+import { authService } from &apos;../services/authService&apos;;
 
 // Types for authentication state (matching backend User interface)
 interface User {
+}
     id: number;
     username: string;
     email: string;
@@ -17,6 +18,7 @@ interface User {
 }
 
 interface AuthState {
+}
     user: User | null;
     sessionToken: string | null;
     isAuthenticated: boolean;
@@ -26,16 +28,17 @@ interface AuthState {
 
 // Auth actions
 type AuthAction =
-    | { type: 'AUTH_START' }
-    | { type: 'AUTH_SUCCESS'; payload: { user: User; sessionToken: string } }
-    | { type: 'AUTH_FAILURE'; payload: string }
-    | { type: 'AUTH_LOGOUT' }
-    | { type: 'AUTH_CLEAR_ERROR' }
-    | { type: 'AUTH_INITIALIZED' }
-    | { type: 'USER_UPDATE'; payload: Partial<User> };
+    | { type: &apos;AUTH_START&apos; }
+    | { type: &apos;AUTH_SUCCESS&apos;; payload: { user: User; sessionToken: string } }
+    | { type: &apos;AUTH_FAILURE&apos;; payload: string }
+    | { type: &apos;AUTH_LOGOUT&apos; }
+    | { type: &apos;AUTH_CLEAR_ERROR&apos; }
+    | { type: &apos;AUTH_INITIALIZED&apos; }
+    | { type: &apos;USER_UPDATE&apos;; payload: Partial<User> };
 
 // Initial auth state
 const initialAuthState: AuthState = {
+}
     user: null,
     sessionToken: null,
     isAuthenticated: false,
@@ -46,20 +49,24 @@ const initialAuthState: AuthState = {
 
 // Auth reducer
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+}
     switch (action.type) {
-        case 'AUTH_START':
+}
+        case &apos;AUTH_START&apos;:
             return {
+}
                 ...state,
                 isLoading: true,
                 error: null,
             };
 
-        case 'AUTH_SUCCESS':
+        case &apos;AUTH_SUCCESS&apos;:
             // Store session token in localStorage for persistence
-            localStorage.setItem('sessionToken', action.payload.sessionToken);
-            localStorage.setItem('user', JSON.stringify(action.payload.user));
+            localStorage.setItem(&apos;sessionToken&apos;, action.payload.sessionToken);
+            localStorage.setItem(&apos;user&apos;, JSON.stringify(action.payload.user));
             
             return {
+}
                 ...state,
                 user: action.payload.user,
                 sessionToken: action.payload.sessionToken,
@@ -68,12 +75,13 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 error: null,
             };
 
-        case 'AUTH_FAILURE':
+        case &apos;AUTH_FAILURE&apos;:
             // Clear any stored auth data on failure
-            localStorage.removeItem('sessionToken');
-            localStorage.removeItem('user');
+            localStorage.removeItem(&apos;sessionToken&apos;);
+            localStorage.removeItem(&apos;user&apos;);
             
             return {
+}
                 ...state,
                 user: null,
                 sessionToken: null,
@@ -82,12 +90,13 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 error: action.payload,
             };
 
-        case 'AUTH_LOGOUT':
+        case &apos;AUTH_LOGOUT&apos;:
             // Clear all stored auth data
-            localStorage.removeItem('sessionToken');
-            localStorage.removeItem('user');
+            localStorage.removeItem(&apos;sessionToken&apos;);
+            localStorage.removeItem(&apos;user&apos;);
             
             return {
+}
                 ...state,
                 user: null,
                 sessionToken: null,
@@ -96,25 +105,30 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
                 error: null,
             };
 
-        case 'AUTH_CLEAR_ERROR':
+        case &apos;AUTH_CLEAR_ERROR&apos;:
             return {
+}
                 ...state,
                 error: null,
             };
 
-        case 'AUTH_INITIALIZED':
+        case &apos;AUTH_INITIALIZED&apos;:
             return {
+}
                 ...state,
                 isInitialized: true,
                 isLoading: false,
             };
 
-        case 'USER_UPDATE': {
+        case &apos;USER_UPDATE&apos;: {
+}
             const updatedUser = state.user ? { ...state.user, ...action.payload } : null;
             if (updatedUser) {
-                localStorage.setItem('user', JSON.stringify(updatedUser));
+}
+                localStorage.setItem(&apos;user&apos;, JSON.stringify(updatedUser));
 
             return {
+}
                 ...state,
                 user: updatedUser,
             };
@@ -126,6 +140,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
 
 // Context interface
 interface AuthContextType {
+}
     // State
     user: User | null;
     sessionToken: string | null;
@@ -149,49 +164,62 @@ const AuthContext = createContext<AuthContextType | null>(null);
 }
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: any) => {
+}
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount
     useEffect(() => {
+}
         const initializeAuth = async () => {
+}
             try {
-                dispatch({ type: 'AUTH_START' });
+}
+                dispatch({ type: &apos;AUTH_START&apos; });
                 
                 // Check for stored session data
-                const storedToken = localStorage.getItem('sessionToken');
-                const storedUser = localStorage.getItem('user');
+                const storedToken = localStorage.getItem(&apos;sessionToken&apos;);
+                const storedUser = localStorage.getItem(&apos;user&apos;);
                 
                 if (storedToken && storedUser) {
+}
                     try {
+}
                         // Verify stored session is still valid
                         const isValid = await authService.validateSession();
                         
                         if (isValid) {
+}
                             const user = JSON.parse(storedUser);
                             dispatch({
-                                type: 'AUTH_SUCCESS',
+}
+                                type: &apos;AUTH_SUCCESS&apos;,
                                 payload: {
+}
                                     user,
                                     sessionToken: storedToken,
                                 },
                             });
                         } else {
+}
                             // Invalid session, clear storage
-                            localStorage.removeItem('sessionToken');
-                            localStorage.removeItem('user');
-                            dispatch({ type: 'AUTH_INITIALIZED' });
+                            localStorage.removeItem(&apos;sessionToken&apos;);
+                            localStorage.removeItem(&apos;user&apos;);
+                            dispatch({ type: &apos;AUTH_INITIALIZED&apos; });
 
                     } catch (validationError) {
+}
                         // Session validation failed, clear storage
-                        localStorage.removeItem('sessionToken');
-                        localStorage.removeItem('user');
-                        dispatch({ type: 'AUTH_INITIALIZED' });
+                        localStorage.removeItem(&apos;sessionToken&apos;);
+                        localStorage.removeItem(&apos;user&apos;);
+                        dispatch({ type: &apos;AUTH_INITIALIZED&apos; });
 
                 } else {
-                    dispatch({ type: 'AUTH_INITIALIZED' });
+}
+                    dispatch({ type: &apos;AUTH_INITIALIZED&apos; });
 
             } catch (error) {
-                dispatch({ type: 'AUTH_INITIALIZED' });
+}
+                dispatch({ type: &apos;AUTH_INITIALIZED&apos; });
 
         };
 
@@ -200,29 +228,38 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
 
     // Login function
     const login = async (email: string, password: string): Promise<void> => {
+}
         try {
-            dispatch({ type: 'AUTH_START' });
+}
+            dispatch({ type: &apos;AUTH_START&apos; });
             
             const result = await authService.login(email, password);
             
             if (result.success && result.data?.user && result.data?.session_token) {
+}
                 dispatch({
-                    type: 'AUTH_SUCCESS',
+}
+                    type: &apos;AUTH_SUCCESS&apos;,
                     payload: {
+}
                         user: result.data.user,
                         sessionToken: result.data.session_token,
                     },
                 });
             } else {
+}
                 dispatch({
-                    type: 'AUTH_FAILURE',
-                    payload: result.error || 'Login failed',
+}
+                    type: &apos;AUTH_FAILURE&apos;,
+                    payload: result.error || &apos;Login failed&apos;,
                 });
 
         } catch (error) {
+}
             dispatch({
-                type: 'AUTH_FAILURE',
-                payload: error instanceof Error ? error.message : 'Login failed',
+}
+                type: &apos;AUTH_FAILURE&apos;,
+                payload: error instanceof Error ? error.message : &apos;Login failed&apos;,
             });
 
     };
@@ -234,106 +271,137 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
         password: string,
         displayName?: string
     ): Promise<void> => {
+}
         try {
-            dispatch({ type: 'AUTH_START' });
+}
+            dispatch({ type: &apos;AUTH_START&apos; });
             
             const result = await authService.register(username, email, password, displayName);
             
             if (result.success && result.data?.user && result.data?.session_token) {
+}
                 dispatch({
-                    type: 'AUTH_SUCCESS',
+}
+                    type: &apos;AUTH_SUCCESS&apos;,
                     payload: {
+}
                         user: result.data.user,
                         sessionToken: result.data.session_token,
                     },
                 });
             } else {
+}
                 dispatch({
-                    type: 'AUTH_FAILURE',
-                    payload: result.error || 'Registration failed',
+}
+                    type: &apos;AUTH_FAILURE&apos;,
+                    payload: result.error || &apos;Registration failed&apos;,
                 });
 
         } catch (error) {
+}
             dispatch({
-                type: 'AUTH_FAILURE',
-                payload: error instanceof Error ? error.message : 'Registration failed',
+}
+                type: &apos;AUTH_FAILURE&apos;,
+                payload: error instanceof Error ? error.message : &apos;Registration failed&apos;,
             });
 
     };
 
     // Logout function
     const logout = async (): Promise<void> => {
+}
         try {
+}
 
             await authService.logout();
         
     } catch (error) {
+}
         } finally {
-            dispatch({ type: 'AUTH_LOGOUT' });
+}
+            dispatch({ type: &apos;AUTH_LOGOUT&apos; });
 
     };
 
     // Update profile function
     const updateProfile = async (updates: Partial<User>): Promise<void> => {
+}
         if (!state.user) {
-            throw new Error('User not authenticated');
+}
+            throw new Error(&apos;User not authenticated&apos;);
 
         try {
-            dispatch({ type: 'AUTH_START' });
+}
+            dispatch({ type: &apos;AUTH_START&apos; });
             
             const result = await authService.updateProfile(updates);
             
             if (result) {
+}
                 // Fetch updated user profile
                 const updatedProfile = await authService.getProfile();
                 if (updatedProfile) {
+}
                     dispatch({
-                        type: 'USER_UPDATE',
+}
+                        type: &apos;USER_UPDATE&apos;,
                         payload: updatedProfile,
                     });
 
             } else {
+}
                 dispatch({
-                    type: 'AUTH_FAILURE',
-                    payload: 'Profile update failed',
+}
+                    type: &apos;AUTH_FAILURE&apos;,
+                    payload: &apos;Profile update failed&apos;,
                 });
 
         } catch (error) {
+}
             dispatch({
-                type: 'AUTH_FAILURE',
-                payload: error instanceof Error ? error.message : 'Profile update failed',
+}
+                type: &apos;AUTH_FAILURE&apos;,
+                payload: error instanceof Error ? error.message : &apos;Profile update failed&apos;,
             });
 
     };
 
     // Clear error function
     const clearError = (): void => {
-        dispatch({ type: 'AUTH_CLEAR_ERROR' });
+}
+        dispatch({ type: &apos;AUTH_CLEAR_ERROR&apos; });
     };
 
     // Check auth function for manual validation
     const checkAuth = async (): Promise<void> => {
+}
         try {
+}
             const result = authService.getCurrentUser();
             
             if (result) {
+}
                 // Auth is valid, update user data
                 dispatch({
-                    type: 'USER_UPDATE',
+}
+                    type: &apos;USER_UPDATE&apos;,
                     payload: result,
                 });
             } else {
+}
                 // Auth is invalid, logout
-                dispatch({ type: 'AUTH_LOGOUT' });
+                dispatch({ type: &apos;AUTH_LOGOUT&apos; });
 
         } catch (error) {
-            dispatch({ type: 'AUTH_LOGOUT' });
+}
+            dispatch({ type: &apos;AUTH_LOGOUT&apos; });
 
     };
 
     // Memoized context value
     const contextValue = useMemo<AuthContextType>(
         () => ({
+}
             // State
             user: state.user,
             sessionToken: state.sessionToken,
@@ -362,18 +430,22 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }: an
 
 // Custom hook for using auth context
 export const useAuth = (): AuthContextType => {
+}
     const context = useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+}
+        throw new Error(&apos;useAuth must be used within an AuthProvider&apos;);
 
     return context;
 };
 
 // Permission-based hook for role/permission checking
 export const usePermission = (permission?: string) => {
+}
     const { user, isAuthenticated } = useAuth();
     
     return useMemo(() => {
+}
         if (!isAuthenticated || !user) return false;
         
         // For MVP, all authenticated users have basic permissions
@@ -387,12 +459,15 @@ export const usePermission = (permission?: string) => {
 
 // Loading component for auth initialization
 export const AuthInitializer: React.FC<{ children: ReactNode; fallback?: ReactNode }> = ({
+}
     children,
     fallback = <div>Loading...</div>,
 }: any) => {
+}
     const { isInitialized } = useAuth();
     
     if (!isInitialized) {
+}
         return <>{fallback}</>;
 
     return <>{children}</>;

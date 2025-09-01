@@ -3,12 +3,13 @@
  * Enhanced activity stream with reactions, comments, and community interactions
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, Team, User, League } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, Team, User, League } from &apos;../../types&apos;;
 import { 
+}
     HeartIcon, 
     MessageCircleIcon, 
     ShareIcon, 
@@ -29,10 +30,11 @@ import {
     FilterIcon,
     TrendingUpIcon,
     ClockIcon,
-    EyeIcon
-} from 'lucide-react';
+//     EyeIcon
+} from &apos;lucide-react&apos;;
 
 export interface SocialFeedItem {
+}
     id: string;
     type: FeedItemType;
     userId: string;
@@ -48,31 +50,32 @@ export interface SocialFeedItem {
     views: number;
     isPinned: boolean;
     isHighlighted: boolean;
-    visibility: 'public' | 'league_only' | 'friends_only';
+    visibility: &apos;public&apos; | &apos;league_only&apos; | &apos;friends_only&apos;;
     tags: string[];
     mentions: FeedMention[];
 
 export type FeedItemType = 
-    | 'trade_announcement'
-    | 'waiver_pickup'
-    | 'lineup_brag'
-    | 'team_story'
-    | 'prediction'
-    | 'trash_talk'
-    | 'achievement'
-    | 'milestone'
-    | 'trade_request'
-    | 'poll'
-    | 'celebration'
-    | 'complaint'
-    | 'analysis'
-    | 'meme'
-    | 'news_share'
-    | 'league_update';
+    | &apos;trade_announcement&apos;
+    | &apos;waiver_pickup&apos;
+    | &apos;lineup_brag&apos;
+    | &apos;team_story&apos;
+    | &apos;prediction&apos;
+    | &apos;trash_talk&apos;
+    | &apos;achievement&apos;
+    | &apos;milestone&apos;
+    | &apos;trade_request&apos;
+    | &apos;poll&apos;
+    | &apos;celebration&apos;
+    | &apos;complaint&apos;
+    | &apos;analysis&apos;
+    | &apos;meme&apos;
+    | &apos;news_share&apos;
+    | &apos;league_update&apos;;
 
 }
 
 export interface FeedContent {
+}
     text?: string;
     media?: FeedMedia[];
     data?: any; // Flexible data for different content types
@@ -83,8 +86,9 @@ export interface FeedContent {
 }
 
 export interface FeedMedia {
+}
     id: string;
-    type: 'image' | 'video' | 'gif' | 'link';
+    type: &apos;image&apos; | &apos;video&apos; | &apos;gif&apos; | &apos;link&apos;;
     url: string;
     thumbnail?: string;
     caption?: string;
@@ -93,6 +97,7 @@ export interface FeedMedia {
 }
 
 export interface FeedPoll {
+}
     id: string;
     question: string;
     options: FeedPollOption[];
@@ -103,6 +108,7 @@ export interface FeedPoll {
 }
 
 export interface FeedPollOption {
+}
     id: string;
     text: string;
     votes: number;
@@ -111,6 +117,7 @@ export interface FeedPollOption {
 }
 
 export interface FeedReaction {
+}
     id: string;
     userId: string;
     userName: string;
@@ -120,6 +127,7 @@ export interface FeedReaction {
 }
 
 export interface FeedComment {
+}
     id: string;
     userId: string;
     userName: string;
@@ -134,24 +142,27 @@ export interface FeedComment {
 }
 
 export interface FeedMention {
+}
     userId: string;
     userName: string;
-    type: 'user' | 'team';
+    type: &apos;user&apos; | &apos;team&apos;;
     position: number;
     length: number;
 
 }
 
 export interface SocialFeedFilter {
+}
     types: FeedItemType[];
     users: string[];
-    timeRange: 'today' | 'week' | 'month' | 'all';
-    sortBy: 'latest' | 'popular' | 'trending';
+    timeRange: &apos;today&apos; | &apos;week&apos; | &apos;month&apos; | &apos;all&apos;;
+    sortBy: &apos;latest&apos; | &apos;popular&apos; | &apos;trending&apos;;
     showPinnedOnly: boolean;
 
 }
 
 interface SocialFeedProps {
+}
     feedItems: SocialFeedItem[];
     currentUser: User;
     onReaction: (itemId: string, emoji: string) => void;
@@ -164,6 +175,7 @@ interface SocialFeedProps {
     className?: string;}
 
 const SocialFeed: React.FC<SocialFeedProps> = ({
+}
     feedItems,
     currentUser,
     onReaction,
@@ -173,13 +185,15 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     onReport,
     onVote,
     onFilter,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
+}
     const [filter, setFilter] = React.useState<SocialFeedFilter>({
+}
         types: [],
         users: [],
-        timeRange: 'all',
-        sortBy: 'latest',
+        timeRange: &apos;all&apos;,
+        sortBy: &apos;latest&apos;,
         showPinnedOnly: false
     });
     const [showFilters, setShowFilters] = React.useState(false);
@@ -189,43 +203,52 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
 
     // Filter and sort feed items
     const processedFeedItems = React.useMemo(() => {
+}
         let filtered = feedItems;
 
         // Type filter
         if (filter.types.length > 0) {
+}
             filtered = filtered.filter((item: any) => filter.types.includes(item.type));
 
         // User filter
         if (filter.users.length > 0) {
+}
             filtered = filtered.filter((item: any) => filter.users.includes(item.userId));
 
         // Time range filter
         const now = new Date();
         const timeFilters = {
+}
             today: new Date(now.getTime() - 24 * 60 * 60 * 1000),
             week: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
             month: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
             all: new Date(0)
         };
 
-        if (filter.timeRange !== 'all') {
+        if (filter.timeRange !== &apos;all&apos;) {
+}
             filtered = filtered.filter((item: any) => item.timestamp >= timeFilters[filter.timeRange]);
 
         // Pinned filter
         if (filter.showPinnedOnly) {
+}
             filtered = filtered.filter((item: any) => item.isPinned);
 
         // Sort
         switch (filter.sortBy) {
-            case 'popular':
+}
+            case &apos;popular&apos;:
                 filtered.sort((a, b) => {
+}
                     const aScore = a.reactions.length + a.comments.length + a.shares;
                     const bScore = b.reactions.length + b.comments.length + b.shares;
                     return bScore - aScore;
                 });
                 break;
-            case 'trending':
+            case &apos;trending&apos;:
                 filtered.sort((a, b) => {
+}
                     const aRecent = a.reactions.filter((r: any) => r.timestamp.getTime() > now.getTime() - 3600000).length;
                     const bRecent = b.reactions.filter((r: any) => r.timestamp.getTime() > now.getTime() - 3600000).length;
                     return bRecent - aRecent;
@@ -236,6 +259,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
 
         // Always show pinned items first (unless pinned-only filter is active)
         if (!filter.showPinnedOnly) {
+}
             const pinned = filtered.filter((item: any) => item.isPinned);
             const unpinned = filtered.filter((item: any) => !item.isPinned);
             filtered = [...pinned, ...unpinned];
@@ -244,21 +268,23 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     }, [feedItems, filter]);
 
     const getItemTypeIcon = (type: FeedItemType) => {
+}
         switch (type) {
-            case 'trade_announcement':
-            case 'trade_request':
+}
+            case &apos;trade_announcement&apos;:
+            case &apos;trade_request&apos;:
                 return <ArrowRightIcon className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'achievement':
-            case 'milestone':
+            case &apos;achievement&apos;:
+            case &apos;milestone&apos;:
                 return <TrophyIcon className="w-4 h-4 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'trash_talk':
+            case &apos;trash_talk&apos;:
                 return <FlameIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'prediction':
-            case 'analysis':
+            case &apos;prediction&apos;:
+            case &apos;analysis&apos;:
                 return <TrendingUpIcon className="w-4 h-4 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'celebration':
+            case &apos;celebration&apos;:
                 return <TrophyIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'poll':
+            case &apos;poll&apos;:
                 return <UsersIcon className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <MessageCircleIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -266,61 +292,69 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     };
 
     const getItemTypeColor = (type: FeedItemType) => {
+}
         switch (type) {
-            case 'trade_announcement':
-            case 'trade_request':
-                return 'text-blue-400 bg-blue-500/20';
-            case 'achievement':
-            case 'milestone':
-                return 'text-yellow-400 bg-yellow-500/20';
-            case 'trash_talk':
-                return 'text-red-400 bg-red-500/20';
-            case 'prediction':
-            case 'analysis':
-                return 'text-purple-400 bg-purple-500/20';
-            case 'celebration':
-                return 'text-green-400 bg-green-500/20';
-            case 'poll':
-                return 'text-orange-400 bg-orange-500/20';
+}
+            case &apos;trade_announcement&apos;:
+            case &apos;trade_request&apos;:
+                return &apos;text-blue-400 bg-blue-500/20&apos;;
+            case &apos;achievement&apos;:
+            case &apos;milestone&apos;:
+                return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+            case &apos;trash_talk&apos;:
+                return &apos;text-red-400 bg-red-500/20&apos;;
+            case &apos;prediction&apos;:
+            case &apos;analysis&apos;:
+                return &apos;text-purple-400 bg-purple-500/20&apos;;
+            case &apos;celebration&apos;:
+                return &apos;text-green-400 bg-green-500/20&apos;;
+            case &apos;poll&apos;:
+                return &apos;text-orange-400 bg-orange-500/20&apos;;
             default:
-                return 'text-gray-400 bg-gray-500/20';
+                return &apos;text-gray-400 bg-gray-500/20&apos;;
 
     };
 
     const formatTimestamp = (date: Date) => {
+}
         const now = new Date();
         const diff = now.getTime() - date.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(diff / 3600000);
         const days = Math.floor(diff / 86400000);
 
-        if (minutes < 1) return 'Just now';
+        if (minutes < 1) return &apos;Just now&apos;;
         if (minutes < 60) return `${minutes}m ago`;
         if (hours < 24) return `${hours}h ago`;
         if (days < 7) return `${days}d ago`;
-        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        return date.toLocaleDateString(&apos;en-US&apos;, { month: &apos;short&apos;, day: &apos;numeric&apos; });
     };
 
     const toggleComments = (itemId: string) => {
+}
         const newExpanded = new Set(expandedComments);
         if (expandedComments.has(itemId)) {
+}
             newExpanded.delete(itemId);
         } else {
+}
             newExpanded.add(itemId);
 
         setExpandedComments(newExpanded);
     };
 
     const handleComment = (itemId: string, parentId?: string) => {
+}
         const content = newComment[itemId];
         if (!content?.trim()) return;
 
         onComment(itemId, content, parentId);
-        setNewComment(prev => ({ ...prev, [itemId]: '' }));
+        setNewComment(prev => ({ ...prev, [itemId]: &apos;&apos; }));
         setReplyingTo(null);
     };
 
     const renderPoll = (poll: FeedPoll, itemId: string) => {
+}
         const totalVotes = poll.options.reduce((sum, option) => sum + option.votes, 0);
         const hasVoted = poll.options.some((option: any) => option.voters.includes(currentUser.id));
         const isPollEnded = poll.endsAt < new Date();
@@ -330,6 +364,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 <h4 className="font-medium text-[var(--text-primary)] mb-3 sm:px-4 md:px-6 lg:px-8">{poll.question}</h4>
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {poll.options.map((option: any) => {
+}
                         const percentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
                         const userVoted = option.voters.includes(currentUser.id);
 
@@ -338,11 +373,12 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                 key={option.id}
                                 onClick={() => !hasVoted && !isPollEnded && onVote(poll.id, option.id)}
                                 className={`w-full p-3 rounded border text-left transition-colors ${
-                                    userVoted 
-                                        ? 'border-blue-400 bg-blue-500/20' 
+}
+//                                     userVoted 
+                                        ? &apos;border-blue-400 bg-blue-500/20&apos; 
                                         : hasVoted || isPollEnded
-                                            ? 'border-[var(--panel-border)] bg-gray-500/10 cursor-not-allowed'
-                                            : 'border-[var(--panel-border)] hover:border-blue-400/50 hover:bg-blue-500/10'
+                                            ? &apos;border-[var(--panel-border)] bg-gray-500/10 cursor-not-allowed&apos;
+                                            : &apos;border-[var(--panel-border)] hover:border-blue-400/50 hover:bg-blue-500/10&apos;
                                 }`}
                             >
                                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -352,11 +388,12 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                     </span>
                                 </div>
                                 {(hasVoted || isPollEnded) && (
+}
                                     <div className="mt-2 h-2 bg-gray-500/20 rounded overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                         <motion.div
                                             initial={{ width: 0 }}
                                             animate={{ width: `${percentage}%` }}
-                                            className={`h-full ${userVoted ? 'bg-blue-400' : 'bg-gray-400'}`}
+                                            className={`h-full ${userVoted ? &apos;bg-blue-400&apos; : &apos;bg-gray-400&apos;}`}
                                         />
                                     </div>
                                 )}
@@ -373,6 +410,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
     };
 
     const renderFeedItem = (item: SocialFeedItem) => {
+}
         const isCommentsExpanded = expandedComments.has(item.id);
 
         return (
@@ -381,14 +419,15 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 ${
-                    item.isPinned ? 'border-yellow-400/50' : ''
-                } ${item.isHighlighted ? 'ring-2 ring-blue-400/30' : ''}`}
+}
+                    item.isPinned ? &apos;border-yellow-400/50&apos; : &apos;&apos;
+                } ${item.isHighlighted ? &apos;ring-2 ring-blue-400/30&apos; : &apos;&apos;}`}
             >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                         <img
-                            src={item.userAvatar || '/default-avatar.png'}
+                            src={item.userAvatar || &apos;/default-avatar.png&apos;}
                             alt={item.userName}
                             className="w-10 h-10 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
@@ -398,6 +437,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                     {item.userName}
                                 </span>
                                 {item.teamName && (
+}
                                     <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         • {item.teamName}
                                     </span>
@@ -425,6 +465,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 {/* Content */}
                 <div className="mb-4 sm:px-4 md:px-6 lg:px-8">
                     {item.content.text && (
+}
                         <p className="text-[var(--text-primary)] mb-3 whitespace-pre-wrap sm:px-4 md:px-6 lg:px-8">
                             {item.content.text}
                         </p>
@@ -432,22 +473,27 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
 
                     {/* Media */}
                     {item.content.media && item.content.media.length > 0 && (
+}
                         <div className="grid grid-cols-2 gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                             {item.content.media.slice(0, 4).map((media: any) => (
+}
                                 <div key={media.id} className="relative sm:px-4 md:px-6 lg:px-8">
-                                    {media.type === 'image' && (
+                                    {media.type === &apos;image&apos; && (
+}
                                         <img
                                             src={media.url}
                                             alt={media.caption}
                                             className="w-full h-32 object-cover rounded sm:px-4 md:px-6 lg:px-8"
                                         />
                                     )}
-                                    {media.type === 'video' && (
+                                    {media.type === &apos;video&apos; && (
+}
                                         <div className="w-full h-32 bg-gray-500/20 rounded flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                                             <PlayIcon className="w-8 h-8 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                                         </div>
                                     )}
                                     {media.caption && (
+}
                                         <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 rounded-b sm:px-4 md:px-6 lg:px-8">
                                             {media.caption}
                                         </div>
@@ -466,7 +512,8 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                     <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                         {/* Reactions */}
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                            {['👍', '❤️', '😂', '🔥', '🤔'].map((emoji: any) => {
+                            {[&apos;👍&apos;, &apos;❤️&apos;, &apos;😂&apos;, &apos;🔥&apos;, &apos;🤔&apos;].map((emoji: any) => {
+}
                                 const count = item.reactions.filter((r: any) => r.emoji === emoji).length;
                                 const userReacted = item.reactions.some((r: any) => r.emoji === emoji && r.userId === currentUser.id);
                                 
@@ -511,22 +558,23 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                 {/* Comments Section */}
                 <AnimatePresence>
                     {isCommentsExpanded && (
+}
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
+                            animate={{ opacity: 1, height: &apos;auto&apos; }}
                             exit={{ opacity: 0, height: 0 }}
                             className="mt-4 pt-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Comment Input */}
                             <div className="flex gap-3 mb-4 sm:px-4 md:px-6 lg:px-8">
                                 <img
-                                    src={currentUser.avatar || '/default-avatar.png'}
-                                    alt={currentUser.name || 'User'}
+                                    src={currentUser.avatar || &apos;/default-avatar.png&apos;}
+                                    alt={currentUser.name || &apos;User&apos;}
                                     className="w-8 h-8 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                                 />
                                 <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                     <textarea
-                                        value={newComment[item.id] || ''}
+                                        value={newComment[item.id] || &apos;&apos;}
                                         onChange={(e: any) => setNewComment(prev => ({ ...prev, [item.id]: e.target.value }}
                                         placeholder="Write a comment..."
                                         className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] placeholder-[var(--text-secondary)] resize-none sm:px-4 md:px-6 lg:px-8"
@@ -537,7 +585,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                             onClick={() => handleComment(item.id)}
                                             className="px-3 py-1 bg-blue-500 text-white rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed sm:px-4 md:px-6 lg:px-8"
                                         >
-                                            Comment
+//                                             Comment
                                         </button>
                                     </div>
                                 </div>
@@ -546,9 +594,10 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                             {/* Comments List */}
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 {item.comments.map((comment: any) => (
+}
                                     <div key={comment.id} className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                                         <img
-                                            src={comment.userAvatar || '/default-avatar.png'}
+                                            src={comment.userAvatar || &apos;/default-avatar.png&apos;}
                                             alt={comment.userName}
                                             className="w-8 h-8 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                                         />
@@ -562,6 +611,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                                         {formatTimestamp(comment.timestamp)}
                                                     </span>
                                                     {comment.isEdited && (
+}
                                                         <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                             (edited)
                                                         </span>
@@ -575,12 +625,13 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                                             {/* Comment reactions */}
                                             <div className="flex items-center gap-2 mt-1 sm:px-4 md:px-6 lg:px-8">
                                                 <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
-                                                    Like
+//                                                     Like
                                                 </button>
                                                 <button className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
-                                                    Reply
+//                                                     Reply
                                                 </button>
                                                 {comment.reactions.length > 0 && (
+}
                                                     <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                         {comment.reactions.length} reactions
                                                     </span>
@@ -607,16 +658,17 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
                         onClick={() => setShowFilters(!showFilters)}
                     >
                         <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                        Filters
+//                         Filters
                     </button>
                 </div>
 
                 {/* Filter Controls */}
                 <AnimatePresence>
                     {showFilters && (
+}
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
+                            animate={{ opacity: 1, height: &apos;auto&apos; }}
                             exit={{ opacity: 0, height: 0 }}
                             className="mt-4 p-4 bg-gray-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8"
                         >
@@ -654,7 +706,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
 
                                 <div>
                                     <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
-                                        Options
+//                                         Options
                                     </label>
                                     <label className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                         <input
@@ -676,6 +728,7 @@ const SocialFeed: React.FC<SocialFeedProps> = ({
             <div className="flex-1 overflow-y-auto p-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {processedFeedItems.length === 0 ? (
+}
                         <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                             <MessageCircleIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                             <p className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">No posts found</p>

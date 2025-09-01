@@ -1,14 +1,15 @@
 
 
-import React, { useCallback, useMemo } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import type { League, Team } from '../../types';
-import { Widget } from '../ui/Widget';
-import ProposeTradeModal from './ProposeTradeModal';
-import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
-import { Tooltip } from '../ui/Tooltip';
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { AnimatePresence } from &apos;framer-motion&apos;;
+import type { League, Team } from &apos;../../types&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import ProposeTradeModal from &apos;./ProposeTradeModal&apos;;
+import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface LeagueTeamsListProps {
+}
     league: League;
     myTeamId: number;
     dispatch: React.Dispatch<any>;
@@ -16,6 +17,7 @@ interface LeagueTeamsListProps {
 }
 
 export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeamId, dispatch }: any) => {
+}
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [selectedOpponent, setSelectedOpponent] = React.useState<Team | null>(null);
 
@@ -25,11 +27,13 @@ export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeam
     const isTradeDeadlinePassed = league.currentWeek > league.settings.tradeDeadline;
 
     const handleProposeTrade = (opponent: Team) => {
+}
         setSelectedOpponent(opponent);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
+}
         setIsModalOpen(false);
         setSelectedOpponent(null);
     };
@@ -39,6 +43,7 @@ export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeam
             <Widget title="League Teams" icon={<ArrowRightLeftIcon />}>
                 <div className="p-3 space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {opponents.map((team: any) => (
+}
                         <div key={team.id} className="flex items-center justify-between p-2 bg-black/10 rounded-md sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-xl sm:px-4 md:px-6 lg:px-8">{team.avatar}</span>
@@ -61,7 +66,8 @@ export const LeagueTeamsList: React.FC<LeagueTeamsListProps> = ({ league, myTeam
             </Widget>
             <AnimatePresence>
                 {isModalOpen && selectedOpponent && (
-                    <ProposeTradeModal
+}
+                    <ProposeTradeModal>
                         myTeam={myTeam}
                         otherTeam={selectedOpponent}
                         leagueId={league.id}

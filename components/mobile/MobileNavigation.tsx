@@ -3,10 +3,11 @@
  * Responsive bottom navigation bar with safe area support
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
   Home, 
   Target, 
   BarChart3, 
@@ -16,10 +17,11 @@ import {
   Calendar,
   Bell,
   Menu,
-  X
-} from 'lucide-react';
+//   X
+} from &apos;lucide-react&apos;;
 
 interface NavigationItem {
+}
   id: string;
   label: string;
   icon: React.ComponentType<any>;
@@ -28,6 +30,7 @@ interface NavigationItem {
 }
 
 interface Props {
+}
   activeView: string;
   onViewChange: (view: string) => void;
   notificationCount?: number;
@@ -35,82 +38,92 @@ interface Props {
 }
 
 const primaryNavItems: NavigationItem[] = [
-  { id: 'home', label: 'Home', icon: Home, path: '/' },
-  { id: 'predictions', label: 'Oracle', icon: Target, path: '/oracle' },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/analytics' },
-  { id: 'profile', label: 'Profile', icon: User, path: '/profile' },
+  { id: &apos;home&apos;, label: &apos;Home&apos;, icon: Home, path: &apos;/&apos; },
+  { id: &apos;predictions&apos;, label: &apos;Oracle&apos;, icon: Target, path: &apos;/oracle&apos; },
+  { id: &apos;analytics&apos;, label: &apos;Analytics&apos;, icon: BarChart3, path: &apos;/analytics&apos; },
+  { id: &apos;profile&apos;, label: &apos;Profile&apos;, icon: User, path: &apos;/profile&apos; },
 ];
 
 const secondaryNavItems: NavigationItem[] = [
-  { id: 'contests', label: 'Contests', icon: Trophy, path: '/contests' },
-  { id: 'schedule', label: 'Schedule', icon: Calendar, path: '/schedule' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, path: '/notifications' },
-  { id: 'settings', label: 'Settings', icon: Settings, path: '/settings' },
+  { id: &apos;contests&apos;, label: &apos;Contests&apos;, icon: Trophy, path: &apos;/contests&apos; },
+  { id: &apos;schedule&apos;, label: &apos;Schedule&apos;, icon: Calendar, path: &apos;/schedule&apos; },
+  { id: &apos;notifications&apos;, label: &apos;Notifications&apos;, icon: Bell, path: &apos;/notifications&apos; },
+  { id: &apos;settings&apos;, label: &apos;Settings&apos;, icon: Settings, path: &apos;/settings&apos; },
 ];
 
 const MobileNavigation: React.FC<Props> = ({ 
+}
   activeView, 
   onViewChange, 
   notificationCount = 0,
-  className = ''
+  className = &apos;&apos;
 }: any) => {
+}
   const [showSecondaryNav, setShowSecondaryNav] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
+}
     const checkDevice = () => {
+}
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     
     checkDevice();
-    window.addEventListener('resize', checkDevice);
-    return () => window.removeEventListener('resize', checkDevice);
+    window.addEventListener(&apos;resize&apos;, checkDevice);
+    return () => window.removeEventListener(&apos;resize&apos;, checkDevice);
     }
   }, []);
 
   const handleNavItemClick = (item: NavigationItem) => {
+}
     onViewChange(item.id);
     setShowSecondaryNav(false);
   };
 
   const renderNavItem = (item: NavigationItem, isSecondary = false) => {
+}
     const isActive = activeView === item.id;
     const IconComponent = item.icon;
-    const showBadge = item.id === 'notifications' && notificationCount > 0;
+    const showBadge = item.id === &apos;notifications&apos; && notificationCount > 0;
 
     return (
       <motion.button
         key={item.id}
         onClick={() => handleNavItemClick(item)}
         className={`
+}
           relative flex flex-col items-center justify-center
           min-h-[44px] min-w-[44px] px-2 py-1
           rounded-lg transition-colors duration-200
           ${isActive 
-            ? 'text-blue-400 bg-blue-400/10' 
-            : 'text-gray-400 hover:text-white hover:bg-white/5'
+}
+            ? &apos;text-blue-400 bg-blue-400/10&apos; 
+            : &apos;text-gray-400 hover:text-white hover:bg-white/5&apos;
           }
-          ${isSecondary ? 'w-full text-left flex-row px-4 py-3' : ''}
+          ${isSecondary ? &apos;w-full text-left flex-row px-4 py-3&apos; : &apos;&apos;}
         `}
         whileTap={{ scale: 0.95 }}
         initial={false}
         animate={{
-          backgroundColor: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent'
+}
+          backgroundColor: isActive ? &apos;rgba(59, 130, 246, 0.1)&apos; : &apos;transparent&apos;
         }}
       >
         <div className="relative">
-          <IconComponent className={`w-5 h-5 ${isSecondary ? 'mr-3' : 'mb-0.5'}`} />
+          <IconComponent className={`w-5 h-5 ${isSecondary ? &apos;mr-3&apos; : &apos;mb-0.5&apos;}`} />
           {showBadge && (
+}
             <motion.div
               className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0 }}
             >
-              {notificationCount > 99 ? '99+' : notificationCount}
+              {notificationCount > 99 ? &apos;99+&apos; : notificationCount}
             </motion.div>
           )}
         </div>
-        <span className={`text-xs font-medium ${isSecondary ? 'flex-1' : ''}`}>
+        <span className={`text-xs font-medium ${isSecondary ? &apos;flex-1&apos; : &apos;&apos;}`}>
           {item.label}
         </span>
       </motion.button>
@@ -122,6 +135,7 @@ const MobileNavigation: React.FC<Props> = ({
       {/* Main Bottom Navigation */}
       <motion.nav
         className={`
+}
           fixed bottom-0 left-0 right-0 z-50
           bg-gray-800/95 backdrop-blur-sm
           border-t border-gray-700
@@ -130,9 +144,10 @@ const MobileNavigation: React.FC<Props> = ({
         initial={{ y: 100 }}
         animate={{ y: 0 }}
         style={{ 
-          paddingBottom: 'env(safe-area-inset-bottom)',
-          paddingLeft: 'env(safe-area-inset-left)',
-          paddingRight: 'env(safe-area-inset-right)'
+}
+          paddingBottom: &apos;env(safe-area-inset-bottom)&apos;,
+          paddingLeft: &apos;env(safe-area-inset-left)&apos;,
+          paddingRight: &apos;env(safe-area-inset-right)&apos;
         }}
       >
         <div className="flex items-center justify-around px-2 py-2">
@@ -142,12 +157,14 @@ const MobileNavigation: React.FC<Props> = ({
           <motion.button
             onClick={() => setShowSecondaryNav(!showSecondaryNav)}
             className={`
+}
               flex flex-col items-center justify-center
               min-h-[44px] min-w-[44px] px-2 py-1
               rounded-lg transition-colors duration-200
               ${showSecondaryNav 
-                ? 'text-blue-400 bg-blue-400/10' 
-                : 'text-gray-400 hover:text-white hover:bg-white/5'
+}
+                ? &apos;text-blue-400 bg-blue-400/10&apos; 
+                : &apos;text-gray-400 hover:text-white hover:bg-white/5&apos;
               }
             `}
             whileTap={{ scale: 0.95 }}
@@ -161,6 +178,7 @@ const MobileNavigation: React.FC<Props> = ({
       {/* Secondary Navigation Overlay */}
       <AnimatePresence>
         {showSecondaryNav && (
+}
           <>
             {/* Backdrop */}
             <motion.div
@@ -180,14 +198,15 @@ const MobileNavigation: React.FC<Props> = ({
                 rounded-t-xl
               "
               style={{ 
-                paddingBottom: 'calc(72px + env(safe-area-inset-bottom))',
-                paddingLeft: 'env(safe-area-inset-left)',
-                paddingRight: 'env(safe-area-inset-right)'
+}
+                paddingBottom: &apos;calc(72px + env(safe-area-inset-bottom))&apos;,
+                paddingLeft: &apos;env(safe-area-inset-left)&apos;,
+                paddingRight: &apos;env(safe-area-inset-right)&apos;
               }}
-              initial={{ y: '100%' }}
+              initial={{ y: &apos;100%&apos; }}
               animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              exit={{ y: &apos;100%&apos; }}
+              transition={{ type: &apos;spring&apos;, damping: 25, stiffness: 200 }}
             >
               {/* Panel Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-700">
@@ -212,6 +231,7 @@ const MobileNavigation: React.FC<Props> = ({
 
       {/* Tablet-specific horizontal navigation */}
       {isTablet && (
+}
         <motion.nav
           className="
             fixed top-0 left-0 right-0 z-40
@@ -219,32 +239,37 @@ const MobileNavigation: React.FC<Props> = ({
             border-b border-gray-700
           "
           style={{ 
-            paddingTop: 'env(safe-area-inset-top)',
-            paddingLeft: 'env(safe-area-inset-left)',
-            paddingRight: 'env(safe-area-inset-right)'
+}
+            paddingTop: &apos;env(safe-area-inset-top)&apos;,
+            paddingLeft: &apos;env(safe-area-inset-left)&apos;,
+            paddingRight: &apos;env(safe-area-inset-right)&apos;
           }}
         >
           <div className="flex items-center justify-between px-4 py-3">
             <div className="flex items-center space-x-6">
               {[...primaryNavItems, ...secondaryNavItems].map((item: any) => (
+}
                 <motion.button
                   key={`tablet-${item.id}`}
                   onClick={() => handleNavItemClick(item)}
                   className={`
+}
                     flex items-center space-x-2 px-3 py-2 rounded-lg
                     min-h-[44px] transition-colors duration-200
                     ${activeView === item.id 
-                      ? 'text-blue-400 bg-blue-400/10' 
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+}
+                      ? &apos;text-blue-400 bg-blue-400/10&apos; 
+                      : &apos;text-gray-400 hover:text-white hover:bg-white/5&apos;
                     }
                   `}
                   whileTap={{ scale: 0.95 }}
                 >
                   <item.icon className="w-5 h-5" />
                   <span className="text-sm font-medium">{item.label}</span>
-                  {item.id === 'notifications' && notificationCount > 0 && (
+                  {item.id === &apos;notifications&apos; && notificationCount > 0 && (
+}
                     <div className="bg-red-500 text-white text-xs rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
-                      {notificationCount > 99 ? '99+' : notificationCount}
+                      {notificationCount > 99 ? &apos;99+&apos; : notificationCount}
                     </div>
                   )}
                 </motion.button>

@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import EmptyState from './EmptyState';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import EmptyState from &apos;./EmptyState&apos;;
 
-describe('EmptyState', () => {
-  it('renders without crashing', () => {
+describe(&apos;EmptyState&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<EmptyState />);
-    expect(screen.getByTestId('emptystate')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;emptystate&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<EmptyState />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<EmptyState />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

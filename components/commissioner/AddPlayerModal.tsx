@@ -1,16 +1,17 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import type { Team, League, Player } from '../../types';
-import { players } from '../../data/players';
-import { Modal } from '../ui/Modal';
-import { CloseIcon } from '../icons/CloseIcon';
-import { SearchIcon } from '../icons/SearchIcon';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Team, League, Player } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
+import { SearchIcon } from &apos;../icons/SearchIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface AddPlayerModalProps {
+}
     league: League;
     team: Team;
     dispatch: React.Dispatch<any>;
@@ -19,7 +20,8 @@ interface AddPlayerModalProps {
 }
 
 const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch, onClose }: any) => {
-    const [search, setSearch] = React.useState('');
+}
+    const [search, setSearch] = React.useState(&apos;&apos;);
 
     const rosteredPlayerIds = new Set(league.teams.flatMap(t => t.roster.map((p: any) => p.id)));
     const freeAgents = players.filter((p: any) => !rosteredPlayerIds.has(p.id));
@@ -27,11 +29,13 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
     const filteredPlayers = freeAgents.filter((p: any) => p.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
 
     const handleAddPlayer = (player: Player) => {
+}
         dispatch({
-            type: 'MANUAL_ADD_PLAYER',
+}
+            type: &apos;MANUAL_ADD_PLAYER&apos;,
             payload: { leagueId: league.id, teamId: team.id, player }
         });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${player.name} added to ${team.name}.`, type: 'SYSTEM' } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `${player.name} added to ${team.name}.`, type: &apos;SYSTEM&apos; } });
         onClose();
     };
 
@@ -55,7 +59,7 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
                             placeholder="Search free agents..."
                             value={search}
                             onChange={e => setSearch(e.target.value)}
-                            autoFocus
+//                             autoFocus
                         />
                         <SearchIcon className="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 sm:px-4 md:px-6 lg:px-8" />
                     </div>
@@ -63,13 +67,14 @@ const AddPlayerModal: React.FC<AddPlayerModalProps> = ({ league, team, dispatch,
 
                 <main className="flex-grow p-2 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                     {filteredPlayers.map((player: any) => (
+}
                         <button
                             key={player.id}
                             onClick={() => handleAddPlayer(player)}
                             className="w-full flex items-center justify-between p-2 hover:bg-black/20 rounded-md text-left sm:px-4 md:px-6 lg:px-8"
                         >
                             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                                <Avatar avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'} className="w-8 h-8 text-xl rounded-md sm:px-4 md:px-6 lg:px-8" />
+                                <Avatar avatar={player.astralIntelligence?.spiritAnimal?.[0] || &apos;🏈&apos;} className="w-8 h-8 text-xl rounded-md sm:px-4 md:px-6 lg:px-8" />
                                 <div>
                                     <p className="font-semibold text-sm sm:px-4 md:px-6 lg:px-8">{player.name}</p>
                                     <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team}</p>

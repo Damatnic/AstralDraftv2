@@ -1,12 +1,14 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect, FC, ChangeEvent } from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect, FC, ChangeEvent } from &apos;react&apos;;
 import { 
+}
   Shield, AlertTriangle, Users, Activity, Lock, 
   Globe, Ban, Eye, Download, RefreshCw, TrendingUp,
   Server, Zap, Clock, CheckCircle, XCircle 
-} from 'lucide-react';
+} from &apos;lucide-react&apos;;
 
 interface SecurityMetrics {
+}
   totalEvents: number;
   criticalEvents: number;
   blockedIPs: number;
@@ -18,10 +20,11 @@ interface SecurityMetrics {
 }
 
 interface SecurityEvent {
+}
   id: string;
   timestamp: string;
   eventType: string;
-  severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
+  severity: &apos;CRITICAL&apos; | &apos;HIGH&apos; | &apos;MEDIUM&apos; | &apos;LOW&apos;;
   ip: string;
   description: string;
   location?: string;
@@ -29,6 +32,7 @@ interface SecurityEvent {
 }
 
 interface SecurityThreat {
+}
   type: string;
   count: number;
   lastSeen: string;
@@ -36,83 +40,102 @@ interface SecurityThreat {
 }
 
 interface SystemStatus {
-  api: 'healthy' | 'degraded' | 'down';
-  database: 'healthy' | 'degraded' | 'down';
-  authentication: 'healthy' | 'degraded' | 'down';
-  monitoring: 'healthy' | 'degraded' | 'down';
-  backups: 'healthy' | 'degraded' | 'down';
+}
+  api: &apos;healthy&apos; | &apos;degraded&apos; | &apos;down&apos;;
+  database: &apos;healthy&apos; | &apos;degraded&apos; | &apos;down&apos;;
+  authentication: &apos;healthy&apos; | &apos;degraded&apos; | &apos;down&apos;;
+  monitoring: &apos;healthy&apos; | &apos;degraded&apos; | &apos;down&apos;;
+  backups: &apos;healthy&apos; | &apos;degraded&apos; | &apos;down&apos;;
 }
 
 const SecurityDashboard: FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<SecurityMetrics | null>(null);
   const [recentEvents, setRecentEvents] = useState<SecurityEvent[]>([]);
   const [topThreats, setTopThreats] = useState<SecurityThreat[]>([]);
   const [systemStatus, setSystemStatus] = useState<SystemStatus | null>(null);
-  const [timeRange, setTimeRange] = useState<'1h' | '24h' | '7d' | '30d'>('24h');
+  const [timeRange, setTimeRange] = useState<&apos;1h&apos; | &apos;24h&apos; | &apos;7d&apos; | &apos;30d&apos;>(&apos;24h&apos;);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+}
     loadSecurityData();
     const interval = setInterval(loadSecurityData, 30000); // Refresh every 30 seconds
     return () => clearInterval(interval);
   }, [timeRange]);
 
   const loadSecurityData = async () => {
+}
     try {
+}
       setRefreshing(true);
       
       // Load security metrics
       const metricsResponse = await fetch(`/api/admin/security/metrics?timeRange=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+}
+        headers: { &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}` }
       });
       
       if (metricsResponse.ok) {
+}
         setMetrics(await metricsResponse.json());
       }
 
       // Load recent security events
       const eventsResponse = await fetch(`/api/admin/security/events?limit=20&timeRange=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+}
+        headers: { &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}` }
       });
       
       if (eventsResponse.ok) {
+}
         setRecentEvents(await eventsResponse.json());
       }
 
       // Load top threats
       const threatsResponse = await fetch(`/api/admin/security/threats?timeRange=${timeRange}`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+}
+        headers: { &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}` }
       });
       
       if (threatsResponse.ok) {
+}
         setTopThreats(await threatsResponse.json());
       }
 
       // Load system status
-      const statusResponse = await fetch('/api/admin/security/status', {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      const statusResponse = await fetch(&apos;/api/admin/security/status&apos;, {
+}
+        headers: { &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}` }
       });
       
       if (statusResponse.ok) {
+}
         setSystemStatus(await statusResponse.json());
       }
     } catch (error) {
-      console.error('Failed to load security data:', error);
+}
+      console.error(&apos;Failed to load security data:&apos;, error);
     } finally {
+}
       setLoading(false);
       setRefreshing(false);
     }
   };
 
   const blockIP = async (ip: string) => {
+}
     try {
-      await fetch('/api/admin/security/block-ip', {
-        method: 'POST',
+}
+      await fetch(&apos;/api/admin/security/block-ip&apos;, {
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
+}
+          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`,
+          &apos;Content-Type&apos;: &apos;application/json&apos;
         },
         body: JSON.stringify({ ip })
       });
@@ -120,62 +143,75 @@ const SecurityDashboard: FC = () => {
       // Refresh data after blocking
       await loadSecurityData();
     } catch (error) {
-      console.error('Failed to block IP:', error);
+}
+      console.error(&apos;Failed to block IP:&apos;, error);
     }
   };
 
   const generateSecurityReport = async () => {
+}
     try {
+}
       const response = await fetch(`/api/admin/security/report?timeRange=${timeRange}`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+}
+        method: &apos;POST&apos;,
+        headers: { &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}` }
       });
       
       if (response.ok) {
+}
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement(&apos;a&apos;);
         a.href = url;
-        a.download = `security-report-${timeRange}-${new Date().toISOString().split('T')[0]}.pdf`;
+        a.download = `security-report-${timeRange}-${new Date().toISOString().split(&apos;T&apos;)[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       }
     } catch (error) {
-      console.error('Failed to generate security report:', error);
+}
+      console.error(&apos;Failed to generate security report:&apos;, error);
     }
   };
 
   const getSeverityColor = (severity: string) => {
+}
     switch (severity) {
-      case 'CRITICAL': return 'text-red-600 bg-red-100 dark:bg-red-900/20';
-      case 'HIGH': return 'text-orange-600 bg-orange-100 dark:bg-orange-900/20';
-      case 'MEDIUM': return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20';
-      case 'LOW': return 'text-blue-600 bg-blue-100 dark:bg-blue-900/20';
-      default: return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20';
+}
+      case &apos;CRITICAL&apos;: return &apos;text-red-600 bg-red-100 dark:bg-red-900/20&apos;;
+      case &apos;HIGH&apos;: return &apos;text-orange-600 bg-orange-100 dark:bg-orange-900/20&apos;;
+      case &apos;MEDIUM&apos;: return &apos;text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20&apos;;
+      case &apos;LOW&apos;: return &apos;text-blue-600 bg-blue-100 dark:bg-blue-900/20&apos;;
+      default: return &apos;text-gray-600 bg-gray-100 dark:bg-gray-900/20&apos;;
     }
   };
 
   const getStatusColor = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return 'text-green-600';
-      case 'degraded': return 'text-yellow-600';
-      case 'down': return 'text-red-600';
-      default: return 'text-gray-600';
+}
+      case &apos;healthy&apos;: return &apos;text-green-600&apos;;
+      case &apos;degraded&apos;: return &apos;text-yellow-600&apos;;
+      case &apos;down&apos;: return &apos;text-red-600&apos;;
+      default: return &apos;text-gray-600&apos;;
     }
   };
 
   const getStatusIcon = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return <CheckCircle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'degraded': return <AlertTriangle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'down': return <XCircle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;healthy&apos;: return <CheckCircle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;degraded&apos;: return <AlertTriangle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;down&apos;: return <XCircle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Clock className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
     }
   };
 
   if (loading) {
+}
     return (
       <div className="flex items-center justify-center h-96 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
@@ -215,8 +251,8 @@ const SecurityDashboard: FC = () => {
             disabled={refreshing}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
+            <RefreshCw className={`w-4 h-4 ${refreshing ? &apos;animate-spin&apos; : &apos;&apos;}`} />
+//             Refresh
           </button>
 
           <button
@@ -231,6 +267,7 @@ const SecurityDashboard: FC = () => {
 
       {/* System Status */}
       {systemStatus && (
+}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <Server className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />
@@ -238,6 +275,7 @@ const SecurityDashboard: FC = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {Object.entries(systemStatus).map(([service, status]) => (
+}
               <div key={service} className="flex items-center gap-3 p-3 border rounded-lg dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <span className={getStatusColor(status)}>
                   {getStatusIcon(status)}
@@ -256,6 +294,7 @@ const SecurityDashboard: FC = () => {
 
       {/* Security Metrics */}
       {metrics && (
+}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -327,6 +366,7 @@ const SecurityDashboard: FC = () => {
           </h2>
           <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             {recentEvents.map((event: any) => (
+}
               <div key={event.id} className="border-l-4 border-gray-200 dark:border-gray-700 pl-4 py-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
                   <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -347,7 +387,8 @@ const SecurityDashboard: FC = () => {
                       <span>{new Date(event.timestamp).toLocaleString()}</span>
                     </div>
                   </div>
-                  {!event.resolved && event.severity === 'CRITICAL' && (
+                  {!event.resolved && event.severity === &apos;CRITICAL&apos; && (
+}
                     <button
                       onClick={() => blockIP(event.ip)}
                     >
@@ -368,6 +409,7 @@ const SecurityDashboard: FC = () => {
           </h2>
           <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
             {topThreats.map((threat, index) => (
+}
               <div key={threat.type} className="flex items-center justify-between p-3 border rounded-lg dark:border-gray-700 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                   <div className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">

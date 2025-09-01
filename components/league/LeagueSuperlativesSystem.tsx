@@ -2,19 +2,21 @@
  * League Superlatives & Awards System - Fun recognition and award tracking
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Award, Trophy, Star, Zap, Crown, Heart, Skull, Target, TrendingUp, Clock, Gift } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Award, Trophy, Star, Zap, Crown, Heart, Skull, Target, TrendingUp, Clock, Gift } from &apos;lucide-react&apos;;
 
 interface Superlative {
+}
   id: string;
   title: string;
   description: string;
-  category: 'weekly' | 'season' | 'career' | 'silly';
+  category: &apos;weekly&apos; | &apos;season&apos; | &apos;career&apos; | &apos;silly&apos;;
   icon: string;
   emoji: string;
   winner?: {
+}
     userId: string;
     userName: string;
     teamName: string;
@@ -22,19 +24,22 @@ interface Superlative {
     context?: string;
   };
   runners_up?: Array<{
+}
     userId: string;
     userName: string;
     teamName: string;
     value?: number | string;
   }>;
   criteria: string;
-  rarity: 'common' | 'rare' | 'legendary';
+  rarity: &apos;common&apos; | &apos;rare&apos; | &apos;legendary&apos;;
   week?: number;
 
 interface LeagueSuperlativesSystemProps {
+}
   leagueId: string;
   currentWeek: number;
   teams: Array<{
+}
     id: string;
     name: string;
     owner: string;
@@ -43,11 +48,13 @@ interface LeagueSuperlativesSystemProps {
   }>;
 
 const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
+}
   leagueId,
   currentWeek,
-  teams
+//   teams
 }: any) => {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'weekly' | 'season' | 'silly'>('all');
+}
+  const [selectedCategory, setSelectedCategory] = useState<&apos;all&apos; | &apos;weekly&apos; | &apos;season&apos; | &apos;silly&apos;>(&apos;all&apos;);
   const [expandedAward, setExpandedAward] = useState<string | null>(null);
   const [showVotingModal, setShowVotingModal] = useState<string | null>(null);
 
@@ -55,222 +62,249 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
   const superlativeDefinitions: Superlative[] = [
     // Weekly Awards
     {
-      id: 'high_scorer',
-      title: 'Weekly High Scorer',
-      description: 'Scored the most points this week',
-      category: 'weekly',
-      icon: 'trophy',
-      emoji: '🏆',
-      criteria: 'Highest weekly point total',
-      rarity: 'common',
+}
+      id: &apos;high_scorer&apos;,
+      title: &apos;Weekly High Scorer&apos;,
+      description: &apos;Scored the most points this week&apos;,
+      category: &apos;weekly&apos;,
+      icon: &apos;trophy&apos;,
+      emoji: &apos;🏆&apos;,
+      criteria: &apos;Highest weekly point total&apos;,
+      rarity: &apos;common&apos;,
       week: currentWeek,
       winner: {
-        userId: 'user1',
-        userName: 'Mike Johnson',
-        teamName: 'Dynasty Destroyers',
+}
+        userId: &apos;user1&apos;,
+        userName: &apos;Mike Johnson&apos;,
+        teamName: &apos;Dynasty Destroyers&apos;,
         value: 156.8,
-        context: 'Dominated with an explosive performance'
+        context: &apos;Dominated with an explosive performance&apos;
 
     },
     {
-      id: 'heartbreaker',
-      title: 'Heartbreaker of the Week',
-      description: 'Lost by the smallest margin',
-      category: 'weekly',
-      icon: 'heart',
-      emoji: '💔',
-      criteria: 'Closest losing margin',
-      rarity: 'common',
+}
+      id: &apos;heartbreaker&apos;,
+      title: &apos;Heartbreaker of the Week&apos;,
+      description: &apos;Lost by the smallest margin&apos;,
+      category: &apos;weekly&apos;,
+      icon: &apos;heart&apos;,
+      emoji: &apos;💔&apos;,
+      criteria: &apos;Closest losing margin&apos;,
+      rarity: &apos;common&apos;,
       week: currentWeek,
       winner: {
-        userId: 'user2',
-        userName: 'Sarah Chen',
-        teamName: 'Gridiron Gladiators',
-        value: '0.34 points',
-        context: 'Lost by a brutal margin that hurts'
+}
+        userId: &apos;user2&apos;,
+        userName: &apos;Sarah Chen&apos;,
+        teamName: &apos;Gridiron Gladiators&apos;,
+        value: &apos;0.34 points&apos;,
+        context: &apos;Lost by a brutal margin that hurts&apos;
 
     },
     {
-      id: 'lucky_win',
-      title: 'Luckiest Win',
-      description: 'Won despite being heavily projected to lose',
-      category: 'weekly',
-      icon: 'star',
-      emoji: '🍀',
-      criteria: 'Biggest upset victory',
-      rarity: 'rare',
+}
+      id: &apos;lucky_win&apos;,
+      title: &apos;Luckiest Win&apos;,
+      description: &apos;Won despite being heavily projected to lose&apos;,
+      category: &apos;weekly&apos;,
+      icon: &apos;star&apos;,
+      emoji: &apos;🍀&apos;,
+      criteria: &apos;Biggest upset victory&apos;,
+      rarity: &apos;rare&apos;,
       week: currentWeek,
       winner: {
-        userId: 'user3',
-        userName: 'Alex Rodriguez',
-        teamName: 'Fantasy Phenoms',
-        value: 'Won by 12 (projected -18)',
-        context: 'Miraculous comeback nobody saw coming'
+}
+        userId: &apos;user3&apos;,
+        userName: &apos;Alex Rodriguez&apos;,
+        teamName: &apos;Fantasy Phenoms&apos;,
+        value: &apos;Won by 12 (projected -18)&apos;,
+        context: &apos;Miraculous comeback nobody saw coming&apos;
 
     },
 
     // Season-Long Awards
     {
-      id: 'consistency_king',
-      title: 'Mr. Consistency',
-      description: 'Most consistent weekly scoring',
-      category: 'season',
-      icon: 'target',
-      emoji: '🎯',
-      criteria: 'Lowest standard deviation in weekly scores',
-      rarity: 'rare',
+}
+      id: &apos;consistency_king&apos;,
+      title: &apos;Mr. Consistency&apos;,
+      description: &apos;Most consistent weekly scoring&apos;,
+      category: &apos;season&apos;,
+      icon: &apos;target&apos;,
+      emoji: &apos;🎯&apos;,
+      criteria: &apos;Lowest standard deviation in weekly scores&apos;,
+      rarity: &apos;rare&apos;,
       winner: {
-        userId: 'user4',
-        userName: 'Jordan Smith',
-        teamName: 'Championship Chasers',
-        value: '±8.2 points',
-        context: 'Reliable as a Swiss watch'
+}
+        userId: &apos;user4&apos;,
+        userName: &apos;Jordan Smith&apos;,
+        teamName: &apos;Championship Chasers&apos;,
+        value: &apos;±8.2 points&apos;,
+        context: &apos;Reliable as a Swiss watch&apos;
 
     },
     {
-      id: 'waiver_wizard',
-      title: 'Waiver Wire Wizard',
-      description: 'Best at finding diamond-in-the-rough players',
-      category: 'season',
-      icon: 'zap',
-      emoji: '💎',
-      criteria: 'Most points from waiver wire pickups',
-      rarity: 'rare',
+}
+      id: &apos;waiver_wizard&apos;,
+      title: &apos;Waiver Wire Wizard&apos;,
+      description: &apos;Best at finding diamond-in-the-rough players&apos;,
+      category: &apos;season&apos;,
+      icon: &apos;zap&apos;,
+      emoji: &apos;💎&apos;,
+      criteria: &apos;Most points from waiver wire pickups&apos;,
+      rarity: &apos;rare&apos;,
       winner: {
-        userId: 'user5',
-        userName: 'Taylor Brown',
-        teamName: 'Playoff Predators',
-        value: '124.6 points',
-        context: 'Master of finding hidden gems'
+}
+        userId: &apos;user5&apos;,
+        userName: &apos;Taylor Brown&apos;,
+        teamName: &apos;Playoff Predators&apos;,
+        value: &apos;124.6 points&apos;,
+        context: &apos;Master of finding hidden gems&apos;
 
     },
     {
-      id: 'trade_master',
-      title: 'Trade Negotiator',
-      description: 'Most successful trades that improved team',
-      category: 'season',
-      icon: 'crown',
-      emoji: '🤝',
-      criteria: 'Best net gain from trades',
-      rarity: 'legendary',
+}
+      id: &apos;trade_master&apos;,
+      title: &apos;Trade Negotiator&apos;,
+      description: &apos;Most successful trades that improved team&apos;,
+      category: &apos;season&apos;,
+      icon: &apos;crown&apos;,
+      emoji: &apos;🤝&apos;,
+      criteria: &apos;Best net gain from trades&apos;,
+      rarity: &apos;legendary&apos;,
       winner: {
-        userId: 'user6',
-        userName: 'Casey Wilson',
-        teamName: 'Touchdown Titans',
-        value: '4 successful trades',
-        context: 'Art of the deal personified'
+}
+        userId: &apos;user6&apos;,
+        userName: &apos;Casey Wilson&apos;,
+        teamName: &apos;Touchdown Titans&apos;,
+        value: &apos;4 successful trades&apos;,
+        context: &apos;Art of the deal personified&apos;
 
     },
 
     // Silly/Fun Awards
     {
-      id: 'bench_warmer',
-      title: 'Bench Warmer Champion',
-      description: 'Left the most points on the bench',
-      category: 'silly',
-      icon: 'skull',
-      emoji: '🪑',
-      criteria: 'Highest total points left on bench',
-      rarity: 'common',
+}
+      id: &apos;bench_warmer&apos;,
+      title: &apos;Bench Warmer Champion&apos;,
+      description: &apos;Left the most points on the bench&apos;,
+      category: &apos;silly&apos;,
+      icon: &apos;skull&apos;,
+      emoji: &apos;🪑&apos;,
+      criteria: &apos;Highest total points left on bench&apos;,
+      rarity: &apos;common&apos;,
       winner: {
-        userId: 'user7',
-        userName: 'Morgan Davis',
-        teamName: 'Victory Vampires',
-        value: '87.4 points on bench',
-        context: 'King of the wrong lineup decisions'
+}
+        userId: &apos;user7&apos;,
+        userName: &apos;Morgan Davis&apos;,
+        teamName: &apos;Victory Vampires&apos;,
+        value: &apos;87.4 points on bench&apos;,
+        context: &apos;King of the wrong lineup decisions&apos;
 
     },
     {
-      id: 'taco_award',
-      title: 'Taco of the Week',
-      description: 'Most questionable lineup decisions',
-      category: 'silly',
-      icon: 'skull',
-      emoji: '🌮',
-      criteria: 'Community vote for worst decisions',
-      rarity: 'common',
+}
+      id: &apos;taco_award&apos;,
+      title: &apos;Taco of the Week&apos;,
+      description: &apos;Most questionable lineup decisions&apos;,
+      category: &apos;silly&apos;,
+      icon: &apos;skull&apos;,
+      emoji: &apos;🌮&apos;,
+      criteria: &apos;Community vote for worst decisions&apos;,
+      rarity: &apos;common&apos;,
       winner: {
-        userId: 'user8',
-        userName: 'Riley Martinez',
-        teamName: 'Elite Eagles',
-        value: 'Started injured QB',
-        context: 'Sometimes fantasy football is hard'
+}
+        userId: &apos;user8&apos;,
+        userName: &apos;Riley Martinez&apos;,
+        teamName: &apos;Elite Eagles&apos;,
+        value: &apos;Started injured QB&apos;,
+        context: &apos;Sometimes fantasy football is hard&apos;
 
     },
     {
-      id: 'glass_house',
-      title: 'Living in a Glass House',
-      description: 'Most trash talk despite poor performance',
-      category: 'silly',
-      icon: 'zap',
-      emoji: '🏠',
-      criteria: 'High trash talk volume + low performance',
-      rarity: 'rare',
+}
+      id: &apos;glass_house&apos;,
+      title: &apos;Living in a Glass House&apos;,
+      description: &apos;Most trash talk despite poor performance&apos;,
+      category: &apos;silly&apos;,
+      icon: &apos;zap&apos;,
+      emoji: &apos;🏠&apos;,
+      criteria: &apos;High trash talk volume + low performance&apos;,
+      rarity: &apos;rare&apos;,
       winner: {
-        userId: 'user9',
-        userName: 'Avery Thompson',
-        teamName: 'Comeback Kings',
-        value: '23 trash talk messages',
-        context: 'All talk, questionable walk'
+}
+        userId: &apos;user9&apos;,
+        userName: &apos;Avery Thompson&apos;,
+        teamName: &apos;Comeback Kings&apos;,
+        value: &apos;23 trash talk messages&apos;,
+        context: &apos;All talk, questionable walk&apos;
 
     },
     {
-      id: 'loyalty_badge',
-      title: 'Ride or Die',
-      description: 'Stuck with struggling player longest',
-      category: 'silly',
-      icon: 'heart',
-      emoji: '🛡️',
-      criteria: 'Kept underperforming drafted player longest',
-      rarity: 'rare',
+}
+      id: &apos;loyalty_badge&apos;,
+      title: &apos;Ride or Die&apos;,
+      description: &apos;Stuck with struggling player longest&apos;,
+      category: &apos;silly&apos;,
+      icon: &apos;heart&apos;,
+      emoji: &apos;🛡️&apos;,
+      criteria: &apos;Kept underperforming drafted player longest&apos;,
+      rarity: &apos;rare&apos;,
       winner: {
-        userId: 'user10',
-        userName: 'Quinn Anderson',
-        teamName: 'Draft Day Demons',
-        value: 'Kept Russell Wilson 12 weeks',
-        context: 'Loyalty beyond reason'
+}
+        userId: &apos;user10&apos;,
+        userName: &apos;Quinn Anderson&apos;,
+        teamName: &apos;Draft Day Demons&apos;,
+        value: &apos;Kept Russell Wilson 12 weeks&apos;,
+        context: &apos;Loyalty beyond reason&apos;
 
 
   ];
 
   const [superlatives] = useState<Superlative[]>(superlativeDefinitions);
 
-  const getRarityColor = (rarity: Superlative['rarity']) => {
+  const getRarityColor = (rarity: Superlative[&apos;rarity&apos;]) => {
+}
     switch (rarity) {
-      case 'common': return 'text-gray-400 border-gray-500 bg-gray-500/10';
-      case 'rare': return 'text-blue-400 border-blue-500 bg-blue-500/10';
-      case 'legendary': return 'text-yellow-400 border-yellow-500 bg-yellow-500/10';
+}
+      case &apos;common&apos;: return &apos;text-gray-400 border-gray-500 bg-gray-500/10&apos;;
+      case &apos;rare&apos;: return &apos;text-blue-400 border-blue-500 bg-blue-500/10&apos;;
+      case &apos;legendary&apos;: return &apos;text-yellow-400 border-yellow-500 bg-yellow-500/10&apos;;
 
   };
 
-  const getCategoryColor = (category: Superlative['category']) => {
+  const getCategoryColor = (category: Superlative[&apos;category&apos;]) => {
+}
     switch (category) {
-      case 'weekly': return 'text-green-400 bg-green-500/20';
-      case 'season': return 'text-purple-400 bg-purple-500/20';
-      case 'silly': return 'text-orange-400 bg-orange-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
+}
+      case &apos;weekly&apos;: return &apos;text-green-400 bg-green-500/20&apos;;
+      case &apos;season&apos;: return &apos;text-purple-400 bg-purple-500/20&apos;;
+      case &apos;silly&apos;: return &apos;text-orange-400 bg-orange-500/20&apos;;
+      default: return &apos;text-gray-400 bg-gray-500/20&apos;;
 
   };
 
   const getIconComponent = (icon: string) => {
+}
     switch (icon) {
-      case 'trophy': return <Trophy className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'award': return <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'star': return <Star className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'zap': return <Zap className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'crown': return <Crown className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'heart': return <Heart className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'skull': return <Skull className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-      case 'target': return <Target className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;trophy&apos;: return <Trophy className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;award&apos;: return <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;star&apos;: return <Star className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;zap&apos;: return <Zap className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;crown&apos;: return <Crown className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;heart&apos;: return <Heart className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;skull&apos;: return <Skull className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;target&apos;: return <Target className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Award className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
-  const filteredSuperlatives = selectedCategory === 'all' 
+  const filteredSuperlatives = selectedCategory === &apos;all&apos; 
     ? superlatives 
     : superlatives.filter((s: any) => s.category === selectedCategory);
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -291,12 +325,13 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
         </div>
         
         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-          {(['all', 'weekly', 'season', 'silly'] as const).map((category: any) => (
+          {([&apos;all&apos;, &apos;weekly&apos;, &apos;season&apos;, &apos;silly&apos;] as const).map((category: any) => (
+}
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}`}
             >
-              {category === 'all' ? 'All Awards' : category.charAt(0).toUpperCase() + category.slice(1)}
+              {category === &apos;all&apos; ? &apos;All Awards&apos; : category.charAt(0).toUpperCase() + category.slice(1)}
             </button>
           ))}
         </div>
@@ -305,9 +340,10 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
       {/* Awards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredSuperlatives.map((superlative: any) => (
+}
           <motion.div
             key={superlative.id}
-            layout
+//             layout
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className={`relative p-5 rounded-lg border-2 ${getRarityColor(superlative.rarity)} transition-all hover:scale-105 cursor-pointer`}
@@ -328,6 +364,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                     {superlative.category.toUpperCase()}
                   </span>
                   {superlative.week && (
+}
                     <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Week {superlative.week}</span>
                   )}
                 </div>
@@ -338,6 +375,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
 
             {/* Winner Display */}
             {superlative.winner && (
+}
               <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   <Crown className="w-4 h-4 text-gold-400 sm:px-4 md:px-6 lg:px-8" />
@@ -345,18 +383,22 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                 </div>
                 <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{superlative.winner.teamName}</div>
                 {superlative.winner.value && (
+}
                   <div className="text-sm font-bold text-primary-400 sm:px-4 md:px-6 lg:px-8">{superlative.winner.value}</div>
                 )}
               </div>
             )}
 
             {!superlative.winner && (
+}
               <div className="text-center py-4 sm:px-4 md:px-6 lg:px-8">
                 <Clock className="w-8 h-8 text-gray-500 mx-auto mb-2 sm:px-4 md:px-6 lg:px-8" />
                 <div className="text-sm text-gray-500 sm:px-4 md:px-6 lg:px-8">Award pending</div>
-                {superlative.category === 'silly' && (
+                {superlative.category === &apos;silly&apos; && (
+}
                   <button
                     onClick={(e) = aria-label="Action button"> {
+}
                       e.stopPropagation();
                       setShowVotingModal(superlative.id);
                     }}
@@ -371,9 +413,10 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
             {/* Expanded Details */}
             <AnimatePresence>
               {expandedAward === superlative.id && (
+}
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
+                  animate={{ height: &apos;auto&apos;, opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   className="mt-4 pt-4 border-t border-gray-600 space-y-3 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -383,6 +426,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                   </div>
                   
                   {superlative.winner?.context && (
+}
                     <div>
                       <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Context:</div>
                       <div className="text-sm text-gray-200 italic sm:px-4 md:px-6 lg:px-8">"{superlative.winner.context}"</div>
@@ -390,10 +434,12 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                   )}
 
                   {superlative.runners_up && superlative.runners_up.length > 0 && (
+}
                     <div>
                       <div className="text-sm text-gray-400 mb-1 sm:px-4 md:px-6 lg:px-8">Runners-up:</div>
                       <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {superlative.runners_up.slice(0, 2).map((runner, index) => (
+}
                           <div key={runner.userId} className="flex justify-between text-sm sm:px-4 md:px-6 lg:px-8">
                             <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{index + 2}. {runner.userName}</span>
                             <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">{runner.value}</span>
@@ -412,6 +458,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
       {/* Voting Modal */}
       <AnimatePresence>
         {showVotingModal && (
+}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -440,6 +487,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
 
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                   {teams.slice(0, 5).map((team: any) => (
+}
                     <button
                       key={team.id}
                       className="w-full p-3 bg-dark-700 hover:bg-dark-600 border border-gray-600 rounded-lg text-left transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -454,7 +502,7 @@ const LeagueSuperlativesSystem: React.FC<LeagueSuperlativesSystemProps> = ({
                   <button
                     onClick={() => setShowVotingModal(null)}
                   >
-                    Cancel
+//                     Cancel
                   </button>
                   <button
                     onClick={() => setShowVotingModal(null)}

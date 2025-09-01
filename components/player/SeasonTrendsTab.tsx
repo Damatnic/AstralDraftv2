@@ -3,17 +3,18 @@
  * Historical performance analysis and trending data
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, League } from '../../types';
-import { TrendingUpIcon } from '../icons/TrendingUpIcon';
-import { TrendingDownIcon } from '../icons/TrendingDownIcon';
-import { BarChartIcon } from '../icons/BarChartIcon';
-import { CalendarIcon } from '../icons/CalendarIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, League } from &apos;../../types&apos;;
+import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
+import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
+import { BarChartIcon } from &apos;../icons/BarChartIcon&apos;;
+import { CalendarIcon } from &apos;../icons/CalendarIcon&apos;;
 
 interface SeasonTrendsTabProps {
+}
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -21,23 +22,26 @@ interface SeasonTrendsTabProps {
 }
 
 interface WeeklyPerformance {
+}
     week: number;
     points: number;
     projected: number;
     opponent: string;
-    result: 'over' | 'under';
-    matchupDifficulty: 'easy' | 'medium' | 'hard';
+    result: &apos;over&apos; | &apos;under&apos;;
+    matchupDifficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
 
 interface TrendMetric {
+}
     label: string;
     value: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
     changePercent: number;
     timeframe: string;
 
 }
 
 interface SeasonComparison {
+}
     season: number;
     games: number;
     totalPoints: number;
@@ -46,42 +50,47 @@ interface SeasonComparison {
     adp: number;}
 
 const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
+}
     // Mock performance data - in real app this would come from stats API
     const weeklyPerformance: WeeklyPerformance[] = [
-        { week: 1, points: 18.5, projected: 16.2, opponent: 'MIA', result: 'over', matchupDifficulty: 'medium' },
-        { week: 2, points: 12.3, projected: 15.8, opponent: 'BUF', result: 'under', matchupDifficulty: 'hard' },
-        { week: 3, points: 24.7, projected: 17.1, opponent: 'JAX', result: 'over', matchupDifficulty: 'easy' },
-        { week: 4, points: 19.2, projected: 16.9, opponent: 'NYJ', result: 'over', matchupDifficulty: 'medium' }
+        { week: 1, points: 18.5, projected: 16.2, opponent: &apos;MIA&apos;, result: &apos;over&apos;, matchupDifficulty: &apos;medium&apos; },
+        { week: 2, points: 12.3, projected: 15.8, opponent: &apos;BUF&apos;, result: &apos;under&apos;, matchupDifficulty: &apos;hard&apos; },
+        { week: 3, points: 24.7, projected: 17.1, opponent: &apos;JAX&apos;, result: &apos;over&apos;, matchupDifficulty: &apos;easy&apos; },
+        { week: 4, points: 19.2, projected: 16.9, opponent: &apos;NYJ&apos;, result: &apos;over&apos;, matchupDifficulty: &apos;medium&apos; }
     ];
 
     const trendMetrics: TrendMetric[] = [
         {
-            label: 'Fantasy Points Per Game',
+}
+            label: &apos;Fantasy Points Per Game&apos;,
             value: 18.7,
-            trend: 'up',
+            trend: &apos;up&apos;,
             changePercent: 12.5,
-            timeframe: 'Last 3 weeks'
+            timeframe: &apos;Last 3 weeks&apos;
         },
         {
-            label: 'Target Share',
+}
+            label: &apos;Target Share&apos;,
             value: 23.8,
-            trend: 'up',
+            trend: &apos;up&apos;,
             changePercent: 8.2,
-            timeframe: 'Season trend'
+            timeframe: &apos;Season trend&apos;
         },
         {
-            label: 'Red Zone Usage',
+}
+            label: &apos;Red Zone Usage&apos;,
             value: 15.6,
-            trend: 'stable',
+            trend: &apos;stable&apos;,
             changePercent: 1.1,
-            timeframe: 'Last 4 weeks'
+            timeframe: &apos;Last 4 weeks&apos;
         },
         {
-            label: 'Snap Count %',
+}
+            label: &apos;Snap Count %&apos;,
             value: 78.5,
-            trend: 'down',
+            trend: &apos;down&apos;,
             changePercent: -5.3,
-            timeframe: 'Recent games'
+            timeframe: &apos;Recent games&apos;
 
     ];
 
@@ -91,41 +100,47 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
         { season: 2022, games: 16, totalPoints: 267.2, avgPoints: 16.7, rank: 22, adp: 62 }
     ];
 
-    const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
+    const getTrendIcon = (trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;) => {
+}
         switch (trend) {
-            case 'up':
+}
+            case &apos;up&apos;:
                 return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'down':
+            case &apos;down&apos;:
                 return <TrendingDownIcon className="w-4 h-4 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
 
     };
 
-    const getTrendColor = (trend: 'up' | 'down' | 'stable') => {
+    const getTrendColor = (trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;) => {
+}
         switch (trend) {
-            case 'up':
-                return 'text-green-400';
-            case 'down':
-                return 'text-red-400';
+}
+            case &apos;up&apos;:
+                return &apos;text-green-400&apos;;
+            case &apos;down&apos;:
+                return &apos;text-red-400&apos;;
             default:
-                return 'text-gray-400';
+                return &apos;text-gray-400&apos;;
 
     };
 
-    const getMatchupColor = (difficulty: WeeklyPerformance['matchupDifficulty']) => {
+    const getMatchupColor = (difficulty: WeeklyPerformance[&apos;matchupDifficulty&apos;]) => {
+}
         switch (difficulty) {
-            case 'easy':
-                return 'bg-green-500/20 text-green-400';
-            case 'hard':
-                return 'bg-red-500/20 text-red-400';
+}
+            case &apos;easy&apos;:
+                return &apos;bg-green-500/20 text-green-400&apos;;
+            case &apos;hard&apos;:
+                return &apos;bg-red-500/20 text-red-400&apos;;
             default:
-                return 'bg-yellow-500/20 text-yellow-400';
+                return &apos;bg-yellow-500/20 text-yellow-400&apos;;
 
     };
 
     const currentSeasonAvg = weeklyPerformance.reduce((sum, week) => sum + week.points, 0) / weeklyPerformance.length;
-    const projectionAccuracy = weeklyPerformance.filter((w: any) => w.result === 'over').length / weeklyPerformance.length * 100;
+    const projectionAccuracy = weeklyPerformance.filter((w: any) => w.result === &apos;over&apos;).length / weeklyPerformance.length * 100;
 
     return (
         <motion.div
@@ -160,6 +175,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                         <h4 className="font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Weekly Performance</h4>
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                             {weeklyPerformance.map((week: any) => (
+}
                                 <div key={week.week} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-center min-w-[50px] sm:px-4 md:px-6 lg:px-8">
                                         <div className="font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">W{week.week}</div>
@@ -182,13 +198,14 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                                     </div>
                                     
                                     <div className={`text-right min-w-[60px] ${
-                                        week.result === 'over' ? 'text-green-400' : 'text-red-400'
+}
+                                        week.result === &apos;over&apos; ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
                                     }`}>
                                         <div className="font-bold sm:px-4 md:px-6 lg:px-8">
-                                            {week.result === 'over' ? '+' : ''}{(week.points - week.projected).toFixed(1)}
+                                            {week.result === &apos;over&apos; ? &apos;+&apos; : &apos;&apos;}{(week.points - week.projected).toFixed(1)}
                                         </div>
                                         <div className="text-xs sm:px-4 md:px-6 lg:px-8">
-                                            {week.result === 'over' ? 'OVER' : 'UNDER'}
+                                            {week.result === &apos;over&apos; ? &apos;OVER&apos; : &apos;UNDER&apos;}
                                         </div>
                                     </div>
                                 </div>
@@ -203,6 +220,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                 <div className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {trendMetrics.map((metric, index) => (
+}
                             <div key={index} className="p-4 bg-white/5 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                                     <h4 className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{metric.label}</h4>
@@ -213,14 +231,14 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                                     <div>
                                         <div className="text-2xl font-bold text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {metric.value}
-                                            {metric.label.includes('%') || metric.label.includes('Share') ? '%' : ''}
+                                            {metric.label.includes(&apos;%&apos;) || metric.label.includes(&apos;Share&apos;) ? &apos;%&apos; : &apos;&apos;}
                                         </div>
                                         <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{metric.timeframe}</div>
                                     </div>
                                     
                                     <div className={`text-right ${getTrendColor(metric.trend)}`}>
                                         <div className="font-medium sm:px-4 md:px-6 lg:px-8">
-                                            {metric.changePercent > 0 ? '+' : ''}{metric.changePercent.toFixed(1)}%
+                                            {metric.changePercent > 0 ? &apos;+&apos; : &apos;&apos;}{metric.changePercent.toFixed(1)}%
                                         </div>
                                         <div className="text-xs sm:px-4 md:px-6 lg:px-8">change</div>
                                     </div>
@@ -248,12 +266,14 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                             </thead>
                             <tbody>
                                 {seasonComparisons.map((season: any) => (
+}
                                     <tr key={season.season} className="border-b border-[var(--panel-border)]/50 sm:px-4 md:px-6 lg:px-8">
                                         <td className="py-3 font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             {season.season}
                                             {season.season === 2024 && (
+}
                                                 <span className="ml-2 px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded sm:px-4 md:px-6 lg:px-8">
-                                                    Current
+//                                                     Current
                                                 </span>
                                             )}
                                         </td>
@@ -263,7 +283,7 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                                             {season.avgPoints.toFixed(1)}
                                         </td>
                                         <td className="py-3 text-right text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">#{season.rank}</td>
-                                        <td className="py-3 text-right text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{season.adp || 'N/A'}</td>
+                                        <td className="py-3 text-right text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{season.adp || &apos;N/A&apos;}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -277,8 +297,8 @@ const SeasonTrendsTab: React.FC<SeasonTrendsTabProps> = ({ player }: any) => {
                         </div>
                         <p className="text-[var(--text-secondary)] text-sm leading-relaxed sm:px-4 md:px-6 lg:px-8">
                             Based on current trends, {player.name} is on pace for a career year. 
-                            The {((trendMetrics.find((m: any) => m.label.includes('Points'))?.changePercent || 0) > 0 ? 'upward' : 'downward')} 
-                            trend in fantasy production suggests strong {((trendMetrics.find((m: any) => m.label.includes('Points'))?.changePercent || 0) > 0 ? 'growth' : 'regression')} 
+                            The {((trendMetrics.find((m: any) => m.label.includes(&apos;Points&apos;))?.changePercent || 0) > 0 ? &apos;upward&apos; : &apos;downward&apos;)} 
+                            trend in fantasy production suggests strong {((trendMetrics.find((m: any) => m.label.includes(&apos;Points&apos;))?.changePercent || 0) > 0 ? &apos;growth&apos; : &apos;regression&apos;)} 
                             compared to previous seasons.
                         </p>
                     </div>

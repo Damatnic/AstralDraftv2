@@ -6,6 +6,7 @@
 
 // Types for educational content
 export interface EducationalTopic {
+}
     id: string;
     title: string;
     category: EducationCategory;
@@ -19,6 +20,7 @@ export interface EducationalTopic {
 }
 
 export interface EducationalContent {
+}
     introduction: string;
     sections: EducationSection[];
     keyTakeaways: string[];
@@ -27,6 +29,7 @@ export interface EducationalContent {
 }
 
 export interface EducationSection {
+}
     id: string;
     title: string;
     content: string;
@@ -36,6 +39,7 @@ export interface EducationSection {
 }
 
 export interface CodeExample {
+}
     id: string;
     title: string;
     description: string;
@@ -45,8 +49,9 @@ export interface CodeExample {
 }
 
 export interface VisualAid {
+}
     id: string;
-    type: 'chart' | 'diagram' | 'infographic' | 'animation';
+    type: &apos;chart&apos; | &apos;diagram&apos; | &apos;infographic&apos; | &apos;animation&apos;;
     title: string;
     description: string;
     data?: any;
@@ -54,9 +59,10 @@ export interface VisualAid {
 }
 
 export interface QuizQuestion {
+}
     id: string;
     question: string;
-    type: 'multiple-choice' | 'true-false' | 'short-answer';
+    type: &apos;multiple-choice&apos; | &apos;true-false&apos; | &apos;short-answer&apos;;
     options?: string[];
     correctAnswer: string | number;
     explanation: string;
@@ -64,10 +70,11 @@ export interface QuizQuestion {
 }
 
 export interface PracticeExercise {
+}
     id: string;
     title: string;
     description: string;
-    type: 'prediction' | 'analysis' | 'calculation' | 'simulation';
+    type: &apos;prediction&apos; | &apos;analysis&apos; | &apos;calculation&apos; | &apos;simulation&apos;;
     difficulty: DifficultyLevel;
     instructions: string[];
     sampleData?: any;
@@ -76,9 +83,10 @@ export interface PracticeExercise {
 }
 
 export interface Resource {
+}
     id: string;
     title: string;
-    type: 'article' | 'video' | 'research-paper' | 'external-link';
+    type: &apos;article&apos; | &apos;video&apos; | &apos;research-paper&apos; | &apos;external-link&apos;;
     url?: string;
     description: string;
     author?: string;
@@ -86,6 +94,7 @@ export interface Resource {
 }
 
 export interface UserProgress {
+}
     userId: string;
     completedTopics: string[];
     currentTopic?: string;
@@ -98,23 +107,25 @@ export interface UserProgress {
 }
 
 export type EducationCategory = 
-    | 'ORACLE_BASICS'
-    | 'PREDICTION_ALGORITHMS'
-    | 'FANTASY_FUNDAMENTALS'
-    | 'STATISTICAL_ANALYSIS'
-    | 'MACHINE_LEARNING'
-    | 'ADVANCED_STRATEGIES'
-    | 'DATA_INTERPRETATION'
-    | 'CONFIDENCE_CALIBRATION';
+    | &apos;ORACLE_BASICS&apos;
+    | &apos;PREDICTION_ALGORITHMS&apos;
+    | &apos;FANTASY_FUNDAMENTALS&apos;
+    | &apos;STATISTICAL_ANALYSIS&apos;
+    | &apos;MACHINE_LEARNING&apos;
+    | &apos;ADVANCED_STRATEGIES&apos;
+    | &apos;DATA_INTERPRETATION&apos;
+    | &apos;CONFIDENCE_CALIBRATION&apos;;
 
-export type DifficultyLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
+export type DifficultyLevel = &apos;BEGINNER&apos; | &apos;INTERMEDIATE&apos; | &apos;ADVANCED&apos; | &apos;EXPERT&apos;;
 
 class OracleEducationService {
-    private readonly STORAGE_KEY = 'oracleEducationProgress';
+}
+    private readonly STORAGE_KEY = &apos;oracleEducationProgress&apos;;
     private readonly topics: Map<string, EducationalTopic> = new Map();
     private userProgress: UserProgress | null = null;
 
     constructor() {
+}
         this.initializeEducationalContent();
         this.loadUserProgress();
     }
@@ -123,6 +134,7 @@ class OracleEducationService {
      * Initialize comprehensive educational content
      */
     private initializeEducationalContent(): void {
+}
         // Oracle Basics Topics
         this.addTopic(this.createOracleIntroductionTopic());
         this.addTopic(this.createPredictionTypesTopic());
@@ -158,19 +170,23 @@ class OracleEducationService {
      * Create Oracle Introduction Topic
      */
     private createOracleIntroductionTopic(): EducationalTopic {
+}
         return {
-            id: 'oracle-introduction',
-            title: 'Introduction to Beat The Oracle',
-            category: 'ORACLE_BASICS',
-            difficulty: 'BEGINNER',
-            description: 'Learn what Oracle is, how it works, and why it\'s revolutionary for fantasy football',
+}
+            id: &apos;oracle-introduction&apos;,
+            title: &apos;Introduction to Beat The Oracle&apos;,
+            category: &apos;ORACLE_BASICS&apos;,
+            difficulty: &apos;BEGINNER&apos;,
+            description: &apos;Learn what Oracle is, how it works, and why it\&apos;s revolutionary for fantasy football&apos;,
             estimatedReadTime: 8,
             content: {
+}
                 introduction: `Beat The Oracle is an AI-powered prediction system that challenges users to outperform sophisticated algorithms in fantasy football predictions. Unlike traditional fantasy advice, Oracle uses real-time data, machine learning, and advanced analytics to make confident predictions about player performance, game outcomes, and fantasy scoring trends.`,
                 sections: [
                     {
-                        id: 'what-is-oracle',
-                        title: 'What is Oracle?',
+}
+                        id: &apos;what-is-oracle&apos;,
+                        title: &apos;What is Oracle?&apos;,
                         content: `Oracle is an advanced AI system that combines multiple data sources and analytical models to generate predictions about fantasy football outcomes. It processes:
 
 • Live sports data from professional APIs
@@ -182,10 +198,12 @@ class OracleEducationService {
 The system then presents these predictions as challenges where users can test their fantasy football knowledge against AI-powered analysis.`,
                         examples: [
                             {
-                                id: 'prediction-example',
-                                title: 'Sample Oracle Prediction',
-                                description: 'Here\'s how Oracle presents a typical prediction challenge:',
+}
+                                id: &apos;prediction-example&apos;,
+                                title: &apos;Sample Oracle Prediction&apos;,
+                                description: &apos;Here\&apos;s how Oracle presents a typical prediction challenge:&apos;,
                                 code: `{
+}
   "question": "Who will score the most fantasy points this week?",
   "options": [
     { "player": "Josh Allen (BUF)", "probability": 0.34 },
@@ -197,14 +215,15 @@ The system then presents these predictions as challenges where users can test th
   "confidence": 87,
   "reasoning": "Josh Allen shows exceptional efficiency metrics..."
 }`,
-                                language: 'json',
-                                explanation: 'Oracle calculates probabilities for each option, makes its choice, and provides confidence levels with detailed reasoning.'
+                                language: &apos;json&apos;,
+                                explanation: &apos;Oracle calculates probabilities for each option, makes its choice, and provides confidence levels with detailed reasoning.&apos;
                             }
                         ]
                     },
                     {
-                        id: 'how-oracle-works',
-                        title: 'How Oracle Makes Predictions',
+}
+                        id: &apos;how-oracle-works&apos;,
+                        title: &apos;How Oracle Makes Predictions&apos;,
                         content: `Oracle uses a sophisticated multi-layered approach:
 
 **1. Data Collection**
@@ -235,16 +254,18 @@ The system then presents these predictions as challenges where users can test th
 • Risk factor analysis`,
                         visualAids: [
                             {
-                                id: 'oracle-workflow',
-                                type: 'diagram',
-                                title: 'Oracle Prediction Workflow',
-                                description: 'Visual representation of how Oracle processes data to generate predictions'
+}
+                                id: &apos;oracle-workflow&apos;,
+                                type: &apos;diagram&apos;,
+                                title: &apos;Oracle Prediction Workflow&apos;,
+                                description: &apos;Visual representation of how Oracle processes data to generate predictions&apos;
                             }
                         ]
                     },
                     {
-                        id: 'why-oracle-matters',
-                        title: 'Why Oracle Matters for Fantasy Football',
+}
+                        id: &apos;why-oracle-matters&apos;,
+                        title: &apos;Why Oracle Matters for Fantasy Football&apos;,
                         content: `Oracle revolutionizes fantasy football by:
 
 **🎯 Objective Analysis**
@@ -273,35 +294,36 @@ The system then presents these predictions as challenges where users can test th
                     }
                 ],
                 keyTakeaways: [
-                    'Oracle combines multiple data sources for comprehensive analysis',
-                    'AI-powered predictions include confidence levels and detailed reasoning',
-                    'The system continuously learns and improves from outcomes',
-                    'Oracle challenges help users improve their fantasy football skills',
-                    'Predictions are based on objective data rather than subjective opinions'
+                    &apos;Oracle combines multiple data sources for comprehensive analysis&apos;,
+                    &apos;AI-powered predictions include confidence levels and detailed reasoning&apos;,
+                    &apos;The system continuously learns and improves from outcomes&apos;,
+                    &apos;Oracle challenges help users improve their fantasy football skills&apos;,
+                    &apos;Predictions are based on objective data rather than subjective opinions&apos;
                 ],
                 practiceExercises: [
                     {
-                        id: 'analyze-prediction',
-                        title: 'Analyze an Oracle Prediction',
-                        description: 'Practice interpreting Oracle\'s reasoning and confidence levels',
-                        type: 'analysis',
-                        difficulty: 'BEGINNER',
+}
+                        id: &apos;analyze-prediction&apos;,
+                        title: &apos;Analyze an Oracle Prediction&apos;,
+                        description: &apos;Practice interpreting Oracle\&apos;s reasoning and confidence levels&apos;,
+                        type: &apos;analysis&apos;,
+                        difficulty: &apos;BEGINNER&apos;,
                         instructions: [
-                            'Review the sample prediction provided',
-                            'Identify the key factors Oracle considered',
-                            'Evaluate whether the confidence level seems appropriate',
-                            'Consider what additional factors you might analyze'
+                            &apos;Review the sample prediction provided&apos;,
+                            &apos;Identify the key factors Oracle considered&apos;,
+                            &apos;Evaluate whether the confidence level seems appropriate&apos;,
+                            &apos;Consider what additional factors you might analyze&apos;
                         ],
-                        expectedOutcome: 'Understanding of Oracle\'s analytical approach and reasoning process',
+                        expectedOutcome: &apos;Understanding of Oracle\&apos;s analytical approach and reasoning process&apos;,
                         hints: [
-                            'Pay attention to the probability distribution across options',
-                            'Consider how confidence relates to the margin between top choices',
-                            'Think about what data sources Oracle might be using'
+                            &apos;Pay attention to the probability distribution across options&apos;,
+                            &apos;Consider how confidence relates to the margin between top choices&apos;,
+                            &apos;Think about what data sources Oracle might be using&apos;
                         ]
                     }
                 ]
             },
-            relatedTopics: ['prediction-types', 'confidence-levels', 'algorithm-basics'],
+            relatedTopics: [&apos;prediction-types&apos;, &apos;confidence-levels&apos;, &apos;algorithm-basics&apos;],
             lastUpdated: new Date().toISOString()
         };
     }
@@ -310,20 +332,24 @@ The system then presents these predictions as challenges where users can test th
      * Create Prediction Types Topic
      */
     private createPredictionTypesTopic(): EducationalTopic {
+}
         return {
-            id: 'prediction-types',
-            title: 'Understanding Oracle Prediction Types',
-            category: 'ORACLE_BASICS',
-            difficulty: 'BEGINNER',
-            description: 'Explore the different types of predictions Oracle makes and their unique characteristics',
+}
+            id: &apos;prediction-types&apos;,
+            title: &apos;Understanding Oracle Prediction Types&apos;,
+            category: &apos;ORACLE_BASICS&apos;,
+            difficulty: &apos;BEGINNER&apos;,
+            description: &apos;Explore the different types of predictions Oracle makes and their unique characteristics&apos;,
             estimatedReadTime: 12,
-            prerequisites: ['oracle-introduction'],
+            prerequisites: [&apos;oracle-introduction&apos;],
             content: {
+}
                 introduction: `Oracle generates six distinct types of predictions, each designed to test different aspects of fantasy football knowledge. Understanding these prediction types helps you know what to expect and how to approach each challenge strategically.`,
                 sections: [
                     {
-                        id: 'player-performance',
-                        title: 'Player Performance Predictions',
+}
+                        id: &apos;player-performance&apos;,
+                        title: &apos;Player Performance Predictions&apos;,
                         content: `**Focus:** Individual player fantasy scoring potential
 
 **What Oracle Analyzes:**
@@ -347,11 +373,13 @@ The system then presents these predictions as challenges where users can test th
 • **Market Sentiment:** Expert opinions and betting line movements`,
                         examples: [
                             {
-                                id: 'player-analysis',
-                                title: 'Player Performance Analysis',
-                                description: 'How Oracle evaluates a top QB for the week',
-                                code: `// Oracle's player analysis factors
+}
+                                id: &apos;player-analysis&apos;,
+                                title: &apos;Player Performance Analysis&apos;,
+                                description: &apos;How Oracle evaluates a top QB for the week&apos;,
+                                code: `// Oracle&apos;s player analysis factors
 const playerAnalysis = {
+}
   baseProjection: 24.3,
   efficiencyRating: 18.7,  // Above average (15.0)
   targetShare: 0.31,       // 31% of team targets
@@ -361,14 +389,15 @@ const playerAnalysis = {
   restDays: 6,            // Standard rest
   confidence: 0.87         // High confidence prediction
 };`,
-                                language: 'javascript',
-                                explanation: 'Oracle weighs multiple factors to arrive at a confidence-adjusted projection for each player.'
+                                language: &apos;javascript&apos;,
+                                explanation: &apos;Oracle weighs multiple factors to arrive at a confidence-adjusted projection for each player.&apos;
                             }
                         ]
                     },
                     {
-                        id: 'game-outcome',
-                        title: 'Game Outcome Predictions',
+}
+                        id: &apos;game-outcome&apos;,
+                        title: &apos;Game Outcome Predictions&apos;,
                         content: `**Focus:** Team-level performance and game totals
 
 **What Oracle Analyzes:**
@@ -392,8 +421,9 @@ const playerAnalysis = {
 • **Environmental Factors:** Temperature, wind, precipitation`
                     },
                     {
-                        id: 'weekly-scoring',
-                        title: 'Weekly Scoring Predictions',
+}
+                        id: &apos;weekly-scoring&apos;,
+                        title: &apos;Weekly Scoring Predictions&apos;,
                         content: `**Focus:** Overall fantasy landscape and scoring patterns
 
 **What Oracle Analyzes:**
@@ -416,8 +446,9 @@ const playerAnalysis = {
 • **Variance Modeling:** Boom/bust probability calculations`
                     },
                     {
-                        id: 'weather-impact',
-                        title: 'Weather Impact Predictions',
+}
+                        id: &apos;weather-impact&apos;,
+                        title: &apos;Weather Impact Predictions&apos;,
                         content: `**Focus:** Environmental effects on fantasy performance
 
 **What Oracle Analyzes:**
@@ -439,8 +470,9 @@ const playerAnalysis = {
 • **Heat:** Increased fatigue, hydration concerns`
                     },
                     {
-                        id: 'injury-impact',
-                        title: 'Injury Impact Predictions',
+}
+                        id: &apos;injury-impact&apos;,
+                        title: &apos;Injury Impact Predictions&apos;,
                         content: `**Focus:** How injuries affect fantasy landscapes
 
 **What Oracle Analyzes:**
@@ -463,37 +495,38 @@ const playerAnalysis = {
                     }
                 ],
                 keyTakeaways: [
-                    'Each prediction type focuses on different aspects of fantasy football',
-                    'Oracle uses specialized analytical approaches for each prediction type',
-                    'Player performance predictions rely heavily on efficiency metrics and matchups',
-                    'Game outcome predictions emphasize team-level analytics and environmental factors',
-                    'Weather and injury predictions help identify situational advantages',
-                    'Understanding prediction types helps you focus on relevant factors'
+                    &apos;Each prediction type focuses on different aspects of fantasy football&apos;,
+                    &apos;Oracle uses specialized analytical approaches for each prediction type&apos;,
+                    &apos;Player performance predictions rely heavily on efficiency metrics and matchups&apos;,
+                    &apos;Game outcome predictions emphasize team-level analytics and environmental factors&apos;,
+                    &apos;Weather and injury predictions help identify situational advantages&apos;,
+                    &apos;Understanding prediction types helps you focus on relevant factors&apos;
                 ],
                 practiceExercises: [
                     {
-                        id: 'classify-predictions',
-                        title: 'Classify Prediction Types',
-                        description: 'Practice identifying which category different Oracle questions belong to',
-                        type: 'analysis',
-                        difficulty: 'BEGINNER',
+}
+                        id: &apos;classify-predictions&apos;,
+                        title: &apos;Classify Prediction Types&apos;,
+                        description: &apos;Practice identifying which category different Oracle questions belong to&apos;,
+                        type: &apos;analysis&apos;,
+                        difficulty: &apos;BEGINNER&apos;,
                         instructions: [
-                            'Review sample Oracle questions',
-                            'Classify each question by prediction type',
-                            'Identify the key analytical focus for each type',
-                            'Consider what data would be most relevant'
+                            &apos;Review sample Oracle questions&apos;,
+                            &apos;Classify each question by prediction type&apos;,
+                            &apos;Identify the key analytical focus for each type&apos;,
+                            &apos;Consider what data would be most relevant&apos;
                         ],
                         sampleData: [
-                            '"Who will have more receiving yards: Tyreek Hill or Davante Adams?"',
-                            '"Will the Packers vs. Lions game go over 52.5 points?"',
-                            '"How many QBs will throw for 300+ yards this week?"',
-                            '"Will weather impact any games significantly this Sunday?"'
+                            &apos;"Who will have more receiving yards: Tyreek Hill or Davante Adams?"&apos;,
+                            &apos;"Will the Packers vs. Lions game go over 52.5 points?"&apos;,
+                            &apos;"How many QBs will throw for 300+ yards this week?"&apos;,
+                            &apos;"Will weather impact any games significantly this Sunday?"&apos;
                         ],
-                        expectedOutcome: 'Ability to quickly identify prediction types and their analytical focus'
+                        expectedOutcome: &apos;Ability to quickly identify prediction types and their analytical focus&apos;
                     }
                 ]
             },
-            relatedTopics: ['oracle-introduction', 'confidence-levels', 'statistical-modeling'],
+            relatedTopics: [&apos;oracle-introduction&apos;, &apos;confidence-levels&apos;, &apos;statistical-modeling&apos;],
             lastUpdated: new Date().toISOString()
         };
     }
@@ -502,20 +535,24 @@ const playerAnalysis = {
      * Create Confidence Levels Topic
      */
     private createConfidenceLevelsTopic(): EducationalTopic {
+}
         return {
-            id: 'confidence-levels',
-            title: 'Oracle Confidence Levels and Calibration',
-            category: 'ORACLE_BASICS',
-            difficulty: 'INTERMEDIATE',
-            description: 'Understand how Oracle calculates and calibrates confidence levels for predictions',
+}
+            id: &apos;confidence-levels&apos;,
+            title: &apos;Oracle Confidence Levels and Calibration&apos;,
+            category: &apos;ORACLE_BASICS&apos;,
+            difficulty: &apos;INTERMEDIATE&apos;,
+            description: &apos;Understand how Oracle calculates and calibrates confidence levels for predictions&apos;,
             estimatedReadTime: 15,
-            prerequisites: ['oracle-introduction', 'prediction-types'],
+            prerequisites: [&apos;oracle-introduction&apos;, &apos;prediction-types&apos;],
             content: {
-                introduction: `Oracle's confidence levels are more than just numbers—they represent the system's assessment of prediction reliability based on data quality, model agreement, and historical accuracy. Understanding confidence helps you make strategic decisions about when to challenge Oracle and when to follow its lead.`,
+}
+                introduction: `Oracle&apos;s confidence levels are more than just numbers—they represent the system&apos;s assessment of prediction reliability based on data quality, model agreement, and historical accuracy. Understanding confidence helps you make strategic decisions about when to challenge Oracle and when to follow its lead.`,
                 sections: [
                     {
-                        id: 'confidence-calculation',
-                        title: 'How Oracle Calculates Confidence',
+}
+                        id: &apos;confidence-calculation&apos;,
+                        title: &apos;How Oracle Calculates Confidence&apos;,
                         content: `**Base Confidence Factors:**
 
 **1. Data Quality & Completeness**
@@ -543,10 +580,12 @@ const playerAnalysis = {
 • Game context considerations`,
                         examples: [
                             {
-                                id: 'confidence-formula',
-                                title: 'Confidence Calculation Example',
-                                description: 'Simplified version of Oracle\'s confidence calculation',
+}
+                                id: &apos;confidence-formula&apos;,
+                                title: &apos;Confidence Calculation Example&apos;,
+                                description: &apos;Simplified version of Oracle\&apos;s confidence calculation&apos;,
                                 code: `function calculateConfidence(prediction) {
+}
   let baseConfidence = 75; // Starting point
   
   // Data quality adjustment
@@ -571,14 +610,15 @@ const playerAnalysis = {
   
   return Math.max(60, Math.min(95, baseConfidence));
 }`,
-                                language: 'javascript',
-                                explanation: 'Oracle adjusts base confidence using multiple factors, with bounds between 60-95% to avoid overconfidence.'
+                                language: &apos;javascript&apos;,
+                                explanation: &apos;Oracle adjusts base confidence using multiple factors, with bounds between 60-95% to avoid overconfidence.&apos;
                             }
                         ]
                     },
                     {
-                        id: 'confidence-ranges',
-                        title: 'Understanding Confidence Ranges',
+}
+                        id: &apos;confidence-ranges&apos;,
+                        title: &apos;Understanding Confidence Ranges&apos;,
                         content: `**Oracle Confidence Scale:**
 
 **🔥 High Confidence (85-95%)**
@@ -586,7 +626,7 @@ const playerAnalysis = {
 • Multiple models in agreement
 • Historical patterns strongly favor choice
 • Low variance in similar scenarios
-• *Strategy: Consider following Oracle's lead*
+• *Strategy: Consider following Oracle&apos;s lead*
 
 **⚡ Medium-High Confidence (75-84%)**
 • Good data quality with clear leader
@@ -616,10 +656,11 @@ const playerAnalysis = {
 • Weather games: Reduced confidence due to volatility`
                     },
                     {
-                        id: 'calibration-system',
-                        title: 'Oracle\'s Calibration System',
+}
+                        id: &apos;calibration-system&apos;,
+                        title: &apos;Oracle\&apos;s Calibration System&apos;,
                         content: `**What is Calibration?**
-Calibration measures whether Oracle's confidence levels match actual outcomes. A well-calibrated system should be correct 80% of the time when it expresses 80% confidence.
+Calibration measures whether Oracle&apos;s confidence levels match actual outcomes. A well-calibrated system should be correct 80% of the time when it expresses 80% confidence.
 
 **How Oracle Stays Calibrated:**
 
@@ -648,45 +689,48 @@ Calibration measures whether Oracle's confidence levels match actual outcomes. A
 • Learn from prediction errors`,
                         visualAids: [
                             {
-                                id: 'calibration-chart',
-                                type: 'chart',
-                                title: 'Oracle Calibration Analysis',
-                                description: 'Shows how Oracle\'s stated confidence levels match actual prediction accuracy'
+}
+                                id: &apos;calibration-chart&apos;,
+                                type: &apos;chart&apos;,
+                                title: &apos;Oracle Calibration Analysis&apos;,
+                                description: &apos;Shows how Oracle\&apos;s stated confidence levels match actual prediction accuracy&apos;
                             }
                         ]
                     }
                 ],
                 keyTakeaways: [
-                    'Confidence levels reflect prediction reliability, not just strength of preference',
-                    'Higher confidence generally means better data and model agreement',
-                    'Lower confidence predictions offer the best opportunities to beat Oracle',
-                    'Oracle continuously calibrates to ensure confidence levels match actual accuracy',
-                    'Different prediction types and seasons affect natural confidence levels',
-                    'Understanding confidence helps you choose when to challenge Oracle strategically'
+                    &apos;Confidence levels reflect prediction reliability, not just strength of preference&apos;,
+                    &apos;Higher confidence generally means better data and model agreement&apos;,
+                    &apos;Lower confidence predictions offer the best opportunities to beat Oracle&apos;,
+                    &apos;Oracle continuously calibrates to ensure confidence levels match actual accuracy&apos;,
+                    &apos;Different prediction types and seasons affect natural confidence levels&apos;,
+                    &apos;Understanding confidence helps you choose when to challenge Oracle strategically&apos;
                 ],
                 practiceExercises: [
                     {
-                        id: 'confidence-strategy',
-                        title: 'Confidence-Based Strategy Exercise',
-                        description: 'Practice developing strategies based on Oracle\'s confidence levels',
-                        type: 'analysis',
-                        difficulty: 'INTERMEDIATE',
+}
+                        id: &apos;confidence-strategy&apos;,
+                        title: &apos;Confidence-Based Strategy Exercise&apos;,
+                        description: &apos;Practice developing strategies based on Oracle\&apos;s confidence levels&apos;,
+                        type: &apos;analysis&apos;,
+                        difficulty: &apos;INTERMEDIATE&apos;,
                         instructions: [
-                            'Review Oracle predictions with different confidence levels',
-                            'Identify patterns in high vs. low confidence scenarios',
-                            'Develop decision rules for when to agree vs. disagree with Oracle',
-                            'Consider how confidence should affect your betting strategy'
+                            &apos;Review Oracle predictions with different confidence levels&apos;,
+                            &apos;Identify patterns in high vs. low confidence scenarios&apos;,
+                            &apos;Develop decision rules for when to agree vs. disagree with Oracle&apos;,
+                            &apos;Consider how confidence should affect your betting strategy&apos;
                         ],
                         sampleData: {
-                            highConfidence: '92% confidence - Josh Allen to score most QB points',
-                            mediumConfidence: '71% confidence - Eagles vs. Cowboys over 48.5 points',
-                            lowConfidence: '63% confidence - Most fantasy points by a TE'
+}
+                            highConfidence: &apos;92% confidence - Josh Allen to score most QB points&apos;,
+                            mediumConfidence: &apos;71% confidence - Eagles vs. Cowboys over 48.5 points&apos;,
+                            lowConfidence: &apos;63% confidence - Most fantasy points by a TE&apos;
                         },
-                        expectedOutcome: 'Strategic framework for using confidence levels in decision-making'
+                        expectedOutcome: &apos;Strategic framework for using confidence levels in decision-making&apos;
                     }
                 ]
             },
-            relatedTopics: ['statistical-modeling', 'performance-metrics', 'ml-basics'],
+            relatedTopics: [&apos;statistical-modeling&apos;, &apos;performance-metrics&apos;, &apos;ml-basics&apos;],
             lastUpdated: new Date().toISOString()
         };
     }
@@ -695,19 +739,23 @@ Calibration measures whether Oracle's confidence levels match actual outcomes. A
      * Create Fantasy Football Basics Topic
      */
     private createFantasyBasicsTopic(): EducationalTopic {
+}
         return {
-            id: 'fantasy-basics',
-            title: 'Fantasy Football Fundamentals',
-            category: 'FANTASY_FUNDAMENTALS',
-            difficulty: 'BEGINNER',
-            description: 'Essential fantasy football concepts that Oracle\'s predictions are built upon',
+}
+            id: &apos;fantasy-basics&apos;,
+            title: &apos;Fantasy Football Fundamentals&apos;,
+            category: &apos;FANTASY_FUNDAMENTALS&apos;,
+            difficulty: &apos;BEGINNER&apos;,
+            description: &apos;Essential fantasy football concepts that Oracle\&apos;s predictions are built upon&apos;,
             estimatedReadTime: 20,
             content: {
-                introduction: `To understand Oracle's predictions, you need a solid foundation in fantasy football fundamentals. This topic covers the core concepts that Oracle analyzes when making predictions about player performance and game outcomes.`,
+}
+                introduction: `To understand Oracle&apos;s predictions, you need a solid foundation in fantasy football fundamentals. This topic covers the core concepts that Oracle analyzes when making predictions about player performance and game outcomes.`,
                 sections: [
                     {
-                        id: 'scoring-systems',
-                        title: 'Fantasy Scoring Systems',
+}
+                        id: &apos;scoring-systems&apos;,
+                        title: &apos;Fantasy Scoring Systems&apos;,
                         content: `**Standard Scoring:**
 • Passing: 1 point per 25 yards, 4 points per TD
 • Rushing/Receiving: 1 point per 10 yards, 6 points per TD
@@ -731,11 +779,13 @@ Calibration measures whether Oracle's confidence levels match actual outcomes. A
 • Accounts for touchdown regression in all formats`,
                         examples: [
                             {
-                                id: 'scoring-comparison',
-                                title: 'Scoring System Impact',
-                                description: 'How different scoring affects player values',
-                                code: `// Example: Cooper Kupp's 2021 season
+}
+                                id: &apos;scoring-comparison&apos;,
+                                title: &apos;Scoring System Impact&apos;,
+                                description: &apos;How different scoring affects player values&apos;,
+                                code: `// Example: Cooper Kupp&apos;s 2021 season
 const kuppStats = {
+}
   receptions: 145,
   receivingYards: 1947,
   receivingTouchdowns: 16,
@@ -751,14 +801,15 @@ const standardPoints =
 
 const pprPoints = standardPoints + kuppStats.receptions;
   // Total: 436.5 points (+145 from receptions)`,
-                                language: 'javascript',
-                                explanation: 'PPR scoring dramatically increases the value of high-reception players like Kupp.'
+                                language: &apos;javascript&apos;,
+                                explanation: &apos;PPR scoring dramatically increases the value of high-reception players like Kupp.&apos;
                             }
                         ]
                     },
                     {
-                        id: 'positional-strategy',
-                        title: 'Positional Analysis and Strategy',
+}
+                        id: &apos;positional-strategy&apos;,
+                        title: &apos;Positional Analysis and Strategy&apos;,
                         content: `**Quarterback Strategy:**
 • Highest floor, moderate ceiling
 • Streaming vs. elite options
@@ -790,8 +841,9 @@ const pprPoints = standardPoints + kuppStats.receptions;
 • Turnover variance and sustainability`
                     },
                     {
-                        id: 'key-metrics',
-                        title: 'Essential Fantasy Metrics',
+}
+                        id: &apos;key-metrics&apos;,
+                        title: &apos;Essential Fantasy Metrics&apos;,
                         content: `**Volume Metrics:**
 • **Snap Count %:** Playing time opportunity
 • **Target Share:** % of team targets (WR/TE)
@@ -813,7 +865,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
 • **Pressure Rate:** QB durability under pressure
 • **Route Participation:** Passing down involvement
 
-**Oracle's Metric Priorities:**
+**Oracle&apos;s Metric Priorities:**
 1. **Volume First:** Opportunity drives fantasy points
 2. **Efficiency Second:** Maximizing given opportunities  
 3. **Situation Third:** Game script and usage context
@@ -821,254 +873,296 @@ const pprPoints = standardPoints + kuppStats.receptions;
                     }
                 ],
                 keyTakeaways: [
-                    'Scoring format significantly impacts player valuations and Oracle predictions',
-                    'Volume metrics (targets, carries) are the strongest predictors of fantasy success',
-                    'Each position has unique analytical considerations and strategies',
-                    'Oracle combines volume, efficiency, and situational factors in predictions',
-                    'Understanding these fundamentals helps interpret Oracle\'s reasoning'
+                    &apos;Scoring format significantly impacts player valuations and Oracle predictions&apos;,
+                    &apos;Volume metrics (targets, carries) are the strongest predictors of fantasy success&apos;,
+                    &apos;Each position has unique analytical considerations and strategies&apos;,
+                    &apos;Oracle combines volume, efficiency, and situational factors in predictions&apos;,
+                    &apos;Understanding these fundamentals helps interpret Oracle\&apos;s reasoning&apos;
                 ]
             },
-            relatedTopics: ['player-analysis', 'statistical-modeling'],
+            relatedTopics: [&apos;player-analysis&apos;, &apos;statistical-modeling&apos;],
             lastUpdated: new Date().toISOString()
         };
     }
 
     // Additional topic creation methods would continue here...
-    // For brevity, I'll create stubs for the remaining topics
+    // For brevity, I&apos;ll create stubs for the remaining topics
 
     private createScoringSystemsTopic(): EducationalTopic {
+}
         return {
-            id: 'scoring-systems',
-            title: 'Fantasy Scoring Systems Deep Dive',
-            category: 'FANTASY_FUNDAMENTALS',
-            difficulty: 'INTERMEDIATE',
-            description: 'Advanced understanding of how different scoring systems affect Oracle predictions',
+}
+            id: &apos;scoring-systems&apos;,
+            title: &apos;Fantasy Scoring Systems Deep Dive&apos;,
+            category: &apos;FANTASY_FUNDAMENTALS&apos;,
+            difficulty: &apos;INTERMEDIATE&apos;,
+            description: &apos;Advanced understanding of how different scoring systems affect Oracle predictions&apos;,
             estimatedReadTime: 10,
             content: {
-                introduction: 'Detailed analysis of scoring systems and their impact on predictions...',
+}
+                introduction: &apos;Detailed analysis of scoring systems and their impact on predictions...&apos;,
                 sections: [],
-                keyTakeaways: ['Scoring systems directly impact player value.']
+                keyTakeaways: [&apos;Scoring systems directly impact player value.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createPlayerAnalysisTopic(): EducationalTopic {
+}
         return {
-            id: 'player-analysis',
-            title: 'Advanced Player Analysis Techniques',
-            category: 'FANTASY_FUNDAMENTALS',
-            difficulty: 'ADVANCED',
-            description: 'Learn Oracle\'s methods for evaluating player performance potential',
+}
+            id: &apos;player-analysis&apos;,
+            title: &apos;Advanced Player Analysis Techniques&apos;,
+            category: &apos;FANTASY_FUNDAMENTALS&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;Learn Oracle\&apos;s methods for evaluating player performance potential&apos;,
             estimatedReadTime: 18,
             content: {
-                introduction: 'Deep dive into player evaluation methodologies...',
+}
+                introduction: &apos;Deep dive into player evaluation methodologies...&apos;,
                 sections: [],
-                keyTakeaways: ['Player analysis involves more than just looking at box scores.']
+                keyTakeaways: [&apos;Player analysis involves more than just looking at box scores.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createAlgorithmBasicsTopic(): EducationalTopic {
+}
         return {
-            id: 'algorithm-basics',
-            title: 'Understanding Oracle\'s Prediction Algorithms',
-            category: 'PREDICTION_ALGORITHMS',
-            difficulty: 'INTERMEDIATE',
-            description: 'How Oracle processes data to generate predictions',
+}
+            id: &apos;algorithm-basics&apos;,
+            title: &apos;Understanding Oracle\&apos;s Prediction Algorithms&apos;,
+            category: &apos;PREDICTION_ALGORITHMS&apos;,
+            difficulty: &apos;INTERMEDIATE&apos;,
+            description: &apos;How Oracle processes data to generate predictions&apos;,
             estimatedReadTime: 22,
             content: {
-                introduction: 'Oracle uses sophisticated algorithms combining multiple analytical approaches to create robust and reliable forecasts.',
+}
+                introduction: &apos;Oracle uses sophisticated algorithms combining multiple analytical approaches to create robust and reliable forecasts.&apos;,
                 sections: [],
-                keyTakeaways: ['Algorithms are the engines of Oracle\'s predictions.']
+                keyTakeaways: [&apos;Algorithms are the engines of Oracle\&apos;s predictions.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createDataSourcesTopic(): EducationalTopic {
+}
         return {
-            id: 'data-sources',
-            title: 'Oracle\'s Data Sources and Integration',
-            category: 'PREDICTION_ALGORITHMS',
-            difficulty: 'INTERMEDIATE',
-            description: 'Understanding the data that powers Oracle predictions',
+}
+            id: &apos;data-sources&apos;,
+            title: &apos;Oracle\&apos;s Data Sources and Integration&apos;,
+            category: &apos;PREDICTION_ALGORITHMS&apos;,
+            difficulty: &apos;INTERMEDIATE&apos;,
+            description: &apos;Understanding the data that powers Oracle predictions&apos;,
             estimatedReadTime: 16,
             content: {
-                introduction: 'Oracle integrates multiple data sources for comprehensive analysis...',
+}
+                introduction: &apos;Oracle integrates multiple data sources for comprehensive analysis...&apos;,
                 sections: [],
-                keyTakeaways: ['High-quality data is essential for accurate predictions.']
+                keyTakeaways: [&apos;High-quality data is essential for accurate predictions.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createAIAnalysisTopic(): EducationalTopic {
+}
         return {
-            id: 'ai-analysis',
-            title: 'AI-Powered Analysis and Reasoning',
-            category: 'PREDICTION_ALGORITHMS',
-            difficulty: 'ADVANCED',
-            description: 'How Oracle uses AI to analyze data and generate insights',
+}
+            id: &apos;ai-analysis&apos;,
+            title: &apos;AI-Powered Analysis and Reasoning&apos;,
+            category: &apos;PREDICTION_ALGORITHMS&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;How Oracle uses AI to analyze data and generate insights&apos;,
             estimatedReadTime: 25,
             content: {
-                introduction: 'Oracle leverages advanced AI to process complex data relationships...',
+}
+                introduction: &apos;Oracle leverages advanced AI to process complex data relationships...&apos;,
                 sections: [],
-                keyTakeaways: ['AI helps uncover hidden patterns in the data.']
+                keyTakeaways: [&apos;AI helps uncover hidden patterns in the data.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createStatisticalModelingTopic(): EducationalTopic {
+}
         return {
-            id: 'statistical-modeling',
-            title: 'Statistical Modeling in Fantasy Football',
-            category: 'STATISTICAL_ANALYSIS',
-            difficulty: 'ADVANCED',
-            description: 'Advanced statistical concepts Oracle uses for predictions',
+}
+            id: &apos;statistical-modeling&apos;,
+            title: &apos;Statistical Modeling in Fantasy Football&apos;,
+            category: &apos;STATISTICAL_ANALYSIS&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;Advanced statistical concepts Oracle uses for predictions&apos;,
             estimatedReadTime: 30,
             content: {
-                introduction: 'Statistical modeling forms the foundation of Oracle\'s analytical approach...',
+}
+                introduction: &apos;Statistical modeling forms the foundation of Oracle\&apos;s analytical approach...&apos;,
                 sections: [],
-                keyTakeaways: ['Statistical models help quantify uncertainty.']
+                keyTakeaways: [&apos;Statistical models help quantify uncertainty.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createProbabilityTheoryTopic(): EducationalTopic {
+}
         return {
-            id: 'probability-theory',
-            title: 'Probability Theory and Confidence Intervals',
-            category: 'STATISTICAL_ANALYSIS',
-            difficulty: 'EXPERT',
-            description: 'Mathematical foundations of Oracle\'s probability calculations',
+}
+            id: &apos;probability-theory&apos;,
+            title: &apos;Probability Theory and Confidence Intervals&apos;,
+            category: &apos;STATISTICAL_ANALYSIS&apos;,
+            difficulty: &apos;EXPERT&apos;,
+            description: &apos;Mathematical foundations of Oracle\&apos;s probability calculations&apos;,
             estimatedReadTime: 35,
             content: {
-                introduction: 'Understanding probability theory helps interpret Oracle\'s confidence levels...',
+}
+                introduction: &apos;Understanding probability theory helps interpret Oracle\&apos;s confidence levels...&apos;,
                 sections: [],
-                keyTakeaways: ['Probability is the language of uncertainty.']
+                keyTakeaways: [&apos;Probability is the language of uncertainty.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createPerformanceMetricsTopic(): EducationalTopic {
+}
         return {
-            id: 'performance-metrics',
-            title: 'Advanced Performance Metrics',
-            category: 'STATISTICAL_ANALYSIS',
-            difficulty: 'ADVANCED',
-            description: 'Sophisticated metrics Oracle uses for player evaluation',
+}
+            id: &apos;performance-metrics&apos;,
+            title: &apos;Advanced Performance Metrics&apos;,
+            category: &apos;STATISTICAL_ANALYSIS&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;Sophisticated metrics Oracle uses for player evaluation&apos;,
             estimatedReadTime: 20,
             content: {
-                introduction: 'Oracle uses advanced metrics beyond basic fantasy statistics...',
+}
+                introduction: &apos;Oracle uses advanced metrics beyond basic fantasy statistics...&apos;,
                 sections: [],
-                keyTakeaways: ['Advanced metrics provide a deeper understanding of player performance.']
+                keyTakeaways: [&apos;Advanced metrics provide a deeper understanding of player performance.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createMLBasicsTopic(): EducationalTopic {
+}
         return {
-            id: 'ml-basics',
-            title: 'Machine Learning in Fantasy Football',
-            category: 'MACHINE_LEARNING',
-            difficulty: 'ADVANCED',
-            description: 'How Oracle uses machine learning for continuous improvement',
+}
+            id: &apos;ml-basics&apos;,
+            title: &apos;Machine Learning in Fantasy Football&apos;,
+            category: &apos;MACHINE_LEARNING&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;How Oracle uses machine learning for continuous improvement&apos;,
             estimatedReadTime: 28,
             content: {
-                introduction: 'Machine learning enables Oracle to improve predictions over time...',
+}
+                introduction: &apos;Machine learning enables Oracle to improve predictions over time...&apos;,
                 sections: [],
-                keyTakeaways: ['Machine learning allows the system to learn from data.']
+                keyTakeaways: [&apos;Machine learning allows the system to learn from data.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createFeatureEngineeringTopic(): EducationalTopic {
+}
         return {
-            id: 'feature-engineering',
-            title: 'Feature Engineering for Predictions',
-            category: 'MACHINE_LEARNING',
-            difficulty: 'EXPERT',
-            description: 'How Oracle creates meaningful features from raw data',
+}
+            id: &apos;feature-engineering&apos;,
+            title: &apos;Feature Engineering for Predictions&apos;,
+            category: &apos;MACHINE_LEARNING&apos;,
+            difficulty: &apos;EXPERT&apos;,
+            description: &apos;How Oracle creates meaningful features from raw data&apos;,
             estimatedReadTime: 32,
             content: {
-                introduction: 'Feature engineering transforms raw data into predictive signals...',
+}
+                introduction: &apos;Feature engineering transforms raw data into predictive signals...&apos;,
                 sections: [],
-                keyTakeaways: ['Feature engineering is a critical step in the machine learning pipeline.']
+                keyTakeaways: [&apos;Feature engineering is a critical step in the machine learning pipeline.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createModelOptimizationTopic(): EducationalTopic {
+}
         return {
-            id: 'model-optimization',
-            title: 'Model Optimization and Validation',
-            category: 'MACHINE_LEARNING',
-            difficulty: 'EXPERT',
-            description: 'Oracle\'s approach to optimizing prediction models',
+}
+            id: &apos;model-optimization&apos;,
+            title: &apos;Model Optimization and Validation&apos;,
+            category: &apos;MACHINE_LEARNING&apos;,
+            difficulty: &apos;EXPERT&apos;,
+            description: &apos;Oracle\&apos;s approach to optimizing prediction models&apos;,
             estimatedReadTime: 25,
             content: {
-                introduction: 'Oracle continuously optimizes models for better predictions...',
+}
+                introduction: &apos;Oracle continuously optimizes models for better predictions...&apos;,
                 sections: [],
-                keyTakeaways: ['Model optimization is key to maintaining a competitive edge.']
+                keyTakeaways: [&apos;Model optimization is key to maintaining a competitive edge.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createAdvancedAnalyticsTopic(): EducationalTopic {
+}
         return {
-            id: 'advanced-analytics',
-            title: 'Advanced Analytics and Ensemble Methods',
-            category: 'ADVANCED_STRATEGIES',
-            difficulty: 'EXPERT',
-            description: 'Sophisticated analytical techniques Oracle employs',
+}
+            id: &apos;advanced-analytics&apos;,
+            title: &apos;Advanced Analytics and Ensemble Methods&apos;,
+            category: &apos;ADVANCED_STRATEGIES&apos;,
+            difficulty: &apos;EXPERT&apos;,
+            description: &apos;Sophisticated analytical techniques Oracle employs&apos;,
             estimatedReadTime: 40,
             content: {
-                introduction: 'Advanced analytics combine multiple approaches for robust predictions...',
+}
+                introduction: &apos;Advanced analytics combine multiple approaches for robust predictions...&apos;,
                 sections: [],
-                keyTakeaways: ['Advanced analytics can provide a significant competitive advantage.']
+                keyTakeaways: [&apos;Advanced analytics can provide a significant competitive advantage.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createEnsembleMethodsTopic(): EducationalTopic {
+}
         return {
-            id: 'ensemble-methods',
-            title: 'Ensemble Prediction Methods',
-            category: 'ADVANCED_STRATEGIES',
-            difficulty: 'EXPERT',
-            description: 'How Oracle combines multiple models for better accuracy',
+}
+            id: &apos;ensemble-methods&apos;,
+            title: &apos;Ensemble Prediction Methods&apos;,
+            category: &apos;ADVANCED_STRATEGIES&apos;,
+            difficulty: &apos;EXPERT&apos;,
+            description: &apos;How Oracle combines multiple models for better accuracy&apos;,
             estimatedReadTime: 30,
             content: {
-                introduction: 'Ensemble methods combine multiple prediction models...',
+}
+                introduction: &apos;Ensemble methods combine multiple prediction models...&apos;,
                 sections: [],
-                keyTakeaways: ['Ensemble methods can improve prediction accuracy and robustness.']
+                keyTakeaways: [&apos;Ensemble methods can improve prediction accuracy and robustness.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
     }
 
     private createMarketSentimentTopic(): EducationalTopic {
+}
         return {
-            id: 'market-sentiment',
-            title: 'Market Sentiment and External Factors',
-            category: 'ADVANCED_STRATEGIES',
-            difficulty: 'ADVANCED',
-            description: 'How Oracle incorporates market sentiment and external data',
+}
+            id: &apos;market-sentiment&apos;,
+            title: &apos;Market Sentiment and External Factors&apos;,
+            category: &apos;ADVANCED_STRATEGIES&apos;,
+            difficulty: &apos;ADVANCED&apos;,
+            description: &apos;How Oracle incorporates market sentiment and external data&apos;,
             estimatedReadTime: 22,
             content: {
-                introduction: 'Market sentiment provides additional signals for Oracle predictions...',
+}
+                introduction: &apos;Market sentiment provides additional signals for Oracle predictions...&apos;,
                 sections: [],
-                keyTakeaways: ['Market sentiment can be a powerful contrarian indicator.']
+                keyTakeaways: [&apos;Market sentiment can be a powerful contrarian indicator.&apos;]
             },
             lastUpdated: new Date().toISOString()
         };
@@ -1078,6 +1172,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Add topic to the service
      */
     private addTopic(topic: EducationalTopic): void {
+}
         this.topics.set(topic.id, topic);
     }
 
@@ -1085,6 +1180,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get all educational topics
      */
     getTopics(): EducationalTopic[] {
+}
         return Array.from(this.topics.values());
     }
 
@@ -1092,6 +1188,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get topics by category
      */
     getTopicsByCategory(category: EducationCategory): EducationalTopic[] {
+}
         return this.getTopics().filter((topic: any) => topic.category === category);
     }
 
@@ -1099,6 +1196,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get topics by difficulty
      */
     getTopicsByDifficulty(difficulty: DifficultyLevel): EducationalTopic[] {
+}
         return this.getTopics().filter((topic: any) => topic.difficulty === difficulty);
     }
 
@@ -1106,58 +1204,66 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get specific topic by ID
      */
     getTopic(topicId: string): EducationalTopic | null {
+}
         return this.topics.get(topicId) || null;
     }
 
     /**
      * Get recommended learning path for user
      */
-    getRecommendedLearningPath(userLevel: DifficultyLevel = 'BEGINNER'): string[] {
+    getRecommendedLearningPath(userLevel: DifficultyLevel = &apos;BEGINNER&apos;): string[] {
+}
         const levelPaths = {
-            'BEGINNER': [
-                'oracle-introduction',
-                'fantasy-basics', 
-                'prediction-types',
-                'confidence-levels',
-                'scoring-systems'
+}
+            &apos;BEGINNER&apos;: [
+                &apos;oracle-introduction&apos;,
+                &apos;fantasy-basics&apos;, 
+                &apos;prediction-types&apos;,
+                &apos;confidence-levels&apos;,
+                &apos;scoring-systems&apos;
             ],
-            'INTERMEDIATE': [
-                'player-analysis',
-                'algorithm-basics',
-                'data-sources',
-                'statistical-modeling',
-                'performance-metrics'
+            &apos;INTERMEDIATE&apos;: [
+                &apos;player-analysis&apos;,
+                &apos;algorithm-basics&apos;,
+                &apos;data-sources&apos;,
+                &apos;statistical-modeling&apos;,
+                &apos;performance-metrics&apos;
             ],
-            'ADVANCED': [
-                'ai-analysis',
-                'ml-basics',
-                'probability-theory',
-                'market-sentiment',
-                'advanced-analytics'
+            &apos;ADVANCED&apos;: [
+                &apos;ai-analysis&apos;,
+                &apos;ml-basics&apos;,
+                &apos;probability-theory&apos;,
+                &apos;market-sentiment&apos;,
+                &apos;advanced-analytics&apos;
             ],
-            'EXPERT': [
-                'feature-engineering',
-                'model-optimization', 
-                'ensemble-methods'
+            &apos;EXPERT&apos;: [
+                &apos;feature-engineering&apos;,
+                &apos;model-optimization&apos;, 
+                &apos;ensemble-methods&apos;
             ]
         };
 
-        return levelPaths[userLevel] || levelPaths['BEGINNER'];
+        return levelPaths[userLevel] || levelPaths[&apos;BEGINNER&apos;];
     }
 
     /**
      * Load user progress from localStorage
      */
     private loadUserProgress(): void {
+}
         try {
+}
             const stored = localStorage.getItem(this.STORAGE_KEY);
             if (stored) {
+}
                 this.userProgress = JSON.parse(stored);
             } else {
+}
                 this.userProgress = this.createDefaultProgress();
             }
         } catch (error) {
-            console.error('Failed to load user progress:', error);
+}
+            console.error(&apos;Failed to load user progress:&apos;, error);
             this.userProgress = this.createDefaultProgress();
         }
     }
@@ -1166,12 +1272,16 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Save user progress to localStorage
      */
     private saveUserProgress(): void {
+}
         try {
+}
             if (this.userProgress) {
+}
                 localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.userProgress));
             }
         } catch (error) {
-            console.error('Failed to save user progress:', error);
+}
+            console.error(&apos;Failed to save user progress:&apos;, error);
         }
     }
 
@@ -1179,12 +1289,14 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Create default user progress
      */
     private createDefaultProgress(): UserProgress {
+}
         return {
-            userId: 'default-user',
+}
+            userId: &apos;default-user&apos;,
             completedTopics: [],
             quizScores: {},
             practiceResults: {},
-            learningPath: this.getRecommendedLearningPath('BEGINNER'),
+            learningPath: this.getRecommendedLearningPath(&apos;BEGINNER&apos;),
             achievements: [],
             totalTimeSpent: 0,
             lastAccessed: new Date().toISOString()
@@ -1195,9 +1307,11 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Mark topic as completed
      */
     markTopicCompleted(topicId: string): void {
+}
         if (!this.userProgress) return;
 
         if (!this.userProgress.completedTopics.includes(topicId)) {
+}
             this.userProgress.completedTopics.push(topicId);
             this.userProgress.lastAccessed = new Date().toISOString();
             this.saveUserProgress();
@@ -1208,6 +1322,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Record quiz score
      */
     recordQuizScore(topicId: string, score: number): void {
+}
         if (!this.userProgress) return;
 
         this.userProgress.quizScores[topicId] = score;
@@ -1219,6 +1334,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get user progress
      */
     getUserProgress(): UserProgress | null {
+}
         return this.userProgress;
     }
 
@@ -1226,6 +1342,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get next recommended topic
      */
     getNextRecommendedTopic(): EducationalTopic | null {
+}
         if (!this.userProgress) return null;
 
         const nextTopicId = this.userProgress.learningPath.find(
@@ -1239,6 +1356,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Search topics by query
      */
     searchTopics(query: string): EducationalTopic[] {
+}
         const searchTerm = query.toLowerCase();
         return this.getTopics().filter((topic: any) =>
             topic.title.toLowerCase().includes(searchTerm) ||
@@ -1251,6 +1369,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get topic prerequisites
      */
     getTopicPrerequisites(topicId: string): EducationalTopic[] {
+}
         const topic = this.getTopic(topicId);
         if (!topic?.prerequisites) return [];
 
@@ -1263,6 +1382,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Check if user can access topic
      */
     canAccessTopic(topicId: string): boolean {
+}
         if (!this.userProgress) return true;
 
         const prerequisites = this.getTopicPrerequisites(topicId);
@@ -1275,6 +1395,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get learning statistics
      */
     getLearningStatistics(): any {
+}
         if (!this.userProgress) return null;
 
         const totalTopics = this.getTopics().length;
@@ -1285,6 +1406,7 @@ const pprPoints = standardPoints + kuppStats.receptions;
         const difficultyProgress = this.getDifficultyProgress();
 
         return {
+}
             totalTopics,
             completedCount,
             completionRate,
@@ -1300,13 +1422,17 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get progress by category
      */
     private getCategoryProgress(): Record<EducationCategory, number> {
+}
         const progress: Record<string, number> = {};
         
         Object.values(this.topics).forEach((topic: any) => {
+}
             if (!progress[topic.category]) {
+}
                 progress[topic.category] = 0;
             }
             if (this.userProgress?.completedTopics.includes(topic.id)) {
+}
                 progress[topic.category]++;
             }
         });
@@ -1318,15 +1444,19 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Get progress by difficulty
      */
     private getDifficultyProgress(): Record<DifficultyLevel, number> {
+}
         const progress: Record<string, number> = {
-            'BEGINNER': 0,
-            'INTERMEDIATE': 0, 
-            'ADVANCED': 0,
-            'EXPERT': 0
+}
+            &apos;BEGINNER&apos;: 0,
+            &apos;INTERMEDIATE&apos;: 0, 
+            &apos;ADVANCED&apos;: 0,
+            &apos;EXPERT&apos;: 0
         };
 
         Object.values(this.topics).forEach((topic: any) => {
+}
             if (this.userProgress?.completedTopics.includes(topic.id)) {
+}
                 progress[topic.difficulty]++;
             }
         });
@@ -1338,7 +1468,9 @@ const pprPoints = standardPoints + kuppStats.receptions;
      * Calculate average quiz score
      */
     private getAverageQuizScore(): number {
+}
         if (!this.userProgress || Object.keys(this.userProgress.quizScores).length === 0) {
+}
             return 0;
         }
 

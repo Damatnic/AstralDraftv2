@@ -1,14 +1,15 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import type { Team, Player, WaiverWireAdvice } from '../../types';
-import { Modal } from '../ui/Modal';
-import { SparklesIcon } from '../icons/SparklesIcon';
-import { getWaiverWireAdvice } from '../../services/geminiService';
-import { useLeague } from '../../hooks/useLeague';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Team, Player, WaiverWireAdvice } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
+import { getWaiverWireAdvice } from &apos;../../services/geminiService&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
 
 interface PlaceClaimModalProps {
+}
     playerToAdd: Player;
     myTeam: Team;
     leagueId: string;
@@ -18,6 +19,7 @@ interface PlaceClaimModalProps {
 }
 
 const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, leagueId, dispatch, onClose }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const { league } = useLeague();
     const [bid, setBid] = React.useState(1);
@@ -25,58 +27,71 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
     const [advice, setAdvice] = React.useState<WaiverWireAdvice | null>(null);
     const [isAnalyzing, setIsAnalyzing] = React.useState(false);
 
-    const isFullAiEnabled = league?.settings.aiAssistanceLevel === 'FULL';
+    const isFullAiEnabled = league?.settings.aiAssistanceLevel === &apos;FULL&apos;;
 
     const handleAnalyze = async () => {
+}
         try {
+}
             if (!isFullAiEnabled) return;
             setIsAnalyzing(true);
             setAdvice(null);
             const result = await getWaiverWireAdvice(myTeam, playerToAdd, undefined);
             setAdvice(result);
             if (result) {
+}
                 setBid(result.suggestedBid);
                 if(result.optimalDropPlayerId) {
+}
                     setPlayerToDropId(result.optimalDropPlayerId);
                 }
             }
         } catch (error) {
-            console.error('Error in handleAnalyze:', error);
+}
+            console.error(&apos;Error in handleAnalyze:&apos;, error);
         } finally {
+}
             setIsAnalyzing(false);
         }
     };
     
     // Automatically fetch advice on modal open
     React.useEffect(() => {
+}
         handleAnalyze();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [playerToAdd.id]);
 
     const handleSubmitClaim = () => {
+}
         if (bid > myTeam.faab) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Error: Bid exceeds your FAAB budget.', type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Error: Bid exceeds your FAAB budget.&apos;, type: &apos;SYSTEM&apos; } });
             return;
         }
 
         if (bid <= 0) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Error: Bid must be positive.', type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Error: Bid must be positive.&apos;, type: &apos;SYSTEM&apos; } });
             return;
         }
 
         dispatch({
-            type: 'PLACE_WAIVER_CLAIM',
+}
+            type: &apos;PLACE_WAIVER_CLAIM&apos;,
             payload: {
+}
                 leagueId,
                 claim: {
+}
                     teamId: myTeam.id,
                     playerId: playerToAdd.id,
                     bid,
-                    playerToDropId
+//                     playerToDropId
                 }
             }
         });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Waiver claim for ${playerToAdd.name} placed!`, type: 'WAIVER' } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Waiver claim for ${playerToAdd.name} placed!`, type: &apos;WAIVER&apos; } });
         onClose();
     };
 
@@ -88,6 +103,7 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
             <motion.div
                 className="glass-pane rounded-xl shadow-2xl w-full max-w-lg sm:px-4 md:px-6 lg:px-8"
                 {...{
+}
                     initial: { opacity: 0, scale: 0.95 },
                     animate: { opacity: 1, scale: 1 },
                     exit: { opacity: 0, scale: 0.95 },
@@ -117,15 +133,18 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
                                 onChange={e => setPlayerToDropId(parseInt(e.target.value))}
                             >
                                 {myTeam.roster.map((p: any) => (
+}
                                     <option key={p.id} value={p.id}>{p.name} ({p.position})</option>
                                 ))}
                             </select>
                         </div>
                     </div>
                      {isFullAiEnabled && (advice || isAnalyzing) && (
+}
                         <div className="p-4 border-t border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
-                             <h3 className="font-bold text-center text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Oracle's Advice</h3>
+                             <h3 className="font-bold text-center text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Oracle&apos;s Advice</h3>
                              {isAnalyzing ? (
+}
                                  <div className="h-14 flex items-center justify-center text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Consulting the cosmos...</div>
                              ) : advice && (
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -139,6 +158,7 @@ const PlaceClaimModal: React.FC<PlaceClaimModalProps> = ({ playerToAdd, myTeam, 
 
                 <footer className="p-6 flex justify-between items-center gap-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                     {isFullAiEnabled ? (
+}
                         <button onClick={handleAnalyze} disabled={isAnalyzing} className="mobile-touch-target flex items-center gap-2 px-4 py-3 bg-transparent border border-cyan-400/50 text-cyan-300 font-bold rounded-lg hover:bg-cyan-400/20 disabled:opacity-50 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                             {isAnalyzing ? <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin sm:px-4 md:px-6 lg:px-8"></div> : <SparklesIcon />}
                             Re-Analyze

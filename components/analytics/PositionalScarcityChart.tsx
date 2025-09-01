@@ -1,20 +1,23 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { Player, PlayerPosition } from '../../types';
-import { players as allPlayers } from '../../data/players';
-import { Tooltip } from '../ui/Tooltip';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { Player, PlayerPosition } from &apos;../../types&apos;;
+import { players as allPlayers } from &apos;../../data/players&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface PositionalScarcityChartProps {
+}
     availablePlayers: Player[];}
 
-const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
+const positions: PlayerPosition[] = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
 const ELITE_TIER_THRESHOLD = 3;
 
 const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ availablePlayers }: any) => {
+}
 
     const scarcityData = React.useMemo(() => {
+}
         return positions.map((pos: PlayerPosition) => {
+}
             const totalEliteInPosition = allPlayers.filter((p: any) => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
             const availableEliteInPosition = availablePlayers.filter((p: any) => p.position === pos && (p?.tier ?? 10) <= ELITE_TIER_THRESHOLD);
             
@@ -23,6 +26,7 @@ const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ avail
                 : 0;
             
             return {
+}
                 pos,
                 availabilityPercent,
                 tooltipText: `${availableEliteInPosition.length} of ${totalEliteInPosition.length} elite (Tiers 1-${ELITE_TIER_THRESHOLD}) ${pos}s remain.`
@@ -36,6 +40,7 @@ const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ avail
             <p className="text-xs text-center mb-4 text-gray-500 sm:px-4 md:px-6 lg:px-8">Percentage of Tiers 1-3 players remaining.</p>
             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                 {scarcityData.map((data: any) => (
+}
                     <Tooltip content="This is a tooltip">
                         <div className="flex items-center gap-2 text-xs sm:px-4 md:px-6 lg:px-8">
                             <span className="w-8 font-bold text-gray-400 sm:px-4 md:px-6 lg:px-8">{data.pos}</span>

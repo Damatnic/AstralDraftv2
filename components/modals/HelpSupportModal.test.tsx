@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import HelpSupportModal from './HelpSupportModal';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import HelpSupportModal from &apos;./HelpSupportModal&apos;;
 
-describe('HelpSupportModal', () => {
-  it('renders without crashing', () => {
+describe(&apos;HelpSupportModal&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<HelpSupportModal />);
-    expect(screen.getByTestId('helpsupportmodal')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;helpsupportmodal&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<HelpSupportModal />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<HelpSupportModal />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

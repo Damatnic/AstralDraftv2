@@ -3,25 +3,27 @@
  * Integrates all specialized agent systems for maximum engagement and fun
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
   Crown, Trophy, Users, Star, Flame, Target, Camera, 
   MessageSquare, BarChart3, Calendar, Zap, Heart,
   ChevronRight, TrendingUp, Award, Palette
-} from 'lucide-react';
+} from &apos;lucide-react&apos;;
 
 // Import all our specialized components
-import TrashTalkSystem from '../components/league/TrashTalkSystem';
-import VictoryCelebrationSystem from '../components/league/VictoryCelebrationSystem';
-import WeeklyPowerRankings from '../components/league/WeeklyPowerRankings';
-import WeeklyChallengeSystem from '../components/league/WeeklyChallengeSystem';
-import LeagueSuperlativesSystem from '../components/league/LeagueSuperlativesSystem';
-import RivalryTracker from '../components/league/RivalryTracker';
-import TeamIdentityCustomizer from '../components/league/TeamIdentityCustomizer';
-import LeagueMemorySystem from '../components/league/LeagueMemorySystem';
+import TrashTalkSystem from &apos;../components/league/TrashTalkSystem&apos;;
+import VictoryCelebrationSystem from &apos;../components/league/VictoryCelebrationSystem&apos;;
+import WeeklyPowerRankings from &apos;../components/league/WeeklyPowerRankings&apos;;
+import WeeklyChallengeSystem from &apos;../components/league/WeeklyChallengeSystem&apos;;
+import LeagueSuperlativesSystem from &apos;../components/league/LeagueSuperlativesSystem&apos;;
+import RivalryTracker from &apos;../components/league/RivalryTracker&apos;;
+import TeamIdentityCustomizer from &apos;../components/league/TeamIdentityCustomizer&apos;;
+import LeagueMemorySystem from &apos;../components/league/LeagueMemorySystem&apos;;
 
 interface EnhancedLeagueExperienceHubProps {
+}
   leagueId: string;
   userId: string;
   userName: string;
@@ -31,6 +33,7 @@ interface EnhancedLeagueExperienceHubProps {
 }
 
 interface LeagueStats {
+}
   totalMessages: number;
   totalMemories: number;
   completedChallenges: number;
@@ -39,14 +42,17 @@ interface LeagueStats {
   activeStreaks: number;}
 
 const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = ({
+}
   leagueId,
   userId,
   userName,
   teamName,
-  currentWeek
+//   currentWeek
 }: any) => {
-  const [activeSection, setActiveSection] = useState<string>('overview');
+}
+  const [activeSection, setActiveSection] = useState<string>(&apos;overview&apos;);
   const [leagueStats, setLeagueStats] = useState<LeagueStats>({
+}
     totalMessages: 247,
     totalMemories: 43,
     completedChallenges: 12,
@@ -57,19 +63,20 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
 
   // Mock team data for demonstrations
   const mockTeams = [
-    { id: 'team1', name: 'Dynasty Destroyers', owner: 'Mike Johnson', record: { wins: 8, losses: 3 }, stats: {} },
-    { id: 'team2', name: 'Gridiron Gladiators', owner: 'Sarah Chen', record: { wins: 7, losses: 4 }, stats: {} },
-    { id: 'team3', name: 'Fantasy Phenoms', owner: 'Alex Rodriguez', record: { wins: 9, losses: 2 }, stats: {} },
-    { id: 'team4', name: 'Championship Chasers', owner: 'Jordan Smith', record: { wins: 6, losses: 5 }, stats: {} },
-    { id: 'team5', name: 'Playoff Predators', owner: 'Taylor Brown', record: { wins: 8, losses: 3 }, stats: {} },
-    { id: 'team6', name: 'Touchdown Titans', owner: 'Casey Wilson', record: { wins: 5, losses: 6 }, stats: {} },
-    { id: 'team7', name: 'Victory Vampires', owner: 'Morgan Davis', record: { wins: 4, losses: 7 }, stats: {} },
-    { id: 'team8', name: 'Elite Eagles', owner: 'Riley Martinez', record: { wins: 7, losses: 4 }, stats: {} },
-    { id: 'team9', name: 'Comeback Kings', owner: 'Avery Thompson', record: { wins: 3, losses: 8 }, stats: {} },
-    { id: 'team10', name: 'Draft Day Demons', owner: 'Quinn Anderson', record: { wins: 6, losses: 5 }, stats: {} }
+    { id: &apos;team1&apos;, name: &apos;Dynasty Destroyers&apos;, owner: &apos;Mike Johnson&apos;, record: { wins: 8, losses: 3 }, stats: {} },
+    { id: &apos;team2&apos;, name: &apos;Gridiron Gladiators&apos;, owner: &apos;Sarah Chen&apos;, record: { wins: 7, losses: 4 }, stats: {} },
+    { id: &apos;team3&apos;, name: &apos;Fantasy Phenoms&apos;, owner: &apos;Alex Rodriguez&apos;, record: { wins: 9, losses: 2 }, stats: {} },
+    { id: &apos;team4&apos;, name: &apos;Championship Chasers&apos;, owner: &apos;Jordan Smith&apos;, record: { wins: 6, losses: 5 }, stats: {} },
+    { id: &apos;team5&apos;, name: &apos;Playoff Predators&apos;, owner: &apos;Taylor Brown&apos;, record: { wins: 8, losses: 3 }, stats: {} },
+    { id: &apos;team6&apos;, name: &apos;Touchdown Titans&apos;, owner: &apos;Casey Wilson&apos;, record: { wins: 5, losses: 6 }, stats: {} },
+    { id: &apos;team7&apos;, name: &apos;Victory Vampires&apos;, owner: &apos;Morgan Davis&apos;, record: { wins: 4, losses: 7 }, stats: {} },
+    { id: &apos;team8&apos;, name: &apos;Elite Eagles&apos;, owner: &apos;Riley Martinez&apos;, record: { wins: 7, losses: 4 }, stats: {} },
+    { id: &apos;team9&apos;, name: &apos;Comeback Kings&apos;, owner: &apos;Avery Thompson&apos;, record: { wins: 3, losses: 8 }, stats: {} },
+    { id: &apos;team10&apos;, name: &apos;Draft Day Demons&apos;, owner: &apos;Quinn Anderson&apos;, record: { wins: 6, losses: 5 }, stats: {} }
   ];
 
   const mockLeagueMembers = mockTeams.map((team: any) => ({
+}
     id: team.id,
     name: team.name,
     teamName: team.name,
@@ -78,66 +85,75 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
 
   const sections = [
     { 
-      id: 'overview', 
-      title: 'League Overview', 
+}
+      id: &apos;overview&apos;, 
+      title: &apos;League Overview&apos;, 
       icon: Crown, 
-      color: 'text-gold-400',
-      description: 'Complete league experience dashboard'
+      color: &apos;text-gold-400&apos;,
+      description: &apos;Complete league experience dashboard&apos;
     },
     { 
-      id: 'trash-talk', 
-      title: 'Trash Talk Central', 
+}
+      id: &apos;trash-talk&apos;, 
+      title: &apos;Trash Talk Central&apos;, 
       icon: MessageSquare, 
-      color: 'text-red-400',
-      description: 'Elite banter and GIF battles'
+      color: &apos;text-red-400&apos;,
+      description: &apos;Elite banter and GIF battles&apos;
     },
     { 
-      id: 'power-rankings', 
-      title: 'AI Power Rankings', 
+}
+      id: &apos;power-rankings&apos;, 
+      title: &apos;AI Power Rankings&apos;, 
       icon: BarChart3, 
-      color: 'text-purple-400',
-      description: 'Weekly intelligent analysis'
+      color: &apos;text-purple-400&apos;,
+      description: &apos;Weekly intelligent analysis&apos;
     },
     { 
-      id: 'challenges', 
-      title: 'Weekly Challenges', 
+}
+      id: &apos;challenges&apos;, 
+      title: &apos;Weekly Challenges&apos;, 
       icon: Target, 
-      color: 'text-green-400',
-      description: 'Earn points and badges'
+      color: &apos;text-green-400&apos;,
+      description: &apos;Earn points and badges&apos;
     },
     { 
-      id: 'superlatives', 
-      title: 'League Awards', 
+}
+      id: &apos;superlatives&apos;, 
+      title: &apos;League Awards&apos;, 
       icon: Award, 
-      color: 'text-yellow-400',
-      description: 'Recognition and fun callouts'
+      color: &apos;text-yellow-400&apos;,
+      description: &apos;Recognition and fun callouts&apos;
     },
     { 
-      id: 'rivalries', 
-      title: 'Rivalry Tracker', 
+}
+      id: &apos;rivalries&apos;, 
+      title: &apos;Rivalry Tracker&apos;, 
       icon: Flame, 
-      color: 'text-orange-400',
-      description: 'Epic head-to-head battles'
+      color: &apos;text-orange-400&apos;,
+      description: &apos;Epic head-to-head battles&apos;
     },
     { 
-      id: 'team-identity', 
-      title: 'Team Identity', 
+}
+      id: &apos;team-identity&apos;, 
+      title: &apos;Team Identity&apos;, 
       icon: Palette, 
-      color: 'text-blue-400',
-      description: 'Customize your team style'
+      color: &apos;text-blue-400&apos;,
+      description: &apos;Customize your team style&apos;
     },
     { 
-      id: 'memories', 
-      title: 'League Memories', 
+}
+      id: &apos;memories&apos;, 
+      title: &apos;League Memories&apos;, 
       icon: Camera, 
-      color: 'text-pink-400',
-      description: 'Photo sharing and moments'
+      color: &apos;text-pink-400&apos;,
+      description: &apos;Photo sharing and moments&apos;
 
   ];
 
   const handleVictoryCelebration = () => {
+}
     // This would be triggered by actual game events
-    console.log('Victory celebration triggered!');
+    console.log(&apos;Victory celebration triggered!&apos;);
   };
 
   const renderOverview = () => (
@@ -162,12 +178,13 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
       {/* Quick Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {[
-          { label: 'Trash Talk Messages', value: leagueStats.totalMessages, icon: MessageSquare, color: 'text-red-400' },
-          { label: 'League Memories', value: leagueStats.totalMemories, icon: Camera, color: 'text-pink-400' },
-          { label: 'Challenges Completed', value: leagueStats.completedChallenges, icon: Target, color: 'text-green-400' },
-          { label: 'Achievement Points', value: leagueStats.achievementPoints, icon: Star, color: 'text-yellow-400' },
-          { label: 'Active Rivalries', value: leagueStats.rivalries, icon: Flame, color: 'text-orange-400' },
-          { label: 'Win Streaks', value: leagueStats.activeStreaks, icon: TrendingUp, color: 'text-blue-400' }
+}
+          { label: &apos;Trash Talk Messages&apos;, value: leagueStats.totalMessages, icon: MessageSquare, color: &apos;text-red-400&apos; },
+          { label: &apos;League Memories&apos;, value: leagueStats.totalMemories, icon: Camera, color: &apos;text-pink-400&apos; },
+          { label: &apos;Challenges Completed&apos;, value: leagueStats.completedChallenges, icon: Target, color: &apos;text-green-400&apos; },
+          { label: &apos;Achievement Points&apos;, value: leagueStats.achievementPoints, icon: Star, color: &apos;text-yellow-400&apos; },
+          { label: &apos;Active Rivalries&apos;, value: leagueStats.rivalries, icon: Flame, color: &apos;text-orange-400&apos; },
+          { label: &apos;Win Streaks&apos;, value: leagueStats.activeStreaks, icon: TrendingUp, color: &apos;text-blue-400&apos; }
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
@@ -187,11 +204,11 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
 
       {/* Feature Highlights */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* This Week's Highlights */}
+        {/* This Week&apos;s Highlights */}
         <div className="bg-dark-700 rounded-xl p-6 border border-gray-600">
           <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-yellow-400" />
-            This Week's Highlights
+            This Week&apos;s Highlights
           </h3>
           <div className="space-y-3">
             <div className="flex items-center gap-3 p-3 bg-dark-600 rounded-lg">
@@ -226,10 +243,11 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
           </h3>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Send Trash Talk', section: 'trash-talk', icon: MessageSquare, color: 'bg-red-600' },
-              { label: 'Join Challenge', section: 'challenges', icon: Target, color: 'bg-green-600' },
-              { label: 'Upload Memory', section: 'memories', icon: Camera, color: 'bg-pink-600' },
-              { label: 'Check Rivalries', section: 'rivalries', icon: Flame, color: 'bg-orange-600' }
+}
+              { label: &apos;Send Trash Talk&apos;, section: &apos;trash-talk&apos;, icon: MessageSquare, color: &apos;bg-red-600&apos; },
+              { label: &apos;Join Challenge&apos;, section: &apos;challenges&apos;, icon: Target, color: &apos;bg-green-600&apos; },
+              { label: &apos;Upload Memory&apos;, section: &apos;memories&apos;, icon: Camera, color: &apos;bg-pink-600&apos; },
+              { label: &apos;Check Rivalries&apos;, section: &apos;rivalries&apos;, icon: Flame, color: &apos;bg-orange-600&apos; }
             ].map((action: any) => (
               <button
                 key={action.label}
@@ -251,12 +269,13 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
         </h3>
         <div className="space-y-3 max-h-60 overflow-y-auto">
           {[
-            { type: 'trash_talk', user: 'Mike Johnson', action: 'roasted Taylor Brown about their lineup decisions', time: '2 minutes ago', icon: '🔥' },
-            { type: 'memory', user: 'Sarah Chen', action: 'uploaded a photo from draft day', time: '15 minutes ago', icon: '📸' },
-            { type: 'challenge', user: 'Alex Rodriguez', action: 'won the Score Predictor challenge', time: '1 hour ago', icon: '🎯' },
-            { type: 'rivalry', user: 'Jordan Smith', action: 'extended their win streak vs Casey Wilson', time: '2 hours ago', icon: '⚔️' },
-            { type: 'achievement', user: 'Taylor Brown', action: 'unlocked the "Comeback King" badge', time: '3 hours ago', icon: '👑' },
-            { type: 'celebration', user: 'Casey Wilson', action: 'celebrated their victory with confetti', time: '4 hours ago', icon: '🎉' }
+}
+            { type: &apos;trash_talk&apos;, user: &apos;Mike Johnson&apos;, action: &apos;roasted Taylor Brown about their lineup decisions&apos;, time: &apos;2 minutes ago&apos;, icon: &apos;🔥&apos; },
+            { type: &apos;memory&apos;, user: &apos;Sarah Chen&apos;, action: &apos;uploaded a photo from draft day&apos;, time: &apos;15 minutes ago&apos;, icon: &apos;📸&apos; },
+            { type: &apos;challenge&apos;, user: &apos;Alex Rodriguez&apos;, action: &apos;won the Score Predictor challenge&apos;, time: &apos;1 hour ago&apos;, icon: &apos;🎯&apos; },
+            { type: &apos;rivalry&apos;, user: &apos;Jordan Smith&apos;, action: &apos;extended their win streak vs Casey Wilson&apos;, time: &apos;2 hours ago&apos;, icon: &apos;⚔️&apos; },
+            { type: &apos;achievement&apos;, user: &apos;Taylor Brown&apos;, action: &apos;unlocked the "Comeback King" badge&apos;, time: &apos;3 hours ago&apos;, icon: &apos;👑&apos; },
+            { type: &apos;celebration&apos;, user: &apos;Casey Wilson&apos;, action: &apos;celebrated their victory with confetti&apos;, time: &apos;4 hours ago&apos;, icon: &apos;🎉&apos; }
           ].map((activity, index) => (
             <div key={index} className="flex items-center gap-3 p-3 bg-dark-600 rounded-lg hover:bg-dark-500 transition-colors">
               <div className="text-xl">{activity.icon}</div>
@@ -274,63 +293,65 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
   );
 
   const renderActiveSection = () => {
+}
     switch (activeSection) {
-      case 'overview':
+}
+      case &apos;overview&apos;:
         return renderOverview();
-      case 'trash-talk':
+      case &apos;trash-talk&apos;:
         return (
-          <TrashTalkSystem
+          <TrashTalkSystem>
             leagueId={leagueId}
             currentUserId={userId}
             currentUserName={userName}
             leagueMembers={mockLeagueMembers}
           />
         );
-      case 'power-rankings':
+      case &apos;power-rankings&apos;:
         return (
-          <WeeklyPowerRankings
+          <WeeklyPowerRankings>
             leagueId={leagueId}
             week={currentWeek}
             teams={[]}
           />
         );
-      case 'challenges':
+      case &apos;challenges&apos;:
         return (
-          <WeeklyChallengeSystem
+          <WeeklyChallengeSystem>
             leagueId={leagueId}
             userId={userId}
             userName={userName}
             week={currentWeek}
           />
         );
-      case 'superlatives':
+      case &apos;superlatives&apos;:
         return (
-          <LeagueSuperlativesSystem
+          <LeagueSuperlativesSystem>
             leagueId={leagueId}
             currentWeek={currentWeek}
             teams={mockTeams}
           />
         );
-      case 'rivalries':
+      case &apos;rivalries&apos;:
         return (
-          <RivalryTracker
+          <RivalryTracker>
             leagueId={leagueId}
             userId={userId}
             currentWeek={currentWeek}
             teams={mockTeams}
           />
         );
-      case 'team-identity':
+      case &apos;team-identity&apos;:
         return (
-          <TeamIdentityCustomizer
+          <TeamIdentityCustomizer>
             teamId={userId}
-            onSave={(identity: any) => console.log('Saving identity:', identity)}
-            onPreview={(identity: any) => console.log('Previewing identity:', identity)}
+            onSave={(identity: any) => console.log(&apos;Saving identity:&apos;, identity)}
+            onPreview={(identity: any) => console.log(&apos;Previewing identity:&apos;, identity)}
           />
         );
-      case 'memories':
+      case &apos;memories&apos;:
         return (
-          <LeagueMemorySystem
+          <LeagueMemorySystem>
             leagueId={leagueId}
             userId={userId}
             userName={userName}
@@ -344,7 +365,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-slate-900 to-dark-950 text-white">
       {/* Victory Celebration System - Always Active */}
-      <VictoryCelebrationSystem
+      <VictoryCelebrationSystem>
         userId={userId}
         userName={userName}
         teamName={teamName}
@@ -378,6 +399,7 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
           {/* Navigation Menu */}
           <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
             {sections.map((section: any) => (
+}
               <button
                 key={section.id}
                 onClick={() => setActiveSection(section.id)}`}
@@ -385,7 +407,8 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <section.icon className={`w-5 h-5 ${
-                      activeSection === section.id ? 'text-white' : section.color
+}
+                      activeSection === section.id ? &apos;text-white&apos; : section.color
                     }`} />
                     <div>
                       <div className="font-semibold">{section.title}</div>
@@ -393,7 +416,8 @@ const EnhancedLeagueExperienceHub: React.FC<EnhancedLeagueExperienceHubProps> = 
                     </div>
                   </div>
                   <ChevronRight className={`w-4 h-4 transition-transform ${
-                    activeSection === section.id ? 'rotate-90' : 'group-hover:translate-x-1'
+}
+                    activeSection === section.id ? &apos;rotate-90&apos; : &apos;group-hover:translate-x-1&apos;
                   }`} />
                 </div>
               </button>

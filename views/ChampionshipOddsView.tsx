@@ -1,50 +1,58 @@
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { generateChampionshipProbabilities } from '../services/geminiService';
-import { TrophyIcon } from '../components/icons/TrophyIcon';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import ChampionshipProbChart from '../components/analytics/ChampionshipProbChart';
-import { Avatar } from '../components/ui/Avatar';
-import { AnimatePresence } from 'framer-motion';
-import TradeScenarioModal from '../components/modals/TradeScenarioModal';
-import { FlaskConicalIcon } from '../components/icons/FlaskConicalIcon';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { generateChampionshipProbabilities } from &apos;../services/geminiService&apos;;
+import { TrophyIcon } from &apos;../components/icons/TrophyIcon&apos;;
+import LoadingSpinner from &apos;../components/ui/LoadingSpinner&apos;;
+import ChampionshipProbChart from &apos;../components/analytics/ChampionshipProbChart&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
+import { AnimatePresence } from &apos;framer-motion&apos;;
+import TradeScenarioModal from &apos;../components/modals/TradeScenarioModal&apos;;
+import { FlaskConicalIcon } from &apos;../components/icons/FlaskConicalIcon&apos;;
 
 const ChampionshipOddsView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
     const [isSimModalOpen, setIsSimModalOpen] = React.useState(false);
 
     React.useEffect(() => {
+}
         const needsUpdate = league?.teams.some((t: any) => {
+}
             const history = t.championshipProbHistory || [];
             return !history.some((h: any) => h.week === league.currentWeek);
         });
 
-        if (league && needsUpdate && (league.status === 'IN_SEASON' || league.status === 'PLAYOFFS')) {
+        if (league && needsUpdate && (league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;)) {
+}
             setIsLoading(true);
             generateChampionshipProbabilities(league)
                 .then(data => {
+}
                     if (data) {
-                        dispatch({ type: 'SET_CHAMPIONSHIP_PROBS', payload: { leagueId: league.id, data } });
+}
+                        dispatch({ type: &apos;SET_CHAMPIONSHIP_PROBS&apos;, payload: { leagueId: league.id, data } });
 
                 })
                 .finally(() => setIsLoading(false));
 
     }, [league, dispatch]);
 
-    if (!league || !(league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE')) {
-        return <ErrorDisplay title="Not Available" message="Championship odds are calculated during the season." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} />;
+    if (!league || !(league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos; || league.status === &apos;COMPLETE&apos;)) {
+}
+        return <ErrorDisplay title="Not Available" message="Championship odds are calculated during the season." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ANALYTICS_HUB&apos; })} />;
 
-    if (league.settings.aiAssistanceLevel === 'BASIC') {
-        return <ErrorDisplay title="Feature Disabled" message="Championship Odds are disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' })} />;
+    if (league.settings.aiAssistanceLevel === &apos;BASIC&apos;) {
+}
+        return <ErrorDisplay title="Feature Disabled" message="Championship Odds are disabled in leagues with Basic AI Assistance." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ANALYTICS_HUB&apos; })} />;
 
     const rankedTeams = [...league.teams]
         .map((team: any) => {
+}
             const history = team.championshipProbHistory || [];
             const currentProb = history.length > 0 ? history.find((h: any) => h.week === league.currentWeek)?.probability ?? history[history.length - 1].probability : 0;
             return { ...team, currentProb };
@@ -66,7 +74,7 @@ const ChampionshipOddsView: React.FC = () => {
                     >
                         <FlaskConicalIcon /> Run Trade Scenario
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' }) className="back-btn">
+                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ANALYTICS_HUB&apos; }) className="back-btn">
                         Back to Analytics Hub
                     </button>
                 </div>
@@ -83,7 +91,8 @@ const ChampionshipOddsView: React.FC = () => {
                      <Widget title={`Current Odds - Week ${league.currentWeek}`}>
                         <div className="p-2 space-y-1 max-h-[60vh] overflow-y-auto">
                             {rankedTeams.map((team, index) => (
-                                <div key={team.id} className={`flex items-center justify-between p-2 rounded-md ${index === 0 ? 'bg-yellow-500/10' : 'bg-black/10'}`}>
+}
+                                <div key={team.id} className={`flex items-center justify-between p-2 rounded-md ${index === 0 ? &apos;bg-yellow-500/10&apos; : &apos;bg-black/10&apos;}`}>
                                     <div className="flex items-center gap-2">
                                         <span className="font-bold w-6">{index + 1}</span>
                                         <Avatar avatar={team.avatar} className="w-8 h-8 rounded-md" />
@@ -98,7 +107,8 @@ const ChampionshipOddsView: React.FC = () => {
             </main>
              <AnimatePresence>
                 {isSimModalOpen && (
-                    <TradeScenarioModal 
+}
+                    <TradeScenarioModal>
                         league={league}
                         onClose={() => setIsSimModalOpen(false)}
                     />

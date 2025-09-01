@@ -3,13 +3,13 @@
  * Critical authentication flow testing
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '../../src/test-utils';
-import SimplePlayerLogin from './SimplePlayerLogin';
+import { render, screen, fireEvent, waitFor } from &apos;../../src/test-utils&apos;;
+import SimplePlayerLogin from &apos;./SimplePlayerLogin&apos;;
 
 // Mock the SimpleAuthContext
 const mockLogin = jest.fn();
 const mockContextValue = {
+}
   user: null,
   isAuthenticated: false,
   isLoading: false,
@@ -18,79 +18,91 @@ const mockContextValue = {
   checkAuth: jest.fn(),
 };
 
-jest.mock('../../contexts/SimpleAuthContext', () => ({
+jest.mock(&apos;../../contexts/SimpleAuthContext&apos;, () => ({
+}
   useAuth: () => mockContextValue,
   SimpleAuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-describe('SimplePlayerLogin', () => {
+describe(&apos;SimplePlayerLogin&apos;, () => {
+}
   beforeEach(() => {
+}
     jest.clearAllMocks();
   });
 
-  test('should render login form with team name field', () => {
+  test(&apos;should render login form with team name field&apos;, () => {
+}
     render(<SimplePlayerLogin />);
     
     expect(screen.getByText(/team name/i)).toBeInTheDocument();
-    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole(&apos;button&apos;)).toBeInTheDocument();
   });
 
-  test('should handle form submission with valid data', async () => {
+  test(&apos;should handle form submission with valid data&apos;, async () => {
+}
     const mockOnLogin = jest.fn();
     render(<SimplePlayerLogin onLogin={mockOnLogin} />);
     
-    const input = screen.getByRole('textbox');
-    const button = screen.getByRole('button');
+    const input = screen.getByRole(&apos;textbox&apos;);
+    const button = screen.getByRole(&apos;button&apos;);
     
-    fireEvent.change(input, { target: { value: 'Test Team' } });
+    fireEvent.change(input, { target: { value: &apos;Test Team&apos; } });
     fireEvent.click(button);
     
     await waitFor(() => {
+}
       expect(mockLogin).toHaveBeenCalledWith(
         expect.objectContaining({
-          teamName: 'Test Team'
+}
+          teamName: &apos;Test Team&apos;
         })
       );
     });
   });
 
-  test('should validate required fields', () => {
+  test(&apos;should validate required fields&apos;, () => {
+}
     render(<SimplePlayerLogin />);
     
-    const button = screen.getByRole('button');
+    const button = screen.getByRole(&apos;button&apos;);
     fireEvent.click(button);
     
     expect(mockLogin).not.toHaveBeenCalled();
   });
 
-  test('should show loading state when authenticating', () => {
+  test(&apos;should show loading state when authenticating&apos;, () => {
+}
     mockContextValue.isLoading = true;
     render(<SimplePlayerLogin />);
     
-    const button = screen.getByRole('button');
+    const button = screen.getByRole(&apos;button&apos;);
     expect(button).toBeDisabled();
   });
 
-  test('should handle authentication errors', async () => {
-    mockLogin.mockRejectedValueOnce(new Error('Auth failed'));
+  test(&apos;should handle authentication errors&apos;, async () => {
+}
+    mockLogin.mockRejectedValueOnce(new Error(&apos;Auth failed&apos;));
     render(<SimplePlayerLogin />);
     
-    const input = screen.getByRole('textbox');
-    const button = screen.getByRole('button');
+    const input = screen.getByRole(&apos;textbox&apos;);
+    const button = screen.getByRole(&apos;button&apos;);
     
-    fireEvent.change(input, { target: { value: 'Test Team' } });
+    fireEvent.change(input, { target: { value: &apos;Test Team&apos; } });
     fireEvent.click(button);
     
     await waitFor(() => {
+}
       expect(screen.getByText(/error/i)).toBeInTheDocument();
     });
   });
 
-  test('should prevent XSS in team name input', () => {
+  test(&apos;should prevent XSS in team name input&apos;, () => {
+}
     render(<SimplePlayerLogin />);
     
-    const input = screen.getByRole('textbox');
-    const xssPayload = '<script>alert("XSS")</script>';
+    const input = screen.getByRole(&apos;textbox&apos;);
+    const xssPayload = &apos;<script>alert("XSS")</script>&apos;;
     
     fireEvent.change(input, { target: { value: xssPayload } });
     
@@ -98,13 +110,14 @@ describe('SimplePlayerLogin', () => {
     expect(input).toHaveValue(xssPayload);
   });
 
-  test('should be accessible with proper ARIA labels', () => {
+  test(&apos;should be accessible with proper ARIA labels&apos;, () => {
+}
     render(<SimplePlayerLogin />);
     
-    const input = screen.getByRole('textbox');
-    const button = screen.getByRole('button');
+    const input = screen.getByRole(&apos;textbox&apos;);
+    const button = screen.getByRole(&apos;button&apos;);
     
-    expect(input).toHaveAttribute('aria-label');
-    expect(button).toHaveAttribute('type');
+    expect(input).toHaveAttribute(&apos;aria-label&apos;);
+    expect(button).toHaveAttribute(&apos;type&apos;);
   });
 });

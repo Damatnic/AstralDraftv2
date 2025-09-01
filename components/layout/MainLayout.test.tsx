@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import MainLayout from './MainLayout';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import MainLayout from &apos;./MainLayout&apos;;
 
-describe('MainLayout', () => {
-  it('renders without crashing', () => {
+describe(&apos;MainLayout&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<MainLayout />);
-    expect(screen.getByTestId('mainlayout')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;mainlayout&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<MainLayout />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<MainLayout />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

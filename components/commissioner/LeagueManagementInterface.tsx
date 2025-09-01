@@ -3,29 +3,32 @@
  * Comprehensive dashboard for league administration and commissioner controls
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
     SettingsIcon, 
     UsersIcon, 
     ShieldIcon, 
     CalendarIcon,
     BarChart3Icon,
     PlusIcon,
-    CrownIcon
-} from 'lucide-react';
-import { Widget } from '../ui/Widget';
-import { useAuth } from '../../contexts/AuthContext';
+//     CrownIcon
+} from &apos;lucide-react&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { useAuth } from &apos;../../contexts/AuthContext&apos;;
 import { 
+}
     leagueManagementService, 
     type League, 
     type LeagueSettings,
     type LeagueInvitation,
     type CommissionerAction
-} from '../../services/leagueManagementService';
+} from &apos;../../services/leagueManagementService&apos;;
 
 interface Props {
+}
     leagueId?: string;
     className?: string;
 
@@ -33,28 +36,32 @@ interface Props {
 }
 
 const getStatusBadgeStyles = (status: string): string => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     switch (status) {
-        case 'active':
-            return 'bg-green-500/20 text-green-400';
-        case 'draft':
-            return 'bg-blue-500/20 text-blue-400';
-        case 'completed':
-            return 'bg-purple-500/20 text-purple-400';
+}
+        case &apos;active&apos;:
+            return &apos;bg-green-500/20 text-green-400&apos;;
+        case &apos;draft&apos;:
+            return &apos;bg-blue-500/20 text-blue-400&apos;;
+        case &apos;completed&apos;:
+            return &apos;bg-purple-500/20 text-purple-400&apos;;
         default:
-            return 'bg-gray-500/20 text-gray-400';
+            return &apos;bg-gray-500/20 text-gray-400&apos;;
 
 };
 
-type Tab = 'overview' | 'members' | 'settings' | 'history' | 'commissioner';
+type Tab = &apos;overview&apos; | &apos;members&apos; | &apos;settings&apos; | &apos;history&apos; | &apos;commissioner&apos;;
 
 const LeagueManagementInterface: React.FC<Props> = ({ 
+}
     leagueId, 
-    className = '' 
+    className = &apos;&apos; 
 }: any) => {
+}
     const { user, isAuthenticated } = useAuth();
     const [league, setLeague] = useState<League | null>(null);
-    const [activeTab, setActiveTab] = useState<Tab>('overview');
+    const [activeTab, setActiveTab] = useState<Tab>(&apos;overview&apos;);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [userLeagues, setUserLeagues] = useState<League[]>([]);
@@ -64,30 +71,37 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
     // Load league data
     useEffect(() => {
+}
         if (!isAuthenticated || !user) return;
 
         const loadData = async () => {
+}
             setLoading(true);
             try {
+}
 
-                // Load user's leagues
+                // Load user&apos;s leagues
                 const leagues = await leagueManagementService.getUserLeagues(user.id.toString());
                 setUserLeagues(leagues);
 
                 // Load invitations
-                const userInvites = await leagueManagementService.getUserInvitations(user.email || '');
+                const userInvites = await leagueManagementService.getUserInvitations(user.email || &apos;&apos;);
                 setInvitations(userInvites);
 
                 // Load specific league if provided
                 if (leagueId) {
+}
                     const leagueData = await leagueManagementService.getLeague(leagueId);
                     setLeague(leagueData);
                 } else if (leagues.length > 0) {
+}
                     setLeague(leagues[0]);
 
     } catch (error) {
-                setError('Failed to load league information');
+}
+                setError(&apos;Failed to load league information&apos;);
             } finally {
+}
                 setLoading(false);
 
         };
@@ -100,70 +114,84 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
     // Handle creating new league
     const handleCreateLeague = () => {
+}
         // Show placeholder message - full implementation would show creation modal
     };
 
     // Handle invitation responses
     const handleAcceptInvitation = async (invitationId: string) => {
+}
         if (!user) return;
         
         try {
+}
 
             // For now, use placeholder values - in a real app, these would come from a form
             await leagueManagementService.acceptInvitation(
                 invitationId, 
                 user.id.toString(), 
-                user.username || 'Player', 
-                `${user.username || 'Player'}'s Team`
+                user.username || &apos;Player&apos;, 
+                `${user.username || &apos;Player&apos;}&apos;s Team`
             );
             // Refresh invitations
             if (user.email) {
+}
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
 
     } catch (error) {
-            setError('Failed to accept invitation');
+}
+            setError(&apos;Failed to accept invitation&apos;);
 
     };
 
     const handleDeclineInvitation = async (invitationId: string) => {
+}
         try {
+}
 
             await leagueManagementService.declineInvitation(invitationId);
             // Refresh invitations
             if (user?.email) {
+}
                 const userInvites = await leagueManagementService.getUserInvitations(user.email);
                 setInvitations(userInvites);
 
     } catch (error) {
-            setError('Failed to decline invitation');
+}
+            setError(&apos;Failed to decline invitation&apos;);
 
     };
 
     // Handle setting updates
     const handleSettingsUpdate = async (updates: Partial<LeagueSettings>) => {
+}
         if (!league || !user || !isCommissioner) return;
 
         try {
+}
 
             const updatedLeague = await leagueManagementService.updateLeagueSettings(
                 league.id,
                 user.id.toString(),
-                updates
+//                 updates
             );
             setLeague(updatedLeague);
             setEditingSettings(false);
 
     } catch (error) {
-            setError('Failed to update league settings');
+}
+            setError(&apos;Failed to update league settings&apos;);
 
     };
 
     // Handle member invitation
     const handleInviteMember = async (email: string, message?: string) => {
+}
         if (!league || !user || !isCommissioner) return;
 
         try {
+}
 
             await leagueManagementService.inviteMember(league.id, user.id.toString(), email, message);
             // Refresh league data
@@ -171,39 +199,45 @@ const LeagueManagementInterface: React.FC<Props> = ({
             if (updatedLeague) setLeague(updatedLeague);
 
     } catch (error) {
-            setError('Failed to send invitation');
+}
+            setError(&apos;Failed to send invitation&apos;);
 
     };
 
     // Handle member removal
     const handleRemoveMember = async (memberId: string, reason: string) => {
+}
         if (!league || !user || !isCommissioner) return;
 
         try {
+}
 
             const updatedLeague = await leagueManagementService.removeMember(
                 league.id,
                 user.id.toString(),
                 memberId,
-                reason
+//                 reason
             );
             setLeague(updatedLeague);
 
     } catch (error) {
-            setError('Failed to remove member');
+}
+            setError(&apos;Failed to remove member&apos;);
 
     };
 
     // Handle commissioner action
     const handleCommissionerAction = async (action: CommissionerAction) => {
+}
         if (!league || !user || !isCommissioner) return;
 
         try {
+}
 
             const updatedLeague = await leagueManagementService.executeCommissionerAction(
                 league.id,
                 user.id.toString(),
-                action
+//                 action
             );
             setLeague(updatedLeague);
             setPendingAction(null);
@@ -214,8 +248,9 @@ const LeagueManagementInterface: React.FC<Props> = ({
                 <div className="flex flex-wrap items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
                         <select
-                            value={league?.id || ''}
+                            value={league?.id || &apos;&apos;}
                             onChange={(e: any) => {
+}
                                 const selectedLeague = userLeagues.find((l: any) => l.id === e.target.value);
                                 setLeague(selectedLeague || null);
                             }}
@@ -223,8 +258,9 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         >
                             <option value="">Select a League</option>
                             {userLeagues.map((l: any) => (
+}
                                 <option key={l.id} value={l.id}>
-                                    {l.name} {l.commissionerId === user?.id.toString() && '(Commissioner)'}
+                                    {l.name} {l.commissionerId === user?.id.toString() && &apos;(Commissioner)&apos;}
                                 </option>
                             ))}
                         </select>
@@ -239,11 +275,13 @@ const LeagueManagementInterface: React.FC<Props> = ({
                     </div>
 
                     {league && (
+}
                         <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                             <div className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusBadgeStyles(league?.status)}`}>
                                 {league.status.toUpperCase()}
                             </div>
                             {isCommissioner && (
+}
                                 <div className="flex items-center space-x-1 text-yellow-400 sm:px-4 md:px-6 lg:px-8">
                                     <CrownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                                     <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">Commissioner</span>
@@ -255,13 +293,15 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
                 {/* Pending Invitations */}
                 {invitations.length > 0 && (
+}
                     <div className="bg-blue-900/20 rounded-lg p-4 mb-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-blue-400 mb-3 sm:px-4 md:px-6 lg:px-8">
                             Pending Invitations ({invitations.length})
                         </h3>
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {invitations.map((invitation: any) => (
-                                <InvitationCard
+}
+                                <InvitationCard>
                                     key={invitation.id}
                                     invitation={invitation}
                                     onAccept={() => handleAcceptInvitation(invitation.id)}
@@ -274,13 +314,15 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
                 {/* Tab Navigation */}
                 {league && (
+}
                     <div className="flex space-x-1 bg-gray-800/50 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
                         {[
-                            { id: 'overview', label: 'Overview', icon: BarChart3Icon },
-                            { id: 'members', label: 'Members', icon: UsersIcon },
-                            { id: 'settings', label: 'Settings', icon: SettingsIcon },
-                            { id: 'history', label: 'History', icon: CalendarIcon },
-                            ...(isCommissioner ? [{ id: 'commissioner', label: 'Commissioner', icon: ShieldIcon }] : [])
+}
+                            { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: BarChart3Icon },
+                            { id: &apos;members&apos;, label: &apos;Members&apos;, icon: UsersIcon },
+                            { id: &apos;settings&apos;, label: &apos;Settings&apos;, icon: SettingsIcon },
+                            { id: &apos;history&apos;, label: &apos;History&apos;, icon: CalendarIcon },
+                            ...(isCommissioner ? [{ id: &apos;commissioner&apos;, label: &apos;Commissioner&apos;, icon: ShieldIcon }] : [])
                         ].map((tab: any) => (
                             <button
                                 key={tab.id}
@@ -296,6 +338,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
             {/* Tab Content */}
             {league && (
+}
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeTab}
@@ -304,12 +347,14 @@ const LeagueManagementInterface: React.FC<Props> = ({
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.2 }}
                     >
-                        {activeTab === 'overview' && (
+                        {activeTab === &apos;overview&apos; && (
+}
                             <LeagueOverview league={league} />
                         )}
                         
-                        {activeTab === 'members' && (
-                            <MembersManagement 
+                        {activeTab === &apos;members&apos; && (
+}
+                            <MembersManagement>
                                 league={league}
                                 isCommissioner={isCommissioner}
                                 onInvite={handleInviteMember}
@@ -317,8 +362,9 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             />
                         )}
                         
-                        {activeTab === 'settings' && (
-                            <LeagueSettingsPanel
+                        {activeTab === &apos;settings&apos; && (
+}
+                            <LeagueSettingsPanel>
                                 league={league}
                                 isCommissioner={isCommissioner}
                                 editing={editingSettings}
@@ -328,12 +374,14 @@ const LeagueManagementInterface: React.FC<Props> = ({
                             />
                         )}
                         
-                        {activeTab === 'history' && (
+                        {activeTab === &apos;history&apos; && (
+}
                             <LeagueHistory league={league} />
                         )}
                         
-                        {activeTab === 'commissioner' && isCommissioner && (
-                            <CommissionerPanel
+                        {activeTab === &apos;commissioner&apos; && isCommissioner && (
+}
+                            <CommissionerPanel>
                                 league={league}
                                 onAction={handleCommissionerAction}
                                 pendingAction={pendingAction}
@@ -349,6 +397,7 @@ const LeagueManagementInterface: React.FC<Props> = ({
 
 // Sub-components for each tab
 const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
+}
     return (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* League Info */}
@@ -383,6 +432,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
             <Widget title="Current Standings" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {league.members
+}
                         .filter((m: any) => m.record)
                         .sort((a, b) => (b.record?.wins || 0) - (a.record?.wins || 0))
                         .slice(0, 5)
@@ -412,6 +462,7 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
             <Widget title="Recent Activity" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {league.history.slice(0, 5).map((event: any) => (
+}
                         <div key={event.id} className="py-2 border-b border-gray-700 last:border-b-0 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{event.description}</div>
                             <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -426,10 +477,12 @@ const LeagueOverview: React.FC<{ league: League }> = ({ league }: any) => {
 };
 
 const InvitationCard: React.FC<{
+}
     invitation: LeagueInvitation;
     onAccept: () => void;
     onDecline: () => void;
 }> = ({ invitation, onAccept, onDecline }: any) => {
+}
     return (
         <div className="bg-gray-800/50 rounded-lg p-3 flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
             <div>
@@ -438,6 +491,7 @@ const InvitationCard: React.FC<{
                     Invited by {invitation.invitedByName}
                 </div>
                 {invitation.message && (
+}
                     <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">{invitation.message}</div>
                 )}
             </div>
@@ -446,13 +500,13 @@ const InvitationCard: React.FC<{
                     onClick={onAccept}
                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
-                    Accept
+//                     Accept
                 </button>
                 <button
                     onClick={onDecline}
                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
-                    Decline
+//                     Decline
                 </button>
             </div>
         </div>

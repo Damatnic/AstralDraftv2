@@ -1,15 +1,16 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import type { Team, League, AiLineupSuggestion } from '../../types';
-import { Widget } from '../ui/Widget';
-import { BrainCircuitIcon } from '../icons/BrainCircuitIcon';
-import { getAiOptimalLineup } from '../../services/geminiService';
-import { motion, AnimatePresence } from 'framer-motion';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import type { Team, League, AiLineupSuggestion } from &apos;../../types&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { BrainCircuitIcon } from &apos;../icons/BrainCircuitIcon&apos;;
+import { getAiOptimalLineup } from &apos;../../services/geminiService&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
 
 interface AiCoManagerWidgetProps {
+}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -17,31 +18,38 @@ interface AiCoManagerWidgetProps {
 }
 
 const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dispatch }: any) => {
+}
     const [isLoading, setIsLoading] = React.useState(false);
     const [suggestion, setSuggestion] = React.useState<AiLineupSuggestion | null>(null);
 
     const handleGetLineup = async () => {
+}
         setIsLoading(true);
         setSuggestion(null);
         try {
+}
 
             const result = await getAiOptimalLineup(team, league);
             setSuggestion(result);
         
     } catch (error) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Could not get a lineup suggestion.", type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Could not get a lineup suggestion.", type: &apos;SYSTEM&apos; } });
         } finally {
+}
             setIsLoading(false);
 
     };
 
     const handleAcceptLineup = () => {
+}
         if (!suggestion) return;
         dispatch({
-            type: 'SET_LINEUP',
+}
+            type: &apos;SET_LINEUP&apos;,
             payload: { leagueId: league.id, teamId: team.id, playerIds: suggestion.recommendedStarters }
         });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Optimal lineup has been set!', type: 'SYSTEM' }});
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Optimal lineup has been set!&apos;, type: &apos;SYSTEM&apos; }});
         setSuggestion(null);
     };
 
@@ -50,6 +58,7 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
             <div className="p-3 sm:px-4 md:px-6 lg:px-8">
                 <AnimatePresence mode="wait">
                     {isLoading ? (
+}
                         <motion.div key="loading" {...{ initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }}>
                             <LoadingSpinner size="sm" text="Optimizing your lineup..." />
                         </motion.div>
@@ -57,11 +66,12 @@ const AiCoManagerWidget: React.FC<AiCoManagerWidgetProps> = ({ team, league, dis
                         <motion.div
                             key="suggestion"
                             {...{
+}
                                 initial: { opacity: 0, y: 10 },
                                 animate: { opacity: 1, y: 0 },
                             }}
                         >
-                            <p className="text-xs text-cyan-300 font-bold sm:px-4 md:px-6 lg:px-8">Oracle's Recommendation:</p>
+                            <p className="text-xs text-cyan-300 font-bold sm:px-4 md:px-6 lg:px-8">Oracle&apos;s Recommendation:</p>
                             <p className="text-xs italic text-gray-300 my-1 sm:px-4 md:px-6 lg:px-8">"{suggestion.reasoning}"</p>
                             <div className="flex gap-2 mt-2 sm:px-4 md:px-6 lg:px-8">
                                 <button onClick={() => setSuggestion(null)}

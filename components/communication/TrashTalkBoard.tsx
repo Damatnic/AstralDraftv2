@@ -3,12 +3,13 @@
  * League banter and friendly competition
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface TrashTalkPost {
+}
   id: string;
   userId: string;
   userName: string;
@@ -16,10 +17,11 @@ interface TrashTalkPost {
   teamName: string;
   message: string;
   timestamp: Date;
-  type: 'general' | 'victory' | 'prediction' | 'callout' | 'meme';
+  type: &apos;general&apos; | &apos;victory&apos; | &apos;prediction&apos; | &apos;callout&apos; | &apos;meme&apos;;
   targetUserId?: string;
   targetUserName?: string;
   reactions: {
+}
     [emoji: string]: string[]; // emoji: array of user IDs
   };
   replies: TrashTalkReply[];
@@ -27,6 +29,7 @@ interface TrashTalkPost {
   moderatorNote?: string;
 
 interface TrashTalkReply {
+}
   id: string;
   userId: string;
   userName: string;
@@ -34,142 +37,161 @@ interface TrashTalkReply {
   message: string;
   timestamp: Date;
   reactions: {
+}
     [emoji: string]: string[];
   };
 
 const TrashTalkBoard: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [newPost, setNewPost] = useState('');
-  const [postType, setPostType] = useState<'general' | 'victory' | 'prediction' | 'callout' | 'meme'>('general');
-  const [targetUser, setTargetUser] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'general' | 'victory' | 'prediction' | 'callout' | 'meme'>('all');
+  const [newPost, setNewPost] = useState(&apos;&apos;);
+  const [postType, setPostType] = useState<&apos;general&apos; | &apos;victory&apos; | &apos;prediction&apos; | &apos;callout&apos; | &apos;meme&apos;>(&apos;general&apos;);
+  const [targetUser, setTargetUser] = useState(&apos;&apos;);
+  const [filterType, setFilterType] = useState<&apos;all&apos; | &apos;general&apos; | &apos;victory&apos; | &apos;prediction&apos; | &apos;callout&apos; | &apos;meme&apos;>(&apos;all&apos;);
   const [showReplyInput, setShowReplyInput] = useState<string | null>(null);
-  const [replyText, setReplyText] = useState('');
+  const [replyText, setReplyText] = useState(&apos;&apos;);
 
   const currentUser = state.user;
   const league = state.leagues[0];
 
   // Simulate trash talk posts
   const trashTalkPosts = useMemo((): TrashTalkPost[] => {
+}
     return [
       {
-        id: 'post-1',
-        userId: 'user-1',
-        userName: 'Nick Damato',
-        userAvatar: '👑',
-        teamName: 'Astral Aces',
-        message: 'Just dropped 167 points this week! 🔥 Who said my draft was weak? Time to eat some crow! 🐦‍⬛',
+}
+        id: &apos;post-1&apos;,
+        userId: &apos;user-1&apos;,
+        userName: &apos;Nick Damato&apos;,
+        userAvatar: &apos;👑&apos;,
+        teamName: &apos;Astral Aces&apos;,
+        message: &apos;Just dropped 167 points this week! 🔥 Who said my draft was weak? Time to eat some crow! 🐦‍⬛&apos;,
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        type: 'victory',
+        type: &apos;victory&apos;,
         reactions: {
-          '🔥': ['user-2', 'user-3'],
-          '👑': ['user-4'],
-          '😤': ['user-5', 'user-6']
+}
+          &apos;🔥&apos;: [&apos;user-2&apos;, &apos;user-3&apos;],
+          &apos;👑&apos;: [&apos;user-4&apos;],
+          &apos;😤&apos;: [&apos;user-5&apos;, &apos;user-6&apos;]
         },
         replies: [
           {
-            id: 'reply-1',
-            userId: 'user-2',
-            userName: 'Jon Kornbeck',
-            userAvatar: '⚡',
-            message: 'One good week doesn\'t make a season, champ! 😏',
+}
+            id: &apos;reply-1&apos;,
+            userId: &apos;user-2&apos;,
+            userName: &apos;Jon Kornbeck&apos;,
+            userAvatar: &apos;⚡&apos;,
+            message: &apos;One good week doesn\&apos;t make a season, champ! 😏&apos;,
             timestamp: new Date(Date.now() - 1.5 * 60 * 60 * 1000),
             reactions: {
-              '😂': ['user-3', 'user-7'],
-              '👀': ['user-1']
+}
+              &apos;😂&apos;: [&apos;user-3&apos;, &apos;user-7&apos;],
+              &apos;👀&apos;: [&apos;user-1&apos;]
 
 
         ],
         isSticky: true
       },
       {
-        id: 'post-2',
-        userId: 'user-3',
-        userName: 'Cason Minor',
-        userAvatar: '🔥',
-        teamName: 'Gridiron Giants',
-        message: 'Calling it now: Thunder Bolts are going to choke in the playoffs. They always do! ⚡💥',
+}
+        id: &apos;post-2&apos;,
+        userId: &apos;user-3&apos;,
+        userName: &apos;Cason Minor&apos;,
+        userAvatar: &apos;🔥&apos;,
+        teamName: &apos;Gridiron Giants&apos;,
+        message: &apos;Calling it now: Thunder Bolts are going to choke in the playoffs. They always do! ⚡💥&apos;,
         timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-        type: 'prediction',
-        targetUserId: 'user-2',
-        targetUserName: 'Jon Kornbeck',
+        type: &apos;prediction&apos;,
+        targetUserId: &apos;user-2&apos;,
+        targetUserName: &apos;Jon Kornbeck&apos;,
         reactions: {
-          '🍿': ['user-1', 'user-4', 'user-8'],
-          '😱': ['user-2'],
-          '🎯': ['user-9']
+}
+          &apos;🍿&apos;: [&apos;user-1&apos;, &apos;user-4&apos;, &apos;user-8&apos;],
+          &apos;😱&apos;: [&apos;user-2&apos;],
+          &apos;🎯&apos;: [&apos;user-9&apos;]
         },
         replies: []
       },
       {
-        id: 'post-3',
-        userId: 'user-4',
-        userName: 'Brittany Bergrum',
-        userAvatar: '💪',
-        teamName: 'Storm Chasers',
-        message: 'Y\'all are fighting for second place while I\'m over here building a dynasty! 💎👸',
+}
+        id: &apos;post-3&apos;,
+        userId: &apos;user-4&apos;,
+        userName: &apos;Brittany Bergrum&apos;,
+        userAvatar: &apos;💪&apos;,
+        teamName: &apos;Storm Chasers&apos;,
+        message: &apos;Y\&apos;all are fighting for second place while I\&apos;m over here building a dynasty! 💎👸&apos;,
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-        type: 'general',
+        type: &apos;general&apos;,
         reactions: {
-          '💅': ['user-5', 'user-8'],
-          '🙄': ['user-1', 'user-2', 'user-3'],
-          '👸': ['user-7']
+}
+          &apos;💅&apos;: [&apos;user-5&apos;, &apos;user-8&apos;],
+          &apos;🙄&apos;: [&apos;user-1&apos;, &apos;user-2&apos;, &apos;user-3&apos;],
+          &apos;👸&apos;: [&apos;user-7&apos;]
         },
         replies: [
           {
-            id: 'reply-2',
-            userId: 'user-1',
-            userName: 'Nick Damato',
-            userAvatar: '👑',
-            message: 'Dynasty? You\'re 4-4! 😂',
+}
+            id: &apos;reply-2&apos;,
+            userId: &apos;user-1&apos;,
+            userName: &apos;Nick Damato&apos;,
+            userAvatar: &apos;👑&apos;,
+            message: &apos;Dynasty? You\&apos;re 4-4! 😂&apos;,
             timestamp: new Date(Date.now() - 5.5 * 60 * 60 * 1000),
             reactions: {
-              '💀': ['user-2', 'user-3', 'user-6'],
-              '🔥': ['user-9']
+}
+              &apos;💀&apos;: [&apos;user-2&apos;, &apos;user-3&apos;, &apos;user-6&apos;],
+              &apos;🔥&apos;: [&apos;user-9&apos;]
 
           },
           {
-            id: 'reply-3',
-            userId: 'user-4',
-            userName: 'Brittany Bergrum',
-            userAvatar: '💪',
-            message: 'Quality over quantity, honey! My team is peaking at the right time 📈',
+}
+            id: &apos;reply-3&apos;,
+            userId: &apos;user-4&apos;,
+            userName: &apos;Brittany Bergrum&apos;,
+            userAvatar: &apos;💪&apos;,
+            message: &apos;Quality over quantity, honey! My team is peaking at the right time 📈&apos;,
             timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
             reactions: {
-              '💯': ['user-8'],
-              '🤔': ['user-1', 'user-2']
+}
+              &apos;💯&apos;: [&apos;user-8&apos;],
+              &apos;🤔&apos;: [&apos;user-1&apos;, &apos;user-2&apos;]
 
       },
       {
-        id: 'post-4',
-        userId: 'user-7',
-        userName: 'Larry McCaigue',
-        userAvatar: '⭐',
-        teamName: 'Cosmic Crushers',
-        message: 'Anyone else notice how quiet @David Jarvey has been since his team started tanking? 🤐📉',
+}
+        id: &apos;post-4&apos;,
+        userId: &apos;user-7&apos;,
+        userName: &apos;Larry McCaigue&apos;,
+        userAvatar: &apos;⭐&apos;,
+        teamName: &apos;Cosmic Crushers&apos;,
+        message: &apos;Anyone else notice how quiet @David Jarvey has been since his team started tanking? 🤐📉&apos;,
         timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
-        type: 'callout',
-        targetUserId: 'user-9',
-        targetUserName: 'David Jarvey',
+        type: &apos;callout&apos;,
+        targetUserId: &apos;user-9&apos;,
+        targetUserName: &apos;David Jarvey&apos;,
         reactions: {
-          '👀': ['user-1', 'user-2', 'user-3', 'user-5'],
-          '💀': ['user-6', 'user-8'],
-          '🔥': ['user-10']
+}
+          &apos;👀&apos;: [&apos;user-1&apos;, &apos;user-2&apos;, &apos;user-3&apos;, &apos;user-5&apos;],
+          &apos;💀&apos;: [&apos;user-6&apos;, &apos;user-8&apos;],
+          &apos;🔥&apos;: [&apos;user-10&apos;]
         },
         replies: []
       },
       {
-        id: 'post-5',
-        userId: 'user-10',
-        userName: 'Nick Hartley',
-        userAvatar: '🎮',
-        teamName: 'Digital Destroyers',
-        message: 'Me watching everyone fight while I quietly climb the standings 🍿👀 #UnderTheRadar',
+}
+        id: &apos;post-5&apos;,
+        userId: &apos;user-10&apos;,
+        userName: &apos;Nick Hartley&apos;,
+        userAvatar: &apos;🎮&apos;,
+        teamName: &apos;Digital Destroyers&apos;,
+        message: &apos;Me watching everyone fight while I quietly climb the standings 🍿👀 #UnderTheRadar&apos;,
         timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
-        type: 'meme',
+        type: &apos;meme&apos;,
         reactions: {
-          '😂': ['user-1', 'user-2', 'user-4', 'user-6'],
-          '🎯': ['user-3', 'user-5'],
-          '🤫': ['user-7', 'user-8']
+}
+          &apos;😂&apos;: [&apos;user-1&apos;, &apos;user-2&apos;, &apos;user-4&apos;, &apos;user-6&apos;],
+          &apos;🎯&apos;: [&apos;user-3&apos;, &apos;user-5&apos;],
+          &apos;🤫&apos;: [&apos;user-7&apos;, &apos;user-8&apos;]
         },
         replies: []
 
@@ -177,19 +199,22 @@ const TrashTalkBoard: React.FC = () => {
   }, []);
 
   const filteredPosts = useMemo(() => {
-    if (filterType === 'all') return trashTalkPosts;
+}
+    if (filterType === &apos;all&apos;) return trashTalkPosts;
     return trashTalkPosts.filter((post: any) => post.type === filterType);
   }, [trashTalkPosts, filterType]);
 
   const handlePostSubmit = () => {
+}
     if (!newPost.trim() || !currentUser) return;
 
     const post: TrashTalkPost = {
+}
       id: `post-${Date.now()}`,
       userId: currentUser.id,
       userName: currentUser.name,
       userAvatar: currentUser.avatar,
-      teamName: league?.teams?.find((t: any) => t.owner.id === currentUser.id)?.name || 'Unknown Team',
+      teamName: league?.teams?.find((t: any) => t.owner.id === currentUser.id)?.name || &apos;Unknown Team&apos;,
       message: newPost.trim(),
       timestamp: new Date(),
       type: postType,
@@ -200,22 +225,26 @@ const TrashTalkBoard: React.FC = () => {
     };
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Trash talk posted! 🔥',
-        type: 'SUCCESS'
+}
+        message: &apos;Trash talk posted! 🔥&apos;,
+        type: &apos;SUCCESS&apos;
 
     });
 
-    setNewPost('');
-    setPostType('general');
-    setTargetUser('');
+    setNewPost(&apos;&apos;);
+    setPostType(&apos;general&apos;);
+    setTargetUser(&apos;&apos;);
   };
 
   const handleReply = (postId: string) => {
+}
     if (!replyText.trim() || !currentUser) return;
 
     const reply: TrashTalkReply = {
+}
       id: `reply-${Date.now()}`,
       userId: currentUser.id,
       userName: currentUser.name,
@@ -226,61 +255,71 @@ const TrashTalkBoard: React.FC = () => {
     };
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Reply posted! 💬',
-        type: 'SUCCESS'
+}
+        message: &apos;Reply posted! 💬&apos;,
+        type: &apos;SUCCESS&apos;
 
     });
 
-    setReplyText('');
+    setReplyText(&apos;&apos;);
     setShowReplyInput(null);
   };
 
   const handleReaction = (postId: string, emoji: string, isReply = false, replyId?: string) => {
+}
     if (!currentUser) return;
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Reaction added! 😊',
-        type: 'INFO'
+}
+        message: &apos;Reaction added! 😊&apos;,
+        type: &apos;INFO&apos;
 
     });
   };
 
   const getPostTypeIcon = (type: string) => {
+}
     switch (type) {
-      case 'victory': return '🏆';
-      case 'prediction': return '🔮';
-      case 'callout': return '🎯';
-      case 'meme': return '😂';
-      default: return '💬';
+}
+      case &apos;victory&apos;: return &apos;🏆&apos;;
+      case &apos;prediction&apos;: return &apos;🔮&apos;;
+      case &apos;callout&apos;: return &apos;🎯&apos;;
+      case &apos;meme&apos;: return &apos;😂&apos;;
+      default: return &apos;💬&apos;;
 
   };
 
   const getPostTypeColor = (type: string) => {
+}
     switch (type) {
-      case 'victory': return 'border-yellow-500 bg-yellow-900/20';
-      case 'prediction': return 'border-purple-500 bg-purple-900/20';
-      case 'callout': return 'border-red-500 bg-red-900/20';
-      case 'meme': return 'border-green-500 bg-green-900/20';
-      default: return 'border-slate-600 bg-slate-700/50';
+}
+      case &apos;victory&apos;: return &apos;border-yellow-500 bg-yellow-900/20&apos;;
+      case &apos;prediction&apos;: return &apos;border-purple-500 bg-purple-900/20&apos;;
+      case &apos;callout&apos;: return &apos;border-red-500 bg-red-900/20&apos;;
+      case &apos;meme&apos;: return &apos;border-green-500 bg-green-900/20&apos;;
+      default: return &apos;border-slate-600 bg-slate-700/50&apos;;
 
   };
 
   const formatTimestamp = (timestamp: Date) => {
+}
     const now = new Date();
     const diffMs = now.getTime() - timestamp.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffHours < 1) return 'Just now';
+    if (diffHours < 1) return &apos;Just now&apos;;
     if (diffHours < 24) return `${diffHours}h ago`;
     return `${diffDays}d ago`;
   };
 
-  const reactionEmojis = ['🔥', '😂', '💀', '👀', '🍿', '💯', '🎯', '👑', '💪', '🤔'];
+  const reactionEmojis = [&apos;🔥&apos;, &apos;😂&apos;, &apos;💀&apos;, &apos;👀&apos;, &apos;🍿&apos;, &apos;💯&apos;, &apos;🎯&apos;, &apos;👑&apos;, &apos;💪&apos;, &apos;🤔&apos;];
 
   return (
     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
@@ -305,11 +344,12 @@ const TrashTalkBoard: React.FC = () => {
           {/* Post Type Selection */}
           <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
             {[
-              { id: 'general', label: 'General', icon: '💬' },
-              { id: 'victory', label: 'Victory Lap', icon: '🏆' },
-              { id: 'prediction', label: 'Prediction', icon: '🔮' },
-              { id: 'callout', label: 'Call Out', icon: '🎯' },
-              { id: 'meme', label: 'Meme', icon: '😂' }
+}
+              { id: &apos;general&apos;, label: &apos;General&apos;, icon: &apos;💬&apos; },
+              { id: &apos;victory&apos;, label: &apos;Victory Lap&apos;, icon: &apos;🏆&apos; },
+              { id: &apos;prediction&apos;, label: &apos;Prediction&apos;, icon: &apos;🔮&apos; },
+              { id: &apos;callout&apos;, label: &apos;Call Out&apos;, icon: &apos;🎯&apos; },
+              { id: &apos;meme&apos;, label: &apos;Meme&apos;, icon: &apos;😂&apos; }
             ].map((type: any) => (
               <button
                 key={type.id}
@@ -321,13 +361,15 @@ const TrashTalkBoard: React.FC = () => {
           </div>
 
           {/* Target User (for callouts) */}
-          {postType === 'callout' && (
+          {postType === &apos;callout&apos; && (
+}
             <select
               value={targetUser}
               onChange={(e: any) => setTargetUser(e.target.value)}
             >
               <option value="">Select target (optional)</option>
               {league?.teams?.filter((t: any) => t.owner.id !== currentUser?.id).map((team: any) => (
+}
                 <option key={team.id} value={team.id}>
                   {team.owner.name} ({team.name})
                 </option>
@@ -361,12 +403,13 @@ const TrashTalkBoard: React.FC = () => {
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2 bg-slate-800/50 rounded-lg p-2 sm:px-4 md:px-6 lg:px-8">
         {[
-          { id: 'all', label: 'All Posts', icon: '📋' },
-          { id: 'general', label: 'General', icon: '💬' },
-          { id: 'victory', label: 'Victory', icon: '🏆' },
-          { id: 'prediction', label: 'Predictions', icon: '🔮' },
-          { id: 'callout', label: 'Call Outs', icon: '🎯' },
-          { id: 'meme', label: 'Memes', icon: '😂' }
+}
+          { id: &apos;all&apos;, label: &apos;All Posts&apos;, icon: &apos;📋&apos; },
+          { id: &apos;general&apos;, label: &apos;General&apos;, icon: &apos;💬&apos; },
+          { id: &apos;victory&apos;, label: &apos;Victory&apos;, icon: &apos;🏆&apos; },
+          { id: &apos;prediction&apos;, label: &apos;Predictions&apos;, icon: &apos;🔮&apos; },
+          { id: &apos;callout&apos;, label: &apos;Call Outs&apos;, icon: &apos;🎯&apos; },
+          { id: &apos;meme&apos;, label: &apos;Memes&apos;, icon: &apos;😂&apos; }
         ].map((filter: any) => (
           <button
             key={filter.id}
@@ -381,13 +424,15 @@ const TrashTalkBoard: React.FC = () => {
       <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {filteredPosts.map((post, index) => (
+}
             <motion.div
               key={post.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className={`card ${getPostTypeColor(post.type)} ${
-                post.isSticky ? 'ring-2 ring-yellow-500' : ''
+}
+                post.isSticky ? &apos;ring-2 ring-yellow-500&apos; : &apos;&apos;
               }`}
             >
               {/* Post Header */}
@@ -401,6 +446,7 @@ const TrashTalkBoard: React.FC = () => {
                       {getPostTypeIcon(post.type)} {post.type}
                     </span>
                     {post.isSticky && (
+}
                       <span className="px-2 py-1 bg-yellow-600 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                         📌 Pinned
                       </span>
@@ -412,6 +458,7 @@ const TrashTalkBoard: React.FC = () => {
 
               {/* Target User (for callouts) */}
               {post.targetUserName && (
+}
                 <div className="mb-3 p-2 bg-red-900/20 border border-red-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                   <span className="text-red-400 text-sm sm:px-4 md:px-6 lg:px-8">🎯 Calling out: @{post.targetUserName}</span>
                 </div>
@@ -424,6 +471,7 @@ const TrashTalkBoard: React.FC = () => {
               <div className="flex items-center gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                   {Object.entries(post.reactions).map(([emoji, userIds]) => (
+}
                     <button
                       key={emoji}
                       onClick={() => handleReaction(post.id, emoji)}`}
@@ -440,6 +488,7 @@ const TrashTalkBoard: React.FC = () => {
                   </button>
                   <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 z-10 sm:px-4 md:px-6 lg:px-8">
                     {reactionEmojis.map((emoji: any) => (
+}
                       <button
                         key={emoji}
                         onClick={() => handleReaction(post.id, emoji)}
@@ -459,8 +508,10 @@ const TrashTalkBoard: React.FC = () => {
 
               {/* Replies */}
               {post.replies.length > 0 && (
+}
                 <div className="space-y-3 pl-6 border-l-2 border-slate-600 sm:px-4 md:px-6 lg:px-8">
                   {post.replies.map((reply: any) => (
+}
                     <div key={reply.id} className="p-3 bg-slate-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                       <div className="flex items-center gap-2 mb-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-lg sm:px-4 md:px-6 lg:px-8">{reply.userAvatar}</span>
@@ -470,6 +521,7 @@ const TrashTalkBoard: React.FC = () => {
                       <p className="text-slate-300 mb-2 sm:px-4 md:px-6 lg:px-8">{reply.message}</p>
                       <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                         {Object.entries(reply.reactions).map(([emoji, userIds]) => (
+}
                           <button
                             key={emoji}
                             onClick={() => handleReaction(post.id, emoji, true, reply.id)}`}
@@ -485,9 +537,10 @@ const TrashTalkBoard: React.FC = () => {
 
               {/* Reply Input */}
               {showReplyInput === post.id && (
+}
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: &apos;auto&apos; }}
                   exit={{ opacity: 0, height: 0 }}
                   className="mt-4 pt-4 border-t border-slate-600 sm:px-4 md:px-6 lg:px-8"
                 >
@@ -508,13 +561,13 @@ const TrashTalkBoard: React.FC = () => {
                           <button
                             onClick={() => setShowReplyInput(null)}
                           >
-                            Cancel
+//                             Cancel
                           </button>
                           <button
                             onClick={() => handleReply(post.id)}
                             className="btn btn-primary btn-sm sm:px-4 md:px-6 lg:px-8"
                           >
-                            Reply
+//                             Reply
                           </button>
                         </div>
                       </div>

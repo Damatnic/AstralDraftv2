@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import EnhancedRosterManager from './EnhancedRosterManager';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import EnhancedRosterManager from &apos;./EnhancedRosterManager&apos;;
 
-describe('EnhancedRosterManager', () => {
-  it('renders without crashing', () => {
+describe(&apos;EnhancedRosterManager&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<EnhancedRosterManager />);
-    expect(screen.getByTestId('enhancedrostermanager')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;enhancedrostermanager&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<EnhancedRosterManager />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<EnhancedRosterManager />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

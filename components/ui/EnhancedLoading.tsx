@@ -1,7 +1,7 @@
-import React from 'react';
 
 interface LoadingProps {
-  size?: 'sm' | 'md' | 'lg';
+}
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
   text?: string;
   fullScreen?: boolean;
   className?: string;
@@ -9,24 +9,27 @@ interface LoadingProps {
 }
 
 const EnhancedLoading: React.FC<LoadingProps> = ({
-  size = 'md',
-  text = 'Loading...',
+}
+  size = &apos;md&apos;,
+  text = &apos;Loading...&apos;,
   fullScreen = false,
-  className = ''
+  className = &apos;&apos;
 }: any) => {
+}
   const sizeClasses = {
-    sm: 'h-4 w-4',
-    md: 'h-8 w-8',
-    lg: 'h-12 w-12'
+}
+    sm: &apos;h-4 w-4&apos;,
+    md: &apos;h-8 w-8&apos;,
+    lg: &apos;h-12 w-12&apos;
   };
 
   const containerClasses = fullScreen 
-    ? 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
-    : 'flex items-center justify-center p-4';
+    ? &apos;fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50&apos;
+    : &apos;flex items-center justify-center p-4&apos;;
 
   return (
     <div 
-      className={containerClasses + ' ' + className}
+      className={containerClasses + &apos; &apos; + className}
       role="status"
       aria-live="polite"
       aria-label={text}

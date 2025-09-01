@@ -3,17 +3,18 @@
  * Main interface for AI-powered predictions and insights
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { BrainCircuit, TrendingUp, Trophy, Sparkles, AlertTriangle } from 'lucide-react';
-import { useAppState } from '../../hooks/useAppState';
-import { useLeague } from '../../hooks/useLeague';
-import { Player } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { BrainCircuit, TrendingUp, Trophy, Sparkles, AlertTriangle } from &apos;lucide-react&apos;;
+import { useAppState } from &apos;../../hooks/useAppState&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
+import { Player } from &apos;../../types&apos;;
 
 interface OraclePrediction {
+}
   id: string;
-  type: 'player' | 'team' | 'matchup' | 'trade';
+  type: &apos;player&apos; | &apos;team&apos; | &apos;matchup&apos; | &apos;trade&apos;;
   confidence: number;
   prediction: string;
   reasoning: string[];
@@ -22,48 +23,52 @@ interface OraclePrediction {
 }
 
 export const OraclePanel: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const { league, myTeam } = useLeague();
-  const [activeTab, setActiveTab] = React.useState<'predictions' | 'insights' | 'challenge'>('predictions');
-  const [userPrediction, setUserPrediction] = React.useState('');
+  const [activeTab, setActiveTab] = React.useState<&apos;predictions&apos; | &apos;insights&apos; | &apos;challenge&apos;>(&apos;predictions&apos;);
+  const [userPrediction, setUserPrediction] = React.useState(&apos;&apos;);
   const [oracleScore, setOracleScore] = React.useState(0);
   const [userScore, setUserScore] = React.useState(0);
   
   // Mock predictions
   const predictions: OraclePrediction[] = [
     {
-      id: '1',
-      type: 'player',
+}
+      id: &apos;1&apos;,
+      type: &apos;player&apos;,
       confidence: 85,
-      prediction: 'CeeDee Lamb will score 25+ fantasy points this week',
+      prediction: &apos;CeeDee Lamb will score 25+ fantasy points this week&apos;,
       reasoning: [
-        'Facing a bottom-5 pass defense',
-        'Averaging 10 targets per game',
-        'Red zone target share of 28%'
+        &apos;Facing a bottom-5 pass defense&apos;,
+        &apos;Averaging 10 targets per game&apos;,
+        &apos;Red zone target share of 28%&apos;
       ],
       timestamp: new Date()
     },
     {
-      id: '2',
-      type: 'team',
+}
+      id: &apos;2&apos;,
+      type: &apos;team&apos;,
       confidence: 72,
-      prediction: 'Your team has a 68% chance to win this week',
+      prediction: &apos;Your team has a 68% chance to win this week&apos;,
       reasoning: [
-        'Favorable matchups at RB positions',
-        'Opponent missing key players',
-        'Historical performance in similar matchups'
+        &apos;Favorable matchups at RB positions&apos;,
+        &apos;Opponent missing key players&apos;,
+        &apos;Historical performance in similar matchups&apos;
       ],
       timestamp: new Date()
     },
     {
-      id: '3',
-      type: 'trade',
+}
+      id: &apos;3&apos;,
+      type: &apos;trade&apos;,
       confidence: 90,
-      prediction: 'Trade Alert: Sell high on Josh Jacobs',
+      prediction: &apos;Trade Alert: Sell high on Josh Jacobs&apos;,
       reasoning: [
-        'Peak value after recent performances',
-        'Tough schedule ahead',
-        'Potential workload concerns'
+        &apos;Peak value after recent performances&apos;,
+        &apos;Tough schedule ahead&apos;,
+        &apos;Potential workload concerns&apos;
       ],
       timestamp: new Date()
 
@@ -71,40 +76,47 @@ export const OraclePanel: React.FC = () => {
   
   const insights = [
     {
-      title: 'Sleeper Alert',
-      content: 'Jaylen Warren is projected to outperform his ranking by 15+ spots',
+}
+      title: &apos;Sleeper Alert&apos;,
+      content: &apos;Jaylen Warren is projected to outperform his ranking by 15+ spots&apos;,
       icon: <Sparkles className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />
     },
     {
-      title: 'Injury Impact',
-      content: 'Monitor Travis Kelce\'s practice status - 30% performance drop if limited',
+}
+      title: &apos;Injury Impact&apos;,
+      content: &apos;Monitor Travis Kelce\&apos;s practice status - 30% performance drop if limited&apos;,
       icon: <AlertTriangle className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />
     },
     {
-      title: 'Weather Factor',
-      content: 'High winds expected in BUF vs MIA - favor running backs',
+}
+      title: &apos;Weather Factor&apos;,
+      content: &apos;High winds expected in BUF vs MIA - favor running backs&apos;,
       icon: <TrendingUp className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />
 
   ];
   
   const handleChallenge = () => {
+}
     // Submit user prediction to challenge the Oracle
     if (!userPrediction) return;
     
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Prediction submitted! Check back after games to see results.',
-        type: 'INFO'
+}
+        message: &apos;Prediction submitted! Check back after games to see results.&apos;,
+        type: &apos;INFO&apos;
 
     });
     
-    setUserPrediction('');
+    setUserPrediction(&apos;&apos;);
   };
   
   const renderPredictions = () => (
     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
       {predictions.map((pred: any) => (
+}
         <motion.div
           key={pred.id}
           initial={{ opacity: 0, y: 20 }}
@@ -127,9 +139,10 @@ export const OraclePanel: React.FC = () => {
             </div>
             <div className="text-right sm:px-4 md:px-6 lg:px-8">
               <div className={`text-2xl font-bold ${
-                pred.confidence >= 80 ? 'text-green-400' :
-                pred.confidence >= 60 ? 'text-yellow-400' :
-                'text-red-400'
+}
+                pred.confidence >= 80 ? &apos;text-green-400&apos; :
+                pred.confidence >= 60 ? &apos;text-yellow-400&apos; :
+                &apos;text-red-400&apos;
               }`}>
                 {pred.confidence}%
               </div>
@@ -140,6 +153,7 @@ export const OraclePanel: React.FC = () => {
             <p className="text-xs font-medium text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Reasoning:</p>
             <ul className="space-y-1 sm:px-4 md:px-6 lg:px-8">
               {pred.reasoning.map((reason, idx) => (
+}
                 <li key={idx} className="text-xs text-[var(--text-secondary)] flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
                   <span className="text-cyan-400 mt-0.5 sm:px-4 md:px-6 lg:px-8">•</span>
                   <span>{reason}</span>
@@ -155,6 +169,7 @@ export const OraclePanel: React.FC = () => {
   const renderInsights = () => (
     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
       {insights.map((insight, idx) => (
+}
         <motion.div
           key={idx}
           initial={{ opacity: 0, x: -20 }}
@@ -255,7 +270,8 @@ export const OraclePanel: React.FC = () => {
       
       {/* Tabs */}
       <div className="flex gap-2 mb-6 sm:px-4 md:px-6 lg:px-8">
-        {(['predictions', 'insights', 'challenge'] as const).map((tab: any) => (
+        {([&apos;predictions&apos;, &apos;insights&apos;, &apos;challenge&apos;] as const).map((tab: any) => (
+}
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}`}
@@ -267,9 +283,9 @@ export const OraclePanel: React.FC = () => {
       
       {/* Content */}
       <div className="min-h-[400px] sm:px-4 md:px-6 lg:px-8">
-        {activeTab === 'predictions' && renderPredictions()}
-        {activeTab === 'insights' && renderInsights()}
-        {activeTab === 'challenge' && renderChallenge()}
+        {activeTab === &apos;predictions&apos; && renderPredictions()}
+        {activeTab === &apos;insights&apos; && renderInsights()}
+        {activeTab === &apos;challenge&apos; && renderChallenge()}
       </div>
     </div>
   );

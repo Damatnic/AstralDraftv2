@@ -1,12 +1,13 @@
-import React from 'react';
-import { ErrorBoundary } from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from &apos;../components/ui/ErrorBoundary&apos;;
 
 interface ProjectViewProps {
+}
   // No props currently needed, but interface ready for future expansion
 
 }
 
 const ProjectView: React.FC<ProjectViewProps> = () => {
+}
   return (
     <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <header className="flex-shrink-0 mb-6">
@@ -98,7 +99,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                     <span className="text-[var(--text-primary)]">95%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div className="bg-green-500 h-2 rounded-full" style={{width: '95%'}}></div>
+                    <div className="bg-green-500 h-2 rounded-full" style={{width: &apos;95%&apos;}}></div>
                   </div>
                 </div>
                 <div>
@@ -107,7 +108,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                     <span className="text-[var(--text-primary)]">90%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div className="bg-blue-500 h-2 rounded-full" style={{width: '90%'}}></div>
+                    <div className="bg-blue-500 h-2 rounded-full" style={{width: &apos;90%&apos;}}></div>
                   </div>
                 </div>
                 <div>
@@ -116,7 +117,7 @@ const ProjectView: React.FC<ProjectViewProps> = () => {
                     <span className="text-[var(--text-primary)]">85%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div className="bg-yellow-500 h-2 rounded-full" style={{width: '85%'}}></div>
+                    <div className="bg-yellow-500 h-2 rounded-full" style={{width: &apos;85%&apos;}}></div>
                   </div>
                 </div>
               </div>

@@ -3,33 +3,34 @@
  * Glassmorphism, micro-animations, accessibility features, and modern design
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, forwardRef, ReactNode, ButtonHTMLAttributes } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { RippleEffect, GlowEffect } from './AnimationLibrary';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, forwardRef, ReactNode, ButtonHTMLAttributes } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { RippleEffect, GlowEffect } from &apos;./AnimationLibrary&apos;;
 
 // =========================================
 // TYPES & INTERFACES
 // =========================================
 
 type ButtonVariant = 
-  | 'primary' 
-  | 'secondary' 
-  | 'success' 
-  | 'warning' 
-  | 'danger' 
-  | 'ghost' 
-  | 'glass' 
-  | 'gradient' 
-  | 'neon'
-  | 'champion'
-  | 'legend';
+  | &apos;primary&apos; 
+  | &apos;secondary&apos; 
+  | &apos;success&apos; 
+  | &apos;warning&apos; 
+  | &apos;danger&apos; 
+  | &apos;ghost&apos; 
+  | &apos;glass&apos; 
+  | &apos;gradient&apos; 
+  | &apos;neon&apos;
+  | &apos;champion&apos;
+  | &apos;legend&apos;;
 
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+type ButtonSize = &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
 
-type ButtonShape = 'rounded' | 'pill' | 'square' | 'circle';
+type ButtonShape = &apos;rounded&apos; | &apos;pill&apos; | &apos;square&apos; | &apos;circle&apos;;
 
-interface EnhancedButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
+interface EnhancedButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, &apos;size&apos;> {
+}
   variant?: ButtonVariant;
   size?: ButtonSize;
   shape?: ButtonShape;
@@ -43,7 +44,7 @@ interface EnhancedButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElemen
   elevated?: boolean;
   children: ReactNode;
   href?: string;
-  as?: 'button' | 'a';
+  as?: &apos;button&apos; | &apos;a&apos;;
 
 // =========================================
 // BUTTON COMPONENT
@@ -51,11 +52,12 @@ interface EnhancedButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElemen
 
 export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, EnhancedButtonProps>(
   ({
-    variant = 'primary',
-    size = 'md',
-    shape = 'rounded',
+}
+    variant = &apos;primary&apos;,
+    size = &apos;md&apos;,
+    shape = &apos;rounded&apos;,
     loading = false,
-    loadingText = 'Loading...',
+    loadingText = &apos;Loading...&apos;,
     leftIcon,
     rightIcon,
     glow = false,
@@ -63,19 +65,21 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     fullWidth = false,
     elevated = false,
     children,
-    className = '',
+    className = &apos;&apos;,
     disabled,
     href,
-    as = 'button',
+    as = &apos;button&apos;,
     onClick,
     ...props
   }, ref) => {
+}
     
     // =========================================
     // VARIANT STYLES
     // =========================================
     
     const variantStyles: Record<ButtonVariant, string> = {
+}
       primary: `
         bg-gradient-to-r from-primary-600 to-primary-500 
         text-white border-primary-600 
@@ -179,11 +183,12 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     // =========================================
     
     const sizeStyles: Record<ButtonSize, string> = {
-      xs: 'px-3 py-1.5 text-xs font-medium min-h-[28px]',
-      sm: 'px-4 py-2 text-sm font-medium min-h-[36px]',
-      md: 'px-6 py-3 text-base font-semibold min-h-[44px]',
-      lg: 'px-8 py-4 text-lg font-semibold min-h-[52px]',
-      xl: 'px-10 py-5 text-xl font-bold min-h-[60px]'
+}
+      xs: &apos;px-3 py-1.5 text-xs font-medium min-h-[28px]&apos;,
+      sm: &apos;px-4 py-2 text-sm font-medium min-h-[36px]&apos;,
+      md: &apos;px-6 py-3 text-base font-semibold min-h-[44px]&apos;,
+      lg: &apos;px-8 py-4 text-lg font-semibold min-h-[52px]&apos;,
+      xl: &apos;px-10 py-5 text-xl font-bold min-h-[60px]&apos;
     };
 
     // =========================================
@@ -191,10 +196,11 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     // =========================================
     
     const shapeStyles: Record<ButtonShape, string> = {
-      rounded: 'rounded-lg',
-      pill: 'rounded-full',
-      square: 'rounded-none',
-      circle: 'rounded-full aspect-square p-0'
+}
+      rounded: &apos;rounded-lg&apos;,
+      pill: &apos;rounded-full&apos;,
+      square: &apos;rounded-none&apos;,
+      circle: &apos;rounded-full aspect-square p-0&apos;
     };
 
     // =========================================
@@ -202,12 +208,14 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     // =========================================
     
     const LoadingSpinner = ({ size: spinnerSize }: { size: ButtonSize }) => {
+}
       const spinnerSizes = {
-        xs: 'w-3 h-3',
-        sm: 'w-4 h-4',
-        md: 'w-5 h-5',
-        lg: 'w-6 h-6',
-        xl: 'w-7 h-7'
+}
+        xs: &apos;w-3 h-3&apos;,
+        sm: &apos;w-4 h-4&apos;,
+        md: &apos;w-5 h-5&apos;,
+        lg: &apos;w-6 h-6&apos;,
+        xl: &apos;w-7 h-7&apos;
       };
 
       return (
@@ -239,11 +247,11 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       variantStyles[variant],
       sizeStyles[size],
       shapeStyles[shape],
-      fullWidth ? 'w-full' : '',
-      elevated ? 'shadow-lg hover:shadow-xl' : '',
-      loading ? 'cursor-wait' : '',
-      className
-    ].filter(Boolean).join(' ');
+      fullWidth ? &apos;w-full&apos; : &apos;&apos;,
+      elevated ? &apos;shadow-lg hover:shadow-xl&apos; : &apos;&apos;,
+      loading ? &apos;cursor-wait&apos; : &apos;&apos;,
+//       className
+    ].filter(Boolean).join(&apos; &apos;);
 
     // =========================================
     // BUTTON CONTENT
@@ -253,6 +261,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
       <>
         <AnimatePresence mode="wait">
           {loading ? (
+}
             <motion.div
               key="loading"
               initial={{ opacity: 0, scale: 0.8 }}
@@ -272,6 +281,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
               className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
             >
               {leftIcon && (
+}
                 <motion.span
                   className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ scale: 1.1, rotate: [0, -10, 10, 0] }}
@@ -284,6 +294,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
               <span className="truncate sm:px-4 md:px-6 lg:px-8">{children}</span>
               
               {rightIcon && (
+}
                 <motion.span
                   className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                   whileHover={{ scale: 1.1, x: 2 }}
@@ -306,12 +317,15 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     const MotionAnchor = motion.a;
 
     const motionProps = {
-      whileHover: { 
+}
+      whileHover: {
+}
         scale: 1.02,
         y: -1,
         transition: { duration: 0.2, ease: "easeOut" }
       },
-      whileTap: { 
+      whileTap: {
+}
         scale: 0.98,
         y: 0,
         transition: { duration: 0.1 }
@@ -326,21 +340,25 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
     // =========================================
     
     const ButtonWrapper: React.FC<{ children: ReactNode }> = ({ children }: any) => {
+}
       let content = children;
 
       if (ripple && !disabled && !loading) {
+}
         content = <RippleEffect>{content}</RippleEffect>;
 
       if (glow && !disabled) {
+}
         content = <GlowEffect>{content}</GlowEffect>;
 
       return <>{content}</>;
     };
 
-    if (as === 'a' && href) {
+    if (as === &apos;a&apos; && href) {
+}
       return (
         <ButtonWrapper>
-          <MotionAnchor
+          <MotionAnchor>
             ref={ref as React.Ref<HTMLAnchorElement>}
             href={href}
             className={classes}
@@ -353,7 +371,7 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
 
     return (
       <ButtonWrapper>
-        <MotionButton
+        <MotionButton>
           ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
           disabled={disabled || loading}
@@ -368,61 +386,70 @@ export const EnhancedButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, 
 
 );
 
-EnhancedButton.displayName = 'EnhancedButton';
+EnhancedButton.displayName = &apos;EnhancedButton&apos;;
 
 // =========================================
 // BUTTON GROUP COMPONENT
 // =========================================
 
 interface ButtonGroupProps {
+}
   children: ReactNode;
   className?: string;
-  orientation?: 'horizontal' | 'vertical';
-  spacing?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'connected' | 'separated';
+  orientation?: &apos;horizontal&apos; | &apos;vertical&apos;;
+  spacing?: &apos;none&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  variant?: &apos;connected&apos; | &apos;separated&apos;;
 
 }
 
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({
+}
   children,
-  className = '',
-  orientation = 'horizontal',
-  spacing = 'sm',
-  variant = 'separated'
+  className = &apos;&apos;,
+  orientation = &apos;horizontal&apos;,
+  spacing = &apos;sm&apos;,
+  variant = &apos;separated&apos;
 }: any) => {
+}
   const spacingClasses = {
-    none: '',
-    sm: orientation === 'horizontal' ? 'space-x-2' : 'space-y-2',
-    md: orientation === 'horizontal' ? 'space-x-4' : 'space-y-4',
-    lg: orientation === 'horizontal' ? 'space-x-6' : 'space-y-6'
+}
+    none: &apos;&apos;,
+    sm: orientation === &apos;horizontal&apos; ? &apos;space-x-2&apos; : &apos;space-y-2&apos;,
+    md: orientation === &apos;horizontal&apos; ? &apos;space-x-4&apos; : &apos;space-y-4&apos;,
+    lg: orientation === &apos;horizontal&apos; ? &apos;space-x-6&apos; : &apos;space-y-6&apos;
   };
 
   const baseClasses = `
-    ${orientation === 'horizontal' ? 'flex flex-row' : 'flex flex-col'}
-    ${variant === 'separated' ? spacingClasses[spacing] : ''}
+    ${orientation === &apos;horizontal&apos; ? &apos;flex flex-row&apos; : &apos;flex flex-col&apos;}
+    ${variant === &apos;separated&apos; ? spacingClasses[spacing] : &apos;&apos;}
   `;
 
-  if (variant === 'connected') {
+  if (variant === &apos;connected&apos;) {
+}
     return (
       <div className={`${baseClasses} ${className}`} role="group">
         {React.Children.map(children, (child, index) => {
+}
           if (!React.isValidElement(child)) return child;
           
           const isFirst = index === 0;
           const isLast = index === React.Children.count(children) - 1;
           
-          let roundedClasses = '';
-          if (orientation === 'horizontal') {
-            if (isFirst) roundedClasses = 'rounded-r-none';
-            else if (isLast) roundedClasses = 'rounded-l-none';
-            else roundedClasses = 'rounded-none';
+          let roundedClasses = &apos;&apos;;
+          if (orientation === &apos;horizontal&apos;) {
+}
+            if (isFirst) roundedClasses = &apos;rounded-r-none&apos;;
+            else if (isLast) roundedClasses = &apos;rounded-l-none&apos;;
+            else roundedClasses = &apos;rounded-none&apos;;
           } else {
-            if (isFirst) roundedClasses = 'rounded-b-none';
-            else if (isLast) roundedClasses = 'rounded-t-none';
-            else roundedClasses = 'rounded-none';
+}
+            if (isFirst) roundedClasses = &apos;rounded-b-none&apos;;
+            else if (isLast) roundedClasses = &apos;rounded-t-none&apos;;
+            else roundedClasses = &apos;rounded-none&apos;;
 
           return React.cloneElement(child, {
-            className: `${child.props.className || ''} ${roundedClasses} ${!isFirst ? 'border-l-0' : ''}`.trim()
+}
+            className: `${child.props.className || &apos;&apos;} ${roundedClasses} ${!isFirst ? &apos;border-l-0&apos; : &apos;&apos;}`.trim()
           });
         })}
       </div>
@@ -439,33 +466,37 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({
 // FLOATING ACTION BUTTON
 // =========================================
 
-interface FloatingActionButtonProps extends Omit<EnhancedButtonProps, 'shape' | 'size'> {
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
-  size?: 'sm' | 'md' | 'lg';
+interface FloatingActionButtonProps extends Omit<EnhancedButtonProps, &apos;shape&apos; | &apos;size&apos;> {
+}
+  position?: &apos;bottom-right&apos; | &apos;bottom-left&apos; | &apos;top-right&apos; | &apos;top-left&apos;;
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
   tooltip?: string;
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
-  position = 'bottom-right',
-  size = 'md',
+}
+  position = &apos;bottom-right&apos;,
+  size = &apos;md&apos;,
   tooltip,
   children,
-  className = '',
+  className = &apos;&apos;,
   ...props
 }: any) => {
+}
   const positionClasses = {
-    'bottom-right': 'fixed bottom-6 right-6',
-    'bottom-left': 'fixed bottom-6 left-6',
-    'top-right': 'fixed top-6 right-6',
-    'top-left': 'fixed top-6 left-6'
+}
+    &apos;bottom-right&apos;: &apos;fixed bottom-6 right-6&apos;,
+    &apos;bottom-left&apos;: &apos;fixed bottom-6 left-6&apos;,
+    &apos;top-right&apos;: &apos;fixed top-6 right-6&apos;,
+    &apos;top-left&apos;: &apos;fixed top-6 left-6&apos;
   };
 
   return (
     <div className={`${positionClasses[position]} z-50`}>
-      <EnhancedButton
+      <EnhancedButton>
         shape="circle"
         size={size}
-        elevated
-        glow
+//         elevated
+//         glow
         className={`shadow-2xl hover:shadow-3xl ${className}`}
         title={tooltip}
         aria-label={tooltip}
@@ -490,10 +521,11 @@ const EnhancedButtonWithErrorBoundary: React.FC = (props: any) => (
 export default React.memo(EnhancedButtonWithErrorBoundary);
 
 export type {
+}
   ButtonVariant,
   ButtonSize,
   ButtonShape,
   EnhancedButtonProps,
   ButtonGroupProps,
-  FloatingActionButtonProps
+//   FloatingActionButtonProps
 };

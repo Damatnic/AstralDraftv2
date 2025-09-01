@@ -1,38 +1,44 @@
 
 interface IconProps {
+}
   size?: number | string;
 }
 
   className?: string;
   color?: string;
-  'aria-label'?: string;
+  &apos;aria-label&apos;?: string;
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import TargetIcon from './TargetIcon';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import TargetIcon from &apos;./TargetIcon&apos;;
 
-describe('TargetIcon', () => {
-  it('renders without crashing', () => {
+describe(&apos;TargetIcon&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<TargetIcon />);
-    expect(screen.getByTestId('targeticon')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;targeticon&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<TargetIcon />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<TargetIcon />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

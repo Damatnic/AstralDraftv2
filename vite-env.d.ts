@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+}
   readonly VITE_API_BASE_URL: string
   readonly VITE_OPENAI_API_KEY: string
   readonly VITE_ENVIRONMENT: string
@@ -25,12 +26,16 @@ interface ImportMetaEnv {
 }
 
 interface ImportMeta {
+}
   readonly env: ImportMetaEnv
 }
 
 declare global {
+}
   interface Window {
+}
     loggingService?: {
+}
       error: (message: string, data?: any, category?: string) => void;
     };
   }

@@ -3,12 +3,13 @@
  * Complete trade proposal, review, and management system
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface TradeProposal {
+}
   id: string;
   fromTeamId: string;
   toTeamId: string;
@@ -16,13 +17,14 @@ interface TradeProposal {
   toTeamName: string;
   playersOffered: any[];
   playersRequested: any[];
-  status: 'pending' | 'accepted' | 'rejected' | 'countered' | 'expired';
+  status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;countered&apos; | &apos;expired&apos;;
   createdAt: Date;
   expiresAt: Date;
   message?: string;
   fairnessScore: number;
   analysis: {
-    winner: 'team_a' | 'team_b' | 'even';
+}
+    winner: &apos;team_a&apos; | &apos;team_b&apos; | &apos;even&apos;;
     summary: string;
     teamAGrade: string;
     teamBGrade: string;
@@ -30,12 +32,13 @@ interface TradeProposal {
 }
 
 const TradingSystem: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<'propose' | 'pending' | 'history' | 'block'>('propose');
-  const [selectedTeam, setSelectedTeam] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<&apos;propose&apos; | &apos;pending&apos; | &apos;history&apos; | &apos;block&apos;>(&apos;propose&apos;);
+  const [selectedTeam, setSelectedTeam] = useState<string>(&apos;&apos;);
   const [offeredPlayers, setOfferedPlayers] = useState<any[]>([]);
   const [requestedPlayers, setRequestedPlayers] = useState<any[]>([]);
-  const [tradeMessage, setTradeMessage] = useState('');
+  const [tradeMessage, setTradeMessage] = useState(&apos;&apos;);
   const [showTradeAnalysis, setShowTradeAnalysis] = useState(false);
 
   const league = state.leagues[0];
@@ -45,96 +48,107 @@ const TradingSystem: React.FC = () => {
   // Simulate existing trade proposals
   const tradeProposals: TradeProposal[] = [
     {
-      id: 'trade-1',
-      fromTeamId: userTeam?.id || '',
-      toTeamId: 'team-2',
-      fromTeamName: userTeam?.name || '',
-      toTeamName: 'Thunder Bolts',
+}
+      id: &apos;trade-1&apos;,
+      fromTeamId: userTeam?.id || &apos;&apos;,
+      toTeamId: &apos;team-2&apos;,
+      fromTeamName: userTeam?.name || &apos;&apos;,
+      toTeamName: &apos;Thunder Bolts&apos;,
       playersOffered: [
-        { id: 'player-1', name: 'Derrick Henry', position: 'RB', team: 'TEN', projectedPoints: 15.2 }
+        { id: &apos;player-1&apos;, name: &apos;Derrick Henry&apos;, position: &apos;RB&apos;, team: &apos;TEN&apos;, projectedPoints: 15.2 }
       ],
       playersRequested: [
-        { id: 'player-2', name: 'Cooper Kupp', position: 'WR', team: 'LAR', projectedPoints: 16.8 }
+        { id: &apos;player-2&apos;, name: &apos;Cooper Kupp&apos;, position: &apos;WR&apos;, team: &apos;LAR&apos;, projectedPoints: 16.8 }
       ],
-      status: 'pending',
+      status: &apos;pending&apos;,
       createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-      message: 'Looking to upgrade at WR. Henry has been solid but I need more ceiling.',
+      message: &apos;Looking to upgrade at WR. Henry has been solid but I need more ceiling.&apos;,
       fairnessScore: 85,
       analysis: {
-        winner: 'team_b',
-        summary: 'This trade slightly favors the team receiving Cooper Kupp due to higher projected points and better playoff schedule.',
-        teamAGrade: 'B+',
-        teamBGrade: 'A-'
+}
+        winner: &apos;team_b&apos;,
+        summary: &apos;This trade slightly favors the team receiving Cooper Kupp due to higher projected points and better playoff schedule.&apos;,
+        teamAGrade: &apos;B+&apos;,
+        teamBGrade: &apos;A-&apos;
       }
     },
     {
-      id: 'trade-2',
-      fromTeamId: 'team-3',
-      toTeamId: userTeam?.id || '',
-      fromTeamName: 'Gridiron Giants',
-      toTeamName: userTeam?.name || '',
+}
+      id: &apos;trade-2&apos;,
+      fromTeamId: &apos;team-3&apos;,
+      toTeamId: userTeam?.id || &apos;&apos;,
+      fromTeamName: &apos;Gridiron Giants&apos;,
+      toTeamName: userTeam?.name || &apos;&apos;,
       playersOffered: [
-        { id: 'player-3', name: 'Travis Kelce', position: 'TE', team: 'KC', projectedPoints: 14.5 }
+        { id: &apos;player-3&apos;, name: &apos;Travis Kelce&apos;, position: &apos;TE&apos;, team: &apos;KC&apos;, projectedPoints: 14.5 }
       ],
       playersRequested: [
-        { id: 'player-4', name: 'Davante Adams', position: 'WR', team: 'LV', projectedPoints: 15.8 },
-        { id: 'player-5', name: 'Tony Pollard', position: 'RB', team: 'DAL', projectedPoints: 11.2 }
+        { id: &apos;player-4&apos;, name: &apos;Davante Adams&apos;, position: &apos;WR&apos;, team: &apos;LV&apos;, projectedPoints: 15.8 },
+        { id: &apos;player-5&apos;, name: &apos;Tony Pollard&apos;, position: &apos;RB&apos;, team: &apos;DAL&apos;, projectedPoints: 11.2 }
       ],
-      status: 'pending',
+      status: &apos;pending&apos;,
       createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
       expiresAt: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000),
-      message: 'Need WR depth for playoffs. Kelce is elite but I have good TE depth.',
+      message: &apos;Need WR depth for playoffs. Kelce is elite but I have good TE depth.&apos;,
       fairnessScore: 78,
       analysis: {
-        winner: 'team_a',
-        summary: 'This trade favors the team receiving Adams and Pollard due to positional value and depth.',
-        teamAGrade: 'A',
-        teamBGrade: 'B-'
+}
+        winner: &apos;team_a&apos;,
+        summary: &apos;This trade favors the team receiving Adams and Pollard due to positional value and depth.&apos;,
+        teamAGrade: &apos;A&apos;,
+        teamBGrade: &apos;B-&apos;
       }
     }
   ];
 
   // Simulate trade block players
   const tradeBlockPlayers = [
-    { id: 'tb-1', name: 'Aaron Jones', position: 'RB', team: 'GB', owner: 'Thunder Bolts', reason: 'Surplus at RB' },
-    { id: 'tb-2', name: 'Mike Evans', position: 'WR', team: 'TB', owner: 'Gridiron Giants', reason: 'Need QB help' },
-    { id: 'tb-3', name: 'Russell Wilson', position: 'QB', team: 'DEN', owner: 'Storm Chasers', reason: 'Have Mahomes' },
-    { id: 'tb-4', name: 'T.J. Hockenson', position: 'TE', team: 'MIN', owner: 'Lightning Strikes', reason: 'Have Kelce' }
+    { id: &apos;tb-1&apos;, name: &apos;Aaron Jones&apos;, position: &apos;RB&apos;, team: &apos;GB&apos;, owner: &apos;Thunder Bolts&apos;, reason: &apos;Surplus at RB&apos; },
+    { id: &apos;tb-2&apos;, name: &apos;Mike Evans&apos;, position: &apos;WR&apos;, team: &apos;TB&apos;, owner: &apos;Gridiron Giants&apos;, reason: &apos;Need QB help&apos; },
+    { id: &apos;tb-3&apos;, name: &apos;Russell Wilson&apos;, position: &apos;QB&apos;, team: &apos;DEN&apos;, owner: &apos;Storm Chasers&apos;, reason: &apos;Have Mahomes&apos; },
+    { id: &apos;tb-4&apos;, name: &apos;T.J. Hockenson&apos;, position: &apos;TE&apos;, team: &apos;MIN&apos;, owner: &apos;Lightning Strikes&apos;, reason: &apos;Have Kelce&apos; }
   ];
 
   const tabs = [
-    { id: 'propose', label: 'Propose Trade', icon: '📝', description: 'Create new trade offers' },
-    { id: 'pending', label: 'Pending Trades', icon: '⏳', description: 'Active trade negotiations' },
-    { id: 'history', label: 'Trade History', icon: '📚', description: 'Completed trades' },
-    { id: 'block', label: 'Trade Block', icon: '🏪', description: 'Available players' }
+    { id: &apos;propose&apos;, label: &apos;Propose Trade&apos;, icon: &apos;📝&apos;, description: &apos;Create new trade offers&apos; },
+    { id: &apos;pending&apos;, label: &apos;Pending Trades&apos;, icon: &apos;⏳&apos;, description: &apos;Active trade negotiations&apos; },
+    { id: &apos;history&apos;, label: &apos;Trade History&apos;, icon: &apos;📚&apos;, description: &apos;Completed trades&apos; },
+    { id: &apos;block&apos;, label: &apos;Trade Block&apos;, icon: &apos;🏪&apos;, description: &apos;Available players&apos; }
   ];
 
   const getStatusColor = (status: string) => {
+}
     switch (status) {
-      case 'pending': return 'text-yellow-400 bg-yellow-900/20 border-yellow-600/30';
-      case 'accepted': return 'text-green-400 bg-green-900/20 border-green-600/30';
-      case 'rejected': return 'text-red-400 bg-red-900/20 border-red-600/30';
-      case 'countered': return 'text-blue-400 bg-blue-900/20 border-blue-600/30';
-      case 'expired': return 'text-gray-400 bg-gray-900/20 border-gray-600/30';
-      default: return 'text-slate-400 bg-slate-900/20 border-slate-600/30';
+}
+      case &apos;pending&apos;: return &apos;text-yellow-400 bg-yellow-900/20 border-yellow-600/30&apos;;
+      case &apos;accepted&apos;: return &apos;text-green-400 bg-green-900/20 border-green-600/30&apos;;
+      case &apos;rejected&apos;: return &apos;text-red-400 bg-red-900/20 border-red-600/30&apos;;
+      case &apos;countered&apos;: return &apos;text-blue-400 bg-blue-900/20 border-blue-600/30&apos;;
+      case &apos;expired&apos;: return &apos;text-gray-400 bg-gray-900/20 border-gray-600/30&apos;;
+      default: return &apos;text-slate-400 bg-slate-900/20 border-slate-600/30&apos;;
     }
   };
 
   const getFairnessColor = (score: number) => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 80) return 'text-yellow-400';
-    if (score >= 70) return 'text-orange-400';
-    return 'text-red-400';
+}
+    if (score >= 90) return &apos;text-green-400&apos;;
+    if (score >= 80) return &apos;text-yellow-400&apos;;
+    if (score >= 70) return &apos;text-orange-400&apos;;
+    return &apos;text-red-400&apos;;
   };
 
   const handleProposeTrade = () => {
+}
     if (!selectedTeam || offeredPlayers.length === 0 || requestedPlayers.length === 0) {
+}
       dispatch({
-        type: 'ADD_NOTIFICATION',
+}
+        type: &apos;ADD_NOTIFICATION&apos;,
         payload: {
-          message: 'Please select teams and players for the trade',
-          type: 'ERROR'
+}
+          message: &apos;Please select teams and players for the trade&apos;,
+          type: &apos;ERROR&apos;
         }
       });
       return;
@@ -142,55 +156,64 @@ const TradingSystem: React.FC = () => {
 
     // Simulate trade proposal
     const newTrade: TradeProposal = {
+}
       id: `trade-${Date.now()}`,
-      fromTeamId: userTeam?.id || '',
+      fromTeamId: userTeam?.id || &apos;&apos;,
       toTeamId: selectedTeam,
-      fromTeamName: userTeam?.name || '',
-      toTeamName: league?.teams?.find((t: any) => t.id === selectedTeam)?.name || '',
+      fromTeamName: userTeam?.name || &apos;&apos;,
+      toTeamName: league?.teams?.find((t: any) => t.id === selectedTeam)?.name || &apos;&apos;,
       playersOffered: offeredPlayers,
       playersRequested: requestedPlayers,
-      status: 'pending',
+      status: &apos;pending&apos;,
       createdAt: new Date(),
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       message: tradeMessage,
       fairnessScore: Math.floor(Math.random() * 30) + 70, // 70-100
       analysis: {
-        winner: Math.random() > 0.5 ? 'team_a' : 'team_b',
-        summary: 'Trade analysis will be generated based on player values and team needs.',
-        teamAGrade: 'B+',
-        teamBGrade: 'B+'
+}
+        winner: Math.random() > 0.5 ? &apos;team_a&apos; : &apos;team_b&apos;,
+        summary: &apos;Trade analysis will be generated based on player values and team needs.&apos;,
+        teamAGrade: &apos;B+&apos;,
+        teamBGrade: &apos;B+&apos;
       }
     };
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Trade proposal sent successfully!',
-        type: 'SUCCESS'
+}
+        message: &apos;Trade proposal sent successfully!&apos;,
+        type: &apos;SUCCESS&apos;
       }
     });
 
     // Reset form
-    setSelectedTeam('');
+    setSelectedTeam(&apos;&apos;);
     setOfferedPlayers([]);
     setRequestedPlayers([]);
-    setTradeMessage('');
-    setActiveTab('pending');
+    setTradeMessage(&apos;&apos;);
+    setActiveTab(&apos;pending&apos;);
   };
 
-  const handleTradeAction = (tradeId: string, action: 'accept' | 'reject' | 'counter') => {
+  const handleTradeAction = (tradeId: string, action: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;) => {
+}
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
+}
         message: `Trade ${action}ed successfully!`,
-        type: action === 'accept' ? 'SUCCESS' : 'INFO'
+        type: action === &apos;accept&apos; ? &apos;SUCCESS&apos; : &apos;INFO&apos;
       }
     });
   };
 
   const renderTabContent = () => {
+}
     switch (activeTab) {
-      case 'propose':
+}
+      case &apos;propose&apos;:
         return (
           <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             <div className="card sm:px-4 md:px-6 lg:px-8">
@@ -204,13 +227,15 @@ const TradingSystem: React.FC = () => {
                 <label className="block text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Select Trading Partner</label>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {league?.teams?.filter((team: any) => team.id !== userTeam?.id).map((team: any) => (
+}
                     <button
                       key={team.id}
                       onClick={() => setSelectedTeam(team.id)}
                       className={`w-full p-3 rounded-lg border transition-all ${
+}
                         selectedTeam === team.id
-                          ? 'bg-blue-900/30 border-blue-500'
-                          : 'bg-slate-700/30 border-slate-600 hover:bg-slate-700/50'
+                          ? &apos;bg-blue-900/30 border-blue-500&apos;
+                          : &apos;bg-slate-700/30 border-slate-600 hover:bg-slate-700/50&apos;
                       }`}
                     >
                       <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
@@ -227,13 +252,15 @@ const TradingSystem: React.FC = () => {
 
               {/* Players to Offer */}
               <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
-                <label className="block text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Players You're Offering</label>
+                <label className="block text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Players You&apos;re Offering</label>
                 <div className="bg-slate-700/30 rounded-lg p-4 min-h-[100px] border-2 border-dashed border-slate-600 sm:px-4 md:px-6 lg:px-8">
                   {offeredPlayers.length === 0 ? (
+}
                     <p className="text-slate-400 text-center py-4 sm:px-4 md:px-6 lg:px-8">Select players from your roster to offer</p>
                   ) : (
                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                       {offeredPlayers.map((player: any) => (
+}
                         <div key={player.id} className="flex items-center justify-between p-3 bg-slate-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <div>
                             <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{player.name}</span>
@@ -243,7 +270,7 @@ const TradingSystem: React.FC = () => {
                             onClick={() => setOfferedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300 text-sm"
                           >
-                            Remove
+//                             Remove
                           </button>
                         </div>
                       ))}
@@ -257,10 +284,12 @@ const TradingSystem: React.FC = () => {
                 <label className="block text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Players You Want</label>
                 <div className="bg-slate-700/30 rounded-lg p-4 min-h-[100px] border-2 border-dashed border-slate-600 sm:px-4 md:px-6 lg:px-8">
                   {requestedPlayers.length === 0 ? (
+}
                     <p className="text-slate-400 text-center py-4 sm:px-4 md:px-6 lg:px-8">Select players you want in return</p>
                   ) : (
                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                       {requestedPlayers.map((player: any) => (
+}
                         <div key={player.id} className="flex items-center justify-between p-3 bg-slate-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <div>
                             <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{player.name}</span>
@@ -270,7 +299,7 @@ const TradingSystem: React.FC = () => {
                             onClick={() => setRequestedPlayers(prev => prev.filter((p: any) => p.id !== player.id))}
                             className="text-red-400 hover:text-red-300 text-sm"
                           >
-                            Remove
+//                             Remove
                           </button>
                         </div>
                       ))}
@@ -309,21 +338,22 @@ const TradingSystem: React.FC = () => {
           </div>
         );
 
-      case 'pending':
+      case &apos;pending&apos;:
         return (
           <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
               <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Pending Trades</h3>
               <span className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
-                {tradeProposals.filter((t: any) => t.status === 'pending').length} active proposals
+                {tradeProposals.filter((t: any) => t.status === &apos;pending&apos;).length} active proposals
               </span>
             </div>
 
-            {tradeProposals.filter((t: any) => t.status === 'pending').length === 0 ? (
+            {tradeProposals.filter((t: any) => t.status === &apos;pending&apos;).length === 0 ? (
+}
               <div className="card text-center py-8 sm:px-4 md:px-6 lg:px-8">
                 <p className="text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">No pending trades</p>
                 <button
-                  onClick={() => setActiveTab('propose')}
+                  onClick={() => setActiveTab(&apos;propose&apos;)}
                   className="btn btn-primary"
                 >
                   Propose a Trade
@@ -331,7 +361,8 @@ const TradingSystem: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-                {tradeProposals.filter((t: any) => t.status === 'pending').map((trade: any) => (
+                {tradeProposals.filter((t: any) => t.status === &apos;pending&apos;).map((trade: any) => (
+}
                   <motion.div
                     key={trade.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -358,6 +389,7 @@ const TradingSystem: React.FC = () => {
                         <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">{trade.fromTeamName} Offers</h4>
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                           {trade.playersOffered.map((player: any) => (
+}
                             <div key={player.id} className="p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                               <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</div>
                               <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
@@ -378,6 +410,7 @@ const TradingSystem: React.FC = () => {
                         <h4 className="text-white font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">{trade.toTeamName} Gets</h4>
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                           {trade.playersRequested.map((player: any) => (
+}
                             <div key={player.id} className="p-3 bg-slate-700/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                               <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</div>
                               <div className="text-sm text-slate-400 sm:px-4 md:px-6 lg:px-8">
@@ -390,6 +423,7 @@ const TradingSystem: React.FC = () => {
                     </div>
 
                     {trade.message && (
+}
                       <div className="mb-4 p-3 bg-blue-900/20 border border-blue-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8">
                         <p className="text-blue-300 text-sm sm:px-4 md:px-6 lg:px-8">{trade.message}</p>
                       </div>
@@ -414,24 +448,25 @@ const TradingSystem: React.FC = () => {
                     {/* Action Buttons */}
                     <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                       {trade.toTeamId === userTeam?.id ? (
+}
                         <>
                           <button
-                            onClick={() => handleTradeAction(trade.id, 'accept')}
+                            onClick={() => handleTradeAction(trade.id, &apos;accept&apos;)}
                             className="btn btn-primary flex-1"
                           >
                             Accept Trade
                           </button>
                           <button
-                            onClick={() => handleTradeAction(trade.id, 'counter')}
+                            onClick={() => handleTradeAction(trade.id, &apos;counter&apos;)}
                             className="btn btn-secondary flex-1"
                           >
                             Counter Offer
                           </button>
                           <button
-                            onClick={() => handleTradeAction(trade.id, 'reject')}
+                            onClick={() => handleTradeAction(trade.id, &apos;reject&apos;)}
                             className="btn btn-danger flex-1"
                           >
-                            Reject
+//                             Reject
                           </button>
                         </>
                       ) : (
@@ -447,7 +482,7 @@ const TradingSystem: React.FC = () => {
           </div>
         );
 
-      case 'history':
+      case &apos;history&apos;:
         return (
           <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             <h3 className="text-xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Trade History</h3>
@@ -458,7 +493,7 @@ const TradingSystem: React.FC = () => {
           </div>
         );
 
-      case 'block':
+      case &apos;block&apos;:
         return (
           <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
@@ -468,6 +503,7 @@ const TradingSystem: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {tradeBlockPlayers.map((player: any) => (
+}
                 <motion.div
                   key={player.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -516,13 +552,15 @@ const TradingSystem: React.FC = () => {
       {/* Tab Navigation */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2">
         {tabs.map((tab: any) => (
+}
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
             className={`flex flex-col items-center p-3 rounded-lg transition-all ${
+}
               activeTab === tab.id
-                ? 'bg-blue-900/30 text-blue-400'
-                : 'bg-slate-700/30 text-slate-400 hover:bg-slate-700/50'
+                ? &apos;bg-blue-900/30 text-blue-400&apos;
+                : &apos;bg-slate-700/30 text-slate-400 hover:bg-slate-700/50&apos;
             }`}
           >
             <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{tab.icon}</span>

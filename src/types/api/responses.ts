@@ -6,6 +6,7 @@
 // ==================== BASE RESPONSE TYPES ====================
 
 export interface ApiResponse<T = any> {
+}
   success: boolean;
   data: T;
   message?: string;
@@ -15,6 +16,7 @@ export interface ApiResponse<T = any> {
 }
 
 export interface ApiError {
+}
   code: string;
   message: string;
   details?: Record<string, any>;
@@ -23,6 +25,7 @@ export interface ApiError {
 }
 
 export interface ErrorResponse {
+}
   success: false;
   error: ApiError;
   timestamp: string;
@@ -31,6 +34,7 @@ export interface ErrorResponse {
 }
 
 export interface PaginationMeta {
+}
   page: number;
   limit: number;
   total: number;
@@ -42,39 +46,48 @@ export interface PaginationMeta {
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
+}
   pagination: PaginationMeta;
   filters?: Record<string, any>;
   sort?: {
+}
     field: string;
-    direction: 'asc' | 'desc';
+    direction: &apos;asc&apos; | &apos;desc&apos;;
   };
 }
 
 // ==================== AUTHENTICATION RESPONSES ====================
 
 export interface LoginResponse extends ApiResponse {
+}
   data: {
+}
     user: {
+}
       id: string;
       username: string;
       email: string;
       profile: {
+}
         firstName: string;
         lastName: string;
         avatar: string;
       };
       role: string;
       subscription: {
+}
         tier: string;
         features: string[];
       };
     };
     tokens: {
+}
       access: string;
       refresh: string;
       expiresAt: string;
     };
     session: {
+}
       id: string;
       expiresAt: string;
     };
@@ -82,7 +95,9 @@ export interface LoginResponse extends ApiResponse {
 }
 
 export interface RefreshTokenResponse extends ApiResponse {
+}
   data: {
+}
     access: string;
     refresh: string;
     expiresAt: string;
@@ -90,8 +105,11 @@ export interface RefreshTokenResponse extends ApiResponse {
 }
 
 export interface RegisterResponse extends ApiResponse {
+}
   data: {
+}
     user: {
+}
       id: string;
       username: string;
       email: string;
@@ -105,11 +123,14 @@ export interface RegisterResponse extends ApiResponse {
 // ==================== USER RESPONSES ====================
 
 export interface UserProfileResponse extends ApiResponse {
+}
   data: {
+}
     id: string;
     username: string;
     email: string;
     profile: {
+}
       firstName: string;
       lastName: string;
       displayName: string;
@@ -117,24 +138,28 @@ export interface UserProfileResponse extends ApiResponse {
       avatar: string;
       banner?: string;
       location?: {
+}
         city: string;
         state: string;
         country: string;
       };
     };
     stats: {
+}
       totalLeagues: number;
       leaguesWon: number;
       winPercentage: number;
       averageDraftGrade: string;
     };
     achievements: Array<{
+}
       id: string;
       name: string;
       icon: string;
       unlockedAt: string;
     }>;
     preferences: {
+}
       theme: string;
       notifications: Record<string, boolean>;
       privacy: Record<string, any>;
@@ -143,8 +168,11 @@ export interface UserProfileResponse extends ApiResponse {
 }
 
 export interface UserStatsResponse extends ApiResponse {
+}
   data: {
+}
     career: {
+}
       totalLeagues: number;
       activeLeagues: number;
       leaguesWon: number;
@@ -153,7 +181,9 @@ export interface UserStatsResponse extends ApiResponse {
       totalWaiverClaims: number;
     };
     currentSeason: {
+}
       record: {
+}
         wins: number;
         losses: number;
         ties: number;
@@ -163,6 +193,7 @@ export interface UserStatsResponse extends ApiResponse {
       rank: number;
     };
     records: Array<{
+}
       category: string;
       value: number | string;
       season?: number;
@@ -174,6 +205,7 @@ export interface UserStatsResponse extends ApiResponse {
 // ==================== LEAGUE RESPONSES ====================
 
 export interface LeagueListResponse extends PaginatedResponse<{
+}
   id: string;
   name: string;
   avatar: string;
@@ -181,9 +213,11 @@ export interface LeagueListResponse extends PaginatedResponse<{
   teamCount: number;
   currentWeek: number;
   myTeam: {
+}
     id: string;
     name: string;
     record: {
+}
       wins: number;
       losses: number;
       ties: number;
@@ -191,6 +225,7 @@ export interface LeagueListResponse extends PaginatedResponse<{
     rank: number;
   };
   commissioner: {
+}
     id: string;
     username: string;
     avatar: string;
@@ -199,8 +234,11 @@ export interface LeagueListResponse extends PaginatedResponse<{
 }> {}
 
 export interface LeagueDetailResponse extends ApiResponse {
+}
   data: {
+}
     league: {
+}
       id: string;
       name: string;
       description?: string;
@@ -208,39 +246,48 @@ export interface LeagueDetailResponse extends ApiResponse {
       status: string;
       type: string;
       settings: {
+}
         teamCount: number;
         scoring: string;
         roster: {
+}
           starters: Record<string, number>;
           bench: number;
           ir: number;
         };
         draftSettings: {
+}
           type: string;
           date?: string;
           timePerPick: number;
         };
       };
       commissioner: {
+}
         id: string;
         username: string;
         profile: {
+}
           displayName: string;
           avatar: string;
         };
       };
       teams: Array<{
+}
         id: string;
         name: string;
         owner: {
+}
           id: string;
           username: string;
           profile: {
+}
             displayName: string;
             avatar: string;
           };
         };
         record: {
+}
           wins: number;
           losses: number;
           ties: number;
@@ -252,6 +299,7 @@ export interface LeagueDetailResponse extends ApiResponse {
       draftCompleted: boolean;
     };
     userTeam: {
+}
       id: string;
       name: string;
       roster: any[]; // Will be typed more specifically
@@ -259,6 +307,7 @@ export interface LeagueDetailResponse extends ApiResponse {
       bench: any[];
     };
     permissions: {
+}
       canManageLeague: boolean;
       canManageRoster: boolean;
       canTrade: boolean;
@@ -268,14 +317,18 @@ export interface LeagueDetailResponse extends ApiResponse {
 }
 
 export interface CreateLeagueResponse extends ApiResponse {
+}
   data: {
+}
     league: {
+}
       id: string;
       name: string;
       inviteCode: string;
       status: string;
     };
     team: {
+}
       id: string;
       name: string;
     };
@@ -286,12 +339,16 @@ export interface CreateLeagueResponse extends ApiResponse {
 // ==================== DRAFT RESPONSES ====================
 
 export interface DraftStateResponse extends ApiResponse {
+}
   data: {
+}
     draft: {
+}
       id: string;
       leagueId: string;
       status: string;
       settings: {
+}
         format: string;
         rounds: number;
         timePerPick: number;
@@ -300,14 +357,17 @@ export interface DraftStateResponse extends ApiResponse {
       currentPick: number;
       currentRound: number;
       currentTeam: {
+}
         id: string;
         name: string;
         owner: {
+}
           username: string;
           avatar: string;
         };
       };
       timer: {
+}
         timeRemaining: number;
         state: string;
         overTime: number;
@@ -315,11 +375,13 @@ export interface DraftStateResponse extends ApiResponse {
       draftOrder: string[];
     };
     picks: Array<{
+}
       pick: number;
       round: number;
       teamId: string;
       playerId?: string;
       player?: {
+}
         id: string;
         name: string;
         position: string;
@@ -331,12 +393,14 @@ export interface DraftStateResponse extends ApiResponse {
     }>;
     availablePlayers: any[]; // Will be typed more specifically
     myTeam: {
+}
       id: string;
       roster: any[];
       queue: string[];
       budget?: number;
     };
     recommendations: Array<{
+}
       player: any;
       type: string;
       reasoning: string;
@@ -346,13 +410,17 @@ export interface DraftStateResponse extends ApiResponse {
 }
 
 export interface DraftPickResponse extends ApiResponse {
+}
   data: {
+}
     pick: {
+}
       pick: number;
       round: number;
       teamId: string;
       playerId: string;
       player: {
+}
         id: string;
         name: string;
         position: string;
@@ -362,6 +430,7 @@ export interface DraftPickResponse extends ApiResponse {
       timeUsed: number;
     };
     nextPick: {
+}
       pick: number;
       round: number;
       teamId: string;
@@ -375,6 +444,7 @@ export interface DraftPickResponse extends ApiResponse {
 // ==================== PLAYER RESPONSES ====================
 
 export interface PlayerListResponse extends PaginatedResponse<{
+}
   id: string;
   name: string;
   position: string;
@@ -389,17 +459,22 @@ export interface PlayerListResponse extends PaginatedResponse<{
 }> {}
 
 export interface PlayerDetailResponse extends ApiResponse {
+}
   data: {
+}
     player: {
+}
       id: string;
       name: string;
       position: string;
       team: {
+}
         id: string;
         name: string;
         abbreviation: string;
       };
       bio: {
+}
         age: number;
         height: string;
         weight: number;
@@ -407,21 +482,26 @@ export interface PlayerDetailResponse extends ApiResponse {
         experience: number;
       };
       stats: {
+}
         current: Record<string, number>;
         projected: Record<string, number>;
         historical: Array<{
+}
           season: number;
           stats: Record<string, number>;
         }>;
       };
       rankings: {
+}
         overall: number;
         position: number;
         tier: number;
         adp: number;
       };
       schedule: {
+}
         nextGame: {
+}
           week: number;
           opponent: string;
           isHome: boolean;
@@ -431,6 +511,7 @@ export interface PlayerDetailResponse extends ApiResponse {
         strength: string;
       };
       news: Array<{
+}
         id: string;
         headline: string;
         summary: string;
@@ -440,8 +521,10 @@ export interface PlayerDetailResponse extends ApiResponse {
       }>;
     };
     ownership: {
+}
       isOwned: boolean;
       ownedBy?: {
+}
         teamId: string;
         teamName: string;
         owner: string;
@@ -449,6 +532,7 @@ export interface PlayerDetailResponse extends ApiResponse {
       availability: string;
     };
     comparisons: Array<{
+}
       playerId: string;
       name: string;
       similarityScore: number;
@@ -457,22 +541,27 @@ export interface PlayerDetailResponse extends ApiResponse {
 }
 
 export interface PlayerStatsResponse extends ApiResponse {
+}
   data: {
+}
     playerId: string;
     season: number;
     weeks: Array<{
+}
       week: number;
       stats: Record<string, number>;
       opponent: string;
-      gameResult: 'W' | 'L' | 'T';
+      gameResult: &apos;W&apos; | &apos;L&apos; | &apos;T&apos;;
       fantasyPoints: number;
     }>;
     seasonTotals: Record<string, number>;
     averages: Record<string, number>;
     trends: {
+}
       last4Weeks: number;
       last8Weeks: number;
       homeVsAway: {
+}
         home: Record<string, number>;
         away: Record<string, number>;
       };
@@ -483,21 +572,27 @@ export interface PlayerStatsResponse extends ApiResponse {
 // ==================== MATCHUP RESPONSES ====================
 
 export interface MatchupResponse extends ApiResponse {
+}
   data: {
+}
     matchup: {
+}
       id: string;
       week: number;
       season: number;
       status: string;
       isPlayoff: boolean;
       homeTeam: {
+}
         id: string;
         name: string;
         score: number;
         projected: number;
         lineup: Array<{
+}
           position: string;
           player: {
+}
             id: string;
             name: string;
             position: string;
@@ -508,13 +603,16 @@ export interface MatchupResponse extends ApiResponse {
         }>;
       };
       awayTeam: {
+}
         id: string;
         name: string;
         score: number;
         projected: number;
         lineup: Array<{
+}
           position: string;
           player: {
+}
             id: string;
             name: string;
             position: string;
@@ -526,12 +624,14 @@ export interface MatchupResponse extends ApiResponse {
       };
     };
     analysis: {
+}
       winProbability: number;
       keyMatchups: Array<{
+}
         position: string;
         homePlayer: string;
         awayPlayer: string;
-        advantage: 'HOME' | 'AWAY' | 'EVEN';
+        advantage: &apos;HOME&apos; | &apos;AWAY&apos; | &apos;EVEN&apos;;
       }>;
       recommendations: string[];
     };
@@ -539,30 +639,38 @@ export interface MatchupResponse extends ApiResponse {
 }
 
 export interface StandingsResponse extends ApiResponse {
+}
   data: {
+}
     standings: Array<{
+}
       rank: number;
       team: {
+}
         id: string;
         name: string;
         owner: {
+}
           username: string;
           avatar: string;
         };
       };
       record: {
+}
         wins: number;
         losses: number;
         ties: number;
         percentage: number;
       };
       points: {
+}
         for: number;
         against: number;
         differential: number;
       };
       streak: {
-        type: 'W' | 'L' | 'T';
+}
+        type: &apos;W&apos; | &apos;L&apos; | &apos;T&apos;;
         count: number;
       };
       playoffOdds: number;
@@ -570,10 +678,12 @@ export interface StandingsResponse extends ApiResponse {
       eliminated?: boolean;
     }>;
     divisions?: Array<{
+}
       name: string;
       teams: Array<any>;
     }>;
     wildCard?: {
+}
       cutoff: number;
       teams: Array<any>;
     };
@@ -583,52 +693,63 @@ export interface StandingsResponse extends ApiResponse {
 // ==================== TRADE RESPONSES ====================
 
 export interface TradeListResponse extends PaginatedResponse<{
+}
   id: string;
   status: string;
   proposedAt: string;
   expiresAt: string;
   fromTeam: {
+}
     id: string;
     name: string;
     owner: string;
   };
   toTeam: {
+}
     id: string;
     name: string;
     owner: string;
   };
   itemsOffered: Array<{
-    type: 'PLAYER' | 'PICK' | 'FAAB';
+}
+    type: &apos;PLAYER&apos; | &apos;PICK&apos; | &apos;FAAB&apos;;
     item: any;
   }>;
   itemsRequested: Array<{
-    type: 'PLAYER' | 'PICK' | 'FAAB';
+}
+    type: &apos;PLAYER&apos; | &apos;PICK&apos; | &apos;FAAB&apos;;
     item: any;
   }>;
 }> {}
 
 export interface TradeAnalysisResponse extends ApiResponse {
+}
   data: {
+}
     tradeId: string;
     analysis: {
+}
       fairnessScore: number;
-      winner: 'TEAM_A' | 'TEAM_B' | 'FAIR';
+      winner: &apos;TEAM_A&apos; | &apos;TEAM_B&apos; | &apos;FAIR&apos;;
       teamA: {
+}
         value: number;
         need: number;
         risk: number;
         summary: string;
       };
       teamB: {
+}
         value: number;
         need: number;
         risk: number;
         summary: string;
       };
     };
-    recommendation: 'ACCEPT' | 'REJECT' | 'COUNTER';
+    recommendation: &apos;ACCEPT&apos; | &apos;REJECT&apos; | &apos;COUNTER&apos;;
     reasoning: string;
     alternativeOffers?: Array<{
+}
       description: string;
       itemsToOffer: any[];
       itemsToRequest: any[];
@@ -639,15 +760,18 @@ export interface TradeAnalysisResponse extends ApiResponse {
 // ==================== WAIVER RESPONSES ====================
 
 export interface WaiverListResponse extends PaginatedResponse<{
+}
   id: string;
   playerId: string;
   player: {
+}
     name: string;
     position: string;
     team: string;
   };
   teamId: string;
   team: {
+}
     name: string;
     owner: string;
   };
@@ -658,29 +782,37 @@ export interface WaiverListResponse extends PaginatedResponse<{
 }> {}
 
 export interface WaiverAdviceResponse extends ApiResponse {
+}
   data: {
+}
     playerId: string;
     player: {
+}
       name: string;
       position: string;
     };
     advice: {
+}
       suggestedBid: number;
       bidRange: {
+}
         min: number;
         max: number;
       };
-      priority: 'HIGH' | 'MEDIUM' | 'LOW';
+      priority: &apos;HIGH&apos; | &apos;MEDIUM&apos; | &apos;LOW&apos;;
       reasoning: string;
       riskLevel: string;
       alternatives: Array<{
+}
         playerId: string;
         name: string;
         reasoning: string;
       }>;
     };
     roster: {
+}
       droppablePlayers: Array<{
+}
         playerId: string;
         name: string;
         dropPriority: number;
@@ -694,14 +826,18 @@ export interface WaiverAdviceResponse extends ApiResponse {
 // ==================== ANALYTICS RESPONSES ====================
 
 export interface AnalyticsResponse extends ApiResponse {
+}
   data: {
+}
     timeframe: string;
     metrics: Record<string, number>;
     trends: Array<{
+}
       date: string;
       value: number;
     }>;
     comparisons: {
+}
       leagueAverage: number;
       percentile: number;
       rank: number;
@@ -711,13 +847,17 @@ export interface AnalyticsResponse extends ApiResponse {
 }
 
 export interface PredictionResponse extends ApiResponse {
+}
   data: {
+}
     playerId: string;
     week: number;
     prediction: {
+}
       points: number;
       confidence: number;
       range: {
+}
         floor: number;
         ceiling: number;
       };
@@ -731,18 +871,22 @@ export interface PredictionResponse extends ApiResponse {
 // ==================== HEALTH CHECK ====================
 
 export interface HealthCheckResponse extends ApiResponse {
+}
   data: {
-    status: 'healthy' | 'degraded' | 'unhealthy';
+}
+    status: &apos;healthy&apos; | &apos;degraded&apos; | &apos;unhealthy&apos;;
     timestamp: string;
     uptime: number;
     version: string;
     environment: string;
     services: {
-      database: 'up' | 'down';
-      cache: 'up' | 'down';
-      external: 'up' | 'down';
+}
+      database: &apos;up&apos; | &apos;down&apos;;
+      cache: &apos;up&apos; | &apos;down&apos;;
+      external: &apos;up&apos; | &apos;down&apos;;
     };
     metrics: {
+}
       responseTime: number;
       memoryUsage: number;
       cpuUsage: number;
@@ -753,21 +897,27 @@ export interface HealthCheckResponse extends ApiResponse {
 // ==================== GENERIC OPERATION RESPONSES ====================
 
 export interface CreateResponse<T = any> extends ApiResponse<T> {
+}
   data: T & {
+}
     id: string;
     createdAt: string;
   };
 }
 
 export interface UpdateResponse<T = any> extends ApiResponse<T> {
+}
   data: T & {
+}
     id: string;
     updatedAt: string;
   };
 }
 
 export interface DeleteResponse extends ApiResponse {
+}
   data: {
+}
     id: string;
     deletedAt: string;
     success: boolean;
@@ -777,6 +927,7 @@ export interface DeleteResponse extends ApiResponse {
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   ApiResponse,
   ApiError,
   ErrorResponse,

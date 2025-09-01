@@ -3,19 +3,19 @@
  * Fantasy football specific player analysis and insights
  */
 
-import { ErrorBoundary } from '../../ui/ErrorBoundary';
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Widget } from '../../ui/Widget';
-import { Player, League } from '../../../types';
-import { TrophyIcon } from '../../icons/TrophyIcon';
-import { TrendingUpIcon } from '../../icons/TrendingUpIcon';
-import { AlertTriangleIcon } from '../../icons/AlertTriangleIcon';
-import { BarChartIcon } from '../../icons/BarChartIcon';
-import { FireIcon } from '../../icons/FireIcon';
-import { ShieldCheckIcon } from '../../icons/ShieldCheckIcon';
+import { ErrorBoundary } from &apos;../../ui/ErrorBoundary&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../../ui/Widget&apos;;
+import { Player, League } from &apos;../../../types&apos;;
+import { TrophyIcon } from &apos;../../icons/TrophyIcon&apos;;
+import { TrendingUpIcon } from &apos;../../icons/TrendingUpIcon&apos;;
+import { AlertTriangleIcon } from &apos;../../icons/AlertTriangleIcon&apos;;
+import { BarChartIcon } from &apos;../../icons/BarChartIcon&apos;;
+import { FireIcon } from &apos;../../icons/FireIcon&apos;;
+import { ShieldCheckIcon } from &apos;../../icons/ShieldCheckIcon&apos;;
 
 interface FantasyTabProps {
+}
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -23,76 +23,89 @@ interface FantasyTabProps {
 }
 
 interface FantasyMetric {
+}
     label: string;
     value: number;
-    format: 'number' | 'decimal' | 'percentage';
-    trend?: 'up' | 'down' | 'stable';
+    format: &apos;number&apos; | &apos;decimal&apos; | &apos;percentage&apos;;
+    trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
     color?: string;
 }
 
 interface WeeklyProjection {
+}
     week: number;
     projection: number;
     confidence: number;
     matchup: string;
-    difficulty: 'easy' | 'medium' | 'hard';
+    difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
 
 }
 
 const FantasyTab: React.FC<FantasyTabProps> = ({
+}
     player,
     league,
-    dispatch
+//     dispatch
 }: any) => {
+}
     // Helper function to safely handle injury history as string union type
     const getInjuryRisk = (injuryHistory: string | undefined): {
+}
         level: string;
         description: string;
         color: string;
         icon: string;
         riskScore: number;
     } => {
+}
         if (!injuryHistory) {
+}
             return {
-                level: 'Unknown',
-                description: 'No injury history data available',
-                color: 'text-gray-400',
-                icon: '❓',
+}
+                level: &apos;Unknown&apos;,
+                description: &apos;No injury history data available&apos;,
+                color: &apos;text-gray-400&apos;,
+                icon: &apos;❓&apos;,
                 riskScore: 0.5
             };
         }
 
         switch (injuryHistory) {
-            case 'minimal':
+}
+            case &apos;minimal&apos;:
                 return {
-                    level: 'Low Risk',
-                    description: 'Clean injury history with minimal concerns',
-                    color: 'text-green-400',
-                    icon: '✅',
+}
+                    level: &apos;Low Risk&apos;,
+                    description: &apos;Clean injury history with minimal concerns&apos;,
+                    color: &apos;text-green-400&apos;,
+                    icon: &apos;✅&apos;,
                     riskScore: 0.1
                 };
-            case 'moderate':
+            case &apos;moderate&apos;:
                 return {
-                    level: 'Medium Risk', 
-                    description: 'Some injury concerns that could affect availability',
-                    color: 'text-yellow-400',
-                    icon: '⚠️',
+}
+                    level: &apos;Medium Risk&apos;, 
+                    description: &apos;Some injury concerns that could affect availability&apos;,
+                    color: &apos;text-yellow-400&apos;,
+                    icon: &apos;⚠️&apos;,
                     riskScore: 0.5
                 };
-            case 'extensive':
+            case &apos;extensive&apos;:
                 return {
-                    level: 'High Risk',
-                    description: 'Significant injury history - proceed with caution',
-                    color: 'text-red-400',
-                    icon: '🚨',
+}
+                    level: &apos;High Risk&apos;,
+                    description: &apos;Significant injury history - proceed with caution&apos;,
+                    color: &apos;text-red-400&apos;,
+                    icon: &apos;🚨&apos;,
                     riskScore: 0.8
                 };
             default:
                 return {
-                    level: 'Unknown',
-                    description: 'Unable to assess injury risk',
-                    color: 'text-gray-400',
-                    icon: '❓',
+}
+                    level: &apos;Unknown&apos;,
+                    description: &apos;Unable to assess injury risk&apos;,
+                    color: &apos;text-gray-400&apos;,
+                    icon: &apos;❓&apos;,
                     riskScore: 0.5
                 };
         }
@@ -100,57 +113,66 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
 
     // Generate fantasy metrics with proper null safety
     const fantasyMetrics = React.useMemo((): FantasyMetric[] => {
+}
         const metrics: FantasyMetric[] = [
             {
-                label: 'Projected Points',
+}
+                label: &apos;Projected Points&apos;,
                 value: player.stats?.projection || 0,
-                format: 'decimal',
-                trend: 'up',
-                color: 'text-blue-400'
+                format: &apos;decimal&apos;,
+                trend: &apos;up&apos;,
+                color: &apos;text-blue-400&apos;
             },
             {
-                label: 'VORP',
+}
+                label: &apos;VORP&apos;,
                 value: player.stats?.vorp || 0,
-                format: 'decimal',
-                trend: player.stats?.vorp && player.stats.vorp > 0 ? 'up' : 'stable',
-                color: 'text-purple-400'
+                format: &apos;decimal&apos;,
+                trend: player.stats?.vorp && player.stats.vorp > 0 ? &apos;up&apos; : &apos;stable&apos;,
+                color: &apos;text-purple-400&apos;
             },
             {
-                label: 'ADP',
+}
+                label: &apos;ADP&apos;,
                 value: player.adp || 999,
-                format: 'decimal',
-                color: 'text-orange-400'
+                format: &apos;decimal&apos;,
+                color: &apos;text-orange-400&apos;
             },
             {
-                label: 'Target Share %',
+}
+                label: &apos;Target Share %&apos;,
                 value: player.stats?.targetShare ? player.stats.targetShare * 100 : 0,
-                format: 'decimal',
-                trend: 'stable',
-                color: 'text-green-400'
+                format: &apos;decimal&apos;,
+                trend: &apos;stable&apos;,
+                color: &apos;text-green-400&apos;
             },
             {
-                label: 'Red Zone %',
+}
+                label: &apos;Red Zone %&apos;,
                 value: player.stats?.redZoneShare ? player.stats.redZoneShare * 100 : 0,
-                format: 'decimal',
-                trend: 'up',
-                color: 'text-red-400'
+                format: &apos;decimal&apos;,
+                trend: &apos;up&apos;,
+                color: &apos;text-red-400&apos;
             },
             {
-                label: 'Snap Count %',
+}
+                label: &apos;Snap Count %&apos;,
                 value: player.stats?.snapShare ? player.stats.snapShare * 100 : 0,
-                format: 'decimal',
-                trend: 'stable',
-                color: 'text-cyan-400'
+                format: &apos;decimal&apos;,
+                trend: &apos;stable&apos;,
+                color: &apos;text-cyan-400&apos;
             }
         ];
 
         // Add position-specific metrics
-        if (player.position === 'RB') {
+        if (player.position === &apos;RB&apos;) {
+}
             metrics.push({
-                label: 'Carry Share %',
+}
+                label: &apos;Carry Share %&apos;,
                 value: player.stats?.carryShare ? player.stats.carryShare * 100 : 0,
-                format: 'decimal',
-                color: 'text-indigo-400'
+                format: &apos;decimal&apos;,
+                color: &apos;text-indigo-400&apos;
             });
         }
 
@@ -159,20 +181,23 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
 
     // Generate weekly projections
     const weeklyProjections = React.useMemo((): WeeklyProjection[] => {
+}
         const baseProjection = player.stats?.projection || 0;
         const projections: WeeklyProjection[] = [];
         
         for (let week = 1; week <= 17; week++) {
+}
             // Add some variance to make it realistic
             const variance = (Math.random() - 0.5) * 0.3;
             const weeklyProjection = Math.max(0, baseProjection + (baseProjection * variance));
             
             projections.push({
+}
                 week,
                 projection: weeklyProjection,
                 confidence: Math.random() * 0.3 + 0.7, // 70-100% confidence
                 matchup: `vs TEAM`, // Would be actual opponent in real app
-                difficulty: ['easy', 'medium', 'hard'][Math.floor(Math.random() * 3)] as 'easy' | 'medium' | 'hard'
+                difficulty: [&apos;easy&apos;, &apos;medium&apos;, &apos;hard&apos;][Math.floor(Math.random() * 3)] as &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;
             });
         }
 
@@ -182,22 +207,26 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
     const injuryRisk = getInjuryRisk(player.injuryHistory);
 
     const formatValue = (value: number, format: string): string => {
+}
         switch (format) {
-            case 'decimal':
+}
+            case &apos;decimal&apos;:
                 return value.toFixed(1);
-            case 'percentage':
+            case &apos;percentage&apos;:
                 return `${value.toFixed(1)}%`;
-            case 'number':
+            case &apos;number&apos;:
             default:
                 return Math.round(value).toString();
         }
     };
 
     const getTrendIcon = (trend?: string) => {
+}
         switch (trend) {
-            case 'up':
+}
+            case &apos;up&apos;:
                 return <TrendingUpIcon className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'down':
+            case &apos;down&apos;:
                 return <TrendingUpIcon className="w-4 h-4 text-red-400 rotate-180 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <BarChartIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -205,11 +234,13 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
     };
 
     const getDifficultyColor = (difficulty: string) => {
+}
         switch (difficulty) {
-            case 'easy': return 'text-green-400 bg-green-500/20';
-            case 'medium': return 'text-yellow-400 bg-yellow-500/20';
-            case 'hard': return 'text-red-400 bg-red-500/20';
-            default: return 'text-gray-400 bg-gray-500/20';
+}
+            case &apos;easy&apos;: return &apos;text-green-400 bg-green-500/20&apos;;
+            case &apos;medium&apos;: return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+            case &apos;hard&apos;: return &apos;text-red-400 bg-red-500/20&apos;;
+            default: return &apos;text-gray-400 bg-gray-500/20&apos;;
         }
     };
 
@@ -221,6 +252,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                 <Widget title="Key Fantasy Metrics">
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {fantasyMetrics.slice(0, 4).map((metric, index) => (
+}
                             <motion.div
                                 key={metric.label}
                                 initial={{ opacity: 0, x: -20 }}
@@ -234,7 +266,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                         {metric.label}
                                     </span>
                                 </div>
-                                <div className={`font-medium ${metric.color || 'text-[var(--text-primary)]'}`}>
+                                <div className={`font-medium ${metric.color || &apos;text-[var(--text-primary)]&apos;}`}>
                                     {formatValue(metric.value, metric.format)}
                                 </div>
                             </motion.div>
@@ -262,9 +294,10 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                     <div className="h-2 bg-[var(--panel-border)] rounded-full overflow-hidden sm:px-4 md:px-6 lg:px-8">
                                         <div 
                                             className={`h-full transition-all duration-500 ${
-                                                injuryRisk.riskScore > 0.7 ? 'bg-red-400' :
-                                                injuryRisk.riskScore > 0.4 ? 'bg-yellow-400' :
-                                                'bg-green-400'
+}
+                                                injuryRisk.riskScore > 0.7 ? &apos;bg-red-400&apos; :
+                                                injuryRisk.riskScore > 0.4 ? &apos;bg-yellow-400&apos; :
+                                                &apos;bg-green-400&apos;
                                             }`}
                                             style={{ width: `${injuryRisk.riskScore * 100}%` }}
                                         />
@@ -280,6 +313,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             <Widget title="Advanced Fantasy Metrics">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {fantasyMetrics.map((metric, index) => (
+}
                         <motion.div
                             key={metric.label}
                             initial={{ opacity: 0, y: 20 }}
@@ -290,10 +324,11 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             <div className="text-xs text-[var(--text-secondary)] mb-1 sm:px-4 md:px-6 lg:px-8">
                                 {metric.label}
                             </div>
-                            <div className={`text-lg font-bold ${metric.color || 'text-[var(--text-primary)]'}`}>
+                            <div className={`text-lg font-bold ${metric.color || &apos;text-[var(--text-primary)]&apos;}`}>
                                 {formatValue(metric.value, metric.format)}
                             </div>
                             {metric.trend && (
+}
                                 <div className="mt-1 sm:px-4 md:px-6 lg:px-8">
                                     {getTrendIcon(metric.trend)}
                                 </div>
@@ -307,6 +342,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
             <Widget title="Weekly Projections">
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {weeklyProjections.map((projection, index) => (
+}
                         <motion.div
                             key={projection.week}
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -329,7 +365,7 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-right sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
-                                        {formatValue(projection.projection, 'decimal')} pts
+                                        {formatValue(projection.projection, &apos;decimal&apos;)} pts
                                     </div>
                                     <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         {Math.round(projection.confidence * 100)}% confidence
@@ -370,8 +406,9 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                     Upside Potential
                                 </div>
                                 <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
-                                    {player.stats?.projection && player.stats.projection > 200 ? 'High' :
-                                     player.stats?.projection && player.stats.projection > 150 ? 'Medium' : 'Low'} ceiling player
+                                    {player.stats?.projection && player.stats.projection > 200 ? &apos;High&apos; :
+}
+                                     player.stats?.projection && player.stats.projection > 150 ? &apos;Medium&apos; : &apos;Low&apos;} ceiling player
                                 </div>
                             </div>
                         </div>
@@ -383,8 +420,9 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                                     Floor Assessment
                                 </div>
                                 <div className="text-xs text-[var(--text-secondary)] mt-1 sm:px-4 md:px-6 lg:px-8">
-                                    {injuryRisk.riskScore < 0.3 ? 'Safe' : 
-                                     injuryRisk.riskScore < 0.6 ? 'Moderate' : 'Risky'} floor due to injury history
+                                    {injuryRisk.riskScore < 0.3 ? &apos;Safe&apos; : 
+}
+                                     injuryRisk.riskScore < 0.6 ? &apos;Moderate&apos; : &apos;Risky&apos;} floor due to injury history
                                 </div>
                             </div>
                         </div>
@@ -395,9 +433,10 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
-                                Fantasy Grade: {player.stats?.projection && player.stats.projection > 200 ? 'A' :
-                                               player.stats?.projection && player.stats.projection > 150 ? 'B' :
-                                               player.stats?.projection && player.stats.projection > 100 ? 'C' : 'D'}
+                                Fantasy Grade: {player.stats?.projection && player.stats.projection > 200 ? &apos;A&apos; :
+}
+                                               player.stats?.projection && player.stats.projection > 150 ? &apos;B&apos; :
+                                               player.stats?.projection && player.stats.projection > 100 ? &apos;C&apos; : &apos;D&apos;}
                             </div>
                             <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 Based on projections, injury risk, and team situation
@@ -410,11 +449,12 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             </div>
                             <div className="text-xs text-[var(--text-secondary)] space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 {weeklyProjections
-                                    .filter((p: any) => p.difficulty === 'easy')
+}
+                                    .filter((p: any) => p.difficulty === &apos;easy&apos;)
                                     .slice(0, 3)
                                     .map((p: any) => (
                                         <div key={p.week}>
-                                            Week {p.week}: {formatValue(p.projection, 'decimal')} projected points
+                                            Week {p.week}: {formatValue(p.projection, &apos;decimal&apos;)} projected points
                                         </div>
                                     ))
                                 }
@@ -427,7 +467,8 @@ const FantasyTab: React.FC<FantasyTabProps> = ({
                             </div>
                             <div className="text-xs text-red-400 space-y-1 sm:px-4 md:px-6 lg:px-8">
                                 {weeklyProjections
-                                    .filter((p: any) => p.difficulty === 'hard')
+}
+                                    .filter((p: any) => p.difficulty === &apos;hard&apos;)
                                     .slice(0, 2)
                                     .map((p: any) => (
                                         <div key={p.week}>

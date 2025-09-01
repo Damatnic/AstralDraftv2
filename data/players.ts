@@ -1,30 +1,34 @@
 // Player data and types for Astral Draft
-import { Player as MainPlayer, PlayerPosition } from '../types';
+import { Player as MainPlayer, PlayerPosition } from &apos;../types&apos;;
 
 // Re-export the main Player type
 export type Player = MainPlayer;
 
 // Import full 2025 NFL roster
-import nflPlayers2025 from './nfl-players-2025-fixed';
+import nflPlayers2025 from &apos;./nfl-players-2025-fixed&apos;;
 
 // Export the full player list
 export const players: Player[] = nflPlayers2025;
 
 // Helper functions
 export const getPlayerById = (id: number | string): Player | undefined => {
-  const playerId = typeof id === 'string' ? parseInt(id) : id;
+}
+  const playerId = typeof id === &apos;string&apos; ? parseInt(id) : id;
   return players.find((p: Player) => p.id === playerId);
 };
 
 export const getPlayersByPosition = (position: string): Player[] => {
+}
   return players.filter((p: Player) => p.position === position);
 };
 
 export const getPlayersByTier = (tier: number): Player[] => {
+}
   return players.filter((p: Player) => p.tier === tier);
 };
 
 export const searchPlayers = (query: string): Player[] => {
+}
   const lowerQuery = query.toLowerCase();
   return players.filter((p: Player) => 
     p.name.toLowerCase().includes(lowerQuery) ||

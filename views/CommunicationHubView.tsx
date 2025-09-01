@@ -3,60 +3,67 @@
  * Central hub for all league communication features
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import TrashTalkBoard from '../components/communication/TrashTalkBoard';
-import DirectMessaging from '../components/communication/DirectMessaging';
-import TradeDiscussion from '../components/communication/TradeDiscussion';
+import React, { useState } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import TrashTalkBoard from &apos;../components/communication/TrashTalkBoard&apos;;
+import DirectMessaging from &apos;../components/communication/DirectMessaging&apos;;
+import TradeDiscussion from &apos;../components/communication/TradeDiscussion&apos;;
 
 const CommunicationHubView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<'trash-talk' | 'messages' | 'announcements' | 'polls'>('trash-talk');
+  const [activeTab, setActiveTab] = useState<&apos;trash-talk&apos; | &apos;messages&apos; | &apos;announcements&apos; | &apos;polls&apos;>(&apos;trash-talk&apos;);
   const [showTradeDiscussion, setShowTradeDiscussion] = useState(false);
 
   const league = state.leagues[0];
 
   const tabs = [
     { 
-      id: 'trash-talk', 
-      label: 'Trash Talk', 
-      icon: '🔥', 
-      description: 'League banter & competition',
+}
+      id: &apos;trash-talk&apos;, 
+      label: &apos;Trash Talk&apos;, 
+      icon: &apos;🔥&apos;, 
+      description: &apos;League banter & competition&apos;,
       count: 12 // unread posts
     },
     { 
-      id: 'messages', 
-      label: 'Direct Messages', 
-      icon: '💬', 
-      description: 'Private conversations',
+}
+      id: &apos;messages&apos;, 
+      label: &apos;Direct Messages&apos;, 
+      icon: &apos;💬&apos;, 
+      description: &apos;Private conversations&apos;,
       count: 3 // unread messages
     },
     { 
-      id: 'announcements', 
-      label: 'Announcements', 
-      icon: '📢', 
-      description: 'League news & updates',
+}
+      id: &apos;announcements&apos;, 
+      label: &apos;Announcements&apos;, 
+      icon: &apos;📢&apos;, 
+      description: &apos;League news & updates&apos;,
       count: 1 // unread announcements
     },
     { 
-      id: 'polls', 
-      label: 'League Polls', 
-      icon: '🗳️', 
-      description: 'Vote on league matters',
+}
+      id: &apos;polls&apos;, 
+      label: &apos;League Polls&apos;, 
+      icon: &apos;🗳️&apos;, 
+      description: &apos;Vote on league matters&apos;,
       count: 0 // active polls
 
   ];
 
   const renderTabContent = () => {
+}
     switch (activeTab) {
-      case 'trash-talk':
+}
+      case &apos;trash-talk&apos;:
         return <TrashTalkBoard />;
       
-      case 'messages':
+      case &apos;messages&apos;:
         return <DirectMessaging />;
       
-      case 'announcements':
+      case &apos;announcements&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -115,7 +122,7 @@ const CommunicationHubView: React.FC = () => {
                     </div>
                     <h3 className="text-white font-bold mb-2">Week 8 Awards Announced</h3>
                     <p className="text-slate-300 mb-3">
-                      Congratulations to this week's award winners! 🎉
+                      Congratulations to this week&apos;s award winners! 🎉
                       <br />• <strong>Player of the Week:</strong> Josh Allen (Thunder Bolts) - 34.8 pts
                       <br />• <strong>Waiver Wire Hero:</strong> Gus Edwards (Lightning Strikes) - 18.4 pts
                       <br />• <strong>Biggest Bust:</strong> Cooper Kupp (Gridiron Giants) - 4.1 pts
@@ -175,7 +182,7 @@ const CommunicationHubView: React.FC = () => {
           </div>
         );
       
-      case 'polls':
+      case &apos;polls&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -216,7 +223,7 @@ const CommunicationHubView: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-24 bg-slate-600 rounded-full h-2">
-                            <div className="bg-green-500 h-2 rounded-full" style={{ width: '70%' }}></div>
+                            <div className="bg-green-500 h-2 rounded-full" style={{ width: &apos;70%&apos; }}></div>
                           </div>
                           <span className="text-sm text-slate-400">7 votes</span>
                         </div>
@@ -229,7 +236,7 @@ const CommunicationHubView: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-24 bg-slate-600 rounded-full h-2">
-                            <div className="bg-red-500 h-2 rounded-full" style={{ width: '30%' }}></div>
+                            <div className="bg-red-500 h-2 rounded-full" style={{ width: &apos;30%&apos; }}></div>
                           </div>
                           <span className="text-sm text-slate-400">3 votes</span>
                         </div>
@@ -258,7 +265,7 @@ const CommunicationHubView: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="px-2 py-1 bg-slate-600 text-white text-xs rounded-full">
-                        Completed
+//                         Completed
                       </span>
                       <span className="text-slate-400 text-sm">Ended 1 week ago</span>
                     </div>
@@ -320,7 +327,7 @@ const CommunicationHubView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })
               className="back-btn"
             >
               ← Back to Dashboard
@@ -388,6 +395,7 @@ const CommunicationHubView: React.FC = () => {
         {/* Tab Navigation */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2 mb-8">
           {tabs.map((tab: any) => (
+}
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}`}
@@ -398,6 +406,7 @@ const CommunicationHubView: React.FC = () => {
                 <div className="text-xs opacity-75">{tab.description}</div>
               </div>
               {tab.count > 0 && (
+}
                 <span className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   {tab.count}
                 </span>
@@ -460,7 +469,7 @@ const CommunicationHubView: React.FC = () => {
       </div>
 
       {/* Trade Discussion Modal */}
-      <TradeDiscussion
+      <TradeDiscussion>
         tradeId="trade-1"
         isVisible={showTradeDiscussion}
         onClose={() => setShowTradeDiscussion(false)}

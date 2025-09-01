@@ -6,8 +6,10 @@
 // ==================== GLOBAL AUGMENTATIONS ====================
 
 declare global {
+}
   // Window object extensions
   interface Window {
+}
     // Analytics
     gtag?: (...args: any[]) => void;
     dataLayer?: any[];
@@ -25,11 +27,13 @@ declare global {
     
     // Service worker
     navigator: Navigator & {
+}
       serviceWorker?: ServiceWorkerContainer;
     };
     
     // Environment variables (for runtime config)
     __ENV__?: {
+}
       NODE_ENV: string;
       API_URL: string;
       WS_URL: string;
@@ -44,8 +48,10 @@ declare global {
   
   // Node.js process environment
   namespace NodeJS {
+}
     interface ProcessEnv {
-      readonly NODE_ENV: 'development' | 'production' | 'test';
+}
+      readonly NODE_ENV: &apos;development&apos; | &apos;production&apos; | &apos;test&apos;;
       readonly REACT_APP_API_URL: string;
       readonly REACT_APP_WS_URL: string;
       readonly REACT_APP_SENTRY_DSN: string;
@@ -64,117 +70,139 @@ declare global {
 // ==================== MODULE DECLARATIONS ====================
 
 // CSS Modules
-declare module '*.module.css' {
+declare module &apos;*.module.css&apos; {
+}
   const classes: { [key: string]: string };
   export default classes;
 }
 
-declare module '*.module.scss' {
+declare module &apos;*.module.scss&apos; {
+}
   const classes: { [key: string]: string };
   export default classes;
 }
 
-declare module '*.module.sass' {
+declare module &apos;*.module.sass&apos; {
+}
   const classes: { [key: string]: string };
   export default classes;
 }
 
 // Asset imports
-declare module '*.svg' {
-  import React from 'react';
+declare module &apos;*.svg&apos; {
+}
+  import React from &apos;react&apos;;
   const SVG: React.VFC<React.SVGProps<SVGSVGElement>>;
   export default SVG;
 }
 
-declare module '*.png' {
+declare module &apos;*.png&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.jpg' {
+declare module &apos;*.jpg&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.jpeg' {
+declare module &apos;*.jpeg&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.gif' {
+declare module &apos;*.gif&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.webp' {
+declare module &apos;*.webp&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.ico' {
+declare module &apos;*.ico&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.woff' {
+declare module &apos;*.woff&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.woff2' {
+declare module &apos;*.woff2&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.ttf' {
+declare module &apos;*.ttf&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.eot' {
+declare module &apos;*.eot&apos; {
+}
   const src: string;
   export default src;
 }
 
 // Audio files
-declare module '*.mp3' {
+declare module &apos;*.mp3&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.wav' {
+declare module &apos;*.wav&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.ogg' {
+declare module &apos;*.ogg&apos; {
+}
   const src: string;
   export default src;
 }
 
 // Video files
-declare module '*.mp4' {
+declare module &apos;*.mp4&apos; {
+}
   const src: string;
   export default src;
 }
 
-declare module '*.webm' {
+declare module &apos;*.webm&apos; {
+}
   const src: string;
   export default src;
 }
 
 // Data files
-declare module '*.json' {
+declare module &apos;*.json&apos; {
+}
   const content: any;
   export default content;
 }
 
-declare module '*.xml' {
+declare module &apos;*.xml&apos; {
+}
   const content: string;
   export default content;
 }
 
-declare module '*.txt' {
+declare module &apos;*.txt&apos; {
+}
   const content: string;
   export default content;
 }
@@ -182,43 +210,48 @@ declare module '*.txt' {
 // ==================== THIRD-PARTY LIBRARY TYPES ====================
 
 // Chart.js extensions
-declare module 'chart.js' {
+declare module &apos;chart.js&apos; {
+}
   interface TooltipModel {
+}
     astralDraftCustomData?: any;
   }
 }
 
 // React extensions
-declare module 'react' {
+declare module &apos;react&apos; {
+}
   interface HTMLAttributes<T> {
+}
     // Custom data attributes for fantasy football
-    'data-player-id'?: string;
-    'data-team-id'?: string;
-    'data-league-id'?: string;
-    'data-draft-id'?: string;
-    'data-position'?: string;
-    'data-fantasy-points'?: number;
-    'data-rank'?: number;
-    'data-tier'?: number;
+    &apos;data-player-id&apos;?: string;
+    &apos;data-team-id&apos;?: string;
+    &apos;data-league-id&apos;?: string;
+    &apos;data-draft-id&apos;?: string;
+    &apos;data-position&apos;?: string;
+    &apos;data-fantasy-points&apos;?: number;
+    &apos;data-rank&apos;?: number;
+    &apos;data-tier&apos;?: number;
   }
   
   interface CSSProperties {
+}
     // CSS custom properties for theming
-    '--astral-primary-color'?: string;
-    '--astral-secondary-color'?: string;
-    '--astral-accent-color'?: string;
-    '--astral-background-color'?: string;
-    '--astral-text-color'?: string;
-    '--astral-border-color'?: string;
-    '--astral-shadow-color'?: string;
+    &apos;--astral-primary-color&apos;?: string;
+    &apos;--astral-secondary-color&apos;?: string;
+    &apos;--astral-accent-color&apos;?: string;
+    &apos;--astral-background-color&apos;?: string;
+    &apos;--astral-text-color&apos;?: string;
+    &apos;--astral-border-color&apos;?: string;
+    &apos;--astral-shadow-color&apos;?: string;
     
     // Fantasy-specific CSS variables
-    '--player-tier-color'?: string;
-    '--position-color'?: string;
-    '--team-primary-color'?: string;
-    '--team-secondary-color'?: string;
-    '--draft-pick-color'?: string;
-    '--fantasy-points-color'?: string;
+    &apos;--player-tier-color&apos;?: string;
+    &apos;--position-color&apos;?: string;
+    &apos;--team-primary-color&apos;?: string;
+    &apos;--team-secondary-color&apos;?: string;
+    &apos;--draft-pick-color&apos;?: string;
+    &apos;--fantasy-points-color&apos;?: string;
   }
 }
 
@@ -226,10 +259,12 @@ declare module 'react' {
 
 // Make some utility types available globally
 export type DeepPartial<T> = {
+}
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
 export type DeepRequired<T> = {
+}
   [P in keyof T]-?: T[P] extends object ? DeepRequired<T[P]> : T[P];
 };
 
@@ -243,60 +278,66 @@ export type Maybe<T> = T | null | undefined;
 
 // Draft status constants
 export const DRAFT_STATUS = {
-  SCHEDULED: 'scheduled',
-  ACTIVE: 'active',
-  PAUSED: 'paused',
-  COMPLETED: 'completed',
-  CANCELLED: 'cancelled'
+}
+  SCHEDULED: &apos;scheduled&apos;,
+  ACTIVE: &apos;active&apos;,
+  PAUSED: &apos;paused&apos;,
+  COMPLETED: &apos;completed&apos;,
+  CANCELLED: &apos;cancelled&apos;
 } as const;
 
 // Player positions
 export const POSITIONS = {
-  QB: 'QB',
-  RB: 'RB',
-  WR: 'WR',
-  TE: 'TE',
-  K: 'K',
-  DEF: 'DEF',
-  FLEX: 'FLEX',
-  SUPERFLEX: 'SUPERFLEX'
+}
+  QB: &apos;QB&apos;,
+  RB: &apos;RB&apos;,
+  WR: &apos;WR&apos;,
+  TE: &apos;TE&apos;,
+  K: &apos;K&apos;,
+  DEF: &apos;DEF&apos;,
+  FLEX: &apos;FLEX&apos;,
+  SUPERFLEX: &apos;SUPERFLEX&apos;
 } as const;
 
 // Injury statuses
 export const INJURY_STATUS = {
-  HEALTHY: 'healthy',
-  QUESTIONABLE: 'questionable',
-  DOUBTFUL: 'doubtful',
-  OUT: 'out',
-  IR: 'ir',
-  PUP: 'pup',
-  SUSPENDED: 'suspended'
+}
+  HEALTHY: &apos;healthy&apos;,
+  QUESTIONABLE: &apos;questionable&apos;,
+  DOUBTFUL: &apos;doubtful&apos;,
+  OUT: &apos;out&apos;,
+  IR: &apos;ir&apos;,
+  PUP: &apos;pup&apos;,
+  SUSPENDED: &apos;suspended&apos;
 } as const;
 
 // League statuses
 export const LEAGUE_STATUS = {
-  PRE_DRAFT: 'pre_draft',
-  DRAFTING: 'drafting',
-  DRAFT_COMPLETE: 'draft_complete',
-  IN_SEASON: 'in_season',
-  PLAYOFFS: 'playoffs',
-  COMPLETE: 'complete',
-  ARCHIVED: 'archived'
+}
+  PRE_DRAFT: &apos;pre_draft&apos;,
+  DRAFTING: &apos;drafting&apos;,
+  DRAFT_COMPLETE: &apos;draft_complete&apos;,
+  IN_SEASON: &apos;in_season&apos;,
+  PLAYOFFS: &apos;playoffs&apos;,
+  COMPLETE: &apos;complete&apos;,
+  ARCHIVED: &apos;archived&apos;
 } as const;
 
 // Scoring formats
 export const SCORING_FORMATS = {
-  STANDARD: 'standard',
-  PPR: 'ppr',
-  HALF_PPR: 'half_ppr',
-  SUPER_FLEX: 'super_flex',
-  TWO_QB: 'two_qb',
-  IDP: 'idp'
+}
+  STANDARD: &apos;standard&apos;,
+  PPR: &apos;ppr&apos;,
+  HALF_PPR: &apos;half_ppr&apos;,
+  SUPER_FLEX: &apos;super_flex&apos;,
+  TWO_QB: &apos;two_qb&apos;,
+  IDP: &apos;idp&apos;
 } as const;
 
 // ==================== ERROR TYPES ====================
 
 export interface AstralDraftError extends Error {
+}
   code: string;
   context?: any;
   timestamp: Date;
@@ -305,6 +346,7 @@ export interface AstralDraftError extends Error {
 }
 
 export interface ValidationErrorDetail {
+}
   field: string;
   message: string;
   code: string;
@@ -314,6 +356,7 @@ export interface ValidationErrorDetail {
 // ==================== API TYPES ====================
 
 export interface APIConfig {
+}
   baseURL: string;
   timeout: number;
   headers: Record<string, string>;
@@ -321,6 +364,7 @@ export interface APIConfig {
 }
 
 export interface WebSocketConfig {
+}
   url: string;
   protocols?: string[];
   reconnectAttempts: number;
@@ -331,8 +375,10 @@ export interface WebSocketConfig {
 // ==================== THEME TYPES ====================
 
 export interface ThemeConfig {
+}
   name: string;
   colors: {
+}
     primary: string;
     secondary: string;
     accent: string;
@@ -348,11 +394,13 @@ export interface ThemeConfig {
     info: string;
   };
   fonts: {
+}
     body: string;
     heading: string;
     mono: string;
   };
   spacing: {
+}
     xs: string;
     sm: string;
     md: string;
@@ -360,6 +408,7 @@ export interface ThemeConfig {
     xl: string;
   };
   breakpoints: {
+}
     sm: string;
     md: string;
     lg: string;

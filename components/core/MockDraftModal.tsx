@@ -1,12 +1,13 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import type { LeagueSettings, User } from '../../types';
-import { Modal } from '../ui/Modal';
-import { motion } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import type { LeagueSettings, User } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { motion } from &apos;framer-motion&apos;;
 
 interface MockDraftModalProps {
+}
     onClose: () => void;
     user: User;
     dispatch: React.Dispatch<any>;
@@ -14,27 +15,32 @@ interface MockDraftModalProps {
 }
 
 const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch }: any) => {
-    const [draftFormat, setDraftFormat] = React.useState<LeagueSettings['draftFormat']>('SNAKE');
-    const [teamCount, setTeamCount] = React.useState<LeagueSettings['teamCount']>(12);
+}
+    const [draftFormat, setDraftFormat] = React.useState<LeagueSettings[&apos;draftFormat&apos;]>(&apos;SNAKE&apos;);
+    const [teamCount, setTeamCount] = React.useState<LeagueSettings[&apos;teamCount&apos;]>(12);
 
     const handleSubmit = (e: React.FormEvent) => {
+}
         e.preventDefault();
         const leagueId = `mock_${Date.now()}`;
         const newMockLeague = {
+}
             id: leagueId,
             name: `Mock Draft (${draftFormat})`,
             settings: {
+}
                 draftFormat,
                 teamCount,
-                scoring: 'PPR' as const,
+                scoring: &apos;PPR&apos; as const,
                 rosterSize: 16
             },
         };
-        dispatch({ type: 'CREATE_MOCK_DRAFT', payload: newMockLeague });
-        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: leagueId });
+        dispatch({ type: &apos;CREATE_MOCK_DRAFT&apos;, payload: newMockLeague });
+        dispatch({ type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: leagueId });
         // The START_DRAFT action needs to be called after the state updates
         setTimeout(() => {
-            dispatch({ type: 'START_DRAFT' });
+}
+            dispatch({ type: &apos;START_DRAFT&apos; });
         }, 100);
         onClose();
     };
@@ -64,8 +70,9 @@ const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch
                         <div>
                             <label className={labelClasses}>Draft Format</label>
                             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                                {['SNAKE', 'AUCTION'].map((format: any) => (
-                                    <button type="button" key={format} onClick={() => setDraftFormat(format as any)} className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${draftFormat === format ? 'bg-cyan-400 text-black' : 'bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50'}`}>
+                                {[&apos;SNAKE&apos;, &apos;AUCTION&apos;].map((format: any) => (
+}
+                                    <button type="button" key={format} onClick={() => setDraftFormat(format as any)} className={`flex-1 py-2 text-sm font-bold rounded-md transition-all ${draftFormat === format ? &apos;bg-cyan-400 text-black&apos; : &apos;bg-black/10 dark:bg-gray-700/50 hover:bg-black/20 dark:hover:bg-gray-600/50&apos;}`}>
                                         {format}
                                     </button>
                                 ))}
@@ -80,7 +87,7 @@ const MockDraftModal: React.FC<MockDraftModalProps> = ({ onClose, user, dispatch
 
                     <footer className="p-6 flex justify-end gap-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                         <button type="button" onClick={onClose} className="mobile-touch-target px-4 py-3 bg-transparent border border-[var(--panel-border)] text-[var(--text-secondary)] font-bold rounded-lg hover:bg-white/10 transition-colors sm:px-4 md:px-6 lg:px-8">
-                            Cancel
+//                             Cancel
                         </button>
                         <button type="submit" className="mobile-touch-target px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold rounded-lg shadow-md transition-colors sm:px-4 md:px-6 lg:px-8">
                             Start Drafting

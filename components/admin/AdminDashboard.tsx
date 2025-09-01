@@ -3,36 +3,43 @@
  * Main dashboard interface for platform administration
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect } from &apos;react&apos;;
 import {
+}
   adminService,
   AdminDashboardData,
   UserSummary,
   ContestSummary,
   type OracleMetrics
-} from '../../services/adminService';
+} from &apos;../../services/adminService&apos;;
 
 // Dashboard overview component
 const DashboardOverview: React.FC<{
-  data: AdminDashboardData['overview'] 
+}
+  data: AdminDashboardData[&apos;overview&apos;] 
 }> = ({ data }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const getHealthColor = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+}
+      case &apos;healthy&apos;: return &apos;text-green-600&apos;;
+      case &apos;warning&apos;: return &apos;text-yellow-600&apos;;
+      case &apos;critical&apos;: return &apos;text-red-600&apos;;
+      default: return &apos;text-gray-600&apos;;
     }
   };
 
   const getHealthIcon = (status: string) => {
+}
     switch (status) {
-      case 'healthy': return '✅';
-      case 'warning': return '⚠️';
-      case 'critical': return '🚨';
-      default: return '❓';
+}
+      case &apos;healthy&apos;: return &apos;✅&apos;;
+      case &apos;warning&apos;: return &apos;⚠️&apos;;
+      case &apos;critical&apos;: return &apos;🚨&apos;;
+      default: return &apos;❓&apos;;
     }
   };
 
@@ -101,53 +108,65 @@ const DashboardOverview: React.FC<{
 
 // User management component
 const UserManagement: React.FC = () => {
+}
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
-    status: '',
-    riskLevel: '',
-    searchTerm: ''
+}
+    status: &apos;&apos;,
+    riskLevel: &apos;&apos;,
+    searchTerm: &apos;&apos;
   });
 
   const loadUsers = React.useCallback(async () => {
+}
     setLoading(true);
     try {
+}
       const result = await adminService.getAllUsers(1, 50, filters);
       setUsers(result.users);
       setTotalUsers(result.total);
     } catch (error) {
-      console.error('Failed to load users:', error);
+}
+      console.error(&apos;Failed to load users:&apos;, error);
     } finally {
+}
       setLoading(false);
     }
   }, [filters]);
 
   const handleStatusChange = async (userId: string, status: string) => {
+}
     const reason = prompt(`Reason for changing status to ${status}:`);
     if (reason) {
-      await adminService.updateUserStatus('admin_001', userId, status, reason);
+}
+      await adminService.updateUserStatus(&apos;admin_001&apos;, userId, status, reason);
       loadUsers();
     }
   };
 
   React.useEffect(() => {
+}
     loadUsers();
   }, [loadUsers]);
 
   const getStatusBadgeColor = (status?: string) => {
+}
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'suspended': return 'bg-yellow-100 text-yellow-800';
-      case 'banned': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+}
+      case &apos;active&apos;: return &apos;bg-green-100 text-green-800&apos;;
+      case &apos;suspended&apos;: return &apos;bg-yellow-100 text-yellow-800&apos;;
+      case &apos;banned&apos;: return &apos;bg-red-100 text-red-800&apos;;
+      default: return &apos;bg-gray-100 text-gray-800&apos;;
     }
   };
 
   const getRiskBadgeColor = (score: number) => {
-    if (score >= 80) return 'bg-red-100 text-red-800';
-    if (score >= 60) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-green-100 text-green-800';
+}
+    if (score >= 80) return &apos;bg-red-100 text-red-800&apos;;
+    if (score >= 60) return &apos;bg-yellow-100 text-yellow-800&apos;;
+    return &apos;bg-green-100 text-green-800&apos;;
   };
 
   return (
@@ -169,12 +188,14 @@ const UserManagement: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {loading ? (
+}
               <tr>
                 <td colSpan={6} className="px-6 py-4 text-center">Loading...</td>
               </tr>
             ) : (
               <>
                 {users.map((user: any) => (
+}
                   <tr key={user.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -204,20 +225,21 @@ const UserManagement: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium sm:px-4 md:px-6 lg:px-8">
                     <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                       <button
-                        onClick={() => handleStatusChange(user.id, user?.status === 'active' ? 'suspended' : 'active')}
+                        onClick={() => handleStatusChange(user.id, user?.status === &apos;active&apos; ? &apos;suspended&apos; : &apos;active&apos;)}
                         className={`px-3 py-1 rounded text-xs ${
-                          user?.status === 'active' 
-                            ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' 
-                            : 'bg-green-100 text-green-800 hover:bg-green-200'
+}
+                          user?.status === &apos;active&apos; 
+                            ? &apos;bg-yellow-100 text-yellow-800 hover:bg-yellow-200&apos; 
+                            : &apos;bg-green-100 text-green-800 hover:bg-green-200&apos;
                         }`}
                       >
-                        {user?.status === 'active' ? 'Suspend' : 'Activate'}
+                        {user?.status === &apos;active&apos; ? &apos;Suspend&apos; : &apos;Activate&apos;}
                       </button>
                       <button
-                        onClick={() => handleStatusChange(user.id, 'banned')}
+                        onClick={() => handleStatusChange(user.id, &apos;banned&apos;)}
                         className="px-3 py-1 rounded text-xs bg-red-100 text-red-800 hover:bg-red-200 sm:px-4 md:px-6 lg:px-8"
                       >
-                        Ban
+//                         Ban
                       </button>
                     </div>
                   </td>
@@ -234,44 +256,56 @@ const UserManagement: React.FC = () => {
 
 // Contest management component
 const ContestManagement: React.FC = () => {
+}
   const [contests, setContests] = useState<ContestSummary[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+}
     loadContests();
   }, []);
 
   const loadContests = async () => {
+}
     setLoading(true);
     try {
+}
       const result = await adminService.getAllContests(1, 50);
       setContests(result.contests);
     } catch (error) {
-      console.error('Operation failed:', error);
+}
+      console.error(&apos;Operation failed:&apos;, error);
     } finally {
+}
       setLoading(false);
     }
   };
 
   const handleCancelContest = async (contestId: string) => {
+}
     try {
-      const reason = prompt('Reason for cancelling contest:');
+}
+      const reason = prompt(&apos;Reason for cancelling contest:&apos;);
       if (reason) {
-        await adminService.cancelContest('admin_001', contestId, reason);
+}
+        await adminService.cancelContest(&apos;admin_001&apos;, contestId, reason);
         loadContests();
       }
     } catch (error) {
-      console.error('Failed to cancel contest:', error);
+}
+      console.error(&apos;Failed to cancel contest:&apos;, error);
     }
   };
 
   const getStatusBadgeColor = (status?: string) => {
+}
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'completed': return 'bg-gray-100 text-gray-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+}
+      case &apos;active&apos;: return &apos;bg-green-100 text-green-800&apos;;
+      case &apos;pending&apos;: return &apos;bg-yellow-100 text-yellow-800&apos;;
+      case &apos;completed&apos;: return &apos;bg-gray-100 text-gray-800&apos;;
+      case &apos;cancelled&apos;: return &apos;bg-red-100 text-red-800&apos;;
+      default: return &apos;bg-gray-100 text-gray-800&apos;;
     }
   };
 
@@ -294,12 +328,14 @@ const ContestManagement: React.FC = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {loading ? (
+}
               <tr>
                 <td colSpan={6} className="px-6 py-4 text-center">Loading...</td>
               </tr>
             ) : (
               <>
                 {contests.map((contest: any) => (
+}
                   <tr key={contest.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{contest.name}</div>
@@ -330,14 +366,15 @@ const ContestManagement: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium sm:px-4 md:px-6 lg:px-8">
                     <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                       <button className="text-blue-600 hover:text-blue-900 sm:px-4 md:px-6 lg:px-8">
-                        View
+//                         View
                       </button>
-                      {contest?.status === 'active' && (
+                      {contest?.status === &apos;active&apos; && (
+}
                         <button
                           onClick={() => handleCancelContest(contest.id)}
                           className="text-red-600 hover:text-red-900 sm:px-4 md:px-6 lg:px-8"
                         >
-                          Cancel
+//                           Cancel
                         </button>
                       )}
                     </div>
@@ -355,30 +392,38 @@ const ContestManagement: React.FC = () => {
 
 // Oracle metrics component
 const OracleMetricsPanel: React.FC = () => {
+}
   const [metrics, setMetrics] = useState<OracleMetrics | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+}
     loadMetrics();
   }, []);
 
   const loadMetrics = async () => {
+}
     setLoading(true);
     try {
+}
       const data = await adminService.getOracleMetrics();
       setMetrics(data);
     } catch (error) {
-      console.error('Operation failed:', error);
+}
+      console.error(&apos;Operation failed:&apos;, error);
     } finally {
+}
       setLoading(false);
     }
   };
 
   if (loading) {
+}
     return <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">Loading Oracle metrics...</div>;
   }
 
   if (!metrics) {
+}
     return <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">Failed to load Oracle metrics</div>;
   }
 
@@ -414,6 +459,7 @@ const OracleMetricsPanel: React.FC = () => {
           <h4 className="text-md font-medium text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">Performance by Category</h4>
           <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             {Object.entries(metrics.performanceByCategory).map(([category, stats]) => (
+}
               <div key={category} className="border rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
                   <span className="font-medium text-gray-900 sm:px-4 md:px-6 lg:px-8">{category}</span>
@@ -482,22 +528,28 @@ const OracleMetricsPanel: React.FC = () => {
 
 // Main admin dashboard component
 const AdminDashboard: React.FC = () => {
+}
   const [dashboardData, setDashboardData] = useState<AdminDashboardData | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'contests' | 'payments' | 'oracle' | 'system'>('overview');
+  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;users&apos; | &apos;contests&apos; | &apos;payments&apos; | &apos;oracle&apos; | &apos;system&apos;>(&apos;overview&apos;);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+}
     loadDashboardData();
   }, []);
 
   const loadDashboardData = async () => {
+}
     setLoading(true);
     try {
+}
       const data = await adminService.getDashboardData();
       setDashboardData(data);
     } catch (error) {
-      console.error('Failed to load dashboard data:', error);
+}
+      console.error(&apos;Failed to load dashboard data:&apos;, error);
     } finally {
+}
       setLoading(false);
     }
   };
@@ -506,7 +558,8 @@ const AdminDashboard: React.FC = () => {
     <>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === 'overview' && dashboardData && (
+        {activeTab === &apos;overview&apos; && dashboardData && (
+}
           <div>
             <DashboardOverview data={dashboardData.overview} />
             
@@ -520,6 +573,7 @@ const AdminDashboard: React.FC = () => {
                 <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {dashboardData.recentActivity.newUsers.slice(0, 5).map((user: any) => (
+}
                       <div key={user.id} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                         <div>
                           <div className="font-medium text-gray-900 sm:px-4 md:px-6 lg:px-8">{user.username}</div>
@@ -541,6 +595,7 @@ const AdminDashboard: React.FC = () => {
                 </div>
                 <div className="p-6 sm:px-4 md:px-6 lg:px-8">
                   {dashboardData.recentActivity.systemAlerts.length === 0 ? (
+}
                     <div className="text-center text-gray-500 py-8 sm:px-4 md:px-6 lg:px-8">
                       <span className="text-4xl sm:px-4 md:px-6 lg:px-8">✅</span>
                       <div className="mt-2 sm:px-4 md:px-6 lg:px-8">No system alerts</div>
@@ -549,6 +604,7 @@ const AdminDashboard: React.FC = () => {
                   ) : (
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                       {dashboardData.recentActivity.systemAlerts.map((alert: any) => (
+}
                         <div key={alert.id} className="border-l-4 border-red-400 bg-red-50 p-4 sm:px-4 md:px-6 lg:px-8">
                           <div className="flex sm:px-4 md:px-6 lg:px-8">
                             <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
@@ -571,18 +627,20 @@ const AdminDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'users' && <UserManagement />}
-        {activeTab === 'contests' && <ContestManagement />}
-        {activeTab === 'oracle' && <OracleMetricsPanel />}
+        {activeTab === &apos;users&apos; && <UserManagement />}
+        {activeTab === &apos;contests&apos; && <ContestManagement />}
+        {activeTab === &apos;oracle&apos; && <OracleMetricsPanel />}
         
-        {activeTab === 'payments' && (
+        {activeTab === &apos;payments&apos; && (
+}
           <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">Payment Management</h3>
             <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">Payment management interface coming soon...</p>
           </div>
         )}
         
-        {activeTab === 'system' && (
+        {activeTab === &apos;system&apos; && (
+}
           <div className="bg-white rounded-lg shadow-md p-6 sm:px-4 md:px-6 lg:px-8">
             <h3 className="text-lg font-medium text-gray-900 mb-4 sm:px-4 md:px-6 lg:px-8">System Management</h3>
             <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">System management interface coming soon...</p>

@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PowerBalanceChart from './PowerBalanceChart';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PowerBalanceChart from &apos;./PowerBalanceChart&apos;;
 
-describe('PowerBalanceChart', () => {
-  it('renders without crashing', () => {
+describe(&apos;PowerBalanceChart&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PowerBalanceChart />);
-    expect(screen.getByTestId('powerbalancechart')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;powerbalancechart&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PowerBalanceChart />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PowerBalanceChart />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

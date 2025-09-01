@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ProtectedRoute from './ProtectedRoute';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import ProtectedRoute from &apos;./ProtectedRoute&apos;;
 
-describe('ProtectedRoute', () => {
-  it('renders without crashing', () => {
+describe(&apos;ProtectedRoute&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<ProtectedRoute />);
-    expect(screen.getByTestId('protectedroute')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;protectedroute&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<ProtectedRoute />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<ProtectedRoute />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

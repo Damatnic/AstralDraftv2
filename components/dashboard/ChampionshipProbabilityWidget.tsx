@@ -3,17 +3,18 @@
  * Real-time playoff odds with Monte Carlo simulation results
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { championshipCalculator } from '../../services/advancedAnalyticsEngine';
-import { useAppState } from '../../contexts/AppContext';
-import { getUserTeam } from '../../data/leagueData';
-import type { Team } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useEffect, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
+import { Button } from &apos;../ui/Button&apos;;
+import { championshipCalculator } from &apos;../../services/advancedAnalyticsEngine&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { getUserTeam } from &apos;../../data/leagueData&apos;;
+import type { Team } from &apos;../../types&apos;;
 
 interface ProbabilityData {
+}
   teamId: string;
   teamName: string;
   playoffProbability: number;
@@ -21,18 +22,19 @@ interface ProbabilityData {
   firstPlaceProbability: number;
   expectedFinish: number;
   strengthOfSchedule: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
   weeklyChange: number;
 
 }
 
 const ChampionshipProbabilityWidget: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { state } = useAppState();
   const [isCalculating, setIsCalculating] = useState(false);
   const [probabilities, setProbabilities] = useState<ProbabilityData[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [viewMode, setViewMode] = useState<'user' | 'league'>('user');
+  const [viewMode, setViewMode] = useState<&apos;user&apos; | &apos;league&apos;>(&apos;user&apos;);
   const [simulationCount] = useState(10000);
 
   const userTeam = state.user ? getUserTeam(state.user.id) : null;
@@ -40,14 +42,17 @@ const ChampionshipProbabilityWidget: React.FC = () => {
 
   // Calculate probabilities
   const calculateProbabilities = async () => {
+}
     setIsCalculating(true);
     try {
+}
 
       // Simulate calculation delay
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Mock probability data
       const mockData: ProbabilityData[] = league.teams.map((team, index) => ({
+}
         teamId: team.id,
         teamName: team.name,
         playoffProbability: Math.max(15, Math.min(95, 100 - (index * 10) + Math.random() * 20)),
@@ -55,7 +60,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
         firstPlaceProbability: Math.max(1, Math.min(25, 20 - (index * 2) + Math.random() * 8)),
         expectedFinish: Math.min(10, index + 1 + Math.random() * 2),
         strengthOfSchedule: 0.5 + (Math.random() * 0.3 - 0.15),
-        trend: Math.random() > 0.6 ? 'up' : Math.random() > 0.3 ? 'stable' : 'down',
+        trend: Math.random() > 0.6 ? &apos;up&apos; : Math.random() > 0.3 ? &apos;stable&apos; : &apos;down&apos;,
         weeklyChange: (Math.random() - 0.5) * 10
       }));
 
@@ -66,44 +71,52 @@ const ChampionshipProbabilityWidget: React.FC = () => {
       setLastUpdated(new Date());
     
     } catch (error) {
-      console.error('Failed to calculate probabilities:', error);
+}
+      console.error(&apos;Failed to calculate probabilities:&apos;, error);
     } finally {
+}
       setIsCalculating(false);
     }
   };
 
   // Auto-calculate on mount
   useEffect(() => {
+}
     if (league && probabilities.length === 0) {
+}
       calculateProbabilities();
     }
   }, [league]);
 
   // Get user team probability data
   const userProbability = useMemo(() => {
+}
     return probabilities.find((p: any) => p.teamId === userTeam?.id);
   }, [probabilities, userTeam]);
 
   // Get trend icon and color
   const getTrendIndicator = (trend: string, change: number) => {
-    if (trend === 'up') return { icon: '📈', color: 'text-green-400', symbol: '↑' };
-    if (trend === 'down') return { icon: '📉', color: 'text-red-400', symbol: '↓' };
-    return { icon: '➡️', color: 'text-gray-400', symbol: '→' };
+}
+    if (trend === &apos;up&apos;) return { icon: &apos;📈&apos;, color: &apos;text-green-400&apos;, symbol: &apos;↑&apos; };
+    if (trend === &apos;down&apos;) return { icon: &apos;📉&apos;, color: &apos;text-red-400&apos;, symbol: &apos;↓&apos; };
+    return { icon: &apos;➡️&apos;, color: &apos;text-gray-400&apos;, symbol: &apos;→&apos; };
   };
 
   // Get probability color
   const getProbabilityColor = (probability: number) => {
-    if (probability >= 70) return 'text-green-400';
-    if (probability >= 40) return 'text-yellow-400';
-    if (probability >= 20) return 'text-orange-400';
-    return 'text-red-400';
+}
+    if (probability >= 70) return &apos;text-green-400&apos;;
+    if (probability >= 40) return &apos;text-yellow-400&apos;;
+    if (probability >= 20) return &apos;text-orange-400&apos;;
+    return &apos;text-red-400&apos;;
   };
 
   // Format SOS
   const formatSOS = (sos: number) => {
-    if (sos > 0.55) return { text: 'Hard', color: 'text-red-400' };
-    if (sos < 0.45) return { text: 'Easy', color: 'text-green-400' };
-    return { text: 'Average', color: 'text-gray-400' };
+}
+    if (sos > 0.55) return { text: &apos;Hard&apos;, color: &apos;text-red-400&apos; };
+    if (sos < 0.45) return { text: &apos;Easy&apos;, color: &apos;text-green-400&apos; };
+    return { text: &apos;Average&apos;, color: &apos;text-gray-400&apos; };
   };
 
   return (
@@ -123,21 +136,21 @@ const ChampionshipProbabilityWidget: React.FC = () => {
             </div>
           </div>
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-            <Button
-              variant={viewMode === 'user' ? 'primary' : 'secondary'}
+            <Button>
+              variant={viewMode === &apos;user&apos; ? &apos;primary&apos; : &apos;secondary&apos;}
               size="sm"
-              onClick={() => setViewMode('user')}
+              onClick={() => setViewMode(&apos;user&apos;)}
               className="text-xs px-2 py-1 sm:px-4 md:px-6 lg:px-8"
             >
               My Team
             </Button>
-            <Button
-              variant={viewMode === 'league' ? 'primary' : 'secondary'}
+            <Button>
+              variant={viewMode === &apos;league&apos; ? &apos;primary&apos; : &apos;secondary&apos;}
               size="sm"
-              onClick={() => setViewMode('league')}
+              onClick={() => setViewMode(&apos;league&apos;)}
               className="text-xs px-2 py-1 sm:px-4 md:px-6 lg:px-8"
             >
-              League
+//               League
             </Button>
           </div>
         </div>
@@ -145,7 +158,8 @@ const ChampionshipProbabilityWidget: React.FC = () => {
 
       <CardContent className="space-y-4 sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence mode="wait">
-          {viewMode === 'user' && userProbability ? (
+          {viewMode === &apos;user&apos; && userProbability ? (
+}
             <motion.div
               key="user"
               initial={{ opacity: 0, x: -20 }}
@@ -159,6 +173,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
                   <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">Playoffs</span>
                     {userProbability.trend && (
+}
                       <span className={`text-xs ${getTrendIndicator(userProbability.trend, userProbability.weeklyChange).color}`}>
                         {getTrendIndicator(userProbability.trend, userProbability.weeklyChange).symbol}
                         {Math.abs(userProbability.weeklyChange).toFixed(1)}%
@@ -228,7 +243,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
                 </div>
               </div>
             </motion.div>
-          ) : viewMode === 'league' ? (
+          ) : viewMode === &apos;league&apos; ? (
             <motion.div
               key="league"
               initial={{ opacity: 0, x: 20 }}
@@ -240,10 +255,12 @@ const ChampionshipProbabilityWidget: React.FC = () => {
               <div className="bg-dark-800/50 rounded-xl p-3 border border-gray-800 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                   {probabilities.slice(0, 5).map((team, index) => (
+}
                     <div
                       key={team.teamId}
                       className={`flex items-center justify-between p-2 rounded-lg ${
-                        team.teamId === userTeam?.id ? 'bg-primary-500/10 border border-primary-500/30' : ''
+}
+                        team.teamId === userTeam?.id ? &apos;bg-primary-500/10 border border-primary-500/30&apos; : &apos;&apos;
                       }`}
                     >
                       <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -254,6 +271,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
                           <p className="text-xs font-semibold text-white sm:px-4 md:px-6 lg:px-8">
                             {team.teamName}
                             {team.teamId === userTeam?.id && (
+}
                               <span className="ml-1 text-primary-400 sm:px-4 md:px-6 lg:px-8">(You)</span>
                             )}
                           </p>
@@ -301,6 +319,7 @@ const ChampionshipProbabilityWidget: React.FC = () => {
 
         {/* Loading State */}
         {isCalculating && (
+}
           <div className="flex flex-col items-center justify-center py-8 sm:px-4 md:px-6 lg:px-8">
             <div className="relative sm:px-4 md:px-6 lg:px-8">
               <div className="w-12 h-12 border-4 border-yellow-500/20 rounded-full sm:px-4 md:px-6 lg:px-8"></div>
@@ -313,18 +332,19 @@ const ChampionshipProbabilityWidget: React.FC = () => {
 
         {/* Footer */}
         {!isCalculating && probabilities.length > 0 && (
+}
           <div className="flex items-center justify-between pt-2 border-t border-gray-800 sm:px-4 md:px-6 lg:px-8">
             <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
-              Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              Updated {lastUpdated.toLocaleTimeString([], { hour: &apos;2-digit&apos;, minute: &apos;2-digit&apos; })}
             </p>
-            <Button
+            <Button>
               variant="ghost"
               size="sm"
               onClick={calculateProbabilities}
               className="text-xs sm:px-4 md:px-6 lg:px-8"
             >
               <span className="mr-1 sm:px-4 md:px-6 lg:px-8">🔄</span>
-              Refresh
+//               Refresh
             </Button>
           </div>
         )}

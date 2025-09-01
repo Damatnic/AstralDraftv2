@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import StoryHighlightCard from './StoryHighlightCard';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import StoryHighlightCard from &apos;./StoryHighlightCard&apos;;
 
-describe('StoryHighlightCard', () => {
-  it('renders without crashing', () => {
+describe(&apos;StoryHighlightCard&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<StoryHighlightCard />);
-    expect(screen.getByTestId('storyhighlightcard')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;storyhighlightcard&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<StoryHighlightCard />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<StoryHighlightCard />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

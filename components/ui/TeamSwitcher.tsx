@@ -1,12 +1,13 @@
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
-import { ChevronDownIcon } from '../icons/ChevronDownIcon';
-import { Avatar } from './Avatar';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { ChevronDownIcon } from &apos;../icons/ChevronDownIcon&apos;;
+import { Avatar } from &apos;./Avatar&apos;;
 
 const TeamSwitcher: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const { state, dispatch } = useAppState();
     const [isOpen, setIsOpen] = React.useState(false);
@@ -18,14 +19,18 @@ const TeamSwitcher: React.FC = () => {
     const otherTeams = state.leagues
         .filter((l: any) => !l.isMock && l.id !== state.activeLeagueId)
         .map((l: any) => ({
+}
             leagueId: l.id,
             team: l.teams.find((t: any) => t.owner.id === state.user?.id)
         }))
         .filter((item: any) => item.team);
 
     React.useEffect(() => {
+}
         function handleClickOutside(event: MouseEvent) {
+}
             if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+}
                 setIsOpen(false);
 
 
@@ -35,8 +40,9 @@ const TeamSwitcher: React.FC = () => {
   }, [wrapperRef]);
     
     const handleSwitch = (leagueId: string) => {
-        dispatch({ type: 'SET_ACTIVE_LEAGUE', payload: leagueId });
-        dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' });
+}
+        dispatch({ type: &apos;SET_ACTIVE_LEAGUE&apos;, payload: leagueId });
+        dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; });
         setIsOpen(false);
 
     return (
@@ -45,6 +51,7 @@ const TeamSwitcher: React.FC = () => {
                 onClick={() => setIsOpen(!isOpen)}
             >
                 {myActiveTeam ? (
+}
                     <>
                         <Avatar avatar={myActiveTeam.avatar} className="w-6 h-6 rounded sm:px-4 md:px-6 lg:px-8" />
                         <span className="text-sm font-semibold hidden md:block">{myActiveTeam.name}</span>
@@ -56,15 +63,18 @@ const TeamSwitcher: React.FC = () => {
             </button>
             <AnimatePresence>
                 {isOpen && otherTeams.length > 0 && (
+}
                     <motion.div
                         className="absolute top-full right-0 mt-2 w-64 bg-slate-800/90 backdrop-blur-md border border-white/10 rounded-lg shadow-lg z-50 p-2 sm:px-4 md:px-6 lg:px-8"
                         {...{
+}
                             initial: { opacity: 0, y: -10 },
                             animate: { opacity: 1, y: 0 },
                             exit: { opacity: 0, y: -10 },
                         }}
                     >
                         {otherTeams.map((item: any) => (
+}
                             item.team && (
                                 <button
                                     key={item.leagueId}

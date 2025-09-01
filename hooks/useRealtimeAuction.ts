@@ -1,10 +1,9 @@
 
 
-import React from 'react';
-import type { League, Team, Player, User, AuctionState } from '../types';
-import { getAiNomination, getAiBid } from '../services/geminiService';
-import { players } from '../data/players';
-import useSound from './useSound';
+import type { League, Team, Player, User, AuctionState } from &apos;../types&apos;;
+import { getAiNomination, getAiBid } from &apos;../services/geminiService&apos;;
+import { players } from &apos;../data/players&apos;;
+import useSound from &apos;./useSound&apos;;
 
 const AUCTION_TIMER_SECONDS = 10;
 const AI_ACTION_DELAY_MS = 2000;
@@ -15,9 +14,10 @@ export const useRealtimeAuction = (
     user: User,
     dispatch: React.Dispatch<any>
 ) => {
-    const playNominationSound = useSound('yourTurn', 0.4);
-    const playBidSound = useSound('bid', 0.5);
-    const playSoldSound = useSound('sold', 0.6);
+}
+    const playNominationSound = useSound(&apos;yourTurn&apos;, 0.4);
+    const playBidSound = useSound(&apos;bid&apos;, 0.5);
+    const playSoldSound = useSound(&apos;sold&apos;, 0.6);
 
     const auctionState = league?.auctionState;
     const teams = league?.teams ?? [];
@@ -26,16 +26,20 @@ export const useRealtimeAuction = (
     
     // Timer Logic
     React.useEffect(() => {
+}
         if (isPaused || !league || !auctionState || !auctionState.nominatedPlayerId || auctionState.lastBidTimestamp === 0) {
+}
             return;
         }
 
         const interval = setInterval(() => {
+}
             const timeSinceLastBid = (Date.now() - auctionState.lastBidTimestamp) / 1000;
             if (timeSinceLastBid >= AUCTION_TIMER_SECONDS) {
+}
                 const soldPlayer = players.find((p: any) => p.id === auctionState.nominatedPlayerId)
-                dispatch({ type: 'PROCESS_AUCTION_SALE', payload: { leagueId: league.id } });
-                dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${soldPlayer?.name} sold!`, type: 'DRAFT' }});
+                dispatch({ type: &apos;PROCESS_AUCTION_SALE&apos;, payload: { leagueId: league.id } });
+                dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `${soldPlayer?.name} sold!`, type: &apos;DRAFT&apos; }});
                 playSoldSound();
             }
         }, 1000);
@@ -46,20 +50,25 @@ export const useRealtimeAuction = (
 
     // AI Logic (Nomination and Bidding)
     React.useEffect(() => {
-        if (isPaused || !league || !auctionState || league.status !== 'DRAFTING') {
+}
+        if (isPaused || !league || !auctionState || league.status !== &apos;DRAFTING&apos;) {
+}
             return;
         }
 
         const nominatingTeam = teams.find((t: any) => t.id === auctionState.nominatingTeamId);
         
         // AI Nomination
-        if (!auctionState.nominatedPlayerId && nominatingTeam?.owner.id.startsWith('ai_')) {
+        if (!auctionState.nominatedPlayerId && nominatingTeam?.owner.id.startsWith(&apos;ai_&apos;)) {
+}
             const timer = setTimeout(async () => {
+}
                 const playerName = await getAiNomination(nominatingTeam, availablePlayers);
                 const playerToNominate = availablePlayers.find((p: any) => p.name === playerName) || availablePlayers[Math.floor(Math.random() * 20)];
                 if (playerToNominate) {
-                    dispatch({ type: 'AUCTION_NOMINATE', payload: { leagueId: league.id, playerId: playerToNominate.id, teamId: nominatingTeam.id } });
-                    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${nominatingTeam.name} nominates ${playerToNominate.name}.`, type: 'DRAFT' } });
+}
+                    dispatch({ type: &apos;AUCTION_NOMINATE&apos;, payload: { leagueId: league.id, playerId: playerToNominate.id, teamId: nominatingTeam.id } });
+                    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `${nominatingTeam.name} nominates ${playerToNominate.name}.`, type: &apos;DRAFT&apos; } });
                     playNominationSound();
                 }
             }, AI_ACTION_DELAY_MS);
@@ -68,19 +77,23 @@ export const useRealtimeAuction = (
 
         // AI Bidding
         if (auctionState.nominatedPlayerId) {
+}
             const nominatedPlayer = players.find((p: any) => p.id === auctionState.nominatedPlayerId)!;
             
-            const aiTeamsToAct = teams.filter((t: any) => t.owner.id.startsWith('ai_') && t.id !== auctionState.highBidderId && t.budget > auctionState.currentBid);
+            const aiTeamsToAct = teams.filter((t: any) => t.owner.id.startsWith(&apos;ai_&apos;) && t.id !== auctionState.highBidderId && t.budget > auctionState.currentBid);
 
             aiTeamsToAct.forEach((aiTeam: any) => {
+}
                 const bidTimer = setTimeout(async () => {
+}
                     const latestAuctionState = league?.auctionState; // Get latest state
                     if (!latestAuctionState || latestAuctionState.highBidderId === aiTeam.id || isPaused) return;
 
                     const newBid = await getAiBid(aiTeam, nominatedPlayer, latestAuctionState.currentBid);
                     if (newBid) {
-                        dispatch({ type: 'AUCTION_BID', payload: { leagueId: league.id, teamId: aiTeam.id, bid: newBid } });
-                        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${aiTeam.name} bids $${newBid}.`, type: 'DRAFT' }});
+}
+                        dispatch({ type: &apos;AUCTION_BID&apos;, payload: { leagueId: league.id, teamId: aiTeam.id, bid: newBid } });
+                        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `${aiTeam.name} bids $${newBid}.`, type: &apos;DRAFT&apos; }});
                         playBidSound();
                     }
                 }, AI_ACTION_DELAY_MS + Math.random() * 2000); // Stagger AI bids
@@ -99,19 +112,22 @@ export const useRealtimeAuction = (
     const isMyNominationTurn = myTeam && auctionState?.nominatingTeamId === myTeam.id;
 
     const placeBid = (bid: number) => {
+}
         if (!league || !myTeam) return;
-        dispatch({ type: 'AUCTION_BID', payload: { leagueId: league.id, teamId: myTeam.id, bid } });
+        dispatch({ type: &apos;AUCTION_BID&apos;, payload: { leagueId: league.id, teamId: myTeam.id, bid } });
         playBidSound();
     };
 
     const nominatePlayer = (player: Player) => {
+}
         if (!league || !myTeam) return;
-        dispatch({ type: 'AUCTION_NOMINATE', payload: { leagueId: league.id, playerId: player.id, teamId: myTeam.id } });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `You nominated ${player.name}.`, type: 'DRAFT' }});
+        dispatch({ type: &apos;AUCTION_NOMINATE&apos;, payload: { leagueId: league.id, playerId: player.id, teamId: myTeam.id } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `You nominated ${player.name}.`, type: &apos;DRAFT&apos; }});
         playNominationSound();
     };
     
     return {
+}
         teams,
         availablePlayers,
         nominatedPlayer,

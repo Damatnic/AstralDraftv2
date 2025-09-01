@@ -2,23 +2,26 @@
  * Simple Suspense Loader Component
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
 
 interface SuspenseLoaderProps {
+}
   message?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
 
 }
 
 const SuspenseLoader: React.FC<SuspenseLoaderProps> = ({ 
+}
   message = "Loading...", 
-  size = 'md' 
+  size = &apos;md&apos; 
 }: any) => {
+}
   const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8', 
-    lg: 'w-12 h-12'
+}
+    sm: &apos;w-6 h-6&apos;,
+    md: &apos;w-8 h-8&apos;, 
+    lg: &apos;w-12 h-12&apos;
   };
 
   return (

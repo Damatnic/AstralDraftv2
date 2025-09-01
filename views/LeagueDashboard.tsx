@@ -2,27 +2,29 @@
  * Enhanced League Dashboard - Professional UI with modern components
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
-import { Button } from '../components/ui/Button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/Card';
-import { View } from '../types';
-import { TrophyIcon, UsersIcon, ClipboardListIcon, ChartBarIcon, CalendarIcon, MessageCircleIcon } from '../components/icons';
+import React, { useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from &apos;../data/leagueData&apos;;
+import { Button } from &apos;../components/ui/Button&apos;;
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from &apos;../components/ui/Card&apos;;
+import { View } from &apos;../types&apos;;
+import { TrophyIcon, UsersIcon, ClipboardListIcon, ChartBarIcon, CalendarIcon, MessageCircleIcon } from &apos;../components/icons&apos;;
 
 // Import advanced dashboard widgets
-import LineupOptimizerWidget from '../components/dashboard/LineupOptimizerWidget';
-import ChampionshipProbabilityWidget from '../components/dashboard/ChampionshipProbabilityWidget';
-import WaiverWireIntelligenceWidget from '../components/dashboard/WaiverWireIntelligenceWidget';
-import TradeOpportunityWidget from '../components/dashboard/TradeOpportunityWidget';
+import LineupOptimizerWidget from &apos;../components/dashboard/LineupOptimizerWidget&apos;;
+import ChampionshipProbabilityWidget from &apos;../components/dashboard/ChampionshipProbabilityWidget&apos;;
+import WaiverWireIntelligenceWidget from &apos;../components/dashboard/WaiverWireIntelligenceWidget&apos;;
+import TradeOpportunityWidget from &apos;../components/dashboard/TradeOpportunityWidget&apos;;
 
 const EnhancedLeagueDashboard: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Update time every minute
   useEffect(() => {
+}
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
@@ -40,76 +42,84 @@ const EnhancedLeagueDashboard: React.FC = () => {
   // Professional navigation items with icons and gradients
   const navItems = [
     { 
-      label: 'My Team', 
-      icon: '🏈', 
-      view: 'TEAM_HUB', 
-      gradient: 'from-blue-500 via-blue-600 to-blue-700',
-      glowColor: 'primary' as const,
-      description: 'Manage roster & lineup',
-      stats: { label: 'Rank', value: userTeam ? `#${userTeam.standings?.rank || 1}` : '#1' }
+}
+      label: &apos;My Team&apos;, 
+      icon: &apos;🏈&apos;, 
+      view: &apos;TEAM_HUB&apos;, 
+      gradient: &apos;from-blue-500 via-blue-600 to-blue-700&apos;,
+      glowColor: &apos;primary&apos; as const,
+      description: &apos;Manage roster & lineup&apos;,
+      stats: { label: &apos;Rank&apos;, value: userTeam ? `#${userTeam.standings?.rank || 1}` : &apos;#1&apos; }
     },
     { 
-      label: 'League Hub', 
-      icon: '🏆', 
-      view: 'LEAGUE_HUB', 
-      gradient: 'from-emerald-500 via-green-600 to-green-700',
-      glowColor: 'secondary' as const,
-      description: 'League overview & stats',
-      stats: { label: 'Teams', value: league.teams.length.toString() }
+}
+      label: &apos;League Hub&apos;, 
+      icon: &apos;🏆&apos;, 
+      view: &apos;LEAGUE_HUB&apos;, 
+      gradient: &apos;from-emerald-500 via-green-600 to-green-700&apos;,
+      glowColor: &apos;secondary&apos; as const,
+      description: &apos;League overview & stats&apos;,
+      stats: { label: &apos;Teams&apos;, value: league.teams.length.toString() }
     },
     { 
-      label: 'Players', 
-      icon: '👥', 
-      view: 'PLAYERS', 
-      gradient: 'from-purple-500 via-purple-600 to-purple-700',
-      glowColor: 'accent' as const,
-      description: 'Player research & stats',
-      stats: { label: 'Available', value: '500+' }
+}
+      label: &apos;Players&apos;, 
+      icon: &apos;👥&apos;, 
+      view: &apos;PLAYERS&apos;, 
+      gradient: &apos;from-purple-500 via-purple-600 to-purple-700&apos;,
+      glowColor: &apos;accent&apos; as const,
+      description: &apos;Player research & stats&apos;,
+      stats: { label: &apos;Available&apos;, value: &apos;500+&apos; }
     },
     { 
-      label: 'Draft Prep', 
-      icon: '📋', 
-      view: 'DRAFT_PREP_CENTER', 
-      gradient: 'from-orange-500 via-orange-600 to-red-600',
-      glowColor: 'warning' as const,
-      description: 'Rankings & strategy',
-      stats: { label: 'Days', value: daysUntilNextWeek.toString() }
+}
+      label: &apos;Draft Prep&apos;, 
+      icon: &apos;📋&apos;, 
+      view: &apos;DRAFT_PREP_CENTER&apos;, 
+      gradient: &apos;from-orange-500 via-orange-600 to-red-600&apos;,
+      glowColor: &apos;warning&apos; as const,
+      description: &apos;Rankings & strategy&apos;,
+      stats: { label: &apos;Days&apos;, value: daysUntilNextWeek.toString() }
     },
     { 
-      label: 'Standings', 
-      icon: '📊', 
-      view: 'ENHANCED_LEAGUE_STANDINGS', 
-      gradient: 'from-red-500 via-rose-600 to-pink-600',
-      glowColor: 'danger' as const,
-      description: 'League standings & playoffs',
-      stats: { label: 'Week', value: '1' }
+}
+      label: &apos;Standings&apos;, 
+      icon: &apos;📊&apos;, 
+      view: &apos;ENHANCED_LEAGUE_STANDINGS&apos;, 
+      gradient: &apos;from-red-500 via-rose-600 to-pink-600&apos;,
+      glowColor: &apos;danger&apos; as const,
+      description: &apos;League standings & playoffs&apos;,
+      stats: { label: &apos;Week&apos;, value: &apos;1&apos; }
     },
     { 
-      label: 'Season Hub', 
-      icon: '⚡', 
-      view: 'SEASON_MANAGEMENT', 
-      gradient: 'from-cyan-500 via-teal-600 to-emerald-600',
-      glowColor: 'secondary' as const,
-      description: 'Matchups & live scoring',
-      stats: { label: 'Live', value: '0' }
+}
+      label: &apos;Season Hub&apos;, 
+      icon: &apos;⚡&apos;, 
+      view: &apos;SEASON_MANAGEMENT&apos;, 
+      gradient: &apos;from-cyan-500 via-teal-600 to-emerald-600&apos;,
+      glowColor: &apos;secondary&apos; as const,
+      description: &apos;Matchups & live scoring&apos;,
+      stats: { label: &apos;Live&apos;, value: &apos;0&apos; }
     },
     { 
-      label: 'Messages', 
-      icon: '💬', 
-      view: 'MESSAGES', 
-      gradient: 'from-indigo-500 via-indigo-600 to-purple-600',
-      glowColor: 'primary' as const,
-      description: 'League chat & trades',
-      stats: { label: 'New', value: '3' }
+}
+      label: &apos;Messages&apos;, 
+      icon: &apos;💬&apos;, 
+      view: &apos;MESSAGES&apos;, 
+      gradient: &apos;from-indigo-500 via-indigo-600 to-purple-600&apos;,
+      glowColor: &apos;primary&apos; as const,
+      description: &apos;League chat & trades&apos;,
+      stats: { label: &apos;New&apos;, value: &apos;3&apos; }
     },
     { 
-      label: 'Analytics', 
-      icon: '📈', 
-      view: 'ANALYTICS_HUB', 
-      gradient: 'from-slate-500 via-slate-600 to-slate-700',
-      glowColor: 'accent' as const,
-      description: 'Advanced metrics & insights',
-      stats: { label: 'Reports', value: '12' }
+}
+      label: &apos;Analytics&apos;, 
+      icon: &apos;📈&apos;, 
+      view: &apos;ANALYTICS_HUB&apos;, 
+      gradient: &apos;from-slate-500 via-slate-600 to-slate-700&apos;,
+      glowColor: &apos;accent&apos; as const,
+      description: &apos;Advanced metrics & insights&apos;,
+      stats: { label: &apos;Reports&apos;, value: &apos;12&apos; }
     },
   ];
 
@@ -152,14 +162,14 @@ const EnhancedLeagueDashboard: React.FC = () => {
                   </div>
                 </div>
               </Card>
-              <Button
+              <Button>
                 variant="danger"
                 size="sm"
-                onClick={() => dispatch({ type: 'LOGOUT' })}
+                onClick={() => dispatch({ type: &apos;LOGOUT&apos; })}
                 className="hover:shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-all duration-300"
               >
                 <span className="mr-2">🚪</span>
-                Logout
+//                 Logout
               </Button>
             </div>
           </div>
@@ -175,10 +185,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, type: "spring" }}
           >
-            <Card 
+            <Card>
               variant="gradient" 
               className="mb-8 relative overflow-hidden"
-              glow
+//               glow
               glowColor="warning"
             >
               {/* Animated Background Pattern */}
@@ -199,9 +209,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
                   
                   <div className="flex justify-center gap-2 sm:gap-4 md:gap-8">
                     {[
-                      { value: daysUntilNextWeek, label: 'DAYS', color: 'from-orange-500 to-red-500' },
-                      { value: hoursUntilDraft, label: 'HOURS', color: 'from-red-500 to-pink-500' },
-                      { value: minutesUntilDraft % 60, label: 'MINUTES', color: 'from-pink-500 to-purple-500' }
+}
+                      { value: daysUntilNextWeek, label: &apos;DAYS&apos;, color: &apos;from-orange-500 to-red-500&apos; },
+                      { value: hoursUntilDraft, label: &apos;HOURS&apos;, color: &apos;from-red-500 to-pink-500&apos; },
+                      { value: minutesUntilDraft % 60, label: &apos;MINUTES&apos;, color: &apos;from-pink-500 to-purple-500&apos; }
                     ].map((item, index) => (
                       <motion.div
                         key={item.label}
@@ -209,7 +220,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                       >
-                        <Card 
+                        <Card>
                           variant="elevated" 
                           padding="sm" 
                           className="min-w-[80px] sm:min-w-[100px] bg-gradient-to-br ${item.color} bg-opacity-20"
@@ -235,19 +246,19 @@ const EnhancedLeagueDashboard: React.FC = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <Button 
+                    <Button>
                       variant="primary" 
                       size="lg"
-                      onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' as View })}
+                      onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DRAFT_PREP_CENTER&apos; as View })}
                       className="shadow-[0_0_30px_rgba(251,146,60,0.5)]"
                     >
                       <span className="mr-2">📋</span>
                       Prepare for Draft
                     </Button>
-                    <Button 
+                    <Button>
                       variant="default" 
                       size="lg"
-                      onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' as View })}
+                      onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MOCK_DRAFT&apos; as View })}
                     >
                       <span className="mr-2">🎯</span>
                       Mock Draft
@@ -270,10 +281,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               Quick Navigation
             </h3>
-            <Button 
+            <Button>
               variant="ghost" 
               size="sm"
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' as View })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; as View })}
             >
               View All →
             </Button>
@@ -281,19 +292,20 @@ const EnhancedLeagueDashboard: React.FC = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {navItems.map((item, index) => (
+}
               <motion.div
                 key={item.label}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05, type: "spring", stiffness: 300 }}
                 whileHover={{ y: -5 }}
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as View })}
+                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: item.view as View })}
                 className="cursor-pointer"
               >
-                <Card 
+                <Card>
                   variant="elevated" 
-                  hover 
-                  interactive
+//                   hover 
+//                   interactive
                   glow={false}
                   className="h-full relative group overflow-hidden"
                 >
@@ -357,10 +369,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
             <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
               AI-Powered Insights
             </h3>
-            <Button 
+            <Button>
               variant="ghost" 
               size="sm"
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ANALYTICS_HUB' as View })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ANALYTICS_HUB&apos; as View })}
             >
               Analytics Hub →
             </Button>
@@ -421,18 +433,19 @@ const EnhancedLeagueDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
                   {league.teams.map((team, index) => (
+}
                     <motion.div
                       key={team.id}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.4 + index * 0.03 }}
                     >
-                      <Card 
+                      <Card>
                         variant="bordered" 
                         padding="sm" 
-                        hover
+//                         hover
                         className="group cursor-pointer"
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_COMPARISON' as View })}
+                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_COMPARISON&apos; as View })}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -470,10 +483,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter separated className="justify-center">
-                <Button 
+                <Button>
                   variant="ghost" 
                   size="sm"
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ENHANCED_LEAGUE_STANDINGS' as View })}
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ENHANCED_LEAGUE_STANDINGS&apos; as View })}
                 >
                   View Full Standings →
                 </Button>
@@ -497,12 +510,13 @@ const EnhancedLeagueDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { label: 'Format', value: league.settings.scoringFormat, icon: '⚙️' },
-                    { label: 'Teams', value: league.settings.teamCount.toString(), icon: '👥' },
-                    { label: 'Playoff Teams', value: league.settings.playoffTeams.toString(), icon: '🏆' },
-                    { label: 'Draft Type', value: league.settings.draftFormat, icon: '📋' },
-                    { label: 'Waiver Type', value: league.settings.waiverType, icon: '📝' },
-                    { label: 'Trade Deadline', value: `Week ${league.settings.tradeDeadline}`, icon: '🔄' },
+}
+                    { label: &apos;Format&apos;, value: league.settings.scoringFormat, icon: &apos;⚙️&apos; },
+                    { label: &apos;Teams&apos;, value: league.settings.teamCount.toString(), icon: &apos;👥&apos; },
+                    { label: &apos;Playoff Teams&apos;, value: league.settings.playoffTeams.toString(), icon: &apos;🏆&apos; },
+                    { label: &apos;Draft Type&apos;, value: league.settings.draftFormat, icon: &apos;📋&apos; },
+                    { label: &apos;Waiver Type&apos;, value: league.settings.waiverType, icon: &apos;📝&apos; },
+                    { label: &apos;Trade Deadline&apos;, value: `Week ${league.settings.tradeDeadline}`, icon: &apos;🔄&apos; },
                   ].map((item, index) => (
                     <motion.div
                       key={item.label}
@@ -534,9 +548,10 @@ const EnhancedLeagueDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-3">
                   {[
-                    { place: '1st Place', amount: league.payouts.firstPlace, color: 'from-yellow-500 to-amber-600', icon: '🥇' },
-                    { place: '2nd Place', amount: league.payouts.secondPlace, color: 'from-gray-400 to-gray-500', icon: '🥈' },
-                    { place: '3rd Place', amount: league.payouts.thirdPlace, color: 'from-orange-600 to-orange-700', icon: '🥉' },
+}
+                    { place: &apos;1st Place&apos;, amount: league.payouts.firstPlace, color: &apos;from-yellow-500 to-amber-600&apos;, icon: &apos;🥇&apos; },
+                    { place: &apos;2nd Place&apos;, amount: league.payouts.secondPlace, color: &apos;from-gray-400 to-gray-500&apos;, icon: &apos;🥈&apos; },
+                    { place: &apos;3rd Place&apos;, amount: league.payouts.thirdPlace, color: &apos;from-orange-600 to-orange-700&apos;, icon: &apos;🥉&apos; },
                   ].map((prize, index) => (
                     <motion.div
                       key={prize.place}
@@ -544,7 +559,7 @@ const EnhancedLeagueDashboard: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.6 + index * 0.1, type: "spring" }}
                     >
-                      <Card 
+                      <Card>
                         variant="elevated" 
                         padding="sm"
                         className={`bg-gradient-to-r ${prize.color} bg-opacity-10 border-0`}
@@ -581,33 +596,38 @@ const EnhancedLeagueDashboard: React.FC = () => {
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
+}
                   { 
-                    title: 'Draft Day', 
-                    date: 'Aug 31, 2025', 
-                    icon: '📋', 
-                    gradient: 'from-orange-500 to-red-500',
-                    description: '7:00 PM EST'
+}
+                    title: &apos;Draft Day&apos;, 
+                    date: &apos;Aug 31, 2025&apos;, 
+                    icon: &apos;📋&apos;, 
+                    gradient: &apos;from-orange-500 to-red-500&apos;,
+                    description: &apos;7:00 PM EST&apos;
                   },
                   { 
-                    title: 'Season Start', 
-                    date: 'Sep 4, 2025', 
-                    icon: '🏈', 
-                    gradient: 'from-green-500 to-emerald-500',
-                    description: 'Week 1 Kickoff'
+}
+                    title: &apos;Season Start&apos;, 
+                    date: &apos;Sep 4, 2025&apos;, 
+                    icon: &apos;🏈&apos;, 
+                    gradient: &apos;from-green-500 to-emerald-500&apos;,
+                    description: &apos;Week 1 Kickoff&apos;
                   },
                   { 
-                    title: 'Trade Deadline', 
-                    date: 'Nov 15, 2025', 
-                    icon: '🔄', 
-                    gradient: 'from-blue-500 to-indigo-500',
-                    description: 'Week 11'
+}
+                    title: &apos;Trade Deadline&apos;, 
+                    date: &apos;Nov 15, 2025&apos;, 
+                    icon: &apos;🔄&apos;, 
+                    gradient: &apos;from-blue-500 to-indigo-500&apos;,
+                    description: &apos;Week 11&apos;
                   },
                   { 
-                    title: 'Championship', 
-                    date: 'Jan 4, 2026', 
-                    icon: '🏆', 
-                    gradient: 'from-purple-500 to-pink-500',
-                    description: 'Week 17 Final'
+}
+                    title: &apos;Championship&apos;, 
+                    date: &apos;Jan 4, 2026&apos;, 
+                    icon: &apos;🏆&apos;, 
+                    gradient: &apos;from-purple-500 to-pink-500&apos;,
+                    description: &apos;Week 17 Final&apos;
                   },
                 ].map((event, index) => (
                   <motion.div
@@ -617,9 +637,9 @@ const EnhancedLeagueDashboard: React.FC = () => {
                     transition={{ delay: 0.6 + index * 0.1, type: "spring" }}
                     whileHover={{ scale: 1.05 }}
                   >
-                    <Card 
+                    <Card>
                       variant="gradient" 
-                      hover 
+//                       hover 
                       className="h-full text-center relative overflow-hidden group"
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${event.gradient} opacity-20 group-hover:opacity-30 transition-opacity`} />
@@ -651,10 +671,11 @@ const EnhancedLeagueDashboard: React.FC = () => {
           className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4"
         >
           {[
-            { label: 'Total Teams', value: '10', icon: '👥', color: 'primary' },
-            { label: 'Entry Fee', value: '$50', icon: '💵', color: 'secondary' },
-            { label: 'Total Prize', value: '$500', icon: '💰', color: 'warning' },
-            { label: 'Weeks Left', value: '17', icon: '📅', color: 'accent' },
+}
+            { label: &apos;Total Teams&apos;, value: &apos;10&apos;, icon: &apos;👥&apos;, color: &apos;primary&apos; },
+            { label: &apos;Entry Fee&apos;, value: &apos;$50&apos;, icon: &apos;💵&apos;, color: &apos;secondary&apos; },
+            { label: &apos;Total Prize&apos;, value: &apos;$500&apos;, icon: &apos;💰&apos;, color: &apos;warning&apos; },
+            { label: &apos;Weeks Left&apos;, value: &apos;17&apos;, icon: &apos;📅&apos;, color: &apos;accent&apos; },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}

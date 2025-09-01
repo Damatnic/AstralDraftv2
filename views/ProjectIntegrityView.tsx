@@ -1,12 +1,13 @@
-import React from 'react';
-import { ErrorBoundary } from '../components/ui/ErrorBoundary';
+import { ErrorBoundary } from &apos;../components/ui/ErrorBoundary&apos;;
 
 interface ProjectIntegrityViewProps {
+}
   // No props currently needed, but interface ready for future expansion
 
 }
 
 const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
+}
   return (
     <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
       <header className="flex-shrink-0 mb-6">
@@ -28,13 +29,13 @@ const ProjectIntegrityView: React.FC<ProjectIntegrityViewProps> = () => {
               <div className="flex justify-between items-center">
                 <span className="text-[var(--text-secondary)]">Oracle Engine</span>
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded text-sm">
-                  Operational
+//                   Operational
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-[var(--text-secondary)]">Data Pipeline</span>
                 <span className="px-2 py-1 bg-green-500/20 text-green-400 rounded text-sm">
-                  Healthy
+//                   Healthy
                 </span>
               </div>
               <div className="flex justify-between items-center">

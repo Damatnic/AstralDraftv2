@@ -3,25 +3,26 @@
  * Advanced roster editing with position management, depth chart, and player details
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { DndContext, DragEndEvent, closestCenter, useSensor, useSensors, PointerSensor, KeyboardSensor } from '@dnd-kit/core';
-import { SortableContext, sortableKeyboardCoordinates, rectSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { Widget } from '../ui/Widget';
-import { Avatar } from '../ui/Avatar';
-import { Player, Team, League, PlayerPosition } from '../../types';
-import { PencilIcon } from '../icons/PencilIcon';
-import { UserPlusIcon } from '../icons/UserPlusIcon';
-import { UserRemoveIcon } from '../icons/UserRemoveIcon';
-import { EyeIcon } from '../icons/EyeIcon';
-import { TrendingUpIcon } from '../icons/TrendingUpIcon';
-import { TrendingDownIcon } from '../icons/TrendingDownIcon';
-import { StarIcon } from '../icons/StarIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { DndContext, DragEndEvent, closestCenter, useSensor, useSensors, PointerSensor, KeyboardSensor } from &apos;@dnd-kit/core&apos;;
+import { SortableContext, sortableKeyboardCoordinates, rectSortingStrategy, arrayMove } from &apos;@dnd-kit/sortable&apos;;
+import { useSortable } from &apos;@dnd-kit/sortable&apos;;
+import { CSS } from &apos;@dnd-kit/utilities&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
+import { Player, Team, League, PlayerPosition } from &apos;../../types&apos;;
+import { PencilIcon } from &apos;../icons/PencilIcon&apos;;
+import { UserPlusIcon } from &apos;../icons/UserPlusIcon&apos;;
+import { UserRemoveIcon } from &apos;../icons/UserRemoveIcon&apos;;
+import { EyeIcon } from &apos;../icons/EyeIcon&apos;;
+import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
+import { TrendingDownIcon } from &apos;../icons/TrendingDownIcon&apos;;
+import { StarIcon } from &apos;../icons/StarIcon&apos;;
 
 interface EnhancedRosterManagerProps {
+}
     team: Team;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -30,6 +31,7 @@ interface EnhancedRosterManagerProps {
 }
 
 interface PlayerCardProps {
+}
     player: Player;
     onView: () => void;
     onEdit?: () => void;
@@ -38,25 +40,30 @@ interface PlayerCardProps {
     isStarter?: boolean;
 
 interface PositionGroupProps {
+}
     position: PlayerPosition;
     players: Player[];
     maxStarters: number;
-    onPlayerAction: (player: Player, action: 'view' | 'edit' | 'remove') => void;
+    onPlayerAction: (player: Player, action: &apos;view&apos; | &apos;edit&apos; | &apos;remove&apos;) => void;
     canEdit: boolean;
 
 }
 
 const SortablePlayerCard: React.FC<{
-  const [isLoading, setIsLoading] = React.useState(false); player: Player; onAction: (player: Player, action: 'view' | 'edit' | 'remove') => void; canEdit: boolean; isStarter?: boolean }> = ({ 
+}
+  const [isLoading, setIsLoading] = React.useState(false); player: Player; onAction: (player: Player, action: &apos;view&apos; | &apos;edit&apos; | &apos;remove&apos;) => void; canEdit: boolean; isStarter?: boolean }> = ({ 
+}
     player, onAction, canEdit, isStarter 
 }: any) => {
+}
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
 
     const style = {
+}
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
-        boxShadow: isDragging ? '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none',
+        boxShadow: isDragging ? &apos;0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)&apos; : &apos;none&apos;,
     };
 
     return (
@@ -66,13 +73,14 @@ const SortablePlayerCard: React.FC<{
             {...attributes}
             {...(canEdit ? listeners : {})}
             className={`p-3 border rounded-lg transition-all ${
-                isDragging ? 'border-blue-500 bg-blue-500/10' : 'border-[var(--panel-border)] hover:border-gray-500'
-            } ${isStarter ? 'bg-green-500/10 border-green-500/30' : 'bg-[var(--panel-bg)]'}`}
+}
+                isDragging ? &apos;border-blue-500 bg-blue-500/10&apos; : &apos;border-[var(--panel-border)] hover:border-gray-500&apos;
+            } ${isStarter ? &apos;bg-green-500/10 border-green-500/30&apos; : &apos;bg-[var(--panel-bg)]&apos;}`}
         >
             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-center gap-3 min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
-                    <Avatar 
-                        avatar={player.astralIntelligence?.spiritAnimal?.[0] || '🏈'} 
+                    <Avatar>
+                        avatar={player.astralIntelligence?.spiritAnimal?.[0] || &apos;🏈&apos;} 
                         className="w-10 h-10 text-xl rounded-md flex-shrink-0 sm:px-4 md:px-6 lg:px-8" 
                     />
                     <div className="min-w-0 flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -85,6 +93,7 @@ const SortablePlayerCard: React.FC<{
                             <span className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">Proj: {player.stats.projection.toFixed(1)}</span>
                             <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">ADP: {player?.adp}</span>
                             {player?.injuryHistory && player?.injuryHistory.length > 0 && (
+}
                                 <span className="text-xs text-red-400 sm:px-4 md:px-6 lg:px-8">⚠️ Injury History</span>
                             )}
                         </div>
@@ -93,21 +102,22 @@ const SortablePlayerCard: React.FC<{
 
                 <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                     <button
-                        onClick={() => onAction(player, 'view')}
+                        onClick={() => onAction(player, &apos;view&apos;)}
                         title="View Details"
                     >
                         <EyeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                     </button>
                     {canEdit && (
+}
                         <>
                             <button
-                                onClick={() => onAction(player, 'edit')}
+                                onClick={() => onAction(player, &apos;edit&apos;)}
                                 title="Edit Player"
                             >
                                 <PencilIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
                             </button>
                             <button
-                                onClick={() => onAction(player, 'remove')}
+                                onClick={() => onAction(player, &apos;remove&apos;)}
                                 title="Remove Player"
                             >
                                 <UserRemoveIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -121,6 +131,7 @@ const SortablePlayerCard: React.FC<{
 };
 
 const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxStarters, onPlayerAction, canEdit }: any) => {
+}
     const starters = players.slice(0, maxStarters);
     const bench = players.slice(maxStarters);
 
@@ -128,19 +139,22 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
             {/* Starters */}
             {maxStarters > 0 && (
+}
                 <div>
                     <h4 className="font-semibold text-[var(--text-primary)] mb-2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8">
                             Starting {position}s ({starters.length}/{maxStarters})
                         </span>
                         {starters.length < maxStarters && (
+}
                             <span className="text-yellow-400 text-xs sm:px-4 md:px-6 lg:px-8">Need {maxStarters - starters.length} more</span>
                         )}
                     </h4>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                         <SortableContext items={starters.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {starters.map((player: any) => (
-                                <SortablePlayerCard
+}
+                                <SortablePlayerCard>
                                     key={player.id}
                                     player={player}
                                     onAction={onPlayerAction}
@@ -150,6 +164,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                             ))}
                         </SortableContext>
                         {starters.length === 0 && (
+}
                             <div className="col-span-full p-6 border-2 border-dashed border-gray-600 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
                                 <p className="text-gray-400 sm:px-4 md:px-6 lg:px-8">No starting {position}s assigned</p>
                             </div>
@@ -160,6 +175,7 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
 
             {/* Bench */}
             {bench.length > 0 && (
+}
                 <div>
                     <h4 className="font-semibold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="bg-gray-500/20 text-gray-400 px-2 py-1 rounded text-sm sm:px-4 md:px-6 lg:px-8">
@@ -169,7 +185,8 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                         <SortableContext items={bench.map((p: any) => p.id)} strategy={rectSortingStrategy}>
                             {bench.map((player: any) => (
-                                <SortablePlayerCard
+}
+                                <SortablePlayerCard>
                                     key={player.id}
                                     player={player}
                                     onAction={onPlayerAction}
@@ -186,8 +203,10 @@ const PositionGroup: React.FC<PositionGroupProps> = ({ position, players, maxSta
 };
 
 const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, league, dispatch, canEdit }: any) => {
+}
     const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
     const [rosterByPosition, setRosterByPosition] = React.useState<Record<PlayerPosition, Player[]>>({
+}
         QB: [],
         RB: [],
         WR: [],
@@ -198,6 +217,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
     // Position requirements (typical starting lineup)
     const positionRequirements: Record<PlayerPosition, number> = {
+}
         QB: 1,
         RB: 2,
         WR: 2,
@@ -208,7 +228,9 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
     // Update roster by position when team roster changes
     React.useEffect(() => {
+}
         const grouped = team.roster.reduce((acc, player) => {
+}
             if (!acc[player.position]) acc[player.position] = [];
             acc[player.position].push(player);
             return acc;
@@ -217,10 +239,12 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
         // Sort each position by projection (descending)
         Object.keys(grouped).forEach((pos: any) => {
+}
             grouped[pos as PlayerPosition].sort((a, b) => b.stats.projection - a.stats.projection);
         });
 
         setRosterByPosition({
+}
             QB: grouped.QB || [],
             RB: grouped.RB || [],
             WR: grouped.WR || [],
@@ -236,6 +260,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
     );
 
     const handleDragEnd = (event: DragEndEvent) => {
+}
         if (!canEdit) return;
 
         const { active, over } = event;
@@ -244,7 +269,9 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
         // Find which position group the dragged player belongs to
         let sourcePosition: PlayerPosition | null = null;
         for (const [pos, players] of Object.entries(rosterByPosition)) {
+}
             if (players.some((p: any) => p.id === active.id)) {
+}
                 sourcePosition = pos as PlayerPosition;
                 break;
 
@@ -256,8 +283,10 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
         const newIndex = sourceArray.findIndex((p: any) => p.id === over.id);
 
         if (oldIndex !== -1 && newIndex !== -1) {
+}
             const newArray = arrayMove(sourceArray, oldIndex, newIndex);
             setRosterByPosition(prev => ({
+}
                 ...prev,
                 [sourcePosition]: newArray
             }));
@@ -265,8 +294,10 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
             // Update global state with new lineup order
             const newStarters = newArray.slice(0, positionRequirements[sourcePosition]);
             dispatch({
-                type: 'UPDATE_POSITION_DEPTH_CHART',
+}
+                type: &apos;UPDATE_POSITION_DEPTH_CHART&apos;,
                 payload: {
+}
                     leagueId: league.id,
                     teamId: team.id,
                     position: sourcePosition,
@@ -276,24 +307,30 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
     };
 
-    const handlePlayerAction = (player: Player, action: 'view' | 'edit' | 'remove') => {
+    const handlePlayerAction = (player: Player, action: &apos;view&apos; | &apos;edit&apos; | &apos;remove&apos;) => {
+}
         switch (action) {
-            case 'view':
+}
+            case &apos;view&apos;:
                 setSelectedPlayer(player);
                 break;
-            case 'edit':
+            case &apos;edit&apos;:
                 if (canEdit) {
+}
                     dispatch({ 
-                        type: 'SET_VIEW', 
-                        payload: 'EDIT_PLAYER',
+}
+                        type: &apos;SET_VIEW&apos;, 
+                        payload: &apos;EDIT_PLAYER&apos;,
                         data: { playerId: player.id, teamId: team.id }
                     });
 
                 break;
-            case 'remove':
+            case &apos;remove&apos;:
                 if (canEdit && window.confirm(`Remove ${player.name} from ${team.name}?`)) {
+}
                     dispatch({
-                        type: 'REMOVE_PLAYER_FROM_TEAM',
+}
+                        type: &apos;REMOVE_PLAYER_FROM_TEAM&apos;,
                         payload: { leagueId: league.id, teamId: team.id, playerId: player.id }
                     });
 
@@ -302,10 +339,13 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
     };
 
     const addPlayer = () => {
+}
         if (canEdit) {
+}
             dispatch({ 
-                type: 'SET_VIEW', 
-                payload: 'ADD_PLAYER_TO_TEAM',
+}
+                type: &apos;SET_VIEW&apos;, 
+                payload: &apos;ADD_PLAYER_TO_TEAM&apos;,
                 data: { teamId: team.id }
             });
 
@@ -313,6 +353,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
     const totalStarters = Object.values(positionRequirements).reduce((sum, count) => sum + count, 0);
     const currentStarters = Object.entries(rosterByPosition).reduce((sum, [pos, players]) => {
+}
         const required = positionRequirements[pos as PlayerPosition];
         return sum + Math.min(players.length, required);
     }, 0);
@@ -345,6 +386,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                         </div>
 
                         {canEdit && (
+}
                             <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                                 <button
                                     onClick={addPlayer}
@@ -354,7 +396,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                                     Add Player
                                 </button>
                                 <button
-                                    onClick={() => dispatch({ type: 'OPTIMIZE_LINEUP', payload: { teamId: team.id }})}
+                                    onClick={() => dispatch({ type: &apos;OPTIMIZE_LINEUP&apos;, payload: { teamId: team.id }})}
                                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg sm:px-4 md:px-6 lg:px-8"
                                 >
                                     <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -367,13 +409,14 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
 
                 {/* Position Groups */}
                 {Object.entries(positionRequirements).map(([position, maxStarters]) => {
+}
                     const pos = position as PlayerPosition;
                     const players = rosterByPosition[pos] || [];
                     
                     return (
                         <Widget key={position} title={`${position} (${players.length} players)`}>
                             <div className="p-4 sm:px-4 md:px-6 lg:px-8">
-                                <PositionGroup
+                                <PositionGroup>
                                     position={pos}
                                     players={players}
                                     maxStarters={maxStarters}
@@ -388,6 +431,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                 {/* Player Details Modal */}
                 <AnimatePresence>
                     {selectedPlayer && (
+}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -433,6 +477,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                                 </div>
 
                                 {selectedPlayer.scoutingReport && (
+}
                                     <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
                                         <h4 className="font-semibold text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">Scouting Report</h4>
                                         <p className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">{selectedPlayer.scoutingReport.summary}</p>
@@ -441,6 +486,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                                                 <h5 className="text-green-400 font-medium sm:px-4 md:px-6 lg:px-8">Strengths</h5>
                                                 <ul className="text-sm list-disc list-inside sm:px-4 md:px-6 lg:px-8">
                                                     {selectedPlayer.scoutingReport.strengths.map((strength, i) => (
+}
                                                         <li key={i}>{strength}</li>
                                                     ))}
                                                 </ul>
@@ -449,6 +495,7 @@ const EnhancedRosterManager: React.FC<EnhancedRosterManagerProps> = ({ team, lea
                                                 <h5 className="text-red-400 font-medium sm:px-4 md:px-6 lg:px-8">Weaknesses</h5>
                                                 <ul className="text-sm list-disc list-inside sm:px-4 md:px-6 lg:px-8">
                                                     {selectedPlayer.scoutingReport.weaknesses.map((weakness, i) => (
+}
                                                         <li key={i}>{weakness}</li>
                                                     ))}
                                                 </ul>

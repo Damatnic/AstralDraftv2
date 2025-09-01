@@ -3,36 +3,38 @@
  * Central hub for all season-long activities: matchups, scoring, waivers
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import WeeklyMatchups from '../components/season/WeeklyMatchups';
-import LiveScoring from '../components/season/LiveScoring';
-import EnhancedWaiverWire from '../components/season/EnhancedWaiverWire';
+import React, { useState } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import WeeklyMatchups from &apos;../components/season/WeeklyMatchups&apos;;
+import LiveScoring from &apos;../components/season/LiveScoring&apos;;
+import EnhancedWaiverWire from &apos;../components/season/EnhancedWaiverWire&apos;;
 
 const SeasonManagementView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<'matchups' | 'scoring' | 'waivers' | 'standings'>('matchups');
+  const [activeTab, setActiveTab] = useState<&apos;matchups&apos; | &apos;scoring&apos; | &apos;waivers&apos; | &apos;standings&apos;>(&apos;matchups&apos;);
   const [currentWeek] = useState(8); // Simulated current week
 
   const league = state.leagues[0];
   const currentUser = state.user;
 
   const tabs = [
-    { id: 'matchups', label: 'Matchups', icon: '⚔️', description: 'Weekly head-to-head matchups' },
-    { id: 'scoring', label: 'Live Scoring', icon: '📊', description: 'Real-time player scoring' },
-    { id: 'waivers', label: 'Waiver Wire', icon: '🔄', description: 'FAAB bidding system' },
-    { id: 'standings', label: 'Standings', icon: '🏆', description: 'League standings & playoffs' }
+    { id: &apos;matchups&apos;, label: &apos;Matchups&apos;, icon: &apos;⚔️&apos;, description: &apos;Weekly head-to-head matchups&apos; },
+    { id: &apos;scoring&apos;, label: &apos;Live Scoring&apos;, icon: &apos;📊&apos;, description: &apos;Real-time player scoring&apos; },
+    { id: &apos;waivers&apos;, label: &apos;Waiver Wire&apos;, icon: &apos;🔄&apos;, description: &apos;FAAB bidding system&apos; },
+    { id: &apos;standings&apos;, label: &apos;Standings&apos;, icon: &apos;🏆&apos;, description: &apos;League standings & playoffs&apos; }
   ];
 
   // Quick stats for the dashboard
   const quickStats = {
+}
     currentWeek,
     totalWeeks: 17,
     playoffWeeks: 3,
     regularSeasonWeeks: 14,
-    waiverProcessing: 'Tuesday 11:59 PM',
-    nextMatchup: 'Sunday 1:00 PM'
+    waiverProcessing: &apos;Tuesday 11:59 PM&apos;,
+    nextMatchup: &apos;Sunday 1:00 PM&apos;
   };
 
   return (
@@ -42,7 +44,7 @@ const SeasonManagementView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
               className="back-btn"
             >
               ← Back to Dashboard
@@ -58,7 +60,7 @@ const SeasonManagementView: React.FC = () => {
             
             <div className="text-right">
               <div className="text-white font-semibold">
-                {currentWeek <= quickStats.regularSeasonWeeks ? 'Regular Season' : 'Playoffs'}
+                {currentWeek <= quickStats.regularSeasonWeeks ? &apos;Regular Season&apos; : &apos;Playoffs&apos;}
               </div>
               <div className="text-sm text-blue-400">
                 {quickStats.totalWeeks - currentWeek + 1} weeks remaining
@@ -83,7 +85,7 @@ const SeasonManagementView: React.FC = () => {
               <div>
                 <div className="text-white font-semibold">Current Week</div>
                 <div className="text-sm text-secondary">
-                  {currentWeek <= quickStats.regularSeasonWeeks ? 'Regular Season' : 'Playoffs'}
+                  {currentWeek <= quickStats.regularSeasonWeeks ? &apos;Regular Season&apos; : &apos;Playoffs&apos;}
                 </div>
               </div>
             </div>
@@ -145,6 +147,7 @@ const SeasonManagementView: React.FC = () => {
         <div className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-2 bg-slate-800/50 rounded-lg p-2">
             {tabs.map((tab: any) => (
+}
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
@@ -161,7 +164,8 @@ const SeasonManagementView: React.FC = () => {
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
-          {activeTab === 'matchups' && (
+          {activeTab === &apos;matchups&apos; && (
+}
             <motion.div
               key="matchups"
               initial={{ opacity: 0, y: 20 }}
@@ -173,7 +177,8 @@ const SeasonManagementView: React.FC = () => {
             </motion.div>
           )}
 
-          {activeTab === 'scoring' && (
+          {activeTab === &apos;scoring&apos; && (
+}
             <motion.div
               key="scoring"
               initial={{ opacity: 0, y: 20 }}
@@ -185,7 +190,8 @@ const SeasonManagementView: React.FC = () => {
             </motion.div>
           )}
 
-          {activeTab === 'waivers' && (
+          {activeTab === &apos;waivers&apos; && (
+}
             <motion.div
               key="waivers"
               initial={{ opacity: 0, y: 20 }}
@@ -197,7 +203,8 @@ const SeasonManagementView: React.FC = () => {
             </motion.div>
           )}
 
-          {activeTab === 'standings' && (
+          {activeTab === &apos;standings&apos; && (
+}
             <motion.div
               key="standings"
               initial={{ opacity: 0, y: 20 }}
@@ -211,7 +218,7 @@ const SeasonManagementView: React.FC = () => {
                   View detailed standings, playoff picture, and league statistics
                 </p>
                 <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'ENHANCED_LEAGUE_STANDINGS' })}
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;ENHANCED_LEAGUE_STANDINGS&apos; })}
                   className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                 >
                   View Full Standings
@@ -250,7 +257,7 @@ const SeasonManagementView: React.FC = () => {
                 <div className="text-white font-semibold">Regular Season</div>
                 <div className="text-sm text-slate-400">Weeks 1-{quickStats.regularSeasonWeeks}</div>
                 <div className="text-xs text-slate-500 mt-1">
-                  {currentWeek <= quickStats.regularSeasonWeeks ? 'In Progress' : 'Complete'}
+                  {currentWeek <= quickStats.regularSeasonWeeks ? &apos;In Progress&apos; : &apos;Complete&apos;}
                 </div>
               </div>
               
@@ -258,7 +265,7 @@ const SeasonManagementView: React.FC = () => {
                 <div className="text-white font-semibold">Playoffs</div>
                 <div className="text-sm text-slate-400">Weeks 15-17</div>
                 <div className="text-xs text-slate-500 mt-1">
-                  {currentWeek >= 15 ? 'In Progress' : 'Upcoming'}
+                  {currentWeek >= 15 ? &apos;In Progress&apos; : &apos;Upcoming&apos;}
                 </div>
               </div>
               
@@ -266,7 +273,7 @@ const SeasonManagementView: React.FC = () => {
                 <div className="text-white font-semibold">Championship</div>
                 <div className="text-sm text-slate-400">Week 17</div>
                 <div className="text-xs text-slate-500 mt-1">
-                  {currentWeek === 17 ? 'This Week!' : currentWeek > 17 ? 'Complete' : 'Upcoming'}
+                  {currentWeek === 17 ? &apos;This Week!&apos; : currentWeek > 17 ? &apos;Complete&apos; : &apos;Upcoming&apos;}
                 </div>
               </div>
             </div>
@@ -276,7 +283,7 @@ const SeasonManagementView: React.FC = () => {
         {/* Quick Actions */}
         <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })}
+            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">
@@ -289,7 +296,7 @@ const SeasonManagementView: React.FC = () => {
           </button>
 
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'PLAYERS' })}
+            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;PLAYERS&apos; })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">
@@ -302,7 +309,7 @@ const SeasonManagementView: React.FC = () => {
           </button>
 
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TRADES' })}
+            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TRADES&apos; })}
             className="p-4 bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700 hover:border-slate-600 rounded-lg transition-colors text-left"
           >
             <div className="flex items-center gap-3">

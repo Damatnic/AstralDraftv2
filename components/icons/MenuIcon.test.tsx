@@ -1,38 +1,44 @@
 
 interface IconProps {
+}
   size?: number | string;
 }
 
   className?: string;
   color?: string;
-  'aria-label'?: string;
+  &apos;aria-label&apos;?: string;
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import MenuIcon from './MenuIcon';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import MenuIcon from &apos;./MenuIcon&apos;;
 
-describe('MenuIcon', () => {
-  it('renders without crashing', () => {
+describe(&apos;MenuIcon&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<MenuIcon />);
-    expect(screen.getByTestId('menuicon')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;menuicon&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<MenuIcon />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<MenuIcon />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

@@ -3,33 +3,34 @@
  * Features advanced filtering, beautiful cards, and smooth animations
  */
 
-import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { Player } from '../types';
-import { NFL_TEAMS, searchPlayers } from '../data/nflPlayers';
-import { SearchIcon } from '../components/icons/SearchIcon';
-import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
-import { TrendingDownIcon } from '../components/icons/TrendingDownIcon';
-import { StarIcon } from '../components/icons/StarIcon';
-import { FireIcon } from '../components/icons/FireIcon';
-import { InjuryIcon } from '../components/icons/InjuryIcon';
-import { ChartBarIcon } from '../components/icons/ChartBarIcon';
-import { AdjustmentsIcon as FilterIcon } from '../components/icons/AdjustmentsIcon';
-import { LayoutIcon as GridIcon } from '../components/icons/LayoutIcon';
-import { ListChecksIcon as ListIcon } from '../components/icons/ListChecksIcon';
-import PlayerDetailModal from '../components/player/PlayerDetailModal';
-import { sportsIOPlayerService } from '../services/sportsIOPlayerService';
+import React, { useState, useMemo, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { Player } from &apos;../types&apos;;
+import { NFL_TEAMS, searchPlayers } from &apos;../data/nflPlayers&apos;;
+import { SearchIcon } from &apos;../components/icons/SearchIcon&apos;;
+import { TrendingUpIcon } from &apos;../components/icons/TrendingUpIcon&apos;;
+import { TrendingDownIcon } from &apos;../components/icons/TrendingDownIcon&apos;;
+import { StarIcon } from &apos;../components/icons/StarIcon&apos;;
+import { FireIcon } from &apos;../components/icons/FireIcon&apos;;
+import { InjuryIcon } from &apos;../components/icons/InjuryIcon&apos;;
+import { ChartBarIcon } from &apos;../components/icons/ChartBarIcon&apos;;
+import { AdjustmentsIcon as FilterIcon } from &apos;../components/icons/AdjustmentsIcon&apos;;
+import { LayoutIcon as GridIcon } from &apos;../components/icons/LayoutIcon&apos;;
+import { ListChecksIcon as ListIcon } from &apos;../components/icons/ListChecksIcon&apos;;
+import PlayerDetailModal from &apos;../components/player/PlayerDetailModal&apos;;
+import { sportsIOPlayerService } from &apos;../services/sportsIOPlayerService&apos;;
 
 const PlayersView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPosition, setSelectedPosition] = useState('ALL');
-  const [selectedTeam, setSelectedTeam] = useState('ALL');
-  const [injuryFilter, setInjuryFilter] = useState('ALL');
-  const [sortBy, setSortBy] = useState<'rank' | 'name' | 'team' | 'points' | 'trending'>('rank');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
+  const [selectedPosition, setSelectedPosition] = useState(&apos;ALL&apos;);
+  const [selectedTeam, setSelectedTeam] = useState(&apos;ALL&apos;);
+  const [injuryFilter, setInjuryFilter] = useState(&apos;ALL&apos;);
+  const [sortBy, setSortBy] = useState<&apos;rank&apos; | &apos;name&apos; | &apos;team&apos; | &apos;points&apos; | &apos;trending&apos;>(&apos;rank&apos;);
+  const [viewMode, setViewMode] = useState<&apos;grid&apos; | &apos;list&apos;>(&apos;grid&apos;);
   const [showFilters, setShowFilters] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [comparePlayers, setComparePlayers] = useState<Player[]>([]);
@@ -41,37 +42,48 @@ const PlayersView: React.FC = () => {
 
   // Load live player data from Sports.io API
   useEffect(() => {
+}
     const loadLivePlayerData = async () => {
+}
       if (!league) return;
       
       try {
-        console.log('🚀 Loading live player data from Sports.io...');
+}
+        console.log(&apos;🚀 Loading live player data from Sports.io...&apos;);
         const livePlayers = await sportsIOPlayerService.getAllPlayers();
         
         if (livePlayers && livePlayers.length > 0) {
+}
           dispatch({
-            type: 'UPDATE_LEAGUE_PLAYERS',
+}
+            type: &apos;UPDATE_LEAGUE_PLAYERS&apos;,
             payload: {
+}
               leagueId: league.id,
               players: livePlayers
             }
           });
           
           dispatch({
-            type: 'ADD_NOTIFICATION',
+}
+            type: &apos;ADD_NOTIFICATION&apos;,
             payload: {
+}
               message: `✅ Loaded ${livePlayers.length} players from Sports.io API`,
-              type: 'SUCCESS'
+              type: &apos;SUCCESS&apos;
             }
           });
         }
       } catch (error) {
-        console.error('Error loading player data:', error);
+}
+        console.error(&apos;Error loading player data:&apos;, error);
         dispatch({
-          type: 'ADD_NOTIFICATION',
+}
+          type: &apos;ADD_NOTIFICATION&apos;,
           payload: {
-            message: 'Failed to load player data',
-            type: 'ERROR'
+}
+            message: &apos;Failed to load player data&apos;,
+            type: &apos;ERROR&apos;
           }
         });
       }
@@ -82,6 +94,7 @@ const PlayersView: React.FC = () => {
 
   // Player Card Component
   const PlayerCard = ({ player, index }: { player: Player; index: number }) => {
+}
     const config = getPositionConfig(player.position);
     const injuryConfig = getInjuryConfig(player.injuryStatus);
     const trendingScore = getTrendingScore(player);
@@ -100,21 +113,24 @@ const PlayersView: React.FC = () => {
       >
         {/* Card Container with Glassmorphism */}
         <div className={`
+}
           relative overflow-hidden rounded-2xl
           bg-gradient-to-br from-slate-800/40 to-slate-900/40
           backdrop-blur-xl border transition-all duration-300
-          ${isSelected ? 'border-blue-400/50 shadow-[0_0_30px_rgba(59,130,246,0.3)]' : 'border-white/5 hover:border-white/10'}
-          ${isComparing ? 'ring-2 ring-yellow-400/50' : ''}
-          ${viewMode === 'grid' ? 'p-6' : 'p-4'}
+          ${isSelected ? &apos;border-blue-400/50 shadow-[0_0_30px_rgba(59,130,246,0.3)]&apos; : &apos;border-white/5 hover:border-white/10&apos;}
+          ${isComparing ? &apos;ring-2 ring-yellow-400/50&apos; : &apos;&apos;}
+          ${viewMode === &apos;grid&apos; ? &apos;p-6&apos; : &apos;p-4&apos;}
         `}>
           {/* Background Gradient Overlay */}
           <div className={`
+}
             absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
             bg-gradient-to-br ${config.color}
           `} style={{ opacity: 0.05 }} />
 
           {/* Trending Badge */}
           {trendingScore > 75 && (
+}
             <div className="absolute top-3 right-3 z-10">
               <motion.div
                 animate={{ rotate: [0, 10, -10, 0] }}
@@ -122,17 +138,19 @@ const PlayersView: React.FC = () => {
                 className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1"
               >
                 <FireIcon className="h-3 w-3" />
-                HOT
+//                 HOT
               </motion.div>
             </div>
           )}
 
-          {viewMode === 'grid' ? (
+          {viewMode === &apos;grid&apos; ? (
+}
             // Grid View Card
             <>
               {/* Position Badge */}
               <div className="flex justify-between items-start mb-4">
                 <div className={`
+}
                   px-3 py-1 rounded-lg font-bold text-sm
                   bg-gradient-to-r ${config.color} text-white shadow-lg
                 `}>
@@ -188,6 +206,7 @@ const PlayersView: React.FC = () => {
               <div className="flex items-center justify-between pt-3 border-t border-slate-700/50">
                 <div className="flex items-center gap-2">
                   {trendingScore > 60 ? (
+}
                     <TrendingUpIcon className="h-4 w-4 text-green-400" />
                   ) : trendingScore < 40 ? (
                     <TrendingDownIcon className="h-4 w-4 text-red-400" />
@@ -198,9 +217,10 @@ const PlayersView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <StarIcon 
+}
+                    <StarIcon>
                       key={i} 
-                      className={`h-3 w-3 ${i < Math.floor(player.fantasyRank / 20) ? 'text-yellow-400' : 'text-gray-600'}`} 
+                      className={`h-3 w-3 ${i < Math.floor(player.fantasyRank / 20) ? &apos;text-yellow-400&apos; : &apos;text-gray-600&apos;}`} 
                     />
                   ))}
                 </div>
@@ -211,6 +231,7 @@ const PlayersView: React.FC = () => {
                 <button
                   type="button"
                   onClick={(e: any) => {
+}
                     e.preventDefault();
                     e.stopPropagation();
                     handleAddToRoster(player);
@@ -230,6 +251,7 @@ const PlayersView: React.FC = () => {
               <div className="flex items-center gap-3">
                 <div className="text-2xl">{config.icon}</div>
                 <div className={`
+}
                   px-2 py-1 rounded font-bold text-xs
                   bg-gradient-to-r ${config.color} text-white
                 `}>
@@ -269,6 +291,7 @@ const PlayersView: React.FC = () => {
               <button
                 type="button"
                 onClick={(e: any) => {
+}
                   e.preventDefault();
                   e.stopPropagation();
                   handleAddToRoster(player);
@@ -277,7 +300,7 @@ const PlayersView: React.FC = () => {
                 autoComplete="off"
                 data-form="false"
               >
-                Add
+//                 Add
               </button>
             </div>
           )}
@@ -298,7 +321,7 @@ const PlayersView: React.FC = () => {
         {/* Navigation Header */}
         <div className="nav-header mb-4">
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
             className="back-btn"
           >
             ← Back to Dashboard
@@ -344,8 +367,9 @@ const PlayersView: React.FC = () => {
                 onChange={(e: any) => setSearchQuery(e.target.value)}
               />
               {searchQuery && (
+}
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => setSearchQuery(&apos;&apos;)}
                 >
                   ✕
                 </button>
@@ -361,6 +385,7 @@ const PlayersView: React.FC = () => {
               >
                 <option value="ALL">All Positions</option>
                 {Object.keys(positionConfig).map((pos: any) => (
+}
                   <option key={pos} value={pos}>{pos}</option>
                 ))}
               </select>
@@ -372,6 +397,7 @@ const PlayersView: React.FC = () => {
               >
                 <option value="ALL">All Teams</option>
                 {Object.entries(NFL_TEAMS).map(([key, team]) => (
+}
                   <option key={key} value={key}>{team.name}</option>
                 ))}
               </select>
@@ -404,12 +430,12 @@ const PlayersView: React.FC = () => {
               {/* View Mode Toggle */}
               <div className="flex items-center gap-2 ml-auto">
                 <button
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => setViewMode(&apos;grid&apos;)}
                 >
                   <GridIcon className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode(&apos;list&apos;)}
                 >
                   <ListIcon className="h-5 w-5" />
                 </button>
@@ -418,29 +444,34 @@ const PlayersView: React.FC = () => {
               {/* Compare Mode Toggle */}
               <button
                 onClick={() => {
+}
                   setCompareMode(!compareMode);
                   setComparePlayers([]);
                 }}
                 className={`px-4 py-2 rounded-xl font-medium transition-all ${
-                  compareMode 
-                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' 
-                    : 'bg-slate-800/50 text-gray-400 border border-white/10 hover:border-white/20'
+}
+//                   compareMode 
+                    ? &apos;bg-yellow-500/20 text-yellow-400 border border-yellow-500/30&apos; 
+                    : &apos;bg-slate-800/50 text-gray-400 border border-white/10 hover:border-white/20&apos;
                 }`}
               >
-                {compareMode ? `Comparing (${comparePlayers.length}/3)` : 'Compare Players'}
+                {compareMode ? `Comparing (${comparePlayers.length}/3)` : &apos;Compare Players&apos;}
               </button>
             </div>
           </motion.div>
 
           {/* Player Grid/List */}
           <div className={`
-            ${viewMode === 'grid' 
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' 
-              : 'space-y-3'}
+}
+            ${viewMode === &apos;grid&apos; 
+}
+              ? &apos;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6&apos; 
+              : &apos;space-y-3&apos;}
             mb-8
           `}>
             <AnimatePresence mode="popLayout">
               {filteredPlayers.slice(0, 50).map((player, index) => (
+}
                 <PlayerCard key={player.id} player={player} index={index} />
               ))}
             </AnimatePresence>
@@ -448,6 +479,7 @@ const PlayersView: React.FC = () => {
 
           {/* No Results */}
           {filteredPlayers.length === 0 && (
+}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -461,6 +493,7 @@ const PlayersView: React.FC = () => {
 
           {/* Compare Panel */}
           {compareMode && comparePlayers.length > 0 && (
+}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -470,6 +503,7 @@ const PlayersView: React.FC = () => {
                 <h3 className="text-lg font-bold text-white mb-4">Player Comparison</h3>
                 <div className="flex items-center gap-4">
                   {comparePlayers.map((player: any) => (
+}
                     <div key={player.id} className="flex items-center gap-2 px-3 py-2 bg-slate-800/50 rounded-lg">
                       <span className="text-white font-medium">{player.name}</span>
                       <button
@@ -480,9 +514,11 @@ const PlayersView: React.FC = () => {
                     </div>
                   ))}
                   {comparePlayers.length >= 2 && (
+}
                     <button
                       className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg font-medium hover:shadow-lg transition-all"
                       onClick={() => {
+}
                         // Open comparison modal
                       }}
                     >
@@ -498,7 +534,8 @@ const PlayersView: React.FC = () => {
 
       {/* Player Detail Modal */}
       {selectedPlayer && (
-        <PlayerDetailModal
+}
+        <PlayerDetailModal>
           player={selectedPlayer}
           onClose={() => setSelectedPlayer(null)}
           playerNotes={state.playerNotes || {}}

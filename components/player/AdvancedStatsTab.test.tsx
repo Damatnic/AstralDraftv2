@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import AdvancedStatsTab from './AdvancedStatsTab';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import AdvancedStatsTab from &apos;./AdvancedStatsTab&apos;;
 
-describe('AdvancedStatsTab', () => {
-  it('renders without crashing', () => {
+describe(&apos;AdvancedStatsTab&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<AdvancedStatsTab />);
-    expect(screen.getByTestId('advancedstatstab')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;advancedstatstab&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<AdvancedStatsTab />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<AdvancedStatsTab />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

@@ -1,17 +1,19 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { Brain } from 'lucide-react';
-import { Widget } from '../ui/Widget';
-import { ZapIcon } from '../icons/ZapIcon';
-import { useAppState } from '../../contexts/AppContext';
-import { oracleAnalyticsService, type OracleAnalytics, type OraclePerformanceMetrics, type UserInsight } from '../../services/oracleAnalyticsService';
-import AdvancedEnsembleMLDashboard from './AdvancedEnsembleMLDashboard';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Brain } from &apos;lucide-react&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { oracleAnalyticsService, type OracleAnalytics, type OraclePerformanceMetrics, type UserInsight } from &apos;../../services/oracleAnalyticsService&apos;;
+import AdvancedEnsembleMLDashboard from &apos;./AdvancedEnsembleMLDashboard&apos;;
 
 interface PerformanceChartProps {
+}
     data: Array<{ week: number; accuracy: number; userWins: number; totalPredictions: number }>;
 
 const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const maxAccuracy = Math.max(...data.map((d: any) => d.accuracy), 1);
     const maxUserWins = Math.max(...data.map((d: any) => d.userWins), 1);
@@ -35,6 +37,7 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }: any) => {
             <div className="relative h-32 bg-gray-800/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex items-end justify-between h-full space-x-2 sm:px-4 md:px-6 lg:px-8">
                     {data.map((item, index) => (
+}
                         <div key={item.week} className="flex-1 flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
                             <div className="flex flex-col space-y-1 w-full sm:px-4 md:px-6 lg:px-8">
                                 {/* Oracle accuracy bar */}
@@ -64,12 +67,14 @@ const PerformanceChart: React.FC<PerformanceChartProps> = ({ data  }: any) => {
 };
 
 interface ConfidenceAnalysisProps {
+}
     confidenceByType: Record<string, number>;
     typeAccuracy: Record<string, number>;
 
 }
 
 const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByType, typeAccuracy }: any) => {
+}
     const predictionTypes = Object.keys(confidenceByType);
 
     return (
@@ -77,6 +82,7 @@ const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByTyp
             <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Prediction Type Analysis</span>
             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                 {predictionTypes.map((type: any) => {
+}
                     const confidence = confidenceByType[type] || 0;
                     const accuracy = typeAccuracy[type] || 0;
                     const isWellCalibrated = Math.abs(confidence - accuracy * 100) < 10;
@@ -85,7 +91,7 @@ const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByTyp
                         <div key={type} className="bg-gray-800/30 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-sm font-medium text-white capitalize sm:px-4 md:px-6 lg:px-8">
-                                    {type.toLowerCase().replace('_', ' ')}
+                                    {type.toLowerCase().replace(&apos;_&apos;, &apos; &apos;)}
                                 </span>
                                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -95,6 +101,7 @@ const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByTyp
                                         {(accuracy * 100).toFixed(1)}% acc
                                     </span>
                                     {isWellCalibrated && (
+}
                                         <span className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">✓ Calibrated</span>
                                     )}
                                 </div>
@@ -131,38 +138,44 @@ const ConfidenceAnalysis: React.FC<ConfidenceAnalysisProps> = ({ confidenceByTyp
 };
 
 interface InsightCardProps {
+}
     insight: UserInsight;
 
 }
 
 const InsightCard: React.FC<InsightCardProps> = ({ insight }: any) => {
-    const getInsightIcon = (type: UserInsight['type']) => {
+}
+    const getInsightIcon = (type: UserInsight[&apos;type&apos;]) => {
+}
         switch (type) {
-            case 'SUCCESS_PATTERN':
-                return '🎯';
-            case 'IMPROVEMENT_AREA':
-                return '📈';
-            case 'STREAK_POTENTIAL':
-                return '🔥';
-            case 'RECOMMENDATION':
-                return '💡';
+}
+            case &apos;SUCCESS_PATTERN&apos;:
+                return &apos;🎯&apos;;
+            case &apos;IMPROVEMENT_AREA&apos;:
+                return &apos;📈&apos;;
+            case &apos;STREAK_POTENTIAL&apos;:
+                return &apos;🔥&apos;;
+            case &apos;RECOMMENDATION&apos;:
+                return &apos;💡&apos;;
             default:
-                return '📊';
+                return &apos;📊&apos;;
 
     };
 
-    const getInsightColor = (type: UserInsight['type']) => {
+    const getInsightColor = (type: UserInsight[&apos;type&apos;]) => {
+}
         switch (type) {
-            case 'SUCCESS_PATTERN':
-                return 'border-green-500/40 bg-green-500/10';
-            case 'IMPROVEMENT_AREA':
-                return 'border-yellow-500/40 bg-yellow-500/10';
-            case 'STREAK_POTENTIAL':
-                return 'border-red-500/40 bg-red-500/10';
-            case 'RECOMMENDATION':
-                return 'border-blue-500/40 bg-blue-500/10';
+}
+            case &apos;SUCCESS_PATTERN&apos;:
+                return &apos;border-green-500/40 bg-green-500/10&apos;;
+            case &apos;IMPROVEMENT_AREA&apos;:
+                return &apos;border-yellow-500/40 bg-yellow-500/10&apos;;
+            case &apos;STREAK_POTENTIAL&apos;:
+                return &apos;border-red-500/40 bg-red-500/10&apos;;
+            case &apos;RECOMMENDATION&apos;:
+                return &apos;border-blue-500/40 bg-blue-500/10&apos;;
             default:
-                return 'border-gray-500/40 bg-gray-500/10';
+                return &apos;border-gray-500/40 bg-gray-500/10&apos;;
 
     };
 
@@ -184,29 +197,34 @@ const InsightCard: React.FC<InsightCardProps> = ({ insight }: any) => {
 };
 
 interface MetricCardProps {
+}
     title: string;
     value: string | number;
     subtitle?: string;
-    trend?: 'up' | 'down' | 'neutral';
+    trend?: &apos;up&apos; | &apos;down&apos; | &apos;neutral&apos;;
     color?: string;
 
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({ 
+}
     title, 
     value, 
     subtitle, 
-    trend = 'neutral',
-    color = 'text-blue-400'
+    trend = &apos;neutral&apos;,
+    color = &apos;text-blue-400&apos;
 }: any) => {
+}
     const getTrendIcon = () => {
+}
         switch (trend) {
-            case 'up':
-                return '↗️';
-            case 'down':
-                return '↘️';
+}
+            case &apos;up&apos;:
+                return &apos;↗️&apos;;
+            case &apos;down&apos;:
+                return &apos;↘️&apos;;
             default:
-                return '';
+                return &apos;&apos;;
 
     };
 
@@ -214,17 +232,20 @@ const MetricCard: React.FC<MetricCardProps> = ({
         <div className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
                 <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">{title}</span>
-                {trend !== 'neutral' && (
+                {trend !== &apos;neutral&apos; && (
+}
                     <span className="text-xs sm:px-4 md:px-6 lg:px-8">{getTrendIcon()}</span>
                 )}
             </div>
             <div className={`text-2xl font-bold ${color}`}>
-                {typeof value === 'number' && value < 1 && value > 0 
+                {typeof value === &apos;number&apos; && value < 1 && value > 0 
+}
                     ? `${(value * 100).toFixed(1)}%`
                     : value
 
             </div>
             {subtitle && (
+}
                 <div className="text-xs text-gray-500 mt-1 sm:px-4 md:px-6 lg:px-8">{subtitle}</div>
             )}
         </div>
@@ -232,6 +253,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 };
 
 export const OracleAnalyticsDashboard: React.FC = () => {
+}
     const { dispatch } = useAppState();
     const [analytics, setAnalytics] = React.useState<OracleAnalytics | null>(null);
     const [performanceMetrics, setPerformanceMetrics] = React.useState<OraclePerformanceMetrics | null>(null);
@@ -240,8 +262,11 @@ export const OracleAnalyticsDashboard: React.FC = () => {
     const [isTrainingModels, setIsTrainingModels] = React.useState(false);
 
     React.useEffect(() => {
+}
         const loadAnalytics = async () => {
+}
             try {
+}
 
                 setLoading(true);
                 setError(null);
@@ -255,17 +280,18 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                 setPerformanceMetrics(metricsData);
             
     } catch (error) {
+}
         console.error(error);
     `${analytics.totalUserChallenges} challenges`}
                     color="text-green-400"
                 />
-                <MetricCard
+                <MetricCard>
                     title="Prediction Quality"
                     value={performanceMetrics.calibrationScore}
                     subtitle="Confidence calibration"
                     color="text-purple-400"
                 />
-                <MetricCard
+                <MetricCard>
                     title="Confidence Correlation"
                     value={performanceMetrics.confidenceCorrelation}
                     subtitle="Accuracy vs confidence"
@@ -285,6 +311,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             {/* Performance Trends */}
             <Widget title="Performance Trends" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 {analytics.accuracyTrends.length > 0 ? (
+}
                     <PerformanceChart data={analytics.accuracyTrends} />
                 ) : (
                     <div className="text-center py-8 text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -296,7 +323,8 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             {/* Prediction Type Analysis */}
             <Widget title="Prediction Analysis by Type" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 {Object.keys(analytics.confidenceByType).length > 0 ? (
-                    <ConfidenceAnalysis 
+}
+                    <ConfidenceAnalysis>
                         confidenceByType={analytics.confidenceByType}
                         typeAccuracy={performanceMetrics.typeAccuracy}
                     />
@@ -311,7 +339,9 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             <Widget title="Your Strongest Categories" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {analytics.topPredictionTypes.length > 0 ? (
+}
                         (() => {
+}
                             const sortedTypes = [...analytics.topPredictionTypes].sort((a, b) => b.userSuccessRate - a.userSuccessRate);
                             return sortedTypes.slice(0, 3).map((type, index) => (
                                 <motion.div
@@ -327,7 +357,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
                                         </span>
                                         <div>
                                             <span className="text-white font-medium capitalize sm:px-4 md:px-6 lg:px-8">
-                                                {type.type.toLowerCase().replace('_', ' ')}
+                                                {type.type.toLowerCase().replace(&apos;_&apos;, &apos; &apos;)}
                                             </span>
                                             <div className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                                 {type.totalPredictions} predictions
@@ -357,6 +387,7 @@ export const OracleAnalyticsDashboard: React.FC = () => {
             <Widget title="Personalized Insights" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {analytics.userInsights.length > 0 ? (
+}
                         analytics.userInsights.map((insight: any) => (
                             <InsightCard key={`${insight.type}-${insight.title}`} insight={insight} />
                         ))

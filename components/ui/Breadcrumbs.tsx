@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import { ChevronRightIcon } from '../icons/ChevronRightIcon';
+import React, { useMemo } from &apos;react&apos;;
+import { ChevronRightIcon } from &apos;../icons/ChevronRightIcon&apos;;
 
 interface BreadcrumbItem {
+}
   label: string;
   href?: string;
   onClick?: () => void;
@@ -9,17 +10,22 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbsProps {
+}
   items: BreadcrumbItem[];
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }: any) => {
+}
   return (
     <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-sm sm:px-4 md:px-6 lg:px-8">
       {items.map((item, index) => (
+}
         <React.Fragment key={index}>
           {index > 0 && (
+}
             <ChevronRightIcon className="w-4 h-4 text-[var(--text-muted)] sm:px-4 md:px-6 lg:px-8" />
           )}
           {index === items.length - 1 ? (
+}
             <span className="text-[var(--text-primary)] font-medium sm:px-4 md:px-6 lg:px-8" aria-current="page">
               {item.label}
             </span>

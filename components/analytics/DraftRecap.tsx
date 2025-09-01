@@ -1,27 +1,30 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { League, DraftRecapData } from '../../types';
-import { generateDraftRecap } from '../../services/geminiService';
-import { TrophyIcon } from '../icons/TrophyIcon';
-import { FlameIcon } from '../icons/FlameIcon';
-import { GemIcon } from '../icons/GemIcon';
-import { SparklesIcon } from '../icons/SparklesIcon';
-import LoadingSpinner from '../ui/LoadingSpinner';
-import { TelescopeIcon } from '../icons/TelescopeIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { League, DraftRecapData } from &apos;../../types&apos;;
+import { generateDraftRecap } from &apos;../../services/geminiService&apos;;
+import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
+import { FlameIcon } from &apos;../icons/FlameIcon&apos;;
+import { GemIcon } from &apos;../icons/GemIcon&apos;;
+import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
+import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
+import { TelescopeIcon } from &apos;../icons/TelescopeIcon&apos;;
 
 interface DraftRecapProps {
+}
     league: League;
     dispatch: React.Dispatch<any>;
 
 }
 
-const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }: any) => {
+const AwardCard: React.FC<{ award: DraftRecapData[&apos;awards&apos;][0] }> = ({ award }: any) => {
+}
     const getIcon = (title: string) => {
+}
         const lowerTitle = title.toLowerCase();
-        if (lowerTitle.includes('steal') || lowerTitle.includes('value')) return <GemIcon />;
-        if (lowerTitle.includes('gambler') || lowerTitle.includes('risk')) return <FlameIcon />;
+        if (lowerTitle.includes(&apos;steal&apos;) || lowerTitle.includes(&apos;value&apos;)) return <GemIcon />;
+        if (lowerTitle.includes(&apos;gambler&apos;) || lowerTitle.includes(&apos;risk&apos;)) return <FlameIcon />;
         return <TrophyIcon />;
     };
 
@@ -40,23 +43,29 @@ const AwardCard: React.FC<{ award: DraftRecapData['awards'][0] }> = ({ award }: 
 };
 
 const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
+}
     const [recap, setRecap] = React.useState<DraftRecapData | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const [error, setError] = React.useState<string | null>(null);
 
     React.useEffect(() => {
+}
         const fetchRecap = async () => {
+}
             if (!league) return;
             setIsLoading(true);
             setError(null);
             try {
+}
 
                 const data = await generateDraftRecap(league);
                 setRecap(data);
             
     } catch (error) {
+}
                 setError("The Oracle is resting. Could not generate a draft recap.");
             } finally {
+}
                 setIsLoading(false);
 
         };
@@ -65,10 +74,12 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
     }, [league]);
     
     if (isLoading) {
+}
         return <div className="p-4 sm:p-6"><LoadingSpinner text="The Oracle is writing your draft story..." /></div>;
     }
 
     if (error || !recap) {
+}
         return <div className="p-4 sm:p-6 text-center text-red-400 text-sm sm:text-base">{error || "No recap data available."}</div>;
     }
 
@@ -81,7 +92,7 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
                     </span>
                 </h2>
                  <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_STORY' }}
+                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DRAFT_STORY&apos; }}
                     className="mb-3 sm:mb-4 flex items-center gap-2 mx-auto px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-lg shadow-lg btn-primary text-sm mobile-touch-target"
                 >
                     <TelescopeIcon />
@@ -94,6 +105,7 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }: any) => {
                 <h3 className="font-bold text-base sm:text-lg text-cyan-300 mb-3 flex items-center gap-2"><SparklesIcon /> Draft Awards</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                     {recap.awards.map((award, index) => (
+}
                         <AwardCard key={index} award={award} />
                     ))}
                 </div>

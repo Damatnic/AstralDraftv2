@@ -3,36 +3,39 @@
  * Manages free agent pickups and waiver claims
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../../hooks/useAppState';
-import { useLeague } from '../../hooks/useLeague';
-import { players } from '../../data/players';
-import { Player } from '../../types';
-import { Search, Plus, TrendingUp, Clock, DollarSign } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../hooks/useAppState&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { Player } from &apos;../../types&apos;;
+import { Search, Plus, TrendingUp, Clock, DollarSign } from &apos;lucide-react&apos;;
 
 interface WaiverClaim {
+}
   id: string;
   playerId: number;
   teamId: number;
   bidAmount: number;
   priority: number;
-  status: 'pending' | 'processed' | 'failed';
+  status: &apos;pending&apos; | &apos;processed&apos; | &apos;failed&apos;;
   timestamp: Date;
 
 }
 
 export const WaiverWire: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const { league, myTeam } = useLeague();
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState(&apos;&apos;);
   const [selectedPlayer, setSelectedPlayer] = React.useState<Player | null>(null);
   const [bidAmount, setBidAmount] = React.useState(0);
   const [showBidModal, setShowBidModal] = React.useState(false);
   
   // Get available free agents
   const freeAgents = React.useMemo(() => {
+}
     if (!league) return [];
     
     const rosteredPlayerIds = new Set(
@@ -44,6 +47,7 @@ export const WaiverWire: React.FC = () => {
   
   // Filter free agents based on search
   const filteredPlayers = React.useMemo(() => {
+}
     if (!searchQuery) return freeAgents.slice(0, 50);
     
     const query = searchQuery.toLowerCase();
@@ -56,21 +60,25 @@ export const WaiverWire: React.FC = () => {
   
   // Get trending players (mock data for now)
   const trendingPlayers = React.useMemo(() => {
+}
     return freeAgents
       .sort((a, b) => (b.projectedPoints || 0) - (a.projectedPoints || 0))
       .slice(0, 5);
   }, [freeAgents]);
   
   const handleAddPlayer = (player: Player) => {
+}
     setSelectedPlayer(player);
     setBidAmount(Math.min(10, myTeam?.faabBudget || 0));
     setShowBidModal(true);
   };
   
   const submitWaiverClaim = () => {
+}
     if (!selectedPlayer || !myTeam || !league) return;
     
     const claim = {
+}
       playerId: selectedPlayer.id,
       teamId: myTeam.id,
       bid: bidAmount,
@@ -78,18 +86,22 @@ export const WaiverWire: React.FC = () => {
     };
     
     dispatch({
-      type: 'ADD_WAIVER_CLAIM',
+}
+      type: &apos;ADD_WAIVER_CLAIM&apos;,
       payload: {
+}
         leagueId: league.id,
-        claim
+//         claim
       }
     });
     
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
+}
         message: `Waiver claim submitted for ${selectedPlayer.name} ($${bidAmount})`,
-        type: 'SUCCESS'
+        type: &apos;SUCCESS&apos;
       }
     });
     
@@ -98,6 +110,7 @@ export const WaiverWire: React.FC = () => {
   };
   
   const getFAABRemaining = () => {
+}
     return myTeam?.faabBudget || 0;
   };
   
@@ -138,6 +151,7 @@ export const WaiverWire: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
           {trendingPlayers.map((player: any) => (
+}
             <button
               key={player.id}
               onClick={() => handleAddPlayer(player)}
@@ -168,6 +182,7 @@ export const WaiverWire: React.FC = () => {
           </thead>
           <tbody>
             {filteredPlayers.map((player: any) => (
+}
               <tr key={player.id} className="border-b border-[var(--panel-border)] hover:bg-white/5 sm:px-4 md:px-6 lg:px-8">
                 <td className="p-3 sm:px-4 md:px-6 lg:px-8">
                   <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{player.name}</div>
@@ -195,6 +210,7 @@ export const WaiverWire: React.FC = () => {
       
       {/* Bid Modal */}
       {showBidModal && selectedPlayer && (
+}
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 sm:px-4 md:px-6 lg:px-8">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
@@ -238,7 +254,7 @@ export const WaiverWire: React.FC = () => {
                 <button
                   onClick={() => setShowBidModal(false)}
                 >
-                  Cancel
+//                   Cancel
                 </button>
                 <button
                   onClick={submitWaiverClaim}

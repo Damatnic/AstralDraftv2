@@ -1,10 +1,11 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, Trophy, TrendingUp, Calendar, Edit3, Camera, Shield, Star } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import { useEscapeKey } from &apos;../../hooks/useEscapeKey&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { X, User, Trophy, TrendingUp, Calendar, Edit3, Camera, Shield, Star } from &apos;lucide-react&apos;;
 
 interface ProfileModalProps {
+}
   isOpen: boolean;
   onClose: () => void;
   user?: any;
@@ -12,46 +13,49 @@ interface ProfileModalProps {
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, user }: any) => {
+}
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    displayName: user?.name || 'Fantasy Manager',
-    teamName: user?.teamName || 'My Team',
-    bio: 'Passionate fantasy football manager with a keen eye for talent and strategy.',
-    location: 'United States',
-    favoriteTeam: 'Green Bay Packers',
-    experience: 'Expert (5+ years)',
+}
+    displayName: user?.name || &apos;Fantasy Manager&apos;,
+    teamName: user?.teamName || &apos;My Team&apos;,
+    bio: &apos;Passionate fantasy football manager with a keen eye for talent and strategy.&apos;,
+    location: &apos;United States&apos;,
+    favoriteTeam: &apos;Green Bay Packers&apos;,
+    experience: &apos;Expert (5+ years)&apos;,
     avatar: null
   });
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: <User className="w-4 h-4" /> },
-    { id: 'stats', label: 'Statistics', icon: <TrendingUp className="w-4 h-4" /> },
-    { id: 'achievements', label: 'Achievements', icon: <Trophy className="w-4 h-4" /> },
-    { id: 'history', label: 'History', icon: <Calendar className="w-4 h-4" /> }
+    { id: &apos;overview&apos;, label: &apos;Overview&apos;, icon: <User className="w-4 h-4" /> },
+    { id: &apos;stats&apos;, label: &apos;Statistics&apos;, icon: <TrendingUp className="w-4 h-4" /> },
+    { id: &apos;achievements&apos;, label: &apos;Achievements&apos;, icon: <Trophy className="w-4 h-4" /> },
+    { id: &apos;history&apos;, label: &apos;History&apos;, icon: <Calendar className="w-4 h-4" /> }
   ];
 
   const achievements = [
-    { id: 1, title: 'League Champion', description: '2023 Season Winner', icon: '🏆', rarity: 'legendary' },
-    { id: 2, title: 'Trade Master', description: 'Completed 50+ trades', icon: '🤝', rarity: 'epic' },
-    { id: 3, title: 'Draft Expert', description: 'Perfect draft score', icon: '🎯', rarity: 'rare' },
-    { id: 4, title: 'Waiver Wire Wizard', description: 'Top waiver pickups', icon: '✨', rarity: 'epic' },
-    { id: 5, title: 'Consistency King', description: 'Top 3 finish 3 seasons', icon: '👑', rarity: 'legendary' },
-    { id: 6, title: 'Rookie Sensation', description: 'Won first season', icon: '⭐', rarity: 'rare' }
+    { id: 1, title: &apos;League Champion&apos;, description: &apos;2023 Season Winner&apos;, icon: &apos;🏆&apos;, rarity: &apos;legendary&apos; },
+    { id: 2, title: &apos;Trade Master&apos;, description: &apos;Completed 50+ trades&apos;, icon: &apos;🤝&apos;, rarity: &apos;epic&apos; },
+    { id: 3, title: &apos;Draft Expert&apos;, description: &apos;Perfect draft score&apos;, icon: &apos;🎯&apos;, rarity: &apos;rare&apos; },
+    { id: 4, title: &apos;Waiver Wire Wizard&apos;, description: &apos;Top waiver pickups&apos;, icon: &apos;✨&apos;, rarity: &apos;epic&apos; },
+    { id: 5, title: &apos;Consistency King&apos;, description: &apos;Top 3 finish 3 seasons&apos;, icon: &apos;👑&apos;, rarity: &apos;legendary&apos; },
+    { id: 6, title: &apos;Rookie Sensation&apos;, description: &apos;Won first season&apos;, icon: &apos;⭐&apos;, rarity: &apos;rare&apos; }
   ];
 
   const seasonHistory = [
-    { year: 2023, record: '12-2', finish: '1st', points: 1847.5, champion: true },
-    { year: 2022, record: '9-5', finish: '3rd', points: 1623.2, champion: false },
-    { year: 2021, record: '11-3', finish: '2nd', points: 1789.4, champion: false },
-    { year: 2020, record: '7-7', finish: '6th', points: 1456.8, champion: false },
-    { year: 2019, record: '10-4', finish: '1st', points: 1692.1, champion: true }
+    { year: 2023, record: &apos;12-2&apos;, finish: &apos;1st&apos;, points: 1847.5, champion: true },
+    { year: 2022, record: &apos;9-5&apos;, finish: &apos;3rd&apos;, points: 1623.2, champion: false },
+    { year: 2021, record: &apos;11-3&apos;, finish: &apos;2nd&apos;, points: 1789.4, champion: false },
+    { year: 2020, record: &apos;7-7&apos;, finish: &apos;6th&apos;, points: 1456.8, champion: false },
+    { year: 2019, record: &apos;10-4&apos;, finish: &apos;1st&apos;, points: 1692.1, champion: true }
   ];
 
   const currentSeasonStats = {
+}
     wins: 8,
     losses: 3,
     pointsFor: 1234.5,
@@ -65,17 +69,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
   };
 
   const handleSave = () => {
+}
     setIsEditing(false);
     // Save profile data to backend/context
-    console.log('Saving profile:', profileData);
+    console.log(&apos;Saving profile:&apos;, profileData);
   };
 
   const getRarityColor = (rarity: string) => {
+}
     switch (rarity) {
-      case 'legendary': return 'text-yellow-400 bg-yellow-400/20 border-yellow-400/30';
-      case 'epic': return 'text-purple-400 bg-purple-400/20 border-purple-400/30';
-      case 'rare': return 'text-blue-400 bg-blue-400/20 border-blue-400/30';
-      default: return 'text-gray-400 bg-gray-400/20 border-gray-400/30';
+}
+      case &apos;legendary&apos;: return &apos;text-yellow-400 bg-yellow-400/20 border-yellow-400/30&apos;;
+      case &apos;epic&apos;: return &apos;text-purple-400 bg-purple-400/20 border-purple-400/30&apos;;
+      case &apos;rare&apos;: return &apos;text-blue-400 bg-blue-400/20 border-blue-400/30&apos;;
+      default: return &apos;text-gray-400 bg-gray-400/20 border-gray-400/30&apos;;
     }
   };
 
@@ -121,6 +128,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                     {profileData.displayName.charAt(0).toUpperCase()}
                   </div>
                   {isEditing && (
+}
                     <button className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary-500 hover:bg-primary-600 rounded-full flex items-center justify-center text-white" aria-label="Change avatar">
                       <Camera className="w-4 h-4" />
                     </button>
@@ -138,13 +146,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
           <div className="border-b border-white/10 bg-dark-900/50">
             <div className="flex px-6 gap-1">
               {tabs.map((tab: any) => (
+}
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+}
                     activeTab === tab.id
-                      ? 'bg-primary-500 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      ? &apos;bg-primary-500 text-white&apos;
+                      : &apos;text-gray-400 hover:text-white hover:bg-white/5&apos;
                   }`}
                 >
                   {tab.icon}
@@ -157,7 +167,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                 className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
               >
                 <Edit3 className="w-4 h-4" />
-                {isEditing ? 'Cancel' : 'Edit Profile'}
+                {isEditing ? &apos;Cancel&apos; : &apos;Edit Profile&apos;}
               </button>
             </div>
           </div>
@@ -165,12 +175,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(90vh-200px)] custom-scrollbar">
             <div className="p-6">
-              {activeTab === 'overview' && (
+              {activeTab === &apos;overview&apos; && (
+}
                 <div className="space-y-6">
                   {/* Bio Section */}
                   <div className="bg-dark-700/50 rounded-xl p-6">
                     <h3 className="text-lg font-semibold text-white mb-4">About</h3>
                     {isEditing ? (
+}
                       <div className="space-y-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-300 mb-2">Display Name</label>
@@ -232,6 +244,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
                         {isEditing ? (
+}
                           <input
                             type="text"
                             value={profileData.location}
@@ -245,6 +258,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Favorite NFL Team</label>
                         {isEditing ? (
+}
                           <input
                             type="text"
                             value={profileData.favoriteTeam}
@@ -260,7 +274,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                 </div>
               )}
 
-              {activeTab === 'stats' && (
+              {activeTab === &apos;stats&apos; && (
+}
                 <div className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="bg-dark-700/50 rounded-xl p-6">
@@ -310,10 +325,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                 </div>
               )}
 
-              {activeTab === 'achievements' && (
+              {activeTab === &apos;achievements&apos; && (
+}
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     {achievements.map((achievement: any) => (
+}
                       <div key={achievement.id} className={`bg-dark-700/50 rounded-xl p-4 border ${getRarityColor(achievement.rarity)}`}>
                         <div className="flex items-center gap-3">
                           <div className="text-2xl">{achievement.icon}</div>
@@ -328,7 +345,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                 </div>
               )}
 
-              {activeTab === 'history' && (
+              {activeTab === &apos;history&apos; && (
+}
                 <div className="space-y-4">
                   <div className="bg-dark-700/50 rounded-xl overflow-hidden">
                     <div className="p-4 border-b border-white/10">
@@ -347,15 +365,17 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                         </thead>
                         <tbody>
                           {seasonHistory.map((season, index) => (
+}
                             <tr key={season.year} className="border-t border-white/5">
                               <td className="px-4 py-3 text-white font-medium">{season.year}</td>
                               <td className="px-4 py-3 text-white">{season.record}</td>
                               <td className="px-4 py-3">
                                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  season.finish === '1st' ? 'bg-yellow-400/20 text-yellow-400' :
-                                  season.finish === '2nd' ? 'bg-gray-400/20 text-gray-400' :
-                                  season.finish === '3rd' ? 'bg-amber-600/20 text-amber-600' :
-                                  'bg-gray-600/20 text-gray-300'
+}
+                                  season.finish === &apos;1st&apos; ? &apos;bg-yellow-400/20 text-yellow-400&apos; :
+                                  season.finish === &apos;2nd&apos; ? &apos;bg-gray-400/20 text-gray-400&apos; :
+                                  season.finish === &apos;3rd&apos; ? &apos;bg-amber-600/20 text-amber-600&apos; :
+                                  &apos;bg-gray-600/20 text-gray-300&apos;
                                 }`}>
                                   {season.finish}
                                 </span>
@@ -363,6 +383,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
                               <td className="px-4 py-3 text-white">{season.points}</td>
                               <td className="px-4 py-3">
                                 {season.champion && (
+}
                                   <Trophy className="w-4 h-4 text-yellow-400" />
                                 )}
                               </td>
@@ -379,13 +400,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, use
 
           {/* Footer */}
           {isEditing && (
+}
             <div className="p-6 border-t border-white/10 bg-dark-900/50">
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => setIsEditing(false)}
                   className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
                 >
-                  Cancel
+//                   Cancel
                 </button>
                 <button
                   onClick={handleSave}

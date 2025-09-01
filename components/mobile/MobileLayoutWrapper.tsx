@@ -3,22 +3,25 @@
  * Provides responsive layout structure and mobile-specific navigation
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useMediaQuery } from '../../hooks/useMediaQuery';
-import MobileBottomNavigation from './MobileBottomNavigation';
-import { View } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useMediaQuery } from &apos;../../hooks/useMediaQuery&apos;;
+import MobileBottomNavigation from &apos;./MobileBottomNavigation&apos;;
+import { View } from &apos;../../types&apos;;
 import { 
+}
     announceToScreenReader, 
     useReducedMotion,
-} from '../../utils/mobileAccessibilityUtils';
+} from &apos;../../utils/mobileAccessibilityUtils&apos;;
 
 import {
-    VisuallyHidden
-} from '../../utils/mobileAccessibilityComponents';
+}
+//     VisuallyHidden
+} from &apos;../../utils/mobileAccessibilityComponents&apos;;
 
 interface MobileLayoutWrapperProps {
+}
     children: React.ReactNode;
     currentView: View;
     onViewChange: (view: View) => void;
@@ -28,6 +31,7 @@ interface MobileLayoutWrapperProps {
 }
 
 interface MobileLayoutConfig {
+}
     hasBottomNav: boolean;
     hasPadding: boolean;
     hasScrollPadding: boolean;
@@ -35,17 +39,20 @@ interface MobileLayoutConfig {
 }
 
 const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
+}
     children,
     currentView,
     onViewChange,
     showBottomNav = true,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    const isTablet = useMediaQuery('(max-width: 1024px)');
+    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
+    const isTablet = useMediaQuery(&apos;(max-width: 1024px)&apos;);
     const [isKeyboardVisible, setIsKeyboardVisible] = React.useState(false);
     const [safeAreaInsets, setSafeAreaInsets] = React.useState({
+}
         top: 0,
         bottom: 0,
         left: 0,
@@ -56,17 +63,20 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
     // Announce view changes to screen readers
     React.useEffect(() => {
+}
         // Convert view to readable format
-        const viewLabel = currentView.replace(/_/g, ' ').toLowerCase()
+        const viewLabel = currentView.replace(/_/g, &apos; &apos;).toLowerCase()
             .replace(/\b\w/g, l => l.toUpperCase());
-        announceToScreenReader(`Navigated to ${viewLabel}`, 'polite');
+        announceToScreenReader(`Navigated to ${viewLabel}`, &apos;polite&apos;);
     }, [currentView]);
 
     // Detect keyboard visibility (mobile virtual keyboards)
     React.useEffect(() => {
+}
         if (!isMobile) return;
 
         const handleResize = () => {
+}
             // On mobile, viewport height changes when keyboard appears
             const viewportHeight = window.visualViewport?.height || window.innerHeight;
             const documentHeight = document.documentElement.clientHeight;
@@ -76,80 +86,94 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
         };
 
         if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', handleResize);
-            return () => window.visualViewport?.removeEventListener('resize', handleResize);
+}
+            window.visualViewport.addEventListener(&apos;resize&apos;, handleResize);
+            return () => window.visualViewport?.removeEventListener(&apos;resize&apos;, handleResize);
         } else {
-            window.addEventListener('resize', handleResize);
-            return () => window.removeEventListener('resize', handleResize);
+}
+            window.addEventListener(&apos;resize&apos;, handleResize);
+            return () => window.removeEventListener(&apos;resize&apos;, handleResize);
         }
     }, [isMobile]);
 
     // Detect safe area insets for devices with notches
     React.useEffect(() => {
+}
         if (!isMobile) return;
 
         const updateSafeArea = () => {
+}
             const computedStyle = getComputedStyle(document.documentElement);
             setSafeAreaInsets({
-                top: parseInt(computedStyle.getPropertyValue('--safe-area-inset-top') || '0'),
-                bottom: parseInt(computedStyle.getPropertyValue('--safe-area-inset-bottom') || '0'),
-                left: parseInt(computedStyle.getPropertyValue('--safe-area-inset-left') || '0'),
-                right: parseInt(computedStyle.getPropertyValue('--safe-area-inset-right') || '0')
+}
+                top: parseInt(computedStyle.getPropertyValue(&apos;--safe-area-inset-top&apos;) || &apos;0&apos;),
+                bottom: parseInt(computedStyle.getPropertyValue(&apos;--safe-area-inset-bottom&apos;) || &apos;0&apos;),
+                left: parseInt(computedStyle.getPropertyValue(&apos;--safe-area-inset-left&apos;) || &apos;0&apos;),
+                right: parseInt(computedStyle.getPropertyValue(&apos;--safe-area-inset-right&apos;) || &apos;0&apos;)
             });
         };
 
         updateSafeArea();
-        window.addEventListener('orientationchange', updateSafeArea);
-        return () => window.removeEventListener('orientationchange', updateSafeArea);
+        window.addEventListener(&apos;orientationchange&apos;, updateSafeArea);
+        return () => window.removeEventListener(&apos;orientationchange&apos;, updateSafeArea);
     }, [isMobile]);
 
     // Layout configuration based on current view
     const getLayoutConfig = (view: View): MobileLayoutConfig => {
+}
         const configs: Partial<Record<View, MobileLayoutConfig>> = {
-            'DASHBOARD': {
+}
+            &apos;DASHBOARD&apos;: {
+}
                 hasBottomNav: true,
                 hasPadding: false,
                 hasScrollPadding: true,
-                backgroundColor: 'var(--app-bg)'
+                backgroundColor: &apos;var(--app-bg)&apos;
             },
-            'DRAFT_ROOM': {
+            &apos;DRAFT_ROOM&apos;: {
+}
                 hasBottomNav: false,
                 hasPadding: false,
                 hasScrollPadding: false,
-                backgroundColor: 'var(--draft-bg, var(--app-bg))'
+                backgroundColor: &apos;var(--draft-bg, var(--app-bg))&apos;
             },
-            'ANALYTICS_HUB': {
+            &apos;ANALYTICS_HUB&apos;: {
+}
                 hasBottomNav: true,
                 hasPadding: false,
                 hasScrollPadding: true,
-                backgroundColor: 'var(--app-bg)'
+                backgroundColor: &apos;var(--app-bg)&apos;
             },
-            'TEAM_HUB': {
+            &apos;TEAM_HUB&apos;: {
+}
                 hasBottomNav: true,
                 hasPadding: true,
                 hasScrollPadding: true,
-                backgroundColor: 'var(--app-bg)'
+                backgroundColor: &apos;var(--app-bg)&apos;
             },
-            'PROFILE': {
+            &apos;PROFILE&apos;: {
+}
                 hasBottomNav: true,
                 hasPadding: true,
                 hasScrollPadding: true,
-                backgroundColor: 'var(--app-bg)'
+                backgroundColor: &apos;var(--app-bg)&apos;
             }
         };
 
         return configs[view] || {
+}
             hasBottomNav: true,
             hasPadding: true,
             hasScrollPadding: true,
-            backgroundColor: 'var(--app-bg)'
+            backgroundColor: &apos;var(--app-bg)&apos;
         };
     };
 
     const layoutConfig = getLayoutConfig(currentView);
 
-    // Don't apply mobile layout on desktop
+    // Don&apos;t apply mobile layout on desktop
     if (!isMobile && !isTablet) {
+}
         return <>{children}</>;
     }
 
@@ -158,10 +182,11 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
     return (
         <main 
             className={`mobile-layout-wrapper ${className}`}
-            aria-label={`Mobile layout for ${currentView.replace(/_/g, ' ').toLowerCase()}`}
+            aria-label={`Mobile layout for ${currentView.replace(/_/g, &apos; &apos;).toLowerCase()}`}
             style={{
-                height: '100vh',
-                overflow: 'hidden',
+}
+                height: &apos;100vh&apos;,
+                overflow: &apos;hidden&apos;,
                 backgroundColor: layoutConfig.backgroundColor,
                 paddingTop: safeAreaInsets.top,
                 paddingLeft: safeAreaInsets.left,
@@ -170,7 +195,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
             }}
         >
             <VisuallyHidden>
-                <h1>Fantasy Football Draft Assistant - {currentView.replace(/_/g, ' ')}</h1>
+                <h1>Fantasy Football Draft Assistant - {currentView.replace(/_/g, &apos; &apos;)}</h1>
             </VisuallyHidden>
 
             {/* Main Content Area */}
@@ -178,24 +203,27 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                 className="mobile-content-area sm:px-4 md:px-6 lg:px-8"
                 aria-label="Main content"
                 style={{
+}
                     height: `calc(100vh - ${safeAreaInsets.top + safeAreaInsets.bottom}px)`,
-                    display: 'flex',
-                    flexDirection: 'column'
+                    display: &apos;flex&apos;,
+                    flexDirection: &apos;column&apos;
                 }}
             >
                 {/* Content Container */}
                 <div 
                     className="flex-1 relative overflow-hidden sm:px-4 md:px-6 lg:px-8"
                     style={{
+}
                         marginBottom: layoutConfig.hasBottomNav && showBottomNav && !isKeyboardVisible 
                             ? `${bottomNavHeight}px` 
                             : 0
                     }}
                 >
                     <div 
-                        className={`h-full ${layoutConfig.hasPadding ? 'p-4' : ''}`}
+                        className={`h-full ${layoutConfig.hasPadding ? &apos;p-4&apos; : &apos;&apos;}`}
                         style={{
-                            paddingBottom: layoutConfig.hasScrollPadding ? '2rem' : 0
+}
+                            paddingBottom: layoutConfig.hasScrollPadding ? &apos;2rem&apos; : 0
                         }}
                     >
                         <AnimatePresence mode="wait">
@@ -217,19 +245,21 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
                 {/* Bottom Navigation */}
                 <AnimatePresence>
                     {layoutConfig.hasBottomNav && showBottomNav && !isKeyboardVisible && (
+}
                         <motion.div
                             initial={prefersReducedMotion ? { opacity: 0 } : { y: bottomNavHeight }}
                             animate={prefersReducedMotion ? { opacity: 1 } : { y: 0 }}
                             exit={prefersReducedMotion ? { opacity: 0 } : { y: bottomNavHeight }}
-                            transition={prefersReducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 30 }}
+                            transition={prefersReducedMotion ? { duration: 0 } : { type: &apos;spring&apos;, stiffness: 400, damping: 30 }}
                             className="fixed bottom-0 left-0 right-0 z-50 sm:px-4 md:px-6 lg:px-8"
                             style={{
+}
                                 paddingLeft: safeAreaInsets.left,
                                 paddingRight: safeAreaInsets.right,
                                 paddingBottom: safeAreaInsets.bottom
                             }}
                         >
-                            <MobileBottomNavigation
+                            <MobileBottomNavigation>
                                 activeView={currentView}
                                 onViewChange={onViewChange}
                             />
@@ -240,19 +270,24 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
             {/* Mobile-specific CSS */}
             <style>{`
+}
                 .mobile-layout-wrapper {
+}
                     -webkit-overflow-scrolling: touch;
                     touch-action: manipulation;
                 }
 
                 .mobile-content-area {
+}
                     position: relative;
                     z-index: 1;
                 }
 
                 /* Handle safe areas for devices with notches */
                 @supports (padding: env(safe-area-inset-top)) {
+}
                     .mobile-layout-wrapper {
+}
                         padding-top: env(safe-area-inset-top);
                         padding-left: env(safe-area-inset-left);
                         padding-right: env(safe-area-inset-right);
@@ -262,14 +297,18 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
                 /* Prevent zoom on input focus */
                 @media screen and (max-width: 768px) {
+}
                     input, select, textarea {
+}
                         font-size: 16px !important;
                     }
                 }
 
                 /* Hide scrollbars on mobile but keep functionality */
                 @media screen and (max-width: 768px) {
+}
                     ::-webkit-scrollbar {
+}
                         width: 0px;
                         background: transparent;
                     }
@@ -277,6 +316,7 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
                 /* Improve touch performance */
                 * {
+}
                     -webkit-tap-highlight-color: transparent;
                     -webkit-touch-callout: none;
                     -webkit-user-select: none;
@@ -285,12 +325,14 @@ const MobileLayoutWrapper: React.FC<MobileLayoutWrapperProps> = ({
 
                 /* Allow text selection in specific areas */
                 input, textarea, [contenteditable] {
+}
                     -webkit-user-select: auto;
                     user-select: auto;
                 }
 
                 /* Optimize for mobile performance */
                 .mobile-content-area * {
+}
                     transform: translateZ(0);
                     backface-visibility: hidden;
                     -webkit-backface-visibility: hidden;

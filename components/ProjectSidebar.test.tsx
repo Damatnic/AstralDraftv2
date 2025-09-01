@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ProjectSidebar from './ProjectSidebar';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import ProjectSidebar from &apos;./ProjectSidebar&apos;;
 
-describe('ProjectSidebar', () => {
-  it('renders without crashing', () => {
+describe(&apos;ProjectSidebar&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<ProjectSidebar />);
-    expect(screen.getByTestId('projectsidebar')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;projectsidebar&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<ProjectSidebar />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<ProjectSidebar />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

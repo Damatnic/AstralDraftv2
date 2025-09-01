@@ -3,102 +3,104 @@
  * Handles all application modals in one place
  */
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React from 'react';
-import { useModal } from '../../contexts/ModalContext';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import { useModal } from &apos;../../contexts/ModalContext&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 // Import all modal components
-import SettingsModal from '../modals/SettingsModal';
-import ProfileModal from '../modals/ProfileModal';
-import AnalyticsModal from '../modals/AnalyticsModal';
-import HelpSupportModal from '../modals/HelpSupportModal';
-import ProposeTradeModal from '../modals/ProposeTradeModal';
-import AssignAwardsModal from '../modals/AssignAwardsModal';
-import EditTeamBrandingModal from '../modals/EditTeamBrandingModal';
-import ShareTeamCardModal from '../modals/ShareTeamCardModal';
-import ChecklistReportModal from '../modals/ChecklistReportModal';
+import SettingsModal from &apos;../modals/SettingsModal&apos;;
+import ProfileModal from &apos;../modals/ProfileModal&apos;;
+import AnalyticsModal from &apos;../modals/AnalyticsModal&apos;;
+import HelpSupportModal from &apos;../modals/HelpSupportModal&apos;;
+import ProposeTradeModal from &apos;../modals/ProposeTradeModal&apos;;
+import AssignAwardsModal from &apos;../modals/AssignAwardsModal&apos;;
+import EditTeamBrandingModal from &apos;../modals/EditTeamBrandingModal&apos;;
+import ShareTeamCardModal from &apos;../modals/ShareTeamCardModal&apos;;
+import ChecklistReportModal from &apos;../modals/ChecklistReportModal&apos;;
 
 export const ModalManager: React.FC = () => {
+}
   const { activeModal, closeModal, modalData } = useModal();
   const { state } = useAppState();
 
   if (!activeModal) return null;
 
   const renderModal = () => {
+}
     switch (activeModal) {
-      case 'settings':
+}
+      case &apos;settings&apos;:
         return (
-          <SettingsModal 
+          <SettingsModal>
             isOpen={true} 
             onClose={closeModal} 
           />
         );
       
-      case 'profile':
+      case &apos;profile&apos;:
         return (
-          <ProfileModal 
+          <ProfileModal>
             isOpen={true} 
             onClose={closeModal}
             user={state.user}
           />
         );
       
-      case 'analytics':
+      case &apos;analytics&apos;:
         return (
-          <AnalyticsModal 
+          <AnalyticsModal>
             isOpen={true} 
             onClose={closeModal} 
           />
         );
       
-      case 'help':
+      case &apos;help&apos;:
         return (
-          <HelpSupportModal 
+          <HelpSupportModal>
             isOpen={true} 
             onClose={closeModal} 
           />
         );
       
-      case 'trade':
+      case &apos;trade&apos;:
         return (
-          <ProposeTradeModal 
+          <ProposeTradeModal>
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
           />
         );
       
-      case 'assign-awards':
+      case &apos;assign-awards&apos;:
         return (
-          <AssignAwardsModal 
+          <AssignAwardsModal>
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
           />
         );
       
-      case 'edit-branding':
+      case &apos;edit-branding&apos;:
         return (
-          <EditTeamBrandingModal 
+          <EditTeamBrandingModal>
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
           />
         );
       
-      case 'share-team':
+      case &apos;share-team&apos;:
         return (
-          <ShareTeamCardModal 
+          <ShareTeamCardModal>
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}
           />
         );
       
-      case 'checklist-report':
+      case &apos;checklist-report&apos;:
         return (
-          <ChecklistReportModal 
+          <ChecklistReportModal>
             isOpen={true} 
             onClose={closeModal}
             {...(modalData || {})}

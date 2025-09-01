@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import RivalryReportModal from './RivalryReportModal';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import RivalryReportModal from &apos;./RivalryReportModal&apos;;
 
-describe('RivalryReportModal', () => {
-  it('renders without crashing', () => {
+describe(&apos;RivalryReportModal&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<RivalryReportModal />);
-    expect(screen.getByTestId('rivalryreportmodal')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;rivalryreportmodal&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<RivalryReportModal />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<RivalryReportModal />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

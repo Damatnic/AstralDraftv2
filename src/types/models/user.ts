@@ -5,22 +5,24 @@
 
 // ==================== USER ENUMS ====================
 
-export type UserRole = 'USER' | 'COMMISSIONER' | 'ADMIN' | 'MODERATOR';
+export type UserRole = &apos;USER&apos; | &apos;COMMISSIONER&apos; | &apos;ADMIN&apos; | &apos;MODERATOR&apos;;
 
-export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'BANNED';
+export type UserStatus = &apos;ACTIVE&apos; | &apos;INACTIVE&apos; | &apos;SUSPENDED&apos; | &apos;BANNED&apos;;
 
-export type SubscriptionTier = 'FREE' | 'PREMIUM' | 'PRO' | 'ENTERPRISE';
+export type SubscriptionTier = &apos;FREE&apos; | &apos;PREMIUM&apos; | &apos;PRO&apos; | &apos;ENTERPRISE&apos;;
 
-export type NotificationPreference = 'ALL' | 'IMPORTANT' | 'NONE';
+export type NotificationPreference = &apos;ALL&apos; | &apos;IMPORTANT&apos; | &apos;NONE&apos;;
 
-export type Theme = 'LIGHT' | 'DARK' | 'SYSTEM';
+export type Theme = &apos;LIGHT&apos; | &apos;DARK&apos; | &apos;SYSTEM&apos;;
 
-export type Language = 'EN' | 'ES' | 'FR' | 'DE' | 'IT' | 'PT';
+export type Language = &apos;EN&apos; | &apos;ES&apos; | &apos;FR&apos; | &apos;DE&apos; | &apos;IT&apos; | &apos;PT&apos;;
 
 // ==================== USER PREFERENCES ====================
 
 export interface NotificationSettings {
+}
   email: {
+}
     draftReminders: boolean;
     tradeProposals: boolean;
     waiverResults: boolean;
@@ -31,6 +33,7 @@ export interface NotificationSettings {
     promotions: boolean;
   };
   push: {
+}
     draftReminders: boolean;
     tradeProposals: boolean;
     gameUpdates: boolean;
@@ -38,16 +41,18 @@ export interface NotificationSettings {
     immediateAlerts: boolean;
   };
   inApp: {
+}
     sounds: boolean;
     animations: boolean;
     popups: boolean;
     badges: boolean;
   };
-  frequency: 'REAL_TIME' | 'HOURLY' | 'DAILY' | 'WEEKLY';
+  frequency: &apos;REAL_TIME&apos; | &apos;HOURLY&apos; | &apos;DAILY&apos; | &apos;WEEKLY&apos;;
 }
 
 export interface PrivacySettings {
-  profileVisibility: 'PUBLIC' | 'FRIENDS' | 'LEAGUES_ONLY' | 'PRIVATE';
+}
+  profileVisibility: &apos;PUBLIC&apos; | &apos;FRIENDS&apos; | &apos;LEAGUES_ONLY&apos; | &apos;PRIVATE&apos;;
   showRealName: boolean;
   showEmail: boolean;
   showLocation: boolean;
@@ -60,17 +65,18 @@ export interface PrivacySettings {
 }
 
 export interface DisplaySettings {
+}
   theme: Theme;
   language: Language;
   timezone: string;
-  dateFormat: 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD';
-  timeFormat: '12H' | '24H';
-  numberFormat: 'US' | 'EU';
+  dateFormat: &apos;MM/DD/YYYY&apos; | &apos;DD/MM/YYYY&apos; | &apos;YYYY-MM-DD&apos;;
+  timeFormat: &apos;12H&apos; | &apos;24H&apos;;
+  numberFormat: &apos;US&apos; | &apos;EU&apos;;
   currency: string;
   compactMode: boolean;
   
   // Accessibility
-  fontSize: 'SMALL' | 'MEDIUM' | 'LARGE' | 'EXTRA_LARGE';
+  fontSize: &apos;SMALL&apos; | &apos;MEDIUM&apos; | &apos;LARGE&apos; | &apos;EXTRA_LARGE&apos;;
   highContrast: boolean;
   reducedMotion: boolean;
   screenReader: boolean;
@@ -78,10 +84,11 @@ export interface DisplaySettings {
 }
 
 export interface GameplaySettings {
-  defaultDraftStrategy: 'CONSERVATIVE' | 'AGGRESSIVE' | 'BALANCED';
+}
+  defaultDraftStrategy: &apos;CONSERVATIVE&apos; | &apos;AGGRESSIVE&apos; | &apos;BALANCED&apos;;
   autoLineupOptimization: boolean;
-  riskTolerance: 'LOW' | 'MEDIUM' | 'HIGH';
-  tradingStyle: 'CONSERVATIVE' | 'ACTIVE' | 'AGGRESSIVE';
+  riskTolerance: &apos;LOW&apos; | &apos;MEDIUM&apos; | &apos;HIGH&apos;;
+  tradingStyle: &apos;CONSERVATIVE&apos; | &apos;ACTIVE&apos; | &apos;AGGRESSIVE&apos;;
   favoritePositions: string[];
   favoriteTeams: string[];
   playerWatchlist: string[]; // Player IDs
@@ -89,6 +96,7 @@ export interface GameplaySettings {
   
   // Draft preferences
   draftPreferences: {
+}
     autoQueue: boolean;
     audioDraftRoom: boolean;
     showProjections: boolean;
@@ -99,6 +107,7 @@ export interface GameplaySettings {
 }
 
 export interface UserPreferences {
+}
   notifications: NotificationSettings;
   privacy: PrivacySettings;
   display: DisplaySettings;
@@ -115,6 +124,7 @@ export interface UserPreferences {
 // ==================== USER PROFILE ====================
 
 export interface UserProfile {
+}
   // Basic Info
   firstName: string;
   lastName: string;
@@ -125,6 +135,7 @@ export interface UserProfile {
   email: string;
   phoneNumber?: string;
   location?: {
+}
     city: string;
     state: string;
     country: string;
@@ -133,6 +144,7 @@ export interface UserProfile {
   
   // Social Media
   socialLinks?: {
+}
     twitter?: string;
     instagram?: string;
     facebook?: string;
@@ -144,6 +156,7 @@ export interface UserProfile {
   avatar: string;
   banner?: string;
   teamColors?: {
+}
     primary: string;
     secondary: string;
   };
@@ -151,7 +164,7 @@ export interface UserProfile {
   // Personal Details
   birthDate?: Date;
   favoriteNFLTeam?: string;
-  fantasyExperience: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'EXPERT';
+  fantasyExperience: &apos;BEGINNER&apos; | &apos;INTERMEDIATE&apos; | &apos;ADVANCED&apos; | &apos;EXPERT&apos;;
   yearsPlaying: number;
   
   // Verification
@@ -164,6 +177,7 @@ export interface UserProfile {
 // ==================== USER STATS AND ACHIEVEMENTS ====================
 
 export interface UserStats {
+}
   // Career Stats
   totalLeagues: number;
   activeLeagues: number;
@@ -173,6 +187,7 @@ export interface UserStats {
   
   // Seasonal Stats
   currentSeasonRecord: {
+}
     wins: number;
     losses: number;
     ties: number;
@@ -185,6 +200,7 @@ export interface UserStats {
   averageDraftGrade: string;
   averageDraftTime: number; // seconds per pick
   bestDraftPick: {
+}
     player: string;
     round: number;
     season: number;
@@ -199,6 +215,7 @@ export interface UserStats {
   waiverClaimsWon: number;
   faabUsed: number;
   bestWaiverPickup: {
+}
     player: string;
     cost: number;
     season: number;
@@ -219,21 +236,24 @@ export interface UserStats {
 }
 
 export interface Achievement {
+}
   id: string;
-  category: 'DRAFT' | 'SEASON' | 'PLAYOFFS' | 'TRADING' | 'WAIVER' | 'ENGAGEMENT' | 'SPECIAL';
+  category: &apos;DRAFT&apos; | &apos;SEASON&apos; | &apos;PLAYOFFS&apos; | &apos;TRADING&apos; | &apos;WAIVER&apos; | &apos;ENGAGEMENT&apos; | &apos;SPECIAL&apos;;
   name: string;
   description: string;
   icon: string;
-  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+  rarity: &apos;COMMON&apos; | &apos;UNCOMMON&apos; | &apos;RARE&apos; | &apos;EPIC&apos; | &apos;LEGENDARY&apos;;
   points: number;
   unlockedAt?: Date;
   progress?: {
+}
     current: number;
     target: number;
   };
 }
 
 export interface Badge {
+}
   id: string;
   name: string;
   description: string;
@@ -247,13 +267,15 @@ export interface Badge {
 // ==================== SUBSCRIPTION AND BILLING ====================
 
 export interface Subscription {
+}
   tier: SubscriptionTier;
-  status: 'ACTIVE' | 'EXPIRED' | 'CANCELLED' | 'PENDING';
+  status: &apos;ACTIVE&apos; | &apos;EXPIRED&apos; | &apos;CANCELLED&apos; | &apos;PENDING&apos;;
   startDate: Date;
   endDate: Date;
   autoRenew: boolean;
   
   features: {
+}
     maxLeagues: number;
     advancedAnalytics: boolean;
     customScoring: boolean;
@@ -266,9 +288,10 @@ export interface Subscription {
   };
   
   billing: {
+}
     amount: number;
     currency: string;
-    interval: 'MONTHLY' | 'YEARLY';
+    interval: &apos;MONTHLY&apos; | &apos;YEARLY&apos;;
     paymentMethod: string;
     lastBilledAt: Date;
     nextBillingAt: Date;
@@ -278,6 +301,7 @@ export interface Subscription {
 // ==================== MAIN USER INTERFACE ====================
 
 export interface User {
+}
   // Core Identity
   id: string;
   username: string;
@@ -319,12 +343,14 @@ export interface User {
 // ==================== AUTHENTICATION ====================
 
 export interface AuthCredentials {
+}
   email: string;
   password: string;
   rememberMe?: boolean;
 }
 
 export interface RegisterCredentials {
+}
   username: string;
   email: string;
   password: string;
@@ -336,6 +362,7 @@ export interface RegisterCredentials {
 }
 
 export interface AuthSession {
+}
   user: User;
   token: string;
   refreshToken: string;
@@ -344,6 +371,7 @@ export interface AuthSession {
 }
 
 export interface AuthState {
+}
   isAuthenticated: boolean;
   isLoading: boolean;
   user: User | null;
@@ -352,6 +380,7 @@ export interface AuthState {
   
   // OAuth providers
   providers: {
+}
     google: boolean;
     facebook: boolean;
     twitter: boolean;
@@ -362,6 +391,7 @@ export interface AuthState {
 // ==================== PASSWORD AND SECURITY ====================
 
 export interface PasswordResetRequest {
+}
   email: string;
   token?: string;
   newPassword?: string;
@@ -369,6 +399,7 @@ export interface PasswordResetRequest {
 }
 
 export interface TwoFactorAuth {
+}
   enabled: boolean;
   secret?: string;
   backupCodes: string[];
@@ -376,12 +407,14 @@ export interface TwoFactorAuth {
 }
 
 export interface SecurityLog {
+}
   id: string;
   userId: string;
-  action: 'LOGIN' | 'LOGOUT' | 'PASSWORD_CHANGE' | 'EMAIL_CHANGE' | '2FA_ENABLE' | '2FA_DISABLE';
+  action: &apos;LOGIN&apos; | &apos;LOGOUT&apos; | &apos;PASSWORD_CHANGE&apos; | &apos;EMAIL_CHANGE&apos; | &apos;2FA_ENABLE&apos; | &apos;2FA_DISABLE&apos;;
   ipAddress: string;
   userAgent: string;
   location?: {
+}
     city: string;
     region: string;
     country: string;
@@ -393,22 +426,24 @@ export interface SecurityLog {
 // ==================== USER RELATIONSHIPS ====================
 
 export interface UserConnection {
+}
   id: string;
   userId: string;
   connectedUserId: string;
-  type: 'FRIEND' | 'LEAGUE_MATE' | 'BLOCKED';
-  status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+  type: &apos;FRIEND&apos; | &apos;LEAGUE_MATE&apos; | &apos;BLOCKED&apos;;
+  status: &apos;PENDING&apos; | &apos;ACCEPTED&apos; | &apos;DECLINED&apos;;
   initiatedBy: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface UserInvite {
+}
   id: string;
   fromUserId: string;
   toEmail: string;
   leagueId?: string;
-  type: 'LEAGUE' | 'FRIENDSHIP' | 'APP';
+  type: &apos;LEAGUE&apos; | &apos;FRIENDSHIP&apos; | &apos;APP&apos;;
   message?: string;
   token: string;
   expiresAt: Date;
@@ -419,6 +454,7 @@ export interface UserInvite {
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   UserRole,
   UserStatus,
   SubscriptionTier,

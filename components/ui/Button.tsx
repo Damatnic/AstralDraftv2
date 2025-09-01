@@ -1,28 +1,30 @@
-import React from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
+import { motion, HTMLMotionProps } from &apos;framer-motion&apos;;
 
-interface ButtonProps extends Omit<HTMLMotionProps<"button">, 'children'> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'outline';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, &apos;children&apos;> {
+}
+  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;danger&apos; | &apos;success&apos; | &apos;ghost&apos; | &apos;outline&apos;;
+  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
   loading?: boolean;
   icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: &apos;left&apos; | &apos;right&apos;;
   fullWidth?: boolean;
   children: React.ReactNode;
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
+}
+  variant = &apos;primary&apos;,
+  size = &apos;md&apos;,
   loading = false,
   disabled,
   icon,
-  iconPosition = 'left',
+  iconPosition = &apos;left&apos;,
   fullWidth = false,
   children,
-  className = '',
+  className = &apos;&apos;,
   ...props
 }: any) => {
+}
   // Premium base classes with enhanced styling
   const baseClasses = `
     relative inline-flex items-center justify-center gap-2 
@@ -31,11 +33,12 @@ export const Button: React.FC<ButtonProps> = ({
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-dark-900
     disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none
     overflow-hidden isolate
-    ${fullWidth ? 'w-full' : ''}
+    ${fullWidth ? &apos;w-full&apos; : &apos;&apos;}
   `;
   
   // Premium variant styles with enhanced gradients and effects
   const variantClasses = {
+}
     primary: `
       bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 
       text-white shadow-xl shadow-primary-500/30
@@ -95,11 +98,12 @@ export const Button: React.FC<ButtonProps> = ({
   
   // Improved size classes with better proportions
   const sizeClasses = {
-    xs: 'px-3 py-1.5 text-xs min-h-[32px]',
-    sm: 'px-4 py-2 text-sm min-h-[36px]',
-    md: 'px-5 py-2.5 text-base min-h-[44px]',
-    lg: 'px-6 py-3 text-lg min-h-[52px]',
-    xl: 'px-8 py-4 text-xl min-h-[60px]'
+}
+    xs: &apos;px-3 py-1.5 text-xs min-h-[32px]&apos;,
+    sm: &apos;px-4 py-2 text-sm min-h-[36px]&apos;,
+    md: &apos;px-5 py-2.5 text-base min-h-[44px]&apos;,
+    lg: &apos;px-6 py-3 text-lg min-h-[52px]&apos;,
+    xl: &apos;px-8 py-4 text-xl min-h-[60px]&apos;
   };
 
   // Loading spinner component
@@ -113,7 +117,8 @@ export const Button: React.FC<ButtonProps> = ({
   const PremiumEffects = () => (
     <>
       {/* Shimmer effect */}
-      {(variant === 'primary' || variant === 'success' || variant === 'danger') && !disabled && !loading && (
+      {(variant === &apos;primary&apos; || variant === &apos;success&apos; || variant === &apos;danger&apos;) && !disabled && !loading && (
+}
         <div className="absolute inset-0 -top-px rounded-xl overflow-hidden -z-10">
           <div className="absolute inset-0 w-1/2 -skew-x-12 bg-gradient-to-r from-transparent via-white/15 to-transparent 
                           transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
@@ -121,7 +126,8 @@ export const Button: React.FC<ButtonProps> = ({
       )}
       
       {/* Glow effect on hover */}
-      {variant === 'primary' && !disabled && !loading && (
+      {variant === &apos;primary&apos; && !disabled && !loading && (
+}
         <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-20">
           <div className="absolute inset-0 rounded-xl bg-primary-500/20 blur-xl" />
         </div>
@@ -139,12 +145,14 @@ export const Button: React.FC<ButtonProps> = ({
     >
       <PremiumEffects />
       
-      <span className={`relative flex items-center gap-2 ${loading ? 'opacity-0' : ''}`}>
-        {icon && iconPosition === 'left' && (
+      <span className={`relative flex items-center gap-2 ${loading ? &apos;opacity-0&apos; : &apos;&apos;}`}>
+        {icon && iconPosition === &apos;left&apos; && (
+}
           <span className="flex-shrink-0">{icon}</span>
         )}
         {children}
-        {icon && iconPosition === 'right' && (
+        {icon && iconPosition === &apos;right&apos; && (
+}
           <span className="flex-shrink-0">{icon}</span>
         )}
       </span>

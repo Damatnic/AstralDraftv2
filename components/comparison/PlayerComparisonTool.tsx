@@ -3,19 +3,21 @@
  * Advanced UI for comparing multiple NFL players with projections and analysis
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Tabs } from '../ui/Tabs';
-import { Loader2, TrendingUp, TrendingDown, Activity, Target, Shield, AlertTriangle } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useEffect, useMemo } from &apos;react&apos;;
+import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
+import { Badge } from &apos;../ui/Badge&apos;;
+import { Tabs } from &apos;../ui/Tabs&apos;;
+import { Loader2, TrendingUp, TrendingDown, Activity, Target, Shield, AlertTriangle } from &apos;lucide-react&apos;;
 import { 
+}
   playerComparisonService, 
-  PlayerComparison
-} from '../../services/playerComparisonService';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+//   PlayerComparison
+} from &apos;../../services/playerComparisonService&apos;;
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from &apos;recharts&apos;;
 
 interface PlayerComparisonToolProps {
+}
   className?: string;
   initialPlayers?: string[];
   week?: number;
@@ -24,6 +26,7 @@ interface PlayerComparisonToolProps {
 }
 
 interface PlayerSearchResult {
+}
   id: string;
   name: string;
   team: string;
@@ -31,43 +34,52 @@ interface PlayerSearchResult {
 }
 
 export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
-  className = '',
+}
+  className = &apos;&apos;,
   initialPlayers = [],
   week = 1,
   season = 2024
 }: any) => {
+}
   // State management
   const [selectedPlayers, setSelectedPlayers] = useState<string[]>(initialPlayers);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
   const [searchResults, setSearchResults] = useState<PlayerSearchResult[]>([]);
   const [comparison, setComparison] = useState<PlayerComparison | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentWeek, setCurrentWeek] = useState(week);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
 
   // Mock search for players - would integrate with real search
   useEffect(() => {
+}
     const searchPlayers = async () => {
+}
     try {
+}
 
       if (searchQuery.length < 2) {
+}
         setSearchResults([]);
         return;
       
     } catch (error) {
-      console.error('Error in searchPlayers:', error);
+}
+      console.error(&apos;Error in searchPlayers:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }try {
+}
 
         // Mock search results - would use real API
         const mockResults = [
-          { id: 'player1', name: 'Josh Allen', team: 'BUF', position: 'QB' },
-          { id: 'player2', name: 'Christian McCaffrey', team: 'SF', position: 'RB' },
-          { id: 'player3', name: 'Cooper Kupp', team: 'LAR', position: 'WR' },
-          { id: 'player4', name: 'Travis Kelce', team: 'KC', position: 'TE' },
+          { id: &apos;player1&apos;, name: &apos;Josh Allen&apos;, team: &apos;BUF&apos;, position: &apos;QB&apos; },
+          { id: &apos;player2&apos;, name: &apos;Christian McCaffrey&apos;, team: &apos;SF&apos;, position: &apos;RB&apos; },
+          { id: &apos;player3&apos;, name: &apos;Cooper Kupp&apos;, team: &apos;LAR&apos;, position: &apos;WR&apos; },
+          { id: &apos;player4&apos;, name: &apos;Travis Kelce&apos;, team: &apos;KC&apos;, position: &apos;TE&apos; },
         ].filter((p: any) => 
           p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           p.team.toLowerCase().includes(searchQuery.toLowerCase())
@@ -76,6 +88,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
         setSearchResults(mockResults);
 
     } catch (error) {
+}
         setSearchResults([]);
 
     };
@@ -86,54 +99,66 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
   // Load comparison when players change
   useEffect(() => {
+}
     if (selectedPlayers.length >= 2) {
+}
       loadComparison();
     } else {
+}
       setComparison(null);
 
   }, [selectedPlayers, currentWeek]);
 
   const loadComparison = async () => {
+}
     if (selectedPlayers.length < 2) return;
 
     setLoading(true);
     setError(null);
 
     try {
+}
 
       const comparisonResult = await playerComparisonService.comparePlayersFull(
         selectedPlayers,
         currentWeek,
-        season
+//         season
       );
       setComparison(comparisonResult);
     
     } catch (error) {
-      setError('Failed to load player comparison. Please try again.');
+}
+      setError(&apos;Failed to load player comparison. Please try again.&apos;);
     } finally {
+}
       setLoading(false);
 
   };
 
   // Player selection handlers
   const addPlayer = (playerId: string) => {
+}
     if (!selectedPlayers.includes(playerId) && selectedPlayers.length < 4) {
+}
       setSelectedPlayers([...selectedPlayers, playerId]);
-      setSearchQuery('');
+      setSearchQuery(&apos;&apos;);
       setSearchResults([]);
 
   };
 
   const removePlayer = (playerId: string) => {
+}
     setSelectedPlayers(selectedPlayers.filter((id: any) => id !== playerId));
   };
 
   // Memoized data transformations
   const chartData = useMemo(() => {
+}
     if (!comparison) return null;
 
     const projectionData = comparison.players.map((player: any) => ({
-      name: player.name.split(' ').pop(), // Last name only for chart
+}
+      name: player.name.split(&apos; &apos;).pop(), // Last name only for chart
       fantasyPoints: player.projectedStats.fantasyPoints,
       confidence: player.projectedStats.confidence,
       ceiling: player.recentPerformance.ceiling,
@@ -145,39 +170,46 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
   // Utility functions
   const getDifficultyColor = (difficulty: string) => {
+}
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+}
+      case &apos;easy&apos;: return &apos;bg-green-100 text-green-800&apos;;
+      case &apos;medium&apos;: return &apos;bg-yellow-100 text-yellow-800&apos;;
+      case &apos;hard&apos;: return &apos;bg-red-100 text-red-800&apos;;
+      default: return &apos;bg-gray-100 text-gray-800&apos;;
 
   };
 
   const getTrendIcon = (trend: string) => {
+}
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'declining': return <TrendingDown className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;improving&apos;: return <TrendingUp className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;declining&apos;: return <TrendingDown className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
   const getRecommendationIcon = (type: string) => {
+}
     switch (type) {
-      case 'start': return <Target className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'sit': return <Shield className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
-      case 'flex': return <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;start&apos;: return <Target className="h-4 w-4 text-green-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;sit&apos;: return <Shield className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;flex&apos;: return <Activity className="h-4 w-4 text-blue-600 sm:px-4 md:px-6 lg:px-8" />;
       default: return <AlertTriangle className="h-4 w-4 text-yellow-600 sm:px-4 md:px-6 lg:px-8" />;
 
   };
 
   const tabItems = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'projections', label: 'Projections' },
-    { id: 'matchups', label: 'Matchups' },
-    { id: 'analytics', label: 'Analytics' }
+    { id: &apos;overview&apos;, label: &apos;Overview&apos; },
+    { id: &apos;projections&apos;, label: &apos;Projections&apos; },
+    { id: &apos;matchups&apos;, label: &apos;Matchups&apos; },
+    { id: &apos;analytics&apos;, label: &apos;Analytics&apos; }
   ];
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -206,8 +238,10 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                 onChange={(e: any) => setSearchQuery(e.target.value)}
               />
               {searchResults.length > 0 && (
+}
                 <div className="absolute top-full left-0 right-0 z-10 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                   {searchResults.map((player: any) => (
+}
                     <div
                       key={player.id}
                       className="p-3 hover:bg-gray-50 cursor-pointer flex items-center gap-3 sm:px-4 md:px-6 lg:px-8"
@@ -242,23 +276,26 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"
              aria-label="Action button">
               {loading ? (
+}
                 <>
                   <Loader2 className="h-4 w-4 animate-spin sm:px-4 md:px-6 lg:px-8" />
                   Analyzing...
                 </>
               ) : (
-                'Compare Players'
+                &apos;Compare Players&apos;
               )}
             </button>
           </div>
 
           {/* Selected Players */}
           {selectedPlayers.length > 0 && (
+}
             <div className="mt-4 sm:px-4 md:px-6 lg:px-8">
               <div className="text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Selected Players ({selectedPlayers.length}/4):</div>
               <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                 {comparison?.players.map((player: any) => (
-                  <Badge 
+}
+                  <Badge>
                     key={player.id} 
                     variant="default"
                     className="flex items-center gap-2 py-1 px-3 sm:px-4 md:px-6 lg:px-8"
@@ -279,6 +316,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
       {/* Error Display */}
       {error && (
+}
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg sm:px-4 md:px-6 lg:px-8">
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <AlertTriangle className="h-4 w-4 text-red-600 sm:px-4 md:px-6 lg:px-8" />
@@ -289,9 +327,10 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
       {/* Comparison Results */}
       {comparison && (
+}
         <div className="w-full sm:px-4 md:px-6 lg:px-8">
           <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
-            <Tabs
+            <Tabs>
               items={tabItems}
               activeTab={activeTab}
               onTabChange={setActiveTab}
@@ -299,7 +338,8 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
           </div>
 
           {/* Overview Tab */}
-          {activeTab === 'overview' && (
+          {activeTab === &apos;overview&apos; && (
+}
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
               {/* Winner Analysis */}
               <Card>
@@ -311,6 +351,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                     <div>
                       <h4 className="font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Recommended Start</h4>
                       {(() => {
+}
                         const winner = comparison.players.find((p: any) => p.id === comparison.analysis.winner);
                         return winner ? (
                           <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg sm:px-4 md:px-6 lg:px-8">
@@ -333,6 +374,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                       <h4 className="font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Key Reasoning</h4>
                       <ul className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {comparison.analysis.reasoning.map((reason, index) => (
+}
                           <li key={index} className="text-sm text-gray-600 flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
                             <span className="text-blue-500 mt-1 sm:px-4 md:px-6 lg:px-8">•</span>
                             {reason}
@@ -347,13 +389,14 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                     <h4 className="font-semibold mb-3 sm:px-4 md:px-6 lg:px-8">Risk Assessment</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {Object.entries(comparison.analysis.riskAssessment).map(([type, playerId]) => {
+}
                         const player = comparison.players.find((p: any) => p.id === playerId);
                         return player ? (
                           <div key={type} className="text-center p-3 bg-gray-50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                             <div className="text-xs uppercase tracking-wide text-gray-500 mb-1 sm:px-4 md:px-6 lg:px-8">
-                              {type.replace(/([A-Z])/g, ' $1').trim()}
+                              {type.replace(/([A-Z])/g, &apos; $1&apos;).trim()}
                             </div>
-                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name.split(' ').pop()}</div>
+                            <div className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name.split(&apos; &apos;).pop()}</div>
                           </div>
                         ) : null;
                       })}
@@ -370,6 +413,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                 <CardContent>
                   <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {comparison.recommendations.map((rec, index) => {
+}
                       const player = comparison.players.find((p: any) => p.id === rec.player);
                       return player ? (
                         <div key={index} className="flex items-center gap-3 p-3 border rounded-lg sm:px-4 md:px-6 lg:px-8">
@@ -377,13 +421,14 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                           <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                               <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
-                              <Badge variant={rec.type === 'start' ? 'default' : 'secondary'}>
+                              <Badge variant={rec.type === &apos;start&apos; ? &apos;default&apos; : &apos;secondary&apos;}>
                                 {rec.type.toUpperCase()}
                               </Badge>
                               <Badge variant="outline" className={
-                                rec.riskLevel === 'low' ? 'border-green-200 text-green-700' :
-                                rec.riskLevel === 'medium' ? 'border-yellow-200 text-yellow-700' :
-                                'border-red-200 text-red-700'
+}
+                                rec.riskLevel === &apos;low&apos; ? &apos;border-green-200 text-green-700&apos; :
+                                rec.riskLevel === &apos;medium&apos; ? &apos;border-yellow-200 text-yellow-700&apos; :
+                                &apos;border-red-200 text-red-700&apos;
                               }>
                                 {rec.riskLevel} risk
                               </Badge>
@@ -403,7 +448,8 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
           )}
 
           {/* Projections Tab */}
-          {activeTab === 'projections' && (
+          {activeTab === &apos;projections&apos; && (
+}
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
               {/* Fantasy Points Chart */}
               <Card>
@@ -412,6 +458,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                 </CardHeader>
                 <CardContent>
                   {chartData?.projectionData && (
+}
                     <ResponsiveContainer width="100%" height={300}>
                       <BarChart data={chartData.projectionData}>
                         <CartesianGrid strokeDasharray="3 3" />
@@ -445,6 +492,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                       </thead>
                       <tbody>
                         {comparison.players.map((player: any) => (
+}
                           <tr key={player.id} className="border-b hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8">
                             <td className="p-2 sm:px-4 md:px-6 lg:px-8">
                               <span className="font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</span>
@@ -477,10 +525,12 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
           )}
 
           {/* Matchups Tab */}
-          {activeTab === 'matchups' && (
+          {activeTab === &apos;matchups&apos; && (
+}
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {comparison.players.map((player: any) => (
+}
                   <Card key={player.id}>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
@@ -513,7 +563,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                         <div>
                           <div className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Home/Away</div>
                           <div className="font-medium sm:px-4 md:px-6 lg:px-8">
-                            {player.matchupAnalysis.homeFieldAdvantage ? 'Home' : 'Away'}
+                            {player.matchupAnalysis.homeFieldAdvantage ? &apos;Home&apos; : &apos;Away&apos;}
                           </div>
                         </div>
                       </div>
@@ -531,10 +581,12 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
                       {/* Key Factors */}
                       {player.matchupAnalysis.keyFactors.length > 0 && (
+}
                         <div>
                           <div className="text-sm font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Key Factors:</div>
                           <ul className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {player.matchupAnalysis.keyFactors.map((factor: string, index: number) => (
+}
                               <li key={index} className="text-xs text-gray-600 flex items-start gap-1 sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-blue-500 mt-0.5 sm:px-4 md:px-6 lg:px-8">•</span>
                                 {factor}
@@ -551,7 +603,8 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
           )}
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
+          {activeTab === &apos;analytics&apos; && (
+}
             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
               {/* Fantasy Relevance */}
               <Card>
@@ -572,6 +625,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                       </thead>
                       <tbody>
                         {comparison.players.map((player: any) => (
+}
                           <tr key={player.id} className="border-b hover:bg-gray-50 sm:px-4 md:px-6 lg:px-8">
                             <td className="p-2 font-medium sm:px-4 md:px-6 lg:px-8">{player.name}</td>
                             <td className="text-center p-2 sm:px-4 md:px-6 lg:px-8">#{player.fantasyRelevance.positionRank}</td>
@@ -581,8 +635,9 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                             <td className="text-center p-2 sm:px-4 md:px-6 lg:px-8">{player.fantasyRelevance.rosteredPercentage}%</td>
                             <td className="text-center p-2 sm:px-4 md:px-6 lg:px-8">
                               {player.fantasyRelevance.snapPercentage ? 
+}
                                 `${Math.round(player.fantasyRelevance.snapPercentage * 100)}%` : 
-                                '-'
+                                &apos;-&apos;
 
                             </td>
                           </tr>
@@ -595,6 +650,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
               {/* Oracle Accuracy */}
               {comparison.players.some((p: any) => p.oracleAccuracy) && (
+}
                 <Card>
                   <CardHeader>
                     <CardTitle>Oracle Prediction Accuracy</CardTitle>
@@ -602,8 +658,9 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                       {comparison.players.filter((p: any) => p.oracleAccuracy).map((player: any) => (
+}
                         <div key={player.id} className="p-4 border rounded-lg sm:px-4 md:px-6 lg:px-8">
-                          <div className="font-medium mb-2 sm:px-4 md:px-6 lg:px-8">{player.name.split(' ').pop()}</div>
+                          <div className="font-medium mb-2 sm:px-4 md:px-6 lg:px-8">{player.name.split(&apos; &apos;).pop()}</div>
                           <div className="space-y-2 text-sm sm:px-4 md:px-6 lg:px-8">
                             <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                               <span>Accuracy:</span>
@@ -633,6 +690,7 @@ export const PlayerComparisonTool: React.FC<PlayerComparisonToolProps> = ({
 
       {/* Empty State */}
       {!comparison && !loading && selectedPlayers.length < 2 && (
+}
         <Card>
           <CardContent className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
             <Target className="h-12 w-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />

@@ -3,17 +3,19 @@
  * ML-powered trade matching, automated negotiations, and intelligent trade recommendations
  */
 
-import { tradeAnalysisService, type TradeProposal, type TradeAnalysis } from './tradeAnalysisService';
-import { machineLearningPlayerPredictionService } from './machineLearningPlayerPredictionService';
-import { productionSportsDataService, type NFLPlayer } from './productionSportsDataService';
+import { tradeAnalysisService, type TradeProposal, type TradeAnalysis } from &apos;./tradeAnalysisService&apos;;
+import { machineLearningPlayerPredictionService } from &apos;./machineLearningPlayerPredictionService&apos;;
+import { productionSportsDataService, type NFLPlayer } from &apos;./productionSportsDataService&apos;;
 
 // Marketplace interfaces
 export interface TradeBlock {
+}
   teamId: string;
   teamName: string;
   playersAvailable: TradeBlockPlayer[];
   playersWanted: PositionWant[];
   tradePreferences: {
+}
     willingToPackage: boolean;
     acceptsFuturePicks: boolean;
     preferredPartners?: string[];
@@ -27,35 +29,39 @@ export interface TradeBlock {
 }
 
 export interface TradeBlockPlayer {
+}
   playerId: string;
   playerName: string;
   position: string;
   team: string;
   askingPrice: {
-    tier: 'elite' | 'high' | 'medium' | 'low' | 'any';
+}
+    tier: &apos;elite&apos; | &apos;high&apos; | &apos;medium&apos; | &apos;low&apos; | &apos;any&apos;;
     positions: string[];
     specificPlayers?: string[];
     notes?: string;
   };
-  availability: 'available' | 'listening' | 'unlikely' | 'untouchable';
+  availability: &apos;available&apos; | &apos;listening&apos; | &apos;unlikely&apos; | &apos;untouchable&apos;;
   timeOnBlock: number; // days
   interestLevel: number; // 0-100 based on inquiries
   bestOffer?: TradeOffer;
 }
 
 export interface PositionWant {
+}
   position: string;
-  tier: 'elite' | 'starter' | 'depth' | 'any';
-  urgency: 'critical' | 'high' | 'moderate' | 'low';
+  tier: &apos;elite&apos; | &apos;starter&apos; | &apos;depth&apos; | &apos;any&apos;;
+  urgency: &apos;critical&apos; | &apos;high&apos; | &apos;moderate&apos; | &apos;low&apos;;
   willingToOverpay: boolean;
   specificTargets?: string[];
 }
 
 export interface TradeOffer {
+}
   offerId: string;
   fromTeam: string;
   toTeam: string;
-  status: 'pending' | 'accepted' | 'rejected' | 'countered' | 'expired' | 'withdrawn';
+  status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;countered&apos; | &apos;expired&apos; | &apos;withdrawn&apos;;
   givingPlayers: string[];
   receivingPlayers: string[];
   fairnessScore?: number;
@@ -68,13 +74,15 @@ export interface TradeOffer {
 }
 
 export interface TradeMessage {
+}
   fromTeam: string;
   message: string;
   timestamp: string;
-  type: 'initial' | 'counter' | 'acceptance' | 'rejection' | 'comment';
+  type: &apos;initial&apos; | &apos;counter&apos; | &apos;acceptance&apos; | &apos;rejection&apos; | &apos;comment&apos;;
 }
 
 export interface CounterOffer {
+}
   counterId: string;
   proposedBy: string;
   givingPlayers: string[];
@@ -84,6 +92,7 @@ export interface CounterOffer {
 }
 
 export interface CompletedTrade {
+}
   tradeId: string;
   team1: string;
   team2: string;
@@ -92,6 +101,7 @@ export interface CompletedTrade {
   completedAt: string;
   fairnessScore: number;
   outcome?: {
+}
     team1Benefit: number; // Points gained/lost
     team2Benefit: number;
     winnerTeam?: string;
@@ -99,6 +109,7 @@ export interface CompletedTrade {
 }
 
 export interface TradeReputation {
+}
   totalTrades: number;
   fairTrades: number;
   acceptanceRate: number;
@@ -108,12 +119,14 @@ export interface TradeReputation {
 }
 
 export interface TradeBadge {
-  type: 'fair_trader' | 'quick_responder' | 'deal_maker' | 'trade_wizard' | 'trusted_partner';
+}
+  type: &apos;fair_trader&apos; | &apos;quick_responder&apos; | &apos;deal_maker&apos; | &apos;trade_wizard&apos; | &apos;trusted_partner&apos;;
   earnedAt: string;
   description: string;
 }
 
 export interface AutoMatchResult {
+}
   matchId: string;
   team1: string;
   team2: string;
@@ -127,6 +140,7 @@ export interface AutoMatchResult {
 }
 
 export interface TradeNetwork {
+}
   nodes: TradeNode[];
   edges: TradeEdge[];
   clusters: TradeCluster[];
@@ -134,15 +148,17 @@ export interface TradeNetwork {
 }
 
 export interface TradeNode {
+}
   teamId: string;
   teamName: string;
-  tradeActivity: 'very_active' | 'active' | 'moderate' | 'inactive';
+  tradeActivity: &apos;very_active&apos; | &apos;active&apos; | &apos;moderate&apos; | &apos;inactive&apos;;
   primaryNeeds: string[];
   primaryAssets: string[];
   openToTrades: boolean;
 }
 
 export interface TradeEdge {
+}
   source: string;
   target: string;
   weight: number; // Trade frequency/success
@@ -151,6 +167,7 @@ export interface TradeEdge {
 }
 
 export interface TradeCluster {
+}
   clusterId: string;
   teams: string[];
   commonInterests: string[];
@@ -159,7 +176,8 @@ export interface TradeCluster {
 }
 
 export interface NetworkInsight {
-  type: 'trade_opportunity' | 'market_trend' | 'value_shift' | 'position_scarcity';
+}
+  type: &apos;trade_opportunity&apos; | &apos;market_trend&apos; | &apos;value_shift&apos; | &apos;position_scarcity&apos;;
   description: string;
   affectedTeams: string[];
   actionableAdvice: string;
@@ -167,9 +185,10 @@ export interface NetworkInsight {
 }
 
 export interface MarketTrend {
+}
   trendId: string;
-  type: 'player_value' | 'position_demand' | 'trade_volume' | 'market_sentiment';
-  direction: 'rising' | 'falling' | 'stable';
+  type: &apos;player_value&apos; | &apos;position_demand&apos; | &apos;trade_volume&apos; | &apos;market_sentiment&apos;;
+  direction: &apos;rising&apos; | &apos;falling&apos; | &apos;stable&apos;;
   magnitude: number; // -100 to 100
   affectedPlayers?: string[];
   affectedPositions?: string[];
@@ -179,6 +198,7 @@ export interface MarketTrend {
 }
 
 export interface TradeSimulation {
+}
   simulationId: string;
   originalRosters: Map<string, string[]>;
   proposedTrades: TradeProposal[];
@@ -190,6 +210,7 @@ export interface TradeSimulation {
 }
 
 export interface TeamProjection {
+}
   teamId: string;
   currentProjectedRank: number;
   newProjectedRank: number;
@@ -199,6 +220,7 @@ export interface TeamProjection {
 }
 
 class AdvancedTradeMarketplaceService {
+}
   private tradeBlocks = new Map<string, TradeBlock>();
   private activeOffers = new Map<string, TradeOffer>();
   private tradeHistory = new Map<string, CompletedTrade[]>();
@@ -208,11 +230,13 @@ class AdvancedTradeMarketplaceService {
   private readonly CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
   constructor() {
+}
     this.initializeService();
   }
 
   private initializeService(): void {
-    console.log('🏪 Initializing Advanced Trade Marketplace Service...');
+}
+    console.log(&apos;🏪 Initializing Advanced Trade Marketplace Service...&apos;);
     
     // Initialize trade network
     this.buildTradeNetwork();
@@ -222,29 +246,34 @@ class AdvancedTradeMarketplaceService {
     
     // Clean up expired offers every 5 minutes
     setInterval(() => {
+}
       this.cleanupExpiredOffers();
     }, 5 * 60 * 1000);
     
     // Update market trends every 30 minutes
     setInterval(() => {
+}
       this.updateMarketTrends();
     }, 30 * 60 * 1000);
   }
 
   /**
-   * Add or update a team's trade block
+   * Add or update a team&apos;s trade block
    */
   async updateTradeBlock(
     teamId: string,
     teamName: string,
     updates: Partial<TradeBlock>
   ): Promise<TradeBlock> {
+}
     try {
+}
       console.log(`📝 Updating trade block for team ${teamName}`);
 
       const existing = this.tradeBlocks.get(teamId) || this.createDefaultTradeBlock(teamId, teamName);
       
       const updated: TradeBlock = {
+}
         ...existing,
         ...updates,
         lastUpdated: new Date().toISOString()
@@ -252,6 +281,7 @@ class AdvancedTradeMarketplaceService {
 
       // Update interest levels based on inquiries
       if (updated.playersAvailable) {
+}
         updated.playersAvailable = await this.updatePlayerInterestLevels(updated.playersAvailable);
       }
 
@@ -262,6 +292,7 @@ class AdvancedTradeMarketplaceService {
 
       // Trigger auto-matching for new listings
       if (updates.playersAvailable || updates.playersWanted) {
+}
         this.triggerAutoMatching(teamId);
       }
 
@@ -269,8 +300,9 @@ class AdvancedTradeMarketplaceService {
       return updated;
 
     } catch (error) {
-      console.error('❌ Error updating trade block:', error);
-      throw new Error(`Failed to update trade block: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error updating trade block:&apos;, error);
+      throw new Error(`Failed to update trade block: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
@@ -281,25 +313,30 @@ class AdvancedTradeMarketplaceService {
     teamId: string,
     maxResults: number = 5
   ): Promise<AutoMatchResult[]> {
+}
     try {
+}
       console.log(`🤖 Finding automated trade matches for team ${teamId}`);
 
       const cacheKey = `auto_match_${teamId}`;
       const cached = this.cache.get(cacheKey);
       
       if (cached && Date.now() < cached.expires) {
+}
         return cached.data;
       }
 
       const teamBlock = this.tradeBlocks.get(teamId);
       if (!teamBlock) {
-        throw new Error('Team trade block not found');
+}
+        throw new Error(&apos;Team trade block not found&apos;);
       }
 
       const matches: AutoMatchResult[] = [];
       
-      // Analyze all other teams' trade blocks
+      // Analyze all other teams&apos; trade blocks
       for (const [otherTeamId, otherBlock] of this.tradeBlocks.entries()) {
+}
         if (otherTeamId === teamId) continue;
         
         // Check if teams are compatible
@@ -309,6 +346,7 @@ class AdvancedTradeMarketplaceService {
         const matchResult = await this.findMatchingTrade(teamBlock, otherBlock);
         
         if (matchResult && matchResult.matchScore > 60) {
+}
           matches.push(matchResult);
         }
       }
@@ -319,6 +357,7 @@ class AdvancedTradeMarketplaceService {
 
       // Cache results
       this.cache.set(cacheKey, { 
+}
         data: topMatches, 
         expires: Date.now() + this.CACHE_TTL 
       });
@@ -327,8 +366,9 @@ class AdvancedTradeMarketplaceService {
       return topMatches;
 
     } catch (error) {
-      console.error('❌ Error finding auto matches:', error);
-      throw new Error(`Failed to find matches: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error finding auto matches:&apos;, error);
+      throw new Error(`Failed to find matches: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
@@ -343,17 +383,20 @@ class AdvancedTradeMarketplaceService {
     message?: string,
     autoGenerated: boolean = false
   ): Promise<TradeOffer> {
+}
     try {
+}
       console.log(`📤 Creating trade offer from ${fromTeam} to ${toTeam}`);
 
       // Create trade proposal for analysis
       const proposal: TradeProposal = {
+}
         id: `offer_${Date.now()}`,
         proposedBy: fromTeam,
         proposedTo: toTeam,
         givingPlayers,
         receivingPlayers,
-        status: 'proposed',
+        status: &apos;proposed&apos;,
         proposedAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString() // 48 hours
       };
@@ -362,10 +405,11 @@ class AdvancedTradeMarketplaceService {
       const analysis = await this.analyzeTradeOffer(proposal);
 
       const offer: TradeOffer = {
+}
         offerId: proposal.id,
         fromTeam,
         toTeam,
-        status: 'pending',
+        status: &apos;pending&apos;,
         givingPlayers,
         receivingPlayers,
         fairnessScore: analysis.fairnessScore,
@@ -373,12 +417,13 @@ class AdvancedTradeMarketplaceService {
         createdAt: proposal.proposedAt,
         expiresAt: proposal.expiresAt,
         messages: message ? [{
+}
           fromTeam,
           message,
           timestamp: proposal.proposedAt,
-          type: 'initial'
+          type: &apos;initial&apos;
         }] : [],
-        autoGenerated
+//         autoGenerated
       };
 
       // Store the offer
@@ -395,8 +440,9 @@ class AdvancedTradeMarketplaceService {
       return offer;
 
     } catch (error) {
-      console.error('❌ Error creating trade offer:', error);
-      throw new Error(`Failed to create offer: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error creating trade offer:&apos;, error);
+      throw new Error(`Failed to create offer: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
@@ -406,44 +452,52 @@ class AdvancedTradeMarketplaceService {
   async respondToOffer(
     offerId: string,
     teamId: string,
-    response: 'accept' | 'reject' | 'counter',
+    response: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;,
     counterOffer?: { givingPlayers: string[]; receivingPlayers: string[] },
     message?: string
   ): Promise<TradeOffer> {
+}
     try {
+}
       console.log(`📥 Responding to trade offer ${offerId}: ${response}`);
 
       const offer = this.activeOffers.get(offerId);
       if (!offer) {
-        throw new Error('Trade offer not found');
+}
+        throw new Error(&apos;Trade offer not found&apos;);
       }
 
       if (offer.toTeam !== teamId && offer.fromTeam !== teamId) {
-        throw new Error('Unauthorized to respond to this offer');
+}
+        throw new Error(&apos;Unauthorized to respond to this offer&apos;);
       }
 
       // Update offer status
-      offer.status = response === 'accept' ? 'accepted' : 
-                    response === 'reject' ? 'rejected' : 'countered';
+      offer.status = response === &apos;accept&apos; ? &apos;accepted&apos; : 
+                    response === &apos;reject&apos; ? &apos;rejected&apos; : &apos;countered&apos;;
 
       // Add response message
       if (message) {
+}
         offer.messages.push({
+}
           fromTeam: teamId,
           message,
           timestamp: new Date().toISOString(),
-          type: response === 'counter' ? 'counter' : response === 'accept' ? 'acceptance' : 'rejection'
+          type: response === &apos;counter&apos; ? &apos;counter&apos; : response === &apos;accept&apos; ? &apos;acceptance&apos; : &apos;rejection&apos;
         });
       }
 
       // Handle counter offer
-      if (response === 'counter' && counterOffer) {
+      if (response === &apos;counter&apos; && counterOffer) {
+}
         const counter: CounterOffer = {
+}
           counterId: `counter_${Date.now()}`,
           proposedBy: teamId,
           givingPlayers: counterOffer.givingPlayers,
           receivingPlayers: counterOffer.receivingPlayers,
-          reasoning: message || 'Counter proposal',
+          reasoning: message || &apos;Counter proposal&apos;,
           timestamp: new Date().toISOString()
         };
 
@@ -457,12 +511,13 @@ class AdvancedTradeMarketplaceService {
           counterOffer.givingPlayers,
           counterOffer.receivingPlayers,
           message,
-          false
+//           false
         );
       }
 
       // Handle acceptance
-      if (response === 'accept') {
+      if (response === &apos;accept&apos;) {
+}
         await this.completeTrade(offer);
       }
 
@@ -473,8 +528,9 @@ class AdvancedTradeMarketplaceService {
       return offer;
 
     } catch (error) {
-      console.error('❌ Error responding to offer:', error);
-      throw new Error(`Failed to respond: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error responding to offer:&apos;, error);
+      throw new Error(`Failed to respond: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
@@ -482,7 +538,9 @@ class AdvancedTradeMarketplaceService {
    * Get trade network visualization data
    */
   getTradeNetwork(): TradeNetwork {
+}
     if (!this.tradeNetwork) {
+}
       this.buildTradeNetwork();
     }
     return this.tradeNetwork!;
@@ -492,11 +550,13 @@ class AdvancedTradeMarketplaceService {
    * Get current market trends
    */
   getMarketTrends(
-    filter?: 'all' | 'player_value' | 'position_demand' | 'trade_volume'
+    filter?: &apos;all&apos; | &apos;player_value&apos; | &apos;position_demand&apos; | &apos;trade_volume&apos;
   ): MarketTrend[] {
+}
     const trends = Array.from(this.marketTrends.values());
     
-    if (filter && filter !== 'all') {
+    if (filter && filter !== &apos;all&apos;) {
+}
       return trends.filter((t: any) => t.type === filter);
     }
     
@@ -510,7 +570,9 @@ class AdvancedTradeMarketplaceService {
     proposedTrades: TradeProposal[],
     leagueRosters: Map<string, string[]>
   ): Promise<TradeSimulation> {
+}
     try {
+}
       console.log(`🔮 Simulating ${proposedTrades.length} trades`);
 
       // Clone original rosters
@@ -518,6 +580,7 @@ class AdvancedTradeMarketplaceService {
       
       // Apply trades to rosters
       for (const trade of proposedTrades) {
+}
         const team1Roster = resultingRosters.get(trade.proposedBy) || [];
         const team2Roster = resultingRosters.get(trade.proposedTo) || [];
         
@@ -536,7 +599,7 @@ class AdvancedTradeMarketplaceService {
       // Calculate projections for each team
       const projectedStandings = await this.calculateProjectedStandings(
         leagueRosters,
-        resultingRosters
+//         resultingRosters
       );
 
       // Calculate probability changes
@@ -544,6 +607,7 @@ class AdvancedTradeMarketplaceService {
       const playoffProbabilityChanges = new Map<string, number>();
       
       for (const projection of projectedStandings) {
+}
         const winChange = (projection.newProjectedPoints - projection.currentProjectedPoints) / 
                          projection.currentProjectedPoints;
         const playoffChange = projection.newProjectedRank <= 6 ? 0.1 : -0.1;
@@ -555,10 +619,11 @@ class AdvancedTradeMarketplaceService {
       // Generate recommendations
       const recommendedActions = this.generateTradeRecommendations(
         projectedStandings,
-        proposedTrades
+//         proposedTrades
       );
 
       const simulation: TradeSimulation = {
+}
         simulationId: `sim_${Date.now()}`,
         originalRosters: leagueRosters,
         proposedTrades,
@@ -566,15 +631,16 @@ class AdvancedTradeMarketplaceService {
         projectedStandings,
         winProbabilityChanges,
         playoffProbabilityChanges,
-        recommendedActions
+//         recommendedActions
       };
 
       console.log(`✅ Trade simulation complete`);
       return simulation;
 
     } catch (error) {
-      console.error('❌ Error simulating trades:', error);
-      throw new Error(`Failed to simulate: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error simulating trades:&apos;, error);
+      throw new Error(`Failed to simulate: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
@@ -585,7 +651,9 @@ class AdvancedTradeMarketplaceService {
     teamId: string,
     roster: string[]
   ): Promise<TradeProposal[]> {
+}
     try {
+}
       console.log(`💡 Generating personalized trade suggestions for team ${teamId}`);
 
       const suggestions: TradeProposal[] = [];
@@ -595,22 +663,25 @@ class AdvancedTradeMarketplaceService {
       
       // Find teams with matching assets
       for (const [otherTeamId, otherBlock] of this.tradeBlocks.entries()) {
+}
         if (otherTeamId === teamId) continue;
         
         // Check if they have what we need
         const hasNeededPlayers = otherBlock.playersAvailable.some((p: any) => 
-          teamNeeds.includes(p.position) && p.availability !== 'untouchable'
+          teamNeeds.includes(p.position) && p.availability !== &apos;untouchable&apos;
         );
         
         if (hasNeededPlayers) {
+}
           const suggestion = await this.generateTradeSuggestion(
             teamId,
             otherTeamId,
             roster,
-            teamNeeds
+//             teamNeeds
           );
           
           if (suggestion) {
+}
             suggestions.push(suggestion);
           }
         }
@@ -618,6 +689,7 @@ class AdvancedTradeMarketplaceService {
 
       // Sort by projected benefit
       suggestions.sort((a, b) => {
+}
         // Would calculate actual benefit
         return Math.random() - 0.5;
       });
@@ -626,20 +698,24 @@ class AdvancedTradeMarketplaceService {
       return suggestions.slice(0, 5);
 
     } catch (error) {
-      console.error('❌ Error generating suggestions:', error);
-      throw new Error(`Failed to generate suggestions: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
+      console.error(&apos;❌ Error generating suggestions:&apos;, error);
+      throw new Error(`Failed to generate suggestions: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`);
     }
   }
 
   // Private helper methods
 
   private createDefaultTradeBlock(teamId: string, teamName: string): TradeBlock {
+}
     return {
+}
       teamId,
       teamName,
       playersAvailable: [],
       playersWanted: [],
       tradePreferences: {
+}
         willingToPackage: true,
         acceptsFuturePicks: false,
         minimumFairnessScore: 60
@@ -647,6 +723,7 @@ class AdvancedTradeMarketplaceService {
       activeOffers: [],
       completedTrades: [],
       reputation: {
+}
         totalTrades: 0,
         fairTrades: 0,
         acceptanceRate: 0,
@@ -661,66 +738,78 @@ class AdvancedTradeMarketplaceService {
   private async updatePlayerInterestLevels(
     players: TradeBlockPlayer[]
   ): Promise<TradeBlockPlayer[]> {
+}
     // Calculate interest based on views, inquiries, and offers
     return players.map((player: any) => ({
+}
       ...player,
       interestLevel: Math.min(100, player.interestLevel + Math.random() * 10)
     }));
   }
 
   private calculateTradeReputation(teamId: string): TradeReputation {
+}
     const history = this.tradeHistory.get(teamId) || [];
     const offers = Array.from(this.activeOffers.values())
       .filter((o: any) => o.fromTeam === teamId || o.toTeam === teamId);
 
     const totalTrades = history.length;
     const fairTrades = history.filter((t: any) => t.fairnessScore >= 60).length;
-    const acceptedOffers = offers.filter((o: any) => o.status === 'accepted').length;
+    const acceptedOffers = offers.filter((o: any) => o.status === &apos;accepted&apos;).length;
     const totalOffers = offers.length;
     
     const badges: TradeBadge[] = [];
     
     if (fairTrades >= 5) {
+}
       badges.push({
-        type: 'fair_trader',
+}
+        type: &apos;fair_trader&apos;,
         earnedAt: new Date().toISOString(),
-        description: 'Consistently makes fair trades'
+        description: &apos;Consistently makes fair trades&apos;
       });
     }
     
     if (totalTrades >= 10) {
+}
       badges.push({
-        type: 'deal_maker',
+}
+        type: &apos;deal_maker&apos;,
         earnedAt: new Date().toISOString(),
-        description: 'Completed 10+ trades'
+        description: &apos;Completed 10+ trades&apos;
       });
     }
 
     return {
+}
       totalTrades,
       fairTrades,
       acceptanceRate: totalOffers > 0 ? acceptedOffers / totalOffers : 0,
       averageResponseTime: 24, // Mock value
       trustScore: Math.min(100, 50 + (fairTrades * 5)),
-      badges
+//       badges
     };
   }
 
   private async triggerAutoMatching(teamId: string): Promise<void> {
+}
     // Run auto-matching in background
     setTimeout(async () => {
+}
       const matches = await this.findAutoMatches(teamId, 3);
       
       // Create offers for high-confidence matches
       for (const match of matches) {
+}
         if (match.confidence > 0.8 && match.fairnessScore > 70) {
+}
           await this.createTradeOffer(
             match.team1,
             match.team2,
             match.proposedTrade.givingPlayers,
             match.proposedTrade.receivingPlayers,
-            `Auto-generated trade suggestion: ${match.matchReasons.join(', ')}`,
-            true
+            `Auto-generated trade suggestion: ${match.matchReasons.join(&apos;, &apos;)}`,
+//             true
           );
         }
       }
@@ -731,11 +820,14 @@ class AdvancedTradeMarketplaceService {
     team1: TradeBlock,
     team2: TradeBlock
   ): boolean {
+}
     // Check if teams are blocked
     if (team1.tradePreferences.blockedPartners?.includes(team2.teamId)) {
+}
       return false;
     }
     if (team2.tradePreferences.blockedPartners?.includes(team1.teamId)) {
+}
       return false;
     }
 
@@ -755,7 +847,9 @@ class AdvancedTradeMarketplaceService {
     team1: TradeBlock,
     team2: TradeBlock
   ): Promise<AutoMatchResult | null> {
+}
     try {
+}
       // Find players that match needs
       const team1Gives = team1.playersAvailable
         .filter((p: any) => team2.playersWanted.some((w: any) => w.position === p.position))
@@ -766,17 +860,19 @@ class AdvancedTradeMarketplaceService {
         .slice(0, 2);
 
       if (team1Gives.length === 0 || team2Gives.length === 0) {
+}
         return null;
       }
 
       // Create trade proposal
       const proposal: TradeProposal = {
+}
         id: `auto_${Date.now()}`,
         proposedBy: team1.teamId,
         proposedTo: team2.teamId,
         givingPlayers: team1Gives.map((p: any) => p.playerId),
         receivingPlayers: team2Gives.map((p: any) => p.playerId),
-        status: 'proposed',
+        status: &apos;proposed&apos;,
         proposedAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
       };
@@ -792,15 +888,16 @@ class AdvancedTradeMarketplaceService {
       const matchScore = needsFitScore + fairnessComponent + reputationBonus;
 
       return {
+}
         matchId: `match_${Date.now()}`,
         team1: team1.teamId,
         team2: team2.teamId,
         proposedTrade: proposal,
         matchScore,
         matchReasons: [
-          'Fills mutual position needs',
+          &apos;Fills mutual position needs&apos;,
           `${analysis.fairnessScore}% fair trade value`,
-          'Compatible trade preferences'
+          &apos;Compatible trade preferences&apos;
         ],
         mutualBenefit: analysis.analysis.teamFitAnalysis.mutualBenefit,
         fairnessScore: analysis.fairnessScore,
@@ -809,22 +906,27 @@ class AdvancedTradeMarketplaceService {
       };
 
     } catch (error) {
-      console.error('Error finding matching trade:', error);
+}
+      console.error(&apos;Error finding matching trade:&apos;, error);
       return null;
     }
   }
 
   private async analyzeTradeOffer(proposal: TradeProposal): Promise<TradeAnalysis> {
+}
     // Use existing trade analysis service
     // This is a simplified version - would need actual roster data
     const mockRoster = {
+}
       teamId: proposal.proposedBy,
-      leagueId: 'league1',
+      leagueId: &apos;league1&apos;,
       players: [],
       settings: {
+}
         startingPositions: { QB: 1, RB: 2, WR: 2, TE: 1, FLEX: 1, K: 1, DST: 1 },
         benchSize: 6,
         scoring: {
+}
           passingTouchdown: 4,
           rushingTouchdown: 6,
           receivingTouchdown: 6,
@@ -846,25 +948,30 @@ class AdvancedTradeMarketplaceService {
     return await tradeAnalysisService.analyzeTradeProposal(
       proposal,
       mockRoster,
-      mockRoster
+//       mockRoster
     );
   }
 
   private updateTradeBlockWithOffer(teamId: string, offer: TradeOffer): void {
+}
     const block = this.tradeBlocks.get(teamId);
     if (block) {
+}
       block.activeOffers.push(offer);
       this.tradeBlocks.set(teamId, block);
     }
   }
 
   private async sendTradeNotification(teamId: string, offer: TradeOffer): Promise<void> {
+}
     // Would integrate with notification service
     console.log(`📧 Trade notification sent to team ${teamId}`);
   }
 
   private async completeTrade(offer: TradeOffer): Promise<void> {
+}
     const completed: CompletedTrade = {
+}
       tradeId: offer.offerId,
       team1: offer.fromTeam,
       team2: offer.toTeam,
@@ -890,12 +997,15 @@ class AdvancedTradeMarketplaceService {
   }
 
   private buildTradeNetwork(): void {
+}
     const nodes: TradeNode[] = [];
     const edges: TradeEdge[] = [];
 
     // Create nodes for each team
     for (const [teamId, block] of this.tradeBlocks.entries()) {
+}
       nodes.push({
+}
         teamId,
         teamName: block.teamName,
         tradeActivity: this.calculateTradeActivity(block),
@@ -907,9 +1017,12 @@ class AdvancedTradeMarketplaceService {
 
     // Create edges based on trade history and compatibility
     for (const [teamId, history] of this.tradeHistory.entries()) {
+}
       for (const trade of history) {
+}
         const otherTeam = trade.team1 === teamId ? trade.team2 : trade.team1;
         edges.push({
+}
           source: teamId,
           target: otherTeam,
           weight: 1,
@@ -926,33 +1039,37 @@ class AdvancedTradeMarketplaceService {
     const insights = this.generateNetworkInsights(nodes, edges, clusters);
 
     this.tradeNetwork = {
+}
       nodes,
       edges,
       clusters,
-      insights
+//       insights
     };
   }
 
-  private calculateTradeActivity(block: TradeBlock): 'very_active' | 'active' | 'moderate' | 'inactive' {
+  private calculateTradeActivity(block: TradeBlock): &apos;very_active&apos; | &apos;active&apos; | &apos;moderate&apos; | &apos;inactive&apos; {
+}
     const totalActivity = block.activeOffers.length + block.completedTrades.length;
     
-    if (totalActivity >= 10) return 'very_active';
-    if (totalActivity >= 5) return 'active';
-    if (totalActivity >= 2) return 'moderate';
-    return 'inactive';
+    if (totalActivity >= 10) return &apos;very_active&apos;;
+    if (totalActivity >= 5) return &apos;active&apos;;
+    if (totalActivity >= 2) return &apos;moderate&apos;;
+    return &apos;inactive&apos;;
   }
 
   private identifyTradeClusters(
     nodes: TradeNode[],
     edges: TradeEdge[]
   ): TradeCluster[] {
+}
     // Simplified clustering - would use actual graph clustering algorithm
     return [{
-      clusterId: 'cluster_1',
+}
+      clusterId: &apos;cluster_1&apos;,
       teams: nodes.slice(0, 3).map((n: any) => n.teamId),
-      commonInterests: ['RB', 'WR'],
+      commonInterests: [&apos;RB&apos;, &apos;WR&apos;],
       tradeVolume: 5,
-      description: 'Active trading group focused on skill positions'
+      description: &apos;Active trading group focused on skill positions&apos;
     }];
   }
 
@@ -961,28 +1078,34 @@ class AdvancedTradeMarketplaceService {
     edges: TradeEdge[],
     clusters: TradeCluster[]
   ): NetworkInsight[] {
+}
     const insights: NetworkInsight[] = [];
 
     // Position scarcity insight
-    const rbNeeds = nodes.filter((n: any) => n.primaryNeeds.includes('RB')).length;
+    const rbNeeds = nodes.filter((n: any) => n.primaryNeeds.includes(&apos;RB&apos;)).length;
     if (rbNeeds > nodes.length * 0.6) {
+}
       insights.push({
-        type: 'position_scarcity',
-        description: 'High demand for RBs across the league',
-        affectedTeams: nodes.filter((n: any) => n.primaryNeeds.includes('RB')).map((n: any) => n.teamId),
-        actionableAdvice: 'RB owners can demand premium value in trades',
+}
+        type: &apos;position_scarcity&apos;,
+        description: &apos;High demand for RBs across the league&apos;,
+        affectedTeams: nodes.filter((n: any) => n.primaryNeeds.includes(&apos;RB&apos;)).map((n: any) => n.teamId),
+        actionableAdvice: &apos;RB owners can demand premium value in trades&apos;,
         confidence: 0.9
       });
     }
 
     // Trade opportunity insight
     for (const cluster of clusters) {
+}
       if (cluster.tradeVolume > 3) {
+}
         insights.push({
-          type: 'trade_opportunity',
+}
+          type: &apos;trade_opportunity&apos;,
           description: `Active trading cluster identified: ${cluster.description}`,
           affectedTeams: cluster.teams,
-          actionableAdvice: 'Join the trading activity for better deals',
+          actionableAdvice: &apos;Join the trading activity for better deals&apos;,
           confidence: 0.75
         });
       }
@@ -992,44 +1115,54 @@ class AdvancedTradeMarketplaceService {
   }
 
   private cleanupExpiredOffers(): void {
+}
     const now = Date.now();
     for (const [offerId, offer] of this.activeOffers.entries()) {
+}
       if (new Date(offer.expiresAt).getTime() < now) {
-        offer.status = 'expired';
+}
+        offer.status = &apos;expired&apos;;
         this.activeOffers.delete(offerId);
       }
     }
   }
 
   private startMarketAnalysis(): void {
+}
     this.updateMarketTrends();
   }
 
   private updateMarketTrends(): void {
+}
     // Analyze recent trades for trends
     const recentTrades: CompletedTrade[] = [];
     for (const history of this.tradeHistory.values()) {
+}
       recentTrades.push(...history);
     }
 
     // Position demand trends
     const positionDemand = new Map<string, number>();
     for (const block of this.tradeBlocks.values()) {
+}
       for (const want of block.playersWanted) {
+}
         positionDemand.set(want.position, (positionDemand.get(want.position) || 0) + 1);
       }
     }
 
     // Create trends
     for (const [position, demand] of positionDemand.entries()) {
+}
       const trend: MarketTrend = {
+}
         trendId: `trend_${position}_${Date.now()}`,
-        type: 'position_demand',
-        direction: demand > 5 ? 'rising' : demand < 2 ? 'falling' : 'stable',
+        type: &apos;position_demand&apos;,
+        direction: demand > 5 ? &apos;rising&apos; : demand < 2 ? &apos;falling&apos; : &apos;stable&apos;,
         magnitude: demand * 10,
         affectedPositions: [position],
         duration: 7,
-        reasoning: `${position} demand is ${demand > 5 ? 'high' : 'normal'} across the league`,
+        reasoning: `${position} demand is ${demand > 5 ? &apos;high&apos; : &apos;normal&apos;} across the league`,
         tradingAdvice: demand > 5 
           ? `Hold ${position} players for better value`
           : `Good time to acquire ${position} players`
@@ -1043,9 +1176,11 @@ class AdvancedTradeMarketplaceService {
     originalRosters: Map<string, string[]>,
     newRosters: Map<string, string[]>
   ): Promise<TeamProjection[]> {
+}
     const projections: TeamProjection[] = [];
 
     for (const [teamId, originalRoster] of originalRosters.entries()) {
+}
       const newRoster = newRosters.get(teamId) || originalRoster;
       
       // Calculate projected points (simplified)
@@ -1053,6 +1188,7 @@ class AdvancedTradeMarketplaceService {
       const newPoints = newRoster.length * 10; // Mock calculation
 
       projections.push({
+}
         teamId,
         currentProjectedRank: Math.floor(Math.random() * 10) + 1,
         newProjectedRank: Math.floor(Math.random() * 10) + 1,
@@ -1069,31 +1205,38 @@ class AdvancedTradeMarketplaceService {
     projections: TeamProjection[],
     trades: TradeProposal[]
   ): string[] {
+}
     const recommendations: string[] = [];
 
     for (const projection of projections) {
+}
       if (projection.improvementScore > 0.1) {
+}
         recommendations.push(`Team ${projection.teamId} significantly improves with these trades`);
       } else if (projection.improvementScore < -0.1) {
+}
         recommendations.push(`Team ${projection.teamId} should reconsider - negative impact projected`);
       }
     }
 
     if (trades.length > 3) {
-      recommendations.push('Multiple trades may create league imbalance');
+}
+      recommendations.push(&apos;Multiple trades may create league imbalance&apos;);
     }
 
     return recommendations;
   }
 
   private async analyzeTeamNeeds(roster: string[]): Promise<string[]> {
+}
     // Simplified need analysis
-    const positions = ['QB', 'RB', 'WR', 'TE'];
+    const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
     const needs: string[] = [];
 
     // Would analyze actual roster composition
     if (roster.length < 5) {
-      needs.push('RB', 'WR');
+}
+      needs.push(&apos;RB&apos;, &apos;WR&apos;);
     }
 
     return needs;
@@ -1105,14 +1248,16 @@ class AdvancedTradeMarketplaceService {
     roster: string[],
     needs: string[]
   ): Promise<TradeProposal | null> {
+}
     // Simplified suggestion generation
     return {
+}
       id: `suggestion_${Date.now()}`,
       proposedBy: teamId,
       proposedTo: otherTeamId,
       givingPlayers: [roster[0]], // Would select appropriate players
-      receivingPlayers: ['player_x'], // Would select from other team
-      status: 'proposed',
+      receivingPlayers: [&apos;player_x&apos;], // Would select from other team
+      status: &apos;proposed&apos;,
       proposedAt: new Date().toISOString(),
       expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
     };
@@ -1122,18 +1267,22 @@ class AdvancedTradeMarketplaceService {
    * Get service status
    */
   getServiceStatus(): {
+}
     isActive: boolean;
     activeTradeBlocks: number;
     activeOffers: number;
     completedTrades: number;
     marketTrends: number;
   } {
+}
     let totalTrades = 0;
     for (const history of this.tradeHistory.values()) {
+}
       totalTrades += history.length;
     }
 
     return {
+}
       isActive: true,
       activeTradeBlocks: this.tradeBlocks.size,
       activeOffers: this.activeOffers.size,

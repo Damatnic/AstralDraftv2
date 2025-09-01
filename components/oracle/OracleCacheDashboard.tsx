@@ -3,12 +3,13 @@
  * Real-time cache monitoring and management interface
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import { useOracleCacheManager } from '../../hooks/useOracleCacheHooks';
-import './OracleCacheDashboard.css';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import { useOracleCacheManager } from &apos;../../hooks/useOracleCacheHooks&apos;;
+import &apos;./OracleCacheDashboard.css&apos;;
 
 interface CacheMetricsDisplayProps {
+}
     stats: any;
     isOptimizing: boolean;
     onOptimize: () => Promise<any>;
@@ -18,38 +19,46 @@ interface CacheMetricsDisplayProps {
 }
 
 const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
+}
     stats,
     isOptimizing,
     onOptimize,
     onWarmCache,
-    onClearCache
+//     onClearCache
 }: any) => {
-    const [userId, setUserId] = useState('user123');
+}
+    const [userId, setUserId] = useState(&apos;user123&apos;);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [optimizationResults, setOptimizationResults] = useState<any>(null);
 
     const handleOptimize = async () => {
+}
         try {
+}
 
             const results = await onOptimize();
             setOptimizationResults(results);
             setTimeout(() => setOptimizationResults(null), 5000);
 
     } catch (error) {
+}
 
     };
 
     const getHealthColor = (score: number) => {
-        if (score >= 80) return '#22c55e'; // green
-        if (score >= 60) return '#f59e0b'; // yellow
-        return '#ef4444'; // red
+}
+        if (score >= 80) return &apos;#22c55e&apos;; // green
+        if (score >= 60) return &apos;#f59e0b&apos;; // yellow
+        return &apos;#ef4444&apos;; // red
     };
 
     const formatPercentage = (value: number) => {
+}
         return `${Math.round(value * 100) / 100}%`;
     };
 
     if (!stats) {
+}
         return (
             <div className="oracle-cache-dashboard loading sm:px-4 md:px-6 lg:px-8">
                 <div className="loading-spinner sm:px-4 md:px-6 lg:px-8"></div>
@@ -129,7 +138,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
                             onClick={handleOptimize}
                             disabled={isOptimizing}
                          aria-label="Action button">
-                            {isOptimizing ? '🔄 Optimizing...' : '⚡ Optimize Cache'}
+                            {isOptimizing ? &apos;🔄 Optimizing...&apos; : &apos;⚡ Optimize Cache&apos;}
                         </button>
 
                         <div className="warm-cache-control sm:px-4 md:px-6 lg:px-8">
@@ -149,7 +158,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
 
                         <div className="clear-cache-control sm:px-4 md:px-6 lg:px-8">
                             <select 
-                                multiple
+//                                 multiple
                                 value={selectedTags}
                                 onChange={(e: any) => setSelectedTags(Array.from(e.target.selectedOptions, (option: HTMLOptionElement) => option.value))}
                             >
@@ -169,6 +178,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
                 </div>
 
                 {optimizationResults && (
+}
                     <div className="optimization-results sm:px-4 md:px-6 lg:px-8">
                         <h4>✨ Optimization Results</h4>
                         <div className="results-grid sm:px-4 md:px-6 lg:px-8">
@@ -194,6 +204,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
                 <h3>🔝 Most Accessed Items</h3>
                 <div className="items-list sm:px-4 md:px-6 lg:px-8">
                     {stats.topKeys.map((item: any, index: number) => (
+}
                         <div key={item.key} className="item-row sm:px-4 md:px-6 lg:px-8">
                             <div className="item-rank sm:px-4 md:px-6 lg:px-8">#{index + 1}</div>
                             <div className="item-details sm:px-4 md:px-6 lg:px-8">
@@ -220,6 +231,7 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
                 <h3>📋 Cache Strategies</h3>
                 <div className="strategies-grid sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(stats.strategies).map(([key, strategy]: [string, any]) => (
+}
                         <div key={key} className="strategy-card sm:px-4 md:px-6 lg:px-8">
                             <div className="strategy-header sm:px-4 md:px-6 lg:px-8">
                                 <h4>{strategy.name}</h4>
@@ -234,15 +246,15 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
                                 </div>
                                 <div className="strategy-row sm:px-4 md:px-6 lg:px-8">
                                     <span>Prefetch:</span>
-                                    <span>{strategy.prefetch ? '✅' : '❌'}</span>
+                                    <span>{strategy.prefetch ? &apos;✅&apos; : &apos;❌&apos;}</span>
                                 </div>
                                 <div className="strategy-row sm:px-4 md:px-6 lg:px-8">
                                     <span>Compression:</span>
-                                    <span>{strategy.compression ? '✅' : '❌'}</span>
+                                    <span>{strategy.compression ? &apos;✅&apos; : &apos;❌&apos;}</span>
                                 </div>
                                 <div className="strategy-row sm:px-4 md:px-6 lg:px-8">
                                     <span>Persistence:</span>
-                                    <span>{strategy.persistence ? '✅' : '❌'}</span>
+                                    <span>{strategy.persistence ? &apos;✅&apos; : &apos;❌&apos;}</span>
                                 </div>
                             </div>
                         </div>
@@ -277,10 +289,11 @@ const OracleCacheDashboard: React.FC<CacheMetricsDisplayProps> = ({
 
 // Main component with integrated cache management
 const OracleCacheManager: React.FC = () => {
+}
     const { stats, isOptimizing, optimize, warmCache, clearCache } = useOracleCacheManager();
 
     return (
-        <OracleCacheDashboard
+        <OracleCacheDashboard>
             stats={stats}
             isOptimizing={isOptimizing}
             onOptimize={optimize}

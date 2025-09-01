@@ -1,38 +1,44 @@
 
 interface IconProps {
+}
   size?: number | string;
 }
 
   className?: string;
   color?: string;
-  'aria-label'?: string;
+  &apos;aria-label&apos;?: string;
 
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import SendIcon from './SendIcon';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import SendIcon from &apos;./SendIcon&apos;;
 
-describe('SendIcon', () => {
-  it('renders without crashing', () => {
+describe(&apos;SendIcon&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<SendIcon />);
-    expect(screen.getByTestId('sendicon')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;sendicon&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<SendIcon />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<SendIcon />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

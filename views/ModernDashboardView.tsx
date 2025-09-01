@@ -2,11 +2,11 @@
  * Simplified Modern Dashboard View
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
 
 const ModernDashboardView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
 
   return (
@@ -15,7 +15,7 @@ const ModernDashboardView: React.FC = () => {
       <div className="nav-header">
         <div className="flex justify-between items-center">
           <div>
-            <h1>Welcome back, <span className="text-blue-400">{state.user?.name || 'Champion'}</span>! 👑</h1>
+            <h1>Welcome back, <span className="text-blue-400">{state.user?.name || &apos;Champion&apos;}</span>! 👑</h1>
             <p className="page-subtitle">Your AI-powered fantasy football command center</p>
           </div>
         </div>
@@ -106,9 +106,10 @@ const ModernDashboardView: React.FC = () => {
               
               <div className="space-y-4">
                 {[
-                  { name: 'Josh Allen', pos: 'QB', team: 'BUF', points: 32.8, status: '🟢' },
-                  { name: 'Tyreek Hill', pos: 'WR', team: 'MIA', points: 28.4, status: '🟢' },
-                  { name: 'Christian McCaffrey', pos: 'RB', team: 'SF', points: 24.2, status: '🟡' }
+}
+                  { name: &apos;Josh Allen&apos;, pos: &apos;QB&apos;, team: &apos;BUF&apos;, points: 32.8, status: &apos;🟢&apos; },
+                  { name: &apos;Tyreek Hill&apos;, pos: &apos;WR&apos;, team: &apos;MIA&apos;, points: 28.4, status: &apos;🟢&apos; },
+                  { name: &apos;Christian McCaffrey&apos;, pos: &apos;RB&apos;, team: &apos;SF&apos;, points: 24.2, status: &apos;🟡&apos; }
                 ].map((player, i) => (
                   <div key={i} className="flex items-center justify-between p-4 bg-slate-700/30 rounded-lg">
                     <div className="flex items-center gap-4">
@@ -147,9 +148,10 @@ const ModernDashboardView: React.FC = () => {
               
               <div className="space-y-3">
                 {[
-                  { type: '💱', message: 'Consider trading Patrick Mahomes - peak value', confidence: 92 },
-                  { type: '⚠️', message: 'Monitor: Cooper Kupp limited in practice', confidence: 78 },
-                  { type: '📈', message: 'Waiver Alert: Tank Bigsby trending up', confidence: 85 }
+}
+                  { type: &apos;💱&apos;, message: &apos;Consider trading Patrick Mahomes - peak value&apos;, confidence: 92 },
+                  { type: &apos;⚠️&apos;, message: &apos;Monitor: Cooper Kupp limited in practice&apos;, confidence: 78 },
+                  { type: &apos;📈&apos;, message: &apos;Waiver Alert: Tank Bigsby trending up&apos;, confidence: 85 }
                 ].map((insight, i) => (
                   <div key={i} className="p-3 bg-slate-700/30 rounded-lg">
                     <div className="flex items-start gap-3">
@@ -182,26 +184,26 @@ const ModernDashboardView: React.FC = () => {
               <h3 className="card-title">Quick Actions</h3>
               <div className="grid grid-cols-2 gap-3">
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })
                   className="btn btn-primary flex items-center justify-center gap-2"
                 >
                   <span>⚡</span>
                   Set Lineup
                 </button>
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' })
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; })
                   className="btn btn-secondary flex items-center justify-center gap-2"
                 >
                   <span>🔍</span>
-                  Waivers
+//                   Waivers
                 </button>
                 <button className="btn btn-secondary flex items-center justify-center gap-2">
                   <span>🔄</span>
-                  Trade
+//                   Trade
                 </button>
                 <button className="btn btn-secondary flex items-center justify-center gap-2">
                   <span>💬</span>
-                  Chat
+//                   Chat
                 </button>
               </div>
             </motion.div>

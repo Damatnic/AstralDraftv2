@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PlayerProfileView from './PlayerProfileView';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PlayerProfileView from &apos;./PlayerProfileView&apos;;
 
-describe('PlayerProfileView', () => {
-  it('renders without crashing', () => {
+describe(&apos;PlayerProfileView&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PlayerProfileView />);
-    expect(screen.getByTestId('playerprofileview')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;playerprofileview&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PlayerProfileView />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PlayerProfileView />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

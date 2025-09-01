@@ -3,25 +3,26 @@
  * Enhanced with focus management, keyboard navigation, and mobile accessibility
  */
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
   useFocusTrap, 
   useAnnouncer, 
   getModalA11yProps,
-  srOnlyClasses
-} from '../../utils/accessibility';
-import { CloseIcon } from '../icons/CloseIcon';
+//   srOnlyClasses
+} from &apos;../../utils/accessibility&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
 
 interface AccessibleModalProps {
+}
   isOpen: boolean;
   onClose: () => void;
   title: string;
   description?: string;
   children: React.ReactNode;
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;full&apos;;
   closeOnEscape?: boolean;
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
@@ -30,27 +31,30 @@ interface AccessibleModalProps {
 }
 
 const sizeClasses = {
+}
   const [isLoading, setIsLoading] = React.useState(false);
-  sm: 'max-w-sm',
-  md: 'max-w-md', 
-  lg: 'max-w-lg',
-  xl: 'max-w-xl',
-  full: 'max-w-full'
+  sm: &apos;max-w-sm&apos;,
+  md: &apos;max-w-md&apos;, 
+  lg: &apos;max-w-lg&apos;,
+  xl: &apos;max-w-xl&apos;,
+  full: &apos;max-w-full&apos;
 };
 
 export const AccessibleModal: React.FC<AccessibleModalProps> = ({
+}
   isOpen,
   onClose,
   title,
   description,
   children,
-  className = '',
-  size = 'md',
+  className = &apos;&apos;,
+  size = &apos;md&apos;,
   closeOnEscape = true,
   closeOnOverlayClick = true,
   showCloseButton = true,
-  initialFocus
+//   initialFocus
 }: any) => {
+}
   const { containerRef } = useFocusTrap(isOpen);
   const { announce } = useAnnouncer();
   const titleId = React.useId();
@@ -58,68 +62,86 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
 
   // Handle escape key and focus trap escape
   React.useEffect(() => {
+}
     if (!isOpen) return;
 
     const handleCustomEscape = (e: CustomEvent) => {
+}
       if (closeOnEscape) {
+}
         onClose();
-        announce('Modal closed', 'polite');
+        announce(&apos;Modal closed&apos;, &apos;polite&apos;);
     }
   };
 
     if (containerRef.current) {
-      containerRef.current.addEventListener('focustrap:escape', handleCustomEscape as EventListener);
+}
+      containerRef.current.addEventListener(&apos;focustrap:escape&apos;, handleCustomEscape as EventListener);
 
     return () => {
+}
       if (containerRef.current) {
-        containerRef.current.removeEventListener('focustrap:escape', handleCustomEscape as EventListener);
+}
+        containerRef.current.removeEventListener(&apos;focustrap:escape&apos;, handleCustomEscape as EventListener);
 
     };
   }, [isOpen, closeOnEscape, onClose, announce, containerRef]);
 
   // Announce modal opening
   React.useEffect(() => {
+}
     if (isOpen) {
-      announce(`${title} dialog opened`, 'assertive');
+}
+      announce(`${title} dialog opened`, &apos;assertive&apos;);
 
   }, [isOpen, title, announce]);
 
   // Handle initial focus
   React.useEffect(() => {
+}
     if (isOpen && initialFocus && containerRef.current) {
+}
       const element = containerRef.current.querySelector(initialFocus);
       if (element && element instanceof HTMLElement) {
+}
         setTimeout(() => element.focus(), 100);
     }
   }, [isOpen, initialFocus, containerRef]);
 
   // Prevent body scroll when modal is open
   React.useEffect(() => {
+}
     if (isOpen) {
+}
       const originalStyle = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = &apos;hidden&apos;;
       
       return () => {
+}
         document.body.style.overflow = originalStyle;
       };
 
   }, [isOpen]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
+}
     if (closeOnOverlayClick && e.target === e.currentTarget) {
+}
       onClose();
-      announce('Modal closed', 'polite');
+      announce(&apos;Modal closed&apos;, &apos;polite&apos;);
     }
   };
 
   const handleCloseClick = () => {
+}
     onClose();
-    announce('Modal closed', 'polite');
+    announce(&apos;Modal closed&apos;, &apos;polite&apos;);
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
+}
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
@@ -141,6 +163,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
           <motion.div
             ref={containerRef as React.RefObject<HTMLDivElement>}
             className={`
+}
               relative w-full ${sizeClasses[size]} max-h-[90vh] overflow-hidden
               bg-white dark:bg-gray-800 rounded-xl shadow-2xl
               border border-gray-200 dark:border-gray-700
@@ -167,6 +190,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
               </h2>
               
               {showCloseButton && (
+}
                 <button
                   onClick={handleCloseClick}
                   className="
@@ -184,6 +208,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
 
             {/* Description (if provided) */}
             {description && (
+}
               <div 
                 id={descriptionId}
                 className="px-6 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 sm:px-4 md:px-6 lg:px-8"
@@ -207,6 +232,7 @@ export const AccessibleModal: React.FC<AccessibleModalProps> = ({
  * Modal Hook for easier usage
  */
 export const useModal = (initialOpen: boolean = false) => {
+}
   const [isOpen, setIsOpen] = React.useState(initialOpen);
 
   const openModal = React.useCallback(() => setIsOpen(true), []);
@@ -214,10 +240,11 @@ export const useModal = (initialOpen: boolean = false) => {
   const toggleModal = React.useCallback(() => setIsOpen(prev => !prev), []);
 
   return {
+}
     isOpen,
     openModal,
     closeModal,
-    toggleModal
+//     toggleModal
   };
 };
 

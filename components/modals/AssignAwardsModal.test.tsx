@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import AssignAwardsModal from './AssignAwardsModal';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import AssignAwardsModal from &apos;./AssignAwardsModal&apos;;
 
-describe('AssignAwardsModal', () => {
-  it('renders without crashing', () => {
+describe(&apos;AssignAwardsModal&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<AssignAwardsModal />);
-    expect(screen.getByTestId('assignawardsmodal')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;assignawardsmodal&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<AssignAwardsModal />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<AssignAwardsModal />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

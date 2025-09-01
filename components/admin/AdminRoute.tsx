@@ -3,38 +3,46 @@
  * Protected route for admin dashboard access with authentication
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
-import { adminService, AdminUser } from '../../services/adminService';
-import AdminDashboard from './AdminDashboard';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useEffect } from &apos;react&apos;;
+import { adminService, AdminUser } from &apos;../../services/adminService&apos;;
+import AdminDashboard from &apos;./AdminDashboard&apos;;
 
 interface AdminLoginProps {
+}
   onLogin: (admin: AdminUser) => void;
 
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [credentials, setCredentials] = useState({ username: &apos;&apos;, password: &apos;&apos; });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(&apos;&apos;);
 
   const handleSubmit = async (e: React.FormEvent) => {
+}
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError(&apos;&apos;);
 
     try {
+}
 
       const admin = await adminService.authenticateAdmin(credentials.username, credentials.password);
       if (admin) {
+}
         onLogin(admin);
       } else {
-        setError('Invalid credentials. Please try again.');
+}
+        setError(&apos;Invalid credentials. Please try again.&apos;);
       }
     } catch (error) {
-      setError('Authentication failed. Please try again.');
+}
+      setError(&apos;Authentication failed. Please try again.&apos;);
     } finally {
+}
       setLoading(false);
     }
   };
@@ -50,12 +58,12 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700 sm:px-4 md:px-6 lg:px-8">
-              Username
+//               Username
             </label>
             <input
               id="username"
               type="text"
-              required
+//               required
               value={credentials.username}
               onChange={(e: any) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -65,12 +73,12 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 sm:px-4 md:px-6 lg:px-8">
-              Password
+//               Password
             </label>
             <input
               id="password"
               type="password"
-              required
+//               required
               value={credentials.password}
               onChange={(e: any) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -79,6 +87,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
           </div>
 
           {error && (
+}
             <div className="bg-red-50 border border-red-200 rounded-md p-4 sm:px-4 md:px-6 lg:px-8">
               <div className="flex sm:px-4 md:px-6 lg:px-8">
                 <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
@@ -95,12 +104,13 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
             type="submit"
             disabled={loading}
             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-              loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+}
+//               loading
+                ? &apos;bg-gray-400 cursor-not-allowed&apos;
+                : &apos;bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500&apos;
             }`}
            aria-label="Action button">
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? &apos;Signing in...&apos; : &apos;Sign In&apos;}
           </button>
         </form>
 
@@ -115,35 +125,43 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
 };
 
 const AdminRoute: React.FC = () => {
+}
   const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+}
     // Check if admin is already logged in (in a real app, this would check tokens/sessions)
-    const savedAdmin = localStorage.getItem('astral_admin');
+    const savedAdmin = localStorage.getItem(&apos;astral_admin&apos;);
     if (savedAdmin) {
+}
       try {
+}
 
         const admin = JSON.parse(savedAdmin);
         setCurrentAdmin(admin);
       } catch (error) {
-        localStorage.removeItem('astral_admin');
+}
+        localStorage.removeItem(&apos;astral_admin&apos;);
       }
     }
     setLoading(false);
   }, []);
 
   const handleLogin = (admin: AdminUser) => {
+}
     setCurrentAdmin(admin);
-    localStorage.setItem('astral_admin', JSON.stringify(admin));
+    localStorage.setItem(&apos;astral_admin&apos;, JSON.stringify(admin));
   };
 
   const handleLogout = () => {
+}
     setCurrentAdmin(null);
-    localStorage.removeItem('astral_admin');
+    localStorage.removeItem(&apos;astral_admin&apos;);
   };
 
   if (loading) {
+}
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
         <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -154,6 +172,7 @@ const AdminRoute: React.FC = () => {
   }
 
   if (!currentAdmin) {
+}
     return <AdminLogin onLogin={handleLogin} />;
   }
 
@@ -170,7 +189,7 @@ const AdminRoute: React.FC = () => {
             onClick={handleLogout}
             className="px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-md text-sm font-medium sm:px-4 md:px-6 lg:px-8"
            aria-label="Action button">
-            Logout
+//             Logout
           </button>
         </div>
       </div>

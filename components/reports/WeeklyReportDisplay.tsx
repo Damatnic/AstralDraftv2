@@ -1,18 +1,19 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { WeeklyReportData } from '../../types';
-import { TrophyIcon } from '../icons/TrophyIcon';
-import { FlameIcon } from '../icons/FlameIcon';
-import { ZapIcon } from '../icons/ZapIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { WeeklyReportData } from &apos;../../types&apos;;
+import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
+import { FlameIcon } from &apos;../icons/FlameIcon&apos;;
+import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
 
 interface WeeklyReportDisplayProps {
+}
     report: WeeklyReportData;
 
 }
 
 const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }: any) => {
+}
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-center mb-6">
@@ -27,6 +28,7 @@ const WeeklyReportDisplay: React.FC<WeeklyReportDisplayProps> = ({ report }: any
                 </p>
                 
                 {report.powerPlay && (
+}
                     <div className="mb-8 p-4 bg-purple-500/10 border border-purple-400/20 rounded-lg text-center sm:px-4 md:px-6 lg:px-8">
                         <h3 className="font-bold text-lg text-purple-300 mb-1 flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8"><ZapIcon /> Power Play of the Week</h3>
                         <p className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{report.powerPlay.move} by {report.powerPlay.teamName}</p>

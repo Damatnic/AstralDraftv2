@@ -14,11 +14,13 @@ export type NonEmptyArray<T> = [T, ...T[]];
 
 // Make all properties optional
 export type Partial<T> = {
+}
   [P in keyof T]?: T[P];
 };
 
 // Make all properties required
 export type Required<T> = {
+}
   [P in keyof T]-?: T[P];
 };
 
@@ -32,41 +34,49 @@ export type RequiredBy<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
 // Extract keys that have values of a certain type
 export type KeysOfType<T, U> = {
+}
   [K in keyof T]: T[K] extends U ? K : never;
 }[keyof T];
 
 // Extract keys that have optional values
 export type OptionalKeys<T> = {
+}
   [K in keyof T]-?: {} extends Pick<T, K> ? K : never;
 }[keyof T];
 
 // Extract keys that have required values
 export type RequiredKeys<T> = {
+}
   [K in keyof T]-?: {} extends Pick<T, K> ? never : K;
 }[keyof T];
 
 // Deep partial
 export type DeepPartial<T> = {
+}
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
 // Deep required
 export type DeepRequired<T> = {
+}
   [P in keyof T]-?: T[P] extends object ? DeepRequired<T[P]> : T[P];
 };
 
 // Deep readonly
 export type DeepReadonly<T> = {
+}
   readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
 };
 
 // Mutable (opposite of readonly)
 export type Mutable<T> = {
+}
   -readonly [P in keyof T]: T[P];
 };
 
 // Deep mutable
 export type DeepMutable<T> = {
+}
   -readonly [P in keyof T]: T[P] extends object ? DeepMutable<T[P]> : T[P];
 };
 
@@ -100,6 +110,7 @@ export type PromiseOr<T> = T | Promise<T>;
 
 // Async result with loading state
 export type AsyncResult<T, E = Error> = {
+}
   data: T | null;
   error: E | null;
   loading: boolean;
@@ -172,36 +183,36 @@ export type Equals<X, Y> = (<T>() => T extends X ? 1 : 2) extends (<T>() => T ex
 export type Brand<T, B> = T & { __brand: B };
 
 // Common branded types
-export type UserId = Brand<string, 'UserId'>;
-export type LeagueId = Brand<string, 'LeagueId'>;
-export type PlayerId = Brand<string, 'PlayerId'>;
-export type TeamId = Brand<string, 'TeamId'>;
-export type DraftId = Brand<string, 'DraftId'>;
-export type TradeId = Brand<string, 'TradeId'>;
-export type MatchupId = Brand<string, 'MatchupId'>;
+export type UserId = Brand<string, &apos;UserId&apos;>;
+export type LeagueId = Brand<string, &apos;LeagueId&apos;>;
+export type PlayerId = Brand<string, &apos;PlayerId&apos;>;
+export type TeamId = Brand<string, &apos;TeamId&apos;>;
+export type DraftId = Brand<string, &apos;DraftId&apos;>;
+export type TradeId = Brand<string, &apos;TradeId&apos;>;
+export type MatchupId = Brand<string, &apos;MatchupId&apos;>;
 
 // Email type with validation
-export type Email = Brand<string, 'Email'>;
+export type Email = Brand<string, &apos;Email&apos;>;
 
 // URL type with validation
-export type URL = Brand<string, 'URL'>;
+export type URL = Brand<string, &apos;URL&apos;>;
 
 // Positive number
-export type PositiveNumber = Brand<number, 'PositiveNumber'>;
+export type PositiveNumber = Brand<number, &apos;PositiveNumber&apos;>;
 
 // Percentage (0-100)
-export type Percentage = Brand<number, 'Percentage'>;
+export type Percentage = Brand<number, &apos;Percentage&apos;>;
 
 // ==================== STATUS AND STATE TYPES ====================
 
 // Loading states
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+export type LoadingState = &apos;idle&apos; | &apos;loading&apos; | &apos;success&apos; | &apos;error&apos;;
 
 // CRUD operations
-export type CrudOperation = 'create' | 'read' | 'update' | 'delete';
+export type CrudOperation = &apos;create&apos; | &apos;read&apos; | &apos;update&apos; | &apos;delete&apos;;
 
 // Sort directions
-export type SortDirection = 'asc' | 'desc';
+export type SortDirection = &apos;asc&apos; | &apos;desc&apos;;
 
 // Compare result
 export type CompareResult = -1 | 0 | 1;
@@ -227,6 +238,7 @@ export type Either<L, R> =
 
 // Validation rule
 export interface ValidationRule<T> {
+}
   validate: (value: T) => boolean;
   message: string;
 }
@@ -238,22 +250,24 @@ export type ValidationResult =
 
 // Field validation result
 export type FieldValidationResult<T> = {
+}
   [K in keyof T]?: string[];
 };
 
 // ==================== DATE AND TIME TYPES ====================
 
 // ISO date string
-export type ISODateString = Brand<string, 'ISODateString'>;
+export type ISODateString = Brand<string, &apos;ISODateString&apos;>;
 
 // Unix timestamp
-export type UnixTimestamp = Brand<number, 'UnixTimestamp'>;
+export type UnixTimestamp = Brand<number, &apos;UnixTimestamp&apos;>;
 
 // Time zone
 export type TimeZone = string;
 
 // Date range
 export interface DateRange {
+}
   start: Date;
   end: Date;
 }
@@ -261,12 +275,14 @@ export interface DateRange {
 // ==================== PAGINATION TYPES ====================
 
 export interface PaginationParams {
+}
   page: number;
   limit: number;
   offset?: number;
 }
 
 export interface PaginationInfo {
+}
   page: number;
   limit: number;
   total: number;
@@ -276,6 +292,7 @@ export interface PaginationInfo {
 }
 
 export interface PaginatedData<T> {
+}
   items: T[];
   pagination: PaginationInfo;
 }
@@ -283,17 +300,20 @@ export interface PaginatedData<T> {
 // ==================== SORT AND FILTER TYPES ====================
 
 export interface SortConfig<T = any> {
+}
   field: keyof T | string;
   direction: SortDirection;
 }
 
 export interface FilterConfig<T = any> {
+}
   field: keyof T | string;
-  operator: 'equals' | 'contains' | 'startsWith' | 'endsWith' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'notIn';
+  operator: &apos;equals&apos; | &apos;contains&apos; | &apos;startsWith&apos; | &apos;endsWith&apos; | &apos;gt&apos; | &apos;gte&apos; | &apos;lt&apos; | &apos;lte&apos; | &apos;in&apos; | &apos;notIn&apos;;
   value: any;
 }
 
 export interface SearchConfig {
+}
   query: string;
   fields?: string[];
   fuzzy?: boolean;
@@ -302,6 +322,7 @@ export interface SearchConfig {
 // ==================== CACHE TYPES ====================
 
 export interface CacheEntry<T> {
+}
   data: T;
   timestamp: number;
   ttl: number;
@@ -309,6 +330,7 @@ export interface CacheEntry<T> {
 }
 
 export interface CacheConfig {
+}
   ttl: number; // Time to live in seconds
   maxSize?: number; // Maximum number of entries
   tags?: string[]; // Tags for cache invalidation
@@ -317,6 +339,7 @@ export interface CacheConfig {
 // ==================== ERROR TYPES ====================
 
 export interface ErrorInfo {
+}
   code: string;
   message: string;
   details?: Record<string, any>;
@@ -325,6 +348,7 @@ export interface ErrorInfo {
 }
 
 export interface ValidationError {
+}
   field: string;
   message: string;
   code: string;
@@ -341,6 +365,7 @@ export type LookupTable<K extends string | number | symbol, V> = Record<K, V>;
 
 // Key-value pair
 export interface KeyValuePair<K = string, V = any> {
+}
   key: K;
   value: V;
 }
@@ -348,11 +373,13 @@ export interface KeyValuePair<K = string, V = any> {
 // ==================== COORDINATE AND GEOMETRY TYPES ====================
 
 export interface Point {
+}
   x: number;
   y: number;
 }
 
 export interface Size {
+}
   width: number;
   height: number;
 }
@@ -360,16 +387,18 @@ export interface Size {
 export interface Rectangle extends Point, Size {}
 
 export interface Circle extends Point {
+}
   radius: number;
 }
 
 // ==================== COLOR TYPES ====================
 
 // Hex color
-export type HexColor = Brand<string, 'HexColor'>;
+export type HexColor = Brand<string, &apos;HexColor&apos;>;
 
 // RGB color
 export interface RGBColor {
+}
   r: number;
   g: number;
   b: number;
@@ -377,11 +406,13 @@ export interface RGBColor {
 
 // RGBA color
 export interface RGBAColor extends RGBColor {
+}
   a: number;
 }
 
 // HSL color
 export interface HSLColor {
+}
   h: number;
   s: number;
   l: number;
@@ -389,13 +420,14 @@ export interface HSLColor {
 
 // ==================== ENVIRONMENT TYPES ====================
 
-export type Environment = 'development' | 'staging' | 'production' | 'test';
+export type Environment = &apos;development&apos; | &apos;staging&apos; | &apos;production&apos; | &apos;test&apos;;
 
-export type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'trace';
+export type LogLevel = &apos;error&apos; | &apos;warn&apos; | &apos;info&apos; | &apos;debug&apos; | &apos;trace&apos;;
 
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   Nullable,
   Optional,
   Maybe,

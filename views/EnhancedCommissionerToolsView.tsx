@@ -3,12 +3,12 @@
  * Complete administrative interface for league commissioners
  */
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import CommissionerTools from '../components/commissioner/CommissionerTools';
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import CommissionerTools from &apos;../components/commissioner/CommissionerTools&apos;;
 
 const EnhancedCommissionerToolsView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
 
   const league = state.leagues[0];
@@ -21,7 +21,7 @@ const EnhancedCommissionerToolsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
               className="glass-button"
             >
               ← Back to Dashboard
@@ -45,6 +45,7 @@ const EnhancedCommissionerToolsView: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         {!isCommissioner ? (
+}
           /* Access Denied */
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -62,7 +63,7 @@ const EnhancedCommissionerToolsView: React.FC = () => {
                 <p>Your Role: League Member</p>
               </div>
               <button
-                onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+                onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
                 className="glass-button-primary mt-6 px-6 py-3"
               >
                 Return to Dashboard

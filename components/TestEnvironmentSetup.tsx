@@ -3,62 +3,70 @@
  * Initializes the test league with 10 users on app load
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import { testUsers } from '../data/testUsers';
-import { useAppState } from '../hooks/useAppState';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import { testUsers } from &apos;../data/testUsers&apos;;
+import { useAppState } from &apos;../hooks/useAppState&apos;;
 
 export const TestEnvironmentSetup: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { dispatch } = useAppState();
   const [isInitialized, setIsInitialized] = React.useState(false);
 
   React.useEffect(() => {
+}
     // Check if already initialized
-    const initialized = localStorage.getItem('testEnvironmentInitialized');
+    const initialized = localStorage.getItem(&apos;testEnvironmentInitialized&apos;);
     
-    if (!initialized || initialized !== '2025') {
+    if (!initialized || initialized !== &apos;2025&apos;) {
+}
       // Mark as initialized
-      localStorage.setItem('testEnvironmentInitialized', '2025');
+      localStorage.setItem(&apos;testEnvironmentInitialized&apos;, &apos;2025&apos;);
       setIsInitialized(true);
       
       // Test environment ready with 10 test users
       // Login with player1@astral.com to player10@astral.com, password: test1234
     } else {
+}
       setIsInitialized(true);
 
   }, [dispatch]);
 
   // Quick user switcher for testing
   const switchUser = (userId: string) => {
+}
     const user = testUsers.find((u: any) => u.id === userId);
     if (user) {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      dispatch({ type: 'SET_USER', payload: user });
+}
+      localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(user));
+      dispatch({ type: &apos;SET_USER&apos;, payload: user });
       // Switched to user: ${user.name}
 
   };
 
   // Development panel (only show in dev mode)
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== &apos;development&apos;) {
+}
     return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50 sm:px-4 md:px-6 lg:px-8">
       <details className="bg-gray-900 rounded-lg shadow-xl p-2 text-white sm:px-4 md:px-6 lg:px-8">
         <summary className="cursor-pointer text-xs font-bold mb-2 sm:px-4 md:px-6 lg:px-8">
-          🧪 Test Environment {isInitialized ? '✅' : '⏳'}
+          🧪 Test Environment {isInitialized ? &apos;✅&apos; : &apos;⏳&apos;}
         </summary>
         <div className="space-y-2 mt-2 sm:px-4 md:px-6 lg:px-8">
           <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Quick User Switch:</p>
           <div className="grid grid-cols-2 gap-1 sm:px-4 md:px-6 lg:px-8">
             {testUsers.map((user: any) => (
+}
               <button
                 key={user.id}
                 onClick={() => switchUser(user.id)}
                 title={`Email: ${user.email}\nPassword: test1234`}
               >
-                {user.avatar} {user.name.split(' ')[0]}
+                {user.avatar} {user.name.split(&apos; &apos;)[0]}
               </button>
             ))}
           </div>

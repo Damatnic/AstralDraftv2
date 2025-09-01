@@ -3,12 +3,13 @@
  * Threaded conversations for trade negotiations
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface TradeComment {
+}
   id: string;
   tradeId: string;
   userId: string;
@@ -18,14 +19,17 @@ interface TradeComment {
   timestamp: Date;
   isCounterOffer?: boolean;
   counterOfferDetails?: {
+}
     playersOffered: any[];
     playersRequested: any[];
   };
   reactions: {
+}
     [emoji: string]: string[]; // emoji: array of user IDs
   };
 
 interface TradeDiscussionProps {
+}
   tradeId: string;
   isVisible: boolean;
   onClose: () => void;
@@ -33,88 +37,102 @@ interface TradeDiscussionProps {
 }
 
 const TradeDiscussion: React.FC<TradeDiscussionProps> = ({ 
+}
   tradeId, 
   isVisible, 
-  onClose 
+//   onClose 
 }: any) => {
+}
   const { state, dispatch } = useAppState();
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState(&apos;&apos;);
   const [showCounterOffer, setShowCounterOffer] = useState(false);
 
   const currentUser = state.user;
 
   // Simulate trade discussion comments
   const tradeComments = useMemo((): TradeComment[] => {
+}
     return [
       {
-        id: 'comment-1',
+}
+        id: &apos;comment-1&apos;,
         tradeId,
-        userId: 'user-1',
-        userName: 'Nick Damato',
-        userAvatar: '👑',
-        message: 'Hey! I think this trade could work for both of us. Henry has been consistent but I really need WR help for the playoffs.',
+        userId: &apos;user-1&apos;,
+        userName: &apos;Nick Damato&apos;,
+        userAvatar: &apos;👑&apos;,
+        message: &apos;Hey! I think this trade could work for both of us. Henry has been consistent but I really need WR help for the playoffs.&apos;,
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
         reactions: {
-          '👍': ['user-2'],
-          '🤔': ['user-3']
+}
+          &apos;👍&apos;: [&apos;user-2&apos;],
+          &apos;🤔&apos;: [&apos;user-3&apos;]
 
       },
       {
-        id: 'comment-2',
+}
+        id: &apos;comment-2&apos;,
         tradeId,
-        userId: 'user-2',
-        userName: 'Jon Kornbeck',
-        userAvatar: '⚡',
-        message: 'I like the idea but Kupp has been dealing with that ankle injury. What if we add a bench player to sweeten the deal?',
+        userId: &apos;user-2&apos;,
+        userName: &apos;Jon Kornbeck&apos;,
+        userAvatar: &apos;⚡&apos;,
+        message: &apos;I like the idea but Kupp has been dealing with that ankle injury. What if we add a bench player to sweeten the deal?&apos;,
         timestamp: new Date(Date.now() - 1.5 * 60 * 60 * 1000), // 1.5 hours ago
         reactions: {
-          '💭': ['user-1'],
-          '👀': ['user-1', 'user-4']
+}
+          &apos;💭&apos;: [&apos;user-1&apos;],
+          &apos;👀&apos;: [&apos;user-1&apos;, &apos;user-4&apos;]
 
       },
       {
-        id: 'comment-3',
+}
+        id: &apos;comment-3&apos;,
         tradeId,
-        userId: 'user-1',
-        userName: 'Nick Damato',
-        userAvatar: '👑',
-        message: 'Good point about the injury. How about I throw in Tyler Boyd as well? He\'s been getting consistent targets.',
+        userId: &apos;user-1&apos;,
+        userName: &apos;Nick Damato&apos;,
+        userAvatar: &apos;👑&apos;,
+        message: &apos;Good point about the injury. How about I throw in Tyler Boyd as well? He\&apos;s been getting consistent targets.&apos;,
         timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000), // 1 hour ago
         isCounterOffer: true,
         counterOfferDetails: {
+}
           playersOffered: [
-            { id: 'p1', name: 'Derrick Henry', position: 'RB' },
-            { id: 'p2', name: 'Tyler Boyd', position: 'WR' }
+            { id: &apos;p1&apos;, name: &apos;Derrick Henry&apos;, position: &apos;RB&apos; },
+            { id: &apos;p2&apos;, name: &apos;Tyler Boyd&apos;, position: &apos;WR&apos; }
           ],
           playersRequested: [
-            { id: 'p3', name: 'Cooper Kupp', position: 'WR' }
+            { id: &apos;p3&apos;, name: &apos;Cooper Kupp&apos;, position: &apos;WR&apos; }
 
         },
         reactions: {
-          '🔥': ['user-2'],
-          '👍': ['user-2', 'user-5']
+}
+          &apos;🔥&apos;: [&apos;user-2&apos;],
+          &apos;👍&apos;: [&apos;user-2&apos;, &apos;user-5&apos;]
 
       },
       {
-        id: 'comment-4',
+}
+        id: &apos;comment-4&apos;,
         tradeId,
-        userId: 'user-2',
-        userName: 'Jon Kornbeck',
-        userAvatar: '⚡',
-        message: 'Now we\'re talking! That makes it much more fair. Let me think about it overnight and I\'ll get back to you tomorrow.',
+        userId: &apos;user-2&apos;,
+        userName: &apos;Jon Kornbeck&apos;,
+        userAvatar: &apos;⚡&apos;,
+        message: &apos;Now we\&apos;re talking! That makes it much more fair. Let me think about it overnight and I\&apos;ll get back to you tomorrow.&apos;,
         timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
         reactions: {
-          '⏰': ['user-1'],
-          '🤝': ['user-1']
+}
+          &apos;⏰&apos;: [&apos;user-1&apos;],
+          &apos;🤝&apos;: [&apos;user-1&apos;]
 
 
     ];
   }, [tradeId]);
 
   const handleSendMessage = () => {
+}
     if (!newMessage.trim() || !currentUser) return;
 
     const newComment: TradeComment = {
+}
       id: `comment-${Date.now()}`,
       tradeId,
       userId: currentUser.id,
@@ -128,44 +146,50 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
     // In a real app, this would be sent to the backend
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Comment posted successfully!',
-        type: 'SUCCESS'
+}
+        message: &apos;Comment posted successfully!&apos;,
+        type: &apos;SUCCESS&apos;
 
     });
 
-    setNewMessage('');
+    setNewMessage(&apos;&apos;);
   };
 
   const handleReaction = (commentId: string, emoji: string) => {
+}
     if (!currentUser) return;
 
     // In a real app, this would update the backend
 
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Reaction added!',
-        type: 'INFO'
+}
+        message: &apos;Reaction added!&apos;,
+        type: &apos;INFO&apos;
 
     });
   };
 
   const formatTimestamp = (timestamp: Date) => {
+}
     const now = new Date();
     const diffMs = now.getTime() - timestamp.getTime();
     const diffMins = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffMins < 1) return 'Just now';
+    if (diffMins < 1) return &apos;Just now&apos;;
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     return `${diffDays}d ago`;
   };
 
-  const reactionEmojis = ['👍', '👎', '🔥', '���', '😂', '❤️', '🤔', '👀'];
+  const reactionEmojis = [&apos;👍&apos;, &apos;👎&apos;, &apos;🔥&apos;, &apos;���&apos;, &apos;😂&apos;, &apos;❤️&apos;, &apos;🤔&apos;, &apos;👀&apos;];
 
   if (!isVisible) return null;
 
@@ -195,15 +219,17 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
         <div className="flex-1 overflow-y-auto space-y-4 mb-6 sm:px-4 md:px-6 lg:px-8">
           <AnimatePresence>
             {tradeComments.map((comment, index) => (
+}
               <motion.div
                 key={comment.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-4 rounded-lg ${
+}
                   comment.isCounterOffer 
-                    ? 'bg-blue-900/20 border border-blue-600/30' 
-                    : 'bg-slate-700/50'
+                    ? &apos;bg-blue-900/20 border border-blue-600/30&apos; 
+                    : &apos;bg-slate-700/50&apos;
                 }`}
               >
                 {/* Comment Header */}
@@ -213,6 +239,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                       <span className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{comment.userName}</span>
                       {comment.isCounterOffer && (
+}
                         <span className="px-2 py-1 bg-blue-600 text-white text-xs rounded-full sm:px-4 md:px-6 lg:px-8">
                           Counter Offer
                         </span>
@@ -224,11 +251,13 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
 
                 {/* Counter Offer Details */}
                 {comment.isCounterOffer && comment.counterOfferDetails && (
+}
                   <div className="mb-3 p-3 bg-slate-800/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <h5 className="text-blue-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">Offering:</h5>
                         {comment.counterOfferDetails.playersOffered.map((player: any) => (
+}
                           <div key={player.id} className="text-white sm:px-4 md:px-6 lg:px-8">
                             {player.name} ({player.position})
                           </div>
@@ -240,6 +269,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                       <div>
                         <h5 className="text-blue-400 font-semibold mb-2 sm:px-4 md:px-6 lg:px-8">For:</h5>
                         {comment.counterOfferDetails.playersRequested.map((player: any) => (
+}
                           <div key={player.id} className="text-white sm:px-4 md:px-6 lg:px-8">
                             {player.name} ({player.position})
                           </div>
@@ -256,6 +286,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(comment.reactions).map(([emoji, userIds]) => (
+}
                       <button
                         key={emoji}
                         onClick={() => handleReaction(comment.id, emoji)}`}
@@ -272,6 +303,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                     </button>
                     <div className="absolute bottom-full left-0 mb-2 hidden group-hover:flex bg-slate-800 rounded-lg p-2 gap-1 shadow-xl border border-slate-600 sm:px-4 md:px-6 lg:px-8">
                       {reactionEmojis.map((emoji: any) => (
+}
                         <button
                           key={emoji}
                           onClick={() => handleReaction(comment.id, emoji)}
@@ -297,7 +329,9 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
                 onChange={(e: any) => setNewMessage(e.target.value)}
                 className="form-input h-20 resize-none mb-3 sm:px-4 md:px-6 lg:px-8"
                 onKeyPress={(e: any) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
+}
+                  if (e.key === &apos;Enter&apos; && !e.shiftKey) {
+}
                     e.preventDefault();
                     handleSendMessage();
 
@@ -328,9 +362,10 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
 
         {/* Counter Offer Builder */}
         {showCounterOffer && (
+}
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: &apos;auto&apos; }}
             exit={{ opacity: 0, height: 0 }}
             className="mt-4 p-4 bg-blue-900/20 border border-blue-600/30 rounded-lg sm:px-4 md:px-6 lg:px-8"
           >
@@ -345,7 +380,7 @@ const TradeDiscussion: React.FC<TradeDiscussionProps> = ({
               <button
                 onClick={() => setShowCounterOffer(false)}
               >
-                Cancel
+//                 Cancel
               </button>
             </div>
           </motion.div>

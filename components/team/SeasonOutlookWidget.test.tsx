@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import SeasonOutlookWidget from './SeasonOutlookWidget';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import SeasonOutlookWidget from &apos;./SeasonOutlookWidget&apos;;
 
-describe('SeasonOutlookWidget', () => {
-  it('renders without crashing', () => {
+describe(&apos;SeasonOutlookWidget&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<SeasonOutlookWidget />);
-    expect(screen.getByTestId('seasonoutlookwidget')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;seasonoutlookwidget&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<SeasonOutlookWidget />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<SeasonOutlookWidget />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

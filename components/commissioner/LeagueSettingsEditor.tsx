@@ -3,16 +3,17 @@
  * Comprehensive league configuration management
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { XIcon } from '../icons/XIcon';
-import { SaveIcon } from '../icons/SaveIcon';
-import { SettingsIcon } from '../icons/SettingsIcon';
-import { League, LeagueSettings } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { XIcon } from &apos;../icons/XIcon&apos;;
+import { SaveIcon } from &apos;../icons/SaveIcon&apos;;
+import { SettingsIcon } from &apos;../icons/SettingsIcon&apos;;
+import { League, LeagueSettings } from &apos;../../types&apos;;
 
 interface LeagueSettingsEditorProps {
+}
     league: League;
     onClose: () => void;
     onSave: (settings: LeagueSettings) => void;
@@ -20,16 +21,18 @@ interface LeagueSettingsEditorProps {
 }
 
 interface SettingsFormData {
-    draftFormat: 'SNAKE' | 'AUCTION';
+}
+    draftFormat: &apos;SNAKE&apos; | &apos;AUCTION&apos;;
     teamCount: number;
     rosterSize: number;
-    scoring: 'Standard' | 'PPR' | 'Half-PPR';
+    scoring: &apos;Standard&apos; | &apos;PPR&apos; | &apos;Half-PPR&apos;;
     tradeDeadline: number;
-    playoffFormat: '4_TEAM' | '6_TEAM';
-    waiverRule: 'FAAB' | 'REVERSE_ORDER';
-    aiAssistanceLevel: 'FULL' | 'BASIC';
+    playoffFormat: &apos;4_TEAM&apos; | &apos;6_TEAM&apos;;
+    waiverRule: &apos;FAAB&apos; | &apos;REVERSE_ORDER&apos;;
+    aiAssistanceLevel: &apos;FULL&apos; | &apos;BASIC&apos;;
     // Additional settings
     rosterPositions: {
+}
         QB: number;
         RB: number;
         WR: number;
@@ -47,7 +50,9 @@ interface SettingsFormData {
     waiverPeriod: number;
 
 const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onClose, onSave }: any) => {
+}
     const [formData, setFormData] = React.useState<SettingsFormData>({
+}
         draftFormat: league.settings.draftFormat,
         teamCount: league.settings.teamCount,
         rosterSize: league.settings.rosterSize,
@@ -57,6 +62,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
         waiverRule: league.settings.waiverRule,
         aiAssistanceLevel: league.settings.aiAssistanceLevel,
         rosterPositions: {
+}
             QB: 1,
             RB: 2,
             WR: 2,
@@ -74,16 +80,19 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
         waiverPeriod: 1
     });
 
-    const [activeTab, setActiveTab] = React.useState<'basic' | 'roster' | 'scoring' | 'waivers' | 'advanced'>('basic');
+    const [activeTab, setActiveTab] = React.useState<&apos;basic&apos; | &apos;roster&apos; | &apos;scoring&apos; | &apos;waivers&apos; | &apos;advanced&apos;>(&apos;basic&apos;);
     const [hasChanges, setHasChanges] = React.useState(false);
 
     const updateField = <K extends keyof SettingsFormData>(field: K, value: SettingsFormData[K]) => {
+}
         setFormData(prev => ({ ...prev, [field]: value }));
         setHasChanges(true);
     };
 
-    const updateRosterPosition = (position: keyof SettingsFormData['rosterPositions'], value: number) => {
+    const updateRosterPosition = (position: keyof SettingsFormData[&apos;rosterPositions&apos;], value: number) => {
+}
         setFormData(prev => ({
+}
             ...prev,
             rosterPositions: { ...prev.rosterPositions, [position]: value }
         }));
@@ -91,7 +100,9 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
     };
 
     const handleSave = () => {
+}
         const updatedSettings: LeagueSettings = {
+}
             draftFormat: formData.draftFormat,
             teamCount: formData.teamCount,
             rosterSize: formData.rosterSize,
@@ -106,11 +117,11 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
     };
 
     const tabs = [
-        { id: 'basic', label: 'Basic', icon: '⚙️' },
-        { id: 'roster', label: 'Roster', icon: '👥' },
-        { id: 'scoring', label: 'Scoring', icon: '🏆' },
-        { id: 'waivers', label: 'Waivers', icon: '📋' },
-        { id: 'advanced', label: 'Advanced', icon: '🔧' }
+        { id: &apos;basic&apos;, label: &apos;Basic&apos;, icon: &apos;⚙️&apos; },
+        { id: &apos;roster&apos;, label: &apos;Roster&apos;, icon: &apos;👥&apos; },
+        { id: &apos;scoring&apos;, label: &apos;Scoring&apos;, icon: &apos;🏆&apos; },
+        { id: &apos;waivers&apos;, label: &apos;Waivers&apos;, icon: &apos;📋&apos; },
+        { id: &apos;advanced&apos;, label: &apos;Advanced&apos;, icon: &apos;🔧&apos; }
     ] as const;
 
     return (
@@ -148,6 +159,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                     {/* Tab Navigation */}
                     <div className="flex border-b border-[var(--panel-border)] bg-[var(--bg-secondary)] sm:px-4 md:px-6 lg:px-8">
                         {tabs.map((tab: any) => (
+}
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(tab.id)}`}
@@ -160,7 +172,8 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
 
                     {/* Content */}
                     <div className="p-6 overflow-y-auto max-h-[60vh] sm:px-4 md:px-6 lg:px-8">
-                        {activeTab === 'basic' && (
+                        {activeTab === &apos;basic&apos; && (
+}
                             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
@@ -169,7 +182,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.draftFormat}
-                                            onChange={(e: any) => updateField('draftFormat', e.target.value as 'SNAKE' | 'AUCTION')}
+                                            onChange={(e: any) => updateField(&apos;draftFormat&apos;, e.target.value as &apos;SNAKE&apos; | &apos;AUCTION&apos;)}
                                         >
                                             <option value="SNAKE">Snake Draft</option>
                                             <option value="AUCTION">Auction Draft</option>
@@ -181,9 +194,10 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.teamCount}
-                                            onChange={(e: any) => updateField('teamCount', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField(&apos;teamCount&apos;, parseInt(e.target.value))}
                                         >
                                             {[8, 10, 12, 14, 16, 18, 20].map((count: any) => (
+}
                                                 <option key={count} value={count}>{count} Teams</option>
                                             ))}
                                         </select>
@@ -194,7 +208,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.playoffFormat}
-                                            onChange={(e: any) => updateField('playoffFormat', e.target.value as any)}
+                                            onChange={(e: any) => updateField(&apos;playoffFormat&apos;, e.target.value as any)}
                                         >
                                             <option value="4_TEAM">4 Team Playoff</option>
                                             <option value="6_TEAM">6 Team Playoff</option>
@@ -209,19 +223,21 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="1"
                                             max="17"
                                             value={formData.tradeDeadline}
-                                            onChange={(e: any) => updateField('tradeDeadline', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField(&apos;tradeDeadline&apos;, parseInt(e.target.value))}
                                         />
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {activeTab === 'roster' && (
+                        {activeTab === &apos;roster&apos; && (
+}
                             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 <div>
                                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Roster Positions</h3>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {Object.entries(formData.rosterPositions).map(([position, count]) => (
+}
                                             <div key={position}>
                                                 <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                                     {position}
@@ -240,7 +256,8 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                             </div>
                         )}
 
-                        {activeTab === 'scoring' && (
+                        {activeTab === &apos;scoring&apos; && (
+}
                             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 <div>
                                     <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -248,7 +265,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                     </label>
                                     <select
                                         value={formData.scoring}
-                                        onChange={(e: any) => updateField('scoring', e.target.value as any)}
+                                        onChange={(e: any) => updateField(&apos;scoring&apos;, e.target.value as any)}
                                     >
                                         <option value="Standard">Standard (No PPR)</option>
                                         <option value="Half-PPR">Half PPR (0.5 pts/reception)</option>
@@ -258,7 +275,8 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                             </div>
                         )}
 
-                        {activeTab === 'waivers' && (
+                        {activeTab === &apos;waivers&apos; && (
+}
                             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
@@ -267,13 +285,14 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.waiverRule}
-                                            onChange={(e: any) => updateField('waiverRule', e.target.value as any)}
+                                            onChange={(e: any) => updateField(&apos;waiverRule&apos;, e.target.value as any)}
                                         >
                                             <option value="FAAB">FAAB (Free Agent Auction Budget)</option>
                                             <option value="REVERSE_ORDER">Reverse Order (Waiver Priority)</option>
                                         </select>
                                     </div>
-                                    {formData.waiverRule === 'FAAB' && (
+                                    {formData.waiverRule === &apos;FAAB&apos; && (
+}
                                         <div>
                                             <label className="block text-sm font-medium text-[var(--text-primary)] mb-2 sm:px-4 md:px-6 lg:px-8">
                                                 FAAB Budget ($)
@@ -284,7 +303,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                                 max="1000"
                                                 step="25"
                                                 value={formData.faabBudget}
-                                                onChange={(e: any) => updateField('faabBudget', parseInt(e.target.value))}
+                                                onChange={(e: any) => updateField(&apos;faabBudget&apos;, parseInt(e.target.value))}
                                             />
                                         </div>
                                     )}
@@ -297,14 +316,15 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="0"
                                             max="7"
                                             value={formData.waiverPeriod}
-                                            onChange={(e: any) => updateField('waiverPeriod', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField(&apos;waiverPeriod&apos;, parseInt(e.target.value))}
                                         />
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {activeTab === 'advanced' && (
+                        {activeTab === &apos;advanced&apos; && (
+}
                             <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
@@ -313,7 +333,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                         </label>
                                         <select
                                             value={formData.aiAssistanceLevel}
-                                            onChange={(e: any) => updateField('aiAssistanceLevel', e.target.value as any)}
+                                            onChange={(e: any) => updateField(&apos;aiAssistanceLevel&apos;, e.target.value as any)}
                                         >
                                             <option value="BASIC">Basic Recommendations</option>
                                             <option value="FULL">Full Oracle Integration</option>
@@ -329,7 +349,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             max="600"
                                             step="30"
                                             value={formData.pickTimer}
-                                            onChange={(e: any) => updateField('pickTimer', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField(&apos;pickTimer&apos;, parseInt(e.target.value))}
                                         />
                                     </div>
                                     <div>
@@ -341,7 +361,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             min="0"
                                             max="10"
                                             value={formData.maxKeepers}
-                                            onChange={(e: any) => updateField('maxKeepers', parseInt(e.target.value))}
+                                            onChange={(e: any) => updateField(&apos;maxKeepers&apos;, parseInt(e.target.value))}
                                         />
                                     </div>
                                     <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
@@ -349,7 +369,7 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                                             type="checkbox"
                                             id="tradingEnabled"
                                             checked={formData.tradingEnabled}
-                                            onChange={(e: any) => updateField('tradingEnabled', e.target.checked)}
+                                            onChange={(e: any) => updateField(&apos;tradingEnabled&apos;, e.target.checked)}
                                         />
                                         <label htmlFor="tradingEnabled" className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                             Enable Trading
@@ -363,14 +383,14 @@ const LeagueSettingsEditor: React.FC<LeagueSettingsEditorProps> = ({ league, onC
                     {/* Footer */}
                     <div className="p-6 border-t border-[var(--panel-border)] flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                         <div className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
-                            {hasChanges && '• Unsaved changes'}
+                            {hasChanges && &apos;• Unsaved changes&apos;}
                         </div>
                         <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                             <button
                                 onClick={onClose}
                                 className="px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
-                                Cancel
+//                                 Cancel
                             </button>
                             <button
                                 onClick={handleSave}

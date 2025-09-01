@@ -3,24 +3,26 @@
  * Enhanced mobile components with full accessibility support
  */
 
-import React from 'react';
-import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { motion, AnimatePresence, PanInfo } from &apos;framer-motion&apos;;
 import {
+}
     announceToScreenReader,
     useKeyboardNavigation,
     useFocusManagement,
     useReducedMotion,
-} from '../../utils/mobileAccessibilityUtils';
+} from &apos;../../utils/mobileAccessibilityUtils&apos;;
 
 import {
+}
     AccessibleButton,
     VisuallyHidden,
-    LiveRegion
-} from '../../utils/mobileAccessibilityComponents';
-import { useThrottle } from '../../utils/mobilePerformanceUtils';
-import { RefreshCwIcon, ChevronDownIcon } from 'lucide-react';
+//     LiveRegion
+} from &apos;../../utils/mobileAccessibilityComponents&apos;;
+import { useThrottle } from &apos;../../utils/mobilePerformanceUtils&apos;;
+import { RefreshCwIcon, ChevronDownIcon } from &apos;lucide-react&apos;;
 
 interface AccessiblePullToRefreshProps {
+}
     onRefresh: () => Promise<void>;
     children: React.ReactNode;
     refreshThreshold?: number;
@@ -31,16 +33,18 @@ interface AccessiblePullToRefreshProps {
 }
 
 export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = ({
+}
     onRefresh,
     children,
     refreshThreshold = 80,
     maxPullDistance = 120,
     disabled = false,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
+}
     const [isRefreshing, setIsRefreshing] = React.useState(false);
-    const [pullState, setPullState] = React.useState<'idle' | 'pulling' | 'ready' | 'refreshing'>('idle');
-    const [announcement, setAnnouncement] = React.useState('');
+    const [pullState, setPullState] = React.useState<&apos;idle&apos; | &apos;pulling&apos; | &apos;ready&apos; | &apos;refreshing&apos;>(&apos;idle&apos;);
+    const [announcement, setAnnouncement] = React.useState(&apos;&apos;);
     
     const pullY = React.useRef(0);
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -48,6 +52,7 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     const prefersReducedMotion = useReducedMotion();
 
     const handlePanStart = (event: any, info: PanInfo) => {
+}
         if (disabled || isRefreshing) return;
         
         const container = containerRef.current;
@@ -57,20 +62,23 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         
         // Only allow pull-to-refresh at the top of the scroll
         if (startScrollTop.current <= 0) {
-            setPullState('pulling');
-            setAnnouncement('Pull to refresh started');
+}
+            setPullState(&apos;pulling&apos;);
+            setAnnouncement(&apos;Pull to refresh started&apos;);
 
     };
 
     const handlePan = useThrottle((event: any, info: PanInfo) => {
-        if (disabled || isRefreshing || pullState === 'idle') return;
+}
+        if (disabled || isRefreshing || pullState === &apos;idle&apos;) return;
         
         const container = containerRef.current;
         if (!container) return;
         
         // Only pull down when at the top
         if (container.scrollTop > 0) {
-            setPullState('idle');
+}
+            setPullState(&apos;idle&apos;);
             pullY.current = 0;
             return;
 
@@ -79,56 +87,68 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
         
         pullY.current = dampedY;
         
-        if (dampedY >= refreshThreshold && pullState !== 'ready') {
-            setPullState('ready');
-            setAnnouncement('Release to refresh');
-        } else if (dampedY < refreshThreshold && pullState !== 'pulling') {
-            setPullState('pulling');
-            setAnnouncement('Pull further to refresh');
+        if (dampedY >= refreshThreshold && pullState !== &apos;ready&apos;) {
+}
+            setPullState(&apos;ready&apos;);
+            setAnnouncement(&apos;Release to refresh&apos;);
+        } else if (dampedY < refreshThreshold && pullState !== &apos;pulling&apos;) {
+}
+            setPullState(&apos;pulling&apos;);
+            setAnnouncement(&apos;Pull further to refresh&apos;);
 
     }, 16); // 60fps throttling
 
     const handlePanEnd = async (event: any, info: PanInfo) => {
+}
         if (disabled || isRefreshing) return;
         
-        if (pullState === 'ready') {
-            setPullState('refreshing');
+        if (pullState === &apos;ready&apos;) {
+}
+            setPullState(&apos;refreshing&apos;);
             setIsRefreshing(true);
-            setAnnouncement('Refreshing content');
+            setAnnouncement(&apos;Refreshing content&apos;);
             
             try {
+}
 
                 await onRefresh();
-                setAnnouncement('Content refreshed successfully');
+                setAnnouncement(&apos;Content refreshed successfully&apos;);
             
     } catch (error) {
-                setAnnouncement('Refresh failed. Please try again.');
+}
+                setAnnouncement(&apos;Refresh failed. Please try again.&apos;);
             } finally {
+}
                 setIsRefreshing(false);
-                setPullState('idle');
+                setPullState(&apos;idle&apos;);
                 pullY.current = 0;
 
         } else {
-            setPullState('idle');
+}
+            setPullState(&apos;idle&apos;);
             pullY.current = 0;
 
     };
 
     // Keyboard support for refresh
     const handleKeyboardRefresh = React.useCallback(async () => {
+}
         if (disabled || isRefreshing) return;
         
         setIsRefreshing(true);
-        setAnnouncement('Refreshing content');
+        setAnnouncement(&apos;Refreshing content&apos;);
         
         try {
+}
 
             await onRefresh();
-            setAnnouncement('Content refreshed successfully');
+            setAnnouncement(&apos;Content refreshed successfully&apos;);
         
     } catch (error) {
-            setAnnouncement('Refresh failed. Please try again.');
+}
+            setAnnouncement(&apos;Refresh failed. Please try again.&apos;);
         } finally {
+}
             setIsRefreshing(false);
 
     }, [onRefresh, disabled, isRefreshing]);
@@ -136,28 +156,32 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
     useKeyboardNavigation(containerRef as React.RefObject<HTMLElement>);
 
     const getPullIndicatorColor = () => {
+}
         switch (pullState) {
-            case 'ready':
-                return 'text-green-500';
-            case 'pulling':
-                return 'text-blue-500';
-            case 'refreshing':
-                return 'text-blue-500';
+}
+            case &apos;ready&apos;:
+                return &apos;text-green-500&apos;;
+            case &apos;pulling&apos;:
+                return &apos;text-blue-500&apos;;
+            case &apos;refreshing&apos;:
+                return &apos;text-blue-500&apos;;
             default:
-                return 'text-gray-400';
+                return &apos;text-gray-400&apos;;
 
     };
 
     const getStatusText = () => {
+}
         switch (pullState) {
-            case 'pulling':
-                return 'Pull down to refresh';
-            case 'ready':
-                return 'Release to refresh';
-            case 'refreshing':
-                return 'Refreshing...';
+}
+            case &apos;pulling&apos;:
+                return &apos;Pull down to refresh&apos;;
+            case &apos;ready&apos;:
+                return &apos;Release to refresh&apos;;
+            case &apos;refreshing&apos;:
+                return &apos;Refreshing...&apos;;
             default:
-                return '';
+                return &apos;&apos;;
 
     };
 
@@ -168,13 +192,13 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             
             {/* Refresh button for keyboard users */}
             <div className="absolute top-2 right-2 z-10 sm:px-4 md:px-6 lg:px-8">
-                <AccessibleButton
+                <AccessibleButton>
                     onClick={handleKeyboardRefresh}
                     disabled={disabled || isRefreshing}
                     className="mobile-focus-ring text-sm px-2 py-1 sm:px-4 md:px-6 lg:px-8"
                     ariaLabel="Refresh content"
                 >
-                    <RefreshCwIcon className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                    <RefreshCwIcon className={`w-4 h-4 ${isRefreshing ? &apos;animate-spin&apos; : &apos;&apos;}`} />
                     <VisuallyHidden>Refresh</VisuallyHidden>
                 </AccessibleButton>
             </div>
@@ -190,7 +214,8 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                 onDragEnd={handlePanEnd}
                 className="w-full h-full overflow-auto sm:px-4 md:px-6 lg:px-8"
                 style={{
-                    transform: pullY.current > 0 ? `translateY(${pullY.current}px)` : 'none'
+}
+                    transform: pullY.current > 0 ? `translateY(${pullY.current}px)` : &apos;none&apos;
                 }}
                 role="main"
                 aria-label="Content area with pull-to-refresh"
@@ -198,7 +223,8 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
             >
                 {/* Pull indicator */}
                 <AnimatePresence>
-                    {pullState !== 'idle' && (
+                    {pullState !== &apos;idle&apos; && (
+}
                         <motion.div
                             initial={prefersReducedMotion ? {} : { opacity: 0, y: -20 }}
                             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
@@ -210,15 +236,18 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
                         >
                             <motion.div
                                 animate={prefersReducedMotion ? {} : {
-                                    rotate: pullState === 'refreshing' ? 360 : 0,
-                                    scale: pullState === 'ready' ? 1.2 : 1
+}
+                                    rotate: pullState === &apos;refreshing&apos; ? 360 : 0,
+                                    scale: pullState === &apos;ready&apos; ? 1.2 : 1
                                 }}
                                 transition={{
-                                    rotate: { duration: 1, repeat: pullState === 'refreshing' ? Infinity : 0 },
+}
+                                    rotate: { duration: 1, repeat: pullState === &apos;refreshing&apos; ? Infinity : 0 },
                                     scale: { duration: 0.2 }
                                 }}
                             >
-                                {pullState === 'refreshing' ? (
+                                {pullState === &apos;refreshing&apos; ? (
+}
                                     <RefreshCwIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                                 ) : (
                                     <ChevronDownIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
@@ -239,9 +268,10 @@ export const AccessiblePullToRefresh: React.FC<AccessiblePullToRefreshProps> = (
 };
 
 interface AccessibleTouchAreaProps {
+}
     onTap?: () => void;
     onLongPress?: () => void;
-    onSwipe?: (direction: 'left' | 'right' | 'up' | 'down') => void;
+    onSwipe?: (direction: &apos;left&apos; | &apos;right&apos; | &apos;up&apos; | &apos;down&apos;) => void;
     children: React.ReactNode;
     className?: string;
     disabled?: boolean;
@@ -251,82 +281,101 @@ interface AccessibleTouchAreaProps {
 }
 
 export const AccessibleTouchArea: React.FC<AccessibleTouchAreaProps> = ({
+}
     onTap,
     onLongPress,
     onSwipe,
     children,
-    className = '',
+    className = &apos;&apos;,
     disabled = false,
-    role = 'button',
-    ariaLabel
+    role = &apos;button&apos;,
+//     ariaLabel
 }: any) => {
+}
     const [isPressed, setIsPressed] = React.useState(false);
     const longPressTimer = React.useRef<NodeJS.Timeout | undefined>(undefined);
     const prefersReducedMotion = useReducedMotion();
 
     const handleTapStart = () => {
+}
         if (disabled) return;
         setIsPressed(true);
         
         if (onLongPress) {
+}
             longPressTimer.current = setTimeout(() => {
+}
                 onLongPress();
-                announceToScreenReader('Long press action activated', 'polite');
+                announceToScreenReader(&apos;Long press action activated&apos;, &apos;polite&apos;);
             }, 500);
 
     };
 
     const handleTapEnd = () => {
+}
         setIsPressed(false);
         if (longPressTimer.current) {
+}
             clearTimeout(longPressTimer.current);
 
     };
 
     const handleTap = () => {
+}
         if (disabled) return;
         if (onTap) {
+}
             onTap();
 
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
+}
         if (disabled) return;
         
-        if (event.key === 'Enter' || event.key === ' ') {
+        if (event.key === &apos;Enter&apos; || event.key === &apos; &apos;) {
+}
             event.preventDefault();
             if (onTap) {
+}
                 onTap();
 
 
     };
 
     const handlePan = (event: any, info: PanInfo) => {
+}
         if (disabled || !onSwipe) return;
         
         const { offset } = info;
         const threshold = 50;
         
         if (Math.abs(offset.x) > Math.abs(offset.y)) {
+}
             // Horizontal swipe
             if (offset.x > threshold) {
-                onSwipe('right');
+}
+                onSwipe(&apos;right&apos;);
             } else if (offset.x < -threshold) {
-                onSwipe('left');
+}
+                onSwipe(&apos;left&apos;);
 
         } else {
+}
             // Vertical swipe
             if (offset.y > threshold) {
-                onSwipe('down');
+}
+                onSwipe(&apos;down&apos;);
             } else if (offset.y < -threshold) {
-                onSwipe('up');
+}
+                onSwipe(&apos;up&apos;);
 
 
     };
 
     return (
         <motion.div
-            className={`mobile-touch-target mobile-focus-ring ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`mobile-touch-target mobile-focus-ring ${className} ${disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}`}
             whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
             onTapStart={handleTapStart}
             onTap={handleTap}

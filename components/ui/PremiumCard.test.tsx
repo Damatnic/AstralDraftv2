@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PremiumCard from './PremiumCard';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PremiumCard from &apos;./PremiumCard&apos;;
 
-describe('PremiumCard', () => {
-  it('renders without crashing', () => {
+describe(&apos;PremiumCard&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PremiumCard />);
-    expect(screen.getByTestId('premiumcard')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;premiumcard&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PremiumCard />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PremiumCard />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

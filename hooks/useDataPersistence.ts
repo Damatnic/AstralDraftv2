@@ -1,18 +1,20 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from &apos;react&apos;;
 
 export interface DraftSession {
+}
   id: string;
   userId: string;
   leagueId: string;
   draftOrder: number[];
   picks: DraftPick[];
   settings: DraftSettings;
-  status: 'pending' | 'active' | 'completed' | 'paused';
+  status: &apos;pending&apos; | &apos;active&apos; | &apos;completed&apos; | &apos;paused&apos;;
   createdAt: number;
   updatedAt: number;
 }
 
 export interface DraftPick {
+}
   round: number;
   pick: number;
   playerId: string;
@@ -21,24 +23,27 @@ export interface DraftPick {
 }
 
 export interface DraftSettings {
+}
   rounds: number;
   timePerPick: number;
-  draftType: 'snake' | 'linear';
-  scoringType: 'standard' | 'ppr' | 'half_ppr';
+  draftType: &apos;snake&apos; | &apos;linear&apos;;
+  scoringType: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos;;
 }
 
 export interface AnalyticsData {
+}
   id: string;
   userId: string;
-  type: 'user_behavior' | 'performance' | 'predictions' | 'draft_analysis';
+  type: &apos;user_behavior&apos; | &apos;performance&apos; | &apos;predictions&apos; | &apos;draft_analysis&apos;;
   data: Record<string, unknown>;
   timestamp: number;
   sessionId: string;
 }
 
 export interface UserPreferences {
+}
   userId: string;
-  theme: 'light' | 'dark' | 'auto';
+  theme: &apos;light&apos; | &apos;dark&apos; | &apos;auto&apos;;
   notifications: boolean;
   autoRefresh: boolean;
   defaultView: string;
@@ -47,6 +52,7 @@ export interface UserPreferences {
 }
 
 export interface OraclePredictionHistory {
+}
   id: string;
   userId: string;
   week: number;
@@ -58,6 +64,7 @@ export interface OraclePredictionHistory {
 }
 
 export interface PredictionEntry {
+}
 
   playerId: string;
   projectedPoints: number;
@@ -66,15 +73,18 @@ export interface PredictionEntry {
   reasoning: string[];
 
     } catch (error) {
+}
         console.error(error);
     }export interface SyncStatus {
+}
   lastSync: number;
-  status: 'synced' | 'syncing' | 'error' | 'offline';
+  status: &apos;synced&apos; | &apos;syncing&apos; | &apos;error&apos; | &apos;offline&apos;;
   pendingOperations: number;
   errors: SyncError[];
 }
 
 export interface SyncError {
+}
   operation: string;
   error: string;
   timestamp: number;
@@ -82,6 +92,7 @@ export interface SyncError {
 }
 
 export interface CacheEntry<T = unknown> {
+}
   data: T;
   timestamp: number;
   ttl: number;
@@ -89,6 +100,7 @@ export interface CacheEntry<T = unknown> {
 }
 
 export interface DataPersistenceState {
+}
   isInitialized: boolean;
   isOnline: boolean;
   syncStatus: SyncStatus | null;
@@ -96,6 +108,7 @@ export interface DataPersistenceState {
 }
 
 export interface DataPersistenceActions {
+}
   // Draft Sessions
   saveDraftSession: (session: DraftSession) => Promise<void>;
   getDraftSession: (id: string) => Promise<DraftSession | null>;
@@ -126,7 +139,9 @@ export interface DataPersistenceActions {
 }
 
 export function useDataPersistence(): [DataPersistenceState, DataPersistenceActions] {
+}
   const [state, setState] = useState<DataPersistenceState>({
+}
     isInitialized: false,
     isOnline: navigator.onLine,
     syncStatus: null,
@@ -135,39 +150,49 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // Storage keys
   const STORAGE_KEYS = {
-    DRAFT_SESSIONS: 'draft_sessions',
-    ANALYTICS: 'analytics_data',
-    USER_PREFERENCES: 'user_preferences',
-    ORACLE_PREDICTIONS: 'oracle_predictions',
-    CACHE: 'data_cache',
-    SYNC_STATUS: 'sync_status'
+}
+    DRAFT_SESSIONS: &apos;draft_sessions&apos;,
+    ANALYTICS: &apos;analytics_data&apos;,
+    USER_PREFERENCES: &apos;user_preferences&apos;,
+    ORACLE_PREDICTIONS: &apos;oracle_predictions&apos;,
+    CACHE: &apos;data_cache&apos;,
+    SYNC_STATUS: &apos;sync_status&apos;
   };
 
   // Initialize
   useEffect(() => {
+}
     const initialize = async () => {
+}
       try {
+}
         // Check storage availability
-        if (typeof Storage !== 'undefined') {
+        if (typeof Storage !== &apos;undefined&apos;) {
+}
           const syncStatus: SyncStatus = {
+}
             lastSync: Date.now(),
-            status: 'synced',
+            status: &apos;synced&apos;,
             pendingOperations: 0,
             errors: []
           };
           
           setState(prev => ({
+}
             ...prev,
             isInitialized: true,
-            syncStatus
+//             syncStatus
           }));
         } else {
-          throw new Error('Local storage not available');
+}
+          throw new Error(&apos;Local storage not available&apos;);
         }
       } catch (error) {
+}
         setState(prev => ({
+}
           ...prev,
-          error: error instanceof Error ? error.message : 'Initialization failed',
+          error: error instanceof Error ? error.message : &apos;Initialization failed&apos;,
           isInitialized: true
         }));
       }
@@ -178,55 +203,69 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // Online/offline detection
   useEffect(() => {
+}
     const handleOnline = () => setState(prev => ({ ...prev, isOnline: true }));
     const handleOffline = () => setState(prev => ({ ...prev, isOnline: false }));
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener(&apos;online&apos;, handleOnline);
+    window.addEventListener(&apos;offline&apos;, handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+}
+      window.removeEventListener(&apos;online&apos;, handleOnline);
+      window.removeEventListener(&apos;offline&apos;, handleOffline);
     };
   }, []);
 
   // Helper functions
   const getStorageData = <T>(key: string): T[] => {
+}
     try {
+}
 
       const data = localStorage.getItem(key);
       return data ? JSON.parse(data) : [];
     
     } catch (error) {
+}
         console.error(error);
     } catch {
+}
       return [];
     }
   };
 
   const setStorageData = <T>(key: string, data: T[]): void => {
+}
     try {
+}
 
       localStorage.setItem(key, JSON.stringify(data));
     
     } catch (error) {
+}
         console.error(error);
     } catch (error) {
+}
       setState(prev => ({
+}
         ...prev,
-        error: `Storage error: ${error instanceof Error ? error.message : 'Unknown error'}`
+        error: `Storage error: ${error instanceof Error ? error.message : &apos;Unknown error&apos;}`
       }));
     }
   };
 
   // Draft Session Operations
   const saveDraftSession = useCallback(async (session: DraftSession) => {
+}
     const sessions = getStorageData<DraftSession>(STORAGE_KEYS.DRAFT_SESSIONS);
     const existingIndex = sessions.findIndex(s => s.id === session.id);
     
     if (existingIndex >= 0) {
+}
       sessions[existingIndex] = { ...session, updatedAt: Date.now() };
     } else {
+}
       sessions.push(session);
     }
     
@@ -234,16 +273,19 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   }, [STORAGE_KEYS.DRAFT_SESSIONS]);
 
   const getDraftSession = useCallback(async (id: string): Promise<DraftSession | null> => {
+}
     const sessions = getStorageData<DraftSession>(STORAGE_KEYS.DRAFT_SESSIONS);
     return sessions.find((s: any) => s.id === id) || null;
   }, [STORAGE_KEYS.DRAFT_SESSIONS]);
 
   const getUserDraftSessions = useCallback(async (userId: string): Promise<DraftSession[]> => {
+}
     const sessions = getStorageData<DraftSession>(STORAGE_KEYS.DRAFT_SESSIONS);
     return sessions.filter((s: any) => s.userId === userId);
   }, [STORAGE_KEYS.DRAFT_SESSIONS]);
 
   const deleteDraftSession = useCallback(async (id: string) => {
+}
     const sessions = getStorageData<DraftSession>(STORAGE_KEYS.DRAFT_SESSIONS);
     const filtered = sessions.filter((s: any) => s.id !== id);
     setStorageData(STORAGE_KEYS.DRAFT_SESSIONS, filtered);
@@ -251,12 +293,14 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // Analytics Operations
   const saveAnalyticsData = useCallback(async (data: AnalyticsData) => {
+}
     const analytics = getStorageData<AnalyticsData>(STORAGE_KEYS.ANALYTICS);
     analytics.push(data);
     setStorageData(STORAGE_KEYS.ANALYTICS, analytics);
   }, [STORAGE_KEYS.ANALYTICS]);
 
   const getAnalyticsData = useCallback(async (userId: string, type?: string): Promise<AnalyticsData[]> => {
+}
     const analytics = getStorageData<AnalyticsData>(STORAGE_KEYS.ANALYTICS);
     return analytics.filter((a: any) => 
       a.userId === userId && (!type || a.type === type)
@@ -265,12 +309,15 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // User Preferences Operations
   const saveUserPreferences = useCallback(async (preferences: UserPreferences) => {
+}
     const prefs = getStorageData<UserPreferences>(STORAGE_KEYS.USER_PREFERENCES);
     const existingIndex = prefs.findIndex(p => p.userId === preferences.userId);
     
     if (existingIndex >= 0) {
+}
       prefs[existingIndex] = { ...preferences, updatedAt: Date.now() };
     } else {
+}
       prefs.push(preferences);
     }
     
@@ -278,12 +325,14 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   }, [STORAGE_KEYS.USER_PREFERENCES]);
 
   const getUserPreferences = useCallback(async (userId: string): Promise<UserPreferences | null> => {
+}
     const prefs = getStorageData<UserPreferences>(STORAGE_KEYS.USER_PREFERENCES);
     return prefs.find((p: any) => p.userId === userId) || null;
   }, [STORAGE_KEYS.USER_PREFERENCES]);
 
   // Oracle Predictions Operations
   const saveOraclePrediction = useCallback(async (prediction: OraclePredictionHistory) => {
+}
     const predictions = getStorageData<OraclePredictionHistory>(STORAGE_KEYS.ORACLE_PREDICTIONS);
     const existingIndex = predictions.findIndex(p => 
       p.userId === prediction.userId && 
@@ -292,8 +341,10 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     );
     
     if (existingIndex >= 0) {
+}
       predictions[existingIndex] = prediction;
     } else {
+}
       predictions.push(prediction);
     }
     
@@ -305,6 +356,7 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     week?: number, 
     season?: number
   ): Promise<OraclePredictionHistory[]> => {
+}
     const predictions = getStorageData<OraclePredictionHistory>(STORAGE_KEYS.ORACLE_PREDICTIONS);
     return predictions.filter((p: any) => 
       p.userId === userId &&
@@ -315,8 +367,10 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // Cache Operations
   const cacheData = useCallback(async <T>(key: string, data: T, ttl = 3600000): Promise<void> => {
+}
     const cache = getStorageData<{ key: string; entry: CacheEntry<T> }>(STORAGE_KEYS.CACHE);
     const entry: CacheEntry<T> = {
+}
       data,
       timestamp: Date.now(),
       ttl,
@@ -325,8 +379,10 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     
     const existingIndex = cache.findIndex(c => c.key === key);
     if (existingIndex >= 0) {
+}
       cache[existingIndex].entry = entry;
     } else {
+}
       cache.push({ key, entry });
     }
     
@@ -334,6 +390,7 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   }, [STORAGE_KEYS.CACHE]);
 
   const getCachedData = useCallback(async <T>(key: string): Promise<T | null> => {
+}
     const cache = getStorageData<{ key: string; entry: CacheEntry<T> }>(STORAGE_KEYS.CACHE);
     const item = cache.find((c: any) => c.key === key);
     
@@ -344,6 +401,7 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     
     // Check if expired
     if (now - entry.timestamp > entry.ttl) {
+}
       // Remove expired entry
       const filtered = cache.filter((c: any) => c.key !== key);
       setStorageData(STORAGE_KEYS.CACHE, filtered);
@@ -358,7 +416,9 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   }, [STORAGE_KEYS.CACHE]);
 
   const clearCache = useCallback(async (pattern?: string) => {
+}
     if (!pattern) {
+}
       setStorageData(STORAGE_KEYS.CACHE, []);
       return;
     }
@@ -370,28 +430,35 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
 
   // Sync Operations
   const getSyncStatus = useCallback(async (): Promise<SyncStatus> => {
+}
     return state.syncStatus || {
+}
       lastSync: 0,
-      status: 'offline',
+      status: &apos;offline&apos;,
       pendingOperations: 0,
       errors: []
     };
   }, [state.syncStatus]);
 
   const forceSyncAll = useCallback(async () => {
+}
     if (!state.isOnline) {
+}
       setState(prev => ({
+}
         ...prev,
-        error: 'Cannot sync while offline'
+        error: &apos;Cannot sync while offline&apos;
       }));
       return;
     }
 
     setState(prev => ({
+}
       ...prev,
       syncStatus: {
+}
         ...prev.syncStatus!,
-        status: 'syncing'
+        status: &apos;syncing&apos;
       }
     }));
 
@@ -399,10 +466,12 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     setState(prev => ({
+}
       ...prev,
       syncStatus: {
+}
         lastSync: Date.now(),
-        status: 'synced',
+        status: &apos;synced&apos;,
         pendingOperations: 0,
         errors: []
       }
@@ -410,13 +479,16 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
   }, [state.isOnline]);
 
   const retryFailedOperations = useCallback(async () => {
+}
     if (!state.syncStatus?.errors.length) return;
 
     setState(prev => ({
+}
       ...prev,
       syncStatus: {
+}
         ...prev.syncStatus!,
-        status: 'syncing'
+        status: &apos;syncing&apos;
       }
     }));
 
@@ -424,16 +496,19 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     await new Promise(resolve => setTimeout(resolve, 500));
 
     setState(prev => ({
+}
       ...prev,
       syncStatus: {
+}
         ...prev.syncStatus!,
-        status: 'synced',
+        status: &apos;synced&apos;,
         errors: []
       }
     }));
   }, [state.syncStatus]);
 
   const actions: DataPersistenceActions = {
+}
     saveDraftSession,
     getDraftSession,
     getUserDraftSessions,
@@ -449,7 +524,7 @@ export function useDataPersistence(): [DataPersistenceState, DataPersistenceActi
     clearCache,
     forceSyncAll,
     getSyncStatus,
-    retryFailedOperations
+//     retryFailedOperations
   };
 
   return [state, actions];

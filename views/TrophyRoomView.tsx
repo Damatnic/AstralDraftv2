@@ -1,25 +1,26 @@
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { AwardIcon } from '../components/icons/AwardIcon';
-import { Avatar } from '../components/ui/Avatar';
-import { motion } from 'framer-motion';
-import { TrophyIcon } from '../components/icons/TrophyIcon';
-import type { LeagueHistoryEntry, LeagueAward, Team } from '../types';
-import { ArrowRightLeftIcon } from '../components/icons/ArrowRightLeftIcon';
-import { ZapIcon } from '../components/icons/ZapIcon';
-import { FlameIcon } from '../components/icons/FlameIcon';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { AwardIcon } from &apos;../components/icons/AwardIcon&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { TrophyIcon } from &apos;../components/icons/TrophyIcon&apos;;
+import type { LeagueHistoryEntry, LeagueAward, Team } from &apos;../types&apos;;
+import { ArrowRightLeftIcon } from &apos;../components/icons/ArrowRightLeftIcon&apos;;
+import { ZapIcon } from &apos;../components/icons/ZapIcon&apos;;
+import { FlameIcon } from &apos;../components/icons/FlameIcon&apos;;
 
-const awardConfig: Record<LeagueAward['type'], { icon: React.ReactNode, color: string, label: string }> = {
-    HIGHEST_SCORE: { icon: <FlameIcon />, color: 'text-orange-400', label: 'Highest Weekly Score' },
-    BEST_RECORD: { icon: <AwardIcon />, color: 'text-green-400', label: 'Best Regular Season Record' },
-    BEST_TRADE: { icon: <ArrowRightLeftIcon />, color: 'text-purple-400', label: 'Trade of the Year' },
-    CLOSEST_MATCHUP: { icon: <ZapIcon />, color: 'text-blue-400', label: 'Closest Matchup' },
+const awardConfig: Record<LeagueAward[&apos;type&apos;], { icon: React.ReactNode, color: string, label: string }> = {
+}
+    HIGHEST_SCORE: { icon: <FlameIcon />, color: &apos;text-orange-400&apos;, label: &apos;Highest Weekly Score&apos; },
+    BEST_RECORD: { icon: <AwardIcon />, color: &apos;text-green-400&apos;, label: &apos;Best Regular Season Record&apos; },
+    BEST_TRADE: { icon: <ArrowRightLeftIcon />, color: &apos;text-purple-400&apos;, label: &apos;Trade of the Year&apos; },
+    CLOSEST_MATCHUP: { icon: <ZapIcon />, color: &apos;text-blue-400&apos;, label: &apos;Closest Matchup&apos; },
 };
 
 const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ award, team }: any) => {
+}
     const config = awardConfig[award.type];
     if (!config) return null;
 
@@ -30,18 +31,20 @@ const AwardCard: React.FC<{ award: LeagueAward, team: Team | undefined }> = ({ a
                 <h4 className="font-bold text-sm text-white">{config.label}</h4>
             </div>
             <p className="text-xs text-gray-300">
-                <span className="font-semibold text-yellow-300">{team?.name || 'Unknown'}</span> - {award.details}
+                <span className="font-semibold text-yellow-300">{team?.name || &apos;Unknown&apos;}</span> - {award.details}
             </p>
         </div>
     );
 };
 
 const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], index: number }> = ({ history, teams, index }: any) => {
+}
     const champion = teams.find((t: any) => t.id === history.championTeamId);
     
     return (
         <motion.div
             {...{
+}
                 initial: { opacity: 0, y: 20 },
                 animate: { opacity: 1, y: 0 },
                 transition: { delay: index * 0.15 },
@@ -53,6 +56,7 @@ const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], ind
                         <TrophyIcon className="w-16 h-16 text-yellow-300" />
                         <h3 className="font-display font-bold text-xl text-yellow-300 mt-2">LEAGUE CHAMPION</h3>
                         {champion && (
+}
                             <>
                                 <Avatar avatar={champion.avatar} className="w-20 h-20 text-5xl rounded-full my-3 ring-4 ring-yellow-400/50" />
                                 <p className="font-bold text-lg">{champion.name}</p>
@@ -61,6 +65,7 @@ const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], ind
                     </div>
                     <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {(history.leagueAwards || []).map((award: any) => (
+}
                             <AwardCard key={award.id} award={award} team={teams.find((t: any) => t.id === award.teamId)} />
                         ))}
                     </div>
@@ -71,11 +76,13 @@ const SeasonTrophies: React.FC<{ history: LeagueHistoryEntry, teams: Team[], ind
 };
 
 const TrophyRoomView: React.FC = () => {
+}
     const { dispatch } = useAppState();
     const { league } = useLeague();
     
     if (!league) {
-        return <ErrorDisplay title="Error" message="Please select a league to view the trophy room." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+}
+        return <ErrorDisplay title="Error" message="Please select a league to view the trophy room." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
 
     const pastSeasons = (league.history || []).sort((a, b) => b.season - a.season);
 
@@ -88,12 +95,13 @@ const TrophyRoomView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_HUB' }) className="back-btn">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_HUB&apos; }) className="back-btn">
                     Back to League Hub
                 </button>
             </header>
             <main className="flex-grow space-y-6">
                 {pastSeasons.length > 0 ? (
+}
                     pastSeasons.map((season, index) => (
                         <SeasonTrophies key={season.season} history={season} teams={league.teams} index={index} />
                     ))

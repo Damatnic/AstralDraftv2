@@ -1,31 +1,37 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { Team, MatchupAnalysis } from '../../types';
-import { getMatchupAnalysis } from '../../services/geminiService';
-import { PercentIcon } from '../icons/PercentIcon';
-import { CrosshairIcon } from '../icons/CrosshairIcon';
-import { Tooltip } from '../ui/Tooltip';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { Team, MatchupAnalysis } from &apos;../../types&apos;;
+import { getMatchupAnalysis } from &apos;../../services/geminiService&apos;;
+import { PercentIcon } from &apos;../icons/PercentIcon&apos;;
+import { CrosshairIcon } from &apos;../icons/CrosshairIcon&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface MatchupAnalysisWidgetProps {
+}
     myTeam: Team;
     opponentTeam: Team;
 
 }
 
 const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, opponentTeam }: any) => {
+}
     const [analysis, setAnalysis] = React.useState<MatchupAnalysis | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
     React.useEffect(() => {
+}
         const fetchAnalysis = async () => {
+}
             setIsLoading(true);
             try {
+}
                 const result = await getMatchupAnalysis(myTeam, opponentTeam);
                 setAnalysis(result);
             } catch (error) {
-                console.error('Error fetching matchup analysis:', error);
+}
+                console.error(&apos;Error fetching matchup analysis:&apos;, error);
             } finally {
+}
                 setIsLoading(false);
             }
         };
@@ -36,10 +42,12 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
     const opponentWinPct = 100 - myWinPct;
 
     if (isLoading) {
+}
         return <div className="p-2 bg-black/20 rounded-lg text-xs text-center sm:px-4 md:px-6 lg:px-8">Analyzing matchup...</div>;
     }
 
     if (!analysis) {
+}
         return null;
     }
 
@@ -63,7 +71,7 @@ const MatchupAnalysisWidget: React.FC<MatchupAnalysisWidgetProps> = ({ myTeam, o
                     <CrosshairIcon /> My Key Player: <span className="text-white sm:px-4 md:px-6 lg:px-8">{analysis.keyPlayerMyTeam}</span>
                 </div>
                 <div className="flex items-center gap-2 text-red-300 font-semibold sm:px-4 md:px-6 lg:px-8">
-                     <CrosshairIcon /> Opponent's Key Player: <span className="text-white sm:px-4 md:px-6 lg:px-8">{analysis.keyPlayerOpponent}</span>
+                     <CrosshairIcon /> Opponent&apos;s Key Player: <span className="text-white sm:px-4 md:px-6 lg:px-8">{analysis.keyPlayerOpponent}</span>
                 </div>
             </div>
         </div>

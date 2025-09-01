@@ -3,11 +3,12 @@
  * Catches and handles errors in Oracle prediction components
  */
 
-import React, { Component, ReactNode } from 'react';
-import { AlertTriangleIcon, RefreshCwIcon, HomeIcon } from 'lucide-react';
-import { Widget } from '../ui/Widget';
+import React, { Component, ReactNode } from &apos;react&apos;;
+import { AlertTriangleIcon, RefreshCwIcon, HomeIcon } from &apos;lucide-react&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
 
 interface Props {
+}
     children: ReactNode;
     fallbackTitle?: string;
     onRetry?: () => void;
@@ -16,17 +17,21 @@ interface Props {
 }
 
 interface State {
+}
     hasError: boolean;
     error: Error | null;
     errorInfo: any;
     retryCount: number;
 
 export class OracleErrorBoundary extends Component<Props, State> {
+}
     private readonly maxRetries = 3;
 
     constructor(props: Props) {
+}
         super(props);
         this.state = {
+}
             hasError: false,
             error: null,
             errorInfo: null,
@@ -34,28 +39,36 @@ export class OracleErrorBoundary extends Component<Props, State> {
         };
 
     static getDerivedStateFromError(error: Error): Partial<State> {
+}
         return {
+}
             hasError: true,
-            error
+//             error
         };
 
     componentDidCatch(error: Error, errorInfo: any) {
+}
         
         this.setState({
+}
             error,
-            errorInfo
+//             errorInfo
         });
 
         // Report to error tracking service in production
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === &apos;production&apos;) {
+}
 
 
     handleRetry = () => {
+}
         const { onRetry } = this.props;
         const { retryCount } = this.state;
 
         if (retryCount < this.maxRetries) {
+}
             this.setState({
+}
                 hasError: false,
                 error: null,
                 errorInfo: null,
@@ -63,15 +76,18 @@ export class OracleErrorBoundary extends Component<Props, State> {
             });
 
             if (onRetry) {
+}
                 onRetry();
 
 
     };
 
     handleReset = () => {
+}
         const { onReset } = this.props;
         
         this.setState({
+}
             hasError: false,
             error: null,
             errorInfo: null,
@@ -79,15 +95,18 @@ export class OracleErrorBoundary extends Component<Props, State> {
         });
 
         if (onReset) {
+}
             onReset();
 
     };
 
     render() {
+}
         const { hasError, error, retryCount } = this.state;
-        const { children, fallbackTitle = '🔮 Oracle Error' } = this.props;
+        const { children, fallbackTitle = &apos;🔮 Oracle Error&apos; } = this.props;
 
         if (hasError) {
+}
             const canRetry = retryCount < this.maxRetries;
             
             return (
@@ -101,11 +120,12 @@ export class OracleErrorBoundary extends Component<Props, State> {
                         
                         <p className="text-gray-400 mb-4 max-w-md mx-auto sm:px-4 md:px-6 lg:px-8">
                             The Oracle prediction interface encountered an unexpected error. 
-                            {canRetry ? ' You can try again or reset the component.' : ' Please reset the component to continue.'}
+                            {canRetry ? &apos; You can try again or reset the component.&apos; : &apos; Please reset the component to continue.&apos;}
                         </p>
 
                         {/* Error details in development */}
-                        {process.env.NODE_ENV === 'development' && error && (
+                        {process.env.NODE_ENV === &apos;development&apos; && error && (
+}
                             <details className="text-left bg-gray-900/50 rounded-lg p-4 mb-4 text-sm sm:px-4 md:px-6 lg:px-8">
                                 <summary className="cursor-pointer text-gray-300 mb-2 sm:px-4 md:px-6 lg:px-8">
                                     Error Details (Development)
@@ -114,6 +134,7 @@ export class OracleErrorBoundary extends Component<Props, State> {
                                     {error.toString()}
                                 </div>
                                 {error.stack && (
+}
                                     <div className="text-gray-400 font-mono text-xs mt-2 whitespace-pre-wrap sm:px-4 md:px-6 lg:px-8">
                                         {error.stack}
                                     </div>
@@ -123,6 +144,7 @@ export class OracleErrorBoundary extends Component<Props, State> {
 
                         <div className="flex items-center justify-center space-x-4 sm:px-4 md:px-6 lg:px-8">
                             {canRetry && (
+}
                                 <button
                                     onClick={this.handleRetry}
                                     className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -142,6 +164,7 @@ export class OracleErrorBoundary extends Component<Props, State> {
                         </div>
 
                         {retryCount > 0 && (
+}
                             <div className="mt-4 text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
                                 Retry attempts: {retryCount}/{this.maxRetries}
                             </div>

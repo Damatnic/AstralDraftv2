@@ -1,41 +1,43 @@
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { Widget } from '../components/ui/Widget';
-import DraftGradeCard from '../components/analytics/DraftGradeCard';
-import type { League, Team } from '../types';
-import DraftRecap from '../components/analytics/DraftRecap';
-import PositionalScarcityChart from '../components/analytics/PositionalScarcityChart';
-import { players } from '../data/players';
-import { Tabs } from '../components/ui/Tabs';
-import { AnimatePresence, motion } from 'framer-motion';
-import MyTeamCompositionChart from '../components/analytics/MyTeamCompositionChart';
-import TeamNeedsAnalysis from '../components/analytics/TeamNeedsAnalysis';
-import { useLeague } from '../hooks/useLeague';
-import PickTimeAnalytics from '../components/analytics/PickTimeAnalytics';
-import ChampionshipOddsPreview from '../components/analytics/ChampionshipOddsPreview';
-import { ErrorBoundary } from '../components/ui/ErrorBoundary';
-import type { AnalyticsViewType } from '../types/viewTypes';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import DraftGradeCard from &apos;../components/analytics/DraftGradeCard&apos;;
+import type { League, Team } from &apos;../types&apos;;
+import DraftRecap from &apos;../components/analytics/DraftRecap&apos;;
+import PositionalScarcityChart from &apos;../components/analytics/PositionalScarcityChart&apos;;
+import { players } from &apos;../data/players&apos;;
+import { Tabs } from &apos;../components/ui/Tabs&apos;;
+import { AnimatePresence, motion } from &apos;framer-motion&apos;;
+import MyTeamCompositionChart from &apos;../components/analytics/MyTeamCompositionChart&apos;;
+import TeamNeedsAnalysis from &apos;../components/analytics/TeamNeedsAnalysis&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import PickTimeAnalytics from &apos;../components/analytics/PickTimeAnalytics&apos;;
+import ChampionshipOddsPreview from &apos;../components/analytics/ChampionshipOddsPreview&apos;;
+import { ErrorBoundary } from &apos;../components/ui/ErrorBoundary&apos;;
+import type { AnalyticsViewType } from &apos;../types/viewTypes&apos;;
 
 interface AnalyticsHubViewProps {
+}
   // Props specific to analytics hub
   viewType?: AnalyticsViewType;
 
 }
 
 const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+}
     const draftedPlayerIds = new Set(league.draftPicks.map((p: any) => p.playerId));
     const availablePlayers = players.filter((p: any) => !draftedPlayerIds.has(p.id));
-    const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
+    const isFullAiEnabled = league.settings.aiAssistanceLevel === &apos;FULL&apos;;
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="md:col-span-2 lg:col-span-2 space-y-4 sm:space-y-6">
-                <Widget title="Oracle's Post-Draft Analysis">
+                <Widget title="Oracle&apos;s Post-Draft Analysis">
                     <DraftRecap league={league} dispatch={dispatch} />
                 </Widget>
                 <Widget title="Team-by-Team Grades">
                     <div className="p-3 sm:p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4">
                         {league.teams.map((team: any) => (
+}
                             <DraftGradeCard key={team.id} team={team} league={league} />
                         ))}
                     </div>
@@ -52,7 +54,8 @@ const LeagueWideAnalytics: React.FC<{ league: League; dispatch: React.Dispatch<a
 };
 
 const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
-    const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
+}
+    const isFullAiEnabled = league.settings.aiAssistanceLevel === &apos;FULL&apos;;
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="lg:col-span-1 space-y-4 sm:space-y-6">
@@ -73,19 +76,21 @@ const MyTeamAnalytics: React.FC<{ league: League; myTeam: Team, dispatch: React.
 };
 
 const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
-    const [activeTab, setActiveTab] = React.useState('league');
-    const isFullAiEnabled = league.settings.aiAssistanceLevel === 'FULL';
+}
+    const [activeTab, setActiveTab] = React.useState(&apos;league&apos;);
+    const isFullAiEnabled = league.settings.aiAssistanceLevel === &apos;FULL&apos;;
     
     const tabs = [
-        {id: 'league', label: 'League-Wide'}, 
-        {id: 'my-team', label: 'My Team'},
-        {id: 'performance', label: 'Draft Performance'}
+        {id: &apos;league&apos;, label: &apos;League-Wide&apos;}, 
+        {id: &apos;my-team&apos;, label: &apos;My Team&apos;},
+        {id: &apos;performance&apos;, label: &apos;Draft Performance&apos;}
     ];
     
-    const isSeasonStarted = league.status === 'IN_SEASON' || league.status === 'PLAYOFFS' || league.status === 'COMPLETE';
+    const isSeasonStarted = league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos; || league.status === &apos;COMPLETE&apos;;
 
-    if (isSeasonStarted && isFullAiEnabled && !tabs.find((t: any) => t.id === 'needs')) {
-        tabs.push({ id: 'needs', label: 'Team Needs' });
+    if (isSeasonStarted && isFullAiEnabled && !tabs.find((t: any) => t.id === &apos;needs&apos;)) {
+}
+        tabs.push({ id: &apos;needs&apos;, label: &apos;Team Needs&apos; });
 
     return (
          <div className="w-full h-full flex flex-col p-3 sm:p-4 md:p-6 lg:p-8 overflow-y-auto">
@@ -98,7 +103,7 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                 </div>
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'HISTORICAL_ANALYTICS' }) 
+                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;HISTORICAL_ANALYTICS&apos; }) 
                         className="flex items-center justify-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm hover:bg-purple-700 transition-colors mobile-touch-target"
                     >
                         <span>Historical Analytics</span>
@@ -106,7 +111,7 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                         </svg>
                     </button>
-                    <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) className="back-btn">
+                    <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; }) className="back-btn">
                         Back to My Team
                     </button>
                 </div>
@@ -119,16 +124,17 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
                     <motion.div
                         key={activeTab}
                         {...{
+}
                             initial: { opacity: 0, y: 20 },
                             animate: { opacity: 1, y: 0 },
                             exit: { opacity: 0, y: -20 },
                             transition: { duration: 0.2 },
                         }}
                     >
-                        {activeTab === 'league' && <LeagueWideAnalytics league={league} dispatch={dispatch} />}
-                        {activeTab === 'my-team' && <MyTeamAnalytics league={league} myTeam={myTeam} dispatch={dispatch} />}
-                        {activeTab === 'performance' && <PickTimeAnalytics league={league} />}
-                        {activeTab === 'needs' && isFullAiEnabled && <TeamNeedsAnalysis team={myTeam} league={league} dispatch={dispatch} />}
+                        {activeTab === &apos;league&apos; && <LeagueWideAnalytics league={league} dispatch={dispatch} />}
+                        {activeTab === &apos;my-team&apos; && <MyTeamAnalytics league={league} myTeam={myTeam} dispatch={dispatch} />}
+                        {activeTab === &apos;performance&apos; && <PickTimeAnalytics league={league} />}
+                        {activeTab === &apos;needs&apos; && isFullAiEnabled && <TeamNeedsAnalysis team={myTeam} league={league} dispatch={dispatch} />}
                     </motion.div>
                 </AnimatePresence>
             </main>
@@ -137,32 +143,35 @@ const AnalyticsHubContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
 };
 
 const AnalyticsHubView: React.FC<AnalyticsHubViewProps> = () => {
+}
     const { dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     
     const isDraftFinished = league && (
-        league.status === 'DRAFT_COMPLETE' || 
-        league.status === 'IN_SEASON' || 
-        league.status === 'PLAYOFFS' ||
-        league.status === 'COMPLETE'
+        league.status === &apos;DRAFT_COMPLETE&apos; || 
+        league.status === &apos;IN_SEASON&apos; || 
+        league.status === &apos;PLAYOFFS&apos; ||
+        league.status === &apos;COMPLETE&apos;
     );
 
     // Early returns to avoid nested ternary complexity
     if (!league || !myTeam) {
+}
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a completed league to view analytics.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>
         );
 
     if (!isDraftFinished) {
+}
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Draft analytics are available after the draft is complete.</p>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>

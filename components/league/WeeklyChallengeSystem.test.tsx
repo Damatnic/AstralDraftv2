@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import WeeklyChallengeSystem from './WeeklyChallengeSystem';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import WeeklyChallengeSystem from &apos;./WeeklyChallengeSystem&apos;;
 
-describe('WeeklyChallengeSystem', () => {
-  it('renders without crashing', () => {
+describe(&apos;WeeklyChallengeSystem&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<WeeklyChallengeSystem />);
-    expect(screen.getByTestId('weeklychallengesystem')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;weeklychallengesystem&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<WeeklyChallengeSystem />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<WeeklyChallengeSystem />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

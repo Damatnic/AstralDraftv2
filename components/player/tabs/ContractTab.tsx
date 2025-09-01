@@ -1,11 +1,11 @@
 
-import { ErrorBoundary } from '../../ui/ErrorBoundary';
-import React from 'react';
-import { motion } from 'framer-motion';
-import type { Player } from '../../../types';
-import { ContractIcon } from '../../icons/ContractIcon';
+import { ErrorBoundary } from &apos;../../ui/ErrorBoundary&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Player } from &apos;../../../types&apos;;
+import { ContractIcon } from &apos;../../icons/ContractIcon&apos;;
 
 interface ContractTabProps {
+}
     player: Player;
 
 }
@@ -18,9 +18,11 @@ const StatCard: React.FC<{ label: string; value: string | number }> = ({ label, 
 );
 
 const ContractTab: React.FC<ContractTabProps> = ({ player }: any) => {
+}
     const { contract } = player;
 
     if (!contract) {
+}
         return <p className="text-gray-500 text-center py-8 sm:px-4 md:px-6 lg:px-8">No contract information available for this player.</p>
     }
 
@@ -28,6 +30,7 @@ const ContractTab: React.FC<ContractTabProps> = ({ player }: any) => {
         <motion.div
             className="space-y-6 sm:px-4 md:px-6 lg:px-8"
             {...{
+}
                 initial: { opacity: 0, x: -10 },
                 animate: { opacity: 1, x: 0 },
                 transition: { duration: 0.3 },

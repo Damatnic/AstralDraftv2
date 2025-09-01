@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import OracleRealTimePredictionInterface from './OracleRealTimePredictionInterface';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import OracleRealTimePredictionInterface from &apos;./OracleRealTimePredictionInterface&apos;;
 
-describe('OracleRealTimePredictionInterface', () => {
-  it('renders without crashing', () => {
+describe(&apos;OracleRealTimePredictionInterface&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<OracleRealTimePredictionInterface />);
-    expect(screen.getByTestId('oraclerealtimepredictioninterface')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;oraclerealtimepredictioninterface&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<OracleRealTimePredictionInterface />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<OracleRealTimePredictionInterface />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

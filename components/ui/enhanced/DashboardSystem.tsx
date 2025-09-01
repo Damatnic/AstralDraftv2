@@ -3,10 +3,11 @@
  * Professional dashboard with customizable widgets, layout persistence, and advanced features
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useRef, useCallback, useMemo, ReactNode } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useRef, useCallback, useMemo, ReactNode } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import {
+}
   DndContext,
   closestCenter,
   KeyboardSensor,
@@ -17,40 +18,43 @@ import {
   DragOverEvent,
   DragStartEvent,
   Active,
-  Over
-} from '@dnd-kit/core';
+//   Over
+} from &apos;@dnd-kit/core&apos;;
 import {
+}
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-  rectSortingStrategy
-} from '@dnd-kit/sortable';
+//   rectSortingStrategy
+} from &apos;@dnd-kit/sortable&apos;;
 import {
+}
   useSortable,
-  CSS
-} from '@dnd-kit/sortable';
+//   CSS
+} from &apos;@dnd-kit/sortable&apos;;
 
 // =========================================
 // TYPES & INTERFACES
 // =========================================
 
-export type WidgetSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
+export type WidgetSize = &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;full&apos;;
 export type WidgetType = 
-  | 'stat' 
-  | 'chart' 
-  | 'table' 
-  | 'feed' 
-  | 'player' 
-  | 'standings' 
-  | 'schedule' 
-  | 'trades'
-  | 'news'
-  | 'weather'
-  | 'calendar'
-  | 'analytics';
+  | &apos;stat&apos; 
+  | &apos;chart&apos; 
+  | &apos;table&apos; 
+  | &apos;feed&apos; 
+  | &apos;player&apos; 
+  | &apos;standings&apos; 
+  | &apos;schedule&apos; 
+  | &apos;trades&apos;
+  | &apos;news&apos;
+  | &apos;weather&apos;
+  | &apos;calendar&apos;
+  | &apos;analytics&apos;;
 
 export interface Widget {
+}
   id: string;
   type: WidgetType;
   title: string;
@@ -64,6 +68,7 @@ export interface Widget {
   priority?: number;
 
 export interface DashboardLayout {
+}
   id: string;
   name: string;
   widgets: Widget[];
@@ -75,6 +80,7 @@ export interface DashboardLayout {
 }
 
 export interface DashboardContextType {
+}
   layouts: DashboardLayout[];
   currentLayout: DashboardLayout | null;
   isEditing: boolean;
@@ -83,7 +89,7 @@ export interface DashboardContextType {
   updateLayout: (layout: DashboardLayout) => void;
   deleteLayout: (layoutId: string) => void;
   setCurrentLayout: (layoutId: string) => void;
-  addWidget: (widget: Omit<Widget, 'id'>) => void;
+  addWidget: (widget: Omit<Widget, &apos;id&apos;>) => void;
   updateWidget: (widgetId: string, updates: Partial<Widget>) => void;
   removeWidget: (widgetId: string) => void;
   toggleEditMode: () => void;
@@ -100,9 +106,11 @@ const DashboardContext = React.createContext<DashboardContextType | null>(null);
 }
 
 export const useDashboard = (): DashboardContextType => {
+}
   const context = React.useContext(DashboardContext);
   if (!context) {
-    throw new Error('useDashboard must be used within DashboardProvider');
+}
+    throw new Error(&apos;useDashboard must be used within DashboardProvider&apos;);
 
   return context;
 };
@@ -112,35 +120,42 @@ export const useDashboard = (): DashboardContextType => {
 // =========================================
 
 const widgetSizeConfig: Record<WidgetSize, { 
+}
   gridColumns: string; 
   gridRows: string; 
   minHeight: string;
   maxHeight?: string;
 }> = {
-  sm: { 
-    gridColumns: 'col-span-1 md:col-span-2', 
-    gridRows: 'row-span-1', 
-    minHeight: 'min-h-[200px]' 
+}
+  sm: {
+}
+    gridColumns: &apos;col-span-1 md:col-span-2&apos;, 
+    gridRows: &apos;row-span-1&apos;, 
+    minHeight: &apos;min-h-[200px]&apos; 
   },
-  md: { 
-    gridColumns: 'col-span-1 md:col-span-3', 
-    gridRows: 'row-span-2', 
-    minHeight: 'min-h-[300px]' 
+  md: {
+}
+    gridColumns: &apos;col-span-1 md:col-span-3&apos;, 
+    gridRows: &apos;row-span-2&apos;, 
+    minHeight: &apos;min-h-[300px]&apos; 
   },
-  lg: { 
-    gridColumns: 'col-span-1 md:col-span-4', 
-    gridRows: 'row-span-3', 
-    minHeight: 'min-h-[400px]' 
+  lg: {
+}
+    gridColumns: &apos;col-span-1 md:col-span-4&apos;, 
+    gridRows: &apos;row-span-3&apos;, 
+    minHeight: &apos;min-h-[400px]&apos; 
   },
-  xl: { 
-    gridColumns: 'col-span-1 md:col-span-6', 
-    gridRows: 'row-span-4', 
-    minHeight: 'min-h-[500px]' 
+  xl: {
+}
+    gridColumns: &apos;col-span-1 md:col-span-6&apos;, 
+    gridRows: &apos;row-span-4&apos;, 
+    minHeight: &apos;min-h-[500px]&apos; 
   },
-  full: { 
-    gridColumns: 'col-span-full', 
-    gridRows: 'row-span-6', 
-    minHeight: 'min-h-[600px]' 
+  full: {
+}
+    gridColumns: &apos;col-span-full&apos;, 
+    gridRows: &apos;row-span-6&apos;, 
+    minHeight: &apos;min-h-[600px]&apos; 
 
 };
 
@@ -149,6 +164,7 @@ const widgetSizeConfig: Record<WidgetSize, {
 // =========================================
 
 interface SortableWidgetProps {
+}
   widget: Widget;
   children: ReactNode;
   isEditing: boolean;
@@ -159,21 +175,25 @@ interface SortableWidgetProps {
 }
 
 const SortableWidget: React.FC<SortableWidgetProps> = ({
+}
   widget,
   children,
   isEditing,
   onEdit,
   onRemove,
-  onResize
+//   onResize
 }: any) => {
+}
   const {
+}
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging
+//     isDragging
   } = useSortable({
+}
     id: widget.id,
     disabled: !isEditing || widget.isLocked
   });
@@ -181,9 +201,10 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
   const [showControls, setShowControls] = useState(false);
 
   const style = {
+}
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 1000 : 'auto',
+    zIndex: isDragging ? 1000 : &apos;auto&apos;,
     opacity: isDragging ? 0.5 : 1
   };
 
@@ -194,10 +215,11 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
       ref={setNodeRef}
       style={style}
       className={`
+}
         relative group
         ${sizeConfig.gridColumns}
         ${sizeConfig.minHeight}
-        ${isEditing ? 'cursor-move' : ''}
+        ${isEditing ? &apos;cursor-move&apos; : &apos;&apos;}
       `}
       whileHover={{ scale: isEditing ? 1.02 : 1 }}
       transition={{ duration: 0.2 }}
@@ -207,6 +229,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
       {/* Widget Controls - Edit Mode Only */}
       <AnimatePresence>
         {isEditing && showControls && (
+}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -242,6 +265,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
 
             {/* Remove Button */}
             {!widget.isLocked && (
+}
               <motion.button
                 onClick={() => onRemove?.(widget.id)}
                 className="w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -265,6 +289,7 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
 
       {/* Editing Overlay */}
       {isEditing && (
+}
         <div className="absolute inset-0 border-2 border-dashed border-primary-400 rounded-lg pointer-events-none opacity-50 sm:px-4 md:px-6 lg:px-8" />
       )}
     </motion.div>
@@ -276,18 +301,22 @@ const SortableWidget: React.FC<SortableWidgetProps> = ({
 // =========================================
 
 interface BaseWidgetProps {
+}
   widget: Widget;
   className?: string;
 
 }
 
 const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
+}
   widget,
   children,
-  className = ''
+  className = &apos;&apos;
 }: any) => {
+}
   return (
     <div className={`
+}
       h-full bg-glass-medium backdrop-blur-xl 
       border border-glass-border rounded-2xl p-6
       transition-all duration-300
@@ -297,6 +326,7 @@ const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
       <div className="flex items-center justify-between mb-4 sm:px-4 md:px-6 lg:px-8">
         <h3 className="text-lg font-semibold text-white sm:px-4 md:px-6 lg:px-8">{widget.title}</h3>
         {widget.lastUpdated && (
+}
           <span className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
             Updated {new Date(widget.lastUpdated).toLocaleTimeString()}
           </span>
@@ -310,22 +340,25 @@ const BaseWidget: React.FC<BaseWidgetProps & { children: ReactNode }> = ({
 };
 
 export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
+}
   const data = widget.props || {};
   
   return (
     <BaseWidget widget={widget}>
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
         <div className="text-4xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
-          {data.value || '0'}
+          {data.value || &apos;0&apos;}
         </div>
         <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-          {data.subtitle || 'No data'}
+          {data.subtitle || &apos;No data&apos;}
         </div>
         {data.change && (
+}
           <div className={`text-sm mt-2 ${
-            data.change > 0 ? 'text-green-400' : 'text-red-400'
+}
+            data.change > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;
           }`}>
-            {data.change > 0 ? '↗' : '↘'} {Math.abs(data.change)}%
+            {data.change > 0 ? &apos;↗&apos; : &apos;↘&apos;} {Math.abs(data.change)}%
           </div>
         )}
       </div>
@@ -334,6 +367,7 @@ export const StatWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
 };
 
 export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
+}
   return (
     <BaseWidget widget={widget}>
       <div className="flex items-center justify-center h-full text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -347,12 +381,14 @@ export const ChartWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
 };
 
 export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
+}
   const items = widget.props?.items || [];
   
   return (
     <BaseWidget widget={widget}>
       <div className="space-y-3 max-h-full overflow-y-auto sm:px-4 md:px-6 lg:px-8">
         {items.length === 0 ? (
+}
           <div className="text-center text-gray-400 py-8 sm:px-4 md:px-6 lg:px-8">
             No items to display
           </div>
@@ -374,7 +410,9 @@ export const FeedWidget: React.FC<BaseWidgetProps> = ({ widget }: any) => {
 // =========================================
 
 const WidgetFactory: React.FC<{ widget: Widget }> = ({ widget }: any) => {
+}
   const components = {
+}
     stat: StatWidget,
     chart: ChartWidget,
     table: FeedWidget,
@@ -398,6 +436,7 @@ const WidgetFactory: React.FC<{ widget: Widget }> = ({ widget }: any) => {
 // =========================================
 
 interface DashboardGridProps {
+}
   widgets: Widget[];
   isEditing: boolean;
   onWidgetUpdate: (widgetId: string, updates: Partial<Widget>) => void;
@@ -407,39 +446,49 @@ interface DashboardGridProps {
 }
 
 export const DashboardGrid: React.FC<DashboardGridProps> = ({
+}
   widgets,
   isEditing,
   onWidgetUpdate,
   onWidgetRemove,
   columns = 6
 }: any) => {
+}
   const [activeId, setActiveId] = useState<string | null>(null);
   const [items, setItems] = useState(widgets);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
+}
       activationConstraint: {
+}
         distance: 8,
       },
     }),
     useSensor(KeyboardSensor, {
+}
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
   React.useEffect(() => {
+}
     setItems(widgets);
   }, [widgets]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
+}
     setActiveId(event.active.id as string);
   }, []);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
+}
     const { active, over } = event;
 
     if (active.id !== over?.id) {
+}
       setItems((items: any) => {
+}
         const oldIndex = items.findIndex(item => item.id === active.id);
         const newIndex = items.findIndex(item => item.id === over?.id);
 
@@ -447,6 +496,7 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
         
         // Update positions
         newItems.forEach((item, index) => {
+}
           const row = Math.floor(index / columns);
           const col = index % columns;
           onWidgetUpdate(item.id, { position: { row, col } });
@@ -461,30 +511,32 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
   const visibleWidgets = items.filter((widget: any) => widget.isVisible !== false);
 
   return (
-    <DndContext
+    <DndContext>
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext
+      <SortableContext>
         items={visibleWidgets.map((w: any) => w.id)}
         strategy={rectSortingStrategy}
       >
         <motion.div 
           className={`
+}
             grid gap-6 auto-rows-min
             grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-${columns}
           `}
-          layout
+//           layout
         >
           <AnimatePresence>
             {visibleWidgets.map((widget: any) => (
-              <SortableWidget
+}
+              <SortableWidget>
                 key={widget.id}
                 widget={widget}
                 isEditing={isEditing}
-                onEdit={(w: any) => console.log('Edit widget:', w)}
+                onEdit={(w: any) => console.log(&apos;Edit widget:&apos;, w)}
                 onRemove={onWidgetRemove}
                 onResize={(id, size) => onWidgetUpdate(id, { size })}
               >
@@ -503,30 +555,35 @@ export const DashboardGrid: React.FC<DashboardGridProps> = ({
 // =========================================
 
 interface WidgetLibraryProps {
+}
   isOpen: boolean;
   onClose: () => void;
-  onAddWidget: (widget: Omit<Widget, 'id'>) => void;
+  onAddWidget: (widget: Omit<Widget, &apos;id&apos;>) => void;
 
 }
 
 export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
+}
   isOpen,
   onClose,
-  onAddWidget
+//   onAddWidget
 }: any) => {
+}
   const availableWidgets: { type: WidgetType; title: string; icon: string; description: string; defaultSize: WidgetSize }[] = [
-    { type: 'stat', title: 'Stat Card', icon: '📊', description: 'Display key statistics', defaultSize: 'sm' },
-    { type: 'chart', title: 'Chart', icon: '📈', description: 'Visual data representation', defaultSize: 'md' },
-    { type: 'standings', title: 'League Standings', icon: '🏆', description: 'Current league standings', defaultSize: 'lg' },
-    { type: 'player', title: 'Player Info', icon: '👤', description: 'Player details and stats', defaultSize: 'md' },
-    { type: 'schedule', title: 'Schedule', icon: '📅', description: 'Upcoming games and events', defaultSize: 'md' },
-    { type: 'trades', title: 'Recent Trades', icon: '🔄', description: 'Latest trade activity', defaultSize: 'md' },
-    { type: 'news', title: 'News Feed', icon: '📰', description: 'Latest fantasy news', defaultSize: 'lg' },
-    { type: 'analytics', title: 'Analytics', icon: '🎯', description: 'Advanced analytics and insights', defaultSize: 'xl' }
+    { type: &apos;stat&apos;, title: &apos;Stat Card&apos;, icon: &apos;📊&apos;, description: &apos;Display key statistics&apos;, defaultSize: &apos;sm&apos; },
+    { type: &apos;chart&apos;, title: &apos;Chart&apos;, icon: &apos;📈&apos;, description: &apos;Visual data representation&apos;, defaultSize: &apos;md&apos; },
+    { type: &apos;standings&apos;, title: &apos;League Standings&apos;, icon: &apos;🏆&apos;, description: &apos;Current league standings&apos;, defaultSize: &apos;lg&apos; },
+    { type: &apos;player&apos;, title: &apos;Player Info&apos;, icon: &apos;👤&apos;, description: &apos;Player details and stats&apos;, defaultSize: &apos;md&apos; },
+    { type: &apos;schedule&apos;, title: &apos;Schedule&apos;, icon: &apos;📅&apos;, description: &apos;Upcoming games and events&apos;, defaultSize: &apos;md&apos; },
+    { type: &apos;trades&apos;, title: &apos;Recent Trades&apos;, icon: &apos;🔄&apos;, description: &apos;Latest trade activity&apos;, defaultSize: &apos;md&apos; },
+    { type: &apos;news&apos;, title: &apos;News Feed&apos;, icon: &apos;📰&apos;, description: &apos;Latest fantasy news&apos;, defaultSize: &apos;lg&apos; },
+    { type: &apos;analytics&apos;, title: &apos;Analytics&apos;, icon: &apos;🎯&apos;, description: &apos;Advanced analytics and insights&apos;, defaultSize: &apos;xl&apos; }
   ];
 
   const handleAddWidget = (widgetTemplate: typeof availableWidgets[0]) => {
-    const newWidget: Omit<Widget, 'id'> = {
+}
+    const newWidget: Omit<Widget, &apos;id&apos;> = {
+}
       type: widgetTemplate.type,
       title: widgetTemplate.title,
       size: widgetTemplate.defaultSize,
@@ -541,6 +598,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
+}
         <>
           {/* Backdrop */}
           <motion.div
@@ -553,9 +611,9 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
 
           {/* Widget Library Panel */}
           <motion.div
-            initial={{ opacity: 0, x: '100%' }}
+            initial={{ opacity: 0, x: &apos;100%&apos; }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
+            exit={{ opacity: 0, x: &apos;100%&apos; }}
             className="fixed top-0 right-0 w-full max-w-md h-full bg-dark-900 border-l border-gray-700 z-50 overflow-y-auto sm:px-4 md:px-6 lg:px-8"
           >
             <div className="p-6 sm:px-4 md:px-6 lg:px-8">
@@ -571,6 +629,7 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
 
               <div className="grid gap-4 sm:px-4 md:px-6 lg:px-8">
                 {availableWidgets.map((widget: any) => (
+}
                   <motion.button
                     key={widget.type}
                     onClick={() => handleAddWidget(widget)}
@@ -604,64 +663,73 @@ export const WidgetLibrary: React.FC<WidgetLibraryProps> = ({
 // =========================================
 
 interface DashboardProviderProps {
+}
   children: ReactNode;
   storageKey?: string;
 
 }
 
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({
+}
   children,
-  storageKey = 'astral-draft-dashboard'
+  storageKey = &apos;astral-draft-dashboard&apos;
 }: any) => {
+}
   const [layouts, setLayouts] = useState<DashboardLayout[]>([]);
   const [currentLayout, setCurrentLayoutState] = useState<DashboardLayout | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
   // Sample data for initial layout
   const defaultLayout: DashboardLayout = {
-    id: 'default',
-    name: 'Default Dashboard',
+}
+    id: &apos;default&apos;,
+    name: &apos;Default Dashboard&apos;,
     columns: 6,
     created: new Date(),
     modified: new Date(),
     isDefault: true,
     widgets: [
       {
-        id: 'stat-1',
-        type: 'stat',
-        title: 'League Rank',
-        size: 'sm',
+}
+        id: &apos;stat-1&apos;,
+        type: &apos;stat&apos;,
+        title: &apos;League Rank&apos;,
+        size: &apos;sm&apos;,
         position: { row: 0, col: 0 },
-        props: { value: '#2', subtitle: 'out of 12 teams', change: 1 },
+        props: { value: &apos;#2&apos;, subtitle: &apos;out of 12 teams&apos;, change: 1 },
         isVisible: true
       },
       {
-        id: 'stat-2',
-        type: 'stat',
-        title: 'Total Points',
-        size: 'sm',
+}
+        id: &apos;stat-2&apos;,
+        type: &apos;stat&apos;,
+        title: &apos;Total Points&apos;,
+        size: &apos;sm&apos;,
         position: { row: 0, col: 1 },
-        props: { value: '1,247', subtitle: 'season total', change: 5 },
+        props: { value: &apos;1,247&apos;, subtitle: &apos;season total&apos;, change: 5 },
         isVisible: true
       },
       {
-        id: 'standings-1',
-        type: 'standings',
-        title: 'League Standings',
-        size: 'lg',
+}
+        id: &apos;standings-1&apos;,
+        type: &apos;standings&apos;,
+        title: &apos;League Standings&apos;,
+        size: &apos;lg&apos;,
         position: { row: 0, col: 2 },
         isVisible: true
       },
       {
-        id: 'news-1',
-        type: 'news',
-        title: 'Fantasy News',
-        size: 'md',
+}
+        id: &apos;news-1&apos;,
+        type: &apos;news&apos;,
+        title: &apos;Fantasy News&apos;,
+        size: &apos;md&apos;,
         position: { row: 1, col: 0 },
         props: {
+}
           items: [
-            { title: 'Player Update', description: 'Latest injury report' },
-            { title: 'Trade News', description: 'Big trade shakes up league' }
+            { title: &apos;Player Update&apos;, description: &apos;Latest injury report&apos; },
+            { title: &apos;Trade News&apos;, description: &apos;Big trade shakes up league&apos; }
 
         },
         isVisible: true
@@ -670,9 +738,12 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
   // Initialize with default layout
   React.useEffect(() => {
+}
     const stored = localStorage.getItem(storageKey);
     if (stored) {
+}
       try {
+}
 
         const data = JSON.parse(stored);
         setLayouts(data.layouts || [defaultLayout]);
@@ -689,36 +760,45 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     },
 
     updateLayout: (layout: DashboardLayout) => {
+}
       setLayouts(prev => prev.map((l: any) => l.id === layout.id ? { ...layout, modified: new Date() } : l));
       if (currentLayout?.id === layout.id) {
+}
         setCurrentLayoutState({ ...layout, modified: new Date() });
 
     },
 
     deleteLayout: (layoutId: string) => {
+}
       setLayouts(prev => prev.filter((l: any) => l.id !== layoutId));
       if (currentLayout?.id === layoutId) {
+}
         const remaining = layouts.filter((l: any) => l.id !== layoutId);
         setCurrentLayoutState(remaining[0] || null);
 
     },
 
     setCurrentLayout: (layoutId: string) => {
+}
       const layout = layouts.find((l: any) => l.id === layoutId);
       if (layout) {
+}
         setCurrentLayoutState(layout);
 
     },
 
-    addWidget: (widget: Omit<Widget, 'id'>) => {
+    addWidget: (widget: Omit<Widget, &apos;id&apos;>) => {
+}
       if (!currentLayout) return;
 
       const newWidget: Widget = {
+}
         ...widget,
         id: `widget-${Date.now()}`
       };
 
       const updatedLayout = {
+}
         ...currentLayout,
         widgets: [...currentLayout.widgets, newWidget],
         modified: new Date()
@@ -729,9 +809,11 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     },
 
     updateWidget: (widgetId: string, updates: Partial<Widget>) => {
+}
       if (!currentLayout) return;
 
       const updatedLayout = {
+}
         ...currentLayout,
         widgets: currentLayout.widgets.map((w: any) => 
           w.id === widgetId ? { ...w, ...updates } : w
@@ -744,9 +826,11 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     },
 
     removeWidget: (widgetId: string) => {
+}
       if (!currentLayout) return;
 
       const updatedLayout = {
+}
         ...currentLayout,
         widgets: currentLayout.widgets.filter((w: any) => w.id !== widgetId),
         modified: new Date()
@@ -757,27 +841,34 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     },
 
     toggleEditMode: () => {
+}
       setIsEditing(prev => !prev);
     },
 
     exportLayout: () => {
+}
       return JSON.stringify({ layouts, currentLayout }, null, 2);
     },
 
     importLayout: (data: string) => {
+}
       try {
+}
 
         const parsed = JSON.parse(data);
         if (parsed.layouts && parsed.currentLayout) {
+}
           setLayouts(parsed.layouts);
           setCurrentLayoutState(parsed.currentLayout);
 
     } catch (error) {
-        throw new Error('Invalid dashboard data format');
+}
+        throw new Error(&apos;Invalid dashboard data format&apos;);
 
     },
 
     resetLayout: () => {
+}
       setLayouts([defaultLayout]);
       setCurrentLayoutState(defaultLayout);
       setIsEditing(false);
@@ -785,6 +876,7 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   };
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -804,8 +896,9 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 // =========================================
 
 export default {
+}
   DashboardProvider,
   DashboardGrid,
   WidgetLibrary,
-  useDashboard
+//   useDashboard
 };

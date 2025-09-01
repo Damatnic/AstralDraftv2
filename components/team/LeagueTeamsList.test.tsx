@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import LeagueTeamsList from './LeagueTeamsList';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import LeagueTeamsList from &apos;./LeagueTeamsList&apos;;
 
-describe('LeagueTeamsList', () => {
-  it('renders without crashing', () => {
+describe(&apos;LeagueTeamsList&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<LeagueTeamsList />);
-    expect(screen.getByTestId('leagueteamslist')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;leagueteamslist&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<LeagueTeamsList />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<LeagueTeamsList />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

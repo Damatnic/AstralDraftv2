@@ -1,16 +1,17 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import Header from '../core/Header';
-import Breadcrumbs from '../core/Breadcrumbs';
-import MobileNavigation from './MobileNavigation';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import Header from &apos;../core/Header&apos;;
+import Breadcrumbs from &apos;../core/Breadcrumbs&apos;;
+import MobileNavigation from &apos;./MobileNavigation&apos;;
 
 interface MainLayoutProps {
+}
     children: React.ReactNode;
 
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }: any) => {
+}
     return (
         <>
             <Header />

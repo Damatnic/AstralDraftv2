@@ -1,40 +1,46 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
-import type { League, TradeOffer } from '../../types';
-import { Modal } from '../ui/Modal';
-import { CloseIcon } from '../icons/CloseIcon';
-import TradeOfferCard from '../team/TradeOfferCard';
-import { GavelIcon } from '../icons/GavelIcon';
-import EmptyState from '../ui/EmptyState';
-import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
-import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import type { League, TradeOffer } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
+import TradeOfferCard from &apos;../team/TradeOfferCard&apos;;
+import { GavelIcon } from &apos;../icons/GavelIcon&apos;;
+import EmptyState from &apos;../ui/EmptyState&apos;;
+import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
+import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
 
 interface ManageTradesModalProps {
+}
     league: League;
     onClose: () => void;
 
 }
 
 const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }: any) => {
+}
     const { state, dispatch } = useAppState();
-    const pendingOffers = league.tradeOffers.filter((o: any) => o?.status === 'PENDING');
+    const pendingOffers = league.tradeOffers.filter((o: any) => o?.status === &apos;PENDING&apos;);
     const isTradeDeadlinePassed = league.currentWeek > league.settings.tradeDeadline;
 
     const handleForce = (offer: TradeOffer) => {
+}
         if (window.confirm("Are you sure you want to force this trade to be accepted?")) {
-            dispatch({ type: 'UPDATE_TRADE_STATUS', payload: { leagueId: league.id, tradeId: offer.id, status: 'FORCED' } });
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Trade has been forced by commissioner.', type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;UPDATE_TRADE_STATUS&apos;, payload: { leagueId: league.id, tradeId: offer.id, status: &apos;FORCED&apos; } });
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Trade has been forced by commissioner.&apos;, type: &apos;SYSTEM&apos; } });
 
     };
     
     const handleVeto = (offer: TradeOffer) => {
+}
         if (window.confirm("Are you sure you want to veto this trade?")) {
-            dispatch({ type: 'UPDATE_TRADE_STATUS', payload: { leagueId: league.id, tradeId: offer.id, status: 'VETOED' } });
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Trade has been vetoed by commissioner.', type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;UPDATE_TRADE_STATUS&apos;, payload: { leagueId: league.id, tradeId: offer.id, status: &apos;VETOED&apos; } });
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Trade has been vetoed by commissioner.&apos;, type: &apos;SYSTEM&apos; } });
 
     };
 
@@ -54,12 +60,14 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
                 </header>
                 <main className="flex-grow p-4 space-y-3 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                     {isTradeDeadlinePassed && (
+}
                         <div className="p-3 bg-yellow-500/10 text-yellow-300 text-xs rounded-lg flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             <AlertTriangleIcon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
-                            <strong>Warning:</strong> The league's trade deadline (Week {league.settings.tradeDeadline}) has passed. Any action here is a commissioner override.
+                            <strong>Warning:</strong> The league&apos;s trade deadline (Week {league.settings.tradeDeadline}) has passed. Any action here is a commissioner override.
                         </div>
                     )}
                     {pendingOffers.length === 0 ? (
+}
                         <EmptyState message="There are no pending trades in the league." />
                     ) : (
                         pendingOffers.map((offer: any) => (
@@ -85,7 +93,7 @@ const ManageTradesModal: React.FC<ManageTradesModalProps> = ({ league, onClose }
                 </main>
                 <footer className="p-4 border-t border-[var(--panel-border)] text-center sm:px-4 md:px-6 lg:px-8">
                     <button onClick={onClose} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md sm:px-4 md:px-6 lg:px-8">
-                        Done
+//                         Done
                     </button>
                 </footer>
             </motion.div>

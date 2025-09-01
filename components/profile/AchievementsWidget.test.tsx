@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import AchievementsWidget from './AchievementsWidget';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import AchievementsWidget from &apos;./AchievementsWidget&apos;;
 
-describe('AchievementsWidget', () => {
-  it('renders without crashing', () => {
+describe(&apos;AchievementsWidget&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<AchievementsWidget />);
-    expect(screen.getByTestId('achievementswidget')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;achievementswidget&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<AchievementsWidget />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<AchievementsWidget />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

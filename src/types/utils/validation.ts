@@ -3,9 +3,9 @@
  * Comprehensive validation type definitions and schema interfaces
  */
 
-import { Player } from '../models/player';
-import { User } from '../models/user';
-import { League } from '../models/league';
+import { Player } from &apos;../models/player&apos;;
+import { User } from &apos;../models/user&apos;;
+import { League } from &apos;../models/league&apos;;
 
 // ==================== BASE VALIDATION TYPES ====================
 
@@ -14,6 +14,7 @@ export type ValidationResult =
   | { isValid: false; errors: ValidationError[] };
 
 export interface ValidationError {
+}
   field: string;
   message: string;
   code: string;
@@ -22,6 +23,7 @@ export interface ValidationError {
 }
 
 export interface ValidationRule<T = any> {
+}
   name: string;
   validator: (value: T, context?: any) => boolean | string | ValidationError;
   message?: string;
@@ -30,6 +32,7 @@ export interface ValidationRule<T = any> {
 }
 
 export interface FieldValidation<T = any> {
+}
   rules: ValidationRule<T>[];
   required?: boolean;
   optional?: boolean;
@@ -38,7 +41,9 @@ export interface FieldValidation<T = any> {
 }
 
 export interface ValidationSchema<T = any> {
+}
   fields: {
+}
     [K in keyof T]?: FieldValidation<T[K]>;
   };
   customValidators?: Array<(data: T) => ValidationResult>;
@@ -47,10 +52,11 @@ export interface ValidationSchema<T = any> {
 // ==================== PRIMITIVE VALIDATION TYPES ====================
 
 export interface StringValidation extends FieldValidation<string> {
+}
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  format?: 'email' | 'url' | 'phone' | 'uuid' | 'slug' | 'hex' | 'base64';
+  format?: &apos;email&apos; | &apos;url&apos; | &apos;phone&apos; | &apos;uuid&apos; | &apos;slug&apos; | &apos;hex&apos; | &apos;base64&apos;;
   enum?: readonly string[];
   trim?: boolean;
   lowercase?: boolean;
@@ -58,6 +64,7 @@ export interface StringValidation extends FieldValidation<string> {
 }
 
 export interface NumberValidation extends FieldValidation<number> {
+}
   min?: number;
   max?: number;
   integer?: boolean;
@@ -67,6 +74,7 @@ export interface NumberValidation extends FieldValidation<number> {
 }
 
 export interface DateValidation extends FieldValidation<Date> {
+}
   min?: Date;
   max?: Date;
   format?: string;
@@ -74,10 +82,12 @@ export interface DateValidation extends FieldValidation<Date> {
 }
 
 export interface BooleanValidation extends FieldValidation<boolean> {
+}
   strict?: boolean; // Only accept true boolean values, not truthy/falsy
 }
 
 export interface ArrayValidation<T = any> extends FieldValidation<T[]> {
+}
   minItems?: number;
   maxItems?: number;
   uniqueItems?: boolean;
@@ -85,6 +95,7 @@ export interface ArrayValidation<T = any> extends FieldValidation<T[]> {
 }
 
 export interface ObjectValidation<T = any> extends FieldValidation<T> {
+}
   schema?: ValidationSchema<T>;
   allowAdditionalProperties?: boolean;
   requiredProperties?: (keyof T)[];
@@ -93,13 +104,15 @@ export interface ObjectValidation<T = any> extends FieldValidation<T> {
 // ==================== COMMON VALIDATION RULES ====================
 
 export interface EmailValidationRule extends StringValidation {
-  format: 'email';
+}
+  format: &apos;email&apos;;
   checkMXRecord?: boolean;
   allowedDomains?: string[];
   blockedDomains?: string[];
 }
 
 export interface PasswordValidationRule extends StringValidation {
+}
   minLength: 8;
   requireUppercase?: boolean;
   requireLowercase?: boolean;
@@ -110,6 +123,7 @@ export interface PasswordValidationRule extends StringValidation {
 }
 
 export interface UsernameValidationRule extends StringValidation {
+}
   minLength: 3;
   maxLength: 30;
   pattern: RegExp; // alphanumeric, underscores, hyphens
@@ -118,7 +132,8 @@ export interface UsernameValidationRule extends StringValidation {
 }
 
 export interface URLValidationRule extends StringValidation {
-  format: 'url';
+}
+  format: &apos;url&apos;;
   protocols?: string[];
   allowedDomains?: string[];
   blockedDomains?: string[];
@@ -129,6 +144,7 @@ export interface URLValidationRule extends StringValidation {
 
 // User Validation
 export interface UserValidationSchema {
+}
   username: UsernameValidationRule;
   email: EmailValidationRule;
   password: PasswordValidationRule;
@@ -137,11 +153,12 @@ export interface UserValidationSchema {
   bio?: StringValidation & { maxLength: 500 };
   avatar?: URLValidationRule;
   birthDate?: DateValidation & { max: Date };
-  phoneNumber?: StringValidation & { format: 'phone' };
+  phoneNumber?: StringValidation & { format: &apos;phone&apos; };
 }
 
 // League Validation
 export interface LeagueValidationSchema {
+}
   name: StringValidation & { minLength: 3; maxLength: 50 };
   description?: StringValidation & { maxLength: 1000 };
   teamCount: NumberValidation & { min: 4; max: 16; integer: true };
@@ -151,25 +168,28 @@ export interface LeagueValidationSchema {
 
 // Team Validation
 export interface TeamValidationSchema {
+}
   name: StringValidation & { minLength: 3; maxLength: 30 };
   abbreviation?: StringValidation & { minLength: 2; maxLength: 5; uppercase: true };
   logo?: URLValidationRule;
-  primaryColor?: StringValidation & { format: 'hex' };
-  secondaryColor?: StringValidation & { format: 'hex' };
+  primaryColor?: StringValidation & { format: &apos;hex&apos; };
+  secondaryColor?: StringValidation & { format: &apos;hex&apos; };
 }
 
 // Player Validation
 export interface PlayerValidationSchema {
+}
   name: StringValidation & { minLength: 2; maxLength: 50 };
-  position: StringValidation & { enum: ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'] };
+  position: StringValidation & { enum: [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;] };
   jerseyNumber: NumberValidation & { min: 0; max: 99; integer: true };
   age?: NumberValidation & { min: 18; max: 50; integer: true };
-  height?: StringValidation & { pattern: /^\d+'\d+"$/ };
+  height?: StringValidation & { pattern: /^\d+&apos;\d+"$/ };
   weight?: NumberValidation & { min: 150; max: 400; integer: true };
 }
 
 // Draft Validation
 export interface DraftValidationSchema {
+}
   timePerPick: NumberValidation & { min: 30; max: 600; integer: true };
   rounds: NumberValidation & { min: 10; max: 20; integer: true };
   auctionBudget?: NumberValidation & { min: 100; max: 1000; integer: true };
@@ -177,6 +197,7 @@ export interface DraftValidationSchema {
 
 // Trade Validation
 export interface TradeValidationSchema {
+}
   playersOffered: ArrayValidation<string> & { minItems: 1; maxItems: 10 };
   playersRequested: ArrayValidation<string> & { minItems: 1; maxItems: 10 };
   message?: StringValidation & { maxLength: 500 };
@@ -185,41 +206,49 @@ export interface TradeValidationSchema {
 
 // Waiver Validation
 export interface WaiverValidationSchema {
-  playerId: StringValidation & { format: 'uuid' };
+}
+  playerId: StringValidation & { format: &apos;uuid&apos; };
   bid: NumberValidation & { min: 0; max: 1000; integer: true };
-  dropPlayerId?: StringValidation & { format: 'uuid' };
+  dropPlayerId?: StringValidation & { format: &apos;uuid&apos; };
 }
 
 // ==================== FORM VALIDATION SCHEMAS ====================
 
 export interface LoginFormValidation {
+}
   email: EmailValidationRule;
   password: StringValidation & { minLength: 1 };
   rememberMe?: BooleanValidation;
 }
 
 export interface RegisterFormValidation extends UserValidationSchema {
+}
   confirmPassword: StringValidation;
   agreeToTerms: BooleanValidation & { required: true };
 }
 
 export interface CreateLeagueFormValidation extends LeagueValidationSchema {
+}
   inviteEmails?: ArrayValidation<string> & { 
+}
     maxItems: 15;
     itemValidation: EmailValidationRule;
   };
 }
 
 export interface UpdateProfileFormValidation {
+}
   firstName?: StringValidation & { minLength: 1; maxLength: 50 };
   lastName?: StringValidation & { minLength: 1; maxLength: 50 };
   bio?: StringValidation & { maxLength: 500 };
   location?: ObjectValidation<{
+}
     city: string;
     state: string;
     country: string;
   }>;
   socialLinks?: ObjectValidation<{
+}
     twitter?: string;
     instagram?: string;
     facebook?: string;
@@ -230,10 +259,11 @@ export interface UpdateProfileFormValidation {
 // ==================== VALIDATION CONTEXT ====================
 
 export interface ValidationContext {
+}
   user?: User;
   league?: League;
   team?: any;
-  operation?: 'create' | 'update' | 'delete';
+  operation?: &apos;create&apos; | &apos;update&apos; | &apos;delete&apos;;
   path?: string[];
   root?: any;
   fieldHistory?: Record<string, any[]>;
@@ -241,7 +271,8 @@ export interface ValidationContext {
 
 // ==================== ASYNC VALIDATION ====================
 
-export interface AsyncValidationRule<T = any> extends Omit<ValidationRule<T>, 'validator' | 'async'> {
+export interface AsyncValidationRule<T = any> extends Omit<ValidationRule<T>, &apos;validator&apos; | &apos;async&apos;> {
+}
   validator: (value: T, context?: ValidationContext) => Promise<boolean | string | ValidationError>;
   async: true;
   timeout?: number; // milliseconds
@@ -249,6 +280,7 @@ export interface AsyncValidationRule<T = any> extends Omit<ValidationRule<T>, 'v
 }
 
 export interface AsyncValidationResult {
+}
   isValid: boolean;
   errors: ValidationError[];
   isPending?: boolean;
@@ -258,11 +290,13 @@ export interface AsyncValidationResult {
 // ==================== CONDITIONAL VALIDATION ====================
 
 export interface ConditionalValidation<T = any> {
+}
   condition: (data: any, context?: ValidationContext) => boolean;
   validation: FieldValidation<T>;
 }
 
 export interface DependentValidation<T = any> {
+}
   dependsOn: string | string[];
   validation: FieldValidation<T> | ((dependentValues: any) => FieldValidation<T>);
 }
@@ -270,6 +304,7 @@ export interface DependentValidation<T = any> {
 // ==================== CUSTOM VALIDATORS ====================
 
 export interface CustomValidator<T = any> {
+}
   name: string;
   validator: (value: T, params?: any, context?: ValidationContext) => ValidationResult;
   defaultMessage?: string;
@@ -278,6 +313,7 @@ export interface CustomValidator<T = any> {
 
 // Fantasy Football specific validators
 export interface FantasyValidators {
+}
   // Roster validation
   validRosterSize: CustomValidator<Player[]>;
   validStartingLineup: CustomValidator<Record<string, Player>>;
@@ -306,6 +342,7 @@ export interface FantasyValidators {
 // ==================== VALIDATION HELPERS ====================
 
 export interface ValidationHelper {
+}
   // Field validation
   validateField<T>(value: T, validation: FieldValidation<T>, context?: ValidationContext): ValidationResult;
   
@@ -328,6 +365,7 @@ export interface ValidationHelper {
 // ==================== VALIDATION METADATA ====================
 
 export interface ValidationMetadata {
+}
   schemaVersion: string;
   lastUpdated: Date;
   supportedFormats: string[];
@@ -338,6 +376,7 @@ export interface ValidationMetadata {
 // ==================== VALIDATION CONFIGURATION ====================
 
 export interface ValidationConfig {
+}
   stopOnFirstError?: boolean;
   collectAllErrors?: boolean;
   validateOnChange?: boolean;
@@ -353,6 +392,7 @@ export interface ValidationConfig {
 // ==================== VALIDATION STATE MANAGEMENT ====================
 
 export interface ValidationState {
+}
   isValid: boolean;
   isValidating: boolean;
   hasValidated: boolean;
@@ -364,6 +404,7 @@ export interface ValidationState {
 }
 
 export interface ValidationActions {
+}
   validate: (field?: string) => Promise<void>;
   validateAll: () => Promise<void>;
   setError: (field: string, error: ValidationError) => void;
@@ -377,6 +418,7 @@ export interface ValidationActions {
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   ValidationResult,
   ValidationError,
   ValidationRule,

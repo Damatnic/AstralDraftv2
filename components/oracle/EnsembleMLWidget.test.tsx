@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import EnsembleMLWidget from './EnsembleMLWidget';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import EnsembleMLWidget from &apos;./EnsembleMLWidget&apos;;
 
-describe('EnsembleMLWidget', () => {
-  it('renders without crashing', () => {
+describe(&apos;EnsembleMLWidget&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<EnsembleMLWidget />);
-    expect(screen.getByTestId('ensemblemlwidget')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;ensemblemlwidget&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<EnsembleMLWidget />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<EnsembleMLWidget />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

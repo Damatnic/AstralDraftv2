@@ -3,12 +3,13 @@
  * Real-time chat system for trade discussions
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, Team, User } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, Team, User } from &apos;../../types&apos;;
 import { 
+}
     MessageCircleIcon, 
     SendIcon, 
     PaperclipIcon, 
@@ -21,17 +22,18 @@ import {
     ClockIcon,
     AlertCircleIcon,
     ThumbsUpIcon,
-    ThumbsDownIcon
-} from 'lucide-react';
+//     ThumbsDownIcon
+} from &apos;lucide-react&apos;;
 
 export interface TradeMessage {
+}
     id: string;
     senderId: string;
     senderName: string;
     senderAvatar?: string;
     content: string;
     timestamp: Date;
-    type: 'text' | 'trade_proposal' | 'counter_offer' | 'system' | 'reaction';
+    type: &apos;text&apos; | &apos;trade_proposal&apos; | &apos;counter_offer&apos; | &apos;system&apos; | &apos;reaction&apos;;
     attachments?: TradeAttachment[];
     tradeProposal?: TradeProposal;
     reactions?: MessageReaction[];
@@ -42,8 +44,9 @@ export interface TradeMessage {
 }
 
 export interface TradeAttachment {
+}
     id: string;
-    type: 'image' | 'player_card' | 'stats_comparison' | 'projection';
+    type: &apos;image&apos; | &apos;player_card&apos; | &apos;stats_comparison&apos; | &apos;projection&apos;;
     url?: string;
     data?: any;
     metadata?: Record<string, any>;
@@ -51,12 +54,13 @@ export interface TradeAttachment {
 }
 
 export interface TradeProposal {
+}
     id: string;
     fromTeamId: number;
     toTeamId: number;
     fromPlayers: Player[];
     toPlayers: Player[];
-    status: 'pending' | 'accepted' | 'rejected' | 'expired' | 'withdrawn';
+    status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;expired&apos; | &apos;withdrawn&apos;;
     expiresAt: Date;
     fairnessScore?: number;
     notes?: string;
@@ -64,6 +68,7 @@ export interface TradeProposal {
 }
 
 export interface MessageReaction {
+}
     id: string;
     emoji: string;
     userId: string;
@@ -73,28 +78,31 @@ export interface MessageReaction {
 }
 
 export interface TradeChatSession {
+}
     id: string;
     participants: User[];
     teamIds: number[];
     title: string;
-    status: 'active' | 'completed' | 'archived';
+    status: &apos;active&apos; | &apos;completed&apos; | &apos;archived&apos;;
     createdAt: Date;
     lastActivity: Date;
     messageCount: number;
     unreadCount: number;
     currentProposal?: TradeProposal;
     metadata?: {
+}
         originalTopic?: string;
         relatedPlayers?: Player[];
-        priority?: 'low' | 'medium' | 'high';
+        priority?: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
     };
 
 interface TradeNegotiationChatProps {
+}
     session: TradeChatSession;
     messages: TradeMessage[];
     currentUser: User & { teamId?: number };
     onSendMessage: (content: string, type?: string, attachments?: TradeAttachment[]) => void;
-    onSendTradeProposal: (proposal: Omit<TradeProposal, 'id' | 'status'>) => void;
+    onSendTradeProposal: (proposal: Omit<TradeProposal, &apos;id&apos; | &apos;status&apos;>) => void;
     onReactToMessage: (messageId: string, emoji: string) => void;
     onAcceptTrade: (proposalId: string) => void;
     onRejectTrade: (proposalId: string, reason?: string) => void;
@@ -103,6 +111,7 @@ interface TradeNegotiationChatProps {
     className?: string;
 
 const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
+}
     session,
     messages,
     currentUser,
@@ -113,9 +122,10 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     onRejectTrade,
     onArchiveChat,
     isLoading = false,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
-    const [newMessage, setNewMessage] = React.useState('');
+}
+    const [newMessage, setNewMessage] = React.useState(&apos;&apos;);
     const [showEmojiPicker, setShowEmojiPicker] = React.useState(false);
     const [showTradeBuilder, setShowTradeBuilder] = React.useState(false);
     const [showAttachments, setShowAttachments] = React.useState(false);
@@ -125,37 +135,44 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
 
     // Auto-scroll to bottom when new messages arrive
     React.useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+}
+        messagesEndRef.current?.scrollIntoView({ behavior: &apos;smooth&apos; });
     }, [messages]);
 
     // Focus input on mount
     React.useEffect(() => {
+}
         inputRef.current?.focus();
     }, []);
 
     const handleSendMessage = (e: React.FormEvent) => {
+}
         e.preventDefault();
         if (newMessage.trim() && !isLoading) {
+}
             onSendMessage(newMessage.trim());
-            setNewMessage('');
+            setNewMessage(&apos;&apos;);
 
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+}
+        if (e.key === &apos;Enter&apos; && !e.shiftKey) {
+}
             e.preventDefault();
             handleSendMessage(e);
 
     };
 
     const formatTimestamp = (timestamp: Date) => {
+}
         const now = new Date();
         const diff = now.getTime() - timestamp.getTime();
         const minutes = Math.floor(diff / 60000);
         const hours = Math.floor(diff / 3600000);
         const days = Math.floor(diff / 86400000);
 
-        if (minutes < 1) return 'Just now';
+        if (minutes < 1) return &apos;Just now&apos;;
         if (minutes < 60) return `${minutes}m ago`;
         if (hours < 24) return `${hours}h ago`;
         if (days < 7) return `${days}d ago`;
@@ -163,12 +180,14 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     };
 
     const getMessageTypeIcon = (type: string) => {
+}
         switch (type) {
-            case 'trade_proposal':
+}
+            case &apos;trade_proposal&apos;:
                 return <MessageCircleIcon className="w-4 h-4 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'counter_offer':
+            case &apos;counter_offer&apos;:
                 return <ClockIcon className="w-4 h-4 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'system':
+            case &apos;system&apos;:
                 return <InfoIcon className="w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return null;
@@ -176,19 +195,21 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     };
 
     const getProposalStatusColor = (status: string) => {
+}
         switch (status) {
-            case 'pending':
-                return 'text-yellow-400 bg-yellow-500/20';
-            case 'accepted':
-                return 'text-green-400 bg-green-500/20';
-            case 'rejected':
-                return 'text-red-400 bg-red-500/20';
-            case 'expired':
-                return 'text-gray-400 bg-gray-500/20';
-            case 'withdrawn':
-                return 'text-orange-400 bg-orange-500/20';
+}
+            case &apos;pending&apos;:
+                return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+            case &apos;accepted&apos;:
+                return &apos;text-green-400 bg-green-500/20&apos;;
+            case &apos;rejected&apos;:
+                return &apos;text-red-400 bg-red-500/20&apos;;
+            case &apos;expired&apos;:
+                return &apos;text-gray-400 bg-gray-500/20&apos;;
+            case &apos;withdrawn&apos;:
+                return &apos;text-orange-400 bg-orange-500/20&apos;;
             default:
-                return 'text-gray-400 bg-gray-500/20';
+                return &apos;text-gray-400 bg-gray-500/20&apos;;
 
     };
 
@@ -206,6 +227,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Offering</h5>
                     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {proposal.fromPlayers.map((player: any) => (
+}
                             <div key={player.id} className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {player.name} ({player.position})
                             </div>
@@ -217,6 +239,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     <h5 className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Requesting</h5>
                     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {proposal.toPlayers.map((player: any) => (
+}
                             <div key={player.id} className="text-sm text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {player.name} ({player.position})
                             </div>
@@ -226,12 +249,14 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             </div>
             
             {proposal.fairnessScore && (
+}
                 <div className="flex items-center gap-2 mb-3 sm:px-4 md:px-6 lg:px-8">
                     <span className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Fairness Score:</span>
                     <div className={`px-2 py-1 rounded text-xs font-medium ${
-                        proposal.fairnessScore >= 80 ? 'text-green-400 bg-green-500/20' :
-                        proposal.fairnessScore >= 60 ? 'text-yellow-400 bg-yellow-500/20' :
-                        'text-red-400 bg-red-500/20'
+}
+                        proposal.fairnessScore >= 80 ? &apos;text-green-400 bg-green-500/20&apos; :
+                        proposal.fairnessScore >= 60 ? &apos;text-yellow-400 bg-yellow-500/20&apos; :
+                        &apos;text-red-400 bg-red-500/20&apos;
                     }`}>
                         {proposal.fairnessScore}/100
                     </div>
@@ -239,24 +264,26 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
             )}
             
             {proposal.notes && (
+}
                 <div className="text-sm text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                     "{proposal.notes}"
                 </div>
             )}
             
-            {proposal?.status === 'pending' && proposal.toTeamId === currentUser.teamId && (
+            {proposal?.status === &apos;pending&apos; && proposal.toTeamId === currentUser.teamId && (
+}
                 <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                     <button
                         onClick={() => onAcceptTrade(proposal.id)}
                     >
                         <CheckIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                        Accept
+//                         Accept
                     </button>
                     <button
                         onClick={() => onRejectTrade(proposal.id)}
                     >
                         <XIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                        Reject
+//                         Reject
                     </button>
                 </div>
             )}
@@ -268,6 +295,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
     );
 
     const renderMessage = (message: TradeMessage, index: number) => {
+}
         const isOwnMessage = message.senderId === currentUser.id;
         const showAvatar = index === 0 || messages[index - 1].senderId !== message.senderId;
 
@@ -277,21 +305,23 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className={`flex gap-3 ${isOwnMessage ? 'flex-row-reverse' : 'flex-row'} ${showAvatar ? 'mt-4' : 'mt-1'}`}
+                className={`flex gap-3 ${isOwnMessage ? &apos;flex-row-reverse&apos; : &apos;flex-row&apos;} ${showAvatar ? &apos;mt-4&apos; : &apos;mt-1&apos;}`}
             >
                 {showAvatar && !isOwnMessage && (
+}
                     <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                         <img
-                            src={message.senderAvatar || '/default-avatar.png'}
+                            src={message.senderAvatar || &apos;/default-avatar.png&apos;}
                             alt={message.senderName}
                             className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
                 )}
                 
-                <div className={`flex-1 max-w-[80%] ${isOwnMessage ? 'text-right' : 'text-left'}`}>
+                <div className={`flex-1 max-w-[80%] ${isOwnMessage ? &apos;text-right&apos; : &apos;text-left&apos;}`}>
                     {showAvatar && (
-                        <div className={`flex items-center gap-2 mb-1 ${isOwnMessage ? 'justify-end' : 'justify-start'}`}>
+}
+                        <div className={`flex items-center gap-2 mb-1 ${isOwnMessage ? &apos;justify-end&apos; : &apos;justify-start&apos;}`}>
                             <span className="text-sm font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                 {message.senderName}
                             </span>
@@ -303,19 +333,22 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     )}
                     
                     <div className={`inline-block p-3 rounded-lg ${
-                        isOwnMessage 
-                            ? 'bg-blue-500 text-white'
-                            : message.type === 'system'
-                            ? 'bg-gray-500/20 text-[var(--text-secondary)]'
-                            : 'bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-primary)]'
+}
+//                         isOwnMessage 
+                            ? &apos;bg-blue-500 text-white&apos;
+                            : message.type === &apos;system&apos;
+                            ? &apos;bg-gray-500/20 text-[var(--text-secondary)]&apos;
+                            : &apos;bg-[var(--panel-bg)] border border-[var(--panel-border)] text-[var(--text-primary)]&apos;
                     }`}>
                         <div className="text-sm whitespace-pre-wrap sm:px-4 md:px-6 lg:px-8">{message.content}</div>
                         
                         {message.tradeProposal && renderTradeProposal(message.tradeProposal, message.id)}
                         
                         {message.attachments && message.attachments.length > 0 && (
+}
                             <div className="mt-2 space-y-2 sm:px-4 md:px-6 lg:px-8">
                                 {message.attachments.map((attachment: any) => (
+}
                                     <div key={attachment.id} className="text-xs opacity-75 sm:px-4 md:px-6 lg:px-8">
                                         📎 {attachment.type}
                                     </div>
@@ -325,9 +358,12 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     </div>
                     
                     {message.reactions && message.reactions.length > 0 && (
+}
                         <div className="flex items-center gap-1 mt-1 flex-wrap sm:px-4 md:px-6 lg:px-8">
                             {Object.entries(
+}
                                 message.reactions.reduce((acc, reaction) => {
+}
                                     acc[reaction.emoji] = (acc[reaction.emoji] || 0) + 1;
                                     return acc;
                                 }, {} as Record<string, number>)
@@ -345,9 +381,10 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 </div>
                 
                 {showAvatar && isOwnMessage && (
+}
                     <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
                         <img
-                            src={currentUser.avatar || '/default-avatar.png'}
+                            src={currentUser.avatar || &apos;/default-avatar.png&apos;}
                             alt={currentUser.name}
                             className="w-8 h-8 rounded-full sm:px-4 md:px-6 lg:px-8"
                         />
@@ -371,6 +408,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                             <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 <span>{session.participants.length} participants</span>
                                 {session.currentProposal && (
+}
                                     <>
                                         <span>•</span>
                                         <span className="text-blue-400 sm:px-4 md:px-6 lg:px-8">Active proposal</span>
@@ -410,11 +448,12 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                 </AnimatePresence>
                 
                 {isTyping && (
+}
                     <div className="flex items-center gap-2 text-[var(--text-secondary)] text-sm sm:px-4 md:px-6 lg:px-8">
                         <div className="flex gap-1 sm:px-4 md:px-6 lg:px-8">
                             <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8"></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.1s' }}></div>
-                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: '0.2s' }}></div>
+                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: &apos;0.1s&apos; }}></div>
+                            <div className="w-2 h-2 bg-current rounded-full animate-bounce sm:px-4 md:px-6 lg:px-8" style={{ animationDelay: &apos;0.2s&apos; }}></div>
                         </div>
                         <span>Someone is typing...</span>
                     </div>
@@ -467,6 +506,7 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
 
             {/* Quick Reactions */}
             {showEmojiPicker && (
+}
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -474,10 +514,12 @@ const TradeNegotiationChat: React.FC<TradeNegotiationChatProps> = ({
                     className="absolute bottom-20 left-4 right-4 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-3 shadow-lg sm:px-4 md:px-6 lg:px-8"
                 >
                     <div className="grid grid-cols-8 gap-2 sm:px-4 md:px-6 lg:px-8">
-                        {['👍', '👎', '😄', '😮', '😢', '😡', '❤️', '🔥'].map((emoji: any) => (
+                        {[&apos;👍&apos;, &apos;👎&apos;, &apos;😄&apos;, &apos;😮&apos;, &apos;😢&apos;, &apos;😡&apos;, &apos;❤️&apos;, &apos;🔥&apos;].map((emoji: any) => (
+}
                             <button
                                 key={emoji}
                                 onClick={() = aria-label="Action button"> {
+}
                                     // Would add reaction to last message or selected message
                                     setShowEmojiPicker(false);
                                 }}

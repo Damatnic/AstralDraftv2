@@ -3,14 +3,15 @@
  * Allows administrators to generate secure random passwords for all league users
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { Button } from '../ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import SimpleAuthService from '../../services/simpleAuthService';
-import { PasswordUpdateUtility } from '../../utils/passwordUpdateUtility';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { Button } from &apos;../ui/Button&apos;;
+import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+import SimpleAuthService from &apos;../../services/simpleAuthService&apos;;
+import { PasswordUpdateUtility } from &apos;../../utils/passwordUpdateUtility&apos;;
 
 interface PasswordStatus {
+}
   id: string;
   displayName: string;
   passwordSet: boolean;
@@ -21,6 +22,7 @@ interface PasswordStatus {
 }
 
 interface SecurityReport {
+}
   totalUsers: number;
   securePasswords: number;
   weakPasswords: number;
@@ -29,6 +31,7 @@ interface SecurityReport {
 }
 
 const PasswordManagementWidget: React.FC = () => {
+}
   const [passwordStatus, setPasswordStatus] = useState<PasswordStatus[]>([]);
   const [securityReport, setSecurityReport] = useState<SecurityReport | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +41,14 @@ const PasswordManagementWidget: React.FC = () => {
 
   // Load initial data
   useEffect(() => {
+}
     loadPasswordData();
   }, []);
 
   const loadPasswordData = () => {
+}
     try {
+}
 
       const status = SimpleAuthService.getUserPasswordStatus();
       const report = SimpleAuthService.generatePasswordSecurityReport();
@@ -51,47 +57,59 @@ const PasswordManagementWidget: React.FC = () => {
       setSecurityReport(report);
 
     } catch (error) {
-      console.error('Failed to load password data:', error);
+}
+      console.error(&apos;Failed to load password data:&apos;, error);
     }
   };
 
   const handleGeneratePasswords = async () => {
+}
     setIsLoading(true);
     setUpdateResult(null);
     
     try {
+}
       const result = await PasswordUpdateUtility.executePasswordUpdate();
       
       if (result.success) {
+}
         setUpdateResult({ success: true, message: result.message });
         setLastUpdate(new Date().toISOString());
         loadPasswordData(); // Refresh the data
       } else {
+}
         setUpdateResult({ 
+}
           success: false, 
-          message: result.errors?.join(', ') || 'Failed to update passwords' 
+          message: result.errors?.join(&apos;, &apos;) || &apos;Failed to update passwords&apos; 
         });
       }
     } catch (error) {
+}
       setUpdateResult({ 
+}
         success: false, 
-        message: error instanceof Error ? error.message : 'Unknown error occurred' 
+        message: error instanceof Error ? error.message : &apos;Unknown error occurred&apos; 
       });
     } finally {
+}
       setIsLoading(false);
       setShowConfirmation(false);
     }
   };
 
   const getSecurityStatusIcon = (isSecure: boolean) => {
-    return isSecure ? '🔒' : '⚠️';
+}
+    return isSecure ? &apos;🔒&apos; : &apos;⚠️&apos;;
   };
 
   const getSecurityStatusColor = (isSecure: boolean) => {
-    return isSecure ? 'text-green-600' : 'text-yellow-600';
+}
+    return isSecure ? &apos;text-green-600&apos; : &apos;text-yellow-600&apos;;
   };
 
   const getSecurityScore = () => {
+}
     if (!securityReport) return 0;
     return Math.round((securityReport.securePasswords / securityReport.totalUsers) * 100);
   };
@@ -106,6 +124,7 @@ const PasswordManagementWidget: React.FC = () => {
       <CardContent className="space-y-6 sm:px-4 md:px-6 lg:px-8">
         {/* Security Overview */}
         {securityReport && (
+}
           <div className="bg-gray-50 p-4 rounded-lg sm:px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -137,8 +156,9 @@ const PasswordManagementWidget: React.FC = () => {
               <div className="w-full bg-gray-200 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                 <div 
                   className={`h-2 rounded-full ${
-                    getSecurityScore() >= 80 ? 'bg-green-500' :
-                    getSecurityScore() >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+}
+                    getSecurityScore() >= 80 ? &apos;bg-green-500&apos; :
+                    getSecurityScore() >= 60 ? &apos;bg-yellow-500&apos; : &apos;bg-red-500&apos;
                   }`}
                   style={{ width: `${getSecurityScore()}%` }}
                 ></div>
@@ -147,8 +167,8 @@ const PasswordManagementWidget: React.FC = () => {
 
             {/* Main Users Protection Status */}
             <div className="flex items-center gap-2 text-sm sm:px-4 md:px-6 lg:px-8">
-              <span className={securityReport.mainUsersProtected ? '✅' : '❌'}>
-                {securityReport.mainUsersProtected ? '✅' : '❌'}
+              <span className={securityReport.mainUsersProtected ? &apos;✅&apos; : &apos;❌&apos;}>
+                {securityReport.mainUsersProtected ? &apos;✅&apos; : &apos;❌&apos;}
               </span>
               <span>Main user passwords protected</span>
             </div>
@@ -160,13 +180,14 @@ const PasswordManagementWidget: React.FC = () => {
           <h4 className="font-medium mb-3 sm:px-4 md:px-6 lg:px-8">User Password Status</h4>
           <div className="space-y-2 max-h-60 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             {passwordStatus.map((user: any) => (
+}
               <div 
                 key={user.id} 
                 className="flex items-center justify-between p-3 bg-white border rounded-lg sm:px-4 md:px-6 lg:px-8"
               >
                 <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                   <span className="text-lg sm:px-4 md:px-6 lg:px-8">
-                    {user.isMainUser ? '👑' : '👤'}
+                    {user.isMainUser ? &apos;👑&apos; : &apos;👤&apos;}
                   </span>
                   <div>
                     <div className="font-medium text-sm sm:px-4 md:px-6 lg:px-8">{user.displayName}</div>
@@ -177,11 +198,12 @@ const PasswordManagementWidget: React.FC = () => {
                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                   <span className={`text-sm ${getSecurityStatusColor(user.isSecurePattern)}`}>
                     {getSecurityStatusIcon(user.isSecurePattern)}
-                    {user.isSecurePattern ? 'Secure' : 'Weak'}
+                    {user.isSecurePattern ? &apos;Secure&apos; : &apos;Weak&apos;}
                   </span>
                   {user.isMainUser && (
+}
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded sm:px-4 md:px-6 lg:px-8">
-                      Protected
+//                       Protected
                     </span>
                   )}
                 </div>
@@ -195,7 +217,8 @@ const PasswordManagementWidget: React.FC = () => {
           {/* Generate Passwords Button */}
           <div className="flex flex-col gap-2 sm:px-4 md:px-6 lg:px-8">
             {!showConfirmation ? (
-              <Button
+}
+              <Button>
                 onClick={() => setShowConfirmation(true)}
                 disabled={isLoading}
                 className="w-full bg-blue-600 hover:bg-blue-700 sm:px-4 md:px-6 lg:px-8"
@@ -212,21 +235,21 @@ const PasswordManagementWidget: React.FC = () => {
                   Main user passwords (admin and player1) will be preserved.
                 </div>
                 <div className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
-                  <Button
+                  <Button>
                     onClick={handleGeneratePasswords}
                     disabled={isLoading}
                     size="sm"
                     className="bg-green-600 hover:bg-green-700 sm:px-4 md:px-6 lg:px-8"
                   >
-                    {isLoading ? '⏳ Generating...' : '✅ Confirm'}
+                    {isLoading ? &apos;⏳ Generating...&apos; : &apos;✅ Confirm&apos;}
                   </Button>
-                  <Button
+                  <Button>
                     onClick={() => setShowConfirmation(false)}
                     disabled={isLoading}
                     size="sm"
                     variant="outline"
                   >
-                    Cancel
+//                     Cancel
                   </Button>
                 </div>
               </div>
@@ -235,15 +258,17 @@ const PasswordManagementWidget: React.FC = () => {
 
           {/* Update Result */}
           {updateResult && (
+}
             <div className={`p-3 rounded-lg ${
+}
               updateResult.success 
-                ? 'bg-green-50 border border-green-200 text-green-800'
-                : 'bg-red-50 border border-red-200 text-red-800'
+                ? &apos;bg-green-50 border border-green-200 text-green-800&apos;
+                : &apos;bg-red-50 border border-red-200 text-red-800&apos;
             }`}>
               <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                <span>{updateResult.success ? '✅' : '❌'}</span>
+                <span>{updateResult.success ? &apos;✅&apos; : &apos;❌&apos;}</span>
                 <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">
-                  {updateResult.success ? 'Success!' : 'Error'}
+                  {updateResult.success ? &apos;Success!&apos; : &apos;Error&apos;}
                 </span>
               </div>
               <div className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{updateResult.message}</div>
@@ -252,6 +277,7 @@ const PasswordManagementWidget: React.FC = () => {
 
           {/* Last Update Info */}
           {lastUpdate && (
+}
             <div className="text-xs text-gray-500 text-center sm:px-4 md:px-6 lg:px-8">
               Last password generation: {new Date(lastUpdate).toLocaleString()}
             </div>
@@ -259,12 +285,14 @@ const PasswordManagementWidget: React.FC = () => {
 
           {/* Recommendations */}
           {securityReport && securityReport.recommendations.length > 0 && (
+}
             <div className="bg-blue-50 p-3 rounded-lg sm:px-4 md:px-6 lg:px-8">
               <div className="text-sm font-medium text-blue-800 mb-2 sm:px-4 md:px-6 lg:px-8">
                 💡 Security Recommendations
               </div>
               <ul className="text-sm text-blue-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                 {securityReport.recommendations.map((rec, index) => (
+}
                   <li key={index} className="flex items-start gap-2 sm:px-4 md:px-6 lg:px-8">
                     <span>•</span>
                     <span>{rec}</span>
@@ -275,7 +303,7 @@ const PasswordManagementWidget: React.FC = () => {
           )}
 
           {/* Refresh Button */}
-          <Button
+          <Button>
             onClick={loadPasswordData}
             variant="outline"
             size="sm"

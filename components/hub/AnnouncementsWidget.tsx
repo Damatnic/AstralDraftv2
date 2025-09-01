@@ -1,13 +1,13 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { useAppState } from '../../contexts/AppContext';
-import { useLeague } from '../../hooks/useLeague';
-import { Widget } from '../ui/Widget';
-import { MegaphoneIcon } from '../icons/MegaphoneIcon';
-import { formatRelativeTime } from '../../utils/time';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { MegaphoneIcon } from &apos;../icons/MegaphoneIcon&apos;;
+import { formatRelativeTime } from &apos;../../utils/time&apos;;
 
 const AnnouncementsWidget: React.FC = () => {
+}
     const { state } = useAppState();
     const { league } = useLeague();
     
@@ -16,6 +16,7 @@ const AnnouncementsWidget: React.FC = () => {
     const announcement = (state.leagueAnnouncements[league.id] || [])[0];
 
     if (!announcement) {
+}
         return (
             <Widget title="Announcements" icon={<MegaphoneIcon />}>
                 <div className="p-4 text-center text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">

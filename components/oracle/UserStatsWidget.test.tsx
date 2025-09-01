@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import UserStatsWidget from './UserStatsWidget';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import UserStatsWidget from &apos;./UserStatsWidget&apos;;
 
-describe('UserStatsWidget', () => {
-  it('renders without crashing', () => {
+describe(&apos;UserStatsWidget&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<UserStatsWidget />);
-    expect(screen.getByTestId('userstatswidget')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;userstatswidget&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<UserStatsWidget />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<UserStatsWidget />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

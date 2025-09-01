@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import EditTeamBrandingModal from './EditTeamBrandingModal';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import EditTeamBrandingModal from &apos;./EditTeamBrandingModal&apos;;
 
-describe('EditTeamBrandingModal', () => {
-  it('renders without crashing', () => {
+describe(&apos;EditTeamBrandingModal&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<EditTeamBrandingModal />);
-    expect(screen.getByTestId('editteambrandingmodal')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;editteambrandingmodal&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<EditTeamBrandingModal />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<EditTeamBrandingModal />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

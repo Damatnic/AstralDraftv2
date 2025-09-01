@@ -1,12 +1,12 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
 
 interface IconProps {
+}
   size?: number | string;
   className?: string;
   color?: string;
-  'aria-label'?: string;
+  &apos;aria-label&apos;?: string;
 }
 
 export const ChartBarIcon: React.FC<{ className?: string }> = ({ className }: any) => (

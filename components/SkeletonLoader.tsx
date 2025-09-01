@@ -1,63 +1,72 @@
 
-import { ErrorBoundary } from './ui/ErrorBoundary';
-import React from 'react';
+import { ErrorBoundary } from &apos;./ui/ErrorBoundary&apos;;
 
 interface SkeletonProps {
+}
   className?: string;
-  variant?: 'rect' | 'circle' | 'text' | 'card' | 'table' | 'chart' | 'avatar';
+  variant?: &apos;rect&apos; | &apos;circle&apos; | &apos;text&apos; | &apos;card&apos; | &apos;table&apos; | &apos;chart&apos; | &apos;avatar&apos;;
   width?: string | number;
   height?: string | number;
   rows?: number;
-  animation?: 'pulse' | 'wave' | 'none';
+  animation?: &apos;pulse&apos; | &apos;wave&apos; | &apos;none&apos;;
 
 }
 
 const SkeletonLoader: React.FC<SkeletonProps> = ({ 
-  className = '', 
-  variant = 'rect',
+}
+  className = &apos;&apos;, 
+  variant = &apos;rect&apos;,
   width,
   height,
   rows = 1,
-  animation = 'pulse'
+  animation = &apos;pulse&apos;
 }: any) => {
+}
   const getBaseClasses = () => {
-    let animationClass = '';
-    if (animation === 'pulse') {
-      animationClass = 'animate-pulse';
-    } else if (animation === 'wave') {
-      animationClass = 'animate-wave';
+}
+    let animationClass = &apos;&apos;;
+    if (animation === &apos;pulse&apos;) {
+}
+      animationClass = &apos;animate-pulse&apos;;
+    } else if (animation === &apos;wave&apos;) {
+}
+      animationClass = &apos;animate-wave&apos;;
     }
 
     return `${animationClass} bg-slate-700/80`;
   };
 
   const getVariantClasses = () => {
+}
     switch (variant) {
-      case 'circle':
-        return 'rounded-full';
-      case 'text':
-        return 'rounded h-4';
-      case 'card':
-        return 'rounded-lg';
-      case 'table':
-        return 'rounded h-12';
-      case 'chart':
-        return 'rounded-lg';
-      case 'avatar':
-        return 'rounded-full w-10 h-10';
+}
+      case &apos;circle&apos;:
+        return &apos;rounded-full&apos;;
+      case &apos;text&apos;:
+        return &apos;rounded h-4&apos;;
+      case &apos;card&apos;:
+        return &apos;rounded-lg&apos;;
+      case &apos;table&apos;:
+        return &apos;rounded h-12&apos;;
+      case &apos;chart&apos;:
+        return &apos;rounded-lg&apos;;
+      case &apos;avatar&apos;:
+        return &apos;rounded-full w-10 h-10&apos;;
       default:
-        return 'rounded';
+        return &apos;rounded&apos;;
     }
   };
 
   const getStyleProps = () => {
+}
     const style: React.CSSProperties = {};
-    if (width) style.width = typeof width === 'number' ? `${width}px` : width;
-    if (height) style.height = typeof height === 'number' ? `${height}px` : height;
+    if (width) style.width = typeof width === &apos;number&apos; ? `${width}px` : width;
+    if (height) style.height = typeof height === &apos;number&apos; ? `${height}px` : height;
     return style;
   };
 
-  if (variant === 'text' && rows > 1) {
+  if (variant === &apos;text&apos; && rows > 1) {
+}
     return (
       <div className={`space-y-2 ${className}`}>
         {Array.from({ length: rows }, (_, i) => (
@@ -65,8 +74,9 @@ const SkeletonLoader: React.FC<SkeletonProps> = ({
             key={i}
             className={`${getBaseClasses()} ${getVariantClasses()}`}
             style={{
+}
               ...getStyleProps(),
-              width: i === rows - 1 ? '75%' : '100%' // Last row is shorter
+              width: i === rows - 1 ? &apos;75%&apos; : &apos;100%&apos; // Last row is shorter
             }}
           />
         ))}
@@ -101,6 +111,7 @@ export const PlayerCardSkeleton: React.FC = () => (
 );
 
 export const TableSkeleton: React.FC<{ rows?: number; cols?: number }> = ({ 
+}
   rows = 5, 
   cols = 4 
 }: any) => (

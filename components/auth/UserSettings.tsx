@@ -3,45 +3,50 @@
  * Allows users to update PIN, email, and customization
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useAuth } from '../../contexts/SimpleAuthContext';
-import { Widget } from '../ui/Widget';
-import { ShieldIcon, MailIcon, PaletteIcon, UserIcon } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useAuth } from &apos;../../contexts/SimpleAuthContext&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { ShieldIcon, MailIcon, PaletteIcon, UserIcon } from &apos;lucide-react&apos;;
 
 interface Props {
+}
     className?: string;
 
 }
 
-const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
+const UserSettings: React.FC<Props> = ({ className = &apos;&apos; }: any) => {
+}
     const { user, updateUserPin, updateUserEmail, updateUserCustomization, updateUserDisplayName } = useAuth();
     
-    const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'appearance'>('profile');
+    const [activeTab, setActiveTab] = useState<&apos;profile&apos; | &apos;security&apos; | &apos;appearance&apos;>(&apos;profile&apos;);
     const [isLoading, setIsLoading] = useState(false);
-    const [success, setSuccess] = useState('');
-    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(&apos;&apos;);
+    const [error, setError] = useState(&apos;&apos;);
 
     // Form states
-    const [displayName, setDisplayName] = useState(user?.displayName || '');
-    const [email, setEmail] = useState(user?.email || '');
-    const [newPin, setNewPin] = useState('');
-    const [confirmPin, setConfirmPin] = useState('');
+    const [displayName, setDisplayName] = useState(user?.displayName || &apos;&apos;);
+    const [email, setEmail] = useState(user?.email || &apos;&apos;);
+    const [newPin, setNewPin] = useState(&apos;&apos;);
+    const [confirmPin, setConfirmPin] = useState(&apos;&apos;);
     const [customization, setCustomization] = useState(user?.customization || {
-        backgroundColor: '#3b82f6',
-        textColor: '#ffffff',
-        emoji: '🏈'
+}
+        backgroundColor: &apos;#3b82f6&apos;,
+        textColor: &apos;#ffffff&apos;,
+        emoji: &apos;🏈&apos;
     });
 
     if (!user) return null;
 
     const clearMessages = () => {
-        setSuccess('');
-        setError('');
+}
+        setSuccess(&apos;&apos;);
+        setError(&apos;&apos;);
     };
 
     const handleDisplayNameUpdate = async (e: React.FormEvent) => {
+}
         e.preventDefault();
         if (!displayName.trim()) return;
 
@@ -49,21 +54,27 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
+}
 
             const success = await updateUserDisplayName(displayName.trim());
             if (success) {
-                setSuccess('Display name updated successfully!');
+}
+                setSuccess(&apos;Display name updated successfully!&apos;);
             } else {
-                setError('Failed to update display name');
+}
+                setError(&apos;Failed to update display name&apos;);
 
     } catch (error) {
-            setError('Failed to update display name');
+}
+            setError(&apos;Failed to update display name&apos;);
         } finally {
+}
             setIsLoading(false);
 
     };
 
     const handleEmailUpdate = async (e: React.FormEvent) => {
+}
         e.preventDefault();
         if (!email.trim()) return;
 
@@ -71,89 +82,111 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
         clearMessages();
 
         try {
+}
 
             const success = await updateUserEmail(email.trim());
             if (success) {
-                setSuccess('Email updated successfully!');
+}
+                setSuccess(&apos;Email updated successfully!&apos;);
             } else {
-                setError('Failed to update email');
+}
+                setError(&apos;Failed to update email&apos;);
 
     } catch (error) {
-            setError('Failed to update email');
+}
+            setError(&apos;Failed to update email&apos;);
         } finally {
+}
             setIsLoading(false);
 
     };
 
     const handlePinUpdate = async () => {
+}
     try {
+}
 
         e.preventDefault();
         
         if (newPin.length !== 4 || confirmPin.length !== 4) {
-            setError('PIN must be 4 digits');
+}
+            setError(&apos;PIN must be 4 digits&apos;);
             return;
         
     } catch (error) {
-      console.error('Error in handlePinUpdate:', error);
+}
+      console.error(&apos;Error in handlePinUpdate:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }if (newPin !== confirmPin) {
-            setError('PINs do not match');
+}
+            setError(&apos;PINs do not match&apos;);
             return;
 
         setIsLoading(true);
         clearMessages();
 
         try {
+}
 
             const success = await updateUserPin(newPin);
             if (success) {
-                setSuccess('PIN updated successfully!');
-                setNewPin('');
-                setConfirmPin('');
+}
+                setSuccess(&apos;PIN updated successfully!&apos;);
+                setNewPin(&apos;&apos;);
+                setConfirmPin(&apos;&apos;);
             } else {
-                setError('Failed to update PIN');
+}
+                setError(&apos;Failed to update PIN&apos;);
 
     } catch (error) {
-            setError('Failed to update PIN');
+}
+            setError(&apos;Failed to update PIN&apos;);
         } finally {
+}
             setIsLoading(false);
 
     };
 
     const handleCustomizationUpdate = async () => {
+}
         setIsLoading(true);
         clearMessages();
 
         try {
+}
 
             const success = await updateUserCustomization(customization);
             if (success) {
-                setSuccess('Appearance updated successfully!');
+}
+                setSuccess(&apos;Appearance updated successfully!&apos;);
             } else {
-                setError('Failed to update appearance');
+}
+                setError(&apos;Failed to update appearance&apos;);
 
     } catch (error) {
-            setError('Failed to update appearance');
+}
+            setError(&apos;Failed to update appearance&apos;);
         } finally {
+}
             setIsLoading(false);
 
     };
 
     const colorOptions = [
-        '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
-        '#8b5cf6', '#06b6d4', '#84cc16', '#f97316',
-        '#ec4899', '#6366f1', '#1f2937', '#374151'
+        &apos;#3b82f6&apos;, &apos;#ef4444&apos;, &apos;#10b981&apos;, &apos;#f59e0b&apos;,
+        &apos;#8b5cf6&apos;, &apos;#06b6d4&apos;, &apos;#84cc16&apos;, &apos;#f97316&apos;,
+        &apos;#ec4899&apos;, &apos;#6366f1&apos;, &apos;#1f2937&apos;, &apos;#374151&apos;
     ];
 
-    const emojiOptions = ['🏈', '⚡', '🔥', '💪', '🎯', '🚀', '⭐', '💎', '🏆', '🎮', '🦅', '🐻'];
+    const emojiOptions = [&apos;🏈&apos;, &apos;⚡&apos;, &apos;🔥&apos;, &apos;💪&apos;, &apos;🎯&apos;, &apos;🚀&apos;, &apos;⭐&apos;, &apos;💎&apos;, &apos;🏆&apos;, &apos;🎮&apos;, &apos;🦅&apos;, &apos;🐻&apos;];
 
     const tabs = [
-        { id: 'profile' as const, label: 'Profile', icon: UserIcon },
-        { id: 'security' as const, label: 'Security', icon: ShieldIcon },
-        { id: 'appearance' as const, label: 'Appearance', icon: PaletteIcon }
+        { id: &apos;profile&apos; as const, label: &apos;Profile&apos;, icon: UserIcon },
+        { id: &apos;security&apos; as const, label: &apos;Security&apos;, icon: ShieldIcon },
+        { id: &apos;appearance&apos; as const, label: &apos;Appearance&apos;, icon: PaletteIcon }
     ];
 
     return (
@@ -162,18 +195,21 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                 {/* Tab Navigation */}
                 <div className="flex space-x-1 bg-gray-800 rounded-lg p-1 sm:px-4 md:px-6 lg:px-8">
                     {tabs.map((tab: any) => {
+}
                         const Icon = tab.icon;
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() = aria-label="Action button"> {
+}
                                     setActiveTab(tab.id);
                                     clearMessages();
                                 }}
                                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md transition-all ${
+}
                                     activeTab === tab.id
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                                        ? &apos;bg-blue-600 text-white&apos;
+                                        : &apos;text-gray-400 hover:text-white hover:bg-gray-700&apos;
                                 }`}
                             >
                                 <Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -185,12 +221,14 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
 
                 {/* Success/Error Messages */}
                 {(success || error) && (
+}
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`p-3 rounded-lg ${
-                            success ? 'bg-green-900/50 border border-green-500 text-green-200' : 
-                            'bg-red-900/50 border border-red-500 text-red-200'
+}
+                            success ? &apos;bg-green-900/50 border border-green-500 text-green-200&apos; : 
+                            &apos;bg-red-900/50 border border-red-500 text-red-200&apos;
                         }`}
                     >
                         {success || error}
@@ -200,7 +238,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                 {/* Tab Content */}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {/* Profile Tab */}
-                    {activeTab === 'profile' && (
+                    {activeTab === &apos;profile&apos; && (
+}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -225,7 +264,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         disabled={isLoading || !displayName.trim() || displayName === user.displayName}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                                      aria-label="Action button">
-                                        Update
+//                                         Update
                                     </button>
                                 </div>
                             </form>
@@ -248,7 +287,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         disabled={isLoading || !email.trim() || email === user.email}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                                      aria-label="Action button">
-                                        Update
+//                                         Update
                                     </button>
                                 </div>
                                 <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
@@ -259,7 +298,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                     )}
 
                     {/* Security Tab */}
-                    {activeTab === 'security' && (
+                    {activeTab === &apos;security&apos; && (
+}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -279,7 +319,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         <input
                                             type="password"
                                             value={newPin}
-                                            onChange={(e: any) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: any) => setNewPin(e.target.value.replace(/\D/g, &apos;&apos;).slice(0, 4))}
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                             maxLength={4}
                                         />
@@ -291,7 +331,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                         <input
                                             type="password"
                                             value={confirmPin}
-                                            onChange={(e: any) => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                                            onChange={(e: any) => setConfirmPin(e.target.value.replace(/\D/g, &apos;&apos;).slice(0, 4))}
                                             className="w-full bg-gray-700 text-white text-center text-xl tracking-widest rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:px-4 md:px-6 lg:px-8"
                                             maxLength={4}
                                         />
@@ -303,7 +343,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                     disabled={isLoading || newPin.length !== 4 || confirmPin.length !== 4}
                                     className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
                                  aria-label="Action button">
-                                    {isLoading ? 'Updating...' : 'Update PIN'}
+                                    {isLoading ? &apos;Updating...&apos; : &apos;Update PIN&apos;}
                                 </button>
                                 
                                 <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
@@ -314,7 +354,8 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                     )}
 
                     {/* Appearance Tab */}
-                    {activeTab === 'appearance' && (
+                    {activeTab === &apos;appearance&apos; && (
+}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -349,13 +390,15 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                 </label>
                                 <div className="grid grid-cols-6 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {colorOptions.map((color: any) => (
+}
                                         <button
                                             key={color}
                                             onClick={() => setCustomization({ ...customization, backgroundColor: color }}
                                             className={`w-10 h-10 rounded-lg border-2 transition-all ${
+}
                                                 customization.backgroundColor === color
-                                                    ? 'border-white scale-110'
-                                                    : 'border-gray-600 hover:border-gray-400'
+                                                    ? &apos;border-white scale-110&apos;
+                                                    : &apos;border-gray-600 hover:border-gray-400&apos;
                                             }`}
                                             style={{ backgroundColor: color }}
                                         />
@@ -366,17 +409,19 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                             {/* Emoji Selection */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">
-                                    Emoji
+//                                     Emoji
                                 </label>
                                 <div className="grid grid-cols-6 gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {emojiOptions.map((emoji: any) => (
+}
                                         <button
                                             key={emoji}
                                             onClick={() => setCustomization({ ...customization, emoji }}
                                             className={`w-10 h-10 rounded-lg border-2 flex items-center justify-center text-xl transition-all ${
+}
                                                 customization.emoji === emoji
-                                                    ? 'border-blue-500 bg-blue-900/50 scale-110'
-                                                    : 'border-gray-600 hover:border-gray-400 hover:bg-gray-700'
+                                                    ? &apos;border-blue-500 bg-blue-900/50 scale-110&apos;
+                                                    : &apos;border-gray-600 hover:border-gray-400 hover:bg-gray-700&apos;
                                             }`}
                                         >
                                             {emoji}
@@ -390,7 +435,7 @@ const UserSettings: React.FC<Props> = ({ className = '' }: any) => {
                                 disabled={isLoading}
                                 className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white py-3 rounded-lg transition-colors font-medium sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
-                                {isLoading ? 'Updating...' : 'Save Appearance'}
+                                {isLoading ? &apos;Updating...&apos; : &apos;Save Appearance&apos;}
                             </button>
                         </motion.div>
                     )}

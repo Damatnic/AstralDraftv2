@@ -1,22 +1,28 @@
 /**
  * Custom hook for handling Escape key press to close modals
  */
-import { useEffect } from 'react';
+import { useEffect } from &apos;react&apos;;
 
 export const useEscapeKey = (isOpen: boolean, onClose: () => void) => {
+}
   useEffect(() => {
+}
     const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && isOpen) {
+}
+      if (event.key === &apos;Escape&apos; && isOpen) {
+}
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
+}
+      document.addEventListener(&apos;keydown&apos;, handleEscapeKey);
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
+}
+      document.removeEventListener(&apos;keydown&apos;, handleEscapeKey);
     };
   }, [isOpen, onClose]);
 };

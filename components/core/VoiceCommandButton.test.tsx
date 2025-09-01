@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import VoiceCommandButton from './VoiceCommandButton';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import VoiceCommandButton from &apos;./VoiceCommandButton&apos;;
 
-describe('VoiceCommandButton', () => {
-  it('renders without crashing', () => {
+describe(&apos;VoiceCommandButton&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<VoiceCommandButton />);
-    expect(screen.getByTestId('voicecommandbutton')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;voicecommandbutton&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<VoiceCommandButton />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<VoiceCommandButton />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

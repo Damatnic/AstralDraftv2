@@ -3,18 +3,18 @@
  * Real-time news integration and player updates
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, League, NewsItem } from '../../types';
-import { NewsIcon } from '../icons/NewsIcon';
-import { ClockIcon } from '../icons/ClockIcon';
-import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
-import { TrendingUpIcon } from '../icons/TrendingUpIcon';
-import { UserIcon } from '../icons/UserIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, League, NewsItem } from &apos;../../types&apos;;
+import { NewsIcon } from &apos;../icons/NewsIcon&apos;;
+import { ClockIcon } from &apos;../icons/ClockIcon&apos;;
+import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
+import { TrendingUpIcon } from &apos;../icons/TrendingUpIcon&apos;;
+import { UserIcon } from &apos;../icons/UserIcon&apos;;
 
 interface NewsAndUpdatesTabProps {
+}
     player: Player;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -22,58 +22,67 @@ interface NewsAndUpdatesTabProps {
 }
 
 interface InjuryUpdate {
+}
     id: string;
     date: string;
-    type: 'injury' | 'return' | 'update';
-    severity: 'minor' | 'moderate' | 'major';
+    type: &apos;injury&apos; | &apos;return&apos; | &apos;update&apos;;
+    severity: &apos;minor&apos; | &apos;moderate&apos; | &apos;major&apos;;
     description: string;
     expectedReturn?: string;
     source: string;
 
 interface TradeRumor {
+}
     id: string;
     date: string;
     probability: number;
     team: string;
     details: string;
     source: string;
-    impact: 'positive' | 'negative' | 'neutral';
+    impact: &apos;positive&apos; | &apos;negative&apos; | &apos;neutral&apos;;
 
 }
 
 const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
+}
     player,
     league,
-    dispatch
+//     dispatch
 }: any) => {
+}
     // Helper function to handle injury history as string union type
     const getInjuryStatusInfo = (injuryHistory: string | undefined) => {
+}
         if (!injuryHistory) return null;
         
         switch (injuryHistory) {
-            case 'minimal':
+}
+            case &apos;minimal&apos;:
                 return {
-                    level: 'Minimal',
-                    description: 'Clean injury history with minor concerns',
-                    color: 'text-green-400',
-                    bgColor: 'bg-green-500/10',
-                    icon: '✅'
+}
+                    level: &apos;Minimal&apos;,
+                    description: &apos;Clean injury history with minor concerns&apos;,
+                    color: &apos;text-green-400&apos;,
+                    bgColor: &apos;bg-green-500/10&apos;,
+                    icon: &apos;✅&apos;
                 };
-            case 'moderate':
+            case &apos;moderate&apos;:
                 return {
-                    level: 'Moderate',
-                    description: 'Some injury concerns that could affect availability',
-                    color: 'text-yellow-400',
-                    bgColor: 'bg-yellow-500/10',
-                    icon: '⚠️'
+}
+                    level: &apos;Moderate&apos;,
+                    description: &apos;Some injury concerns that could affect availability&apos;,
+                    color: &apos;text-yellow-400&apos;,
+                    bgColor: &apos;bg-yellow-500/10&apos;,
+                    icon: &apos;⚠️&apos;
                 };
-            case 'extensive':
+            case &apos;extensive&apos;:
                 return {
-                    level: 'Extensive',
-                    description: 'Significant injury history with high risk',
-                    color: 'text-red-400',
-                    bgColor: 'bg-red-500/10',
-                    icon: '🚨'
+}
+                    level: &apos;Extensive&apos;,
+                    description: &apos;Significant injury history with high risk&apos;,
+                    color: &apos;text-red-400&apos;,
+                    bgColor: &apos;bg-red-500/10&apos;,
+                    icon: &apos;🚨&apos;
                 };
             default:
                 return null;
@@ -83,59 +92,67 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     // Mock data for demonstration - in real app this would come from API
     const recentNews = React.useMemo(() => [
         {
-            id: '1',
+}
+            id: &apos;1&apos;,
             headline: `${player.name} Expected to See Increased Targets`,
             summary: `Beat reporters suggest ${player.name} is forming strong chemistry with the quarterback in practice.`,
-            url: '#',
-            source: 'ESPN',
+            url: &apos;#&apos;,
+            source: &apos;ESPN&apos;,
             publishedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-            impact: 'positive'
+            impact: &apos;positive&apos;
         },
         {
-            id: '2',
+}
+            id: &apos;2&apos;,
             headline: `${player.team} Offensive Coordinator Comments on Usage`,
-            summary: `"We're going to get ${player.name} involved in more creative ways this season."`,
-            url: '#',
-            source: 'NFL Network',
+            summary: `"We&apos;re going to get ${player.name} involved in more creative ways this season."`,
+            url: &apos;#&apos;,
+            source: &apos;NFL Network&apos;,
             publishedAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(), // 6 hours ago
-            impact: 'positive'
+            impact: &apos;positive&apos;
         },
         {
-            id: '3',
+}
+            id: &apos;3&apos;,
             headline: `Training Camp Report: ${player.name} Looks Sharp`,
             summary: `Sources report ${player.name} has been consistently making plays in practice sessions.`,
-            url: '#',
-            source: 'The Athletic',
+            url: &apos;#&apos;,
+            source: &apos;The Athletic&apos;,
             publishedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
-            impact: 'positive'
+            impact: &apos;positive&apos;
 
     ], [player.name, player.team]);
 
     const injuryUpdates: InjuryUpdate[] = React.useMemo(() => {
+}
         const injuryInfo = getInjuryStatusInfo(player.injuryHistory);
         if (!injuryInfo) return [];
 
         // Generate relevant updates based on injury history level
         const updates: InjuryUpdate[] = [];
         
-        if (player.injuryHistory === 'extensive') {
+        if (player.injuryHistory === &apos;extensive&apos;) {
+}
             updates.push({
-                id: '1',
+}
+                id: &apos;1&apos;,
                 date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week ago
-                type: 'update',
-                severity: 'major',
-                description: 'Medical staff monitoring previous injury site during practice',
-                source: 'Team Medical Staff',
-                expectedReturn: 'Week 1'
+                type: &apos;update&apos;,
+                severity: &apos;major&apos;,
+                description: &apos;Medical staff monitoring previous injury site during practice&apos;,
+                source: &apos;Team Medical Staff&apos;,
+                expectedReturn: &apos;Week 1&apos;
             });
-        } else if (player.injuryHistory === 'moderate') {
+        } else if (player.injuryHistory === &apos;moderate&apos;) {
+}
             updates.push({
-                id: '1',
+}
+                id: &apos;1&apos;,
                 date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
-                type: 'update',
-                severity: 'minor',
-                description: 'Participating fully in practice with no restrictions',
-                source: 'Beat Reporter',
+                type: &apos;update&apos;,
+                severity: &apos;minor&apos;,
+                description: &apos;Participating fully in practice with no restrictions&apos;,
+                source: &apos;Beat Reporter&apos;,
             });
 
         return updates;
@@ -144,43 +161,49 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
     const tradeRumors: TradeRumor[] = React.useMemo(() => [
         // Mock trade rumors for demonstration
         {
-            id: '1',
+}
+            id: &apos;1&apos;,
             date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
             probability: 0.15,
-            team: 'Multiple Teams',
-            details: `Several contenders reportedly showing interest in ${player.name}'s services`,
-            source: 'NFL Insider',
-            impact: 'neutral'
+            team: &apos;Multiple Teams&apos;,
+            details: `Several contenders reportedly showing interest in ${player.name}&apos;s services`,
+            source: &apos;NFL Insider&apos;,
+            impact: &apos;neutral&apos;
 
     ], [player.name]);
 
     const formatTimeAgo = (dateString: string): string => {
+}
         const date = new Date(dateString);
         const now = new Date();
         const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
         
-        if (diffInHours < 1) return 'Less than an hour ago';
-        if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        if (diffInHours < 1) return &apos;Less than an hour ago&apos;;
+        if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? &apos;s&apos; : &apos;&apos;} ago`;
         
         const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+        if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? &apos;s&apos; : &apos;&apos;} ago`;
         
         const diffInWeeks = Math.floor(diffInDays / 7);
-        return `${diffInWeeks} week${diffInWeeks > 1 ? 's' : ''} ago`;
+        return `${diffInWeeks} week${diffInWeeks > 1 ? &apos;s&apos; : &apos;&apos;} ago`;
     };
 
     const getImpactColor = (impact: string) => {
+}
         switch (impact) {
-            case 'positive': return 'text-green-400';
-            case 'negative': return 'text-red-400';
-            default: return 'text-gray-400';
+}
+            case &apos;positive&apos;: return &apos;text-green-400&apos;;
+            case &apos;negative&apos;: return &apos;text-red-400&apos;;
+            default: return &apos;text-gray-400&apos;;
 
     };
 
     const getImpactIcon = (impact: string) => {
+}
         switch (impact) {
-            case 'positive': return <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-            case 'negative': return <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+}
+            case &apos;positive&apos;: return <TrendingUpIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+            case &apos;negative&apos;: return <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
             default: return <NewsIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
     };
@@ -191,6 +214,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
             {/* Injury Status Overview */}
             {injuryStatusInfo && (
+}
                 <Widget title="Injury Status">
                     <div className={`p-4 rounded-lg ${injuryStatusInfo.bgColor}`}>
                         <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
@@ -203,6 +227,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                                     {injuryStatusInfo.description}
                                 </p>
                                 {injuryUpdates.length > 0 && (
+}
                                     <div className="mt-3 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                         Last update: {formatTimeAgo(injuryUpdates[0].date)}
                                     </div>
@@ -217,6 +242,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
             <Widget title="Recent News">
                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {recentNews.map((news, index) => (
+}
                         <motion.div
                             key={news.id}
                             initial={{ opacity: 0, y: 20 }}
@@ -254,9 +280,11 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
 
             {/* Injury Updates */}
             {injuryUpdates.length > 0 && (
+}
                 <Widget title="Injury Updates">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {injuryUpdates.map((update, index) => (
+}
                             <motion.div
                                 key={update.id}
                                 initial={{ opacity: 0, x: -20 }}
@@ -266,9 +294,10 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                             >
                                 <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
                                     <AlertTriangleIcon className={`w-4 h-4 flex-shrink-0 mt-0.5 ${
-                                        update.severity === 'major' ? 'text-red-400' :
-                                        update.severity === 'moderate' ? 'text-yellow-400' :
-                                        'text-green-400'
+}
+                                        update.severity === &apos;major&apos; ? &apos;text-red-400&apos; :
+                                        update.severity === &apos;moderate&apos; ? &apos;text-yellow-400&apos; :
+                                        &apos;text-green-400&apos;
                                     }`} />
                                     <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                                         <div className="flex items-center gap-2 mb-1 sm:px-4 md:px-6 lg:px-8">
@@ -276,9 +305,10 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                                                 {update.type}
                                             </span>
                                             <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                                update.severity === 'major' ? 'bg-red-500/20 text-red-400' :
-                                                update.severity === 'moderate' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                'bg-green-500/20 text-green-400'
+}
+                                                update.severity === &apos;major&apos; ? &apos;bg-red-500/20 text-red-400&apos; :
+                                                update.severity === &apos;moderate&apos; ? &apos;bg-yellow-500/20 text-yellow-400&apos; :
+                                                &apos;bg-green-500/20 text-green-400&apos;
                                             }`}>
                                                 {update.severity}
                                             </span>
@@ -287,6 +317,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
                                             {update.description}
                                         </p>
                                         {update.expectedReturn && (
+}
                                             <div className="text-xs text-blue-400 mb-2 sm:px-4 md:px-6 lg:px-8">
                                                 Expected Return: {update.expectedReturn}
                                             </div>
@@ -311,9 +342,11 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
 
             {/* Trade Rumors */}
             {tradeRumors.length > 0 && (
+}
                 <Widget title="Trade Rumors">
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {tradeRumors.map((rumor, index) => (
+}
                             <motion.div
                                 key={rumor.id}
                                 initial={{ opacity: 0, scale: 0.95 }}
@@ -355,6 +388,7 @@ const NewsAndUpdatesTab: React.FC<NewsAndUpdatesTabProps> = ({
 
             {/* News Feed Empty State */}
             {recentNews.length === 0 && injuryUpdates.length === 0 && tradeRumors.length === 0 && (
+}
                 <Widget title="No Recent News">
                     <div className="text-center py-8 sm:px-4 md:px-6 lg:px-8">
                         <NewsIcon className="w-12 h-12 text-gray-400 mx-auto mb-4 sm:px-4 md:px-6 lg:px-8" />

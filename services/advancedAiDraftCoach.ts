@@ -4,20 +4,22 @@
  * Provides real-time recommendations, analysis, and strategic guidance
  */
 
-import { Player, PlayerPosition, League } from '../types';
-import { realTimeDraftServiceV2 } from './realTimeDraftServiceV2';
-import { enhancedWebSocketService } from './enhancedWebSocketService';
+import { Player, PlayerPosition, League } from &apos;../types&apos;;
+import { realTimeDraftServiceV2 } from &apos;./realTimeDraftServiceV2&apos;;
+import { enhancedWebSocketService } from &apos;./enhancedWebSocketService&apos;;
 
 // Core Interfaces
 export interface DraftStrategy {
+}
   name: string;
   description: string;
   positionPriority: PlayerPosition[];
   roundStrategy: Record<number, string>;
-  riskTolerance: 'conservative' | 'moderate' | 'aggressive';
+  riskTolerance: &apos;conservative&apos; | &apos;moderate&apos; | &apos;aggressive&apos;;
 }
 
 export interface AIRecommendation {
+}
   player: Player;
   confidence: number;
   reasoning: string[];
@@ -29,6 +31,7 @@ export interface AIRecommendation {
 }
 
 export interface VBDCalculation {
+}
   player: Player;
   vbdScore: number;
   positionRank: number;
@@ -38,6 +41,7 @@ export interface VBDCalculation {
 }
 
 export interface TeamAnalysis {
+}
   strengths: string[];
   weaknesses: string[];
   needsPriority: PlayerPosition[];
@@ -49,6 +53,7 @@ export interface TeamAnalysis {
 }
 
 export interface DraftGrade {
+}
   overall: string;
   positionGrades: Record<PlayerPosition, string>;
   value: number;
@@ -61,6 +66,7 @@ export interface DraftGrade {
 
 // Machine Learning Models Interface
 export interface MLModels {
+}
   playerProjections: PlayerProjectionModel;
   injuryRisk: InjuryRiskModel;
   breakoutPrediction: BreakoutModel;
@@ -69,12 +75,14 @@ export interface MLModels {
 }
 
 export interface PlayerProjectionModel {
+}
   predict(player: Player, leagueSettings: any): number;
   getConfidenceInterval(prediction: number): [number, number];
   getFactors(): string[];
 }
 
 export interface InjuryRiskModel {
+}
   calculateRisk(player: Player): number;
   getRiskFactors(player: Player): string[];
   getHealthyAlternatives(player: Player): Player[];
@@ -82,6 +90,7 @@ export interface InjuryRiskModel {
 
 // Advanced AI Draft Coach Service
 export class AdvancedAiDraftCoach {
+}
   private models: MLModels;
   private draftStrategies: Map<string, DraftStrategy>;
   private userPreferences: Map<string, any>;
@@ -91,6 +100,7 @@ export class AdvancedAiDraftCoach {
   private vbdCache: Map<string, VBDCalculation>;
 
   constructor() {
+}
     this.models = this.initializeModels();
     this.draftStrategies = this.initializeDraftStrategies();
     this.userPreferences = new Map();
@@ -104,7 +114,9 @@ export class AdvancedAiDraftCoach {
    * Initialize Machine Learning Models
    */
   private initializeModels(): MLModels {
+}
     return {
+}
       playerProjections: new PlayerProjectionModel(),
       injuryRisk: new InjuryRiskModel(),
       breakoutPrediction: new BreakoutModel(),
@@ -117,66 +129,75 @@ export class AdvancedAiDraftCoach {
    * Initialize Draft Strategies
    */
   private initializeDraftStrategies(): Map<string, DraftStrategy> {
+}
     const strategies = new Map<string, DraftStrategy>();
 
     // Zero RB Strategy
-    strategies.set('zero-rb', {
-      name: 'Zero RB',
-      description: 'Wait on RB, prioritize elite WR and QB early',
-      positionPriority: ['QB', 'WR', 'TE', 'RB', 'K', 'DEF'],
+    strategies.set(&apos;zero-rb&apos;, {
+}
+      name: &apos;Zero RB&apos;,
+      description: &apos;Wait on RB, prioritize elite WR and QB early&apos;,
+      positionPriority: [&apos;QB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;RB&apos;, &apos;K&apos;, &apos;DEF&apos;],
       roundStrategy: {
-        1: 'Elite WR or top QB',
-        2: 'WR1 or elite TE',
-        3: 'WR depth or QB if missed',
-        4: 'First RB - look for volume',
-        5: 'RB depth with upside'
+}
+        1: &apos;Elite WR or top QB&apos;,
+        2: &apos;WR1 or elite TE&apos;,
+        3: &apos;WR depth or QB if missed&apos;,
+        4: &apos;First RB - look for volume&apos;,
+        5: &apos;RB depth with upside&apos;
       },
-      riskTolerance: 'moderate'
+      riskTolerance: &apos;moderate&apos;
     });
 
     // Hero RB Strategy  
-    strategies.set('hero-rb', {
-      name: 'Hero RB',
-      description: 'Draft one elite RB, then focus on WR depth',
-      positionPriority: ['RB', 'WR', 'QB', 'TE', 'K', 'DEF'],
+    strategies.set(&apos;hero-rb&apos;, {
+}
+      name: &apos;Hero RB&apos;,
+      description: &apos;Draft one elite RB, then focus on WR depth&apos;,
+      positionPriority: [&apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;],
       roundStrategy: {
-        1: 'Elite RB (top 6)',
-        2: 'Best available WR',
-        3: 'WR or QB depending on value',
-        4: 'Late RB with upside',
-        5: 'WR depth'
+}
+        1: &apos;Elite RB (top 6)&apos;,
+        2: &apos;Best available WR&apos;,
+        3: &apos;WR or QB depending on value&apos;,
+        4: &apos;Late RB with upside&apos;,
+        5: &apos;WR depth&apos;
       },
-      riskTolerance: 'moderate'
+      riskTolerance: &apos;moderate&apos;
     });
 
     // Robust RB Strategy
-    strategies.set('robust-rb', {
-      name: 'Robust RB',
-      description: 'Secure multiple solid RBs early for floor',
-      positionPriority: ['RB', 'RB', 'WR', 'QB', 'TE', 'K', 'DEF'],
+    strategies.set(&apos;robust-rb&apos;, {
+}
+      name: &apos;Robust RB&apos;,
+      description: &apos;Secure multiple solid RBs early for floor&apos;,
+      positionPriority: [&apos;RB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;],
       roundStrategy: {
-        1: 'Top RB',
-        2: 'RB2 with good floor',
-        3: 'Best WR available',
-        4: 'QB or more RB depth',
-        5: 'WR or TE'
+}
+        1: &apos;Top RB&apos;,
+        2: &apos;RB2 with good floor&apos;,
+        3: &apos;Best WR available&apos;,
+        4: &apos;QB or more RB depth&apos;,
+        5: &apos;WR or TE&apos;
       },
-      riskTolerance: 'conservative'
+      riskTolerance: &apos;conservative&apos;
     });
 
     // Late Round QB Strategy
-    strategies.set('late-qb', {
-      name: 'Late Round QB',
-      description: 'Wait on QB, focus on skill positions early',
-      positionPriority: ['RB', 'WR', 'TE', 'QB', 'K', 'DEF'],
+    strategies.set(&apos;late-qb&apos;, {
+}
+      name: &apos;Late Round QB&apos;,
+      description: &apos;Wait on QB, focus on skill positions early&apos;,
+      positionPriority: [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;QB&apos;, &apos;K&apos;, &apos;DEF&apos;],
       roundStrategy: {
-        1: 'Elite RB or WR',
-        2: 'Best skill position player',
-        3: 'Fill roster needs',
-        8: 'First QB around round 8+',
-        12: 'Backup QB for matchups'
+}
+        1: &apos;Elite RB or WR&apos;,
+        2: &apos;Best skill position player&apos;,
+        3: &apos;Fill roster needs&apos;,
+        8: &apos;First QB around round 8+&apos;,
+        12: &apos;Backup QB for matchups&apos;
       },
-      riskTolerance: 'moderate'
+      riskTolerance: &apos;moderate&apos;
     });
 
     return strategies;
@@ -192,6 +213,7 @@ export class AdvancedAiDraftCoach {
     currentRound: number,
     leagueSettings: any
   ): Promise<AIRecommendation[]> {
+}
     
     // Calculate VBD for all available players
     const vbdCalculations = await this.calculateVBD(availablePlayers, leagueSettings);
@@ -206,6 +228,7 @@ export class AdvancedAiDraftCoach {
     const recommendations: AIRecommendation[] = [];
     
     for (const player of availablePlayers.slice(0, 20)) { // Top 20 available
+}
       const vbd = vbdCalculations.get(player.id);
       if (!vbd) continue;
 
@@ -221,7 +244,7 @@ export class AdvancedAiDraftCoach {
         scarcityData,
         injuryRisk,
         breakoutChance,
-        bustRisk
+//         bustRisk
       );
 
       // Generate reasoning
@@ -230,13 +253,14 @@ export class AdvancedAiDraftCoach {
         vbd,
         teamAnalysis,
         scarcityData,
-        currentRound
+//         currentRound
       );
 
       // Find alternative options
       const alternatives = this.findAlternatives(player, availablePlayers, vbd);
 
       recommendations.push({
+}
         player,
         confidence,
         reasoning,
@@ -261,6 +285,7 @@ export class AdvancedAiDraftCoach {
     availablePlayers: Player[],
     leagueSettings: any
   ): Promise<Map<string, VBDCalculation>> {
+}
     
     const calculations = new Map<string, VBDCalculation>();
     
@@ -268,6 +293,7 @@ export class AdvancedAiDraftCoach {
     const playersByPosition = this.groupPlayersByPosition(availablePlayers);
     
     for (const [position, players] of playersByPosition) {
+}
       // Sort by projected points
       players.sort((a, b) => (b.projectedPoints || 0) - (a.projectedPoints || 0));
       
@@ -276,6 +302,7 @@ export class AdvancedAiDraftCoach {
       const replacementLevel = players[replacementIndex]?.projectedPoints || 0;
       
       for (let i = 0; i < players.length; i++) {
+}
         const player = players[i];
         const projectedPoints = player.projectedPoints || 0;
         const valueOverReplacement = Math.max(0, projectedPoints - replacementLevel);
@@ -284,18 +311,19 @@ export class AdvancedAiDraftCoach {
         const opportunityCost = this.calculateOpportunityCost(
           player,
           playersByPosition,
-          i
+//           i
         );
         
         const vbdScore = valueOverReplacement - opportunityCost;
         
         calculations.set(player.id, {
+}
           player,
           vbdScore,
           positionRank: i + 1,
           replacementLevel,
           valueOverReplacement,
-          opportunityCost
+//           opportunityCost
         });
       }
     }
@@ -307,6 +335,7 @@ export class AdvancedAiDraftCoach {
    * Analyze Current Team Composition
    */
   private async analyzeTeam(roster: Player[], currentRound: number): Promise<TeamAnalysis> {
+}
     const positionCounts = this.getPositionCounts(roster);
     const totalProjectedPoints = roster.reduce((sum, p) => sum + (p.projectedPoints || 0), 0);
     
@@ -317,30 +346,37 @@ export class AdvancedAiDraftCoach {
     
     // Analyze each position
     if (positionCounts.QB === 0 && currentRound > 8) {
-      weaknesses.push('No QB drafted - critical need');
-      needsPriority.push('QB');
+}
+      weaknesses.push(&apos;No QB drafted - critical need&apos;);
+      needsPriority.push(&apos;QB&apos;);
     } else if (positionCounts.QB >= 1) {
-      strengths.push('QB position secured');
+}
+      strengths.push(&apos;QB position secured&apos;);
     }
     
     if (positionCounts.RB < 2) {
-      weaknesses.push('Insufficient RB depth');
-      needsPriority.push('RB');
+}
+      weaknesses.push(&apos;Insufficient RB depth&apos;);
+      needsPriority.push(&apos;RB&apos;);
     } else if (positionCounts.RB >= 3) {
-      strengths.push('Strong RB depth');
+}
+      strengths.push(&apos;Strong RB depth&apos;);
     }
     
     if (positionCounts.WR < 3) {
-      weaknesses.push('Need more WR depth');
-      needsPriority.push('WR');
+}
+      weaknesses.push(&apos;Need more WR depth&apos;);
+      needsPriority.push(&apos;WR&apos;);
     } else if (positionCounts.WR >= 4) {
-      strengths.push('Excellent WR corps');
+}
+      strengths.push(&apos;Excellent WR corps&apos;);
     }
     
     // Calculate roster balance (0-100 scale)
     const idealCounts = { QB: 1, RB: 3, WR: 4, TE: 1, K: 1, DEF: 1 };
     let balance = 100;
     for (const [pos, ideal] of Object.entries(idealCounts)) {
+}
       const current = positionCounts[pos as PlayerPosition] || 0;
       const deviation = Math.abs(current - ideal) / ideal;
       balance -= deviation * 20;
@@ -359,6 +395,7 @@ export class AdvancedAiDraftCoach {
     const riskScore = this.calculateTeamRisk(roster);
     
     return {
+}
       strengths,
       weaknesses,
       needsPriority,
@@ -366,7 +403,7 @@ export class AdvancedAiDraftCoach {
       projectedFinish: this.estimateProjectedFinish(totalProjectedPoints),
       playoffProbability,
       championshipOdds,
-      riskScore
+//       riskScore
     };
   }
 
@@ -380,34 +417,42 @@ export class AdvancedAiDraftCoach {
     scarcityData: any,
     currentRound: number
   ): string[] {
+}
     const reasoning: string[] = [];
     
     // VBD reasoning
     if (vbd.vbdScore > 15) {
+}
       reasoning.push(`Exceptional value - ${vbd.vbdScore.toFixed(1)} points above replacement`);
     } else if (vbd.vbdScore > 5) {
+}
       reasoning.push(`Good value pick with solid upside`);
     }
     
     // Position scarcity
     if (scarcityData[player.position]?.scarce) {
+}
       reasoning.push(`${player.position} position getting scarce - grab while available`);
     }
     
     // Team needs
     if (teamAnalysis.needsPriority.includes(player.position as PlayerPosition)) {
+}
       reasoning.push(`Addresses critical team need at ${player.position}`);
     }
     
     // Round appropriateness
     if (vbd.positionRank <= currentRound * 2) {
+}
       reasoning.push(`Appropriate value for round ${currentRound}`);
     } else if (vbd.positionRank > currentRound * 3) {
+}
       reasoning.push(`Potential reach - consider waiting`);
     }
     
     // Player-specific insights
     if (player.tier === 1) {
+}
       reasoning.push(`Elite tier player with championship upside`);
     }
     
@@ -420,17 +465,20 @@ export class AdvancedAiDraftCoach {
   async askCoach(
     question: string,
     context: {
+}
       availablePlayers: Player[];
       userRoster: Player[];
       currentRound: number;
       leagueSettings: any;
     }
   ): Promise<string> {
+}
     
     const lowerQuestion = question.toLowerCase();
     
     // Pattern matching for common questions
-    if (lowerQuestion.includes('who should i draft') || lowerQuestion.includes('recommend')) {
+    if (lowerQuestion.includes(&apos;who should i draft&apos;) || lowerQuestion.includes(&apos;recommend&apos;)) {
+}
       const recommendations = await this.getRealtimeRecommendations(
         context.availablePlayers,
         context.userRoster,
@@ -443,31 +491,34 @@ export class AdvancedAiDraftCoach {
       return `Based on your team needs and available value, I recommend:\n\n` +
         top3.map((rec, i) => 
           `${i + 1}. ${rec.player.name} - ${rec.reasoning[0]}`
-        ).join('\n');
+        ).join(&apos;\n&apos;);
     }
     
-    if (lowerQuestion.includes('team analysis') || lowerQuestion.includes('how am i doing')) {
+    if (lowerQuestion.includes(&apos;team analysis&apos;) || lowerQuestion.includes(&apos;how am i doing&apos;)) {
+}
       const analysis = await this.analyzeTeam(context.userRoster, context.currentRound);
       return `Your team analysis:\n\n` +
-        `Strengths: ${analysis.strengths.join(', ')}\n` +
-        `Areas to improve: ${analysis.weaknesses.join(', ')}\n` +
+        `Strengths: ${analysis.strengths.join(&apos;, &apos;)}\n` +
+        `Areas to improve: ${analysis.weaknesses.join(&apos;, &apos;)}\n` +
         `Playoff probability: ${analysis.playoffProbability.toFixed(1)}%\n` +
-        `Next priority: ${analysis.needsPriority[0] || 'Best available'}`;
+        `Next priority: ${analysis.needsPriority[0] || &apos;Best available&apos;}`;
     }
     
-    if (lowerQuestion.includes('compare') || lowerQuestion.includes('vs')) {
+    if (lowerQuestion.includes(&apos;compare&apos;) || lowerQuestion.includes(&apos;vs&apos;)) {
+}
       // Extract player names from question and compare
-      return `I can help you compare players! Please specify which two players you'd like me to analyze.`;
+      return `I can help you compare players! Please specify which two players you&apos;d like me to analyze.`;
     }
     
-    if (lowerQuestion.includes('strategy') || lowerQuestion.includes('approach')) {
+    if (lowerQuestion.includes(&apos;strategy&apos;) || lowerQuestion.includes(&apos;approach&apos;)) {
+}
       const currentStrategy = this.detectCurrentStrategy(context.userRoster);
       return `Your draft appears to follow a ${currentStrategy} strategy. ` +
         `This approach typically works well when executed properly. ` +
         `Continue focusing on ${this.getStrategyAdvice(currentStrategy, context.currentRound)}.`;
     }
     
-    return `I'm here to help with your draft decisions! You can ask me about:\n` +
+    return `I&apos;m here to help with your draft decisions! You can ask me about:\n` +
       `• Player recommendations\n` +
       `• Team analysis\n` +
       `• Draft strategy advice\n` +
@@ -483,6 +534,7 @@ export class AdvancedAiDraftCoach {
     draftHistory: any[],
     leagueSettings: any
   ): Promise<DraftGrade> {
+}
     
     const teamAnalysis = await this.analyzeTeam(finalRoster, 16);
     
@@ -491,6 +543,7 @@ export class AdvancedAiDraftCoach {
     const positionGroups = this.groupPlayersByPosition(finalRoster);
     
     for (const [position, players] of positionGroups) {
+}
       const grade = this.gradePosition(players, position);
       positionGrades[position] = grade;
     }
@@ -518,10 +571,11 @@ export class AdvancedAiDraftCoach {
       finalRoster,
       draftHistory,
       teamAnalysis,
-      overallScore
+//       overallScore
     );
     
     return {
+}
       overall: overallGrade,
       positionGrades,
       value: valueScore,
@@ -529,7 +583,7 @@ export class AdvancedAiDraftCoach {
       balance: balanceScore,
       upside: upsideScore,
       floor: floorScore,
-      analysis
+//       analysis
     };
   }
 
@@ -537,10 +591,13 @@ export class AdvancedAiDraftCoach {
    * Utility Methods
    */
   private groupPlayersByPosition(players: Player[]): Map<PlayerPosition, Player[]> {
+}
     const groups = new Map<PlayerPosition, Player[]>();
     for (const player of players) {
+}
       const position = player.position as PlayerPosition;
       if (!groups.has(position)) {
+}
         groups.set(position, []);
       }
       groups.get(position)!.push(player);
@@ -549,8 +606,10 @@ export class AdvancedAiDraftCoach {
   }
 
   private getPositionCounts(roster: Player[]): Record<PlayerPosition, number> {
+}
     const counts = {} as Record<PlayerPosition, number>;
     for (const player of roster) {
+}
       const pos = player.position as PlayerPosition;
       counts[pos] = (counts[pos] || 0) + 1;
     }
@@ -565,6 +624,7 @@ export class AdvancedAiDraftCoach {
     breakoutChance: number,
     bustRisk: number
   ): number {
+}
     let confidence = 50; // Base confidence
     
     // VBD influence
@@ -572,6 +632,7 @@ export class AdvancedAiDraftCoach {
     
     // Team need influence
     if (teamAnalysis.needsPriority.includes(vbd.player.position as PlayerPosition)) {
+}
       confidence += 15;
     }
     
@@ -584,22 +645,24 @@ export class AdvancedAiDraftCoach {
   }
 
   private scoreToGrade(score: number): string {
-    if (score >= 90) return 'A+';
-    if (score >= 87) return 'A';
-    if (score >= 83) return 'A-';
-    if (score >= 80) return 'B+';
-    if (score >= 77) return 'B';
-    if (score >= 73) return 'B-';
-    if (score >= 70) return 'C+';
-    if (score >= 67) return 'C';
-    if (score >= 63) return 'C-';
-    if (score >= 60) return 'D+';
-    if (score >= 57) return 'D';
-    return 'F';
+}
+    if (score >= 90) return &apos;A+&apos;;
+    if (score >= 87) return &apos;A&apos;;
+    if (score >= 83) return &apos;A-&apos;;
+    if (score >= 80) return &apos;B+&apos;;
+    if (score >= 77) return &apos;B&apos;;
+    if (score >= 73) return &apos;B-&apos;;
+    if (score >= 70) return &apos;C+&apos;;
+    if (score >= 67) return &apos;C&apos;;
+    if (score >= 63) return &apos;C-&apos;;
+    if (score >= 60) return &apos;D+&apos;;
+    if (score >= 57) return &apos;D&apos;;
+    return &apos;F&apos;;
   }
 
   // Additional helper methods would continue here...
   private calculateTier(vbdScore: number): number {
+}
     if (vbdScore >= 20) return 1;
     if (vbdScore >= 10) return 2;
     if (vbdScore >= 5) return 3;
@@ -607,26 +670,30 @@ export class AdvancedAiDraftCoach {
   }
 
   private identifyRiskFactors(player: Player, injuryRisk: number, bustRisk: number): string[] {
+}
     const factors: string[] = [];
-    if (injuryRisk > 0.3) factors.push('Injury history concern');
-    if (bustRisk > 0.4) factors.push('Performance volatility');
-    if (player.age && player.age > 30) factors.push('Age-related decline risk');
+    if (injuryRisk > 0.3) factors.push(&apos;Injury history concern&apos;);
+    if (bustRisk > 0.4) factors.push(&apos;Performance volatility&apos;);
+    if (player.age && player.age > 30) factors.push(&apos;Age-related decline risk&apos;);
     return factors;
   }
 
   private findAlternatives(player: Player, availablePlayers: Player[], vbd: VBDCalculation): Player[] {
+}
     return availablePlayers
       .filter((p: any) => p.position === player.position && p.id !== player.id)
       .slice(0, 3);
   }
 
   private getReplacementIndex(position: PlayerPosition, leagueSettings: any): number {
+}
     const leagueSize = leagueSettings.teams || 12;
     switch (position) {
-      case 'QB': return leagueSize - 1; // 12th QB
-      case 'RB': return leagueSize * 2 - 1; // 24th RB  
-      case 'WR': return leagueSize * 3 - 1; // 36th WR
-      case 'TE': return leagueSize - 1; // 12th TE
+}
+      case &apos;QB&apos;: return leagueSize - 1; // 12th QB
+      case &apos;RB&apos;: return leagueSize * 2 - 1; // 24th RB  
+      case &apos;WR&apos;: return leagueSize * 3 - 1; // 36th WR
+      case &apos;TE&apos;: return leagueSize - 1; // 12th TE
       default: return leagueSize - 1;
     }
   }
@@ -636,16 +703,19 @@ export class AdvancedAiDraftCoach {
     playersByPosition: Map<PlayerPosition, Player[]>,
     currentIndex: number
   ): number {
+}
     // Simplified opportunity cost - would be more complex in production
     return 0;
   }
 
   private calculateTeamRisk(roster: Player[]): number {
+}
     // Calculate overall team risk based on various factors
     return 50; // Placeholder
   }
 
   private estimateProjectedFinish(totalPoints: number): number {
+}
     // Estimate finish position based on projected points
     const leagueAverage = 1400;
     if (totalPoints > leagueAverage * 1.1) return Math.ceil(Math.random() * 3); // Top 3
@@ -654,61 +724,71 @@ export class AdvancedAiDraftCoach {
   }
 
   private detectCurrentStrategy(roster: Player[]): string {
+}
     const counts = this.getPositionCounts(roster);
-    if (counts.RB === 0 || counts.RB === 1) return 'Zero RB';
-    if (counts.RB >= 3) return 'Robust RB';
-    if (counts.QB === 0) return 'Late Round QB';
-    return 'Balanced';
+    if (counts.RB === 0 || counts.RB === 1) return &apos;Zero RB&apos;;
+    if (counts.RB >= 3) return &apos;Robust RB&apos;;
+    if (counts.QB === 0) return &apos;Late Round QB&apos;;
+    return &apos;Balanced&apos;;
   }
 
   private getStrategyAdvice(strategy: string, round: number): string {
+}
     switch (strategy) {
-      case 'Zero RB': return 'WR depth and late-round RB volume';
-      case 'Robust RB': return 'WR value and QB when ready';  
-      case 'Late Round QB': return 'skill position depth';
-      default: return 'best available value';
+}
+      case &apos;Zero RB&apos;: return &apos;WR depth and late-round RB volume&apos;;
+      case &apos;Robust RB&apos;: return &apos;WR value and QB when ready&apos;;  
+      case &apos;Late Round QB&apos;: return &apos;skill position depth&apos;;
+      default: return &apos;best available value&apos;;
     }
   }
 
   private gradePosition(players: Player[], position: PlayerPosition): string {
+}
     // Simplified position grading
     const totalProjected = players.reduce((sum, p) => sum + (p.projectedPoints || 0), 0);
     const expected = this.getExpectedPositionPoints(position);
     const ratio = totalProjected / expected;
     
-    if (ratio >= 1.2) return 'A';
-    if (ratio >= 1.1) return 'B+';
-    if (ratio >= 1.0) return 'B';
-    if (ratio >= 0.9) return 'C+';
-    return 'C';
+    if (ratio >= 1.2) return &apos;A&apos;;
+    if (ratio >= 1.1) return &apos;B+&apos;;
+    if (ratio >= 1.0) return &apos;B&apos;;
+    if (ratio >= 0.9) return &apos;C+&apos;;
+    return &apos;C&apos;;
   }
 
   private getExpectedPositionPoints(position: PlayerPosition): number {
+}
     switch (position) {
-      case 'QB': return 300;
-      case 'RB': return 200;
-      case 'WR': return 180;
-      case 'TE': return 120;
+}
+      case &apos;QB&apos;: return 300;
+      case &apos;RB&apos;: return 200;
+      case &apos;WR&apos;: return 180;
+      case &apos;TE&apos;: return 120;
       default: return 100;
     }
   }
 
   private calculateValueScore(draftHistory: any[]): number {
+}
     // Calculate how well the user drafted for value
     return 75; // Placeholder
   }
 
   private calculateStrategyScore(draftHistory: any[], roster: Player[]): number {
+}
     // Evaluate strategy execution
     return 80; // Placeholder
   }
 
   private calculateUpsideScore(roster: Player[]): number {
+}
     // Calculate championship upside potential
     return 70; // Placeholder  
   }
 
   private calculateFloorScore(roster: Player[]): number {
+}
     // Calculate floor/safety of the roster
     return 85; // Placeholder
   }
@@ -719,53 +799,64 @@ export class AdvancedAiDraftCoach {
     teamAnalysis: TeamAnalysis,
     overallScore: number
   ): string {
-    return `Your draft shows ${overallScore >= 80 ? 'strong' : 'decent'} execution with ` +
-      `${teamAnalysis.strengths.length > 0 ? teamAnalysis.strengths[0] : 'solid foundation'}. ` +
-      `Focus on ${teamAnalysis.needsPriority[0] || 'depth'} during the season.`;
+}
+    return `Your draft shows ${overallScore >= 80 ? &apos;strong&apos; : &apos;decent&apos;} execution with ` +
+      `${teamAnalysis.strengths.length > 0 ? teamAnalysis.strengths[0] : &apos;solid foundation&apos;}. ` +
+      `Focus on ${teamAnalysis.needsPriority[0] || &apos;depth&apos;} during the season.`;
   }
 }
 
 // Machine Learning Model Implementations (Simplified)
 class PlayerProjectionModel implements PlayerProjectionModel {
+}
   predict(player: Player, leagueSettings: any): number {
+}
     // Simplified projection model
     return player.projectedPoints || 0;
   }
   
   getConfidenceInterval(prediction: number): [number, number] {
+}
     const variance = prediction * 0.2;
     return [prediction - variance, prediction + variance];
   }
   
   getFactors(): string[] {
-    return ['Historical performance', 'Target share', 'Team offense', 'Schedule strength'];
+}
+    return [&apos;Historical performance&apos;, &apos;Target share&apos;, &apos;Team offense&apos;, &apos;Schedule strength&apos;];
   }
 }
 
 class InjuryRiskModel implements InjuryRiskModel {
+}
   calculateRisk(player: Player): number {
+}
     // Simplified injury risk calculation
-    if (player.injuryStatus === 'OUT' || player.injuryStatus === 'IR') return 1.0;
-    if (player.injuryStatus === 'QUESTIONABLE') return 0.6;
+    if (player.injuryStatus === &apos;OUT&apos; || player.injuryStatus === &apos;IR&apos;) return 1.0;
+    if (player.injuryStatus === &apos;QUESTIONABLE&apos;) return 0.6;
     if (player.age && player.age > 30) return 0.3;
     return 0.1;
   }
   
   getRiskFactors(player: Player): string[] {
+}
     const factors: string[] = [];
     if (player.injuryStatus) factors.push(`Current status: ${player.injuryStatus}`);
-    if (player.age && player.age > 30) factors.push('Age-related concerns');
+    if (player.age && player.age > 30) factors.push(&apos;Age-related concerns&apos;);
     return factors;
   }
   
   getHealthyAlternatives(player: Player): Player[] {
+}
     // Return healthy players at same position
     return [];
   }
 }
 
 class BreakoutModel {
+}
   predict(player: Player): number {
+}
     // Simplified breakout prediction
     if (player.isRookie) return 0.3;
     if (player.age && player.age < 25) return 0.4;
@@ -774,7 +865,9 @@ class BreakoutModel {
 }
 
 class BustModel {
+}
   predict(player: Player): number {
+}
     // Simplified bust prediction  
     if (player.adp && player.adp < 24 && (player.projectedPoints || 0) < 200) return 0.5;
     return 0.2;
@@ -782,13 +875,17 @@ class BustModel {
 }
 
 class ScarcityModel {
+}
   analyze(availablePlayers: Player[]): any {
+}
     const byPosition = availablePlayers.reduce((acc, player) => {
+}
       acc[player.position] = (acc[player.position] || 0) + 1;
       return acc;
     }, {} as any);
     
     return {
+}
       QB: { scarce: byPosition.QB < 8 },
       RB: { scarce: byPosition.RB < 15 },
       WR: { scarce: byPosition.WR < 25 },

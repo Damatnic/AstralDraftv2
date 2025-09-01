@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import WeeklyReportDisplay from './WeeklyReportDisplay';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import WeeklyReportDisplay from &apos;./WeeklyReportDisplay&apos;;
 
-describe('WeeklyReportDisplay', () => {
-  it('renders without crashing', () => {
+describe(&apos;WeeklyReportDisplay&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<WeeklyReportDisplay />);
-    expect(screen.getByTestId('weeklyreportdisplay')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;weeklyreportdisplay&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<WeeklyReportDisplay />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<WeeklyReportDisplay />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

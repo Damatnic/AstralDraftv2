@@ -1,8 +1,9 @@
+import { ErrorBoundary } from '../ui/ErrorBoundary';
 /**
  * Main App Component wrapper - Imports from OracleOnlyApp for backwards compatibility
  */
 
-import OracleOnlyApp from './OracleOnlyApp';
+import OracleOnlyApp from &apos;./OracleOnlyApp&apos;;
 
 const OracleOnlyAppWithErrorBoundary: React.FC = (props: any) => (
   <ErrorBoundary>

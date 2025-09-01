@@ -1,11 +1,11 @@
 
-import React from 'react';
 
 interface IconProps {
+}
   size?: number | string;
   className?: string;
   color?: string;
-  'aria-label'?: string;
+  &apos;aria-label&apos;?: string;
 }
 
 export const NewspaperIcon: React.FC<{ className?: string }> = ({ className }: any) => (

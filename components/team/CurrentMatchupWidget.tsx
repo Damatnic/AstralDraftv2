@@ -1,12 +1,12 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { Team, League } from '../../types';
-import { Widget } from '../ui/Widget';
-import { TargetIcon } from '../icons/TargetIcon';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { Team, League } from &apos;../../types&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { TargetIcon } from &apos;../icons/TargetIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface CurrentMatchupWidgetProps {
+}
     myTeam: Team;
     league: League;
     dispatch: React.Dispatch<any>;
@@ -14,12 +14,14 @@ interface CurrentMatchupWidgetProps {
 }
 
 const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, league, dispatch }: any) => {
+}
     const nextMatchup = league.schedule.find((m: any) => 
         m.week === league.currentWeek && 
         (m.teamA.teamId === myTeam.id || m.teamB.teamId === myTeam.id)
     );
 
     if (!nextMatchup) {
+}
         return (
             <Widget title="Upcoming Matchup" icon={<TargetIcon />}>
                 <div className="p-4 text-center text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
@@ -32,6 +34,7 @@ const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, lea
     const opponent = league.teams.find((t: any) => t.id === opponentId);
 
     if (!opponent) {
+}
         return null;
 
     return (
@@ -42,7 +45,7 @@ const CurrentMatchupWidget: React.FC<CurrentMatchupWidgetProps> = ({ myTeam, lea
                 <p className="font-bold text-lg mt-2 sm:px-4 md:px-6 lg:px-8">{opponent.name}</p>
                 <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">({opponent.record.wins}-{opponent.record.losses}-{opponent.record.ties})</p>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MATCHUP' }}
+                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MATCHUP&apos; }}
                     className="mt-3 w-full px-4 py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20 sm:px-4 md:px-6 lg:px-8"
                 >
                     View Full Matchup

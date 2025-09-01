@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ChampionshipProbChart from './ChampionshipProbChart';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import ChampionshipProbChart from &apos;./ChampionshipProbChart&apos;;
 
-describe('ChampionshipProbChart', () => {
-  it('renders without crashing', () => {
+describe(&apos;ChampionshipProbChart&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<ChampionshipProbChart />);
-    expect(screen.getByTestId('championshipprobchart')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;championshipprobchart&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<ChampionshipProbChart />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<ChampionshipProbChart />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

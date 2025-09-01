@@ -3,16 +3,17 @@
  * Comprehensive league administration with commissioner controls and settings
  */
 
-import { Player } from '../types';
+import { Player } from &apos;../types&apos;;
 
 export interface League {
+}
     id: string;
     name: string;
     commissionerId: string;
     commissionerName: string;
     settings: LeagueSettings;
     members: LeagueMember[];
-    status: 'draft' | 'active' | 'completed' | 'archived';
+    status: &apos;draft&apos; | &apos;active&apos; | &apos;completed&apos; | &apos;archived&apos;;
     createdAt: Date;
     updatedAt: Date;
     draftDate?: Date;
@@ -27,14 +28,16 @@ export interface League {
 }
 
 export interface LeagueSettings {
+}
     // Basic Settings
     leagueSize: number;
     teamSize: number;
-    scoringSystem: 'standard' | 'ppr' | 'half-ppr' | 'superflex' | 'custom';
-    draftType: 'snake' | 'auction' | 'linear';
+    scoringSystem: &apos;standard&apos; | &apos;ppr&apos; | &apos;half-ppr&apos; | &apos;superflex&apos; | &apos;custom&apos;;
+    draftType: &apos;snake&apos; | &apos;auction&apos; | &apos;linear&apos;;
     
     // Roster Settings
     startingLineup: {
+}
         QB: number;
         RB: number;
         WR: number;
@@ -49,7 +52,7 @@ export interface LeagueSettings {
     taxiSlots?: number;
     
     // Draft Settings
-    draftOrderType: 'randomized' | 'manual' | 'snake-reverse' | 'auction';
+    draftOrderType: &apos;randomized&apos; | &apos;manual&apos; | &apos;snake-reverse&apos; | &apos;auction&apos;;
     pickTimeLimit: number; // seconds
     autodraftEnabled: boolean;
     keeperSettings?: KeeperSettings;
@@ -60,7 +63,7 @@ export interface LeagueSettings {
     playoffTeams: number;
     championshipWeek: number;
     tradeDeadline: number; // week number
-    waiverType: 'rolling' | 'reverse-standings' | 'faab';
+    waiverType: &apos;rolling&apos; | &apos;reverse-standings&apos; | &apos;faab&apos;;
     waiverBudget?: number;
     
     // Scoring Settings
@@ -83,12 +86,13 @@ export interface LeagueSettings {
     // Commissioner Settings
     commissionerVeto: boolean;
     tradeReviewPeriod: number; // hours
-    rosterMoves: 'unlimited' | 'limited';
+    rosterMoves: &apos;unlimited&apos; | &apos;limited&apos;;
     moveLimit?: number;
     lockTeams: boolean;
 }
 
 export interface KeeperSettings {
+}
     enabled: boolean;
     maxKeepers: number;
     keeperDeadline: Date;
@@ -98,6 +102,7 @@ export interface KeeperSettings {
 }
 
 export interface BonusScoring {
+}
     passingYardBonus?: { threshold: number; points: number }[];
     rushingYardBonus?: { threshold: number; points: number }[];
     receivingYardBonus?: { threshold: number; points: number }[];
@@ -105,18 +110,20 @@ export interface BonusScoring {
 }
 
 export interface CustomScoring {
+}
     statType: string;
     points: number;
     description: string;
 }
 
 export interface LeagueMember {
+}
     userId: string;
     username: string;
     email: string;
     teamName: string;
     avatar?: string;
-    role: 'commissioner' | 'owner' | 'co-commissioner';
+    role: &apos;commissioner&apos; | &apos;owner&apos; | &apos;co-commissioner&apos;;
     joinedAt: Date;
     isActive: boolean;
     draftPosition?: number;
@@ -128,19 +135,22 @@ export interface LeagueMember {
 }
 
 export interface TeamRecord {
+}
     wins: number;
     losses: number;
     ties: number;
     pointsFor: number;
     pointsAgainst: number;
     streak: number;
-    streakType: 'W' | 'L' | 'T';
+    streakType: &apos;W&apos; | &apos;L&apos; | &apos;T&apos;;
 }
 
 export interface PayoutStructure {
+}
     entryFee: number;
     totalPot: number;
     payouts: {
+}
         position: number;
         amount: number;
         percentage: number;
@@ -148,8 +158,9 @@ export interface PayoutStructure {
 }
 
 export interface LeagueEvent {
+}
     id: string;
-    type: 'trade' | 'waiver' | 'setting_change' | 'member_join' | 'member_leave' | 'draft_start' | 'season_start' | 'commissioner_action';
+    type: &apos;trade&apos; | &apos;waiver&apos; | &apos;setting_change&apos; | &apos;member_join&apos; | &apos;member_leave&apos; | &apos;draft_start&apos; | &apos;season_start&apos; | &apos;commissioner_action&apos;;
     description: string;
     initiatedBy: string;
     affectedUsers?: string[];
@@ -158,43 +169,50 @@ export interface LeagueEvent {
 }
 
 export interface LeagueInvitation {
+}
     id: string;
     leagueId: string;
     leagueName: string;
     invitedEmail: string;
     invitedBy: string;
     invitedByName: string;
-    status: 'pending' | 'accepted' | 'declined' | 'expired';
+    status: &apos;pending&apos; | &apos;accepted&apos; | &apos;declined&apos; | &apos;expired&apos;;
     expiresAt: Date;
     createdAt: Date;
     message?: string;
 }
 
 export interface CommissionerAction {
-    type: 'force_trade' | 'reverse_trade' | 'move_player' | 'adjust_score' | 'change_lineup' | 'reset_waivers' | 'extend_deadline' | 'kick_member';
+}
+    type: &apos;force_trade&apos; | &apos;reverse_trade&apos; | &apos;move_player&apos; | &apos;adjust_score&apos; | &apos;change_lineup&apos; | &apos;reset_waivers&apos; | &apos;extend_deadline&apos; | &apos;kick_member&apos;;
     targetUserId?: string;
     data: Record<string, unknown>;
     reason: string;
 }
 
 export class LeagueManagementService {
+}
     private readonly leagues: Map<string, League> = new Map();
     private readonly invitations: Map<string, LeagueInvitation> = new Map();
 
     constructor() {
+}
         this.initializeMockData();
     }
 
     // League Creation and Management
     async createLeague(_settings: Record<string, unknown>): Promise<string> {
+}
         const leagueId = `league_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         
         const defaultSettings: LeagueSettings = {
+}
             leagueSize: 12,
             teamSize: 16,
-            scoringSystem: 'ppr',
-            draftType: 'snake',
+            scoringSystem: &apos;ppr&apos;,
+            draftType: &apos;snake&apos;,
             startingLineup: {
+}
                 QB: 1,
                 RB: 2,
                 WR: 2,
@@ -205,7 +223,7 @@ export class LeagueManagementService {
             },
             benchSlots: 7,
             irSlots: 1,
-            draftOrderType: 'randomized',
+            draftOrderType: &apos;randomized&apos;,
             pickTimeLimit: 90,
             autodraftEnabled: true,
             regularSeasonWeeks: 14,
@@ -213,7 +231,7 @@ export class LeagueManagementService {
             playoffTeams: 6,
             championshipWeek: 17,
             tradeDeadline: 12,
-            waiverType: 'rolling',
+            waiverType: &apos;rolling&apos;,
             passingYards: 0.04,
             passingTouchdowns: 4,
             passingInterceptions: -2,
@@ -227,26 +245,28 @@ export class LeagueManagementService {
             negativePoints: true,
             commissionerVeto: true,
             tradeReviewPeriod: 24,
-            rosterMoves: 'unlimited',
+            rosterMoves: &apos;unlimited&apos;,
             lockTeams: false
         };
 
         const league: League = {
+}
             id: leagueId,
-            name: leagueData.name || `${commissionerName}'s League`,
+            name: leagueData.name || `${commissionerName}&apos;s League`,
             commissionerId,
             commissionerName,
             settings: { ...defaultSettings, ...leagueData.settings },
             members: [{
+}
                 userId: commissionerId,
                 username: commissionerName,
-                email: '',
-                teamName: `${commissionerName}'s Team`,
-                role: 'commissioner',
+                email: &apos;&apos;,
+                teamName: `${commissionerName}&apos;s Team`,
+                role: &apos;commissioner&apos;,
                 joinedAt: new Date(),
                 isActive: true
             }],
-            status: 'draft',
+            status: &apos;draft&apos;,
             createdAt: new Date(),
             updatedAt: new Date(),
             seasonYear: new Date().getFullYear(),
@@ -256,12 +276,13 @@ export class LeagueManagementService {
             rules: leagueData.rules,
             payouts: leagueData.payouts,
             history: [{
+}
                 id: `event_${Date.now()}`,
-                type: 'commissioner_action',
-                description: 'League created',
+                type: &apos;commissioner_action&apos;,
+                description: &apos;League created&apos;,
                 initiatedBy: commissionerId,
                 timestamp: new Date(),
-                data: { action: 'create_league' }
+                data: { action: &apos;create_league&apos; }
             }]
         };
 
@@ -274,13 +295,16 @@ export class LeagueManagementService {
         commissionerId: string,
         updates: Partial<LeagueSettings>
     ): Promise<League> {
+}
         const league = this.leagues.get(leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.commissionerId !== commissionerId) {
-            throw new Error('Only the commissioner can update league settings');
+}
+            throw new Error(&apos;Only the commissioner can update league settings&apos;);
         }
 
         league.settings = { ...league.settings, ...updates };
@@ -288,9 +312,10 @@ export class LeagueManagementService {
 
         // Log the setting change
         league.history.push({
+}
             id: `event_${Date.now()}`,
-            type: 'setting_change',
-            description: `League settings updated: ${Object.keys(updates).join(', ')}`,
+            type: &apos;setting_change&apos;,
+            description: `League settings updated: ${Object.keys(updates).join(&apos;, &apos;)}`,
             initiatedBy: commissionerId,
             timestamp: new Date(),
             data: { changes: updates }
@@ -307,31 +332,36 @@ export class LeagueManagementService {
         email: string,
         message?: string
     ): Promise<LeagueInvitation> {
+}
         const league = this.leagues.get(leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.commissionerId !== commissionerId) {
-            throw new Error('Only the commissioner can invite members');
+}
+            throw new Error(&apos;Only the commissioner can invite members&apos;);
         }
 
         if (league.members.length >= league.maxMembers) {
-            throw new Error('League is full');
+}
+            throw new Error(&apos;League is full&apos;);
         }
 
         const invitationId = `inv_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
         const invitation: LeagueInvitation = {
+}
             id: invitationId,
             leagueId,
             leagueName: league.name,
             invitedEmail: email,
             invitedBy: commissionerId,
             invitedByName: league.commissionerName,
-            status: 'pending',
+            status: &apos;pending&apos;,
             expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
             createdAt: new Date(),
-            message
+//             message
         };
 
         this.invitations.set(invitationId, invitation);
@@ -344,36 +374,43 @@ export class LeagueManagementService {
         username: string,
         teamName: string
     ): Promise<League> {
+}
         const invitation = this.invitations.get(invitationId);
         if (!invitation) {
-            throw new Error('Invitation not found');
+}
+            throw new Error(&apos;Invitation not found&apos;);
         }
 
-        if (invitation.status !== 'pending') {
-            throw new Error('Invitation is no longer valid');
+        if (invitation.status !== &apos;pending&apos;) {
+}
+            throw new Error(&apos;Invitation is no longer valid&apos;);
         }
 
         if (invitation.expiresAt < new Date()) {
-            invitation.status = 'expired';
-            throw new Error('Invitation has expired');
+}
+            invitation.status = &apos;expired&apos;;
+            throw new Error(&apos;Invitation has expired&apos;);
         }
 
         const league = this.leagues.get(invitation.leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.members.length >= league.maxMembers) {
-            throw new Error('League is full');
+}
+            throw new Error(&apos;League is full&apos;);
         }
 
         // Add new member
         const newMember: LeagueMember = {
+}
             userId,
             username,
             email: invitation.invitedEmail,
             teamName,
-            role: 'owner',
+            role: &apos;owner&apos;,
             joinedAt: new Date(),
             isActive: true
         };
@@ -383,8 +420,9 @@ export class LeagueManagementService {
 
         // Log the member join
         league.history.push({
+}
             id: `event_${Date.now()}`,
-            type: 'member_join',
+            type: &apos;member_join&apos;,
             description: `${username} joined the league`,
             initiatedBy: userId,
             timestamp: new Date(),
@@ -392,7 +430,7 @@ export class LeagueManagementService {
         });
 
         // Update invitation status
-        invitation.status = 'accepted';
+        invitation.status = &apos;accepted&apos;;
 
         this.leagues.set(invitation.leagueId, league);
         this.invitations.set(invitationId, invitation);
@@ -401,17 +439,20 @@ export class LeagueManagementService {
     }
 
     async declineInvitation(invitationId: string): Promise<void> {
+}
         const invitation = this.invitations.get(invitationId);
         if (!invitation) {
-            throw new Error('Invitation not found');
+}
+            throw new Error(&apos;Invitation not found&apos;);
         }
 
-        if (invitation.status !== 'pending') {
-            throw new Error('Invitation is no longer valid');
+        if (invitation.status !== &apos;pending&apos;) {
+}
+            throw new Error(&apos;Invitation is no longer valid&apos;);
         }
 
         // Update invitation status
-        invitation.status = 'declined';
+        invitation.status = &apos;declined&apos;;
         this.invitations.set(invitationId, invitation);
     }
 
@@ -421,18 +462,22 @@ export class LeagueManagementService {
         targetUserId: string,
         reason: string
     ): Promise<League> {
+}
         const league = this.leagues.get(leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.commissionerId !== commissionerId) {
-            throw new Error('Only the commissioner can remove members');
+}
+            throw new Error(&apos;Only the commissioner can remove members&apos;);
         }
 
         const memberIndex = league.members.findIndex(m => m.userId === targetUserId);
         if (memberIndex === -1) {
-            throw new Error('Member not found');
+}
+            throw new Error(&apos;Member not found&apos;);
         }
 
         const removedMember = league.members[memberIndex];
@@ -441,8 +486,9 @@ export class LeagueManagementService {
 
         // Log the removal
         league.history.push({
+}
             id: `event_${Date.now()}`,
-            type: 'member_leave',
+            type: &apos;member_leave&apos;,
             description: `${removedMember.username} was removed from the league: ${reason}`,
             initiatedBy: commissionerId,
             affectedUsers: [targetUserId],
@@ -460,46 +506,50 @@ export class LeagueManagementService {
         commissionerId: string,
         action: CommissionerAction
     ): Promise<League> {
+}
         const league = this.leagues.get(leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.commissionerId !== commissionerId) {
-            throw new Error('Only the commissioner can execute these actions');
+}
+            throw new Error(&apos;Only the commissioner can execute these actions&apos;);
         }
 
-        let description = '';
+        let description = &apos;&apos;;
         const affectedUsers: string[] = [];
 
         switch (action.type) {
-            case 'force_trade':
+}
+            case &apos;force_trade&apos;:
                 description = `Commissioner forced trade: ${action.data.description}`;
                 affectedUsers.push(...action.data.participants);
                 break;
-            case 'reverse_trade':
+            case &apos;reverse_trade&apos;:
                 description = `Commissioner reversed trade: ${action.data.tradeId}`;
                 affectedUsers.push(...action.data.participants);
                 break;
-            case 'move_player':
+            case &apos;move_player&apos;:
                 description = `Commissioner moved player: ${action.data.playerName} to ${action.data.targetTeam}`;
                 if (action.targetUserId) affectedUsers.push(action.targetUserId);
                 break;
-            case 'adjust_score':
+            case &apos;adjust_score&apos;:
                 description = `Commissioner adjusted score for ${action.data.teamName}: ${action.data.adjustment} points`;
                 if (action.targetUserId) affectedUsers.push(action.targetUserId);
                 break;
-            case 'change_lineup':
+            case &apos;change_lineup&apos;:
                 description = `Commissioner changed lineup for ${action.data.teamName}`;
                 if (action.targetUserId) affectedUsers.push(action.targetUserId);
                 break;
-            case 'reset_waivers':
-                description = 'Commissioner reset waiver order';
+            case &apos;reset_waivers&apos;:
+                description = &apos;Commissioner reset waiver order&apos;;
                 break;
-            case 'extend_deadline':
+            case &apos;extend_deadline&apos;:
                 description = `Commissioner extended ${action.data.deadlineType} deadline`;
                 break;
-            case 'kick_member':
+            case &apos;kick_member&apos;:
                 description = `Commissioner removed ${action.data.username} from league`;
                 if (action.targetUserId) affectedUsers.push(action.targetUserId);
                 break;
@@ -509,8 +559,9 @@ export class LeagueManagementService {
 
         // Log the commissioner action
         league.history.push({
+}
             id: `event_${Date.now()}`,
-            type: 'commissioner_action',
+            type: &apos;commissioner_action&apos;,
             description: `${description}. Reason: ${action.reason}`,
             initiatedBy: commissionerId,
             affectedUsers: affectedUsers.length > 0 ? affectedUsers : undefined,
@@ -525,55 +576,65 @@ export class LeagueManagementService {
 
     // League Query Methods
     async getLeague(leagueId: string): Promise<League | null> {
+}
         return this.leagues.get(leagueId) || null;
     }
 
     async getUserLeagues(userId: string): Promise<League[]> {
+}
         return Array.from(this.leagues.values()).filter(
             league => league.members.some((member: any) => member.userId === userId)
         );
     }
 
     async getPublicLeagues(): Promise<League[]> {
+}
         return Array.from(this.leagues.values())
             .filter((league: any) => league.isPublic && league.members.length < league.maxMembers)
             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     }
 
     async getUserInvitations(email: string): Promise<LeagueInvitation[]> {
+}
         return Array.from(this.invitations.values())
-            .filter((inv: any) => inv.invitedEmail === email && inv.status === 'pending')
+            .filter((inv: any) => inv.invitedEmail === email && inv.status === &apos;pending&apos;)
             .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     }
 
     // Draft Management
     async startDraft(leagueId: string, commissionerId: string): Promise<League> {
+}
         const league = this.leagues.get(leagueId);
         if (!league) {
-            throw new Error('League not found');
+}
+            throw new Error(&apos;League not found&apos;);
         }
 
         if (league.commissionerId !== commissionerId) {
-            throw new Error('Only the commissioner can start the draft');
+}
+            throw new Error(&apos;Only the commissioner can start the draft&apos;);
         }
 
-        if (league.status !== 'draft') {
-            throw new Error('League is not in draft status');
+        if (league.status !== &apos;draft&apos;) {
+}
+            throw new Error(&apos;League is not in draft status&apos;);
         }
 
         if (league.members.length < 2) {
-            throw new Error('Need at least 2 members to start draft');
+}
+            throw new Error(&apos;Need at least 2 members to start draft&apos;);
         }
 
-        league.status = 'active';
+        league.status = &apos;active&apos;;
         league.draftDate = new Date();
         league.updatedAt = new Date();
 
         // Log draft start
         league.history.push({
+}
             id: `event_${Date.now()}`,
-            type: 'draft_start',
-            description: 'Draft started',
+            type: &apos;draft_start&apos;,
+            description: &apos;Draft started&apos;,
             initiatedBy: commissionerId,
             timestamp: new Date()
         });
@@ -584,18 +645,22 @@ export class LeagueManagementService {
 
     // Utilities
     private initializeMockData(): void {
+}
         // Create a sample league for testing
         const mockLeague: League = {
-            id: 'mock_league_1',
-            name: 'Championship League',
-            commissionerId: 'user_1',
-            commissionerName: 'Commissioner',
+}
+            id: &apos;mock_league_1&apos;,
+            name: &apos;Championship League&apos;,
+            commissionerId: &apos;user_1&apos;,
+            commissionerName: &apos;Commissioner&apos;,
             settings: {
+}
                 leagueSize: 12,
                 teamSize: 16,
-                scoringSystem: 'ppr',
-                draftType: 'snake',
+                scoringSystem: &apos;ppr&apos;,
+                draftType: &apos;snake&apos;,
                 startingLineup: {
+}
                     QB: 1,
                     RB: 2,
                     WR: 2,
@@ -606,7 +671,7 @@ export class LeagueManagementService {
                 },
                 benchSlots: 7,
                 irSlots: 1,
-                draftOrderType: 'randomized',
+                draftOrderType: &apos;randomized&apos;,
                 pickTimeLimit: 90,
                 autodraftEnabled: true,
                 regularSeasonWeeks: 14,
@@ -614,7 +679,7 @@ export class LeagueManagementService {
                 playoffTeams: 6,
                 championshipWeek: 17,
                 tradeDeadline: 12,
-                waiverType: 'rolling',
+                waiverType: &apos;rolling&apos;,
                 passingYards: 0.04,
                 passingTouchdowns: 4,
                 passingInterceptions: -2,
@@ -628,42 +693,44 @@ export class LeagueManagementService {
                 negativePoints: true,
                 commissionerVeto: true,
                 tradeReviewPeriod: 24,
-                rosterMoves: 'unlimited',
+                rosterMoves: &apos;unlimited&apos;,
                 lockTeams: false
             },
             members: [
                 {
-                    userId: 'user_1',
-                    username: 'Commissioner',
-                    email: 'commissioner@example.com',
-                    teamName: 'The Champions',
-                    role: 'commissioner',
+}
+                    userId: &apos;user_1&apos;,
+                    username: &apos;Commissioner&apos;,
+                    email: &apos;commissioner@example.com&apos;,
+                    teamName: &apos;The Champions&apos;,
+                    role: &apos;commissioner&apos;,
                     joinedAt: new Date(),
                     isActive: true,
-                    record: { wins: 8, losses: 4, ties: 0, pointsFor: 1250.5, pointsAgainst: 1180.2, streak: 3, streakType: 'W' }
+                    record: { wins: 8, losses: 4, ties: 0, pointsFor: 1250.5, pointsAgainst: 1180.2, streak: 3, streakType: &apos;W&apos; }
                 },
                 {
-                    userId: 'user_2',
-                    username: 'Player2',
-                    email: 'player2@example.com',
-                    teamName: 'The Contenders',
-                    role: 'owner',
+}
+                    userId: &apos;user_2&apos;,
+                    username: &apos;Player2&apos;,
+                    email: &apos;player2@example.com&apos;,
+                    teamName: &apos;The Contenders&apos;,
+                    role: &apos;owner&apos;,
                     joinedAt: new Date(),
                     isActive: true,
-                    record: { wins: 7, losses: 5, ties: 0, pointsFor: 1180.3, pointsAgainst: 1200.1, streak: 1, streakType: 'L' }
+                    record: { wins: 7, losses: 5, ties: 0, pointsFor: 1180.3, pointsAgainst: 1200.1, streak: 1, streakType: &apos;L&apos; }
                 }
             ],
-            status: 'active',
+            status: &apos;active&apos;,
             createdAt: new Date(),
             updatedAt: new Date(),
             seasonYear: new Date().getFullYear(),
             isPublic: true,
             maxMembers: 12,
-            description: 'Competitive fantasy football league',
+            description: &apos;Competitive fantasy football league&apos;,
             history: []
         };
 
-        this.leagues.set('mock_league_1', mockLeague);
+        this.leagues.set(&apos;mock_league_1&apos;, mockLeague);
     }
 }
 

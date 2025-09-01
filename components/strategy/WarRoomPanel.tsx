@@ -1,14 +1,15 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { Reorder } from 'framer-motion';
-import type { Player } from '../../types';
-import { players } from '../../data/players';
-import { QueueIcon } from '../icons/QueueIcon';
-import { DragHandleIcon } from '../icons/DragHandleIcon';
-import { CloseIcon } from '../icons/CloseIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { Reorder } from &apos;framer-motion&apos;;
+import type { Player } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { QueueIcon } from &apos;../icons/QueueIcon&apos;;
+import { DragHandleIcon } from &apos;../icons/DragHandleIcon&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
 
 interface WarRoomPanelProps {
+}
     queue: number[]; // player IDs
     leagueId: string;
     dispatch: React.Dispatch<any>;
@@ -16,28 +17,35 @@ interface WarRoomPanelProps {
 }
 
 const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }: any) => {
+}
     // We have player IDs, we need the full player objects, maintaining order
     const queuedPlayers = React.useMemo(() => {
+}
         const playerMap = new Map(players.map((p: any) => [p.id, p]));
         return queue.map((id: any) => playerMap.get(id)).filter((p: any) => p !== undefined) as Player[];
     }, [queue]);
     
     const setQueuedPlayers = (newOrder: Player[]) => {
+}
         const newPlayerIds = newOrder.map((p: any) => p.id);
         dispatch({
-            type: 'REORDER_QUEUE',
+}
+            type: &apos;REORDER_QUEUE&apos;,
             payload: { leagueId, playerIds: newPlayerIds }
         });
     };
 
     const handleRemove = (playerId: number) => {
+}
         dispatch({
-            type: 'REMOVE_FROM_QUEUE',
+}
+            type: &apos;REMOVE_FROM_QUEUE&apos;,
             payload: { leagueId, playerId }
         });
         const player = players.find((p: any) => p.id === playerId);
         if (player) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: `${player.name} removed from queue.` });
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: `${player.name} removed from queue.` });
 
     };
     
@@ -51,12 +59,14 @@ const WarRoomPanel: React.FC<WarRoomPanelProps> = ({ queue, leagueId, dispatch }
             </div>
             <div className="flex-grow space-y-1 overflow-y-auto pr-1 sm:px-4 md:px-6 lg:px-8">
                 {queuedPlayers.length === 0 ? (
+}
                     <div className="text-center text-sm text-[var(--text-secondary)] p-4 h-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                         <p>Add players to your queue from the player pool. Drag and drop to reorder.</p>
                     </div>
                 ) : (
                     <Reorder.Group axis="y" values={queuedPlayers} onReorder={setQueuedPlayers} className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {queuedPlayers.map((player: any) => (
+}
                             <Reorder.Item 
                                 key={player.id} 
                                 value={player}

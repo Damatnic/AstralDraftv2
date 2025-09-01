@@ -3,16 +3,18 @@
  * Handles real-time fantasy scoring and matchup management
  */
 
-import { apiService } from './apiService';
-import { socketService } from './socketService';
+import { apiService } from &apos;./apiService&apos;;
+import { socketService } from &apos;./socketService&apos;;
 
 export interface Matchup {
+}
   id: string;
   leagueId: string;
   week: number;
   season: number;
-  matchupType: 'REGULAR_SEASON' | 'PLAYOFF' | 'CHAMPIONSHIP' | 'CONSOLATION';
+  matchupType: &apos;REGULAR_SEASON&apos; | &apos;PLAYOFF&apos; | &apos;CHAMPIONSHIP&apos; | &apos;CONSOLATION&apos;;
   homeTeam: {
+}
     teamId: string;
     score: number;
     projectedScore: number;
@@ -20,14 +22,16 @@ export interface Matchup {
     benchPoints: number;
   };
   awayTeam: {
+}
     teamId: string;
     score: number;
     projectedScore: number;
     lineup: LineupPlayer[];
     benchPoints: number;
   };
-  status: 'SCHEDULED' | 'IN_PROGRESS' | 'FINAL' | 'POSTPONED';
+  status: &apos;SCHEDULED&apos; | &apos;IN_PROGRESS&apos; | &apos;FINAL&apos; | &apos;POSTPONED&apos;;
   winner?: {
+}
     teamId: string;
     margin: number;
     isTie: boolean;
@@ -36,36 +40,43 @@ export interface Matchup {
   gameEnd?: string;
   lastUpdated: string;
   playoffInfo?: {
+}
     round: number;
     seed: {
+}
       home: number;
       away: number;
     };
     isElimination: boolean;
   };
   stats: {
+}
     totalPoints: number;
     highestScoringPlayer?: {
+}
       playerId: string;
       points: number;
-      team: 'HOME' | 'AWAY';
+      team: &apos;HOME&apos; | &apos;AWAY&apos;;
     };
     lowestScoringPlayer?: {
+}
       playerId: string;
       points: number;
-      team: 'HOME' | 'AWAY';
+      team: &apos;HOME&apos; | &apos;AWAY&apos;;
     };
     benchHighScore: number;
     projectionAccuracy: number;
   };
   tiebreaker?: {
-    method: 'BENCH_POINTS' | 'QB_POINTS' | 'SEASON_RECORD';
+}
+    method: &apos;BENCH_POINTS&apos; | &apos;QB_POINTS&apos; | &apos;SEASON_RECORD&apos;;
     winner: string;
     details: string;
   };
 }
 
 export interface LineupPlayer {
+}
   player: string;
   position: string;
   points: number;
@@ -74,14 +85,17 @@ export interface LineupPlayer {
 }
 
 export interface ScoreUpdate {
+}
   matchupId: string;
   week: number;
   homeTeam: {
+}
     teamId: string;
     score: number;
     projectedScore: number;
   };
   awayTeam: {
+}
     teamId: string;
     score: number;
     projectedScore: number;
@@ -91,6 +105,7 @@ export interface ScoreUpdate {
 }
 
 export interface ScoringStats {
+}
   isUpdating: boolean;
   lastUpdateTime: string;
   cacheSize: number;
@@ -100,9 +115,11 @@ export interface ScoringStats {
 }
 
 class ScoringService {
+}
   private scoreUpdateCallbacks: Map<string, (update: ScoreUpdate) => void> = new Map();
 
   constructor() {
+}
     this.initializeSocketListeners();
   }
 
@@ -110,11 +127,14 @@ class ScoringService {
    * Initialize WebSocket listeners for real-time score updates
    */
   private initializeSocketListeners(): void {
-    socketService.on('score:update', (update: ScoreUpdate) => {
+}
+    socketService.on(&apos;score:update&apos;, (update: ScoreUpdate) => {
+}
       this.handleScoreUpdate(update);
     });
 
-    socketService.on('matchup:finalized', (data: { matchupId: string; winner: any; finalizedBy: string }) => {
+    socketService.on(&apos;matchup:finalized&apos;, (data: { matchupId: string; winner: any; finalizedBy: string }) => {
+}
       this.handleMatchupFinalized(data);
     });
   }
@@ -123,8 +143,10 @@ class ScoringService {
    * Handle real-time score updates
    */
   private handleScoreUpdate(update: ScoreUpdate): void {
+}
     // Notify all registered callbacks
     this.scoreUpdateCallbacks.forEach((callback: any) => {
+}
       callback(update);
     });
 
@@ -136,6 +158,7 @@ class ScoringService {
    * Handle matchup finalization
    */
   private handleMatchupFinalized(data: { matchupId: string; winner: any; finalizedBy: string }): void {
+}
     console.log(`Matchup ${data.matchupId} finalized by ${data.finalizedBy}`);
     // Trigger UI updates for finalized matchup
   }
@@ -144,6 +167,7 @@ class ScoringService {
    * Subscribe to score updates for a specific matchup
    */
   subscribeToScoreUpdates(matchupId: string, callback: (update: ScoreUpdate) => void): void {
+}
     this.scoreUpdateCallbacks.set(matchupId, callback);
   }
 
@@ -151,6 +175,7 @@ class ScoringService {
    * Unsubscribe from score updates
    */
   unsubscribeFromScoreUpdates(matchupId: string): void {
+}
     this.scoreUpdateCallbacks.delete(matchupId);
   }
 
@@ -158,6 +183,7 @@ class ScoringService {
    * Get weekly matchups for a league
    */
   async getWeeklyMatchups(leagueId: string, week: number): Promise<Matchup[]> {
+}
     const response = await apiService.get(`/matchups/league/${leagueId}/week/${week}`);
     return response.data.matchups;
   }
@@ -166,6 +192,7 @@ class ScoringService {
    * Get current week matchups for a league
    */
   async getCurrentMatchups(leagueId: string): Promise<Matchup[]> {
+}
     const response = await apiService.get(`/matchups/league/${leagueId}/current`);
     return response.data.matchups;
   }
@@ -174,6 +201,7 @@ class ScoringService {
    * Get all matchups for a specific team
    */
   async getTeamMatchups(teamId: string, season?: number): Promise<Matchup[]> {
+}
     const params = season ? { season } : {};
     const response = await apiService.get(`/matchups/team/${teamId}`, { params });
     return response.data.matchups;
@@ -183,6 +211,7 @@ class ScoringService {
    * Get specific matchup details
    */
   async getMatchupDetails(matchupId: string): Promise<Matchup> {
+}
     const response = await apiService.get(`/matchups/${matchupId}`);
     return response.data.matchup;
   }
@@ -191,7 +220,8 @@ class ScoringService {
    * Create weekly matchups for a league (commissioner only)
    */
   async createWeeklyMatchups(leagueId: string, week: number): Promise<Matchup[]> {
-    const response = await apiService.post('/matchups/create', { leagueId, week });
+}
+    const response = await apiService.post(&apos;/matchups/create&apos;, { leagueId, week });
     return response.data.matchups;
   }
 
@@ -204,10 +234,12 @@ class ScoringService {
     score: number,
     lineup?: LineupPlayer[]
   ): Promise<Matchup> {
+}
     const response = await apiService.post(`/matchups/${matchupId}/update-score`, {
+}
       teamId,
       score,
-      lineup
+//       lineup
     });
     return response.data.matchup;
   }
@@ -216,6 +248,7 @@ class ScoringService {
    * Finalize a matchup (commissioner only)
    */
   async finalizeMatchup(matchupId: string): Promise<Matchup> {
+}
     const response = await apiService.post(`/matchups/${matchupId}/finalize`);
     return response.data.matchup;
   }
@@ -224,8 +257,10 @@ class ScoringService {
    * Update live scores for all matchups in a league/week
    */
   async updateLiveScores(leagueId: string, week: number): Promise<{
+}
     updatedMatchups: number;
   }> {
+}
     const response = await apiService.post(`/matchups/update-scores/${leagueId}/${week}`);
     return response.data.result;
   }
@@ -234,6 +269,7 @@ class ScoringService {
    * Get playoff matchups for a league
    */
   async getPlayoffMatchups(leagueId: string, round?: number): Promise<Matchup[]> {
+}
     const params = round ? { round } : {};
     const response = await apiService.get(`/matchups/playoffs/${leagueId}`, { params });
     return response.data.matchups;
@@ -243,7 +279,8 @@ class ScoringService {
    * Get scoring engine statistics (admin only)
    */
   async getScoringStats(): Promise<ScoringStats> {
-    const response = await apiService.get('/matchups/scoring-stats');
+}
+    const response = await apiService.get(&apos;/matchups/scoring-stats&apos;);
     return response.data.stats;
   }
 
@@ -252,27 +289,33 @@ class ScoringService {
    */
   calculateFantasyPoints(
     stats: {
+}
       passing?: {
+}
         yards: number;
         touchdowns: number;
         interceptions: number;
       };
       rushing?: {
+}
         yards: number;
         touchdowns: number;
         fumbles: number;
       };
       receiving?: {
+}
         yards: number;
         touchdowns: number;
         receptions: number;
         fumbles: number;
       };
       kicking?: {
+}
         fieldGoalsMade: number;
         extraPointsMade: number;
       };
       defense?: {
+}
         sacks: number;
         interceptions: number;
         fumbleRecoveries: number;
@@ -281,12 +324,14 @@ class ScoringService {
         pointsAllowed: number;
       };
     },
-    scoringType: 'standard' | 'ppr' | 'half-ppr' = 'ppr'
+    scoringType: &apos;standard&apos; | &apos;ppr&apos; | &apos;half-ppr&apos; = &apos;ppr&apos;
   ): number {
+}
     let points = 0;
 
     // Passing points
     if (stats.passing) {
+}
       points += (stats.passing.yards || 0) * 0.04; // 1 point per 25 yards
       points += (stats.passing.touchdowns || 0) * 4;
       points += (stats.passing.interceptions || 0) * -2;
@@ -294,6 +339,7 @@ class ScoringService {
 
     // Rushing points
     if (stats.rushing) {
+}
       points += (stats.rushing.yards || 0) * 0.1; // 1 point per 10 yards
       points += (stats.rushing.touchdowns || 0) * 6;
       points += (stats.rushing.fumbles || 0) * -2;
@@ -301,26 +347,31 @@ class ScoringService {
 
     // Receiving points
     if (stats.receiving) {
+}
       points += (stats.receiving.yards || 0) * 0.1; // 1 point per 10 yards
       points += (stats.receiving.touchdowns || 0) * 6;
       points += (stats.receiving.fumbles || 0) * -2;
 
       // PPR bonus
-      if (scoringType === 'ppr') {
+      if (scoringType === &apos;ppr&apos;) {
+}
         points += (stats.receiving.receptions || 0) * 1;
-      } else if (scoringType === 'half-ppr') {
+      } else if (scoringType === &apos;half-ppr&apos;) {
+}
         points += (stats.receiving.receptions || 0) * 0.5;
       }
     }
 
     // Kicking points
     if (stats.kicking) {
+}
       points += (stats.kicking.fieldGoalsMade || 0) * 3;
       points += (stats.kicking.extraPointsMade || 0) * 1;
     }
 
     // Defense/Special Teams points
     if (stats.defense) {
+}
       points += (stats.defense.sacks || 0) * 1;
       points += (stats.defense.interceptions || 0) * 2;
       points += (stats.defense.fumbleRecoveries || 0) * 2;
@@ -345,6 +396,7 @@ class ScoringService {
    * Format score for display
    */
   formatScore(score: number): string {
+}
     return score.toFixed(1);
   }
 
@@ -352,40 +404,48 @@ class ScoringService {
    * Get matchup status display
    */
   getMatchupStatusDisplay(matchup: Matchup): {
+}
     status: string;
     color: string;
     description: string;
   } {
+}
     switch (matchup.status) {
-      case 'SCHEDULED':
+}
+      case &apos;SCHEDULED&apos;:
         return {
-          status: 'Scheduled',
-          color: 'gray',
+}
+          status: &apos;Scheduled&apos;,
+          color: &apos;gray&apos;,
           description: `Starts ${new Date(matchup.gameStart).toLocaleDateString()}`
         };
-      case 'IN_PROGRESS':
+      case &apos;IN_PROGRESS&apos;:
         return {
-          status: 'Live',
-          color: 'green',
-          description: 'Game in progress'
+}
+          status: &apos;Live&apos;,
+          color: &apos;green&apos;,
+          description: &apos;Game in progress&apos;
         };
-      case 'FINAL':
+      case &apos;FINAL&apos;:
         return {
-          status: 'Final',
-          color: 'blue',
-          description: 'Game completed'
+}
+          status: &apos;Final&apos;,
+          color: &apos;blue&apos;,
+          description: &apos;Game completed&apos;
         };
-      case 'POSTPONED':
+      case &apos;POSTPONED&apos;:
         return {
-          status: 'Postponed',
-          color: 'yellow',
-          description: 'Game postponed'
+}
+          status: &apos;Postponed&apos;,
+          color: &apos;yellow&apos;,
+          description: &apos;Game postponed&apos;
         };
       default:
         return {
-          status: 'Unknown',
-          color: 'gray',
-          description: 'Status unknown'
+}
+          status: &apos;Unknown&apos;,
+          color: &apos;gray&apos;,
+          description: &apos;Status unknown&apos;
         };
     }
   }
@@ -394,11 +454,15 @@ class ScoringService {
    * Get win probability based on current scores and projections
    */
   calculateWinProbability(matchup: Matchup): {
+}
     homeTeamWinProbability: number;
     awayTeamWinProbability: number;
   } {
-    if (matchup.status === 'FINAL') {
+}
+    if (matchup.status === &apos;FINAL&apos;) {
+}
       return {
+}
         homeTeamWinProbability: matchup.homeTeam.score > matchup.awayTeam.score ? 100 : 0,
         awayTeamWinProbability: matchup.awayTeam.score > matchup.homeTeam.score ? 100 : 0
       };
@@ -420,6 +484,7 @@ class ScoringService {
     const probability = 1 / (1 + Math.exp(-totalDiff / 10));
     
     return {
+}
       homeTeamWinProbability: Math.round(probability * 100),
       awayTeamWinProbability: Math.round((1 - probability) * 100)
     };
@@ -429,10 +494,12 @@ class ScoringService {
    * Update local score cache
    */
   private updateLocalScoreCache(update: ScoreUpdate): void {
+}
     const cacheKey = `matchup_${update.matchupId}_scores`;
     const cached = localStorage.getItem(cacheKey);
     
     if (cached) {
+}
       const data = JSON.parse(cached);
       data.lastUpdate = update.lastUpdated;
       data.homeScore = update.homeTeam.score;
@@ -445,14 +512,17 @@ class ScoringService {
    * Get cached scores for offline viewing
    */
   getCachedScores(matchupId: string): {
+}
     homeScore: number;
     awayScore: number;
     lastUpdate: string;
   } | null {
+}
     const cacheKey = `matchup_${matchupId}_scores`;
     const cached = localStorage.getItem(cacheKey);
     
     if (cached) {
+}
       return JSON.parse(cached);
     }
     
@@ -460,9 +530,10 @@ class ScoringService {
   }
 
   /**
-   * Check if it's currently NFL game time
+   * Check if it&apos;s currently NFL game time
    */
   isGameTime(): boolean {
+}
     const now = new Date();
     const day = now.getDay(); // 0 = Sunday, 4 = Thursday, 1 = Monday
     const hour = now.getHours();
@@ -483,6 +554,7 @@ class ScoringService {
    * Get current NFL week
    */
   getCurrentNFLWeek(): number {
+}
     const now = new Date();
     const seasonStart = new Date(now.getFullYear(), 8, 1); // September 1st
     const weeksSinceStart = Math.floor((now.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000));

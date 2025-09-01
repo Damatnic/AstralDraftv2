@@ -1,8 +1,9 @@
 
-import type { Player, Team, League, Matchup, DraftPick } from '../types';
-import { players } from '../data/players';
+import type { Player, Team, League, Matchup, DraftPick } from &apos;../types&apos;;
+import { players } from &apos;../data/players&apos;;
 
 export interface SeasonStoryData {
+}
     teamMvp: Player | null;
     draftGem: { player: Player, value: number, pick: number } | null;
     biggestWin: { matchup: Matchup, margin: number, opponent?: Team } | null;
@@ -10,14 +11,18 @@ export interface SeasonStoryData {
 }
 
 export function generateSeasonStory(team: Team, league: League): SeasonStoryData {
+}
     if (!team) return { teamMvp: null, draftGem: null, biggestWin: null, bestWeek: null };
 
     // Calculate total points for each player on the team based on weekly scores
     const playerScores: { [playerId: number]: number } = {};
     league.schedule.forEach((matchup: any) => {
+}
         const teamInMatchup = matchup.teamA.teamId === team.id ? matchup.teamA : (matchup.teamB.teamId === team.id ? matchup.teamB : null);
         if (teamInMatchup) {
+}
             teamInMatchup.roster.forEach((playerScore: any) => {
+}
                 playerScores[playerScore.player.id] = (playerScores[playerScore.player.id] || 0) + playerScore.actualScore;
             });
         }
@@ -28,20 +33,24 @@ export function generateSeasonStory(team: Team, league: League): SeasonStoryData
 
     const myDraftPicks = league.draftPicks.filter((p: any) => p.teamId === team.id && p.playerId);
     const draftGem = myDraftPicks.map((pick: any) => {
+}
         const player = players.find((p: any) => p.id === pick.playerId);
         if (!player) return null;
         const value = player.rank - pick.overall;
         return { player, value, pick: pick.overall };
     }).filter((p: any) => p !== null && p.value > 0).sort((a, b) => b!.value - a!.value)[0] || null;
 
-    let biggestWin: SeasonStoryData['biggestWin'] = null;
+    let biggestWin: SeasonStoryData[&apos;biggestWin&apos;] = null;
     let maxMargin = -Infinity;
     league.schedule.forEach((matchup: any) => {
+}
         if (matchup.teamA.teamId === team.id || matchup.teamB.teamId === team.id) {
+}
             const myScore = matchup.teamA.teamId === team.id ? matchup.teamA.score : matchup.teamB.score;
             const oppScore = matchup.teamA.teamId === team.id ? matchup.teamB.score : matchup.teamA.score;
             const margin = myScore - oppScore;
             if (margin > maxMargin) {
+}
                 maxMargin = margin;
                 const opponentId = matchup.teamA.teamId === team.id ? matchup.teamB.teamId : matchup.teamA.teamId;
                 biggestWin = { matchup, margin, opponent: league.teams.find((t: any) => t.id === opponentId) };
@@ -49,12 +58,15 @@ export function generateSeasonStory(team: Team, league: League): SeasonStoryData
         }
     });
 
-    let bestWeek: SeasonStoryData['bestWeek'] = null;
+    let bestWeek: SeasonStoryData[&apos;bestWeek&apos;] = null;
     let maxScore = -Infinity;
     league.schedule.forEach((matchup: any) => {
+}
         if (matchup.teamA.teamId === team.id || matchup.teamB.teamId === team.id) {
+}
             const myScore = matchup.teamA.teamId === team.id ? matchup.teamA.score : matchup.teamB.score;
             if (myScore > maxScore) {
+}
                 maxScore = myScore;
                 bestWeek = { week: matchup.week, score: myScore };
             }
@@ -62,8 +74,9 @@ export function generateSeasonStory(team: Team, league: League): SeasonStoryData
     });
 
     return {
+}
         teamMvp,
-        draftGem: draftGem as SeasonStoryData['draftGem'],
+        draftGem: draftGem as SeasonStoryData[&apos;draftGem&apos;],
         biggestWin,
         bestWeek,
     };

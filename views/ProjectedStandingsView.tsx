@@ -1,16 +1,16 @@
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { generateProjectedStandings } from '../services/geminiService';
-import type { ProjectedStanding } from '../types';
-import { TrendingUpIcon } from '../components/icons/TrendingUpIcon';
-import LoadingSpinner from '../components/ui/LoadingSpinner';
-import { Avatar } from '../components/ui/Avatar';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { generateProjectedStandings } from &apos;../services/geminiService&apos;;
+import type { ProjectedStanding } from &apos;../types&apos;;
+import { TrendingUpIcon } from &apos;../components/icons/TrendingUpIcon&apos;;
+import LoadingSpinner from &apos;../components/ui/LoadingSpinner&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
 
 const ProjectedStandingsView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [standings, setStandings] = React.useState<ProjectedStanding[] | null>(null);
@@ -18,26 +18,33 @@ const ProjectedStandingsView: React.FC = () => {
     const [error, setError] = React.useState<string | null>(null);
 
     React.useEffect(() => {
-        if (league && (league.status === 'IN_SEASON' || league.status === 'PLAYOFFS')) {
+}
+        if (league && (league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;)) {
+}
             setIsLoading(true);
             setError(null);
             generateProjectedStandings(league)
                 .then(data => {
+}
                     if (data) {
+}
                         setStandings(data);
                     } else {
+}
                         setError("The Oracle could not generate projections at this time.");
 
                 })
                 .catch(() => setError("An error occurred while consulting the Oracle."))
                 .finally(() => setIsLoading(false));
         } else {
+}
             setIsLoading(false);
 
     }, [league]);
 
-    if (!league || !(league.status === 'IN_SEASON' || league.status === 'PLAYOFFS')) {
-        return <ErrorDisplay title="Not Available" message="Projected standings are only available during an active season." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' })} />;
+    if (!league || !(league.status === &apos;IN_SEASON&apos; || league.status === &apos;PLAYOFFS&apos;)) {
+}
+        return <ErrorDisplay title="Not Available" message="Projected standings are only available during an active season." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_STANDINGS&apos; })} />;
 
     const sortedStandings = standings
         ? [...standings].sort((a, b) => b.projectedWins - a.projectedWins)
@@ -52,13 +59,14 @@ const ProjectedStandingsView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'LEAGUE_STANDINGS' }) className="glass-button">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;LEAGUE_STANDINGS&apos; }) className="glass-button">
                     Back to Standings
                 </button>
             </header>
             <main className="flex-grow">
                 <Widget title="End of Season Projections" icon={<TrendingUpIcon />}>
                     {isLoading ? <LoadingSpinner text="Simulating the rest of the season..." /> :
+}
                      error ? <ErrorDisplay message={error} /> :
                      standings && (
                         <div className="p-2">
@@ -68,11 +76,12 @@ const ProjectedStandingsView: React.FC = () => {
                                         <th className="p-3">Rank</th>
                                         <th className="p-3">Team</th>
                                         <th className="p-3 text-center">Projected Record</th>
-                                        <th className="p-3">Oracle's Outlook</th>
+                                        <th className="p-3">Oracle&apos;s Outlook</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {sortedStandings.map((standing, i) => {
+}
                                         const team = league.teams.find((t: any) => t.id === standing.teamId);
                                         if (!team) return null;
                                         

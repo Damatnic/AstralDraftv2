@@ -3,34 +3,40 @@
  * Demonstrates the comprehensive notification system capabilities
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { Widget } from '../ui/Widget';
-import { PlayIcon, SettingsIcon } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useNotifications } from &apos;../../contexts/NotificationContext&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { PlayIcon, SettingsIcon } from &apos;lucide-react&apos;;
 
 const NotificationDemo: React.FC = () => {
+}
     const { sendNotification, preferences, updatePreferences } = useNotifications();
     const [demoInProgress, setDemoInProgress] = useState(false);
 
     const runDemoSequence = async () => {
+}
     try {
+}
         setDemoInProgress(true);
 
         // Draft Pick Reminder
         await sendNotification(
-            'DRAFT_PICK',
-            'Your Turn to Pick! 🏈',
-            "It's your turn to pick in the Draft League. Time remaining: 45s",
+            &apos;DRAFT_PICK&apos;,
+            &apos;Your Turn to Pick! 🏈&apos;,
+            "It&apos;s your turn to pick in the Draft League. Time remaining: 45s",
             {
-                priority: 'urgent',
-                actionUrl: '/draft/demo',
-                actionText: 'Make Pick',
+}
+                priority: &apos;urgent&apos;,
+                actionUrl: &apos;/draft/demo&apos;,
+                actionText: &apos;Make Pick&apos;,
                 data: { pickNumber: 15, timeRemaining: 45 
+}
     
     } catch (error) {
-      console.error('Error in runDemoSequence:', error);
+}
+      console.error(&apos;Error in runDemoSequence:&apos;, error);
 
 
 
@@ -40,14 +46,15 @@ const NotificationDemo: React.FC = () => {
 
         // Oracle Prediction Update
         await sendNotification(
-            'ORACLE_PREDICTION',
-            'Oracle Prediction Updated',
-            'Oracle updated prediction for Josh Allen Week 10 - Confidence: 85%',
+            &apos;ORACLE_PREDICTION&apos;,
+            &apos;Oracle Prediction Updated&apos;,
+            &apos;Oracle updated prediction for Josh Allen Week 10 - Confidence: 85%&apos;,
             {
-                priority: 'medium',
-                actionUrl: '/oracle/predictions/demo',
-                actionText: 'View Prediction',
-                data: { confidence: 85, reasoning: 'Weather conditions favorable' }
+}
+                priority: &apos;medium&apos;,
+                actionUrl: &apos;/oracle/predictions/demo&apos;,
+                actionText: &apos;View Prediction&apos;,
+                data: { confidence: 85, reasoning: &apos;Weather conditions favorable&apos; }
 
         );
 
@@ -55,14 +62,15 @@ const NotificationDemo: React.FC = () => {
 
         // Trade Proposal
         await sendNotification(
-            'TRADE',
-            'New Trade Proposal',
-            'Team Alpha sent you a trade proposal',
+            &apos;TRADE&apos;,
+            &apos;New Trade Proposal&apos;,
+            &apos;Team Alpha sent you a trade proposal&apos;,
             {
-                priority: 'medium',
-                actionUrl: '/trades/demo',
-                actionText: 'Review Trade',
-                data: { fromTeam: 'Team Alpha' }
+}
+                priority: &apos;medium&apos;,
+                actionUrl: &apos;/trades/demo&apos;,
+                actionText: &apos;Review Trade&apos;,
+                data: { fromTeam: &apos;Team Alpha&apos; }
 
         );
 
@@ -70,14 +78,15 @@ const NotificationDemo: React.FC = () => {
 
         // Achievement Unlocked
         await sendNotification(
-            'ACHIEVEMENT',
-            'Achievement Unlocked! 🏆',
-            'You unlocked "Oracle Master": Correctly predicted 10 Oracle challenges',
+            &apos;ACHIEVEMENT&apos;,
+            &apos;Achievement Unlocked! 🏆&apos;,
+            &apos;You unlocked "Oracle Master": Correctly predicted 10 Oracle challenges&apos;,
             {
-                priority: 'low',
-                actionUrl: '/achievements/demo',
-                actionText: 'View Achievement',
-                data: { achievementName: 'Oracle Master' }
+}
+                priority: &apos;low&apos;,
+                actionUrl: &apos;/achievements/demo&apos;,
+                actionText: &apos;View Achievement&apos;,
+                data: { achievementName: &apos;Oracle Master&apos; }
 
         );
 
@@ -85,14 +94,15 @@ const NotificationDemo: React.FC = () => {
 
         // League Announcement
         await sendNotification(
-            'LEAGUE_UPDATE',
-            'League Announcement',
-            'Commissioner updated playoff format - Check the new rules',
+            &apos;LEAGUE_UPDATE&apos;,
+            &apos;League Announcement&apos;,
+            &apos;Commissioner updated playoff format - Check the new rules&apos;,
             {
-                priority: 'medium',
-                actionUrl: '/league/announcements/demo',
-                actionText: 'View Details',
-                data: { commissionerName: 'League Admin' }
+}
+                priority: &apos;medium&apos;,
+                actionUrl: &apos;/league/announcements/demo&apos;,
+                actionText: &apos;View Details&apos;,
+                data: { commissionerName: &apos;League Admin&apos; }
 
         );
 
@@ -101,37 +111,45 @@ const NotificationDemo: React.FC = () => {
 
     const testNotificationTypes = [
         {
-            type: 'DRAFT_START',
-            title: 'Draft Starting Soon! 🚀',
-            message: 'Your draft is starting in 15 minutes. Get ready!',
-            priority: 'high'
+}
+            type: &apos;DRAFT_START&apos;,
+            title: &apos;Draft Starting Soon! 🚀&apos;,
+            message: &apos;Your draft is starting in 15 minutes. Get ready!&apos;,
+            priority: &apos;high&apos;
         },
         {
-            type: 'ORACLE_RESULT',
-            title: 'Oracle Challenge Won! 🎉',
-            message: 'Congratulations! You earned 150 points.',
-            priority: 'medium'
+}
+            type: &apos;ORACLE_RESULT&apos;,
+            title: &apos;Oracle Challenge Won! 🎉&apos;,
+            message: &apos;Congratulations! You earned 150 points.&apos;,
+            priority: &apos;medium&apos;
         },
         {
-            type: 'SYSTEM',
-            title: 'Maintenance Alert',
-            message: 'Scheduled maintenance will begin at 2:00 AM EST',
-            priority: 'low'
+}
+            type: &apos;SYSTEM&apos;,
+            title: &apos;Maintenance Alert&apos;,
+            message: &apos;Scheduled maintenance will begin at 2:00 AM EST&apos;,
+            priority: &apos;low&apos;
 
     ];
 
     const quickTestNotification = async () => {
+}
     try {
+}
         await sendNotification(
             testNotif.type,
             testNotif.title,
             testNotif.message,
             {
+}
                 priority: testNotif.priority,
                 data: { test: true 
+}
     
     } catch (error) {
-      console.error('Error in quickTestNotification:', error);
+}
+      console.error(&apos;Error in quickTestNotification:&apos;, error);
 
 
 
@@ -155,13 +173,14 @@ const NotificationDemo: React.FC = () => {
                             onClick={runDemoSequence}
                             disabled={demoInProgress}
                             className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                                demoInProgress 
-                                    ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+}
+//                                 demoInProgress 
+                                    ? &apos;bg-gray-600 text-gray-400 cursor-not-allowed&apos; 
+                                    : &apos;bg-blue-600 hover:bg-blue-700 text-white&apos;
                             }`}
                          aria-label="Action button">
                             <PlayIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            <span>{demoInProgress ? 'Demo Running...' : 'Start Demo Sequence'}</span>
+                            <span>{demoInProgress ? &apos;Demo Running...&apos; : &apos;Start Demo Sequence&apos;}</span>
                         </button>
                     </div>
 
@@ -172,11 +191,14 @@ const NotificationDemo: React.FC = () => {
                         </h3>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
                             {testNotificationTypes.map((testNotif: any) => {
-                                let priorityClasses = 'bg-gray-500/20 text-gray-400';
-                                if (testNotif.priority === 'high') {
-                                    priorityClasses = 'bg-orange-500/20 text-orange-400';
-                                } else if (testNotif.priority === 'medium') {
-                                    priorityClasses = 'bg-blue-500/20 text-blue-400';
+}
+                                let priorityClasses = &apos;bg-gray-500/20 text-gray-400&apos;;
+                                if (testNotif.priority === &apos;high&apos;) {
+}
+                                    priorityClasses = &apos;bg-orange-500/20 text-orange-400&apos;;
+                                } else if (testNotif.priority === &apos;medium&apos;) {
+}
+                                    priorityClasses = &apos;bg-blue-500/20 text-blue-400&apos;;
 
                                 return (
                                     <motion.button
@@ -211,6 +233,7 @@ const NotificationDemo: React.FC = () => {
                         </div>
                         
                         {preferences ? (
+}
                             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Push Notifications</span>
@@ -218,6 +241,7 @@ const NotificationDemo: React.FC = () => {
                                         type="checkbox"
                                         checked={preferences.enablePushNotifications || false}
                                         onChange={(e: any) => updatePreferences({
+}
                                             enablePushNotifications: e.target.checked
                                         }}
                                         className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -229,6 +253,7 @@ const NotificationDemo: React.FC = () => {
                                         type="checkbox"
                                         checked={preferences.enableSoundNotifications || false}
                                         onChange={(e: any) => updatePreferences({
+}
                                             enableSoundNotifications: e.target.checked
                                         }}
                                         className="accent-blue-500 sm:px-4 md:px-6 lg:px-8"
@@ -240,9 +265,12 @@ const NotificationDemo: React.FC = () => {
                                         type="checkbox"
                                         checked={preferences.categories?.draft?.enabled || false}
                                         onChange={(e: any) => updatePreferences({
+}
                                             categories: {
+}
                                                 ...preferences.categories,
                                                 draft: {
+}
                                                     ...preferences.categories?.draft,
                                                     enabled: e.target.checked
                                                 }}
@@ -256,9 +284,12 @@ const NotificationDemo: React.FC = () => {
                                         type="checkbox"
                                         checked={preferences.categories?.oracle?.enabled || false}
                                         onChange={(e: any) => updatePreferences({
+}
                                             categories: {
+}
                                                 ...preferences.categories,
                                                 oracle: {
+}
                                                     ...preferences.categories?.oracle,
                                                     enabled: e.target.checked
                                                 }}

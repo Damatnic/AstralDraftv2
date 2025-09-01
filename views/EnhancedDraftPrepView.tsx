@@ -3,17 +3,18 @@
  * Complete draft preparation interface
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilNextWeek, SEASON_DATES_2025 } from '../data/leagueData';
-import DraftOrder from '../components/draft/DraftOrder';
-import PlayerSearch from '../components/players/PlayerSearch';
-import { getTopPlayersByPosition, DRAFT_TIERS } from '../data/nflPlayers';
+import React, { useState } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { getDaysUntilNextWeek, SEASON_DATES_2025 } from &apos;../data/leagueData&apos;;
+import DraftOrder from &apos;../components/draft/DraftOrder&apos;;
+import PlayerSearch from &apos;../components/players/PlayerSearch&apos;;
+import { getTopPlayersByPosition, DRAFT_TIERS } from &apos;../data/nflPlayers&apos;;
 
 const EnhancedDraftPrepView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<'order' | 'rankings' | 'tiers' | 'strategy' | 'mock'>('order');
+  const [activeTab, setActiveTab] = useState<&apos;order&apos; | &apos;rankings&apos; | &apos;tiers&apos; | &apos;strategy&apos; | &apos;mock&apos;>(&apos;order&apos;);
 
   const league = state.leagues[0];
   const isCommissioner = state.user?.id === league?.commissionerId;
@@ -21,24 +22,26 @@ const EnhancedDraftPrepView: React.FC = () => {
   const draftDate = SEASON_DATES_2025.draftDate;
 
   const tabs = [
-    { id: 'order', label: 'Draft Order', icon: '📋' },
-    { id: 'rankings', label: 'Player Rankings', icon: '📊' },
-    { id: 'tiers', label: 'Draft Tiers', icon: '🎯' },
-    { id: 'strategy', label: 'Strategy Guide', icon: '🧠' },
-    { id: 'mock', label: 'Mock Draft', icon: '🎮' }
+    { id: &apos;order&apos;, label: &apos;Draft Order&apos;, icon: &apos;📋&apos; },
+    { id: &apos;rankings&apos;, label: &apos;Player Rankings&apos;, icon: &apos;📊&apos; },
+    { id: &apos;tiers&apos;, label: &apos;Draft Tiers&apos;, icon: &apos;🎯&apos; },
+    { id: &apos;strategy&apos;, label: &apos;Strategy Guide&apos;, icon: &apos;🧠&apos; },
+    { id: &apos;mock&apos;, label: &apos;Mock Draft&apos;, icon: &apos;🎮&apos; }
   ];
 
   const renderTabContent = () => {
+}
     switch (activeTab) {
-      case 'order':
+}
+      case &apos;order&apos;:
         return (
-          <DraftOrder 
+          <DraftOrder>
             showRandomizeButton={true}
             isCommissioner={isCommissioner}
           />
         );
 
-      case 'rankings':
+      case &apos;rankings&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -54,7 +57,8 @@ const EnhancedDraftPrepView: React.FC = () => {
                   Top Quarterbacks
                 </h4>
                 <div className="space-y-2">
-                  {getTopPlayersByPosition('QB', 5).map((player, index) => (
+                  {getTopPlayersByPosition(&apos;QB&apos;, 5).map((player, index) => (
+}
                     <div key={player.id} className="flex items-center justify-between p-2 bg-slate-700/50 rounded">
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 bg-red-600 text-white text-xs font-bold rounded flex items-center justify-center">
@@ -81,7 +85,8 @@ const EnhancedDraftPrepView: React.FC = () => {
                   Top Running Backs
                 </h4>
                 <div className="space-y-2">
-                  {getTopPlayersByPosition('RB', 5).map((player, index) => (
+                  {getTopPlayersByPosition(&apos;RB&apos;, 5).map((player, index) => (
+}
                     <div key={player.id} className="flex items-center justify-between p-2 bg-slate-700/50 rounded">
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 bg-green-600 text-white text-xs font-bold rounded flex items-center justify-center">
@@ -108,7 +113,8 @@ const EnhancedDraftPrepView: React.FC = () => {
                   Top Wide Receivers
                 </h4>
                 <div className="space-y-2">
-                  {getTopPlayersByPosition('WR', 5).map((player, index) => (
+                  {getTopPlayersByPosition(&apos;WR&apos;, 5).map((player, index) => (
+}
                     <div key={player.id} className="flex items-center justify-between p-2 bg-slate-700/50 rounded">
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 bg-blue-600 text-white text-xs font-bold rounded flex items-center justify-center">
@@ -135,7 +141,8 @@ const EnhancedDraftPrepView: React.FC = () => {
                   Top Tight Ends
                 </h4>
                 <div className="space-y-2">
-                  {getTopPlayersByPosition('TE', 5).map((player, index) => (
+                  {getTopPlayersByPosition(&apos;TE&apos;, 5).map((player, index) => (
+}
                     <div key={player.id} className="flex items-center justify-between p-2 bg-slate-700/50 rounded">
                       <div className="flex items-center gap-3">
                         <span className="w-6 h-6 bg-yellow-600 text-white text-xs font-bold rounded flex items-center justify-center">
@@ -158,7 +165,7 @@ const EnhancedDraftPrepView: React.FC = () => {
           </div>
         );
 
-      case 'tiers':
+      case &apos;tiers&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -168,16 +175,19 @@ const EnhancedDraftPrepView: React.FC = () => {
 
             <div className="space-y-6">
               {Object.entries(DRAFT_TIERS).map(([position, tiers]) => (
+}
                 <div key={position} className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
                   <h4 className="font-semibold text-white mb-4">{position} Tiers</h4>
                   <div className="space-y-4">
                     {tiers.map((tier, tierIndex) => (
+}
                       <div key={tierIndex} className="border border-slate-600 rounded-lg p-3">
                         <h5 className="text-sm font-semibold text-slate-300 mb-2">
                           Tier {tier.tier} ({tier.players.length} players)
                         </h5>
                         <div className="flex flex-wrap gap-2">
                           {tier.players.map((playerId: any) => {
+}
                             const player = league.allPlayers.find((p: any) => p.id === playerId);
                             return player ? (
                               <span
@@ -198,7 +208,7 @@ const EnhancedDraftPrepView: React.FC = () => {
           </div>
         );
 
-      case 'strategy':
+      case &apos;strategy&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -228,7 +238,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                 </h4>
                 <ul className="space-y-2 text-slate-300 text-sm">
                   <li>• Fill out starting lineup positions</li>
-                  <li>• Target QB if you haven't taken one</li>
+                  <li>• Target QB if you haven&apos;t taken one</li>
                   <li>• Look for high-upside WR/RB</li>
                   <li>• Consider TE if elite options available</li>
                   <li>• Start thinking about bye weeks</li>
@@ -281,7 +291,7 @@ const EnhancedDraftPrepView: React.FC = () => {
           </div>
         );
 
-      case 'mock':
+      case &apos;mock&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -311,7 +321,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                   </div>
                 </div>
                 <button 
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MOCK_DRAFT' })}
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MOCK_DRAFT&apos; })}
                   className="glass-button-primary px-6 py-3 font-semibold"
                 >
                   Start Mock Draft Now
@@ -333,7 +343,7 @@ const EnhancedDraftPrepView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
               className="glass-button"
             >
               ← Back to Dashboard
@@ -364,11 +374,12 @@ const EnhancedDraftPrepView: React.FC = () => {
         >
           <h2 className="text-2xl font-bold mb-2">🏈 Draft Day Countdown</h2>
           <p className="text-lg mb-4">
-            {draftDate.toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
+            {draftDate.toLocaleDateString(&apos;en-US&apos;, { 
+}
+              weekday: &apos;long&apos;, 
+              year: &apos;numeric&apos;, 
+              month: &apos;long&apos;, 
+              day: &apos;numeric&apos; 
             })} at 7:00 PM
           </p>
           <div className="text-3xl font-bold">{daysUntilNextWeek} Days Remaining</div>
@@ -378,13 +389,15 @@ const EnhancedDraftPrepView: React.FC = () => {
         <div className="mb-8">
           <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 overflow-x-auto">
             {tabs.map((tab: any) => (
+}
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+}
                   activeTab === tab.id
-                    ? 'bg-orange-600 text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-slate-700'
+                    ? &apos;bg-orange-600 text-white&apos;
+                    : &apos;text-gray-300 hover:text-white hover:bg-slate-700&apos;
                 }`}
               >
                 <span>{tab.icon}</span>

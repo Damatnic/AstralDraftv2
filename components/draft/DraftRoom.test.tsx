@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import DraftRoom from './DraftRoom';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import DraftRoom from &apos;./DraftRoom&apos;;
 
-describe('DraftRoom', () => {
-  it('renders without crashing', () => {
+describe(&apos;DraftRoom&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<DraftRoom />);
-    expect(screen.getByTestId('draftroom')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;draftroom&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<DraftRoom />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<DraftRoom />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

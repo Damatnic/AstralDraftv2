@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import MatchupTrendChart from './MatchupTrendChart';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import MatchupTrendChart from &apos;./MatchupTrendChart&apos;;
 
-describe('MatchupTrendChart', () => {
-  it('renders without crashing', () => {
+describe(&apos;MatchupTrendChart&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<MatchupTrendChart />);
-    expect(screen.getByTestId('matchuptrendchart')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;matchuptrendchart&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<MatchupTrendChart />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<MatchupTrendChart />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

@@ -1,8 +1,9 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState } from 'react';
-import './OracleNeuralNetworkSection.css';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState } from &apos;react&apos;;
+import &apos;./OracleNeuralNetworkSection.css&apos;;
 
 interface NetworkLayer {
+}
   id: string;
   name: string;
   type: string;
@@ -15,6 +16,7 @@ interface NetworkLayer {
 }
 
 interface ActivationFunction {
+}
   id: string;
   name: string;
   formula: string;
@@ -25,6 +27,7 @@ interface ActivationFunction {
   useCases: string[];
 
 interface TrainingTechnique {
+}
   id: string;
   name: string;
   description: string;
@@ -37,6 +40,7 @@ interface TrainingTechnique {
 }
 
 interface LearningCurvePoint {
+}
   sampleSize: number;
   trainLoss: number;
   valLoss: number;
@@ -45,6 +49,7 @@ interface LearningCurvePoint {
   converged: boolean;
 
 interface LearningCurveConfig {
+}
   id: string;
   name: string;
   minSample: number;
@@ -57,20 +62,24 @@ interface LearningCurveConfig {
 }
 
 interface FeatureImportanceResult {
+}
   featureName: string;
   permutationImportance: number;
   shapValue: number;
   baselineContribution: number;
   rank: number;
-  category: 'high' | 'medium' | 'low';
+  category: &apos;high&apos; | &apos;medium&apos; | &apos;low&apos;;
   description: string;
 
 interface SHAPAnalysis {
+}
   globalImportance: FeatureImportanceResult[];
   localExplanation: {
+}
     prediction: number;
     baseValue: number;
     contributions: Array<{
+}
       feature: string;
       value: number;
       shapValue: number;
@@ -78,24 +87,27 @@ interface SHAPAnalysis {
   };
   interactionMatrix: Array<Array<number>>;
   dependencePlots: Array<{
+}
     feature: string;
     values: Array<{ x: number; y: number; color: number }>;
   }>;
 
 interface PermutationConfig {
+}
   id: string;
   name: string;
   features: string[];
   iterations: number;
-  metric: 'mse' | 'mae' | 'r2';
+  metric: &apos;mse&apos; | &apos;mae&apos; | &apos;r2&apos;;
   randomSeed: number;
 
 }
 
 const learningCurveConfigs: LearningCurveConfig[] = [
   {
-    id: 'nn_curve',
-    name: 'Neural Network Learning Curve',
+}
+    id: &apos;nn_curve&apos;,
+    name: &apos;Neural Network Learning Curve&apos;,
     minSample: 100,
     maxSample: 5000,
     step: 100,
@@ -103,8 +115,9 @@ const learningCurveConfigs: LearningCurveConfig[] = [
     expectedConvergence: 2500
   },
   {
-    id: 'rf_curve',
-    name: 'Random Forest Learning Curve',
+}
+    id: &apos;rf_curve&apos;,
+    name: &apos;Random Forest Learning Curve&apos;,
     minSample: 50,
     maxSample: 3000,
     step: 50,
@@ -116,36 +129,39 @@ const learningCurveConfigs: LearningCurveConfig[] = [
 // Feature importance configurations
 const permutationConfigs: PermutationConfig[] = [
   {
-    id: 'fantasy_features',
-    name: 'Fantasy Football Features',
+}
+    id: &apos;fantasy_features&apos;,
+    name: &apos;Fantasy Football Features&apos;,
     features: [
-      'passing_yards', 'rushing_yards', 'receiving_yards', 'touchdowns',
-      'targets', 'completions', 'attempts', 'team_strength', 'opponent_ranking',
-      'weather_conditions', 'home_away', 'injury_status', 'recent_form',
-      'season_avg', 'matchup_difficulty', 'snap_percentage', 'red_zone_touches', 'game_script'
+      &apos;passing_yards&apos;, &apos;rushing_yards&apos;, &apos;receiving_yards&apos;, &apos;touchdowns&apos;,
+      &apos;targets&apos;, &apos;completions&apos;, &apos;attempts&apos;, &apos;team_strength&apos;, &apos;opponent_ranking&apos;,
+      &apos;weather_conditions&apos;, &apos;home_away&apos;, &apos;injury_status&apos;, &apos;recent_form&apos;,
+      &apos;season_avg&apos;, &apos;matchup_difficulty&apos;, &apos;snap_percentage&apos;, &apos;red_zone_touches&apos;, &apos;game_script&apos;
     ],
     iterations: 50,
-    metric: 'mse',
+    metric: &apos;mse&apos;,
     randomSeed: 42
   },
   {
-    id: 'player_specific',
-    name: 'Player-Specific Analysis',
+}
+    id: &apos;player_specific&apos;,
+    name: &apos;Player-Specific Analysis&apos;,
     features: [
-      'player_age', 'experience_years', 'position_rank', 'team_offensive_rating',
-      'usage_rate', 'target_share', 'air_yards', 'yards_after_catch',
-      'breakaway_runs', 'goal_line_carries', 'third_down_usage', 'two_minute_drill'
+      &apos;player_age&apos;, &apos;experience_years&apos;, &apos;position_rank&apos;, &apos;team_offensive_rating&apos;,
+      &apos;usage_rate&apos;, &apos;target_share&apos;, &apos;air_yards&apos;, &apos;yards_after_catch&apos;,
+      &apos;breakaway_runs&apos;, &apos;goal_line_carries&apos;, &apos;third_down_usage&apos;, &apos;two_minute_drill&apos;
     ],
     iterations: 30,
-    metric: 'mae',
+    metric: &apos;mae&apos;,
     randomSeed: 123
 
 ];
 
 const OracleNeuralNetworkSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'architecture' | 'activations' | 'training' | 'optimization' | 'demo' | 'learning_curve' | 'feature_importance' | 'model_selection'>('overview');
+}
+  const [activeTab, setActiveTab] = useState<&apos;overview&apos; | &apos;architecture&apos; | &apos;activations&apos; | &apos;training&apos; | &apos;optimization&apos; | &apos;demo&apos; | &apos;learning_curve&apos; | &apos;feature_importance&apos; | &apos;model_selection&apos;>(&apos;overview&apos;);
   // Model Selection state
-  const [selectedModelType, setSelectedModelType] = useState<'neural_network' | 'random_forest' | 'ensemble'>('neural_network');
+  const [selectedModelType, setSelectedModelType] = useState<&apos;neural_network&apos; | &apos;random_forest&apos; | &apos;ensemble&apos;>(&apos;neural_network&apos;);
   const [modelSelectionResults, setModelSelectionResults] = useState<any>(null);
   const [modelSelectionRunning, setModelSelectionRunning] = useState<boolean>(false);
   const [modelSelectionProgress, setModelSelectionProgress] = useState<number>(0);
@@ -153,49 +169,59 @@ const OracleNeuralNetworkSection: React.FC = () => {
   // Model selection configs
   const modelConfigs = [
     {
-      id: 'neural_network',
-      name: 'Neural Network',
-      description: 'Deep learning model with multiple hidden layers and regularization.',
-      criteria: ['Accuracy', 'Generalization', 'Interpretability', 'Training Time', 'Robustness'],
+}
+      id: &apos;neural_network&apos;,
+      name: &apos;Neural Network&apos;,
+      description: &apos;Deep learning model with multiple hidden layers and regularization.&apos;,
+      criteria: [&apos;Accuracy&apos;, &apos;Generalization&apos;, &apos;Interpretability&apos;, &apos;Training Time&apos;, &apos;Robustness&apos;],
     },
     {
-      id: 'random_forest',
-      name: 'Random Forest',
-      description: 'Ensemble of decision trees with bagging for stability and feature importance.',
-      criteria: ['Accuracy', 'Feature Importance', 'Training Time', 'Overfitting Risk', 'Interpretability'],
+}
+      id: &apos;random_forest&apos;,
+      name: &apos;Random Forest&apos;,
+      description: &apos;Ensemble of decision trees with bagging for stability and feature importance.&apos;,
+      criteria: [&apos;Accuracy&apos;, &apos;Feature Importance&apos;, &apos;Training Time&apos;, &apos;Overfitting Risk&apos;, &apos;Interpretability&apos;],
     },
     {
-      id: 'ensemble',
-      name: 'Stacked Ensemble',
-      description: 'Combines multiple models for improved prediction and robustness.',
-      criteria: ['Accuracy', 'Robustness', 'Complexity', 'Generalization', 'Training Time'],
+}
+      id: &apos;ensemble&apos;,
+      name: &apos;Stacked Ensemble&apos;,
+      description: &apos;Combines multiple models for improved prediction and robustness.&apos;,
+      criteria: [&apos;Accuracy&apos;, &apos;Robustness&apos;, &apos;Complexity&apos;, &apos;Generalization&apos;, &apos;Training Time&apos;],
     },
   ];
 
   // Simulate model selection analysis
   const runModelSelectionAnalysis = async () => {
+}
     try {
+}
 
     setModelSelectionRunning(true);
     setModelSelectionProgress(0);
     const results: any = {
+}
     } catch (error) {
-      console.error('Error in runModelSelectionAnalysis:', error);
+}
+      console.error(&apos;Error in runModelSelectionAnalysis:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     };
     for (let i = 0; i < modelConfigs.length; i++) {
+}
       const model = modelConfigs[i];
       // Simulate metrics
       results[model.id] = {
+}
         accuracy: (0.85 + Math.random() * 0.1).toFixed(3),
         generalization: (0.8 + Math.random() * 0.15).toFixed(3),
-        interpretability: (model.id === 'random_forest' ? 0.8 : model.id === 'ensemble' ? 0.6 : 0.5).toFixed(2),
-        trainingTime: (model.id === 'neural_network' ? 120 : model.id === 'random_forest' ? 40 : 180),
+        interpretability: (model.id === &apos;random_forest&apos; ? 0.8 : model.id === &apos;ensemble&apos; ? 0.6 : 0.5).toFixed(2),
+        trainingTime: (model.id === &apos;neural_network&apos; ? 120 : model.id === &apos;random_forest&apos; ? 40 : 180),
         robustness: (0.7 + Math.random() * 0.2).toFixed(2),
-        overfittingRisk: (model.id === 'neural_network' ? 0.3 : model.id === 'random_forest' ? 0.2 : 0.15).toFixed(2),
-        complexity: (model.id === 'ensemble' ? 0.9 : model.id === 'neural_network' ? 0.7 : 0.5).toFixed(2),
+        overfittingRisk: (model.id === &apos;neural_network&apos; ? 0.3 : model.id === &apos;random_forest&apos; ? 0.2 : 0.15).toFixed(2),
+        complexity: (model.id === &apos;ensemble&apos; ? 0.9 : model.id === &apos;neural_network&apos; ? 0.7 : 0.5).toFixed(2),
       };
       setModelSelectionProgress(((i + 1) / modelConfigs.length) * 100);
       await new Promise(res => setTimeout(res, 60));
@@ -213,7 +239,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
         <select
           id="model-type-select"
           value={selectedModelType}
-          onChange={e => setSelectedModelType(e.target.value as 'neural_network' | 'random_forest' | 'ensemble')} value={cfg.id}>{cfg.name}</option>
+          onChange={e => setSelectedModelType(e.target.value as &apos;neural_network&apos; | &apos;random_forest&apos; | &apos;ensemble&apos;)} value={cfg.id}>{cfg.name}</option>
           ))}
         </select>
         <button
@@ -221,7 +247,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           onClick={runModelSelectionAnalysis}
           disabled={modelSelectionRunning}
         >
-          {modelSelectionRunning ? 'Comparing...' : 'Run Comparison'}
+          {modelSelectionRunning ? &apos;Comparing...&apos; : &apos;Run Comparison&apos;}
         </button>
         <div className="model-selection-progress-bar sm:px-4 md:px-6 lg:px-8">
           <div className="model-selection-progress-fill sm:px-4 md:px-6 lg:px-8" style={{ width: `${modelSelectionProgress}%` }}></div>
@@ -229,6 +255,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       </div>
 
       {modelSelectionResults && (
+}
         <div className="model-selection-results sm:px-4 md:px-6 lg:px-8">
           <h4>📊 Model Comparison Table</h4>
           <table className="model-table sm:px-4 md:px-6 lg:px-8">
@@ -246,7 +273,8 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </thead>
             <tbody>
               {modelConfigs.map((cfg: any) => (
-                <tr key={`model-row-${cfg.id}`} className={selectedModelType === cfg.id ? 'selected-model-row' : ''}>
+}
+                <tr key={`model-row-${cfg.id}`} className={selectedModelType === cfg.id ? &apos;selected-model-row&apos; : &apos;&apos;}>
                   <td>{cfg.name}</td>
                   <td>{modelSelectionResults[cfg.id].accuracy}</td>
                   <td>{modelSelectionResults[cfg.id].generalization}</td>
@@ -281,282 +309,312 @@ const OracleNeuralNetworkSection: React.FC = () => {
       )}
     </div>
   );
-  const [selectedLayer, setSelectedLayer] = useState<string>('');
-  const [selectedActivation, setSelectedActivation] = useState<string>('relu');
+  const [selectedLayer, setSelectedLayer] = useState<string>(&apos;&apos;);
+  const [selectedActivation, setSelectedActivation] = useState<string>(&apos;relu&apos;);
   const [trainingProgress, setTrainingProgress] = useState<any>(null);
   const [networkVisualization, setNetworkVisualization] = useState<any>(null);
   const [learningCurvePoints, setLearningCurvePoints] = useState<LearningCurvePoint[] | null>(null);
   const [learningCurveRunning, setLearningCurveRunning] = useState<boolean>(false);
   const [learningCurveProgress, setLearningCurveProgress] = useState<number>(0);
-  const [selectedLearningCurveConfig, setSelectedLearningCurveConfig] = useState<string>('nn_curve');
+  const [selectedLearningCurveConfig, setSelectedLearningCurveConfig] = useState<string>(&apos;nn_curve&apos;);
   
   // Feature Importance state
   const [featureImportanceResults, setFeatureImportanceResults] = useState<FeatureImportanceResult[] | null>(null);
   const [shapAnalysis, setShapAnalysis] = useState<SHAPAnalysis | null>(null);
   const [featureImportanceRunning, setFeatureImportanceRunning] = useState<boolean>(false);
   const [featureImportanceProgress, setFeatureImportanceProgress] = useState<number>(0);
-  const [selectedPermutationConfig, setSelectedPermutationConfig] = useState<string>('fantasy_features');
-  const [selectedFeatureMethod, setSelectedFeatureMethod] = useState<'permutation' | 'shap' | 'both'>('both');
+  const [selectedPermutationConfig, setSelectedPermutationConfig] = useState<string>(&apos;fantasy_features&apos;);
+  const [selectedFeatureMethod, setSelectedFeatureMethod] = useState<&apos;permutation&apos; | &apos;shap&apos; | &apos;both&apos;>(&apos;both&apos;);
 
   // Helper functions for scoring
   const getComputationScore = (activationId: string): string => {
+}
     const scores: Record<string, string> = {
-      'relu': '⭐⭐⭐⭐⭐',
-      'leaky_relu': '⭐⭐⭐⭐',
-      'sigmoid': '⭐⭐⭐',
-      'tanh': '⭐⭐',
-      'swish': '⭐⭐',
-      'gelu': '⭐'
+}
+      &apos;relu&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;leaky_relu&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;sigmoid&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;tanh&apos;: &apos;⭐⭐&apos;,
+      &apos;swish&apos;: &apos;⭐⭐&apos;,
+      &apos;gelu&apos;: &apos;⭐&apos;
     };
-    return scores[activationId] || '⭐';
+    return scores[activationId] || &apos;⭐&apos;;
   };
 
   const getGradientScore = (activationId: string): string => {
+}
     const scores: Record<string, string> = {
-      'swish': '⭐⭐⭐⭐⭐',
-      'gelu': '⭐⭐⭐⭐⭐',
-      'relu': '⭐⭐⭐⭐',
-      'leaky_relu': '⭐⭐⭐⭐',
-      'tanh': '⭐⭐',
-      'sigmoid': '⭐'
+}
+      &apos;swish&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gelu&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;relu&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;leaky_relu&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;tanh&apos;: &apos;⭐⭐&apos;,
+      &apos;sigmoid&apos;: &apos;⭐&apos;
     };
-    return scores[activationId] || '⭐';
+    return scores[activationId] || &apos;⭐&apos;;
   };
 
   const getPerformanceScore = (activationId: string): string => {
+}
     const scores: Record<string, string> = {
-      'swish': '⭐⭐⭐⭐⭐',
-      'gelu': '⭐⭐⭐⭐⭐',
-      'relu': '⭐⭐⭐⭐',
-      'leaky_relu': '⭐⭐⭐',
-      'tanh': '⭐⭐',
-      'sigmoid': '⭐⭐'
+}
+      &apos;swish&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gelu&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;relu&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;leaky_relu&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;tanh&apos;: &apos;⭐⭐&apos;,
+      &apos;sigmoid&apos;: &apos;⭐⭐&apos;
     };
-    return scores[activationId] || '⭐';
+    return scores[activationId] || &apos;⭐&apos;;
   };
 
   const getMemoryScore = (activationId: string): string => {
+}
     const scores: Record<string, string> = {
-      'relu': '⭐⭐⭐⭐⭐',
-      'leaky_relu': '⭐⭐⭐⭐',
-      'sigmoid': '⭐⭐⭐',
-      'tanh': '⭐⭐⭐',
-      'swish': '⭐⭐',
-      'gelu': '⭐'
+}
+      &apos;relu&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;leaky_relu&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;sigmoid&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;tanh&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;swish&apos;: &apos;⭐⭐&apos;,
+      &apos;gelu&apos;: &apos;⭐&apos;
     };
-    return scores[activationId] || '⭐';
+    return scores[activationId] || &apos;⭐&apos;;
   };
 
-  // Oracle's Neural Network Architecture
+  // Oracle&apos;s Neural Network Architecture
   const networkLayers: NetworkLayer[] = [
     {
-      id: 'input',
-      name: 'Input Layer',
-      type: 'Input',
+}
+      id: &apos;input&apos;,
+      name: &apos;Input Layer&apos;,
+      type: &apos;Input&apos;,
       neurons: 18,
-      activation: 'None',
-      description: 'Receives normalized feature vectors from preprocessing pipeline',
-      purpose: 'Data ingestion and initial feature representation',
-      outputShape: '(batch_size, 18)'
+      activation: &apos;None&apos;,
+      description: &apos;Receives normalized feature vectors from preprocessing pipeline&apos;,
+      purpose: &apos;Data ingestion and initial feature representation&apos;,
+      outputShape: &apos;(batch_size, 18)&apos;
     },
     {
-      id: 'embedding',
-      name: 'Embedding Layer',
-      type: 'Embedding',
+}
+      id: &apos;embedding&apos;,
+      name: &apos;Embedding Layer&apos;,
+      type: &apos;Embedding&apos;,
       neurons: 64,
-      activation: 'None',
-      description: 'Transforms categorical features into dense vector representations',
-      purpose: 'Convert discrete features to continuous space',
-      outputShape: '(batch_size, 64)'
+      activation: &apos;None&apos;,
+      description: &apos;Transforms categorical features into dense vector representations&apos;,
+      purpose: &apos;Convert discrete features to continuous space&apos;,
+      outputShape: &apos;(batch_size, 64)&apos;
     },
     {
-      id: 'hidden1',
-      name: 'Hidden Layer 1',
-      type: 'Dense',
+}
+      id: &apos;hidden1&apos;,
+      name: &apos;Hidden Layer 1&apos;,
+      type: &apos;Dense&apos;,
       neurons: 128,
-      activation: 'ReLU',
-      description: 'First hidden layer with ReLU activation for non-linear transformations',
-      purpose: 'Primary feature extraction and pattern recognition',
-      outputShape: '(batch_size, 128)'
+      activation: &apos;ReLU&apos;,
+      description: &apos;First hidden layer with ReLU activation for non-linear transformations&apos;,
+      purpose: &apos;Primary feature extraction and pattern recognition&apos;,
+      outputShape: &apos;(batch_size, 128)&apos;
     },
     {
-      id: 'dropout1',
-      name: 'Dropout Layer 1',
-      type: 'Dropout',
+}
+      id: &apos;dropout1&apos;,
+      name: &apos;Dropout Layer 1&apos;,
+      type: &apos;Dropout&apos;,
       neurons: 128,
-      activation: 'None',
-      description: 'Regularization layer to prevent overfitting (rate: 0.3)',
-      purpose: 'Reduce overfitting and improve generalization',
-      outputShape: '(batch_size, 128)'
+      activation: &apos;None&apos;,
+      description: &apos;Regularization layer to prevent overfitting (rate: 0.3)&apos;,
+      purpose: &apos;Reduce overfitting and improve generalization&apos;,
+      outputShape: &apos;(batch_size, 128)&apos;
     },
     {
-      id: 'hidden2',
-      name: 'Hidden Layer 2',
-      type: 'Dense',
+}
+      id: &apos;hidden2&apos;,
+      name: &apos;Hidden Layer 2&apos;,
+      type: &apos;Dense&apos;,
       neurons: 64,
-      activation: 'ReLU',
-      description: 'Second hidden layer for deeper feature abstractions',
-      purpose: 'Advanced pattern recognition and feature combinations',
-      outputShape: '(batch_size, 64)'
+      activation: &apos;ReLU&apos;,
+      description: &apos;Second hidden layer for deeper feature abstractions&apos;,
+      purpose: &apos;Advanced pattern recognition and feature combinations&apos;,
+      outputShape: &apos;(batch_size, 64)&apos;
     },
     {
-      id: 'batchnorm',
-      name: 'Batch Normalization',
-      type: 'BatchNorm',
+}
+      id: &apos;batchnorm&apos;,
+      name: &apos;Batch Normalization&apos;,
+      type: &apos;BatchNorm&apos;,
       neurons: 64,
-      activation: 'None',
-      description: 'Normalizes layer inputs to stabilize training',
-      purpose: 'Accelerate training and improve stability',
-      outputShape: '(batch_size, 64)'
+      activation: &apos;None&apos;,
+      description: &apos;Normalizes layer inputs to stabilize training&apos;,
+      purpose: &apos;Accelerate training and improve stability&apos;,
+      outputShape: &apos;(batch_size, 64)&apos;
     },
     {
-      id: 'hidden3',
-      name: 'Hidden Layer 3',
-      type: 'Dense',
+}
+      id: &apos;hidden3&apos;,
+      name: &apos;Hidden Layer 3&apos;,
+      type: &apos;Dense&apos;,
       neurons: 32,
-      activation: 'Swish',
-      description: 'Third hidden layer with Swish activation for smooth gradients',
-      purpose: 'Fine-grained feature refinement',
-      outputShape: '(batch_size, 32)'
+      activation: &apos;Swish&apos;,
+      description: &apos;Third hidden layer with Swish activation for smooth gradients&apos;,
+      purpose: &apos;Fine-grained feature refinement&apos;,
+      outputShape: &apos;(batch_size, 32)&apos;
     },
     {
-      id: 'dropout2',
-      name: 'Dropout Layer 2',
-      type: 'Dropout',
+}
+      id: &apos;dropout2&apos;,
+      name: &apos;Dropout Layer 2&apos;,
+      type: &apos;Dropout&apos;,
       neurons: 32,
-      activation: 'None',
-      description: 'Second dropout layer for additional regularization (rate: 0.2)',
-      purpose: 'Final overfitting prevention',
-      outputShape: '(batch_size, 32)'
+      activation: &apos;None&apos;,
+      description: &apos;Second dropout layer for additional regularization (rate: 0.2)&apos;,
+      purpose: &apos;Final overfitting prevention&apos;,
+      outputShape: &apos;(batch_size, 32)&apos;
     },
     {
-      id: 'output',
-      name: 'Output Layer',
-      type: 'Dense',
+}
+      id: &apos;output&apos;,
+      name: &apos;Output Layer&apos;,
+      type: &apos;Dense&apos;,
       neurons: 1,
-      activation: 'Linear',
-      description: 'Final layer outputting continuous prediction values',
-      purpose: 'Generate final fantasy points prediction',
-      outputShape: '(batch_size, 1)'
+      activation: &apos;Linear&apos;,
+      description: &apos;Final layer outputting continuous prediction values&apos;,
+      purpose: &apos;Generate final fantasy points prediction&apos;,
+      outputShape: &apos;(batch_size, 1)&apos;
 
   ];
 
   // Activation Functions
   const activationFunctions: ActivationFunction[] = [
     {
-      id: 'relu',
-      name: 'ReLU (Rectified Linear Unit)',
-      formula: 'f(x) = max(0, x)',
-      range: '[0, ∞)',
-      description: 'Most commonly used activation function that outputs zero for negative inputs',
-      advantages: ['Simple computation', 'Solves vanishing gradient', 'Sparse activation', 'Fast convergence'],
-      disadvantages: ['Dying ReLU problem', 'Not zero-centered', 'Unbounded output'],
-      useCases: ['Hidden layers', 'Convolutional networks', 'Most deep learning tasks']
+}
+      id: &apos;relu&apos;,
+      name: &apos;ReLU (Rectified Linear Unit)&apos;,
+      formula: &apos;f(x) = max(0, x)&apos;,
+      range: &apos;[0, ∞)&apos;,
+      description: &apos;Most commonly used activation function that outputs zero for negative inputs&apos;,
+      advantages: [&apos;Simple computation&apos;, &apos;Solves vanishing gradient&apos;, &apos;Sparse activation&apos;, &apos;Fast convergence&apos;],
+      disadvantages: [&apos;Dying ReLU problem&apos;, &apos;Not zero-centered&apos;, &apos;Unbounded output&apos;],
+      useCases: [&apos;Hidden layers&apos;, &apos;Convolutional networks&apos;, &apos;Most deep learning tasks&apos;]
     },
     {
-      id: 'swish',
-      name: 'Swish',
-      formula: 'f(x) = x × σ(x) = x / (1 + e^(-x))',
-      range: '(-∞, ∞)',
-      description: 'Self-gated activation function discovered by Google, smooth and non-monotonic',
-      advantages: ['Smooth gradients', 'Self-gating property', 'Better than ReLU in some cases', 'Unbounded above'],
-      disadvantages: ['Computationally expensive', 'Can be slow to train', 'Memory intensive'],
-      useCases: ['Deep networks', 'Image classification', 'Advanced architectures']
+}
+      id: &apos;swish&apos;,
+      name: &apos;Swish&apos;,
+      formula: &apos;f(x) = x × σ(x) = x / (1 + e^(-x))&apos;,
+      range: &apos;(-∞, ∞)&apos;,
+      description: &apos;Self-gated activation function discovered by Google, smooth and non-monotonic&apos;,
+      advantages: [&apos;Smooth gradients&apos;, &apos;Self-gating property&apos;, &apos;Better than ReLU in some cases&apos;, &apos;Unbounded above&apos;],
+      disadvantages: [&apos;Computationally expensive&apos;, &apos;Can be slow to train&apos;, &apos;Memory intensive&apos;],
+      useCases: [&apos;Deep networks&apos;, &apos;Image classification&apos;, &apos;Advanced architectures&apos;]
     },
     {
-      id: 'sigmoid',
-      name: 'Sigmoid',
-      formula: 'f(x) = 1 / (1 + e^(-x))',
-      range: '(0, 1)',
-      description: 'Classic S-shaped activation function that maps inputs to probability-like outputs',
-      advantages: ['Smooth gradients', 'Bounded output', 'Probabilistic interpretation'],
-      disadvantages: ['Vanishing gradient problem', 'Not zero-centered', 'Saturates easily'],
-      useCases: ['Binary classification', 'Output layers', 'Gate mechanisms']
+}
+      id: &apos;sigmoid&apos;,
+      name: &apos;Sigmoid&apos;,
+      formula: &apos;f(x) = 1 / (1 + e^(-x))&apos;,
+      range: &apos;(0, 1)&apos;,
+      description: &apos;Classic S-shaped activation function that maps inputs to probability-like outputs&apos;,
+      advantages: [&apos;Smooth gradients&apos;, &apos;Bounded output&apos;, &apos;Probabilistic interpretation&apos;],
+      disadvantages: [&apos;Vanishing gradient problem&apos;, &apos;Not zero-centered&apos;, &apos;Saturates easily&apos;],
+      useCases: [&apos;Binary classification&apos;, &apos;Output layers&apos;, &apos;Gate mechanisms&apos;]
     },
     {
-      id: 'tanh',
-      name: 'Tanh (Hyperbolic Tangent)',
-      formula: 'f(x) = (e^x - e^(-x)) / (e^x + e^(-x))',
-      range: '(-1, 1)',
-      description: 'Zero-centered activation function, scaled version of sigmoid',
-      advantages: ['Zero-centered', 'Stronger gradients than sigmoid', 'Bounded output'],
-      disadvantages: ['Still suffers from vanishing gradients', 'Computational overhead'],
-      useCases: ['RNNs', 'Hidden layers in shallow networks', 'When zero-centered needed']
+}
+      id: &apos;tanh&apos;,
+      name: &apos;Tanh (Hyperbolic Tangent)&apos;,
+      formula: &apos;f(x) = (e^x - e^(-x)) / (e^x + e^(-x))&apos;,
+      range: &apos;(-1, 1)&apos;,
+      description: &apos;Zero-centered activation function, scaled version of sigmoid&apos;,
+      advantages: [&apos;Zero-centered&apos;, &apos;Stronger gradients than sigmoid&apos;, &apos;Bounded output&apos;],
+      disadvantages: [&apos;Still suffers from vanishing gradients&apos;, &apos;Computational overhead&apos;],
+      useCases: [&apos;RNNs&apos;, &apos;Hidden layers in shallow networks&apos;, &apos;When zero-centered needed&apos;]
     },
     {
-      id: 'leaky_relu',
-      name: 'Leaky ReLU',
-      formula: 'f(x) = max(αx, x) where α = 0.01',
-      range: '(-∞, ∞)',
-      description: 'Modified ReLU that allows small negative values to pass through',
-      advantages: ['Prevents dying ReLU', 'Allows negative information', 'Simple computation'],
-      disadvantages: ['Hyperparameter tuning needed', 'Inconsistent results', 'Not zero-centered'],
-      useCases: ['When ReLU causes dead neurons', 'Deep networks', 'Alternative to ReLU']
+}
+      id: &apos;leaky_relu&apos;,
+      name: &apos;Leaky ReLU&apos;,
+      formula: &apos;f(x) = max(αx, x) where α = 0.01&apos;,
+      range: &apos;(-∞, ∞)&apos;,
+      description: &apos;Modified ReLU that allows small negative values to pass through&apos;,
+      advantages: [&apos;Prevents dying ReLU&apos;, &apos;Allows negative information&apos;, &apos;Simple computation&apos;],
+      disadvantages: [&apos;Hyperparameter tuning needed&apos;, &apos;Inconsistent results&apos;, &apos;Not zero-centered&apos;],
+      useCases: [&apos;When ReLU causes dead neurons&apos;, &apos;Deep networks&apos;, &apos;Alternative to ReLU&apos;]
     },
     {
-      id: 'gelu',
-      name: 'GELU (Gaussian Error Linear Unit)',
-      formula: 'f(x) = x × Φ(x) ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))',
-      range: '(-∞, ∞)',
-      description: 'Smooth approximation to ReLU using Gaussian cumulative distribution',
-      advantages: ['Smooth gradients', 'Better performance than ReLU', 'Stochastic regularization'],
-      disadvantages: ['Computationally complex', 'Not widely supported', 'Slower than ReLU'],
-      useCases: ['Transformer models', 'BERT and GPT', 'State-of-the-art NLP']
+}
+      id: &apos;gelu&apos;,
+      name: &apos;GELU (Gaussian Error Linear Unit)&apos;,
+      formula: &apos;f(x) = x × Φ(x) ≈ 0.5x(1 + tanh(√(2/π)(x + 0.044715x³)))&apos;,
+      range: &apos;(-∞, ∞)&apos;,
+      description: &apos;Smooth approximation to ReLU using Gaussian cumulative distribution&apos;,
+      advantages: [&apos;Smooth gradients&apos;, &apos;Better performance than ReLU&apos;, &apos;Stochastic regularization&apos;],
+      disadvantages: [&apos;Computationally complex&apos;, &apos;Not widely supported&apos;, &apos;Slower than ReLU&apos;],
+      useCases: [&apos;Transformer models&apos;, &apos;BERT and GPT&apos;, &apos;State-of-the-art NLP&apos;]
 
   ];
 
   // Training Techniques
   const trainingTechniques: TrainingTechnique[] = [
     {
-      id: 'backpropagation',
-      name: 'Backpropagation',
-      description: 'Core algorithm for training neural networks by propagating errors backward',
-      algorithm: 'Gradient descent with chain rule for weight updates',
-      benefits: ['Efficient gradient computation', 'Scalable to deep networks', 'Well-established theory'],
-      challenges: ['Vanishing/exploding gradients', 'Local minima', 'Computational complexity'],
-      implementation: 'Automatic differentiation with PyTorch/TensorFlow'
+}
+      id: &apos;backpropagation&apos;,
+      name: &apos;Backpropagation&apos;,
+      description: &apos;Core algorithm for training neural networks by propagating errors backward&apos;,
+      algorithm: &apos;Gradient descent with chain rule for weight updates&apos;,
+      benefits: [&apos;Efficient gradient computation&apos;, &apos;Scalable to deep networks&apos;, &apos;Well-established theory&apos;],
+      challenges: [&apos;Vanishing/exploding gradients&apos;, &apos;Local minima&apos;, &apos;Computational complexity&apos;],
+      implementation: &apos;Automatic differentiation with PyTorch/TensorFlow&apos;
     },
     {
-      id: 'adam_optimizer',
-      name: 'Adam Optimizer',
-      description: 'Adaptive moment estimation optimizer combining momentum and RMSprop',
-      algorithm: 'Adaptive learning rates with bias correction',
-      benefits: ['Fast convergence', 'Adaptive learning rates', 'Handles sparse gradients'],
-      challenges: ['Memory overhead', 'Hyperparameter sensitivity', 'Can converge to suboptimal solutions'],
-      implementation: 'Built-in optimizer with learning rate scheduling'
+}
+      id: &apos;adam_optimizer&apos;,
+      name: &apos;Adam Optimizer&apos;,
+      description: &apos;Adaptive moment estimation optimizer combining momentum and RMSprop&apos;,
+      algorithm: &apos;Adaptive learning rates with bias correction&apos;,
+      benefits: [&apos;Fast convergence&apos;, &apos;Adaptive learning rates&apos;, &apos;Handles sparse gradients&apos;],
+      challenges: [&apos;Memory overhead&apos;, &apos;Hyperparameter sensitivity&apos;, &apos;Can converge to suboptimal solutions&apos;],
+      implementation: &apos;Built-in optimizer with learning rate scheduling&apos;
     },
     {
-      id: 'batch_training',
-      name: 'Mini-Batch Training',
-      description: 'Train on small batches of data for efficient memory usage and convergence',
-      algorithm: 'Stochastic gradient descent with batch processing',
-      benefits: ['Memory efficient', 'Regularization effect', 'Parallel processing'],
-      challenges: ['Batch size tuning', 'Gradient noise', 'Convergence stability'],
-      implementation: 'DataLoader with batch size 32-128'
+}
+      id: &apos;batch_training&apos;,
+      name: &apos;Mini-Batch Training&apos;,
+      description: &apos;Train on small batches of data for efficient memory usage and convergence&apos;,
+      algorithm: &apos;Stochastic gradient descent with batch processing&apos;,
+      benefits: [&apos;Memory efficient&apos;, &apos;Regularization effect&apos;, &apos;Parallel processing&apos;],
+      challenges: [&apos;Batch size tuning&apos;, &apos;Gradient noise&apos;, &apos;Convergence stability&apos;],
+      implementation: &apos;DataLoader with batch size 32-128&apos;
     },
     {
-      id: 'regularization',
-      name: 'Regularization Techniques',
-      description: 'Methods to prevent overfitting and improve generalization',
-      algorithm: 'Dropout, batch normalization, weight decay',
-      benefits: ['Prevents overfitting', 'Better generalization', 'Stable training'],
-      challenges: ['Hyperparameter tuning', 'Training time increase', 'Complexity'],
-      implementation: 'Dropout layers, BatchNorm, L2 regularization'
+}
+      id: &apos;regularization&apos;,
+      name: &apos;Regularization Techniques&apos;,
+      description: &apos;Methods to prevent overfitting and improve generalization&apos;,
+      algorithm: &apos;Dropout, batch normalization, weight decay&apos;,
+      benefits: [&apos;Prevents overfitting&apos;, &apos;Better generalization&apos;, &apos;Stable training&apos;],
+      challenges: [&apos;Hyperparameter tuning&apos;, &apos;Training time increase&apos;, &apos;Complexity&apos;],
+      implementation: &apos;Dropout layers, BatchNorm, L2 regularization&apos;
     },
     {
-      id: 'transfer_learning',
-      name: 'Transfer Learning',
-      description: 'Leverage pre-trained models and adapt to fantasy football domain',
-      algorithm: 'Fine-tuning pre-trained weights on domain-specific data',
-      benefits: ['Faster training', 'Better performance with limited data', 'Leverages existing knowledge'],
-      challenges: ['Domain adaptation', 'Feature mismatch', 'Catastrophic forgetting'],
-      implementation: 'Pre-trained sports models with fine-tuning'
+}
+      id: &apos;transfer_learning&apos;,
+      name: &apos;Transfer Learning&apos;,
+      description: &apos;Leverage pre-trained models and adapt to fantasy football domain&apos;,
+      algorithm: &apos;Fine-tuning pre-trained weights on domain-specific data&apos;,
+      benefits: [&apos;Faster training&apos;, &apos;Better performance with limited data&apos;, &apos;Leverages existing knowledge&apos;],
+      challenges: [&apos;Domain adaptation&apos;, &apos;Feature mismatch&apos;, &apos;Catastrophic forgetting&apos;],
+      implementation: &apos;Pre-trained sports models with fine-tuning&apos;
 
   ];
 
   // Simulate network training
   const simulateTraining = () => {
+}
     setTrainingProgress({
+}
       epoch: 0,
       totalEpochs: 100,
       trainLoss: 2.5,
@@ -569,8 +627,11 @@ const OracleNeuralNetworkSection: React.FC = () => {
 
     // Simulate training progress
     const interval = setInterval(() => {
+}
       setTrainingProgress((prev: any) => {
+}
         if (!prev || prev.epoch >= prev.totalEpochs) {
+}
           clearInterval(interval);
           return { ...prev, isTraining: false };
 
@@ -578,6 +639,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
         const progress = newEpoch / prev.totalEpochs;
         
         return {
+}
           ...prev,
           epoch: newEpoch,
           trainLoss: Math.max(0.15, 2.5 * Math.exp(-progress * 2) + Math.random() * 0.1),
@@ -592,19 +654,23 @@ const OracleNeuralNetworkSection: React.FC = () => {
 
   // Generate network visualization
   const generateNetworkVisualization = () => {
+}
     const selectedLayers = networkLayers.filter((layer: any) => 
-      layer.type === 'Dense' || layer.type === 'Input'
+      layer.type === &apos;Dense&apos; || layer.type === &apos;Input&apos;
     );
     
     setNetworkVisualization({
+}
       layers: selectedLayers,
       connections: selectedLayers.length - 1,
       totalParameters: selectedLayers.reduce((total, layer, index) => {
+}
         if (index === 0) return 0;
         const prevNeurons = selectedLayers[index - 1].neurons;
         return total + (prevNeurons * layer.neurons + layer.neurons);
       }, 0),
       activationFlow: selectedLayers.map((layer: any) => ({
+}
         name: layer.name,
         activation: layer.activation,
         neurons: layer.neurons
@@ -613,7 +679,9 @@ const OracleNeuralNetworkSection: React.FC = () => {
   };
 
   const runLearningCurveAnalysis = async () => {
+}
     try {
+}
     setLearningCurveRunning(true);
     setLearningCurveProgress(0);
     const config = learningCurveConfigs.find((c: any) => c.id === selectedLearningCurveConfig);
@@ -621,6 +689,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
     const points: LearningCurvePoint[] = [];
     let converged = false;
     for (let sample = config.minSample; sample <= config.maxSample; sample += config.step) {
+}
       // Simulate training/validation loss and accuracy
       const progress = sample / config.expectedConvergence;
       const trainLoss = Math.max(0.12, 2.5 * Math.exp(-progress * 2) + Math.random() * 0.1);
@@ -628,10 +697,11 @@ const OracleNeuralNetworkSection: React.FC = () => {
       const trainAccuracy = Math.min(0.95, 0.45 + progress * 0.45 + Math.random() * 0.05);
       const valAccuracy = Math.min(0.92, 0.42 + progress * 0.42 + Math.random() * 0.05);
       if (sample >= config.expectedConvergence && Math.abs(trainLoss - valLoss) < config.convergenceThreshold) {
+}
         converged = true;
 
-    `layer-card ${selectedLayer === layer.id ? 'selected' : ''}`}
-              onClick={() => setSelectedLayer(selectedLayer === layer.id ? '' : layer.id)}
+    `layer-card ${selectedLayer === layer.id ? &apos;selected&apos; : &apos;&apos;}`}
+              onClick={() => setSelectedLayer(selectedLayer === layer.id ? &apos;&apos; : layer.id)}
               aria-label={`Select ${layer.name} details`}
             >
               <div className="layer-header sm:px-4 md:px-6 lg:px-8">
@@ -656,6 +726,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   {layer.neurons > 8 && <span className="neuron-overflow sm:px-4 md:px-6 lg:px-8">+{layer.neurons - 8}</span>}
                 </div>
                 {index < networkLayers.length - 1 && (
+}
                   <div className="layer-connections sm:px-4 md:px-6 lg:px-8">
                     {Array.from({ length: Math.min(3, Math.min(layer.neurons, networkLayers[index + 1].neurons)) }).map((_, connIndex) => (
                       <div key={`connection-${layer.id}-${connIndex}`} className="connection-line sm:px-4 md:px-6 lg:px-8"></div>
@@ -670,6 +741,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
               </div>
               
               {selectedLayer === layer.id && (
+}
                 <div className="layer-details sm:px-4 md:px-6 lg:px-8">
                   <h6>Layer Purpose</h6>
                   <p>{layer.purpose}</p>
@@ -694,7 +766,8 @@ const OracleNeuralNetworkSection: React.FC = () => {
                       </div>
                     </div>
                     
-                    {layer.type === 'Dense' && (
+                    {layer.type === &apos;Dense&apos; && (
+}
                       <div className="parameter-calculation sm:px-4 md:px-6 lg:px-8">
                         <h6>Parameter Calculation</h6>
                         <p>
@@ -704,11 +777,12 @@ const OracleNeuralNetworkSection: React.FC = () => {
                       </div>
                     )}
                     
-                    {layer.type === 'Dropout' && (
+                    {layer.type === &apos;Dropout&apos; && (
+}
                       <div className="dropout-info sm:px-4 md:px-6 lg:px-8">
                         <h6>Dropout Configuration</h6>
                         <p>
-                          Dropout Rate: {layer.id === 'dropout1' ? '30%' : '20%'}<br/>
+                          Dropout Rate: {layer.id === &apos;dropout1&apos; ? &apos;30%&apos; : &apos;20%&apos;}<br/>
                           Purpose: Randomly zero out neurons during training to prevent overfitting
                         </p>
                       </div>
@@ -730,7 +804,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
             <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Trainable Layers</h6>
-              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === &apos;Dense&apos;).length}</div>
               <p>Dense layers with weights</p>
             </div>
             <div className="summary-card sm:px-4 md:px-6 lg:px-8">
@@ -740,7 +814,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </div>
             <div className="summary-card sm:px-4 md:px-6 lg:px-8">
               <h6>Network Depth</h6>
-              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === 'Dense').length}</div>
+              <div className="summary-value sm:px-4 md:px-6 lg:px-8">{networkLayers.filter((l: any) => l.type === &apos;Dense&apos;).length}</div>
               <p>Hidden + output layers</p>
             </div>
           </div>
@@ -754,9 +828,10 @@ const OracleNeuralNetworkSection: React.FC = () => {
       <h3>⚡ Activation Functions</h3>
       <div className="activations-grid sm:px-4 md:px-6 lg:px-8">
         {activationFunctions.map((activation: any) => (
+}
           <button 
             key={activation.id} 
-            className={`activation-card ${selectedActivation === activation.id ? 'selected' : ''}`}
+            className={`activation-card ${selectedActivation === activation.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedActivation(activation.id)}
             aria-label={`Select ${activation.name} activation function`}
           >
@@ -781,6 +856,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <h6>✅ Advantages</h6>
                 <ul>
                   {activation.advantages.map((advantage, advIndex) => (
+}
                     <li key={`advantage-${activation.id}-${advIndex}`}>{advantage}</li>
                   ))}
                 </ul>
@@ -789,6 +865,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <h6>⚠️ Disadvantages</h6>
                 <ul>
                   {activation.disadvantages.map((disadvantage, disIndex) => (
+}
                     <li key={`disadvantage-${activation.id}-${disIndex}`}>{disadvantage}</li>
                   ))}
                 </ul>
@@ -799,12 +876,14 @@ const OracleNeuralNetworkSection: React.FC = () => {
               <h6>🎯 Use Cases</h6>
               <ul>
                 {activation.useCases.map((useCase, useIndex) => (
+}
                   <li key={`usecase-${activation.id}-${useIndex}`}>{useCase}</li>
                 ))}
               </ul>
             </div>
             
             {selectedActivation === activation.id && (
+}
               <div className="activation-visualization sm:px-4 md:px-6 lg:px-8">
                 <h6>📈 Function Visualization</h6>
                 <div className="function-graph sm:px-4 md:px-6 lg:px-8">
@@ -825,19 +904,19 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   <div className="property-grid sm:px-4 md:px-6 lg:px-8">
                     <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Monotonic:</strong>
-                      <span>{['relu', 'sigmoid', 'tanh', 'leaky_relu'].includes(activation.id) ? 'Yes' : 'No'}</span>
+                      <span>{[&apos;relu&apos;, &apos;sigmoid&apos;, &apos;tanh&apos;, &apos;leaky_relu&apos;].includes(activation.id) ? &apos;Yes&apos; : &apos;No&apos;}</span>
                     </div>
                     <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Differentiable:</strong>
-                      <span>{activation.id === 'relu' ? 'Except at 0' : 'Yes'}</span>
+                      <span>{activation.id === &apos;relu&apos; ? &apos;Except at 0&apos; : &apos;Yes&apos;}</span>
                     </div>
                     <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Zero-Centered:</strong>
-                      <span>{['tanh'].includes(activation.id) ? 'Yes' : 'No'}</span>
+                      <span>{[&apos;tanh&apos;].includes(activation.id) ? &apos;Yes&apos; : &apos;No&apos;}</span>
                     </div>
                     <div className="property-item sm:px-4 md:px-6 lg:px-8">
                       <strong>Bounded:</strong>
-                      <span>{['sigmoid', 'tanh'].includes(activation.id) ? 'Yes' : 'No'}</span>
+                      <span>{[&apos;sigmoid&apos;, &apos;tanh&apos;].includes(activation.id) ? &apos;Yes&apos; : &apos;No&apos;}</span>
                     </div>
                   </div>
                 </div>
@@ -858,6 +937,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
             <span>Memory Usage</span>
           </div>
           {activationFunctions.map((activation: any) => (
+}
             <div key={`comparison-${activation.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
               <span className="function-name sm:px-4 md:px-6 lg:px-8">{activation.name}</span>
               <span className="computation-score sm:px-4 md:px-6 lg:px-8">
@@ -884,6 +964,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       <h3>🎓 Training Process & Techniques</h3>
       <div className="training-grid sm:px-4 md:px-6 lg:px-8">
         {trainingTechniques.map((technique: any) => (
+}
           <div key={technique.id} className="training-card sm:px-4 md:px-6 lg:px-8">
             <h4>{technique.name}</h4>
             <p className="training-description sm:px-4 md:px-6 lg:px-8">{technique.description}</p>
@@ -898,6 +979,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <h6>✅ Benefits</h6>
                 <ul>
                   {technique.benefits.map((benefit, benefitIndex) => (
+}
                     <li key={`benefit-${technique.id}-${benefitIndex}`}>{benefit}</li>
                   ))}
                 </ul>
@@ -906,6 +988,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <h6>⚠️ Challenges</h6>
                 <ul>
                   {technique.challenges.map((challenge, challengeIndex) => (
+}
                     <li key={`challenge-${technique.id}-${challengeIndex}`}>{challenge}</li>
                   ))}
                 </ul>
@@ -1153,7 +1236,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           onClick={simulateTraining}
           disabled={trainingProgress?.isTraining}
         >
-          {trainingProgress?.isTraining ? 'Training...' : 'Start Training Simulation'}
+          {trainingProgress?.isTraining ? &apos;Training...&apos; : &apos;Start Training Simulation&apos;}
         </button>
         <button 
           className="demo-button sm:px-4 md:px-6 lg:px-8"
@@ -1164,6 +1247,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       </div>
       
       {trainingProgress && (
+}
         <div className="training-simulation sm:px-4 md:px-6 lg:px-8">
           <h4>📈 Training Progress</h4>
           <div className="progress-dashboard sm:px-4 md:px-6 lg:px-8">
@@ -1218,6 +1302,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       )}
       
       {networkVisualization && (
+}
         <div className="network-visualization sm:px-4 md:px-6 lg:px-8">
           <h4>🧠 Network Structure</h4>
           <div className="visualization-summary sm:px-4 md:px-6 lg:px-8">
@@ -1239,11 +1324,13 @@ const OracleNeuralNetworkSection: React.FC = () => {
             <h5>Activation Flow</h5>
             <div className="flow-visualization sm:px-4 md:px-6 lg:px-8">
               {networkVisualization.activationFlow.map((layer: any, index: number) => (
-                <div key={`flow-${layer.name.toLowerCase().replace(/\s+/g, '-')}`} className="flow-layer sm:px-4 md:px-6 lg:px-8">
+}
+                <div key={`flow-${layer.name.toLowerCase().replace(/\s+/g, &apos;-&apos;)}`} className="flow-layer sm:px-4 md:px-6 lg:px-8">
                   <div className="layer-name sm:px-4 md:px-6 lg:px-8">{layer.name}</div>
                   <div className="layer-neurons sm:px-4 md:px-6 lg:px-8">{layer.neurons} neurons</div>
                   <div className="layer-activation sm:px-4 md:px-6 lg:px-8">{layer.activation}</div>
                   {index < networkVisualization.activationFlow.length - 1 && (
+}
                     <div className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</div>
                   )}
                 </div>
@@ -1301,13 +1388,14 @@ const OracleNeuralNetworkSection: React.FC = () => {
           ))}
         </select>
         <button className="curve-run-btn sm:px-4 md:px-6 lg:px-8" onClick={runLearningCurveAnalysis} disabled={learningCurveRunning}>
-          {learningCurveRunning ? 'Running...' : 'Run Analysis'}
+          {learningCurveRunning ? &apos;Running...&apos; : &apos;Run Analysis&apos;}
         </button>
         <div className="curve-progress-bar sm:px-4 md:px-6 lg:px-8">
           <div className="curve-progress-fill sm:px-4 md:px-6 lg:px-8" style={{ width: `${learningCurveProgress}%` }}></div>
         </div>
       </div>
       {learningCurvePoints && (
+}
         <div className="curve-results sm:px-4 md:px-6 lg:px-8">
           <h4>Results</h4>
           <table className="curve-table sm:px-4 md:px-6 lg:px-8">
@@ -1323,13 +1411,14 @@ const OracleNeuralNetworkSection: React.FC = () => {
             </thead>
             <tbody>
               {learningCurvePoints.map((pt: any) => (
-                <tr key={`curve-${pt.sampleSize}-${pt.trainLoss.toFixed(4)}-${pt.valLoss.toFixed(4)}`} className={pt.converged ? 'converged-row' : ''}>
+}
+                <tr key={`curve-${pt.sampleSize}-${pt.trainLoss.toFixed(4)}-${pt.valLoss.toFixed(4)}`} className={pt.converged ? &apos;converged-row&apos; : &apos;&apos;}>
                   <td>{pt.sampleSize}</td>
                   <td>{pt.trainLoss.toFixed(4)}</td>
                   <td>{pt.valLoss.toFixed(4)}</td>
                   <td>{(pt.trainAccuracy * 100).toFixed(1)}%</td>
                   <td>{(pt.valAccuracy * 100).toFixed(1)}%</td>
-                  <td>{pt.converged ? '✅' : ''}</td>
+                  <td>{pt.converged ? &apos;✅&apos; : &apos;&apos;}</td>
                 </tr>
               ))}
             </tbody>
@@ -1369,7 +1458,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           <select 
             id="method-select" 
             value={selectedFeatureMethod} 
-            onChange={e => setSelectedFeatureMethod(e.target.value as 'permutation' | 'shap' | 'both')}
+            onChange={e => setSelectedFeatureMethod(e.target.value as &apos;permutation&apos; | &apos;shap&apos; | &apos;both&apos;)}
             <option value="permutation">Permutation Importance</option>
             <option value="shap">SHAP Values</option>
             <option value="both">Both Methods</option>
@@ -1381,7 +1470,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           onClick={runFeatureImportanceAnalysis} 
           disabled={featureImportanceRunning}
         >
-          {featureImportanceRunning ? 'Analyzing...' : 'Run Analysis'}
+          {featureImportanceRunning ? &apos;Analyzing...&apos; : &apos;Run Analysis&apos;}
         </button>
         
         <div className="importance-progress-bar sm:px-4 md:px-6 lg:px-8">
@@ -1390,6 +1479,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
       </div>
 
       {featureImportanceResults && (
+}
         <div className="importance-results sm:px-4 md:px-6 lg:px-8">
           <div className="results-overview sm:px-4 md:px-6 lg:px-8">
             <h4>📊 Feature Ranking</h4>
@@ -1403,6 +1493,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <span>Description</span>
               </div>
               {featureImportanceResults.map((result: any) => (
+}
                 <div key={`importance-${result.featureName}`} className={`table-row ${result.category}`}>
                   <span className="rank sm:px-4 md:px-6 lg:px-8">#{result.rank}</span>
                   <span className="feature-name sm:px-4 md:px-6 lg:px-8">{result.featureName}</span>
@@ -1416,8 +1507,8 @@ const OracleNeuralNetworkSection: React.FC = () => {
                     {result.permutationImportance.toFixed(3)}
                   </span>
                   <span className="shap-value sm:px-4 md:px-6 lg:px-8">
-                    <div className={`shap-indicator ${result.shapValue >= 0 ? 'positive' : 'negative'}`}>
-                      {result.shapValue >= 0 ? '+' : ''}{result.shapValue.toFixed(3)}
+                    <div className={`shap-indicator ${result.shapValue >= 0 ? &apos;positive&apos; : &apos;negative&apos;}`}>
+                      {result.shapValue >= 0 ? &apos;+&apos; : &apos;&apos;}{result.shapValue.toFixed(3)}
                     </div>
                   </span>
                   <span className={`category-badge ${result.category}`}>
@@ -1430,6 +1521,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
           </div>
 
           {shapAnalysis && (
+}
             <div className="shap-analysis sm:px-4 md:px-6 lg:px-8">
               <h4>🎯 SHAP Analysis</h4>
               
@@ -1448,6 +1540,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                     
                     <div className="contributions-chart sm:px-4 md:px-6 lg:px-8">
                       {shapAnalysis.localExplanation.contributions.map((contrib: any) => (
+}
                         <div key={`contrib-${contrib.feature}`} className="contribution-bar sm:px-4 md:px-6 lg:px-8">
                           <div className="contrib-feature sm:px-4 md:px-6 lg:px-8">{contrib.feature}</div>
                           <div className="contrib-value sm:px-4 md:px-6 lg:px-8">
@@ -1455,14 +1548,15 @@ const OracleNeuralNetworkSection: React.FC = () => {
                           </div>
                           <div className="contrib-shap sm:px-4 md:px-6 lg:px-8">
                             <div 
-                              className={`shap-bar ${contrib.shapValue >= 0 ? 'positive' : 'negative'}`}
+                              className={`shap-bar ${contrib.shapValue >= 0 ? &apos;positive&apos; : &apos;negative&apos;}`}
                               style={{ 
+}
                                 width: `${Math.abs(contrib.shapValue) * 50}px`,
-                                marginLeft: contrib.shapValue < 0 ? `${50 - Math.abs(contrib.shapValue) * 50}px` : '50px'
+                                marginLeft: contrib.shapValue < 0 ? `${50 - Math.abs(contrib.shapValue) * 50}px` : &apos;50px&apos;
                               }}
                             ></div>
                             <span className="shap-number sm:px-4 md:px-6 lg:px-8">
-                              {contrib.shapValue >= 0 ? '+' : ''}{contrib.shapValue.toFixed(2)}
+                              {contrib.shapValue >= 0 ? &apos;+&apos; : &apos;&apos;}{contrib.shapValue.toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -1476,14 +1570,17 @@ const OracleNeuralNetworkSection: React.FC = () => {
                   <div className="matrix-visualization sm:px-4 md:px-6 lg:px-8">
                     <div className="matrix-grid sm:px-4 md:px-6 lg:px-8">
                       {shapAnalysis.interactionMatrix.map((row, i) => (
+}
                         <div key={`matrix-row-${featureImportanceResults[i]?.featureName || i}`} className="matrix-row sm:px-4 md:px-6 lg:px-8">
                           {row.map((value, j) => (
+}
                             <div 
                               key={`matrix-cell-${featureImportanceResults[i]?.featureName || i}-${featureImportanceResults[j]?.featureName || j}`}
                               className="matrix-cell sm:px-4 md:px-6 lg:px-8"
                               style={{ 
+}
                                 backgroundColor: `rgba(59, 130, 246, ${value})`,
-                                color: value > 0.5 ? 'white' : 'black'
+                                color: value > 0.5 ? &apos;white&apos; : &apos;black&apos;
                               }}
                               title={`Interaction: ${value.toFixed(3)}`}
                             >
@@ -1495,6 +1592,7 @@ const OracleNeuralNetworkSection: React.FC = () => {
                     </div>
                     <div className="matrix-labels sm:px-4 md:px-6 lg:px-8">
                       {featureImportanceResults.slice(0, 6).map((result: any) => (
+}
                         <div key={`label-${result.featureName}`} className="matrix-label sm:px-4 md:px-6 lg:px-8">
                           {result.featureName}
                         </div>
@@ -1508,15 +1606,18 @@ const OracleNeuralNetworkSection: React.FC = () => {
                 <h5>Feature Dependence Plots</h5>
                 <div className="plots-grid sm:px-4 md:px-6 lg:px-8">
                   {shapAnalysis.dependencePlots.map((plot: any) => (
+}
                     <div key={`plot-${plot.feature}`} className="dependence-plot sm:px-4 md:px-6 lg:px-8">
                       <h6>{plot.feature}</h6>
                       <div className="plot-container sm:px-4 md:px-6 lg:px-8">
                         <div className="plot-points sm:px-4 md:px-6 lg:px-8">
                           {plot.values.map((point, i) => (
+}
                             <div
                               key={`point-${plot.feature}-${i}`}
                               className="plot-point sm:px-4 md:px-6 lg:px-8"
                               style={{
+}
                                 left: `${(point.x / 100) * 100}%`,
                                 bottom: `${((point.y + 1) / 2) * 100}%`,
                                 backgroundColor: `hsl(${point.color * 360}, 70%, 50%)`
@@ -1609,71 +1710,71 @@ const OracleNeuralNetworkSection: React.FC = () => {
       
       <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button 
-          className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
+          className={`nav-button ${activeTab === &apos;overview&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;overview&apos;)}
         >
           📊 Overview
         </button>
         <button 
-          className={`nav-button ${activeTab === 'architecture' ? 'active' : ''}`}
-          onClick={() => setActiveTab('architecture')}
+          className={`nav-button ${activeTab === &apos;architecture&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;architecture&apos;)}
         >
           🏗️ Architecture
         </button>
         <button 
-          className={`nav-button ${activeTab === 'activations' ? 'active' : ''}`}
-          onClick={() => setActiveTab('activations')}
+          className={`nav-button ${activeTab === &apos;activations&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;activations&apos;)}
         >
           ⚡ Activations
         </button>
         <button 
-          className={`nav-button ${activeTab === 'training' ? 'active' : ''}`}
-          onClick={() => setActiveTab('training')}
+          className={`nav-button ${activeTab === &apos;training&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;training&apos;)}
         >
           🎓 Training
         </button>
         <button 
-          className={`nav-button ${activeTab === 'optimization' ? 'active' : ''}`}
-          onClick={() => setActiveTab('optimization')}
+          className={`nav-button ${activeTab === &apos;optimization&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;optimization&apos;)}
         >
           🚀 Optimization
         </button>
         <button 
-          className={`nav-button ${activeTab === 'demo' ? 'active' : ''}`}
-          onClick={() => setActiveTab('demo')}
+          className={`nav-button ${activeTab === &apos;demo&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;demo&apos;)}
         >
           🧪 Demo
         </button>
         <button 
-          className={`nav-button ${activeTab === 'learning_curve' ? 'active' : ''}`}
-          onClick={() => setActiveTab('learning_curve')}
+          className={`nav-button ${activeTab === &apos;learning_curve&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;learning_curve&apos;)}
         >
           📈 Learning Curve
         </button>
         <button 
-          className={`nav-button ${activeTab === 'feature_importance' ? 'active' : ''}`}
-          onClick={() => setActiveTab('feature_importance')}
+          className={`nav-button ${activeTab === &apos;feature_importance&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;feature_importance&apos;)}
         >
           🔍 Feature Importance
         </button>
         <button 
-          className={`nav-button ${activeTab === 'model_selection' ? 'active' : ''}`}
-          onClick={() => setActiveTab('model_selection')}
+          className={`nav-button ${activeTab === &apos;model_selection&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;model_selection&apos;)}
         >
           🤖 Model Selection
         </button>
       </div>
       
       <div className="section-content sm:px-4 md:px-6 lg:px-8">
-        {activeTab === 'overview' && renderOverview()}
-        {activeTab === 'architecture' && renderArchitecture()}
-        {activeTab === 'activations' && renderActivations()}
-        {activeTab === 'training' && renderTraining()}
-        {activeTab === 'optimization' && renderOptimization()}
-        {activeTab === 'demo' && renderDemo()}
-        {activeTab === 'learning_curve' && renderLearningCurveAnalysis()}
-        {activeTab === 'feature_importance' && renderFeatureImportanceAnalysis()}
-        {activeTab === 'model_selection' && renderModelSelection()}
+        {activeTab === &apos;overview&apos; && renderOverview()}
+        {activeTab === &apos;architecture&apos; && renderArchitecture()}
+        {activeTab === &apos;activations&apos; && renderActivations()}
+        {activeTab === &apos;training&apos; && renderTraining()}
+        {activeTab === &apos;optimization&apos; && renderOptimization()}
+        {activeTab === &apos;demo&apos; && renderDemo()}
+        {activeTab === &apos;learning_curve&apos; && renderLearningCurveAnalysis()}
+        {activeTab === &apos;feature_importance&apos; && renderFeatureImportanceAnalysis()}
+        {activeTab === &apos;model_selection&apos; && renderModelSelection()}
       </div>
     </div>
   );

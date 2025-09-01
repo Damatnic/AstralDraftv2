@@ -1,16 +1,16 @@
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { generatePowerRankings } from '../services/geminiService';
-import type { League, PowerRanking } from '../types';
-import PowerRankingCard from '../components/rankings/PowerRankingCard';
-import { ChartBarIcon } from '../components/icons/ChartBarIcon';
-import { Widget } from '../components/ui/Widget';
-import PowerRankingCardSkeleton from '../components/rankings/PowerRankingCardSkeleton';
-import { useLeague } from '../hooks/useLeague';
-import ErrorDisplay from '../components/core/ErrorDisplay';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { generatePowerRankings } from &apos;../services/geminiService&apos;;
+import type { League, PowerRanking } from &apos;../types&apos;;
+import PowerRankingCard from &apos;../components/rankings/PowerRankingCard&apos;;
+import { ChartBarIcon } from &apos;../components/icons/ChartBarIcon&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import PowerRankingCardSkeleton from &apos;../components/rankings/PowerRankingCardSkeleton&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
 
 const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<any> }> = ({ league, dispatch }: any) => {
+}
     const { state } = useAppState();
     const [rankings, setRankings] = React.useState<PowerRanking[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -20,30 +20,38 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
     const myTeamId = league.teams.find((t: any) => t.owner.id === state.user?.id)?.id;
     
     const fetchRankings = React.useCallback(async () => {
+}
         setIsLoading(true);
         setError(null);
         try {
+}
 
             const data = await generatePowerRankings(league);
             if (data) {
+}
                 // Gemini might not return sorted, so we sort here
                 data.sort((a, b) => a.rank - b.rank);
                 setRankings(data);
             } else {
+}
                 setError("The Oracle could not produce power rankings. Please try again later.");
             }
         } catch (error) {
+}
             setError("An error occurred while consulting the Oracle for power rankings.");
         } finally {
+}
             setIsLoading(false);
         }
     }, [league]);
 
     React.useEffect(() => {
+}
         fetchRankings();
     }, [league.id, league.currentWeek, retryCount, fetchRankings]);
 
     const handleRetry = () => {
+}
         setRetryCount(c => c + 1);
     };
 
@@ -57,7 +65,7 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         <p className="page-subtitle">{league.name} - Week {league.currentWeek}</p>
                     </div>
                     <button 
-                        onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} 
+                        onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })} 
                         className="back-btn"
                     >
                         Back to My Team
@@ -67,8 +75,9 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
 
             <div className="max-w-7xl mx-auto p-4">
                 <main>
-                     <Widget title="The Oracle's Official Rankings" icon={<ChartBarIcon />}>
+                     <Widget title="The Oracle&apos;s Official Rankings" icon={<ChartBarIcon />}>
                         {isLoading ? (
+}
                             <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {Array.from({ length: league.teams.length || 8 }).map((_, i) => <PowerRankingCardSkeleton key={i} />)}
                             </div>
@@ -77,7 +86,8 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
                         ) : (
                             <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {rankings.map((ranking: any) => (
-                                    <PowerRankingCard 
+}
+                                    <PowerRankingCard>
                                        key={ranking.teamId} 
                                        ranking={ranking} 
                                        team={league.teams.find((t: any) => t.id === ranking.teamId)}
@@ -95,14 +105,16 @@ const PowerRankingsContent: React.FC<{ league: League; dispatch: React.Dispatch<
 };
 
 const PowerRankingsView: React.FC = () => {
+}
     const { dispatch } = useAppState();
     const { league } = useLeague();
     
     if (!league) {
+}
         return (
             <div className="p-8 text-center w-full h-full flex flex-col items-center justify-center">
                 <p>Please select a league to view power rankings.</p>
-                 <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
+                 <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} className="mt-4 px-4 py-2 bg-cyan-500 rounded">
                     Back to Dashboard
                 </button>
             </div>

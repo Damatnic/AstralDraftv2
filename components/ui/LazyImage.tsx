@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from &apos;react&apos;;
 
 interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+}
   src: string;
   alt: string;
   placeholder?: string;
@@ -9,22 +10,27 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export const LazyImage: React.FC<LazyImageProps> = ({
+}
   src,
   alt,
-  placeholder = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjY2NjIi8+PC9zdmc+',
+  placeholder = &apos;data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjY2NjIi8+PC9zdmc+&apos;,
   fallback,
-  className = '',
+  className = &apos;&apos;,
   ...props
 }) => {
+}
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
+}
     const observer = new IntersectionObserver(
       ([entry]) => {
+}
         if (entry.isIntersecting) {
+}
           setIsInView(true);
           observer.disconnect();
         }
@@ -33,6 +39,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     );
 
     if (imgRef.current) {
+}
       observer.observe(imgRef.current);
     }
 
@@ -44,7 +51,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       ref={imgRef}
       src={hasError && fallback ? fallback : (isInView ? src : placeholder)}
       alt={alt}
-      className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-50'} ${className}`}
+      className={`transition-opacity duration-300 ${isLoaded ? &apos;opacity-100&apos; : &apos;opacity-50&apos;} ${className}`}
       onLoad={() => setIsLoaded(true)}
       onError={() => setHasError(true)}
       {...props}

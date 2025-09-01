@@ -8,55 +8,63 @@
  * - Different configurations and use cases
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { SecurePasswordInput, SecurePinInput } from '../ui/SecureInput';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Button } from '../ui/Button';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { SecurePasswordInput, SecurePinInput } from &apos;../ui/SecureInput&apos;;
+import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+import { Button } from &apos;../ui/Button&apos;;
 
 export const SecureInputDemo: React.FC = () => {
+}
   // Demo state
-  const [loginPassword, setLoginPassword] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [userPin, setUserPin] = useState('');
-  const [adminPin, setAdminPin] = useState('');
-  const [customPin, setCustomPin] = useState('');
+  const [loginPassword, setLoginPassword] = useState(&apos;&apos;);
+  const [registerPassword, setRegisterPassword] = useState(&apos;&apos;);
+  const [confirmPassword, setConfirmPassword] = useState(&apos;&apos;);
+  const [userPin, setUserPin] = useState(&apos;&apos;);
+  const [adminPin, setAdminPin] = useState(&apos;&apos;);
+  const [customPin, setCustomPin] = useState(&apos;&apos;);
   
   // Error states for demo
   const [errors, setErrors] = useState<Record<string, string>>({});
   
   // Demo validation
   const validateDemo = () => {
+}
     const newErrors: Record<string, string> = {};
     
     if (loginPassword.length < 8) {
-      newErrors.loginPassword = 'Password must be at least 8 characters';
+}
+      newErrors.loginPassword = &apos;Password must be at least 8 characters&apos;;
 
     if (registerPassword !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+}
+      newErrors.confirmPassword = &apos;Passwords do not match&apos;;
 
     if (userPin.length !== 4) {
-      newErrors.userPin = 'PIN must be exactly 4 digits';
+}
+      newErrors.userPin = &apos;PIN must be exactly 4 digits&apos;;
 
     if (adminPin.length !== 6) {
-      newErrors.adminPin = 'Admin PIN must be 6 digits';
+}
+      newErrors.adminPin = &apos;Admin PIN must be 6 digits&apos;;
 
     setErrors(newErrors);
     
     if (Object.keys(newErrors).length === 0) {
-      alert('All inputs are valid! 🎉');
+}
+      alert(&apos;All inputs are valid! 🎉&apos;);
 
   };
   
   const clearDemo = () => {
-    setLoginPassword('');
-    setRegisterPassword('');
-    setConfirmPassword('');
-    setUserPin('');
-    setAdminPin('');
-    setCustomPin('');
+}
+    setLoginPassword(&apos;&apos;);
+    setRegisterPassword(&apos;&apos;);
+    setConfirmPassword(&apos;&apos;);
+    setUserPin(&apos;&apos;);
+    setAdminPin(&apos;&apos;);
+    setCustomPin(&apos;&apos;);
     setErrors({});
   };
 
@@ -97,7 +105,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Login Password */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Login Password</h3>
-                  <SecurePasswordInput
+                  <SecurePasswordInput>
                     type="password"
                     value={loginPassword}
                     onChange={setLoginPassword}
@@ -113,7 +121,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Registration Password with Strength */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Registration Password</h3>
-                  <SecurePasswordInput
+                  <SecurePasswordInput>
                     type="password"
                     value={registerPassword}
                     onChange={setRegisterPassword}
@@ -129,7 +137,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Confirm Password */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Confirm Password</h3>
-                  <SecurePasswordInput
+                  <SecurePasswordInput>
                     type="password"
                     value={confirmPassword}
                     onChange={setConfirmPassword}
@@ -162,7 +170,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* User PIN (4 digits) */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">User PIN (4 digits)</h3>
-                  <SecurePinInput
+                  <SecurePinInput>
                     type="pin"
                     value={userPin}
                     onChange={setUserPin}
@@ -178,7 +186,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Admin PIN (6 digits) */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Admin PIN (6 digits)</h3>
-                  <SecurePinInput
+                  <SecurePinInput>
                     type="pin"
                     value={adminPin}
                     onChange={setAdminPin}
@@ -194,7 +202,7 @@ export const SecureInputDemo: React.FC = () => {
                 {/* Custom PIN with different mask */}
                 <div>
                   <h3 className="text-sm font-medium text-gray-300 mb-3 sm:px-4 md:px-6 lg:px-8">Custom PIN (8 digits)</h3>
-                  <SecurePinInput
+                  <SecurePinInput>
                     type="pin"
                     value={customPin}
                     onChange={setCustomPin}
@@ -272,7 +280,7 @@ export const SecureInputDemo: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="mt-8 flex justify-center gap-4 sm:px-4 md:px-6 lg:px-8"
         >
-          <Button
+          <Button>
             variant="primary"
             size="lg"
             onClick={validateDemo}
@@ -280,7 +288,7 @@ export const SecureInputDemo: React.FC = () => {
           >
             ✅ Validate All Inputs
           </Button>
-          <Button
+          <Button>
             variant="default"
             size="lg"
             onClick={clearDemo}

@@ -3,12 +3,13 @@
  * Handles PWA installation prompts and provides fallback for iOS
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Download, X, Share, Plus, Smartphone } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Download, X, Share, Plus, Smartphone } from &apos;lucide-react&apos;;
 
 interface Props {
+}
   onInstall?: () => void;
   onDismiss?: () => void;
   className?: string;
@@ -16,9 +17,11 @@ interface Props {
 }
 
 const PWAInstallPrompt: React.FC<Props> = ({ onInstall, 
+}
   onDismiss,
-  className = ''
+  className = &apos;&apos;
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -27,69 +30,85 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
   const [showIOSInstructions, setShowIOSInstructions] = useState(false);
 
   useEffect(() => {
+}
     // Check if running in standalone mode
     const checkStandalone = () => {
-      return window.matchMedia('(display-mode: standalone)').matches ||
+}
+      return window.matchMedia(&apos;(display-mode: standalone)&apos;).matches ||
              (window.navigator as any).standalone ||
-             document.referrer.includes('android-app://');
+             document.referrer.includes(&apos;android-app://&apos;);
     };
 
     // Check if iOS device
     const checkIOS = () => {
+}
       return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-             (navigator.userAgent.includes('Mac') && navigator.maxTouchPoints > 1);
+             (navigator.userAgent.includes(&apos;Mac&apos;) && navigator.maxTouchPoints > 1);
     };
 
     setIsIOS(checkIOS());
     setIsStandalone(checkStandalone());
 
-    // Don't show prompt if already installed
+    // Don&apos;t show prompt if already installed
     if (checkStandalone()) {
+}
       return;
 
     // Check if user has already dismissed the prompt
-    const hasDismissed = localStorage.getItem('pwa-install-dismissed');
+    const hasDismissed = localStorage.getItem(&apos;pwa-install-dismissed&apos;);
     if (hasDismissed) {
+}
       return;
 
     // Listen for beforeinstallprompt event (Android/Chrome)
     const handleBeforeInstallPrompt = (e: Event) => {
+}
       e.preventDefault();
       setDeferredPrompt(e);
       setShowPrompt(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
 
     // For iOS, show prompt after a delay if not dismissed
     if (checkIOS() && !hasDismissed) {
+}
       const timer = setTimeout(() => {
+}
         setShowPrompt(true);
       }, 3000); // Show after 3 seconds
 
       return () => {
+}
         clearTimeout(timer);
-        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.removeEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
       };
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+}
+      window.removeEventListener(&apos;beforeinstallprompt&apos;, handleBeforeInstallPrompt);
     };
   }, []);
 
   const handleInstallClick = async () => {
+}
     try {
+}
 
     if (isIOS) {
+}
       setShowIOSInstructions(true);
       return;
     
     } catch (error) {
-      console.error('Error in handleInstallClick:', error);
+}
+      console.error(&apos;Error in handleInstallClick:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }if (!deferredPrompt) {
+}
       return;
 
     // Show the install prompt
@@ -98,9 +117,11 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
     // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
 
-    if (outcome === 'accepted') {
+    if (outcome === &apos;accepted&apos;) {
+}
       onInstall?.();
     } else {
+}
 
     // Clear the deferred prompt
     setDeferredPrompt(null);
@@ -108,21 +129,25 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
   };
 
   const handleDismiss = () => {
+}
     setShowPrompt(false);
     setShowIOSInstructions(false);
-    localStorage.setItem('pwa-install-dismissed', 'true');
+    localStorage.setItem(&apos;pwa-install-dismissed&apos;, &apos;true&apos;);
     onDismiss?.();
   };
 
-  // Don't render if already installed or no prompt available
+  // Don&apos;t render if already installed or no prompt available
   if (isStandalone || (!showPrompt && !showIOSInstructions)) {
+}
     return null;
 
   return (
     <AnimatePresence>
       {showPrompt && (
+}
         <motion.div
           className={`
+}
             fixed bottom-20 left-4 right-4 z-50
             bg-gray-800/95 backdrop-blur-sm
             border border-gray-700 rounded-xl
@@ -130,12 +155,13 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
             ${className}
           `}
           style={{ 
-            marginBottom: 'env(safe-area-inset-bottom)'
+}
+            marginBottom: &apos;env(safe-area-inset-bottom)&apos;
           }}
           initial={{ opacity: 0, y: 100, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 100, scale: 0.95 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          transition={{ type: &apos;spring&apos;, damping: 25, stiffness: 200 }}
         >
           <div className="flex items-start space-x-3 sm:px-4 md:px-6 lg:px-8">
             <div className="flex-shrink-0 sm:px-4 md:px-6 lg:px-8">
@@ -196,6 +222,7 @@ const PWAInstallPrompt: React.FC<Props> = ({ onInstall,
 
       {/* iOS Installation Instructions */}
       {showIOSInstructions && (
+}
         <motion.div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}

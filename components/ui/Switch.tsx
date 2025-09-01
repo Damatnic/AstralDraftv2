@@ -1,24 +1,27 @@
-import React from 'react';
 
 interface SwitchProps {
+}
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
   disabled?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
 }
 
 export const Switch: React.FC<SwitchProps> = ({
+}
   checked,
   onChange,
   label,
   disabled = false,
-  size = 'md'
+  size = &apos;md&apos;
 }: any) => {
+}
   const sizeClasses = {
-    sm: { track: 'w-8 h-4', thumb: 'w-3 h-3' },
-    md: { track: 'w-10 h-5', thumb: 'w-4 h-4' },
-    lg: { track: 'w-12 h-6', thumb: 'w-5 h-5' }
+}
+    sm: { track: &apos;w-8 h-4&apos;, thumb: &apos;w-3 h-3&apos; },
+    md: { track: &apos;w-10 h-5&apos;, thumb: &apos;w-4 h-4&apos; },
+    lg: { track: &apos;w-12 h-6&apos;, thumb: &apos;w-5 h-5&apos; }
   };
 
   const { track, thumb } = sizeClasses[size];
@@ -32,22 +35,25 @@ export const Switch: React.FC<SwitchProps> = ({
         disabled={disabled}
         onClick={() => onChange(!checked)}
         className={`
+}
           inline-block relative rounded-full transition-colors duration-200
-          ${checked ? 'bg-blue-500' : 'bg-gray-300'}
-          ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+          ${checked ? &apos;bg-blue-500&apos; : &apos;bg-gray-300&apos;}
+          ${disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}
           ${track}
         `}
       >
         <span
           className={`
+}
             inline-block rounded-full bg-white transition-transform duration-200
-            ${checked ? 'translate-x-full' : 'translate-x-0'}
+            ${checked ? &apos;translate-x-full&apos; : &apos;translate-x-0&apos;}
             ${thumb}
           `}
         />
       </button>
       
       {label && (
+}
         <span className="text-sm font-medium text-[var(--text-primary)]">
           {label}
         </span>

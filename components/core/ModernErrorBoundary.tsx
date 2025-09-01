@@ -3,25 +3,30 @@
  * Graceful error handling with beautiful UI
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangleIcon, RefreshCwIcon, HomeIcon, MessageCircleIcon } from 'lucide-react';
+import React, { Component, ErrorInfo, ReactNode } from &apos;react&apos;;
+import { AlertTriangleIcon, RefreshCwIcon, HomeIcon, MessageCircleIcon } from &apos;lucide-react&apos;;
 
 interface Props {
+}
   children: ReactNode;
   fallback?: ReactNode;
 
 }
 
 interface State {
+}
   hasError: boolean;
   error: Error | null;
   errorInfo: ErrorInfo | null;
   errorCount: number;
 
 class ModernErrorBoundary extends Component<Props, State> {
+}
   constructor(props: Props) {
+}
     super(props);
     this.state = {
+}
       hasError: false,
       error: null,
       errorInfo: null,
@@ -29,11 +34,14 @@ class ModernErrorBoundary extends Component<Props, State> {
     };
 
   static getDerivedStateFromError(error: Error): Partial<State> {
+}
     return { hasError: true };
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+}
     
     this.setState(prevState => ({
+}
       error,
       errorInfo,
       errorCount: prevState.errorCount + 1
@@ -43,14 +51,18 @@ class ModernErrorBoundary extends Component<Props, State> {
     this.logErrorToService(error, errorInfo);
 
   logErrorToService = (error: Error, errorInfo: ErrorInfo) => {
+}
     // In production, send to error tracking service like Sentry
-    if (process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === &apos;production&apos;) {
+}
       // Example: Sentry.captureException(error, { extra: errorInfo });
 
   };
 
   handleReset = () => {
+}
     this.setState({
+}
       hasError: false,
       error: null,
       errorInfo: null
@@ -58,19 +70,24 @@ class ModernErrorBoundary extends Component<Props, State> {
   };
 
   handleReload = () => {
+}
     window.location.reload();
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+}
+    window.location.href = &apos;/&apos;;
   };
 
   render() {
+}
     if (this.state.hasError) {
+}
       if (this.props.fallback) {
+}
         return <>{this.props.fallback}</>;
 
-      const isDevelopment = process.env.NODE_ENV === 'development';
+      const isDevelopment = process.env.NODE_ENV === &apos;development&apos;;
 
       return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-4 sm:px-4 md:px-6 lg:px-8">
@@ -99,13 +116,14 @@ class ModernErrorBoundary extends Component<Props, State> {
                   <h2 className="text-lg font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">What happened?</h2>
                   <div className="bg-black/20 rounded-lg p-4 border border-white/10 sm:px-4 md:px-6 lg:px-8">
                     <p className="text-red-400 font-mono text-sm sm:px-4 md:px-6 lg:px-8">
-                      {this.state.error?.message || 'An unexpected error occurred'}
+                      {this.state.error?.message || &apos;An unexpected error occurred&apos;}
                     </p>
                   </div>
                 </div>
 
                 {/* Stack Trace (Development only) */}
                 {isDevelopment && this.state.errorInfo && (
+}
                   <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
                     <details className="cursor-pointer sm:px-4 md:px-6 lg:px-8">
                       <summary className="text-sm font-medium text-gray-400 hover:text-white transition-colors sm:px-4 md:px-6 lg:px-8">
@@ -155,7 +173,7 @@ class ModernErrorBoundary extends Component<Props, State> {
                 {/* Support Link */}
                 <div className="mt-6 pt-6 border-t border-white/10 text-center sm:px-4 md:px-6 lg:px-8">
                   <p className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                    Need help?{' '}
+                    Need help?{&apos; &apos;}
                     <a
                       href="mailto:support@astraldraft.com"
                       className="text-blue-400 hover:text-blue-300 underline sm:px-4 md:px-6 lg:px-8"
@@ -167,6 +185,7 @@ class ModernErrorBoundary extends Component<Props, State> {
 
                 {/* Error Count Warning */}
                 {this.state.errorCount > 2 && (
+}
                   <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg sm:px-4 md:px-6 lg:px-8">
                     <p className="text-sm text-yellow-400 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                       <AlertTriangleIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />

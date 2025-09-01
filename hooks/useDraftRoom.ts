@@ -1,7 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { draftWebSocketService, DraftWebSocketMessage, DraftRoomState } from '../services/draftWebSocketService';
+import { useState, useEffect, useCallback, useRef } from &apos;react&apos;;
+import { draftWebSocketService, DraftWebSocketMessage, DraftRoomState } from &apos;../services/draftWebSocketService&apos;;
 
 export interface UseDraftRoomOptions {
+}
   leagueId: string;
   userId: string;
   teamId: number;
@@ -9,13 +10,15 @@ export interface UseDraftRoomOptions {
 }
 
 export interface DraftRoomHookReturn {
+}
   // Connection state
   isConnected: boolean;
-  connectionStatus: 'CONNECTING' | 'CONNECTED' | 'DISCONNECTED' | 'ERROR';
+  connectionStatus: &apos;CONNECTING&apos; | &apos;CONNECTED&apos; | &apos;DISCONNECTED&apos; | &apos;ERROR&apos;;
   
   // Room state
   roomState: DraftRoomState | null;
   participants: Array<{
+}
     teamId: number;
     userId: string;
     isOnline: boolean;
@@ -32,12 +35,14 @@ export interface DraftRoomHookReturn {
   
   // Picks and chat
   picks: Array<{
+}
     teamId: number;
     playerId: number;
     pickNumber: number;
     timestamp: number;
   }>;
   chatMessages: Array<{
+}
     userId: string;
     message: string;
     timestamp: number;
@@ -60,10 +65,11 @@ export interface DraftRoomHookReturn {
  * Hook for managing real-time draft room functionality
  */
 export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn {
+}
   const { leagueId, userId, teamId, autoConnect = true } = options;
   
   const [isConnected, setIsConnected] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<'CONNECTING' | 'CONNECTED' | 'DISCONNECTED' | 'ERROR'>('DISCONNECTED');
+  const [connectionStatus, setConnectionStatus] = useState<&apos;CONNECTING&apos; | &apos;CONNECTED&apos; | &apos;DISCONNECTED&apos; | &apos;ERROR&apos;>(&apos;DISCONNECTED&apos;);
   const [roomState, setRoomState] = useState<DraftRoomState | null>(null);
   const [error, setError] = useState<string | null>(null);
   
@@ -72,118 +78,148 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
 
   // Connection management
   const connect = useCallback(async () => {
+}
     try {
+}
 
       setError(null);
-      setConnectionStatus('CONNECTING');
+      setConnectionStatus(&apos;CONNECTING&apos;);
       await draftWebSocketService.connectToDraftRoom(leagueId, userId);
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to connect to draft room';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to connect to draft room&apos;;
       setError(errorMessage);
-      setConnectionStatus('ERROR');
-      console.error('Draft room connection error:', err);
+      setConnectionStatus(&apos;ERROR&apos;);
+      console.error(&apos;Draft room connection error:&apos;, err);
     }
   }, [leagueId, userId]);
 
   const disconnect = useCallback(() => {
+}
     draftWebSocketService.disconnect();
-    setConnectionStatus('DISCONNECTED');
+    setConnectionStatus(&apos;DISCONNECTED&apos;);
     setIsConnected(false);
     setRoomState(null);
   }, []);
 
   // Draft actions
   const makePick = useCallback((playerId: number) => {
+}
     try {
+}
 
       if (!isConnected) {
-        throw new Error('Not connected to draft room');
+}
+        throw new Error(&apos;Not connected to draft room&apos;);
       }
       
       if (!roomState || roomState.currentPicker !== teamId) {
-        throw new Error('It is not your turn to pick');
+}
+        throw new Error(&apos;It is not your turn to pick&apos;);
       }
       
       draftWebSocketService.sendPick(leagueId, teamId, playerId);
       setError(null);
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to make pick';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to make pick&apos;;
       setError(errorMessage);
     }
   }, [isConnected, roomState, teamId, leagueId]);
 
   const sendChatMessage = useCallback((message: string, isTradeProposal = false) => {
+}
     try {
+}
 
       if (!isConnected) {
-        throw new Error('Not connected to draft room');
+}
+        throw new Error(&apos;Not connected to draft room&apos;);
       }
       
       draftWebSocketService.sendChatMessage(leagueId, userId, message, isTradeProposal);
       setError(null);
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to send message&apos;;
       setError(errorMessage);
     }
   }, [isConnected, leagueId, userId]);
 
   const toggleTimer = useCallback(() => {
+}
     try {
+}
 
       if (!isConnected) {
-        throw new Error('Not connected to draft room');
+}
+        throw new Error(&apos;Not connected to draft room&apos;);
       }
       
       draftWebSocketService.toggleTimer(leagueId);
       setError(null);
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to toggle timer';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to toggle timer&apos;;
       setError(errorMessage);
     }
   }, [isConnected, leagueId]);
 
   const clearError = useCallback(() => {
+}
     setError(null);
   }, []);
 
   // Setup message handlers
   useEffect(() => {
+}
     const handlers = new Map<string, (message: DraftWebSocketMessage) => void>();
 
     // Draft status handler
-    handlers.set('DRAFT_STATUS', (message: any) => {
-      if (message.type === 'DRAFT_STATUS') {
+    handlers.set(&apos;DRAFT_STATUS&apos;, (message: any) => {
+}
+      if (message.type === &apos;DRAFT_STATUS&apos;) {
+}
         setRoomState(draftWebSocketService.getRoomState());
-        setConnectionStatus('CONNECTED');
+        setConnectionStatus(&apos;CONNECTED&apos;);
         setIsConnected(true);
       }
     });
 
     // Pick made handler
-    handlers.set('PICK_MADE', (message: any) => {
-      if (message.type === 'PICK_MADE') {
+    handlers.set(&apos;PICK_MADE&apos;, (message: any) => {
+}
+      if (message.type === &apos;PICK_MADE&apos;) {
+}
         setRoomState(draftWebSocketService.getRoomState());
         
         // Play notification sound for picks
-        if ('serviceWorker' in navigator && 'showNotification' in window) {
+        if (&apos;serviceWorker&apos; in navigator && &apos;showNotification&apos; in window) {
+}
           navigator.serviceWorker.ready.then(registration => {
-            registration.showNotification('Draft Pick Made', {
+}
+            registration.showNotification(&apos;Draft Pick Made&apos;, {
+}
               body: `Team ${message.data.teamId} selected a player`,
-              icon: '/favicon.svg',
-              badge: '/favicon.svg',
-              tag: 'draft-pick'
+              icon: &apos;/favicon.svg&apos;,
+              badge: &apos;/favicon.svg&apos;,
+              tag: &apos;draft-pick&apos;
             });
           });
         }
@@ -191,19 +227,25 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     });
 
     // Timer update handler
-    handlers.set('TIMER_UPDATE', (message: any) => {
-      if (message.type === 'TIMER_UPDATE') {
+    handlers.set(&apos;TIMER_UPDATE&apos;, (message: any) => {
+}
+      if (message.type === &apos;TIMER_UPDATE&apos;) {
+}
         setRoomState(draftWebSocketService.getRoomState());
         
         // Show notification when time is running low
         if (message.data.timeRemaining <= 30 && message.data.currentPicker === teamId) {
-          if ('serviceWorker' in navigator && 'showNotification' in window) {
+}
+          if (&apos;serviceWorker&apos; in navigator && &apos;showNotification&apos; in window) {
+}
             navigator.serviceWorker.ready.then(registration => {
-              registration.showNotification('Your Pick Time is Running Out!', {
+}
+              registration.showNotification(&apos;Your Pick Time is Running Out!&apos;, {
+}
                 body: `${message.data.timeRemaining} seconds remaining`,
-                icon: '/favicon.svg',
-                badge: '/favicon.svg',
-                tag: 'draft-timer-warning',
+                icon: &apos;/favicon.svg&apos;,
+                badge: &apos;/favicon.svg&apos;,
+                tag: &apos;draft-timer-warning&apos;,
                 requireInteraction: true
               });
             });
@@ -213,28 +255,36 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     });
 
     // User joined/left handlers
-    handlers.set('USER_JOINED', () => {
+    handlers.set(&apos;USER_JOINED&apos;, () => {
+}
       setRoomState(draftWebSocketService.getRoomState());
     });
 
-    handlers.set('USER_LEFT', () => {
+    handlers.set(&apos;USER_LEFT&apos;, () => {
+}
       setRoomState(draftWebSocketService.getRoomState());
     });
 
     // Chat message handler
-    handlers.set('CHAT_MESSAGE', (message: any) => {
-      if (message.type === 'CHAT_MESSAGE') {
+    handlers.set(&apos;CHAT_MESSAGE&apos;, (message: any) => {
+}
+      if (message.type === &apos;CHAT_MESSAGE&apos;) {
+}
         setRoomState(draftWebSocketService.getRoomState());
         
         // Show notification for trade proposals
         if (message.data.isTradeProposal && message.data.userId !== userId) {
-          if ('serviceWorker' in navigator && 'showNotification' in window) {
+}
+          if (&apos;serviceWorker&apos; in navigator && &apos;showNotification&apos; in window) {
+}
             navigator.serviceWorker.ready.then(registration => {
-              registration.showNotification('Trade Proposal Received', {
+}
+              registration.showNotification(&apos;Trade Proposal Received&apos;, {
+}
                 body: message.data.message,
-                icon: '/favicon.svg',
-                badge: '/favicon.svg',
-                tag: 'trade-proposal'
+                icon: &apos;/favicon.svg&apos;,
+                badge: &apos;/favicon.svg&apos;,
+                tag: &apos;trade-proposal&apos;
               });
             });
           }
@@ -244,34 +294,42 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
 
     // Register all handlers
     handlers.forEach((handler, eventType) => {
-      draftWebSocketService.addEventListener(eventType as DraftWebSocketMessage['type'], handler);
+}
+      draftWebSocketService.addEventListener(eventType as DraftWebSocketMessage[&apos;type&apos;], handler);
     });
 
     messageHandlersRef.current = handlers;
 
     return () => {
+}
       // Cleanup handlers
       handlers.forEach((handler, eventType) => {
-        draftWebSocketService.removeEventListener(eventType as DraftWebSocketMessage['type'], handler);
+}
+        draftWebSocketService.removeEventListener(eventType as DraftWebSocketMessage[&apos;type&apos;], handler);
       });
     };
   }, [teamId, userId]);
 
   // Auto-connect and connection monitoring
   useEffect(() => {
+}
     if (autoConnect && leagueId && userId) {
+}
       connect();
     }
 
     // Monitor connection status
     connectionCheckInterval.current = setInterval(() => {
+}
       const status = draftWebSocketService.getConnectionStatus();
       setConnectionStatus(status);
-      setIsConnected(status === 'CONNECTED');
+      setIsConnected(status === &apos;CONNECTED&apos;);
     }, 1000);
 
     return () => {
+}
       if (connectionCheckInterval.current) {
+}
         clearInterval(connectionCheckInterval.current);
       }
     };
@@ -279,7 +337,9 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
 
   // Cleanup on unmount
   useEffect(() => {
+}
     return () => {
+}
       disconnect();
     };
   }, [disconnect]);
@@ -296,6 +356,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
   const chatMessages = roomState?.chatMessages || [];
 
   return {
+}
     // Connection state
     isConnected,
     connectionStatus,
@@ -325,7 +386,7 @@ export function useDraftRoom(options: UseDraftRoomOptions): DraftRoomHookReturn 
     
     // Error handling
     error,
-    clearError
+//     clearError
   };
 }
 

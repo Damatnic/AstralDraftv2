@@ -1,11 +1,10 @@
 
-import React from 'react';
-import type { League, Player, PlayerPosition, User } from '../types';
-import { players } from '../data/players';
-import { getAiDraftPick } from '../services/geminiService';
-import useSound from './useSound';
-import { useAppState } from '../contexts/AppContext';
-import { showNotification } from '../utils/notifications';
+import type { League, Player, PlayerPosition, User } from &apos;../types&apos;;
+import { players } from &apos;../data/players&apos;;
+import { getAiDraftPick } from &apos;../services/geminiService&apos;;
+import useSound from &apos;./useSound&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { showNotification } from &apos;../utils/notifications&apos;;
 
 const DRAFT_SPEED_MS = 3000; // Increased speed slightly to account for API latency
 const USER_PICK_TIME_LIMIT_MS = 60000;
@@ -16,9 +15,10 @@ export const useRealtimeDraft = (
     user: User, 
     dispatch: React.Dispatch<any>
 ) => {
+}
     const { state } = useAppState();
-    const playDraftSound = useSound('draft', 0.5);
-    const playYourTurnSound = useSound('yourTurn', 0.3);
+    const playDraftSound = useSound(&apos;draft&apos;, 0.5);
+    const playYourTurnSound = useSound(&apos;yourTurn&apos;, 0.3);
 
     const teams = league?.teams ?? [];
     const draftPicks = league?.draftPicks ?? [];
@@ -30,12 +30,15 @@ export const useRealtimeDraft = (
     const teamOnClockId = league ? league.draftPicks[currentPick - 1]?.teamId : null;
     const isMyTurn = myTeamId === teamOnClockId;
     
-    // Play sound on user's turn
+    // Play sound on user&apos;s turn
     React.useEffect(() => {
-        if (!league || isPaused || status !== 'DRAFTING') return;
+}
+        if (!league || isPaused || status !== &apos;DRAFTING&apos;) return;
         if (isMyTurn) {
+}
             playYourTurnSound();
-            showNotification("It's your turn to draft!", {
+            showNotification("It&apos;s your turn to draft!", {
+}
                 body: `You are on the clock in ${league.name}.`,
                 tag: `turn-notification-${league.id}`
             });
@@ -43,7 +46,9 @@ export const useRealtimeDraft = (
     }, [isMyTurn, user.id, league, isPaused, status, playYourTurnSound]);
 
     React.useEffect(() => {
-        if (!league || status !== 'DRAFTING' || isPaused || currentPick > league.draftPicks.length) {
+}
+        if (!league || status !== &apos;DRAFTING&apos; || isPaused || currentPick > league.draftPicks.length) {
+}
             return;
         }
 
@@ -52,8 +57,10 @@ export const useRealtimeDraft = (
         if (!teamOnTheClock) return;
 
         // AI Pick Logic
-        if (teamOnTheClock.owner.id.startsWith('ai_')) {
+        if (teamOnTheClock.owner.id.startsWith(&apos;ai_&apos;)) {
+}
             const pickTimer = setTimeout(async () => {
+}
                 const currentPicksInHook = league.draftPicks.filter((p: any) => p.playerId).length;
                 
                 if ((currentPicksInHook + 1) !== currentPick) return;
@@ -63,16 +70,18 @@ export const useRealtimeDraft = (
                 let playerToDraft = recommendedPlayerName ? availablePlayersNow.find((p: any) => p.name === recommendedPlayerName) : undefined;
 
                 if (!playerToDraft) {
+}
                     console.warn("Gemini pick failed or was invalid. Using fallback logic.");
-                    const rosterCount = (pos: Player['position']) => teamOnTheClock.roster.filter((rp: any) => rp.position === pos).length;
+                    const rosterCount = (pos: Player[&apos;position&apos;]) => teamOnTheClock.roster.filter((rp: any) => rp.position === pos).length;
                     const ROSTER_LIMITS: { [key in PlayerPosition]: number } = { QB: 2, RB: 5, WR: 6, TE: 2, K: 1, DST: 1 };
                     const neededPlayers = availablePlayersNow.filter((p: any) => rosterCount(p.position) < ROSTER_LIMITS[p.position]);
                     playerToDraft = neededPlayers[0] || availablePlayersNow[0];
                 }
 
                 if (playerToDraft) {
-                    dispatch({ type: 'DRAFT_PLAYER', payload: { teamId: teamOnTheClock.id, player: playerToDraft } });
-                    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `${teamOnTheClock.name} drafted ${playerToDraft.name}`, type: 'DRAFT' }});
+}
+                    dispatch({ type: &apos;DRAFT_PLAYER&apos;, payload: { teamId: teamOnTheClock.id, player: playerToDraft } });
+                    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `${teamOnTheClock.name} drafted ${playerToDraft.name}`, type: &apos;DRAFT&apos; }});
                     playDraftSound();
                 }
             }, DRAFT_SPEED_MS);
@@ -82,20 +91,24 @@ export const useRealtimeDraft = (
         
         // User Auto-Draft Logic
         if (isMyTurn) {
+}
              const autoDraftTimer = setTimeout(() => {
+}
                 const myQueue = state.playerQueues[league.id] || [];
                 const availablePlayersNow = players.filter((p: any) => !league.draftPicks.some((dp: any) => dp.playerId === p.id));
                 const availablePlayerIds = new Set(availablePlayersNow.map((p: any) => p.id));
                 const playerToDraftFromQueue = myQueue.map((pid: any) => players.find((p: any) => p.id === pid)).find((p: any) => p && availablePlayerIds.has(p.id));
 
                 if (playerToDraftFromQueue) {
-                    dispatch({ type: 'DRAFT_PLAYER', payload: { teamId: myTeamId, player: playerToDraftFromQueue } });
-                    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Auto-drafted ${playerToDraftFromQueue.name} from your queue.`, type: 'SYSTEM' }});
+}
+                    dispatch({ type: &apos;DRAFT_PLAYER&apos;, payload: { teamId: myTeamId, player: playerToDraftFromQueue } });
+                    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Auto-drafted ${playerToDraftFromQueue.name} from your queue.`, type: &apos;SYSTEM&apos; }});
                     playDraftSound();
                 } else if(availablePlayersNow.length > 0) {
+}
                      // Fallback: draft best available player if queue is empty/exhausted
-                    dispatch({ type: 'DRAFT_PLAYER', payload: { teamId: myTeamId, player: availablePlayersNow[0] } });
-                    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Auto-drafted ${availablePlayersNow[0].name} (Best Available).`, type: 'SYSTEM' }});
+                    dispatch({ type: &apos;DRAFT_PLAYER&apos;, payload: { teamId: myTeamId, player: availablePlayersNow[0] } });
+                    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Auto-drafted ${availablePlayersNow[0].name} (Best Available).`, type: &apos;SYSTEM&apos; }});
                     playDraftSound();
                 }
             }, USER_PICK_TIME_LIMIT_MS);
@@ -106,17 +119,20 @@ export const useRealtimeDraft = (
     }, [currentPick, league, status, isPaused, dispatch, playDraftSound, isMyTurn, myTeamId, state.playerQueues, teamOnClockId]);
 
     const draftPlayer = React.useCallback((player: Player) => {
+}
         if (!league) return;
         
         const internalCurrentPick = league.draftPicks.filter((p: any) => p.playerId).length + 1;
         const currentTeamId = league.draftPicks[internalCurrentPick - 1]?.teamId;
 
         if (myTeamId === currentTeamId) {
-            dispatch({ type: 'DRAFT_PLAYER', payload: { teamId: myTeamId, player } });
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `You drafted ${player.name}!`, type: 'DRAFT' }});
+}
+            dispatch({ type: &apos;DRAFT_PLAYER&apos;, payload: { teamId: myTeamId, player } });
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `You drafted ${player.name}!`, type: &apos;DRAFT&apos; }});
             playDraftSound();
         } else {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "It's not your turn!", type: 'SYSTEM' } });
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "It&apos;s not your turn!", type: &apos;SYSTEM&apos; } });
         }
     }, [league, myTeamId, dispatch, playDraftSound]);
 
@@ -125,11 +141,12 @@ export const useRealtimeDraft = (
     const latestPlayer = latestPick ? players.find((p: any) => p.id === latestPick.playerId) : null;
 
     return {
+}
         teams,
         draftPicks,
         availablePlayers,
         currentPick,
         latestPick: latestPlayer && latestPick ? { ...latestPick, player: latestPlayer } : null,
-        draftPlayer
+//         draftPlayer
     };
 };

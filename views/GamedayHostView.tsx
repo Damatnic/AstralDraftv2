@@ -1,17 +1,17 @@
 
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { generateGamedayHighlight } from '../services/geminiService';
-import { Avatar } from '../components/ui/Avatar';
-import { formatRelativeTime } from '../utils/time';
-import type { Player, GamedayEvent } from '../types';
-import { useLiveData } from '../hooks/useLiveData';
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { generateGamedayHighlight } from &apos;../services/geminiService&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
+import { formatRelativeTime } from &apos;../utils/time&apos;;
+import type { Player, GamedayEvent } from &apos;../types&apos;;
+import { useLiveData } from &apos;../hooks/useLiveData&apos;;
 
 const GamedayHostView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league, myTeam } = useLeague();
 
@@ -29,27 +29,33 @@ const GamedayHostView: React.FC = () => {
     const latestEvent = events.length > 0 ? events[events.length - 1] : null;
 
     React.useEffect(() => {
+}
         // This effect will run when a new event is added from the live data hook
         const processNewEvent = async (event: GamedayEvent) => {
+}
             if (!matchup || !myTeam || !opponentTeam) return;
 
             const commentary = await generateGamedayHighlight({ teamA: myTeam, teamB: opponentTeam }, event.player);
             if (commentary) {
+}
                 // We can update the event with the commentary or handle it separately
-                // For simplicity, let's just log it for now but it could be displayed
+                // For simplicity, let&apos;s just log it for now but it could be displayed
 
         };
 
         if (latestEvent && !latestEvent.text.includes("commentary")) { // Simple check to avoid reprocessing
+}
              // In a real app, you might have a better way to check if commentary exists
 
     }, [latestEvent, matchup, myTeam, opponentTeam, dispatch]);
 
     if (!league || !myTeam) {
-        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+}
+        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
 
     if (!matchup || !opponentTeam) {
-        return <ErrorDisplay title="Bye Week" message="You don't have a matchup this week." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
+}
+        return <ErrorDisplay title="Bye Week" message="You don&apos;t have a matchup this week." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })} />;
 
     return (
         <div className="w-full h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto">
@@ -60,7 +66,7 @@ const GamedayHostView: React.FC = () => {
                     </h1>
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{myTeam.name} vs. {opponentTeam.name}</p>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) className="back-btn">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; }) className="back-btn">
                     Back to Team Hub
                 </button>
             </header>
@@ -68,18 +74,20 @@ const GamedayHostView: React.FC = () => {
                 <div className="lg:col-span-2 glass-pane rounded-2xl flex items-center justify-center p-8">
                     <AnimatePresence mode="wait">
                         <motion.div
-                            key={latestEvent?.id || 'waiting'}
+                            key={latestEvent?.id || &apos;waiting&apos;}
                             className="text-center"
                             {...{
+}
                                 initial: { opacity: 0, scale: 0.8 },
                                 animate: { opacity: 1, scale: 1 },
                                 exit: { opacity: 0, scale: 1.2 },
-                                transition: { duration: 0.5, type: 'spring' },
+                                transition: { duration: 0.5, type: &apos;spring&apos; },
                             }}
                         >
                             {latestEvent ? (
+}
                                 <>
-                                    <Avatar avatar={league.teams.find((t: any) => t.id === latestEvent.teamId)?.avatar || '🏈'} className="w-24 h-24 text-6xl mx-auto rounded-lg mb-4" />
+                                    <Avatar avatar={league.teams.find((t: any) => t.id === latestEvent.teamId)?.avatar || &apos;🏈&apos;} className="w-24 h-24 text-6xl mx-auto rounded-lg mb-4" />
                                     <p className="font-display text-3xl font-bold">{latestEvent.text}</p>
                                 </>
                             ) : (
@@ -92,6 +100,7 @@ const GamedayHostView: React.FC = () => {
                     <h3 className="p-3 font-bold text-center border-b border-[var(--panel-border)]">Event Timeline</h3>
                     <div className="flex-grow p-2 space-y-2 overflow-y-auto">
                         {events.slice().reverse().map((event: any) => {
+}
                             const team = league.teams.find((t: any) => t.id === event.teamId);
                             return (
                                 <div key={event.id} className="p-2 bg-black/20 rounded-md text-sm">

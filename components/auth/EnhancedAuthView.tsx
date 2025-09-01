@@ -1,11 +1,12 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '../../contexts/AuthContext';
-import { OAuthLoginComponent } from '../auth/oauth/OAuthLoginComponent';
-import { UserRoleBadge, PermissionList } from '../auth/ProtectedRoute';
-import { UserRole } from '../../services/rbacService';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAuth } from &apos;../../contexts/AuthContext&apos;;
+import { OAuthLoginComponent } from &apos;../auth/oauth/OAuthLoginComponent&apos;;
+import { UserRoleBadge, PermissionList } from &apos;../auth/ProtectedRoute&apos;;
+import { UserRole } from &apos;../../services/rbacService&apos;;
 import { 
+}
   EyeIcon, 
   EyeOffIcon, 
   UserIcon, 
@@ -13,12 +14,13 @@ import {
   LockIcon,
   CheckCircleIcon,
   AlertCircleIcon,
-  ShieldCheckIcon
-} from 'lucide-react';
+//   ShieldCheckIcon
+} from &apos;lucide-react&apos;;
 
-type AuthMode = 'login' | 'register' | 'profile';
+type AuthMode = &apos;login&apos; | &apos;register&apos; | &apos;profile&apos;;
 
 interface FormData {
+}
   username: string;
   email: string;
   password: string;
@@ -28,15 +30,17 @@ interface FormData {
 }
 
 const EnhancedAuthView: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { user, isAuthenticated, login, register, updateProfile, error, clearError } = useAuth();
-  const [mode, setMode] = useState<AuthMode>('login');
+  const [mode, setMode] = useState<AuthMode>(&apos;login&apos;);
   const [formData, setFormData] = useState<FormData>({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    displayName: ''
+}
+    username: &apos;&apos;,
+    email: &apos;&apos;,
+    password: &apos;&apos;,
+    confirmPassword: &apos;&apos;,
+    displayName: &apos;&apos;
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -46,6 +50,7 @@ const EnhancedAuthView: React.FC = () => {
 
   // Clear errors when switching modes
   useEffect(() => {
+}
     clearError();
     setAuthError(null);
     setValidationErrors({});
@@ -53,8 +58,11 @@ const EnhancedAuthView: React.FC = () => {
 
   // Populate form with user data in profile mode
   useEffect(() => {
-    if (mode === 'profile' && user) {
+}
+    if (mode === &apos;profile&apos; && user) {
+}
       setFormData(prev => ({
+}
         ...prev,
         username: user.username,
         email: user.email,
@@ -64,12 +72,15 @@ const EnhancedAuthView: React.FC = () => {
   }, [mode, user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+}
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
     // Clear specific field error when user starts typing
     if (validationErrors[name]) {
+}
       setValidationErrors(prev => {
+}
         const newErrors = { ...prev };
         delete newErrors[name];
         return newErrors;
@@ -79,42 +90,58 @@ const EnhancedAuthView: React.FC = () => {
   };
 
   const validateForm = (): boolean => {
+}
     const errors: Record<string, string> = {};
 
-    if (mode === 'register' || mode === 'profile') {
+    if (mode === &apos;register&apos; || mode === &apos;profile&apos;) {
+}
       if (!formData.username.trim()) {
-        errors.username = 'Username is required';
+}
+        errors.username = &apos;Username is required&apos;;
       } else if (formData.username.length < 3) {
-        errors.username = 'Username must be at least 3 characters';
+}
+        errors.username = &apos;Username must be at least 3 characters&apos;;
       } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-        errors.username = 'Username can only contain letters, numbers, and underscores';
+}
+        errors.username = &apos;Username can only contain letters, numbers, and underscores&apos;;
 
       if (!formData.email.trim()) {
-        errors.email = 'Email is required';
+}
+        errors.email = &apos;Email is required&apos;;
       } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        errors.email = 'Please enter a valid email address';
+}
+        errors.email = &apos;Please enter a valid email address&apos;;
 
       if (!formData.displayName.trim()) {
-        errors.displayName = 'Display name is required';
+}
+        errors.displayName = &apos;Display name is required&apos;;
 
 
-    if (mode === 'register') {
+    if (mode === &apos;register&apos;) {
+}
       if (!formData.password) {
-        errors.password = 'Password is required';
+}
+        errors.password = &apos;Password is required&apos;;
       } else if (formData.password.length < 8) {
-        errors.password = 'Password must be at least 8 characters';
+}
+        errors.password = &apos;Password must be at least 8 characters&apos;;
       } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-        errors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+}
+        errors.password = &apos;Password must contain at least one uppercase letter, one lowercase letter, and one number&apos;;
 
       if (formData.password !== formData.confirmPassword) {
-        errors.confirmPassword = 'Passwords do not match';
+}
+        errors.confirmPassword = &apos;Passwords do not match&apos;;
 
-    } else if (mode === 'login') {
+    } else if (mode === &apos;login&apos;) {
+}
       if (!formData.username.trim()) {
-        errors.username = 'Username or email is required';
+}
+        errors.username = &apos;Username or email is required&apos;;
 
       if (!formData.password) {
-        errors.password = 'Password is required';
+}
+        errors.password = &apos;Password is required&apos;;
 
 
     setValidationErrors(errors);
@@ -122,6 +149,7 @@ const EnhancedAuthView: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+}
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -130,34 +158,44 @@ const EnhancedAuthView: React.FC = () => {
     setAuthError(null);
 
     try {
-      if (mode === 'login') {
+}
+      if (mode === &apos;login&apos;) {
+}
         await login(formData.username, formData.password);
-      } else if (mode === 'register') {
+      } else if (mode === &apos;register&apos;) {
+}
         await register(formData.username, formData.email, formData.password, formData.displayName);
-        setMode('login');
-      } else if (mode === 'profile') {
+        setMode(&apos;login&apos;);
+      } else if (mode === &apos;profile&apos;) {
+}
         await updateProfile({
+}
           display_name: formData.displayName,
           email: formData.email
         });
 
     } catch (error) {
-      setAuthError(err instanceof Error ? err.message : 'An error occurred');
+}
+      setAuthError(err instanceof Error ? err.message : &apos;An error occurred&apos;);
     } finally {
+}
       setIsSubmitting(false);
 
   };
 
   const handleOAuthSuccess = (oauthUser: any) => {
+}
     // OAuth success is handled by the auth context
   };
 
   const handleOAuthError = (errorMessage: string) => {
+}
     setAuthError(errorMessage);
   };
 
   // If authenticated and not in profile mode, show user dashboard
-  if (isAuthenticated && mode !== 'profile') {
+  if (isAuthenticated && mode !== &apos;profile&apos;) {
+}
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 sm:px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto py-8 px-4 sm:px-4 md:px-6 lg:px-8">
@@ -174,7 +212,7 @@ const EnhancedAuthView: React.FC = () => {
                 Welcome back, {user?.display_name || user?.username}!
               </h1>
               <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                You're successfully authenticated and ready to use Astral Draft.
+                You&apos;re successfully authenticated and ready to use Astral Draft.
               </p>
             </div>
 
@@ -206,12 +244,12 @@ const EnhancedAuthView: React.FC = () => {
 
                 <div className="mt-6 flex gap-3 sm:px-4 md:px-6 lg:px-8">
                   <button
-                    onClick={() => setMode('profile')}
+                    onClick={() => setMode(&apos;profile&apos;)}
                   >
                     Edit Profile
                   </button>
                   <button
-                    onClick={() => window.location.href = '/dashboard'}
+                    onClick={() => window.location.href = &apos;/dashboard&apos;}
                   >
                     Go to Dashboard
                   </button>
@@ -242,23 +280,24 @@ const EnhancedAuthView: React.FC = () => {
                 <ShieldCheckIcon className="w-8 h-8 text-blue-600 dark:text-blue-400 sm:px-4 md:px-6 lg:px-8" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 sm:px-4 md:px-6 lg:px-8">
-                {mode === 'login' && 'Welcome Back'}
-                {mode === 'register' && 'Create Account'}
-                {mode === 'profile' && 'Edit Profile'}
+                {mode === &apos;login&apos; && &apos;Welcome Back&apos;}
+                {mode === &apos;register&apos; && &apos;Create Account&apos;}
+                {mode === &apos;profile&apos; && &apos;Edit Profile&apos;}
               </h1>
               <p className="text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                {mode === 'login' && 'Sign in to your Astral Draft account'}
-                {mode === 'register' && 'Join the Astral Draft community'}
-                {mode === 'profile' && 'Update your account information'}
+                {mode === &apos;login&apos; && &apos;Sign in to your Astral Draft account&apos;}
+                {mode === &apos;register&apos; && &apos;Join the Astral Draft community&apos;}
+                {mode === &apos;profile&apos; && &apos;Update your account information&apos;}
               </p>
             </div>
 
             {/* Error Display */}
             <AnimatePresence>
               {(authError || error) && (
+}
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
+                  animate={{ opacity: 1, height: &apos;auto&apos; }}
                   exit={{ opacity: 0, height: 0 }}
                   className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg sm:px-4 md:px-6 lg:px-8"
                 >
@@ -273,8 +312,9 @@ const EnhancedAuthView: React.FC = () => {
             </AnimatePresence>
 
             {/* OAuth Login (only show for login mode) */}
-            {mode === 'login' && (
-              <OAuthLoginComponent
+            {mode === &apos;login&apos; && (
+}
+              <OAuthLoginComponent>
                 onSuccess={handleOAuthSuccess}
                 onError={handleOAuthError}
                 className="mb-6 sm:px-4 md:px-6 lg:px-8"
@@ -292,10 +332,11 @@ const EnhancedAuthView: React.FC = () => {
                       value={formData.username}
                       onChange={handleInputChange}
                       `}
-                      placeholder={mode === 'login' ? 'Username or email' : 'Choose a username'}
+                      placeholder={mode === &apos;login&apos; ? &apos;Username or email&apos; : &apos;Choose a username&apos;}
                     />
                   </div>
                   {validationErrors.username && (
+}
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400 sm:px-4 md:px-6 lg:px-8">
                       {validationErrors.username}
                     </p>
@@ -304,10 +345,11 @@ const EnhancedAuthView: React.FC = () => {
               )}
 
               {/* Email Field */}
-              {(mode === 'register' || mode === 'profile') && (
+              {(mode === &apos;register&apos; || mode === &apos;profile&apos;) && (
+}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                    Email
+//                     Email
                   </label>
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <MailIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
@@ -321,6 +363,7 @@ const EnhancedAuthView: React.FC = () => {
                     />
                   </div>
                   {validationErrors.email && (
+}
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400 sm:px-4 md:px-6 lg:px-8">
                       {validationErrors.email}
                     </p>
@@ -329,7 +372,8 @@ const EnhancedAuthView: React.FC = () => {
               )}
 
               {/* Display Name Field */}
-              {(mode === 'register' || mode === 'profile') && (
+              {(mode === &apos;register&apos; || mode === &apos;profile&apos;) && (
+}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
                     Display Name
@@ -343,6 +387,7 @@ const EnhancedAuthView: React.FC = () => {
                     placeholder="How should we display your name?"
                   />
                   {validationErrors.displayName && (
+}
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400 sm:px-4 md:px-6 lg:px-8">
                       {validationErrors.displayName}
                     </p>
@@ -351,15 +396,16 @@ const EnhancedAuthView: React.FC = () => {
               )}
 
               {/* Password Field */}
-              {mode !== 'profile' && (
+              {mode !== &apos;profile&apos; && (
+}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                    Password
+//                     Password
                   </label>
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <LockIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                     <input
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? &apos;text&apos; : &apos;password&apos;}
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
@@ -374,6 +420,7 @@ const EnhancedAuthView: React.FC = () => {
                     </button>
                   </div>
                   {validationErrors.password && (
+}
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400 sm:px-4 md:px-6 lg:px-8">
                       {validationErrors.password}
                     </p>
@@ -382,7 +429,8 @@ const EnhancedAuthView: React.FC = () => {
               )}
 
               {/* Confirm Password Field */}
-              {mode === 'register' && (
+              {mode === &apos;register&apos; && (
+}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
                     Confirm Password
@@ -390,7 +438,7 @@ const EnhancedAuthView: React.FC = () => {
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
                     <LockIcon className="absolute left-3 top-3 w-4 h-4 text-gray-400 sm:px-4 md:px-6 lg:px-8" />
                     <input
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      type={showConfirmPassword ? &apos;text&apos; : &apos;password&apos;}
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
@@ -405,6 +453,7 @@ const EnhancedAuthView: React.FC = () => {
                     </button>
                   </div>
                   {validationErrors.confirmPassword && (
+}
                     <p className="mt-1 text-sm text-red-600 dark:text-red-400 sm:px-4 md:px-6 lg:px-8">
                       {validationErrors.confirmPassword}
                     </p>
@@ -421,27 +470,30 @@ const EnhancedAuthView: React.FC = () => {
                 whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
               >
                 {isSubmitting ? (
+}
                   <div className="flex items-center justify-center gap-2 sm:px-4 md:px-6 lg:px-8">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white sm:px-4 md:px-6 lg:px-8" />
                     <span>Processing...</span>
                   </div>
                 ) : (
                   <>
-                    {mode === 'login' && 'Sign In'}
-                    {mode === 'register' && 'Create Account'}
-                    {mode === 'profile' && 'Update Profile'}
+                    {mode === &apos;login&apos; && &apos;Sign In&apos;}
+                    {mode === &apos;register&apos; && &apos;Create Account&apos;}
+                    {mode === &apos;profile&apos; && &apos;Update Profile&apos;}
                   </>
                 )}
               </motion.button>
             </form>
 
             {/* Mode Toggle */}
-            {mode !== 'profile' && (
+            {mode !== &apos;profile&apos; && (
+}
               <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
                 <button
-                  onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
+                  onClick={() => setMode(mode === &apos;login&apos; ? &apos;register&apos; : &apos;login&apos;)}
                 >
-                  {mode === 'login' 
+                  {mode === &apos;login&apos; 
+}
                     ? "Don&apos;t have an account? Sign up" 
                     : "Already have an account? Sign in"
 
@@ -450,10 +502,11 @@ const EnhancedAuthView: React.FC = () => {
             )}
 
             {/* Back to Dashboard (profile mode) */}
-            {mode === 'profile' && (
+            {mode === &apos;profile&apos; && (
+}
               <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
                 <button
-                  onClick={() => window.location.href = '/dashboard'}
+                  onClick={() => window.location.href = &apos;/dashboard&apos;}
                 >
                   Back to Dashboard
                 </button>

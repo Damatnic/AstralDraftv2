@@ -3,29 +3,30 @@
  * 10-person league with draft on 8/31/2025
  */
 
-import { League, Team, User } from '../types';
+import { League, Team, User } from &apos;../types&apos;;
 
 // League Members
 export const LEAGUE_MEMBERS: User[] = [
-  { id: 'user_1', name: 'Nick Damato', email: 'nick@example.com', avatar: '👑' },
-  { id: 'user_2', name: 'Jon Kornbeck', email: 'jon@example.com', avatar: '⚡' },
-  { id: 'user_3', name: 'Cason Minor', email: 'cason@example.com', avatar: '🔥' },
-  { id: 'user_4', name: 'Brittany Bergrum', email: 'brittany@example.com', avatar: '💪' },
-  { id: 'user_5', name: 'Renee McCaigue', email: 'renee@example.com', avatar: '🎯' },
-  { id: 'user_6', name: 'Jack McCaigue', email: 'jack@example.com', avatar: '🚀' },
-  { id: 'user_7', name: 'Larry McCaigue', email: 'larry@example.com', avatar: '⭐' },
-  { id: 'user_8', name: 'Kaity Lorbiecki', email: 'kaity@example.com', avatar: '💎' },
-  { id: 'user_9', name: 'David Jarvey', email: 'david@example.com', avatar: '🏆' },
-  { id: 'user_10', name: 'Nick Hartley', email: 'nickh@example.com', avatar: '🎮' }
+  { id: &apos;user_1&apos;, name: &apos;Nick Damato&apos;, email: &apos;nick@example.com&apos;, avatar: &apos;👑&apos; },
+  { id: &apos;user_2&apos;, name: &apos;Jon Kornbeck&apos;, email: &apos;jon@example.com&apos;, avatar: &apos;⚡&apos; },
+  { id: &apos;user_3&apos;, name: &apos;Cason Minor&apos;, email: &apos;cason@example.com&apos;, avatar: &apos;🔥&apos; },
+  { id: &apos;user_4&apos;, name: &apos;Brittany Bergrum&apos;, email: &apos;brittany@example.com&apos;, avatar: &apos;💪&apos; },
+  { id: &apos;user_5&apos;, name: &apos;Renee McCaigue&apos;, email: &apos;renee@example.com&apos;, avatar: &apos;🎯&apos; },
+  { id: &apos;user_6&apos;, name: &apos;Jack McCaigue&apos;, email: &apos;jack@example.com&apos;, avatar: &apos;🚀&apos; },
+  { id: &apos;user_7&apos;, name: &apos;Larry McCaigue&apos;, email: &apos;larry@example.com&apos;, avatar: &apos;⭐&apos; },
+  { id: &apos;user_8&apos;, name: &apos;Kaity Lorbiecki&apos;, email: &apos;kaity@example.com&apos;, avatar: &apos;💎&apos; },
+  { id: &apos;user_9&apos;, name: &apos;David Jarvey&apos;, email: &apos;david@example.com&apos;, avatar: &apos;🏆&apos; },
+  { id: &apos;user_10&apos;, name: &apos;Nick Hartley&apos;, email: &apos;nickh@example.com&apos;, avatar: &apos;🎮&apos; }
 ];
 
 // Team configurations
 export const TEAMS_2025: Team[] = [
   {
+}
     id: 1,
-    name: "Damato's Dynasty",
+    name: "Damato&apos;s Dynasty",
     owner: LEAGUE_MEMBERS[0],
-    avatar: '👑',
+    avatar: &apos;👑&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -33,10 +34,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 2,
-    name: "Kornbeck's Crushers",
+    name: "Kornbeck&apos;s Crushers",
     owner: LEAGUE_MEMBERS[1],
-    avatar: '⚡',
+    avatar: &apos;⚡&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -44,10 +46,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 3,
-    name: "Minor's Maulers",
+    name: "Minor&apos;s Maulers",
     owner: LEAGUE_MEMBERS[2],
-    avatar: '🔥',
+    avatar: &apos;🔥&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -55,10 +58,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 4,
-    name: "Bergrum's Blitz",
+    name: "Bergrum&apos;s Blitz",
     owner: LEAGUE_MEMBERS[3],
-    avatar: '💪',
+    avatar: &apos;💪&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -66,10 +70,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 5,
-    name: "Renee's Raiders",
+    name: "Renee&apos;s Raiders",
     owner: LEAGUE_MEMBERS[4],
-    avatar: '🎯',
+    avatar: &apos;🎯&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -77,10 +82,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 6,
-    name: "Jack's Juggernauts",
+    name: "Jack&apos;s Juggernauts",
     owner: LEAGUE_MEMBERS[5],
-    avatar: '🚀',
+    avatar: &apos;🚀&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -88,10 +94,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 7,
-    name: "Larry's Legends",
+    name: "Larry&apos;s Legends",
     owner: LEAGUE_MEMBERS[6],
-    avatar: '⭐',
+    avatar: &apos;⭐&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -99,10 +106,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 8,
-    name: "Lorbiecki's Lions",
+    name: "Lorbiecki&apos;s Lions",
     owner: LEAGUE_MEMBERS[7],
-    avatar: '💎',
+    avatar: &apos;💎&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -110,10 +118,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 9,
-    name: "Jarvey's Giants",
+    name: "Jarvey&apos;s Giants",
     owner: LEAGUE_MEMBERS[8],
-    avatar: '🏆',
+    avatar: &apos;🏆&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -121,10 +130,11 @@ export const TEAMS_2025: Team[] = [
     futureDraftPicks: []
   },
   {
+}
     id: 10,
-    name: "Hartley's Heroes",
+    name: "Hartley&apos;s Heroes",
     owner: LEAGUE_MEMBERS[9],
-    avatar: '🎮',
+    avatar: &apos;🎮&apos;,
     roster: [],
     budget: 200,
     faab: 100,
@@ -135,19 +145,22 @@ export const TEAMS_2025: Team[] = [
 
 // Main League Configuration
 export const MAIN_LEAGUE: League = {
-  id: 'league_2025',
-  name: 'Astral Draft League 2025',
-  logoUrl: '/favicon.svg',
-  commissionerId: 'user_1', // Nick Damato is commissioner
-  status: 'IN_SEASON', // Changed from PRE_DRAFT to IN_SEASON - draft is complete
+}
+  id: &apos;league_2025&apos;,
+  name: &apos;Astral Draft League 2025&apos;,
+  logoUrl: &apos;/favicon.svg&apos;,
+  commissionerId: &apos;user_1&apos;, // Nick Damato is commissioner
+  status: &apos;IN_SEASON&apos;, // Changed from PRE_DRAFT to IN_SEASON - draft is complete
   currentWeek: 1, // Week 1 of the regular season
   settings: {
+}
     teamCount: 10,
     playoffTeams: 6,
     regularSeasonWeeks: 14,
     playoffWeeks: 3,
-    scoringFormat: 'PPR', // Full PPR scoring
+    scoringFormat: &apos;PPR&apos;, // Full PPR scoring
     rosterFormat: {
+}
       QB: 1,
       RB: 2,
       WR: 2,
@@ -158,17 +171,18 @@ export const MAIN_LEAGUE: League = {
       BENCH: 6,
       IR: 2
     },
-    draftFormat: 'SNAKE',
-    draftDate: '2025-08-31T19:00:00Z', // August 31, 2025 at 7 PM
+    draftFormat: &apos;SNAKE&apos;,
+    draftDate: &apos;2025-08-31T19:00:00Z&apos;, // August 31, 2025 at 7 PM
     draftRounds: 16,
     draftSecondsPerPick: 90,
-    waiverType: 'FAAB',
+    waiverType: &apos;FAAB&apos;,
     waiverBudget: 100,
     waiverProcessDay: 3, // Wednesday
     tradeDeadline: 11, // Week 11
     keeperCount: 0, // No keepers for now
-    aiAssistanceLevel: 'ADVANCED',
+    aiAssistanceLevel: &apos;ADVANCED&apos;,
     scoringRules: {
+}
       // Passing
       passingYards: 0.04, // 1 point per 25 yards
       passingTouchdowns: 4,
@@ -226,11 +240,13 @@ export const MAIN_LEAGUE: League = {
   schedule: [],
   draftCommentary: [],
   dues: {
+}
     amount: 50,
     paid: {},
-    deadline: '2025-08-30'
+    deadline: &apos;2025-08-30&apos;
   },
   payouts: {
+}
     firstPlace: 300,
     secondPlace: 150,
     thirdPlace: 50
@@ -242,22 +258,24 @@ export const MAIN_LEAGUE: League = {
 
 // Draft order (will be randomized closer to draft date)
 export const DRAFT_ORDER_2025 = [
-  'user_1', 'user_2', 'user_3', 'user_4', 'user_5',
-  'user_6', 'user_7', 'user_8', 'user_9', 'user_10'
+  &apos;user_1&apos;, &apos;user_2&apos;, &apos;user_3&apos;, &apos;user_4&apos;, &apos;user_5&apos;,
+  &apos;user_6&apos;, &apos;user_7&apos;, &apos;user_8&apos;, &apos;user_9&apos;, &apos;user_10&apos;
 ];
 
 // Important dates for 2025 season
 export const SEASON_DATES_2025 = {
-  draftDate: new Date('2025-08-31T19:00:00Z'), // Draft has been completed
-  seasonStart: new Date('2025-09-05T00:00:00Z'), // September 5, 2025 - NFL Kickoff Thursday
-  regularSeasonEnd: new Date('2025-12-28T23:59:59Z'), // Week 17 ends
-  playoffStart: new Date('2025-12-29T00:00:00Z'), // Fantasy playoffs begin Week 15-17
-  championship: new Date('2026-01-04T00:00:00Z'), // Week 17 championship
-  tradeDeadline: new Date('2025-11-22T23:59:59Z') // Week 12 trade deadline
+}
+  draftDate: new Date(&apos;2025-08-31T19:00:00Z&apos;), // Draft has been completed
+  seasonStart: new Date(&apos;2025-09-05T00:00:00Z&apos;), // September 5, 2025 - NFL Kickoff Thursday
+  regularSeasonEnd: new Date(&apos;2025-12-28T23:59:59Z&apos;), // Week 17 ends
+  playoffStart: new Date(&apos;2025-12-29T00:00:00Z&apos;), // Fantasy playoffs begin Week 15-17
+  championship: new Date(&apos;2026-01-04T00:00:00Z&apos;), // Week 17 championship
+  tradeDeadline: new Date(&apos;2025-11-22T23:59:59Z&apos;) // Week 12 trade deadline
 };
 
 // Helper function to get days until next game week
 export function getDaysUntilNextWeek(): number {
+}
   const now = new Date();
   const nextThursday = new Date(now);
   nextThursday.setDate(now.getDate() + ((4 - now.getDay() + 7) % 7 || 7)); // Get next Thursday
@@ -266,14 +284,16 @@ export function getDaysUntilNextWeek(): number {
   return diffDays;
 }
 
-// Helper function to check if we're in season
+// Helper function to check if we&apos;re in season
 export function isSeasonActive(): boolean {
+}
   const now = new Date();
   return now >= SEASON_DATES_2025.seasonStart && now <= SEASON_DATES_2025.regularSeasonEnd;
 }
 
 // Helper function to get current NFL week
 export function getCurrentNFLWeek(): number {
+}
   const now = new Date();
   const seasonStart = SEASON_DATES_2025.seasonStart;
   if (now < seasonStart) return 0;
@@ -284,10 +304,12 @@ export function getCurrentNFLWeek(): number {
 
 // Helper function to check if user is in league
 export function isUserInLeague(userId: string): boolean {
+}
   return LEAGUE_MEMBERS.some((member: any) => member.id === userId);
 }
 
-// Helper function to get user's team
+// Helper function to get user&apos;s team
 export function getUserTeam(userId: string): Team | null {
+}
   return TEAMS_2025.find((team: any) => team.owner.id === userId) || null;
 }

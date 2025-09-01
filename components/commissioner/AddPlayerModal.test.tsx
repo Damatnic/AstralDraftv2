@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import AddPlayerModal from './AddPlayerModal';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import AddPlayerModal from &apos;./AddPlayerModal&apos;;
 
-describe('AddPlayerModal', () => {
-  it('renders without crashing', () => {
+describe(&apos;AddPlayerModal&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<AddPlayerModal />);
-    expect(screen.getByTestId('addplayermodal')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;addplayermodal&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<AddPlayerModal />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<AddPlayerModal />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

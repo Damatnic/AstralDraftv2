@@ -3,22 +3,23 @@
  * Comprehensive types for draft mechanics, league settings, and real-time draft functionality
  */
 
-import { Player } from './player';
-import { User } from './user';
+import { Player } from &apos;./player&apos;;
+import { User } from &apos;./user&apos;;
 
 // ==================== DRAFT ENUMS AND CONSTANTS ====================
 
-export type DraftFormat = 'SNAKE' | 'AUCTION' | 'LINEAR' | 'KEEPER' | 'DYNASTY';
+export type DraftFormat = &apos;SNAKE&apos; | &apos;AUCTION&apos; | &apos;LINEAR&apos; | &apos;KEEPER&apos; | &apos;DYNASTY&apos;;
 
-export type DraftStatus = 'SCHEDULED' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'CANCELLED';
+export type DraftStatus = &apos;SCHEDULED&apos; | &apos;ACTIVE&apos; | &apos;PAUSED&apos; | &apos;COMPLETED&apos; | &apos;CANCELLED&apos;;
 
-export type PickType = 'NORMAL' | 'AUTO' | 'COMMISSIONER' | 'KEEPER';
+export type PickType = &apos;NORMAL&apos; | &apos;AUTO&apos; | &apos;COMMISSIONER&apos; | &apos;KEEPER&apos;;
 
-export type TimerState = 'RUNNING' | 'PAUSED' | 'EXPIRED' | 'DISABLED';
+export type TimerState = &apos;RUNNING&apos; | &apos;PAUSED&apos; | &apos;EXPIRED&apos; | &apos;DISABLED&apos;;
 
 // ==================== DRAFT PICK TYPES ====================
 
 export interface DraftPick {
+}
   id: string;
   draftId: string;
   teamId: string;
@@ -36,6 +37,7 @@ export interface DraftPick {
 }
 
 export interface DraftQueue {
+}
   teamId: string;
   playerIds: string[];
   autoPickEnabled: boolean;
@@ -46,6 +48,7 @@ export interface DraftQueue {
 // ==================== DRAFT STATE ====================
 
 export interface DraftTimer {
+}
   timePerPick: number; // seconds
   timeRemaining: number; // seconds
   state: TimerState;
@@ -55,6 +58,7 @@ export interface DraftTimer {
 }
 
 export interface DraftSettings {
+}
   format: DraftFormat;
   teamCount: number;
   rounds: number;
@@ -69,13 +73,15 @@ export interface DraftSettings {
   nominationTime?: number; // For auction drafts
   biddingTime?: number; // For auction drafts
   keeperSettings?: {
+}
     maxKeepers: number;
     keeperDeadline: Date;
-    keeperCosts: 'NONE' | 'DRAFT_ROUND' | 'AUCTION_VALUE';
+    keeperCosts: &apos;NONE&apos; | &apos;DRAFT_ROUND&apos; | &apos;AUCTION_VALUE&apos;;
   };
 }
 
 export interface DraftState {
+}
   id: string;
   leagueId: string;
   status: DraftStatus;
@@ -96,6 +102,7 @@ export interface DraftState {
 // ==================== AUCTION-SPECIFIC TYPES ====================
 
 export interface AuctionState {
+}
   nominatingTeamId: string;
   nominatedPlayerId: string | null;
   currentBid: number;
@@ -107,6 +114,7 @@ export interface AuctionState {
 }
 
 export interface BidHistory {
+}
   id: string;
   teamId: string;
   playerId: string;
@@ -117,6 +125,7 @@ export interface BidHistory {
 }
 
 export interface TeamBudget {
+}
   teamId: string;
   totalBudget: number;
   spent: number;
@@ -128,9 +137,11 @@ export interface TeamBudget {
 // ==================== DRAFT BOARD AND RANKINGS ====================
 
 export interface DraftBoard {
+}
   availablePlayers: Player[];
   draftedPlayers: { [teamId: string]: Player[] };
   myTeam: {
+}
     teamId: string;
     roster: Player[];
     budget?: number;
@@ -141,6 +152,7 @@ export interface DraftBoard {
 }
 
 export interface DraftRecommendation {
+}
   id: string;
   playerId: string;
   player: Player;
@@ -154,19 +166,20 @@ export interface DraftRecommendation {
 }
 
 export type RecommendationType = 
-  | 'VALUE' 
-  | 'POSITIONAL_NEED' 
-  | 'SAFE_PICK' 
-  | 'SLEEPER' 
-  | 'HANDCUFF' 
-  | 'CEILING_PLAY' 
-  | 'FLOOR_PLAY'
-  | 'ROOKIE_UPSIDE'
-  | 'INJURY_REPLACEMENT';
+  | &apos;VALUE&apos; 
+  | &apos;POSITIONAL_NEED&apos; 
+  | &apos;SAFE_PICK&apos; 
+  | &apos;SLEEPER&apos; 
+  | &apos;HANDCUFF&apos; 
+  | &apos;CEILING_PLAY&apos; 
+  | &apos;FLOOR_PLAY&apos;
+  | &apos;ROOKIE_UPSIDE&apos;
+  | &apos;INJURY_REPLACEMENT&apos;;
 
 export interface PositionNeed {
+}
   position: string;
-  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  priority: &apos;HIGH&apos; | &apos;MEDIUM&apos; | &apos;LOW&apos;;
   reason: string;
   suggestedPlayers: string[]; // Player IDs
 }
@@ -174,10 +187,12 @@ export interface PositionNeed {
 // ==================== DRAFT ANALYTICS ====================
 
 export interface DraftGrade {
+}
   teamId: string;
-  overall: 'A+' | 'A' | 'A-' | 'B+' | 'B' | 'B-' | 'C+' | 'C' | 'C-' | 'D+' | 'D' | 'F';
+  overall: &apos;A+&apos; | &apos;A&apos; | &apos;A-&apos; | &apos;B+&apos; | &apos;B&apos; | &apos;B-&apos; | &apos;C+&apos; | &apos;C&apos; | &apos;C-&apos; | &apos;D+&apos; | &apos;D&apos; | &apos;F&apos;;
   score: number; // 0-100
   categories: {
+}
     value: number;
     need: number;
     upside: number;
@@ -185,12 +200,14 @@ export interface DraftGrade {
     depth: number;
   };
   bestPick: {
+}
     playerId: string;
     player: Player;
     round: number;
     reasoning: string;
   };
   worstPick: {
+}
     playerId: string;
     player: Player;
     round: number;
@@ -203,6 +220,7 @@ export interface DraftGrade {
 }
 
 export interface DraftAnalytics {
+}
   efficiency: number; // How well did teams draft relative to ADP
   valuePicks: number; // Number of players drafted significantly below ADP
   reaches: number; // Number of players drafted significantly above ADP
@@ -213,6 +231,7 @@ export interface DraftAnalytics {
   positionDistribution: { [position: string]: number };
   teamGrades: DraftGrade[];
   surprises: {
+}
     player: Player;
     expectedRound: number;
     actualRound: number;
@@ -223,6 +242,7 @@ export interface DraftAnalytics {
 // ==================== DRAFT EVENTS ====================
 
 export interface DraftEvent {
+}
   id: string;
   draftId: string;
   type: DraftEventType;
@@ -234,26 +254,27 @@ export interface DraftEvent {
 }
 
 export type DraftEventType = 
-  | 'DRAFT_STARTED'
-  | 'DRAFT_PAUSED' 
-  | 'DRAFT_RESUMED'
-  | 'DRAFT_COMPLETED'
-  | 'PICK_MADE'
-  | 'AUTO_PICK'
-  | 'PICK_SKIPPED'
-  | 'TIME_EXPIRED'
-  | 'NOMINATION_MADE'
-  | 'BID_PLACED'
-  | 'AUCTION_WON'
-  | 'TRADE_COMPLETED'
-  | 'TEAM_JOINED'
-  | 'TEAM_LEFT'
-  | 'ROUND_COMPLETED'
-  | 'COMMISSIONER_ACTION';
+  | &apos;DRAFT_STARTED&apos;
+  | &apos;DRAFT_PAUSED&apos; 
+  | &apos;DRAFT_RESUMED&apos;
+  | &apos;DRAFT_COMPLETED&apos;
+  | &apos;PICK_MADE&apos;
+  | &apos;AUTO_PICK&apos;
+  | &apos;PICK_SKIPPED&apos;
+  | &apos;TIME_EXPIRED&apos;
+  | &apos;NOMINATION_MADE&apos;
+  | &apos;BID_PLACED&apos;
+  | &apos;AUCTION_WON&apos;
+  | &apos;TRADE_COMPLETED&apos;
+  | &apos;TEAM_JOINED&apos;
+  | &apos;TEAM_LEFT&apos;
+  | &apos;ROUND_COMPLETED&apos;
+  | &apos;COMMISSIONER_ACTION&apos;;
 
 // ==================== TRADE TYPES ====================
 
 export interface DraftTrade {
+}
   id: string;
   draftId: string;
   fromTeamId: string;
@@ -264,56 +285,63 @@ export interface DraftTrade {
   playersRequested: string[];
   faabOffered?: number; // Future FAAB budget
   faabRequested?: number;
-  status: 'PROPOSED' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
+  status: &apos;PROPOSED&apos; | &apos;ACCEPTED&apos; | &apos;REJECTED&apos; | &apos;EXPIRED&apos;;
   proposedAt: Date;
   respondedAt?: Date;
   expiresAt: Date;
 }
 
 export interface TradeAnalysis {
+}
   tradeId: string;
   fairnessScore: number; // -100 to 100, 0 is fair
-  winner: 'TEAM_A' | 'TEAM_B' | 'FAIR';
+  winner: &apos;TEAM_A&apos; | &apos;TEAM_B&apos; | &apos;FAIR&apos;;
   analysis: {
+}
     teamA: {
+}
       value: number;
       need: number;
       risk: number;
       summary: string;
     };
     teamB: {
+}
       value: number;
       need: number;
       risk: number;
       summary: string;
     };
   };
-  recommendation: 'ACCEPT' | 'REJECT' | 'COUNTER';
+  recommendation: &apos;ACCEPT&apos; | &apos;REJECT&apos; | &apos;COUNTER&apos;;
   reasoning: string;
 }
 
 // ==================== MOCK DRAFT TYPES ====================
 
-export interface MockDraft extends Omit<DraftState, 'id' | 'leagueId'> {
+export interface MockDraft extends Omit<DraftState, &apos;id&apos; | &apos;leagueId&apos;> {
+}
   isMock: true;
   participants: MockParticipant[];
-  aiDifficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
+  aiDifficulty: &apos;EASY&apos; | &apos;MEDIUM&apos; | &apos;HARD&apos; | &apos;EXPERT&apos;;
   focusPosition?: string; // Position to focus practice on
-  scenarioType?: 'STANDARD' | 'LATE_DRAFT' | 'AUCTION_PRACTICE' | 'KEEPER_LEAGUE';
+  scenarioType?: &apos;STANDARD&apos; | &apos;LATE_DRAFT&apos; | &apos;AUCTION_PRACTICE&apos; | &apos;KEEPER_LEAGUE&apos;;
 }
 
 export interface MockParticipant {
+}
   id: string;
   name: string;
   isHuman: boolean;
   isUser: boolean; // The actual user
-  draftingStyle: 'AGGRESSIVE' | 'CONSERVATIVE' | 'VALUE_BASED' | 'POSITIONAL';
+  draftingStyle: &apos;AGGRESSIVE&apos; | &apos;CONSERVATIVE&apos; | &apos;VALUE_BASED&apos; | &apos;POSITIONAL&apos;;
   avatar: string;
 }
 
 // ==================== DRAFT PREPARATION ====================
 
 export interface DraftPrep {
+}
   userId: string;
   leagueId: string;
   rankings: CustomRankings;
@@ -326,7 +354,9 @@ export interface DraftPrep {
 }
 
 export interface CustomRankings {
+}
   [position: string]: {
+}
     playerId: string;
     rank: number;
     notes?: string;
@@ -334,6 +364,7 @@ export interface CustomRankings {
 }
 
 export interface DraftTargets {
+}
   early: string[]; // Rounds 1-3
   middle: string[]; // Rounds 4-8
   late: string[]; // Rounds 9+
@@ -342,10 +373,12 @@ export interface DraftTargets {
 }
 
 export interface DraftStrategy {
-  approach: 'RB_HEAVY' | 'WR_HEAVY' | 'ZERO_RB' | 'ZERO_WR' | 'BALANCED' | 'LATE_ROUND_QB';
+}
+  approach: &apos;RB_HEAVY&apos; | &apos;WR_HEAVY&apos; | &apos;ZERO_RB&apos; | &apos;ZERO_WR&apos; | &apos;BALANCED&apos; | &apos;LATE_ROUND_QB&apos;;
   priorities: string[]; // Position order
-  riskTolerance: 'HIGH' | 'MEDIUM' | 'LOW';
+  riskTolerance: &apos;HIGH&apos; | &apos;MEDIUM&apos; | &apos;LOW&apos;;
   targetPositions: {
+}
     round: number;
     positions: string[];
     reasoning: string;
@@ -353,6 +386,7 @@ export interface DraftStrategy {
 }
 
 export interface CheatSheetEntry {
+}
   playerId: string;
   player: Player;
   rank: number;
@@ -364,6 +398,7 @@ export interface CheatSheetEntry {
 }
 
 export interface PlayerTier {
+}
   tier: number;
   position: string;
   playerIds: string[];
@@ -374,6 +409,7 @@ export interface PlayerTier {
 // ==================== COMMISSIONER CONTROLS ====================
 
 export interface CommissionerAction {
+}
   id: string;
   draftId: string;
   commissionerId: string;
@@ -386,19 +422,20 @@ export interface CommissionerAction {
 }
 
 export type CommissionerActionType = 
-  | 'PAUSE_DRAFT'
-  | 'RESUME_DRAFT'
-  | 'RESET_PICK'
-  | 'FORCE_PICK'
-  | 'EDIT_PICK'
-  | 'RESET_TIMER'
-  | 'KICK_PARTICIPANT'
-  | 'CHANGE_ORDER'
-  | 'REVERSE_TRADE';
+  | &apos;PAUSE_DRAFT&apos;
+  | &apos;RESUME_DRAFT&apos;
+  | &apos;RESET_PICK&apos;
+  | &apos;FORCE_PICK&apos;
+  | &apos;EDIT_PICK&apos;
+  | &apos;RESET_TIMER&apos;
+  | &apos;KICK_PARTICIPANT&apos;
+  | &apos;CHANGE_ORDER&apos;
+  | &apos;REVERSE_TRADE&apos;;
 
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   DraftFormat,
   DraftStatus,
   PickType,

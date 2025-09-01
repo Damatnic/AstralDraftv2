@@ -1,27 +1,28 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState } from 'react';
-import type { HoldoutResult, TimeSeriesResult, BootstrapResult, CalibrationResult } from '../../types';
-import './OracleCalibrationValidationSection.css';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState } from &apos;react&apos;;
+import type { HoldoutResult, TimeSeriesResult, BootstrapResult, CalibrationResult } from &apos;../../types&apos;;
+import &apos;./OracleCalibrationValidationSection.css&apos;;
 
 // ===== TYPE ALIASES =====
 
-type ComplexityLevel = 'low' | 'medium' | 'high';
-type ValidationMethodType = 'cross_validation' | 'holdout' | 'time_series' | 'bootstrap' | 'monte_carlo';
-type CrossValidationType = 'k_fold' | 'stratified_k_fold' | 'time_series_split' | 'group_k_fold' | 'nested_cv' | 'leave_one_out';
-type HoldoutType = 'simple_holdout' | 'stratified_holdout' | 'temporal_holdout' | 'grouped_holdout';
-type TimeSeriesValidationType = 'walk_forward' | 'expanding_window' | 'rolling_window' | 'blocked_time_series' | 'purged_group_time_series';
-type CalibrationMethodType = 'parametric' | 'non_parametric' | 'bayesian' | 'ensemble';
-type MetricCategory = 'classification' | 'regression' | 'ranking' | 'calibration' | 'fairness' | 'custom';
-type TargetType = 'classification' | 'regression';
-type ExperimentStatus = 'pending' | 'running' | 'completed' | 'failed';
-type CalibrationQuality = 'poor' | 'fair' | 'good' | 'excellent';
-type ActiveTab = 'overview' | 'crossval' | 'holdout' | 'timeseries' | 'bootstrap' | 'calibration' | 'metrics' | 'biasvariance' | 'demo';
-type BinStrategy = 'uniform' | 'quantile' | 'kmeans';
-type VotingStrategy = 'soft' | 'hard' | 'weighted';
+type ComplexityLevel = &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+type ValidationMethodType = &apos;cross_validation&apos; | &apos;holdout&apos; | &apos;time_series&apos; | &apos;bootstrap&apos; | &apos;monte_carlo&apos;;
+type CrossValidationType = &apos;k_fold&apos; | &apos;stratified_k_fold&apos; | &apos;time_series_split&apos; | &apos;group_k_fold&apos; | &apos;nested_cv&apos; | &apos;leave_one_out&apos;;
+type HoldoutType = &apos;simple_holdout&apos; | &apos;stratified_holdout&apos; | &apos;temporal_holdout&apos; | &apos;grouped_holdout&apos;;
+type TimeSeriesValidationType = &apos;walk_forward&apos; | &apos;expanding_window&apos; | &apos;rolling_window&apos; | &apos;blocked_time_series&apos; | &apos;purged_group_time_series&apos;;
+type CalibrationMethodType = &apos;parametric&apos; | &apos;non_parametric&apos; | &apos;bayesian&apos; | &apos;ensemble&apos;;
+type MetricCategory = &apos;classification&apos; | &apos;regression&apos; | &apos;ranking&apos; | &apos;calibration&apos; | &apos;fairness&apos; | &apos;custom&apos;;
+type TargetType = &apos;classification&apos; | &apos;regression&apos;;
+type ExperimentStatus = &apos;pending&apos; | &apos;running&apos; | &apos;completed&apos; | &apos;failed&apos;;
+type CalibrationQuality = &apos;poor&apos; | &apos;fair&apos; | &apos;good&apos; | &apos;excellent&apos;;
+type ActiveTab = &apos;overview&apos; | &apos;crossval&apos; | &apos;holdout&apos; | &apos;timeseries&apos; | &apos;bootstrap&apos; | &apos;calibration&apos; | &apos;metrics&apos; | &apos;biasvariance&apos; | &apos;demo&apos;;
+type BinStrategy = &apos;uniform&apos; | &apos;quantile&apos; | &apos;kmeans&apos;;
+type VotingStrategy = &apos;soft&apos; | &apos;hard&apos; | &apos;weighted&apos;;
 
 // ===== VALIDATION METHOD INTERFACES =====
 
 interface ValidationMethod {
+}
   id: string;
   name: string;
   type: ValidationMethodType;
@@ -37,6 +38,7 @@ interface ValidationMethod {
 }
 
 interface CrossValidationConfig {
+}
   id: string;
   name: string;
   type: CrossValidationType;
@@ -53,6 +55,7 @@ interface CrossValidationConfig {
   implementation: string;
 
 interface CrossValidationResult {
+}
   method: string;
   folds: number;
   scores: number[];
@@ -62,6 +65,7 @@ interface CrossValidationResult {
   trainingTime: number;
   validationTime: number;
   details: {
+}
     fold: number;
     trainSize: number;
     testSize: number;
@@ -71,6 +75,7 @@ interface CrossValidationResult {
 
 // Holdout Validation Interfaces
 interface HoldoutConfig {
+}
   id: string;
   name: string;
   icon: string;
@@ -89,6 +94,7 @@ interface HoldoutConfig {
 }
 
 interface TimeSeriesValidationConfig {
+}
   id: string;
   name: string;
   icon: string;
@@ -107,10 +113,11 @@ interface TimeSeriesValidationConfig {
 
 // Bootstrap Resampling Configuration
 interface BootstrapConfig {
+}
   id: string;
   name: string;
   icon: string;
-  type: 'basic' | 'stratified' | 'block' | 'parametric';
+  type: &apos;basic&apos; | &apos;stratified&apos; | &apos;block&apos; | &apos;parametric&apos;;
   nBootstraps: number;
   sampleSize?: number;
   blockSize?: number;
@@ -127,6 +134,7 @@ interface BootstrapConfig {
 }
 
 interface TimeSeriesValidationResult {
+}
   method: string;
   windows: number;
   scores: number[];
@@ -136,6 +144,7 @@ interface TimeSeriesValidationResult {
   degenerationRate: number;
   forecastAccuracy: number[];
   details: {
+}
     window: number;
     trainStart: string;
     trainEnd: string;
@@ -148,6 +157,7 @@ interface TimeSeriesValidationResult {
 // ===== CALIBRATION METHOD INTERFACES =====
 
 interface CalibrationMethod {
+}
   id: string;
   name: string;
   type: CalibrationMethodType;
@@ -164,6 +174,7 @@ interface CalibrationMethod {
 }
 
 interface CalibrationConfig {
+}
   method: string;
   parameters: Record<string, any>;
   cvFolds?: number;
@@ -171,6 +182,7 @@ interface CalibrationConfig {
   nBins?: number;
   smoothingParameter?: number;
   ensemble?: {
+}
     methods: string[];
     weights?: number[];
     voting: VotingStrategy;
@@ -179,6 +191,7 @@ interface CalibrationConfig {
 // ===== PERFORMANCE METRICS INTERFACES =====
 
 interface PerformanceMetric {
+}
   id: string;
   name: string;
   category: MetricCategory;
@@ -193,6 +206,7 @@ interface PerformanceMetric {
 }
 
 interface ClassificationMetrics {
+}
   accuracy: number;
   precision: number;
   recall: number;
@@ -210,6 +224,7 @@ interface ClassificationMetrics {
   confusionMatrix: number[][];
 
 interface RegressionMetrics {
+}
   mse: number;
   rmse: number;
   mae: number;
@@ -227,6 +242,7 @@ interface RegressionMetrics {
 }
 
 interface CalibrationMetrics {
+}
   expectedCalibrationError: number;
   maximumCalibrationError: number;
   averageCalibrationError: number;
@@ -241,6 +257,7 @@ interface CalibrationMetrics {
   calibrationIntercept: number;
 
 interface FantasyMetrics {
+}
   pointsAccuracy: number;
   rankingAccuracy: number;
   topPerformerPrecision: number;
@@ -257,6 +274,7 @@ interface FantasyMetrics {
 }
 
 interface ComprehensiveMetrics {
+}
   classification?: ClassificationMetrics;
   regression?: RegressionMetrics;
   calibration: CalibrationMetrics;
@@ -266,11 +284,13 @@ interface ComprehensiveMetrics {
 // ===== EXPERIMENT AND EVALUATION INTERFACES =====
 
 interface ValidationExperiment {
+}
   id: string;
   name: string;
   description: string;
   model: string;
   dataset: {
+}
     name: string;
     size: number;
     features: number;
@@ -278,6 +298,7 @@ interface ValidationExperiment {
     timeRange?: [string, string];
   };
   validationConfig: {
+}
     method: string;
     config: CrossValidationConfig | HoldoutConfig | TimeSeriesValidationConfig;
   };
@@ -289,17 +310,20 @@ interface ValidationExperiment {
   duration?: number;
 
 interface ExperimentResult {
+}
   experimentId: string;
   validationResults: CrossValidationResult | HoldoutResult | TimeSeriesValidationResult;
   calibrationResults?: CalibrationResult;
   metrics: ComprehensiveMetrics;
   modelPerformance: {
+}
     trainingTime: number;
     inferenceTime: number;
     memoryUsage: number;
     modelSize: number;
   };
   insights: {
+}
     strengths: string[];
     weaknesses: string[];
     recommendations: string[];
@@ -307,7 +331,9 @@ interface ExperimentResult {
   };
 
 interface ValidationReport {
+}
   summary: {
+}
     totalExperiments: number;
     completedExperiments: number;
     averageScore: number;
@@ -315,6 +341,7 @@ interface ValidationReport {
     recommendedApproach: string;
   };
   methodComparison: {
+}
     method: string;
     score: number;
     rank: number;
@@ -323,6 +350,7 @@ interface ValidationReport {
     interpretability: number;
   }[];
   calibrationAnalysis: {
+}
     uncalibratedScore: number;
     calibratedScore: number;
     improvement: number;
@@ -330,6 +358,7 @@ interface ValidationReport {
     calibrationQuality: CalibrationQuality;
   };
   recommendations: {
+}
     productionMethod: string;
     alternativeMethod: string;
     calibrationStrategy: string;
@@ -340,6 +369,7 @@ interface ValidationReport {
 // ===== DEMO AND INTERACTION INTERFACES =====
 
 interface ValidationDemoConfig {
+}
   selectedMethod: string;
   selectedCalibration: string;
   selectedMetrics: string[];
@@ -353,11 +383,13 @@ interface ValidationDemoConfig {
 }
 
 interface ValidationDemoState {
+}
   isRunning: boolean;
   progress: number;
   currentStage: string;
   results?: ExperimentResult;
   visualizations: {
+}
     calibrationCurve?: any;
     reliabilityDiagram?: any;
     learningCurve?: any;
@@ -369,28 +401,32 @@ interface ValidationDemoState {
 // ===== UTILITY INTERFACES =====
 
 interface ValidationConfig {
+}
   seed: number;
   verbose: boolean;
   nJobs: number;
-  backend: 'sklearn' | 'custom' | 'distributed';
+  backend: &apos;sklearn&apos; | &apos;custom&apos; | &apos;distributed&apos;;
   cachePredictions: boolean;
   saveIntermediateResults: boolean;
 
 }
 
 interface ModelMetadata {
+}
   name: string;
   version: string;
-  type: TargetType | 'ranking';
+  type: TargetType | &apos;ranking&apos;;
   algorithm: string;
   hyperparameters: Record<string, any>;
   trainingData: {
+}
     size: number;
     features: string[];
     target: string;
     timeRange?: [string, string];
   };
   performance: {
+}
     training: number;
     validation: number;
     test?: number;
@@ -399,6 +435,7 @@ interface ModelMetadata {
 // ===== BIAS-VARIANCE ANALYSIS INTERFACES =====
 
 interface BiasVarianceExperiment {
+}
   id: string;
   name: string;
   modelComplexity: number;
@@ -407,11 +444,12 @@ interface BiasVarianceExperiment {
   expectedVariance: number;
   expectedNoise: number;
   totalError: number;
-  decompositionMethod: 'bootstrap' | 'analytical' | 'monte_carlo';
+  decompositionMethod: &apos;bootstrap&apos; | &apos;analytical&apos; | &apos;monte_carlo&apos;;
 
 }
 
 interface BiasVarianceResult {
+}
   modelComplexity: number;
   bias: number;
   variance: number;
@@ -421,12 +459,14 @@ interface BiasVarianceResult {
   predictions: number[];
   trueValues: number[];
   decomposition: {
+}
     biasSquared: number;
     varianceComponent: number;
     noiseComponent: number;
     covariance: number;
   };
   metrics: {
+}
     mse: number;
     mae: number;
     r2: number;
@@ -434,6 +474,7 @@ interface BiasVarianceResult {
   };
 
 interface BiasVarianceVisualization {
+}
   complexityRange: number[];
   biasValues: number[];
   varianceValues: number[];
@@ -446,6 +487,7 @@ interface BiasVarianceVisualization {
 }
 
 interface ModelComplexityConfig {
+}
   id: string;
   name: string;
   description: string;
@@ -453,13 +495,14 @@ interface ModelComplexityConfig {
   minComplexity: number;
   maxComplexity: number;
   stepSize: number;
-  optimizationTarget: 'bias' | 'variance' | 'total_error' | 'generalization';
+  optimizationTarget: &apos;bias&apos; | &apos;variance&apos; | &apos;total_error&apos; | &apos;generalization&apos;;
   regularization: boolean;
   crossValidation: boolean;
 
 // ===== LEARNING CURVE ANALYSIS INTERFACES =====
 
 interface LearningCurveExperiment {
+}
   id: string;
   name: string;
   description: string;
@@ -468,12 +511,13 @@ interface LearningCurveExperiment {
   stepSize: number;
   convergenceThreshold: number;
   expectedConvergencePoint: number;
-  dataEfficiency: 'low' | 'medium' | 'high';
-  convergenceRate: 'slow' | 'medium' | 'fast';
+  dataEfficiency: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
+  convergenceRate: &apos;slow&apos; | &apos;medium&apos; | &apos;fast&apos;;
 
 }
 
 interface LearningCurveResult {
+}
   sampleSize: number;
   trainScore: number;
   validationScore: number;
@@ -487,6 +531,7 @@ interface LearningCurveResult {
   isConverged: boolean;
 
 interface LearningCurveVisualization {
+}
   sampleSizes: number[];
   trainScores: number[];
   validationScores: number[];
@@ -496,24 +541,27 @@ interface LearningCurveVisualization {
   dataEfficiencyScore: number;
   recommendedSampleSize: number;
   convergenceAnalysis: {
+}
     hasConverged: boolean;
-    convergenceRate: 'slow' | 'medium' | 'fast';
+    convergenceRate: &apos;slow&apos; | &apos;medium&apos; | &apos;fast&apos;;
     plateauDetected: boolean;
     optimalDataSize: number;
   };
   insights: {
+}
     dataEfficiency: string;
     convergenceBehavior: string;
     recommendations: string[];
   };
 
 interface DataSizeConfig {
+}
   id: string;
   name: string;
   description: string;
   minSamples: number;
   maxSamples: number;
-  stepStrategy: 'linear' | 'logarithmic' | 'exponential';
+  stepStrategy: &apos;linear&apos; | &apos;logarithmic&apos; | &apos;exponential&apos;;
   validationRatio: number;
   crossValidationFolds: number;
   randomState: number;
@@ -521,17 +569,21 @@ interface DataSizeConfig {
 }
 
 interface FantasyContext {
+}
   league: {
-    type: 'standard' | 'ppr' | 'half_ppr' | 'dynasty' | 'redraft';
+}
+    type: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;dynasty&apos; | &apos;redraft&apos;;
     size: number;
     scoringSystem: Record<string, number>;
   };
   season: {
+}
     year: number;
     week?: number;
-    phase: 'preseason' | 'regular' | 'playoffs';
+    phase: &apos;preseason&apos; | &apos;regular&apos; | &apos;playoffs&apos;;
   };
   playerPool: {
+}
     positions: string[];
     totalPlayers: number;
     activeRosters: number;
@@ -539,456 +591,478 @@ interface FantasyContext {
 
 // Component placeholder for the main section
 const OracleCalibrationValidationSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
-  const [selectedCVMethod, setSelectedCVMethod] = useState<string>('k_fold');
+}
+  const [activeTab, setActiveTab] = useState<ActiveTab>(&apos;overview&apos;);
+  const [selectedCVMethod, setSelectedCVMethod] = useState<string>(&apos;k_fold&apos;);
   const [cvExperimentRunning, setCvExperimentRunning] = useState<boolean>(false);
   const [cvResults, setCvResults] = useState<CrossValidationResult | null>(null);
   const [experimentProgress, setExperimentProgress] = useState<number>(0);
-  const [selectedHoldoutMethod, setSelectedHoldoutMethod] = useState<string>('simple_holdout');
+  const [selectedHoldoutMethod, setSelectedHoldoutMethod] = useState<string>(&apos;simple_holdout&apos;);
   const [holdoutExperimentRunning, setHoldoutExperimentRunning] = useState<boolean>(false);
   const [holdoutResults, setHoldoutResults] = useState<HoldoutResult | null>(null);
   const [holdoutProgress, setHoldoutProgress] = useState<number>(0);
 
   // Time series validation state
-  const [selectedTimeSeriesMethod, setSelectedTimeSeriesMethod] = useState<string>('walk_forward');
+  const [selectedTimeSeriesMethod, setSelectedTimeSeriesMethod] = useState<string>(&apos;walk_forward&apos;);
   const [timeSeriesExperimentRunning, setTimeSeriesExperimentRunning] = useState<boolean>(false);
   const [timeSeriesResults, setTimeSeriesResults] = useState<TimeSeriesResult | null>(null);
   const [timeSeriesProgress, setTimeSeriesProgress] = useState<number>(0);
 
   // Bootstrap resampling state
-  const [selectedBootstrapMethod, setSelectedBootstrapMethod] = useState<string>('basic_bootstrap');
+  const [selectedBootstrapMethod, setSelectedBootstrapMethod] = useState<string>(&apos;basic_bootstrap&apos;);
   const [bootstrapExperimentRunning, setBootstrapExperimentRunning] = useState<boolean>(false);
   const [bootstrapResults, setBootstrapResults] = useState<BootstrapResult | null>(null);
   const [bootstrapProgress, setBootstrapProgress] = useState<number>(0);
 
   // Calibration techniques state
-  const [selectedCalibrationMethod, setSelectedCalibrationMethod] = useState<string>('platt_scaling');
+  const [selectedCalibrationMethod, setSelectedCalibrationMethod] = useState<string>(&apos;platt_scaling&apos;);
   const [calibrationExperimentRunning, setCalibrationExperimentRunning] = useState<boolean>(false);
   const [calibrationResults, setCalibrationResults] = useState<CalibrationResult | null>(null);
   const [calibrationProgress, setCalibrationProgress] = useState<number>(0);
 
   // Performance metrics state
-  const [selectedMetricCategory, setSelectedMetricCategory] = useState<string>('classification');
-  const [selectedMetric, setSelectedMetric] = useState<string>('accuracy');
+  const [selectedMetricCategory, setSelectedMetricCategory] = useState<string>(&apos;classification&apos;);
+  const [selectedMetric, setSelectedMetric] = useState<string>(&apos;accuracy&apos;);
   const [metricsExperimentRunning, setMetricsExperimentRunning] = useState<boolean>(false);
   const [metricsResults, setMetricsResults] = useState<ComprehensiveMetrics | null>(null);
   const [metricsProgress, setMetricsProgress] = useState<number>(0);
-  const [selectedModel, setSelectedModel] = useState<string>('neural_network');
+  const [selectedModel, setSelectedModel] = useState<string>(&apos;neural_network&apos;);
 
   // Bias-variance analysis state
-  const [selectedComplexityModel, setSelectedComplexityModel] = useState<string>('polynomial');
+  const [selectedComplexityModel, setSelectedComplexityModel] = useState<string>(&apos;polynomial&apos;);
   const [biasVarianceExperimentRunning, setBiasVarianceExperimentRunning] = useState<boolean>(false);
   const [biasVarianceResults, setBiasVarianceResults] = useState<BiasVarianceResult[] | null>(null);
   const [biasVarianceProgress, setBiasVarianceProgress] = useState<number>(0);
   const [selectedComplexityRange, setSelectedComplexityRange] = useState<[number, number]>([1, 20]);
   const [biasVarianceVisualization, setBiasVarianceVisualization] = useState<BiasVarianceVisualization | null>(null);
-  const [decompositionMethod, setDecompositionMethod] = useState<string>('bootstrap');
+  const [decompositionMethod, setDecompositionMethod] = useState<string>(&apos;bootstrap&apos;);
 
   // Learning curve analysis state
-  const [selectedLearningModel, setSelectedLearningModel] = useState<string>('neural_network');
+  const [selectedLearningModel, setSelectedLearningModel] = useState<string>(&apos;neural_network&apos;);
   const [learningCurveExperimentRunning, setLearningCurveExperimentRunning] = useState<boolean>(false);
   const [learningCurveResults, setLearningCurveResults] = useState<LearningCurveResult[] | null>(null);
   const [learningCurveProgress, setLearningCurveProgress] = useState<number>(0);
   const [selectedSampleRange, setSelectedSampleRange] = useState<[number, number]>([100, 5000]);
   const [learningCurveVisualization, setLearningCurveVisualization] = useState<LearningCurveVisualization | null>(null);
-  const [dataSizeStrategy, setDataSizeStrategy] = useState<string>('logarithmic');
+  const [dataSizeStrategy, setDataSizeStrategy] = useState<string>(&apos;logarithmic&apos;);
 
   // Cross-validation method configurations
   const crossValidationMethods: CrossValidationConfig[] = [
     {
-      id: 'k_fold',
-      name: 'K-Fold Cross-Validation',
-      type: 'k_fold',
+}
+      id: &apos;k_fold&apos;,
+      name: &apos;K-Fold Cross-Validation&apos;,
+      type: &apos;k_fold&apos;,
       folds: 5,
       shuffle: true,
       randomState: 42,
-      description: 'Standard k-fold CV that divides data into k equal-sized folds, using k-1 for training and 1 for validation',
-      formula: 'CV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋ᵢ), yᵢ)',
-      implementation: 'Randomly shuffle dataset, split into k folds, rotate validation fold'
+      description: &apos;Standard k-fold CV that divides data into k equal-sized folds, using k-1 for training and 1 for validation&apos;,
+      formula: &apos;CV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋ᵢ), yᵢ)&apos;,
+      implementation: &apos;Randomly shuffle dataset, split into k folds, rotate validation fold&apos;
     },
     {
-      id: 'stratified_k_fold',
-      name: 'Stratified K-Fold CV',
-      type: 'stratified_k_fold',
+}
+      id: &apos;stratified_k_fold&apos;,
+      name: &apos;Stratified K-Fold CV&apos;,
+      type: &apos;stratified_k_fold&apos;,
       folds: 5,
       shuffle: true,
       randomState: 42,
-      stratifyColumn: 'position',
-      description: 'K-fold CV that maintains class distribution across folds, crucial for imbalanced fantasy football positions',
-      formula: 'StratifiedCV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋ᵢ), yᵢ) s.t. P(yᵢ) ≈ P(y)',
-      implementation: 'Ensure proportional representation of each position (QB, RB, WR, TE) in every fold'
+      stratifyColumn: &apos;position&apos;,
+      description: &apos;K-fold CV that maintains class distribution across folds, crucial for imbalanced fantasy football positions&apos;,
+      formula: &apos;StratifiedCV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋ᵢ), yᵢ) s.t. P(yᵢ) ≈ P(y)&apos;,
+      implementation: &apos;Ensure proportional representation of each position (QB, RB, WR, TE) in every fold&apos;
     },
     {
-      id: 'time_series_split',
-      name: 'Time Series Split CV',
-      type: 'time_series_split',
+}
+      id: &apos;time_series_split&apos;,
+      name: &apos;Time Series Split CV&apos;,
+      type: &apos;time_series_split&apos;,
       folds: 5,
       shuffle: false,
-      timeColumn: 'game_date',
-      description: 'Temporal validation that respects chronological order, preventing data leakage from future games',
-      formula: 'TimeSeriesCV = ∑ᵢ₌₁ⁿ L(f(X₁:ᵢ), yᵢ₊₁)',
-      implementation: 'Use historical data to predict future performance, expanding training window over time'
+      timeColumn: &apos;game_date&apos;,
+      description: &apos;Temporal validation that respects chronological order, preventing data leakage from future games&apos;,
+      formula: &apos;TimeSeriesCV = ∑ᵢ₌₁ⁿ L(f(X₁:ᵢ), yᵢ₊₁)&apos;,
+      implementation: &apos;Use historical data to predict future performance, expanding training window over time&apos;
     },
     {
-      id: 'group_k_fold',
-      name: 'Group K-Fold CV',
-      type: 'group_k_fold',
+}
+      id: &apos;group_k_fold&apos;,
+      name: &apos;Group K-Fold CV&apos;,
+      type: &apos;group_k_fold&apos;,
       folds: 5,
       shuffle: true,
-      groupColumn: 'player_id',
-      description: 'Groups data by player to prevent information leakage between training and validation sets',
-      formula: 'GroupCV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋Gᵢ), yGᵢ)',
-      implementation: 'Ensure same player never appears in both training and validation within a fold'
+      groupColumn: &apos;player_id&apos;,
+      description: &apos;Groups data by player to prevent information leakage between training and validation sets&apos;,
+      formula: &apos;GroupCV(k) = (1/k) ∑ᵢ₌₁ᵏ L(fᵢ(X₋Gᵢ), yGᵢ)&apos;,
+      implementation: &apos;Ensure same player never appears in both training and validation within a fold&apos;
     },
     {
-      id: 'nested_cv',
-      name: 'Nested Cross-Validation',
-      type: 'nested_cv',
+}
+      id: &apos;nested_cv&apos;,
+      name: &apos;Nested Cross-Validation&apos;,
+      type: &apos;nested_cv&apos;,
       folds: 5,
       shuffle: true,
       randomState: 42,
-      description: 'Double CV for unbiased hyperparameter tuning and model selection in fantasy sports',
-      formula: 'NestedCV = (1/k₁) ∑ᵢ₌₁ᵏ¹ min_{h} (1/k₂) ∑ⱼ₌₁ᵏ² L(fₕ(X₋ᵢⱼ), yᵢⱼ)',
-      implementation: 'Outer loop for model evaluation, inner loop for hyperparameter optimization'
+      description: &apos;Double CV for unbiased hyperparameter tuning and model selection in fantasy sports&apos;,
+      formula: &apos;NestedCV = (1/k₁) ∑ᵢ₌₁ᵏ¹ min_{h} (1/k₂) ∑ⱼ₌₁ᵏ² L(fₕ(X₋ᵢⱼ), yᵢⱼ)&apos;,
+      implementation: &apos;Outer loop for model evaluation, inner loop for hyperparameter optimization&apos;
 
   ];
 
   // Holdout validation method configurations
   const holdoutMethods: HoldoutConfig[] = [
     {
-      id: 'simple_holdout',
-      name: 'Simple Holdout',
-      icon: '🎯',
-      type: 'simple_holdout',
+}
+      id: &apos;simple_holdout&apos;,
+      name: &apos;Simple Holdout&apos;,
+      icon: &apos;🎯&apos;,
+      type: &apos;simple_holdout&apos;,
       trainRatio: 0.7,
       testRatio: 0.3,
       shuffle: true,
       stratify: false,
       timeAware: false,
-      description: 'Basic train/test split with random partitioning of the dataset',
-      implementation: 'Random split maintaining specified ratios, suitable for balanced datasets'
+      description: &apos;Basic train/test split with random partitioning of the dataset&apos;,
+      implementation: &apos;Random split maintaining specified ratios, suitable for balanced datasets&apos;
     },
     {
-      id: 'stratified_holdout',
-      name: 'Stratified Holdout',
-      icon: '⚖️',
-      type: 'stratified_holdout',
+}
+      id: &apos;stratified_holdout&apos;,
+      name: &apos;Stratified Holdout&apos;,
+      icon: &apos;⚖️&apos;,
+      type: &apos;stratified_holdout&apos;,
       trainRatio: 0.7,
       testRatio: 0.3,
       shuffle: true,
       stratify: true,
       timeAware: false,
-      description: 'Holdout split maintaining proportional representation of each position across train/test sets',
-      implementation: 'Stratified sampling ensures equal representation of QB, RB, WR, TE in both sets'
+      description: &apos;Holdout split maintaining proportional representation of each position across train/test sets&apos;,
+      implementation: &apos;Stratified sampling ensures equal representation of QB, RB, WR, TE in both sets&apos;
     },
     {
-      id: 'temporal_holdout',
-      name: 'Temporal Holdout',
-      icon: '📅',
-      type: 'temporal_holdout',
+}
+      id: &apos;temporal_holdout&apos;,
+      name: &apos;Temporal Holdout&apos;,
+      icon: &apos;📅&apos;,
+      type: &apos;temporal_holdout&apos;,
       trainRatio: 0.8,
       testRatio: 0.2,
       shuffle: false,
       stratify: false,
       timeAware: true,
-      description: 'Time-aware split using historical data for training and recent data for testing',
-      implementation: 'Chronological split preventing future information leakage in fantasy predictions'
+      description: &apos;Time-aware split using historical data for training and recent data for testing&apos;,
+      implementation: &apos;Chronological split preventing future information leakage in fantasy predictions&apos;
     },
     {
-      id: 'grouped_holdout',
-      name: 'Grouped Holdout',
-      icon: '👥',
-      type: 'grouped_holdout',
+}
+      id: &apos;grouped_holdout&apos;,
+      name: &apos;Grouped Holdout&apos;,
+      icon: &apos;👥&apos;,
+      type: &apos;grouped_holdout&apos;,
       trainRatio: 0.75,
       testRatio: 0.25,
       shuffle: true,
       stratify: false,
-      groupBy: 'player_id',
+      groupBy: &apos;player_id&apos;,
       timeAware: false,
-      description: 'Player-grouped split ensuring same player never appears in both train and test sets',
-      implementation: 'Group-based sampling for testing generalization to unseen players'
+      description: &apos;Player-grouped split ensuring same player never appears in both train and test sets&apos;,
+      implementation: &apos;Group-based sampling for testing generalization to unseen players&apos;
 
   ];
 
   // Time series validation methods configuration
   const timeSeriesMethods: TimeSeriesValidationConfig[] = [
     {
-      id: 'walk_forward',
-      name: 'Walk-Forward Validation',
-      icon: '🚶',
-      type: 'walk_forward',
+}
+      id: &apos;walk_forward&apos;,
+      name: &apos;Walk-Forward Validation&apos;,
+      icon: &apos;🚶&apos;,
+      type: &apos;walk_forward&apos;,
       windowSize: 4,
       stepSize: 1,
       minTrainSize: 4,
       maxTrainSize: 12,
       preserveOrder: true,
       allowDataLeakage: false,
-      description: 'Sequential validation that walks forward through time, using past data to predict future outcomes',
-      implementation: 'Incrementally expand training set while testing on next time period',
-      advantages: ['Realistic temporal validation', 'Prevents look-ahead bias', 'Simulates live trading'],
-      disadvantages: ['Limited training data early on', 'Computationally expensive', 'May underestimate performance'],
-      useCases: ['Season progression modeling', 'Weekly prediction validation', 'Real-time strategy testing']
+      description: &apos;Sequential validation that walks forward through time, using past data to predict future outcomes&apos;,
+      implementation: &apos;Incrementally expand training set while testing on next time period&apos;,
+      advantages: [&apos;Realistic temporal validation&apos;, &apos;Prevents look-ahead bias&apos;, &apos;Simulates live trading&apos;],
+      disadvantages: [&apos;Limited training data early on&apos;, &apos;Computationally expensive&apos;, &apos;May underestimate performance&apos;],
+      useCases: [&apos;Season progression modeling&apos;, &apos;Weekly prediction validation&apos;, &apos;Real-time strategy testing&apos;]
     },
     {
-      id: 'expanding_window',
-      name: 'Expanding Window Validation',
-      icon: '📈',
-      type: 'expanding_window',
+}
+      id: &apos;expanding_window&apos;,
+      name: &apos;Expanding Window Validation&apos;,
+      icon: &apos;📈&apos;,
+      type: &apos;expanding_window&apos;,
       windowSize: 0,
       stepSize: 1,
       minTrainSize: 4,
       maxTrainSize: undefined,
       preserveOrder: true,
       allowDataLeakage: false,
-      description: 'Growing training window that starts small and expands to include all historical data',
-      implementation: 'Start with minimum training size and grow window with each validation step',
-      advantages: ['Uses all available data', 'Stable performance metrics', 'Good for trend analysis'],
-      disadvantages: ['May include outdated patterns', 'Slower adaptation to changes', 'Computational overhead'],
-      useCases: ['Long-term trend analysis', 'Career progression modeling', 'Historical performance evaluation']
+      description: &apos;Growing training window that starts small and expands to include all historical data&apos;,
+      implementation: &apos;Start with minimum training size and grow window with each validation step&apos;,
+      advantages: [&apos;Uses all available data&apos;, &apos;Stable performance metrics&apos;, &apos;Good for trend analysis&apos;],
+      disadvantages: [&apos;May include outdated patterns&apos;, &apos;Slower adaptation to changes&apos;, &apos;Computational overhead&apos;],
+      useCases: [&apos;Long-term trend analysis&apos;, &apos;Career progression modeling&apos;, &apos;Historical performance evaluation&apos;]
     },
     {
-      id: 'rolling_window',
-      name: 'Rolling Window Validation',
-      icon: '🎡',
-      type: 'rolling_window',
+}
+      id: &apos;rolling_window&apos;,
+      name: &apos;Rolling Window Validation&apos;,
+      icon: &apos;🎡&apos;,
+      type: &apos;rolling_window&apos;,
       windowSize: 8,
       stepSize: 1,
       minTrainSize: 8,
       maxTrainSize: 8,
       preserveOrder: true,
       allowDataLeakage: false,
-      description: 'Fixed-size sliding window that maintains constant training period length',
-      implementation: 'Slide window through time keeping training size constant',
-      advantages: ['Consistent data volume', 'Adapts to recent patterns', 'Efficient computation'],
-      disadvantages: ['May miss long-term trends', 'Less stable than expanding', 'Window size tuning needed'],
-      useCases: ['Recent form analysis', 'Injury recovery patterns', 'Short-term consistency evaluation']
+      description: &apos;Fixed-size sliding window that maintains constant training period length&apos;,
+      implementation: &apos;Slide window through time keeping training size constant&apos;,
+      advantages: [&apos;Consistent data volume&apos;, &apos;Adapts to recent patterns&apos;, &apos;Efficient computation&apos;],
+      disadvantages: [&apos;May miss long-term trends&apos;, &apos;Less stable than expanding&apos;, &apos;Window size tuning needed&apos;],
+      useCases: [&apos;Recent form analysis&apos;, &apos;Injury recovery patterns&apos;, &apos;Short-term consistency evaluation&apos;]
     },
     {
-      id: 'blocked_time_series',
-      name: 'Blocked Time Series Validation',
-      icon: '🧱',
-      type: 'blocked_time_series',
+}
+      id: &apos;blocked_time_series&apos;,
+      name: &apos;Blocked Time Series Validation&apos;,
+      icon: &apos;🧱&apos;,
+      type: &apos;blocked_time_series&apos;,
       windowSize: 4,
       stepSize: 4,
       minTrainSize: 8,
       maxTrainSize: 16,
       preserveOrder: true,
       allowDataLeakage: false,
-      description: 'Non-overlapping blocks of time periods for independent validation splits',
-      implementation: 'Divide timeline into discrete blocks with gaps between train/test periods',
-      advantages: ['Independent validation sets', 'Prevents temporal leakage', 'Clear separation'],
-      disadvantages: ['Wastes data with gaps', 'Fewer validation points', 'May miss transitions'],
-      useCases: ['Season-to-season validation', 'Draft class analysis', 'Multi-year trend detection']
+      description: &apos;Non-overlapping blocks of time periods for independent validation splits&apos;,
+      implementation: &apos;Divide timeline into discrete blocks with gaps between train/test periods&apos;,
+      advantages: [&apos;Independent validation sets&apos;, &apos;Prevents temporal leakage&apos;, &apos;Clear separation&apos;],
+      disadvantages: [&apos;Wastes data with gaps&apos;, &apos;Fewer validation points&apos;, &apos;May miss transitions&apos;],
+      useCases: [&apos;Season-to-season validation&apos;, &apos;Draft class analysis&apos;, &apos;Multi-year trend detection&apos;]
 
   ];
 
   // Bootstrap resampling methods configuration
   const bootstrapMethods: BootstrapConfig[] = [
     {
-      id: 'basic_bootstrap',
-      name: 'Basic Bootstrap',
-      icon: '🎲',
-      type: 'basic',
+}
+      id: &apos;basic_bootstrap&apos;,
+      name: &apos;Basic Bootstrap&apos;,
+      icon: &apos;🎲&apos;,
+      type: &apos;basic&apos;,
       nBootstraps: 1000,
       sampleSize: undefined,
       replacement: true,
       confidenceLevel: 0.95,
-      description: 'Standard bootstrap resampling with replacement from the original dataset',
-      implementation: 'Randomly sample N observations with replacement to create bootstrap samples',
-      advantages: ['Simple and intuitive', 'Works with any distribution', 'Provides confidence intervals'],
-      disadvantages: ['May not preserve data structure', 'Assumes independence', 'Can underestimate variance'],
-      useCases: ['General uncertainty quantification', 'Confidence intervals', 'Model stability assessment']
+      description: &apos;Standard bootstrap resampling with replacement from the original dataset&apos;,
+      implementation: &apos;Randomly sample N observations with replacement to create bootstrap samples&apos;,
+      advantages: [&apos;Simple and intuitive&apos;, &apos;Works with any distribution&apos;, &apos;Provides confidence intervals&apos;],
+      disadvantages: [&apos;May not preserve data structure&apos;, &apos;Assumes independence&apos;, &apos;Can underestimate variance&apos;],
+      useCases: [&apos;General uncertainty quantification&apos;, &apos;Confidence intervals&apos;, &apos;Model stability assessment&apos;]
     },
     {
-      id: 'stratified_bootstrap',
-      name: 'Stratified Bootstrap',
-      icon: '📊',
-      type: 'stratified',
+}
+      id: &apos;stratified_bootstrap&apos;,
+      name: &apos;Stratified Bootstrap&apos;,
+      icon: &apos;📊&apos;,
+      type: &apos;stratified&apos;,
       nBootstraps: 1000,
       sampleSize: undefined,
       replacement: true,
-      stratifyColumn: 'position',
+      stratifyColumn: &apos;position&apos;,
       confidenceLevel: 0.95,
-      description: 'Bootstrap that preserves class proportions by sampling within each stratum',
-      implementation: 'Sample proportionally from each class/group to maintain original distribution',
-      advantages: ['Preserves class balance', 'Better for imbalanced data', 'More representative samples'],
-      disadvantages: ['Requires categorical variable', 'More complex implementation', 'May miss rare interactions'],
-      useCases: ['Position-based sampling', 'Imbalanced datasets', 'Multi-class validation']
+      description: &apos;Bootstrap that preserves class proportions by sampling within each stratum&apos;,
+      implementation: &apos;Sample proportionally from each class/group to maintain original distribution&apos;,
+      advantages: [&apos;Preserves class balance&apos;, &apos;Better for imbalanced data&apos;, &apos;More representative samples&apos;],
+      disadvantages: [&apos;Requires categorical variable&apos;, &apos;More complex implementation&apos;, &apos;May miss rare interactions&apos;],
+      useCases: [&apos;Position-based sampling&apos;, &apos;Imbalanced datasets&apos;, &apos;Multi-class validation&apos;]
     },
     {
-      id: 'block_bootstrap',
-      name: 'Block Bootstrap',
-      icon: '🧱',
-      type: 'block',
+}
+      id: &apos;block_bootstrap&apos;,
+      name: &apos;Block Bootstrap&apos;,
+      icon: &apos;🧱&apos;,
+      type: &apos;block&apos;,
       nBootstraps: 1000,
       sampleSize: undefined,
       blockSize: 4,
       replacement: true,
       confidenceLevel: 0.95,
-      description: 'Bootstrap that samples contiguous blocks to preserve temporal or spatial dependencies',
-      implementation: 'Sample overlapping or non-overlapping blocks of consecutive observations',
-      advantages: ['Preserves dependencies', 'Good for time series', 'Maintains local patterns'],
-      disadvantages: ['Block size selection critical', 'Less efficient sampling', 'May miss long-term patterns'],
-      useCases: ['Time series data', 'Weekly fantasy patterns', 'Seasonal dependencies']
+      description: &apos;Bootstrap that samples contiguous blocks to preserve temporal or spatial dependencies&apos;,
+      implementation: &apos;Sample overlapping or non-overlapping blocks of consecutive observations&apos;,
+      advantages: [&apos;Preserves dependencies&apos;, &apos;Good for time series&apos;, &apos;Maintains local patterns&apos;],
+      disadvantages: [&apos;Block size selection critical&apos;, &apos;Less efficient sampling&apos;, &apos;May miss long-term patterns&apos;],
+      useCases: [&apos;Time series data&apos;, &apos;Weekly fantasy patterns&apos;, &apos;Seasonal dependencies&apos;]
     },
     {
-      id: 'parametric_bootstrap',
-      name: 'Parametric Bootstrap',
-      icon: '📈',
-      type: 'parametric',
+}
+      id: &apos;parametric_bootstrap&apos;,
+      name: &apos;Parametric Bootstrap&apos;,
+      icon: &apos;📈&apos;,
+      type: &apos;parametric&apos;,
       nBootstraps: 1000,
       sampleSize: undefined,
       replacement: true,
-      distribution: 'normal',
+      distribution: &apos;normal&apos;,
       confidenceLevel: 0.95,
-      description: 'Bootstrap based on assumed parametric distribution fitted to the data',
-      implementation: 'Fit distribution to data, then generate samples from fitted distribution',
-      advantages: ['Model-based uncertainty', 'Smooth estimates', 'Extrapolation possible'],
-      disadvantages: ['Distribution assumption required', 'May miss non-parametric features', 'Model misspecification risk'],
-      useCases: ['Well-understood distributions', 'Smooth confidence bands', 'Prediction intervals']
+      description: &apos;Bootstrap based on assumed parametric distribution fitted to the data&apos;,
+      implementation: &apos;Fit distribution to data, then generate samples from fitted distribution&apos;,
+      advantages: [&apos;Model-based uncertainty&apos;, &apos;Smooth estimates&apos;, &apos;Extrapolation possible&apos;],
+      disadvantages: [&apos;Distribution assumption required&apos;, &apos;May miss non-parametric features&apos;, &apos;Model misspecification risk&apos;],
+      useCases: [&apos;Well-understood distributions&apos;, &apos;Smooth confidence bands&apos;, &apos;Prediction intervals&apos;]
 
   ];
 
   // Calibration methods configuration
   const calibrationMethods = [
     {
-      id: 'platt_scaling',
-      name: 'Platt Scaling',
-      icon: '🎯',
-      type: 'parametric',
-      description: 'Parametric calibration using sigmoid function to map predictions to probabilities',
-      implementation: 'Train logistic regression on hold-out set using model outputs as features',
-      formula: 'P(y=1|f) = 1 / (1 + exp(A*f + B))',
-      complexity: 'Low',
-      dataRequirement: 'Small hold-out set',
+}
+      id: &apos;platt_scaling&apos;,
+      name: &apos;Platt Scaling&apos;,
+      icon: &apos;🎯&apos;,
+      type: &apos;parametric&apos;,
+      description: &apos;Parametric calibration using sigmoid function to map predictions to probabilities&apos;,
+      implementation: &apos;Train logistic regression on hold-out set using model outputs as features&apos;,
+      formula: &apos;P(y=1|f) = 1 / (1 + exp(A*f + B))&apos;,
+      complexity: &apos;Low&apos;,
+      dataRequirement: &apos;Small hold-out set&apos;,
       advantages: [
-        'Simple and fast implementation',
-        'Effective for small datasets',
-        'Well-established theoretical foundation',
-        'Monotonic calibration mapping'
+        &apos;Simple and fast implementation&apos;,
+        &apos;Effective for small datasets&apos;,
+        &apos;Well-established theoretical foundation&apos;,
+        &apos;Monotonic calibration mapping&apos;
       ],
       disadvantages: [
-        'Assumes sigmoid relationship',
-        'May overfit on small datasets',
-        'Limited flexibility for complex patterns',
-        'Requires additional validation data'
+        &apos;Assumes sigmoid relationship&apos;,
+        &apos;May overfit on small datasets&apos;,
+        &apos;Limited flexibility for complex patterns&apos;,
+        &apos;Requires additional validation data&apos;
       ],
       useCases: [
-        'Binary classification tasks',
-        'Small to medium datasets',
-        'Real-time calibration needs',
-        'Linear probability relationships'
+        &apos;Binary classification tasks&apos;,
+        &apos;Small to medium datasets&apos;,
+        &apos;Real-time calibration needs&apos;,
+        &apos;Linear probability relationships&apos;
       ],
       fantasyApplications: [
-        'Player performance probability calibration',
-        'Binary outcomes (injury, breakout)',
-        'Draft pick success probability',
-        'Win/loss predictions'
+        &apos;Player performance probability calibration&apos;,
+        &apos;Binary outcomes (injury, breakout)&apos;,
+        &apos;Draft pick success probability&apos;,
+        &apos;Win/loss predictions&apos;
 
     },
     {
-      id: 'isotonic_regression',
-      name: 'Isotonic Regression',
-      icon: '📊',
-      type: 'non_parametric',
-      description: 'Non-parametric calibration preserving monotonic relationship between predictions and probabilities',
-      implementation: 'Fit isotonic regression to map model outputs to calibrated probabilities',
-      formula: 'P_cal = isotonic_fit(P_raw)',
-      complexity: 'Medium',
-      dataRequirement: 'Medium-sized hold-out set',
+}
+      id: &apos;isotonic_regression&apos;,
+      name: &apos;Isotonic Regression&apos;,
+      icon: &apos;📊&apos;,
+      type: &apos;non_parametric&apos;,
+      description: &apos;Non-parametric calibration preserving monotonic relationship between predictions and probabilities&apos;,
+      implementation: &apos;Fit isotonic regression to map model outputs to calibrated probabilities&apos;,
+      formula: &apos;P_cal = isotonic_fit(P_raw)&apos;,
+      complexity: &apos;Medium&apos;,
+      dataRequirement: &apos;Medium-sized hold-out set&apos;,
       advantages: [
-        'No distributional assumptions',
-        'Preserves ranking order',
-        'Flexible calibration curves',
-        'Handles non-linear relationships'
+        &apos;No distributional assumptions&apos;,
+        &apos;Preserves ranking order&apos;,
+        &apos;Flexible calibration curves&apos;,
+        &apos;Handles non-linear relationships&apos;
       ],
       disadvantages: [
-        'Can overfit to calibration data',
-        'Step-wise function artifacts',
-        'Requires more data than Platt scaling',
-        'May reduce discriminative performance'
+        &apos;Can overfit to calibration data&apos;,
+        &apos;Step-wise function artifacts&apos;,
+        &apos;Requires more data than Platt scaling&apos;,
+        &apos;May reduce discriminative performance&apos;
       ],
       useCases: [
-        'Non-linear probability relationships',
-        'Ranking preservation important',
-        'Large calibration datasets',
-        'Complex prediction patterns'
+        &apos;Non-linear probability relationships&apos;,
+        &apos;Ranking preservation important&apos;,
+        &apos;Large calibration datasets&apos;,
+        &apos;Complex prediction patterns&apos;
       ],
       fantasyApplications: [
-        'Player ranking calibration',
-        'Multi-class position predictions',
-        'Performance tier classifications',
-        'Trade value assessments'
+        &apos;Player ranking calibration&apos;,
+        &apos;Multi-class position predictions&apos;,
+        &apos;Performance tier classifications&apos;,
+        &apos;Trade value assessments&apos;
 
     },
     {
-      id: 'bayesian_calibration',
-      name: 'Bayesian Calibration',
-      icon: '🧠',
-      type: 'bayesian',
-      description: 'Bayesian approach incorporating prior knowledge and uncertainty quantification',
-      implementation: 'Use Bayesian inference to estimate calibration mapping with uncertainty',
-      formula: 'P(y|x) = ∫ P(y|θ,x) P(θ|D) dθ',
-      complexity: 'High',
-      dataRequirement: 'Variable with priors',
+}
+      id: &apos;bayesian_calibration&apos;,
+      name: &apos;Bayesian Calibration&apos;,
+      icon: &apos;🧠&apos;,
+      type: &apos;bayesian&apos;,
+      description: &apos;Bayesian approach incorporating prior knowledge and uncertainty quantification&apos;,
+      implementation: &apos;Use Bayesian inference to estimate calibration mapping with uncertainty&apos;,
+      formula: &apos;P(y|x) = ∫ P(y|θ,x) P(θ|D) dθ&apos;,
+      complexity: &apos;High&apos;,
+      dataRequirement: &apos;Variable with priors&apos;,
       advantages: [
-        'Incorporates prior knowledge',
-        'Quantifies calibration uncertainty',
-        'Principled Bayesian framework',
-        'Handles small datasets well'
+        &apos;Incorporates prior knowledge&apos;,
+        &apos;Quantifies calibration uncertainty&apos;,
+        &apos;Principled Bayesian framework&apos;,
+        &apos;Handles small datasets well&apos;
       ],
       disadvantages: [
-        'Computationally intensive',
-        'Requires prior specification',
-        'Complex implementation',
-        'Slower inference time'
+        &apos;Computationally intensive&apos;,
+        &apos;Requires prior specification&apos;,
+        &apos;Complex implementation&apos;,
+        &apos;Slower inference time&apos;
       ],
       useCases: [
-        'Limited training data',
-        'Prior knowledge available',
-        'Uncertainty quantification needed',
-        'High-stakes decisions'
+        &apos;Limited training data&apos;,
+        &apos;Prior knowledge available&apos;,
+        &apos;Uncertainty quantification needed&apos;,
+        &apos;High-stakes decisions&apos;
       ],
       fantasyApplications: [
-        'Rookie performance prediction',
-        'Injury recovery probability',
-        'Career trajectory modeling',
-        'Draft value uncertainty'
+        &apos;Rookie performance prediction&apos;,
+        &apos;Injury recovery probability&apos;,
+        &apos;Career trajectory modeling&apos;,
+        &apos;Draft value uncertainty&apos;
 
     },
     {
-      id: 'temperature_scaling',
-      name: 'Temperature Scaling',
-      icon: '🌡️',
-      type: 'parametric',
-      description: 'Single-parameter scaling method adjusting confidence of neural network predictions',
-      implementation: 'Learn single temperature parameter T to scale logits before softmax',
-      formula: 'P_cal = softmax(z/T)',
-      complexity: 'Very Low',
-      dataRequirement: 'Small validation set',
+}
+      id: &apos;temperature_scaling&apos;,
+      name: &apos;Temperature Scaling&apos;,
+      icon: &apos;🌡️&apos;,
+      type: &apos;parametric&apos;,
+      description: &apos;Single-parameter scaling method adjusting confidence of neural network predictions&apos;,
+      implementation: &apos;Learn single temperature parameter T to scale logits before softmax&apos;,
+      formula: &apos;P_cal = softmax(z/T)&apos;,
+      complexity: &apos;Very Low&apos;,
+      dataRequirement: &apos;Small validation set&apos;,
       advantages: [
-        'Extremely simple - single parameter',
-        'Preserves model accuracy',
-        'Fast optimization',
-        'Works well with neural networks'
+        &apos;Extremely simple - single parameter&apos;,
+        &apos;Preserves model accuracy&apos;,
+        &apos;Fast optimization&apos;,
+        &apos;Works well with neural networks&apos;
       ],
       disadvantages: [
-        'Limited to neural network outputs',
-        'Single global parameter',
-        'May not handle local miscalibration',
-        'Assumes uniform miscalibration'
+        &apos;Limited to neural network outputs&apos;,
+        &apos;Single global parameter&apos;,
+        &apos;May not handle local miscalibration&apos;,
+        &apos;Assumes uniform miscalibration&apos;
       ],
       useCases: [
-        'Neural network calibration',
-        'Multi-class problems',
-        'Preserving top-1 accuracy',
-        'Large-scale applications'
+        &apos;Neural network calibration&apos;,
+        &apos;Multi-class problems&apos;,
+        &apos;Preserving top-1 accuracy&apos;,
+        &apos;Large-scale applications&apos;
       ],
       fantasyApplications: [
-        'Deep learning player predictions',
-        'Multi-position classifications',
-        'Ensemble model calibration',
-        'Neural ranking systems'
+        &apos;Deep learning player predictions&apos;,
+        &apos;Multi-position classifications&apos;,
+        &apos;Ensemble model calibration&apos;,
+        &apos;Neural ranking systems&apos;
 
   ];
 
@@ -996,299 +1070,322 @@ const OracleCalibrationValidationSection: React.FC = () => {
   const performanceMetrics: PerformanceMetric[] = [
     // Classification Metrics
     {
-      id: 'accuracy',
-      name: 'Accuracy',
-      category: 'classification' as MetricCategory,
-      description: 'Proportion of correct predictions among total predictions',
-      formula: 'Accuracy = (TP + TN) / (TP + TN + FP + FN)',
-      interpretation: 'Higher values indicate better overall performance',
-      range: '[0, 1]',
+}
+      id: &apos;accuracy&apos;,
+      name: &apos;Accuracy&apos;,
+      category: &apos;classification&apos; as MetricCategory,
+      description: &apos;Proportion of correct predictions among total predictions&apos;,
+      formula: &apos;Accuracy = (TP + TN) / (TP + TN + FP + FN)&apos;,
+      interpretation: &apos;Higher values indicate better overall performance&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Balanced datasets', 'Overall performance assessment', 'Simple classification tasks'],
-      limitations: ['Misleading with imbalanced data', 'Ignores class-specific performance', 'Can hide poor minority class performance']
+      useCases: [&apos;Balanced datasets&apos;, &apos;Overall performance assessment&apos;, &apos;Simple classification tasks&apos;],
+      limitations: [&apos;Misleading with imbalanced data&apos;, &apos;Ignores class-specific performance&apos;, &apos;Can hide poor minority class performance&apos;]
     },
     {
-      id: 'precision',
-      name: 'Precision',
-      category: 'classification' as MetricCategory,
-      description: 'Proportion of true positives among predicted positives',
-      formula: 'Precision = TP / (TP + FP)',
-      interpretation: 'Higher values mean fewer false positives',
-      range: '[0, 1]',
+}
+      id: &apos;precision&apos;,
+      name: &apos;Precision&apos;,
+      category: &apos;classification&apos; as MetricCategory,
+      description: &apos;Proportion of true positives among predicted positives&apos;,
+      formula: &apos;Precision = TP / (TP + FP)&apos;,
+      interpretation: &apos;Higher values mean fewer false positives&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['When false positives are costly', 'Quality-focused applications', 'Spam detection'],
-      limitations: ['Ignores false negatives', 'Can be high with low recall', 'Sensitive to class distribution']
+      useCases: [&apos;When false positives are costly&apos;, &apos;Quality-focused applications&apos;, &apos;Spam detection&apos;],
+      limitations: [&apos;Ignores false negatives&apos;, &apos;Can be high with low recall&apos;, &apos;Sensitive to class distribution&apos;]
     },
     {
-      id: 'recall',
-      name: 'Recall (Sensitivity)',
-      category: 'classification' as MetricCategory,
-      description: 'Proportion of true positives among actual positives',
-      formula: 'Recall = TP / (TP + FN)',
-      interpretation: 'Higher values mean fewer missed positive cases',
-      range: '[0, 1]',
+}
+      id: &apos;recall&apos;,
+      name: &apos;Recall (Sensitivity)&apos;,
+      category: &apos;classification&apos; as MetricCategory,
+      description: &apos;Proportion of true positives among actual positives&apos;,
+      formula: &apos;Recall = TP / (TP + FN)&apos;,
+      interpretation: &apos;Higher values mean fewer missed positive cases&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['When false negatives are costly', 'Medical diagnosis', 'Fraud detection'],
-      limitations: ['Ignores false positives', 'Can be high with low precision', 'May favor over-prediction']
+      useCases: [&apos;When false negatives are costly&apos;, &apos;Medical diagnosis&apos;, &apos;Fraud detection&apos;],
+      limitations: [&apos;Ignores false positives&apos;, &apos;Can be high with low precision&apos;, &apos;May favor over-prediction&apos;]
     },
     {
-      id: 'f1_score',
-      name: 'F1-Score',
-      category: 'classification' as MetricCategory,
-      description: 'Harmonic mean of precision and recall',
-      formula: 'F1 = 2 × (Precision × Recall) / (Precision + Recall)',
-      interpretation: 'Balances precision and recall, higher is better',
-      range: '[0, 1]',
+}
+      id: &apos;f1_score&apos;,
+      name: &apos;F1-Score&apos;,
+      category: &apos;classification&apos; as MetricCategory,
+      description: &apos;Harmonic mean of precision and recall&apos;,
+      formula: &apos;F1 = 2 × (Precision × Recall) / (Precision + Recall)&apos;,
+      interpretation: &apos;Balances precision and recall, higher is better&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Imbalanced datasets', 'Need balance of precision/recall', 'Single performance metric'],
-      limitations: ['Equal weight to precision/recall', 'Ignores true negatives', 'Can be misleading with very imbalanced data']
+      useCases: [&apos;Imbalanced datasets&apos;, &apos;Need balance of precision/recall&apos;, &apos;Single performance metric&apos;],
+      limitations: [&apos;Equal weight to precision/recall&apos;, &apos;Ignores true negatives&apos;, &apos;Can be misleading with very imbalanced data&apos;]
     },
     {
-      id: 'auc_roc',
-      name: 'AUC-ROC',
-      category: 'classification' as MetricCategory,
-      description: 'Area under the ROC curve, measuring separability',
-      formula: 'AUC = ∫ TPR d(FPR)',
-      interpretation: 'Higher values indicate better discrimination ability',
-      range: '[0, 1]',
+}
+      id: &apos;auc_roc&apos;,
+      name: &apos;AUC-ROC&apos;,
+      category: &apos;classification&apos; as MetricCategory,
+      description: &apos;Area under the ROC curve, measuring separability&apos;,
+      formula: &apos;AUC = ∫ TPR d(FPR)&apos;,
+      interpretation: &apos;Higher values indicate better discrimination ability&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Binary classification', 'Ranking problems', 'Threshold-independent evaluation'],
-      limitations: ['Optimistic with imbalanced data', 'Hard to interpret', 'May not reflect real-world performance']
+      useCases: [&apos;Binary classification&apos;, &apos;Ranking problems&apos;, &apos;Threshold-independent evaluation&apos;],
+      limitations: [&apos;Optimistic with imbalanced data&apos;, &apos;Hard to interpret&apos;, &apos;May not reflect real-world performance&apos;]
     },
     // Regression Metrics
     {
-      id: 'mse',
-      name: 'Mean Squared Error',
-      category: 'regression' as MetricCategory,
-      description: 'Average of squared differences between predicted and actual values',
-      formula: 'MSE = (1/n) ∑(yᵢ - ŷᵢ)²',
-      interpretation: 'Lower values indicate better fit, penalizes large errors heavily',
-      range: '[0, ∞)',
+}
+      id: &apos;mse&apos;,
+      name: &apos;Mean Squared Error&apos;,
+      category: &apos;regression&apos; as MetricCategory,
+      description: &apos;Average of squared differences between predicted and actual values&apos;,
+      formula: &apos;MSE = (1/n) ∑(yᵢ - ŷᵢ)²&apos;,
+      interpretation: &apos;Lower values indicate better fit, penalizes large errors heavily&apos;,
+      range: &apos;[0, ∞)&apos;,
       higherIsBetter: false,
-      useCases: ['Continuous predictions', 'When large errors are very bad', 'Optimization objective'],
-      limitations: ['Sensitive to outliers', 'Units are squared', 'Hard to interpret scale']
+      useCases: [&apos;Continuous predictions&apos;, &apos;When large errors are very bad&apos;, &apos;Optimization objective&apos;],
+      limitations: [&apos;Sensitive to outliers&apos;, &apos;Units are squared&apos;, &apos;Hard to interpret scale&apos;]
     },
     {
-      id: 'mae',
-      name: 'Mean Absolute Error',
-      category: 'regression' as MetricCategory,
-      description: 'Average of absolute differences between predicted and actual values',
-      formula: 'MAE = (1/n) ∑|yᵢ - ŷᵢ|',
-      interpretation: 'Lower values indicate better fit, robust to outliers',
-      range: '[0, ∞)',
+}
+      id: &apos;mae&apos;,
+      name: &apos;Mean Absolute Error&apos;,
+      category: &apos;regression&apos; as MetricCategory,
+      description: &apos;Average of absolute differences between predicted and actual values&apos;,
+      formula: &apos;MAE = (1/n) ∑|yᵢ - ŷᵢ|&apos;,
+      interpretation: &apos;Lower values indicate better fit, robust to outliers&apos;,
+      range: &apos;[0, ∞)&apos;,
       higherIsBetter: false,
-      useCases: ['When outliers are present', 'Robust error measurement', 'Interpretable metric'],
-      limitations: ['Treats all errors equally', 'Less sensitive to large errors', 'May not penalize worst predictions']
+      useCases: [&apos;When outliers are present&apos;, &apos;Robust error measurement&apos;, &apos;Interpretable metric&apos;],
+      limitations: [&apos;Treats all errors equally&apos;, &apos;Less sensitive to large errors&apos;, &apos;May not penalize worst predictions&apos;]
     },
     {
-      id: 'r_squared',
-      name: 'R-Squared',
-      category: 'regression' as MetricCategory,
-      description: 'Proportion of variance in target explained by the model',
-      formula: 'R² = 1 - SS_res / SS_tot',
-      interpretation: 'Higher values indicate better explanatory power',
-      range: '(-∞, 1]',
+}
+      id: &apos;r_squared&apos;,
+      name: &apos;R-Squared&apos;,
+      category: &apos;regression&apos; as MetricCategory,
+      description: &apos;Proportion of variance in target explained by the model&apos;,
+      formula: &apos;R² = 1 - SS_res / SS_tot&apos;,
+      interpretation: &apos;Higher values indicate better explanatory power&apos;,
+      range: &apos;(-∞, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Model comparison', 'Explanatory analysis', 'Variance explanation'],
-      limitations: ['Can be negative', 'Affected by number of features', 'Not suitable for all regression types']
+      useCases: [&apos;Model comparison&apos;, &apos;Explanatory analysis&apos;, &apos;Variance explanation&apos;],
+      limitations: [&apos;Can be negative&apos;, &apos;Affected by number of features&apos;, &apos;Not suitable for all regression types&apos;]
     },
     {
-      id: 'mape',
-      name: 'Mean Absolute Percentage Error',
-      category: 'regression' as MetricCategory,
-      description: 'Average of absolute percentage errors',
-      formula: 'MAPE = (100/n) ∑|yᵢ - ŷᵢ| / |yᵢ|',
-      interpretation: 'Lower percentage indicates better relative accuracy',
-      range: '[0, ∞)',
+}
+      id: &apos;mape&apos;,
+      name: &apos;Mean Absolute Percentage Error&apos;,
+      category: &apos;regression&apos; as MetricCategory,
+      description: &apos;Average of absolute percentage errors&apos;,
+      formula: &apos;MAPE = (100/n) ∑|yᵢ - ŷᵢ| / |yᵢ|&apos;,
+      interpretation: &apos;Lower percentage indicates better relative accuracy&apos;,
+      range: &apos;[0, ∞)&apos;,
       higherIsBetter: false,
-      useCases: ['Percentage-based errors', 'Scale-independent comparison', 'Business metrics'],
-      limitations: ['Division by zero issues', 'Biased toward low values', 'Asymmetric penalty']
+      useCases: [&apos;Percentage-based errors&apos;, &apos;Scale-independent comparison&apos;, &apos;Business metrics&apos;],
+      limitations: [&apos;Division by zero issues&apos;, &apos;Biased toward low values&apos;, &apos;Asymmetric penalty&apos;]
     },
     // Fantasy-Specific Metrics
     {
-      id: 'points_accuracy',
-      name: 'Points Accuracy',
-      category: 'fantasy' as MetricCategory,
-      description: 'Accuracy of fantasy point predictions within tolerance',
-      formula: 'Points Accuracy = Count(|predicted - actual| < threshold) / Total',
-      interpretation: 'Higher values indicate more accurate point predictions',
-      range: '[0, 1]',
+}
+      id: &apos;points_accuracy&apos;,
+      name: &apos;Points Accuracy&apos;,
+      category: &apos;fantasy&apos; as MetricCategory,
+      description: &apos;Accuracy of fantasy point predictions within tolerance&apos;,
+      formula: &apos;Points Accuracy = Count(|predicted - actual| < threshold) / Total&apos;,
+      interpretation: &apos;Higher values indicate more accurate point predictions&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Fantasy point predictions', 'Player performance evaluation', 'Lineup optimization'],
-      limitations: ['Threshold dependent', 'May miss systematic bias', 'Ignores magnitude of errors']
+      useCases: [&apos;Fantasy point predictions&apos;, &apos;Player performance evaluation&apos;, &apos;Lineup optimization&apos;],
+      limitations: [&apos;Threshold dependent&apos;, &apos;May miss systematic bias&apos;, &apos;Ignores magnitude of errors&apos;]
     },
     {
-      id: 'ranking_accuracy',
-      name: 'Ranking Accuracy',
-      category: 'fantasy' as MetricCategory,
-      description: 'Accuracy of player ranking predictions',
-      formula: 'Ranking Accuracy = 1 - (Kendall Tau Distance / Max Distance)',
-      interpretation: 'Higher values indicate better ranking predictions',
-      range: '[0, 1]',
+}
+      id: &apos;ranking_accuracy&apos;,
+      name: &apos;Ranking Accuracy&apos;,
+      category: &apos;fantasy&apos; as MetricCategory,
+      description: &apos;Accuracy of player ranking predictions&apos;,
+      formula: &apos;Ranking Accuracy = 1 - (Kendall Tau Distance / Max Distance)&apos;,
+      interpretation: &apos;Higher values indicate better ranking predictions&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Draft rankings', 'Weekly rankings', 'Player tiers'],
-      limitations: ['Position-sensitive', 'May not reflect fantasy relevance', 'Equal weight to all positions']
+      useCases: [&apos;Draft rankings&apos;, &apos;Weekly rankings&apos;, &apos;Player tiers&apos;],
+      limitations: [&apos;Position-sensitive&apos;, &apos;May not reflect fantasy relevance&apos;, &apos;Equal weight to all positions&apos;]
     },
     {
-      id: 'bust_detection',
-      name: 'Bust Detection',
-      category: 'fantasy' as MetricCategory,
-      description: 'Ability to identify players who significantly underperform',
-      formula: 'Bust Detection = TP_busts / (TP_busts + FN_busts)',
-      interpretation: 'Higher values indicate better bust identification',
-      range: '[0, 1]',
+}
+      id: &apos;bust_detection&apos;,
+      name: &apos;Bust Detection&apos;,
+      category: &apos;fantasy&apos; as MetricCategory,
+      description: &apos;Ability to identify players who significantly underperform&apos;,
+      formula: &apos;Bust Detection = TP_busts / (TP_busts + FN_busts)&apos;,
+      interpretation: &apos;Higher values indicate better bust identification&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Draft strategy', 'Risk assessment', 'Avoid disappointments'],
-      limitations: ['Bust definition subjective', 'May be conservative', 'Class imbalance issues']
+      useCases: [&apos;Draft strategy&apos;, &apos;Risk assessment&apos;, &apos;Avoid disappointments&apos;],
+      limitations: [&apos;Bust definition subjective&apos;, &apos;May be conservative&apos;, &apos;Class imbalance issues&apos;]
     },
     {
-      id: 'sleeper_identification',
-      name: 'Sleeper Identification',
-      category: 'fantasy' as MetricCategory,
-      description: 'Ability to identify undervalued players who outperform',
-      formula: 'Sleeper ID = TP_sleepers / (TP_sleepers + FN_sleepers)',
-      interpretation: 'Higher values indicate better sleeper detection',
-      range: '[0, 1]',
+}
+      id: &apos;sleeper_identification&apos;,
+      name: &apos;Sleeper Identification&apos;,
+      category: &apos;fantasy&apos; as MetricCategory,
+      description: &apos;Ability to identify undervalued players who outperform&apos;,
+      formula: &apos;Sleeper ID = TP_sleepers / (TP_sleepers + FN_sleepers)&apos;,
+      interpretation: &apos;Higher values indicate better sleeper detection&apos;,
+      range: &apos;[0, 1]&apos;,
       higherIsBetter: true,
-      useCases: ['Finding value picks', 'Late-round gems', 'Competitive advantage'],
-      limitations: ['Sleeper definition varies', 'Rare event prediction', 'Market efficiency limits']
+      useCases: [&apos;Finding value picks&apos;, &apos;Late-round gems&apos;, &apos;Competitive advantage&apos;],
+      limitations: [&apos;Sleeper definition varies&apos;, &apos;Rare event prediction&apos;, &apos;Market efficiency limits&apos;]
 
   ];
 
   const metricCategories = [
-    { id: 'classification', name: 'Classification', icon: '🎯', description: 'Metrics for binary and multi-class classification problems' },
-    { id: 'regression', name: 'Regression', icon: '📈', description: 'Metrics for continuous value prediction problems' },
-    { id: 'ranking', name: 'Ranking', icon: '📊', description: 'Metrics for ordering and ranking prediction problems' },
-    { id: 'calibration', name: 'Calibration', icon: '⚖️', description: 'Metrics for probability calibration and reliability' },
-    { id: 'fantasy', name: 'Fantasy Football', icon: '🏈', description: 'Domain-specific metrics for fantasy football performance' }
+    { id: &apos;classification&apos;, name: &apos;Classification&apos;, icon: &apos;🎯&apos;, description: &apos;Metrics for binary and multi-class classification problems&apos; },
+    { id: &apos;regression&apos;, name: &apos;Regression&apos;, icon: &apos;📈&apos;, description: &apos;Metrics for continuous value prediction problems&apos; },
+    { id: &apos;ranking&apos;, name: &apos;Ranking&apos;, icon: &apos;📊&apos;, description: &apos;Metrics for ordering and ranking prediction problems&apos; },
+    { id: &apos;calibration&apos;, name: &apos;Calibration&apos;, icon: &apos;⚖️&apos;, description: &apos;Metrics for probability calibration and reliability&apos; },
+    { id: &apos;fantasy&apos;, name: &apos;Fantasy Football&apos;, icon: &apos;🏈&apos;, description: &apos;Domain-specific metrics for fantasy football performance&apos; }
   ];
 
   const modelTypes = [
-    { id: 'neural_network', name: 'Neural Network', icon: '🧠', description: 'Deep learning model with multiple layers' },
-    { id: 'random_forest', name: 'Random Forest', icon: '🌲', description: 'Ensemble of decision trees' },
-    { id: 'gradient_boosting', name: 'Gradient Boosting', icon: '🚀', description: 'Sequential boosting algorithm' },
-    { id: 'linear_regression', name: 'Linear Regression', icon: '📏', description: 'Linear relationship modeling' },
-    { id: 'svm', name: 'Support Vector Machine', icon: '⚡', description: 'Maximum margin classifier' }
+    { id: &apos;neural_network&apos;, name: &apos;Neural Network&apos;, icon: &apos;🧠&apos;, description: &apos;Deep learning model with multiple layers&apos; },
+    { id: &apos;random_forest&apos;, name: &apos;Random Forest&apos;, icon: &apos;🌲&apos;, description: &apos;Ensemble of decision trees&apos; },
+    { id: &apos;gradient_boosting&apos;, name: &apos;Gradient Boosting&apos;, icon: &apos;🚀&apos;, description: &apos;Sequential boosting algorithm&apos; },
+    { id: &apos;linear_regression&apos;, name: &apos;Linear Regression&apos;, icon: &apos;📏&apos;, description: &apos;Linear relationship modeling&apos; },
+    { id: &apos;svm&apos;, name: &apos;Support Vector Machine&apos;, icon: &apos;⚡&apos;, description: &apos;Maximum margin classifier&apos; }
   ];
 
   // Bias-variance analysis experiments
   const biasVarianceExperiments: BiasVarianceExperiment[] = [
     {
-      id: 'polynomial_complexity',
-      name: 'Polynomial Degree Analysis',
+}
+      id: &apos;polynomial_complexity&apos;,
+      name: &apos;Polynomial Degree Analysis&apos;,
       modelComplexity: 1,
-      description: 'Analyze bias-variance trade-off by varying polynomial degree from 1 to 20',
+      description: &apos;Analyze bias-variance trade-off by varying polynomial degree from 1 to 20&apos;,
       expectedBias: 0.45,
       expectedVariance: 0.15,
       expectedNoise: 0.10,
       totalError: 0.70,
-      decompositionMethod: 'bootstrap'
+      decompositionMethod: &apos;bootstrap&apos;
     },
     {
-      id: 'neural_depth',
-      name: 'Neural Network Depth',
+}
+      id: &apos;neural_depth&apos;,
+      name: &apos;Neural Network Depth&apos;,
       modelComplexity: 2,
-      description: 'Study bias-variance by varying number of hidden layers in neural networks',
+      description: &apos;Study bias-variance by varying number of hidden layers in neural networks&apos;,
       expectedBias: 0.35,
       expectedVariance: 0.25,
       expectedNoise: 0.10,
       totalError: 0.70,
-      decompositionMethod: 'bootstrap'
+      decompositionMethod: &apos;bootstrap&apos;
     },
     {
-      id: 'tree_depth',
-      name: 'Decision Tree Depth',
+}
+      id: &apos;tree_depth&apos;,
+      name: &apos;Decision Tree Depth&apos;,
       modelComplexity: 5,
-      description: 'Examine bias-variance trade-off with different tree maximum depths',
+      description: &apos;Examine bias-variance trade-off with different tree maximum depths&apos;,
       expectedBias: 0.30,
       expectedVariance: 0.35,
       expectedNoise: 0.10,
       totalError: 0.75,
-      decompositionMethod: 'bootstrap'
+      decompositionMethod: &apos;bootstrap&apos;
     },
     {
-      id: 'ensemble_size',
-      name: 'Ensemble Size Impact',
+}
+      id: &apos;ensemble_size&apos;,
+      name: &apos;Ensemble Size Impact&apos;,
       modelComplexity: 10,
-      description: 'Evaluate how ensemble size affects bias-variance decomposition',
+      description: &apos;Evaluate how ensemble size affects bias-variance decomposition&apos;,
       expectedBias: 0.25,
       expectedVariance: 0.20,
       expectedNoise: 0.10,
       totalError: 0.55,
-      decompositionMethod: 'bootstrap'
+      decompositionMethod: &apos;bootstrap&apos;
     },
     {
-      id: 'regularization_strength',
-      name: 'Regularization Analysis',
+}
+      id: &apos;regularization_strength&apos;,
+      name: &apos;Regularization Analysis&apos;,
       modelComplexity: 8,
-      description: 'Study bias-variance with different L1/L2 regularization strengths',
+      description: &apos;Study bias-variance with different L1/L2 regularization strengths&apos;,
       expectedBias: 0.40,
       expectedVariance: 0.15,
       expectedNoise: 0.10,
       totalError: 0.65,
-      decompositionMethod: 'analytical'
+      decompositionMethod: &apos;analytical&apos;
 
   ];
 
   // Model complexity configurations
   const complexityConfigs: ModelComplexityConfig[] = [
     {
-      id: 'polynomial',
-      name: 'Polynomial Regression',
-      description: 'Varying polynomial degree to control model complexity',
-      complexityParameter: 'degree',
+}
+      id: &apos;polynomial&apos;,
+      name: &apos;Polynomial Regression&apos;,
+      description: &apos;Varying polynomial degree to control model complexity&apos;,
+      complexityParameter: &apos;degree&apos;,
       minComplexity: 1,
       maxComplexity: 20,
       stepSize: 1,
-      optimizationTarget: 'total_error',
+      optimizationTarget: &apos;total_error&apos;,
       regularization: false,
       crossValidation: true
     },
     {
-      id: 'neural_network',
-      name: 'Neural Network',
-      description: 'Varying number of hidden layers and neurons',
-      complexityParameter: 'hidden_layers',
+}
+      id: &apos;neural_network&apos;,
+      name: &apos;Neural Network&apos;,
+      description: &apos;Varying number of hidden layers and neurons&apos;,
+      complexityParameter: &apos;hidden_layers&apos;,
       minComplexity: 1,
       maxComplexity: 10,
       stepSize: 1,
-      optimizationTarget: 'generalization',
+      optimizationTarget: &apos;generalization&apos;,
       regularization: true,
       crossValidation: true
     },
     {
-      id: 'decision_tree',
-      name: 'Decision Tree',
-      description: 'Varying maximum depth of decision trees',
-      complexityParameter: 'max_depth',
+}
+      id: &apos;decision_tree&apos;,
+      name: &apos;Decision Tree&apos;,
+      description: &apos;Varying maximum depth of decision trees&apos;,
+      complexityParameter: &apos;max_depth&apos;,
       minComplexity: 1,
       maxComplexity: 15,
       stepSize: 1,
-      optimizationTarget: 'total_error',
+      optimizationTarget: &apos;total_error&apos;,
       regularization: false,
       crossValidation: true
     },
     {
-      id: 'random_forest',
-      name: 'Random Forest',
-      description: 'Varying number of trees in the ensemble',
-      complexityParameter: 'n_estimators',
+}
+      id: &apos;random_forest&apos;,
+      name: &apos;Random Forest&apos;,
+      description: &apos;Varying number of trees in the ensemble&apos;,
+      complexityParameter: &apos;n_estimators&apos;,
       minComplexity: 10,
       maxComplexity: 200,
       stepSize: 10,
-      optimizationTarget: 'variance',
+      optimizationTarget: &apos;variance&apos;,
       regularization: false,
       crossValidation: true
     },
     {
-      id: 'svm',
-      name: 'Support Vector Machine',
-      description: 'Varying regularization parameter C',
-      complexityParameter: 'C',
+}
+      id: &apos;svm&apos;,
+      name: &apos;Support Vector Machine&apos;,
+      description: &apos;Varying regularization parameter C&apos;,
+      complexityParameter: &apos;C&apos;,
       minComplexity: 0.01,
       maxComplexity: 100,
       stepSize: 0.1,
-      optimizationTarget: 'total_error',
+      optimizationTarget: &apos;total_error&apos;,
       regularization: true,
       crossValidation: true
 
@@ -1297,98 +1394,106 @@ const OracleCalibrationValidationSection: React.FC = () => {
   // Learning curve experiments
   const learningCurveExperiments: LearningCurveExperiment[] = [
     {
-      id: 'neural_network_learning',
-      name: 'Neural Network Convergence',
-      description: 'Analyze how neural network performance improves with training data size',
-      modelType: 'neural_network',
+}
+      id: &apos;neural_network_learning&apos;,
+      name: &apos;Neural Network Convergence&apos;,
+      description: &apos;Analyze how neural network performance improves with training data size&apos;,
+      modelType: &apos;neural_network&apos;,
       sampleSizeRange: [100, 5000],
       stepSize: 100,
       convergenceThreshold: 0.01,
       expectedConvergencePoint: 2500,
-      dataEfficiency: 'medium',
-      convergenceRate: 'medium'
+      dataEfficiency: &apos;medium&apos;,
+      convergenceRate: &apos;medium&apos;
     },
     {
-      id: 'random_forest_learning',
-      name: 'Random Forest Data Scaling',
-      description: 'Study random forest performance scaling with dataset size',
-      modelType: 'random_forest',
+}
+      id: &apos;random_forest_learning&apos;,
+      name: &apos;Random Forest Data Scaling&apos;,
+      description: &apos;Study random forest performance scaling with dataset size&apos;,
+      modelType: &apos;random_forest&apos;,
       sampleSizeRange: [50, 3000],
       stepSize: 50,
       convergenceThreshold: 0.005,
       expectedConvergencePoint: 1500,
-      dataEfficiency: 'high',
-      convergenceRate: 'fast'
+      dataEfficiency: &apos;high&apos;,
+      convergenceRate: &apos;fast&apos;
     },
     {
-      id: 'linear_regression_learning',
-      name: 'Linear Model Efficiency',
-      description: 'Examine linear regression data efficiency and convergence patterns',
-      modelType: 'linear_regression',
+}
+      id: &apos;linear_regression_learning&apos;,
+      name: &apos;Linear Model Efficiency&apos;,
+      description: &apos;Examine linear regression data efficiency and convergence patterns&apos;,
+      modelType: &apos;linear_regression&apos;,
       sampleSizeRange: [50, 2000],
       stepSize: 50,
       convergenceThreshold: 0.02,
       expectedConvergencePoint: 800,
-      dataEfficiency: 'high',
-      convergenceRate: 'fast'
+      dataEfficiency: &apos;high&apos;,
+      convergenceRate: &apos;fast&apos;
     },
     {
-      id: 'gradient_boosting_learning',
-      name: 'Gradient Boosting Scaling',
-      description: 'Analyze gradient boosting performance with increasing data volumes',
-      modelType: 'gradient_boosting',
+}
+      id: &apos;gradient_boosting_learning&apos;,
+      name: &apos;Gradient Boosting Scaling&apos;,
+      description: &apos;Analyze gradient boosting performance with increasing data volumes&apos;,
+      modelType: &apos;gradient_boosting&apos;,
       sampleSizeRange: [100, 4000],
       stepSize: 100,
       convergenceThreshold: 0.008,
       expectedConvergencePoint: 2000,
-      dataEfficiency: 'medium',
-      convergenceRate: 'medium'
+      dataEfficiency: &apos;medium&apos;,
+      convergenceRate: &apos;medium&apos;
     },
     {
-      id: 'ensemble_learning',
-      name: 'Ensemble Learning Curves',
-      description: 'Study ensemble method convergence and data requirements',
-      modelType: 'ensemble',
+}
+      id: &apos;ensemble_learning&apos;,
+      name: &apos;Ensemble Learning Curves&apos;,
+      description: &apos;Study ensemble method convergence and data requirements&apos;,
+      modelType: &apos;ensemble&apos;,
       sampleSizeRange: [200, 6000],
       stepSize: 200,
       convergenceThreshold: 0.005,
       expectedConvergencePoint: 3500,
-      dataEfficiency: 'low',
-      convergenceRate: 'slow'
+      dataEfficiency: &apos;low&apos;,
+      convergenceRate: &apos;slow&apos;
 
   ];
 
   // Data size configurations
   const dataSizeConfigs: DataSizeConfig[] = [
     {
-      id: 'logarithmic',
-      name: 'Logarithmic Scaling',
-      description: 'Sample sizes increase logarithmically for efficient exploration',
+}
+      id: &apos;logarithmic&apos;,
+      name: &apos;Logarithmic Scaling&apos;,
+      description: &apos;Sample sizes increase logarithmically for efficient exploration&apos;,
       minSamples: 50,
       maxSamples: 5000,
-      stepStrategy: 'logarithmic',
+      stepStrategy: &apos;logarithmic&apos;,
       validationRatio: 0.2,
       crossValidationFolds: 5,
       randomState: 42
     },
     {
-      id: 'linear',
-      name: 'Linear Scaling',
-      description: 'Sample sizes increase linearly for detailed analysis',
+}
+      id: &apos;linear&apos;,
+      name: &apos;Linear Scaling&apos;,
+      description: &apos;Sample sizes increase linearly for detailed analysis&apos;,
       minSamples: 100,
       maxSamples: 3000,
-      stepStrategy: 'linear',
+      stepStrategy: &apos;linear&apos;,
       validationRatio: 0.25,
       crossValidationFolds: 5,
       randomState: 42
     },
     {
-      id: 'exponential',
-      name: 'Exponential Scaling',
-      description: 'Sample sizes increase exponentially for rapid exploration',
+}
+      id: &apos;exponential&apos;,
+      name: &apos;Exponential Scaling&apos;,
+      description: &apos;Sample sizes increase exponentially for rapid exploration&apos;,
       minSamples: 100,
       maxSamples: 8000,
-      stepStrategy: 'exponential',
+      stepStrategy: &apos;exponential&apos;,
       validationRatio: 0.2,
       crossValidationFolds: 3,
       randomState: 42
@@ -1397,113 +1502,135 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Helper functions for cross-validation analysis
   const getCVComplexityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'k_fold': '⭐⭐',
-      'stratified_k_fold': '⭐⭐⭐',
-      'time_series_split': '⭐⭐⭐⭐',
-      'group_k_fold': '⭐⭐⭐',
-      'nested_cv': '⭐⭐⭐⭐⭐'
+}
+      &apos;k_fold&apos;: &apos;⭐⭐&apos;,
+      &apos;stratified_k_fold&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;time_series_split&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;group_k_fold&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;nested_cv&apos;: &apos;⭐⭐⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCVReliabilityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'nested_cv': '⭐⭐⭐⭐⭐',
-      'stratified_k_fold': '⭐⭐⭐⭐',
-      'group_k_fold': '⭐⭐⭐⭐',
-      'time_series_split': '⭐⭐⭐⭐',
-      'k_fold': '⭐⭐⭐'
+}
+      &apos;nested_cv&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_k_fold&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;group_k_fold&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;time_series_split&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;k_fold&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCVEfficiencyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'k_fold': '⭐⭐⭐⭐⭐',
-      'stratified_k_fold': '⭐⭐⭐⭐',
-      'group_k_fold': '⭐⭐⭐⭐',
-      'time_series_split': '⭐⭐⭐',
-      'nested_cv': '⭐⭐'
+}
+      &apos;k_fold&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_k_fold&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;group_k_fold&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;time_series_split&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;nested_cv&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCVFantasyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'time_series_split': '⭐⭐⭐⭐⭐',
-      'group_k_fold': '⭐⭐⭐⭐⭐',
-      'stratified_k_fold': '⭐⭐⭐⭐',
-      'nested_cv': '⭐⭐⭐⭐',
-      'k_fold': '⭐⭐⭐'
+}
+      &apos;time_series_split&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;group_k_fold&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_k_fold&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;nested_cv&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;k_fold&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   // Helper functions for holdout validation analysis
   const getHoldoutSimplicityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'simple_holdout': '⭐⭐⭐⭐⭐',
-      'stratified_holdout': '⭐⭐⭐⭐',
-      'grouped_holdout': '⭐⭐⭐',
-      'temporal_holdout': '⭐⭐'
+}
+      &apos;simple_holdout&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_holdout&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;grouped_holdout&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;temporal_holdout&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getHoldoutReliabilityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'temporal_holdout': '⭐⭐⭐⭐⭐',
-      'grouped_holdout': '⭐⭐⭐⭐⭐',
-      'stratified_holdout': '⭐⭐⭐⭐',
-      'simple_holdout': '⭐⭐⭐'
+}
+      &apos;temporal_holdout&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;grouped_holdout&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_holdout&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;simple_holdout&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getHoldoutSpeedScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'simple_holdout': '⭐⭐⭐⭐⭐',
-      'stratified_holdout': '⭐⭐⭐⭐',
-      'grouped_holdout': '⭐⭐⭐⭐',
-      'temporal_holdout': '⭐⭐⭐⭐'
+}
+      &apos;simple_holdout&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_holdout&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;grouped_holdout&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;temporal_holdout&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getHoldoutFantasyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'temporal_holdout': '⭐⭐⭐⭐⭐',
-      'grouped_holdout': '⭐⭐⭐⭐',
-      'stratified_holdout': '⭐⭐⭐',
-      'simple_holdout': '⭐⭐'
+}
+      &apos;temporal_holdout&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;grouped_holdout&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;stratified_holdout&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;simple_holdout&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getHoldoutDataLeakageRisk = (methodId: string): string => {
+}
     const risks: Record<string, string> = {
-      'simple_holdout': 'Low',
-      'stratified_holdout': 'Low', 
-      'grouped_holdout': 'Very Low',
-      'temporal_holdout': 'Minimal'
+}
+      &apos;simple_holdout&apos;: &apos;Low&apos;,
+      &apos;stratified_holdout&apos;: &apos;Low&apos;, 
+      &apos;grouped_holdout&apos;: &apos;Very Low&apos;,
+      &apos;temporal_holdout&apos;: &apos;Minimal&apos;
     };
-    return risks[methodId] || 'Unknown';
+    return risks[methodId] || &apos;Unknown&apos;;
   };
 
   const getHoldoutBestUseCase = (methodId: string): string => {
+}
     const useCases: Record<string, string> = {
-      'simple_holdout': 'Quick model evaluation with balanced datasets',
-      'stratified_holdout': 'Maintaining class distributions in classification tasks',
-      'grouped_holdout': 'Player-based validation to prevent data leakage',
-      'temporal_holdout': 'Time-aware validation for seasonal patterns'
+}
+      &apos;simple_holdout&apos;: &apos;Quick model evaluation with balanced datasets&apos;,
+      &apos;stratified_holdout&apos;: &apos;Maintaining class distributions in classification tasks&apos;,
+      &apos;grouped_holdout&apos;: &apos;Player-based validation to prevent data leakage&apos;,
+      &apos;temporal_holdout&apos;: &apos;Time-aware validation for seasonal patterns&apos;
     };
-    return useCases[methodId] || 'General validation';
+    return useCases[methodId] || &apos;General validation&apos;;
   };
 
   // Simulate holdout validation experiment
   const runHoldoutExperiment = async () => {
+}
     try {
+}
 
     setHoldoutExperimentRunning(true);
     setHoldoutProgress(0);
@@ -1512,16 +1639,19 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedMethod) return;
 
     // Simulate experiment progress
-    const steps = ['Data Loading', 'Split Generation', 'Model Training', 'Evaluation', 'Analysis'];
+    const steps = [&apos;Data Loading&apos;, &apos;Split Generation&apos;, &apos;Model Training&apos;, &apos;Evaluation&apos;, &apos;Analysis&apos;];
     
     for (let step = 0; step < steps.length; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 600));
       setHoldoutProgress((step + 1) / steps.length * 100);
     
     } catch (error) {
-      console.error('Error in runHoldoutExperiment:', error);
+}
+      console.error(&apos;Error in runHoldoutExperiment:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }// Generate realistic results
     const totalSize = 10000;
@@ -1535,6 +1665,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const validationScore = validationSize ? baseScore + Math.random() * 0.07 : undefined;
 
     const result: HoldoutResult = {
+}
       method: selectedMethod.name,
       trainSize,
       testSize,
@@ -1545,6 +1676,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       overfit: trainScore - testScore,
       generalizationGap: Math.abs(trainScore - testScore),
       metrics: {
+}
         mae: 2.1 + Math.random() * 0.5,
         rmse: 2.8 + Math.random() * 0.7,
         r2: 0.78 + Math.random() * 0.15,
@@ -1560,367 +1692,431 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Helper functions for time series validation analysis
   const getTimeSeriesComplexityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'walk_forward': '⭐⭐⭐',
-      'expanding_window': '⭐⭐',
-      'rolling_window': '⭐⭐⭐',
-      'blocked_time_series': '⭐⭐⭐⭐'
+}
+      &apos;walk_forward&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;expanding_window&apos;: &apos;⭐⭐&apos;,
+      &apos;rolling_window&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;blocked_time_series&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getTimeSeriesReliabilityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'walk_forward': '⭐⭐⭐⭐⭐',
-      'blocked_time_series': '⭐⭐⭐⭐⭐',
-      'expanding_window': '⭐⭐⭐⭐',
-      'rolling_window': '⭐⭐⭐'
+}
+      &apos;walk_forward&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;blocked_time_series&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;expanding_window&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;rolling_window&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getTimeSeriesEfficiencyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'rolling_window': '⭐⭐⭐⭐⭐',
-      'expanding_window': '⭐⭐⭐⭐',
-      'walk_forward': '⭐⭐⭐',
-      'blocked_time_series': '⭐⭐'
+}
+      &apos;rolling_window&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;expanding_window&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;walk_forward&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;blocked_time_series&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getTimeSeriesFantasyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'walk_forward': '⭐⭐⭐⭐⭐',
-      'rolling_window': '⭐⭐⭐⭐',
-      'blocked_time_series': '⭐⭐⭐⭐',
-      'expanding_window': '⭐⭐⭐'
+}
+      &apos;walk_forward&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;rolling_window&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;blocked_time_series&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;expanding_window&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getTimeSeriesDataUsage = (methodId: string): string => {
+}
     const usage: Record<string, string> = {
-      'expanding_window': 'Maximum - uses all historical data',
-      'walk_forward': 'Progressive - incremental data usage',
-      'rolling_window': 'Fixed - consistent window size',
-      'blocked_time_series': 'Segmented - discrete time blocks'
+}
+      &apos;expanding_window&apos;: &apos;Maximum - uses all historical data&apos;,
+      &apos;walk_forward&apos;: &apos;Progressive - incremental data usage&apos;,
+      &apos;rolling_window&apos;: &apos;Fixed - consistent window size&apos;,
+      &apos;blocked_time_series&apos;: &apos;Segmented - discrete time blocks&apos;
     };
-    return usage[methodId] || 'Variable usage';
+    return usage[methodId] || &apos;Variable usage&apos;;
   };
 
   const getTimeSeriesBestUseCase = (methodId: string): string => {
+}
     const useCases: Record<string, string> = {
-      'walk_forward': 'Live prediction simulation and season progression',
-      'expanding_window': 'Long-term trend analysis and career modeling',
-      'rolling_window': 'Recent form analysis and injury recovery patterns',
-      'blocked_time_series': 'Independent season validation and draft analysis'
+}
+      &apos;walk_forward&apos;: &apos;Live prediction simulation and season progression&apos;,
+      &apos;expanding_window&apos;: &apos;Long-term trend analysis and career modeling&apos;,
+      &apos;rolling_window&apos;: &apos;Recent form analysis and injury recovery patterns&apos;,
+      &apos;blocked_time_series&apos;: &apos;Independent season validation and draft analysis&apos;
     };
-    return useCases[methodId] || 'General time series validation';
+    return useCases[methodId] || &apos;General time series validation&apos;;
   };
 
   // Helper functions for bootstrap resampling analysis
   const getBootstrapComplexityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'basic_bootstrap': '⭐⭐',
-      'stratified_bootstrap': '⭐⭐⭐',
-      'block_bootstrap': '⭐⭐⭐⭐',
-      'parametric_bootstrap': '⭐⭐⭐⭐⭐'
+}
+      &apos;basic_bootstrap&apos;: &apos;⭐⭐&apos;,
+      &apos;stratified_bootstrap&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;block_bootstrap&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;parametric_bootstrap&apos;: &apos;⭐⭐⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getBootstrapReliabilityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'parametric_bootstrap': '⭐⭐⭐⭐⭐',
-      'block_bootstrap': '⭐⭐⭐⭐',
-      'stratified_bootstrap': '⭐⭐⭐⭐',
-      'basic_bootstrap': '⭐⭐⭐'
+}
+      &apos;parametric_bootstrap&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;block_bootstrap&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;stratified_bootstrap&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;basic_bootstrap&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getBootstrapEfficiencyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'basic_bootstrap': '⭐⭐⭐⭐⭐',
-      'stratified_bootstrap': '⭐⭐⭐⭐',
-      'block_bootstrap': '⭐⭐⭐',
-      'parametric_bootstrap': '⭐⭐'
+}
+      &apos;basic_bootstrap&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;stratified_bootstrap&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;block_bootstrap&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;parametric_bootstrap&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getBootstrapFantasyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'stratified_bootstrap': '⭐⭐⭐⭐⭐',
-      'block_bootstrap': '⭐⭐⭐⭐',
-      'parametric_bootstrap': '⭐⭐⭐',
-      'basic_bootstrap': '⭐⭐⭐'
+}
+      &apos;stratified_bootstrap&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;block_bootstrap&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;parametric_bootstrap&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;basic_bootstrap&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getBootstrapDataUsage = (methodId: string): string => {
+}
     const usage: Record<string, string> = {
-      'basic_bootstrap': '100% with replacement',
-      'stratified_bootstrap': '100% stratified sampling',
-      'block_bootstrap': '~90% block sampling',
-      'parametric_bootstrap': 'Model-based generation'
+}
+      &apos;basic_bootstrap&apos;: &apos;100% with replacement&apos;,
+      &apos;stratified_bootstrap&apos;: &apos;100% stratified sampling&apos;,
+      &apos;block_bootstrap&apos;: &apos;~90% block sampling&apos;,
+      &apos;parametric_bootstrap&apos;: &apos;Model-based generation&apos;
     };
-    return usage[methodId] || 'Variable usage';
+    return usage[methodId] || &apos;Variable usage&apos;;
   };
 
   const getBootstrapBestUseCase = (methodId: string): string => {
+}
     const useCases: Record<string, string> = {
-      'basic_bootstrap': 'General uncertainty quantification and confidence intervals',
-      'stratified_bootstrap': 'Position-balanced sampling and imbalanced datasets',
-      'block_bootstrap': 'Time-dependent data and seasonal fantasy patterns',
-      'parametric_bootstrap': 'Model-based uncertainty and smooth predictions'
+}
+      &apos;basic_bootstrap&apos;: &apos;General uncertainty quantification and confidence intervals&apos;,
+      &apos;stratified_bootstrap&apos;: &apos;Position-balanced sampling and imbalanced datasets&apos;,
+      &apos;block_bootstrap&apos;: &apos;Time-dependent data and seasonal fantasy patterns&apos;,
+      &apos;parametric_bootstrap&apos;: &apos;Model-based uncertainty and smooth predictions&apos;
     };
-    return useCases[methodId] || 'General bootstrap resampling';
+    return useCases[methodId] || &apos;General bootstrap resampling&apos;;
   };
 
   // Helper functions for calibration analysis
   const getCalibrationComplexityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'temperature_scaling': '⭐',
-      'platt_scaling': '⭐⭐',
-      'isotonic_regression': '⭐⭐⭐',
-      'bayesian_calibration': '⭐⭐⭐⭐⭐'
+}
+      &apos;temperature_scaling&apos;: &apos;⭐&apos;,
+      &apos;platt_scaling&apos;: &apos;⭐⭐&apos;,
+      &apos;isotonic_regression&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;bayesian_calibration&apos;: &apos;⭐⭐⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCalibrationReliabilityScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'bayesian_calibration': '⭐⭐⭐⭐⭐',
-      'isotonic_regression': '⭐⭐⭐⭐',
-      'platt_scaling': '⭐⭐⭐',
-      'temperature_scaling': '⭐⭐⭐'
+}
+      &apos;bayesian_calibration&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;isotonic_regression&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;platt_scaling&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;temperature_scaling&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCalibrationEfficiencyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'temperature_scaling': '⭐⭐⭐⭐⭐',
-      'platt_scaling': '⭐⭐⭐⭐',
-      'isotonic_regression': '⭐⭐⭐',
-      'bayesian_calibration': '⭐⭐'
+}
+      &apos;temperature_scaling&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;platt_scaling&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;isotonic_regression&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;bayesian_calibration&apos;: &apos;⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCalibrationFantasyScore = (methodId: string): string => {
+}
     const scores: Record<string, string> = {
-      'isotonic_regression': '⭐⭐⭐⭐⭐',
-      'bayesian_calibration': '⭐⭐⭐⭐',
-      'platt_scaling': '⭐⭐⭐⭐',
-      'temperature_scaling': '⭐⭐⭐'
+}
+      &apos;isotonic_regression&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;bayesian_calibration&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;platt_scaling&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;temperature_scaling&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[methodId] || '⭐';
+    return scores[methodId] || &apos;⭐&apos;;
   };
 
   const getCalibrationDataRequirement = (methodId: string): string => {
+}
     const requirements: Record<string, string> = {
-      'temperature_scaling': 'Minimal - single parameter',
-      'platt_scaling': 'Small - hold-out validation set',
-      'isotonic_regression': 'Medium - sufficient calibration data',
-      'bayesian_calibration': 'Variable - depends on priors'
+}
+      &apos;temperature_scaling&apos;: &apos;Minimal - single parameter&apos;,
+      &apos;platt_scaling&apos;: &apos;Small - hold-out validation set&apos;,
+      &apos;isotonic_regression&apos;: &apos;Medium - sufficient calibration data&apos;,
+      &apos;bayesian_calibration&apos;: &apos;Variable - depends on priors&apos;
     };
-    return requirements[methodId] || 'Variable requirement';
+    return requirements[methodId] || &apos;Variable requirement&apos;;
   };
 
   const getCalibrationBestUseCase = (methodId: string): string => {
+}
     const useCases: Record<string, string> = {
-      'temperature_scaling': 'Neural networks with preserved accuracy requirements',
-      'platt_scaling': 'Binary classification with parametric assumptions',
-      'isotonic_regression': 'Ranking preservation and non-linear relationships',
-      'bayesian_calibration': 'Limited data with domain expertise and uncertainty needs'
+}
+      &apos;temperature_scaling&apos;: &apos;Neural networks with preserved accuracy requirements&apos;,
+      &apos;platt_scaling&apos;: &apos;Binary classification with parametric assumptions&apos;,
+      &apos;isotonic_regression&apos;: &apos;Ranking preservation and non-linear relationships&apos;,
+      &apos;bayesian_calibration&apos;: &apos;Limited data with domain expertise and uncertainty needs&apos;
     };
-    return useCases[methodId] || 'General probability calibration';
+    return useCases[methodId] || &apos;General probability calibration&apos;;
   };
 
   const getCalibrationPreservesRanking = (methodId: string): boolean => {
+}
     const preserves: Record<string, boolean> = {
-      'temperature_scaling': true,
-      'platt_scaling': true,
-      'isotonic_regression': true,
-      'bayesian_calibration': false
+}
+      &apos;temperature_scaling&apos;: true,
+      &apos;platt_scaling&apos;: true,
+      &apos;isotonic_regression&apos;: true,
+      &apos;bayesian_calibration&apos;: false
     };
     return preserves[methodId] || false;
   };
 
   // Helper functions for performance metrics analysis
   const getMetricImportanceScore = (metricId: string): string => {
+}
     const scores: Record<string, string> = {
-      'accuracy': '⭐⭐⭐⭐',
-      'precision': '⭐⭐⭐⭐',
-      'recall': '⭐⭐⭐⭐',
-      'f1_score': '⭐⭐⭐⭐⭐',
-      'auc_roc': '⭐⭐⭐⭐⭐',
-      'mse': '⭐⭐⭐⭐',
-      'mae': '⭐⭐⭐⭐',
-      'r_squared': '⭐⭐⭐⭐⭐',
-      'mape': '⭐⭐⭐',
-      'points_accuracy': '⭐⭐⭐⭐⭐',
-      'ranking_accuracy': '⭐⭐⭐⭐⭐',
-      'bust_detection': '⭐⭐⭐⭐',
-      'sleeper_identification': '⭐⭐⭐⭐'
+}
+      &apos;accuracy&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;precision&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;recall&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;f1_score&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;auc_roc&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;mse&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;mae&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;r_squared&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;mape&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;points_accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;ranking_accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;bust_detection&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;sleeper_identification&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[metricId] || '⭐';
+    return scores[metricId] || &apos;⭐&apos;;
   };
 
   const getMetricInterpretabilityScore = (metricId: string): string => {
+}
     const scores: Record<string, string> = {
-      'accuracy': '⭐⭐⭐⭐⭐',
-      'precision': '⭐⭐⭐⭐',
-      'recall': '⭐⭐⭐⭐',
-      'f1_score': '⭐⭐⭐',
-      'auc_roc': '⭐⭐',
-      'mse': '⭐⭐⭐',
-      'mae': '⭐⭐⭐⭐⭐',
-      'r_squared': '⭐⭐⭐⭐',
-      'mape': '⭐⭐⭐⭐⭐',
-      'points_accuracy': '⭐⭐⭐⭐⭐',
-      'ranking_accuracy': '⭐⭐⭐⭐',
-      'bust_detection': '⭐⭐⭐⭐',
-      'sleeper_identification': '⭐⭐⭐⭐'
+}
+      &apos;accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;precision&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;recall&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;f1_score&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;auc_roc&apos;: &apos;⭐⭐&apos;,
+      &apos;mse&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;mae&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;r_squared&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;mape&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;points_accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;ranking_accuracy&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;bust_detection&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;sleeper_identification&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[metricId] || '⭐';
+    return scores[metricId] || &apos;⭐&apos;;
   };
 
   const getMetricRobustnessScore = (metricId: string): string => {
+}
     const scores: Record<string, string> = {
-      'accuracy': '⭐⭐',
-      'precision': '⭐⭐⭐',
-      'recall': '⭐⭐⭐',
-      'f1_score': '⭐⭐⭐⭐',
-      'auc_roc': '⭐⭐⭐⭐⭐',
-      'mse': '⭐⭐',
-      'mae': '⭐⭐⭐⭐⭐',
-      'r_squared': '⭐⭐⭐',
-      'mape': '⭐⭐',
-      'points_accuracy': '⭐⭐⭐',
-      'ranking_accuracy': '⭐⭐⭐⭐',
-      'bust_detection': '⭐⭐⭐',
-      'sleeper_identification': '⭐⭐'
+}
+      &apos;accuracy&apos;: &apos;⭐⭐&apos;,
+      &apos;precision&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;recall&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;f1_score&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;auc_roc&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;mse&apos;: &apos;⭐⭐&apos;,
+      &apos;mae&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;r_squared&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;mape&apos;: &apos;⭐⭐&apos;,
+      &apos;points_accuracy&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;ranking_accuracy&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;bust_detection&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;sleeper_identification&apos;: &apos;⭐⭐&apos;
     };
-    return scores[metricId] || '⭐';
+    return scores[metricId] || &apos;⭐&apos;;
   };
 
   const getMetricFantasyRelevanceScore = (metricId: string): string => {
+}
     const scores: Record<string, string> = {
-      'accuracy': '⭐⭐⭐',
-      'precision': '⭐⭐⭐',
-      'recall': '⭐⭐⭐',
-      'f1_score': '⭐⭐⭐',
-      'auc_roc': '⭐⭐⭐',
-      'mse': '⭐⭐⭐⭐',
-      'mae': '⭐⭐⭐⭐',
-      'r_squared': '⭐⭐⭐⭐',
-      'mape': '⭐⭐⭐⭐',
-      'points_accuracy': '⭐⭐⭐⭐⭐',
-      'ranking_accuracy': '⭐⭐⭐⭐⭐',
-      'bust_detection': '⭐⭐⭐⭐⭐',
-      'sleeper_identification': '⭐⭐⭐⭐⭐'
+}
+      &apos;accuracy&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;precision&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;recall&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;f1_score&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;auc_roc&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;mse&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;mae&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;r_squared&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;mape&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;points_accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;ranking_accuracy&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;bust_detection&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;sleeper_identification&apos;: &apos;⭐⭐⭐⭐⭐&apos;
     };
-    return scores[metricId] || '⭐';
+    return scores[metricId] || &apos;⭐&apos;;
   };
 
   // Helper functions for bias-variance analysis
   const getBiasComplexityScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'polynomial_complexity': '⭐⭐⭐⭐',
-      'neural_depth': '⭐⭐⭐⭐⭐',
-      'tree_depth': '⭐⭐⭐',
-      'ensemble_size': '⭐⭐',
-      'regularization_strength': '⭐⭐⭐⭐'
+}
+      &apos;polynomial_complexity&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;neural_depth&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;tree_depth&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;ensemble_size&apos;: &apos;⭐⭐&apos;,
+      &apos;regularization_strength&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getVarianceComplexityScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'polynomial_complexity': '⭐⭐⭐',
-      'neural_depth': '⭐⭐⭐⭐',
-      'tree_depth': '⭐⭐⭐⭐⭐',
-      'ensemble_size': '⭐⭐⭐⭐⭐',
-      'regularization_strength': '⭐⭐'
+}
+      &apos;polynomial_complexity&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;neural_depth&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;tree_depth&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;ensemble_size&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;regularization_strength&apos;: &apos;⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getInterpretabilityScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'polynomial_complexity': '⭐⭐⭐⭐',
-      'neural_depth': '⭐⭐',
-      'tree_depth': '⭐⭐⭐⭐⭐',
-      'ensemble_size': '⭐⭐⭐',
-      'regularization_strength': '⭐⭐⭐'
+}
+      &apos;polynomial_complexity&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;neural_depth&apos;: &apos;⭐⭐&apos;,
+      &apos;tree_depth&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;ensemble_size&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;regularization_strength&apos;: &apos;⭐⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getComputationalComplexityScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'polynomial_complexity': '⭐⭐⭐⭐⭐',
-      'neural_depth': '⭐⭐',
-      'tree_depth': '⭐⭐⭐⭐',
-      'ensemble_size': '⭐⭐⭐',
-      'regularization_strength': '⭐⭐⭐⭐'
+}
+      &apos;polynomial_complexity&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;neural_depth&apos;: &apos;⭐⭐&apos;,
+      &apos;tree_depth&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;ensemble_size&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;regularization_strength&apos;: &apos;⭐⭐⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   // Helper functions for learning curve analysis
   const getDataEfficiencyScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
+}
+      &apos;neural_network_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;random_forest_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;linear_regression_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gradient_boosting_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;ensemble_learning&apos;: &apos;⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getConvergenceSpeedScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
+}
+      &apos;neural_network_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;random_forest_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;linear_regression_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gradient_boosting_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;ensemble_learning&apos;: &apos;⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getScalabilityScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐⭐⭐',
-      'random_forest_learning': '⭐⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
+}
+      &apos;neural_network_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;random_forest_learning&apos;: &apos;⭐⭐⭐⭐&apos;,
+      &apos;linear_regression_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gradient_boosting_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;ensemble_learning&apos;: &apos;⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   const getMemoryEfficiencyScore = (experimentId: string): string => {
+}
     const scores: Record<string, string> = {
-      'neural_network_learning': '⭐⭐',
-      'random_forest_learning': '⭐⭐⭐',
-      'linear_regression_learning': '⭐⭐⭐⭐⭐',
-      'gradient_boosting_learning': '⭐⭐⭐',
-      'ensemble_learning': '⭐⭐'
+}
+      &apos;neural_network_learning&apos;: &apos;⭐⭐&apos;,
+      &apos;random_forest_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;linear_regression_learning&apos;: &apos;⭐⭐⭐⭐⭐&apos;,
+      &apos;gradient_boosting_learning&apos;: &apos;⭐⭐⭐&apos;,
+      &apos;ensemble_learning&apos;: &apos;⭐⭐&apos;
     };
-    return scores[experimentId] || '⭐';
+    return scores[experimentId] || &apos;⭐&apos;;
   };
 
   // Simulate time series validation experiment
   const runTimeSeriesExperiment = async () => {
+}
     try {
+}
 
     setTimeSeriesExperimentRunning(true);
     setTimeSeriesProgress(0);
@@ -1929,16 +2125,19 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedMethod) return;
 
     // Simulate experiment progress
-    const steps = ['Data Preparation', 'Time Split Generation', 'Model Training', 'Window Validation', 'Results Aggregation'];
+    const steps = [&apos;Data Preparation&apos;, &apos;Time Split Generation&apos;, &apos;Model Training&apos;, &apos;Window Validation&apos;, &apos;Results Aggregation&apos;];
     
     for (let step = 0; step < steps.length; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 800));
       setTimeSeriesProgress((step + 1) / steps.length * 100);
     
     } catch (error) {
-      console.error('Error in runTimeSeriesExperiment:', error);
+}
+      console.error(&apos;Error in runTimeSeriesExperiment:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }// Generate realistic time series validation results
     const totalWeeks = 17; // NFL season
@@ -1951,26 +2150,28 @@ const OracleCalibrationValidationSection: React.FC = () => {
     let splitIndex = 0;
 
     while (currentStart + minTrainSize < totalWeeks) {
+}
       const trainStart = currentStart;
       let trainEnd, testStart, testEnd;
 
       switch (selectedMethod.id) {
-        case 'walk_forward':
+}
+        case &apos;walk_forward&apos;:
           trainEnd = Math.min(trainStart + minTrainSize + splitIndex, totalWeeks - 1);
           testStart = trainEnd;
           testEnd = Math.min(testStart + 1, totalWeeks);
           break;
-        case 'expanding_window':
+        case &apos;expanding_window&apos;:
           trainEnd = Math.min(trainStart + minTrainSize + splitIndex * 2, totalWeeks - 1);
           testStart = trainEnd;
           testEnd = Math.min(testStart + 1, totalWeeks);
           break;
-        case 'rolling_window':
+        case &apos;rolling_window&apos;:
           trainEnd = Math.min(trainStart + windowSize, totalWeeks - 1);
           testStart = trainEnd;
           testEnd = Math.min(testStart + 1, totalWeeks);
           break;
-        case 'blocked_time_series':
+        case &apos;blocked_time_series&apos;:
           trainEnd = Math.min(trainStart + windowSize, totalWeeks - 2);
           testStart = trainEnd + 1; // gap
           testEnd = Math.min(testStart + windowSize, totalWeeks);
@@ -1981,10 +2182,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
           testEnd = testStart + 1;
 
       if (testEnd <= totalWeeks) {
+}
         const trainScore = 0.85 + Math.random() * 0.1 - splitIndex * 0.005; // Slight degradation over time
         const testScore = 0.82 + Math.random() * 0.08 - splitIndex * 0.008;
 
         splits.push({
+}
           splitIndex,
           trainPeriod: `Week ${trainStart + 1}-${trainEnd}`,
           testPeriod: `Week ${testStart + 1}-${testEnd}`,
@@ -2004,9 +2207,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const scoreStability = Math.max(0, 1 - scoreVariance * 10);
 
     const result: TimeSeriesResult = {
+}
       method: selectedMethod.name,
       totalSplits: splits.length,
-      trainSize: Math.round(splits.reduce((sum, s) => sum + parseInt(s.trainPeriod.split('-')[1]) - parseInt(s.trainPeriod.split('-')[0].split(' ')[1]) + 1, 0) / splits.length),
+      trainSize: Math.round(splits.reduce((sum, s) => sum + parseInt(s.trainPeriod.split(&apos;-&apos;)[1]) - parseInt(s.trainPeriod.split(&apos;-&apos;)[0].split(&apos; &apos;)[1]) + 1, 0) / splits.length),
       testSize: 1, // Usually 1 week for fantasy
       windowSize: selectedMethod.windowSize,
       stepSize: selectedMethod.stepSize,
@@ -2016,6 +2220,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       temporalConsistency: Math.max(0.6, scoreStability + Math.random() * 0.2),
       splits,
       metrics: {
+}
         mae: 2.3 + Math.random() * 0.6,
         rmse: 3.1 + Math.random() * 0.8,
         r2: 0.74 + Math.random() * 0.18,
@@ -2033,7 +2238,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate bootstrap resampling experiment
   const runBootstrapExperiment = async () => {
+}
     try {
+}
 
     setBootstrapExperimentRunning(true);
     setBootstrapProgress(0);
@@ -2042,17 +2249,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedMethod) return;
 
     // Simulate experiment progress
-    const steps = ['Data Preparation', 'Sample Generation', 'Model Training', 'Bootstrap Sampling', 'Confidence Estimation'];
+    const steps = [&apos;Data Preparation&apos;, &apos;Sample Generation&apos;, &apos;Model Training&apos;, &apos;Bootstrap Sampling&apos;, &apos;Confidence Estimation&apos;];
     const totalSteps = steps.length;
 
     for (let step = 0; step < totalSteps; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       setBootstrapProgress(((step + 1) / totalSteps) * 100);
     
     } catch (error) {
-      console.error('Error in runBootstrapExperiment:', error);
+}
+      console.error(&apos;Error in runBootstrapExperiment:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }// Generate realistic bootstrap results with fantasy football context
     const nBootstraps = selectedMethod.nBootstraps;
@@ -2060,15 +2270,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
     
     // Generate bootstrap scores with method-specific characteristics
     const bootstrapScores = Array.from({ length: nBootstraps }, (_, i) => {
+}
       let score = baseScore;
       
-      if (selectedMethod.type === 'basic') {
+      if (selectedMethod.type === &apos;basic&apos;) {
+}
         score += (Math.random() - 0.5) * 0.1;
-      } else if (selectedMethod.type === 'stratified') {
+      } else if (selectedMethod.type === &apos;stratified&apos;) {
+}
         score += (Math.random() - 0.5) * 0.08 + 0.02; // More stable
-      } else if (selectedMethod.type === 'block') {
+      } else if (selectedMethod.type === &apos;block&apos;) {
+}
         score += (Math.random() - 0.5) * 0.12 - 0.01; // More variable
-      } else if (selectedMethod.type === 'parametric') {
+      } else if (selectedMethod.type === &apos;parametric&apos;) {
+}
         score += (Math.random() - 0.5) * 0.06 + 0.04; // Smoothest
 
       return Math.max(0.1, Math.min(0.95, score));
@@ -2094,6 +2309,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const kurtosis = bootstrapScores.reduce((sum, score) => sum + Math.pow((score - avgScore) / std, 4), 0) / nBootstraps - 3;
 
     const result: BootstrapResult = {
+}
       method: selectedMethod.name,
       nBootstraps: nBootstraps,
       sampleSize: 1000,
@@ -2102,11 +2318,13 @@ const OracleCalibrationValidationSection: React.FC = () => {
       avgScore: avgScore,
       bootstrapScores: bootstrapScores,
       confidenceInterval: {
+}
         lower: sortedScores[lowerIndex],
         upper: sortedScores[upperIndex],
         level: selectedMethod.confidenceLevel
       },
       statistics: {
+}
         mean: avgScore,
         std: std,
         variance: variance,
@@ -2117,6 +2335,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         q75: q75
       },
       metrics: {
+}
         mae: 0.045 + Math.random() * 0.02,
         rmse: 0.067 + Math.random() * 0.03,
         r2: avgScore,
@@ -2127,6 +2346,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         robustnessMetric: 1 / (1 + std * 2)
       },
       convergence: {
+}
         converged: std < 0.05,
         requiredSamples: Math.min(nBootstraps, Math.ceil(1000 / (std + 0.01))),
         stabilityThreshold: 0.05,
@@ -2140,7 +2360,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate calibration experiment
   const runCalibrationExperiment = async () => {
+}
     try {
+}
     setCalibrationExperimentRunning(true);
     setCalibrationProgress(0);
 
@@ -2148,21 +2370,24 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedMethod) return;
 
     // Simulate experiment progress
-    const steps = ['Data Preparation', 'Hold-out Split', 'Model Training', 'Calibration Fitting', 'Reliability Assessment'];
+    const steps = [&apos;Data Preparation&apos;, &apos;Hold-out Split&apos;, &apos;Model Training&apos;, &apos;Calibration Fitting&apos;, &apos;Reliability Assessment&apos;];
     const totalSteps = steps.length;
 
     for (let step = 0; step < totalSteps; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
       setCalibrationProgress(((step + 1) / totalSteps) * 100);
     
     `${(binStart * 100).toFixed(0)}-${(binEnd * 100).toFixed(0)}%`,
         uncalibrated: {
+}
           count: uncalInBin.length,
           meanPrediction: uncalMeanPred,
           accuracy: uncalAccuracy,
           calibrationError: Math.abs(uncalMeanPred - uncalAccuracy)
         },
         calibrated: {
+}
           count: calInBin.length,
           meanPrediction: calMeanPred,
           accuracy: calAccuracy,
@@ -2199,16 +2424,18 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const binCounts = reliabilityDiagram.map((bin: any) => bin.calibrated.count);
 
     const result: CalibrationResult = {
+}
       method: selectedMethod.name,
-      methodType: selectedMethod.type === 'parametric' ? 'parametric' : 
-                 selectedMethod.type === 'bayesian' ? 'bayesian' : 'non_parametric',
-      calibrationType: selectedMethod.id === 'platt_scaling' ? 'platt' :
-                      selectedMethod.id === 'isotonic_regression' ? 'isotonic' :
-                      selectedMethod.id === 'bayesian_calibration' ? 'bayesian' : 'temperature',
+      methodType: selectedMethod.type === &apos;parametric&apos; ? &apos;parametric&apos; : 
+                 selectedMethod.type === &apos;bayesian&apos; ? &apos;bayesian&apos; : &apos;non_parametric&apos;,
+      calibrationType: selectedMethod.id === &apos;platt_scaling&apos; ? &apos;platt&apos; :
+                      selectedMethod.id === &apos;isotonic_regression&apos; ? &apos;isotonic&apos; :
+                      selectedMethod.id === &apos;bayesian_calibration&apos; ? &apos;bayesian&apos; : &apos;temperature&apos;,
       originalBrierScore: uncalBrierScore,
       calibratedBrierScore: calBrierScore,
       brierImprovement: (uncalBrierScore - calBrierScore) / uncalBrierScore,
       reliabilityDiagram: {
+}
         binEdges,
         binMeans,
         binCounts,
@@ -2216,6 +2443,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         maximumCalibrationError: Math.max(...reliabilityDiagram.map((b: any) => b.calibrated.calibrationError))
       },
       calibrationMetrics: {
+}
         brierScore: calBrierScore,
         logLoss: -trueLabels.reduce((sum: number, label: number, i: number) => 
           sum + label * Math.log(calibratedPredictions[i]) + (1 - label) * Math.log(1 - calibratedPredictions[i]), 0) / nSamples,
@@ -2225,17 +2453,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
         uncertainty: 0.15 + Math.random() * 0.05
       },
       parameters: {
+}
         nSamples,
         nBins,
         method: selectedMethod.id,
         preservesRanking: getCalibrationPreservesRanking(selectedMethod.id)
       },
       predictions: {
+}
         original: uncalibratedPredictions.slice(0, 100), // Limit for display
         calibrated: calibratedPredictions.slice(0, 100),
         actualOutcomes: trueLabels.slice(0, 100)
       },
       performanceMetrics: {
+}
         accuracy,
         precision,
         recall,
@@ -2244,9 +2475,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         fantasyAccuracy: 0.78 + Math.random() * 0.15
       },
       calibrationCurve: {
+}
         meanPredicted: binMeans,
         fractionPositives: reliabilityDiagram.map((bin: any) => bin.calibrated.accuracy),
-        binCounts
+//         binCounts
 
     };
 
@@ -2256,23 +2488,28 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate performance metrics experiment
   const runPerformanceMetricsExperiment = async () => {
+}
     try {
+}
 
     setMetricsExperimentRunning(true);
     setMetricsProgress(0);
 
     // Simulate experiment progress
-    const steps = ['Model Training', 'Prediction Generation', 'Metrics Calculation', 'Validation Analysis', 'Results Compilation'];
+    const steps = [&apos;Model Training&apos;, &apos;Prediction Generation&apos;, &apos;Metrics Calculation&apos;, &apos;Validation Analysis&apos;, &apos;Results Compilation&apos;];
     const totalSteps = steps.length;
 
     for (let step = 0; step < totalSteps; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
       setMetricsProgress(((step + 1) / totalSteps) * 100);
     
     } catch (error) {
-      console.error('Error in runPerformanceMetricsExperiment:', error);
+}
+      console.error(&apos;Error in runPerformanceMetricsExperiment:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }// Generate realistic performance metrics based on selected model
     const selectedModelType = modelTypes.find((m: any) => m.id === selectedModel);
@@ -2281,22 +2518,24 @@ const OracleCalibrationValidationSection: React.FC = () => {
     // Generate predictions and ground truth
     const predictions = Array.from({ length: nSamples }, () => Math.random());
     const groundTruth = predictions.map((pred: any) => {
+}
       // Add realistic noise based on model type
       let noise = 0;
       switch (selectedModel) {
-        case 'neural_network':
+}
+        case &apos;neural_network&apos;:
           noise = (Math.random() - 0.5) * 0.1;
           break;
-        case 'random_forest':
+        case &apos;random_forest&apos;:
           noise = (Math.random() - 0.5) * 0.12;
           break;
-        case 'gradient_boosting':
+        case &apos;gradient_boosting&apos;:
           noise = (Math.random() - 0.5) * 0.08;
           break;
-        case 'linear_regression':
+        case &apos;linear_regression&apos;:
           noise = (Math.random() - 0.5) * 0.15;
           break;
-        case 'svm':
+        case &apos;svm&apos;:
           noise = (Math.random() - 0.5) * 0.13;
           break;
         default:
@@ -2343,6 +2582,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const r2 = 1 - (ssRes / ssTot);
 
     const mape = predictions.reduce((sum, pred, i) => {
+}
       const actual = groundTruth[i];
       return actual !== 0 ? sum + Math.abs((actual - pred) / actual) : sum;
     }, 0) / nSamples * 100;
@@ -2359,7 +2599,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
     const sleeper = 0.6 + Math.random() * 0.35;
 
     const result: ComprehensiveMetrics = {
+}
       classification: {
+}
         accuracy,
         precision,
         recall,
@@ -2374,9 +2616,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
         matthews: (tp * tn - fp * fn) / Math.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)) || 0,
         kappa: 2 * (tp * tn - fn * fp) / ((tp + fp) * (fp + tn) + (tp + fn) * (fn + tn)) || 0,
         balancedAccuracy: (recall + specificity) / 2,
-        confusionMatrix
+//         confusionMatrix
       },
       regression: {
+}
         mse,
         rmse,
         mae,
@@ -2390,6 +2633,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         explainedVariance: r2 + Math.random() * 0.05
       },
       calibration: {
+}
         expectedCalibrationError,
         maximumCalibrationError: expectedCalibrationError * 2,
         averageCalibrationError: expectedCalibrationError * 0.8,
@@ -2404,6 +2648,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         calibrationIntercept: -0.05 + Math.random() * 0.1
       },
       fantasy: {
+}
         pointsAccuracy,
         rankingAccuracy,
         topPerformerPrecision: 0.7 + Math.random() * 0.25,
@@ -2425,7 +2670,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Simulate bias-variance trade-off experiment
   const runBiasVarianceExperiment = async () => {
+}
     try {
+}
 
     setBiasVarianceExperimentRunning(true);
     setBiasVarianceProgress(0);
@@ -2434,16 +2681,19 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedConfig) return;
 
     // Simulate experiment progress
-    const steps = ['Data Generation', 'Model Training', 'Bootstrap Sampling', 'Bias-Variance Decomposition', 'Visualization Generation'];
+    const steps = [&apos;Data Generation&apos;, &apos;Model Training&apos;, &apos;Bootstrap Sampling&apos;, &apos;Bias-Variance Decomposition&apos;, &apos;Visualization Generation&apos;];
     
     for (let step = 0; step < steps.length; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 1000));
       setBiasVarianceProgress((step + 1) / steps.length * 100);
     
     } catch (error) {
-      console.error('Error in runBiasVarianceExperiment:', error);
+}
+      console.error(&apos;Error in runBiasVarianceExperiment:&apos;, error);
 
     } catch (error) {
+}
         console.error(error);
     }// Generate bias-variance results across complexity range
     const complexityStart = selectedComplexityRange[0];
@@ -2460,51 +2710,59 @@ const OracleCalibrationValidationSection: React.FC = () => {
     let minTotalError = Infinity;
 
     for (let complexity = complexityStart; complexity <= complexityEnd; complexity += complexityStep) {
+}
       // Simulate bias-variance decomposition for this complexity level
       const baseNoise = 0.10 + Math.random() * 0.05;
       
       // Bias typically decreases with complexity (until overfitting)
       let bias: number;
       if (complexity < optimalComplexity) {
+}
         // Underfitting region - high bias
         bias = 0.8 * Math.exp(-complexity / 3) + 0.05;
       } else {
+}
         // Overfitting region - increasing bias due to poor generalization
         bias = 0.05 + 0.2 * Math.exp((complexity - optimalComplexity) / 8);
 
       // Variance typically increases with complexity
       let variance: number;
       if (selectedConfig.regularization) {
+}
         // With regularization, variance increases more slowly
         variance = 0.02 + 0.3 * (1 - Math.exp(-complexity / 5));
       } else {
+}
         // Without regularization, variance increases faster
         variance = 0.02 + 0.5 * (complexity / complexityEnd);
 
       // Add model-specific adjustments
       switch (selectedConfig.id) {
-        case 'polynomial':
+}
+        case &apos;polynomial&apos;:
           bias = Math.max(0.01, 1.2 * Math.exp(-complexity / 2.5) + 0.02);
           variance = 0.01 + Math.pow(complexity / 20, 2) * 0.4;
           break;
-        case 'neural_network':
+        case &apos;neural_network&apos;:
           bias = Math.max(0.02, 0.6 * Math.exp(-complexity / 2) + 0.02);
           variance = 0.03 + complexity * 0.08 + Math.pow(complexity / 10, 1.5) * 0.1;
           break;
-        case 'decision_tree':
+        case &apos;decision_tree&apos;:
           bias = Math.max(0.05, 0.8 * Math.exp(-complexity / 3) + 0.05);
           variance = Math.min(0.6, 0.02 + Math.pow(complexity / 15, 1.8) * 0.4);
           break;
-        case 'random_forest':
+        case &apos;random_forest&apos;:
           bias = Math.max(0.03, 0.4 * Math.exp(-complexity / 50) + 0.03);
           variance = Math.max(0.01, 0.3 * Math.exp(-complexity / 30) + 0.01);
           break;
-        case 'svm':
+        case &apos;svm&apos;:
           if (complexity < 1) {
+}
             // Low C (high regularization)
             bias = 0.3 + 0.2 * Math.exp(-complexity * 10);
             variance = 0.05 + complexity * 0.1;
           } else {
+}
             // High C (low regularization)
             bias = 0.05 + 0.1 * Math.exp((complexity - 1) / 10);
             variance = 0.05 + Math.log(complexity) * 0.15;
@@ -2514,6 +2772,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       const totalError = bias + variance + baseNoise;
       
       if (totalError < minTotalError) {
+}
         minTotalError = totalError;
         optimalComplexity = complexity;
 
@@ -2536,6 +2795,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
       const r2 = 1 - (ssRes / ssTotal);
 
       const result: BiasVarianceResult = {
+}
         modelComplexity: complexity,
         bias: bias,
         variance: variance,
@@ -2545,12 +2805,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         predictions,
         trueValues,
         decomposition: {
+}
           biasSquared: bias,
           varianceComponent: variance,
           noiseComponent: baseNoise,
           covariance: (Math.random() - 0.5) * 0.05
         },
         metrics: {
+}
           mse,
           mae,
           r2: Math.max(0, Math.min(1, r2)),
@@ -2566,6 +2828,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
     // Create visualization data
     const visualization: BiasVarianceVisualization = {
+}
       complexityRange,
       biasValues,
       varianceValues,
@@ -2583,7 +2846,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Learning Curve Experiment Simulation
   const runLearningCurveExperiment = async () => {
+}
     try {
+}
     setLearningCurveExperimentRunning(true);
     setLearningCurveProgress(0);
 
@@ -2591,15 +2856,16 @@ const OracleCalibrationValidationSection: React.FC = () => {
     if (!selectedExperiment) return;
 
     // Simulate experiment progress
-    const steps = ['Data Generation', 'Model Training', 'Sample Size Scaling', 'Performance Measurement', 'Visualization Generation'];
+    const steps = [&apos;Data Generation&apos;, &apos;Model Training&apos;, &apos;Sample Size Scaling&apos;, &apos;Performance Measurement&apos;, &apos;Visualization Generation&apos;];
     for (let step = 0; step < steps.length; step++) {
+}
       await new Promise(resolve => setTimeout(resolve, 1000));
       setLearningCurveProgress((step + 1) / steps.length * 100);
     
     `block-${method.id}-${foldIndex}-${blockIndex}`}
-        className={`fold-block ${blockIndex === foldIndex ? 'validation' : 'training'}`}
+        className={`fold-block ${blockIndex === foldIndex ? &apos;validation&apos; : &apos;training&apos;}`}
       >
-        {blockIndex === foldIndex ? 'Val' : 'Train'}
+        {blockIndex === foldIndex ? &apos;Val&apos; : &apos;Train&apos;}
       </div>
     ))
   );
@@ -2628,21 +2894,24 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
         <div className="config-item sm:px-4 md:px-6 lg:px-8">
           <span>Shuffle:</span>
-          <span>{method.shuffle ? 'Yes' : 'No'}</span>
+          <span>{method.shuffle ? &apos;Yes&apos; : &apos;No&apos;}</span>
         </div>
         {method.stratifyColumn && (
+}
           <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Stratify:</span>
             <span>{method.stratifyColumn}</span>
           </div>
         )}
         {method.groupColumn && (
+}
           <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Group By:</span>
             <span>{method.groupColumn}</span>
           </div>
         )}
         {method.timeColumn && (
+}
           <div className="config-item sm:px-4 md:px-6 lg:px-8">
             <span>Time Column:</span>
             <span>{method.timeColumn}</span>
@@ -2654,31 +2923,38 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
   // Helper function to render fantasy applications
   const renderFantasyApplications = (methodId: string) => {
+}
     const applications = {
-      'k_fold': {
-        best: 'General model evaluation with balanced datasets',
-        use: 'Overall model performance assessment',
-        caution: 'May not preserve temporal relationships or player groupings'
+}
+      &apos;k_fold&apos;: {
+}
+        best: &apos;General model evaluation with balanced datasets&apos;,
+        use: &apos;Overall model performance assessment&apos;,
+        caution: &apos;May not preserve temporal relationships or player groupings&apos;
       },
-      'stratified_k_fold': {
-        best: 'Imbalanced position distributions (more RBs than QBs)',
-        use: 'Ensuring fair representation of all positions',
-        benefit: 'Prevents bias toward common positions'
+      &apos;stratified_k_fold&apos;: {
+}
+        best: &apos;Imbalanced position distributions (more RBs than QBs)&apos;,
+        use: &apos;Ensuring fair representation of all positions&apos;,
+        benefit: &apos;Prevents bias toward common positions&apos;
       },
-      'time_series_split': {
-        best: 'Temporal prediction scenarios',
-        use: 'Predicting future game performance from historical data',
-        critical: 'Prevents future information leakage'
+      &apos;time_series_split&apos;: {
+}
+        best: &apos;Temporal prediction scenarios&apos;,
+        use: &apos;Predicting future game performance from historical data&apos;,
+        critical: &apos;Prevents future information leakage&apos;
       },
-      'group_k_fold': {
-        best: 'Player-specific generalization',
-        use: 'Testing model performance on unseen players',
-        insight: 'Reveals if model learns player-specific vs. general patterns'
+      &apos;group_k_fold&apos;: {
+}
+        best: &apos;Player-specific generalization&apos;,
+        use: &apos;Testing model performance on unseen players&apos;,
+        insight: &apos;Reveals if model learns player-specific vs. general patterns&apos;
       },
-      'nested_cv': {
-        best: 'Hyperparameter optimization with unbiased evaluation',
-        use: 'Model selection for production deployment',
-        tradeoff: 'Most reliable but computationally expensive'
+      &apos;nested_cv&apos;: {
+}
+        best: &apos;Hyperparameter optimization with unbiased evaluation&apos;,
+        use: &apos;Model selection for production deployment&apos;,
+        tradeoff: &apos;Most reliable but computationally expensive&apos;
 
     };
 
@@ -2694,7 +2970,9 @@ const OracleCalibrationValidationSection: React.FC = () => {
     );
   };
   const runCVExperiment = async () => {
+}
     try {
+}
     setCvExperimentRunning(true);
     setExperimentProgress(0);
 
@@ -2704,13 +2982,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
     // Simulate experiment progress
     const totalSteps = selectedMethod.folds;
     const foldResults: Array<{
+}
       fold: number;
       trainSize: number;
       testSize: number;
       score: number;
       metrics: Record<string, number>;
     
-    `cv-method-card ${selectedCVMethod === method.id ? 'selected' : ''}`}
+    `cv-method-card ${selectedCVMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedCVMethod(method.id)}
           >
             <div className="method-header sm:px-4 md:px-6 lg:px-8">
@@ -2735,6 +3014,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </div>
             
             {selectedCVMethod === method.id && (
+}
               <div className="method-details sm:px-4 md:px-6 lg:px-8">
                 <h6>Fantasy Sports Applications</h6>
                 {renderFantasyApplications(method.id)}
@@ -2760,6 +3040,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <span>Fantasy Fit</span>
           </div>
           {crossValidationMethods.map((method: any) => (
+}
             <div key={`comparison-${method.id}`} className="table-row sm:px-4 md:px-6 lg:px-8">
               <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
               <span className="complexity-score sm:px-4 md:px-6 lg:px-8">{getCVComplexityScore(method.id)}</span>
@@ -2782,6 +3063,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onChange={(e: any) => setSelectedCVMethod(e.target.value)}
             >
               {crossValidationMethods.map((method: any) => (
+}
                 <option key={`option-${method.id}`} value={method.id}>
                   {method.name}
                 </option>
@@ -2794,11 +3076,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             onClick={runCVExperiment}
             disabled={cvExperimentRunning}
           >
-            {cvExperimentRunning ? 'Running Experiment...' : 'Run CV Experiment'}
+            {cvExperimentRunning ? &apos;Running Experiment...&apos; : &apos;Run CV Experiment&apos;}
           </button>
         </div>
 
         {cvExperimentRunning && (
+}
           <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
             <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
@@ -2814,6 +3097,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {cvResults && !cvExperimentRunning && (
+}
           <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Experiment Results</h5>
             
@@ -2851,6 +3135,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     <span>RMSE</span>
                   </div>
                   {cvResults.details.map((fold: any) => (
+}
                     <div key={`fold-result-${fold.fold}`} className="fold-results-row sm:px-4 md:px-6 lg:px-8">
                       <span>{fold.fold}</span>
                       <span>{fold.score.toFixed(3)}</span>
@@ -2929,9 +3214,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
       <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {holdoutMethods.map((method: any) => (
+}
           <div 
             key={method.id} 
-            className={`method-card ${selectedHoldoutMethod === method.id ? 'selected' : ''}`}
+            className={`method-card ${selectedHoldoutMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedHoldoutMethod(method.id)}
           >
             <div className="method-header sm:px-4 md:px-6 lg:px-8">
@@ -2946,6 +3232,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <span className="split-label sm:px-4 md:px-6 lg:px-8">Train: {(method.trainRatio * 100)}%</span>
                   <span className="split-label sm:px-4 md:px-6 lg:px-8">Test: {(method.testRatio * 100)}%</span>
                   {method.validationRatio && (
+}
                     <span className="split-label sm:px-4 md:px-6 lg:px-8">Val: {(method.validationRatio * 100)}%</span>
                   )}
                 </div>
@@ -2995,6 +3282,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <div className="header-cell sm:px-4 md:px-6 lg:px-8">Split Strategy</div>
           </div>
           {holdoutMethods.map((method: any) => (
+}
             <div key={method.id} className="comparison-row sm:px-4 md:px-6 lg:px-8">
               <div className="cell method-name sm:px-4 md:px-6 lg:px-8">{method.name}</div>
               <div className="cell sm:px-4 md:px-6 lg:px-8">{getHoldoutSimplicityScore(method.id)}</div>
@@ -3065,11 +3353,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             onClick={runHoldoutExperiment}
             disabled={holdoutExperimentRunning}
           >
-            {holdoutExperimentRunning ? 'Running Experiment...' : 'Run Holdout Experiment'}
+            {holdoutExperimentRunning ? &apos;Running Experiment...&apos; : &apos;Run Holdout Experiment&apos;}
           </button>
         </div>
 
         {holdoutExperimentRunning && (
+}
           <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
             <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
@@ -3085,6 +3374,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {holdoutResults && (
+}
           <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Holdout Validation Results</h5>
             <div className="results-grid sm:px-4 md:px-6 lg:px-8">
@@ -3100,6 +3390,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.testSize.toLocaleString()} samples</span>
                   </div>
                   {holdoutResults.validationSize && (
+}
                     <div className="split-item sm:px-4 md:px-6 lg:px-8">
                       <span className="label sm:px-4 md:px-6 lg:px-8">Validation Set:</span>
                       <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.validationSize.toLocaleString()} samples</span>
@@ -3120,6 +3411,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                     <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.testScore.toFixed(4)}</span>
                   </div>
                   {holdoutResults.validationScore && (
+}
                     <div className="score-item sm:px-4 md:px-6 lg:px-8">
                       <span className="label sm:px-4 md:px-6 lg:px-8">Validation Score:</span>
                       <span className="value sm:px-4 md:px-6 lg:px-8">{holdoutResults.validationScore.toFixed(4)}</span>
@@ -3127,7 +3419,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   )}
                   <div className="score-item sm:px-4 md:px-6 lg:px-8">
                     <span className="label sm:px-4 md:px-6 lg:px-8">Overfitting:</span>
-                    <span className={`value ${holdoutResults.overfit > 0.05 ? 'warning' : 'good'}`}>
+                    <span className={`value ${holdoutResults.overfit > 0.05 ? &apos;warning&apos; : &apos;good&apos;}`}>
                       {holdoutResults.overfit.toFixed(4)}
                     </span>
                   </div>
@@ -3183,7 +3475,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </div>
           
           <div className="practice-card sm:px-4 md:px-6 lg:px-8">
-            <h5>❌ Don't</h5>
+            <h5>❌ Don&apos;t</h5>
             <ul>
               <li>Use holdout with small datasets (&lt;1000 samples)</li>
               <li>Ignore class imbalance in splits</li>
@@ -3209,9 +3501,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
       <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {timeSeriesMethods.map((method: any) => (
+}
           <div 
             key={method.id} 
-            className={`method-card ${selectedTimeSeriesMethod === method.id ? 'selected' : ''}`}
+            className={`method-card ${selectedTimeSeriesMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedTimeSeriesMethod(method.id)}
           >
             <div className="method-header sm:px-4 md:px-6 lg:px-8">
@@ -3262,6 +3555,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, advIndex) => (
+}
                       <li key={`advantage-${method.id}-${advIndex}`}>{advantage}</li>
                     ))}
                   </ul>
@@ -3270,6 +3564,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, disIndex) => (
+}
                       <li key={`disadvantage-${method.id}-${disIndex}`}>{disadvantage}</li>
                     ))}
                   </ul>
@@ -3292,6 +3587,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <div className="header-cell sm:px-4 md:px-6 lg:px-8">Window/Step</div>
           </div>
           {timeSeriesMethods.map((method: any) => (
+}
             <div key={method.id} className="comparison-row sm:px-4 md:px-6 lg:px-8">
               <div className="cell method-name sm:px-4 md:px-6 lg:px-8">{method.name}</div>
               <div className="cell sm:px-4 md:px-6 lg:px-8">{getTimeSeriesComplexityScore(method.id)}</div>
@@ -3365,11 +3661,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             onClick={runTimeSeriesExperiment}
             disabled={timeSeriesExperimentRunning}
           >
-            {timeSeriesExperimentRunning ? 'Running Experiment...' : 'Run Time Series Experiment'}
+            {timeSeriesExperimentRunning ? &apos;Running Experiment...&apos; : &apos;Run Time Series Experiment&apos;}
           </button>
         </div>
 
         {timeSeriesExperimentRunning && (
+}
           <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
             <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
@@ -3385,6 +3682,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {timeSeriesResults && (
+}
           <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Time Series Validation Results</h5>
             <div className="results-grid sm:px-4 md:px-6 lg:px-8">
@@ -3427,7 +3725,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </div>
                   <div className="score-item sm:px-4 md:px-6 lg:px-8">
                     <span className="label sm:px-4 md:px-6 lg:px-8">Temporal Consistency:</span>
-                    <span className={`value ${timeSeriesResults.temporalConsistency > 0.8 ? 'good' : 'warning'}`}>
+                    <span className={`value ${timeSeriesResults.temporalConsistency > 0.8 ? &apos;good&apos; : &apos;warning&apos;}`}>
                       {(timeSeriesResults.temporalConsistency * 100).toFixed(1)}%
                     </span>
                   </div>
@@ -3477,18 +3775,20 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <span>Difference</span>
                 </div>
                 {timeSeriesResults.splits.slice(0, 8).map((split: any) => (
+}
                   <div key={`split-${split.splitIndex}`} className="splits-row sm:px-4 md:px-6 lg:px-8">
                     <span>{split.splitIndex + 1}</span>
                     <span>{split.trainPeriod}</span>
                     <span>{split.testPeriod}</span>
                     <span>{split.trainScore.toFixed(3)}</span>
                     <span>{split.testScore.toFixed(3)}</span>
-                    <span className={split.trainScore - split.testScore > 0.05 ? 'warning' : 'good'}>
+                    <span className={split.trainScore - split.testScore > 0.05 ? &apos;warning&apos; : &apos;good&apos;}>
                       {(split.trainScore - split.testScore).toFixed(3)}
                     </span>
                   </div>
                 ))}
                 {timeSeriesResults.splits.length > 8 && (
+}
                   <div className="splits-row summary sm:px-4 md:px-6 lg:px-8">
                     <div className="text-center text-gray-400 sm:px-4 md:px-6 lg:px-8">... and {timeSeriesResults.splits.length - 8} more splits</div>
                   </div>
@@ -3514,7 +3814,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </div>
           
           <div className="practice-card sm:px-4 md:px-6 lg:px-8">
-            <h5>❌ Don't</h5>
+            <h5>❌ Don&apos;t</h5>
             <ul>
               <li>Shuffle time series data randomly</li>
               <li>Use future information in training sets</li>
@@ -3576,13 +3876,14 @@ const OracleCalibrationValidationSection: React.FC = () => {
         <h4>Available Bootstrap Methods</h4>
         <div className="methods-container sm:px-4 md:px-6 lg:px-8">
           {bootstrapMethods.map((method: any) => (
+}
             <div 
               key={method.id} 
-              className={`method-card ${selectedBootstrapMethod === method.id ? 'selected' : ''}`}
+              className={`method-card ${selectedBootstrapMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
               onClick={() => setSelectedBootstrapMethod(method.id)}
               role="button"
               tabIndex={0}
-              onKeyDown={(e: any) => e.key === 'Enter' && setSelectedBootstrapMethod(method.id)}
+              onKeyDown={(e: any) => e.key === &apos;Enter&apos; && setSelectedBootstrapMethod(method.id)}
               aria-label={`Select ${method.name} bootstrap method`}
             >
               <div className="method-header sm:px-4 md:px-6 lg:px-8">
@@ -3603,19 +3904,21 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 </div>
                 <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Replacement:</strong>
-                  <span>{method.replacement ? 'Yes' : 'No'}</span>
+                  <span>{method.replacement ? &apos;Yes&apos; : &apos;No&apos;}</span>
                 </div>
                 <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                   <strong>Confidence Level:</strong>
                   <span>{(method.confidenceLevel * 100)}%</span>
                 </div>
                 {method.blockSize && (
+}
                   <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Block Size:</strong>
                     <span>{method.blockSize}</span>
                   </div>
                 )}
                 {method.stratifyColumn && (
+}
                   <div className="detail-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Stratify by:</strong>
                     <span>{method.stratifyColumn}</span>
@@ -3628,6 +3931,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, advIndex) => (
+}
                       <li key={`advantage-${method.id}-${advIndex}`}>{advantage}</li>
                     ))}
                   </ul>
@@ -3636,6 +3940,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, disIndex) => (
+}
                       <li key={`disadvantage-${method.id}-${disIndex}`}>{disadvantage}</li>
                     ))}
                   </ul>
@@ -3644,6 +3949,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, useIndex) => (
+}
                       <li key={`usecase-${method.id}-${useIndex}`}>{useCase}</li>
                     ))}
                   </ul>
@@ -3672,6 +3978,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             <span>Best Use Case</span>
           </div>
           {bootstrapMethods.map((method: any) => (
+}
             <div key={`comparison-${method.id}`} className="comparison-row sm:px-4 md:px-6 lg:px-8">
               <span className="method-name sm:px-4 md:px-6 lg:px-8">{method.name}</span>
               <span className="complexity-score sm:px-4 md:px-6 lg:px-8">
@@ -3706,11 +4013,12 @@ const OracleCalibrationValidationSection: React.FC = () => {
             disabled={bootstrapExperimentRunning}
             aria-label="Run bootstrap resampling experiment"
           >
-            {bootstrapExperimentRunning ? 'Running Experiment...' : 'Run Bootstrap Experiment'}
+            {bootstrapExperimentRunning ? &apos;Running Experiment...&apos; : &apos;Run Bootstrap Experiment&apos;}
           </button>
         </div>
 
         {bootstrapExperimentRunning && (
+}
           <div className="experiment-progress sm:px-4 md:px-6 lg:px-8">
             <div className="progress-header sm:px-4 md:px-6 lg:px-8">
               <span>Experiment Progress</span>
@@ -3726,6 +4034,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         )}
 
         {bootstrapResults && (
+}
           <div className="experiment-results sm:px-4 md:px-6 lg:px-8">
             <h5>📈 Bootstrap Resampling Results</h5>
             
@@ -3835,8 +4144,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
               <div className="convergence-info sm:px-4 md:px-6 lg:px-8">
                 <div className="convergence-status sm:px-4 md:px-6 lg:px-8">
                   <strong>Converged:</strong>
-                  <span className={`status ${bootstrapResults.convergence.converged ? 'success' : 'warning'}`}>
-                    {bootstrapResults.convergence.converged ? '✅ Yes' : '⚠️ No'}
+                  <span className={`status ${bootstrapResults.convergence.converged ? &apos;success&apos; : &apos;warning&apos;}`}>
+                    {bootstrapResults.convergence.converged ? &apos;✅ Yes&apos; : &apos;⚠️ No&apos;}
                   </span>
                 </div>
                 <div className="convergence-details sm:px-4 md:px-6 lg:px-8">
@@ -3861,22 +4170,24 @@ const OracleCalibrationValidationSection: React.FC = () => {
               <div className="distribution-info sm:px-4 md:px-6 lg:px-8">
                 <p>
                   Bootstrap samples generated {bootstrapResults.nBootstraps.toLocaleString()} resampled datasets
-                  with scores ranging from {Math.min(...bootstrapResults.bootstrapScores).toFixed(3)} to{' '}
+                  with scores ranging from {Math.min(...bootstrapResults.bootstrapScores).toFixed(3)} to{&apos; &apos;}
                   {Math.max(...bootstrapResults.bootstrapScores).toFixed(3)}.
                 </p>
                 <div className="distribution-stats sm:px-4 md:px-6 lg:px-8">
                   <div className="dist-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Distribution Shape:</strong>
                     <span>
-                      {bootstrapResults.statistics.skewness > 0.5 ? 'Right-skewed' : 
-                       bootstrapResults.statistics.skewness < -0.5 ? 'Left-skewed' : 'Symmetric'}
+                      {bootstrapResults.statistics.skewness > 0.5 ? &apos;Right-skewed&apos; : 
+}
+                       bootstrapResults.statistics.skewness < -0.5 ? &apos;Left-skewed&apos; : &apos;Symmetric&apos;}
                     </span>
                   </div>
                   <div className="dist-item sm:px-4 md:px-6 lg:px-8">
                     <strong>Tail Behavior:</strong>
                     <span>
-                      {bootstrapResults.statistics.kurtosis > 1 ? 'Heavy-tailed' :
-                       bootstrapResults.statistics.kurtosis < -1 ? 'Light-tailed' : 'Normal-tailed'}
+                      {bootstrapResults.statistics.kurtosis > 1 ? &apos;Heavy-tailed&apos; :
+}
+                       bootstrapResults.statistics.kurtosis < -1 ? &apos;Light-tailed&apos; : &apos;Normal-tailed&apos;}
                     </span>
                   </div>
                 </div>
@@ -3970,14 +4281,17 @@ const OracleCalibrationValidationSection: React.FC = () => {
 
       <div className="methods-grid sm:px-4 md:px-6 lg:px-8">
         {calibrationMethods.map((method: any) => (
+}
           <div 
             key={method.id} 
-            className={`method-card ${selectedCalibrationMethod === method.id ? 'selected' : ''}`}
+            className={`method-card ${selectedCalibrationMethod === method.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedCalibrationMethod(method.id)}
             role="button"
             tabIndex={0}
             onKeyDown={(e: any) => {
-              if (e.key === 'Enter' || e.key === ' ') {
+}
+              if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
+}
                 e.preventDefault();
                 setSelectedCalibrationMethod(method.id);
 
@@ -4028,6 +4342,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>✅ Advantages</h6>
                   <ul>
                     {method.advantages.map((advantage, index) => (
+}
                       <li key={index}>{advantage}</li>
                     ))}
                   </ul>
@@ -4037,6 +4352,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>⚠️ Disadvantages</h6>
                   <ul>
                     {method.disadvantages.map((disadvantage, index) => (
+}
                       <li key={index}>{disadvantage}</li>
                     ))}
                   </ul>
@@ -4046,6 +4362,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>🎯 Use Cases</h6>
                   <ul>
                     {method.useCases.map((useCase, index) => (
+}
                       <li key={index}>{useCase}</li>
                     ))}
                   </ul>
@@ -4055,6 +4372,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <h6>🏈 Fantasy Applications</h6>
                   <ul>
                     {method.fantasyApplications.map((application, index) => (
+}
                       <li key={index}>{application}</li>
                     ))}
                   </ul>
@@ -4081,6 +4399,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onChange={(e: any) => setSelectedCalibrationMethod(e.target.value)}
             >
               {calibrationMethods.map((method: any) => (
+}
                 <option key={method.id} value={method.id}>
                   {method.icon} {method.name}
                 </option>
@@ -4094,10 +4413,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
             className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run calibration experiment"
           >
-            {calibrationExperimentRunning ? '🔄 Running Calibration...' : '🚀 Run Calibration Experiment'}
+            {calibrationExperimentRunning ? &apos;🔄 Running Calibration...&apos; : &apos;🚀 Run Calibration Experiment&apos;}
           </button>
 
           {calibrationExperimentRunning && (
+}
             <div className="progress-container sm:px-4 md:px-6 lg:px-8">
               <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div 
@@ -4111,6 +4431,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {calibrationResults && (
+}
           <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>⚖️ Calibration Results</h5>
             
@@ -4133,7 +4454,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   <div className="metric-item sm:px-4 md:px-6 lg:px-8">
                     <span className="metric-label sm:px-4 md:px-6 lg:px-8">Preserves Ranking</span>
                     <span className="metric-value sm:px-4 md:px-6 lg:px-8">
-                      {calibrationResults.parameters.preservesRanking ? '✅ Yes' : '❌ No'}
+                      {calibrationResults.parameters.preservesRanking ? &apos;✅ Yes&apos; : &apos;❌ No&apos;}
                     </span>
                   </div>
                 </div>
@@ -4217,6 +4538,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </thead>
                   <tbody>
                     {calibrationResults.calibrationCurve.meanPredicted.map((meanPred, index) => {
+}
                       const binStart = index / calibrationResults.calibrationCurve.meanPredicted.length;
                       const binEnd = (index + 1) / calibrationResults.calibrationCurve.meanPredicted.length;
                       const actualRate = calibrationResults.calibrationCurve.fractionPositives[index];
@@ -4224,16 +4546,17 @@ const OracleCalibrationValidationSection: React.FC = () => {
                       const error = Math.abs(meanPred - actualRate);
                       
                       return (
-                        <tr key={index} className={error < 0.05 ? 'well-calibrated' : error > 0.15 ? 'poorly-calibrated' : ''}>
+                        <tr key={index} className={error < 0.05 ? &apos;well-calibrated&apos; : error > 0.15 ? &apos;poorly-calibrated&apos; : &apos;&apos;}>
                           <td>{(binStart * 100).toFixed(0)}-{(binEnd * 100).toFixed(0)}%</td>
                           <td>{count}</td>
                           <td>{(meanPred * 100).toFixed(1)}%</td>
                           <td>{(actualRate * 100).toFixed(1)}%</td>
                           <td>{(error * 100).toFixed(1)}%</td>
                           <td>
-                            {error < 0.05 ? '🟢 Excellent' : 
-                             error < 0.1 ? '🟡 Good' : 
-                             error < 0.15 ? '🟠 Fair' : '🔴 Poor'}
+                            {error < 0.05 ? &apos;🟢 Excellent&apos; : 
+}
+                             error < 0.1 ? &apos;🟡 Good&apos; : 
+                             error < 0.15 ? &apos;🟠 Fair&apos; : &apos;🔴 Poor&apos;}
                           </td>
                         </tr>
                       );
@@ -4249,29 +4572,31 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Reliability Assessment</h6>
                   <p>
-                    The {calibrationResults.method} method achieved a calibration error of{' '}
-                    {(calibrationResults.calibrationMetrics.calibrationError * 100).toFixed(2)}%, indicating{' '}
-                    {calibrationResults.calibrationMetrics.calibrationError < 0.05 ? 'excellent' :
-                     calibrationResults.calibrationMetrics.calibrationError < 0.1 ? 'good' :
-                     calibrationResults.calibrationMetrics.calibrationError < 0.15 ? 'moderate' : 'poor'} calibration.
+                    The {calibrationResults.method} method achieved a calibration error of{&apos; &apos;}
+                    {(calibrationResults.calibrationMetrics.calibrationError * 100).toFixed(2)}%, indicating{&apos; &apos;}
+                    {calibrationResults.calibrationMetrics.calibrationError < 0.05 ? &apos;excellent&apos; :
+}
+                     calibrationResults.calibrationMetrics.calibrationError < 0.1 ? &apos;good&apos; :
+                     calibrationResults.calibrationMetrics.calibrationError < 0.15 ? &apos;moderate&apos; : &apos;poor&apos;} calibration.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Ranking Preservation</h6>
                   <p>
-                    This method {calibrationResults.parameters.preservesRanking ? 'preserves' : 'does not preserve'} the 
-                    original ranking of predictions, which is{' '}
-                    {calibrationResults.parameters.preservesRanking ? 'ideal' : 'potentially problematic'} for 
+                    This method {calibrationResults.parameters.preservesRanking ? &apos;preserves&apos; : &apos;does not preserve&apos;} the 
+                    original ranking of predictions, which is{&apos; &apos;}
+                    {calibrationResults.parameters.preservesRanking ? &apos;ideal&apos; : &apos;potentially problematic&apos;} for 
                     fantasy football player rankings and draft strategies.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Football Application</h6>
                   <p>
-                    For fantasy football, this calibration approach provides{' '}
-                    {calibrationResults.calibrationMetrics.reliability > 0.9 ? 'highly reliable' :
-                     calibrationResults.calibrationMetrics.reliability > 0.8 ? 'reliable' :
-                     calibrationResults.calibrationMetrics.reliability > 0.7 ? 'moderately reliable' : 'limited'} 
+                    For fantasy football, this calibration approach provides{&apos; &apos;}
+                    {calibrationResults.calibrationMetrics.reliability > 0.9 ? &apos;highly reliable&apos; :
+}
+                     calibrationResults.calibrationMetrics.reliability > 0.8 ? &apos;reliable&apos; :
+                     calibrationResults.calibrationMetrics.reliability > 0.7 ? &apos;moderately reliable&apos; : &apos;limited&apos;} 
                     confidence estimates for player performance predictions and decision support.
                   </p>
                 </div>
@@ -4297,7 +4622,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </thead>
           <tbody>
             {calibrationMethods.map((method: any) => (
-              <tr key={method.id} className={selectedCalibrationMethod === method.id ? 'selected-row' : ''}>
+}
+              <tr key={method.id} className={selectedCalibrationMethod === method.id ? &apos;selected-row&apos; : &apos;&apos;}>
                 <td>
                   <span className="method-icon sm:px-4 md:px-6 lg:px-8">{method.icon}</span>
                   {method.name}
@@ -4336,7 +4662,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <div className="insight-item sm:px-4 md:px-6 lg:px-8">
             <h5>Model Trust</h5>
             <p>
-              Calibration builds trust in Oracle's predictions by ensuring confidence levels accurately 
+              Calibration builds trust in Oracle&apos;s predictions by ensuring confidence levels accurately 
               reflect prediction quality. This transparency helps users understand when to rely heavily 
               on predictions versus when to consider additional factors.
             </p>
@@ -4358,14 +4684,17 @@ const OracleCalibrationValidationSection: React.FC = () => {
         <h4>📋 Metric Categories</h4>
         <div className="categories-grid sm:px-4 md:px-6 lg:px-8">
           {metricCategories.map((category: any) => (
+}
             <button
               key={category.id}
-              className={`category-card ${selectedMetricCategory === category.id ? 'selected' : ''}`}
+              className={`category-card ${selectedMetricCategory === category.id ? &apos;selected&apos; : &apos;&apos;}`}
               onClick={() => setSelectedMetricCategory(category.id)}
               role="button"
               tabIndex={0}
               onKeyDown={(e: any) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+}
+                if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
+}
                   e.preventDefault();
                   setSelectedMetricCategory(category.id);
 
@@ -4384,16 +4713,19 @@ const OracleCalibrationValidationSection: React.FC = () => {
         <h4>🎯 Performance Metrics</h4>
         <div className="metrics-grid sm:px-4 md:px-6 lg:px-8">
           {performanceMetrics
+}
             .filter((metric: any) => metric.category === selectedMetricCategory)
             .map((metric: any) => (
               <div
                 key={metric.id}
-                className={`metric-card ${selectedMetric === metric.id ? 'selected' : ''}`}
+                className={`metric-card ${selectedMetric === metric.id ? &apos;selected&apos; : &apos;&apos;}`}
                 onClick={() => setSelectedMetric(metric.id)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e: any) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
+}
+                  if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
+}
                     e.preventDefault();
                     setSelectedMetric(metric.id);
 
@@ -4402,8 +4734,8 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <div className="metric-header sm:px-4 md:px-6 lg:px-8">
                   <h5>{metric.name}</h5>
                   <div className="metric-range sm:px-4 md:px-6 lg:px-8">Range: {metric.range}</div>
-                  <div className={`metric-direction ${metric.higherIsBetter ? 'higher-better' : 'lower-better'}`}>
-                    {metric.higherIsBetter ? '⬆️ Higher is Better' : '⬇️ Lower is Better'}
+                  <div className={`metric-direction ${metric.higherIsBetter ? &apos;higher-better&apos; : &apos;lower-better&apos;}`}>
+                    {metric.higherIsBetter ? &apos;⬆️ Higher is Better&apos; : &apos;⬇️ Lower is Better&apos;}
                   </div>
                 </div>
 
@@ -4425,6 +4757,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                       <h6>✅ Use Cases</h6>
                       <ul>
                         {metric.useCases.map((useCase, index) => (
+}
                           <li key={`usecase-${metric.id}-${index}`}>{useCase}</li>
                         ))}
                       </ul>
@@ -4434,6 +4767,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
                       <h6>⚠️ Limitations</h6>
                       <ul>
                         {metric.limitations.map((limitation, index) => (
+}
                           <li key={`limitation-${metric.id}-${index}`}>{limitation}</li>
                         ))}
                       </ul>
@@ -4482,6 +4816,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onChange={(e: any) => setSelectedModel(e.target.value)}
             >
               {modelTypes.map((model: any) => (
+}
                 <option key={model.id} value={model.id}>
                   {model.icon} {model.name}
                 </option>
@@ -4497,6 +4832,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onChange={(e: any) => setSelectedMetricCategory(e.target.value)}
             >
               {metricCategories.map((category: any) => (
+}
                 <option key={category.id} value={category.id}>
                   {category.icon} {category.name}
                 </option>
@@ -4510,10 +4846,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
             className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run performance metrics experiment"
           >
-            {metricsExperimentRunning ? '🔄 Evaluating Performance...' : '🚀 Run Performance Evaluation'}
+            {metricsExperimentRunning ? &apos;🔄 Evaluating Performance...&apos; : &apos;🚀 Run Performance Evaluation&apos;}
           </button>
 
           {metricsExperimentRunning && (
+}
             <div className="progress-container sm:px-4 md:px-6 lg:px-8">
               <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div
@@ -4527,6 +4864,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {metricsResults && (
+}
           <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Performance Evaluation Results</h5>
 
@@ -4553,6 +4891,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             </div>
 
             {metricsResults.classification && (
+}
               <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>🎯 Classification Metrics</h6>
                 <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
@@ -4610,6 +4949,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             )}
 
             {metricsResults.regression && (
+}
               <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>📈 Regression Metrics</h6>
                 <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
@@ -4642,6 +4982,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             )}
 
             {metricsResults.calibration && (
+}
               <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>⚖️ Calibration Metrics</h6>
                 <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
@@ -4674,6 +5015,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
             )}
 
             {metricsResults.fantasy && (
+}
               <div className="metrics-category-results sm:px-4 md:px-6 lg:px-8">
                 <h6>🏈 Fantasy Football Metrics</h6>
                 <div className="metric-grid sm:px-4 md:px-6 lg:px-8">
@@ -4711,30 +5053,33 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Model Strengths</h6>
                   <p>
-                    The {modelTypes.find((m: any) => m.id === selectedModel)?.name} model shows{' '}
-                    {metricsResults.classification && metricsResults.classification.f1Score > 0.8 ? 'excellent' :
-                     metricsResults.classification && metricsResults.classification.f1Score > 0.7 ? 'good' :
-                     metricsResults.classification && metricsResults.classification.f1Score > 0.6 ? 'moderate' : 'limited'} 
+                    The {modelTypes.find((m: any) => m.id === selectedModel)?.name} model shows{&apos; &apos;}
+                    {metricsResults.classification && metricsResults.classification.f1Score > 0.8 ? &apos;excellent&apos; :
+}
+                     metricsResults.classification && metricsResults.classification.f1Score > 0.7 ? &apos;good&apos; :
+                     metricsResults.classification && metricsResults.classification.f1Score > 0.6 ? &apos;moderate&apos; : &apos;limited&apos;} 
                     classification performance with strong predictive capabilities for fantasy football applications.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Calibration Quality</h6>
                   <p>
-                    The calibration metrics indicate{' '}
-                    {metricsResults.calibration.reliability > 0.9 ? 'excellent' :
-                     metricsResults.calibration.reliability > 0.8 ? 'good' :
-                     metricsResults.calibration.reliability > 0.7 ? 'moderate' : 'poor'} 
+                    The calibration metrics indicate{&apos; &apos;}
+                    {metricsResults.calibration.reliability > 0.9 ? &apos;excellent&apos; :
+}
+                     metricsResults.calibration.reliability > 0.8 ? &apos;good&apos; :
+                     metricsResults.calibration.reliability > 0.7 ? &apos;moderate&apos; : &apos;poor&apos;} 
                     probability calibration, providing reliable confidence estimates for decision-making.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Relevance</h6>
                   <p>
-                    The fantasy-specific metrics demonstrate{' '}
-                    {metricsResults.fantasy.pointsAccuracy > 0.8 ? 'strong' :
-                     metricsResults.fantasy.pointsAccuracy > 0.7 ? 'good' :
-                     metricsResults.fantasy.pointsAccuracy > 0.6 ? 'moderate' : 'limited'} 
+                    The fantasy-specific metrics demonstrate{&apos; &apos;}
+                    {metricsResults.fantasy.pointsAccuracy > 0.8 ? &apos;strong&apos; :
+}
+                     metricsResults.fantasy.pointsAccuracy > 0.7 ? &apos;good&apos; :
+                     metricsResults.fantasy.pointsAccuracy > 0.6 ? &apos;moderate&apos; : &apos;limited&apos;} 
                     performance in actual fantasy football scenarios with practical value for lineup optimization.
                   </p>
                 </div>
@@ -4760,9 +5105,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
           </thead>
           <tbody>
             {performanceMetrics
+}
               .filter((metric: any) => metric.category === selectedMetricCategory)
               .map((metric: any) => (
-                <tr key={metric.id} className={selectedMetric === metric.id ? 'selected-row' : ''}>
+                <tr key={metric.id} className={selectedMetric === metric.id ? &apos;selected-row&apos; : &apos;&apos;}>
                   <td className="metric-name sm:px-4 md:px-6 lg:px-8">{metric.name}</td>
                   <td className="metric-category sm:px-4 md:px-6 lg:px-8">{metric.category}</td>
                   <td>{getMetricImportanceScore(metric.id)}</td>
@@ -4866,6 +5212,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
               onChange={(e: any) => setSelectedComplexityModel(e.target.value)}
             >
               {complexityConfigs.map((config: any) => (
+}
                 <option key={config.id} value={config.id}>
                   {config.name}
                 </option>
@@ -4912,6 +5259,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
           <h5>📋 Experiment Configurations</h5>
           <div className="experiments-grid sm:px-4 md:px-6 lg:px-8">
             {biasVarianceExperiments.map((experiment: any) => (
+}
               <div key={experiment.id} className="experiment-card sm:px-4 md:px-6 lg:px-8">
                 <h6>{experiment.name}</h6>
                 <p>{experiment.description}</p>
@@ -4971,10 +5319,11 @@ const OracleCalibrationValidationSection: React.FC = () => {
             className="experiment-button sm:px-4 md:px-6 lg:px-8"
             aria-label="Run bias-variance analysis experiment"
           >
-            {biasVarianceExperimentRunning ? '🔄 Analyzing Trade-offs...' : '🚀 Run Bias-Variance Analysis'}
+            {biasVarianceExperimentRunning ? &apos;🔄 Analyzing Trade-offs...&apos; : &apos;🚀 Run Bias-Variance Analysis&apos;}
           </button>
 
           {biasVarianceExperimentRunning && (
+}
             <div className="progress-container sm:px-4 md:px-6 lg:px-8">
               <div className="progress-bar sm:px-4 md:px-6 lg:px-8">
                 <div
@@ -4988,6 +5337,7 @@ const OracleCalibrationValidationSection: React.FC = () => {
         </div>
 
         {biasVarianceVisualization && biasVarianceResults && (
+}
           <div className="results-container sm:px-4 md:px-6 lg:px-8">
             <h5>📊 Bias-Variance Decomposition Results</h5>
 
@@ -5038,23 +5388,30 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <div className="chart-area sm:px-4 md:px-6 lg:px-8">
                   <div className="chart-grid sm:px-4 md:px-6 lg:px-8">
                     {biasVarianceVisualization.complexityRange.map((complexity, index) => (
+}
                       <div key={`chart-point-${complexity}`} className="chart-point sm:px-4 md:px-6 lg:px-8" style={{
+}
                         left: `${(complexity - biasVarianceVisualization.complexityRange[0]) / 
+}
                           (biasVarianceVisualization.complexityRange[biasVarianceVisualization.complexityRange.length - 1] - 
                            biasVarianceVisualization.complexityRange[0]) * 100}%`
                       }}>
                         <div className="bias-bar sm:px-4 md:px-6 lg:px-8" style={{
+}
                           height: `${biasVarianceVisualization.biasValues[index] * 200}px`,
-                          backgroundColor: '#ff6b6b'
+                          backgroundColor: &apos;#ff6b6b&apos;
                         }}></div>
                         <div className="variance-bar sm:px-4 md:px-6 lg:px-8" style={{
+}
                           height: `${biasVarianceVisualization.varianceValues[index] * 200}px`,
-                          backgroundColor: '#4ecdc4'
+                          backgroundColor: &apos;#4ecdc4&apos;
                         }}></div>
                         <div className="total-line sm:px-4 md:px-6 lg:px-8" style={{
+}
                           bottom: `${biasVarianceVisualization.totalErrorValues[index] * 200}px`
                         }}></div>
                         {Math.abs(complexity - biasVarianceVisualization.optimalComplexity) < 0.5 && (
+}
                           <div className="optimal-marker sm:px-4 md:px-6 lg:px-8">⭐</div>
                         )}
                       </div>
@@ -5101,8 +5458,10 @@ const OracleCalibrationValidationSection: React.FC = () => {
                   </thead>
                   <tbody>
                     {biasVarianceResults.slice(0, 8).map((result, index) => (
+}
                       <tr key={`result-${result.modelComplexity}`} className={
-                        Math.abs(result.modelComplexity - biasVarianceVisualization.optimalComplexity) < 1 ? 'optimal-row' : ''
+}
+                        Math.abs(result.modelComplexity - biasVarianceVisualization.optimalComplexity) < 1 ? &apos;optimal-row&apos; : &apos;&apos;
                       }>
                         <td>{result.modelComplexity.toFixed(1)}</td>
                         <td>{(result.bias * 100).toFixed(2)}%</td>
@@ -5111,15 +5470,17 @@ const OracleCalibrationValidationSection: React.FC = () => {
                         <td>{(result.totalError * 100).toFixed(2)}%</td>
                         <td>{result.metrics.r2.toFixed(3)}</td>
                         <td>
-                          {result.totalError < 0.3 ? '🟢 Excellent' :
-                           result.totalError < 0.5 ? '🟡 Good' :
-                           result.totalError < 0.7 ? '🟠 Fair' : '🔴 Poor'}
+                          {result.totalError < 0.3 ? &apos;🟢 Excellent&apos; :
+}
+                           result.totalError < 0.5 ? &apos;🟡 Good&apos; :
+                           result.totalError < 0.7 ? &apos;🟠 Fair&apos; : &apos;🔴 Poor&apos;}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 {biasVarianceResults.length > 8 && (
+}
                   <p className="table-truncation sm:px-4 md:px-6 lg:px-8">
                     Showing first 8 of {biasVarianceResults.length} complexity levels. 
                     Full analysis includes {biasVarianceResults.length} data points.
@@ -5134,30 +5495,34 @@ const OracleCalibrationValidationSection: React.FC = () => {
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Model Complexity Impact</h6>
                   <p>
-                    The {complexityConfigs.find((c: any) => c.id === selectedComplexityModel)?.name} model shows{' '}
-                    {biasVarianceVisualization.optimalComplexity < 5 ? 'low' :
-                     biasVarianceVisualization.optimalComplexity < 10 ? 'moderate' : 'high'} optimal complexity,
-                    indicating {biasVarianceVisualization.optimalComplexity < 5 ? 'simple relationships' : 
-                               biasVarianceVisualization.optimalComplexity < 10 ? 'moderate complexity patterns' :
-                               'complex non-linear interactions'} in fantasy football data.
+                    The {complexityConfigs.find((c: any) => c.id === selectedComplexityModel)?.name} model shows{&apos; &apos;}
+                    {biasVarianceVisualization.optimalComplexity < 5 ? &apos;low&apos; :
+}
+                     biasVarianceVisualization.optimalComplexity < 10 ? &apos;moderate&apos; : &apos;high&apos;} optimal complexity,
+                    indicating {biasVarianceVisualization.optimalComplexity < 5 ? &apos;simple relationships&apos; : 
+}
+                               biasVarianceVisualization.optimalComplexity < 10 ? &apos;moderate complexity patterns&apos; :
+                               &apos;complex non-linear interactions&apos;} in fantasy football data.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Generalization Capability</h6>
                   <p>
-                    The optimal bias-variance balance suggests{' '}
-                    {Math.min(...biasVarianceVisualization.totalErrorValues) < 0.3 ? 'excellent' :
-                     Math.min(...biasVarianceVisualization.totalErrorValues) < 0.5 ? 'good' : 'limited'} 
+                    The optimal bias-variance balance suggests{&apos; &apos;}
+                    {Math.min(...biasVarianceVisualization.totalErrorValues) < 0.3 ? &apos;excellent&apos; :
+}
+                     Math.min(...biasVarianceVisualization.totalErrorValues) < 0.5 ? &apos;good&apos; : &apos;limited&apos;} 
                     generalization performance for unseen fantasy football scenarios and player combinations.
                   </p>
                 </div>
                 <div className="insight-item sm:px-4 md:px-6 lg:px-8">
                   <h6>Fantasy Football Application</h6>
                   <p>
-                    For fantasy football predictions, this analysis suggests using{' '}
-                    {biasVarianceVisualization.optimalComplexity < 5 ? 'simpler models with strong domain features' :
-                     biasVarianceVisualization.optimalComplexity < 10 ? 'moderately complex models with regularization' :
-                     'complex ensemble methods with careful validation'} to achieve optimal prediction accuracy.
+                    For fantasy football predictions, this analysis suggests using{&apos; &apos;}
+                    {biasVarianceVisualization.optimalComplexity < 5 ? &apos;simpler models with strong domain features&apos; :
+}
+                     biasVarianceVisualization.optimalComplexity < 10 ? &apos;moderately complex models with regularization&apos; :
+                     &apos;complex ensemble methods with careful validation&apos;} to achieve optimal prediction accuracy.
                   </p>
                 </div>
               </div>
@@ -5209,76 +5574,76 @@ const OracleCalibrationValidationSection: React.FC = () => {
     <div className="oracle-calibration-validation-section sm:px-4 md:px-6 lg:px-8">
       <div className="section-header sm:px-4 md:px-6 lg:px-8">
         <h2>🎯 Prediction Calibration & Validation</h2>
-        <p>Ensuring accuracy, reliability, and trustworthiness in Oracle's predictions</p>
+        <p>Ensuring accuracy, reliability, and trustworthiness in Oracle&apos;s predictions</p>
       </div>
       
       <div className="section-navigation sm:px-4 md:px-6 lg:px-8">
         <button 
-          className={`nav-button ${activeTab === 'overview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('overview')}
+          className={`nav-button ${activeTab === &apos;overview&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;overview&apos;)}
         >
           📊 Overview
         </button>
         <button 
-          className={`nav-button ${activeTab === 'crossval' ? 'active' : ''}`}
-          onClick={() => setActiveTab('crossval')}
+          className={`nav-button ${activeTab === &apos;crossval&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;crossval&apos;)}
         >
           🔄 Cross-Validation
         </button>
         <button 
-          className={`nav-button ${activeTab === 'holdout' ? 'active' : ''}`}
-          onClick={() => setActiveTab('holdout')}
+          className={`nav-button ${activeTab === &apos;holdout&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;holdout&apos;)}
         >
           🎲 Holdout Methods
         </button>
         <button 
-          className={`nav-button ${activeTab === 'timeseries' ? 'active' : ''}`}
-          onClick={() => setActiveTab('timeseries')}
+          className={`nav-button ${activeTab === &apos;timeseries&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;timeseries&apos;)}
         >
           ⏰ Time Series
         </button>
         <button 
-          className={`nav-button ${activeTab === 'bootstrap' ? 'active' : ''}`}
-          onClick={() => setActiveTab('bootstrap')}
+          className={`nav-button ${activeTab === &apos;bootstrap&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;bootstrap&apos;)}
         >
           🎲 Bootstrap
         </button>
         <button 
-          className={`nav-button ${activeTab === 'calibration' ? 'active' : ''}`}
-          onClick={() => setActiveTab('calibration')}
+          className={`nav-button ${activeTab === &apos;calibration&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;calibration&apos;)}
         >
           ⚖️ Calibration
         </button>
         <button 
-          className={`nav-button ${activeTab === 'metrics' ? 'active' : ''}`}
-          onClick={() => setActiveTab('metrics')}
+          className={`nav-button ${activeTab === &apos;metrics&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;metrics&apos;)}
         >
           📈 Metrics
         </button>
         <button 
-          className={`nav-button ${activeTab === 'biasvariance' ? 'active' : ''}`}
-          onClick={() => setActiveTab('biasvariance')}
+          className={`nav-button ${activeTab === &apos;biasvariance&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;biasvariance&apos;)}
         >
           ⚖️ Bias-Variance
         </button>
         <button 
-          className={`nav-button ${activeTab === 'demo' ? 'active' : ''}`}
-          onClick={() => setActiveTab('demo')}
+          className={`nav-button ${activeTab === &apos;demo&apos; ? &apos;active&apos; : &apos;&apos;}`}
+          onClick={() => setActiveTab(&apos;demo&apos;)}
         >
           🧪 Demo
         </button>
       </div>
       
       <div className="section-content sm:px-4 md:px-6 lg:px-8">
-        {activeTab === 'overview' && renderOverview()}
-        {activeTab === 'crossval' && renderCrossValidation()}
-        {activeTab === 'holdout' && renderHoldout()}
-        {activeTab === 'timeseries' && renderTimeSeries()}
-        {activeTab === 'bootstrap' && renderBootstrap()}
-        {activeTab === 'calibration' && renderCalibration()}
-        {activeTab === 'metrics' && renderPerformanceMetrics()}
-        {activeTab === 'biasvariance' && renderBiasVarianceAnalysis()}
-        {activeTab === 'demo' && renderPlaceholder('Interactive Demo')}
+        {activeTab === &apos;overview&apos; && renderOverview()}
+        {activeTab === &apos;crossval&apos; && renderCrossValidation()}
+        {activeTab === &apos;holdout&apos; && renderHoldout()}
+        {activeTab === &apos;timeseries&apos; && renderTimeSeries()}
+        {activeTab === &apos;bootstrap&apos; && renderBootstrap()}
+        {activeTab === &apos;calibration&apos; && renderCalibration()}
+        {activeTab === &apos;metrics&apos; && renderPerformanceMetrics()}
+        {activeTab === &apos;biasvariance&apos; && renderBiasVarianceAnalysis()}
+        {activeTab === &apos;demo&apos; && renderPlaceholder(&apos;Interactive Demo&apos;)}
       </div>
     </div>
   );

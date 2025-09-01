@@ -1,36 +1,42 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import type { Player } from '../../types';
-import { players } from '../../data/players';
-import { findSimilarPlayers } from '../../services/geminiService';
-import LoadingSpinner from '../ui/LoadingSpinner';
-import { CloseIcon } from '../icons/CloseIcon';
-import { Avatar } from '../ui/Avatar';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Player } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { findSimilarPlayers } from &apos;../../services/geminiService&apos;;
+import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface SimilarPlayersPopupProps {
+}
     playerToCompare: Player;
     onClose: () => void;
 
 }
 
 const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompare, onClose }: any) => {
+}
     const [similarPlayerNames, setSimilarPlayerNames] = React.useState<string[] | null>(null);
     const [isLoading, setIsLoading] = React.useState(true);
     const { dispatch } = useAppState();
 
     React.useEffect(() => {
+}
         const fetchSimilar = async () => {
+}
             try {
+}
                 setIsLoading(true);
                 const names = await findSimilarPlayers(playerToCompare);
                 setSimilarPlayerNames(names);
                 setIsLoading(false);
             } catch (error) {
-                console.error('Error in fetchSimilar:', error);
+}
+                console.error(&apos;Error in fetchSimilar:&apos;, error);
                 setIsLoading(false);
             }
         };
@@ -38,12 +44,14 @@ const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompa
     }, [playerToCompare]);
 
     const similarPlayers = React.useMemo(() => {
+}
         if (!similarPlayerNames) return [];
         return similarPlayerNames.map((name: any) => players.find((p: any) => p.name === name)).filter(Boolean) as Player[];
     }, [similarPlayerNames]);
 
     const handlePlayerClick = (player: Player) => {
-        dispatch({ type: 'SET_PLAYER_DETAIL', payload: { player } });
+}
+        dispatch({ type: &apos;SET_PLAYER_DETAIL&apos;, payload: { player } });
         onClose();
     };
 
@@ -72,14 +80,16 @@ const SimilarPlayersPopup: React.FC<SimilarPlayersPopupProps> = ({ playerToCompa
                 </header>
                 <main className="p-4 min-h-[10rem] sm:px-4 md:px-6 lg:px-8">
                     {isLoading ? <LoadingSpinner text="Consulting the Oracle..." size="sm" /> :
+}
                      similarPlayers.length > 0 ? (
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {similarPlayers.map((player: any) => (
+}
                                 <button 
                                     key={player.id} 
                                     onClick={() => handlePlayerClick(player)}
                                 >
-                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'} className="w-10 h-10 text-2xl rounded-md flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
+                                    <Avatar avatar={player.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;} className="w-10 h-10 text-2xl rounded-md flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                     <div>
                                         <p className="font-bold text-sm text-left sm:px-4 md:px-6 lg:px-8">{player.name}</p>
                                         <p className="text-xs text-gray-400 text-left sm:px-4 md:px-6 lg:px-8">{player.position} - {player.team} | Rank: {player.rank}</p>

@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import PlayerCompareTool from './PlayerCompareTool';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import PlayerCompareTool from &apos;./PlayerCompareTool&apos;;
 
-describe('PlayerCompareTool', () => {
-  it('renders without crashing', () => {
+describe(&apos;PlayerCompareTool&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<PlayerCompareTool />);
-    expect(screen.getByTestId('playercomparetool')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;playercomparetool&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<PlayerCompareTool />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<PlayerCompareTool />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

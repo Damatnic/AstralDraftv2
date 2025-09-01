@@ -4,17 +4,18 @@
  */
 
 export interface NFLPlayer {
+}
   // Basic Information
   id: string;
   name: string;
   firstName: string;
   lastName: string;
-  position: 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
+  position: &apos;QB&apos; | &apos;RB&apos; | &apos;WR&apos; | &apos;TE&apos; | &apos;K&apos; | &apos;DEF&apos;;
   team: string;
   jerseyNumber: number;
   
   // Physical Attributes
-  height: string; // "6'2""
+  height: string; // "6&apos;2""
   weight: number; // pounds
   age: number;
   birthDate: string;
@@ -41,6 +42,7 @@ export interface NFLPlayer {
   
   // Historical Stats (3 years)
   statsHistory: {
+}
     2023: PlayerStats;
     2022: PlayerStats;
     2021: PlayerStats;
@@ -50,7 +52,7 @@ export interface NFLPlayer {
   metrics: PlayerMetrics;
   
   // Status Information
-  injuryStatus: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out' | 'IR' | 'PUP';
+  injuryStatus: &apos;Healthy&apos; | &apos;Questionable&apos; | &apos;Doubtful&apos; | &apos;Out&apos; | &apos;IR&apos; | &apos;PUP&apos;;
   injuryDetails?: string;
   depthChartPosition: number;
   
@@ -59,13 +61,14 @@ export interface NFLPlayer {
   recentNews: string[];
   
   // Fantasy Relevance
-  fantasyRelevance: 'Elite' | 'High' | 'Medium' | 'Low' | 'Deep League';
+  fantasyRelevance: &apos;Elite&apos; | &apos;High&apos; | &apos;Medium&apos; | &apos;Low&apos; | &apos;Deep League&apos;;
   breakoutCandidate: boolean;
   sleeper: boolean;
   bust: boolean;
 }
 
 export interface PlayerStats {
+}
   // Passing Stats (QB)
   passingYards?: number;
   passingTDs?: number;
@@ -112,6 +115,7 @@ export interface PlayerStats {
 }
 
 export interface PlayerMetrics {
+}
   // Advanced Analytics
   targetShare?: number; // Percentage of team targets
   snapCount?: number;
@@ -142,17 +146,18 @@ export interface PlayerMetrics {
   gamesPlayedPercentage: number; // Games played / games possible
   
   // Age Curve
-  ageCurvePosition: 'Ascending' | 'Peak' | 'Declining' | 'Veteran';
+  ageCurvePosition: &apos;Ascending&apos; | &apos;Peak&apos; | &apos;Declining&apos; | &apos;Veteran&apos;;
   projectedDecline: number; // Expected year-over-year change
 }
 
 export interface NFLTeam {
+}
   id: string;
   name: string;
   city: string;
   abbreviation: string;
-  conference: 'AFC' | 'NFC';
-  division: 'North' | 'South' | 'East' | 'West';
+  conference: &apos;AFC&apos; | &apos;NFC&apos;;
+  division: &apos;North&apos; | &apos;South&apos; | &apos;East&apos; | &apos;West&apos;;
   
   // Team Colors
   primaryColor: string;
@@ -161,7 +166,7 @@ export interface NFLTeam {
   // Stadium Information
   stadium: string;
   location: string;
-  surface: 'Grass' | 'Turf';
+  surface: &apos;Grass&apos; | &apos;Turf&apos;;
   dome: boolean;
   
   // Coaching Staff
@@ -190,21 +195,22 @@ export interface NFLTeam {
 export const NFL_TEAMS: NFLTeam[] = [
   // AFC East
   {
-    id: 'BUF',
-    name: 'Bills',
-    city: 'Buffalo',
-    abbreviation: 'BUF',
-    conference: 'AFC',
-    division: 'East',
-    primaryColor: '#00338D',
-    secondaryColor: '#C60C30',
-    stadium: 'Highmark Stadium',
-    location: 'Orchard Park, NY',
-    surface: 'Turf',
+}
+    id: &apos;BUF&apos;,
+    name: &apos;Bills&apos;,
+    city: &apos;Buffalo&apos;,
+    abbreviation: &apos;BUF&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#00338D&apos;,
+    secondaryColor: &apos;#C60C30&apos;,
+    stadium: &apos;Highmark Stadium&apos;,
+    location: &apos;Orchard Park, NY&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Sean McDermott',
-    offensiveCoordinator: 'Joe Brady',
-    defensiveCoordinator: 'Bobby Babich',
+    headCoach: &apos;Sean McDermott&apos;,
+    offensiveCoordinator: &apos;Joe Brady&apos;,
+    defensiveCoordinator: &apos;Bobby Babich&apos;,
     offensiveRanking: 2,
     defensiveRanking: 15,
     offensivePace: 65.2,
@@ -217,21 +223,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 8
   },
   {
-    id: 'MIA',
-    name: 'Dolphins',
-    city: 'Miami',
-    abbreviation: 'MIA',
-    conference: 'AFC',
-    division: 'East',
-    primaryColor: '#008E97',
-    secondaryColor: '#FC4C02',
-    stadium: 'Hard Rock Stadium',
-    location: 'Miami Gardens, FL',
-    surface: 'Grass',
+}
+    id: &apos;MIA&apos;,
+    name: &apos;Dolphins&apos;,
+    city: &apos;Miami&apos;,
+    abbreviation: &apos;MIA&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#008E97&apos;,
+    secondaryColor: &apos;#FC4C02&apos;,
+    stadium: &apos;Hard Rock Stadium&apos;,
+    location: &apos;Miami Gardens, FL&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Mike McDaniel',
-    offensiveCoordinator: 'Frank Smith',
-    defensiveCoordinator: 'Anthony Weaver',
+    headCoach: &apos;Mike McDaniel&apos;,
+    offensiveCoordinator: &apos;Frank Smith&apos;,
+    defensiveCoordinator: &apos;Anthony Weaver&apos;,
     offensiveRanking: 8,
     defensiveRanking: 24,
     offensivePace: 67.1,
@@ -244,21 +251,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 25
   },
   {
-    id: 'NE',
-    name: 'Patriots',
-    city: 'New England',
-    abbreviation: 'NE',
-    conference: 'AFC',
-    division: 'East',
-    primaryColor: '#002244',
-    secondaryColor: '#C60C30',
-    stadium: 'Gillette Stadium',
-    location: 'Foxborough, MA',
-    surface: 'Turf',
+}
+    id: &apos;NE&apos;,
+    name: &apos;Patriots&apos;,
+    city: &apos;New England&apos;,
+    abbreviation: &apos;NE&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#002244&apos;,
+    secondaryColor: &apos;#C60C30&apos;,
+    stadium: &apos;Gillette Stadium&apos;,
+    location: &apos;Foxborough, MA&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Jerod Mayo',
-    offensiveCoordinator: 'Alex Van Pelt',
-    defensiveCoordinator: 'DeMarcus Covington',
+    headCoach: &apos;Jerod Mayo&apos;,
+    offensiveCoordinator: &apos;Alex Van Pelt&apos;,
+    defensiveCoordinator: &apos;DeMarcus Covington&apos;,
     offensiveRanking: 28,
     defensiveRanking: 8,
     offensivePace: 62.4,
@@ -271,21 +279,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 15
   },
   {
-    id: 'NYJ',
-    name: 'Jets',
-    city: 'New York',
-    abbreviation: 'NYJ',
-    conference: 'AFC',
-    division: 'East',
-    primaryColor: '#125740',
-    secondaryColor: '#000000',
-    stadium: 'MetLife Stadium',
-    location: 'East Rutherford, NJ',
-    surface: 'Turf',
+}
+    id: &apos;NYJ&apos;,
+    name: &apos;Jets&apos;,
+    city: &apos;New York&apos;,
+    abbreviation: &apos;NYJ&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#125740&apos;,
+    secondaryColor: &apos;#000000&apos;,
+    stadium: &apos;MetLife Stadium&apos;,
+    location: &apos;East Rutherford, NJ&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Robert Saleh',
-    offensiveCoordinator: 'Nathaniel Hackett',
-    defensiveCoordinator: 'Jeff Ulbrich',
+    headCoach: &apos;Robert Saleh&apos;,
+    offensiveCoordinator: &apos;Nathaniel Hackett&apos;,
+    defensiveCoordinator: &apos;Jeff Ulbrich&apos;,
     offensiveRanking: 24,
     defensiveRanking: 4,
     offensivePace: 63.8,
@@ -300,21 +309,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // AFC North
   {
-    id: 'BAL',
-    name: 'Ravens',
-    city: 'Baltimore',
-    abbreviation: 'BAL',
-    conference: 'AFC',
-    division: 'North',
-    primaryColor: '#241773',
-    secondaryColor: '#000000',
-    stadium: 'M&T Bank Stadium',
-    location: 'Baltimore, MD',
-    surface: 'Grass',
+}
+    id: &apos;BAL&apos;,
+    name: &apos;Ravens&apos;,
+    city: &apos;Baltimore&apos;,
+    abbreviation: &apos;BAL&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#241773&apos;,
+    secondaryColor: &apos;#000000&apos;,
+    stadium: &apos;M&T Bank Stadium&apos;,
+    location: &apos;Baltimore, MD&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'John Harbaugh',
-    offensiveCoordinator: 'Todd Monken',
-    defensiveCoordinator: 'Roquan Smith',
+    headCoach: &apos;John Harbaugh&apos;,
+    offensiveCoordinator: &apos;Todd Monken&apos;,
+    defensiveCoordinator: &apos;Roquan Smith&apos;,
     offensiveRanking: 1,
     defensiveRanking: 11,
     offensivePace: 66.9,
@@ -327,21 +337,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 7
   },
   {
-    id: 'CIN',
-    name: 'Bengals',
-    city: 'Cincinnati',
-    abbreviation: 'CIN',
-    conference: 'AFC',
-    division: 'North',
-    primaryColor: '#FB4F14',
-    secondaryColor: '#000000',
-    stadium: 'Paycor Stadium',
-    location: 'Cincinnati, OH',
-    surface: 'Turf',
+}
+    id: &apos;CIN&apos;,
+    name: &apos;Bengals&apos;,
+    city: &apos;Cincinnati&apos;,
+    abbreviation: &apos;CIN&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#FB4F14&apos;,
+    secondaryColor: &apos;#000000&apos;,
+    stadium: &apos;Paycor Stadium&apos;,
+    location: &apos;Cincinnati, OH&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Zac Taylor',
-    offensiveCoordinator: 'Brian Callahan',
-    defensiveCoordinator: 'Lou Anarumo',
+    headCoach: &apos;Zac Taylor&apos;,
+    offensiveCoordinator: &apos;Brian Callahan&apos;,
+    defensiveCoordinator: &apos;Lou Anarumo&apos;,
     offensiveRanking: 5,
     defensiveRanking: 18,
     offensivePace: 65.7,
@@ -354,21 +365,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 23
   },
   {
-    id: 'CLE',
-    name: 'Browns',
-    city: 'Cleveland',
-    abbreviation: 'CLE',
-    conference: 'AFC',
-    division: 'North',
-    primaryColor: '#311D00',
-    secondaryColor: '#FF3C00',
-    stadium: 'Cleveland Browns Stadium',
-    location: 'Cleveland, OH',
-    surface: 'Grass',
+}
+    id: &apos;CLE&apos;,
+    name: &apos;Browns&apos;,
+    city: &apos;Cleveland&apos;,
+    abbreviation: &apos;CLE&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#311D00&apos;,
+    secondaryColor: &apos;#FF3C00&apos;,
+    stadium: &apos;Cleveland Browns Stadium&apos;,
+    location: &apos;Cleveland, OH&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Kevin Stefanski',
-    offensiveCoordinator: 'Ken Dorsey',
-    defensiveCoordinator: 'Jim Schwartz',
+    headCoach: &apos;Kevin Stefanski&apos;,
+    offensiveCoordinator: &apos;Ken Dorsey&apos;,
+    defensiveCoordinator: &apos;Jim Schwartz&apos;,
     offensiveRanking: 22,
     defensiveRanking: 3,
     offensivePace: 61.9,
@@ -381,21 +393,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 9
   },
   {
-    id: 'PIT',
-    name: 'Steelers',
-    city: 'Pittsburgh',
-    abbreviation: 'PIT',
-    conference: 'AFC',
-    division: 'North',
-    primaryColor: '#FFB612',
-    secondaryColor: '#101820',
-    stadium: 'Heinz Field',
-    location: 'Pittsburgh, PA',
-    surface: 'Grass',
+}
+    id: &apos;PIT&apos;,
+    name: &apos;Steelers&apos;,
+    city: &apos;Pittsburgh&apos;,
+    abbreviation: &apos;PIT&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#FFB612&apos;,
+    secondaryColor: &apos;#101820&apos;,
+    stadium: &apos;Heinz Field&apos;,
+    location: &apos;Pittsburgh, PA&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Mike Tomlin',
-    offensiveCoordinator: 'Arthur Smith',
-    defensiveCoordinator: 'Teryl Austin',
+    headCoach: &apos;Mike Tomlin&apos;,
+    offensiveCoordinator: &apos;Arthur Smith&apos;,
+    defensiveCoordinator: &apos;Teryl Austin&apos;,
     offensiveRanking: 18,
     defensiveRanking: 7,
     offensivePace: 63.2,
@@ -410,21 +423,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // AFC South
   {
-    id: 'HOU',
-    name: 'Texans',
-    city: 'Houston',
-    abbreviation: 'HOU',
-    conference: 'AFC',
-    division: 'South',
-    primaryColor: '#03202F',
-    secondaryColor: '#A71930',
-    stadium: 'NRG Stadium',
-    location: 'Houston, TX',
-    surface: 'Turf',
+}
+    id: &apos;HOU&apos;,
+    name: &apos;Texans&apos;,
+    city: &apos;Houston&apos;,
+    abbreviation: &apos;HOU&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#03202F&apos;,
+    secondaryColor: &apos;#A71930&apos;,
+    stadium: &apos;NRG Stadium&apos;,
+    location: &apos;Houston, TX&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'DeMeco Ryans',
-    offensiveCoordinator: 'Bobby Slowik',
-    defensiveCoordinator: 'Matt Burke',
+    headCoach: &apos;DeMeco Ryans&apos;,
+    offensiveCoordinator: &apos;Bobby Slowik&apos;,
+    defensiveCoordinator: &apos;Matt Burke&apos;,
     offensiveRanking: 12,
     defensiveRanking: 9,
     offensivePace: 64.8,
@@ -437,21 +451,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 11
   },
   {
-    id: 'IND',
-    name: 'Colts',
-    city: 'Indianapolis',
-    abbreviation: 'IND',
-    conference: 'AFC',
-    division: 'South',
-    primaryColor: '#002C5F',
-    secondaryColor: '#A2AAAD',
-    stadium: 'Lucas Oil Stadium',
-    location: 'Indianapolis, IN',
-    surface: 'Turf',
+}
+    id: &apos;IND&apos;,
+    name: &apos;Colts&apos;,
+    city: &apos;Indianapolis&apos;,
+    abbreviation: &apos;IND&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#002C5F&apos;,
+    secondaryColor: &apos;#A2AAAD&apos;,
+    stadium: &apos;Lucas Oil Stadium&apos;,
+    location: &apos;Indianapolis, IN&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Shane Steichen',
-    offensiveCoordinator: 'Jim Bob Cooter',
-    defensiveCoordinator: 'Gus Bradley',
+    headCoach: &apos;Shane Steichen&apos;,
+    offensiveCoordinator: &apos;Jim Bob Cooter&apos;,
+    defensiveCoordinator: &apos;Gus Bradley&apos;,
     offensiveRanking: 16,
     defensiveRanking: 20,
     offensivePace: 63.5,
@@ -464,21 +479,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 26
   },
   {
-    id: 'JAX',
-    name: 'Jaguars',
-    city: 'Jacksonville',
-    abbreviation: 'JAX',
-    conference: 'AFC',
-    division: 'South',
-    primaryColor: '#006778',
-    secondaryColor: '#9F792C',
-    stadium: 'TIAA Bank Field',
-    location: 'Jacksonville, FL',
-    surface: 'Grass',
+}
+    id: &apos;JAX&apos;,
+    name: &apos;Jaguars&apos;,
+    city: &apos;Jacksonville&apos;,
+    abbreviation: &apos;JAX&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#006778&apos;,
+    secondaryColor: &apos;#9F792C&apos;,
+    stadium: &apos;TIAA Bank Field&apos;,
+    location: &apos;Jacksonville, FL&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Doug Pederson',
-    offensiveCoordinator: 'Press Taylor',
-    defensiveCoordinator: 'Ryan Nielsen',
+    headCoach: &apos;Doug Pederson&apos;,
+    offensiveCoordinator: &apos;Press Taylor&apos;,
+    defensiveCoordinator: &apos;Ryan Nielsen&apos;,
     offensiveRanking: 14,
     defensiveRanking: 25,
     offensivePace: 65.1,
@@ -491,21 +507,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 28
   },
   {
-    id: 'TEN',
-    name: 'Titans',
-    city: 'Tennessee',
-    abbreviation: 'TEN',
-    conference: 'AFC',
-    division: 'South',
-    primaryColor: '#0C2340',
-    secondaryColor: '#4B92DB',
-    stadium: 'Nissan Stadium',
-    location: 'Nashville, TN',
-    surface: 'Grass',
+}
+    id: &apos;TEN&apos;,
+    name: &apos;Titans&apos;,
+    city: &apos;Tennessee&apos;,
+    abbreviation: &apos;TEN&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#0C2340&apos;,
+    secondaryColor: &apos;#4B92DB&apos;,
+    stadium: &apos;Nissan Stadium&apos;,
+    location: &apos;Nashville, TN&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Brian Callahan',
-    offensiveCoordinator: 'Nick Holz',
-    defensiveCoordinator: 'Dennard Wilson',
+    headCoach: &apos;Brian Callahan&apos;,
+    offensiveCoordinator: &apos;Nick Holz&apos;,
+    defensiveCoordinator: &apos;Dennard Wilson&apos;,
     offensiveRanking: 26,
     defensiveRanking: 28,
     offensivePace: 62.1,
@@ -520,21 +537,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // AFC West
   {
-    id: 'DEN',
-    name: 'Broncos',
-    city: 'Denver',
-    abbreviation: 'DEN',
-    conference: 'AFC',
-    division: 'West',
-    primaryColor: '#FB4F14',
-    secondaryColor: '#002244',
-    stadium: 'Empower Field at Mile High',
-    location: 'Denver, CO',
-    surface: 'Grass',
+}
+    id: &apos;DEN&apos;,
+    name: &apos;Broncos&apos;,
+    city: &apos;Denver&apos;,
+    abbreviation: &apos;DEN&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#FB4F14&apos;,
+    secondaryColor: &apos;#002244&apos;,
+    stadium: &apos;Empower Field at Mile High&apos;,
+    location: &apos;Denver, CO&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Sean Payton',
-    offensiveCoordinator: 'Joe Lombardi',
-    defensiveCoordinator: 'Vance Joseph',
+    headCoach: &apos;Sean Payton&apos;,
+    offensiveCoordinator: &apos;Joe Lombardi&apos;,
+    defensiveCoordinator: &apos;Vance Joseph&apos;,
     offensiveRanking: 10,
     defensiveRanking: 6,
     offensivePace: 64.3,
@@ -547,21 +565,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 10
   },
   {
-    id: 'KC',
-    name: 'Chiefs',
-    city: 'Kansas City',
-    abbreviation: 'KC',
-    conference: 'AFC',
-    division: 'West',
-    primaryColor: '#E31837',
-    secondaryColor: '#FFB81C',
-    stadium: 'Arrowhead Stadium',
-    location: 'Kansas City, MO',
-    surface: 'Grass',
+}
+    id: &apos;KC&apos;,
+    name: &apos;Chiefs&apos;,
+    city: &apos;Kansas City&apos;,
+    abbreviation: &apos;KC&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#E31837&apos;,
+    secondaryColor: &apos;#FFB81C&apos;,
+    stadium: &apos;Arrowhead Stadium&apos;,
+    location: &apos;Kansas City, MO&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Andy Reid',
-    offensiveCoordinator: 'Matt Nagy',
-    defensiveCoordinator: 'Steve Spagnuolo',
+    headCoach: &apos;Andy Reid&apos;,
+    offensiveCoordinator: &apos;Matt Nagy&apos;,
+    defensiveCoordinator: &apos;Steve Spagnuolo&apos;,
     offensiveRanking: 3,
     defensiveRanking: 12,
     offensivePace: 66.4,
@@ -574,21 +593,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 16
   },
   {
-    id: 'LV',
-    name: 'Raiders',
-    city: 'Las Vegas',
-    abbreviation: 'LV',
-    conference: 'AFC',
-    division: 'West',
-    primaryColor: '#000000',
-    secondaryColor: '#A5ACAF',
-    stadium: 'Allegiant Stadium',
-    location: 'Las Vegas, NV',
-    surface: 'Grass',
+}
+    id: &apos;LV&apos;,
+    name: &apos;Raiders&apos;,
+    city: &apos;Las Vegas&apos;,
+    abbreviation: &apos;LV&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#000000&apos;,
+    secondaryColor: &apos;#A5ACAF&apos;,
+    stadium: &apos;Allegiant Stadium&apos;,
+    location: &apos;Las Vegas, NV&apos;,
+    surface: &apos;Grass&apos;,
     dome: true,
-    headCoach: 'Antonio Pierce',
-    offensiveCoordinator: 'Luke Getsy',
-    defensiveCoordinator: 'Patrick Graham',
+    headCoach: &apos;Antonio Pierce&apos;,
+    offensiveCoordinator: &apos;Luke Getsy&apos;,
+    defensiveCoordinator: &apos;Patrick Graham&apos;,
     offensiveRanking: 20,
     defensiveRanking: 22,
     offensivePace: 63.7,
@@ -601,21 +621,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 27
   },
   {
-    id: 'LAC',
-    name: 'Chargers',
-    city: 'Los Angeles',
-    abbreviation: 'LAC',
-    conference: 'AFC',
-    division: 'West',
-    primaryColor: '#0080C6',
-    secondaryColor: '#FFC20E',
-    stadium: 'SoFi Stadium',
-    location: 'Los Angeles, CA',
-    surface: 'Turf',
+}
+    id: &apos;LAC&apos;,
+    name: &apos;Chargers&apos;,
+    city: &apos;Los Angeles&apos;,
+    abbreviation: &apos;LAC&apos;,
+    conference: &apos;AFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#0080C6&apos;,
+    secondaryColor: &apos;#FFC20E&apos;,
+    stadium: &apos;SoFi Stadium&apos;,
+    location: &apos;Los Angeles, CA&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Jim Harbaugh',
-    offensiveCoordinator: 'Greg Roman',
-    defensiveCoordinator: 'Jesse Minter',
+    headCoach: &apos;Jim Harbaugh&apos;,
+    offensiveCoordinator: &apos;Greg Roman&apos;,
+    defensiveCoordinator: &apos;Jesse Minter&apos;,
     offensiveRanking: 11,
     defensiveRanking: 13,
     offensivePace: 64.9,
@@ -630,21 +651,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // NFC East
   {
-    id: 'DAL',
-    name: 'Cowboys',
-    city: 'Dallas',
-    abbreviation: 'DAL',
-    conference: 'NFC',
-    division: 'East',
-    primaryColor: '#003594',
-    secondaryColor: '#869397',
-    stadium: 'AT&T Stadium',
-    location: 'Arlington, TX',
-    surface: 'Turf',
+}
+    id: &apos;DAL&apos;,
+    name: &apos;Cowboys&apos;,
+    city: &apos;Dallas&apos;,
+    abbreviation: &apos;DAL&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#003594&apos;,
+    secondaryColor: &apos;#869397&apos;,
+    stadium: &apos;AT&T Stadium&apos;,
+    location: &apos;Arlington, TX&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Mike McCarthy',
-    offensiveCoordinator: 'Brian Schottenheimer',
-    defensiveCoordinator: 'Mike Zimmer',
+    headCoach: &apos;Mike McCarthy&apos;,
+    offensiveCoordinator: &apos;Brian Schottenheimer&apos;,
+    defensiveCoordinator: &apos;Mike Zimmer&apos;,
     offensiveRanking: 6,
     defensiveRanking: 16,
     offensivePace: 65.8,
@@ -657,21 +679,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 20
   },
   {
-    id: 'NYG',
-    name: 'Giants',
-    city: 'New York',
-    abbreviation: 'NYG',
-    conference: 'NFC',
-    division: 'East',
-    primaryColor: '#0B2265',
-    secondaryColor: '#A71930',
-    stadium: 'MetLife Stadium',
-    location: 'East Rutherford, NJ',
-    surface: 'Turf',
+}
+    id: &apos;NYG&apos;,
+    name: &apos;Giants&apos;,
+    city: &apos;New York&apos;,
+    abbreviation: &apos;NYG&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#0B2265&apos;,
+    secondaryColor: &apos;#A71930&apos;,
+    stadium: &apos;MetLife Stadium&apos;,
+    location: &apos;East Rutherford, NJ&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Brian Daboll',
-    offensiveCoordinator: 'Mike Kafka',
-    defensiveCoordinator: 'Shane Bowen',
+    headCoach: &apos;Brian Daboll&apos;,
+    offensiveCoordinator: &apos;Mike Kafka&apos;,
+    defensiveCoordinator: &apos;Shane Bowen&apos;,
     offensiveRanking: 30,
     defensiveRanking: 19,
     offensivePace: 61.8,
@@ -684,21 +707,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 24
   },
   {
-    id: 'PHI',
-    name: 'Eagles',
-    city: 'Philadelphia',
-    abbreviation: 'PHI',
-    conference: 'NFC',
-    division: 'East',
-    primaryColor: '#004C54',
-    secondaryColor: '#A5ACAF',
-    stadium: 'Lincoln Financial Field',
-    location: 'Philadelphia, PA',
-    surface: 'Grass',
+}
+    id: &apos;PHI&apos;,
+    name: &apos;Eagles&apos;,
+    city: &apos;Philadelphia&apos;,
+    abbreviation: &apos;PHI&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#004C54&apos;,
+    secondaryColor: &apos;#A5ACAF&apos;,
+    stadium: &apos;Lincoln Financial Field&apos;,
+    location: &apos;Philadelphia, PA&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Nick Sirianni',
-    offensiveCoordinator: 'Kellen Moore',
-    defensiveCoordinator: 'Vic Fangio',
+    headCoach: &apos;Nick Sirianni&apos;,
+    offensiveCoordinator: &apos;Kellen Moore&apos;,
+    defensiveCoordinator: &apos;Vic Fangio&apos;,
     offensiveRanking: 4,
     defensiveRanking: 10,
     offensivePace: 66.7,
@@ -711,21 +735,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 14
   },
   {
-    id: 'WAS',
-    name: 'Commanders',
-    city: 'Washington',
-    abbreviation: 'WAS',
-    conference: 'NFC',
-    division: 'East',
-    primaryColor: '#5A1414',
-    secondaryColor: '#FFB612',
-    stadium: 'FedExField',
-    location: 'Landover, MD',
-    surface: 'Grass',
+}
+    id: &apos;WAS&apos;,
+    name: &apos;Commanders&apos;,
+    city: &apos;Washington&apos;,
+    abbreviation: &apos;WAS&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;East&apos;,
+    primaryColor: &apos;#5A1414&apos;,
+    secondaryColor: &apos;#FFB612&apos;,
+    stadium: &apos;FedExField&apos;,
+    location: &apos;Landover, MD&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Dan Quinn',
-    offensiveCoordinator: 'Kliff Kingsbury',
-    defensiveCoordinator: 'Joe Whitt Jr.',
+    headCoach: &apos;Dan Quinn&apos;,
+    offensiveCoordinator: &apos;Kliff Kingsbury&apos;,
+    defensiveCoordinator: &apos;Joe Whitt Jr.&apos;,
     offensiveRanking: 13,
     defensiveRanking: 17,
     offensivePace: 64.6,
@@ -740,21 +765,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // NFC North
   {
-    id: 'CHI',
-    name: 'Bears',
-    city: 'Chicago',
-    abbreviation: 'CHI',
-    conference: 'NFC',
-    division: 'North',
-    primaryColor: '#0B162A',
-    secondaryColor: '#C83803',
-    stadium: 'Soldier Field',
-    location: 'Chicago, IL',
-    surface: 'Grass',
+}
+    id: &apos;CHI&apos;,
+    name: &apos;Bears&apos;,
+    city: &apos;Chicago&apos;,
+    abbreviation: &apos;CHI&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#0B162A&apos;,
+    secondaryColor: &apos;#C83803&apos;,
+    stadium: &apos;Soldier Field&apos;,
+    location: &apos;Chicago, IL&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Matt Eberflus',
-    offensiveCoordinator: 'Shane Waldron',
-    defensiveCoordinator: 'Eric Washington',
+    headCoach: &apos;Matt Eberflus&apos;,
+    offensiveCoordinator: &apos;Shane Waldron&apos;,
+    defensiveCoordinator: &apos;Eric Washington&apos;,
     offensiveRanking: 25,
     defensiveRanking: 14,
     offensivePace: 62.7,
@@ -767,21 +793,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 17
   },
   {
-    id: 'DET',
-    name: 'Lions',
-    city: 'Detroit',
-    abbreviation: 'DET',
-    conference: 'NFC',
-    division: 'North',
-    primaryColor: '#0076B6',
-    secondaryColor: '#B0B7BC',
-    stadium: 'Ford Field',
-    location: 'Detroit, MI',
-    surface: 'Turf',
+}
+    id: &apos;DET&apos;,
+    name: &apos;Lions&apos;,
+    city: &apos;Detroit&apos;,
+    abbreviation: &apos;DET&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#0076B6&apos;,
+    secondaryColor: &apos;#B0B7BC&apos;,
+    stadium: &apos;Ford Field&apos;,
+    location: &apos;Detroit, MI&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Dan Campbell',
-    offensiveCoordinator: 'Ben Johnson',
-    defensiveCoordinator: 'Aaron Glenn',
+    headCoach: &apos;Dan Campbell&apos;,
+    offensiveCoordinator: &apos;Ben Johnson&apos;,
+    defensiveCoordinator: &apos;Aaron Glenn&apos;,
     offensiveRanking: 7,
     defensiveRanking: 21,
     offensivePace: 67.3,
@@ -794,21 +821,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 22
   },
   {
-    id: 'GB',
-    name: 'Packers',
-    city: 'Green Bay',
-    abbreviation: 'GB',
-    conference: 'NFC',
-    division: 'North',
-    primaryColor: '#203731',
-    secondaryColor: '#FFB612',
-    stadium: 'Lambeau Field',
-    location: 'Green Bay, WI',
-    surface: 'Grass',
+}
+    id: &apos;GB&apos;,
+    name: &apos;Packers&apos;,
+    city: &apos;Green Bay&apos;,
+    abbreviation: &apos;GB&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#203731&apos;,
+    secondaryColor: &apos;#FFB612&apos;,
+    stadium: &apos;Lambeau Field&apos;,
+    location: &apos;Green Bay, WI&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Matt LaFleur',
-    offensiveCoordinator: 'Adam Stenavich',
-    defensiveCoordinator: 'Jeff Hafley',
+    headCoach: &apos;Matt LaFleur&apos;,
+    offensiveCoordinator: &apos;Adam Stenavich&apos;,
+    defensiveCoordinator: &apos;Jeff Hafley&apos;,
     offensiveRanking: 9,
     defensiveRanking: 5,
     offensivePace: 65.4,
@@ -821,21 +849,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 5
   },
   {
-    id: 'MIN',
-    name: 'Vikings',
-    city: 'Minnesota',
-    abbreviation: 'MIN',
-    conference: 'NFC',
-    division: 'North',
-    primaryColor: '#4F2683',
-    secondaryColor: '#FFC62F',
-    stadium: 'U.S. Bank Stadium',
-    location: 'Minneapolis, MN',
-    surface: 'Turf',
+}
+    id: &apos;MIN&apos;,
+    name: &apos;Vikings&apos;,
+    city: &apos;Minnesota&apos;,
+    abbreviation: &apos;MIN&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;North&apos;,
+    primaryColor: &apos;#4F2683&apos;,
+    secondaryColor: &apos;#FFC62F&apos;,
+    stadium: &apos;U.S. Bank Stadium&apos;,
+    location: &apos;Minneapolis, MN&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Kevin O\'Connell',
-    offensiveCoordinator: 'Wes Phillips',
-    defensiveCoordinator: 'Brian Flores',
+    headCoach: &apos;Kevin O\&apos;Connell&apos;,
+    offensiveCoordinator: &apos;Wes Phillips&apos;,
+    defensiveCoordinator: &apos;Brian Flores&apos;,
     offensiveRanking: 15,
     defensiveRanking: 1,
     offensivePace: 64.1,
@@ -850,21 +879,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // NFC South
   {
-    id: 'ATL',
-    name: 'Falcons',
-    city: 'Atlanta',
-    abbreviation: 'ATL',
-    conference: 'NFC',
-    division: 'South',
-    primaryColor: '#A71930',
-    secondaryColor: '#000000',
-    stadium: 'Mercedes-Benz Stadium',
-    location: 'Atlanta, GA',
-    surface: 'Turf',
+}
+    id: &apos;ATL&apos;,
+    name: &apos;Falcons&apos;,
+    city: &apos;Atlanta&apos;,
+    abbreviation: &apos;ATL&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#A71930&apos;,
+    secondaryColor: &apos;#000000&apos;,
+    stadium: &apos;Mercedes-Benz Stadium&apos;,
+    location: &apos;Atlanta, GA&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Raheem Morris',
-    offensiveCoordinator: 'Zac Robinson',
-    defensiveCoordinator: 'Jimmy Lake',
+    headCoach: &apos;Raheem Morris&apos;,
+    offensiveCoordinator: &apos;Zac Robinson&apos;,
+    defensiveCoordinator: &apos;Jimmy Lake&apos;,
     offensiveRanking: 17,
     defensiveRanking: 26,
     offensivePace: 63.9,
@@ -877,21 +907,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 29
   },
   {
-    id: 'CAR',
-    name: 'Panthers',
-    city: 'Carolina',
-    abbreviation: 'CAR',
-    conference: 'NFC',
-    division: 'South',
-    primaryColor: '#0085CA',
-    secondaryColor: '#101820',
-    stadium: 'Bank of America Stadium',
-    location: 'Charlotte, NC',
-    surface: 'Grass',
+}
+    id: &apos;CAR&apos;,
+    name: &apos;Panthers&apos;,
+    city: &apos;Carolina&apos;,
+    abbreviation: &apos;CAR&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#0085CA&apos;,
+    secondaryColor: &apos;#101820&apos;,
+    stadium: &apos;Bank of America Stadium&apos;,
+    location: &apos;Charlotte, NC&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Dave Canales',
-    offensiveCoordinator: 'Brad Idzik',
-    defensiveCoordinator: 'Ejiro Evero',
+    headCoach: &apos;Dave Canales&apos;,
+    offensiveCoordinator: &apos;Brad Idzik&apos;,
+    defensiveCoordinator: &apos;Ejiro Evero&apos;,
     offensiveRanking: 32,
     defensiveRanking: 29,
     offensivePace: 60.8,
@@ -904,21 +935,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 30
   },
   {
-    id: 'NO',
-    name: 'Saints',
-    city: 'New Orleans',
-    abbreviation: 'NO',
-    conference: 'NFC',
-    division: 'South',
-    primaryColor: '#D3BC8D',
-    secondaryColor: '#101820',
-    stadium: 'Caesars Superdome',
-    location: 'New Orleans, LA',
-    surface: 'Turf',
+}
+    id: &apos;NO&apos;,
+    name: &apos;Saints&apos;,
+    city: &apos;New Orleans&apos;,
+    abbreviation: &apos;NO&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#D3BC8D&apos;,
+    secondaryColor: &apos;#101820&apos;,
+    stadium: &apos;Caesars Superdome&apos;,
+    location: &apos;New Orleans, LA&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Dennis Allen',
-    offensiveCoordinator: 'Pete Carmichael Jr.',
-    defensiveCoordinator: 'Joe Woods',
+    headCoach: &apos;Dennis Allen&apos;,
+    offensiveCoordinator: &apos;Pete Carmichael Jr.&apos;,
+    defensiveCoordinator: &apos;Joe Woods&apos;,
     offensiveRanking: 21,
     defensiveRanking: 23,
     offensivePace: 63.1,
@@ -931,21 +963,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 25
   },
   {
-    id: 'TB',
-    name: 'Buccaneers',
-    city: 'Tampa Bay',
-    abbreviation: 'TB',
-    conference: 'NFC',
-    division: 'South',
-    primaryColor: '#D50A0A',
-    secondaryColor: '#FF7900',
-    stadium: 'Raymond James Stadium',
-    location: 'Tampa, FL',
-    surface: 'Grass',
+}
+    id: &apos;TB&apos;,
+    name: &apos;Buccaneers&apos;,
+    city: &apos;Tampa Bay&apos;,
+    abbreviation: &apos;TB&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;South&apos;,
+    primaryColor: &apos;#D50A0A&apos;,
+    secondaryColor: &apos;#FF7900&apos;,
+    stadium: &apos;Raymond James Stadium&apos;,
+    location: &apos;Tampa, FL&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Todd Bowles',
-    offensiveCoordinator: 'Liam Coen',
-    defensiveCoordinator: 'Kacy Rodgers',
+    headCoach: &apos;Todd Bowles&apos;,
+    offensiveCoordinator: &apos;Liam Coen&apos;,
+    defensiveCoordinator: &apos;Kacy Rodgers&apos;,
     offensiveRanking: 19,
     defensiveRanking: 27,
     offensivePace: 64.5,
@@ -960,21 +993,22 @@ export const NFL_TEAMS: NFLTeam[] = [
   
   // NFC West
   {
-    id: 'ARI',
-    name: 'Cardinals',
-    city: 'Arizona',
-    abbreviation: 'ARI',
-    conference: 'NFC',
-    division: 'West',
-    primaryColor: '#97233F',
-    secondaryColor: '#000000',
-    stadium: 'State Farm Stadium',
-    location: 'Glendale, AZ',
-    surface: 'Grass',
+}
+    id: &apos;ARI&apos;,
+    name: &apos;Cardinals&apos;,
+    city: &apos;Arizona&apos;,
+    abbreviation: &apos;ARI&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#97233F&apos;,
+    secondaryColor: &apos;#000000&apos;,
+    stadium: &apos;State Farm Stadium&apos;,
+    location: &apos;Glendale, AZ&apos;,
+    surface: &apos;Grass&apos;,
     dome: true,
-    headCoach: 'Jonathan Gannon',
-    offensiveCoordinator: 'Drew Petzing',
-    defensiveCoordinator: 'Nick Rallis',
+    headCoach: &apos;Jonathan Gannon&apos;,
+    offensiveCoordinator: &apos;Drew Petzing&apos;,
+    defensiveCoordinator: &apos;Nick Rallis&apos;,
     offensiveRanking: 23,
     defensiveRanking: 30,
     offensivePace: 63.4,
@@ -987,21 +1021,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 33
   },
   {
-    id: 'LAR',
-    name: 'Rams',
-    city: 'Los Angeles',
-    abbreviation: 'LAR',
-    conference: 'NFC',
-    division: 'West',
-    primaryColor: '#003594',
-    secondaryColor: '#FFA300',
-    stadium: 'SoFi Stadium',
-    location: 'Los Angeles, CA',
-    surface: 'Turf',
+}
+    id: &apos;LAR&apos;,
+    name: &apos;Rams&apos;,
+    city: &apos;Los Angeles&apos;,
+    abbreviation: &apos;LAR&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#003594&apos;,
+    secondaryColor: &apos;#FFA300&apos;,
+    stadium: &apos;SoFi Stadium&apos;,
+    location: &apos;Los Angeles, CA&apos;,
+    surface: &apos;Turf&apos;,
     dome: true,
-    headCoach: 'Sean McVay',
-    offensiveCoordinator: 'Mike LaFleur',
-    defensiveCoordinator: 'Chris Shula',
+    headCoach: &apos;Sean McVay&apos;,
+    offensiveCoordinator: &apos;Mike LaFleur&apos;,
+    defensiveCoordinator: &apos;Chris Shula&apos;,
     offensiveRanking: 27,
     defensiveRanking: 2,
     offensivePace: 62.3,
@@ -1014,21 +1049,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 3
   },
   {
-    id: 'SF',
-    name: '49ers',
-    city: 'San Francisco',
-    abbreviation: 'SF',
-    conference: 'NFC',
-    division: 'West',
-    primaryColor: '#AA0000',
-    secondaryColor: '#B3995D',
-    stadium: 'Levi\'s Stadium',
-    location: 'Santa Clara, CA',
-    surface: 'Grass',
+}
+    id: &apos;SF&apos;,
+    name: &apos;49ers&apos;,
+    city: &apos;San Francisco&apos;,
+    abbreviation: &apos;SF&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#AA0000&apos;,
+    secondaryColor: &apos;#B3995D&apos;,
+    stadium: &apos;Levi\&apos;s Stadium&apos;,
+    location: &apos;Santa Clara, CA&apos;,
+    surface: &apos;Grass&apos;,
     dome: false,
-    headCoach: 'Kyle Shanahan',
-    offensiveCoordinator: 'Kyle Shanahan',
-    defensiveCoordinator: 'Nick Sorensen',
+    headCoach: &apos;Kyle Shanahan&apos;,
+    offensiveCoordinator: &apos;Kyle Shanahan&apos;,
+    defensiveCoordinator: &apos;Nick Sorensen&apos;,
     offensiveRanking: 29,
     defensiveRanking: 31,
     offensivePace: 61.7,
@@ -1041,21 +1077,22 @@ export const NFL_TEAMS: NFLTeam[] = [
     defenseVsTE: 4
   },
   {
-    id: 'SEA',
-    name: 'Seahawks',
-    city: 'Seattle',
-    abbreviation: 'SEA',
-    conference: 'NFC',
-    division: 'West',
-    primaryColor: '#002244',
-    secondaryColor: '#69BE28',
-    stadium: 'Lumen Field',
-    location: 'Seattle, WA',
-    surface: 'Turf',
+}
+    id: &apos;SEA&apos;,
+    name: &apos;Seahawks&apos;,
+    city: &apos;Seattle&apos;,
+    abbreviation: &apos;SEA&apos;,
+    conference: &apos;NFC&apos;,
+    division: &apos;West&apos;,
+    primaryColor: &apos;#002244&apos;,
+    secondaryColor: &apos;#69BE28&apos;,
+    stadium: &apos;Lumen Field&apos;,
+    location: &apos;Seattle, WA&apos;,
+    surface: &apos;Turf&apos;,
     dome: false,
-    headCoach: 'Mike Macdonald',
-    offensiveCoordinator: 'Ryan Grubb',
-    defensiveCoordinator: 'Aden Durde',
+    headCoach: &apos;Mike Macdonald&apos;,
+    offensiveCoordinator: &apos;Ryan Grubb&apos;,
+    defensiveCoordinator: &apos;Aden Durde&apos;,
     offensiveRanking: 31,
     defensiveRanking: 32,
     offensivePace: 61.2,
@@ -1073,19 +1110,20 @@ export const NFL_TEAMS: NFLTeam[] = [
 export const NFL_PLAYERS: NFLPlayer[] = [
   // Top QBs
   {
-    id: 'josh-allen',
-    name: 'Josh Allen',
-    firstName: 'Josh',
-    lastName: 'Allen',
-    position: 'QB',
-    team: 'BUF',
+}
+    id: &apos;josh-allen&apos;,
+    name: &apos;Josh Allen&apos;,
+    firstName: &apos;Josh&apos;,
+    lastName: &apos;Allen&apos;,
+    position: &apos;QB&apos;,
+    team: &apos;BUF&apos;,
     jerseyNumber: 17,
-    height: '6\'5"',
+    height: &apos;6\&apos;5"&apos;,
     weight: 237,
     age: 28,
-    birthDate: '1996-05-21',
+    birthDate: &apos;1996-05-21&apos;,
     experience: 7,
-    college: 'Wyoming',
+    college: &apos;Wyoming&apos;,
     draftYear: 2018,
     draftRound: 1,
     draftPick: 7,
@@ -1096,6 +1134,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     ownership: 98.7,
     projectedPoints: 24.8,
     stats2024: {
+}
       passingYards: 4306,
       passingTouchdowns: 29,
       interceptions: 18,
@@ -1113,7 +1152,9 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       pointsPerGame: 23.4
     },
     statsHistory: {
+}
       2023: {
+}
         passingYards: 4306,
         passingTouchdowns: 29,
         interceptions: 18,
@@ -1124,6 +1165,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 23.4
       },
       2022: {
+}
         passingYards: 4283,
         passingTouchdowns: 35,
         interceptions: 14,
@@ -1134,6 +1176,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 24.8
       },
       2021: {
+}
         passingYards: 4407,
         passingTouchdowns: 36,
         interceptions: 15,
@@ -1145,6 +1188,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       }
     },
     metrics: {
+}
       consistency: 78,
       volatility: 6.2,
       floor: 14.8,
@@ -1154,37 +1198,38 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       playoffSchedule: 0.45,
       injuryRisk: 0.15,
       gamesPlayedPercentage: 100,
-      ageCurvePosition: 'Peak',
+      ageCurvePosition: &apos;Peak&apos;,
       projectedDecline: 0.02
     },
-    injuryStatus: 'Healthy',
+    injuryStatus: &apos;Healthy&apos;,
     depthChartPosition: 1,
-    lastNewsUpdate: new Date('2024-01-15'),
+    lastNewsUpdate: new Date(&apos;2024-01-15&apos;),
     recentNews: [
-      'Allen leads Bills to AFC East title',
-      'Named to Pro Bowl for 4th consecutive year',
-      'On pace for career-high rushing TDs'
+      &apos;Allen leads Bills to AFC East title&apos;,
+      &apos;Named to Pro Bowl for 4th consecutive year&apos;,
+      &apos;On pace for career-high rushing TDs&apos;
     ],
-    fantasyRelevance: 'Elite',
+    fantasyRelevance: &apos;Elite&apos;,
     breakoutCandidate: false,
     sleeper: false,
     bust: false
   },
   
   {
-    id: 'lamar-jackson',
-    name: 'Lamar Jackson',
-    firstName: 'Lamar',
-    lastName: 'Jackson',
-    position: 'QB',
-    team: 'BAL',
+}
+    id: &apos;lamar-jackson&apos;,
+    name: &apos;Lamar Jackson&apos;,
+    firstName: &apos;Lamar&apos;,
+    lastName: &apos;Jackson&apos;,
+    position: &apos;QB&apos;,
+    team: &apos;BAL&apos;,
     jerseyNumber: 8,
-    height: '6\'2"',
+    height: &apos;6\&apos;2"&apos;,
     weight: 212,
     age: 27,
-    birthDate: '1997-01-07',
+    birthDate: &apos;1997-01-07&apos;,
     experience: 7,
-    college: 'Louisville',
+    college: &apos;Louisville&apos;,
     draftYear: 2018,
     draftRound: 1,
     draftPick: 32,
@@ -1195,6 +1240,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     ownership: 99.2,
     projectedPoints: 25.4,
     stats2024: {
+}
       passingYards: 3678,
       passingTouchdowns: 24,
       interceptions: 7,
@@ -1212,7 +1258,9 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       pointsPerGame: 25.0
     },
     statsHistory: {
+}
       2023: {
+}
         passingYards: 3678,
         passingTouchdowns: 24,
         interceptions: 7,
@@ -1223,6 +1271,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 25.0
       },
       2022: {
+}
         passingYards: 2242,
         passingTouchdowns: 17,
         interceptions: 7,
@@ -1233,6 +1282,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 24.2
       },
       2021: {
+}
         passingYards: 2882,
         passingTouchdowns: 16,
         interceptions: 13,
@@ -1244,6 +1294,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       }
     },
     metrics: {
+}
       consistency: 82,
       volatility: 5.8,
       floor: 16.2,
@@ -1253,18 +1304,18 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       playoffSchedule: 0.49,
       injuryRisk: 0.25,
       gamesPlayedPercentage: 88.2,
-      ageCurvePosition: 'Peak',
+      ageCurvePosition: &apos;Peak&apos;,
       projectedDecline: 0.01
     },
-    injuryStatus: 'Healthy',
+    injuryStatus: &apos;Healthy&apos;,
     depthChartPosition: 1,
-    lastNewsUpdate: new Date('2024-01-12'),
+    lastNewsUpdate: new Date(&apos;2024-01-12&apos;),
     recentNews: [
-      'Jackson wins 2023 NFL MVP award',
-      'Ravens clinch #1 seed in AFC',
-      'Career-high completion percentage'
+      &apos;Jackson wins 2023 NFL MVP award&apos;,
+      &apos;Ravens clinch #1 seed in AFC&apos;,
+      &apos;Career-high completion percentage&apos;
     ],
-    fantasyRelevance: 'Elite',
+    fantasyRelevance: &apos;Elite&apos;,
     breakoutCandidate: false,
     sleeper: false,
     bust: false
@@ -1272,19 +1323,20 @@ export const NFL_PLAYERS: NFLPlayer[] = [
 
   // Top RBs
   {
-    id: 'christian-mccaffrey',
-    name: 'Christian McCaffrey',
-    firstName: 'Christian',
-    lastName: 'McCaffrey',
-    position: 'RB',
-    team: 'SF',
+}
+    id: &apos;christian-mccaffrey&apos;,
+    name: &apos;Christian McCaffrey&apos;,
+    firstName: &apos;Christian&apos;,
+    lastName: &apos;McCaffrey&apos;,
+    position: &apos;RB&apos;,
+    team: &apos;SF&apos;,
     jerseyNumber: 23,
-    height: '5\'11"',
+    height: &apos;5\&apos;11"&apos;,
     weight: 205,
     age: 28,
-    birthDate: '1996-06-07',
+    birthDate: &apos;1996-06-07&apos;,
     experience: 8,
-    college: 'Stanford',
+    college: &apos;Stanford&apos;,
     draftYear: 2017,
     draftRound: 1,
     draftPick: 8,
@@ -1295,6 +1347,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
     ownership: 99.8,
     projectedPoints: 19.8,
     stats2024: {
+}
       rushingYards: 1459,
       rushingTouchdowns: 14,
       rushingAttempts: 272,
@@ -1310,7 +1363,9 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       pointsPerGame: 25.2
     },
     statsHistory: {
+}
       2023: {
+}
         rushingYards: 1459,
         rushingTouchdowns: 14,
         receptions: 67,
@@ -1322,6 +1377,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 25.2
       },
       2022: {
+}
         rushingYards: 1139,
         rushingTouchdowns: 8,
         receptions: 85,
@@ -1333,6 +1389,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
         pointsPerGame: 34.3
       },
       2021: {
+}
         rushingYards: 1,
         rushingTouchdowns: 0,
         receptions: 0,
@@ -1345,6 +1402,7 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       }
     },
     metrics: {
+}
       targetShare: 15.2,
       snapCount: 892,
       snapPercentage: 78.4,
@@ -1361,60 +1419,68 @@ export const NFL_PLAYERS: NFLPlayer[] = [
       playoffSchedule: 0.52,
       injuryRisk: 0.35,
       gamesPlayedPercentage: 70.6,
-      ageCurvePosition: 'Peak',
+      ageCurvePosition: &apos;Peak&apos;,
       projectedDecline: 0.05
     },
-    injuryStatus: 'Healthy',
+    injuryStatus: &apos;Healthy&apos;,
     depthChartPosition: 1,
-    lastNewsUpdate: new Date('2024-01-10'),
+    lastNewsUpdate: new Date(&apos;2024-01-10&apos;),
     recentNews: [
-      'CMC leads NFL in scrimmage yards',
-      'Named Offensive Player of the Year',
-      'Key to 49ers playoff push'
+      &apos;CMC leads NFL in scrimmage yards&apos;,
+      &apos;Named Offensive Player of the Year&apos;,
+      &apos;Key to 49ers playoff push&apos;
     ],
-    fantasyRelevance: 'Elite',
+    fantasyRelevance: &apos;Elite&apos;,
     breakoutCandidate: false,
     sleeper: false,
     bust: false
   }
 
   // Note: This would continue for all 1,700+ NFL players
-  // For brevity, I'm showing the structure with key examples
+  // For brevity, I&apos;m showing the structure with key examples
 ];
 
 // Helper functions for database operations
 export class NFLDatabase {
+}
   private players: Map<string, NFLPlayer> = new Map();
   private teams: Map<string, NFLTeam> = new Map();
 
   constructor() {
+}
     this.initializeDatabase();
   }
 
   private initializeDatabase() {
+}
     // Load teams
     NFL_TEAMS.forEach((team: any) => {
+}
       this.teams.set(team.id, team);
     });
 
     // Load players
     NFL_PLAYERS.forEach((player: any) => {
+}
       this.players.set(player.id, player);
     });
   }
 
   // Player search and filtering
   searchPlayers(query: string, position?: string, team?: string): NFLPlayer[] {
+}
     const results: NFLPlayer[] = [];
     const searchTerm = query.toLowerCase();
 
     this.players.forEach((player: any) => {
+}
       const matchesQuery = player.name.toLowerCase().includes(searchTerm) ||
                           player.team.toLowerCase().includes(searchTerm);
       const matchesPosition = !position || player.position === position;
       const matchesTeam = !team || player.team === team;
 
       if (matchesQuery && matchesPosition && matchesTeam) {
+}
         results.push(player);
       }
     });
@@ -1424,10 +1490,13 @@ export class NFLDatabase {
 
   // Get players by position
   getPlayersByPosition(position: string): NFLPlayer[] {
+}
     const results: NFLPlayer[] = [];
     
     this.players.forEach((player: any) => {
+}
       if (player.position === position) {
+}
         results.push(player);
       }
     });
@@ -1437,26 +1506,31 @@ export class NFLDatabase {
 
   // Get team information
   getTeam(teamId: string): NFLTeam | undefined {
+}
     return this.teams.get(teamId);
   }
 
   // Get all teams
   getAllTeams(): NFLTeam[] {
+}
     return Array.from(this.teams.values());
   }
 
   // Get player by ID
   getPlayer(playerId: string): NFLPlayer | undefined {
+}
     return this.players.get(playerId);
   }
 
   // Get all players
   getAllPlayers(): NFLPlayer[] {
+}
     return Array.from(this.players.values());
   }
 
   // Get top players by ADP
   getTopPlayers(count: number = 100): NFLPlayer[] {
+}
     return Array.from(this.players.values())
       .sort((a, b) => a.adp - b.adp)
       .slice(0, count);
@@ -1464,10 +1538,13 @@ export class NFLDatabase {
 
   // Get players by fantasy relevance
   getPlayersByRelevance(relevance: string): NFLPlayer[] {
+}
     const results: NFLPlayer[] = [];
     
     this.players.forEach((player: any) => {
+}
       if (player.fantasyRelevance === relevance) {
+}
         results.push(player);
       }
     });
@@ -1477,10 +1554,13 @@ export class NFLDatabase {
 
   // Get breakout candidates
   getBreakoutCandidates(): NFLPlayer[] {
+}
     const results: NFLPlayer[] = [];
     
     this.players.forEach((player: any) => {
+}
       if (player.breakoutCandidate) {
+}
         results.push(player);
       }
     });
@@ -1490,10 +1570,13 @@ export class NFLDatabase {
 
   // Get sleeper picks
   getSleeperPicks(): NFLPlayer[] {
+}
     const results: NFLPlayer[] = [];
     
     this.players.forEach((player: any) => {
+}
       if (player.sleeper) {
+}
         results.push(player);
       }
     });
@@ -1503,6 +1586,7 @@ export class NFLDatabase {
 
   // Update player stats (for real-time updates)
   updatePlayerStats(playerId: string, stats: Partial<PlayerStats>): boolean {
+}
     const player = this.players.get(playerId);
     if (!player) return false;
 
@@ -1511,7 +1595,8 @@ export class NFLDatabase {
   }
 
   // Update player injury status
-  updatePlayerInjury(playerId: string, status: NFLPlayer['injuryStatus'], details?: string): boolean {
+  updatePlayerInjury(playerId: string, status: NFLPlayer[&apos;injuryStatus&apos;], details?: string): boolean {
+}
     const player = this.players.get(playerId);
     if (!player) return false;
 
@@ -1524,10 +1609,12 @@ export class NFLDatabase {
 
   // Get database statistics
   getDatabaseStats() {
+}
     const totalPlayers = this.players.size;
     const totalTeams = this.teams.size;
     
     const positionCounts = {
+}
       QB: 0,
       RB: 0,
       WR: 0,
@@ -1537,10 +1624,12 @@ export class NFLDatabase {
     };
 
     this.players.forEach((player: any) => {
+}
       positionCounts[player.position]++;
     });
 
     return {
+}
       totalPlayers,
       totalTeams,
       positionCounts,

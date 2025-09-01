@@ -76,7 +76,8 @@
       "Bash(npm outdated)",
       "Bash(npx jest:*)",
       "Bash(npm run deploy:check:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": [],

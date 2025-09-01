@@ -5,29 +5,30 @@
 
 // ==================== BASIC ENUMS AND CONSTANTS ====================
 
-export type PlayerPosition = 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF' | 'DST';
+export type PlayerPosition = &apos;QB&apos; | &apos;RB&apos; | &apos;WR&apos; | &apos;TE&apos; | &apos;K&apos; | &apos;DEF&apos; | &apos;DST&apos;;
 
-export type InjuryStatus = 'healthy' | 'questionable' | 'doubtful' | 'out' | 'ir' | 'pup' | 'suspended';
+export type InjuryStatus = &apos;healthy&apos; | &apos;questionable&apos; | &apos;doubtful&apos; | &apos;out&apos; | &apos;ir&apos; | &apos;pup&apos; | &apos;suspended&apos;;
 
-export type PlayerRole = 'starter' | 'backup' | 'committee' | 'handcuff' | 'rookie' | 'veteran';
+export type PlayerRole = &apos;starter&apos; | &apos;backup&apos; | &apos;committee&apos; | &apos;handcuff&apos; | &apos;rookie&apos; | &apos;veteran&apos;;
 
-export type ConsistencyLevel = 'high' | 'medium' | 'low';
+export type ConsistencyLevel = &apos;high&apos; | &apos;medium&apos; | &apos;low&apos;;
 
-export type UpsideLevel = 'ceiling' | 'steady' | 'floor';
+export type UpsideLevel = &apos;ceiling&apos; | &apos;steady&apos; | &apos;floor&apos;;
 
-export type SituationChange = 'improved' | 'same' | 'worse' | 'unknown';
+export type SituationChange = &apos;improved&apos; | &apos;same&apos; | &apos;worse&apos; | &apos;unknown&apos;;
 
-export type ScheduleStrength = 'easy' | 'medium' | 'hard';
+export type ScheduleStrength = &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
 
 // ==================== NFL TEAM TYPES ====================
 
 export interface NFLTeam {
+}
   id: string;
   city: string;
   name: string;
   abbreviation: string;
-  conference: 'AFC' | 'NFC';
-  division: 'North' | 'South' | 'East' | 'West';
+  conference: &apos;AFC&apos; | &apos;NFC&apos;;
+  division: &apos;North&apos; | &apos;South&apos; | &apos;East&apos; | &apos;West&apos;;
   primaryColor: string;
   secondaryColor: string;
   logoUrl?: string;
@@ -39,6 +40,7 @@ export interface NFLTeam {
 // ==================== PLAYER STATS ====================
 
 export interface PlayerStats {
+}
   // Passing stats (QB)
   passingYards?: number;
   passingTDs?: number;
@@ -99,11 +101,13 @@ export interface PlayerStats {
   snapPercentage?: number;
 }
 
-export interface PlayerProjections extends Omit<PlayerStats, 'gamesPlayed' | 'gamesStarted'> {
+export interface PlayerProjections extends Omit<PlayerStats, &apos;gamesPlayed&apos; | &apos;gamesStarted&apos;> {
+}
   projectedFantasyPoints: number;
   weeklyProjections: { [week: number]: number };
   seasonProjection: number;
   confidenceInterval: {
+}
     low: number;
     high: number;
   };
@@ -114,6 +118,7 @@ export interface PlayerProjections extends Omit<PlayerStats, 'gamesPlayed' | 'ga
 // ==================== ADVANCED METRICS ====================
 
 export interface AdvancedMetrics {
+}
   // Efficiency metrics
   snapCountPct: number;
   targetSharePct: number;
@@ -125,6 +130,7 @@ export interface AdvancedMetrics {
   thirdDownConversions?: number;
   fourthDownConversions?: number;
   twoMinuteDrillStats?: {
+}
     attempts: number;
     completions: number;
     touchdowns: number;
@@ -148,6 +154,7 @@ export interface AdvancedMetrics {
   
   // Strength of schedule
   strengthOfSchedule: {
+}
     overall: number;
     vsPosition: number;
     playoff: number;
@@ -158,12 +165,14 @@ export interface AdvancedMetrics {
 // ==================== PLAYER METADATA ====================
 
 export interface PlayerBio {
+}
   age: number;
-  height: string; // e.g., "6'2""
+  height: string; // e.g., "6&apos;2""
   weight: number;
   college: string;
   experience: number; // years in NFL
   drafted: {
+}
     year: number;
     round: number;
     pick: number;
@@ -174,6 +183,7 @@ export interface PlayerBio {
 }
 
 export interface PlayerContract {
+}
   years: number;
   totalValue: number;
   guaranteedMoney: number;
@@ -186,31 +196,34 @@ export interface PlayerContract {
 }
 
 export interface InjuryHistory {
+}
   date: Date;
   injury: string;
-  severity: 'minor' | 'moderate' | 'major' | 'career-threatening';
+  severity: &apos;minor&apos; | &apos;moderate&apos; | &apos;major&apos; | &apos;career-threatening&apos;;
   expectedRecoveryWeeks: number;
   actualRecoveryWeeks?: number;
   status: InjuryStatus;
-  impactOnPerformance?: 'none' | 'minimal' | 'moderate' | 'significant';
+  impactOnPerformance?: &apos;none&apos; | &apos;minimal&apos; | &apos;moderate&apos; | &apos;significant&apos;;
 }
 
 export interface NewsItem {
+}
   id: string;
   headline: string;
   summary: string;
   source: string;
   author: string;
   publishedAt: Date;
-  category: 'injury' | 'trade' | 'performance' | 'personal' | 'team' | 'contract';
-  sentiment: 'positive' | 'neutral' | 'negative';
-  fantasyImpact: 'bullish' | 'neutral' | 'bearish';
+  category: &apos;injury&apos; | &apos;trade&apos; | &apos;performance&apos; | &apos;personal&apos; | &apos;team&apos; | &apos;contract&apos;;
+  sentiment: &apos;positive&apos; | &apos;neutral&apos; | &apos;negative&apos;;
+  fantasyImpact: &apos;bullish&apos; | &apos;neutral&apos; | &apos;bearish&apos;;
   impactScore: number; // 1-10 scale
 }
 
 // ==================== MAIN PLAYER INTERFACE ====================
 
 export interface Player {
+}
   // Basic Info
   id: string;
   name: string;
@@ -241,6 +254,7 @@ export interface Player {
   situationChange: SituationChange;
   handcuffValue: ConsistencyLevel;
   scheduleStrength: {
+}
     overall: ScheduleStrength;
     playoff: ScheduleStrength;
     championship: ScheduleStrength;
@@ -269,6 +283,7 @@ export interface Player {
 // ==================== PLAYER COLLECTIONS ====================
 
 export interface PlayerPool {
+}
   availablePlayers: Player[];
   draftedPlayers: Player[];
   freeAgents: Player[];
@@ -277,6 +292,7 @@ export interface PlayerPool {
 }
 
 export interface PositionalRankings {
+}
   QB: Player[];
   RB: Player[];
   WR: Player[];
@@ -288,9 +304,10 @@ export interface PositionalRankings {
 // ==================== PLAYER SEARCH AND FILTERING ====================
 
 export interface PlayerFilter {
+}
   positions?: PlayerPosition[];
   teams?: string[];
-  availability?: ('available' | 'drafted' | 'free_agent' | 'waiver')[];
+  availability?: (&apos;available&apos; | &apos;drafted&apos; | &apos;free_agent&apos; | &apos;waiver&apos;)[];
   injuryStatus?: InjuryStatus[];
   minRank?: number;
   maxRank?: number;
@@ -301,47 +318,56 @@ export interface PlayerFilter {
 }
 
 export interface PlayerSortOption {
+}
   field: keyof Player | keyof PlayerStats | keyof PlayerProjections;
-  direction: 'asc' | 'desc';
+  direction: &apos;asc&apos; | &apos;desc&apos;;
   label: string;
 }
 
 // ==================== PLAYER COMPARISONS ====================
 
 export interface PlayerComparison {
+}
   playerA: Player;
   playerB: Player;
   categories: {
+}
     overall: {
-      winner: 'A' | 'B' | 'tie';
+}
+      winner: &apos;A&apos; | &apos;B&apos; | &apos;tie&apos;;
       scoreA: number;
       scoreB: number;
     };
     stats: {
+}
       [key in keyof PlayerStats]?: {
-        winner: 'A' | 'B' | 'tie';
+}
+        winner: &apos;A&apos; | &apos;B&apos; | &apos;tie&apos;;
         valueA: number;
         valueB: number;
       };
     };
     projections: {
-      winner: 'A' | 'B' | 'tie';
+}
+      winner: &apos;A&apos; | &apos;B&apos; | &apos;tie&apos;;
       scoreA: number;
       scoreB: number;
     };
     situation: {
-      winner: 'A' | 'B' | 'tie';
+}
+      winner: &apos;A&apos; | &apos;B&apos; | &apos;tie&apos;;
       factorA: string;
       factorB: string;
     };
   };
-  recommendation: 'A' | 'B' | 'neither';
+  recommendation: &apos;A&apos; | &apos;B&apos; | &apos;neither&apos;;
   reasoning: string;
 }
 
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   PlayerPosition,
   InjuryStatus,
   PlayerRole,

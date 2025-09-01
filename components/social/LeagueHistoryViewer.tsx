@@ -3,12 +3,12 @@
  * Interactive timeline of league events, milestones, and memories
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, Team, User, League } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, Team, User, League } from &apos;../../types&apos;;
 import { 
+}
     CalendarIcon, 
     TrophyIcon, 
     UsersIcon, 
@@ -28,10 +28,11 @@ import {
     BarChartIcon,
     CrownIcon,
     ZapIcon,
-    TrendingUpIcon
-} from 'lucide-react';
+//     TrendingUpIcon
+} from &apos;lucide-react&apos;;
 
 export interface LeagueEvent {
+}
     id: string;
     type: EventType;
     title: string;
@@ -47,49 +48,52 @@ export interface LeagueEvent {
     comments: EventComment[];
     tags: string[];
     isHighlight: boolean;
-    visibility: 'public' | 'league_only' | 'private';
+    visibility: &apos;public&apos; | &apos;league_only&apos; | &apos;private&apos;;
 
 export type EventType = 
-    | 'championship' 
-    | 'trade' 
-    | 'draft_pick' 
-    | 'waiver_claim' 
-    | 'record_broken' 
-    | 'milestone' 
-    | 'rivalry_moment' 
-    | 'comeback' 
-    | 'upset' 
-    | 'perfect_week' 
-    | 'league_creation' 
-    | 'member_joined' 
-    | 'season_start'
-    | 'season_end'
-    | 'playoffs_start'
-    | 'trade_deadline'
-    | 'punishment'
-    | 'achievement';
+    | &apos;championship&apos; 
+    | &apos;trade&apos; 
+    | &apos;draft_pick&apos; 
+    | &apos;waiver_claim&apos; 
+    | &apos;record_broken&apos; 
+    | &apos;milestone&apos; 
+    | &apos;rivalry_moment&apos; 
+    | &apos;comeback&apos; 
+    | &apos;upset&apos; 
+    | &apos;perfect_week&apos; 
+    | &apos;league_creation&apos; 
+    | &apos;member_joined&apos; 
+    | &apos;season_start&apos;
+    | &apos;season_end&apos;
+    | &apos;playoffs_start&apos;
+    | &apos;trade_deadline&apos;
+    | &apos;punishment&apos;
+    | &apos;achievement&apos;;
 
 }
 
 export interface EventParticipant {
+}
     teamId: number;
     teamName: string;
     userId: string;
     userName: string;
     avatar?: string;
-    role: 'primary' | 'secondary' | 'mentioned';
+    role: &apos;primary&apos; | &apos;secondary&apos; | &apos;mentioned&apos;;
 
 }
 
 export interface EventData {
+}
     [key: string]: any;
     // Flexible structure to accommodate different event types
 
 }
 
 export interface EventMedia {
+}
     id: string;
-    type: 'image' | 'video' | 'audio' | 'gif';
+    type: &apos;image&apos; | &apos;video&apos; | &apos;audio&apos; | &apos;gif&apos;;
     url: string;
     caption?: string;
     thumbnail?: string;
@@ -97,6 +101,7 @@ export interface EventMedia {
 }
 
 export interface EventStats {
+}
     fantasyPoints?: number;
     winPercentage?: number;
     tradeValue?: number;
@@ -106,6 +111,7 @@ export interface EventStats {
 }
 
 export interface EventReaction {
+}
     id: string;
     userId: string;
     userName: string;
@@ -115,6 +121,7 @@ export interface EventReaction {
 }
 
 export interface EventComment {
+}
     id: string;
     userId: string;
     userName: string;
@@ -127,13 +134,14 @@ export interface EventComment {
 }
 
 export interface LeagueMilestone {
+}
     id: string;
     title: string;
     description: string;
     achievedDate: Date;
     achievedBy?: EventParticipant;
-    category: 'scoring' | 'winning' | 'trading' | 'participation' | 'special';
-    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    category: &apos;scoring&apos; | &apos;winning&apos; | &apos;trading&apos; | &apos;participation&apos; | &apos;special&apos;;
+    rarity: &apos;common&apos; | &apos;rare&apos; | &apos;epic&apos; | &apos;legendary&apos;;
     icon: string;
     value?: number;
     isFirstTime: boolean;
@@ -141,17 +149,20 @@ export interface LeagueMilestone {
 }
 
 export interface TimelineFilter {
+}
     seasons: number[];
     eventTypes: EventType[];
     participants: string[];
     tags: string[];
     highlightsOnly: boolean;
     dateRange?: {
+}
         start: Date;
         end: Date;
     };
 
 interface LeagueHistoryViewerProps {
+}
     league: League;
     events: LeagueEvent[];
     milestones: LeagueMilestone[];
@@ -163,39 +174,45 @@ interface LeagueHistoryViewerProps {
 }
 
 const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
+}
     league,
     events,
     milestones,
     onEventReaction,
     onEventComment,
     onShareEvent,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
-    const [selectedView, setSelectedView] = React.useState<'timeline' | 'milestones' | 'stats'>('timeline');
+}
+    const [selectedView, setSelectedView] = React.useState<&apos;timeline&apos; | &apos;milestones&apos; | &apos;stats&apos;>(&apos;timeline&apos;);
     const [timelineFilter, setTimelineFilter] = React.useState<TimelineFilter>({
+}
         seasons: [],
         eventTypes: [],
         participants: [],
         tags: [],
         highlightsOnly: false
     });
-    const [searchQuery, setSearchQuery] = React.useState('');
+    const [searchQuery, setSearchQuery] = React.useState(&apos;&apos;);
     const [expandedEvent, setExpandedEvent] = React.useState<string | null>(null);
     const [selectedSeason, setSelectedSeason] = React.useState<number | null>(null);
     const [showFilters, setShowFilters] = React.useState(false);
 
     // Get unique seasons from events
     const availableSeasons = React.useMemo(() => {
+}
         const seasons = [...new Set(events.map((event: any) => event.season))];
         return seasons.sort((a, b) => b - a); // Most recent first
     }, [events]);
 
     // Filter events based on current filters and search
     const filteredEvents = React.useMemo(() => {
+}
         let filtered = events;
 
         // Search filter
         if (searchQuery) {
+}
             filtered = filtered.filter((event: any) =>
                 event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -204,18 +221,22 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
         // Season filter
         if (selectedSeason) {
+}
             filtered = filtered.filter((event: any) => event.season === selectedSeason);
 
         // Timeline filters
         if (timelineFilter.eventTypes.length > 0) {
+}
             filtered = filtered.filter((event: any) => timelineFilter.eventTypes.includes(event.type));
 
         if (timelineFilter.participants.length > 0) {
+}
             filtered = filtered.filter((event: any) =>
                 event.participants.some((p: any) => timelineFilter.participants.includes(p.userId))
             );
 
         if (timelineFilter.highlightsOnly) {
+}
             filtered = filtered.filter((event: any) => event.isHighlight);
 
         return filtered.sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -223,11 +244,13 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
     // Group events by season and month
     const groupedEvents = React.useMemo(() => {
+}
         const groups: Record<string, Record<string, LeagueEvent[]>> = {};
 
         filteredEvents.forEach((event: any) => {
+}
             const seasonKey = `Season ${event.season}`;
-            const monthKey = event.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+            const monthKey = event.date.toLocaleDateString(&apos;en-US&apos;, { year: &apos;numeric&apos;, month: &apos;long&apos; });
 
             if (!groups[seasonKey]) groups[seasonKey] = {};
             if (!groups[seasonKey][monthKey]) groups[seasonKey][monthKey] = [];
@@ -239,22 +262,24 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
     }, [filteredEvents]);
 
     const getEventTypeIcon = (type: EventType) => {
+}
         switch (type) {
-            case 'championship':
+}
+            case &apos;championship&apos;:
                 return <TrophyIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'trade':
+            case &apos;trade&apos;:
                 return <ArrowRightIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'record_broken':
+            case &apos;record_broken&apos;:
                 return <StarIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'milestone':
+            case &apos;milestone&apos;:
                 return <CrownIcon className="w-5 h-5 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'comeback':
+            case &apos;comeback&apos;:
                 return <TrendingUpIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'upset':
+            case &apos;upset&apos;:
                 return <ZapIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'perfect_week':
+            case &apos;perfect_week&apos;:
                 return <FlameIcon className="w-5 h-5 text-orange-500 sm:px-4 md:px-6 lg:px-8" />;
-            case 'rivalry_moment':
+            case &apos;rivalry_moment&apos;:
                 return <FlameIcon className="w-5 h-5 text-red-500 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <CalendarIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -262,37 +287,42 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
     };
 
     const getEventTypeColor = (type: EventType) => {
+}
         switch (type) {
-            case 'championship':
-                return 'text-yellow-400 bg-yellow-500/20';
-            case 'trade':
-                return 'text-blue-400 bg-blue-500/20';
-            case 'record_broken':
-                return 'text-purple-400 bg-purple-500/20';
-            case 'milestone':
-                return 'text-orange-400 bg-orange-500/20';
-            case 'comeback':
-                return 'text-green-400 bg-green-500/20';
-            case 'upset':
-                return 'text-red-400 bg-red-500/20';
-            case 'perfect_week':
-                return 'text-orange-500 bg-orange-500/20';
-            case 'rivalry_moment':
-                return 'text-red-500 bg-red-500/20';
+}
+            case &apos;championship&apos;:
+                return &apos;text-yellow-400 bg-yellow-500/20&apos;;
+            case &apos;trade&apos;:
+                return &apos;text-blue-400 bg-blue-500/20&apos;;
+            case &apos;record_broken&apos;:
+                return &apos;text-purple-400 bg-purple-500/20&apos;;
+            case &apos;milestone&apos;:
+                return &apos;text-orange-400 bg-orange-500/20&apos;;
+            case &apos;comeback&apos;:
+                return &apos;text-green-400 bg-green-500/20&apos;;
+            case &apos;upset&apos;:
+                return &apos;text-red-400 bg-red-500/20&apos;;
+            case &apos;perfect_week&apos;:
+                return &apos;text-orange-500 bg-orange-500/20&apos;;
+            case &apos;rivalry_moment&apos;:
+                return &apos;text-red-500 bg-red-500/20&apos;;
             default:
-                return 'text-gray-400 bg-gray-500/20';
+                return &apos;text-gray-400 bg-gray-500/20&apos;;
 
     };
 
     const formatEventDate = (date: Date) => {
-        return date.toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
+}
+        return date.toLocaleDateString(&apos;en-US&apos;, {
+}
+            month: &apos;short&apos;,
+            day: &apos;numeric&apos;,
+            year: &apos;numeric&apos;
         });
     };
 
     const renderEventCard = (event: LeagueEvent) => {
+}
         const isExpanded = expandedEvent === event.id;
 
         return (
@@ -301,7 +331,8 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg p-4 hover:border-blue-400/50 transition-all cursor-pointer ${
-                    event.isHighlight ? 'ring-2 ring-yellow-400/30' : ''
+}
+                    event.isHighlight ? &apos;ring-2 ring-yellow-400/30&apos; : &apos;&apos;
                 }`}
                 onClick={() => setExpandedEvent(isExpanded ? null : event.id)}
             >
@@ -318,6 +349,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                     {event.title}
                                 </h3>
                                 {event.isHighlight && (
+}
                                     <StarIcon className="w-4 h-4 text-yellow-400 flex-shrink-0 sm:px-4 md:px-6 lg:px-8" />
                                 )}
                             </div>
@@ -330,7 +362,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                 <span>{formatEventDate(event.date)}</span>
                                 {event.week && <span>Week {event.week}</span>}
                                 <span className={`px-2 py-1 rounded ${getEventTypeColor(event.type)}`}>
-                                    {event.type.replace('_', ' ')}
+                                    {event.type.replace(&apos;_&apos;, &apos; &apos;)}
                                 </span>
                             </div>
                         </div>
@@ -343,12 +375,15 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
                 {/* Event Participants */}
                 {event.participants.length > 0 && (
+}
                     <div className="flex items-center gap-2 mt-3 sm:px-4 md:px-6 lg:px-8">
                         <UsersIcon className="w-4 h-4 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                             {event.participants.slice(0, 3).map((participant: any) => (
+}
                                 <div key={`${participant.teamId}-${participant.userId}`} className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                                     {participant.avatar && (
+}
                                         <img
                                             src={participant.avatar}
                                             alt={participant.teamName}
@@ -361,6 +396,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                 </div>
                             ))}
                             {event.participants.length > 3 && (
+}
                                 <span className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                     +{event.participants.length - 3} more
                                 </span>
@@ -372,30 +408,36 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                 {/* Expanded Content */}
                 <AnimatePresence>
                     {isExpanded && (
+}
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
+                            animate={{ opacity: 1, height: &apos;auto&apos; }}
                             exit={{ opacity: 0, height: 0 }}
                             className="mt-4 pt-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8"
                         >
                             {/* Event Media */}
                             {event.media && event.media.length > 0 && (
+}
                                 <div className="grid grid-cols-2 gap-2 mb-4 sm:px-4 md:px-6 lg:px-8">
                                     {event.media.slice(0, 4).map((media: any) => (
+}
                                         <div key={media.id} className="relative sm:px-4 md:px-6 lg:px-8">
-                                            {media.type === 'image' && (
+                                            {media.type === &apos;image&apos; && (
+}
                                                 <img
                                                     src={media.url}
                                                     alt={media.caption}
                                                     className="w-full h-24 object-cover rounded sm:px-4 md:px-6 lg:px-8"
                                                 />
                                             )}
-                                            {media.type === 'video' && (
+                                            {media.type === &apos;video&apos; && (
+}
                                                 <div className="w-full h-24 bg-gray-500/20 rounded flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                                                     <PlayIcon className="w-6 h-6 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8" />
                                                 </div>
                                             )}
                                             {media.caption && (
+}
                                                 <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-1 rounded-b sm:px-4 md:px-6 lg:px-8">
                                                     {media.caption}
                                                 </div>
@@ -407,8 +449,10 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
                             {/* Event Stats */}
                             {event.stats && (
+}
                                 <div className="grid grid-cols-2 gap-4 mb-4 p-3 bg-gray-500/10 rounded sm:px-4 md:px-6 lg:px-8">
                                     {event.stats.fantasyPoints && (
+}
                                         <div>
                                             <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Fantasy Points</div>
                                             <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
@@ -417,6 +461,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                         </div>
                                     )}
                                     {event.stats.significance && (
+}
                                         <div>
                                             <div className="text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Significance</div>
                                             <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
@@ -431,8 +476,10 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
                             {/* Event Tags */}
                             {event.tags.length > 0 && (
+}
                                 <div className="flex flex-wrap gap-1 mb-4 sm:px-4 md:px-6 lg:px-8">
                                     {event.tags.map((tag: any) => (
+}
                                         <span
                                             key={tag}
                                             className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs sm:px-4 md:px-6 lg:px-8"
@@ -448,12 +495,14 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                 <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                                     {/* Quick Reactions */}
                                     <div className="flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
-                                        {['🔥', '😂', '😮', '👏'].map((emoji: any) => {
+                                        {[&apos;🔥&apos;, &apos;😂&apos;, &apos;😮&apos;, &apos;👏&apos;].map((emoji: any) => {
+}
                                             const count = event.reactions.filter((r: any) => r.emoji === emoji).length;
                                             return (
                                                 <button
                                                     key={emoji}
                                                     onClick={(e: any) = aria-label="Action button"> {
+}
                                                         e.stopPropagation();
                                                         onEventReaction(event.id, emoji);
                                                     }}
@@ -478,24 +527,27 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
                                 <button
                                     onClick={(e: any) = aria-label="Action button"> {
+}
                                         e.stopPropagation();
                                         onShareEvent(event.id);
                                     }}
                                     className="flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                 >
                                     <ShareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                                    Share
+//                                     Share
                                 </button>
                             </div>
 
                             {/* Comments Section */}
                             {event.comments.length > 0 && (
+}
                                 <div className="mt-4 pt-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                                     <div className="space-y-3 max-h-40 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                                         {event.comments.slice(0, 3).map((comment: any) => (
+}
                                             <div key={comment.id} className="flex gap-2 sm:px-4 md:px-6 lg:px-8">
                                                 <img
-                                                    src={comment.userAvatar || '/default-avatar.png'}
+                                                    src={comment.userAvatar || &apos;/default-avatar.png&apos;}
                                                     alt={comment.userName}
                                                     className="w-6 h-6 rounded-full flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                                                 />
@@ -516,6 +568,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                         ))}
                                     </div>
                                     {event.comments.length > 3 && (
+}
                                         <button className="text-sm text-blue-400 hover:text-blue-300 mt-2 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                             View all {event.comments.length} comments
                                         </button>
@@ -531,30 +584,34 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
     const renderMilestones = () => (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
-            {['legendary', 'epic', 'rare', 'common'].map((rarity: any) => {
+            {[&apos;legendary&apos;, &apos;epic&apos;, &apos;rare&apos;, &apos;common&apos;].map((rarity: any) => {
+}
                 const rarityMilestones = milestones.filter((m: any) => m.rarity === rarity);
                 if (rarityMilestones.length === 0) return null;
 
                 return (
                     <div key={rarity}>
                         <h3 className={`text-lg font-medium mb-4 capitalize ${
-                            rarity === 'legendary' ? 'text-yellow-400' :
-                            rarity === 'epic' ? 'text-purple-400' :
-                            rarity === 'rare' ? 'text-blue-400' :
-                            'text-gray-400'
+}
+                            rarity === &apos;legendary&apos; ? &apos;text-yellow-400&apos; :
+                            rarity === &apos;epic&apos; ? &apos;text-purple-400&apos; :
+                            rarity === &apos;rare&apos; ? &apos;text-blue-400&apos; :
+                            &apos;text-gray-400&apos;
                         }`}>
                             {rarity} Milestones
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {rarityMilestones.map((milestone: any) => (
+}
                                 <motion.div
                                     key={milestone.id}
                                     whileHover={{ scale: 1.02 }}
                                     className={`p-4 rounded-lg border ${
-                                        milestone.rarity === 'legendary' ? 'border-yellow-400/50 bg-yellow-500/10' :
-                                        milestone.rarity === 'epic' ? 'border-purple-400/50 bg-purple-500/10' :
-                                        milestone.rarity === 'rare' ? 'border-blue-400/50 bg-blue-500/10' :
-                                        'border-[var(--panel-border)] bg-[var(--panel-bg)]'
+}
+                                        milestone.rarity === &apos;legendary&apos; ? &apos;border-yellow-400/50 bg-yellow-500/10&apos; :
+                                        milestone.rarity === &apos;epic&apos; ? &apos;border-purple-400/50 bg-purple-500/10&apos; :
+                                        milestone.rarity === &apos;rare&apos; ? &apos;border-blue-400/50 bg-blue-500/10&apos; :
+                                        &apos;border-[var(--panel-border)] bg-[var(--panel-bg)]&apos;
                                     }`}
                                 >
                                     <div className="flex items-start gap-3 sm:px-4 md:px-6 lg:px-8">
@@ -571,6 +628,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                                     {formatEventDate(milestone.achievedDate)}
                                                 </span>
                                                 {milestone.achievedBy && (
+}
                                                     <span className="text-xs text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
                                                         {milestone.achievedBy.teamName}
                                                     </span>
@@ -621,7 +679,9 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                 <h3 className="font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Event Distribution</h3>
                 <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(
+}
                         events.reduce((acc, event) => {
+}
                             acc[event.type] = (acc[event.type] || 0) + 1;
                             return acc;
                         }, {} as Record<string, number>)
@@ -633,7 +693,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                 <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     {getEventTypeIcon(type as EventType)}
                                     <span className="capitalize text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">
-                                        {type.replace('_', ' ')}
+                                        {type.replace(&apos;_&apos;, &apos; &apos;)}
                                     </span>
                                 </div>
                                 <span className="text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">{count}</span>
@@ -656,7 +716,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                             onClick={() => setShowFilters(!showFilters)}
                         >
                             <FilterIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            Filters
+//                             Filters
                         </button>
                     </div>
                 </div>
@@ -673,11 +733,12 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                         />
                     </div>
                     <select
-                        value={selectedSeason || ''}
+                        value={selectedSeason || &apos;&apos;}
                         onChange={(e: any) => setSelectedSeason(e.target.value ? parseInt(e.target.value) : null)}
                     >
                         <option value="">All Seasons</option>
                         {availableSeasons.map((season: any) => (
+}
                             <option key={season} value={season}>Season {season}</option>
                         ))}
                     </select>
@@ -686,9 +747,10 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                 {/* View Tabs */}
                 <div className="flex sm:px-4 md:px-6 lg:px-8">
                     {[
-                        { id: 'timeline', label: 'Timeline', icon: <CalendarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: 'milestones', label: 'Milestones', icon: <CrownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: 'stats', label: 'Stats', icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+}
+                        { id: &apos;timeline&apos;, label: &apos;Timeline&apos;, icon: <CalendarIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: &apos;milestones&apos;, label: &apos;Milestones&apos;, icon: <CrownIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: &apos;stats&apos;, label: &apos;Stats&apos;, icon: <BarChartIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
                     ].map((tab: any) => (
                         <button
                             key={tab.id}
@@ -703,9 +765,11 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
 
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto p-4 sm:px-4 md:px-6 lg:px-8">
-                {selectedView === 'timeline' && (
+                {selectedView === &apos;timeline&apos; && (
+}
                     <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                         {Object.keys(groupedEvents).length === 0 ? (
+}
                             <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                 <p className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">No events found</p>
@@ -718,6 +782,7 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                                         {season}
                                     </h3>
                                     {Object.entries(months).map(([month, monthEvents]) => (
+}
                                         <div key={month} className="mb-6 sm:px-4 md:px-6 lg:px-8">
                                             <h4 className="text-md font-medium text-[var(--text-secondary)] mb-3 sm:px-4 md:px-6 lg:px-8">
                                                 {month}
@@ -733,8 +798,8 @@ const LeagueHistoryViewer: React.FC<LeagueHistoryViewerProps> = ({
                     </div>
                 )}
 
-                {selectedView === 'milestones' && renderMilestones()}
-                {selectedView === 'stats' && renderStats()}
+                {selectedView === &apos;milestones&apos; && renderMilestones()}
+                {selectedView === &apos;stats&apos; && renderStats()}
             </div>
         </div>
     );

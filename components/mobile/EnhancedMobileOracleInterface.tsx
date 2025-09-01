@@ -3,10 +3,11 @@
  * Optimized for touch interactions and mobile screens
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect, useCallback } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
   Target, 
   BarChart3, 
   Clock,
@@ -15,17 +16,18 @@ import {
   Zap,
   CheckCircle,
   AlertCircle,
-  RefreshCw
-} from 'lucide-react';
-import MobileLayout from './MobileLayout';
+//   RefreshCw
+} from &apos;lucide-react&apos;;
+import MobileLayout from &apos;./MobileLayout&apos;;
 
 interface Prediction {
+}
   id: string;
   question: string;
   options: PredictionOption[];
   deadline: string;
-  category: 'spread' | 'total' | 'player_prop' | 'team_prop';
-  difficulty: 'easy' | 'medium' | 'hard';
+  category: &apos;spread&apos; | &apos;total&apos; | &apos;player_prop&apos; | &apos;team_prop&apos;;
+  difficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos;;
   confidence?: number;
   submitted?: boolean;
   result?: number;
@@ -33,12 +35,14 @@ interface Prediction {
 }
 
 interface PredictionOption {
+}
   id: number;
   text: string;
   odds: number;
   probability: number;
 
 interface Props {
+}
   activeView: string;
   onViewChange: (view: string) => void;
   week?: number;
@@ -47,15 +51,18 @@ interface Props {
 }
 
 const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
+}
   onViewChange,
   week = 1,
-  className = ''
+  className = &apos;&apos;
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [selectedPrediction, setSelectedPrediction] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [stats, setStats] = useState({
+}
     totalPredictions: 0,
     submitted: 0,
     accuracy: 0,
@@ -64,46 +71,51 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
 
   // Mock data for demonstration
   useEffect(() => {
+}
     const mockPredictions: Prediction[] = [
       {
-        id: 'pred_1',
-        question: 'Will the Chiefs cover the -7.5 spread vs Raiders?',
+}
+        id: &apos;pred_1&apos;,
+        question: &apos;Will the Chiefs cover the -7.5 spread vs Raiders?&apos;,
         options: [
-          { id: 0, text: 'Yes, Chiefs cover', odds: -110, probability: 0.52 },
-          { id: 1, text: 'No, Raiders cover', odds: -110, probability: 0.48 }
+          { id: 0, text: &apos;Yes, Chiefs cover&apos;, odds: -110, probability: 0.52 },
+          { id: 1, text: &apos;No, Raiders cover&apos;, odds: -110, probability: 0.48 }
         ],
-        deadline: '2024-09-15T17:00:00Z',
-        category: 'spread',
-        difficulty: 'medium',
+        deadline: &apos;2024-09-15T17:00:00Z&apos;,
+        category: &apos;spread&apos;,
+        difficulty: &apos;medium&apos;,
         submitted: true,
         confidence: 75
       },
       {
-        id: 'pred_2',
-        question: 'Will the total points be over 47.5 in Bills vs Dolphins?',
+}
+        id: &apos;pred_2&apos;,
+        question: &apos;Will the total points be over 47.5 in Bills vs Dolphins?&apos;,
         options: [
-          { id: 0, text: 'Over 47.5', odds: -105, probability: 0.51 },
-          { id: 1, text: 'Under 47.5', odds: -115, probability: 0.49 }
+          { id: 0, text: &apos;Over 47.5&apos;, odds: -105, probability: 0.51 },
+          { id: 1, text: &apos;Under 47.5&apos;, odds: -115, probability: 0.49 }
         ],
-        deadline: '2024-09-15T20:00:00Z',
-        category: 'total',
-        difficulty: 'easy'
+        deadline: &apos;2024-09-15T20:00:00Z&apos;,
+        category: &apos;total&apos;,
+        difficulty: &apos;easy&apos;
       },
       {
-        id: 'pred_3',
-        question: 'Will Josh Allen throw for over 2.5 TDs?',
+}
+        id: &apos;pred_3&apos;,
+        question: &apos;Will Josh Allen throw for over 2.5 TDs?&apos;,
         options: [
-          { id: 0, text: 'Over 2.5 TDs', odds: +120, probability: 0.45 },
-          { id: 1, text: 'Under 2.5 TDs', odds: -140, probability: 0.55 }
+          { id: 0, text: &apos;Over 2.5 TDs&apos;, odds: +120, probability: 0.45 },
+          { id: 1, text: &apos;Under 2.5 TDs&apos;, odds: -140, probability: 0.55 }
         ],
-        deadline: '2024-09-15T20:00:00Z',
-        category: 'player_prop',
-        difficulty: 'hard'
+        deadline: &apos;2024-09-15T20:00:00Z&apos;,
+        category: &apos;player_prop&apos;,
+        difficulty: &apos;hard&apos;
 
     ];
 
     setPredictions(mockPredictions);
     setStats({
+}
       totalPredictions: mockPredictions.length,
       submitted: mockPredictions.filter((p: any) => p.submitted).length,
       accuracy: 73.5,
@@ -112,6 +124,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   }, [week]);
 
   const handlePredictionSubmit = useCallback((predictionId: string, optionId: number, confidence: number) => {
+}
     setPredictions(prev => prev.map((p: any) => 
       p.id === predictionId 
         ? { ...p, submitted: true, confidence }
@@ -121,12 +134,14 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
     
     // Update stats
     setStats(prev => ({
+}
       ...prev,
       submitted: prev.submitted + 1
     }));
   }, []);
 
   const handleRefresh = useCallback(async () => {
+}
     setRefreshing(true);
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -134,25 +149,30 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   }, []);
 
   const getDifficultyColor = (difficulty: string) => {
+}
     switch (difficulty) {
-      case 'easy': return 'text-green-400 bg-green-400/10';
-      case 'medium': return 'text-yellow-400 bg-yellow-400/10';
-      case 'hard': return 'text-red-400 bg-red-400/10';
-      default: return 'text-gray-400 bg-gray-400/10';
+}
+      case &apos;easy&apos;: return &apos;text-green-400 bg-green-400/10&apos;;
+      case &apos;medium&apos;: return &apos;text-yellow-400 bg-yellow-400/10&apos;;
+      case &apos;hard&apos;: return &apos;text-red-400 bg-red-400/10&apos;;
+      default: return &apos;text-gray-400 bg-gray-400/10&apos;;
 
   };
 
   const getCategoryIcon = (category: string) => {
+}
     switch (category) {
-      case 'spread': return Target;
-      case 'total': return BarChart3;
-      case 'player_prop': return Users;
-      case 'team_prop': return Trophy;
+}
+      case &apos;spread&apos;: return Target;
+      case &apos;total&apos;: return BarChart3;
+      case &apos;player_prop&apos;: return Users;
+      case &apos;team_prop&apos;: return Trophy;
       default: return Target;
 
   };
 
   const isDeadlineSoon = (deadline: string) => {
+}
     const deadlineTime = new Date(deadline).getTime();
     const now = Date.now();
     const oneHour = 60 * 60 * 1000;
@@ -173,7 +193,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
           whileTap={{ scale: 0.95 }}
           disabled={refreshing}
         >
-          <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-5 h-5 ${refreshing ? &apos;animate-spin&apos; : &apos;&apos;}`} />
         </motion.button>
       </div>
       
@@ -191,6 +211,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   );
 
   const renderPredictionCard = (prediction: Prediction) => {
+}
     const CategoryIcon = getCategoryIcon(prediction.category);
     const deadlineSoon = isDeadlineSoon(prediction.deadline);
     
@@ -212,6 +233,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
           </div>
           
           {prediction.submitted ? (
+}
             <div className="flex items-center space-x-1 text-green-400 sm:px-4 md:px-6 lg:px-8">
               <CheckCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
               <span className="text-xs font-medium sm:px-4 md:px-6 lg:px-8">{prediction.confidence}%</span>
@@ -232,6 +254,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
         {/* Options */}
         <div className="space-y-2 mb-3 sm:px-4 md:px-6 lg:px-8">
           {prediction.options.map((option: any) => (
+}
             <motion.button
               key={option.id}
               onClick={() => setSelectedPrediction(prediction.id)}
@@ -246,7 +269,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
             >
               <span className="text-white text-sm sm:px-4 md:px-6 lg:px-8">{option.text}</span>
               <div className="flex items-center space-x-2 text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                <span>{option.odds > 0 ? '+' : ''}{option.odds}</span>
+                <span>{option.odds > 0 ? &apos;+&apos; : &apos;&apos;}{option.odds}</span>
                 <span>({(option.probability * 100).toFixed(0)}%)</span>
               </div>
             </motion.button>
@@ -260,6 +283,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
             <span>Deadline: {new Date(prediction.deadline).toLocaleTimeString()}</span>
           </div>
           {!prediction.submitted && (
+}
             <span className="text-blue-400 font-medium sm:px-4 md:px-6 lg:px-8">Tap to predict</span>
           )}
         </div>
@@ -268,6 +292,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   };
 
   const renderPredictionModal = () => {
+}
     const prediction = predictions.find((p: any) => p.id === selectedPrediction);
     if (!prediction) return null;
 
@@ -286,17 +311,19 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
               border-t border-gray-700
              sm:px-4 md:px-6 lg:px-8"
             style={{ 
-              paddingBottom: 'calc(24px + env(safe-area-inset-bottom))'
+}
+              paddingBottom: &apos;calc(24px + env(safe-area-inset-bottom))&apos;
             }}
-            initial={{ y: '100%' }}
+            initial={{ y: &apos;100%&apos; }}
             animate={{ y: 0 }}
-            exit={{ y: '100%' }}
+            exit={{ y: &apos;100%&apos; }}
             onClick={e => e.stopPropagation()}
           >
             <h3 className="text-white font-semibold mb-4 sm:px-4 md:px-6 lg:px-8">Make Your Prediction</h3>
             
             <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
               {prediction.options.map((option: any) => (
+}
                 <motion.button
                   key={option.id}
                   onClick={() => handlePredictionSubmit(prediction.id, option.id, 75)}
@@ -310,7 +337,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
                   <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                     <span className="font-medium sm:px-4 md:px-6 lg:px-8">{option.text}</span>
                     <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                      {option.odds > 0 ? '+' : ''}{option.odds}
+                      {option.odds > 0 ? &apos;+&apos; : &apos;&apos;}{option.odds}
                     </span>
                   </div>
                 </motion.button>
@@ -323,7 +350,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
   };
 
   return (
-    <MobileLayout
+    <MobileLayout>
       activeView={activeView}
       onViewChange={onViewChange}
       className={className}
@@ -348,6 +375,7 @@ const EnhancedMobileOracleInterface: React.FC<Props> = ({ activeView,
 
         {/* Empty State */}
         {predictions.length === 0 && (
+}
           <motion.div
             className="text-center py-12 sm:px-4 md:px-6 lg:px-8"
             initial={{ opacity: 0 }}

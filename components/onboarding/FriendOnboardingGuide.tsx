@@ -1,14 +1,16 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+import { Badge } from &apos;../ui/Badge&apos;;
 
 const FriendOnboardingGuide: React.FC = () => {
+}
   const steps = [
     {
-      id: 'welcome',
-      title: 'Welcome to Astral Draft!',
-      emoji: '🎯',
+}
+      id: &apos;welcome&apos;,
+      title: &apos;Welcome to Astral Draft!&apos;,
+      emoji: &apos;🎯&apos;,
       content: (
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -17,12 +19,12 @@ const FriendOnboardingGuide: React.FC = () => {
               Ready to Start Predicting?
             </h3>
             <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">
-              You're joining an exclusive group of friends competing to outpredict the Oracle AI!
+              You&apos;re joining an exclusive group of friends competing to outpredict the Oracle AI!
             </p>
           </div>
           
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
-            <h4 className="font-semibold text-blue-800 mb-2 sm:px-4 md:px-6 lg:px-8">What You'll Learn:</h4>
+            <h4 className="font-semibold text-blue-800 mb-2 sm:px-4 md:px-6 lg:px-8">What You&apos;ll Learn:</h4>
             <ul className="text-blue-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
               <li>• How to login with your friend PIN</li>
               <li>• Making your first prediction</li>
@@ -40,14 +42,15 @@ const FriendOnboardingGuide: React.FC = () => {
       )
     },
     {
-      id: 'login',
-      title: 'Login with Your Friend PIN',
-      emoji: '🔑',
+}
+      id: &apos;login&apos;,
+      title: &apos;Login with Your Friend PIN&apos;,
+      emoji: &apos;🔑&apos;,
       content: (
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-6 text-center sm:px-4 md:px-6 lg:px-8">
             <div className="text-3xl font-mono font-bold text-gray-800 mb-2 sm:px-4 md:px-6 lg:px-8">
-              0000
+//               0000
             </div>
             <p className="text-gray-600 sm:px-4 md:px-6 lg:px-8">Your Friend Group PIN</p>
           </div>
@@ -80,9 +83,10 @@ const FriendOnboardingGuide: React.FC = () => {
       )
     },
     {
-      id: 'predictions',
-      title: 'Make Your First Prediction',
-      emoji: '🎯',
+}
+      id: &apos;predictions&apos;,
+      title: &apos;Make Your First Prediction&apos;,
+      emoji: &apos;🎯&apos;,
       content: (
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
@@ -135,9 +139,10 @@ const FriendOnboardingGuide: React.FC = () => {
       )
     },
     {
-      id: 'scoring',
-      title: 'Understanding Scoring & Competition',
-      emoji: '🏆',
+}
+      id: &apos;scoring&apos;,
+      title: &apos;Understanding Scoring & Competition&apos;,
+      emoji: &apos;🏆&apos;,
       content: (
         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
           <div className="text-center mb-4 sm:px-4 md:px-6 lg:px-8">
@@ -175,7 +180,7 @@ const FriendOnboardingGuide: React.FC = () => {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:px-4 md:px-6 lg:px-8">
             <h5 className="font-medium text-blue-800 mb-2 sm:px-4 md:px-6 lg:px-8">Your Goals:</h5>
             <div className="text-sm text-blue-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
-              <div>🎯 <strong>Beat the Oracle:</strong> Outperform the AI's predictions</div>
+              <div>🎯 <strong>Beat the Oracle:</strong> Outperform the AI&apos;s predictions</div>
               <div>🏅 <strong>Climb Leaderboard:</strong> Rank higher than your friends</div>
               <div>📈 <strong>Improve Accuracy:</strong> Aim for 70%+ correct predictions</div>
             </div>
@@ -198,6 +203,7 @@ const FriendOnboardingGuide: React.FC = () => {
 
       <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
         {steps.map((step, index) => (
+}
           <Card key={step.id} className="mb-6 sm:px-4 md:px-6 lg:px-8">
             <CardHeader className="text-center sm:px-4 md:px-6 lg:px-8">
               <div className="text-4xl mb-2 sm:px-4 md:px-6 lg:px-8">{step.emoji}</div>
@@ -248,7 +254,7 @@ const FriendOnboardingGuide: React.FC = () => {
               <h5 className="font-semibold text-cyan-800 mb-2 sm:px-4 md:px-6 lg:px-8">🚀 Pro Tips:</h5>
               <div className="text-sm text-cyan-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                 <div>• Research before predicting - knowledge improves accuracy</div>
-                <div>• Don't always use 100% confidence - manage your risk</div>
+                <div>• Don&apos;t always use 100% confidence - manage your risk</div>
                 <div>• Stay consistent - regular participation helps improve results</div>
                 <div>• Learn from the Oracle - analyze when it&apos;s right vs wrong</div>
               </div>
@@ -257,10 +263,10 @@ const FriendOnboardingGuide: React.FC = () => {
             <div>
               <h5 className="font-semibold text-red-800 mb-2 sm:px-4 md:px-6 lg:px-8">🔧 Common Issues:</h5>
               <div className="text-sm text-red-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
-                <div><strong>Can't login?</strong> Double-check PIN is exactly "0000"</div>
+                <div><strong>Can&apos;t login?</strong> Double-check PIN is exactly "0000"</div>
                 <div><strong>Page looks broken?</strong> Refresh your browser</div>
                 <div><strong>No predictions available?</strong> Check back later for new events</div>
-                <div><strong>Prediction didn't save?</strong> Make sure you clicked "Submit"</div>
+                <div><strong>Prediction didn&apos;t save?</strong> Make sure you clicked "Submit"</div>
               </div>
             </div>
 

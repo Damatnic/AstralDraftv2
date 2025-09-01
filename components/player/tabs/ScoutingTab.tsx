@@ -1,20 +1,23 @@
 
 
-import { ErrorBoundary } from '../../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
-import type { Player } from '../../../types';
-import { ContractIcon } from '../../icons/ContractIcon';
+import { ErrorBoundary } from &apos;../../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Player } from &apos;../../../types&apos;;
+import { ContractIcon } from &apos;../../icons/ContractIcon&apos;;
 
 interface ScoutingTabProps {
+}
   player: Player;
 
 }
 
 const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }: any) => {
+}
   const { scoutingReport: report, contract } = player;
 
   if (!report) {
+}
       return <p className="text-gray-500 sm:px-4 md:px-6 lg:px-8">No scouting report available for this player.</p>
   }
 
@@ -22,6 +25,7 @@ const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }: any) => {
     <motion.div
       className="space-y-6 sm:px-4 md:px-6 lg:px-8"
       {...{
+}
         initial: { opacity: 0, x: -10 },
         animate: { opacity: 1, x: 0 },
         transition: { duration: 0.3 },
@@ -48,6 +52,7 @@ const ScoutingTab: React.FC<ScoutingTabProps> = ({ player }: any) => {
       </div>
 
       {contract && (
+}
         <div>
             <h3 className="font-bold text-lg text-cyan-300 mb-2 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8"><ContractIcon /> Contract Details</h3>
             <div className="text-sm bg-white/5 p-4 rounded-lg flex justify-around sm:px-4 md:px-6 lg:px-8">

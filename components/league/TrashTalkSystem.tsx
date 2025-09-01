@@ -2,12 +2,13 @@
  * Trash Talk Enhancement System - Make league interactions legendary
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Flame, Trophy, Target, Zap, Laughing } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { MessageSquare, Flame, Trophy, Target, Zap, Laughing } from &apos;lucide-react&apos;;
 
 interface TrashTalkMessage {
+}
   id: string;
   userId: string;
   userName: string;
@@ -16,14 +17,16 @@ interface TrashTalkMessage {
   targetUserName?: string;
   timestamp: Date;
   reactions: { emoji: string; count: number; users: string[] }[];
-  type: 'general' | 'matchup_specific' | 'waiver_burn' | 'trade_roast';
+  type: &apos;general&apos; | &apos;matchup_specific&apos; | &apos;waiver_burn&apos; | &apos;trade_roast&apos;;
   spicyLevel: 1 | 2 | 3 | 4 | 5; // Spice meter for content
 
 interface TrashTalkSystemProps {
+}
   leagueId: string;
   currentUserId: string;
   currentUserName: string;
   leagueMembers: Array<{
+}
     id: string;
     name: string;
     teamName: string;
@@ -31,41 +34,44 @@ interface TrashTalkSystemProps {
   }>;
 
 const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
+}
   currentUserId,
   currentUserName,
-  leagueMembers
+//   leagueMembers
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [messages, setMessages] = useState<TrashTalkMessage[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [selectedTarget, setSelectedTarget] = useState<string>('');
-  const [messageType, setMessageType] = useState<TrashTalkMessage['type']>('general');
+  const [newMessage, setNewMessage] = useState(&apos;&apos;);
+  const [selectedTarget, setSelectedTarget] = useState<string>(&apos;&apos;);
+  const [messageType, setMessageType] = useState<TrashTalkMessage[&apos;type&apos;]>(&apos;general&apos;);
   const [showGifSelector, setShowGifSelector] = useState(false);
-  const [spicyLevel, setSpicyLevel] = useState<TrashTalkMessage['spicyLevel']>(3);
+  const [spicyLevel, setSpicyLevel] = useState<TrashTalkMessage[&apos;spicyLevel&apos;]>(3);
 
   // Predefined trash talk templates for inspiration
   const trashTalkTemplates = {
+}
     waiver_burn: [
       "Congrats on picking up that player... who got dropped last week 😂",
       "Your waiver wire strategy is as weak as your lineup decisions",
-      "Even my grandmother could've made a better pickup",
+      "Even my grandmother could&apos;ve made a better pickup",
       "That player? Really? Bold strategy, Cotton."
     ],
     matchup_specific: [
       "Prepare for total domination this week!",
       "Your team is about to meet their maker",
-      "I've seen stronger lineups in preseason",
+      "I&apos;ve seen stronger lineups in preseason",
       "Time to send you back to the cellar where you belong"
     ],
     trade_roast: [
       "That trade was highway robbery... and you were the victim",
-      "I've seen more balanced trades at a kindergarten lunch table",
+      "I&apos;ve seen more balanced trades at a kindergarten lunch table",
       "Your trade evaluation skills need work",
       "Thanks for making the rest of us look like geniuses"
     ],
     general: [
       "Your fantasy knowledge is as reliable as a weather forecast",
-      "I'm not saying your team is bad, but...",
+      "I&apos;m not saying your team is bad, but...",
       "May your players stay healthy and your scores stay low",
       "Your team name is the best part of your roster"
 
@@ -73,27 +79,29 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
 
   // Spice level indicators
   const spiceIndicators = [
-    { level: 1, emoji: '😊', label: 'Friendly Banter', color: 'green' },
-    { level: 2, emoji: '😏', label: 'Light Roasting', color: 'yellow' },
-    { level: 3, emoji: '🔥', label: 'Spicy Takes', color: 'orange' },
-    { level: 4, emoji: '🌶️', label: 'Hot Sauce', color: 'red' },
-    { level: 5, emoji: '💀', label: 'Nuclear', color: 'purple' }
+    { level: 1, emoji: &apos;😊&apos;, label: &apos;Friendly Banter&apos;, color: &apos;green&apos; },
+    { level: 2, emoji: &apos;😏&apos;, label: &apos;Light Roasting&apos;, color: &apos;yellow&apos; },
+    { level: 3, emoji: &apos;🔥&apos;, label: &apos;Spicy Takes&apos;, color: &apos;orange&apos; },
+    { level: 4, emoji: &apos;🌶️&apos;, label: &apos;Hot Sauce&apos;, color: &apos;red&apos; },
+    { level: 5, emoji: &apos;💀&apos;, label: &apos;Nuclear&apos;, color: &apos;purple&apos; }
   ];
 
   // Popular GIF reactions for fantasy football
   const gifReactions = [
-    { id: 'touchdown_dance', url: '/gifs/touchdown-dance.gif', name: 'Touchdown Dance' },
-    { id: 'crying_jordan', url: '/gifs/crying-jordan.gif', name: 'Crying Jordan' },
-    { id: 'celebration', url: '/gifs/celebration.gif', name: 'Victory Celebration' },
-    { id: 'facepalm', url: '/gifs/facepalm.gif', name: 'Facepalm' },
-    { id: 'mic_drop', url: '/gifs/mic-drop.gif', name: 'Mic Drop' },
-    { id: 'fire', url: '/gifs/fire.gif', name: 'This is Fine' }
+    { id: &apos;touchdown_dance&apos;, url: &apos;/gifs/touchdown-dance.gif&apos;, name: &apos;Touchdown Dance&apos; },
+    { id: &apos;crying_jordan&apos;, url: &apos;/gifs/crying-jordan.gif&apos;, name: &apos;Crying Jordan&apos; },
+    { id: &apos;celebration&apos;, url: &apos;/gifs/celebration.gif&apos;, name: &apos;Victory Celebration&apos; },
+    { id: &apos;facepalm&apos;, url: &apos;/gifs/facepalm.gif&apos;, name: &apos;Facepalm&apos; },
+    { id: &apos;mic_drop&apos;, url: &apos;/gifs/mic-drop.gif&apos;, name: &apos;Mic Drop&apos; },
+    { id: &apos;fire&apos;, url: &apos;/gifs/fire.gif&apos;, name: &apos;This is Fine&apos; }
   ];
 
   const handleSendMessage = () => {
+}
     if (!newMessage.trim()) return;
 
     const message: TrashTalkMessage = {
+}
       id: Date.now().toString(),
       userId: currentUserId,
       userName: currentUserName,
@@ -103,37 +111,46 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
       timestamp: new Date(),
       reactions: [],
       type: messageType,
-      spicyLevel
+//       spicyLevel
     };
 
     setMessages(prev => [message, ...prev]);
-    setNewMessage('');
-    setSelectedTarget('');
+    setNewMessage(&apos;&apos;);
+    setSelectedTarget(&apos;&apos;);
 
     // TODO: Send to backend/websocket service
     // await trashTalkService.sendMessage(leagueId, message);
   };
 
   const addReaction = (messageId: string, emoji: string) => {
+}
     setMessages(prev => prev.map((msg: any) => {
+}
       if (msg.id === messageId) {
+}
         const existingReaction = msg.reactions.find((r: any) => r.emoji === emoji);
         if (existingReaction) {
+}
           if (existingReaction.users.includes(currentUserId)) {
+}
             // Remove reaction
             existingReaction.count--;
             existingReaction.users = existingReaction.users.filter((u: any) => u !== currentUserId);
             if (existingReaction.count === 0) {
+}
               msg.reactions = msg.reactions.filter((r: any) => r.emoji !== emoji);
 
           } else {
+}
             // Add reaction
             existingReaction.count++;
             existingReaction.users.push(currentUserId);
 
         } else {
+}
           // New reaction
           msg.reactions.push({
+}
             emoji,
             count: 1,
             users: [currentUserId]
@@ -145,15 +162,18 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
   };
 
   const getSpiceColor = (level: number) => {
-    const colors = ['text-green-400', 'text-yellow-400', 'text-orange-400', 'text-red-400', 'text-purple-400'];
+}
+    const colors = [&apos;text-green-400&apos;, &apos;text-yellow-400&apos;, &apos;text-orange-400&apos;, &apos;text-red-400&apos;, &apos;text-purple-400&apos;];
     return colors[level - 1];
   };
 
-  const getMessageIcon = (type: TrashTalkMessage['type']) => {
+  const getMessageIcon = (type: TrashTalkMessage[&apos;type&apos;]) => {
+}
     switch (type) {
-      case 'matchup_specific': return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case 'waiver_burn': return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
-      case 'trade_roast': return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+}
+      case &apos;matchup_specific&apos;: return <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;waiver_burn&apos;: return <Zap className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
+      case &apos;trade_roast&apos;: return <Flame className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
       default: return <MessageSquare className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />;
 
   };
@@ -177,7 +197,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           {/* Message Type Selector */}
           <select
             value={messageType}
-            onChange={(e: any) => setMessageType(e.target.value as TrashTalkMessage['type'])}
+            onChange={(e: any) => setMessageType(e.target.value as TrashTalkMessage[&apos;type&apos;])}
           >
             <option value="general">General Banter</option>
             <option value="matchup_specific">Matchup Trash Talk</option>
@@ -192,6 +212,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           >
             <option value="">Everyone</option>
             {leagueMembers.filter((m: any) => m.id !== currentUserId).map((member: any) => (
+}
               <option key={member.id} value={member.id}>
                 @ {member.name}
               </option>
@@ -202,6 +223,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
             <span className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">Spice:</span>
             {spiceIndicators.map((indicator: any) => (
+}
               <button
                 key={indicator.level}
                 onClick={() => setSpicyLevel(indicator.level)}`}
@@ -218,6 +240,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
           <div className="text-sm text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Quick fire templates:</div>
           <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
             {trashTalkTemplates[messageType].map((template, index) => (
+}
               <button
                 key={index}
                 onClick={() => setNewMessage(template)}
@@ -234,7 +257,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
             <textarea
               value={newMessage}
               onChange={(e: any) => setNewMessage(e.target.value)}...` : 
-                'Drop some fire trash talk...'
+                &apos;Drop some fire trash talk...&apos;
 
               className="w-full bg-dark-600 border border-gray-500 rounded-lg px-4 py-3 text-white placeholder-gray-400 resize-none sm:px-4 md:px-6 lg:px-8"
               rows={3}
@@ -260,16 +283,19 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
         {/* GIF Selector */}
         <AnimatePresence>
           {showGifSelector && (
+}
             <motion.div
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: &apos;auto&apos; }}
               exit={{ opacity: 0, height: 0 }}
               className="mt-4 grid grid-cols-3 md:grid-cols-6 gap-2"
             >
               {gifReactions.map((gif: any) => (
+}
                 <button
                   key={gif.id}
                   onClick={() = aria-label="Action button"> {
+}
                     setNewMessage(prev => prev + ` [GIF: ${gif.name}]`);
                     setShowGifSelector(false);
                   }}
@@ -287,6 +313,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
       <div className="space-y-4 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
         <AnimatePresence>
           {messages.map((message: any) => (
+}
             <motion.div
               key={message.id}
               initial={{ opacity: 0, y: 20 }}
@@ -299,6 +326,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
                   {getMessageIcon(message.type)}
                   <span className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">{message.userName}</span>
                   {message.targetUserName && (
+}
                     <>
                       <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">→</span>
                       <span className="font-semibold text-primary-400 sm:px-4 md:px-6 lg:px-8">@{message.targetUserName}</span>
@@ -320,6 +348,7 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
               {/* Reactions */}
               <div className="flex items-center gap-2 flex-wrap sm:px-4 md:px-6 lg:px-8">
                 {message.reactions.map((reaction: any) => (
+}
                   <button
                     key={reaction.emoji}
                     onClick={() => addReaction(message.id, reaction.emoji)}`}
@@ -329,7 +358,8 @@ const TrashTalkSystem: React.FC<TrashTalkSystemProps> = ({ leagueId,
                 ))}
                 
                 {/* Quick reaction buttons */}
-                {['🔥', '😂', '💀', '👑', '🤡'].map((emoji: any) => (
+                {[&apos;🔥&apos;, &apos;😂&apos;, &apos;💀&apos;, &apos;👑&apos;, &apos;🤡&apos;].map((emoji: any) => (
+}
                   <button
                     key={emoji}
                     onClick={() => addReaction(message.id, emoji)}

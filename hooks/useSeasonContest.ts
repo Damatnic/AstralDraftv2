@@ -1,13 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
-import { seasonContestService, SeasonContest, BracketPick, AwardPick } from '../services/seasonContestService';
+import { useState, useEffect, useCallback } from &apos;react&apos;;
+import { seasonContestService, SeasonContest, BracketPick, AwardPick } from &apos;../services/seasonContestService&apos;;
 
 export interface UseSeasonContestOptions {
+}
   userId: string;
   autoRefresh?: boolean;
   refreshInterval?: number;
 }
 
 export interface SeasonContestHookReturn {
+}
   // Contest data
   userContests: SeasonContest[];
   availableContests: SeasonContest[];
@@ -39,6 +41,7 @@ export interface SeasonContestHookReturn {
  * Hook for managing season contest functionality
  */
 export function useSeasonContest(options: UseSeasonContestOptions): SeasonContestHookReturn {
+}
   const { userId, autoRefresh = true, refreshInterval = 30000 } = options;
   
   const [userContests, setUserContests] = useState<SeasonContest[]>([]);
@@ -50,12 +53,14 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
   // Load user contests and available contests
   const refreshContests = useCallback(async () => {
+}
     try {
+}
 
       setLoading(true);
       setError(null);
 
-      // Get user's contests
+      // Get user&apos;s contests
       const userContestsList = seasonContestService.getUserContests(userId);
       setUserContests(userContestsList);
 
@@ -68,27 +73,33 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
       // Set default selected contest if none selected
       if (!selectedContest && userContestsList.length > 0) {
+}
         setSelectedContest(userContestsList[0]);
       }
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load contests';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to load contests&apos;;
       setError(errorMessage);
-      console.error('Error loading contests:', err);
+      console.error(&apos;Error loading contests:&apos;, err);
     } finally {
+}
       setLoading(false);
     }
   }, [userId, selectedContest]);
 
   // Initial load
   useEffect(() => {
+}
     refreshContests();
   }, [refreshContests]);
 
   // Auto-refresh contests
   useEffect(() => {
+}
     if (!autoRefresh) return;
 
     const interval = setInterval(refreshContests, refreshInterval);
@@ -97,37 +108,44 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
   // Select contest
   const selectContest = useCallback((contestId: string) => {
+}
     const contest = userContests.find((c: any) => c.id === contestId);
     if (contest) {
+}
       setSelectedContest(contest);
     }
   }, [userContests]);
 
   // Join contest
   const joinContest = useCallback(async (contestId: string): Promise<boolean> => {
+}
     try {
+}
       setSubmitting(true);
       setError(null);
 
       const contest = availableContests.find((c: any) => c.id === contestId);
       if (!contest) {
-        throw new Error('Contest not found');
+}
+        throw new Error(&apos;Contest not found&apos;);
       }
 
       // Mock user data - in real app this would come from auth/user service
       const success = seasonContestService.joinContest(
         contestId,
         userId,
-        'Your Name', // This should come from user service
-        '/default-avatar.png' // This should come from user service
+        &apos;Your Name&apos;, // This should come from user service
+        &apos;/default-avatar.png&apos; // This should come from user service
       );
 
       if (success) {
+}
         await refreshContests();
         
         // Select the newly joined contest
         const updatedContest = seasonContestService.getContest(contestId);
         if (updatedContest) {
+}
           setSelectedContest(updatedContest);
         }
       }
@@ -135,10 +153,12 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
       return success;
 
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to join contest';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to join contest&apos;;
       setError(errorMessage);
       return false;
     } finally {
+}
       setSubmitting(false);
     }
   }, [availableContests, userId, refreshContests]);
@@ -148,12 +168,15 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     week: number, 
     predictions: { [categoryId: string]: any }
   ): Promise<boolean> => {
+}
     if (!selectedContest) {
-      setError('No contest selected');
+}
+      setError(&apos;No contest selected&apos;);
       return false;
     }
 
     try {
+}
 
       setSubmitting(true);
       setError(null);
@@ -162,10 +185,11 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
         selectedContest.id,
         userId,
         week,
-        predictions
+//         predictions
       );
 
       if (success) {
+}
         // Refresh to get updated contest data
         await refreshContests();
       }
@@ -173,24 +197,30 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
       return success;
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to submit predictions';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to submit predictions&apos;;
       setError(errorMessage);
       return false;
     } finally {
+}
       setSubmitting(false);
     }
   }, [selectedContest, userId, refreshContests]);
 
   // Submit bracket predictions
   const submitBracketPredictions = useCallback(async (picks: BracketPick[]): Promise<boolean> => {
+}
     if (!selectedContest) {
-      setError('No contest selected');
+}
+      setError(&apos;No contest selected&apos;);
       return false;
     }
 
     try {
+}
 
       setSubmitting(true);
       setError(null);
@@ -198,34 +228,41 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
       const success = seasonContestService.submitBracketPredictions(
         selectedContest.id,
         userId,
-        picks
+//         picks
       );
 
       if (success) {
+}
         await refreshContests();
       }
 
       return success;
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to submit bracket picks';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to submit bracket picks&apos;;
       setError(errorMessage);
       return false;
     } finally {
+}
       setSubmitting(false);
     }
   }, [selectedContest, userId, refreshContests]);
 
   // Submit award predictions
   const submitAwardPredictions = useCallback(async (picks: AwardPick[]): Promise<boolean> => {
+}
     if (!selectedContest) {
-      setError('No contest selected');
+}
+      setError(&apos;No contest selected&apos;);
       return false;
     }
 
     try {
+}
 
       setSubmitting(true);
       setError(null);
@@ -233,28 +270,33 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
       const success = seasonContestService.submitAwardPredictions(
         selectedContest.id,
         userId,
-        picks
+//         picks
       );
 
       if (success) {
+}
         await refreshContests();
       }
 
       return success;
 
     } catch (error) {
+}
         console.error(error);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to submit award picks';
+}
+      const errorMessage = err instanceof Error ? err.message : &apos;Failed to submit award picks&apos;;
       setError(errorMessage);
       return false;
     } finally {
+}
       setSubmitting(false);
     }
   }, [selectedContest, userId, refreshContests]);
 
-  // Get user's rank in contest
+  // Get user&apos;s rank in contest
   const getUserRank = useCallback((contestId?: string): number => {
+}
     const contest = contestId ? 
       userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
@@ -265,8 +307,9 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     return participant?.currentRank || 0;
   }, [userContests, selectedContest, userId]);
 
-  // Get user's total score in contest
+  // Get user&apos;s total score in contest
   const getUserScore = useCallback((contestId?: string): number => {
+}
     const contest = contestId ? 
       userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
@@ -277,8 +320,9 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     return participant?.totalScore || 0;
   }, [userContests, selectedContest, userId]);
 
-  // Get user's weekly score
+  // Get user&apos;s weekly score
   const getWeeklyScore = useCallback((week: number, contestId?: string): number => {
+}
     const contest = contestId ? 
       userContests.find((c: any) => c.id === contestId) : 
       selectedContest;
@@ -291,10 +335,12 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
 
   // Clear error
   const clearError = useCallback(() => {
+}
     setError(null);
   }, []);
 
   return {
+}
     // Contest data
     userContests,
     availableContests,
@@ -319,7 +365,7 @@ export function useSeasonContest(options: UseSeasonContestOptions): SeasonContes
     
     // Error handling
     error,
-    clearError
+//     clearError
   };
 }
 

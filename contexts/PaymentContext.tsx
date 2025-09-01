@@ -3,25 +3,27 @@
  * Manages payment state, subscriptions, and transaction history
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
-import { loadStripe, Stripe } from '@stripe/stripe-js';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from &apos;react&apos;;
+import { loadStripe, Stripe } from &apos;@stripe/stripe-js&apos;;
 
 // Initialize Stripe
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || &apos;&apos;);
 
 // Payment types
 export interface PaymentProduct {
+}
   id: string;
   name: string;
   price: number;
   currency: string;
-  type: 'one_time' | 'subscription';
-  interval?: 'month' | 'year';
+  type: &apos;one_time&apos; | &apos;subscription&apos;;
+  interval?: &apos;month&apos; | &apos;year&apos;;
   description: string;
 
 }
 
 export interface PaymentIntent {
+}
   id: string;
   amount: number;
   currency: string;
@@ -31,9 +33,10 @@ export interface PaymentIntent {
 }
 
 export interface UserSubscription {
+}
   id: string;
   productId: string;
-  status: 'active' | 'canceled' | 'past_due' | 'trialing';
+  status: &apos;active&apos; | &apos;canceled&apos; | &apos;past_due&apos; | &apos;trialing&apos;;
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
   cancelAtPeriodEnd: boolean;
@@ -41,17 +44,19 @@ export interface UserSubscription {
 }
 
 export interface PaymentHistory {
+}
   id: string;
   amount: number;
   currency: string;
-  status: 'succeeded' | 'pending' | 'failed' | 'refunded';
-  type: 'contest_entry' | 'subscription' | 'one_time';
+  status: &apos;succeeded&apos; | &apos;pending&apos; | &apos;failed&apos; | &apos;refunded&apos;;
+  type: &apos;contest_entry&apos; | &apos;subscription&apos; | &apos;one_time&apos;;
   productId: string;
   createdAt: Date;
 
 }
 
 interface PaymentContextType {
+}
   // Stripe instance
   stripe: Stripe | null;
   
@@ -87,19 +92,23 @@ interface PaymentContextType {
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
 
 export const usePayment = () => {
+}
   const context = useContext(PaymentContext);
   if (!context) {
-    throw new Error('usePayment must be used within a PaymentProvider');
+}
+    throw new Error(&apos;usePayment must be used within a PaymentProvider&apos;);
 
   return context;
 };
 
 interface PaymentProviderProps {
+}
   children: ReactNode;
 
 }
 
 export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: any) => {
+}
   // Stripe instance
   const [stripe, setStripe] = useState<Stripe | null>(null);
   
@@ -121,13 +130,17 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
 
   // Initialize Stripe
   useEffect(() => {
+}
     const initializeStripe = async () => {
+}
       try {
+}
 
         const stripeInstance = await stripePromise;
         setStripe(stripeInstance);
 
     } catch (error) {
+}
 
     };
 
@@ -136,18 +149,24 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
 
   // Load payment products
   useEffect(() => {
+}
     const loadProducts = async () => {
+}
       try {
+}
 
         setIsLoadingProducts(true);
-        const response = await fetch('/api/payment/products');
+        const response = await fetch(&apos;/api/payment/products&apos;);
         const data = await response.json();
         
         if (data.success) {
+}
           setProducts(data.data.products);
 
     } catch (error) {
+}
       } finally {
+}
         setIsLoadingProducts(false);
 
     };
@@ -157,14 +176,18 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
 
   // Create contest entry payment
   const createContestEntryPayment = async (contestId: string, entryType: string): Promise<PaymentIntent> => {
+}
     try {
+}
       setIsProcessingPayment(true);
       
-      const response = await fetch('/api/payment/contest-entry', {
-        method: 'POST',
+      const response = await fetch(&apos;/api/payment/contest-entry&apos;, {
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
+          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`
         },
         body: JSON.stringify({ contestId, entryType })
       });
@@ -172,14 +195,15 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       const data = await response.json();
       
       if (!data.success) {
-        throw new Error(data.error || 'Failed to create payment intent');
+}
+        throw new Error(data.error || &apos;Failed to create payment intent&apos;);
 
       const paymentIntent = data.data.paymentIntent;
       setCurrentPaymentIntent(paymentIntent);
       
       return paymentIntent;
 
-    `Bearer ${localStorage.getItem('token')}`
+    `Bearer ${localStorage.getItem(&apos;token&apos;)}`
         },
         body: JSON.stringify({ subscriptionType, trialDays })
       });
@@ -187,7 +211,8 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       const data = await response.json();
       
       if (!data.success) {
-        throw new Error(data.error || 'Failed to create subscription');
+}
+        throw new Error(data.error || &apos;Failed to create subscription&apos;);
 
       // Refresh subscriptions
       await refreshSubscriptions();
@@ -195,10 +220,12 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       return data.data;
 
     `/api/payment/subscription/${subscriptionId}/cancel`, {
-        method: 'PUT',
+}
+        method: &apos;PUT&apos;,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
+          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;token&apos;)}`
         },
         body: JSON.stringify({ immediate })
       });
@@ -206,46 +233,55 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
       const data = await response.json();
       
       if (!data.success) {
-        throw new Error(data.error || 'Failed to cancel subscription');
+}
+        throw new Error(data.error || &apos;Failed to cancel subscription&apos;);
 
       // Refresh subscriptions
       await refreshSubscriptions();
 
-    `Bearer ${localStorage.getItem('token')}`
+    `Bearer ${localStorage.getItem(&apos;token&apos;)}`
 
       });
 
       const data = await response.json();
       
       if (data.success) {
+}
         setSubscriptions(data.data.subscriptions.map((sub: any) => ({
+}
           ...sub,
           currentPeriodStart: new Date(sub.currentPeriodStart),
           currentPeriodEnd: new Date(sub.currentPeriodEnd)
         })));
 
-    `Bearer ${localStorage.getItem('token')}`
+    `Bearer ${localStorage.getItem(&apos;token&apos;)}`
 
       });
 
       const data = await response.json();
       
       if (data.success) {
+}
         setPaymentHistory(data.data.payments.map((payment: any) => ({
+}
           ...payment,
           createdAt: new Date(payment.createdAt)
         })));
 
     } catch (error) {
+}
     } finally {
+}
       setIsLoadingHistory(false);
 
   };
 
   // Load user data on mount
   useEffect(() => {
-    const token = localStorage.getItem('token');
+}
+    const token = localStorage.getItem(&apos;token&apos;);
     if (token) {
+}
       refreshSubscriptions();
       refreshPaymentHistory();
     }
@@ -253,41 +289,46 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
 
   // Premium feature checks
   const hasActivePremium = (): boolean => {
+}
     return subscriptions.some((sub: any) => 
-      sub.productId === 'oracle_premium' && 
-      sub.status === 'active' && 
+      sub.productId === &apos;oracle_premium&apos; && 
+      sub.status === &apos;active&apos; && 
       new Date() < sub.currentPeriodEnd
     );
   };
 
   const hasActiveAnalytics = (): boolean => {
+}
     return subscriptions.some((sub: any) => 
-      (sub.productId === 'analytics_pro' || sub.productId === 'oracle_ultimate') && 
-      sub.status === 'active' && 
+      (sub.productId === &apos;analytics_pro&apos; || sub.productId === &apos;oracle_ultimate&apos;) && 
+      sub.status === &apos;active&apos; && 
       new Date() < sub.currentPeriodEnd
     );
   };
 
   const hasActiveUltimate = (): boolean => {
+}
     return subscriptions.some((sub: any) => 
-      sub.productId === 'oracle_ultimate' && 
-      sub.status === 'active' && 
+      sub.productId === &apos;oracle_ultimate&apos; && 
+      sub.status === &apos;active&apos; && 
       new Date() < sub.currentPeriodEnd
     );
   };
 
   const canAccessPremiumFeature = (feature: string): boolean => {
+}
     switch (feature) {
-      case 'advanced_predictions':
-      case 'prediction_insights':
+}
+      case &apos;advanced_predictions&apos;:
+      case &apos;prediction_insights&apos;:
         return hasActivePremium() || hasActiveUltimate();
       
-      case 'detailed_analytics':
-      case 'performance_tracking':
+      case &apos;detailed_analytics&apos;:
+      case &apos;performance_tracking&apos;:
         return hasActiveAnalytics() || hasActiveUltimate();
       
-      case 'priority_support':
-      case 'exclusive_content':
+      case &apos;priority_support&apos;:
+      case &apos;exclusive_content&apos;:
         return hasActiveUltimate();
       
       default:
@@ -296,6 +337,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
   };
 
   const value: PaymentContextType = useMemo(() => ({
+}
     stripe,
     products,
     isLoadingProducts,
@@ -313,7 +355,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
     hasActivePremium,
     hasActiveAnalytics,
     hasActiveUltimate,
-    canAccessPremiumFeature
+//     canAccessPremiumFeature
   }), [
     stripe,
     products,
@@ -323,7 +365,7 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }: an
     paymentHistory,
     isLoadingHistory,
     currentPaymentIntent,
-    isProcessingPayment
+//     isProcessingPayment
   ]);
 
   return (

@@ -1,10 +1,10 @@
 
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React from 'react';
-import { motion } from 'framer-motion';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import { motion } from &apos;framer-motion&apos;;
 
 interface StatChartProps {
+}
   label: string;
   value: number;
   maxValue: number;
@@ -13,7 +13,8 @@ interface StatChartProps {
 
 }
 
-const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = '', color = 'bg-cyan-500' }: any) => {
+const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = &apos;&apos;, color = &apos;bg-cyan-500&apos; }: any) => {
+}
   const percentage = (value / maxValue) * 100;
 
   return (
@@ -26,9 +27,10 @@ const StatChart: React.FC<StatChartProps> = ({ label, value, maxValue, prefix = 
         <motion.div
           className={`h-full rounded-full ${color}`}
           {...{
+}
             initial: { width: 0 },
             animate: { width: `${percentage}%` },
-            transition: { duration: 0.8, ease: 'easeOut' },
+            transition: { duration: 0.8, ease: &apos;easeOut&apos; },
           }}
         />
       </div>

@@ -1,27 +1,28 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import type { Player, PlayerNote, League } from '../../types';
-import { Modal } from '../ui/Modal';
-import { Tabs } from '../ui/Tabs';
-import OverviewTab from './tabs/OverviewTab';
-import ScoutingTab from './tabs/ScoutingTab';
-import FantasyTab from './tabs/FantasyTab';
-import IntelligenceTab from './tabs/IntelligenceTab';
-import { generatePlayerInsight, generatePlayerAvatar } from '../../services/geminiService';
-import { SparklesIcon } from '../icons/SparklesIcon';
-import { ShieldCheckIcon } from '../icons/ShieldCheckIcon';
-import SimilarPlayersPopup from './SimilarPlayersPopup';
-import StoryTab from './tabs/StoryTab';
-import ContractTab from './tabs/ContractTab';
-import GameLogTab from './tabs/GameLogTab';
-import { MicrophoneIcon } from '../icons/MicrophoneIcon';
-import { StopIcon } from '../icons/StopIcon';
-import { Trash2Icon } from '../icons/Trash2Icon';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { AnimatePresence } from &apos;framer-motion&apos;;
+import type { Player, PlayerNote, League } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { Tabs } from &apos;../ui/Tabs&apos;;
+import OverviewTab from &apos;./tabs/OverviewTab&apos;;
+import ScoutingTab from &apos;./tabs/ScoutingTab&apos;;
+import FantasyTab from &apos;./tabs/FantasyTab&apos;;
+import IntelligenceTab from &apos;./tabs/IntelligenceTab&apos;;
+import { generatePlayerInsight, generatePlayerAvatar } from &apos;../../services/geminiService&apos;;
+import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
+import { ShieldCheckIcon } from &apos;../icons/ShieldCheckIcon&apos;;
+import SimilarPlayersPopup from &apos;./SimilarPlayersPopup&apos;;
+import StoryTab from &apos;./tabs/StoryTab&apos;;
+import ContractTab from &apos;./tabs/ContractTab&apos;;
+import GameLogTab from &apos;./tabs/GameLogTab&apos;;
+import { MicrophoneIcon } from &apos;../icons/MicrophoneIcon&apos;;
+import { StopIcon } from &apos;../icons/StopIcon&apos;;
+import { Trash2Icon } from &apos;../icons/Trash2Icon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface PlayerDetailModalProps {
+}
   player: Player;
   onClose: () => void;
   playerNotes: { [playerId: number]: PlayerNote };
@@ -32,15 +33,17 @@ interface PlayerDetailModalProps {
 }
 
 const positionColor: Record<string, string> = {
-    QB: 'from-red-500/30',
-    RB: 'from-green-500/30',
-    WR: 'from-blue-500/30',
-    TE: 'from-orange-500/30',
-    DST: 'from-purple-500/30',
-    K: 'from-yellow-500/30'
+}
+    QB: &apos;from-red-500/30&apos;,
+    RB: &apos;from-green-500/30&apos;,
+    WR: &apos;from-blue-500/30&apos;,
+    TE: &apos;from-orange-500/30&apos;,
+    DST: &apos;from-purple-500/30&apos;,
+    K: &apos;from-yellow-500/30&apos;
 };
 
 interface MyNotesTabProps {
+}
     player: Player;
     note: PlayerNote | undefined;
     dispatch: React.Dispatch<any>;
@@ -48,68 +51,86 @@ interface MyNotesTabProps {
 }
 
 const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) => {
-    const [noteText, setNoteText] = React.useState(note?.text || '');
+}
+    const [noteText, setNoteText] = React.useState(note?.text || &apos;&apos;);
     const [isGenerating, setIsGenerating] = React.useState(false);
     const [isRecording, setIsRecording] = React.useState(false);
     const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
     const audioChunksRef = React.useRef<Blob[]>([]);
 
      React.useEffect(() => {
-        setNoteText(note?.text || '');
+}
+        setNoteText(note?.text || &apos;&apos;);
     }, [note?.text]);
 
     const handleSaveText = () => {
+}
         dispatch({
-            type: 'ADD_PLAYER_NOTE',
+}
+            type: &apos;ADD_PLAYER_NOTE&apos;,
             payload: { playerId: player.id, note: noteText }
         });
         dispatch({
-            type: 'ADD_NOTIFICATION',
-            payload: { message: `Note for ${player.name} saved!`, type: 'SYSTEM' }
+}
+            type: &apos;ADD_NOTIFICATION&apos;,
+            payload: { message: `Note for ${player.name} saved!`, type: &apos;SYSTEM&apos; }
         });
     };
 
     const handleGenerateInsight = async () => {
+}
         try {
+}
             setIsGenerating(true);
             const insight = await generatePlayerInsight(player);
             if (insight) {
-                const newNote = noteText ? `${noteText}\n\n---\n🔮 Oracle's Insight:\n${insight}` : `🔮 Oracle's Insight:\n${insight}`;
+}
+                const newNote = noteText ? `${noteText}\n\n---\n🔮 Oracle&apos;s Insight:\n${insight}` : `🔮 Oracle&apos;s Insight:\n${insight}`;
                 setNoteText(newNote);
             } else {
+}
                 dispatch({
-                    type: 'ADD_NOTIFICATION',
-                    payload: { message: `Could not generate insight for ${player.name}.`, type: 'SYSTEM' }
+}
+                    type: &apos;ADD_NOTIFICATION&apos;,
+                    payload: { message: `Could not generate insight for ${player.name}.`, type: &apos;SYSTEM&apos; }
                 });
             }
         } catch (error) {
+}
             dispatch({
-                type: 'ADD_NOTIFICATION',
-                payload: { message: `Could not generate insight for ${player.name}.`, type: 'SYSTEM' }
+}
+                type: &apos;ADD_NOTIFICATION&apos;,
+                payload: { message: `Could not generate insight for ${player.name}.`, type: &apos;SYSTEM&apos; }
             });
         } finally {
+}
             setIsGenerating(false);
         }
     };
     
     const handleStartRecording = async () => {
+}
         try {
+}
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             mediaRecorderRef.current = new MediaRecorder(stream);
             audioChunksRef.current = [];
             
             mediaRecorderRef.current.ondataavailable = (event: any) => {
+}
                 audioChunksRef.current.push(event.data);
             };
 
             mediaRecorderRef.current.onstop = () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+}
+                const audioBlob = new Blob(audioChunksRef.current, { type: &apos;audio/webm&apos; });
                 const reader = new FileReader();
                 reader.readAsDataURL(audioBlob);
                 reader.onloadend = () => {
+}
                     const base64data = reader.result as string;
-                    dispatch({ type: 'ADD_PLAYER_AUDIO_NOTE', payload: { playerId: player.id, audioDataUrl: base64data } });
-                     dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Audio note for ${player.name} saved.`, type: 'SYSTEM' } });
+                    dispatch({ type: &apos;ADD_PLAYER_AUDIO_NOTE&apos;, payload: { playerId: player.id, audioDataUrl: base64data } });
+                     dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Audio note for ${player.name} saved.`, type: &apos;SYSTEM&apos; } });
                 };
                  stream.getTracks().forEach((track: any) => track.stop());
             };
@@ -117,20 +138,24 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) =>
             mediaRecorderRef.current.start();
             setIsRecording(true);
         } catch (error) {
-            console.error('Recording error:', error);
+}
+            console.error(&apos;Recording error:&apos;, error);
         }
     };
     
     const handleStopRecording = () => {
+}
         if (mediaRecorderRef.current) {
+}
             mediaRecorderRef.current.stop();
         }
         setIsRecording(false);
     };
     
     const handleDeleteAudio = () => {
-        dispatch({ type: 'DELETE_PLAYER_AUDIO_NOTE', payload: { playerId: player.id }});
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: `Audio note for ${player.name} deleted.`, type: 'SYSTEM' } });
+}
+        dispatch({ type: &apos;DELETE_PLAYER_AUDIO_NOTE&apos;, payload: { playerId: player.id }});
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: `Audio note for ${player.name} deleted.`, type: &apos;SYSTEM&apos; } });
     };
 
     return (
@@ -149,7 +174,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) =>
                     className="flex items-center gap-2 px-3 py-1.5 bg-transparent border border-cyan-400/50 text-cyan-300 font-bold text-xs rounded-md hover:bg-cyan-400/20 disabled:opacity-50 disabled:cursor-wait sm:px-4 md:px-6 lg:px-8"
                     aria-label="Generate AI insight for player note"
                 >
-                    {isGenerating ? 'Generating...' : <><SparklesIcon /> AI Insight</>}
+                    {isGenerating ? &apos;Generating...&apos; : <><SparklesIcon /> AI Insight</>}
                 </button>
                 <button 
                     onClick={handleSaveText}
@@ -163,6 +188,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) =>
              <div className="mt-4 pt-4 border-t border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                 <h3 className="font-bold text-lg text-cyan-300 mb-2 sm:px-4 md:px-6 lg:px-8">Voice Memo</h3>
                 {note?.audio ? (
+}
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <audio src={note.audio} controls className="w-full h-10 sm:px-4 md:px-6 lg:px-8" />
                         <button onClick={handleDeleteAudio} className="p-2 bg-red-500/20 text-red-300 rounded-md hover:bg-red-500/30 sm:px-4 md:px-6 lg:px-8">
@@ -173,7 +199,7 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) =>
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button 
                             onClick={isRecording ? handleStopRecording : handleStartRecording}
-                            className={`px-4 py-2 text-sm font-bold rounded-md flex items-center gap-2 transition-colors ${isRecording ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}
+                            className={`px-4 py-2 text-sm font-bold rounded-md flex items-center gap-2 transition-colors ${isRecording ? &apos;bg-red-500 text-white&apos; : &apos;bg-blue-500 text-white&apos;}`}
                         >
                             {isRecording ? <><StopIcon /> Stop</> : <><MicrophoneIcon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" /> Record</>}
                         </button>
@@ -185,18 +211,19 @@ const MyNotesTab: React.FC<MyNotesTabProps> = ({player, note, dispatch}: any) =>
     );
 };
 
-const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = 'overview', league, playerAvatars }: any) => {
+const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, playerNotes, dispatch, initialTab = &apos;overview&apos;, league, playerAvatars }: any) => {
+}
   const [isSimilarPlayersOpen, setIsSimilarPlayersOpen] = React.useState(false);
   
   const tabItems = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'scouting', label: 'Scouting' },
-    { id: 'fantasy', label: 'Fantasy' },
-    { id: 'game_log', label: 'Game Log' },
-    { id: 'contract', label: 'Contract' },
-    { id: 'intel', label: 'Astral Intel' },
-    { id: 'story', label: 'Story' },
-    { id: 'notes', label: 'My Notes' },
+    { id: &apos;overview&apos;, label: &apos;Overview&apos; },
+    { id: &apos;scouting&apos;, label: &apos;Scouting&apos; },
+    { id: &apos;fantasy&apos;, label: &apos;Fantasy&apos; },
+    { id: &apos;game_log&apos;, label: &apos;Game Log&apos; },
+    { id: &apos;contract&apos;, label: &apos;Contract&apos; },
+    { id: &apos;intel&apos;, label: &apos;Astral Intel&apos; },
+    { id: &apos;story&apos;, label: &apos;Story&apos; },
+    { id: &apos;notes&apos;, label: &apos;My Notes&apos; },
   ];
 
   const [activeTab, setActiveTab] = React.useState(initialTab);
@@ -205,20 +232,26 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
   const generatedAvatar = playerAvatars[player.id];
 
   const rosteredTeam = React.useMemo(() => {
+}
     if (!league) return null;
     return league.teams.find((team: any) => team.roster.some((p: any) => p.id === player.id));
   }, [league, player.id]);
   
   React.useEffect(() => {
+}
     setActiveTab(initialTab);
   }, [initialTab]);
   
   React.useEffect(() => {
-    // Generate an AI avatar for the player if one doesn't exist
+}
+    // Generate an AI avatar for the player if one doesn&apos;t exist
     if (!generatedAvatar) {
+}
         generatePlayerAvatar(player).then(avatarUrl => {
+}
             if(avatarUrl) {
-                dispatch({ type: 'SET_PLAYER_AVATAR', payload: { playerId: player.id, avatarUrl } });
+}
+                dispatch({ type: &apos;SET_PLAYER_AVATAR&apos;, payload: { playerId: player.id, avatarUrl } });
             }
         });
     }
@@ -231,8 +264,8 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
               {/* Header */}
               <div className={`p-4 sm:p-6 border-b border-[var(--panel-border)] bg-gradient-to-br ${positionColor[player.position]} to-transparent flex items-start justify-between`}>
                   <div className="flex items-start gap-4 sm:px-4 md:px-6 lg:px-8">
-                        <Avatar 
-                           avatar={player.astralIntelligence?.spiritAnimal?.split(',')[0] || '🏈'}
+                        <Avatar>
+                           avatar={player.astralIntelligence?.spiritAnimal?.split(&apos;,&apos;)[0] || &apos;🏈&apos;}
                            generatedAvatarUrl={generatedAvatar}
                            className="w-24 h-24 text-6xl rounded-lg flex-shrink-0 sm:px-4 md:px-6 lg:px-8"
                            alt={player.name}
@@ -244,6 +277,7 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
                   </div>
                   <div>
                       {rosteredTeam && (
+}
                           <div className="flex items-center gap-2 px-3 py-1 bg-green-900/50 border border-green-400/30 rounded-full text-xs text-green-300 sm:px-4 md:px-6 lg:px-8">
                               <ShieldCheckIcon className="h-4 w-4 sm:px-4 md:px-6 lg:px-8" />
                               <span>Rostered by <strong>{rosteredTeam.name}</strong></span>
@@ -261,14 +295,14 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
               <div className="flex-grow p-4 sm:p-6 overflow-y-auto">
                   <AnimatePresence mode="wait">
                       <div key={activeTab}>
-                          {activeTab === 'overview' && <OverviewTab player={player} onFindSimilar={() => setIsSimilarPlayersOpen(true)} />}
-                          {activeTab === 'scouting' && <ScoutingTab player={player} />}
-                          {activeTab === 'fantasy' && league && <FantasyTab player={player} league={league} dispatch={dispatch} />}
-                          {activeTab === 'game_log' && <GameLogTab player={player} />}
-                          {activeTab === 'contract' && <ContractTab player={player} />}
-                          {activeTab === 'intel' && <IntelligenceTab player={player} />}
-                          {activeTab === 'story' && league && <StoryTab player={player} league={league} />}
-                          {activeTab === 'notes' && <MyNotesTab player={player} note={playerNote} dispatch={dispatch} />}
+                          {activeTab === &apos;overview&apos; && <OverviewTab player={player} onFindSimilar={() => setIsSimilarPlayersOpen(true)} />}
+                          {activeTab === &apos;scouting&apos; && <ScoutingTab player={player} />}
+                          {activeTab === &apos;fantasy&apos; && league && <FantasyTab player={player} league={league} dispatch={dispatch} />}
+                          {activeTab === &apos;game_log&apos; && <GameLogTab player={player} />}
+                          {activeTab === &apos;contract&apos; && <ContractTab player={player} />}
+                          {activeTab === &apos;intel&apos; && <IntelligenceTab player={player} />}
+                          {activeTab === &apos;story&apos; && league && <StoryTab player={player} league={league} />}
+                          {activeTab === &apos;notes&apos; && <MyNotesTab player={player} note={playerNote} dispatch={dispatch} />}
                       </div>
                   </AnimatePresence>
               </div>
@@ -276,7 +310,8 @@ const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({ player, onClose, 
       </Modal>
       <AnimatePresence>
         {isSimilarPlayersOpen && (
-            <SimilarPlayersPopup
+}
+            <SimilarPlayersPopup>
                 playerToCompare={player}
                 onClose={() => setIsSimilarPlayersOpen(false)}
             />

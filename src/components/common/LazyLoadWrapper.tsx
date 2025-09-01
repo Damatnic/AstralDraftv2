@@ -3,10 +3,11 @@
  * Provides lazy loading with loading states, error boundaries, and performance tracking
  */
 
-import React, { Suspense, lazy, ComponentType, useEffect, useState } from 'react';
-import { performanceService } from '../../services/performanceService';
+import React, { Suspense, lazy, ComponentType, useEffect, useState } from &apos;react&apos;;
+import { performanceService } from &apos;../../services/performanceService&apos;;
 
 interface LazyLoadWrapperProps {
+}
   children: React.ReactNode;
   fallback?: React.ComponentType;
   errorFallback?: React.ComponentType<{ error: Error; retry: () => void }>;
@@ -15,6 +16,7 @@ interface LazyLoadWrapperProps {
 }
 
 interface LazyComponentProps {
+}
   loader: () => Promise<{ default: ComponentType<any> }>;
   componentName: string;
   fallback?: React.ComponentType;
@@ -56,6 +58,7 @@ const DefaultErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({ e
 // Enhanced error boundary for lazy components
 class LazyLoadErrorBoundary extends React.Component<
   { 
+}
     children: React.ReactNode; 
     fallback: React.ComponentType<{ error: Error; retry: () => void }>;
     componentName?: string;
@@ -63,44 +66,55 @@ class LazyLoadErrorBoundary extends React.Component<
   },
   { hasError: boolean; error: Error | null }
 > {
+}
   constructor(props: any) {
+}
     super(props);
     this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error: Error) {
+}
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+}
     // Log error with performance service
-    performanceService.recordMetric('lazy_component_error', 1, {
+    performanceService.recordMetric(&apos;lazy_component_error&apos;, 1, {
+}
       component: this.props.componentName,
       error: error.message,
       stack: error.stack,
-      errorInfo
+//       errorInfo
     });
 
     // Send to error tracking service if available
     if (window.errorTrackingService) {
+}
       window.errorTrackingService.captureError(error, {
-        component: 'lazy-load-boundary',
-        severity: 'medium',
-        context: { 
+}
+        component: &apos;lazy-load-boundary&apos;,
+        severity: &apos;medium&apos;,
+        context: {
+}
           componentName: this.props.componentName,
-          errorInfo 
+//           errorInfo 
         }
       });
     }
   }
 
   retry = () => {
+}
     this.setState({ hasError: false, error: null });
     this.props.onRetry();
   }
 
   render() {
+}
     if (this.state.hasError && this.state.error) {
+}
       const FallbackComponent = this.props.fallback;
       return <FallbackComponent error={this.state.error} retry={this.retry} />;
     }
@@ -111,32 +125,38 @@ class LazyLoadErrorBoundary extends React.Component<
 
 // Lazy load wrapper with performance tracking
 export const LazyLoadWrapper: React.FC<LazyLoadWrapperProps> = ({
+}
   children,
   fallback: FallbackComponent = DefaultLoadingFallback,
   errorFallback: ErrorFallbackComponent = DefaultErrorFallback,
-  componentName = 'unknown',
+  componentName = &apos;unknown&apos;,
   minDelay = 0
 }) => {
+}
   const [showContent, setShowContent] = useState(minDelay === 0);
   const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
+}
     if (minDelay > 0) {
+}
       const timer = setTimeout(() => setShowContent(true), minDelay);
       return () => clearTimeout(timer);
     }
   }, [minDelay]);
 
   const handleRetry = () => {
+}
     setRetryKey(prev => prev + 1);
   };
 
   if (!showContent) {
+}
     return <FallbackComponent />;
   }
 
   return (
-    <LazyLoadErrorBoundary
+    <LazyLoadErrorBoundary>
       key={retryKey}
       fallback={ErrorFallbackComponent}
       componentName={componentName}
@@ -151,6 +171,7 @@ export const LazyLoadWrapper: React.FC<LazyLoadWrapperProps> = ({
 
 // Factory function to create lazy components with performance tracking
 export const createLazyComponent = <P extends object = {}>({
+}
   loader,
   componentName,
   fallback,
@@ -158,11 +179,15 @@ export const createLazyComponent = <P extends object = {}>({
   minDelay,
   ...defaultProps
 }: LazyComponentProps): React.ComponentType<P> => {
+}
   const LazyComponent = lazy(async () => {
+}
     const startTime = performance.now();
     
     try {
-      performanceService.recordMetric('lazy_component_load_start', startTime, {
+}
+      performanceService.recordMetric(&apos;lazy_component_load_start&apos;, startTime, {
+}
         component: componentName
       });
 
@@ -171,15 +196,16 @@ export const createLazyComponent = <P extends object = {}>({
       performanceService.measureAsyncOperation(
         `lazy_load_${componentName}`,
         startTime,
-        true
+//         true
       );
 
       return module;
     } catch (error) {
+}
       performanceService.measureAsyncOperation(
         `lazy_load_${componentName}`,
         startTime,
-        false
+//         false
       );
 
       throw error;
@@ -187,7 +213,7 @@ export const createLazyComponent = <P extends object = {}>({
   });
 
   const WrappedComponent: React.ComponentType<P> = (props: any) => (
-    <LazyLoadWrapper
+    <LazyLoadWrapper>
       fallback={fallback}
       errorFallback={errorFallback}
       componentName={componentName}
@@ -203,29 +229,34 @@ export const createLazyComponent = <P extends object = {}>({
 
 // Pre-built lazy components for common heavy features
 export const LazyDraftRoom = createLazyComponent({
-  loader: () => import('../../views/DraftRoomView'),
-  componentName: 'DraftRoomView',
+}
+  loader: () => import(&apos;../../views/DraftRoomView&apos;),
+  componentName: &apos;DraftRoomView&apos;,
   minDelay: 100 // Prevent flashing for fast loads
 });
 
 export const LazyAnalyticsDashboard = createLazyComponent({
-  loader: () => import('../../components/analytics/AdvancedAnalyticsDashboard'),
-  componentName: 'AdvancedAnalyticsDashboard'
+}
+  loader: () => import(&apos;../../components/analytics/AdvancedAnalyticsDashboard&apos;),
+  componentName: &apos;AdvancedAnalyticsDashboard&apos;
 });
 
 export const LazyAIAssistant = createLazyComponent({
-  loader: () => import('../../components/ai/AIFantasyAssistant'),
-  componentName: 'AIFantasyAssistant'
+}
+  loader: () => import(&apos;../../components/ai/AIFantasyAssistant&apos;),
+  componentName: &apos;AIFantasyAssistant&apos;
 });
 
 export const LazyCommissionerTools = createLazyComponent({
-  loader: () => import('../../views/EnhancedCommissionerToolsView'),
-  componentName: 'EnhancedCommissionerToolsView'
+}
+  loader: () => import(&apos;../../views/EnhancedCommissionerToolsView&apos;),
+  componentName: &apos;EnhancedCommissionerToolsView&apos;
 });
 
 export const LazyPlayerDetailModal = createLazyComponent({
-  loader: () => import('../../components/player/PlayerDetailModal'),
-  componentName: 'PlayerDetailModal'
+}
+  loader: () => import(&apos;../../components/player/PlayerDetailModal&apos;),
+  componentName: &apos;PlayerDetailModal&apos;
 });
 
 export default LazyLoadWrapper;

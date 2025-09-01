@@ -3,20 +3,21 @@
  * Focuses on Oracle predictions with simple 10-player + admin login
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, memo } from 'react';
-import ProductionAuthProvider, { useProductionAuth } from '../contexts/ProductionAuthContext';
-import ProductionLoginInterface from '../components/auth/ProductionLoginInterface';
-import MobileOptimizedOracleInterface from '../components/oracle/MobileOptimizedOracleInterface';
-import NotificationDemo from '../components/oracle/NotificationDemo';
-import UserSettings from '../components/auth/UserSettings';
-import OraclePerformanceDashboard from '../components/oracle/OraclePerformanceDashboard';
-import OracleCacheDashboard from '../components/oracle/OracleCacheDashboard';
-import { motion } from 'framer-motion';
-import { LogOutIcon, SettingsIcon, TestTubeIcon, ActivityIcon, DatabaseIcon } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, memo } from &apos;react&apos;;
+import ProductionAuthProvider, { useProductionAuth } from &apos;../contexts/ProductionAuthContext&apos;;
+import ProductionLoginInterface from &apos;../components/auth/ProductionLoginInterface&apos;;
+import MobileOptimizedOracleInterface from &apos;../components/oracle/MobileOptimizedOracleInterface&apos;;
+import NotificationDemo from &apos;../components/oracle/NotificationDemo&apos;;
+import UserSettings from &apos;../components/auth/UserSettings&apos;;
+import OraclePerformanceDashboard from &apos;../components/oracle/OraclePerformanceDashboard&apos;;
+import OracleCacheDashboard from &apos;../components/oracle/OracleCacheDashboard&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { LogOutIcon, SettingsIcon, TestTubeIcon, ActivityIcon, DatabaseIcon } from &apos;lucide-react&apos;;
 
 // Memoized AppContent for better performance
 const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
+}
     const { user, isAuthenticated, logout, isLoading } = useProductionAuth();
     const [showSettings, setShowSettings] = useState(false);
     const [showDemo, setShowDemo] = useState(false);
@@ -25,6 +26,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
 
     // Show loading state while authenticating
     if (isLoading) {
+}
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
@@ -35,9 +37,11 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
         );
 
     if (!isAuthenticated) {
+}
         return <ProductionLoginInterface />;
 
     if (showSettings) {
+}
         return (
             <div className="min-h-screen bg-gray-900 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto p-4 sm:px-4 md:px-6 lg:px-8">
@@ -58,6 +62,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
         );
 
     if (showDemo) {
+}
         return (
             <div className="min-h-screen bg-gray-900 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto p-4 sm:px-4 md:px-6 lg:px-8">
@@ -78,6 +83,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
         );
 
     if (showPerformance) {
+}
         return (
             <div className="min-h-screen bg-gray-900 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-6xl mx-auto p-4 sm:px-4 md:px-6 lg:px-8">
@@ -98,6 +104,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
         );
 
     if (showCache) {
+}
         return (
             <div className="min-h-screen bg-gray-900 sm:px-4 md:px-6 lg:px-8">
                 <div className="max-w-6xl mx-auto p-4 sm:px-4 md:px-6 lg:px-8">
@@ -127,11 +134,11 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
                         <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-white font-semibold text-sm sm:px-4 md:px-6 lg:px-8">
-                                    {user?.username?.[0]?.toUpperCase() || 'U'}
+                                    {user?.username?.[0]?.toUpperCase() || &apos;U&apos;}
                                 </span>
                             </div>
                             <div>
-                                <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Welcome, {user?.username || 'User'}</p>
+                                <p className="text-white font-medium sm:px-4 md:px-6 lg:px-8">Welcome, {user?.username || &apos;User&apos;}</p>
                                 <p className="text-gray-400 text-sm sm:px-4 md:px-6 lg:px-8">Oracle System Ready</p>
                             </div>
                         </div>
@@ -198,6 +205,7 @@ const OracleOnlyAppContent: React.FC = memo(function OracleOnlyAppContent() {
 });
 
 const OracleOnlyApp: React.FC = () => {
+}
     return (
         <ProductionAuthProvider>
             <OracleOnlyAppContent />

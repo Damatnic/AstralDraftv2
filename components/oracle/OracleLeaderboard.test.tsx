@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import OracleLeaderboard from './OracleLeaderboard';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import OracleLeaderboard from &apos;./OracleLeaderboard&apos;;
 
-describe('OracleLeaderboard', () => {
-  it('renders without crashing', () => {
+describe(&apos;OracleLeaderboard&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<OracleLeaderboard />);
-    expect(screen.getByTestId('oracleleaderboard')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;oracleleaderboard&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<OracleLeaderboard />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<OracleLeaderboard />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

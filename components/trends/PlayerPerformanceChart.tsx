@@ -1,19 +1,22 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { Player, League } from '../../types';
-import { Tooltip } from '../ui/Tooltip';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { Player, League } from &apos;../../types&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface PlayerPerformanceChartProps {
+}
     player: Player;
     league: League;
 
 }
 
 const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player, league }: any) => {
+}
     const chartData = React.useMemo(() => {
+}
         const data = [];
         for (let week = 1; week < league.currentWeek; week++) {
+}
             const matchup = league.schedule.find((m: any) => m.week === week);
             if (!matchup) continue;
 
@@ -28,6 +31,7 @@ const PlayerPerformanceChart: React.FC<PlayerPerformanceChartProps> = ({ player,
     }, [player, league]);
 
     if (chartData.length === 0) {
+}
         return <p className="text-center text-sm text-gray-400 p-8 sm:px-4 md:px-6 lg:px-8">No games have been played yet.</p>;
 
     const maxScore = Math.max(...chartData.flatMap(d => [d.actualScore, d.projectedScore]), 1);

@@ -1,24 +1,28 @@
-import React from 'react';
 
 interface LoadingProps {
-  size?: 'sm' | 'md' | 'lg';
+}
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
   text?: string;
-  variant?: 'spinner' | 'skeleton';
+  variant?: &apos;spinner&apos; | &apos;skeleton&apos;;
 
 }
 
 export const Loading: React.FC<LoadingProps> = ({
-  size = 'md',
+}
+  size = &apos;md&apos;,
   text,
-  variant = 'spinner'
+  variant = &apos;spinner&apos;
 }: any) => {
+}
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-8 h-8', 
-    lg: 'w-12 h-12'
+}
+    sm: &apos;w-4 h-4&apos;,
+    md: &apos;w-8 h-8&apos;, 
+    lg: &apos;w-12 h-12&apos;
   };
 
-  if (variant === 'skeleton') {
+  if (variant === &apos;skeleton&apos;) {
+}
     return (
       <div className="animate-pulse sm:px-4 md:px-6 lg:px-8">
         <div className="glass-pane p-6 space-y-4 sm:px-4 md:px-6 lg:px-8">

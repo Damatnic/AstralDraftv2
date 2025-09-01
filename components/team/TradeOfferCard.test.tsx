@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import TradeOfferCard from './TradeOfferCard';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import TradeOfferCard from &apos;./TradeOfferCard&apos;;
 
-describe('TradeOfferCard', () => {
-  it('renders without crashing', () => {
+describe(&apos;TradeOfferCard&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<TradeOfferCard />);
-    expect(screen.getByTestId('tradeoffercard')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;tradeoffercard&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<TradeOfferCard />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<TradeOfferCard />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

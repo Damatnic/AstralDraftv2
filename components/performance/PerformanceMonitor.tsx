@@ -3,13 +3,14 @@
  * Tracks app performance metrics and provides optimization insights
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useSafeInterval, useMemoryCleanup, useSafeEventListener } from '../../hooks/useMemoryCleanup';
-import { memoryManager } from '../../utils/memoryCleanup';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect, useRef } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useSafeInterval, useMemoryCleanup, useSafeEventListener } from &apos;../../hooks/useMemoryCleanup&apos;;
+import { memoryManager } from &apos;../../utils/memoryCleanup&apos;;
 
 interface PerformanceMetrics {
+}
   // Core Web Vitals
   lcp: number | null; // Largest Contentful Paint
   fid: number | null; // First Input Delay
@@ -39,18 +40,20 @@ interface PerformanceMetrics {
 }
 
 interface PerformanceIssue {
+}
   id: string;
-  type: 'warning' | 'error' | 'info';
-  category: 'performance' | 'memory' | 'network' | 'accessibility';
+  type: &apos;warning&apos; | &apos;error&apos; | &apos;info&apos;;
+  category: &apos;performance&apos; | &apos;memory&apos; | &apos;network&apos; | &apos;accessibility&apos;;
   title: string;
   description: string;
-  impact: 'low' | 'medium' | 'high';
+  impact: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
   suggestion: string;
   metric?: number;
   threshold?: number;
 }
 
 const PerformanceMonitor: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
   const [issues, setIssues] = useState<PerformanceIssue[]>([]);
@@ -61,22 +64,28 @@ const PerformanceMonitor: React.FC = () => {
   const observersRef = useRef<PerformanceObserver[]>([]);
 
   useEffect(() => {
+}
     // Only show in development or when explicitly enabled
-    const showMonitor = process.env.NODE_ENV === 'development' || 
-                       localStorage.getItem('show_performance_monitor') === 'true';
+    const showMonitor = process.env.NODE_ENV === &apos;development&apos; || 
+                       localStorage.getItem(&apos;show_performance_monitor&apos;) === &apos;true&apos;;
     
     if (showMonitor) {
+}
       collectInitialMetrics();
       startPerformanceMonitoring();
     }
 
     return () => {
+}
       // Clean up all observers
       observersRef.current.forEach((observer: any) => {
+}
         try {
+}
           observer.disconnect();
         } catch (error) {
-          console.error('Failed to disconnect observer:', error);
+}
+          console.error(&apos;Failed to disconnect observer:&apos;, error);
         }
       });
       observersRef.current = [];
@@ -84,15 +93,19 @@ const PerformanceMonitor: React.FC = () => {
   }, []);
 
   const collectInitialMetrics = async () => {
+}
     try {
+}
       setIsCollecting(true);
       
       // Wait for page to be fully loaded with cleanup
-      if (document.readyState !== 'complete') {
+      if (document.readyState !== &apos;complete&apos;) {
+}
         await new Promise(resolve => {
+}
           const cleanup = memoryScope.addEventListener(
             window,
-            'load',
+            &apos;load&apos;,
             resolve as EventListener,
             { once: true }
           );
@@ -108,14 +121,17 @@ const PerformanceMonitor: React.FC = () => {
       
       setIsCollecting(false);
     } catch (error) {
-      console.error('Failed to collect performance metrics:', error);
+}
+      console.error(&apos;Failed to collect performance metrics:&apos;, error);
       setIsCollecting(false);
     }
   };
 
   const startPerformanceMonitoring = () => {
+}
     // Update metrics every 30 seconds with managed interval
     setInterval(async () => {
+}
       const updatedMetrics = await gatherPerformanceMetrics();
       setMetrics(updatedMetrics);
       
@@ -125,9 +141,10 @@ const PerformanceMonitor: React.FC = () => {
   };
 
   const gatherPerformanceMetrics = async (): Promise<PerformanceMetrics> => {
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    const paint = performance.getEntriesByType('paint');
-    const resources = performance.getEntriesByType('resource');
+}
+    const navigation = performance.getEntriesByType(&apos;navigation&apos;)[0] as PerformanceNavigationTiming;
+    const paint = performance.getEntriesByType(&apos;paint&apos;);
+    const resources = performance.getEntriesByType(&apos;resource&apos;);
     
     // Core Web Vitals
     const lcp = await getLCP();
@@ -137,8 +154,8 @@ const PerformanceMonitor: React.FC = () => {
     // Navigation Timing
     const domContentLoaded = navigation.domContentLoadedEventEnd - navigation.navigationStart;
     const loadComplete = navigation.loadEventEnd - navigation.navigationStart;
-    const firstPaint = paint.find((p: any) => p.name === 'first-paint')?.startTime || 0;
-    const firstContentfulPaint = paint.find((p: any) => p.name === 'first-contentful-paint')?.startTime || 0;
+    const firstPaint = paint.find((p: any) => p.name === &apos;first-paint&apos;)?.startTime || 0;
+    const firstContentfulPaint = paint.find((p: any) => p.name === &apos;first-contentful-paint&apos;)?.startTime || 0;
     
     // Resource Timing
     const totalResources = resources.length;
@@ -154,12 +171,13 @@ const PerformanceMonitor: React.FC = () => {
     
     // Network Information
     const connection = (navigator as any).connection || {};
-    const connectionType = connection.type || 'unknown';
-    const effectiveType = connection.effectiveType || 'unknown';
+    const connectionType = connection.type || &apos;unknown&apos;;
+    const effectiveType = connection.effectiveType || &apos;unknown&apos;;
     const downlink = connection.downlink || 0;
     const rtt = connection.rtt || 0;
 
     return {
+}
       lcp,
       fid,
       cls,
@@ -176,23 +194,26 @@ const PerformanceMonitor: React.FC = () => {
       connectionType,
       effectiveType,
       downlink,
-      rtt
+//       rtt
     };
   };
 
   const analyzePerformance = (metrics: PerformanceMetrics): PerformanceIssue[] => {
+}
     const issues: PerformanceIssue[] = [];
 
     // LCP Analysis
     if (metrics.lcp && metrics.lcp > 2500) {
+}
       issues.push({
-        id: 'lcp-slow',
-        type: metrics.lcp > 4000 ? 'error' : 'warning',
-        category: 'performance',
-        title: 'Slow Largest Contentful Paint',
-        description: `LCP is ${Math.round(metrics.lcp)}ms, which is ${metrics.lcp > 4000 ? 'poor' : 'needs improvement'}`,
-        impact: metrics.lcp > 4000 ? 'high' : 'medium',
-        suggestion: 'Optimize images, reduce server response times, and eliminate render-blocking resources',
+}
+        id: &apos;lcp-slow&apos;,
+        type: metrics.lcp > 4000 ? &apos;error&apos; : &apos;warning&apos;,
+        category: &apos;performance&apos;,
+        title: &apos;Slow Largest Contentful Paint&apos;,
+        description: `LCP is ${Math.round(metrics.lcp)}ms, which is ${metrics.lcp > 4000 ? &apos;poor&apos; : &apos;needs improvement&apos;}`,
+        impact: metrics.lcp > 4000 ? &apos;high&apos; : &apos;medium&apos;,
+        suggestion: &apos;Optimize images, reduce server response times, and eliminate render-blocking resources&apos;,
         metric: metrics.lcp,
         threshold: 2500
       });
@@ -200,14 +221,16 @@ const PerformanceMonitor: React.FC = () => {
 
     // FID Analysis
     if (metrics.fid && metrics.fid > 100) {
+}
       issues.push({
-        id: 'fid-slow',
-        type: metrics.fid > 300 ? 'error' : 'warning',
-        category: 'performance',
-        title: 'High First Input Delay',
+}
+        id: &apos;fid-slow&apos;,
+        type: metrics.fid > 300 ? &apos;error&apos; : &apos;warning&apos;,
+        category: &apos;performance&apos;,
+        title: &apos;High First Input Delay&apos;,
         description: `FID is ${Math.round(metrics.fid)}ms, which affects interactivity`,
-        impact: metrics.fid > 300 ? 'high' : 'medium',
-        suggestion: 'Reduce JavaScript execution time and break up long tasks',
+        impact: metrics.fid > 300 ? &apos;high&apos; : &apos;medium&apos;,
+        suggestion: &apos;Reduce JavaScript execution time and break up long tasks&apos;,
         metric: metrics.fid,
         threshold: 100
       });
@@ -215,14 +238,16 @@ const PerformanceMonitor: React.FC = () => {
 
     // CLS Analysis
     if (metrics.cls && metrics.cls > 0.1) {
+}
       issues.push({
-        id: 'cls-high',
-        type: metrics.cls > 0.25 ? 'error' : 'warning',
-        category: 'performance',
-        title: 'High Cumulative Layout Shift',
+}
+        id: &apos;cls-high&apos;,
+        type: metrics.cls > 0.25 ? &apos;error&apos; : &apos;warning&apos;,
+        category: &apos;performance&apos;,
+        title: &apos;High Cumulative Layout Shift&apos;,
         description: `CLS is ${metrics.cls.toFixed(3)}, causing visual instability`,
-        impact: metrics.cls > 0.25 ? 'high' : 'medium',
-        suggestion: 'Add size attributes to images and reserve space for dynamic content',
+        impact: metrics.cls > 0.25 ? &apos;high&apos; : &apos;medium&apos;,
+        suggestion: &apos;Add size attributes to images and reserve space for dynamic content&apos;,
         metric: metrics.cls,
         threshold: 0.1
       });
@@ -233,14 +258,16 @@ const PerformanceMonitor: React.FC = () => {
       (metrics.usedJSHeapSize / metrics.totalJSHeapSize) * 100 : 0;
     
     if (memoryUsagePercent > 80) {
+}
       issues.push({
-        id: 'memory-high',
-        type: memoryUsagePercent > 90 ? 'error' : 'warning',
-        category: 'memory',
-        title: 'High Memory Usage',
+}
+        id: &apos;memory-high&apos;,
+        type: memoryUsagePercent > 90 ? &apos;error&apos; : &apos;warning&apos;,
+        category: &apos;memory&apos;,
+        title: &apos;High Memory Usage&apos;,
         description: `Memory usage is at ${Math.round(memoryUsagePercent)}%`,
-        impact: memoryUsagePercent > 90 ? 'high' : 'medium',
-        suggestion: 'Check for memory leaks and optimize component lifecycle',
+        impact: memoryUsagePercent > 90 ? &apos;high&apos; : &apos;medium&apos;,
+        suggestion: &apos;Check for memory leaks and optimize component lifecycle&apos;,
         metric: memoryUsagePercent,
         threshold: 80
       });
@@ -248,14 +275,16 @@ const PerformanceMonitor: React.FC = () => {
 
     // Cache Hit Rate Analysis
     if (metrics.cacheHitRate < 50) {
+}
       issues.push({
-        id: 'cache-low',
-        type: 'warning',
-        category: 'network',
-        title: 'Low Cache Hit Rate',
+}
+        id: &apos;cache-low&apos;,
+        type: &apos;warning&apos;,
+        category: &apos;network&apos;,
+        title: &apos;Low Cache Hit Rate&apos;,
         description: `Only ${Math.round(metrics.cacheHitRate)}% of resources are cached`,
-        impact: 'medium',
-        suggestion: 'Implement better caching strategies for static assets',
+        impact: &apos;medium&apos;,
+        suggestion: &apos;Implement better caching strategies for static assets&apos;,
         metric: metrics.cacheHitRate,
         threshold: 50
       });
@@ -263,14 +292,16 @@ const PerformanceMonitor: React.FC = () => {
 
     // Load Time Analysis
     if (metrics.loadComplete > 3000) {
+}
       issues.push({
-        id: 'load-slow',
-        type: metrics.loadComplete > 5000 ? 'error' : 'warning',
-        category: 'performance',
-        title: 'Slow Page Load',
+}
+        id: &apos;load-slow&apos;,
+        type: metrics.loadComplete > 5000 ? &apos;error&apos; : &apos;warning&apos;,
+        category: &apos;performance&apos;,
+        title: &apos;Slow Page Load&apos;,
         description: `Page load took ${Math.round(metrics.loadComplete)}ms`,
-        impact: metrics.loadComplete > 5000 ? 'high' : 'medium',
-        suggestion: 'Optimize bundle size, enable compression, and use code splitting',
+        impact: metrics.loadComplete > 5000 ? &apos;high&apos; : &apos;medium&apos;,
+        suggestion: &apos;Optimize bundle size, enable compression, and use code splitting&apos;,
         metric: metrics.loadComplete,
         threshold: 3000
       });
@@ -281,130 +312,160 @@ const PerformanceMonitor: React.FC = () => {
 
   // Core Web Vitals measurement functions
   const getLCP = (): Promise<number | null> => {
+}
     return new Promise((resolve: any) => {
-      if ('PerformanceObserver' in window) {
+}
+      if (&apos;PerformanceObserver&apos; in window) {
+}
         const observer = new PerformanceObserver((list: any) => {
+}
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           resolve(lastEntry.startTime);
           observer.disconnect();
         });
-        observer.observe({ entryTypes: ['largest-contentful-paint'] });
+        observer.observe({ entryTypes: [&apos;largest-contentful-paint&apos;] });
         
         // Track observer for cleanup
         observersRef.current.push(observer);
         
         // Timeout after 10 seconds with managed timer
         const timeout = memoryManager.registerTimer(() => {
+}
           observer.disconnect();
           // Remove from tracking
           const index = observersRef.current.indexOf(observer);
           if (index > -1) {
+}
             observersRef.current.splice(index, 1);
           }
           resolve(null);
         }, 10000);
       } else {
+}
         resolve(null);
       }
     });
   };
 
   const getFID = (): Promise<number | null> => {
+}
     return new Promise((resolve: any) => {
-      if ('PerformanceObserver' in window) {
+}
+      if (&apos;PerformanceObserver&apos; in window) {
+}
         const observer = new PerformanceObserver((list: any) => {
+}
           const entries = list.getEntries();
           const firstEntry = entries[0];
           resolve(firstEntry.processingStart - firstEntry.startTime);
           observer.disconnect();
         });
-        observer.observe({ entryTypes: ['first-input'] });
+        observer.observe({ entryTypes: [&apos;first-input&apos;] });
         
         // Track observer for cleanup
         observersRef.current.push(observer);
         
         // Timeout after 30 seconds with managed timer
         const timeout = memoryManager.registerTimer(() => {
+}
           observer.disconnect();
           // Remove from tracking
           const index = observersRef.current.indexOf(observer);
           if (index > -1) {
+}
             observersRef.current.splice(index, 1);
           }
           resolve(null);
         }, 30000);
       } else {
+}
         resolve(null);
       }
     });
   };
 
   const getCLS = (): Promise<number | null> => {
+}
     return new Promise((resolve: any) => {
-      if ('PerformanceObserver' in window) {
+}
+      if (&apos;PerformanceObserver&apos; in window) {
+}
         let clsValue = 0;
         const observer = new PerformanceObserver((list: any) => {
+}
           for (const entry of list.getEntries()) {
+}
             if (!(entry as any).hadRecentInput) {
+}
               clsValue += (entry as any).value;
             }
           }
         });
-        observer.observe({ entryTypes: ['layout-shift'] });
+        observer.observe({ entryTypes: [&apos;layout-shift&apos;] });
         
         // Track observer for cleanup
         observersRef.current.push(observer);
         
         // Resolve after 10 seconds with managed timer
         const timeout = memoryManager.registerTimer(() => {
+}
           observer.disconnect();
           // Remove from tracking
           const index = observersRef.current.indexOf(observer);
           if (index > -1) {
+}
             observersRef.current.splice(index, 1);
           }
           resolve(clsValue);
         }, 10000);
       } else {
+}
         resolve(null);
       }
     });
   };
 
   const getIssueIcon = (issue: PerformanceIssue) => {
+}
     switch (issue.type) {
-      case 'error': return '🔴';
-      case 'warning': return '🟡';
-      case 'info': return '🔵';
-      default: return '⚪';
+}
+      case &apos;error&apos;: return &apos;🔴&apos;;
+      case &apos;warning&apos;: return &apos;🟡&apos;;
+      case &apos;info&apos;: return &apos;🔵&apos;;
+      default: return &apos;⚪&apos;;
     }
   };
 
   const getImpactColor = (impact: string) => {
+}
     switch (impact) {
-      case 'high': return 'text-red-400';
-      case 'medium': return 'text-yellow-400';
-      case 'low': return 'text-green-400';
-      default: return 'text-slate-400';
+}
+      case &apos;high&apos;: return &apos;text-red-400&apos;;
+      case &apos;medium&apos;: return &apos;text-yellow-400&apos;;
+      case &apos;low&apos;: return &apos;text-green-400&apos;;
+      default: return &apos;text-slate-400&apos;;
     }
   };
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 B';
+}
+    if (bytes === 0) return &apos;0 B&apos;;
     const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const sizes = [&apos;B&apos;, &apos;KB&apos;, &apos;MB&apos;, &apos;GB&apos;];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + &apos; &apos; + sizes[i];
   };
 
   const formatMs = (ms: number) => {
+}
     return `${Math.round(ms)}ms`;
   };
 
-  // Don't render in production unless explicitly enabled
-  if (process.env.NODE_ENV === 'production' && 
-      localStorage.getItem('show_performance_monitor') !== 'true') {
+  // Don&apos;t render in production unless explicitly enabled
+  if (process.env.NODE_ENV === &apos;production&apos; && 
+      localStorage.getItem(&apos;show_performance_monitor&apos;) !== &apos;true&apos;) {
+}
     return null;
   }
 
@@ -422,6 +483,7 @@ const PerformanceMonitor: React.FC = () => {
       {/* Performance Monitor Panel */}
       <AnimatePresence>
         {isVisible && (
+}
           <motion.div
             initial={{ opacity: 0, x: -400 }}
             animate={{ opacity: 1, x: 0 }}
@@ -440,12 +502,14 @@ const PerformanceMonitor: React.FC = () => {
                 </button>
               </div>
               {isCollecting && (
+}
                 <div className="mt-2 text-sm text-blue-400">Collecting metrics...</div>
               )}
             </div>
 
             {/* Metrics */}
             {metrics && (
+}
               <div className="p-4 space-y-4">
                 {/* Core Web Vitals */}
                 <div>
@@ -453,20 +517,20 @@ const PerformanceMonitor: React.FC = () => {
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-slate-700/50 p-2 rounded">
                       <div className="text-slate-400">LCP</div>
-                      <div className={`font-bold ${metrics.lcp && metrics.lcp > 2500 ? 'text-red-400' : 'text-green-400'}`}>
-                        {metrics.lcp ? formatMs(metrics.lcp) : 'N/A'}
+                      <div className={`font-bold ${metrics.lcp && metrics.lcp > 2500 ? &apos;text-red-400&apos; : &apos;text-green-400&apos;}`}>
+                        {metrics.lcp ? formatMs(metrics.lcp) : &apos;N/A&apos;}
                       </div>
                     </div>
                     <div className="bg-slate-700/50 p-2 rounded">
                       <div className="text-slate-400">FID</div>
-                      <div className={`font-bold ${metrics.fid && metrics.fid > 100 ? 'text-red-400' : 'text-green-400'}`}>
-                        {metrics.fid ? formatMs(metrics.fid) : 'N/A'}
+                      <div className={`font-bold ${metrics.fid && metrics.fid > 100 ? &apos;text-red-400&apos; : &apos;text-green-400&apos;}`}>
+                        {metrics.fid ? formatMs(metrics.fid) : &apos;N/A&apos;}
                       </div>
                     </div>
                     <div className="bg-slate-700/50 p-2 rounded">
                       <div className="text-slate-400">CLS</div>
-                      <div className={`font-bold ${metrics.cls && metrics.cls > 0.1 ? 'text-red-400' : 'text-green-400'}`}>
-                        {metrics.cls ? metrics.cls.toFixed(3) : 'N/A'}
+                      <div className={`font-bold ${metrics.cls && metrics.cls > 0.1 ? &apos;text-red-400&apos; : &apos;text-green-400&apos;}`}>
+                        {metrics.cls ? metrics.cls.toFixed(3) : &apos;N/A&apos;}
                       </div>
                     </div>
                   </div>
@@ -507,6 +571,7 @@ const PerformanceMonitor: React.FC = () => {
                       <div 
                         className="bg-blue-500 h-2 rounded-full" 
                         style={{ 
+}
                           width: `${metrics.totalJSHeapSize > 0 ? (metrics.usedJSHeapSize / metrics.totalJSHeapSize) * 100 : 0}%` 
                         }}
                       ></div>
@@ -533,10 +598,12 @@ const PerformanceMonitor: React.FC = () => {
 
             {/* Issues */}
             {issues.length > 0 && (
+}
               <div className="p-4 border-t border-slate-600">
                 <h4 className="text-white font-semibold mb-2">Issues ({issues.length})</h4>
                 <div className="space-y-2 max-h-32 overflow-y-auto">
                   {issues.map((issue: any) => (
+}
                     <div key={issue.id} className="p-2 bg-slate-700/50 rounded text-xs">
                       <div className="flex items-center gap-2 mb-1">
                         <span>{getIssueIcon(issue)}</span>

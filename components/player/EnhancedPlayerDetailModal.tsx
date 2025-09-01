@@ -3,15 +3,15 @@
  * Updated modal to use the new PlayerProfileView for comprehensive player information
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { AnimatePresence } from 'framer-motion';
-import type { Player, League } from '../../types';
-import { Modal } from '../ui/Modal';
-import PlayerProfileView from './PlayerProfileView';
-import { players } from '../../data/players';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { AnimatePresence } from &apos;framer-motion&apos;;
+import type { Player, League } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import PlayerProfileView from &apos;./PlayerProfileView&apos;;
+import { players } from &apos;../../data/players&apos;;
 
 interface EnhancedPlayerDetailModalProps {
+}
     player: Player;
     onClose: () => void;
     league?: League | null;
@@ -20,28 +20,32 @@ interface EnhancedPlayerDetailModalProps {
 }
 
 const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({ 
+}
     player, 
     onClose, 
     league,
-    dispatch 
+//     dispatch 
 }: any) => {
+}
     // Fallback league if none provided
     const defaultLeague: League = {
-        id: '1',
-        name: 'Demo League',
+}
+        id: &apos;1&apos;,
+        name: &apos;Demo League&apos;,
         settings: {
-            draftFormat: 'SNAKE',
+}
+            draftFormat: &apos;SNAKE&apos;,
             teamCount: 12,
             rosterSize: 16,
-            scoring: 'PPR',
+            scoring: &apos;PPR&apos;,
             tradeDeadline: 12,
-            playoffFormat: '4_TEAM',
-            waiverRule: 'FAAB',
-            aiAssistanceLevel: 'FULL'
+            playoffFormat: &apos;4_TEAM&apos;,
+            waiverRule: &apos;FAAB&apos;,
+            aiAssistanceLevel: &apos;FULL&apos;
         },
         members: [],
-        status: 'IN_SEASON',
-        commissionerId: '1',
+        status: &apos;IN_SEASON&apos;,
+        commissionerId: &apos;1&apos;,
         draftPicks: [],
         teams: [],
         draftLog: [],
@@ -59,7 +63,7 @@ const EnhancedPlayerDetailModal: React.FC<EnhancedPlayerDetailModalProps> = ({
     return (
         <AnimatePresence>
             <Modal isOpen={true} onClose={onClose}>
-                <PlayerProfileView 
+                <PlayerProfileView>
                     player={player}
                     league={activeLeague}
                     dispatch={dispatch}

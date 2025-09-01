@@ -1,20 +1,22 @@
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { Widget } from '../components/ui/Widget';
-import { GlobeIcon } from '../components/icons/GlobeIcon';
-import type { League } from '../types';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import { GlobeIcon } from &apos;../components/icons/GlobeIcon&apos;;
+import type { League } from &apos;../types&apos;;
 
 const OpenLeaguesView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
 
     const openLeagues = state.leagues.filter((l: any) => {
-        const humanMembers = l.members.filter((m: any) => !m.id.startsWith('ai_'));
+}
+        const humanMembers = l.members.filter((m: any) => !m.id.startsWith(&apos;ai_&apos;));
         return l.isPublic && humanMembers.length < l.settings.teamCount;
     });
     
     const handleJoin = (leagueId: string) => {
-        dispatch({ type: 'JOIN_OPEN_LEAGUE', payload: { leagueId } });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Successfully joined league!', type: 'SYSTEM' }});
+}
+        dispatch({ type: &apos;JOIN_OPEN_LEAGUE&apos;, payload: { leagueId } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Successfully joined league!&apos;, type: &apos;SYSTEM&apos; }});
     };
 
     return (
@@ -25,7 +27,7 @@ const OpenLeaguesView: React.FC = () => {
                         Open Leagues
                     </h1>
                 </div>
-                <button onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' }) className="back-btn">
+                <button onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; }) className="back-btn">
                     Back to Dashboard
                 </button>
             </header>
@@ -33,6 +35,7 @@ const OpenLeaguesView: React.FC = () => {
                 <Widget title="Public Leagues" icon={<GlobeIcon />}>
                     <div className="p-4 space-y-3">
                         {openLeagues.length > 0 ? (
+}
                             openLeagues.map((league: any) => (
                                 <div key={league.id} className="p-3 bg-black/10 rounded-lg flex items-center justify-between hover:bg-black/20">
                                     <div>
@@ -44,7 +47,7 @@ const OpenLeaguesView: React.FC = () => {
                                     <button
                                         onClick={() => handleJoin(league.id)}
                                     >
-                                        Join
+//                                         Join
                                     </button>
                                 </div>
                             ))

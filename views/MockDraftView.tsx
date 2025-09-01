@@ -3,13 +3,14 @@
  * Full-featured mock draft simulator for league members to prepare
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { NFLPlayer } from '../types';
-import { NFL_PLAYERS_2024 } from '../data/nflPlayers';
-import PlayerSearch from '../components/players/PlayerSearch';
+import React, { useState, useEffect, useCallback } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { NFLPlayer } from &apos;../types&apos;;
+import { NFL_PLAYERS_2024 } from &apos;../data/nflPlayers&apos;;
+import PlayerSearch from &apos;../components/players/PlayerSearch&apos;;
 import { 
+}
   PlayIcon, 
   PauseIcon, 
   RotateCcwIcon, 
@@ -21,23 +22,25 @@ import {
   BrainIcon,
   ChevronRightIcon,
   CheckCircleIcon,
-  XCircleIcon
-} from 'lucide-react';
+//   XCircleIcon
+} from &apos;lucide-react&apos;;
 
 interface MockDraftSettings {
-  draftSpeed: 'instant' | 'fast' | 'realistic';
-  aiDifficulty: 'easy' | 'medium' | 'hard' | 'expert';
+}
+  draftSpeed: &apos;instant&apos; | &apos;fast&apos; | &apos;realistic&apos;;
+  aiDifficulty: &apos;easy&apos; | &apos;medium&apos; | &apos;hard&apos; | &apos;expert&apos;;
   draftPosition: number;
   teamCount: number;
   rounds: number;
   timerSeconds: number;
   enableTrades: boolean;
   enableKeepers: boolean;
-  scoringFormat: 'standard' | 'ppr' | 'halfPpr';
+  scoringFormat: &apos;standard&apos; | &apos;ppr&apos; | &apos;halfPpr&apos;;
 
 }
 
 interface DraftPick {
+}
   round: number;
   pick: number;
   overall: number;
@@ -48,17 +51,19 @@ interface DraftPick {
 }
 
 interface MockTeam {
+}
   id: number;
   name: string;
   owner: string;
   isUser: boolean;
   roster: NFLPlayer[];
-  draftStrategy?: 'balanced' | 'rb-heavy' | 'wr-heavy' | 'best-available';
+  draftStrategy?: &apos;balanced&apos; | &apos;rb-heavy&apos; | &apos;wr-heavy&apos; | &apos;best-available&apos;;
   needs: string[];
 
 }
 
 const MockDraftView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const [isSetupComplete, setIsSetupComplete] = useState(false);
   const [isDraftActive, setIsDraftActive] = useState(false);
@@ -74,39 +79,43 @@ const MockDraftView: React.FC = () => {
   const [draftComplete, setDraftComplete] = useState(false);
   
   const [settings, setSettings] = useState<MockDraftSettings>({
-    draftSpeed: 'realistic',
-    aiDifficulty: 'medium',
+}
+    draftSpeed: &apos;realistic&apos;,
+    aiDifficulty: &apos;medium&apos;,
     draftPosition: 5,
     teamCount: 10,
     rounds: 16,
     timerSeconds: 90,
     enableTrades: false,
     enableKeepers: false,
-    scoringFormat: 'ppr'
+    scoringFormat: &apos;ppr&apos;
   });
 
   // Initialize teams
   const initializeTeams = useCallback(() => {
+}
     const mockTeams: MockTeam[] = [];
     const teamNames = [
-      'Thunder Bolts', 'Storm Chasers', 'Lightning Strikes', 'Gridiron Giants',
-      'Field Generals', 'End Zone Elite', 'Touchdown Titans', 'Red Zone Raiders',
-      'Blitz Brigade', 'Victory Vipers'
+      &apos;Thunder Bolts&apos;, &apos;Storm Chasers&apos;, &apos;Lightning Strikes&apos;, &apos;Gridiron Giants&apos;,
+      &apos;Field Generals&apos;, &apos;End Zone Elite&apos;, &apos;Touchdown Titans&apos;, &apos;Red Zone Raiders&apos;,
+      &apos;Blitz Brigade&apos;, &apos;Victory Vipers&apos;
     ];
     
-    const aiStrategies: MockTeam['draftStrategy'][] = [
-      'balanced', 'rb-heavy', 'wr-heavy', 'best-available'
+    const aiStrategies: MockTeam[&apos;draftStrategy&apos;][] = [
+      &apos;balanced&apos;, &apos;rb-heavy&apos;, &apos;wr-heavy&apos;, &apos;best-available&apos;
     ];
 
     for (let i = 0; i < settings.teamCount; i++) {
+}
       mockTeams.push({
+}
         id: i + 1,
-        name: i === settings.draftPosition - 1 ? 'Your Team' : teamNames[i],
-        owner: i === settings.draftPosition - 1 ? state.user?.name || 'You' : `AI Manager ${i + 1}`,
+        name: i === settings.draftPosition - 1 ? &apos;Your Team&apos; : teamNames[i],
+        owner: i === settings.draftPosition - 1 ? state.user?.name || &apos;You&apos; : `AI Manager ${i + 1}`,
         isUser: i === settings.draftPosition - 1,
         roster: [],
         draftStrategy: i === settings.draftPosition - 1 ? undefined : aiStrategies[Math.floor(Math.random() * aiStrategies.length)],
-        needs: ['QB', 'RB', 'RB', 'WR', 'WR', 'WR', 'TE', 'FLEX', 'K', 'DST']
+        needs: [&apos;QB&apos;, &apos;RB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;WR&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;FLEX&apos;, &apos;K&apos;, &apos;DST&apos;]
       });
     }
 
@@ -115,6 +124,7 @@ const MockDraftView: React.FC = () => {
 
   // Get current picking team
   const getCurrentPickingTeam = useCallback((): MockTeam | undefined => {
+}
     const pickInRound = ((currentPick - 1) % settings.teamCount) + 1;
     const isEvenRound = currentRound % 2 === 0;
     const teamIndex = isEvenRound 
@@ -125,12 +135,13 @@ const MockDraftView: React.FC = () => {
 
   // AI Draft Logic
   const makeAIPick = useCallback((team: MockTeam) => {
+}
     let selectedPlayer: NFLPlayer | null = null;
     
     // AI difficulty affects decision quality
-    const randomFactor = settings.aiDifficulty === 'easy' ? 0.3 : 
-                        settings.aiDifficulty === 'medium' ? 0.15 : 
-                        settings.aiDifficulty === 'hard' ? 0.05 : 0;
+    const randomFactor = settings.aiDifficulty === &apos;easy&apos; ? 0.3 : 
+                        settings.aiDifficulty === &apos;medium&apos; ? 0.15 : 
+                        settings.aiDifficulty === &apos;hard&apos; ? 0.05 : 0;
     
     // Filter by team needs
     const positionNeeds = team.needs.filter((need: any) => 
@@ -144,13 +155,14 @@ const MockDraftView: React.FC = () => {
     
     // Apply strategy
     switch (team.draftStrategy) {
-      case 'rb-heavy':
-        selectedPlayer = topPlayers.find((p: any) => p.position === 'RB') || topPlayers[0];
+}
+      case &apos;rb-heavy&apos;:
+        selectedPlayer = topPlayers.find((p: any) => p.position === &apos;RB&apos;) || topPlayers[0];
         break;
-      case 'wr-heavy':
-        selectedPlayer = topPlayers.find((p: any) => p.position === 'WR') || topPlayers[0];
+      case &apos;wr-heavy&apos;:
+        selectedPlayer = topPlayers.find((p: any) => p.position === &apos;WR&apos;) || topPlayers[0];
         break;
-      case 'balanced':
+      case &apos;balanced&apos;:
         selectedPlayer = topPlayers.find((p: any) => positionNeeds.includes(p.position)) || topPlayers[0];
         break;
       default:
@@ -159,6 +171,7 @@ const MockDraftView: React.FC = () => {
 
     // Add randomness based on difficulty
     if (Math.random() < randomFactor && topPlayers.length > 5) {
+}
       const randomIndex = Math.floor(Math.random() * 5) + 1;
       selectedPlayer = topPlayers[randomIndex] || selectedPlayer;
     }
@@ -168,7 +181,9 @@ const MockDraftView: React.FC = () => {
 
   // Process a draft pick
   const processPick = useCallback((player: NFLPlayer, team: MockTeam) => {
+}
     const pick: DraftPick = {
+}
       round: currentRound,
       pick: ((currentPick - 1) % settings.teamCount) + 1,
       overall: currentPick,
@@ -194,6 +209,7 @@ const MockDraftView: React.FC = () => {
     // Update team needs
     const positionIndex = team.needs.indexOf(player.position);
     if (positionIndex > -1) {
+}
       setTeams(prev => prev.map((t: any) => 
         t.id === team.id 
           ? { ...t, needs: t.needs.filter((_, i) => i !== positionIndex) }
@@ -203,11 +219,14 @@ const MockDraftView: React.FC = () => {
 
     // Move to next pick
     if (currentPick >= settings.teamCount * settings.rounds) {
+}
       setDraftComplete(true);
       setIsDraftActive(false);
     } else {
+}
       setCurrentPick(prev => prev + 1);
       if ((currentPick % settings.teamCount) === 0) {
+}
         setCurrentRound(prev => prev + 1);
       }
       setTimeRemaining(settings.timerSeconds);
@@ -216,6 +235,7 @@ const MockDraftView: React.FC = () => {
 
   // Timer effect
   useEffect(() => {
+}
     if (!isDraftActive || isPaused || draftComplete) return;
     
     const currentTeam = getCurrentPickingTeam();
@@ -223,12 +243,15 @@ const MockDraftView: React.FC = () => {
     
     // AI picks
     if (!currentTeam.isUser) {
-      const delay = settings.draftSpeed === 'instant' ? 100 :
-                   settings.draftSpeed === 'fast' ? 1000 : 3000;
+}
+      const delay = settings.draftSpeed === &apos;instant&apos; ? 100 :
+                   settings.draftSpeed === &apos;fast&apos; ? 1000 : 3000;
       
       const timeout = setTimeout(() => {
+}
         const aiPick = makeAIPick(currentTeam);
         if (aiPick) {
+}
           processPick(aiPick, currentTeam);
         }
       }, delay);
@@ -238,11 +261,15 @@ const MockDraftView: React.FC = () => {
 
     // User timer
     const interval = setInterval(() => {
+}
       setTimeRemaining(prev => {
+}
         if (prev <= 1) {
+}
           // Auto-pick for user
           const autoPick = availablePlayers[0];
           if (autoPick && currentTeam) {
+}
             processPick(autoPick, currentTeam);
           }
           return settings.timerSeconds;
@@ -256,6 +283,7 @@ const MockDraftView: React.FC = () => {
 
   // Start mock draft
   const startDraft = () => {
+}
     initializeTeams();
     setIsSetupComplete(true);
     setIsDraftActive(true);
@@ -268,6 +296,7 @@ const MockDraftView: React.FC = () => {
 
   // Reset draft
   const resetDraft = () => {
+}
     setIsSetupComplete(false);
     setIsDraftActive(false);
     setCurrentPick(1);
@@ -281,8 +310,10 @@ const MockDraftView: React.FC = () => {
 
   // Make user pick
   const makeUserPick = () => {
+}
     const currentTeam = getCurrentPickingTeam();
     if (currentTeam?.isUser && selectedPlayer) {
+}
       processPick(selectedPlayer, currentTeam);
       setSelectedPlayer(null);
     }
@@ -292,6 +323,7 @@ const MockDraftView: React.FC = () => {
   const isUserTurn = currentTeam?.isUser || false;
 
   if (!isSetupComplete) {
+}
     // Setup Screen
     return (
       <div className="min-h-screen bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 p-4">
@@ -523,6 +555,7 @@ const MockDraftView: React.FC = () => {
 
           <div className="flex items-center gap-4">
             {isUserTurn && !draftComplete && (
+}
               <div className="flex items-center gap-2 text-white">
                 <ClockIcon className="w-5 h-5" />
                 <span className="text-2xl font-bold">{timeRemaining}s</span>
@@ -552,21 +585,23 @@ const MockDraftView: React.FC = () => {
         <div className="lg:col-span-2 space-y-4">
           {/* Current Pick */}
           {!draftComplete && (
+}
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`glass-pane p-4 ${isUserTurn ? 'border-2 border-green-400' : ''}`}
+              className={`glass-pane p-4 ${isUserTurn ? &apos;border-2 border-green-400&apos; : &apos;&apos;}`}
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-lg font-semibold text-white">
-                    {isUserTurn ? 'Your Pick!' : `${currentTeam?.name} is picking...`}
+                    {isUserTurn ? &apos;Your Pick!&apos; : `${currentTeam?.name} is picking...`}
                   </h3>
                   <p className="text-[var(--text-secondary)]">
                     Pick #{currentPick} Overall (Round {currentRound}, Pick {((currentPick - 1) % settings.teamCount) + 1})
                   </p>
                 </div>
                 {isUserTurn && (
+}
                   <button
                     onClick={() => setShowPlayerSearch(true)}
                     className="glass-button px-4 py-2"
@@ -577,14 +612,17 @@ const MockDraftView: React.FC = () => {
               </div>
 
               {isUserTurn && selectedPlayer && (
+}
                 <div className="flex items-center justify-between p-3 glass-pane">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold
-                      ${selectedPlayer.position === 'QB' ? 'bg-red-500' :
-                        selectedPlayer.position === 'RB' ? 'bg-green-500' :
-                        selectedPlayer.position === 'WR' ? 'bg-blue-500' :
-                        selectedPlayer.position === 'TE' ? 'bg-yellow-500' :
-                        'bg-gray-500'}`}>
+}
+                      ${selectedPlayer.position === &apos;QB&apos; ? &apos;bg-red-500&apos; :
+}
+                        selectedPlayer.position === &apos;RB&apos; ? &apos;bg-green-500&apos; :
+                        selectedPlayer.position === &apos;WR&apos; ? &apos;bg-blue-500&apos; :
+                        selectedPlayer.position === &apos;TE&apos; ? &apos;bg-yellow-500&apos; :
+                        &apos;bg-gray-500&apos;}`}>
                       {selectedPlayer.position}
                     </div>
                     <div>
@@ -605,6 +643,7 @@ const MockDraftView: React.FC = () => {
 
           {/* Draft Complete */}
           {draftComplete && (
+}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -623,7 +662,7 @@ const MockDraftView: React.FC = () => {
                   Start New Mock Draft
                 </button>
                 <button
-                  onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DRAFT_PREP_CENTER' })}
+                  onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DRAFT_PREP_CENTER&apos; })}
                   className="glass-button px-6 py-2"
                 >
                   Back to Draft Prep
@@ -638,6 +677,7 @@ const MockDraftView: React.FC = () => {
             <div className="space-y-2 max-h-96 overflow-y-auto">
               <AnimatePresence>
                 {draftHistory.slice(-10).reverse().map((pick, index) => (
+}
                   <motion.div
                     key={`${pick.round}-${pick.pick}`}
                     initial={{ opacity: 0, x: -20 }}
@@ -645,7 +685,8 @@ const MockDraftView: React.FC = () => {
                     exit={{ opacity: 0, x: 20 }}
                     transition={{ delay: index * 0.05 }}
                     className={`flex items-center justify-between p-3 rounded-lg ${
-                      pick.isUserPick ? 'bg-green-500/20 border border-green-500/30' : 'bg-white/5'
+}
+                      pick.isUserPick ? &apos;bg-green-500/20 border border-green-500/30&apos; : &apos;bg-white/5&apos;
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -653,11 +694,13 @@ const MockDraftView: React.FC = () => {
                         {pick.overall}.
                       </span>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white
-                        ${pick.player.position === 'QB' ? 'bg-red-500' :
-                          pick.player.position === 'RB' ? 'bg-green-500' :
-                          pick.player.position === 'WR' ? 'bg-blue-500' :
-                          pick.player.position === 'TE' ? 'bg-yellow-500' :
-                          'bg-gray-500'}`}>
+}
+                        ${pick.player.position === &apos;QB&apos; ? &apos;bg-red-500&apos; :
+}
+                          pick.player.position === &apos;RB&apos; ? &apos;bg-green-500&apos; :
+                          pick.player.position === &apos;WR&apos; ? &apos;bg-blue-500&apos; :
+                          pick.player.position === &apos;TE&apos; ? &apos;bg-yellow-500&apos; :
+                          &apos;bg-gray-500&apos;}`}>
                         {pick.player.position}
                       </div>
                       <div>
@@ -683,17 +726,20 @@ const MockDraftView: React.FC = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Your Team</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {teams.find((t: any) => t.isUser)?.roster.map((player, index) => (
+}
                 <div
                   key={player.id}
                   className="flex items-center gap-2 p-2 bg-white/5 rounded-lg"
                 >
                   <span className="text-sm text-[var(--text-secondary)]">{index + 1}.</span>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white
-                    ${player.position === 'QB' ? 'bg-red-500' :
-                      player.position === 'RB' ? 'bg-green-500' :
-                      player.position === 'WR' ? 'bg-blue-500' :
-                      player.position === 'TE' ? 'bg-yellow-500' :
-                      'bg-gray-500'}`}>
+}
+                    ${player.position === &apos;QB&apos; ? &apos;bg-red-500&apos; :
+}
+                      player.position === &apos;RB&apos; ? &apos;bg-green-500&apos; :
+                      player.position === &apos;WR&apos; ? &apos;bg-blue-500&apos; :
+                      player.position === &apos;TE&apos; ? &apos;bg-yellow-500&apos; :
+                      &apos;bg-gray-500&apos;}`}>
                     {player.position}
                   </div>
                   <div className="flex-1">
@@ -712,11 +758,13 @@ const MockDraftView: React.FC = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Draft Order</h3>
             <div className="space-y-2">
               {teams.map((team, index) => (
+}
                 <div
                   key={team.id}
                   className={`flex items-center justify-between p-2 rounded-lg ${
-                    getCurrentPickingTeam()?.id === team.id ? 'bg-blue-500/20 border border-blue-500/30' :
-                    team.isUser ? 'bg-green-500/10' : 'bg-white/5'
+}
+                    getCurrentPickingTeam()?.id === team.id ? &apos;bg-blue-500/20 border border-blue-500/30&apos; :
+                    team.isUser ? &apos;bg-green-500/10&apos; : &apos;bg-white/5&apos;
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -726,7 +774,7 @@ const MockDraftView: React.FC = () => {
                     <div>
                       <p className="text-sm font-medium text-white">
                         {team.name}
-                        {team.isUser && ' (You)'}
+                        {team.isUser && &apos; (You)&apos;}
                       </p>
                       <p className="text-xs text-[var(--text-secondary)]">
                         {team.roster.length} players
@@ -734,6 +782,7 @@ const MockDraftView: React.FC = () => {
                     </div>
                   </div>
                   {team.draftStrategy && (
+}
                     <span className="text-xs px-2 py-1 bg-white/10 rounded">
                       {team.draftStrategy}
                     </span>
@@ -748,6 +797,7 @@ const MockDraftView: React.FC = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Top Available</h3>
             <div className="space-y-2">
               {availablePlayers.slice(0, 10).map((player: any) => (
+}
                 <div
                   key={player.id}
                   className="flex items-center justify-between p-2 bg-white/5 rounded-lg hover:bg-white/10 cursor-pointer"
@@ -755,11 +805,13 @@ const MockDraftView: React.FC = () => {
                 >
                   <div className="flex items-center gap-2">
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white
-                      ${player.position === 'QB' ? 'bg-red-500' :
-                        player.position === 'RB' ? 'bg-green-500' :
-                        player.position === 'WR' ? 'bg-blue-500' :
-                        player.position === 'TE' ? 'bg-yellow-500' :
-                        'bg-gray-500'}`}>
+}
+                      ${player.position === &apos;QB&apos; ? &apos;bg-red-500&apos; :
+}
+                        player.position === &apos;RB&apos; ? &apos;bg-green-500&apos; :
+                        player.position === &apos;WR&apos; ? &apos;bg-blue-500&apos; :
+                        player.position === &apos;TE&apos; ? &apos;bg-yellow-500&apos; :
+                        &apos;bg-gray-500&apos;}`}>
                       {player.position}
                     </div>
                     <div>
@@ -779,6 +831,7 @@ const MockDraftView: React.FC = () => {
 
       {/* Player Search Modal */}
       {showPlayerSearch && (
+}
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -794,9 +847,10 @@ const MockDraftView: React.FC = () => {
                 <XCircleIcon className="w-5 h-5" />
               </button>
             </div>
-            <PlayerSearch
+            <PlayerSearch>
               players={availablePlayers}
               onSelectPlayer={(player: any) => {
+}
                 setSelectedPlayer(player);
                 setShowPlayerSearch(false);
               }}

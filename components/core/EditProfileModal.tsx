@@ -1,13 +1,14 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import type { User } from '../../types';
-import { Modal } from '../ui/Modal';
-import { PencilIcon } from '../icons/PencilIcon';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { User } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { PencilIcon } from &apos;../icons/PencilIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface EditProfileModalProps {
+}
   user: User;
   dispatch: React.Dispatch<any>;
   onClose: () => void;
@@ -15,22 +16,26 @@ interface EditProfileModalProps {
 }
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, dispatch, onClose }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [name, setName] = React.useState(user.name);
   const [avatar, setAvatar] = React.useState(user.avatar);
-  const [bio, setBio] = React.useState(user.bio || '');
+  const [bio, setBio] = React.useState(user.bio || &apos;&apos;);
   const [isDirty, setIsDirty] = React.useState(false);
 
   React.useEffect(() => {
-    setIsDirty(name !== user.name || avatar !== user.avatar || bio !== (user.bio || ''));
+}
+    setIsDirty(name !== user.name || avatar !== user.avatar || bio !== (user.bio || &apos;&apos;));
   }, [name, avatar, bio, user]);
 
   const handleSave = () => {
+}
     dispatch({
-      type: 'UPDATE_USER_PROFILE',
+}
+      type: &apos;UPDATE_USER_PROFILE&apos;,
       payload: { name, avatar, bio },
     });
-    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Profile updated!', type: 'SYSTEM' } });
+    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Profile updated!&apos;, type: &apos;SYSTEM&apos; } });
     onClose();
   };
   

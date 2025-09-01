@@ -3,14 +3,15 @@
  * Live updates, collaborative features, and interactive prediction interface
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Avatar } from '../ui/Avatar';
-import { Tabs } from '../ui/Tabs';
-import { Progress } from '../ui/Progress';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect } from &apos;react&apos;;
+import { Card, CardContent, CardHeader, CardTitle } from &apos;../ui/Card&apos;;
+import { Badge } from &apos;../ui/Badge&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
+import { Tabs } from &apos;../ui/Tabs&apos;;
+import { Progress } from &apos;../ui/Progress&apos;;
 import { 
+}
     TrendingUp, 
     TrendingDown, 
     Users, 
@@ -22,39 +23,45 @@ import {
     ThumbsDown,
     Clock,
     Target,
-    Zap
-} from 'lucide-react';
-import { oracleRealTimeService, LivePredictionUpdate } from '../../services/oracleRealTimeService';
+//     Zap
+} from &apos;lucide-react&apos;;
+import { oracleRealTimeService, LivePredictionUpdate } from &apos;../../services/oracleRealTimeService&apos;;
 import oracleCollaborativeService, { 
+}
     CollaborativeMessage, 
     SharedInsight, 
     CollaborativeRoom,
-    CommunityPoll
-} from '../../services/oracleCollaborativeServiceMock';
+//     CommunityPoll
+} from &apos;../../services/oracleCollaborativeServiceMock&apos;;
 
 interface OracleRealTimeDashboardProps {
+}
     predictionId: string;
     userId: string;
     userInfo: {
+}
         username: string;
         avatar?: string;
     };
     onPredictionUpdate?: (update: LivePredictionUpdate) => void;
 
 interface RealTimeMetrics {
+}
     activeUsers: number;
     totalMessages: number;
     consensusLevel: number;
     confidenceAverage: number;
-    trendingDirection: 'up' | 'down' | 'stable';
+    trendingDirection: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
 
 }
 
 const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predictionId,
+}
     userId,
     userInfo,
-    onPredictionUpdate
+//     onPredictionUpdate
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     // State management
     const [predictionUpdate] = useState<LivePredictionUpdate | null>(null);
@@ -63,25 +70,29 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
     const [insights, setInsights] = useState<SharedInsight[]>([]);
     const [polls, setPolls] = useState<CommunityPoll[]>([]);
     const [metrics, setMetrics] = useState<RealTimeMetrics>({
+}
         activeUsers: 0,
         totalMessages: 0,
         consensusLevel: 0,
         confidenceAverage: 0,
-        trendingDirection: 'stable'
+        trendingDirection: &apos;stable&apos;
     });
     
     // UI state
-    const [activeTab, setActiveTab] = useState('overview');
-    const [messageInput, setMessageInput] = useState('');
-    const [insightTitle, setInsightTitle] = useState('');
-    const [insightContent, setInsightContent] = useState('');
+    const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
+    const [messageInput, setMessageInput] = useState(&apos;&apos;);
+    const [insightTitle, setInsightTitle] = useState(&apos;&apos;);
+    const [insightContent, setInsightContent] = useState(&apos;&apos;);
     const [insightConfidence, setInsightConfidence] = useState(50);
     const [isConnected, setIsConnected] = useState(false);
 
     // Initialize real-time connections
     useEffect(() => {
+}
         const initializeServices = async () => {
+}
             try {
+}
 
                 // Subscribe to live updates
                 await oracleRealTimeService.subscribeToPrediction(userId, predictionId);
@@ -89,7 +100,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                 // Join collaborative room
                 const room = await oracleCollaborativeService.joinCollaborativeRoom(
                     predictionId,
-                    userId
+//                     userId
                 );
                 
                 setCollaborativeRoom(room);
@@ -102,6 +113,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                 loadInitialData();
 
     } catch (error) {
+}
 
         };
 
@@ -109,8 +121,10 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
 
         // Cleanup on unmount
         return () => {
+}
             // Cleanup if method exists
-            if ('unsubscribeFromPrediction' in oracleRealTimeService) {
+            if (&apos;unsubscribeFromPrediction&apos; in oracleRealTimeService) {
+}
                 (oracleRealTimeService as any).unsubscribeFromPrediction(userId, predictionId);
 
         };
@@ -118,12 +132,14 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
 
     // Load initial data and metrics
     const loadInitialData = () => {
+}
         // Update metrics with current data
         updateMetrics();
     };
 
     // Update metrics based on current data
     const updateMetrics = () => {
+}
         if (!collaborativeRoom) return;
 
         const activeUsers = collaborativeRoom.participants?.filter((p: any) => p.isOnline).length || 0;
@@ -138,44 +154,53 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
 
         // Determine trending direction based on recent activity
         const recentMessages = messages.slice(-5);
-        const positiveKeywords = ['good', 'positive', 'up', 'bullish', 'confident'];
-        const negativeKeywords = ['bad', 'negative', 'down', 'bearish', 'uncertain'];
+        const positiveKeywords = [&apos;good&apos;, &apos;positive&apos;, &apos;up&apos;, &apos;bullish&apos;, &apos;confident&apos;];
+        const negativeKeywords = [&apos;bad&apos;, &apos;negative&apos;, &apos;down&apos;, &apos;bearish&apos;, &apos;uncertain&apos;];
         
         let positiveCount = 0;
         let negativeCount = 0;
         
         recentMessages.forEach((msg: any) => {
+}
             const content = msg.content.toLowerCase();
             positiveKeywords.forEach((keyword: any) => {
+}
                 if (content.includes(keyword)) positiveCount++;
             });
             negativeKeywords.forEach((keyword: any) => {
+}
                 if (content.includes(keyword)) negativeCount++;
             });
         });
 
-        let trendingDirection: 'up' | 'down' | 'stable';
+        let trendingDirection: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
         if (positiveCount > negativeCount) {
-            trendingDirection = 'up';
+}
+            trendingDirection = &apos;up&apos;;
         } else if (negativeCount > positiveCount) {
-            trendingDirection = 'down';
+}
+            trendingDirection = &apos;down&apos;;
         } else {
-            trendingDirection = 'stable';
+}
+            trendingDirection = &apos;stable&apos;;
 
         setMetrics({
+}
             activeUsers,
             totalMessages,
             consensusLevel,
             confidenceAverage,
-            trendingDirection
+//             trendingDirection
         });
     };
 
     // Handle message sending
     const handleSendMessage = async () => {
+}
         if (!messageInput.trim()) return;
 
         try {
+}
 
             const message = await oracleCollaborativeService.sendMessage(
                 userId,
@@ -184,32 +209,35 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             );
 
             setMessages(prev => [...prev, message]);
-            setMessageInput('');
+            setMessageInput(&apos;&apos;);
             updateMetrics();
 
     } catch (error) {
+}
 
     };
 
     // Format timestamp
     const formatTimestamp = (timestamp: string): string => {
+}
         const date = new Date(timestamp);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return date.toLocaleTimeString([], { hour: &apos;2-digit&apos;, minute: &apos;2-digit&apos; });
     };
 
     // Get confidence color
     const getConfidenceColor = (confidence: number): string => {
-        if (confidence >= 80) return 'text-green-600';
-        if (confidence >= 60) return 'text-yellow-600';
-        return 'text-red-600';
+}
+        if (confidence >= 80) return &apos;text-green-600&apos;;
+        if (confidence >= 60) return &apos;text-yellow-600&apos;;
+        return &apos;text-red-600&apos;;
     };
 
     // Tab items for the tabs component
     const tabItems = [
-        { id: 'overview', label: 'Overview' },
-        { id: 'chat', label: 'Discussion' },
-        { id: 'insights', label: 'Insights' },
-        { id: 'polls', label: 'Polls' }
+        { id: &apos;overview&apos;, label: &apos;Overview&apos; },
+        { id: &apos;chat&apos;, label: &apos;Discussion&apos; },
+        { id: &apos;insights&apos;, label: &apos;Insights&apos; },
+        { id: &apos;polls&apos;, label: &apos;Polls&apos; }
     ];
 
     // Render metrics overview
@@ -254,9 +282,9 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             <Card>
                 <CardContent className="p-4 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
-                        {metrics.trendingDirection === 'up' && <TrendingUp className="h-4 w-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />}
-                        {metrics.trendingDirection === 'down' && <TrendingDown className="h-4 w-4 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
-                        {metrics.trendingDirection === 'stable' && <BarChart3 className="h-4 w-4 text-gray-500 sm:px-4 md:px-6 lg:px-8" />}
+                        {metrics.trendingDirection === &apos;up&apos; && <TrendingUp className="h-4 w-4 text-green-500 sm:px-4 md:px-6 lg:px-8" />}
+                        {metrics.trendingDirection === &apos;down&apos; && <TrendingDown className="h-4 w-4 text-red-500 sm:px-4 md:px-6 lg:px-8" />}
+                        {metrics.trendingDirection === &apos;stable&apos; && <BarChart3 className="h-4 w-4 text-gray-500 sm:px-4 md:px-6 lg:px-8" />}
                         <div>
                             <p className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">Sentiment</p>
                             <p className="text-2xl font-bold capitalize sm:px-4 md:px-6 lg:px-8">{metrics.trendingDirection}</p>
@@ -282,8 +310,9 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             <CardContent className="flex-1 flex flex-col space-y-4 sm:px-4 md:px-6 lg:px-8">
                 <div className="flex-1 overflow-y-auto pr-4 space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {messages.map((message: any) => (
+}
                         <div key={message.id} className="flex space-x-3 sm:px-4 md:px-6 lg:px-8">
-                            <Avatar 
+                            <Avatar>
                                 avatar={message.username.charAt(0).toUpperCase()} 
                                 className="h-8 w-8 rounded-full bg-blue-500 text-white flex items-center justify-center text-sm font-medium sm:px-4 md:px-6 lg:px-8"
                             />
@@ -299,8 +328,10 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                 </div>
                                 <p className="text-sm mt-1 sm:px-4 md:px-6 lg:px-8">{message.content}</p>
                                 {message.reactions && message.reactions.length > 0 && (
+}
                                     <div className="flex items-center space-x-1 mt-2 sm:px-4 md:px-6 lg:px-8">
                                         {message.reactions.map((reaction: any) => (
+}
                                             <Badge key={`${reaction.userId}-${reaction.emoji}-${reaction.timestamp}`} variant="default" className="text-xs sm:px-4 md:px-6 lg:px-8">
                                                 {reaction.emoji}
                                             </Badge>
@@ -366,6 +397,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                     </div>
                     <button 
                         onClick={() = aria-label="Action button"> {
+}
                             // Handle insight sharing when method is available
                         }}
                         disabled={!insightTitle.trim() || !insightContent.trim()}
@@ -384,6 +416,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                 <CardContent>
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         {insights.map((insight: any) => (
+}
                             <div key={insight.id} className="border rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-start justify-between sm:px-4 md:px-6 lg:px-8">
                                     <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
@@ -397,7 +430,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                                 {formatTimestamp(insight.timestamp)}
                                             </span>
                                             <Badge variant="outline">
-                                                {insight.type?.replace('_', ' ') || 'General'}
+                                                {insight.type?.replace(&apos;_&apos;, &apos; &apos;) || &apos;General&apos;}
                                             </Badge>
                                         </div>
                                     </div>
@@ -408,11 +441,11 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                         <div className="flex items-center space-x-1 mt-2 sm:px-4 md:px-6 lg:px-8">
                                             <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 <ThumbsUp className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
-                                                <span>{insight.votes.filter((v: any) => v.vote === 'upvote').length}</span>
+                                                <span>{insight.votes.filter((v: any) => v.vote === &apos;upvote&apos;).length}</span>
                                             </button>
                                             <button className="px-2 py-1 text-xs bg-gray-100 rounded hover:bg-gray-200 transition-colors flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8" aria-label="Action button">
                                                 <ThumbsDown className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
-                                                <span>{insight.votes.filter((v: any) => v.vote === 'downvote').length}</span>
+                                                <span>{insight.votes.filter((v: any) => v.vote === &apos;downvote&apos;).length}</span>
                                             </button>
                                         </div>
                                     </div>
@@ -427,7 +460,9 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
 
     // Helper function to calculate poll option results
     const calculatePollOptionResults = (poll: CommunityPoll) => {
+}
         return poll.options.map((option: any) => {
+}
             const votes = poll.responses?.filter((r: any) => r.optionId === option.id).length || 0;
             const totalResponses = poll.responses?.length || 0;
             const percentage = totalResponses > 0 
@@ -435,9 +470,10 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                 : 0;
             
             return {
+}
                 option,
                 votes,
-                percentage
+//                 percentage
             };
         });
     };
@@ -454,6 +490,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             <CardContent>
                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                     {polls.map((poll: any) => {
+}
                         const optionResults = calculatePollOptionResults(poll);
                         
                         return (
@@ -475,7 +512,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                     <span>{poll.responses?.length || 0} responses</span>
                                     <span className="flex items-center space-x-1 sm:px-4 md:px-6 lg:px-8">
                                         <Clock className="h-3 w-3 sm:px-4 md:px-6 lg:px-8" />
-                                        <span>Expires {poll.expiresAt ? new Date(poll.expiresAt).toLocaleDateString() : 'N/A'}</span>
+                                        <span>Expires {poll.expiresAt ? new Date(poll.expiresAt).toLocaleDateString() : &apos;N/A&apos;}</span>
                                     </span>
                                 </div>
                             </div>
@@ -488,19 +525,21 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
 
     // Render content based on active tab
     const renderTabContent = () => {
+}
         switch (activeTab) {
-            case 'overview':
+}
+            case &apos;overview&apos;:
                 return (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>{renderChatInterface()}</div>
                         <div>{renderInsightsPanel()}</div>
                     </div>
                 );
-            case 'chat':
+            case &apos;chat&apos;:
                 return renderChatInterface();
-            case 'insights':
+            case &apos;insights&apos;:
                 return renderInsightsPanel();
-            case 'polls':
+            case &apos;polls&apos;:
                 return renderPollsSection();
             default:
                 return renderChatInterface();
@@ -522,6 +561,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
                                 {isConnected ? "Live" : "Connecting"}
                             </Badge>
                             {predictionUpdate && (
+}
                                 <Badge variant="outline">
                                     Updated {formatTimestamp(predictionUpdate.timestamp)}
                                 </Badge>
@@ -537,7 +577,7 @@ const OracleRealTimeDashboard: React.FC<OracleRealTimeDashboardProps> = ({ predi
             {/* Main Content Tabs */}
             <Card>
                 <CardHeader>
-                    <Tabs 
+                    <Tabs>
                         items={tabItems}
                         activeTab={activeTab}
                         onTabChange={setActiveTab}

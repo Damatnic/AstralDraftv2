@@ -3,16 +3,18 @@
  * Intelligent resource preloading for optimal performance
  */
 
-import { performanceOptimizer } from './performanceOptimizer';
+import { performanceOptimizer } from &apos;./performanceOptimizer&apos;;
 
 interface PreloadConfig {
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  timing: 'immediate' | 'idle' | 'interaction' | 'viewport';
+}
+  priority: &apos;critical&apos; | &apos;high&apos; | &apos;medium&apos; | &apos;low&apos;;
+  timing: &apos;immediate&apos; | &apos;idle&apos; | &apos;interaction&apos; | &apos;viewport&apos;;
   condition?: () => boolean;
   timeout?: number;
 }
 
 interface PreloadableResource {
+}
   id: string;
   loader: () => Promise<any>;
   config: PreloadConfig;
@@ -22,13 +24,15 @@ interface PreloadableResource {
 }
 
 class PreloadManager {
+}
   private resources: Map<string, PreloadableResource> = new Map();
   private loadedResources: Set<string> = new Set();
   private pendingLoads: Map<string, Promise<any>> = new Map();
   private interactionPreloads: Set<string> = new Set();
-  private idleCallbackSupported = typeof requestIdleCallback !== 'undefined';
+  private idleCallbackSupported = typeof requestIdleCallback !== &apos;undefined&apos;;
 
   constructor() {
+}
     this.initializePreloadStrategies();
   }
 
@@ -36,6 +40,7 @@ class PreloadManager {
    * Initialize preload strategies
    */
   private initializePreloadStrategies(): void {
+}
     // Preload critical resources immediately
     this.preloadCriticalResources();
     
@@ -53,7 +58,9 @@ class PreloadManager {
    * Register a resource for preloading
    */
   registerResource(id: string, loader: () => Promise<any>, config: PreloadConfig): void {
+}
     this.resources.set(id, {
+}
       id,
       loader,
       config,
@@ -62,7 +69,8 @@ class PreloadManager {
     });
 
     // Trigger immediate loading if critical
-    if (config.timing === 'immediate' || config.priority === 'critical') {
+    if (config.timing === &apos;immediate&apos; || config.priority === &apos;critical&apos;) {
+}
       this.preloadResource(id);
     }
   }
@@ -71,19 +79,23 @@ class PreloadManager {
    * Preload a specific resource
    */
   async preloadResource(id: string): Promise<any> {
+}
     const resource = this.resources.get(id);
     if (!resource) {
+}
       console.warn(`⚠️ PreloadManager: Resource ${id} not found`);
       return null;
     }
 
     // Check if already loaded or loading
     if (resource.loaded || resource.loading) {
+}
       return this.pendingLoads.get(id) || null;
     }
 
     // Check condition if provided
     if (resource.config.condition && !resource.config.condition()) {
+}
       return null;
     }
 
@@ -93,6 +105,7 @@ class PreloadManager {
     const startTime = performance.now();
     
     try {
+}
 
       // Create timeout promise if specified
       const timeoutPromise = resource.config.timeout ? 
@@ -122,6 +135,7 @@ class PreloadManager {
       return result;
 
     } catch (error) {
+}
         console.error(error);
     `PreloadError-${id}`, loadTime);
       
@@ -129,6 +143,7 @@ class PreloadManager {
       
       return null;
     } finally {
+}
       this.pendingLoads.delete(id);
     }
   }
@@ -137,9 +152,11 @@ class PreloadManager {
    * Preload multiple resources
    */
   async preloadMultiple(ids: string[]): Promise<{ [key: string]: any }> {
+}
     const results: { [key: string]: any } = {};
     
     const promises = ids.map(async (id: any) => {
+}
       results[id] = await this.preloadResource(id);
     });
     
@@ -152,7 +169,9 @@ class PreloadManager {
    * Get preloaded resource
    */
   getResource(id: string): any {
+}
     if (this.loadedResources.has(id)) {
+}
       return this.pendingLoads.get(id) || null;
     }
     return null;
@@ -162,6 +181,7 @@ class PreloadManager {
    * Check if resource is loaded
    */
   isResourceLoaded(id: string): boolean {
+}
     return this.loadedResources.has(id);
   }
 
@@ -169,8 +189,11 @@ class PreloadManager {
    * Preload critical resources
    */
   private preloadCriticalResources(): void {
+}
     this.resources.forEach((resource, id) => {
-      if (resource.config.priority === 'critical' && resource.config.timing === 'immediate') {
+}
+      if (resource.config.priority === &apos;critical&apos; && resource.config.timing === &apos;immediate&apos;) {
+}
         this.preloadResource(id);
       }
     });
@@ -180,17 +203,23 @@ class PreloadManager {
    * Setup idle preloading
    */
   private setupIdlePreloading(): void {
+}
     const preloadOnIdle = () => {
+}
       this.resources.forEach((resource, id) => {
-        if (resource.config.timing === 'idle' && !resource.loaded && !resource.loading) {
+}
+        if (resource.config.timing === &apos;idle&apos; && !resource.loaded && !resource.loading) {
+}
           this.preloadResource(id);
         }
       });
     };
 
     if (this.idleCallbackSupported) {
+}
       requestIdleCallback(preloadOnIdle, { timeout: 5000 });
     } else {
+}
       // Fallback for browsers without requestIdleCallback
       setTimeout(preloadOnIdle, 1000);
     }
@@ -200,45 +229,57 @@ class PreloadManager {
    * Setup interaction-based preloading
    */
   private setupInteractionPreloading(): void {
+}
     // Preload on hover/focus
     const handleInteraction = (event: Event) => {
+}
       const target = event.target as HTMLElement;
       const preloadId = target.dataset.preload;
       
       if (preloadId && !this.interactionPreloads.has(preloadId)) {
+}
         this.interactionPreloads.add(preloadId);
         this.preloadResource(preloadId);
       }
     };
 
     // Add event listeners for interaction preloading
-    document.addEventListener('mouseover', handleInteraction, { passive: true });
-    document.addEventListener('focus', handleInteraction, { passive: true });
-    document.addEventListener('touchstart', handleInteraction, { passive: true });
+    document.addEventListener(&apos;mouseover&apos;, handleInteraction, { passive: true });
+    document.addEventListener(&apos;focus&apos;, handleInteraction, { passive: true });
+    document.addEventListener(&apos;touchstart&apos;, handleInteraction, { passive: true });
   }
 
   /**
    * Setup viewport-based preloading
    */
   private setupViewportPreloading(): void {
-    if ('IntersectionObserver' in window) {
+}
+    if (&apos;IntersectionObserver&apos; in window) {
+}
       const observer = new IntersectionObserver((entries: any) => {
+}
         entries.forEach((entry: any) => {
+}
           if (entry.isIntersecting) {
+}
             const preloadId = (entry.target as HTMLElement).dataset.preloadViewport;
             if (preloadId) {
+}
               this.preloadResource(preloadId);
               observer.unobserve(entry.target);
             }
           }
         });
       }, {
-        rootMargin: '50px'
+}
+        rootMargin: &apos;50px&apos;
       });
 
       // Observe elements with viewport preloading
-      document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('[data-preload-viewport]').forEach((element: any) => {
+      document.addEventListener(&apos;DOMContentLoaded&apos;, () => {
+}
+        document.querySelectorAll(&apos;[data-preload-viewport]&apos;).forEach((element: any) => {
+}
           observer.observe(element);
         });
       });
@@ -249,6 +290,7 @@ class PreloadManager {
    * Get preload statistics
    */
   getStats(): {
+}
     total: number;
     loaded: number;
     loading: number;
@@ -256,7 +298,9 @@ class PreloadManager {
     byPriority: { [key: string]: number };
     byTiming: { [key: string]: number };
   } {
+}
     const stats = {
+}
       total: this.resources.size,
       loaded: this.loadedResources.size,
       loading: 0,
@@ -266,6 +310,7 @@ class PreloadManager {
     };
 
     this.resources.forEach((resource: any) => {
+}
       if (resource.loading) stats.loading++;
       if (resource.error) stats.failed++;
       
@@ -280,6 +325,7 @@ class PreloadManager {
    * Clear all preload data
    */
   clear(): void {
+}
     this.resources.clear();
     this.loadedResources.clear();
     this.pendingLoads.clear();
@@ -291,40 +337,51 @@ class PreloadManager {
 export const preloadManager = new PreloadManager();
 
 // Convenience functions for common preload scenarios
-export const preloadComponent = (id: string, importFn: () => Promise<any>, priority: PreloadConfig['priority'] = 'medium') => {
+export const preloadComponent = (id: string, importFn: () => Promise<any>, priority: PreloadConfig[&apos;priority&apos;] = &apos;medium&apos;) => {
+}
   preloadManager.registerResource(id, importFn, {
+}
     priority,
-    timing: 'idle'
+    timing: &apos;idle&apos;
   });
 };
 
 export const preloadCriticalComponent = (id: string, importFn: () => Promise<any>) => {
+}
   preloadManager.registerResource(id, importFn, {
-    priority: 'critical',
-    timing: 'immediate'
+}
+    priority: &apos;critical&apos;,
+    timing: &apos;immediate&apos;
   });
 };
 
 export const preloadOnHover = (id: string, importFn: () => Promise<any>) => {
+}
   preloadManager.registerResource(id, importFn, {
-    priority: 'high',
-    timing: 'interaction'
+}
+    priority: &apos;high&apos;,
+    timing: &apos;interaction&apos;
   });
 };
 
 export const preloadInViewport = (id: string, importFn: () => Promise<any>) => {
+}
   preloadManager.registerResource(id, importFn, {
-    priority: 'medium',
-    timing: 'viewport'
+}
+    priority: &apos;medium&apos;,
+    timing: &apos;viewport&apos;
   });
 };
 
 // Hook for React components
 export const usePreload = (id: string) => {
+}
   const [isLoaded, setIsLoaded] = React.useState(preloadManager.isResourceLoaded(id));
   
   React.useEffect(() => {
+}
     const checkLoaded = () => {
+}
       setIsLoaded(preloadManager.isResourceLoaded(id));
     };
     
@@ -334,6 +391,7 @@ export const usePreload = (id: string) => {
   }, [id]);
   
   return {
+}
     isLoaded,
     preload: () => preloadManager.preloadResource(id),
     getResource: () => preloadManager.getResource(id)

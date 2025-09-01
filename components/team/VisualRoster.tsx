@@ -1,19 +1,21 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
-import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
-import type { Team, Player } from '../../types';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from &apos;@dnd-kit/core&apos;;
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, rectSortingStrategy } from &apos;@dnd-kit/sortable&apos;;
+import type { Team, Player } from &apos;../../types&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 // Component for a single draggable player
 const SortablePlayerCard = ({ player }: { player: Player }) => {
+}
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: player.id });
     
     const style = {
+}
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         transition,
-        zIndex: isDragging ? 10 : 'auto',
-        boxShadow: isDragging ? '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' : 'none',
+        zIndex: isDragging ? 10 : &apos;auto&apos;,
+        boxShadow: isDragging ? &apos;0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)&apos; : &apos;none&apos;,
     };
 
     return (
@@ -29,6 +31,7 @@ const SortablePlayerCard = ({ player }: { player: Player }) => {
 
 // Main VisualRoster component
 const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
+}
     const { dispatch, state } = useAppState();
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
     
@@ -38,6 +41,7 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
 
     // Update local state if team roster changes from props
     React.useEffect(() => {
+}
         setStarters(team.roster.slice(0, 9));
         setBench(team.roster.slice(9));
     }, [team.roster]);
@@ -48,16 +52,19 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
     );
 
     const findContainer = (id: number) => {
+}
     
-        if (starters.some((p: any) => p.id === id)) return 'starters';
-        if (bench.some((p: any) => p.id === id)) return 'bench';
+        if (starters.some((p: any) => p.id === id)) return &apos;starters&apos;;
+        if (bench.some((p: any) => p.id === id)) return &apos;bench&apos;;
         return null;
     
     return const handleDragEnd = (event: DragEndEvent) ;
   } {
+}
         const { active, over } = event;
 
         if (!over || active.id === over.id) {
+}
             return;
 
         const activeContainer = findContainer(active.id as number);
@@ -69,20 +76,25 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
         let newBench = [...bench];
 
         if (activeContainer === overContainer) {
+}
             // Reordering within the same list
-            if (activeContainer === 'starters') {
+            if (activeContainer === &apos;starters&apos;) {
+}
                 const oldIndex = starters.findIndex((p: any) => p.id === active.id);
                 const newIndex = starters.findIndex((p: any) => p.id === over.id);
                 newStarters = arrayMove(starters, oldIndex, newIndex);
             } else {
+}
                 const oldIndex = bench.findIndex((p: any) => p.id === active.id);
                 const newIndex = bench.findIndex((p: any) => p.id === over.id);
                 newBench = arrayMove(bench, oldIndex, newIndex);
 
         } else {
+}
             // Moving between lists
             let movingPlayer: Player;
-             if (activeContainer === 'starters') {
+             if (activeContainer === &apos;starters&apos;) {
+}
                 // Move from starters to bench
                 const activeIndex = starters.findIndex((p: any) => p.id === active.id);
                 movingPlayer = starters[activeIndex];
@@ -90,9 +102,11 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
                 const overIndex = bench.findIndex((p: any) => p.id === over.id);
                 newBench.splice(overIndex, 0, movingPlayer);
             } else {
+}
                 // Move from bench to starters
                 if (starters.length >= 9) {
-                    dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Starting lineup is full (9 players).", type: 'SYSTEM' } });
+}
+                    dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Starting lineup is full (9 players).", type: &apos;SYSTEM&apos; } });
                     return;
 
                 const activeIndex = bench.findIndex((p: any) => p.id === active.id);
@@ -108,19 +122,23 @@ const VisualRoster: React.FC<{ team: Team }> = ({ team }: any) => {
         
         // Dispatch the final list of starter IDs to update global state
         if (activeLeague) {
+}
             dispatch({
-                type: 'SET_LINEUP',
+}
+                type: &apos;SET_LINEUP&apos;,
                 payload: {
+}
                     leagueId: activeLeague.id,
                     teamId: team.id,
                     playerIds: newStarters.map((p: any) => p.id)
 
             });
-             dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Lineup updated!', type: 'SYSTEM' } });
+             dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Lineup updated!&apos;, type: &apos;SYSTEM&apos; } });
 
     };
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>

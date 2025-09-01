@@ -3,15 +3,16 @@
  * Premium real-time draft interface with advanced visuals
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
-import { Player, Team } from '../../types';
-import { NFL_TEAMS } from '../../data/nflPlayers';
-import PlayerSearch from '../players/PlayerSearch';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState, useEffect, useRef } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { Player, Team } from &apos;../../types&apos;;
+import { NFL_TEAMS } from &apos;../../data/nflPlayers&apos;;
+import PlayerSearch from &apos;../players/PlayerSearch&apos;;
 
 interface DraftPick {
+}
   round: number;
   pick: number;
   teamId: number;
@@ -22,12 +23,15 @@ interface DraftPick {
 }
 
 interface LiveDraftRoomProps {
+}
   isActive?: boolean;
   onDraftComplete?: () => void;}
 
 const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false, 
-  onDraftComplete 
+}
+//   onDraftComplete 
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const [currentPick, setCurrentPick] = useState(1);
@@ -54,19 +58,24 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
   // Initialize draft order and picks
   useEffect(() => {
+}
     if (league?.teams && draftOrder.length === 0) {
+}
       const shuffledTeams = [...league.teams].sort(() => Math.random() - 0.5);
       setDraftOrder(shuffledTeams);
       
       // Initialize all draft picks
       const picks: DraftPick[] = [];
       for (let round = 1; round <= totalRounds; round++) {
+}
         for (let pickInRound = 1; pickInRound <= 10; pickInRound++) {
+}
           const teamIndex = round % 2 === 1 
             ? pickInRound - 1  // Odd rounds: normal order
             : 10 - pickInRound; // Even rounds: reverse order (snake)
           
           picks.push({
+}
             round,
             pick: (round - 1) * 10 + pickInRound,
             teamId: shuffledTeams[teamIndex].id,
@@ -82,10 +91,15 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
   // Timer logic
   useEffect(() => {
+}
     if (isDraftStarted && !isPaused && timeRemaining > 0) {
+}
       timerRef.current = setTimeout(() => {
+}
         setTimeRemaining(prev => {
+}
           if (prev <= 1) {
+}
             handleAutoDraft();
             return 90;
 
@@ -94,7 +108,9 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
       }, 1000);
 
     return () => {
+}
       if (timerRef.current) {
+}
         clearTimeout(timerRef.current);
 
     };
@@ -102,14 +118,18 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
   // Timer critical state
   useEffect(() => {
+}
     setIsTimerCritical(timeRemaining <= 15 && isDraftStarted && !isPaused);
   }, [timeRemaining, isDraftStarted, isPaused]);
 
   // Pick celebration effect
   useEffect(() => {
+}
     if (recentPick) {
+}
       setShowParticles(true);
       const timer = setTimeout(() => {
+}
         setShowParticles(false);
         setRecentPick(null);
     }
@@ -120,12 +140,15 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
   // Sound notifications
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+}
+    if (typeof window !== &apos;undefined&apos;) {
+}
       audioRef.current = new Audio();
     }
   }, []);
 
-  const playSound = (type: 'pick' | 'timer' | 'turn') => {
+  const playSound = (type: &apos;pick&apos; | &apos;timer&apos; | &apos;turn&apos;) => {
+}
     if (!state.soundEnabled || !audioRef.current) return;
     
     // Simple beep sounds (you could replace with actual audio files)
@@ -137,15 +160,16 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
     gainNode.connect(context.destination);
     
     switch (type) {
-      case 'pick':
+}
+      case &apos;pick&apos;:
         oscillator.frequency.value = 800;
         gainNode.gain.value = 0.3;
         break;
-      case 'timer':
+      case &apos;timer&apos;:
         oscillator.frequency.value = 400;
         gainNode.gain.value = 0.2;
         break;
-      case 'turn':
+      case &apos;turn&apos;:
         oscillator.frequency.value = 600;
         gainNode.gain.value = 0.4;
         break;
@@ -155,6 +179,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
   };
 
   const getCurrentPickInfo = () => {
+}
     const pick = draftPicks[currentPick - 1];
     if (!pick) return null;
     
@@ -163,36 +188,44 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
   };
 
   const isUserTurn = () => {
+}
     const pickInfo = getCurrentPickInfo();
     return pickInfo?.team?.owner.id === currentUser?.id;
   };
 
   const handleStartDraft = () => {
+}
     setIsDraftStarted(true);
     setTimeRemaining(90);
-    playSound('turn');
+    playSound(&apos;turn&apos;);
     
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: 'Draft has started! Good luck everyone!',
-        type: 'SUCCESS'
+}
+        message: &apos;Draft has started! Good luck everyone!&apos;,
+        type: &apos;SUCCESS&apos;
 
     });
   };
 
   const handlePauseDraft = () => {
+}
     setIsPaused(!isPaused);
     dispatch({
-      type: 'ADD_NOTIFICATION',
+}
+      type: &apos;ADD_NOTIFICATION&apos;,
       payload: {
-        message: isPaused ? 'Draft resumed' : 'Draft paused',
-        type: 'INFO'
+}
+        message: isPaused ? &apos;Draft resumed&apos; : &apos;Draft paused&apos;,
+        type: &apos;INFO&apos;
 
     });
   };
 
   const handlePlayerSelect = (player: Player) => {
+}
     if (!isUserTurn() || !isDraftStarted) return;
     
     const pickInfo = getCurrentPickInfo();
@@ -200,13 +233,15 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
     // Add player to team roster
     dispatch({
-      type: 'ADD_PLAYER_TO_ROSTER',
+}
+      type: &apos;ADD_PLAYER_TO_ROSTER&apos;,
       payload: { teamId: pickInfo.team!.id, player }
     });
 
     // Update draft pick
     const updatedPicks = [...draftPicks];
     updatedPicks[currentPick - 1] = {
+}
       ...pickInfo.pick,
       player,
       isComplete: true
@@ -219,6 +254,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
   };
 
   const handleAutoDraft = () => {
+}
     const pickInfo = getCurrentPickInfo();
     if (!pickInfo) return;
 
@@ -230,29 +266,36 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
     const bestAvailable = availablePlayers.sort((a, b) => a.fantasyRank - b.fantasyRank)[0];
     
     if (bestAvailable) {
+}
       handlePlayerSelect(bestAvailable);
       
       dispatch({
-        type: 'ADD_NOTIFICATION',
+}
+        type: &apos;ADD_NOTIFICATION&apos;,
         payload: {
+}
           message: `${pickInfo.team?.name} auto-drafted ${bestAvailable.name}`,
-          type: 'INFO'
+          type: &apos;INFO&apos;
 
       });
 
   };
 
   const advanceToNextPick = (selectedPlayer: Player) => {
-    playSound('pick');
+}
+    playSound(&apos;pick&apos;);
     
     if (currentPick >= totalPicks) {
+}
       // Draft complete!
       setIsDraftStarted(false);
       dispatch({
-        type: 'ADD_NOTIFICATION',
+}
+        type: &apos;ADD_NOTIFICATION&apos;,
         payload: {
-          message: 'Draft Complete! Good luck this season!',
-          type: 'SUCCESS'
+}
+          message: &apos;Draft Complete! Good luck this season!&apos;,
+          type: &apos;SUCCESS&apos;
 
       });
       onDraftComplete?.();
@@ -260,18 +303,20 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
 
     setCurrentPick(prev => prev + 1);
     setTimeRemaining(90);
-    playSound('turn');
+    playSound(&apos;turn&apos;);
   };
 
   const getPositionColor = (position: string) => {
+}
     switch (position) {
-      case 'QB': return 'bg-red-600';
-      case 'RB': return 'bg-green-600';
-      case 'WR': return 'bg-blue-600';
-      case 'TE': return 'bg-yellow-600';
-      case 'K': return 'bg-purple-600';
-      case 'DST': return 'bg-gray-600';
-      default: return 'bg-gray-500';
+}
+      case &apos;QB&apos;: return &apos;bg-red-600&apos;;
+      case &apos;RB&apos;: return &apos;bg-green-600&apos;;
+      case &apos;WR&apos;: return &apos;bg-blue-600&apos;;
+      case &apos;TE&apos;: return &apos;bg-yellow-600&apos;;
+      case &apos;K&apos;: return &apos;bg-purple-600&apos;;
+      case &apos;DST&apos;: return &apos;bg-gray-600&apos;;
+      default: return &apos;bg-gray-500&apos;;
 
   };
 
@@ -291,23 +336,28 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 sm:px-4 md:px-6 lg:px-8" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(79,110,247,0.15),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(16,185,129,0.12),transparent_50%)] sm:px-4 md:px-6 lg:px-8" />
         {showParticles && (
+}
           <div className="absolute inset-0 overflow-hidden sm:px-4 md:px-6 lg:px-8">
             {[...Array(20)].map((_, i) => (
+}
               <motion.div
                 key={i}
                 className="absolute w-2 h-2 bg-primary-400 rounded-full sm:px-4 md:px-6 lg:px-8"
                 initial={{
+}
                   x: Math.random() * window.innerWidth,
                   y: window.innerHeight + 50,
                   scale: 0,
                   opacity: 0
                 }}
                 animate={{
+}
                   y: -50,
                   scale: [0, 1, 0],
                   opacity: [0, 1, 0]
                 }}
                 transition={{
+}
                   duration: 3,
                   delay: i * 0.1,
                   ease: "easeOut"
@@ -342,6 +392,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
           <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence mode="wait">
               {!isDraftStarted ? (
+}
                 <motion.button
                   key="start"
                   onClick={handleStartDraft}
@@ -359,16 +410,17 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                   key="pause"
                   onClick={handlePauseDraft}
                   className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    isPaused 
-                      ? 'btn-success shadow-[0_0_20px_rgba(16,185,129,0.4)]' 
-                      : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-105'
+}
+//                     isPaused 
+                      ? &apos;btn-success shadow-[0_0_20px_rgba(16,185,129,0.4)]&apos; 
+                      : &apos;bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:scale-105&apos;
                   }`}
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                  {isPaused ? &apos;▶️ Resume&apos; : &apos;⏸️ Pause&apos;}
                 </motion.button>
               )}
             </AnimatePresence>
@@ -378,20 +430,23 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
         {/* Premium Current Pick Display */}
         <AnimatePresence>
           {pickInfo && (
+}
             <motion.div 
               className="glass-card p-6 border-l-4 border-primary-500 relative overflow-hidden sm:px-4 md:px-6 lg:px-8"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              layout
+//               layout
             >
               {/* Animated background for current pick */}
               <motion.div 
                 className="absolute inset-0 bg-gradient-to-r from-primary-500/10 via-cyan-400/10 to-transparent sm:px-4 md:px-6 lg:px-8"
                 animate={isMyTurn ? {
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+}
+                  backgroundPosition: [&apos;0% 50%&apos;, &apos;100% 50%&apos;, &apos;0% 50%&apos;],
                 } : {}}
                 transition={{
+}
                   duration: 3,
                   repeat: Infinity,
                   ease: "easeInOut"
@@ -403,6 +458,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                   <motion.div 
                     className="text-5xl sm:px-4 md:px-6 lg:px-8"
                     animate={isMyTurn ? {
+}
                       scale: [1, 1.2, 1],
                       rotate: [0, 5, -5, 0]
                     } : {}}
@@ -414,7 +470,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                   <div>
                     <motion.h3 
                       className="text-2xl font-bold text-white mb-1 sm:px-4 md:px-6 lg:px-8"
-                      animate={isMyTurn ? { color: ['#ffffff', '#4facfe', '#ffffff'] } : {}}
+                      animate={isMyTurn ? { color: [&apos;#ffffff&apos;, &apos;#4facfe&apos;, &apos;#ffffff&apos;] } : {}}
                       transition={{ duration: 2, repeat: Infinity }}
                     >
                       {pickInfo.team?.name}
@@ -423,21 +479,24 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                     
                     <AnimatePresence>
                       {isMyTurn && (
+}
                         <motion.div 
                           className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-500 to-cyan-400 text-white text-sm font-bold rounded-full shadow-[0_0_20px_rgba(79,110,247,0.5)] mt-2 sm:px-4 md:px-6 lg:px-8"
                           initial={{ scale: 0, x: -50 }}
                           animate={{ 
+}
                             scale: 1, 
                             x: 0,
                             boxShadow: [
-                              '0_0_20px_rgba(79,110,247,0.5)',
-                              '0_0_30px_rgba(79,110,247,0.8)',
-                              '0_0_20px_rgba(79,110,247,0.5)'
+                              &apos;0_0_20px_rgba(79,110,247,0.5)&apos;,
+                              &apos;0_0_30px_rgba(79,110,247,0.8)&apos;,
+                              &apos;0_0_20px_rgba(79,110,247,0.5)&apos;
 
                           }}
                           exit={{ scale: 0, x: 50 }}
                           transition={{ 
-                            scale: { type: 'spring', stiffness: 500 },
+}
+                            scale: { type: &apos;spring&apos;, stiffness: 500 },
                             boxShadow: { duration: 2, repeat: Infinity }
                           }}
                         >
@@ -453,27 +512,31 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                 <div className="text-center relative sm:px-4 md:px-6 lg:px-8">
                   <motion.div 
                     className={`text-6xl font-bold relative ${
-                      isTimerCritical 
-                        ? 'text-red-400' 
+}
+//                       isTimerCritical 
+                        ? &apos;text-red-400&apos; 
                         : timeRemaining <= 30 
-                          ? 'text-amber-400' 
-                          : 'text-white'
+                          ? &apos;text-amber-400&apos; 
+                          : &apos;text-white&apos;
                     }`}
                     animate={isTimerCritical ? {
+}
                       scale: [1, 1.1, 1],
                       textShadow: [
-                        '0_0_10px_rgba(239,68,68,0.5)',
-                        '0_0_20px_rgba(239,68,68,0.8)',
-                        '0_0_10px_rgba(239,68,68,0.5)'
+                        &apos;0_0_10px_rgba(239,68,68,0.5)&apos;,
+                        &apos;0_0_20px_rgba(239,68,68,0.8)&apos;,
+                        &apos;0_0_10px_rgba(239,68,68,0.5)&apos;
 
                     } : {}}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
                     {timeRemaining}
                     {isTimerCritical && (
+}
                       <motion.div
                         className="absolute -inset-4 border-2 border-red-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                         animate={{
+}
                           scale: [1, 1.2, 1],
                           opacity: [0.5, 1, 0.5]
                         }}
@@ -487,7 +550,8 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                   <div className="w-20 h-1 bg-slate-600 rounded-full mt-2 mx-auto overflow-hidden sm:px-4 md:px-6 lg:px-8">
                     <motion.div
                       className={`h-full rounded-full ${
-                        isTimerCritical ? 'bg-red-500' : timeRemaining <= 30 ? 'bg-amber-500' : 'bg-primary-500'
+}
+                        isTimerCritical ? &apos;bg-red-500&apos; : timeRemaining <= 30 ? &apos;bg-amber-500&apos; : &apos;bg-primary-500&apos;
                       }`}
                       animate={{ width: `${(timeRemaining / 90) * 100}%` }}
                       transition={{ duration: 0.5 }}
@@ -503,18 +567,20 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
       {/* Premium Draft Actions */}
       <AnimatePresence>
         {isMyTurn && isDraftStarted && (
+}
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -30, scale: 0.95 }}
             className="glass-panel-premium border-2 border-primary-500/30 shadow-[0_0_40px_rgba(79,110,247,0.2)] sm:px-4 md:px-6 lg:px-8"
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            transition={{ type: &apos;spring&apos;, stiffness: 300, damping: 25 }}
           >
             <div className="p-8 sm:px-4 md:px-6 lg:px-8">
               <motion.h3 
                 className="text-2xl font-bold text-gradient mb-6 flex items-center gap-3 sm:px-4 md:px-6 lg:px-8"
                 animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+}
+                  backgroundPosition: [&apos;0% 50%&apos;, &apos;100% 50%&apos;, &apos;0% 50%&apos;]
                 }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
@@ -582,10 +648,12 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
           <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin sm:px-4 md:px-6 lg:px-8">
             <AnimatePresence>
               {draftPicks
+}
               .filter((pick: DraftPick) => pick.isComplete)
               .slice(-10)
               .reverse()
               .map((pick, index) => {
+}
                 const team = draftOrder.find((t: Team) => t.id === pick.teamId);
                 return (
                   <motion.div
@@ -606,7 +674,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                       </div>
                     </div>
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
-                      <div className={`${getPositionColor(pick.player?.position || '')} text-white text-xs font-bold px-2 py-1 rounded`}>
+                      <div className={`${getPositionColor(pick.player?.position || &apos;&apos;)} text-white text-xs font-bold px-2 py-1 rounded`}>
                         {pick.player?.position}
                       </div>
                       <span className="text-slate-400 text-sm sm:px-4 md:px-6 lg:px-8">
@@ -625,6 +693,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
           <h3 className="text-xl font-bold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Team Rosters</h3>
           <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
             {draftOrder.map((team: Team) => {
+}
               const teamPicks = draftPicks.filter((pick: DraftPick) => 
                 pick.teamId === team.id && pick.isComplete
               );
@@ -642,9 +711,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                   </div>
                   <div className="flex flex-wrap gap-1 sm:px-4 md:px-6 lg:px-8">
                     {teamPicks.map((pick: DraftPick) => (
+}
                       <span
                         key={pick.pick}
-                        className={`${getPositionColor(pick.player?.position || '')} text-white text-xs px-2 py-1 rounded`}
+                        className={`${getPositionColor(pick.player?.position || &apos;&apos;)} text-white text-xs px-2 py-1 rounded`}
                       >
                         {pick.player?.position}
                       </span>
@@ -660,6 +730,7 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
       {/* Player Search Modal */}
       <AnimatePresence>
         {showPlayerSearch && (
+}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -685,9 +756,10 @@ const LiveDraftRoom: React.FC<LiveDraftRoomProps> = ({ isActive = false,
                 </button>
               </div>
               
-              <PlayerSearch
+              <PlayerSearch>
                 onPlayerSelect={handlePlayerSelect}
                 excludePlayerIds={draftPicks
+}
                   .filter((pick: DraftPick) => pick.isComplete && pick.player)
                   .map((pick: DraftPick) => pick.player!.id)
 

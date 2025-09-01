@@ -1,14 +1,15 @@
-import React from 'react';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { motion } from 'framer-motion';
-import { DollarSignIcon } from '../components/icons/DollarSignIcon';
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { DollarSignIcon } from &apos;../components/icons/DollarSignIcon&apos;;
 
 const FinanceTrackerView: React.FC = () => {
+}
     const { league } = useLeague();
 
     if (!league) {
+}
         return <ErrorDisplay message="No league selected" />;
 
     return (
@@ -19,7 +20,7 @@ const FinanceTrackerView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget
+                <Widget>
                     title="Budget Overview"
                     icon={<DollarSignIcon />}
                     className="lg:col-span-2"
@@ -28,7 +29,7 @@ const FinanceTrackerView: React.FC = () => {
                         <div className="bg-gradient-to-r from-green-500/20 to-blue-500/20 p-6 rounded-lg">
                             <h3 className="text-lg font-semibold mb-2">League Financial Summary</h3>
                             <p className="text-gray-300 mb-4">
-                                Track your league's financial health and budget allocations.
+                                Track your league&apos;s financial health and budget allocations.
                             </p>
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="text-center">
@@ -62,7 +63,7 @@ const FinanceTrackerView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget
+                <Widget>
                     title="Team Budgets"
                     icon={<DollarSignIcon />}
                 >
@@ -75,7 +76,7 @@ const FinanceTrackerView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget
+                <Widget>
                     title="Transaction History"
                     icon={<DollarSignIcon />}
                 >

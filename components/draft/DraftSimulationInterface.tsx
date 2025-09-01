@@ -3,10 +3,11 @@
  * Interactive interface for running AI-powered mock drafts
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useCallback, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
 import { 
+}
     PlayIcon, 
     PauseIcon, 
     RotateCcwIcon, 
@@ -15,20 +16,22 @@ import {
     ClockIcon,
     TrophyIcon,
     BarChart3Icon,
-    ZapIcon
-} from 'lucide-react';
-import { Widget } from '../ui/Widget';
+//     ZapIcon
+} from &apos;lucide-react&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
 import { 
+}
     draftSimulationEngine, 
     type SimulationSettings, 
     type SimulationResult, 
     type DraftPick,
     type DraftTeam 
-} from '../../services/draftSimulationEngine';
-import { Player } from '../../types';
-import { players } from '../../data/players';
+} from &apos;../../services/draftSimulationEngine&apos;;
+import { Player } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
 
 interface SimulationState {
+}
     isRunning: boolean;
     isPaused: boolean;
     currentRound: number;
@@ -41,9 +44,11 @@ interface SimulationState {
 }
 
 const DraftSimulationInterface: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const [simulation, setSimulation] = useState<SimulationResult | null>(null);
     const [simulationState, setSimulationState] = useState<SimulationState>({
+}
         isRunning: false,
         isPaused: false,
         currentRound: 1,
@@ -55,14 +60,15 @@ const DraftSimulationInterface: React.FC = () => {
     });
 
     const [settings, setSettings] = useState<SimulationSettings>({
-        draftType: 'snake',
+}
+        draftType: &apos;snake&apos;,
         rounds: 16,
         teams: 12,
         userPosition: 6,
-        scoringType: 'ppr',
+        scoringType: &apos;ppr&apos;,
         positionLimits: { QB: 3, RB: 8, WR: 8, TE: 3, K: 2, DST: 3 },
         benchSize: 7,
-        aiDifficulty: 'medium',
+        aiDifficulty: &apos;medium&apos;,
         realtimeSpeed: 2, // 2x speed
         includeRookies: true,
         injuryUpdates: true
@@ -73,13 +79,16 @@ const DraftSimulationInterface: React.FC = () => {
 
     // Initialize simulation
     const initializeSimulation = useCallback(async () => {
+}
         try {
+}
 
             const newSimulation = await draftSimulationEngine.startSimulation(settings, players);
             setSimulation(newSimulation);
             setSelectedTeam(newSimulation.userTeam.id);
             
             setSimulationState({
+}
                 isRunning: false,
                 isPaused: false,
                 currentRound: 1,
@@ -91,14 +100,17 @@ const DraftSimulationInterface: React.FC = () => {
             });
 
     } catch (error) {
+}
 
     }, [settings]);
 
     // Start/resume simulation
     const startSimulation = useCallback(() => {
+}
         if (!simulation) return;
         
         setSimulationState(prev => ({
+}
             ...prev,
             isRunning: true,
             isPaused: false
@@ -107,7 +119,9 @@ const DraftSimulationInterface: React.FC = () => {
 
     // Pause simulation
     const pauseSimulation = useCallback(() => {
+}
         setSimulationState(prev => ({
+}
             ...prev,
             isRunning: false,
             isPaused: true
@@ -116,8 +130,10 @@ const DraftSimulationInterface: React.FC = () => {
 
     // Reset simulation
     const resetSimulation = useCallback(() => {
+}
         setSimulation(null);
         setSimulationState({
+}
             isRunning: false,
             isPaused: false,
             currentRound: 1,
@@ -131,18 +147,21 @@ const DraftSimulationInterface: React.FC = () => {
 
     // Simulate next pick
     const simulateNextPick = useCallback(async () => {
+}
         if (!simulation || !simulationState.currentTeam) return;
 
         try {
+}
             const pick = draftSimulationEngine.simulateAIPick(
                 simulationState.currentTeam,
                 simulationState.availablePlayers,
                 simulationState.currentRound,
-                settings
+//                 settings
             );
 
             // Update simulation state
             setSimulationState(prev => {
+}
                 const newDraftBoard = [...prev.draftBoard, pick];
                 const newAvailablePlayers = prev.availablePlayers.filter((p: any) => p.id !== pick.player?.id);
                 
@@ -154,18 +173,23 @@ const DraftSimulationInterface: React.FC = () => {
                 
                 // Determine next team based on snake draft
                 let nextTeamIndex = 0;
-                if (settings.draftType === 'snake') {
+                if (settings.draftType === &apos;snake&apos;) {
+}
                     if (newRound % 2 === 1) {
+}
                         nextTeamIndex = newPick - 1;
                     } else {
+}
                         nextTeamIndex = settings.teams - newPick;
 
                 } else {
+}
                     nextTeamIndex = newPick - 1;
 
                 const nextTeam = simulation.teams[nextTeamIndex];
 
                 return {
+}
                     ...prev,
                     currentRound: newRound,
                     currentPick: newPick,
@@ -178,6 +202,7 @@ const DraftSimulationInterface: React.FC = () => {
 
             // Check if draft is complete
             if (simulationState.currentRound >= settings.rounds) {
+}
                 setSimulationState(prev => ({ ...prev, isRunning: false }));
                 
                 // Generate final analytics
@@ -185,16 +210,21 @@ const DraftSimulationInterface: React.FC = () => {
                 setSimulation(prev => prev ? { ...prev, analytics } : null);
 
     } catch (error) {
+}
 
     }, [simulation, simulationState, settings]);
 
     // Auto-advance simulation when running
     useEffect(() => {
+}
         if (!simulationState.isRunning) return;
 
         const interval = setInterval(() => {
+}
             setSimulationState(prev => {
+}
                 if (prev.timeRemaining <= 1) {
+}
                     simulateNextPick();
                     return { ...prev, timeRemaining: 60 };
 
@@ -207,21 +237,28 @@ const DraftSimulationInterface: React.FC = () => {
 
     // Initialize on mount
     useEffect(() => {
+}
         initializeSimulation();
     }, [initializeSimulation]);
 
     const formatTime = (seconds: number): string => {
-        return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}`;
+}
+        return `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, &apos;0&apos;)}`;
     };
 
     const getDraftPosition = (round: number, pick: number): number => {
-        if (settings.draftType === 'snake') {
+}
+        if (settings.draftType === &apos;snake&apos;) {
+}
             if (round % 2 === 1) {
+}
                 return (round - 1) * settings.teams + pick;
             } else {
+}
                 return (round - 1) * settings.teams + (settings.teams - pick + 1);
 
         } else {
+}
             return (round - 1) * settings.teams + pick;
 
     };
@@ -237,6 +274,7 @@ const DraftSimulationInterface: React.FC = () => {
                         <div className="flex items-center space-x-4 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex space-x-2 sm:px-4 md:px-6 lg:px-8">
                                 {!simulation ? (
+}
                                     <button
                                         onClick={initializeSimulation}
                                         className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -247,6 +285,7 @@ const DraftSimulationInterface: React.FC = () => {
                                 ) : (
                                     <>
                                         {simulationState.isRunning ? (
+}
                                             <button
                                                 onClick={pauseSimulation}
                                                 className="flex items-center space-x-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
@@ -260,7 +299,7 @@ const DraftSimulationInterface: React.FC = () => {
                                                 className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
                                              aria-label="Action button">
                                                 <PlayIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                                                <span>{simulationState.isPaused ? 'Resume' : 'Start'}</span>
+                                                <span>{simulationState.isPaused ? &apos;Resume&apos; : &apos;Start&apos;}</span>
                                             </button>
                                         )}
                                         
@@ -294,6 +333,7 @@ const DraftSimulationInterface: React.FC = () => {
 
                         {/* Draft Status */}
                         {simulation && (
+}
                             <div className="flex items-center space-x-6 text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">
                                 <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <BarChart3Icon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -308,6 +348,7 @@ const DraftSimulationInterface: React.FC = () => {
                                     <span>{formatTime(simulationState.timeRemaining)}</span>
                                 </div>
                                 {simulationState.currentTeam && (
+}
                                     <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                         <span className="font-medium text-blue-400 sm:px-4 md:px-6 lg:px-8">
                                             {simulationState.currentTeam.name} OTC
@@ -321,13 +362,14 @@ const DraftSimulationInterface: React.FC = () => {
                     {/* Settings Panel */}
                     <AnimatePresence>
                         {showSettings && (
+}
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
+                                animate={{ opacity: 1, height: &apos;auto&apos; }}
                                 exit={{ opacity: 0, height: 0 }}
                                 className="bg-gray-800/30 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8"
                             >
-                                <DraftSimulationSettingsComponent 
+                                <DraftSimulationSettingsComponent>
                                     settings={settings}
                                     onSettingsChange={setSettings}
                                 />
@@ -337,10 +379,11 @@ const DraftSimulationInterface: React.FC = () => {
 
                     {/* Main Content */}
                     {simulation && (
+}
                         <div className="grid lg:grid-cols-3 gap-6">
                             {/* Draft Board */}
                             <div className="lg:col-span-2">
-                                <DraftBoard 
+                                <DraftBoard>
                                     draftBoard={simulationState.draftBoard}
                                     currentPick={getDraftPosition(simulationState.currentRound, simulationState.currentPick)}
                                     settings={settings}
@@ -349,17 +392,19 @@ const DraftSimulationInterface: React.FC = () => {
 
                             {/* Team Panel */}
                             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
-                                <TeamSelector
+                                <TeamSelector>
                                     teams={simulation.teams}
                                     selectedTeam={selectedTeam}
                                     onTeamSelect={setSelectedTeam}
                                 />
                                 
                                 {selectedTeamData && (
+}
                                     <TeamRoster team={selectedTeamData} />
                                 )}
 
                                 {simulation.analytics.userRosterScore > 0 && (
+}
                                     <DraftAnalytics analytics={simulation.analytics} />
                                 )}
                             </div>
@@ -392,19 +437,23 @@ const DraftSimulationInterface: React.FC = () => {
 
 // Settings Component
 interface DraftSimulationSettingsProps {
+}
     settings: SimulationSettings;
     onSettingsChange: (settings: SimulationSettings) => void;
 
 }
 
 const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> = ({
+}
     settings,
-    onSettingsChange
+//     onSettingsChange
 }: any) => {
+}
     const updateSetting = <K extends keyof SimulationSettings>(
         key: K,
         value: SimulationSettings[K]
     ) => {
+}
         onSettingsChange({ ...settings, [key]: value });
     };
 
@@ -420,7 +469,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
                     <select
                         id="draftType"
                         value={settings.draftType}
-                        onChange={(e: any) => updateSetting('draftType', e.target.value as 'snake' | 'linear')}
+                        onChange={(e: any) => updateSetting(&apos;draftType&apos;, e.target.value as &apos;snake&apos; | &apos;linear&apos;)}
                     >
                         <option value="snake">Snake Draft</option>
                         <option value="linear">Linear Draft</option>
@@ -429,12 +478,12 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
 
                 <div>
                     <label htmlFor="teams" className="block text-sm font-medium text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                        Teams
+//                         Teams
                     </label>
                     <select
                         id="teams"
                         value={settings.teams}
-                        onChange={(e: any) => updateSetting('teams', Number(e.target.value))}
+                        onChange={(e: any) => updateSetting(&apos;teams&apos;, Number(e.target.value))}
                     >
                         <option value={8}>8 Teams</option>
                         <option value={10}>10 Teams</option>
@@ -450,7 +499,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
                     <select
                         id="userPosition"
                         value={settings.userPosition}
-                        onChange={(e: any) => updateSetting('userPosition', Number(e.target.value))}
+                        onChange={(e: any) => updateSetting(&apos;userPosition&apos;, Number(e.target.value))}
                     >
                         {Array.from({ length: settings.teams }, (_, i) => (
                             <option key={i + 1} value={i + 1}>
@@ -462,12 +511,12 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
 
                 <div>
                     <label htmlFor="scoringType" className="block text-sm font-medium text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                        Scoring
+//                         Scoring
                     </label>
                     <select
                         id="scoringType"
                         value={settings.scoringType}
-                        onChange={(e: any) => updateSetting('scoringType', e.target.value as any)}
+                        onChange={(e: any) => updateSetting(&apos;scoringType&apos;, e.target.value as any)}
                     >
                         <option value="standard">Standard</option>
                         <option value="ppr">PPR</option>
@@ -483,7 +532,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
                     <select
                         id="aiDifficulty"
                         value={settings.aiDifficulty}
-                        onChange={(e: any) => updateSetting('aiDifficulty', e.target.value as any)}
+                        onChange={(e: any) => updateSetting(&apos;aiDifficulty&apos;, e.target.value as any)}
                     >
                         <option value="easy">Easy</option>
                         <option value="medium">Medium</option>
@@ -494,12 +543,12 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
 
                 <div>
                     <label htmlFor="realtimeSpeed" className="block text-sm font-medium text-gray-300 mb-1 sm:px-4 md:px-6 lg:px-8">
-                        Speed
+//                         Speed
                     </label>
                     <select
                         id="realtimeSpeed"
                         value={settings.realtimeSpeed}
-                        onChange={(e: any) => updateSetting('realtimeSpeed', Number(e.target.value))}
+                        onChange={(e: any) => updateSetting(&apos;realtimeSpeed&apos;, Number(e.target.value))}
                     >
                         <option value={1}>1x Speed</option>
                         <option value={2}>2x Speed</option>
@@ -514,7 +563,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
                     <input
                         type="checkbox"
                         checked={settings.includeRookies}
-                        onChange={(e: any) => updateSetting('includeRookies', e.target.checked)}
+                        onChange={(e: any) => updateSetting(&apos;includeRookies&apos;, e.target.checked)}
                     />
                     <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Include Rookies</span>
                 </label>
@@ -523,7 +572,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
                     <input
                         type="checkbox"
                         checked={settings?.injuryUpdates}
-                        onChange={(e: any) => updateSetting('injuryUpdates', e.target.checked)}
+                        onChange={(e: any) => updateSetting(&apos;injuryUpdates&apos;, e.target.checked)}
                     />
                     <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">Injury Updates</span>
                 </label>
@@ -534,6 +583,7 @@ const DraftSimulationSettingsComponent: React.FC<DraftSimulationSettingsProps> =
 
 // Draft Board Component
 interface DraftBoardProps {
+}
     draftBoard: DraftPick[];
     currentPick: number;
     settings: SimulationSettings;
@@ -541,20 +591,24 @@ interface DraftBoardProps {
 }
 
 const DraftBoard: React.FC<DraftBoardProps> = ({ 
+}
     draftBoard, 
     currentPick, 
-    settings 
+//     settings 
 }: any) => {
+}
     return (
         <Widget title="Draft Board" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {draftBoard.length === 0 ? (
+}
                     <div className="text-center py-8 text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                        Draft hasn't started yet
+                        Draft hasn&apos;t started yet
                     </div>
                 ) : (
                     <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
                         {draftBoard.slice(-10).map((pick, index) => (
+}
                             <motion.div
                                 key={pick.overallPick}
                                 initial={{ opacity: 0, x: -20 }}
@@ -593,6 +647,7 @@ const DraftBoard: React.FC<DraftBoardProps> = ({
 
 // Team Selector Component
 interface TeamSelectorProps {
+}
     teams: DraftTeam[];
     selectedTeam: string | null;
     onTeamSelect: (teamId: string) => void;
@@ -600,14 +655,17 @@ interface TeamSelectorProps {
 }
 
 const TeamSelector: React.FC<TeamSelectorProps> = ({
+}
     teams,
     selectedTeam,
-    onTeamSelect
+//     onTeamSelect
 }: any) => {
+}
     return (
         <Widget title="Teams" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {teams.map((team: any) => (
+}
                     <button
                         key={team.id}
                         onClick={() => onTeamSelect(team.id)}`}
@@ -632,15 +690,18 @@ const TeamSelector: React.FC<TeamSelectorProps> = ({
 
 // Team Roster Component
 interface TeamRosterProps {
+}
     team: DraftTeam;
 
 }
 
 const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
+}
     return (
         <Widget title={`${team.name} Roster`} className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {team.roster.length === 0 ? (
+}
                     <div className="text-center py-4 text-gray-400 sm:px-4 md:px-6 lg:px-8">
                         No players drafted yet
                     </div>
@@ -671,11 +732,13 @@ const TeamRoster: React.FC<TeamRosterProps> = ({ team }: any) => {
 
 // Draft Analytics Component
 interface DraftAnalyticsProps {
+}
     analytics: any;
 
 }
 
 const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }: any) => {
+}
     return (
         <Widget title="Draft Analytics" className="bg-gray-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
@@ -693,19 +756,21 @@ const DraftAnalytics: React.FC<DraftAnalyticsProps> = ({ analytics }: any) => {
                 </div>
 
                 {analytics.strengthsWeaknesses.strengths.length > 0 && (
+}
                     <div>
                         <div className="text-sm font-medium text-green-400 mb-1 sm:px-4 md:px-6 lg:px-8">Strengths</div>
                         <div className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                            {analytics.strengthsWeaknesses.strengths.join(', ')}
+                            {analytics.strengthsWeaknesses.strengths.join(&apos;, &apos;)}
                         </div>
                     </div>
                 )}
 
                 {analytics.strengthsWeaknesses.weaknesses.length > 0 && (
+}
                     <div>
                         <div className="text-sm font-medium text-red-400 mb-1 sm:px-4 md:px-6 lg:px-8">Weaknesses</div>
                         <div className="text-xs text-gray-300 sm:px-4 md:px-6 lg:px-8">
-                            {analytics.strengthsWeaknesses.weaknesses.join(', ')}
+                            {analytics.strengthsWeaknesses.weaknesses.join(&apos;, &apos;)}
                         </div>
                     </div>
                 )}

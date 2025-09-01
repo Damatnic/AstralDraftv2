@@ -3,14 +3,15 @@
  * Advanced waiver wire analysis with breakout detection and FAAB optimization
  */
 
-import { Player, Team, League } from '../types';
-import { playerPerformanceModel } from './advancedAnalyticsEngine';
+import { Player, Team, League } from &apos;../types&apos;;
+import { playerPerformanceModel } from &apos;./advancedAnalyticsEngine&apos;;
 
 /**
  * Waiver Wire Analysis Engine
  * Provides intelligent waiver wire recommendations
  */
 export class WaiverWireEngine {
+}
   private trendWindow = 3; // weeks to analyze for trends
   private breakoutThreshold = 1.5; // 50% increase for breakout
   private targetShareWeight = 0.3;
@@ -27,9 +28,11 @@ export class WaiverWireEngine {
     league: League,
     faabBudget: number
   ): Promise<WaiverRecommendation[]> {
+}
     const recommendations: WaiverRecommendation[] = [];
 
     for (const player of availablePlayers) {
+}
       const score = await this.calculateWaiverScore(player);
       const type = this.categorizePickup(player);
       const faabRecommendation = this.calculateFAABRecommendation(
@@ -41,6 +44,7 @@ export class WaiverWireEngine {
       const dropCandidate = this.findDropCandidate(userTeam, player);
 
       recommendations.push({
+}
         player,
         score,
         type,
@@ -63,13 +67,17 @@ export class WaiverWireEngine {
   async detectBreakoutCandidates(
     players: Player[]
   ): Promise<BreakoutCandidate[]> {
+}
     const candidates: BreakoutCandidate[] = [];
 
     for (const player of players) {
+}
       const breakoutProbability = await this.calculateBreakoutProbability(player);
       
       if (breakoutProbability > 0.3) { // 30% threshold
+}
         candidates.push({
+}
           player,
           probability: breakoutProbability,
           factors: this.identifyBreakoutFactors(player),
@@ -92,6 +100,7 @@ export class WaiverWireEngine {
     budget: number,
     leagueContext: LeagueContext
   ): FAABStrategy {
+}
     const allocations: Map<string, number> = new Map();
     let remainingBudget = budget;
 
@@ -99,19 +108,22 @@ export class WaiverWireEngine {
     const prioritizedTargets = this.prioritizeTargets(targets, leagueContext);
 
     for (const target of prioritizedTargets) {
+}
       const optimalBid = this.calculateOptimalBid(
         target,
         remainingBudget,
-        leagueContext
+//         leagueContext
       );
 
       if (optimalBid <= remainingBudget) {
+}
         allocations.set(target.id, optimalBid);
         remainingBudget -= optimalBid;
       }
     }
 
     return {
+}
       allocations,
       totalSpend: budget - remainingBudget,
       remainingBudget,
@@ -126,26 +138,30 @@ export class WaiverWireEngine {
     injuredPlayer: Player,
     availablePlayers: Player[]
   ): Promise<Player[]> {
+}
     const replacements: Array<{ player: Player; similarity: number }> = [];
 
     for (const player of availablePlayers) {
+}
       if (player.position !== injuredPlayer.position) continue;
 
       const similarity = this.calculatePlayerSimilarity(injuredPlayer, player);
       const projection = await playerPerformanceModel.generateProjection(
         player,
-        'average',
+        &apos;average&apos;,
         undefined,
-        'Healthy'
+        &apos;Healthy&apos;
       );
 
       if (projection.projectedPoints > injuredPlayer.projectedPoints * 0.7) {
+}
         replacements.push({ player, similarity });
       }
     }
 
     // Sort by similarity and projected points
     replacements.sort((a, b) => {
+}
       const scoreA = a.similarity * 0.4 + (a.player.projectedPoints / 20) * 0.6;
       const scoreB = b.similarity * 0.4 + (b.player.projectedPoints / 20) * 0.6;
       return scoreB - scoreA;
@@ -161,6 +177,7 @@ export class WaiverWireEngine {
     transactions: WaiverTransaction[],
     timeWindow: number = 7 // days
   ): WaiverTrends {
+}
     const now = Date.now();
     const windowStart = now - (timeWindow * 24 * 60 * 60 * 1000);
     
@@ -171,6 +188,7 @@ export class WaiverWireEngine {
     // Calculate trending players
     const playerActivity = new Map<string, number>();
     recentTransactions.forEach((t: any) => {
+}
       const count = playerActivity.get(t.playerId) || 0;
       playerActivity.set(t.playerId, count + 1);
     });
@@ -178,6 +196,7 @@ export class WaiverWireEngine {
     // Calculate position trends
     const positionActivity = new Map<string, number>();
     recentTransactions.forEach((t: any) => {
+}
       const count = positionActivity.get(t.position) || 0;
       positionActivity.set(t.position, count + 1);
     });
@@ -189,6 +208,7 @@ export class WaiverWireEngine {
       .map(([playerId, count]) => ({ playerId, pickupCount: count }));
 
     return {
+}
       hotPickups,
       positionTrends: Array.from(positionActivity.entries()).map(
         ([position, count]) => ({ position, activity: count })
@@ -199,6 +219,7 @@ export class WaiverWireEngine {
   }
 
   private async calculateWaiverScore(player: Player): Promise<number> {
+}
     // Base score from recent performance
     const recentPerformance = this.getRecentPerformance(player);
     const performanceScore = recentPerformance * this.recentPerformanceWeight;
@@ -219,23 +240,28 @@ export class WaiverWireEngine {
   }
 
   private categorizePickup(player: Player): WaiverPickupType {
+}
     const recentTrend = this.getRecentTrend(player);
     const snapCount = this.getLatestSnapCount(player);
     const targetShare = this.getTargetShare(player);
 
     if (recentTrend > this.breakoutThreshold) {
-      return 'breakout';
+}
+      return &apos;breakout&apos;;
     }
     if (this.isInjuryReplacement(player)) {
-      return 'injury_replacement';
+}
+      return &apos;injury_replacement&apos;;
     }
     if (recentTrend > 1.2 && snapCount > 60) {
-      return 'trending';
+}
+      return &apos;trending&apos;;
     }
     if (player.projectedPoints > 10 && (player.ownership || 100) < 30) {
-      return 'buy_low';
+}
+      return &apos;buy_low&apos;;
     }
-    return 'speculative';
+    return &apos;speculative&apos;;
   }
 
   private calculateFAABRecommendation(
@@ -244,10 +270,12 @@ export class WaiverWireEngine {
     budget: number,
     type: WaiverPickupType
   ): number {
+}
     const basePercentage = score / 100 * 0.3; // Max 30% of budget
     
     // Adjust based on type
     const typeMultipliers: Record<WaiverPickupType, number> = {
+}
       breakout: 1.5,
       injury_replacement: 1.3,
       trending: 1.1,
@@ -263,6 +291,7 @@ export class WaiverWireEngine {
   }
 
   private findDropCandidate(team: Team, addPlayer: Player): DropCandidate | null {
+}
     // Find worst performer at same position
     const samePositionPlayers = team.players.filter(
       p => p.position === addPlayer.position
@@ -278,7 +307,9 @@ export class WaiverWireEngine {
     const worstPlayer = samePositionPlayers[0];
     
     if ((worstPlayer.projectedPoints || 0) < (addPlayer.projectedPoints || 0)) {
+}
       return {
+}
         player: worstPlayer,
         confidence: Math.min(
           0.95,
@@ -291,28 +322,33 @@ export class WaiverWireEngine {
   }
 
   private async calculateBreakoutProbability(player: Player): Promise<number> {
+}
     const factors: number[] = [];
 
     // Age factor (younger players more likely to breakout)
     if (player.age && player.age <= 25) {
+}
       factors.push(0.2);
     }
 
     // Opportunity increase
     const snapTrend = this.getSnapCountTrend(player);
     if (snapTrend > 1.2) {
+}
       factors.push(0.25);
     }
 
     // Target share increase
     const targetTrend = this.getTargetShareTrend(player);
     if (targetTrend > 1.3) {
+}
       factors.push(0.3);
     }
 
     // Recent performance spike
     const recentSpike = this.detectPerformanceSpike(player);
     if (recentSpike) {
+}
       factors.push(0.25);
     }
 
@@ -320,22 +356,28 @@ export class WaiverWireEngine {
   }
 
   private identifyBreakoutFactors(player: Player): string[] {
+}
     const factors: string[] = [];
 
     if (this.getSnapCountTrend(player) > 1.2) {
-      factors.push('Increasing snap count');
+}
+      factors.push(&apos;Increasing snap count&apos;);
     }
     if (this.getTargetShareTrend(player) > 1.3) {
-      factors.push('Rising target share');
+}
+      factors.push(&apos;Rising target share&apos;);
     }
     if (this.detectPerformanceSpike(player)) {
-      factors.push('Recent performance spike');
+}
+      factors.push(&apos;Recent performance spike&apos;);
     }
     if (player.age && player.age <= 25) {
-      factors.push('Young player with upside');
+}
+      factors.push(&apos;Young player with upside&apos;);
     }
     if (this.hasWeakCompetition(player)) {
-      factors.push('Weak position competition');
+}
+      factors.push(&apos;Weak position competition&apos;);
     }
 
     return factors;
@@ -346,6 +388,7 @@ export class WaiverWireEngine {
     budget: number,
     context: LeagueContext
   ): number {
+}
     const baseValue = player.projectedPoints || 10;
     const scarcityMultiplier = this.getPositionScarcity(player.position, context);
     const competitionMultiplier = this.estimateCompetition(player, context);
@@ -358,55 +401,68 @@ export class WaiverWireEngine {
 
   // Mock helper methods
   private getRecentPerformance(player: Player): number {
+}
     return Math.random() * 0.8 + 0.2;
   }
 
   private getTargetShare(player: Player): number {
+}
     return Math.random() * 0.3 + 0.1;
   }
 
   private getSnapCountTrend(player: Player): number {
+}
     return Math.random() * 0.5 + 0.8;
   }
 
   private getOpportunityScore(player: Player): number {
+}
     return Math.random() * 0.7 + 0.3;
   }
 
   private getRecentTrend(player: Player): number {
+}
     return Math.random() * 0.8 + 0.8;
   }
 
   private getLatestSnapCount(player: Player): number {
+}
     return Math.random() * 40 + 40;
   }
 
   private isInjuryReplacement(player: Player): boolean {
+}
     return Math.random() > 0.8;
   }
 
   private getTargetShareTrend(player: Player): number {
+}
     return Math.random() * 0.6 + 0.9;
   }
 
   private detectPerformanceSpike(player: Player): boolean {
+}
     return Math.random() > 0.7;
   }
 
   private hasWeakCompetition(player: Player): boolean {
+}
     return Math.random() > 0.6;
   }
 
   private projectImprovement(player: Player, probability: number): number {
+}
     return (player.projectedPoints || 10) * (1 + probability * 0.5);
   }
 
   private calculatePlayerSimilarity(playerA: Player, playerB: Player): number {
+}
     // Simplified similarity calculation
     return Math.random() * 0.5 + 0.5;
   }
 
   private prioritizeTargets(targets: Player[], context: LeagueContext): Player[] {
+}
     // Sort by projected points and position need
     return [...targets].sort((a, b) => 
       (b.projectedPoints || 0) - (a.projectedPoints || 0)
@@ -417,11 +473,14 @@ export class WaiverWireEngine {
     allocations: Map<string, number>,
     targets: Player[]
   ): number {
+}
     return Math.min(0.95, 0.7 + (allocations.size / targets.length) * 0.3);
   }
 
   private getPositionScarcity(position: string, context: LeagueContext): number {
+}
     const scarcityMap: Record<string, number> = {
+}
       RB: 1.3,
       WR: 1.1,
       TE: 1.2,
@@ -433,23 +492,27 @@ export class WaiverWireEngine {
   }
 
   private estimateCompetition(player: Player, context: LeagueContext): number {
+}
     // Estimate based on ownership and recent trends
     const ownership = player.ownership || 50;
     return 1 + (ownership / 100) * 0.5;
   }
 
   private calculateAverageFAAB(transactions: WaiverTransaction[]): number {
+}
     if (transactions.length === 0) return 0;
     const total = transactions.reduce((sum, t) => sum + (t.faabAmount || 0), 0);
     return total / transactions.length;
   }
 
   private async getPlayerMetrics(player: Player): Promise<PlayerMetrics> {
+}
     return {
+}
       targetShare: this.getTargetShare(player),
       snapCount: this.getLatestSnapCount(player),
       redZoneTargets: Math.floor(Math.random() * 5),
-      trend: Math.random() > 0.6 ? 'rising' : Math.random() > 0.3 ? 'stable' : 'falling'
+      trend: Math.random() > 0.6 ? &apos;rising&apos; : Math.random() > 0.3 ? &apos;stable&apos; : &apos;falling&apos;
     };
   }
 
@@ -458,41 +521,44 @@ export class WaiverWireEngine {
     type: WaiverPickupType,
     score: number
   ): string {
+}
     const reasonTemplates: Record<WaiverPickupType, string[]> = {
+}
       breakout: [
-        'Breakout candidate with increasing opportunity',
-        'Usage trending up significantly over last 3 weeks',
-        'Perfect storm of opportunity and talent'
+        &apos;Breakout candidate with increasing opportunity&apos;,
+        &apos;Usage trending up significantly over last 3 weeks&apos;,
+        &apos;Perfect storm of opportunity and talent&apos;
       ],
       injury_replacement: [
-        'Direct replacement for injured starter',
-        'Expected to see significant volume increase',
-        'Clear path to starting role'
+        &apos;Direct replacement for injured starter&apos;,
+        &apos;Expected to see significant volume increase&apos;,
+        &apos;Clear path to starting role&apos;
       ],
       trending: [
-        'Consistent target share increase',
-        'Snap count trending upward',
-        'Emerging as reliable option'
+        &apos;Consistent target share increase&apos;,
+        &apos;Snap count trending upward&apos;,
+        &apos;Emerging as reliable option&apos;
       ],
       buy_low: [
-        'Undervalued based on recent performance',
-        'Schedule improves significantly',
-        'Buy-low opportunity before breakout'
+        &apos;Undervalued based on recent performance&apos;,
+        &apos;Schedule improves significantly&apos;,
+        &apos;Buy-low opportunity before breakout&apos;
       ],
       speculative: [
-        'High-upside stash candidate',
-        'Worth a speculative add',
-        'Lottery ticket with potential'
+        &apos;High-upside stash candidate&apos;,
+        &apos;Worth a speculative add&apos;,
+        &apos;Lottery ticket with potential&apos;
       ]
     };
 
-    const templates = reasonTemplates[type] || ['Solid waiver wire addition'];
+    const templates = reasonTemplates[type] || [&apos;Solid waiver wire addition&apos;];
     return templates[Math.floor(Math.random() * templates.length)];
   }
 }
 
 // Type definitions
 interface WaiverRecommendation {
+}
   player: Player;
   score: number;
   type: WaiverPickupType;
@@ -503,6 +569,7 @@ interface WaiverRecommendation {
 }
 
 interface BreakoutCandidate {
+}
   player: Player;
   probability: number;
   factors: string[];
@@ -510,6 +577,7 @@ interface BreakoutCandidate {
 }
 
 interface FAABStrategy {
+}
   allocations: Map<string, number>;
   totalSpend: number;
   remainingBudget: number;
@@ -517,6 +585,7 @@ interface FAABStrategy {
 }
 
 interface WaiverTrends {
+}
   hotPickups: Array<{ playerId: string; pickupCount: number }>;
   positionTrends: Array<{ position: string; activity: number }>;
   totalActivity: number;
@@ -524,6 +593,7 @@ interface WaiverTrends {
 }
 
 interface WaiverTransaction {
+}
   playerId: string;
   position: string;
   timestamp: number;
@@ -532,6 +602,7 @@ interface WaiverTransaction {
 }
 
 interface LeagueContext {
+}
   teamCount: number;
   rosterSize: number;
   positionRequirements: Map<string, number>;
@@ -539,18 +610,20 @@ interface LeagueContext {
 }
 
 interface DropCandidate {
+}
   player: Player;
   confidence: number;
 }
 
 interface PlayerMetrics {
+}
   targetShare: number;
   snapCount: number;
   redZoneTargets: number;
-  trend: 'rising' | 'falling' | 'stable';
+  trend: &apos;rising&apos; | &apos;falling&apos; | &apos;stable&apos;;
 }
 
-type WaiverPickupType = 'breakout' | 'injury_replacement' | 'trending' | 'buy_low' | 'speculative';
+type WaiverPickupType = &apos;breakout&apos; | &apos;injury_replacement&apos; | &apos;trending&apos; | &apos;buy_low&apos; | &apos;speculative&apos;;
 
 // Export singleton instance
 export const waiverWireEngine = new WaiverWireEngine();

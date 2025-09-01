@@ -1,37 +1,41 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { PowerRanking, Team } from '../../types';
-import { motion } from 'framer-motion';
-import { ArrowUpIcon } from '../icons/ArrowUpIcon';
-import { ArrowDownIcon } from '../icons/ArrowDownIcon';
-import { MinusIcon } from '../icons/MinusIcon';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { PowerRanking, Team } from &apos;../../types&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { ArrowUpIcon } from &apos;../icons/ArrowUpIcon&apos;;
+import { ArrowDownIcon } from &apos;../icons/ArrowDownIcon&apos;;
+import { MinusIcon } from &apos;../icons/MinusIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface PowerRankingCardProps {
+}
     ranking: PowerRanking;
     team?: Team;
     isMyTeam?: boolean;
 
 }
 
-const TrendIcon: React.FC<{ trend: PowerRanking['trend'] }> = ({ trend }: any) => {
+const TrendIcon: React.FC<{ trend: PowerRanking[&apos;trend&apos;] }> = ({ trend }: any) => {
+}
     switch (trend) {
-        case 'up': return <ArrowUpIcon className="h-5 w-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-        case 'down': return <ArrowDownIcon className="h-5 w-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
-        case 'same': return <MinusIcon className="h-5 w-5 text-gray-500 sm:px-4 md:px-6 lg:px-8" />;
+}
+        case &apos;up&apos;: return <ArrowUpIcon className="h-5 w-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
+        case &apos;down&apos;: return <ArrowDownIcon className="h-5 w-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
+        case &apos;same&apos;: return <MinusIcon className="h-5 w-5 text-gray-500 sm:px-4 md:px-6 lg:px-8" />;
         default: return null;
     }
 };
 
 const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMyTeam }: any) => {
+}
     if (!team) return null;
 
     return (
         <motion.div
-            className={`p-4 bg-white/5 rounded-lg flex gap-4 transition-all ${isMyTeam ? 'ring-2 ring-cyan-400 bg-cyan-500/10' : ''}`}
+            className={`p-4 bg-white/5 rounded-lg flex gap-4 transition-all ${isMyTeam ? &apos;ring-2 ring-cyan-400 bg-cyan-500/10&apos; : &apos;&apos;}`}
             {...{
+}
                 layout: true,
                 initial: { opacity: 0, y: 20 },
                 animate: { opacity: 1, y: 0 },
@@ -48,7 +52,7 @@ const PowerRankingCard: React.FC<PowerRankingCardProps> = ({ ranking, team, isMy
                     <div>
                         <p className="font-bold text-white sm:px-4 md:px-6 lg:px-8">{team.name}</p>
                         <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
-                           ({team.record.wins}-{team.record.losses}{team.record.ties > 0 ? `-${team.record.ties}`: ''})
+                           ({team.record.wins}-{team.record.losses}{team.record.ties > 0 ? `-${team.record.ties}`: &apos;&apos;})
                         </p>
                     </div>
                 </div>

@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { searchPlayers, getPlayersByPosition, NFL_TEAMS } from '../../data/nflPlayers';
 import { Player } from '../../types';
+import { VirtualScroll } from '../../performance/virtual-scrolling';
+import { useDebounce } from '../../performance/memory-optimization';
 
 interface PlayerSearchProps {
   onPlayerSelect?: (player: Player) => void;
@@ -26,6 +28,7 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
 }: any) => {
   const { state, dispatch } = useAppState();
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [selectedPosition, setSelectedPosition] = useState(filterPosition || 'ALL');
   const [sortBy, setSortBy] = useState<'rank' | 'name' | 'team'>('rank');
 
@@ -43,9 +46,9 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
       players = players.filter((player: any) => player.position === selectedPosition);
     }
 
-    // Apply search query
-    if (searchQuery.trim()) {
-      players = searchPlayers(searchQuery).filter((player: any) => 
+    // Apply search query (use debounced value for performance)
+    if (debouncedSearchQuery.trim()) {
+      players = searchPlayers(debouncedSearchQuery).filter((player: any) => 
         !excludePlayerIds.includes(player.id)
       );
     }
@@ -64,8 +67,8 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
       }
     });
 
-    return players.slice(0, 50); // Limit to 50 results for performance
-  }, [availablePlayers, searchQuery, selectedPosition, sortBy, excludePlayerIds]);
+    return players; // Remove artificial limit, VirtualScroll will handle performance
+  }, [availablePlayers, debouncedSearchQuery, selectedPosition, sortBy, excludePlayerIds]);
 
   const positions = ['ALL', 'QB', 'RB', 'WR', 'TE', 'K', 'DST'];
 
@@ -150,67 +153,70 @@ const PlayerSearch: FC<PlayerSearchProps> = ({
         </div>
       </div>
 
-      {/* Results */}
-      <div className="space-y-2 max-h-96 overflow-y-auto mobile-scroll custom-scrollbar sm:px-4 md:px-6 lg:px-8">
-        <AnimatePresence>
-          {filteredPlayers.map((player, index) => (
-            <motion.div
-              key={player.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ delay: index * 0.02 }}
-              onClick={(e: MouseEvent<HTMLDivElement>) => { e.preventDefault(); handlePlayerClick(player); }}
-              className={`player-card ${player.position.toLowerCase()} cursor-pointer group`}
-            >
-              <div className="player-header sm:px-4 md:px-6 lg:px-8">
-                <div className="player-info sm:px-4 md:px-6 lg:px-8">
-                  <div className="position-badge sm:px-4 md:px-6 lg:px-8">{player.position}</div>
-                  <h3 className="player-name group-hover:text-blue-400 transition-colors sm:px-4 md:px-6 lg:px-8">
-                    {player.name}
-                  </h3>
-                  <p className="player-team sm:px-4 md:px-6 lg:px-8">
-                    {NFL_TEAMS[player.team as keyof typeof NFL_TEAMS]?.name || player.team} • #{player.jerseyNumber}
-                    {player.age > 0 && ` • ${player.age}y`}
-                  </p>
+      {/* Results with Virtual Scrolling */}
+      <div className="sm:px-4 md:px-6 lg:px-8">
+        {filteredPlayers.length > 0 ? (
+          <VirtualScroll
+            items={filteredPlayers}
+            itemHeight={120}
+            containerHeight={400}
+            renderItem={(player, index) => (
+              <motion.div
+                key={player.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.01 }}
+                onClick={(e: MouseEvent<HTMLDivElement>) => { e.preventDefault(); handlePlayerClick(player); }}
+                className={`player-card ${player.position.toLowerCase()} cursor-pointer group mb-2`}
+              >
+                <div className="player-header">
+                  <div className="player-info">
+                    <div className="position-badge">{player.position}</div>
+                    <h3 className="player-name group-hover:text-blue-400 transition-colors">
+                      {player.name}
+                    </h3>
+                    <p className="player-team">
+                      {NFL_TEAMS[player.team as keyof typeof NFL_TEAMS]?.name || player.team} • #{player.jerseyNumber}
+                      {player.age > 0 && ` • ${player.age}y`}
+                    </p>
+                  </div>
+                  {showAddButton && (
+                    <button
+                      onClick={(e: any) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onPlayerSelect?.(player);
+                      }}
+                      aria-label="Action button"
+                      className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center"
+                    >
+                      Add
+                    </button>
+                  )}
                 </div>
-                {showAddButton && (
-                  <button
-                    onClick={(e: any) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onPlayerSelect?.(player);
-                    }}
-                    aria-label="Action button"
-                    className="add-btn min-h-[44px] min-w-[44px] flex items-center justify-center sm:px-4 md:px-6 lg:px-8"
-                  >
-                    Add
-                  </button>
-                )}
-              </div>
 
-              <div className="player-stats sm:px-4 md:px-6 lg:px-8">
-                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
-                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Rank</span>
-                  <span className="stat-value sm:px-4 md:px-6 lg:px-8">#{player.fantasyRank}</span>
+                <div className="player-stats">
+                  <div className="stat-item">
+                    <span className="stat-label">Rank</span>
+                    <span className="stat-value">#{player.fantasyRank}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Projection</span>
+                    <span className="stat-value">{player.projectedPoints.toFixed(1)}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-label">Status</span>
+                    <span className={`stat-value ${getInjuryStatusColor(player.injuryStatus)}`}>
+                      {player.injuryStatus}
+                    </span>
+                  </div>
                 </div>
-                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
-                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Projection</span>
-                  <span className="stat-value sm:px-4 md:px-6 lg:px-8">{player.projectedPoints.toFixed(1)}</span>
-                </div>
-                <div className="stat-item sm:px-4 md:px-6 lg:px-8">
-                  <span className="stat-label sm:px-4 md:px-6 lg:px-8">Status</span>
-                  <span className={`stat-value ${getInjuryStatusColor(player.injuryStatus)}`}>
-                    {player.injuryStatus}
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {filteredPlayers.length === 0 && (
-          <div className="text-center py-8 text-slate-400 sm:px-4 md:px-6 lg:px-8">
+              </motion.div>
+            )}
+            className="virtual-scroll-container"
+          />
+        ) : (
+          <div className="text-center py-8 text-slate-400">
             {searchQuery ? 'No players found matching your search.' : 'No players available.'}
           </div>
         )}

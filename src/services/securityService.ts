@@ -4,9 +4,10 @@
  */
 
 interface SecurityViolation {
+}
   id: string;
-  type: 'xss' | 'csrf' | 'injection' | 'content_security' | 'data_leak' | 'unauthorized_access';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: &apos;xss&apos; | &apos;csrf&apos; | &apos;injection&apos; | &apos;content_security&apos; | &apos;data_leak&apos; | &apos;unauthorized_access&apos;;
+  severity: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos; | &apos;critical&apos;;
   message: string;
   context?: Record<string, unknown>;
   timestamp: Date;
@@ -14,6 +15,7 @@ interface SecurityViolation {
 }
 
 interface SecurityConfig {
+}
   enableCSPValidation: boolean;
   enableXSSProtection: boolean;
   enableInputSanitization: boolean;
@@ -23,6 +25,7 @@ interface SecurityConfig {
 }
 
 class SecurityService {
+}
   private violations: SecurityViolation[] = [];
   private sessionId: string;
   private config: SecurityConfig;
@@ -39,7 +42,7 @@ class SecurityService {
   ];
 
   private readonly INJECTION_PATTERNS = [
-    /['";]\s*(union|select|insert|update|delete|drop|create|alter|exec|execute)/gi,
+    /[&apos;";]\s*(union|select|insert|update|delete|drop|create|alter|exec|execute)/gi,
     /\b(union|select|insert|update|delete|drop|create|alter)\b.*\b(from|where|into|values)\b/gi,
     /--\s*$/gm,
     /\/\*.*?\*\//gs
@@ -55,29 +58,34 @@ class SecurityService {
   ];
 
   constructor() {
+}
     this.sessionId = `sec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     this.config = {
-      enableCSPValidation: import.meta.env.PROD || import.meta.env.VITE_ENABLE_SECURITY === 'true',
+}
+      enableCSPValidation: import.meta.env.PROD || import.meta.env.VITE_ENABLE_SECURITY === &apos;true&apos;,
       enableXSSProtection: true,
       enableInputSanitization: true,
       enableAPIKeyProtection: true,
       enableContentValidation: true,
-      logSecurityEvents: import.meta.env.PROD || import.meta.env.VITE_ENABLE_SECURITY_LOGGING === 'true'
+      logSecurityEvents: import.meta.env.PROD || import.meta.env.VITE_ENABLE_SECURITY_LOGGING === &apos;true&apos;
     };
 
     this.initializeSecurity();
   }
 
   private initializeSecurity(): void {
-    if (typeof window === 'undefined') return;
+}
+    if (typeof window === &apos;undefined&apos;) return;
 
     // Set up CSP violation reporting
     if (this.config.enableCSPValidation) {
+}
       this.setupCSPReporting();
     }
 
     // Monitor DOM mutations for XSS attempts
     if (this.config.enableXSSProtection) {
+}
       this.setupXSSProtection();
     }
 
@@ -89,12 +97,16 @@ class SecurityService {
   }
 
   private setupCSPReporting(): void {
-    document.addEventListener('securitypolicyviolation', (event: any) => {
+}
+    document.addEventListener(&apos;securitypolicyviolation&apos;, (event: any) => {
+}
       this.reportViolation({
-        type: 'content_security',
-        severity: 'high',
+}
+        type: &apos;content_security&apos;,
+        severity: &apos;high&apos;,
         message: `CSP violation: ${event.violatedDirective}`,
         context: {
+}
           blockedURI: event.blockedURI,
           documentURI: event.documentURI,
           effectiveDirective: event.effectiveDirective,
@@ -107,13 +119,19 @@ class SecurityService {
   }
 
   private setupXSSProtection(): void {
+}
     if (!window.MutationObserver) return;
 
     const observer = new MutationObserver((mutations: any) => {
+}
       mutations.forEach((mutation: any) => {
-        if (mutation.type === 'childList') {
+}
+        if (mutation.type === &apos;childList&apos;) {
+}
           mutation.addedNodes.forEach((node: any) => {
+}
             if (node.nodeType === Node.ELEMENT_NODE) {
+}
               this.scanElementForXSS(node as Element);
             }
           });
@@ -122,25 +140,31 @@ class SecurityService {
     });
 
     observer.observe(document.body, {
+}
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['onclick', 'onload', 'onerror', 'onmouseover']
+      attributeFilter: [&apos;onclick&apos;, &apos;onload&apos;, &apos;onerror&apos;, &apos;onmouseover&apos;]
     });
   }
 
   private scanElementForXSS(element: Element): void {
+}
     const innerHTML = element.innerHTML;
     const outerHTML = element.outerHTML;
 
     // Check for XSS patterns
     this.XSS_PATTERNS.forEach((pattern: any) => {
+}
       if (pattern.test(innerHTML) || pattern.test(outerHTML)) {
+}
         this.reportViolation({
-          type: 'xss',
-          severity: 'critical',
-          message: 'Potential XSS attempt detected in DOM',
+}
+          type: &apos;xss&apos;,
+          severity: &apos;critical&apos;,
+          message: &apos;Potential XSS attempt detected in DOM&apos;,
           context: {
+}
             element: element.tagName,
             content: innerHTML.substring(0, 200),
             pattern: pattern.source
@@ -152,12 +176,16 @@ class SecurityService {
 
     // Check attributes for dangerous content
     Array.from(element.attributes).forEach((attr: any) => {
-      if (attr.name.startsWith('on') && attr.value) {
+}
+      if (attr.name.startsWith(&apos;on&apos;) && attr.value) {
+}
         this.reportViolation({
-          type: 'xss',
-          severity: 'high',
-          message: 'Dangerous event handler attribute detected',
+}
+          type: &apos;xss&apos;,
+          severity: &apos;high&apos;,
+          message: &apos;Dangerous event handler attribute detected&apos;,
           context: {
+}
             element: element.tagName,
             attribute: attr.name,
             value: attr.value
@@ -169,9 +197,11 @@ class SecurityService {
   }
 
   private secureConsole(): void {
+}
     if (!import.meta.env.PROD) return; // Only in production
 
     const originalMethods = {
+}
       log: console.log,
       warn: console.warn,
       error: console.error,
@@ -181,7 +211,9 @@ class SecurityService {
 
     // Override console methods to prevent sensitive data leakage
     Object.keys(originalMethods).forEach((method: any) => {
+}
       (console as any)[method] = (...args: any[]) => {
+}
         const filteredArgs = args.map((arg: any) => this.sanitizeOutput(arg));
         (originalMethods as any)[method](...filteredArgs);
       };
@@ -189,16 +221,22 @@ class SecurityService {
   }
 
   private sanitizeOutput(data: any): any {
-    if (typeof data === 'string') {
+}
+    if (typeof data === &apos;string&apos;) {
+}
       return this.removeSensitiveData(data);
     }
     
-    if (typeof data === 'object' && data !== null) {
+    if (typeof data === &apos;object&apos; && data !== null) {
+}
       const sanitized = { ...data };
       Object.keys(sanitized).forEach((key: any) => {
+}
         if (this.isSensitiveKey(key)) {
-          sanitized[key] = '***REDACTED***';
-        } else if (typeof sanitized[key] === 'string') {
+}
+          sanitized[key] = &apos;***REDACTED***&apos;;
+        } else if (typeof sanitized[key] === &apos;string&apos;) {
+}
           sanitized[key] = this.removeSensitiveData(sanitized[key]);
         }
       });
@@ -209,28 +247,35 @@ class SecurityService {
   }
 
   private isSensitiveKey(key: string): boolean {
+}
     const sensitiveKeys = [
-      'password', 'pass', 'pwd', 'secret', 'token', 'key', 'api_key', 
-      'apikey', 'auth', 'authorization', 'credential', 'private'
+      &apos;password&apos;, &apos;pass&apos;, &apos;pwd&apos;, &apos;secret&apos;, &apos;token&apos;, &apos;key&apos;, &apos;api_key&apos;, 
+      &apos;apikey&apos;, &apos;auth&apos;, &apos;authorization&apos;, &apos;credential&apos;, &apos;private&apos;
     ];
     return sensitiveKeys.some((sensitive: any) => key.toLowerCase().includes(sensitive));
   }
 
   private setupStorageMonitoring(): void {
+}
     const originalSetItem = Storage.prototype.setItem;
     const securityService = this;
 
     Storage.prototype.setItem = function(key: string, value: string) {
+}
       if (securityService.config.enableAPIKeyProtection) {
+}
         if (securityService.containsSensitiveData(value)) {
+}
           securityService.reportViolation({
-            type: 'data_leak',
-            severity: 'high',
-            message: 'Attempt to store sensitive data in storage',
-            context: { 
+}
+            type: &apos;data_leak&apos;,
+            severity: &apos;high&apos;,
+            message: &apos;Attempt to store sensitive data in storage&apos;,
+            context: {
+}
               key, 
               storageType: this.constructor.name,
-              dataPreview: value.substring(0, 50) + '...'
+              dataPreview: value.substring(0, 50) + &apos;...&apos;
             },
             blocked: false
           });
@@ -240,78 +285,94 @@ class SecurityService {
     };
   }
 
-  public validateInput(input: string, context: string = 'unknown'): {
+  public validateInput(input: string, context: string = &apos;unknown&apos;): {
+}
     isValid: boolean;
     sanitized: string;
     violations: string[];
   } {
+}
     const violations: string[] = [];
     let sanitized = input;
 
     if (!this.config.enableInputSanitization) {
+}
       return { isValid: true, sanitized: input, violations: [] };
     }
 
     // Check for XSS patterns
     this.XSS_PATTERNS.forEach((pattern: any) => {
+}
       if (pattern.test(input)) {
+}
         violations.push(`XSS pattern detected: ${pattern.source}`);
-        sanitized = sanitized.replace(pattern, '');
+        sanitized = sanitized.replace(pattern, &apos;&apos;);
       }
     });
 
     // Check for injection patterns
     this.INJECTION_PATTERNS.forEach((pattern: any) => {
+}
       if (pattern.test(input)) {
+}
         violations.push(`Injection pattern detected: ${pattern.source}`);
-        sanitized = sanitized.replace(pattern, '');
+        sanitized = sanitized.replace(pattern, &apos;&apos;);
       }
     });
 
     // Report violations
     if (violations.length > 0) {
+}
       this.reportViolation({
-        type: 'injection',
-        severity: 'high',
-        message: 'Malicious input detected and sanitized',
+}
+        type: &apos;injection&apos;,
+        severity: &apos;high&apos;,
+        message: &apos;Malicious input detected and sanitized&apos;,
         context: {
+}
           originalInput: input.substring(0, 200),
           sanitizedInput: sanitized.substring(0, 200),
           inputContext: context,
-          violations
+//           violations
         },
         blocked: true
       });
     }
 
     return {
+}
       isValid: violations.length === 0,
       sanitized,
-      violations
+//       violations
     };
   }
 
   public containsSensitiveData(text: string): boolean {
+}
     return this.SENSITIVE_DATA_PATTERNS.some((pattern: any) => pattern.test(text));
   }
 
   public removeSensitiveData(text: string): string {
+}
     let cleaned = text;
     this.SENSITIVE_DATA_PATTERNS.forEach((pattern: any) => {
-      cleaned = cleaned.replace(pattern, '***REDACTED***');
+}
+      cleaned = cleaned.replace(pattern, &apos;***REDACTED***&apos;);
     });
     return cleaned;
   }
 
   public validateAPIKey(apiKey: string): boolean {
+}
     if (!this.config.enableAPIKeyProtection) return true;
 
     // Basic API key validation
     if (!apiKey || apiKey.length < 10) {
+}
       return false;
     }
 
-    // Check if it's a test/dummy key
+    // Check if it&apos;s a test/dummy key
     const testPatterns = [
       /^test/i,
       /^dummy/i,
@@ -321,10 +382,12 @@ class SecurityService {
     ];
 
     if (testPatterns.some((pattern: any) => pattern.test(apiKey))) {
+}
       this.reportViolation({
-        type: 'unauthorized_access',
-        severity: 'medium',
-        message: 'Test/dummy API key detected',
+}
+        type: &apos;unauthorized_access&apos;,
+        severity: &apos;medium&apos;,
+        message: &apos;Test/dummy API key detected&apos;,
         context: { keyPrefix: apiKey.substring(0, 10) },
         blocked: false
       });
@@ -335,37 +398,46 @@ class SecurityService {
   }
 
   public generateSecureToken(length: number = 32): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+}
+    const chars = &apos;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789&apos;;
     const array = new Uint8Array(length);
     
     if (window.crypto && window.crypto.getRandomValues) {
+}
       window.crypto.getRandomValues(array);
     } else {
+}
       // Fallback for older browsers
       for (let i = 0; i < length; i++) {
+}
         array[i] = Math.floor(Math.random() * 256);
       }
     }
 
-    return Array.from(array, byte => chars[byte % chars.length]).join('');
+    return Array.from(array, byte => chars[byte % chars.length]).join(&apos;&apos;);
   }
 
   public hashSensitiveData(data: string, salt?: string): Promise<string> {
+}
     if (!window.crypto || !window.crypto.subtle) {
-      throw new Error('Web Crypto API not available');
+}
+      throw new Error(&apos;Web Crypto API not available&apos;);
     }
 
     const encoder = new TextEncoder();
-    const dataBuffer = encoder.encode(data + (salt || ''));
+    const dataBuffer = encoder.encode(data + (salt || &apos;&apos;));
 
-    return window.crypto.subtle.digest('SHA-256', dataBuffer).then(hashBuffer => {
+    return window.crypto.subtle.digest(&apos;SHA-256&apos;, dataBuffer).then(hashBuffer => {
+}
       const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map((byte: any) => byte.toString(16).padStart(2, '0')).join('');
+      return hashArray.map((byte: any) => byte.toString(16).padStart(2, &apos;0&apos;)).join(&apos;&apos;);
     });
   }
 
-  private reportViolation(violation: Omit<SecurityViolation, 'id' | 'timestamp'>): void {
+  private reportViolation(violation: Omit<SecurityViolation, &apos;id&apos; | &apos;timestamp&apos;>): void {
+}
     const fullViolation: SecurityViolation = {
+}
       id: `sec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date(),
       ...violation
@@ -374,45 +446,56 @@ class SecurityService {
     this.violations.push(fullViolation);
 
     if (this.config.logSecurityEvents) {
-      console.warn('Security violation detected:', fullViolation);
+}
+      console.warn(&apos;Security violation detected:&apos;, fullViolation);
     }
 
     // Send to error tracking service
     if (window.errorTrackingService) {
+}
       try {
+}
         window.errorTrackingService.captureError(
           new Error(`Security violation: ${violation.message}`),
           {
-            component: 'security-service',
-            severity: violation.severity === 'critical' ? 'critical' : 'high',
+}
+            component: &apos;security-service&apos;,
+            severity: violation.severity === &apos;critical&apos; ? &apos;critical&apos; : &apos;high&apos;,
             context: {
+}
               securityViolation: fullViolation,
               sessionId: this.sessionId
             }
           }
         );
       } catch (error) {
-        console.warn('Failed to report security violation to tracking service:', error);
+}
+        console.warn(&apos;Failed to report security violation to tracking service:&apos;, error);
       }
     }
   }
 
   public getViolations(): SecurityViolation[] {
+}
     return [...this.violations];
   }
 
   public getSecuritySummary(): {
+}
     totalViolations: number;
     violationsBySeverity: Record<string, number>;
     violationsByType: Record<string, number>;
     recentViolations: SecurityViolation[];
   } {
+}
     const violationsBySeverity = this.violations.reduce((acc, v) => {
+}
       acc[v.severity] = (acc[v.severity] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
 
     const violationsByType = this.violations.reduce((acc, v) => {
+}
       acc[v.type] = (acc[v.type] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -422,14 +505,16 @@ class SecurityService {
       .slice(-10); // Last 10 violations
 
     return {
+}
       totalViolations: this.violations.length,
       violationsBySeverity,
       violationsByType,
-      recentViolations
+//       recentViolations
     };
   }
 
   public clearViolations(): void {
+}
     this.violations = [];
   }
 }
@@ -438,6 +523,7 @@ class SecurityService {
 export const securityService = new SecurityService();
 
 // Make it available globally
-if (typeof window !== 'undefined') {
+if (typeof window !== &apos;undefined&apos;) {
+}
   (window as any).securityService = securityService;
 }

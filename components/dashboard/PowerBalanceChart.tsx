@@ -1,26 +1,30 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import type { League } from '../../types';
-import { Widget } from '../ui/Widget';
-import { ChartBarIcon } from '../icons/ChartBarIcon';
-import { Tooltip } from '../ui/Tooltip';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import type { League } from &apos;../../types&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { ChartBarIcon } from &apos;../icons/ChartBarIcon&apos;;
+import { Tooltip } from &apos;../ui/Tooltip&apos;;
 
 interface PowerBalanceChartProps {
+}
     leagues: League[];
 
 }
 
 const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }: any) => {
+}
     const chartData = React.useMemo(() => {
+}
         return leagues.filter((l: any) => !l.isMock).map((league: any) => {
-            const myTeam = league.teams.find((t: any) => t.owner.id === 'user_1');
+}
+            const myTeam = league.teams.find((t: any) => t.owner.id === &apos;user_1&apos;);
             if (!myTeam) return null;
             
             const totalGames = myTeam.record.wins + myTeam.record.losses + myTeam.record.ties;
             const winPct = totalGames > 0 ? (myTeam.record.wins + myTeam.record.ties * 0.5) / totalGames * 100 : 50;
 
             return {
+}
                 leagueName: league.name,
                 winPct,
             };
@@ -31,6 +35,7 @@ const PowerBalanceChart: React.FC<PowerBalanceChartProps> = ({ leagues }: any) =
         <Widget title="League Power Balance" icon={<ChartBarIcon />}>
             <div className="p-4 h-full flex flex-col justify-center sm:px-4 md:px-6 lg:px-8">
                 {chartData.length === 0 ? (
+}
                     <p className="text-center text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">Join a league to see your power balance.</p>
                 ) : (
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">

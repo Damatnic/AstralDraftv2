@@ -3,9 +3,9 @@
  * Comprehensive visualization of advanced statistical modeling and external data sources
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useEffect, useMemo } from 'react';
-import { loadRecharts } from '../../utils/dynamicImports';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useEffect, useMemo } from &apos;react&apos;;
+import { loadRecharts } from &apos;../../utils/dynamicImports&apos;;
 
 // Import Recharts components (these will be dynamically imported)
 let ResponsiveContainer: any, BarChart: any, CartesianGrid: any, XAxis: any, YAxis: any, Tooltip: any, Bar: any;
@@ -13,7 +13,9 @@ let RadarChart: any, PolarGrid: any, PolarAngleAxis: any, PolarRadiusAxis: any, 
 
 // Dynamic import of Recharts components
 (async () => {
+}
     try {
+}
         const recharts = await loadRecharts();
         ResponsiveContainer = recharts.ResponsiveContainer;
         BarChart = recharts.BarChart;
@@ -29,21 +31,24 @@ let RadarChart: any, PolarGrid: any, PolarAngleAxis: any, PolarRadiusAxis: any, 
         Radar = recharts.Radar;
         Cell = recharts.Cell;
     } catch (error) {
-        console.error('Failed to load Recharts:', error);
+}
+        console.error(&apos;Failed to load Recharts:&apos;, error);
     }
 })();
-import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';
-import { Progress } from '../ui/Progress';
-import { Badge } from '../ui/Badge';
+import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from &apos;lucide-react&apos;;
+import { Card, CardHeader, CardTitle, CardContent } from &apos;../ui/Card&apos;;
+import { Tabs, TabsList, TabsTrigger, TabsContent } from &apos;../ui/ShadcnTabs&apos;;
+import { Progress } from &apos;../ui/Progress&apos;;
+import { Badge } from &apos;../ui/Badge&apos;;
 import { 
+}
     PredictionFactors,
     CompositeScore, 
-    oracleAdvancedAnalyticsService 
-} from '../../services/oracleAdvancedAnalyticsService';
+//     oracleAdvancedAnalyticsService 
+} from &apos;../../services/oracleAdvancedAnalyticsService&apos;;
 
 interface AdvancedAnalyticsDashboardProps {
+}
     playerId: string;
     week: number;
     predictionFactors: PredictionFactors | null;
@@ -51,84 +56,99 @@ interface AdvancedAnalyticsDashboardProps {
 }
 
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
+}
     predictionFactors,
-    onRefresh
+//     onRefresh
 }: any) => {
-    const [activeTab, setActiveTab] = useState('overview');
+}
+    const [activeTab, setActiveTab] = useState(&apos;overview&apos;);
     const [compositeScore, setCompositeScore] = useState<CompositeScore | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     // Calculate composite score when prediction factors change
     const calculateCompositeScore = useMemo(() => {
+}
         return async () => {
+}
             if (!predictionFactors) return;
             
             setIsLoading(true);
             try {
+}
 
                 const score = await oracleAdvancedAnalyticsService.calculateAdvancedCompositeScore(predictionFactors);
                 setCompositeScore(score);
             } catch (error) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.error('Failed to calculate composite score:', error);
+}
+                if (process.env.NODE_ENV === &apos;development&apos;) {
+}
+                    console.error(&apos;Failed to calculate composite score:&apos;, error);
                 }
             } finally {
+}
                 setIsLoading(false);
             }
         };
     }, [predictionFactors]);
 
     useEffect(() => {
+}
         if (predictionFactors) {
+}
             calculateCompositeScore();
         }
   }, [predictionFactors, calculateCompositeScore]);
 
     // Prepare chart data
     const playerMetricsData = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         const metrics = predictionFactors.playerMetrics;
         return [
-            { name: 'Efficiency Rating', value: metrics.playerEfficiencyRating, max: 150 },
-            { name: 'Target Share', value: metrics.targetShare * 100, max: 35 },
-            { name: 'Red Zone Share', value: metrics.redZoneTargetShare * 100, max: 40 },
-            { name: 'Snap %', value: metrics.snapCountPercentage * 100, max: 100 },
-            { name: 'Separation', value: metrics.separationRating, max: 5 },
-            { name: 'YAC', value: metrics.yardsAfterContact, max: 8 }
+            { name: &apos;Efficiency Rating&apos;, value: metrics.playerEfficiencyRating, max: 150 },
+            { name: &apos;Target Share&apos;, value: metrics.targetShare * 100, max: 35 },
+            { name: &apos;Red Zone Share&apos;, value: metrics.redZoneTargetShare * 100, max: 40 },
+            { name: &apos;Snap %&apos;, value: metrics.snapCountPercentage * 100, max: 100 },
+            { name: &apos;Separation&apos;, value: metrics.separationRating, max: 5 },
+            { name: &apos;YAC&apos;, value: metrics.yardsAfterContact, max: 8 }
         ];
     }, [predictionFactors]);
 
     const teamChemistryData = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         const team = predictionFactors.teamMetrics;
         return [
-            { subject: 'Team Chemistry', A: team.teamChemistryScore, fullMark: 100 },
-            { subject: 'Offensive Chemistry', A: team.offlineChemistry, fullMark: 100 },
-            { subject: 'Passing Chemistry', A: team.passingChemistry, fullMark: 100 },
-            { subject: 'Run Blocking', A: team.runBlockingChemistry, fullMark: 100 },
-            { subject: 'Defensive Chemistry', A: team.defensiveChemistry, fullMark: 100 },
-            { subject: 'Morale', A: team.locker_roomMorale, fullMark: 100 }
+            { subject: &apos;Team Chemistry&apos;, A: team.teamChemistryScore, fullMark: 100 },
+            { subject: &apos;Offensive Chemistry&apos;, A: team.offlineChemistry, fullMark: 100 },
+            { subject: &apos;Passing Chemistry&apos;, A: team.passingChemistry, fullMark: 100 },
+            { subject: &apos;Run Blocking&apos;, A: team.runBlockingChemistry, fullMark: 100 },
+            { subject: &apos;Defensive Chemistry&apos;, A: team.defensiveChemistry, fullMark: 100 },
+            { subject: &apos;Morale&apos;, A: team.locker_roomMorale, fullMark: 100 }
         ];
     }, [predictionFactors]);
 
     const marketSentimentData = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         const market = predictionFactors.marketData;
         return [
-            { name: 'Media Sentiment', value: (market.mediaSentimentScore + 1) * 50, color: '#22c55e' },
-            { name: 'Social Buzz', value: market.socialMediaBuzz, color: '#3b82f6' },
-            { name: 'Injury Sentiment', value: (market?.injuryReportSentiment + 1) * 50, color: '#f59e0b' },
-            { name: 'Reporter Confidence', value: market.beatReporterConfidence * 100, color: '#8b5cf6' }
+            { name: &apos;Media Sentiment&apos;, value: (market.mediaSentimentScore + 1) * 50, color: &apos;#22c55e&apos; },
+            { name: &apos;Social Buzz&apos;, value: market.socialMediaBuzz, color: &apos;#3b82f6&apos; },
+            { name: &apos;Injury Sentiment&apos;, value: (market?.injuryReportSentiment + 1) * 50, color: &apos;#f59e0b&apos; },
+            { name: &apos;Reporter Confidence&apos;, value: market.beatReporterConfidence * 100, color: &apos;#8b5cf6&apos; }
         ];
     }, [predictionFactors]);
 
     const ensembleModelData = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         return predictionFactors.ensemblePrediction.modelPredictions.map((model: any) => ({
+}
             name: model.model,
             prediction: model.prediction,
             weight: model.weight * 100,
@@ -137,31 +157,35 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
     }, [predictionFactors]);
 
     const regressionFactorsData = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         return predictionFactors.regressionAnalysis.significantFactors.map((factor: any) => ({
+}
             name: factor.factor,
             coefficient: Math.abs(factor.coefficient),
             impact: factor.impact,
             pValue: factor.pValue,
-            significance: factor.pValue < 0.01 ? 'High' : factor.pValue < 0.05 ? 'Medium' : 'Low'
+            significance: factor.pValue < 0.01 ? &apos;High&apos; : factor.pValue < 0.05 ? &apos;Medium&apos; : &apos;Low&apos;
         }));
     }, [predictionFactors]);
 
     const environmentalFactors = useMemo(() => {
+}
         if (!predictionFactors) return [];
         
         const env = predictionFactors.externalFactors;
         return [
-            { name: 'Temperature', value: env.detailedWeather.temperature, unit: '°F', ideal: [65, 75] },
-            { name: 'Wind Speed', value: env.detailedWeather.windSpeed, unit: 'mph', ideal: [0, 10] },
-            { name: 'Humidity', value: env.detailedWeather.humidity, unit: '%', ideal: [40, 60] },
-            { name: 'Rest Days', value: env.restDays, unit: 'days', ideal: [6, 9] },
-            { name: 'Travel Distance', value: env.travelDistance, unit: 'miles', ideal: [0, 500] }
+            { name: &apos;Temperature&apos;, value: env.detailedWeather.temperature, unit: &apos;°F&apos;, ideal: [65, 75] },
+            { name: &apos;Wind Speed&apos;, value: env.detailedWeather.windSpeed, unit: &apos;mph&apos;, ideal: [0, 10] },
+            { name: &apos;Humidity&apos;, value: env.detailedWeather.humidity, unit: &apos;%&apos;, ideal: [40, 60] },
+            { name: &apos;Rest Days&apos;, value: env.restDays, unit: &apos;days&apos;, ideal: [6, 9] },
+            { name: &apos;Travel Distance&apos;, value: env.travelDistance, unit: &apos;miles&apos;, ideal: [0, 500] }
         ];
     }, [predictionFactors]);
 
     if (!predictionFactors) {
+}
         return (
             <Card className="w-full sm:px-4 md:px-6 lg:px-8">
                 <CardHeader>
@@ -192,12 +216,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors sm:px-4 md:px-6 lg:px-8"
                             disabled={isLoading}
                          aria-label="Action button">
-                            {isLoading ? '🔄' : '↻'} Refresh
+                            {isLoading ? &apos;🔄&apos; : &apos;↻&apos;} Refresh
                         </button>
                     </div>
                 </CardHeader>
                 <CardContent>
                     {compositeScore && (
+}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                 <div className="text-3xl font-bold text-blue-600 sm:px-4 md:px-6 lg:px-8">
@@ -246,8 +271,10 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             </CardHeader>
                             <CardContent>
                                 {compositeScore && (
+}
                                     <div className="space-y-2 sm:space-y-3">
                                         {compositeScore.reasoning.map((reason: string, index: number) => (
+}
                                             <div key={index} className="p-2 sm:p-3 bg-gray-50 rounded-lg">
                                                 <p className="text-xs sm:text-sm">{reason}</p>
                                             </div>
@@ -281,7 +308,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                                 {predictionFactors.ensemblePrediction.predictionRange[0].toFixed(1)} - {predictionFactors.ensemblePrediction.predictionRange[1].toFixed(1)} pts
                                             </span>
                                         </div>
-                                        <Progress 
+                                        <Progress>
                                             value={(predictionFactors.ensemblePrediction.prediction / 25) * 100} 
                                             className="w-full sm:px-4 md:px-6 lg:px-8"
                                         />
@@ -291,6 +318,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         <h4 className="text-sm sm:text-base font-medium mb-2">Key Drivers:</h4>
                                         <div className="flex flex-wrap gap-1 sm:gap-2">
                                             {predictionFactors.ensemblePrediction.keyDrivers.map((driver, index) => (
+}
                                                 <Badge key={index} variant="default" className="text-xs sm:px-4 md:px-6 lg:px-8">
                                                     {driver}
                                                 </Badge>
@@ -304,6 +332,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
 
                     {/* Score Breakdown */}
                     {compositeScore && (
+}
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-base sm:text-lg">Score Component Breakdown</CardTitle>
@@ -311,13 +340,14 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <CardContent>
                                 <ResponsiveContainer width="100%" height={200}>
                                     <BarChart data={Object.entries(compositeScore.breakdown).map(([key, value]) => ({
-                                        name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+}
+                                        name: key.replace(/([A-Z])/g, &apos; $1&apos;).replace(/^./, str => str.toUpperCase()),
                                         score: Number(value) * 100
                                     }))}>
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} fontSize={10} />
                                         <YAxis domain={[0, 100]} fontSize={12} />
-                                        <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, 'Score']} />
+                                        <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, &apos;Score&apos;]} />
                                         <Bar dataKey="score" fill="#3b82f6" />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -493,22 +523,24 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
-                                    <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.passingEpa >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                        {predictionFactors.teamMetrics.passingEpa >= 0 ? '+' : ''}{predictionFactors.teamMetrics.passingEpa.toFixed(3)}
+                                    <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.passingEpa >= 0 ? &apos;text-green-600&apos; : &apos;text-red-600&apos;}`}>
+                                        {predictionFactors.teamMetrics.passingEpa >= 0 ? &apos;+&apos; : &apos;&apos;}{predictionFactors.teamMetrics.passingEpa.toFixed(3)}
                                     </div>
                                     <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Passing EPA</div>
                                     {predictionFactors.teamMetrics.passingEpa >= 0 ? (
+}
                                         <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     ) : (
                                         <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     )}
                                 </div>
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
-                                    <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.rushingEpa >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                        {predictionFactors.teamMetrics.rushingEpa >= 0 ? '+' : ''}{predictionFactors.teamMetrics.rushingEpa.toFixed(3)}
+                                    <div className={`text-2xl font-bold ${predictionFactors.teamMetrics.rushingEpa >= 0 ? &apos;text-green-600&apos; : &apos;text-red-600&apos;}`}>
+                                        {predictionFactors.teamMetrics.rushingEpa >= 0 ? &apos;+&apos; : &apos;&apos;}{predictionFactors.teamMetrics.rushingEpa.toFixed(3)}
                                     </div>
                                     <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Rushing EPA</div>
                                     {predictionFactors.teamMetrics.rushingEpa >= 0 ? (
+}
                                         <TrendingUp className="h-4 w-4 text-green-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
                                     ) : (
                                         <TrendingDown className="h-4 w-4 text-red-600 mx-auto mt-1 sm:px-4 md:px-6 lg:px-8" />
@@ -554,6 +586,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <CardContent>
                                 <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                                     {ensembleModelData.map((model, index) => (
+}
                                         <div key={index} className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                                             <div className="flex justify-between sm:px-4 md:px-6 lg:px-8">
                                                 <span className="font-medium sm:px-4 md:px-6 lg:px-8">{model.name}</span>
@@ -613,7 +646,8 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                             <Tooltip />
                                             <Bar dataKey="coefficient">
                                                 {regressionFactorsData.map((entry: any) => (
-                                                    <Cell key={`cell-${entry.name}`} fill={entry.impact === 'POSITIVE' ? '#22c55e' : '#ef4444'} />
+}
+                                                    <Cell key={`cell-${entry.name}`} fill={entry.impact === &apos;POSITIVE&apos; ? &apos;#22c55e&apos; : &apos;#ef4444&apos;} />
                                                 ))}
                                             </Bar>
                                         </BarChart>
@@ -638,7 +672,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} />
                                         <YAxis domain={[0, 100]} />
-                                        <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, 'Sentiment']} />
+                                        <Tooltip formatter={(value: number) => [`${value.toFixed(1)}%`, &apos;Sentiment&apos;]} />
                                         <Bar dataKey="value" fill="#3b82f6" />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -686,13 +720,13 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
-                                        {predictionFactors.marketData.spreadMovement >= 0 ? '+' : ''}{predictionFactors.marketData.spreadMovement.toFixed(1)}
+                                        {predictionFactors.marketData.spreadMovement >= 0 ? &apos;+&apos; : &apos;&apos;}{predictionFactors.marketData.spreadMovement.toFixed(1)}
                                     </div>
                                     <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Spread Movement</div>
                                 </div>
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
                                     <div className="text-lg font-bold sm:px-4 md:px-6 lg:px-8">
-                                        {predictionFactors.marketData.totalMovement >= 0 ? '+' : ''}{predictionFactors.marketData.totalMovement.toFixed(1)}
+                                        {predictionFactors.marketData.totalMovement >= 0 ? &apos;+&apos; : &apos;&apos;}{predictionFactors.marketData.totalMovement.toFixed(1)}
                                     </div>
                                     <div className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">Total Movement</div>
                                 </div>
@@ -735,6 +769,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                             <CardContent>
                                 <div className="grid grid-cols-2 gap-4 sm:px-4 md:px-6 lg:px-8">
                                     {environmentalFactors.map((factor, index) => (
+}
                                         <div key={index} className="text-center sm:px-4 md:px-6 lg:px-8">
                                             <div className="text-xl font-bold sm:px-4 md:px-6 lg:px-8">
                                                 {factor.value.toFixed(1)} {factor.unit}
@@ -796,14 +831,14 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                         <CardContent>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
-                                    <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.thursdayNightGame ? 'text-blue-600' : 'text-gray-400'}`}>
-                                        {predictionFactors.externalFactors.thursdayNightGame ? 'YES' : 'NO'}
+                                    <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.thursdayNightGame ? &apos;text-blue-600&apos; : &apos;text-gray-400&apos;}`}>
+                                        {predictionFactors.externalFactors.thursdayNightGame ? &apos;YES&apos; : &apos;NO&apos;}
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-600">Thursday Night</div>
                                 </div>
                                 <div className="text-center sm:px-4 md:px-6 lg:px-8">
-                                    <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.mondayNightGame ? 'text-blue-600' : 'text-gray-400'}`}>
-                                        {predictionFactors.externalFactors.mondayNightGame ? 'YES' : 'NO'}
+                                    <div className={`text-base sm:text-lg font-bold ${predictionFactors.externalFactors.mondayNightGame ? &apos;text-blue-600&apos; : &apos;text-gray-400&apos;}`}>
+                                        {predictionFactors.externalFactors.mondayNightGame ? &apos;YES&apos; : &apos;NO&apos;}
                                     </div>
                                     <div className="text-xs sm:text-sm text-gray-600">Monday Night</div>
                                 </div>

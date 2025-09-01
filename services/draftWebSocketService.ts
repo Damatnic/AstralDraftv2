@@ -4,8 +4,10 @@
  */
 
 export interface DraftPickMessage {
-  type: 'PICK_MADE';
+}
+  type: &apos;PICK_MADE&apos;;
   data: {
+}
     leagueId: string;
     teamId: number;
     playerId: number;
@@ -16,8 +18,10 @@ export interface DraftPickMessage {
 }
 
 export interface DraftTimerMessage {
-  type: 'TIMER_UPDATE';
+}
+  type: &apos;TIMER_UPDATE&apos;;
   data: {
+}
     leagueId: string;
     timeRemaining: number;
     currentPicker: number;
@@ -27,13 +31,16 @@ export interface DraftTimerMessage {
 }
 
 export interface DraftStatusMessage {
-  type: 'DRAFT_STATUS';
+}
+  type: &apos;DRAFT_STATUS&apos;;
   data: {
+}
     leagueId: string;
-    status: 'WAITING' | 'ACTIVE' | 'PAUSED' | 'COMPLETED';
+    status: &apos;WAITING&apos; | &apos;ACTIVE&apos; | &apos;PAUSED&apos; | &apos;COMPLETED&apos;;
     currentRound: number;
     currentPick: number;
     participants: {
+}
       teamId: number;
       userId: string;
       isOnline: boolean;
@@ -43,8 +50,10 @@ export interface DraftStatusMessage {
 }
 
 export interface UserJoinMessage {
-  type: 'USER_JOINED';
+}
+  type: &apos;USER_JOINED&apos;;
   data: {
+}
     leagueId: string;
     userId: string;
     teamId: number;
@@ -53,8 +62,10 @@ export interface UserJoinMessage {
 }
 
 export interface UserLeaveMessage {
-  type: 'USER_LEFT';
+}
+  type: &apos;USER_LEFT&apos;;
   data: {
+}
     leagueId: string;
     userId: string;
     teamId: number;
@@ -63,8 +74,10 @@ export interface UserLeaveMessage {
 }
 
 export interface DraftChatMessage {
-  type: 'CHAT_MESSAGE';
+}
+  type: &apos;CHAT_MESSAGE&apos;;
   data: {
+}
     leagueId: string;
     userId: string;
     message: string;
@@ -82,8 +95,9 @@ export type DraftWebSocketMessage =
   | DraftChatMessage;
 
 export interface DraftRoomState {
+}
   leagueId: string;
-  status: 'WAITING' | 'ACTIVE' | 'PAUSED' | 'COMPLETED';
+  status: &apos;WAITING&apos; | &apos;ACTIVE&apos; | &apos;PAUSED&apos; | &apos;COMPLETED&apos;;
   currentRound: number;
   currentPick: number;
   currentPicker: number;
@@ -91,18 +105,21 @@ export interface DraftRoomState {
   timeRemaining: number;
   isPaused: boolean;
   participants: Map<string, {
+}
     teamId: number;
     userId: string;
     isOnline: boolean;
     lastSeen: number;
   }>;
   picks: Array<{
+}
     teamId: number;
     playerId: number;
     pickNumber: number;
     timestamp: number;
   }>;
   chatMessages: Array<{
+}
     userId: string;
     message: string;
     timestamp: number;
@@ -111,6 +128,7 @@ export interface DraftRoomState {
 }
 
 class DraftWebSocketService {
+}
   private ws: WebSocket | null = null;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 5;
@@ -122,6 +140,7 @@ class DraftWebSocketService {
   private roomState: DraftRoomState | null = null;
   
   constructor() {
+}
     this.setupEventListeners();
   }
 
@@ -129,13 +148,16 @@ class DraftWebSocketService {
    * Connect to draft room WebSocket
    */
   async connectToDraftRoom(leagueId: string, userId: string): Promise<void> {
+}
     if (this.isConnecting || (this.ws && this.ws.readyState === WebSocket.OPEN)) {
+}
       return;
     }
 
     this.isConnecting = true;
     
     try {
+}
       const wsUrl = this.getWebSocketUrl(leagueId, userId);
       this.ws = new WebSocket(wsUrl);
       
@@ -145,7 +167,8 @@ class DraftWebSocketService {
       this.ws.onerror = this.handleError.bind(this);
       
     } catch (error) {
-      console.error('Failed to connect to draft room:', error);
+}
+      console.error(&apos;Failed to connect to draft room:&apos;, error);
       this.isConnecting = false;
       throw error;
     }
@@ -155,13 +178,16 @@ class DraftWebSocketService {
    * Disconnect from draft room
    */
   disconnect(): void {
+}
     if (this.heartbeatInterval) {
+}
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
     }
     
     if (this.ws) {
-      this.ws.close(1000, 'User disconnected');
+}
+      this.ws.close(1000, &apos;User disconnected&apos;);
       this.ws = null;
     }
     
@@ -174,13 +200,17 @@ class DraftWebSocketService {
    * Send draft pick
    */
   sendPick(leagueId: string, teamId: number, playerId: number): void {
+}
     if (!this.isConnected()) {
-      throw new Error('Not connected to draft room');
+}
+      throw new Error(&apos;Not connected to draft room&apos;);
     }
 
     const message: DraftPickMessage = {
-      type: 'PICK_MADE',
+}
+      type: &apos;PICK_MADE&apos;,
       data: {
+}
         leagueId,
         teamId,
         playerId,
@@ -196,18 +226,22 @@ class DraftWebSocketService {
    * Send chat message
    */
   sendChatMessage(leagueId: string, userId: string, message: string, isTradeProposal = false): void {
+}
     if (!this.isConnected()) {
-      throw new Error('Not connected to draft room');
+}
+      throw new Error(&apos;Not connected to draft room&apos;);
     }
 
     const chatMessage: DraftChatMessage = {
-      type: 'CHAT_MESSAGE',
+}
+      type: &apos;CHAT_MESSAGE&apos;,
       data: {
+}
         leagueId,
         userId,
         message,
         timestamp: Date.now(),
-        isTradeProposal
+//         isTradeProposal
       }
     };
 
@@ -218,13 +252,17 @@ class DraftWebSocketService {
    * Pause/resume draft timer
    */
   toggleTimer(leagueId: string): void {
+}
     if (!this.isConnected()) {
-      throw new Error('Not connected to draft room');
+}
+      throw new Error(&apos;Not connected to draft room&apos;);
     }
 
     this.send({
-      type: 'TIMER_UPDATE',
+}
+      type: &apos;TIMER_UPDATE&apos;,
       data: {
+}
         leagueId,
         timeRemaining: this.roomState?.timeRemaining || 0,
         currentPicker: this.roomState?.currentPicker || 1,
@@ -237,12 +275,15 @@ class DraftWebSocketService {
   /**
    * Add event listener for specific message types
    */
-  addEventListener(eventType: DraftWebSocketMessage['type'], callback: (message: DraftWebSocketMessage) => void): void {
+  addEventListener(eventType: DraftWebSocketMessage[&apos;type&apos;], callback: (message: DraftWebSocketMessage) => void): void {
+}
     if (!this.listeners.has(eventType)) {
+}
       this.listeners.set(eventType, []);
     }
     const callbacks = this.listeners.get(eventType);
     if (callbacks) {
+}
       callbacks.push(callback);
     }
   }
@@ -250,11 +291,14 @@ class DraftWebSocketService {
   /**
    * Remove event listener
    */
-  removeEventListener(eventType: DraftWebSocketMessage['type'], callback: (message: DraftWebSocketMessage) => void): void {
+  removeEventListener(eventType: DraftWebSocketMessage[&apos;type&apos;], callback: (message: DraftWebSocketMessage) => void): void {
+}
     const callbacks = this.listeners.get(eventType);
     if (callbacks) {
+}
       const index = callbacks.indexOf(callback);
       if (index > -1) {
+}
         callbacks.splice(index, 1);
       }
     }
@@ -264,6 +308,7 @@ class DraftWebSocketService {
    * Get current room state
    */
   getRoomState(): DraftRoomState | null {
+}
     return this.roomState;
   }
 
@@ -271,59 +316,70 @@ class DraftWebSocketService {
    * Check if connected
    */
   isConnected(): boolean {
+}
     return this.ws !== null && this.ws.readyState === WebSocket.OPEN;
   }
 
   /**
    * Get WebSocket connection status
    */
-  getConnectionStatus(): 'CONNECTING' | 'CONNECTED' | 'DISCONNECTED' | 'ERROR' {
-    if (this.isConnecting) return 'CONNECTING';
-    if (!this.ws) return 'DISCONNECTED';
+  getConnectionStatus(): &apos;CONNECTING&apos; | &apos;CONNECTED&apos; | &apos;DISCONNECTED&apos; | &apos;ERROR&apos; {
+}
+    if (this.isConnecting) return &apos;CONNECTING&apos;;
+    if (!this.ws) return &apos;DISCONNECTED&apos;;
     
     switch (this.ws.readyState) {
-      case WebSocket.CONNECTING: return 'CONNECTING';
-      case WebSocket.OPEN: return 'CONNECTED';
+}
+      case WebSocket.CONNECTING: return &apos;CONNECTING&apos;;
+      case WebSocket.OPEN: return &apos;CONNECTED&apos;;
       case WebSocket.CLOSING:
-      case WebSocket.CLOSED: return 'DISCONNECTED';
-      default: return 'ERROR';
+      case WebSocket.CLOSED: return &apos;DISCONNECTED&apos;;
+      default: return &apos;ERROR&apos;;
     }
   }
 
   private getWebSocketUrl(leagueId: string, userId: string): string {
-    const host = process.env.NODE_ENV === 'production' 
-      ? 'wss://your-websocket-server.netlify.app'
-      : 'ws://localhost:3001';
+}
+    const host = process.env.NODE_ENV === &apos;production&apos; 
+      ? &apos;wss://your-websocket-server.netlify.app&apos;
+      : &apos;ws://localhost:3001&apos;;
     
     return `${host}/draft-room?leagueId=${leagueId}&userId=${userId}`;
   }
 
   private setupEventListeners(): void {
+}
     // Handle page visibility changes
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible' && this.ws && this.ws.readyState === WebSocket.CLOSED) {
+    document.addEventListener(&apos;visibilitychange&apos;, () => {
+}
+      if (document.visibilityState === &apos;visible&apos; && this.ws && this.ws.readyState === WebSocket.CLOSED) {
+}
         this.attemptReconnect();
       }
     });
 
     // Handle beforeunload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener(&apos;beforeunload&apos;, () => {
+}
       this.disconnect();
     });
   }
 
   private handleOpen(_event: Event): void {
-    console.log('Connected to draft room WebSocket');
+}
+    console.log(&apos;Connected to draft room WebSocket&apos;);
     this.isConnecting = false;
     this.reconnectAttempts = 0;
     this.startHeartbeat();
     
     // Notify listeners of connection
     this.emit({
-      type: 'DRAFT_STATUS',
+}
+      type: &apos;DRAFT_STATUS&apos;,
       data: {
-        leagueId: '',
-        status: 'WAITING',
+}
+        leagueId: &apos;&apos;,
+        status: &apos;WAITING&apos;,
         currentRound: 1,
         currentPick: 1,
         participants: []
@@ -332,61 +388,73 @@ class DraftWebSocketService {
   }
 
   private handleMessage(event: MessageEvent): void {
+}
     try {
+}
       const message: DraftWebSocketMessage = JSON.parse(event.data);
       this.processMessage(message);
       this.emit(message);
     } catch (error) {
-      console.error('Failed to parse WebSocket message:', error);
+}
+      console.error(&apos;Failed to parse WebSocket message:&apos;, error);
     }
   }
 
   private handleClose(event: CloseEvent): void {
-    console.log('Draft room WebSocket closed:', event.code, event.reason);
+}
+    console.log(&apos;Draft room WebSocket closed:&apos;, event.code, event.reason);
     this.isConnecting = false;
     
     if (this.heartbeatInterval) {
+}
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = null;
     }
 
     // Attempt reconnection if not intentionally closed
     if (event.code !== 1000 && this.reconnectAttempts < this.maxReconnectAttempts) {
+}
       this.attemptReconnect();
     }
   }
 
   private handleError(event: Event): void {
-    console.error('Draft room WebSocket error:', event);
+}
+    console.error(&apos;Draft room WebSocket error:&apos;, event);
     this.isConnecting = false;
   }
 
   private processMessage(message: DraftWebSocketMessage): void {
+}
     switch (message.type) {
-      case 'DRAFT_STATUS':
+}
+      case &apos;DRAFT_STATUS&apos;:
         this.updateRoomState(message.data);
         break;
-      case 'PICK_MADE':
+      case &apos;PICK_MADE&apos;:
         this.handlePickMade(message.data);
         break;
-      case 'TIMER_UPDATE':
+      case &apos;TIMER_UPDATE&apos;:
         this.handleTimerUpdate(message.data);
         break;
-      case 'USER_JOINED':
+      case &apos;USER_JOINED&apos;:
         this.handleUserJoined(message.data);
         break;
-      case 'USER_LEFT':
+      case &apos;USER_LEFT&apos;:
         this.handleUserLeft(message.data);
         break;
-      case 'CHAT_MESSAGE':
+      case &apos;CHAT_MESSAGE&apos;:
         this.handleChatMessage(message.data);
         break;
     }
   }
 
-  private updateRoomState(data: DraftStatusMessage['data']): void {
+  private updateRoomState(data: DraftStatusMessage[&apos;data&apos;]): void {
+}
     if (!this.roomState) {
+}
       this.roomState = {
+}
         leagueId: data.leagueId,
         status: data.status,
         currentRound: data.currentRound,
@@ -400,6 +468,7 @@ class DraftWebSocketService {
         chatMessages: []
       };
     } else {
+}
       this.roomState.status = data.status;
       this.roomState.currentRound = data.currentRound;
       this.roomState.currentPick = data.currentPick;
@@ -407,15 +476,20 @@ class DraftWebSocketService {
 
     // Update participants
     data.participants.forEach((participant: any) => {
+}
       if (this.roomState) {
+}
         this.roomState.participants.set(participant.userId, participant);
       }
     });
   }
 
-  private handlePickMade(data: DraftPickMessage['data']): void {
+  private handlePickMade(data: DraftPickMessage[&apos;data&apos;]): void {
+}
     if (this.roomState) {
+}
       this.roomState.picks.push({
+}
         teamId: data.teamId,
         playerId: data.playerId,
         pickNumber: data.pickNumber,
@@ -428,8 +502,10 @@ class DraftWebSocketService {
     }
   }
 
-  private handleTimerUpdate(data: DraftTimerMessage['data']): void {
+  private handleTimerUpdate(data: DraftTimerMessage[&apos;data&apos;]): void {
+}
     if (this.roomState) {
+}
       this.roomState.timeRemaining = data.timeRemaining;
       this.roomState.currentPicker = data.currentPicker;
       this.roomState.currentPick = data.pickNumber;
@@ -437,9 +513,12 @@ class DraftWebSocketService {
     }
   }
 
-  private handleUserJoined(data: UserJoinMessage['data']): void {
+  private handleUserJoined(data: UserJoinMessage[&apos;data&apos;]): void {
+}
     if (this.roomState) {
+}
       this.roomState.participants.set(data.userId, {
+}
         teamId: data.teamId,
         userId: data.userId,
         isOnline: true,
@@ -448,19 +527,25 @@ class DraftWebSocketService {
     }
   }
 
-  private handleUserLeft(data: UserLeaveMessage['data']): void {
+  private handleUserLeft(data: UserLeaveMessage[&apos;data&apos;]): void {
+}
     if (this.roomState) {
+}
       const participant = this.roomState.participants.get(data.userId);
       if (participant) {
+}
         participant.isOnline = false;
         participant.lastSeen = data.timestamp;
       }
     }
   }
 
-  private handleChatMessage(data: DraftChatMessage['data']): void {
+  private handleChatMessage(data: DraftChatMessage[&apos;data&apos;]): void {
+}
     if (this.roomState) {
+}
       this.roomState.chatMessages.push({
+}
         userId: data.userId,
         message: data.message,
         timestamp: data.timestamp,
@@ -469,22 +554,28 @@ class DraftWebSocketService {
       
       // Keep only last 100 messages
       if (this.roomState.chatMessages.length > 100) {
+}
         this.roomState.chatMessages.shift();
       }
     }
   }
 
   private startHeartbeat(): void {
+}
     this.heartbeatInterval = setInterval(() => {
+}
       if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-        this.ws.send(JSON.stringify({ type: 'PING' }));
+}
+        this.ws.send(JSON.stringify({ type: &apos;PING&apos; }));
       }
     }, 30000); // Send ping every 30 seconds
   }
 
   private attemptReconnect(): void {
+}
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('Max reconnection attempts reached');
+}
+      console.error(&apos;Max reconnection attempts reached&apos;);
       return;
     }
 
@@ -494,28 +585,38 @@ class DraftWebSocketService {
     console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
     
     setTimeout(() => {
+}
       if (this.roomState) {
-        this.connectToDraftRoom(this.roomState.leagueId, '').catch(console.error);
+}
+        this.connectToDraftRoom(this.roomState.leagueId, &apos;&apos;).catch(console.error);
       }
     }, delay);
   }
 
   private send(message: DraftWebSocketMessage | { type: string }): void {
+}
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+}
       this.ws.send(JSON.stringify(message));
     } else {
-      throw new Error('WebSocket is not connected');
+}
+      throw new Error(&apos;WebSocket is not connected&apos;);
     }
   }
 
   private emit(message: DraftWebSocketMessage): void {
+}
     const callbacks = this.listeners.get(message.type);
     if (callbacks) {
+}
       callbacks.forEach((callback: any) => {
+}
         try {
+}
           callback(message);
         } catch (error) {
-          console.error('Error in WebSocket event callback:', error);
+}
+          console.error(&apos;Error in WebSocket event callback:&apos;, error);
         }
       });
     }

@@ -1,75 +1,86 @@
-import React, { useState } from 'react';
-import DraftRoom from '../components/draft/DraftRoom';
-import { motion } from 'framer-motion';
+import React, { useState } from &apos;react&apos;;
+import DraftRoom from &apos;../components/draft/DraftRoom&apos;;
+import { motion } from &apos;framer-motion&apos;;
 
 interface League {
+}
   id: string;
   name: string;
   teams: number;
-  draftStatus: 'SCHEDULED' | 'ACTIVE' | 'COMPLETED';
+  draftStatus: &apos;SCHEDULED&apos; | &apos;ACTIVE&apos; | &apos;COMPLETED&apos;;
   draftTime: Date;
   userTeamId: number;
 
 }
 
 const LiveDraftRoomView: React.FC = () => {
+}
   const [selectedLeague, setSelectedLeague] = useState<League | null>(null);
   const [leagues] = useState<League[]>([
     {
-      id: 'league-1',
-      name: 'Championship League',
+}
+      id: &apos;league-1&apos;,
+      name: &apos;Championship League&apos;,
       teams: 12,
-      draftStatus: 'ACTIVE',
+      draftStatus: &apos;ACTIVE&apos;,
       draftTime: new Date(),
       userTeamId: 1
     },
     {
-      id: 'league-2', 
-      name: 'Friends & Family',
+}
+      id: &apos;league-2&apos;, 
+      name: &apos;Friends & Family&apos;,
       teams: 10,
-      draftStatus: 'SCHEDULED',
+      draftStatus: &apos;SCHEDULED&apos;,
       draftTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
       userTeamId: 3
     },
     {
-      id: 'league-3',
-      name: 'Office League',
+}
+      id: &apos;league-3&apos;,
+      name: &apos;Office League&apos;,
       teams: 8,
-      draftStatus: 'COMPLETED',
+      draftStatus: &apos;COMPLETED&apos;,
       draftTime: new Date(Date.now() - 24 * 60 * 60 * 1000),
       userTeamId: 5
 
   ]);
   
-  const [userId] = useState('user-123'); // Mock user ID
+  const [userId] = useState(&apos;user-123&apos;); // Mock user ID
 
   const handleJoinDraft = (league: League) => {
+}
     setSelectedLeague(league);
   };
 
   const handleExitDraft = () => {
+}
     setSelectedLeague(null);
   };
 
-  const getStatusColor = (status: League['draftStatus']): string => {
+  const getStatusColor = (status: League[&apos;draftStatus&apos;]): string => {
+}
     switch (status) {
-      case 'ACTIVE': return 'text-green-500 bg-green-100';
-      case 'SCHEDULED': return 'text-blue-500 bg-blue-100';
-      case 'COMPLETED': return 'text-gray-500 bg-gray-100';
-      default: return 'text-gray-500 bg-gray-100';
+}
+      case &apos;ACTIVE&apos;: return &apos;text-green-500 bg-green-100&apos;;
+      case &apos;SCHEDULED&apos;: return &apos;text-blue-500 bg-blue-100&apos;;
+      case &apos;COMPLETED&apos;: return &apos;text-gray-500 bg-gray-100&apos;;
+      default: return &apos;text-gray-500 bg-gray-100&apos;;
 
   };
 
   const canJoinDraft = (league: League): boolean => {
-    return league.draftStatus === 'ACTIVE' || 
-           (league.draftStatus === 'SCHEDULED' && 
+}
+    return league.draftStatus === &apos;ACTIVE&apos; || 
+           (league.draftStatus === &apos;SCHEDULED&apos; && 
             Math.abs(league.draftTime.getTime() - Date.now()) < 15 * 60 * 1000); // 15 minutes before
   };
 
   // If in a draft room, render the DraftRoom component
   if (selectedLeague) {
+}
     return (
-      <DraftRoom
+      <DraftRoom>
         leagueId={selectedLeague.id}
         userId={userId}
         teamId={selectedLeague.userTeamId}
@@ -89,6 +100,7 @@ const LiveDraftRoomView: React.FC = () => {
           
           <div className="grid gap-6">
             {leagues.map((league: any) => (
+}
               <motion.div
                 key={league.id}
                 whileHover={{ scale: 1.02 }}
@@ -111,7 +123,8 @@ const LiveDraftRoomView: React.FC = () => {
                       </span>
                     </div>
                     
-                    {league.draftStatus === 'SCHEDULED' && (
+                    {league.draftStatus === &apos;SCHEDULED&apos; && (
+}
                       <div className="mt-3">
                         <p className="text-sm text-gray-500">
                           Starts in: {Math.ceil((league.draftTime.getTime() - Date.now()) / (1000 * 60 * 60))} hours
@@ -121,7 +134,8 @@ const LiveDraftRoomView: React.FC = () => {
                   </div>
                   
                   <div className="flex space-x-3">
-                    {league.draftStatus === 'ACTIVE' && (
+                    {league.draftStatus === &apos;ACTIVE&apos; && (
+}
                       <button
                         onClick={() => handleJoinDraft(league)}
                       >
@@ -129,7 +143,8 @@ const LiveDraftRoomView: React.FC = () => {
                       </button>
                     )}
                     
-                    {league.draftStatus === 'SCHEDULED' && canJoinDraft(league) && (
+                    {league.draftStatus === &apos;SCHEDULED&apos; && canJoinDraft(league) && (
+}
                       <button
                         onClick={() => handleJoinDraft(league)}
                       >
@@ -137,19 +152,22 @@ const LiveDraftRoomView: React.FC = () => {
                       </button>
                     )}
                     
-                    {league.draftStatus === 'SCHEDULED' && !canJoinDraft(league) && (
+                    {league.draftStatus === &apos;SCHEDULED&apos; && !canJoinDraft(league) && (
+}
                       <button
-                        disabled
+//                         disabled
                         className="bg-gray-400 text-white px-6 py-2 rounded-lg font-medium cursor-not-allowed"
                       >
                         Too Early
                       </button>
                     )}
                     
-                    {league.draftStatus === 'COMPLETED' && (
+                    {league.draftStatus === &apos;COMPLETED&apos; && (
+}
                       <button
                         className="glass-button px-6 py-2 font-medium"
                         onClick={() => {
+}
                           // Navigate to draft results or league dashboard
                         }}
                       >
@@ -159,7 +177,8 @@ const LiveDraftRoomView: React.FC = () => {
                   </div>
                 </div>
                 
-                {league.draftStatus === 'ACTIVE' && (
+                {league.draftStatus === &apos;ACTIVE&apos; && (
+}
                   <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -171,7 +190,8 @@ const LiveDraftRoomView: React.FC = () => {
                   </div>
                 )}
                 
-                {league.draftStatus === 'SCHEDULED' && canJoinDraft(league) && (
+                {league.draftStatus === &apos;SCHEDULED&apos; && canJoinDraft(league) && (
+}
                   <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -187,12 +207,13 @@ const LiveDraftRoomView: React.FC = () => {
           </div>
           
           {leagues.length === 0 && (
+}
             <div className="text-center py-12">
               <div className="max-w-md mx-auto">
                 <div className="text-6xl mb-4">🏈</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Live Draft Rooms Available</h3>
                 <p className="text-gray-600">
-                  You're not currently in any leagues with upcoming or active live drafts. 
+                  You&apos;re not currently in any leagues with upcoming or active live drafts. 
                   Join a league to start real-time drafting!
                 </p>
                 <button className="glass-button-primary mt-4 px-6 py-2 font-medium">

@@ -1,12 +1,13 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { Team, MatchupTeam, MatchupPlayer, GamedayEvent } from '../../types';
-import { Widget } from '../ui/Widget';
-import PlayerRow from './PlayerRow';
-import { useAppState } from '../../contexts/AppContext';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { Team, MatchupTeam, MatchupPlayer, GamedayEvent } from &apos;../../types&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import PlayerRow from &apos;./PlayerRow&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
 
 interface MatchupRosterViewProps {
+}
     team: Team;
     matchupTeam: MatchupTeam;
     isLive: boolean;
@@ -16,19 +17,24 @@ interface MatchupRosterViewProps {
 }
 
 const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam, isLive, week, matchupId }: any) => {
+}
     const { state } = useAppState();
     const latestEvent = (state.gamedayEvents[matchupId] || []).slice(-1)[0];
 
     const getDisplayRoster = (): MatchupPlayer[] => {
+}
         if (matchupTeam.roster.length > 0 && !isLive) {
+}
             return matchupTeam.roster;
         }
 
         // For live or future weeks, merge roster data with live/projected scores
         return team.roster.slice(0, 9).map((player: any) => {
+}
             const liveData = matchupTeam.roster.find((p: any) => p.player.id === player.id);
             const projectedScore = parseFloat((player.stats.weeklyProjections[week] || player.stats.projection / 17).toFixed(2));
             return {
+}
                 player,
                 projectedScore,
                 actualScore: liveData?.actualScore || 0,
@@ -49,10 +55,11 @@ const MatchupRosterView: React.FC<MatchupRosterViewProps> = ({ team, matchupTeam
                     <span className="text-right sm:px-4 md:px-6 lg:px-8">SCORE</span>
                 </div>
                 {displayRoster.map((playerData, index) => (
-                   <PlayerRow
+}
+                   <PlayerRow>
                         key={playerData.player.id}
                         playerData={playerData}
-                        position={['QB', 'RB', 'RB', 'WR', 'WR', 'TE', 'FLEX', 'DST', 'K'][index]}
+                        position={[&apos;QB&apos;, &apos;RB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;FLEX&apos;, &apos;DST&apos;, &apos;K&apos;][index]}
                         latestEvent={latestEvent}
                    />
                 ))}

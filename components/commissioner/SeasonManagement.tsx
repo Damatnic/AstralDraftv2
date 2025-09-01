@@ -3,86 +3,98 @@
  * Advanced season administration and control panel
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { CalendarIcon } from '../icons/CalendarIcon';
-import { PlayIcon } from '../icons/PlayIcon';
-import { PauseIcon } from '../icons/PauseIcon';
-import { StopIcon } from '../icons/StopIcon';
-import { RefreshIcon } from '../icons/RefreshIcon';
-import { AdjustmentsIcon } from '../icons/AdjustmentsIcon';
-import { League } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { CalendarIcon } from &apos;../icons/CalendarIcon&apos;;
+import { PlayIcon } from &apos;../icons/PlayIcon&apos;;
+import { PauseIcon } from &apos;../icons/PauseIcon&apos;;
+import { StopIcon } from &apos;../icons/StopIcon&apos;;
+import { RefreshIcon } from &apos;../icons/RefreshIcon&apos;;
+import { AdjustmentsIcon } from &apos;../icons/AdjustmentsIcon&apos;;
+import { League } from &apos;../../types&apos;;
 
 interface SeasonManagementProps {
+}
     league: League;
     dispatch: React.Dispatch<any>;
 
 }
 
 interface SeasonAction {
-    type: 'ADVANCE_WEEK' | 'RESET_WEEK' | 'END_SEASON' | 'MANUAL_SCORE_ADJUSTMENT' | 'FORCE_SYNC';
+}
+    type: &apos;ADVANCE_WEEK&apos; | &apos;RESET_WEEK&apos; | &apos;END_SEASON&apos; | &apos;MANUAL_SCORE_ADJUSTMENT&apos; | &apos;FORCE_SYNC&apos;;
     data?: any;}
 
 const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }: any) => {
+}
     const [showConfirmAction, setShowConfirmAction] = React.useState<SeasonAction | null>(null);
     const [manualScoreMode, setManualScoreMode] = React.useState(false);
     const [selectedMatchup, setSelectedMatchup] = React.useState<string | null>(null);
-    const [scoreAdjustment, setScoreAdjustment] = React.useState({ teamId: '', adjustment: 0, reason: '' });
+    const [scoreAdjustment, setScoreAdjustment] = React.useState({ teamId: &apos;&apos;, adjustment: 0, reason: &apos;&apos; });
 
     // Mock season data
     const seasonInfo = {
+}
         currentWeek: 12,
         totalWeeks: 17,
         playoffWeeks: 3,
         regularSeasonWeeks: 14,
-        tradeDeadline: '2024-11-15',
-        playoffStart: '2024-12-01',
+        tradeDeadline: &apos;2024-11-15&apos;,
+        playoffStart: &apos;2024-12-01&apos;,
         championshipWeek: 17,
-        waiverDay: 'Wednesday',
-        lockTime: '13:00'
+        waiverDay: &apos;Wednesday&apos;,
+        lockTime: &apos;13:00&apos;
     };
 
     const weeklyMatchups = [
-        { id: '1', team1: 'Alice\'s Aces', team2: 'Smithtown Stallions', score1: 125.6, score2: 118.2, completed: true },
-        { id: '2', team1: 'Thunder Bolts', team2: 'Wilson Warriors', score1: 98.3, score2: 142.7, completed: true },
-        { id: '3', team1: 'Dynasty Dominators', team2: 'Playoff Pushers', score1: 115.4, score2: 89.6, completed: false },
+        { id: &apos;1&apos;, team1: &apos;Alice\&apos;s Aces&apos;, team2: &apos;Smithtown Stallions&apos;, score1: 125.6, score2: 118.2, completed: true },
+        { id: &apos;2&apos;, team1: &apos;Thunder Bolts&apos;, team2: &apos;Wilson Warriors&apos;, score1: 98.3, score2: 142.7, completed: true },
+        { id: &apos;3&apos;, team1: &apos;Dynasty Dominators&apos;, team2: &apos;Playoff Pushers&apos;, score1: 115.4, score2: 89.6, completed: false },
     ];
 
     const handleSeasonAction = (action: SeasonAction) => {
+}
         setShowConfirmAction(action);
     };
 
     const confirmSeasonAction = () => {
+}
         if (!showConfirmAction) return;
 
         switch (showConfirmAction.type) {
-            case 'ADVANCE_WEEK':
+}
+            case &apos;ADVANCE_WEEK&apos;:
                 dispatch({ 
-                    type: 'ADVANCE_WEEK', 
+}
+                    type: &apos;ADVANCE_WEEK&apos;, 
                     payload: { leagueId: league.id, currentWeek: seasonInfo.currentWeek + 1 } 
                 });
                 dispatch({ 
-                    type: 'ADD_NOTIFICATION', 
-                    payload: { message: `Advanced to Week ${seasonInfo.currentWeek + 1}`, type: 'SYSTEM' } 
+}
+                    type: &apos;ADD_NOTIFICATION&apos;, 
+                    payload: { message: `Advanced to Week ${seasonInfo.currentWeek + 1}`, type: &apos;SYSTEM&apos; } 
                 });
                 break;
-            case 'RESET_WEEK':
+            case &apos;RESET_WEEK&apos;:
                 dispatch({ 
-                    type: 'RESET_WEEK', 
+}
+                    type: &apos;RESET_WEEK&apos;, 
                     payload: { leagueId: league.id, week: seasonInfo.currentWeek } 
                 });
                 break;
-            case 'END_SEASON':
+            case &apos;END_SEASON&apos;:
                 dispatch({ 
-                    type: 'END_SEASON', 
+}
+                    type: &apos;END_SEASON&apos;, 
                     payload: { leagueId: league.id } 
                 });
                 break;
-            case 'FORCE_SYNC':
+            case &apos;FORCE_SYNC&apos;:
                 dispatch({ 
-                    type: 'FORCE_DATA_SYNC', 
+}
+                    type: &apos;FORCE_DATA_SYNC&apos;, 
                     payload: { leagueId: league.id } 
                 });
                 break;
@@ -91,11 +103,14 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
     };
 
     const handleScoreAdjustment = () => {
+}
         if (!scoreAdjustment.teamId || !scoreAdjustment.reason) return;
 
         dispatch({
-            type: 'MANUAL_SCORE_ADJUSTMENT',
+}
+            type: &apos;MANUAL_SCORE_ADJUSTMENT&apos;,
             payload: {
+}
                 leagueId: league.id,
                 week: seasonInfo.currentWeek,
                 teamId: scoreAdjustment.teamId,
@@ -105,25 +120,29 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
         });
 
         dispatch({
-            type: 'ADD_AUDIT_LOG',
+}
+            type: &apos;ADD_AUDIT_LOG&apos;,
             payload: {
-                action: 'Manual Score Adjustment',
+}
+                action: &apos;Manual Score Adjustment&apos;,
                 details: `${scoreAdjustment.adjustment} points to team ${scoreAdjustment.teamId}: ${scoreAdjustment.reason}`,
-                commissioner: 'Current User'
+                commissioner: &apos;Current User&apos;
 
         });
 
-        setScoreAdjustment({ teamId: '', adjustment: 0, reason: '' });
+        setScoreAdjustment({ teamId: &apos;&apos;, adjustment: 0, reason: &apos;&apos; });
         setManualScoreMode(false);
     };
 
     const getSeasonPhase = () => {
-        if (seasonInfo.currentWeek <= seasonInfo.regularSeasonWeeks) return 'Regular Season';
-        if (seasonInfo.currentWeek <= seasonInfo.regularSeasonWeeks + seasonInfo.playoffWeeks) return 'Playoffs';
-        return 'Championship';
+}
+        if (seasonInfo.currentWeek <= seasonInfo.regularSeasonWeeks) return &apos;Regular Season&apos;;
+        if (seasonInfo.currentWeek <= seasonInfo.regularSeasonWeeks + seasonInfo.playoffWeeks) return &apos;Playoffs&apos;;
+        return &apos;Championship&apos;;
     };
 
     const getWeekProgress = () => {
+}
         return (seasonInfo.currentWeek / seasonInfo.totalWeeks) * 100;
     };
 
@@ -180,7 +199,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                     
                     <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                         <button
-                            onClick={() => handleSeasonAction({ type: 'ADVANCE_WEEK' }}
+                            onClick={() => handleSeasonAction({ type: &apos;ADVANCE_WEEK&apos; }}
                             className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                             disabled={seasonInfo.currentWeek >= seasonInfo.totalWeeks}
                         >
@@ -189,7 +208,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'RESET_WEEK' }}
+                            onClick={() => handleSeasonAction({ type: &apos;RESET_WEEK&apos; }}
                             className="flex items-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -197,7 +216,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'FORCE_SYNC' }}
+                            onClick={() => handleSeasonAction({ type: &apos;FORCE_SYNC&apos; }}
                             className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <RefreshIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -211,7 +230,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                         </button>
                         
                         <button
-                            onClick={() => handleSeasonAction({ type: 'END_SEASON' }}
+                            onClick={() => handleSeasonAction({ type: &apos;END_SEASON&apos; }}
                             className="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm sm:px-4 md:px-6 lg:px-8"
                         >
                             <StopIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
@@ -228,6 +247,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                     
                     <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                         {weeklyMatchups.map((matchup: any) => (
+}
                             <div
                                 key={matchup.id}
                                 className="flex items-center justify-between p-3 bg-[var(--panel-bg)] border border-[var(--panel-border)] rounded-lg sm:px-4 md:px-6 lg:px-8"
@@ -245,11 +265,12 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                 
                                 <div className="ml-4 flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className={`px-2 py-1 rounded-full text-xs ${
+}
                                         matchup.completed 
-                                            ? 'bg-green-500/20 text-green-400' 
-                                            : 'bg-yellow-500/20 text-yellow-400'
+                                            ? &apos;bg-green-500/20 text-green-400&apos; 
+                                            : &apos;bg-yellow-500/20 text-yellow-400&apos;
                                     }`}>
-                                        {matchup.completed ? 'Final' : 'In Progress'}
+                                        {matchup.completed ? &apos;Final&apos; : &apos;In Progress&apos;}
                                     </span>
                                     
                                     <button
@@ -266,6 +287,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 {/* Manual Score Adjustment Modal */}
                 <AnimatePresence>
                     {manualScoreMode && (
+}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -294,7 +316,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                             className="w-full px-3 py-2 border border-[var(--panel-border)] rounded-lg bg-[var(--panel-bg)] text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                                         >
                                             <option value="">Choose team...</option>
-                                            <option value="team1">Alice's Aces</option>
+                                            <option value="team1">Alice&apos;s Aces</option>
                                             <option value="team2">Smithtown Stallions</option>
                                             <option value="team3">Thunder Bolts</option>
                                             <option value="team4">Wilson Warriors</option>
@@ -317,7 +339,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     
                                     <div>
                                         <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">
-                                            Reason
+//                                             Reason
                                         </label>
                                         <textarea
                                             value={scoreAdjustment.reason}
@@ -333,7 +355,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     <button
                                         onClick={() => setManualScoreMode(false)}
                                     >
-                                        Cancel
+//                                         Cancel
                                     </button>
                                     <button
                                         onClick={handleScoreAdjustment}
@@ -351,6 +373,7 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                 {/* Confirmation Modal */}
                 <AnimatePresence>
                     {showConfirmAction && (
+}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -368,26 +391,27 @@ const SeasonManagement: React.FC<SeasonManagementProps> = ({ league, dispatch }:
                                     Confirm Season Action
                                 </h3>
                                 <p className="text-[var(--text-secondary)] mb-6 sm:px-4 md:px-6 lg:px-8">
-                                    {showConfirmAction.type === 'ADVANCE_WEEK' && `Are you sure you want to advance to Week ${seasonInfo.currentWeek + 1}?`}
-                                    {showConfirmAction.type === 'RESET_WEEK' && 'Are you sure you want to reset the current week? This will clear all scores and lineup locks.'}
-                                    {showConfirmAction.type === 'END_SEASON' && 'Are you sure you want to end the season? This action cannot be undone.'}
-                                    {showConfirmAction.type === 'FORCE_SYNC' && 'Force sync all league data with external sources?'}
+                                    {showConfirmAction.type === &apos;ADVANCE_WEEK&apos; && `Are you sure you want to advance to Week ${seasonInfo.currentWeek + 1}?`}
+                                    {showConfirmAction.type === &apos;RESET_WEEK&apos; && &apos;Are you sure you want to reset the current week? This will clear all scores and lineup locks.&apos;}
+                                    {showConfirmAction.type === &apos;END_SEASON&apos; && &apos;Are you sure you want to end the season? This action cannot be undone.&apos;}
+                                    {showConfirmAction.type === &apos;FORCE_SYNC&apos; && &apos;Force sync all league data with external sources?&apos;}
                                 </p>
                                 <div className="flex gap-3 justify-end sm:px-4 md:px-6 lg:px-8">
                                     <button
                                         onClick={() => setShowConfirmAction(null)}
                                     >
-                                        Cancel
+//                                         Cancel
                                     </button>
                                     <button
                                         onClick={confirmSeasonAction}
                                         className={`px-4 py-2 text-white rounded-lg ${
-                                            showConfirmAction.type === 'END_SEASON' 
-                                                ? 'bg-red-600 hover:bg-red-700' 
-                                                : 'bg-blue-600 hover:bg-blue-700'
+}
+                                            showConfirmAction.type === &apos;END_SEASON&apos; 
+                                                ? &apos;bg-red-600 hover:bg-red-700&apos; 
+                                                : &apos;bg-blue-600 hover:bg-blue-700&apos;
                                         }`}
                                      aria-label="Action button">
-                                        Confirm
+//                                         Confirm
                                     </button>
                                 </div>
                             </motion.div>

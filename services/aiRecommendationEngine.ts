@@ -3,14 +3,15 @@
  * Multi-factor scoring system with customizable weights and ML integration
  */
 
-import { Player, Team, LeagueSettings, DraftPick } from '../types';
-import { aiDraftCoachService } from './aiDraftCoachService';
-import { oraclePredictionService } from './oraclePredictionService';
-import { injuryTrackingService } from './injuryTrackingService';
-import { playerResearchService } from './playerResearchService';
-import { realTimeDataService } from './realTimeDataService';
+import { Player, Team, LeagueSettings, DraftPick } from &apos;../types&apos;;
+import { aiDraftCoachService } from &apos;./aiDraftCoachService&apos;;
+import { oraclePredictionService } from &apos;./oraclePredictionService&apos;;
+import { injuryTrackingService } from &apos;./injuryTrackingService&apos;;
+import { playerResearchService } from &apos;./playerResearchService&apos;;
+import { realTimeDataService } from &apos;./realTimeDataService&apos;;
 
 interface RecommendationFactors {
+}
   adpValue: number;
   projectedPoints: number;
   positionalScarcity: number;
@@ -29,6 +30,7 @@ interface RecommendationFactors {
 }
 
 interface ScoringWeights {
+}
   adpValue: number;
   projectedPoints: number;
   positionalScarcity: number;
@@ -47,9 +49,10 @@ interface ScoringWeights {
 }
 
 interface StackRecommendation {
+}
   primaryPlayer: Player;
   stackPartners: Player[];
-  stackType: 'QB-WR' | 'QB-TE' | 'RB-Handcuff' | 'WR-WR' | 'Game-Stack';
+  stackType: &apos;QB-WR&apos; | &apos;QB-TE&apos; | &apos;RB-Handcuff&apos; | &apos;WR-WR&apos; | &apos;Game-Stack&apos;;
   projectedBonus: number;
   correlation: number;
   risk: string;
@@ -57,18 +60,21 @@ interface StackRecommendation {
 }
 
 interface HandcuffRecommendation {
+}
   starter: Player;
   handcuff: Player;
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  priority: &apos;critical&apos; | &apos;high&apos; | &apos;medium&apos; | &apos;low&apos;;
   injuryRisk: number;
   valueIfStarterInjured: number;
   explanation: string;
 }
 
 interface AntifragilityScore {
+}
   player: Player;
   score: number;
   factors: {
+}
     injuryHistory: number;
     ageRisk: number;
     workloadConcern: number;
@@ -79,12 +85,14 @@ interface AntifragilityScore {
 }
 
 interface LeagueSpecificAdjustment {
+}
   setting: string;
   adjustment: number;
   explanation: string;
 }
 
 class AIRecommendationEngine {
+}
   private defaultWeights: ScoringWeights;
   private customWeights: Map<string, ScoringWeights> = new Map();
   private factorCache: Map<string, RecommendationFactors> = new Map();
@@ -93,13 +101,16 @@ class AIRecommendationEngine {
   private userPreferences: Map<string, any> = new Map();
 
   constructor() {
+}
     this.defaultWeights = this.initializeDefaultWeights();
     this.loadCorrelationMatrix();
     this.loadHistoricalAccuracy();
   }
 
   private initializeDefaultWeights(): ScoringWeights {
+}
     return {
+}
       adpValue: 0.15,
       projectedPoints: 0.20,
       positionalScarcity: 0.15,
@@ -127,48 +138,50 @@ class AIRecommendationEngine {
     leagueSettings: LeagueSettings,
     draftContext: any
   ): Promise<any> {
+}
     // Calculate factors for all available players
     const playerScores = await this.scoreAllPlayers(
       availablePlayers,
       team,
       leagueSettings,
-      draftContext
+//       draftContext
     );
     
     // Get position-specific recommendations
     const positionRecs = await this.getPositionRecommendations(
       playerScores,
       team,
-      leagueSettings
+//       leagueSettings
     );
     
     // Get stack recommendations
     const stackRecs = await this.getStackRecommendations(
       availablePlayers,
       team,
-      leagueSettings
+//       leagueSettings
     );
     
     // Get handcuff recommendations
     const handcuffRecs = await this.getHandcuffRecommendations(
       availablePlayers,
-      team
+//       team
     );
     
     // Get anti-fragility recommendations
     const antifragileRecs = await this.getAntifragileRecommendations(
       availablePlayers,
-      team
+//       team
     );
     
     // Get contrarian picks
     const contrarianRecs = await this.getContrarianRecommendations(
       availablePlayers,
-      draftContext
+//       draftContext
     );
     
     // Compile final recommendations
     return {
+}
       topOverall: playerScores.slice(0, 5),
       byPosition: positionRecs,
       stacks: stackRecs,
@@ -191,14 +204,17 @@ class AIRecommendationEngine {
     settings: LeagueSettings,
     context: any
   ): Promise<any[]> {
+}
     const scores = [];
     
     for (const player of players) {
+}
       const factors = await this.calculateFactors(player, team, settings, context);
       const weights = this.getWeights(settings, team.strategy);
       const score = this.calculateWeightedScore(factors, weights);
       
       scores.push({
+}
         player,
         score,
         factors,
@@ -219,13 +235,16 @@ class AIRecommendationEngine {
     settings: LeagueSettings,
     context: any
   ): Promise<RecommendationFactors> {
+}
     // Check cache first
     const cacheKey = `${player.id}-${team.id}-${context.round}`;
     if (this.factorCache.has(cacheKey)) {
+}
       return this.factorCache.get(cacheKey)!;
     }
     
     const factors: RecommendationFactors = {
+}
       adpValue: await this.calculateADPValue(player, context.currentPick),
       projectedPoints: await this.calculateProjectedValue(player, settings),
       positionalScarcity: await this.calculatePositionalScarcity(player, context),
@@ -253,6 +272,7 @@ class AIRecommendationEngine {
    * Calculate ADP value relative to current pick
    */
   private async calculateADPValue(player: Player, currentPick: number): Promise<number> {
+}
     const adpDifference = player.adp - currentPick;
     
     // Normalize to 0-100 scale
@@ -271,24 +291,30 @@ class AIRecommendationEngine {
     player: Player,
     settings: LeagueSettings
   ): Promise<number> {
+}
     // Get Oracle predictions
     const oraclePrediction = await oraclePredictionService.getPrediction(player.id);
     
     // Adjust for scoring settings
     let adjustedProjection = player.projectedPoints;
     
-    if (settings.scoringType === 'PPR') {
-      if (player.position === 'RB' || player.position === 'WR' || player.position === 'TE') {
+    if (settings.scoringType === &apos;PPR&apos;) {
+}
+      if (player.position === &apos;RB&apos; || player.position === &apos;WR&apos; || player.position === &apos;TE&apos;) {
+}
         adjustedProjection *= 1.15; // PPR boost
       }
-    } else if (settings.scoringType === 'Half-PPR') {
-      if (player.position === 'RB' || player.position === 'WR' || player.position === 'TE') {
+    } else if (settings.scoringType === &apos;Half-PPR&apos;) {
+}
+      if (player.position === &apos;RB&apos; || player.position === &apos;WR&apos; || player.position === &apos;TE&apos;) {
+}
         adjustedProjection *= 1.075; // Half-PPR boost
       }
     }
     
     // Blend with Oracle prediction
     if (oraclePrediction) {
+}
       adjustedProjection = adjustedProjection * 0.6 + oraclePrediction.points * 0.4;
     }
     
@@ -304,6 +330,7 @@ class AIRecommendationEngine {
     player: Player,
     context: any
   ): Promise<number> {
+}
     const availableAtPosition = context.availablePlayers
       .filter((p: any) => p.position === player.position)
       .sort((a, b) => b.projectedPoints - a.projectedPoints);
@@ -326,19 +353,21 @@ class AIRecommendationEngine {
   }
 
   /**
-   * Calculate team need for player's position
+   * Calculate team need for player&apos;s position
    */
   private async calculateTeamNeed(player: Player, team: Team): Promise<number> {
+}
     const roster = team.roster || [];
     const positionCount = roster.filter((p: any) => p.position === player.position).length;
     
     const idealCounts = {
-      'QB': 2,
-      'RB': 5,
-      'WR': 5,
-      'TE': 2,
-      'K': 1,
-      'DST': 1
+}
+      &apos;QB&apos;: 2,
+      &apos;RB&apos;: 5,
+      &apos;WR&apos;: 5,
+      &apos;TE&apos;: 2,
+      &apos;K&apos;: 1,
+      &apos;DST&apos;: 1
     };
     
     const ideal = idealCounts[player.position] || 0;
@@ -352,6 +381,7 @@ class AIRecommendationEngine {
    * Calculate bye week fit
    */
   private async calculateByeWeekFit(player: Player, team: Team): Promise<number> {
+}
     const roster = team.roster || [];
     const sameByeCount = roster.filter((p: any) => 
       p.byeWeek === player.byeWeek && 
@@ -368,6 +398,7 @@ class AIRecommendationEngine {
    * Calculate injury risk
    */
   private async calculateInjuryRisk(player: Player): Promise<number> {
+}
     const injuryData = await injuryTrackingService.getPlayerInjuryRisk(player.id);
     
     if (!injuryData) return 50; // Neutral if no data
@@ -380,21 +411,25 @@ class AIRecommendationEngine {
    * Calculate player upside
    */
   private async calculateUpside(player: Player): Promise<number> {
+}
     // Factors: age, past performance variance, situation change
     let upside = 50; // Base
     
     // Youth bonus
     if (player.age && player.age <= 25) {
+}
       upside += 20;
     }
     
     // Situation change bonus
     if (player.newTeam || player.newCoach) {
+}
       upside += 15;
     }
     
     // Past breakout potential
     if (player.breakoutCandidate) {
+}
       upside += 15;
     }
     
@@ -405,21 +440,25 @@ class AIRecommendationEngine {
    * Calculate player floor
    */
   private async calculateFloor(player: Player): Promise<number> {
+}
     // Factors: consistency, role security, past performance
     let floor = 50; // Base
     
     // Veteran reliability
     if (player.yearsExperience && player.yearsExperience >= 5) {
+}
       floor += 20;
     }
     
     // Consistent past performance
     if (player.consistencyRating && player.consistencyRating > 0.8) {
+}
       floor += 20;
     }
     
     // Secure role
     if (player.depthChart === 1) {
+}
       floor += 10;
     }
     
@@ -430,8 +469,10 @@ class AIRecommendationEngine {
    * Calculate consistency score
    */
   private async calculateConsistency(player: Player): Promise<number> {
+}
     // Use historical game logs to calculate consistency
     if (!player.gameLog || player.gameLog.length === 0) {
+}
       return 50; // Neutral if no data
     }
     
@@ -451,7 +492,8 @@ class AIRecommendationEngine {
    * Calculate strength of schedule
    */
   private async calculateSOS(player: Player): Promise<number> {
-    // Get team's schedule difficulty
+}
+    // Get team&apos;s schedule difficulty
     const schedule = await playerResearchService.getTeamSchedule(player.team);
     
     if (!schedule) return 50; // Neutral if no data
@@ -468,8 +510,10 @@ class AIRecommendationEngine {
    * Calculate recent form
    */
   private async calculateRecentForm(player: Player): Promise<number> {
+}
     // Look at last 4 games if available
     if (!player.recentGames || player.recentGames.length === 0) {
+}
       return 50; // Neutral if no data
     }
     
@@ -486,25 +530,31 @@ class AIRecommendationEngine {
    * Calculate stack potential
    */
   private async calculateStackPotential(player: Player, team: Team): Promise<number> {
+}
     const roster = team.roster || [];
     let stackScore = 0;
     
     // QB-WR/TE stack
-    if (player.position === 'WR' || player.position === 'TE') {
-      const qb = roster.find((p: any) => p.position === 'QB' && p.team === player.team);
+    if (player.position === &apos;WR&apos; || player.position === &apos;TE&apos;) {
+}
+      const qb = roster.find((p: any) => p.position === &apos;QB&apos; && p.team === player.team);
       if (qb) {
+}
         stackScore = 80;
         // Boost for high-powered offenses
         if (player.teamOffenseRank && player.teamOffenseRank <= 10) {
+}
           stackScore = 100;
         }
       }
-    } else if (player.position === 'QB') {
+    } else if (player.position === &apos;QB&apos;) {
+}
       const receivers = roster.filter((p: any) => 
-        (p.position === 'WR' || p.position === 'TE') && 
+        (p.position === &apos;WR&apos; || p.position === &apos;TE&apos;) && 
         p.team === player.team
       );
       if (receivers.length > 0) {
+}
         stackScore = 80 + (receivers.length * 10);
       }
     }
@@ -516,20 +566,23 @@ class AIRecommendationEngine {
    * Calculate handcuff value
    */
   private async calculateHandcuffValue(player: Player, team: Team): Promise<number> {
-    if (player.position !== 'RB') return 0;
+}
+    if (player.position !== &apos;RB&apos;) return 0;
     
     const roster = team.roster || [];
-    const teamRBs = roster.filter((p: any) => p.position === 'RB' && p.team === player.team);
+    const teamRBs = roster.filter((p: any) => p.position === &apos;RB&apos; && p.team === player.team);
     
     // Check if this is a handcuff to owned starter
     const starter = teamRBs.find((p: any) => p.depthChart === 1);
     if (starter && player.depthChart === 2) {
+}
       // High value handcuff
       let value = 70;
       
       // Increase value if starter is injury-prone
       const starterInjuryRisk = await this.calculateInjuryRisk(starter);
       if (starterInjuryRisk > 70) {
+}
         value = 90;
       }
       
@@ -546,19 +599,23 @@ class AIRecommendationEngine {
     player: Player,
     settings: LeagueSettings
   ): Promise<number> {
+}
     if (!settings.keeperLeague) return 0;
     
     let value = 50;
     
     // Youth bonus
     if (player.age && player.age <= 24) {
+}
       value += 30;
     } else if (player.age && player.age <= 27) {
+}
       value += 15;
     }
     
     // Round value bonus
     if (player.draftRound && player.draftRound >= 8) {
+}
       value += 20; // Late round keeper value
     }
     
@@ -572,12 +629,14 @@ class AIRecommendationEngine {
     player: Player,
     settings: LeagueSettings
   ): Promise<number> {
+}
     if (!settings.dynastyLeague) return 0;
     
     let value = 50;
     
     // Age is critical in dynasty
     if (player.age) {
+}
       if (player.age <= 23) value += 40;
       else if (player.age <= 26) value += 20;
       else if (player.age >= 30) value -= 30;
@@ -585,11 +644,13 @@ class AIRecommendationEngine {
     
     // Situation stability
     if (player.contractYears && player.contractYears >= 3) {
+}
       value += 15;
     }
     
     // Talent/draft capital
     if (player.draftPosition && player.draftPosition <= 50) {
+}
       value += 15;
     }
     
@@ -600,9 +661,11 @@ class AIRecommendationEngine {
    * Get customized weights based on league settings
    */
   private getWeights(settings: LeagueSettings, strategy?: string): ScoringWeights {
+}
     const key = `${settings.id}-${strategy}`;
     
     if (this.customWeights.has(key)) {
+}
       return this.customWeights.get(key)!;
     }
     
@@ -610,25 +673,30 @@ class AIRecommendationEngine {
     const weights = { ...this.defaultWeights };
     
     // Adjust for league settings
-    if (settings.scoringType === 'PPR') {
+    if (settings.scoringType === &apos;PPR&apos;) {
+}
       weights.consistency *= 1.2; // Consistency more valuable in PPR
     }
     
     if (settings.keeperLeague) {
+}
       weights.keeperValue *= 3;
       weights.dynastyValue *= 2;
     }
     
     if (settings.dynastyLeague) {
+}
       weights.dynastyValue *= 5;
       weights.injuryRisk *= 0.5; // Less concerned with short-term injury
     }
     
     // Adjust for strategy
-    if (strategy === 'upside') {
+    if (strategy === &apos;upside&apos;) {
+}
       weights.upside *= 2;
       weights.floor *= 0.5;
-    } else if (strategy === 'safe') {
+    } else if (strategy === &apos;safe&apos;) {
+}
       weights.floor *= 2;
       weights.upside *= 0.5;
       weights.injuryRisk *= 1.5;
@@ -647,9 +715,11 @@ class AIRecommendationEngine {
     factors: RecommendationFactors,
     weights: ScoringWeights
   ): number {
+}
     let score = 0;
     
     for (const [factor, value] of Object.entries(factors)) {
+}
       const weight = weights[factor as keyof ScoringWeights];
       score += value * weight;
     }
@@ -665,33 +735,40 @@ class AIRecommendationEngine {
     factors: RecommendationFactors,
     score: number
   ): string {
+}
     const explanations = [];
     
     if (factors.adpValue > 80) {
-      explanations.push('Excellent ADP value');
+}
+      explanations.push(&apos;Excellent ADP value&apos;);
     }
     
     if (factors.positionalScarcity > 70) {
-      explanations.push('Position becoming scarce');
+}
+      explanations.push(&apos;Position becoming scarce&apos;);
     }
     
     if (factors.teamNeed > 80) {
-      explanations.push('Fills critical team need');
+}
+      explanations.push(&apos;Fills critical team need&apos;);
     }
     
     if (factors.upside > 80) {
-      explanations.push('High upside potential');
+}
+      explanations.push(&apos;High upside potential&apos;);
     }
     
     if (factors.injuryRisk > 70) {
-      explanations.push('Injury concern');
+}
+      explanations.push(&apos;Injury concern&apos;);
     }
     
     if (factors.stackPotential > 70) {
-      explanations.push('Stack opportunity');
+}
+      explanations.push(&apos;Stack opportunity&apos;);
     }
     
-    return explanations.join('. ') || 'Solid overall value';
+    return explanations.join(&apos;. &apos;) || &apos;Solid overall value&apos;;
   }
 
   /**
@@ -701,25 +778,30 @@ class AIRecommendationEngine {
     player: Player,
     factors: RecommendationFactors
   ): Promise<number> {
+}
     let confidence = 70; // Base confidence
     
     // More data = higher confidence
     if (player.gameLog && player.gameLog.length >= 16) {
+}
       confidence += 10;
     }
     
     // Consistent projections = higher confidence
     if (factors.consistency > 70) {
+}
       confidence += 10;
     }
     
     // High injury risk = lower confidence
     if (factors.injuryRisk > 70) {
+}
       confidence -= 20;
     }
     
     // Rookie = lower confidence
     if (player.yearsExperience === 0) {
+}
       confidence -= 15;
     }
     
@@ -734,9 +816,11 @@ class AIRecommendationEngine {
     team: Team,
     settings: LeagueSettings
   ): Promise<Map<string, any[]>> {
+}
     const recommendations = new Map<string, any[]>();
     
-    for (const position of ['QB', 'RB', 'WR', 'TE', 'K', 'DST']) {
+    for (const position of [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;]) {
+}
       const positionPlayers = scoredPlayers.filter((sp: any) => sp.player.position === position);
       recommendations.set(position, positionPlayers.slice(0, 5));
     }
@@ -752,26 +836,30 @@ class AIRecommendationEngine {
     team: Team,
     settings: LeagueSettings
   ): Promise<StackRecommendation[]> {
+}
     const recommendations: StackRecommendation[] = [];
     const roster = team.roster || [];
     
     // Find QB-WR/TE stacks
-    const qbs = roster.filter((p: any) => p.position === 'QB');
+    const qbs = roster.filter((p: any) => p.position === &apos;QB&apos;);
     for (const qb of qbs) {
+}
       const teammates = players.filter((p: any) => 
-        (p.position === 'WR' || p.position === 'TE') && 
+        (p.position === &apos;WR&apos; || p.position === &apos;TE&apos;) && 
         p.team === qb.team
       );
       
       for (const teammate of teammates.slice(0, 3)) {
+}
         const correlation = await this.getCorrelation(qb.id, teammate.id);
         recommendations.push({
+}
           primaryPlayer: qb,
           stackPartners: [teammate],
-          stackType: teammate.position === 'WR' ? 'QB-WR' : 'QB-TE',
+          stackType: teammate.position === &apos;WR&apos; ? &apos;QB-WR&apos; : &apos;QB-TE&apos;,
           projectedBonus: correlation * 15,
           correlation,
-          risk: correlation < 0.5 ? 'Low correlation' : 'High variance',
+          risk: correlation < 0.5 ? &apos;Low correlation&apos; : &apos;High variance&apos;,
           explanation: `Stack ${qb.name} with ${teammate.name} for correlated scoring`
         });
       }
@@ -787,28 +875,32 @@ class AIRecommendationEngine {
     players: Player[],
     team: Team
   ): Promise<HandcuffRecommendation[]> {
+}
     const recommendations: HandcuffRecommendation[] = [];
     const roster = team.roster || [];
     
     // Find RB1s and their handcuffs
-    const rbs = roster.filter((p: any) => p.position === 'RB' && p.depthChart === 1);
+    const rbs = roster.filter((p: any) => p.position === &apos;RB&apos; && p.depthChart === 1);
     
     for (const rb of rbs) {
+}
       const handcuff = players.find((p: any) => 
-        p.position === 'RB' && 
+        p.position === &apos;RB&apos; && 
         p.team === rb.team && 
         p.depthChart === 2
       );
       
       if (handcuff) {
+}
         const injuryRisk = await this.calculateInjuryRisk(rb);
         recommendations.push({
+}
           starter: rb,
           handcuff,
-          priority: injuryRisk > 70 ? 'critical' : injuryRisk > 50 ? 'high' : 'medium',
+          priority: injuryRisk > 70 ? &apos;critical&apos; : injuryRisk > 50 ? &apos;high&apos; : &apos;medium&apos;,
           injuryRisk: injuryRisk / 100,
           valueIfStarterInjured: handcuff.projectedPoints * 1.5,
-          explanation: `Handcuff for ${rb.name} - ${injuryRisk > 70 ? 'High injury risk' : 'Insurance policy'}`
+          explanation: `Handcuff for ${rb.name} - ${injuryRisk > 70 ? &apos;High injury risk&apos; : &apos;Insurance policy&apos;}`
         });
       }
     }
@@ -823,10 +915,13 @@ class AIRecommendationEngine {
     players: Player[],
     team: Team
   ): Promise<AntifragilityScore[]> {
+}
     const scores: AntifragilityScore[] = [];
     
     for (const player of players.slice(0, 50)) {
+}
       const factors = {
+}
         injuryHistory: await this.assessInjuryHistory(player),
         ageRisk: this.assessAgeRisk(player),
         workloadConcern: await this.assessWorkloadConcern(player),
@@ -837,6 +932,7 @@ class AIRecommendationEngine {
       const score = Object.values(factors).reduce((sum, f) => sum + f, 0) / 5;
       
       scores.push({
+}
         player,
         score: 100 - score, // Invert so higher = more antifragile
         factors,
@@ -854,17 +950,21 @@ class AIRecommendationEngine {
     players: Player[],
     context: any
   ): Promise<any[]> {
+}
     const contrarian = [];
     
     for (const player of players) {
+}
       // Find players being undervalued by the draft
       const adpDiff = player.adp - context.currentPick;
       const recentDraftTrend = await this.getRecentDraftTrend(player.id);
       
-      if (adpDiff > 20 && recentDraftTrend === 'falling') {
+      if (adpDiff > 20 && recentDraftTrend === &apos;falling&apos;) {
+}
         contrarian.push({
+}
           player,
-          type: 'Falling value',
+          type: &apos;Falling value&apos;,
           explanation: `${player.name} falling in drafts but maintains strong fundamentals`,
           confidence: 0.7
         });
@@ -872,9 +972,11 @@ class AIRecommendationEngine {
       
       // Find players with improving situations
       if (player.situationImproved) {
+}
         contrarian.push({
+}
           player,
-          type: 'Situation upgrade',
+          type: &apos;Situation upgrade&apos;,
           explanation: `${player.name} has improved situation not reflected in ADP`,
           confidence: 0.75
         });
@@ -888,42 +990,49 @@ class AIRecommendationEngine {
    * Helper methods
    */
   private loadCorrelationMatrix(): void {
+}
     // Load historical correlation data
     // In production, this would come from a database
-    this.correlationMatrix.set('QB-WR1', 0.65);
-    this.correlationMatrix.set('QB-TE1', 0.55);
-    this.correlationMatrix.set('QB-WR2', 0.45);
+    this.correlationMatrix.set(&apos;QB-WR1&apos;, 0.65);
+    this.correlationMatrix.set(&apos;QB-TE1&apos;, 0.55);
+    this.correlationMatrix.set(&apos;QB-WR2&apos;, 0.45);
   }
 
   private loadHistoricalAccuracy(): void {
+}
     // Load historical prediction accuracy
-    this.historicalAccuracy.set('projections', 0.72);
-    this.historicalAccuracy.set('rankings', 0.68);
+    this.historicalAccuracy.set(&apos;projections&apos;, 0.72);
+    this.historicalAccuracy.set(&apos;rankings&apos;, 0.68);
   }
 
   private getPositionMax(position: string): number {
+}
     const maxes = {
-      'QB': 400,
-      'RB': 350,
-      'WR': 350,
-      'TE': 250,
-      'K': 150,
-      'DST': 150
+}
+      &apos;QB&apos;: 400,
+      &apos;RB&apos;: 350,
+      &apos;WR&apos;: 350,
+      &apos;TE&apos;: 250,
+      &apos;K&apos;: 150,
+      &apos;DST&apos;: 150
     };
     return maxes[position] || 200;
   }
 
   private async getCorrelation(player1Id: string, player2Id: string): Promise<number> {
+}
     // In production, look up actual correlation data
     return Math.random() * 0.3 + 0.4; // 0.4-0.7 correlation
   }
 
   private async assessInjuryHistory(player: Player): Promise<number> {
+}
     // Return injury concern level 0-100
     return player.injuryHistory?.length || 0 * 20;
   }
 
   private assessAgeRisk(player: Player): number {
+}
     if (!player.age) return 0;
     if (player.age <= 26) return 0;
     if (player.age <= 29) return 20;
@@ -932,56 +1041,69 @@ class AIRecommendationEngine {
   }
 
   private async assessWorkloadConcern(player: Player): Promise<number> {
+}
     // High touch/target share = higher injury risk
-    if (player.position === 'RB' && player.touchShare && player.touchShare > 0.8) {
+    if (player.position === &apos;RB&apos; && player.touchShare && player.touchShare > 0.8) {
+}
       return 70;
     }
     return 30;
   }
 
   private async assessTeamStability(player: Player): Promise<number> {
+}
     // New coach/system = higher risk
     if (player.newCoach || player.newSystem) {
+}
       return 60;
     }
     return 20;
   }
 
   private assessContractSituation(player: Player): number {
+}
     if (player.contractYear) {
+}
       return 30; // Some risk but also motivation
     }
     if (player.holdout) {
+}
       return 90;
     }
     return 10;
   }
 
   private generateAntifragileRec(score: number, factors: any): string {
+}
     if (score < 30) {
-      return 'Very stable player with low risk factors';
+}
+      return &apos;Very stable player with low risk factors&apos;;
     }
     if (score < 50) {
-      return 'Moderate risk but manageable concerns';
+}
+      return &apos;Moderate risk but manageable concerns&apos;;
     }
     if (score < 70) {
-      return 'Elevated risk - consider alternatives';
+}
+      return &apos;Elevated risk - consider alternatives&apos;;
     }
-    return 'High risk player - avoid unless significant value';
+    return &apos;High risk player - avoid unless significant value&apos;;
   }
 
   private async getRecentDraftTrend(playerId: string): Promise<string> {
+}
     // In production, analyze recent draft data
     const random = Math.random();
-    if (random < 0.3) return 'rising';
-    if (random < 0.6) return 'stable';
-    return 'falling';
+    if (random < 0.3) return &apos;rising&apos;;
+    if (random < 0.6) return &apos;stable&apos;;
+    return &apos;falling&apos;;
   }
 
   private async createTargetList(
     scoredPlayers: any[],
     team: Team
   ): Promise<Player[]> {
+}
     // Create round-by-round target list
     return scoredPlayers
       .filter((sp: any) => sp.score > 70)
@@ -993,32 +1115,40 @@ class AIRecommendationEngine {
     players: Player[],
     team: Team
   ): Promise<any[]> {
+}
     const avoidList = [];
     
     for (const player of players.slice(0, 100)) {
+}
       const injuryRisk = await this.calculateInjuryRisk(player);
       
       if (injuryRisk > 80) {
+}
         avoidList.push({
+}
           player,
-          reason: 'High injury risk',
-          severity: 'high'
+          reason: &apos;High injury risk&apos;,
+          severity: &apos;high&apos;
         });
       }
       
       if (player.suspended) {
+}
         avoidList.push({
+}
           player,
           reason: `Suspended ${player.suspendedGames} games`,
-          severity: 'high'
+          severity: &apos;high&apos;
         });
       }
       
       if (player.bustProbability && player.bustProbability > 0.6) {
+}
         avoidList.push({
+}
           player,
-          reason: 'High bust probability',
-          severity: 'medium'
+          reason: &apos;High bust probability&apos;,
+          severity: &apos;medium&apos;
         });
       }
     }
@@ -1030,33 +1160,41 @@ class AIRecommendationEngine {
     players: Player[],
     context: any
   ): Promise<any[]> {
+}
     const sleepers = [];
     
     for (const player of players) {
+}
       // Late round value
       if (player.adp > 100 && player.projectedPoints > 150) {
+}
         sleepers.push({
+}
           player,
-          type: 'Late round value',
+          type: &apos;Late round value&apos;,
           explanation: `Projected for ${player.projectedPoints} points but going in round ${Math.ceil(player.adp / 12)}`
         });
       }
       
       // Situation improved
       if (player.situationImproved && player.adp > 50) {
+}
         sleepers.push({
+}
           player,
-          type: 'Situation upgrade',
-          explanation: 'Improved opportunity not reflected in ADP'
+          type: &apos;Situation upgrade&apos;,
+          explanation: &apos;Improved opportunity not reflected in ADP&apos;
         });
       }
       
       // Second year breakout
-      if (player.yearsExperience === 1 && player.position === 'WR') {
+      if (player.yearsExperience === 1 && player.position === &apos;WR&apos;) {
+}
         sleepers.push({
+}
           player,
-          type: 'Second year WR',
-          explanation: 'Classic breakout profile for sophomore receiver'
+          type: &apos;Second year WR&apos;,
+          explanation: &apos;Classic breakout profile for sophomore receiver&apos;
         });
       }
     }
@@ -1065,22 +1203,26 @@ class AIRecommendationEngine {
   }
 
   private async recommendStrategy(team: Team, context: any): Promise<string> {
+}
     const roster = team.roster || [];
     const round = Math.ceil((roster.length + 1) / 1);
     
     if (round <= 3) {
-      return 'Focus on elite talent regardless of position. Establish your core.';
+}
+      return &apos;Focus on elite talent regardless of position. Establish your core.&apos;;
     }
     
     if (round <= 6) {
-      return 'Balance value with team needs. Look for falling value.';
+}
+      return &apos;Balance value with team needs. Look for falling value.&apos;;
     }
     
     if (round <= 10) {
-      return 'Target upside and depth. Consider handcuffs for your RBs.';
+}
+      return &apos;Target upside and depth. Consider handcuffs for your RBs.&apos;;
     }
     
-    return 'Focus on high-upside bench players and handcuffs.';
+    return &apos;Focus on high-upside bench players and handcuffs.&apos;;
   }
 }
 

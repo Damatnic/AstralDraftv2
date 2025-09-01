@@ -3,15 +3,17 @@
  * Provides advanced matchup analysis data and state management
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from &apos;react&apos;;
 import { 
+}
   MatchupTrend, 
   DefensiveHeatMap, 
   WeatherTrendAnalysis,
-  enhancedMatchupAnalyticsService 
-} from '../services/enhancedMatchupAnalyticsService';
+//   enhancedMatchupAnalyticsService 
+} from &apos;../services/enhancedMatchupAnalyticsService&apos;;
 
 interface EnhancedMatchupAnalyticsState {
+}
   trends: MatchupTrend[];
   defensiveHeatMap: DefensiveHeatMap | null;
   weatherAnalysis: WeatherTrendAnalysis | null;
@@ -20,6 +22,7 @@ interface EnhancedMatchupAnalyticsState {
 }
 
 interface UseEnhancedMatchupAnalyticsProps {
+}
   playerId: string;
   position?: string;
   autoRefresh?: boolean;
@@ -27,12 +30,15 @@ interface UseEnhancedMatchupAnalyticsProps {
 }
 
 export const useEnhancedMatchupAnalytics = ({
+}
   playerId,
-  position = 'WR',
+  position = &apos;WR&apos;,
   autoRefresh = false,
   refreshInterval = 300000 // 5 minutes
 }: any) => {
+}
   const [state, setState] = useState<EnhancedMatchupAnalyticsState>({
+}
     trends: [],
     defensiveHeatMap: null,
     weatherAnalysis: null,
@@ -41,15 +47,18 @@ export const useEnhancedMatchupAnalytics = ({
   });
 
   const loadAnalyticsData = useCallback(async (showLoading = true) => {
+}
     try {
+}
       if (showLoading) {
+}
         setState(prev => ({ ...prev, loading: true, error: null }));
       }
 
       // Load core analytics data in parallel
       const [
         trendsData,
-        weatherData
+//         weatherData
       ] = await Promise.all([
         enhancedMatchupAnalyticsService.generateMatchupTrends(playerId, 2),
         enhancedMatchupAnalyticsService.analyzeWeatherTrends(playerId)
@@ -59,11 +68,13 @@ export const useEnhancedMatchupAnalytics = ({
       let defensiveData: DefensiveHeatMap | null = null;
 
       if (trendsData.length > 0) {
+}
         const recentOpponent = trendsData[trendsData.length - 1].opponent;
         defensiveData = await enhancedMatchupAnalyticsService.generateDefensiveHeatMap(recentOpponent, position);
       }
 
       setState(prev => ({
+}
         ...prev,
         trends: trendsData,
         weatherAnalysis: weatherData,
@@ -73,28 +84,34 @@ export const useEnhancedMatchupAnalytics = ({
       }));
 
     } catch (err) {
-      console.error('Error loading enhanced matchup analytics:', err);
+}
+      console.error(&apos;Error loading enhanced matchup analytics:&apos;, err);
       setState(prev => ({
+}
         ...prev,
         loading: false,
-        error: err instanceof Error ? err.message : 'Failed to load matchup analysis data'
+        error: err instanceof Error ? err.message : &apos;Failed to load matchup analysis data&apos;
       }));
     }
   }, [playerId, position]);
 
   // Initial data load
   useEffect(() => {
+}
     if (playerId) {
+}
       loadAnalyticsData();
     }
   }, [playerId, loadAnalyticsData]);
 
   // Auto-refresh functionality
   useEffect(() => {
+}
     if (!autoRefresh || !playerId) return;
 
     const interval = setInterval(() => {
-      loadAnalyticsData(false); // Don't show loading spinner for background refresh
+}
+      loadAnalyticsData(false); // Don&apos;t show loading spinner for background refresh
     }, refreshInterval);
 
     return () => clearInterval(interval);
@@ -102,14 +119,16 @@ export const useEnhancedMatchupAnalytics = ({
 
   // Helper function to get correlation strength
   const getCorrelationStrength = (value: number): string => {
+}
     const abs = Math.abs(value);
-    if (abs > 0.7) return 'strong';
-    if (abs > 0.4) return 'moderate';
-    return 'weak';
+    if (abs > 0.7) return &apos;strong&apos;;
+    if (abs > 0.4) return &apos;moderate&apos;;
+    return &apos;weak&apos;;
   };
 
   // Derived analytics calculations
   const analytics = {
+}
     // Trend analysis
     trendDirection: getTrendDirection(state.trends),
     averagePoints: state.trends.length > 0 
@@ -149,10 +168,11 @@ export const useEnhancedMatchupAnalytics = ({
     correlations: calculateCorrelations(state.trends, getCorrelationStrength),
     
     // Weather sensitivity
-    weatherSensitivity: state.weatherAnalysis?.predictedImpact.expectedImpact === 'negative' ? 'high' : 'low'
+    weatherSensitivity: state.weatherAnalysis?.predictedImpact.expectedImpact === &apos;negative&apos; ? &apos;high&apos; : &apos;low&apos;
   };
 
   return {
+}
     ...state,
     analytics,
     refresh: () => loadAnalyticsData(),
@@ -161,20 +181,22 @@ export const useEnhancedMatchupAnalytics = ({
 };
 
 // Helper functions
-function getTrendDirection(trends: MatchupTrend[]): 'up' | 'down' | 'stable' {
-  if (trends.length < 3) return 'stable';
+function getTrendDirection(trends: MatchupTrend[]): &apos;up&apos; | &apos;down&apos; | &apos;stable&apos; {
+}
+  if (trends.length < 3) return &apos;stable&apos;;
   
   const recent = trends.slice(-5);
   const firstHalf = recent.slice(0, 3).reduce((sum, d) => sum + d.fantasyPoints, 0) / 3;
   const secondHalf = recent.slice(-3).reduce((sum, d) => sum + d.fantasyPoints, 0) / 3;
   
   const difference = secondHalf - firstHalf;
-  if (difference > 2) return 'up';
-  if (difference < -2) return 'down';
-  return 'stable';
+  if (difference > 2) return &apos;up&apos;;
+  if (difference < -2) return &apos;down&apos;;
+  return &apos;stable&apos;;
 }
 
 function calculateConsistency(trends: MatchupTrend[]): number {
+}
   if (trends.length < 2) return 0;
   
   const mean = trends.reduce((sum, t) => sum + t.fantasyPoints, 0) / trends.length;
@@ -186,11 +208,14 @@ function calculateConsistency(trends: MatchupTrend[]): number {
 }
 
 function calculateGameScriptPerformance(trends: MatchupTrend[]) {
-  const gameScripts = ['positive', 'neutral', 'negative'] as const;
+}
+  const gameScripts = [&apos;positive&apos;, &apos;neutral&apos;, &apos;negative&apos;] as const;
   
   return gameScripts.reduce((acc, script) => {
+}
     const games = trends.filter((t: any) => t.gameScript === script);
     acc[script] = {
+}
       games: games.length,
       averagePoints: games.length > 0 
         ? games.reduce((sum, t) => sum + t.fantasyPoints, 0) / games.length 
@@ -202,6 +227,7 @@ function calculateGameScriptPerformance(trends: MatchupTrend[]) {
 }
 
 function calculateCorrelations(trends: MatchupTrend[], getStrength: (value: number) => string) {
+}
   if (trends.length < 5) return null;
 
   const defensiveRankCorr = calculateCorrelation(
@@ -215,20 +241,24 @@ function calculateCorrelations(trends: MatchupTrend[], getStrength: (value: numb
   );
 
   return {
+}
     defensiveRank: {
+}
       value: defensiveRankCorr,
       strength: getStrength(defensiveRankCorr),
-      direction: defensiveRankCorr < 0 ? 'negative' : 'positive'
+      direction: defensiveRankCorr < 0 ? &apos;negative&apos; : &apos;positive&apos;
     },
     touches: {
+}
       value: touchesCorr,
       strength: getStrength(touchesCorr),
-      direction: touchesCorr > 0 ? 'positive' : 'negative'
+      direction: touchesCorr > 0 ? &apos;positive&apos; : &apos;negative&apos;
     }
   };
 }
 
 function calculateCorrelation(x: number[], y: number[]): number {
+}
   const n = x.length;
   if (n === 0) return 0;
 

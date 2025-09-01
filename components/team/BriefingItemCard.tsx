@@ -1,20 +1,21 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import type { DailyBriefingItem, Player } from '../../types';
-import { players } from '../../data/players';
-import { TargetIcon } from '../icons/TargetIcon';
-import { LightbulbIcon } from '../icons/LightbulbIcon';
-import { AlertTriangleIcon } from '../icons/AlertTriangleIcon';
-import { SparklesIcon } from '../icons/SparklesIcon';
-import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
-import { WandIcon } from '../icons/WandIcon';
-import { PlusCircleIcon } from '../icons/PlusCircleIcon';
-import { FireIcon } from '../icons/FireIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { DailyBriefingItem, Player } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { TargetIcon } from &apos;../icons/TargetIcon&apos;;
+import { LightbulbIcon } from &apos;../icons/LightbulbIcon&apos;;
+import { AlertTriangleIcon } from &apos;../icons/AlertTriangleIcon&apos;;
+import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
+import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
+import { WandIcon } from &apos;../icons/WandIcon&apos;;
+import { PlusCircleIcon } from &apos;../icons/PlusCircleIcon&apos;;
+import { FireIcon } from &apos;../icons/FireIcon&apos;;
 
 interface BriefingItemCardProps {
+}
     item: DailyBriefingItem;
     dispatch: React.Dispatch<any>;
     onGetAdvice?: (playerIds: number[]) => void;
@@ -23,36 +24,45 @@ interface BriefingItemCardProps {
 }
 
 const itemConfig = {
-    MATCHUP_PREVIEW: { icon: <TargetIcon />, color: 'text-blue-400' },
-    WAIVER_GEM: { icon: <LightbulbIcon />, color: 'text-green-400' },
-    ROSTER_WARNING: { icon: <AlertTriangleIcon />, color: 'text-red-400' },
-    PLAYER_SPOTLIGHT: { icon: <SparklesIcon />, color: 'text-yellow-400' },
-    TRADE_TIP: { icon: <ArrowRightLeftIcon />, color: 'text-purple-400' },
-    ON_THE_HOT_SEAT: { icon: <FireIcon />, color: 'text-orange-400' },
+}
+    MATCHUP_PREVIEW: { icon: <TargetIcon />, color: &apos;text-blue-400&apos; },
+    WAIVER_GEM: { icon: <LightbulbIcon />, color: &apos;text-green-400&apos; },
+    ROSTER_WARNING: { icon: <AlertTriangleIcon />, color: &apos;text-red-400&apos; },
+    PLAYER_SPOTLIGHT: { icon: <SparklesIcon />, color: &apos;text-yellow-400&apos; },
+    TRADE_TIP: { icon: <ArrowRightLeftIcon />, color: &apos;text-purple-400&apos; },
+    ON_THE_HOT_SEAT: { icon: <FireIcon />, color: &apos;text-orange-400&apos; },
 };
 
 const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onGetAdvice, onClaimPlayer }: any) => {
-    const config = itemConfig[item.type] || { icon: <SparklesIcon />, color: 'text-gray-400' };
+}
+    const config = itemConfig[item.type] || { icon: <SparklesIcon />, color: &apos;text-gray-400&apos; };
 
     const handleCardClick = () => {
-        if (item.type === 'WAIVER_GEM') {
-            dispatch({ type: 'SET_VIEW', payload: 'WAIVER_WIRE' });
-        } else if (item.type === 'MATCHUP_PREVIEW') {
-            dispatch({ type: 'SET_VIEW', payload: 'MATCHUP' });
-        } else if (item.type === 'TRADE_TIP') {
+}
+        if (item.type === &apos;WAIVER_GEM&apos;) {
+}
+            dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;WAIVER_WIRE&apos; });
+        } else if (item.type === &apos;MATCHUP_PREVIEW&apos;) {
+}
+            dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MATCHUP&apos; });
+        } else if (item.type === &apos;TRADE_TIP&apos;) {
+}
             // Future: Navigate to trade center or a specific trade proposal view
 
     };
 
-    const canGetAdvice = (item.type === 'ROSTER_WARNING' || item.type === 'ON_THE_HOT_SEAT') && item.relatedPlayerIds && item.relatedPlayerIds.length > 0 && onGetAdvice;
-    const waiverGemPlayer = item.type === 'WAIVER_GEM' && item.playerName ? players.find((p: any) => p.name === item.playerName) : null;
+    const canGetAdvice = (item.type === &apos;ROSTER_WARNING&apos; || item.type === &apos;ON_THE_HOT_SEAT&apos;) && item.relatedPlayerIds && item.relatedPlayerIds.length > 0 && onGetAdvice;
+    const waiverGemPlayer = item.type === &apos;WAIVER_GEM&apos; && item.playerName ? players.find((p: any) => p.name === item.playerName) : null;
     const canClaimPlayer = waiverGemPlayer && onClaimPlayer;
 
     const actionButton = () => {
+}
         if (canGetAdvice) {
+}
             return (
                 <button
                     onClick={(e: any) = aria-label="Action button"> {
+}
                         e.stopPropagation();
                         onGetAdvice(item.relatedPlayerIds!);
                     }}
@@ -64,9 +74,11 @@ const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onG
             );
 
         if (canClaimPlayer) {
+}
              return (
                 <button
                     onClick={(e: any) = aria-label="Action button"> {
+}
                         e.stopPropagation();
                         onClaimPlayer(waiverGemPlayer);
                     }}
@@ -84,11 +96,12 @@ const BriefingItemCard: React.FC<BriefingItemCardProps> = ({ item, dispatch, onG
             onClick={handleCardClick}
             className="flex items-start gap-3 p-2 bg-black/10 rounded-lg cursor-pointer hover:bg-black/20 sm:px-4 md:px-6 lg:px-8"
             {...{
+}
                 layout: true,
                 initial: { opacity: 0, y: 10 },
                 animate: { opacity: 1, y: 0 },
                 exit: { opacity: 0 },
-                transition: { type: 'spring', stiffness: 300, damping: 30 },
+                transition: { type: &apos;spring&apos;, stiffness: 300, damping: 30 },
             }}
         >
             <div className={`mt-0.5 ${config.color}`}>

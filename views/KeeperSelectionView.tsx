@@ -1,35 +1,42 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { UsersIcon } from '../components/icons/UsersIcon';
-import { CheckCircleIcon, XCircleIcon, ShieldIcon, TrophyIcon } from 'lucide-react';
-import type { Player } from '../types';
-import { Avatar } from '../components/ui/Avatar';
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { UsersIcon } from &apos;../components/icons/UsersIcon&apos;;
+import { CheckCircleIcon, XCircleIcon, ShieldIcon, TrophyIcon } from &apos;lucide-react&apos;;
+import type { Player } from &apos;../types&apos;;
+import { Avatar } from &apos;../components/ui/Avatar&apos;;
 
 const KeeperSelectionView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league, myTeam } = useLeague();
     const [selectedIds, setSelectedIds] = React.useState<Set<number>>(new Set(myTeam?.keepers || []));
     const [showConfirmation, setShowConfirmation] = React.useState(false);
 
     if (!league || !myTeam) {
-        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })} />;
+}
+        return <ErrorDisplay title="Error" message="Could not load league data." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })} />;
 
     const keeperCount = league.settings.keeperCount || 0;
 
     if (keeperCount === 0) {
-        return <ErrorDisplay title="Not a Keeper League" message="This league is not set up for keepers." onRetry={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' })} />;
+}
+        return <ErrorDisplay title="Not a Keeper League" message="This league is not set up for keepers." onRetry={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; })} />;
 
     const handleTogglePlayer = (playerId: number) => {
+}
         setSelectedIds(prev => {
+}
             const newSet = new Set(prev);
             if (newSet.has(playerId)) {
+}
                 newSet.delete(playerId);
             } else {
+}
                 if (newSet.size < keeperCount) {
+}
                     newSet.add(playerId);
 
 
@@ -38,14 +45,17 @@ const KeeperSelectionView: React.FC = () => {
     };
 
     const handleSaveChanges = () => {
+}
         dispatch({
-            type: 'SET_KEEPERS',
+}
+            type: &apos;SET_KEEPERS&apos;,
             payload: { leagueId: league.id, teamId: myTeam.id, keeperPlayerIds: Array.from(selectedIds) }
         });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Keeper selections saved!', type: 'SYSTEM' } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Keeper selections saved!&apos;, type: &apos;SYSTEM&apos; } });
         setShowConfirmation(true);
         setTimeout(() => {
-            dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' });
+}
+            dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; });
         }, 2000);
     };
 
@@ -60,7 +70,7 @@ const KeeperSelectionView: React.FC = () => {
                     <p className="text-sm text-[var(--text-secondary)] tracking-widest">{league.name}</p>
                 </div>
                 <button 
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'TEAM_HUB' }) 
+                    onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;TEAM_HUB&apos; }) 
                     className="glass-button"
                 >
                     Back to Team Hub
@@ -93,13 +103,13 @@ const KeeperSelectionView: React.FC = () => {
                         </div>
                     </div>
                     <p className="text-sm text-[var(--text-secondary)] mt-4">
-                        Choose up to {keeperCount} players from your previous season's roster to keep for the upcoming draft. 
+                        Choose up to {keeperCount} players from your previous season&apos;s roster to keep for the upcoming draft. 
                         These picks will replace your first {keeperCount} round draft selections.
                     </p>
                 </motion.div>
 
                 {/* Player Selection Grid */}
-                <Widget 
+                <Widget>
                     title={`Your Roster (${selectedIds.size}/${keeperCount} selected)`} 
                     icon={<UsersIcon />}
                     className="glass-pane"
@@ -107,6 +117,7 @@ const KeeperSelectionView: React.FC = () => {
                     <div className="p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {myTeam.roster.map((player, index) => {
+}
                                 const isSelected = selectedIds.has(player.id);
                                 return (
                                     <motion.div
@@ -119,6 +130,7 @@ const KeeperSelectionView: React.FC = () => {
                                         {/* Selection Indicator */}
                                         <div className="absolute top-2 right-2">
                                             {isSelected ? (
+}
                                                 <CheckCircleIcon className="w-5 h-5 text-green-400" />
                                             ) : (
                                                 <div className="w-5 h-5 rounded-full border-2 border-gray-400" />
@@ -127,11 +139,13 @@ const KeeperSelectionView: React.FC = () => {
 
                                         {/* Player Avatar */}
                                         <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white
-                                            ${player.position === 'QB' ? 'bg-red-500' :
-                                              player.position === 'RB' ? 'bg-green-500' :
-                                              player.position === 'WR' ? 'bg-blue-500' :
-                                              player.position === 'TE' ? 'bg-yellow-500' :
-                                              'bg-gray-500'}`}>
+}
+                                            ${player.position === &apos;QB&apos; ? &apos;bg-red-500&apos; :
+}
+                                              player.position === &apos;RB&apos; ? &apos;bg-green-500&apos; :
+                                              player.position === &apos;WR&apos; ? &apos;bg-blue-500&apos; :
+                                              player.position === &apos;TE&apos; ? &apos;bg-yellow-500&apos; :
+                                              &apos;bg-gray-500&apos;}`}>
                                             {player.position}
                                         </div>
 
@@ -142,6 +156,7 @@ const KeeperSelectionView: React.FC = () => {
                                                 {player.position} - {player.team}
                                             </p>
                                             {player.projectedPoints && (
+}
                                                 <p className="text-xs text-blue-400 mt-1">
                                                     Proj: {player.projectedPoints.toFixed(1)} pts
                                                 </p>
@@ -150,6 +165,7 @@ const KeeperSelectionView: React.FC = () => {
 
                                         {/* Keeper Cost */}
                                         {isSelected && (
+}
                                             <div className="text-right">
                                                 <p className="text-xs text-[var(--text-secondary)]">Round</p>
                                                 <p className="text-lg font-bold text-white">{selectedIds.size}</p>
@@ -183,6 +199,7 @@ const KeeperSelectionView: React.FC = () => {
 
                 {/* Confirmation Modal */}
                 {showConfirmation && (
+}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -192,7 +209,7 @@ const KeeperSelectionView: React.FC = () => {
                             <CheckCircleIcon className="w-16 h-16 text-green-400 mx-auto mb-4" />
                             <h2 className="text-2xl font-bold text-white mb-2">Keepers Saved!</h2>
                             <p className="text-[var(--text-secondary)]">
-                                Your {selectedIds.size} keeper selection{selectedIds.size !== 1 ? 's have' : ' has'} been saved.
+                                Your {selectedIds.size} keeper selection{selectedIds.size !== 1 ? &apos;s have&apos; : &apos; has&apos;} been saved.
                             </p>
                         </div>
                     </motion.div>

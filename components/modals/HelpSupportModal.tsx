@@ -1,101 +1,120 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState } from 'react';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, HelpCircle, MessageCircle, Book, Video, Search, ChevronRight, ExternalLink, Mail, Phone, Clock } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo, useState } from &apos;react&apos;;
+import { useEscapeKey } from &apos;../../hooks/useEscapeKey&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { X, HelpCircle, MessageCircle, Book, Video, Search, ChevronRight, ExternalLink, Mail, Phone, Clock } from &apos;lucide-react&apos;;
 
 interface HelpSupportModalProps {
+}
   isOpen: boolean;
   onClose: () => void;
 
 }
 
 export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onClose }: any) => {
+}
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
-  const [activeTab, setActiveTab] = useState('faq');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState(&apos;faq&apos;);
+  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
   const [supportTicket, setSupportTicket] = useState({
-    category: 'general',
-    subject: '',
-    description: '',
-    priority: 'medium'
+}
+    category: &apos;general&apos;,
+    subject: &apos;&apos;,
+    description: &apos;&apos;,
+    priority: &apos;medium&apos;
   });
 
   const tabs = [
-    { id: 'faq', label: 'FAQ', icon: <HelpCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'guides', label: 'Guides', icon: <Book className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'videos', label: 'Tutorials', icon: <Video className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'contact', label: 'Contact Support', icon: <MessageCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+    { id: &apos;faq&apos;, label: &apos;FAQ&apos;, icon: <HelpCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;guides&apos;, label: &apos;Guides&apos;, icon: <Book className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;videos&apos;, label: &apos;Tutorials&apos;, icon: <Video className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;contact&apos;, label: &apos;Contact Support&apos;, icon: <MessageCircle className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
   ];
 
   const faqData = [
     {
-      category: 'Getting Started',
+}
+      category: &apos;Getting Started&apos;,
       questions: [
         {
-          q: 'How do I create my first fantasy team?',
-          a: 'Navigate to the Team Hub and click "Create Team". Follow the setup wizard to select your league settings, draft format, and invite friends.'
+}
+          q: &apos;How do I create my first fantasy team?&apos;,
+          a: &apos;Navigate to the Team Hub and click "Create Team". Follow the setup wizard to select your league settings, draft format, and invite friends.&apos;
         },
         {
-          q: 'What scoring system should I use?',
-          a: 'We recommend PPR (Point Per Reception) for beginners as it provides more consistent scoring. Standard scoring is also popular for traditional leagues.'
+}
+          q: &apos;What scoring system should I use?&apos;,
+          a: &apos;We recommend PPR (Point Per Reception) for beginners as it provides more consistent scoring. Standard scoring is also popular for traditional leagues.&apos;
         },
         {
-          q: 'How many teams should be in my league?',
-          a: '10-12 teams is ideal for competitive balance. 8 teams can work for casual leagues, while 14+ teams are for experienced players who want a challenge.'
+}
+          q: &apos;How many teams should be in my league?&apos;,
+          a: &apos;10-12 teams is ideal for competitive balance. 8 teams can work for casual leagues, while 14+ teams are for experienced players who want a challenge.&apos;
         }
       ]
     },
     {
-      category: 'Draft & Players',
+}
+      category: &apos;Draft & Players&apos;,
       questions: [
         {
-          q: 'How does the draft work?',
-          a: 'Our live draft room supports snake, auction, and custom formats. Players take turns selecting from available players until all rosters are full.'
+}
+          q: &apos;How does the draft work?&apos;,
+          a: &apos;Our live draft room supports snake, auction, and custom formats. Players take turns selecting from available players until all rosters are full.&apos;
         },
         {
-          q: 'Can I trade players?',
-          a: 'Yes! Use the Trade Center to propose trades. Both managers must accept, and your league commissioner may need to approve depending on settings.'
+}
+          q: &apos;Can I trade players?&apos;,
+          a: &apos;Yes! Use the Trade Center to propose trades. Both managers must accept, and your league commissioner may need to approve depending on settings.&apos;
         },
         {
-          q: 'What is the waiver wire?',
-          a: 'The waiver wire contains unowned players. Submit claims during the waiver period (usually Tuesday-Wednesday) to add players to your team.'
+}
+          q: &apos;What is the waiver wire?&apos;,
+          a: &apos;The waiver wire contains unowned players. Submit claims during the waiver period (usually Tuesday-Wednesday) to add players to your team.&apos;
         }
       ]
     },
     {
-      category: 'Scoring & Rules',
+}
+      category: &apos;Scoring & Rules&apos;,
       questions: [
         {
-          q: 'When are scores updated?',
-          a: 'Scores are updated in real-time during games. Final scores are typically available within 24 hours after the last game ends.'
+}
+          q: &apos;When are scores updated?&apos;,
+          a: &apos;Scores are updated in real-time during games. Final scores are typically available within 24 hours after the last game ends.&apos;
         },
         {
-          q: 'What happens if a player is injured?',
-          a: 'If a player is ruled out before the game starts, you can substitute them. Once games begin, injured players score 0 points.'
+}
+          q: &apos;What happens if a player is injured?&apos;,
+          a: &apos;If a player is ruled out before the game starts, you can substitute them. Once games begin, injured players score 0 points.&apos;
         },
         {
-          q: 'How do playoffs work?',
-          a: 'Top teams (usually 4-6) make playoffs in weeks 14-17. Playoffs use single-elimination brackets with matchups based on regular season standings.'
+}
+          q: &apos;How do playoffs work?&apos;,
+          a: &apos;Top teams (usually 4-6) make playoffs in weeks 14-17. Playoffs use single-elimination brackets with matchups based on regular season standings.&apos;
         }
       ]
     },
     {
-      category: 'Technical Issues',
+}
+      category: &apos;Technical Issues&apos;,
       questions: [
         {
-          q: 'The app is running slowly, what can I do?',
-          a: 'Try clearing your browser cache, updating to the latest version, or switching to a different browser. Contact support if issues persist.'
+}
+          q: &apos;The app is running slowly, what can I do?&apos;,
+          a: &apos;Try clearing your browser cache, updating to the latest version, or switching to a different browser. Contact support if issues persist.&apos;
         },
         {
-          q: 'I lost access to my account, how do I recover it?',
-          a: 'Use the "Forgot Password" link on the login page, or contact support with your email address and we\'ll help you regain access.'
+}
+          q: &apos;I lost access to my account, how do I recover it?&apos;,
+          a: &apos;Use the "Forgot Password" link on the login page, or contact support with your email address and we\&apos;ll help you regain access.&apos;
         },
         {
-          q: 'Can I use the app on my phone?',
-          a: 'Yes! Our app is fully responsive and optimized for mobile devices. You can also install it as a PWA for native app-like experience.'
+}
+          q: &apos;Can I use the app on my phone?&apos;,
+          a: &apos;Yes! Our app is fully responsive and optimized for mobile devices. You can also install it as a PWA for native app-like experience.&apos;
         }
       ]
     }
@@ -103,88 +122,100 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
 
   const guides = [
     {
-      title: 'Fantasy Football Basics',
-      description: 'Complete guide for beginners covering all fundamentals',
-      duration: '15 min read',
-      category: 'Beginner',
-      icon: '📚'
+}
+      title: &apos;Fantasy Football Basics&apos;,
+      description: &apos;Complete guide for beginners covering all fundamentals&apos;,
+      duration: &apos;15 min read&apos;,
+      category: &apos;Beginner&apos;,
+      icon: &apos;📚&apos;
     },
     {
-      title: 'Draft Strategy Guide',
-      description: 'Advanced drafting techniques and position prioritization',
-      duration: '20 min read',
-      category: 'Advanced',
-      icon: '🎯'
+}
+      title: &apos;Draft Strategy Guide&apos;,
+      description: &apos;Advanced drafting techniques and position prioritization&apos;,
+      duration: &apos;20 min read&apos;,
+      category: &apos;Advanced&apos;,
+      icon: &apos;🎯&apos;
     },
     {
-      title: 'Waiver Wire Mastery',
-      description: 'How to find and claim the best free agents',
-      duration: '12 min read',
-      category: 'Intermediate',
-      icon: '🔍'
+}
+      title: &apos;Waiver Wire Mastery&apos;,
+      description: &apos;How to find and claim the best free agents&apos;,
+      duration: &apos;12 min read&apos;,
+      category: &apos;Intermediate&apos;,
+      icon: &apos;🔍&apos;
     },
     {
-      title: 'Trade Negotiation',
-      description: 'Tips for successful player trades and valuations',
-      duration: '18 min read',
-      category: 'Advanced',
-      icon: '🤝'
+}
+      title: &apos;Trade Negotiation&apos;,
+      description: &apos;Tips for successful player trades and valuations&apos;,
+      duration: &apos;18 min read&apos;,
+      category: &apos;Advanced&apos;,
+      icon: &apos;🤝&apos;
     },
     {
-      title: 'Mobile App Features',
-      description: 'Make the most of our mobile experience',
-      duration: '8 min read',
-      category: 'Beginner',
-      icon: '📱'
+}
+      title: &apos;Mobile App Features&apos;,
+      description: &apos;Make the most of our mobile experience&apos;,
+      duration: &apos;8 min read&apos;,
+      category: &apos;Beginner&apos;,
+      icon: &apos;📱&apos;
     },
     {
-      title: 'League Management',
-      description: 'Commissioner tools and league administration',
-      duration: '25 min read',
-      category: 'Advanced',
-      icon: '⚙️'
+}
+      title: &apos;League Management&apos;,
+      description: &apos;Commissioner tools and league administration&apos;,
+      duration: &apos;25 min read&apos;,
+      category: &apos;Advanced&apos;,
+      icon: &apos;⚙️&apos;
     }
   ];
 
   const tutorials = [
     {
-      title: 'Setting Up Your First League',
-      description: 'Step-by-step video walkthrough of league creation',
-      duration: '8:32',
-      thumbnail: '🎬',
-      category: 'Getting Started'
+}
+      title: &apos;Setting Up Your First League&apos;,
+      description: &apos;Step-by-step video walkthrough of league creation&apos;,
+      duration: &apos;8:32&apos;,
+      thumbnail: &apos;🎬&apos;,
+      category: &apos;Getting Started&apos;
     },
     {
-      title: 'Live Draft Walkthrough',
-      description: 'See how our draft room works in real-time',
-      duration: '12:15',
-      thumbnail: '🎬',
-      category: 'Draft'
+}
+      title: &apos;Live Draft Walkthrough&apos;,
+      description: &apos;See how our draft room works in real-time&apos;,
+      duration: &apos;12:15&apos;,
+      thumbnail: &apos;🎬&apos;,
+      category: &apos;Draft&apos;
     },
     {
-      title: 'Managing Your Team',
-      description: 'Weekly roster management and lineup optimization',
-      duration: '6:48',
-      thumbnail: '🎬',
-      category: 'Team Management'
+}
+      title: &apos;Managing Your Team&apos;,
+      description: &apos;Weekly roster management and lineup optimization&apos;,
+      duration: &apos;6:48&apos;,
+      thumbnail: &apos;🎬&apos;,
+      category: &apos;Team Management&apos;
     },
     {
-      title: 'Using Analytics Tools',
-      description: 'Leverage our advanced analytics for better decisions',
-      duration: '10:23',
-      thumbnail: '🎬',
-      category: 'Analytics'
+}
+      title: &apos;Using Analytics Tools&apos;,
+      description: &apos;Leverage our advanced analytics for better decisions&apos;,
+      duration: &apos;10:23&apos;,
+      thumbnail: &apos;🎬&apos;,
+      category: &apos;Analytics&apos;
     },
     {
-      title: 'Mobile App Tour',
-      description: 'Complete guide to mobile features and navigation',
-      duration: '5:17',
-      thumbnail: '🎬',
-      category: 'Mobile'
+}
+      title: &apos;Mobile App Tour&apos;,
+      description: &apos;Complete guide to mobile features and navigation&apos;,
+      duration: &apos;5:17&apos;,
+      thumbnail: &apos;🎬&apos;,
+      category: &apos;Mobile&apos;
     }
   ];
 
   const filteredFAQ = faqData.map((category: any) => ({
+}
     ...category,
     questions: category.questions.filter(
       item =>
@@ -194,18 +225,20 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
   })).filter((category: any) => category.questions.length > 0);
 
   const handleSubmitTicket = (e: React.FormEvent) => {
+}
     e.preventDefault();
     // Handle support ticket submission
-    console.log('Support ticket submitted:', supportTicket);
+    console.log(&apos;Support ticket submitted:&apos;, supportTicket);
     // Reset form
     setSupportTicket({
-      category: 'general',
-      subject: '',
-      description: '',
-      priority: 'medium'
+}
+      category: &apos;general&apos;,
+      subject: &apos;&apos;,
+      description: &apos;&apos;,
+      priority: &apos;medium&apos;
     });
     // Show success message
-    alert('Support ticket submitted successfully! We\'ll get back to you within 24 hours.');
+    alert(&apos;Support ticket submitted successfully! We\&apos;ll get back to you within 24 hours.&apos;);
   };
 
   if (!isOpen) return null;
@@ -252,13 +285,15 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
           <div className="border-b border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="flex px-6 gap-1 sm:px-4 md:px-6 lg:px-8">
               {tabs.map((tab: any) => (
+}
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-4 py-3 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+}
                     activeTab === tab.id
-                      ? 'bg-primary-500 text-white'
-                      : 'text-gray-400 hover:text-white hover:bg-white/10'
+                      ? &apos;bg-primary-500 text-white&apos;
+                      : &apos;text-gray-400 hover:text-white hover:bg-white/10&apos;
                   }`}
                 >
                   {tab.icon}
@@ -271,7 +306,8 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(90vh-160px)] custom-scrollbar sm:px-4 md:px-6 lg:px-8">
             <div className="p-6 sm:px-4 md:px-6 lg:px-8">
-              {activeTab === 'faq' && (
+              {activeTab === &apos;faq&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   {/* Search */}
                   <div className="relative sm:px-4 md:px-6 lg:px-8">
@@ -287,12 +323,14 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                   {/* FAQ Categories */}
                   <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                     {(searchQuery ? filteredFAQ : faqData).map((category, categoryIndex) => (
+}
                       <div key={category.category} className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                         <h3 className="text-lg font-semibold text-white border-b border-white/10 pb-2 sm:px-4 md:px-6 lg:px-8">
                           {category.category}
                         </h3>
                         <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                           {category.questions.map((faq, index) => (
+}
                             <motion.div
                               key={index}
                               initial={{ opacity: 0, y: 20 }}
@@ -318,9 +356,11 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                 </div>
               )}
 
-              {activeTab === 'guides' && (
+              {activeTab === &apos;guides&apos; && (
+}
                 <div className="grid md:grid-cols-2 gap-4">
                   {guides.map((guide, index) => (
+}
                     <motion.div
                       key={guide.title}
                       initial={{ opacity: 0, y: 20 }}
@@ -340,9 +380,10 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           <p className="text-gray-400 text-sm mb-3 sm:px-4 md:px-6 lg:px-8">{guide.description}</p>
                           <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                             <span className={`text-xs px-2 py-1 rounded-full ${
-                              guide.category === 'Beginner' ? 'bg-green-400/20 text-green-400' :
-                              guide.category === 'Intermediate' ? 'bg-yellow-400/20 text-yellow-400' :
-                              'bg-red-400/20 text-red-400'
+}
+                              guide.category === &apos;Beginner&apos; ? &apos;bg-green-400/20 text-green-400&apos; :
+                              guide.category === &apos;Intermediate&apos; ? &apos;bg-yellow-400/20 text-yellow-400&apos; :
+                              &apos;bg-red-400/20 text-red-400&apos;
                             }`}>
                               {guide.category}
                             </span>
@@ -355,9 +396,11 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                 </div>
               )}
 
-              {activeTab === 'videos' && (
+              {activeTab === &apos;videos&apos; && (
+}
                 <div className="grid md:grid-cols-2 gap-4">
                   {tutorials.map((video, index) => (
+}
                     <motion.div
                       key={video.title}
                       initial={{ opacity: 0, y: 20 }}
@@ -385,7 +428,8 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                 </div>
               )}
 
-              {activeTab === 'contact' && (
+              {activeTab === &apos;contact&apos; && (
+}
                 <div className="max-w-2xl mx-auto space-y-6 sm:px-4 md:px-6 lg:px-8">
                   {/* Contact Options */}
                   <div className="grid md:grid-cols-3 gap-4 mb-8">
@@ -456,7 +500,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           onChange={(e: any) => setSupportTicket(prev => ({ ...prev, subject: e.target.value }))}
                           placeholder="Brief description of your issue"
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 sm:px-4 md:px-6 lg:px-8"
-                          required
+//                           required
                         />
                       </div>
                       <div>
@@ -467,7 +511,7 @@ export const HelpSupportModal: React.FC<HelpSupportModalProps> = ({ isOpen, onCl
                           placeholder="Please provide as much detail as possible about your issue"
                           rows={5}
                           className="w-full bg-dark-600 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:ring-2 focus:ring-primary-500 resize-none sm:px-4 md:px-6 lg:px-8"
-                          required
+//                           required
                         />
                       </div>
                       <button

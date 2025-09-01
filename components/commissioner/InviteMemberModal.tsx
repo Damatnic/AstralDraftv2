@@ -1,37 +1,42 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
-import { Modal } from '../ui/Modal';
-import { UserPlusIcon } from '../icons/UserPlusIcon';
-import type { League } from '../../types';
-import { ClipboardIcon } from '../icons/ClipboardIcon';
-import { CheckIcon } from '../icons/CheckIcon';
-import useCopyToClipboard from '../../hooks/useCopyToClipboard';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { UserPlusIcon } from &apos;../icons/UserPlusIcon&apos;;
+import type { League } from &apos;../../types&apos;;
+import { ClipboardIcon } from &apos;../icons/ClipboardIcon&apos;;
+import { CheckIcon } from &apos;../icons/CheckIcon&apos;;
+import useCopyToClipboard from &apos;../../hooks/useCopyToClipboard&apos;;
 
 interface InviteMemberModalProps {
+}
     league: League;
     onClose: () => void;
 
 }
 
 const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }: any) => {
+}
     const { dispatch } = useAppState();
-    const [email, setEmail] = React.useState('');
+    const [email, setEmail] = React.useState(&apos;&apos;);
     const [copiedLink, setCopiedLink] = React.useState<string | null>(null);
     const { copy } = useCopyToClipboard();
 
     const handleSubmit = (e: React.FormEvent) => {
+}
         e.preventDefault();
-        if (!email.trim().includes('@')) {
-            dispatch({ type: 'ADD_NOTIFICATION', payload: { message: "Please enter a valid email.", type: 'SYSTEM' } });
+        if (!email.trim().includes(&apos;@&apos;)) {
+}
+            dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: "Please enter a valid email.", type: &apos;SYSTEM&apos; } });
             return;
 
-        dispatch({ type: 'INVITE_MEMBER', payload: { leagueId: league.id, invitation: { email, status: 'PENDING', leagueId: league.id } } });
-        setEmail('');
+        dispatch({ type: &apos;INVITE_MEMBER&apos;, payload: { leagueId: league.id, invitation: { email, status: &apos;PENDING&apos;, leagueId: league.id } } });
+        setEmail(&apos;&apos;);
     };
 
     const handleCopy = (link: string) => {
+}
         copy(link);
         setCopiedLink(link);
         setTimeout(() => setCopiedLink(null), 2000);
@@ -64,8 +69,10 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ league, onClose }
                 <div className="p-4 border-t border-[var(--panel-border)] max-h-64 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                     <h3 className="font-semibold text-sm mb-2 sm:px-4 md:px-6 lg:px-8">Pending Invitations</h3>
                     {league.invitations && league.invitations.length > 0 ? (
+}
                         <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                             {league.invitations.map((inv: any) => (
+}
                                 <div key={inv.id} className="p-2 bg-black/10 rounded-md flex justify-between items-center sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-sm text-gray-300 sm:px-4 md:px-6 lg:px-8">{inv.email}</span>
                                     <button onClick={() => handleCopy(inv.link)}

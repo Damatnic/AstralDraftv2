@@ -1,71 +1,77 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState } from 'react';
-import { useEscapeKey } from '../../hooks/useEscapeKey';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, BarChart3, TrendingUp, Target, Award, Calendar, Users, Zap } from 'lucide-react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState } from &apos;react&apos;;
+import { useEscapeKey } from &apos;../../hooks/useEscapeKey&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { X, BarChart3, TrendingUp, Target, Award, Calendar, Users, Zap } from &apos;lucide-react&apos;;
 
 interface AnalyticsModalProps {
+}
   isOpen: boolean;
   onClose: () => void;
 
 }
 
 export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose }: any) => {
+}
   // Handle Escape key to close modal
   useEscapeKey(isOpen, onClose);
 
-  const [activeTab, setActiveTab] = useState('performance');
-  const [timeRange, setTimeRange] = useState('season');
+  const [activeTab, setActiveTab] = useState(&apos;performance&apos;);
+  const [timeRange, setTimeRange] = useState(&apos;season&apos;);
 
   const tabs = [
-    { id: 'performance', label: 'Performance', icon: <TrendingUp className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'team', label: 'Team Analysis', icon: <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'trends', label: 'Trends', icon: <BarChart3 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-    { id: 'predictions', label: 'Predictions', icon: <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+    { id: &apos;performance&apos;, label: &apos;Performance&apos;, icon: <TrendingUp className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;team&apos;, label: &apos;Team Analysis&apos;, icon: <Users className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;trends&apos;, label: &apos;Trends&apos;, icon: <BarChart3 className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+    { id: &apos;predictions&apos;, label: &apos;Predictions&apos;, icon: <Target className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
   ];
 
   const performanceMetrics = [
     {
-      label: 'Points Per Game',
+}
+      label: &apos;Points Per Game&apos;,
       value: 112.4,
       change: +5.2,
       rank: 2,
-      color: 'text-green-400',
-      bgColor: 'bg-green-400/20'
+      color: &apos;text-green-400&apos;,
+      bgColor: &apos;bg-green-400/20&apos;
     },
     {
-      label: 'Win Rate',
+}
+      label: &apos;Win Rate&apos;,
       value: 72.7,
       change: +8.3,
       rank: 3,
-      color: 'text-blue-400',
-      bgColor: 'bg-blue-400/20'
+      color: &apos;text-blue-400&apos;,
+      bgColor: &apos;bg-blue-400/20&apos;
     },
     {
-      label: 'Trade Efficiency',
+}
+      label: &apos;Trade Efficiency&apos;,
       value: 8.9,
       change: +1.4,
       rank: 1,
-      color: 'text-purple-400',
-      bgColor: 'bg-purple-400/20'
+      color: &apos;text-purple-400&apos;,
+      bgColor: &apos;bg-purple-400/20&apos;
     },
     {
-      label: 'Waiver Success',
+}
+      label: &apos;Waiver Success&apos;,
       value: 68.5,
       change: -2.1,
       rank: 4,
-      color: 'text-orange-400',
-      bgColor: 'bg-orange-400/20'
+      color: &apos;text-orange-400&apos;,
+      bgColor: &apos;bg-orange-400/20&apos;
     }
   ];
 
   const teamComposition = [
-    { position: 'QB', players: ['Josh Allen', 'Tua Tagovailoa'], strength: 95, color: 'text-red-400' },
-    { position: 'RB', players: ['Christian McCaffrey', 'Josh Jacobs', 'Dameon Pierce'], strength: 88, color: 'text-green-400' },
-    { position: 'WR', players: ['Tyreek Hill', 'Stefon Diggs', 'Mike Evans'], strength: 92, color: 'text-blue-400' },
-    { position: 'TE', players: ['Travis Kelce'], strength: 98, color: 'text-yellow-400' },
-    { position: 'K', players: ['Harrison Butker'], strength: 85, color: 'text-purple-400' },
-    { position: 'DST', players: ['Buffalo Bills'], strength: 78, color: 'text-indigo-400' }
+    { position: &apos;QB&apos;, players: [&apos;Josh Allen&apos;, &apos;Tua Tagovailoa&apos;], strength: 95, color: &apos;text-red-400&apos; },
+    { position: &apos;RB&apos;, players: [&apos;Christian McCaffrey&apos;, &apos;Josh Jacobs&apos;, &apos;Dameon Pierce&apos;], strength: 88, color: &apos;text-green-400&apos; },
+    { position: &apos;WR&apos;, players: [&apos;Tyreek Hill&apos;, &apos;Stefon Diggs&apos;, &apos;Mike Evans&apos;], strength: 92, color: &apos;text-blue-400&apos; },
+    { position: &apos;TE&apos;, players: [&apos;Travis Kelce&apos;], strength: 98, color: &apos;text-yellow-400&apos; },
+    { position: &apos;K&apos;, players: [&apos;Harrison Butker&apos;], strength: 85, color: &apos;text-purple-400&apos; },
+    { position: &apos;DST&apos;, players: [&apos;Buffalo Bills&apos;], strength: 78, color: &apos;text-indigo-400&apos; }
   ];
 
   const trendData = [
@@ -84,63 +90,71 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
 
   const predictions = [
     {
-      type: 'Playoff Chances',
+}
+      type: &apos;Playoff Chances&apos;,
       value: 85,
-      description: 'Strong chance to make playoffs',
+      description: &apos;Strong chance to make playoffs&apos;,
       confidence: 92,
-      color: 'text-green-400'
+      color: &apos;text-green-400&apos;
     },
     {
-      type: 'Championship Odds',
+}
+      type: &apos;Championship Odds&apos;,
       value: 18,
-      description: 'Above average championship potential',
+      description: &apos;Above average championship potential&apos;,
       confidence: 76,
-      color: 'text-yellow-400'
+      color: &apos;text-yellow-400&apos;
     },
     {
-      type: 'Next Week Win Prob',
+}
+      type: &apos;Next Week Win Prob&apos;,
       value: 68,
-      description: 'Favorable matchup ahead',
+      description: &apos;Favorable matchup ahead&apos;,
       confidence: 84,
-      color: 'text-blue-400'
+      color: &apos;text-blue-400&apos;
     },
     {
-      type: 'Trade Value Trend',
+}
+      type: &apos;Trade Value Trend&apos;,
       value: 95,
-      description: 'Team value increasing',
+      description: &apos;Team value increasing&apos;,
       confidence: 88,
-      color: 'text-purple-400'
+      color: &apos;text-purple-400&apos;
     }
   ];
 
   const insights = [
     {
-      type: 'strength',
-      title: 'Elite TE Position',
-      description: 'Travis Kelce gives you a significant advantage at TE',
-      impact: 'High',
-      color: 'text-green-400'
+}
+      type: &apos;strength&apos;,
+      title: &apos;Elite TE Position&apos;,
+      description: &apos;Travis Kelce gives you a significant advantage at TE&apos;,
+      impact: &apos;High&apos;,
+      color: &apos;text-green-400&apos;
     },
     {
-      type: 'opportunity',
-      title: 'RB Depth Concern',
-      description: 'Consider adding RB depth for playoff run',
-      impact: 'Medium',
-      color: 'text-yellow-400'
+}
+      type: &apos;opportunity&apos;,
+      title: &apos;RB Depth Concern&apos;,
+      description: &apos;Consider adding RB depth for playoff run&apos;,
+      impact: &apos;Medium&apos;,
+      color: &apos;text-yellow-400&apos;
     },
     {
-      type: 'warning',
-      title: 'Tough Schedule Ahead',
-      description: 'Next 3 weeks feature strong opponents',
-      impact: 'Medium',
-      color: 'text-orange-400'
+}
+      type: &apos;warning&apos;,
+      title: &apos;Tough Schedule Ahead&apos;,
+      description: &apos;Next 3 weeks feature strong opponents&apos;,
+      impact: &apos;Medium&apos;,
+      color: &apos;text-orange-400&apos;
     },
     {
-      type: 'tip',
-      title: 'Waiver Opportunity',
-      description: 'Consider picking up emerging WR handcuffs',
-      impact: 'Low',
-      color: 'text-blue-400'
+}
+      type: &apos;tip&apos;,
+      title: &apos;Waiver Opportunity&apos;,
+      description: &apos;Consider picking up emerging WR handcuffs&apos;,
+      impact: &apos;Low&apos;,
+      color: &apos;text-blue-400&apos;
     }
   ];
 
@@ -198,6 +212,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
           <div className="border-b border-white/10 bg-dark-900/50 sm:px-4 md:px-6 lg:px-8">
             <div className="flex px-6 gap-1 sm:px-4 md:px-6 lg:px-8">
               {tabs.map((tab: any) => (
+}
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
@@ -212,11 +227,13 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(90vh-160px)] custom-scrollbar sm:px-4 md:px-6 lg:px-8">
             <div className="p-6 sm:px-4 md:px-6 lg:px-8">
-              {activeTab === 'performance' && (
+              {activeTab === &apos;performance&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   {/* Key Metrics */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     {performanceMetrics.map((metric, index) => (
+}
                       <motion.div
                         key={metric.label}
                         initial={{ opacity: 0, y: 20 }}
@@ -232,10 +249,10 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                         </div>
                         <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                           <div className={`text-2xl font-bold ${metric.color}`}>
-                            {metric.value}{metric.label.includes('Rate') || metric.label.includes('Success') ? '%' : ''}
+                            {metric.value}{metric.label.includes(&apos;Rate&apos;) || metric.label.includes(&apos;Success&apos;) ? &apos;%&apos; : &apos;&apos;}
                           </div>
-                          <div className={`text-sm ${metric.change > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                            {metric.change > 0 ? '+' : ''}{metric.change}%
+                          <div className={`text-sm ${metric.change > 0 ? &apos;text-green-400&apos; : &apos;text-red-400&apos;}`}>
+                            {metric.change > 0 ? &apos;+&apos; : &apos;&apos;}{metric.change}%
                           </div>
                         </div>
                       </motion.div>
@@ -247,8 +264,9 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                     <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Key Insights</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       {insights.map((insight, index) => (
+}
                         <div key={index} className="flex items-start gap-3 p-4 bg-dark-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
-                          <div className={`w-2 h-2 rounded-full ${insight.color.replace('text-', 'bg-')} mt-2`}></div>
+                          <div className={`w-2 h-2 rounded-full ${insight.color.replace(&apos;text-&apos;, &apos;bg-&apos;)} mt-2`}></div>
                           <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center justify-between mb-1 sm:px-4 md:px-6 lg:px-8">
                               <h4 className="font-medium text-white sm:px-4 md:px-6 lg:px-8">{insight.title}</h4>
@@ -265,12 +283,14 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                 </div>
               )}
 
-              {activeTab === 'team' && (
+              {activeTab === &apos;team&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
                     <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Positional Strength Analysis</h3>
                     <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                       {teamComposition.map((position, index) => (
+}
                         <div key={position.position} className="flex items-center gap-4 p-4 bg-dark-600/50 rounded-lg sm:px-4 md:px-6 lg:px-8">
                           <div className="w-12 text-center sm:px-4 md:px-6 lg:px-8">
                             <div className={`text-sm font-bold ${position.color}`}>{position.position}</div>
@@ -278,7 +298,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                           <div className="flex-1 sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
                               <div className="text-white font-medium sm:px-4 md:px-6 lg:px-8">
-                                {position.players.join(', ')}
+                                {position.players.join(&apos;, &apos;)}
                               </div>
                               <div className="text-sm text-gray-400 sm:px-4 md:px-6 lg:px-8">
                                 Strength: <span className={position.color}>{position.strength}</span>
@@ -286,7 +306,7 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                             </div>
                             <div className="w-full bg-gray-600 rounded-full h-2 sm:px-4 md:px-6 lg:px-8">
                               <div
-                                className={`h-2 rounded-full ${position.color.replace('text-', 'bg-')}`}
+                                className={`h-2 rounded-full ${position.color.replace(&apos;text-&apos;, &apos;bg-&apos;)}`}
                                 style={{ width: `${position.strength}%` }}
                               ></div>
                             </div>
@@ -298,12 +318,14 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                 </div>
               )}
 
-              {activeTab === 'trends' && (
+              {activeTab === &apos;trends&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="bg-dark-700/50 rounded-xl p-6 sm:px-4 md:px-6 lg:px-8">
                     <h3 className="text-lg font-semibold text-white mb-4 sm:px-4 md:px-6 lg:px-8">Scoring Trends</h3>
                     <div className="h-64 flex items-end justify-between gap-1 px-4 sm:px-4 md:px-6 lg:px-8">
                       {trendData.map((week, index) => (
+}
                         <div key={week.week} className="flex-1 flex flex-col items-center sm:px-4 md:px-6 lg:px-8">
                           <div className="w-full max-w-8 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             <div
@@ -335,10 +357,12 @@ export const AnalyticsModal: React.FC<AnalyticsModalProps> = ({ isOpen, onClose 
                 </div>
               )}
 
-              {activeTab === 'predictions' && (
+              {activeTab === &apos;predictions&apos; && (
+}
                 <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                   <div className="grid md:grid-cols-2 gap-6">
                     {predictions.map((prediction, index) => (
+}
                       <motion.div
                         key={prediction.type}
                         initial={{ opacity: 0, scale: 0.9 }}

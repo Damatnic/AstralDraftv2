@@ -3,13 +3,14 @@
  * Provides a user-friendly interface for app installation
  */
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React, { useCallback } from 'react';
-import { usePWAInstall, useOfflineStatus, pwaUtils } from '../../utils/pwa';
-import { AccessibleButton } from './AccessibleButton';
-import './InstallPrompt.css';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { usePWAInstall, useOfflineStatus, pwaUtils } from &apos;../../utils/pwa&apos;;
+import { AccessibleButton } from &apos;./AccessibleButton&apos;;
+import &apos;./InstallPrompt.css&apos;;
 
 interface InstallPromptProps {
+}
   className?: string;
   onInstall?: () => void;
   onDismiss?: () => void;
@@ -17,62 +18,75 @@ interface InstallPromptProps {
 
 }
 
-export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
+export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = &apos;&apos;,
+}
   onInstall,
   onDismiss,
   showOfflineStatus = true
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { isInstallable, isInstalled, promptInstall } = usePWAInstall();
   const { isOffline } = useOfflineStatus();
   const [dismissed, setDismissed] = React.useState(false);
   const [installing, setInstalling] = React.useState(false);
 
-  // Don't show if already installed, dismissed, or not installable
+  // Don&apos;t show if already installed, dismissed, or not installable
   if (isInstalled || dismissed || !isInstallable) {
+}
     return null;
 
   const platform = pwaUtils.getPlatform();
 
   const handleInstall = async () => {
+}
     setInstalling(true);
     try {
+}
 
       const success = await promptInstall();
       if (success) {
+}
         onInstall?.();
 
     } catch (error) {
+}
         console.error(error);
     } finally {
+}
       setInstalling(false);
 
   };
 
   const handleDismiss = () => {
+}
     setDismissed(true);
     onDismiss?.();
   };
 
   const getInstallText = () => {
+}
     switch (platform) {
-      case 'ios':
-        return 'Add to Home Screen';
-      case 'android':
-        return 'Install App';
+}
+      case &apos;ios&apos;:
+        return &apos;Add to Home Screen&apos;;
+      case &apos;android&apos;:
+        return &apos;Install App&apos;;
       default:
-        return 'Install Astral Draft';
+        return &apos;Install Astral Draft&apos;;
 
   };
 
   const getDescription = () => {
+}
     switch (platform) {
-      case 'ios':
+}
+      case &apos;ios&apos;:
         return pwaUtils.showIOSInstallInstructions();
-      case 'android':
+      case &apos;android&apos;:
         return pwaUtils.showAndroidInstallInstructions();
       default:
-        return 'Install Astral Draft for a better experience with offline access and faster loading.';
+        return &apos;Install Astral Draft for a better experience with offline access and faster loading.&apos;;
 
   };
 
@@ -100,27 +114,29 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
           </p>
           
           {showOfflineStatus && isOffline && (
+}
             <div className="install-prompt__offline-notice sm:px-4 md:px-6 lg:px-8">
               <span className="install-prompt__offline-icon sm:px-4 md:px-6 lg:px-8" aria-hidden="true">📱</span>
-              {' '}Install for offline access
+              {&apos; &apos;}Install for offline access
             </div>
           )}
         </div>
         
         <div className="install-prompt__actions sm:px-4 md:px-6 lg:px-8">
-          {(platform === 'desktop' || platform === 'android') && (
-            <AccessibleButton
+          {(platform === &apos;desktop&apos; || platform === &apos;android&apos;) && (
+}
+            <AccessibleButton>
               onClick={handleInstall}
               disabled={installing}
               variant="primary"
               size="sm"
               aria-describedby="install-description"
             >
-              {installing ? 'Installing...' : 'Install'}
+              {installing ? &apos;Installing...&apos; : &apos;Install&apos;}
             </AccessibleButton>
           )}
           
-          <AccessibleButton
+          <AccessibleButton>
             onClick={handleDismiss}
             variant="ghost"
             size="sm"
@@ -139,20 +155,26 @@ export const InstallPrompt: React.FC<InstallPromptProps> = ({ className = '',
  * Shows connection status and update notifications
  */
 interface PWAStatusBannerProps {
+}
   className?: string;
 
 }
 
 export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
-  className = ''
+}
+  className = &apos;&apos;
 }: any) => {
+}
   const { isOffline } = useOfflineStatus();
   const [showBanner, setShowBanner] = React.useState(false);
 
   React.useEffect(() => {
+}
     if (isOffline) {
+}
       setShowBanner(true);
     } else {
+}
       // Hide banner after a delay when coming back online
       const timer = setTimeout(() => setShowBanner(false), 3000);
       return () => clearTimeout(timer);
@@ -163,14 +185,15 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
 
   return (
     <output 
-      className={`pwa-status-banner ${isOffline ? 'pwa-status-banner--offline' : 'pwa-status-banner--online'} ${className}`}
+      className={`pwa-status-banner ${isOffline ? &apos;pwa-status-banner--offline&apos; : &apos;pwa-status-banner--online&apos;} ${className}`}
       aria-live="polite"
     >
       <div className="pwa-status-banner__content sm:px-4 md:px-6 lg:px-8">
         {isOffline ? (
+}
           <>
             <span className="pwa-status-banner__icon sm:px-4 md:px-6 lg:px-8" aria-hidden="true">📱</span>
-            <span>You're offline. Some features may be limited.</span>
+            <span>You&apos;re offline. Some features may be limited.</span>
           </>
         ) : (
           <>
@@ -180,7 +203,7 @@ export const PWAStatusBanner: React.FC<PWAStatusBannerProps> = ({
         )}
       </div>
       
-      <AccessibleButton
+      <AccessibleButton>
         onClick={() => setShowBanner(false)}
         variant="ghost"
         size="sm"

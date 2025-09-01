@@ -1,19 +1,21 @@
 // Mobile Optimization Utilities for Astral Draft Views
 // Provides consistent mobile-first patterns and utilities for view components
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from &apos;react&apos;;
 
 // Breakpoint system based on Tailwind CSS
 export const BREAKPOINTS = {
+}
   sm: 640,
   md: 768,
   lg: 1024,
   xl: 1280,
-  '2xl': 1536
+  &apos;2xl&apos;: 1536
 } as const;
 
 // Mobile-specific constants
 export const MOBILE_CONSTANTS = {
+}
   MIN_TOUCH_TARGET: 44, // Apple/W3C recommended minimum
   SAFE_AREA_BOTTOM: 34, // iPhone safe area
   KEYBOARD_HEIGHT: 300, // Estimated keyboard height
@@ -25,40 +27,48 @@ export const MOBILE_CONSTANTS = {
  * Hook to detect current screen size and mobile status
  */
 export const useResponsiveBreakpoint = () => {
-  const [breakpoint, setBreakpoint] = useState<keyof typeof BREAKPOINTS>('sm');
+}
+  const [breakpoint, setBreakpoint] = useState<keyof typeof BREAKPOINTS>(&apos;sm&apos;);
   const [isMobile, setIsMobile] = useState(true);
   const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
+}
     const updateBreakpoint = () => {
+}
       const width = window.innerWidth;
       
-      if (width >= BREAKPOINTS['2xl']) {
-        setBreakpoint('2xl');
+      if (width >= BREAKPOINTS[&apos;2xl&apos;]) {
+}
+        setBreakpoint(&apos;2xl&apos;);
         setIsMobile(false);
         setIsTablet(false);
       } else if (width >= BREAKPOINTS.xl) {
-        setBreakpoint('xl');
+}
+        setBreakpoint(&apos;xl&apos;);
         setIsMobile(false);
         setIsTablet(false);
       } else if (width >= BREAKPOINTS.lg) {
-        setBreakpoint('lg');
+}
+        setBreakpoint(&apos;lg&apos;);
         setIsMobile(false);
         setIsTablet(true);
       } else if (width >= BREAKPOINTS.md) {
-        setBreakpoint('md');
+}
+        setBreakpoint(&apos;md&apos;);
         setIsMobile(false);
         setIsTablet(true);
       } else {
-        setBreakpoint('sm');
+}
+        setBreakpoint(&apos;sm&apos;);
         setIsMobile(true);
         setIsTablet(false);
       }
     };
 
     updateBreakpoint();
-    window.addEventListener('resize', updateBreakpoint);
-    return () => window.removeEventListener('resize', updateBreakpoint);
+    window.addEventListener(&apos;resize&apos;, updateBreakpoint);
+    return () => window.removeEventListener(&apos;resize&apos;, updateBreakpoint);
   }, []);
 
   return { breakpoint, isMobile, isTablet };
@@ -68,6 +78,7 @@ export const useResponsiveBreakpoint = () => {
  * Mobile-optimized class name builders (static, no hooks)
  */
 export const mobileClasses = {
+}
   // Layout patterns
   container: "w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
   panel: "bg-[var(--panel-bg)] rounded-lg border border-[var(--panel-border)] shadow-lg",
@@ -123,13 +134,17 @@ export const useMobileOptimizedClasses = (
   tabletClasses?: string,
   desktopClasses?: string
 ) => {
+}
   const { isMobile, isTablet } = useResponsiveBreakpoint();
   
   if (isMobile) {
+}
     return `${baseClasses} ${mobileClasses}`;
   } else if (isTablet && tabletClasses) {
+}
     return `${baseClasses} ${tabletClasses}`;
   } else if (desktopClasses) {
+}
     return `${baseClasses} ${desktopClasses}`;
   }
   
@@ -140,10 +155,13 @@ export const useMobileOptimizedClasses = (
  * Custom hook for mobile-optimized modal positioning
  */
 export const useMobileModalClasses = () => {
+}
   const { isMobile } = useResponsiveBreakpoint();
   
   if (isMobile) {
+}
     return {
+}
       overlay: "fixed inset-0 bg-black/50 flex items-end justify-center z-50",
       content: "w-full bg-[var(--panel-bg)] rounded-t-xl border-t border-[var(--panel-border)] max-h-[90vh] overflow-y-auto",
       animation: "animate-slide-up"
@@ -151,6 +169,7 @@ export const useMobileModalClasses = () => {
   }
   
   return {
+}
     overlay: "fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4",
     content: "w-full max-w-lg bg-[var(--panel-bg)] rounded-lg border border-[var(--panel-border)]",
     animation: "animate-fade-in"
@@ -160,13 +179,15 @@ export const useMobileModalClasses = () => {
 /**
  * Custom hook for touch-friendly icon sizing
  */
-export const useIconSize = (size: 'sm' | 'md' | 'lg' = 'md') => {
+export const useIconSize = (size: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; = &apos;md&apos;) => {
+}
   const { isMobile } = useResponsiveBreakpoint();
   
   const sizes = {
-    sm: isMobile ? 'w-5 h-5' : 'w-4 h-4',
-    md: isMobile ? 'w-6 h-6' : 'w-5 h-5',
-    lg: isMobile ? 'w-8 h-8' : 'w-6 h-6'
+}
+    sm: isMobile ? &apos;w-5 h-5&apos; : &apos;w-4 h-4&apos;,
+    md: isMobile ? &apos;w-6 h-6&apos; : &apos;w-5 h-5&apos;,
+    lg: isMobile ? &apos;w-8 h-8&apos; : &apos;w-6 h-6&apos;
   };
   
   return sizes[size];
@@ -175,11 +196,14 @@ export const useIconSize = (size: 'sm' | 'md' | 'lg' = 'md') => {
 /**
  * Custom hook for mobile-optimized fixed positioning
  */
-export const useMobileFixedPosition = (position: 'top' | 'bottom' | 'corner') => {
+export const useMobileFixedPosition = (position: &apos;top&apos; | &apos;bottom&apos; | &apos;corner&apos;) => {
+}
   const { isMobile } = useResponsiveBreakpoint();
   
   if (!isMobile) {
+}
     return {
+}
       top: "fixed top-4 left-1/2 -translate-x-1/2 z-50",
       bottom: "fixed bottom-4 left-1/2 -translate-x-1/2 z-50",
       corner: "fixed bottom-4 right-4 z-50"
@@ -188,6 +212,7 @@ export const useMobileFixedPosition = (position: 'top' | 'bottom' | 'corner') =>
   
   // Mobile-optimized positions with safe areas
   return {
+}
     top: "fixed top-4 left-4 right-4 z-50",
     bottom: "fixed bottom-4 left-4 right-4 z-50 pb-safe",
     corner: "fixed bottom-4 right-4 z-50 mb-safe"
@@ -202,14 +227,18 @@ export const useResponsiveColumns = (
   maxCols: { mobile: number; tablet: number; desktop: number } = 
     { mobile: 2, tablet: 3, desktop: 4 }
 ) => {
+}
   const { isMobile, isTablet } = useResponsiveBreakpoint();
   
   let cols: number;
   if (isMobile) {
+}
     cols = Math.min(itemCount, maxCols.mobile);
   } else if (isTablet) {
+}
     cols = Math.min(itemCount, maxCols.tablet);
   } else {
+}
     cols = Math.min(itemCount, maxCols.desktop);
   }
   
@@ -217,7 +246,7 @@ export const useResponsiveColumns = (
     `grid-cols-${cols}`,
     `sm:grid-cols-${Math.min(itemCount, maxCols.tablet)}`,
     `lg:grid-cols-${Math.min(itemCount, maxCols.desktop)}`
-  ].join(' ');
+  ].join(&apos; &apos;);
   
   return `grid ${gridClasses} gap-3 sm:gap-4 lg:gap-6`;
 };
@@ -226,6 +255,7 @@ export const useResponsiveColumns = (
  * Mobile-optimized spacing utilities
  */
 export const spacing = {
+}
   xs: "gap-1 sm:gap-2",
   sm: "gap-2 sm:gap-3", 
   md: "gap-3 sm:gap-4",
@@ -233,6 +263,7 @@ export const spacing = {
   xl: "gap-6 sm:gap-8",
   
   padding: {
+}
     xs: "p-2 sm:p-3",
     sm: "p-3 sm:p-4", 
     md: "p-4 sm:p-6",
@@ -240,6 +271,7 @@ export const spacing = {
   },
   
   margin: {
+}
     xs: "m-2 sm:m-3",
     sm: "m-3 sm:m-4",
     md: "m-4 sm:m-6", 
@@ -251,6 +283,7 @@ export const spacing = {
  * Custom hook to determine if element should use mobile layout
  */
 export const useShouldUseMobileLayout = () => {
+}
   const { isMobile } = useResponsiveBreakpoint();
   return isMobile;
 };
@@ -258,18 +291,21 @@ export const useShouldUseMobileLayout = () => {
 /**
  * Mobile-safe scrollable container
  */
-export const getMobileScrollContainer = (height: 'sm' | 'md' | 'lg' | 'xl' = 'md') => {
+export const getMobileScrollContainer = (height: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; = &apos;md&apos;) => {
+}
   const heights = {
-    sm: 'max-h-32 sm:max-h-40',
-    md: 'max-h-48 sm:max-h-64', 
-    lg: 'max-h-64 sm:max-h-80',
-    xl: 'max-h-80 sm:max-h-96'
+}
+    sm: &apos;max-h-32 sm:max-h-40&apos;,
+    md: &apos;max-h-48 sm:max-h-64&apos;, 
+    lg: &apos;max-h-64 sm:max-h-80&apos;,
+    xl: &apos;max-h-80 sm:max-h-96&apos;
   };
   
   return `${heights[height]} overflow-y-auto scrollbar-hide overscroll-contain`;
 };
 
 export default {
+}
   useResponsiveBreakpoint,
   mobileClasses,
   useMobileOptimizedClasses,
@@ -281,5 +317,5 @@ export default {
   useShouldUseMobileLayout,
   getMobileScrollContainer,
   BREAKPOINTS,
-  MOBILE_CONSTANTS
+//   MOBILE_CONSTANTS
 };

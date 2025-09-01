@@ -3,39 +3,41 @@
  * Comprehensive prop interfaces for all React components
  */
 
-import React from 'react';
-import { Player } from '../models/player';
-import { User } from '../models/user';
-import { League, Team, Matchup } from '../models/league';
-import { DraftState, DraftPick } from '../models/draft';
+import { Player } from &apos;../models/player&apos;;
+import { User } from &apos;../models/user&apos;;
+import { League, Team, Matchup } from &apos;../models/league&apos;;
+import { DraftState, DraftPick } from &apos;../models/draft&apos;;
 
 // ==================== BASE COMPONENT PROPS ====================
 
 export interface BaseComponentProps {
+}
   className?: string;
   children?: React.ReactNode;
   testId?: string;
-  'data-testid'?: string;
+  &apos;data-testid&apos;?: string;
   id?: string;
   style?: React.CSSProperties;
 }
 
 export interface InteractiveProps extends BaseComponentProps {
+}
   disabled?: boolean;
   loading?: boolean;
   onClick?: (event: React.MouseEvent) => void;
   onKeyDown?: (event: React.KeyboardEvent) => void;
   tabIndex?: number;
   role?: string;
-  'aria-label'?: string;
-  'aria-describedby'?: string;
-  'aria-expanded'?: boolean;
-  'aria-controls'?: string;
+  &apos;aria-label&apos;?: string;
+  &apos;aria-describedby&apos;?: string;
+  &apos;aria-expanded&apos;?: boolean;
+  &apos;aria-controls&apos;?: string;
 }
 
 // ==================== MODAL PROPS ====================
 
 export interface BaseModalProps extends BaseComponentProps {
+}
   isOpen: boolean;
   onClose: () => void;
   title?: string;
@@ -43,22 +45,24 @@ export interface BaseModalProps extends BaseComponentProps {
   closeOnEscape?: boolean;
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
-  position?: 'center' | 'top' | 'bottom';
-  animation?: 'fade' | 'slide' | 'scale' | 'none';
+  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos; | &apos;full&apos;;
+  position?: &apos;center&apos; | &apos;top&apos; | &apos;bottom&apos;;
+  animation?: &apos;fade&apos; | &apos;slide&apos; | &apos;scale&apos; | &apos;none&apos;;
 }
 
 export interface ConfirmModalProps extends BaseModalProps {
+}
   message: string;
   confirmText?: string;
   cancelText?: string;
-  variant?: 'danger' | 'warning' | 'info' | 'success';
+  variant?: &apos;danger&apos; | &apos;warning&apos; | &apos;info&apos; | &apos;success&apos;;
   onConfirm: () => void;
   onCancel?: () => void;
   isLoading?: boolean;
 }
 
 export interface PlayerDetailModalProps extends BaseModalProps {
+}
   player: Player;
   showComparison?: boolean;
   showTrade?: boolean;
@@ -69,6 +73,7 @@ export interface PlayerDetailModalProps extends BaseModalProps {
 // ==================== FORM PROPS ====================
 
 export interface FormFieldProps extends BaseComponentProps {
+}
   name: string;
   label?: string;
   placeholder?: string;
@@ -81,7 +86,8 @@ export interface FormFieldProps extends BaseComponentProps {
 }
 
 export interface InputProps extends FormFieldProps {
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+}
+  type?: &apos;text&apos; | &apos;email&apos; | &apos;password&apos; | &apos;number&apos; | &apos;tel&apos; | &apos;url&apos; | &apos;search&apos;;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -92,16 +98,18 @@ export interface InputProps extends FormFieldProps {
   pattern?: string;
   maxLength?: number;
   minLength?: number;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'filled' | 'outlined';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  variant?: &apos;default&apos; | &apos;filled&apos; | &apos;outlined&apos;;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
 
 export interface SelectProps<T = any> extends FormFieldProps {
+}
   value: T;
   onChange: (value: T) => void;
   options: Array<{
+}
     value: T;
     label: string;
     disabled?: boolean;
@@ -111,34 +119,37 @@ export interface SelectProps<T = any> extends FormFieldProps {
   searchable?: boolean;
   clearable?: boolean;
   loading?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'filled' | 'outlined';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  variant?: &apos;default&apos; | &apos;filled&apos; | &apos;outlined&apos;;
 }
 
 export interface TextAreaProps extends FormFieldProps {
+}
   value: string;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: number;
   cols?: number;
-  resize?: 'none' | 'both' | 'horizontal' | 'vertical';
+  resize?: &apos;none&apos; | &apos;both&apos; | &apos;horizontal&apos; | &apos;vertical&apos;;
   maxLength?: number;
   minLength?: number;
 }
 
 export interface CheckboxProps extends FormFieldProps {
+}
   checked: boolean;
   onChange: (checked: boolean) => void;
   indeterminate?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'switch';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  variant?: &apos;default&apos; | &apos;switch&apos;;
 }
 
 // ==================== BUTTON PROPS ====================
 
 export interface ButtonProps extends InteractiveProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success' | 'warning';
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  type?: 'button' | 'submit' | 'reset';
+}
+  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;outline&apos; | &apos;ghost&apos; | &apos;danger&apos; | &apos;success&apos; | &apos;warning&apos;;
+  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
+  type?: &apos;button&apos; | &apos;submit&apos; | &apos;reset&apos;;
   fullWidth?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
@@ -149,17 +160,19 @@ export interface ButtonProps extends InteractiveProps {
   download?: boolean;
 }
 
-export interface IconButtonProps extends Omit<ButtonProps, 'leftIcon' | 'rightIcon' | 'iconOnly'> {
+export interface IconButtonProps extends Omit<ButtonProps, &apos;leftIcon&apos; | &apos;rightIcon&apos; | &apos;iconOnly&apos;> {
+}
   icon: React.ReactNode;
-  'aria-label': string;
+  &apos;aria-label&apos;: string;
   tooltip?: string;
 }
 
 // ==================== PLAYER COMPONENT PROPS ====================
 
 export interface PlayerCardProps extends BaseComponentProps {
+}
   player: Player;
-  variant?: 'compact' | 'default' | 'detailed';
+  variant?: &apos;compact&apos; | &apos;default&apos; | &apos;detailed&apos;;
   showActions?: boolean;
   showStats?: boolean;
   showProjections?: boolean;
@@ -176,11 +189,12 @@ export interface PlayerCardProps extends BaseComponentProps {
 }
 
 export interface PlayerListProps extends BaseComponentProps {
+}
   players: Player[];
   loading?: boolean;
   error?: string;
   emptyMessage?: string;
-  variant?: 'table' | 'grid' | 'list';
+  variant?: &apos;table&apos; | &apos;grid&apos; | &apos;list&apos;;
   sortable?: boolean;
   filterable?: boolean;
   searchable?: boolean;
@@ -188,16 +202,18 @@ export interface PlayerListProps extends BaseComponentProps {
   selectedPlayers?: string[];
   onPlayerSelect?: (playerId: string, selected: boolean) => void;
   onPlayerClick?: (player: Player) => void;
-  onSort?: (field: string, direction: 'asc' | 'desc') => void;
+  onSort?: (field: string, direction: &apos;asc&apos; | &apos;desc&apos;) => void;
   itemsPerPage?: number;
   showPagination?: boolean;
 }
 
 export interface PlayerSearchProps extends BaseComponentProps {
+}
   onSearch: (query: string) => void;
   onFilter: (filters: any) => void;
   placeholder?: string;
   filters?: {
+}
     positions?: string[];
     teams?: string[];
     availability?: string[];
@@ -208,6 +224,7 @@ export interface PlayerSearchProps extends BaseComponentProps {
 }
 
 export interface PlayerComparisonProps extends BaseComponentProps {
+}
   players: Player[];
   categories?: string[];
   onRemovePlayer?: (playerId: string) => void;
@@ -218,6 +235,7 @@ export interface PlayerComparisonProps extends BaseComponentProps {
 // ==================== DRAFT COMPONENT PROPS ====================
 
 export interface DraftBoardProps extends BaseComponentProps {
+}
   draftState: DraftState;
   availablePlayers: Player[];
   myTeam: Team;
@@ -229,26 +247,29 @@ export interface DraftBoardProps extends BaseComponentProps {
 }
 
 export interface DraftPickProps extends BaseComponentProps {
+}
   pick: DraftPick;
   team?: Team;
   player?: Player;
   isCurrent?: boolean;
   isMyPick?: boolean;
-  variant?: 'compact' | 'detailed';
+  variant?: &apos;compact&apos; | &apos;detailed&apos;;
   onClick?: (pick: DraftPick) => void;
 }
 
 export interface DraftTimerProps extends BaseComponentProps {
+}
   timeRemaining: number;
   totalTime: number;
   isActive: boolean;
   onTimeExpired?: () => void;
   showProgress?: boolean;
-  variant?: 'circular' | 'linear' | 'text';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: &apos;circular&apos; | &apos;linear&apos; | &apos;text&apos;;
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
 }
 
 export interface DraftQueueProps extends BaseComponentProps {
+}
   queue: Player[];
   onReorder: (playerIds: string[]) => void;
   onRemove: (playerId: string) => void;
@@ -259,13 +280,15 @@ export interface DraftQueueProps extends BaseComponentProps {
 // ==================== TEAM COMPONENT PROPS ====================
 
 export interface TeamCardProps extends BaseComponentProps {
+}
   team: Team;
-  variant?: 'compact' | 'default' | 'detailed';
+  variant?: &apos;compact&apos; | &apos;default&apos; | &apos;detailed&apos;;
   showRecord?: boolean;
   showRoster?: boolean;
   showStats?: boolean;
   onClick?: (team: Team) => void;
   actions?: Array<{
+}
     label: string;
     icon?: React.ReactNode;
     onClick: (team: Team) => void;
@@ -274,6 +297,7 @@ export interface TeamCardProps extends BaseComponentProps {
 }
 
 export interface TeamRosterProps extends BaseComponentProps {
+}
   team: Team;
   editable?: boolean;
   showBench?: boolean;
@@ -284,6 +308,7 @@ export interface TeamRosterProps extends BaseComponentProps {
 }
 
 export interface TeamStandingsProps extends BaseComponentProps {
+}
   teams: Team[];
   currentWeek: number;
   showDivisions?: boolean;
@@ -295,13 +320,15 @@ export interface TeamStandingsProps extends BaseComponentProps {
 // ==================== LEAGUE COMPONENT PROPS ====================
 
 export interface LeagueCardProps extends BaseComponentProps {
+}
   league: League;
-  variant?: 'compact' | 'default' | 'detailed';
+  variant?: &apos;compact&apos; | &apos;default&apos; | &apos;detailed&apos;;
   showSettings?: boolean;
   showMembers?: boolean;
   showActivity?: boolean;
   onClick?: (league: League) => void;
   actions?: Array<{
+}
     label: string;
     icon?: React.ReactNode;
     onClick: (league: League) => void;
@@ -310,6 +337,7 @@ export interface LeagueCardProps extends BaseComponentProps {
 }
 
 export interface LeagueSettingsProps extends BaseComponentProps {
+}
   league: League;
   editable?: boolean;
   onSettingChange?: (setting: string, value: any) => void;
@@ -318,6 +346,7 @@ export interface LeagueSettingsProps extends BaseComponentProps {
 }
 
 export interface LeagueActivityProps extends BaseComponentProps {
+}
   activities: any[];
   loading?: boolean;
   realTime?: boolean;
@@ -329,8 +358,9 @@ export interface LeagueActivityProps extends BaseComponentProps {
 // ==================== MATCHUP COMPONENT PROPS ====================
 
 export interface MatchupCardProps extends BaseComponentProps {
+}
   matchup: Matchup;
-  variant?: 'compact' | 'default' | 'detailed';
+  variant?: &apos;compact&apos; | &apos;default&apos; | &apos;detailed&apos;;
   showLineups?: boolean;
   showProjections?: boolean;
   showLive?: boolean;
@@ -339,6 +369,7 @@ export interface MatchupCardProps extends BaseComponentProps {
 }
 
 export interface MatchupLineupProps extends BaseComponentProps {
+}
   matchup: Matchup;
   teamId: string;
   editable?: boolean;
@@ -348,6 +379,7 @@ export interface MatchupLineupProps extends BaseComponentProps {
 }
 
 export interface LiveScoringProps extends BaseComponentProps {
+}
   matchup: Matchup;
   showEvents?: boolean;
   showProjections?: boolean;
@@ -358,6 +390,7 @@ export interface LiveScoringProps extends BaseComponentProps {
 // ==================== TRADE COMPONENT PROPS ====================
 
 export interface TradeOfferProps extends BaseComponentProps {
+}
   trade: any;
   canRespond?: boolean;
   showAnalysis?: boolean;
@@ -368,6 +401,7 @@ export interface TradeOfferProps extends BaseComponentProps {
 }
 
 export interface TradeBuilderProps extends BaseComponentProps {
+}
   myTeam: Team;
   targetTeam: Team;
   onSubmit: (trade: any) => void;
@@ -379,6 +413,7 @@ export interface TradeBuilderProps extends BaseComponentProps {
 // ==================== WAIVER COMPONENT PROPS ====================
 
 export interface WaiverClaimProps extends BaseComponentProps {
+}
   claim: any;
   canCancel?: boolean;
   showAdvice?: boolean;
@@ -387,6 +422,7 @@ export interface WaiverClaimProps extends BaseComponentProps {
 }
 
 export interface WaiverWireProps extends BaseComponentProps {
+}
   players: Player[];
   claims: any[];
   faabBudget: number;
@@ -398,8 +434,9 @@ export interface WaiverWireProps extends BaseComponentProps {
 // ==================== ANALYTICS COMPONENT PROPS ====================
 
 export interface ChartProps extends BaseComponentProps {
+}
   data: any[];
-  type: 'line' | 'bar' | 'pie' | 'scatter' | 'area';
+  type: &apos;line&apos; | &apos;bar&apos; | &apos;pie&apos; | &apos;scatter&apos; | &apos;area&apos;;
   title?: string;
   subtitle?: string;
   xAxis?: string;
@@ -412,23 +449,26 @@ export interface ChartProps extends BaseComponentProps {
 }
 
 export interface StatsCardProps extends BaseComponentProps {
+}
   title: string;
   value: string | number;
   change?: {
+}
     value: number;
-    direction: 'up' | 'down';
+    direction: &apos;up&apos; | &apos;down&apos;;
     period: string;
   };
   icon?: React.ReactNode;
-  variant?: 'default' | 'compact' | 'featured';
+  variant?: &apos;default&apos; | &apos;compact&apos; | &apos;featured&apos;;
   loading?: boolean;
   onClick?: () => void;
 }
 
 export interface AnalyticsDashboardProps extends BaseComponentProps {
-  entity: 'team' | 'player' | 'league';
+}
+  entity: &apos;team&apos; | &apos;player&apos; | &apos;league&apos;;
   entityId: string;
-  timeframe?: 'week' | 'month' | 'season' | 'all';
+  timeframe?: &apos;week&apos; | &apos;month&apos; | &apos;season&apos; | &apos;all&apos;;
   widgets?: string[];
   customizable?: boolean;
   onWidgetAdd?: (widget: string) => void;
@@ -439,6 +479,7 @@ export interface AnalyticsDashboardProps extends BaseComponentProps {
 // ==================== NAVIGATION COMPONENT PROPS ====================
 
 export interface NavigationProps extends BaseComponentProps {
+}
   user?: User;
   currentView: string;
   onViewChange: (view: string) => void;
@@ -447,7 +488,9 @@ export interface NavigationProps extends BaseComponentProps {
 }
 
 export interface BreadcrumbProps extends BaseComponentProps {
+}
   items: Array<{
+}
     label: string;
     href?: string;
     onClick?: () => void;
@@ -458,7 +501,9 @@ export interface BreadcrumbProps extends BaseComponentProps {
 }
 
 export interface TabsProps extends BaseComponentProps {
+}
   tabs: Array<{
+}
     id: string;
     label: string;
     content: React.ReactNode;
@@ -468,33 +513,37 @@ export interface TabsProps extends BaseComponentProps {
   }>;
   activeTab: string;
   onTabChange: (tabId: string) => void;
-  variant?: 'default' | 'pills' | 'underline';
-  orientation?: 'horizontal' | 'vertical';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: &apos;default&apos; | &apos;pills&apos; | &apos;underline&apos;;
+  orientation?: &apos;horizontal&apos; | &apos;vertical&apos;;
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
 }
 
 // ==================== UTILITY COMPONENT PROPS ====================
 
 export interface LoaderProps extends BaseComponentProps {
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'spinner' | 'dots' | 'pulse' | 'skeleton';
+}
+  size?: &apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;;
+  variant?: &apos;spinner&apos; | &apos;dots&apos; | &apos;pulse&apos; | &apos;skeleton&apos;;
   text?: string;
   overlay?: boolean;
   color?: string;
 }
 
 export interface EmptyStateProps extends BaseComponentProps {
+}
   title: string;
   description?: string;
   icon?: React.ReactNode;
   action?: {
+}
     label: string;
     onClick: () => void;
   };
-  variant?: 'default' | 'compact';
+  variant?: &apos;default&apos; | &apos;compact&apos;;
 }
 
 export interface ErrorBoundaryProps extends BaseComponentProps {
+}
   fallback?: React.ComponentType<{ error: Error; resetError: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   resetOnPropsChange?: any[];
@@ -502,9 +551,10 @@ export interface ErrorBoundaryProps extends BaseComponentProps {
 }
 
 export interface TooltipProps extends BaseComponentProps {
+}
   content: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
-  trigger?: 'hover' | 'click' | 'focus';
+  placement?: &apos;top&apos; | &apos;bottom&apos; | &apos;left&apos; | &apos;right&apos; | &apos;auto&apos;;
+  trigger?: &apos;hover&apos; | &apos;click&apos; | &apos;focus&apos;;
   delay?: number;
   disabled?: boolean;
   arrow?: boolean;
@@ -512,9 +562,10 @@ export interface TooltipProps extends BaseComponentProps {
 }
 
 export interface PopoverProps extends BaseComponentProps {
+}
   content: React.ReactNode;
   trigger: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+  placement?: &apos;top&apos; | &apos;bottom&apos; | &apos;left&apos; | &apos;right&apos; | &apos;auto&apos;;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
   closeOnClickOutside?: boolean;
@@ -525,6 +576,7 @@ export interface PopoverProps extends BaseComponentProps {
 // ==================== RESPONSIVE PROPS ====================
 
 export interface ResponsiveProps {
+}
   mobile?: any;
   tablet?: any;
   desktop?: any;
@@ -534,7 +586,8 @@ export interface ResponsiveProps {
 // ==================== THEME PROPS ====================
 
 export interface ThemeProps {
-  theme?: 'light' | 'dark' | 'auto';
+}
+  theme?: &apos;light&apos; | &apos;dark&apos; | &apos;auto&apos;;
   colorScheme?: string;
   variant?: string;
   size?: string;
@@ -543,6 +596,7 @@ export interface ThemeProps {
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   BaseComponentProps,
   InteractiveProps,
   BaseModalProps,

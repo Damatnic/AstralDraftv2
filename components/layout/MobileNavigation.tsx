@@ -3,23 +3,24 @@
  * Provides accessible mobile navigation with proper touch targets
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { useAppState } from '../../contexts/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CloseIcon } from '../icons/CloseIcon';
-import { ZapIcon } from '../icons/ZapIcon';
-import { TrophyIcon } from '../icons/TrophyIcon';
-import { UserIcon } from '../icons/UserIcon';
-import { SettingsIcon } from '../icons/SettingsIcon';
-import { ArrowRightIcon } from '../icons/ArrowRightIcon';
-import { ChartBarIcon } from '../icons/ChartBarIcon';
-import { LayoutIcon } from '../icons/LayoutIcon';
-import { LazyImage } from '../ui/LazyImage';
-import type { View } from '../../types';
-import { useFocusTrap } from '../../utils/accessibility';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
+import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
+import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
+import { UserIcon } from &apos;../icons/UserIcon&apos;;
+import { SettingsIcon } from &apos;../icons/SettingsIcon&apos;;
+import { ArrowRightIcon } from &apos;../icons/ArrowRightIcon&apos;;
+import { ChartBarIcon } from &apos;../icons/ChartBarIcon&apos;;
+import { LayoutIcon } from &apos;../icons/LayoutIcon&apos;;
+import { LazyImage } from &apos;../ui/LazyImage&apos;;
+import type { View } from &apos;../../types&apos;;
+import { useFocusTrap } from &apos;../../utils/accessibility&apos;;
 
 interface MobileNavItem {
+}
   id: string;
   label: string;
   icon: React.ReactNode;
@@ -30,6 +31,7 @@ interface MobileNavItem {
 }
 
 const MobileNavigation: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const { state, dispatch } = useAppState();
   const { isMobileNavOpen } = state;
@@ -37,97 +39,118 @@ const MobileNavigation: React.FC = () => {
 
   const navigationItems: MobileNavItem[] = [
     {
-      id: 'dashboard',
-      label: 'Dashboard',
+}
+      id: &apos;dashboard&apos;,
+      label: &apos;Dashboard&apos;,
       icon: <LayoutIcon />,
-      view: 'DASHBOARD'
+      view: &apos;DASHBOARD&apos;
     },
     {
-      id: 'oracle',
-      label: 'Beat The Oracle',
+}
+      id: &apos;oracle&apos;,
+      label: &apos;Beat The Oracle&apos;,
       icon: <ZapIcon />,
-      view: 'BEAT_THE_ORACLE'
+      view: &apos;BEAT_THE_ORACLE&apos;
     },
     {
-      id: 'draft',
-      label: 'Draft Room',
+}
+      id: &apos;draft&apos;,
+      label: &apos;Draft Room&apos;,
       icon: <TrophyIcon />,
-      view: 'DRAFT_ROOM'
+      view: &apos;DRAFT_ROOM&apos;
     },
     {
-      id: 'analytics',
-      label: 'Analytics Hub',
+}
+      id: &apos;analytics&apos;,
+      label: &apos;Analytics Hub&apos;,
       icon: <ChartBarIcon />,
-      view: 'ANALYTICS_HUB'
+      view: &apos;ANALYTICS_HUB&apos;
     },
     {
-      id: 'historical-analytics',
-      label: 'Historical Analytics',
+}
+      id: &apos;historical-analytics&apos;,
+      label: &apos;Historical Analytics&apos;,
       icon: <ChartBarIcon />,
-      view: 'HISTORICAL_ANALYTICS'
+      view: &apos;HISTORICAL_ANALYTICS&apos;
     },
     {
-      id: 'leaderboard',
-      label: 'Leaderboard',
+}
+      id: &apos;leaderboard&apos;,
+      label: &apos;Leaderboard&apos;,
       icon: <TrophyIcon />,
-      view: 'LEADERBOARD'
+      view: &apos;LEADERBOARD&apos;
     },
     {
-      id: 'profile',
-      label: 'Profile',
+}
+      id: &apos;profile&apos;,
+      label: &apos;Profile&apos;,
       icon: <UserIcon />,
-      view: 'PROFILE'
+      view: &apos;PROFILE&apos;
     },
     {
-      id: 'commissioner',
-      label: 'Commissioner Tools',
+}
+      id: &apos;commissioner&apos;,
+      label: &apos;Commissioner Tools&apos;,
       icon: <SettingsIcon />,
-      view: 'COMMISSIONER_TOOLS'
+      view: &apos;COMMISSIONER_TOOLS&apos;
 
   ];
 
   const handleNavItemClick = (view: View) => {
-    dispatch({ type: 'SET_VIEW', payload: view });
-    dispatch({ type: 'TOGGLE_MOBILE_NAV' }); // Close nav after selection
+}
+    dispatch({ type: &apos;SET_VIEW&apos;, payload: view });
+    dispatch({ type: &apos;TOGGLE_MOBILE_NAV&apos; }); // Close nav after selection
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
+}
     if (e.target === e.currentTarget) {
-      dispatch({ type: 'TOGGLE_MOBILE_NAV' });
+}
+      dispatch({ type: &apos;TOGGLE_MOBILE_NAV&apos; });
 
   };
 
   React.useEffect(() => {
+}
     // Prevent body scroll when nav is open
     if (isMobileNavOpen) {
-      document.body.style.overflow = 'hidden';
+}
+      document.body.style.overflow = &apos;hidden&apos;;
     } else {
-      document.body.style.overflow = '';
+}
+      document.body.style.overflow = &apos;&apos;;
 
     // Cleanup on unmount
     return () => {
-      document.body.style.overflow = '';
+}
+      document.body.style.overflow = &apos;&apos;;
     };
   }, [isMobileNavOpen]);
 
   // Focus trap for accessibility
   React.useEffect(() => {
+}
     if (!isMobileNavOpen) return;
 
     const focusableElements = document.querySelectorAll(
-      '.mobile-nav button, .mobile-nav [tabindex="0"]'
+      &apos;.mobile-nav button, .mobile-nav [tabindex="0"]&apos;
     );
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key === 'Tab') {
+}
+      if (e.key === &apos;Tab&apos;) {
+}
         if (e.shiftKey) {
+}
           if (document.activeElement === firstElement) {
+}
             e.preventDefault();
             lastElement?.focus();
 
         } else if (document.activeElement === lastElement) {
+}
           e.preventDefault();
           firstElement?.focus();
 
@@ -135,27 +158,31 @@ const MobileNavigation: React.FC = () => {
     };
 
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        dispatch({ type: 'TOGGLE_MOBILE_NAV' });
+}
+      if (e.key === &apos;Escape&apos;) {
+}
+        dispatch({ type: &apos;TOGGLE_MOBILE_NAV&apos; });
 
     };
 
-    document.addEventListener('keydown', handleTabKey);
-    document.addEventListener('keydown', handleEscapeKey);
+    document.addEventListener(&apos;keydown&apos;, handleTabKey);
+    document.addEventListener(&apos;keydown&apos;, handleEscapeKey);
     firstElement?.focus();
 
     return () => {
-      document.removeEventListener('keydown', handleTabKey);
-      document.removeEventListener('keydown', handleEscapeKey);
+}
+      document.removeEventListener(&apos;keydown&apos;, handleTabKey);
+      document.removeEventListener(&apos;keydown&apos;, handleEscapeKey);
     };
   }, [isMobileNavOpen, dispatch]);
 
   return (
     <AnimatePresence>
       {isMobileNavOpen && (
+}
         <motion.dialog
           ref={containerRef as React.RefObject<HTMLDialogElement>}
-          open
+//           open
           className="mobile-nav fixed inset-0 z-50 flex sm:px-4 md:px-6 lg:px-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -170,11 +197,12 @@ const MobileNavigation: React.FC = () => {
           {/* Navigation Panel */}
           <motion.div
             className="relative ml-auto h-full w-80 max-w-[85vw] bg-slate-900/95 backdrop-blur-xl border-l border-white/10 shadow-2xl sm:px-4 md:px-6 lg:px-8"
-            initial={{ x: '100%' }}
+            initial={{ x: &apos;100%&apos; }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: &apos;100%&apos; }}
             transition={{ 
-              type: 'spring', 
+}
+              type: &apos;spring&apos;, 
               damping: 25, 
               stiffness: 200,
               duration: 0.3 
@@ -183,7 +211,7 @@ const MobileNavigation: React.FC = () => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10 sm:px-4 md:px-6 lg:px-8">
               <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
-                <LazyImage 
+                <LazyImage>
                   src="/favicon.svg" 
                   alt="Astral Draft" 
                   className="h-8 w-8 sm:px-4 md:px-6 lg:px-8"
@@ -194,7 +222,7 @@ const MobileNavigation: React.FC = () => {
                 </h2>
               </div>
               <button
-                onClick={() => dispatch({ type: 'TOGGLE_MOBILE_NAV' })}
+                onClick={() => dispatch({ type: &apos;TOGGLE_MOBILE_NAV&apos; })}
                 className="mobile-touch-target flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors sm:px-4 md:px-6 lg:px-8"
                 aria-label="Close navigation"
               >
@@ -206,10 +234,10 @@ const MobileNavigation: React.FC = () => {
             <div className="p-6 border-b border-white/10 sm:px-4 md:px-6 lg:px-8">
               <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold text-lg sm:px-4 md:px-6 lg:px-8">
-                  {(state.user?.name || 'G').charAt(0).toUpperCase()}
+                  {(state.user?.name || &apos;G&apos;).charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{state.user?.name || 'Guest'}</h3>
+                  <h3 className="text-white font-semibold sm:px-4 md:px-6 lg:px-8">{state.user?.name || &apos;Guest&apos;}</h3>
                   <p className="text-white/60 text-sm sm:px-4 md:px-6 lg:px-8">
                     {state.leagues.filter((l: any) => l.members.some((m: any) => m.id === state.user?.id)).length} leagues
                   </p>
@@ -221,25 +249,29 @@ const MobileNavigation: React.FC = () => {
             <nav className="flex-1 overflow-y-auto py-4 sm:px-4 md:px-6 lg:px-8" role="navigation">
               <ul className="space-y-2 px-4 sm:px-4 md:px-6 lg:px-8">
                 {navigationItems.map((item: any) => (
+}
                   <li key={item.id}>
                     <button
                       onClick={() => handleNavItemClick(item.view)}
                       disabled={item.disabled}
                       className={`
+}
                         mobile-nav-item group relative flex items-center justify-between w-full p-4 rounded-xl text-left transition-all duration-200
                         ${state.currentView === item.view 
-                          ? 'bg-accent-500/20 text-accent-400 border border-accent-500/30' 
-                          : 'text-white/80 hover:text-white hover:bg-white/10'
+}
+                          ? &apos;bg-accent-500/20 text-accent-400 border border-accent-500/30&apos; 
+                          : &apos;text-white/80 hover:text-white hover:bg-white/10&apos;
 
-                        ${item.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                        ${item.disabled ? &apos;opacity-50 cursor-not-allowed&apos; : &apos;cursor-pointer&apos;}
                         focus:outline-none focus:ring-2 focus:ring-accent-500/50 focus:ring-offset-2 focus:ring-offset-slate-900
                       `}
-                      aria-current={state.currentView === item.view ? 'page' : undefined}
+                      aria-current={state.currentView === item.view ? &apos;page&apos; : undefined}
                     >
                       <div className="flex items-center gap-4 sm:px-4 md:px-6 lg:px-8">
                         <div className={`
+}
                           w-6 h-6 transition-colors duration-200
-                          ${state.currentView === item.view ? 'text-accent-400' : 'text-white/60 group-hover:text-white'}
+                          ${state.currentView === item.view ? &apos;text-accent-400&apos; : &apos;text-white/60 group-hover:text-white&apos;}
                         `}>
                           {item.icon}
                         </div>
@@ -250,15 +282,18 @@ const MobileNavigation: React.FC = () => {
                       
                       <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {Boolean(item.badge && item.badge > 0) && (
+}
                           <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center sm:px-4 md:px-6 lg:px-8">
-                            {item.badge && item.badge > 99 ? '99+' : item.badge}
+                            {item.badge && item.badge > 99 ? &apos;99+&apos; : item.badge}
                           </span>
                         )}
                         <ArrowRightIcon className={`
+}
                           w-4 h-4 transition-all duration-200
                           ${state.currentView === item.view 
-                            ? 'text-accent-400 transform rotate-90' 
-                            : 'text-white/40 group-hover:text-white/60 group-hover:transform group-hover:translate-x-1'
+}
+                            ? &apos;text-accent-400 transform rotate-90&apos; 
+                            : &apos;text-white/40 group-hover:text-white/60 group-hover:transform group-hover:translate-x-1&apos;
 
                         `} />
                       </div>

@@ -4,122 +4,130 @@
  */
 
 export const SECURITY_CONFIG = {
+}
   // Content Security Policy
   csp: {
+}
     directives: {
-      'default-src': ["'self'"],
-      'script-src': [
-        "'self'",
-        "'unsafe-inline'", // Required for Vite development
-        "'unsafe-eval'", // Required for some React features
-        'https://cdn.jsdelivr.net',
-        'https://accounts.google.com',
-        'https://apis.google.com',
-        'chrome-extension:',
-        'moz-extension:',
-        'safari-extension:'
+}
+      &apos;default-src&apos;: ["&apos;self&apos;"],
+      &apos;script-src&apos;: [
+        "&apos;self&apos;",
+        "&apos;unsafe-inline&apos;", // Required for Vite development
+        "&apos;unsafe-eval&apos;", // Required for some React features
+        &apos;https://cdn.jsdelivr.net&apos;,
+        &apos;https://accounts.google.com&apos;,
+        &apos;https://apis.google.com&apos;,
+        &apos;chrome-extension:&apos;,
+        &apos;moz-extension:&apos;,
+        &apos;safari-extension:&apos;
       ],
-      'style-src': [
-        "'self'",
-        "'unsafe-inline'",
-        'https://fonts.googleapis.com',
-        'https://fonts.gstatic.com'
+      &apos;style-src&apos;: [
+        "&apos;self&apos;",
+        "&apos;unsafe-inline&apos;",
+        &apos;https://fonts.googleapis.com&apos;,
+        &apos;https://fonts.gstatic.com&apos;
       ],
-      'font-src': [
-        "'self'",
-        'https://fonts.googleapis.com',
-        'https://fonts.gstatic.com',
-        'data:'
+      &apos;font-src&apos;: [
+        "&apos;self&apos;",
+        &apos;https://fonts.googleapis.com&apos;,
+        &apos;https://fonts.gstatic.com&apos;,
+        &apos;data:&apos;
       ],
-      'img-src': [
-        "'self'",
-        'data:',
-        'blob:',
-        'https:',
-        'https://*.espn.com',
-        'https://*.nfl.com',
-        'https://*.googleapis.com'
+      &apos;img-src&apos;: [
+        "&apos;self&apos;",
+        &apos;data:&apos;,
+        &apos;blob:&apos;,
+        &apos;https:&apos;,
+        &apos;https://*.espn.com&apos;,
+        &apos;https://*.nfl.com&apos;,
+        &apos;https://*.googleapis.com&apos;
       ],
-      'connect-src': [
-        "'self'",
-        'ws://localhost:*',
-        'wss://localhost:*',
-        'http://localhost:*',
-        'https://localhost:*',
-        'https://astraldraft.netlify.app',
-        'wss://astraldraft.netlify.app',
-        'https://api.gemini.com',
-        'https://generativelanguage.googleapis.com',
-        'https://*.espn.com',
-        'https://api.the-odds-api.com',
-        'https://api.sportsdata.io',
-        'https://accounts.google.com',
-        'https://oauth.googleapis.com',
-        'https://www.googleapis.com',
-        'chrome-extension:',
-        'moz-extension:',
-        'safari-extension:'
+      &apos;connect-src&apos;: [
+        "&apos;self&apos;",
+        &apos;ws://localhost:*&apos;,
+        &apos;wss://localhost:*&apos;,
+        &apos;http://localhost:*&apos;,
+        &apos;https://localhost:*&apos;,
+        &apos;https://astraldraft.netlify.app&apos;,
+        &apos;wss://astraldraft.netlify.app&apos;,
+        &apos;https://api.gemini.com&apos;,
+        &apos;https://generativelanguage.googleapis.com&apos;,
+        &apos;https://*.espn.com&apos;,
+        &apos;https://api.the-odds-api.com&apos;,
+        &apos;https://api.sportsdata.io&apos;,
+        &apos;https://accounts.google.com&apos;,
+        &apos;https://oauth.googleapis.com&apos;,
+        &apos;https://www.googleapis.com&apos;,
+        &apos;chrome-extension:&apos;,
+        &apos;moz-extension:&apos;,
+        &apos;safari-extension:&apos;
       ],
-      'manifest-src': ["'self'"],
-      'worker-src': ["'self'", 'blob:'],
-      'object-src': ["'none'"],
-      'base-uri': ["'self'"],
-      'form-action': ["'self'", 'https://accounts.google.com'],
-      'frame-src': ["'self'", 'https://accounts.google.com', 'https://oauth.googleapis.com'],
-      'media-src': ["'self'", 'data:', 'blob:'],
-      'upgrade-insecure-requests': []
+      &apos;manifest-src&apos;: ["&apos;self&apos;"],
+      &apos;worker-src&apos;: ["&apos;self&apos;", &apos;blob:&apos;],
+      &apos;object-src&apos;: ["&apos;none&apos;"],
+      &apos;base-uri&apos;: ["&apos;self&apos;"],
+      &apos;form-action&apos;: ["&apos;self&apos;", &apos;https://accounts.google.com&apos;],
+      &apos;frame-src&apos;: ["&apos;self&apos;", &apos;https://accounts.google.com&apos;, &apos;https://oauth.googleapis.com&apos;],
+      &apos;media-src&apos;: ["&apos;self&apos;", &apos;data:&apos;, &apos;blob:&apos;],
+      &apos;upgrade-insecure-requests&apos;: []
     }
   },
 
   // Security Headers
   headers: {
-    'X-Content-Type-Options': 'nosniff',
-    'X-XSS-Protection': '1; mode=block',
-    'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': [
-      'accelerometer=()',
-      'ambient-light-sensor=()',
-      'autoplay=(self)',
-      'battery=()',
-      'camera=()',
-      'cross-origin-isolated=()',
-      'display-capture=()',
-      'document-domain=()',
-      'encrypted-media=()',
-      'execution-while-not-rendered=()',
-      'execution-while-out-of-viewport=()',
-      'fullscreen=(self)',
-      'geolocation=()',
-      'gyroscope=()',
-      'keyboard-map=()',
-      'magnetometer=()',
-      'microphone=()',
-      'midi=()',
-      'navigation-override=()',
-      'payment=()',
-      'picture-in-picture=()',
-      'publickey-credentials-get=()',
-      'screen-wake-lock=()',
-      'sync-xhr=()',
-      'usb=()',
-      'web-share=()',
-      'xr-spatial-tracking=()'
-    ].join(', ')
+}
+    &apos;X-Content-Type-Options&apos;: &apos;nosniff&apos;,
+    &apos;X-XSS-Protection&apos;: &apos;1; mode=block&apos;,
+    &apos;Referrer-Policy&apos;: &apos;strict-origin-when-cross-origin&apos;,
+    &apos;Permissions-Policy&apos;: [
+      &apos;accelerometer=()&apos;,
+      &apos;ambient-light-sensor=()&apos;,
+      &apos;autoplay=(self)&apos;,
+      &apos;battery=()&apos;,
+      &apos;camera=()&apos;,
+      &apos;cross-origin-isolated=()&apos;,
+      &apos;display-capture=()&apos;,
+      &apos;document-domain=()&apos;,
+      &apos;encrypted-media=()&apos;,
+      &apos;execution-while-not-rendered=()&apos;,
+      &apos;execution-while-out-of-viewport=()&apos;,
+      &apos;fullscreen=(self)&apos;,
+      &apos;geolocation=()&apos;,
+      &apos;gyroscope=()&apos;,
+      &apos;keyboard-map=()&apos;,
+      &apos;magnetometer=()&apos;,
+      &apos;microphone=()&apos;,
+      &apos;midi=()&apos;,
+      &apos;navigation-override=()&apos;,
+      &apos;payment=()&apos;,
+      &apos;picture-in-picture=()&apos;,
+      &apos;publickey-credentials-get=()&apos;,
+      &apos;screen-wake-lock=()&apos;,
+      &apos;sync-xhr=()&apos;,
+      &apos;usb=()&apos;,
+      &apos;web-share=()&apos;,
+      &apos;xr-spatial-tracking=()&apos;
+    ].join(&apos;, &apos;)
   },
 
   // API Security
   api: {
+}
     rateLimiting: {
+}
       windowMs: 15 * 60 * 1000, // 15 minutes
       maxRequests: 100, // per window
       skipSuccessfulRequests: false,
       skipFailedRequests: false
     },
     encryption: {
-      algorithm: 'AES-GCM',
+}
+      algorithm: &apos;AES-GCM&apos;,
       keyLength: 256
     },
     authentication: {
+}
       tokenExpiry: 24 * 60 * 60 * 1000, // 24 hours
       refreshTokenExpiry: 7 * 24 * 60 * 60 * 1000, // 7 days
       maxLoginAttempts: 5,
@@ -129,12 +137,14 @@ export const SECURITY_CONFIG = {
 
   // Input Validation
   validation: {
+}
     maxInputLength: 10000,
     allowedTags: [], // No HTML tags allowed by default
     allowedAttributes: [],
     maxFileSize: 10 * 1024 * 1024, // 10MB
-    allowedFileTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+    allowedFileTypes: [&apos;image/jpeg&apos;, &apos;image/png&apos;, &apos;image/gif&apos;, &apos;image/webp&apos;],
     sanitizeOptions: {
+}
       removeScripts: true,
       removeObjects: true,
       removeEmbeds: true,
@@ -146,28 +156,30 @@ export const SECURITY_CONFIG = {
 
   // Data Protection
   dataProtection: {
+}
     encryptSensitiveData: true,
     maskPII: true,
     logRetentionDays: 30,
     anonymizeAfterDays: 90,
     purgeAfterDays: 365,
     sensitiveFields: [
-      'password',
-      'email',
-      'phone',
-      'ssn',
-      'creditCard',
-      'apiKey',
-      'token',
-      'secret'
+      &apos;password&apos;,
+      &apos;email&apos;,
+      &apos;phone&apos;,
+      &apos;ssn&apos;,
+      &apos;creditCard&apos;,
+      &apos;apiKey&apos;,
+      &apos;token&apos;,
+      &apos;secret&apos;
     ]
   },
 
   // Session Security
   session: {
+}
     secure: true, // HTTPS only in production
     httpOnly: true,
-    sameSite: 'strict' as const,
+    sameSite: &apos;strict&apos; as const,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     regenerateOnLogin: true,
     regenerateOnPrivilegeChange: true
@@ -175,6 +187,7 @@ export const SECURITY_CONFIG = {
 
   // Environment-specific settings
   development: {
+}
     enableSecurityLogging: true,
     allowInsecureConnections: true,
     disableCSP: false,
@@ -182,6 +195,7 @@ export const SECURITY_CONFIG = {
   },
 
   production: {
+}
     enableSecurityLogging: true,
     allowInsecureConnections: false,
     disableCSP: false,
@@ -195,73 +209,90 @@ export const SECURITY_CONFIG = {
 
 // Security utility functions
 export const SecurityUtils = {
+}
   // Generate CSP string from configuration
   generateCSP(): string {
+}
     const directives = SECURITY_CONFIG.csp.directives;
     return Object.entries(directives)
       .map(([directive, sources]) => {
+}
         if (sources.length === 0) {
+}
           return directive;
         }
-        return `${directive} ${sources.join(' ')}`;
+        return `${directive} ${sources.join(&apos; &apos;)}`;
       })
-      .join('; ');
+      .join(&apos;; &apos;);
   },
 
   // Validate environment-specific security settings
   validateSecurityConfig(): {
+}
     isValid: boolean;
     warnings: string[];
     errors: string[];
   } {
+}
     const warnings: string[] = [];
     const errors: string[] = [];
     
     const isProduction = import.meta.env.PROD;
     
     if (isProduction) {
+}
       // Production-specific validation
       if (SECURITY_CONFIG.development.allowInsecureConnections) {
-        warnings.push('Insecure connections allowed in production');
+}
+        warnings.push(&apos;Insecure connections allowed in production&apos;);
       }
       
       if (SECURITY_CONFIG.development.enableDebugEndpoints) {
-        errors.push('Debug endpoints enabled in production');
+}
+        errors.push(&apos;Debug endpoints enabled in production&apos;);
       }
       
       if (!SECURITY_CONFIG.production.enableHSTS) {
-        warnings.push('HSTS not enabled in production');
+}
+        warnings.push(&apos;HSTS not enabled in production&apos;);
       }
     } else {
+}
       // Development-specific validation
       if (!SECURITY_CONFIG.development.enableSecurityLogging) {
-        warnings.push('Security logging disabled in development');
+}
+        warnings.push(&apos;Security logging disabled in development&apos;);
       }
     }
 
     // General validation
     if (SECURITY_CONFIG.api.authentication.tokenExpiry < 60000) {
-      warnings.push('Token expiry less than 1 minute may cause UX issues');
+}
+      warnings.push(&apos;Token expiry less than 1 minute may cause UX issues&apos;);
     }
 
     if (SECURITY_CONFIG.validation.maxInputLength > 100000) {
-      warnings.push('Very large input length limit may impact performance');
+}
+      warnings.push(&apos;Very large input length limit may impact performance&apos;);
     }
 
     return {
+}
       isValid: errors.length === 0,
       warnings,
-      errors
+//       errors
     };
   },
 
   // Get current security level
-  getSecurityLevel(): 'development' | 'production' {
-    return import.meta.env.PROD ? 'production' : 'development';
+  getSecurityLevel(): &apos;development&apos; | &apos;production&apos; {
+}
+    return import.meta.env.PROD ? &apos;production&apos; : &apos;development&apos;;
   },
 
   // Check if feature is enabled for current environment
   isFeatureEnabled(feature: keyof typeof SECURITY_CONFIG.development): boolean {
+}
     const level = this.getSecurityLevel();
     return SECURITY_CONFIG[level][feature] || false;
   }
@@ -269,8 +300,10 @@ export const SecurityUtils = {
 
 // Export security configuration based on environment
 export const getCurrentSecurityConfig = () => {
+}
   const level = SecurityUtils.getSecurityLevel();
   return {
+}
     ...SECURITY_CONFIG,
     current: SECURITY_CONFIG[level]
   };

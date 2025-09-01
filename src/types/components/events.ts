@@ -3,11 +3,10 @@
  * Comprehensive event handler interfaces and WebSocket event types
  */
 
-import React from 'react';
-import { Player } from '../models/player';
-import { User } from '../models/user';
-import { League, Team } from '../models/league';
-import { DraftPick, DraftEvent } from '../models/draft';
+import { Player } from &apos;../models/player&apos;;
+import { User } from &apos;../models/user&apos;;
+import { League, Team } from &apos;../models/league&apos;;
+import { DraftPick, DraftEvent } from &apos;../models/draft&apos;;
 
 // ==================== BASIC EVENT HANDLERS ====================
 
@@ -32,6 +31,7 @@ export type DragOverHandler = (event: React.DragEvent) => void;
 export type DropHandler = (event: React.DragEvent) => void;
 
 export interface DragDropHandlers {
+}
   onDragStart?: DragStartHandler;
   onDragEnd?: DragEndHandler;
   onDragOver?: DragOverHandler;
@@ -41,6 +41,7 @@ export interface DragDropHandlers {
 }
 
 export interface DragDropResult {
+}
   sourceId: string;
   targetId: string;
   sourceIndex: number;
@@ -55,10 +56,11 @@ export type ReorderHandler<T = any> = (items: T[]) => void;
 export type PlayerSelectHandler = (player: Player) => void;
 export type PlayerActionHandler = (action: string, player: Player) => void;
 export type PlayerComparisonHandler = (players: Player[]) => void;
-export type PlayerWatchlistHandler = (playerId: string, action: 'add' | 'remove') => void;
+export type PlayerWatchlistHandler = (playerId: string, action: &apos;add&apos; | &apos;remove&apos;) => void;
 export type PlayerRankingHandler = (playerId: string, newRank: number) => void;
 
 export interface PlayerEventHandlers {
+}
   onPlayerSelect?: PlayerSelectHandler;
   onPlayerAction?: PlayerActionHandler;
   onPlayerCompare?: (playerId: string) => void;
@@ -78,6 +80,7 @@ export type AuctionBidHandler = (playerId: string, amount: number) => void;
 export type DraftNominationHandler = (playerId: string) => void;
 
 export interface DraftEventHandlers {
+}
   onMakePick?: DraftPickHandler;
   onUpdateQueue?: DraftQueueUpdateHandler;
   onAutoDraftToggle?: (enabled: boolean) => void;
@@ -97,6 +100,7 @@ export type RosterMoveHandler = (playerId: string, fromPosition: string, toPosit
 export type TeamSettingsHandler = (setting: string, value: any) => void;
 
 export interface TeamEventHandlers {
+}
   onTeamSelect?: TeamSelectHandler;
   onLineupChange?: LineupChangeHandler;
   onRosterMove?: RosterMoveHandler;
@@ -111,11 +115,12 @@ export interface TeamEventHandlers {
 // ==================== TRADE EVENT HANDLERS ====================
 
 export type TradeProposalHandler = (toTeamId: string, offer: any) => void;
-export type TradeResponseHandler = (tradeId: string, response: 'accept' | 'reject' | 'counter') => void;
+export type TradeResponseHandler = (tradeId: string, response: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos;) => void;
 export type TradeAnalysisHandler = (tradeId: string) => void;
-export type TradeVoteHandler = (tradeId: string, vote: 'approve' | 'veto') => void;
+export type TradeVoteHandler = (tradeId: string, vote: &apos;approve&apos; | &apos;veto&apos;) => void;
 
 export interface TradeEventHandlers {
+}
   onTradePropose?: TradeProposalHandler;
   onTradeRespond?: TradeResponseHandler;
   onTradeCancel?: (tradeId: string) => void;
@@ -132,6 +137,7 @@ export type WaiverCancelHandler = (claimId: string) => void;
 export type WaiverPriorityHandler = (claimIds: string[]) => void;
 
 export interface WaiverEventHandlers {
+}
   onWaiverClaim?: WaiverClaimHandler;
   onWaiverCancel?: WaiverCancelHandler;
   onWaiverPriority?: WaiverPriorityHandler;
@@ -144,9 +150,10 @@ export interface WaiverEventHandlers {
 export type LeagueSelectHandler = (league: League) => void;
 export type LeagueSettingsHandler = (setting: string, value: any) => void;
 export type LeagueInviteHandler = (emails: string[]) => void;
-export type LeagueMemberHandler = (userId: string, action: 'kick' | 'promote' | 'demote') => void;
+export type LeagueMemberHandler = (userId: string, action: &apos;kick&apos; | &apos;promote&apos; | &apos;demote&apos;) => void;
 
 export interface LeagueEventHandlers {
+}
   onLeagueSelect?: LeagueSelectHandler;
   onLeagueSettings?: LeagueSettingsHandler;
   onLeagueInvite?: LeagueInviteHandler;
@@ -163,6 +170,7 @@ export type TabChangeHandler = (tabId: string) => void;
 export type ModalToggleHandler = (modalId: string, isOpen: boolean, data?: any) => void;
 
 export interface NavigationEventHandlers {
+}
   onViewChange?: ViewChangeHandler;
   onTabChange?: TabChangeHandler;
   onModalToggle?: ModalToggleHandler;
@@ -176,10 +184,11 @@ export interface NavigationEventHandlers {
 
 export type SearchHandler = (query: string) => void;
 export type FilterChangeHandler = (filters: Record<string, any>) => void;
-export type SortChangeHandler = (field: string, direction: 'asc' | 'desc') => void;
+export type SortChangeHandler = (field: string, direction: &apos;asc&apos; | &apos;desc&apos;) => void;
 export type PaginationHandler = (page: number) => void;
 
 export interface SearchFilterHandlers {
+}
   onSearch?: SearchHandler;
   onFilterChange?: FilterChangeHandler;
   onSortChange?: SortChangeHandler;
@@ -191,6 +200,7 @@ export interface SearchFilterHandlers {
 // ==================== WEBSOCKET EVENT TYPES ====================
 
 export interface WebSocketMessage {
+}
   id: string;
   type: string;
   payload: any;
@@ -201,26 +211,28 @@ export interface WebSocketMessage {
 
 // Draft Events
 export type DraftEventType = 
-  | 'draft:started'
-  | 'draft:paused'
-  | 'draft:resumed'
-  | 'draft:completed'
-  | 'draft:pick_made'
-  | 'draft:pick_skipped'
-  | 'draft:auto_pick'
-  | 'draft:time_update'
-  | 'draft:timer_expired'
-  | 'draft:bid_placed'
-  | 'draft:nomination_made'
-  | 'draft:auction_won'
-  | 'draft:user_joined'
-  | 'draft:user_left'
-  | 'draft:queue_updated'
-  | 'draft:trade_completed';
+  | &apos;draft:started&apos;
+  | &apos;draft:paused&apos;
+  | &apos;draft:resumed&apos;
+  | &apos;draft:completed&apos;
+  | &apos;draft:pick_made&apos;
+  | &apos;draft:pick_skipped&apos;
+  | &apos;draft:auto_pick&apos;
+  | &apos;draft:time_update&apos;
+  | &apos;draft:timer_expired&apos;
+  | &apos;draft:bid_placed&apos;
+  | &apos;draft:nomination_made&apos;
+  | &apos;draft:auction_won&apos;
+  | &apos;draft:user_joined&apos;
+  | &apos;draft:user_left&apos;
+  | &apos;draft:queue_updated&apos;
+  | &apos;draft:trade_completed&apos;;
 
 export interface DraftWebSocketEvent extends WebSocketMessage {
+}
   type: DraftEventType;
   payload: {
+}
     draftId: string;
     pick?: DraftPick;
     timeRemaining?: number;
@@ -237,23 +249,25 @@ export interface DraftWebSocketEvent extends WebSocketMessage {
 
 // League Events
 export type LeagueEventType =
-  | 'league:member_joined'
-  | 'league:member_left'
-  | 'league:settings_updated'
-  | 'league:season_started'
-  | 'league:week_advanced'
-  | 'league:playoffs_started'
-  | 'league:champion_crowned'
-  | 'league:trade_proposed'
-  | 'league:trade_accepted'
-  | 'league:trade_rejected'
-  | 'league:waiver_processed'
-  | 'league:lineup_locked'
-  | 'league:scores_updated';
+  | &apos;league:member_joined&apos;
+  | &apos;league:member_left&apos;
+  | &apos;league:settings_updated&apos;
+  | &apos;league:season_started&apos;
+  | &apos;league:week_advanced&apos;
+  | &apos;league:playoffs_started&apos;
+  | &apos;league:champion_crowned&apos;
+  | &apos;league:trade_proposed&apos;
+  | &apos;league:trade_accepted&apos;
+  | &apos;league:trade_rejected&apos;
+  | &apos;league:waiver_processed&apos;
+  | &apos;league:lineup_locked&apos;
+  | &apos;league:scores_updated&apos;;
 
 export interface LeagueWebSocketEvent extends WebSocketMessage {
+}
   type: LeagueEventType;
   payload: {
+}
     leagueId: string;
     userId?: string;
     teamId?: string;
@@ -268,18 +282,20 @@ export interface LeagueWebSocketEvent extends WebSocketMessage {
 
 // Real-time Score Events
 export type ScoringEventType =
-  | 'score:touchdown'
-  | 'score:field_goal'
-  | 'score:safety'
-  | 'score:interception'
-  | 'score:fumble'
-  | 'score:big_play'
-  | 'score:game_final'
-  | 'score:player_update';
+  | &apos;score:touchdown&apos;
+  | &apos;score:field_goal&apos;
+  | &apos;score:safety&apos;
+  | &apos;score:interception&apos;
+  | &apos;score:fumble&apos;
+  | &apos;score:big_play&apos;
+  | &apos;score:game_final&apos;
+  | &apos;score:player_update&apos;;
 
 export interface ScoringWebSocketEvent extends WebSocketMessage {
+}
   type: ScoringEventType;
   payload: {
+}
     playerId: string;
     player: Player;
     teamId: string;
@@ -295,17 +311,19 @@ export interface ScoringWebSocketEvent extends WebSocketMessage {
 
 // Chat Events
 export type ChatEventType =
-  | 'chat:message_sent'
-  | 'chat:message_edited'
-  | 'chat:message_deleted'
-  | 'chat:user_typing'
-  | 'chat:user_stopped_typing'
-  | 'chat:reaction_added'
-  | 'chat:reaction_removed';
+  | &apos;chat:message_sent&apos;
+  | &apos;chat:message_edited&apos;
+  | &apos;chat:message_deleted&apos;
+  | &apos;chat:user_typing&apos;
+  | &apos;chat:user_stopped_typing&apos;
+  | &apos;chat:reaction_added&apos;
+  | &apos;chat:reaction_removed&apos;;
 
 export interface ChatWebSocketEvent extends WebSocketMessage {
+}
   type: ChatEventType;
   payload: {
+}
     messageId?: string;
     channelId: string;
     userId: string;
@@ -318,21 +336,24 @@ export interface ChatWebSocketEvent extends WebSocketMessage {
 
 // System Events
 export type SystemEventType =
-  | 'system:maintenance_start'
-  | 'system:maintenance_end'
-  | 'system:update_available'
-  | 'system:connection_lost'
-  | 'system:connection_restored'
-  | 'system:rate_limit_exceeded'
-  | 'system:server_overload';
+  | &apos;system:maintenance_start&apos;
+  | &apos;system:maintenance_end&apos;
+  | &apos;system:update_available&apos;
+  | &apos;system:connection_lost&apos;
+  | &apos;system:connection_restored&apos;
+  | &apos;system:rate_limit_exceeded&apos;
+  | &apos;system:server_overload&apos;;
 
 export interface SystemWebSocketEvent extends WebSocketMessage {
+}
   type: SystemEventType;
   payload: {
+}
     message: string;
-    severity: 'info' | 'warning' | 'error';
+    severity: &apos;info&apos; | &apos;warning&apos; | &apos;error&apos;;
     duration?: number;
     maintenanceWindow?: {
+}
       start: Date;
       end: Date;
     };
@@ -352,6 +373,7 @@ export type AnyWebSocketEvent =
 export type WebSocketEventHandler<T extends WebSocketMessage = WebSocketMessage> = (event: T) => void;
 
 export interface WebSocketEventHandlers {
+}
   onDraftEvent?: WebSocketEventHandler<DraftWebSocketEvent>;
   onLeagueEvent?: WebSocketEventHandler<LeagueWebSocketEvent>;
   onScoringEvent?: WebSocketEventHandler<ScoringWebSocketEvent>;
@@ -369,6 +391,7 @@ export type NotificationHandler = (notification: any) => void;
 export type NotificationActionHandler = (notificationId: string, action: string) => void;
 
 export interface NotificationEventHandlers {
+}
   onNotification?: NotificationHandler;
   onNotificationAction?: NotificationActionHandler;
   onNotificationDismiss?: (notificationId: string) => void;
@@ -382,6 +405,7 @@ export type AnalyticsEventHandler = (eventName: string, properties?: Record<stri
 export type ChartInteractionHandler = (dataPoint: any, index: number) => void;
 
 export interface AnalyticsEventHandlers {
+}
   onTrackEvent?: AnalyticsEventHandler;
   onChartHover?: ChartInteractionHandler;
   onChartClick?: ChartInteractionHandler;
@@ -396,6 +420,7 @@ export type ErrorHandler = (error: Error) => void;
 export type ValidationErrorHandler = (errors: Record<string, string>) => void;
 
 export interface ErrorEventHandlers {
+}
   onError?: ErrorHandler;
   onValidationError?: ValidationErrorHandler;
   onRetry?: () => void;
@@ -406,6 +431,7 @@ export interface ErrorEventHandlers {
 // ==================== LIFECYCLE EVENT HANDLERS ====================
 
 export interface LifecycleEventHandlers {
+}
   onLoad?: () => void;
   onUnload?: () => void;
   onSave?: () => void;
@@ -435,6 +461,7 @@ export interface AllEventHandlers extends
 // ==================== EXPORT ALL ====================
 
 export type {
+}
   FormChangeHandler,
   FormSubmitHandler,
   ButtonClickHandler,

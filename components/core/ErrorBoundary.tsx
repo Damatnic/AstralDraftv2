@@ -1,7 +1,7 @@
 
-import React from 'react';
 
 interface ErrorBoundaryState {
+}
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
@@ -9,45 +9,58 @@ interface ErrorBoundaryState {
 }
 
 interface ErrorBoundaryProps {
+}
   fallback?: React.ComponentType<{ error?: Error; retry: () => void }>;
   onError?: (error: Error, errorInfo: React.ErrorInfo) => void;
   children: React.ReactNode;
 
 export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+}
   constructor(props: ErrorBoundaryProps) {
+}
     super(props);
     this.state = { hasError: false };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+}
     return { 
+}
       hasError: true,
-      error 
+//       error 
     };
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+}
     this.setState({
+}
       error,
-      errorInfo
+//       errorInfo
     });
 
     // Call custom error handler if provided
     if (this.props.onError) {
+}
       this.props.onError(error, errorInfo);
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === &apos;development&apos;) {
+}
 
     // In production, you might want to send this to an error reporting service
     // Example: Sentry.captureException(error, { extra: errorInfo });
 
   handleRetry = () => {
+}
     this.setState({ hasError: false, error: undefined, errorInfo: undefined });
   };
 
   render() {
+}
     if (this.state.hasError) {
+}
       // Use custom fallback if provided
       if (this.props.fallback) {
+}
         const FallbackComponent = this.props.fallback;
         return <FallbackComponent error={this.state.error} retry={this.handleRetry} />;
 
@@ -65,7 +78,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               An unexpected error occurred. This has been logged and our team has been notified.
             </p>
             
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === &apos;development&apos; && this.state.error && (
+}
               <details className="mb-4 text-left sm:px-4 md:px-6 lg:px-8">
                 <summary className="cursor-pointer text-red-300 hover:text-red-100 sm:px-4 md:px-6 lg:px-8">
                   Error Details (Development)
@@ -129,9 +143,10 @@ const OracleErrorFallback: React.FC<{ retry: () => void }> = ({ retry }: any) =>
 );
 
 export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
-  <ErrorBoundary
+  <ErrorBoundary>
     onError={(error, errorInfo) => {
-      // Could send to analytics: trackEvent('error', 'draft', error.message);
+}
+      // Could send to analytics: trackEvent(&apos;error&apos;, &apos;draft&apos;, error.message);
     }}
     fallback={DraftErrorFallback}
   >
@@ -140,8 +155,9 @@ export const DraftErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ ch
 );
 
 export const OracleErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }: any) => (
-  <ErrorBoundary
+  <ErrorBoundary>
     onError={(error, errorInfo) => {
+}
     }}
     fallback={OracleErrorFallback}
   >

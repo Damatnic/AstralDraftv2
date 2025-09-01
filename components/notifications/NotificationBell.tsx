@@ -3,19 +3,21 @@
  * Header notification indicator with unread count
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BellIcon } from 'lucide-react';
-import { useNotifications } from '../../contexts/NotificationContext';
-import NotificationCenter from './NotificationCenter';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { BellIcon } from &apos;lucide-react&apos;;
+import { useNotifications } from &apos;../../contexts/NotificationContext&apos;;
+import NotificationCenter from &apos;./NotificationCenter&apos;;
 
 interface NotificationBellProps {
+}
     className?: string;
 
 }
 
-const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: any) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ className = &apos;&apos; }: any) => {
+}
     const { unreadCount } = useNotifications();
     const [isNotificationCenterOpen, setIsNotificationCenterOpen] = useState(false);
 
@@ -31,16 +33,18 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
                 <BellIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" />
                 
                 {unreadCount > 0 && (
+}
                     <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1 sm:px-4 md:px-6 lg:px-8"
                     >
-                        {unreadCount > 99 ? '99+' : unreadCount}
+                        {unreadCount > 99 ? &apos;99+&apos; : unreadCount}
                     </motion.div>
                 )}
                 
                 {unreadCount > 0 && (
+}
                     <motion.div
                         className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full sm:px-4 md:px-6 lg:px-8"
                         animate={{ scale: [1, 1.2, 1] }}
@@ -51,7 +55,8 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className = '' }: a
 
             <AnimatePresence>
                 {isNotificationCenterOpen && (
-                    <NotificationCenter
+}
+                    <NotificationCenter>
                         isOpen={isNotificationCenterOpen}
                         onClose={() => setIsNotificationCenterOpen(false)}
                     />

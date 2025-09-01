@@ -1,18 +1,21 @@
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { GroundingChunk } from '../../types';
-import { LinkIcon } from '../icons/LinkIcon';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { GroundingChunk } from &apos;../../types&apos;;
+import { LinkIcon } from &apos;../icons/LinkIcon&apos;;
 
 interface GroundingCitationsProps {
+}
     chunks: GroundingChunk[];
 
 }
 
 const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }: any) => {
+}
     const webChunks = chunks.filter((c: any) => c.web && c.web.uri && c.web.title);
 
     if (webChunks.length === 0) {
+}
         return null;
 
     return (
@@ -20,6 +23,7 @@ const GroundingCitations: React.FC<GroundingCitationsProps> = ({ chunks }: any) 
             <h4 className="text-xs font-bold text-gray-400 mb-2 sm:px-4 md:px-6 lg:px-8">Sources:</h4>
             <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                 {webChunks.map((chunk, index) => (
+}
                     <a
                         key={index}
                         href={chunk.web!.uri}

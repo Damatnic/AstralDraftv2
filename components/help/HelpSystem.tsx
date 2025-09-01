@@ -3,19 +3,20 @@
  * Comprehensive help documentation and tutorials
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useMemo } from 'react';
-import { useAppState } from '../../contexts/AppContext';
-import { loadFramerMotion } from '../../utils/dynamicImports';
-import DOMPurify from 'isomorphic-dompurify';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useMemo } from &apos;react&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { loadFramerMotion } from &apos;../../utils/dynamicImports&apos;;
+import DOMPurify from &apos;isomorphic-dompurify&apos;;
 
 interface HelpArticle {
+}
   id: string;
   title: string;
   category: string;
   content: string;
   tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: &apos;beginner&apos; | &apos;intermediate&apos; | &apos;advanced&apos;;
   readTime: number;
   lastUpdated: Date;
   helpful: number;
@@ -24,6 +25,7 @@ interface HelpArticle {
 }
 
 interface HelpCategory {
+}
   id: string;
   name: string;
   icon: string;
@@ -31,60 +33,67 @@ interface HelpCategory {
   articles: string[];}
 
 const HelpSystem: React.FC = () => {
+}
   const { state } = useAppState();
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('getting-started');
+  const [selectedCategory, setSelectedCategory] = useState<string>(&apos;getting-started&apos;);
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(&apos;&apos;);
 
   // Help categories
   const categories: HelpCategory[] = [
     {
-      id: 'getting-started',
-      name: 'Getting Started',
-      icon: '🚀',
-      description: 'New to fantasy football? Start here!',
-      articles: ['fantasy-basics', 'league-setup', 'draft-guide', 'scoring-system']
+}
+      id: &apos;getting-started&apos;,
+      name: &apos;Getting Started&apos;,
+      icon: &apos;🚀&apos;,
+      description: &apos;New to fantasy football? Start here!&apos;,
+      articles: [&apos;fantasy-basics&apos;, &apos;league-setup&apos;, &apos;draft-guide&apos;, &apos;scoring-system&apos;]
     },
     {
-      id: 'draft',
-      name: 'Draft & Prep',
-      icon: '📋',
-      description: 'Master your draft strategy',
-      articles: ['draft-strategy', 'player-rankings', 'mock-drafts', 'draft-room-guide']
+}
+      id: &apos;draft&apos;,
+      name: &apos;Draft & Prep&apos;,
+      icon: &apos;📋&apos;,
+      description: &apos;Master your draft strategy&apos;,
+      articles: [&apos;draft-strategy&apos;, &apos;player-rankings&apos;, &apos;mock-drafts&apos;, &apos;draft-room-guide&apos;]
     },
     {
-      id: 'season-management',
-      name: 'Season Management',
-      icon: '🏈',
-      description: 'Manage your team during the season',
-      articles: ['lineup-setting', 'waiver-wire', 'trading-guide', 'injury-management']
+}
+      id: &apos;season-management&apos;,
+      name: &apos;Season Management&apos;,
+      icon: &apos;🏈&apos;,
+      description: &apos;Manage your team during the season&apos;,
+      articles: [&apos;lineup-setting&apos;, &apos;waiver-wire&apos;, &apos;trading-guide&apos;, &apos;injury-management&apos;]
     },
     {
-      id: 'advanced',
-      name: 'Advanced Strategy',
-      icon: '🧠',
-      description: 'Take your game to the next level',
-      articles: ['advanced-analytics', 'playoff-strategy', 'championship-tips', 'ai-features']
+}
+      id: &apos;advanced&apos;,
+      name: &apos;Advanced Strategy&apos;,
+      icon: &apos;🧠&apos;,
+      description: &apos;Take your game to the next level&apos;,
+      articles: [&apos;advanced-analytics&apos;, &apos;playoff-strategy&apos;, &apos;championship-tips&apos;, &apos;ai-features&apos;]
     },
     {
-      id: 'troubleshooting',
-      name: 'Troubleshooting',
-      icon: '🔧',
-      description: 'Fix common issues',
-      articles: ['login-issues', 'app-problems', 'notification-setup', 'performance-tips']
+}
+      id: &apos;troubleshooting&apos;,
+      name: &apos;Troubleshooting&apos;,
+      icon: &apos;🔧&apos;,
+      description: &apos;Fix common issues&apos;,
+      articles: [&apos;login-issues&apos;, &apos;app-problems&apos;, &apos;notification-setup&apos;, &apos;performance-tips&apos;]
 
   ];
 
   // Help articles
   const articles: HelpArticle[] = [
     {
-      id: 'fantasy-basics',
-      title: 'Fantasy Football Basics',
-      category: 'getting-started',
+}
+      id: &apos;fantasy-basics&apos;,
+      title: &apos;Fantasy Football Basics&apos;,
+      category: &apos;getting-started&apos;,
       content: `# Fantasy Football Basics
 
-Welcome to the exciting world of fantasy football! Here's everything you need to know to get started.
+Welcome to the exciting world of fantasy football! Here&apos;s everything you need to know to get started.
 
 ## What is Fantasy Football?
 
@@ -125,24 +134,25 @@ Our league uses **PPR (Point Per Reception)** scoring:
 
 ## Key Strategies
 
-1. **Draft Running Backs Early**: They're scarce and valuable
+1. **Draft Running Backs Early**: They&apos;re scarce and valuable
 2. **Stream Defenses**: Pick up defenses with good matchups
 3. **Work the Waiver Wire**: Add emerging players weekly
 4. **Make Smart Trades**: Improve your team through trades
 5. **Plan for Playoffs**: Consider playoff schedules
 
-Ready to dominate your league? Let's get started!`,
-      tags: ['basics', 'beginner', 'rules', 'scoring'],
-      difficulty: 'beginner',
+Ready to dominate your league? Let&apos;s get started!`,
+      tags: [&apos;basics&apos;, &apos;beginner&apos;, &apos;rules&apos;, &apos;scoring&apos;],
+      difficulty: &apos;beginner&apos;,
       readTime: 5,
-      lastUpdated: new Date('2024-01-15'),
+      lastUpdated: new Date(&apos;2024-01-15&apos;),
       helpful: 47,
       views: 234
     },
     {
-      id: 'draft-strategy',
-      title: 'Advanced Draft Strategy',
-      category: 'draft',
+}
+      id: &apos;draft-strategy&apos;,
+      title: &apos;Advanced Draft Strategy&apos;,
+      category: &apos;draft&apos;,
       content: `# Advanced Draft Strategy
 
 Master your draft with these proven strategies and techniques.
@@ -157,7 +167,7 @@ Master your draft with these proven strategies and techniques.
 
 ### 2. Create Your Rankings
 - Use multiple sources (experts, projections, ADP)
-- Adjust for your league's scoring system
+- Adjust for your league&apos;s scoring system
 - Create tiers within positions
 - Identify value picks and sleepers
 
@@ -209,7 +219,7 @@ Master your draft with these proven strategies and techniques.
 ### Tight End Strategy
 - **Elite tier**: Kelce, Andrews (Rounds 2-4)
 - **Streaming tier**: Everyone else (Rounds 12+)
-- **Avoid the middle**: Don't reach for TE6-12
+- **Avoid the middle**: Don&apos;t reach for TE6-12
 
 ### Defense/Kicker Strategy
 - **Stream defenses** based on matchups
@@ -226,9 +236,9 @@ Calculate player value above replacement level:
 - Adjust for positional scarcity
 
 ### Auction Strategy
-- **Nominate players** you don't want early
+- **Nominate players** you don&apos;t want early
 - **Save money** for stars you target
-- **Don't get stuck** with budget at end
+- **Don&apos;t get stuck** with budget at end
 - **Target value** in middle tiers
 
 ### Best Ball Strategy
@@ -247,7 +257,7 @@ Calculate player value above replacement level:
 
 ### Making Your Pick
 1. **Trust your rankings** but adapt
-2. **Don't reach** more than 1 round
+2. **Don&apos;t reach** more than 1 round
 3. **Consider bye weeks** in late rounds
 4. **Take upside** over safety late
 
@@ -276,20 +286,21 @@ Calculate player value above replacement level:
 5. **Prepare for Week 1** lineup
 
 Remember: The draft is just the beginning. Stay active on waivers and make smart trades throughout the season!`,
-      tags: ['draft', 'strategy', 'advanced', 'preparation'],
-      difficulty: 'advanced',
+      tags: [&apos;draft&apos;, &apos;strategy&apos;, &apos;advanced&apos;, &apos;preparation&apos;],
+      difficulty: &apos;advanced&apos;,
       readTime: 12,
-      lastUpdated: new Date('2024-01-20'),
+      lastUpdated: new Date(&apos;2024-01-20&apos;),
       helpful: 89,
       views: 456
     },
     {
-      id: 'ai-features',
-      title: 'Using AI Features',
-      category: 'advanced',
+}
+      id: &apos;ai-features&apos;,
+      title: &apos;Using AI Features&apos;,
+      category: &apos;advanced&apos;,
       content: `# Using AI Features
 
-Astral Draft includes powerful AI features to give you a competitive edge. Here's how to use them effectively.
+Astral Draft includes powerful AI features to give you a competitive edge. Here&apos;s how to use them effectively.
 
 ## AI Trade Analyzer
 
@@ -339,8 +350,8 @@ Astral Draft includes powerful AI features to give you a competitive edge. Here'
 - "Should I trade Derrick Henry for Cooper Kupp?"
 - "Who should I start at RB this week?"
 - "What waiver wire players should I target?"
-- "How does CMC's injury affect his value?"
-- "Analyze my team's playoff chances"
+- "How does CMC&apos;s injury affect his value?"
+- "Analyze my team&apos;s playoff chances"
 
 ### Getting Better Responses
 - Be **specific** about players and situations
@@ -403,7 +414,7 @@ Astral Draft includes powerful AI features to give you a competitive edge. Here'
 
 ### How to Use It
 1. When injury news breaks, ask the AI Assistant
-2. Example: "How does Saquon's ankle injury affect his value?"
+2. Example: "How does Saquon&apos;s ankle injury affect his value?"
 3. Review impact prediction and timeline
 4. Consider recommended actions (hold, trade, handcuff)
 
@@ -428,19 +439,19 @@ Astral Draft includes powerful AI features to give you a competitive edge. Here'
 
 ## Best Practices
 
-### Do's
+### Do&apos;s
 ✅ **Use AI as a guide**, not absolute truth
 ✅ **Combine AI insights** with your knowledge
 ✅ **Ask specific questions** for better responses
 ✅ **Consider multiple factors** beyond AI recommendations
 ✅ **Update AI** with current information when possible
 
-### Don'ts
-❌ **Don't blindly follow** AI recommendations
-❌ **Don't ignore** your gut feelings completely
-❌ **Don't forget** league-specific factors
-❌ **Don't rely solely** on AI for decisions
-❌ **Don't expect perfection** - AI makes mistakes too
+### Don&apos;ts
+❌ **Don&apos;t blindly follow** AI recommendations
+❌ **Don&apos;t ignore** your gut feelings completely
+❌ **Don&apos;t forget** league-specific factors
+❌ **Don&apos;t rely solely** on AI for decisions
+❌ **Don&apos;t expect perfection** - AI makes mistakes too
 
 ## Troubleshooting AI Features
 
@@ -460,13 +471,13 @@ Astral Draft includes powerful AI features to give you a competitive edge. Here'
 - **Use regularly** throughout the season
 - **Ask about trends** and patterns
 - **Combine with research** from other sources
-- **Share insights** with league mates (or don't! 😉)
+- **Share insights** with league mates (or don&apos;t! 😉)
 
 The AI features in Astral Draft are designed to give you an edge, but remember - fantasy football is still about having fun and enjoying the competition with friends!`,
-      tags: ['ai', 'features', 'advanced', 'tools'],
-      difficulty: 'intermediate',
+      tags: [&apos;ai&apos;, &apos;features&apos;, &apos;advanced&apos;, &apos;tools&apos;],
+      difficulty: &apos;intermediate&apos;,
       readTime: 8,
-      lastUpdated: new Date('2024-01-25'),
+      lastUpdated: new Date(&apos;2024-01-25&apos;),
       helpful: 72,
       views: 189
 
@@ -474,12 +485,15 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
 
   // Filter articles based on search and category
   const filteredArticles = useMemo(() => {
+}
     let filtered = articles;
 
-    if (selectedCategory !== 'all') {
+    if (selectedCategory !== &apos;all&apos;) {
+}
       filtered = filtered.filter((article: any) => article.category === selectedCategory);
 
     if (searchQuery) {
+}
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((article: any) =>
         article.title.toLowerCase().includes(query) ||
@@ -493,18 +507,22 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
   const selectedArticleData = articles.find((article: any) => article.id === selectedArticle);
 
   const getDifficultyColor = (difficulty: string) => {
+}
     switch (difficulty) {
-      case 'beginner': return 'text-green-400 bg-green-900/20';
-      case 'intermediate': return 'text-yellow-400 bg-yellow-900/20';
-      case 'advanced': return 'text-red-400 bg-red-900/20';
-      default: return 'text-slate-400 bg-slate-900/20';
+}
+      case &apos;beginner&apos;: return &apos;text-green-400 bg-green-900/20&apos;;
+      case &apos;intermediate&apos;: return &apos;text-yellow-400 bg-yellow-900/20&apos;;
+      case &apos;advanced&apos;: return &apos;text-red-400 bg-red-900/20&apos;;
+      default: return &apos;text-slate-400 bg-slate-900/20&apos;;
 
   };
 
   const formatContent = (content: string) => {
+}
     // Escape HTML to prevent XSS attacks
     const escapeHtml = (text: string) => {
-      const element = document.createElement('div');
+}
+      const element = document.createElement(&apos;div&apos;);
       element.textContent = text;
       return element.innerHTML;
     };
@@ -512,12 +530,12 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
     // Safe markdown-like formatting - escape first, then apply formatting
     const escaped = escapeHtml(content);
     return escaped
-      .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold text-white mb-4">$1</h1>')
-      .replace(/^## (.*$)/gm, '<h2 class="text-xl font-semibold text-white mb-3 mt-6">$1</h2>')
-      .replace(/^### (.*$)/gm, '<h3 class="text-lg font-medium text-white mb-2 mt-4">$1</h3>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
-      .replace(/\n\n/g, '</p><p class="text-slate-300 mb-4">')
-      .replace(/\n/g, '<br>');
+      .replace(/^# (.*$)/gm, &apos;<h1 class="text-2xl font-bold text-white mb-4">$1</h1>&apos;)
+      .replace(/^## (.*$)/gm, &apos;<h2 class="text-xl font-semibold text-white mb-3 mt-6">$1</h2>&apos;)
+      .replace(/^### (.*$)/gm, &apos;<h3 class="text-lg font-medium text-white mb-2 mt-4">$1</h3>&apos;)
+      .replace(/\*\*(.*?)\*\*/g, &apos;<strong class="text-white font-semibold">$1</strong>&apos;)
+      .replace(/\n\n/g, &apos;</p><p class="text-slate-300 mb-4">&apos;)
+      .replace(/\n/g, &apos;<br>&apos;);
   };
 
   return (
@@ -533,6 +551,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
       {/* Help System Modal */}
       <AnimatePresence>
         {isVisible && (
+}
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 sm:px-4 md:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -566,7 +585,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                 <div className="flex-1 overflow-y-auto p-4 sm:px-4 md:px-6 lg:px-8">
                   <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                     <button
-                      onClick={() => setSelectedCategory('all')}`}
+                      onClick={() => setSelectedCategory(&apos;all&apos;)}`}
                     >
                       <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-lg sm:px-4 md:px-6 lg:px-8">📚</span>
@@ -578,6 +597,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     </button>
 
                     {categories.map((category: any) => (
+}
                       <button
                         key={category.id}
                         onClick={() => setSelectedCategory(category.id)}`}
@@ -598,6 +618,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
               {/* Main Content */}
               <div className="flex-1 flex flex-col sm:px-4 md:px-6 lg:px-8">
                 {selectedArticle ? (
+}
                   /* Article View */
                   <div className="flex-1 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                     <div className="p-6 sm:px-4 md:px-6 lg:px-8">
@@ -614,7 +635,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                         </h1>
                         
                         <div className="flex items-center gap-4 text-sm text-slate-400 mb-4 sm:px-4 md:px-6 lg:px-8">
-                          <span className={`px-2 py-1 rounded ${getDifficultyColor(selectedArticleData?.difficulty || 'beginner')}`}>
+                          <span className={`px-2 py-1 rounded ${getDifficultyColor(selectedArticleData?.difficulty || &apos;beginner&apos;)}`}>
                             {selectedArticleData?.difficulty}
                           </span>
                           <span>📖 {selectedArticleData?.readTime} min read</span>
@@ -624,6 +645,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                         
                         <div className="flex flex-wrap gap-2 sm:px-4 md:px-6 lg:px-8">
                           {selectedArticleData?.tags.map((tag: any) => (
+}
                             <span
                               key={tag}
                               className="px-2 py-1 bg-slate-700 text-slate-300 text-xs rounded sm:px-4 md:px-6 lg:px-8"
@@ -638,7 +660,8 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                       <div 
                         className="prose prose-invert max-w-none sm:px-4 md:px-6 lg:px-8"
                         dangerouslySetInnerHTML={{ 
-                          __html: DOMPurify.sanitize(formatContent(selectedArticleData?.content || ''))
+}
+                          __html: DOMPurify.sanitize(formatContent(selectedArticleData?.content || &apos;&apos;))
                         }}
                       />
 
@@ -665,16 +688,18 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                   <div className="flex-1 overflow-y-auto p-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="mb-6 sm:px-4 md:px-6 lg:px-8">
                       <h2 className="text-2xl font-bold text-white mb-2 sm:px-4 md:px-6 lg:px-8">
-                        {selectedCategory === 'all' ? 'All Articles' : 
+                        {selectedCategory === &apos;all&apos; ? &apos;All Articles&apos; : 
+}
                          categories.find((c: any) => c.id === selectedCategory)?.name}
                       </h2>
                       <p className="text-slate-400 sm:px-4 md:px-6 lg:px-8">
-                        {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} found
+                        {filteredArticles.length} article{filteredArticles.length !== 1 ? &apos;s&apos; : &apos;&apos;} found
                       </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {filteredArticles.map((article: any) => (
+}
                         <motion.button
                           key={article.id}
                           initial={{ opacity: 0, y: 20 }}
@@ -711,6 +736,7 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
                     </div>
 
                     {filteredArticles.length === 0 && (
+}
                       <div className="text-center py-12 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-6xl mb-4 block sm:px-4 md:px-6 lg:px-8">📚</span>
                         <h3 className="text-xl font-semibold text-white mb-2 sm:px-4 md:px-6 lg:px-8">No articles found</h3>

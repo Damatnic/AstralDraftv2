@@ -3,20 +3,22 @@
  * Provides optimized snake draft functionality with auto-draft, strategy analysis, and keeper support
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Player, DraftPick, League, PlayerPosition } from '../types';
-import { players } from '../data/players';
+import { useState, useEffect, useCallback, useMemo } from &apos;react&apos;;
+import { Player, DraftPick, League, PlayerPosition } from &apos;../types&apos;;
+import { players } from &apos;../data/players&apos;;
 import { 
+}
   enhancedDraftEngine, 
   AutoDraftConfig, 
   SnakeDraftOptimization, 
   DraftRecommendation,
   KeeperLeagueConfig,
-  KeeperPlayer
-} from '../services/enhancedDraftEngine';
-import { useAppState } from '../contexts/AppContext';
+//   KeeperPlayer
+} from &apos;../services/enhancedDraftEngine&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
 
 export interface SnakeDraftState {
+}
   // Basic draft state
   currentPick: number;
   currentRound: number;
@@ -39,8 +41,8 @@ export interface SnakeDraftState {
   availablePlayers: Player[];
   filteredPlayers: Player[];
   searchTerm: string;
-  positionFilter: PlayerPosition | 'ALL';
-  tierFilter: number | 'ALL';
+  positionFilter: PlayerPosition | &apos;ALL&apos;;
+  tierFilter: number | &apos;ALL&apos;;
   
   // User queue and watchlist
   draftQueue: number[];
@@ -55,14 +57,15 @@ export interface SnakeDraftState {
   reorderQueue: (startIndex: number, endIndex: number) => void;
   addToWatchlist: (playerId: number) => void;
   removeFromWatchlist: (playerId: number) => void;
-  setPositionFilter: (position: PlayerPosition | 'ALL') => void;
-  setTierFilter: (tier: number | 'ALL') => void;
+  setPositionFilter: (position: PlayerPosition | &apos;ALL&apos;) => void;
+  setTierFilter: (tier: number | &apos;ALL&apos;) => void;
   setSearchTerm: (term: string) => void;
   getRecommendations: () => DraftRecommendation[];
   analyzePosition: () => SnakeDraftOptimization | null;
 }
 
 export interface UseSnakeDraftOptions {
+}
   league: League;
   userTeamId: number;
   autoDraftTimeout?: number; // Default timeout for auto-draft in ms
@@ -71,6 +74,7 @@ export interface UseSnakeDraftOptions {
 }
 
 export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
+}
   const { league, userTeamId, autoDraftTimeout = 60000, enableAnalytics = true, keeperConfig } = options;
   const { dispatch } = useAppState();
   
@@ -79,14 +83,15 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const [timeRemaining] = useState(0);
   const [autoDraftEnabled, setAutoDraftEnabled] = useState(false);
   const [autoDraftConfig, setAutoDraftConfig] = useState<AutoDraftConfig>({
+}
     enabled: false,
-    strategy: 'BPA',
-    positionPriority: ['RB', 'WR', 'QB', 'TE', 'K', 'DST'],
-    riskTolerance: 'MEDIUM',
+    strategy: &apos;BPA&apos;,
+    positionPriority: [&apos;RB&apos;, &apos;WR&apos;, &apos;QB&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;],
+    riskTolerance: &apos;MEDIUM&apos;,
     targetRosterComposition: { QB: 2, RB: 5, WR: 6, TE: 2, K: 1, DST: 1 },
     avoidInjuryProne: false,
     preferVeterans: false,
-    timeoutAction: 'AUTO_DRAFT'
+    timeoutAction: &apos;AUTO_DRAFT&apos;
   });
   
   // Enhanced features
@@ -95,9 +100,9 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   const [eligibleKeepers, setEligibleKeepers] = useState<KeeperPlayer[]>([]);
   
   // Filtering and search
-  const [searchTerm, setSearchTermState] = useState('');
-  const [positionFilter, setPositionFilterState] = useState<PlayerPosition | 'ALL'>('ALL');
-  const [tierFilter, setTierFilterState] = useState<number | 'ALL'>('ALL');
+  const [searchTerm, setSearchTermState] = useState(&apos;&apos;);
+  const [positionFilter, setPositionFilterState] = useState<PlayerPosition | &apos;ALL&apos;>(&apos;ALL&apos;);
+  const [tierFilter, setTierFilterState] = useState<number | &apos;ALL&apos;>(&apos;ALL&apos;);
   
   // User preferences
   const [draftQueue, setDraftQueue] = useState<number[]>([]);
@@ -111,10 +116,13 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   
   // Calculate current team (snake draft logic)
   const currentTeamId = useMemo(() => {
+}
     if (currentRound % 2 === 1) {
+}
       // Odd rounds: normal order
       return pickInRound;
     } else {
+}
       // Even rounds: reverse order
       return league.teams.length - pickInRound + 1;
     }
@@ -125,6 +133,7 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   
   // Get available players
   const availablePlayers = useMemo(() => {
+}
     const draftedPlayerIds = new Set(
       league.draftPicks
         .filter((pick: any) => pick.playerId)
@@ -136,10 +145,12 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
   // Apply filters to available players
   const filteredPlayers = useMemo(() => {
+}
     let filtered = [...availablePlayers];
 
     // Search filter
     if (searchTerm) {
+}
       const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter((player: any) =>
         player.name.toLowerCase().includes(searchLower) ||
@@ -148,12 +159,14 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
     }
 
     // Position filter
-    if (positionFilter !== 'ALL') {
+    if (positionFilter !== &apos;ALL&apos;) {
+}
       filtered = filtered.filter((player: any) => player.position === positionFilter);
     }
 
     // Tier filter
-    if (tierFilter !== 'ALL') {
+    if (tierFilter !== &apos;ALL&apos;) {
+}
       filtered = filtered.filter((player: any) => player.tier === tierFilter);
     }
 
@@ -163,14 +176,19 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
   // Load keeper players if keeper league
   useEffect(() => {
+}
     if (keeperConfig?.enabled) {
+}
       const userTeam = league.teams.find((team: any) => team.id === userTeamId);
       if (userTeam?.keepers) {
+}
         const keeperPlayers: KeeperPlayer[] = userTeam.keepers.map((keeperId: any) => {
+}
           const player = players.find((p: any) => p.id === keeperId);
           if (!player) return null;
           
           return {
+}
             ...player,
             keeperCost: 50, // Mock cost - would be calculated based on keeper rules
             yearsKept: 1,
@@ -188,11 +206,14 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
   // Auto-draft timer
   useEffect(() => {
+}
     if (!autoDraftEnabled || isPaused || isComplete || currentTeamId !== userTeamId) {
+}
       return;
     }
 
     const timer = setTimeout(async () => {
+}
       await performAutoDraft();
     }, autoDraftTimeout);
 
@@ -201,7 +222,9 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
   // Update recommendations when pick changes
   useEffect(() => {
+}
     if (enableAnalytics && currentTeamId === userTeamId && !isComplete) {
+}
       updateRecommendations();
       updateDraftAnalysis();
     }
@@ -209,19 +232,23 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
   // Actions
   const makePick = useCallback((playerId: number) => {
+}
     if (currentTeamId !== userTeamId || isComplete) {
-      console.warn('Not your turn or draft is complete');
+}
+      console.warn(&apos;Not your turn or draft is complete&apos;);
       return;
     }
 
     const player = players.find((p: any) => p.id === playerId);
     if (!player) {
-      console.error('Player not found');
+}
+      console.error(&apos;Player not found&apos;);
       return;
     }
 
     // Create draft pick
     const draftPick: DraftPick = {
+}
       overall: currentPick,
       round: currentRound,
       pickInRound,
@@ -232,14 +259,15 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
 
     // Dispatch pick - using a more general action type
     dispatch({
-      type: 'SET_LOADING',
+}
+      type: &apos;SET_LOADING&apos;,
       payload: false
     });
 
-    console.log('Draft pick made:', draftPick, player);
+    console.log(&apos;Draft pick made:&apos;, draftPick, player);
     
     // Note: In a real implementation, you would dispatch to a draft management system
-    // For now, we'll just log and update local state
+    // For now, we&apos;ll just log and update local state
 
     // Remove from queue if present
     setDraftQueue(prev => prev.filter((id: any) => id !== playerId));
@@ -247,28 +275,35 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   }, [currentTeamId, userTeamId, isComplete, currentPick, currentRound, pickInRound, league.id, dispatch]);
 
   const enableAutoDraft = useCallback((configOverrides?: Partial<AutoDraftConfig>) => {
+}
     setAutoDraftConfig(prev => ({ ...prev, enabled: true, ...configOverrides }));
     setAutoDraftEnabled(true);
   }, []);
 
   const disableAutoDraft = useCallback(() => {
+}
     setAutoDraftConfig(prev => ({ ...prev, enabled: false }));
     setAutoDraftEnabled(false);
   }, []);
 
   const addToQueue = useCallback((playerId: number) => {
+}
     setDraftQueue(prev => {
+}
       if (prev.includes(playerId)) return prev;
       return [...prev, playerId];
     });
   }, []);
 
   const removeFromQueue = useCallback((playerId: number) => {
+}
     setDraftQueue(prev => prev.filter((id: any) => id !== playerId));
   }, []);
 
   const reorderQueue = useCallback((startIndex: number, endIndex: number) => {
+}
     setDraftQueue(prev => {
+}
       const result = [...prev];
       const [removed] = result.splice(startIndex, 1);
       result.splice(endIndex, 0, removed);
@@ -277,68 +312,79 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   }, []);
 
   const addToWatchlist = useCallback((playerId: number) => {
+}
     setWatchlist(prev => {
+}
       if (prev.includes(playerId)) return prev;
       return [...prev, playerId];
     });
   }, []);
 
   const removeFromWatchlist = useCallback((playerId: number) => {
+}
     setWatchlist(prev => prev.filter((id: any) => id !== playerId));
   }, []);
 
-  const setPositionFilter = useCallback((position: PlayerPosition | 'ALL') => {
+  const setPositionFilter = useCallback((position: PlayerPosition | &apos;ALL&apos;) => {
+}
     setPositionFilterState(position);
   }, []);
 
-  const setTierFilter = useCallback((tier: number | 'ALL') => {
+  const setTierFilter = useCallback((tier: number | &apos;ALL&apos;) => {
+}
     setTierFilterState(tier);
   }, []);
 
   const setSearchTerm = useCallback((term: string) => {
+}
     setSearchTermState(term);
   }, []);
 
   const getRecommendations = useCallback((): DraftRecommendation[] => {
+}
     if (currentTeamId !== userTeamId) return [];
 
     const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return [];
 
     try {
+}
 
       const recs = enhancedDraftEngine.getPickRecommendations(
         availablePlayers,
         userTeam.roster || [],
         currentPick,
         16, // Total rounds
-        autoDraftConfig
+//         autoDraftConfig
       );
       
       setRecommendations(recs);
       return recs;
 
     } catch (error) {
+}
         console.error(error);
     } catch (error) {
-      console.error('Failed to get recommendations:', error);
+}
+      console.error(&apos;Failed to get recommendations:&apos;, error);
       return [];
     }
   }, [currentTeamId, userTeamId, league.teams, availablePlayers, currentPick, autoDraftConfig]);
 
   const analyzePosition = useCallback((): SnakeDraftOptimization | null => {
+}
     if (currentTeamId !== userTeamId) return null;
 
     const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return null;
 
-    // Find user's draft position (1-based)
+    // Find user&apos;s draft position (1-based)
     const draftPosition = league.teams.findIndex(team => team.id === userTeamId) + 1;
     
     const analysis = enhancedDraftEngine.analyzeSnakeDraftPosition(
       draftPosition,
       league.teams.length,
-      currentRound
+//       currentRound
     );
     
     setDraftAnalysis(analysis);
@@ -346,26 +392,31 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
   }, [currentTeamId, userTeamId, league.teams, currentRound]);
 
   const updateRecommendations = useCallback(() => {
+}
     getRecommendations();
   }, [getRecommendations]);
 
   const updateDraftAnalysis = useCallback(() => {
+}
     analyzePosition();
   }, [analyzePosition]);
 
   const performAutoDraft = useCallback(async () => {
+}
     if (currentTeamId !== userTeamId || !autoDraftEnabled) return;
 
     const userTeam = league.teams.find((team: any) => team.id === userTeamId);
     if (!userTeam) return;
 
     try {
+}
       // Check queue first
       const availableInQueue = draftQueue
         .map((id: any) => players.find((p: any) => p.id === id))
         .filter((p: any) => p && availablePlayers.includes(p))[0];
 
       if (availableInQueue) {
+}
         makePick(availableInQueue.id);
         return;
       }
@@ -377,32 +428,38 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
         userTeam.roster || [],
         currentPick,
         16,
-        autoDraftConfig
+//         autoDraftConfig
       );
 
       if (recommendation) {
+}
         makePick(recommendation.player.id);
         
         // Notify user of auto-pick
         dispatch({
-          type: 'ADD_NOTIFICATION',
+}
+          type: &apos;ADD_NOTIFICATION&apos;,
           payload: {
+}
             message: `Auto-drafted ${recommendation.player.name} (${recommendation.reasoning})`,
-            type: 'DRAFT'
+            type: &apos;DRAFT&apos;
           }
         });
       }
     } catch (error) {
-      console.error('Auto-draft failed:', error);
+}
+      console.error(&apos;Auto-draft failed:&apos;, error);
       
       // Fallback to best available
       if (availablePlayers.length > 0) {
+}
         makePick(availablePlayers[0].id);
       }
     }
   }, [currentTeamId, userTeamId, autoDraftEnabled, league.teams, draftQueue, availablePlayers, currentPick, autoDraftConfig, makePick, dispatch]);
 
   return {
+}
     // Basic state
     currentPick,
     currentRound,
@@ -445,6 +502,6 @@ export function useSnakeDraft(options: UseSnakeDraftOptions): SnakeDraftState {
     setTierFilter,
     setSearchTerm,
     getRecommendations,
-    analyzePosition
+//     analyzePosition
   };
 }

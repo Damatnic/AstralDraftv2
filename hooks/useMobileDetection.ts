@@ -3,9 +3,10 @@
  * Comprehensive mobile device and interaction detection
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from &apos;react&apos;;
 
 interface MobileDetection {
+}
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;
@@ -15,7 +16,7 @@ interface MobileDetection {
   isPWA: boolean;
   isIOS: boolean;
   isAndroid: boolean;
-  screenSize: 'small' | 'medium' | 'large' | 'xlarge';
+  screenSize: &apos;small&apos; | &apos;medium&apos; | &apos;large&apos; | &apos;xlarge&apos;;
   viewportWidth: number;
   viewportHeight: number;
   hasNotch: boolean;
@@ -23,7 +24,9 @@ interface MobileDetection {
 }
 
 export const useMobileDetection = (): MobileDetection => {
+}
   const [detection, setDetection] = useState<MobileDetection>({
+}
     isMobile: false,
     isTablet: false,
     isDesktop: true,
@@ -33,7 +36,7 @@ export const useMobileDetection = (): MobileDetection => {
     isPWA: false,
     isIOS: false,
     isAndroid: false,
-    screenSize: 'large',
+    screenSize: &apos;large&apos;,
     viewportWidth: 1024,
     viewportHeight: 768,
     hasNotch: false,
@@ -41,7 +44,9 @@ export const useMobileDetection = (): MobileDetection => {
   });
 
   useEffect(() => {
+}
     const updateDetection = () => {
+}
       const width = window.innerWidth;
       const height = window.innerHeight;
       
@@ -51,7 +56,7 @@ export const useMobileDetection = (): MobileDetection => {
       const isDesktop = width >= 1024;
       
       // Touch detection
-      const isTouchDevice = 'ontouchstart' in window || 
+      const isTouchDevice = &apos;ontouchstart&apos; in window || 
                            navigator.maxTouchPoints > 0 ||
                            (navigator as any).msMaxTouchPoints > 0;
       
@@ -60,33 +65,34 @@ export const useMobileDetection = (): MobileDetection => {
       const isLandscape = width > height;
       
       // PWA detection
-      const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+      const isPWA = window.matchMedia(&apos;(display-mode: standalone)&apos;).matches ||
                    (window.navigator as any).standalone ||
-                   document.referrer.includes('android-app://');
+                   document.referrer.includes(&apos;android-app://&apos;);
       
       // Platform detection
       const userAgent = navigator.userAgent.toLowerCase();
       const isIOS = /iphone|ipad|ipod/.test(userAgent) ||
-                   (navigator.userAgent.includes('Mac') && navigator.maxTouchPoints > 1);
+                   (navigator.userAgent.includes(&apos;Mac&apos;) && navigator.maxTouchPoints > 1);
       const isAndroid = /android/.test(userAgent);
       
       // Screen size categorization
-      let screenSize: 'small' | 'medium' | 'large' | 'xlarge';
-      if (width < 480) screenSize = 'small';
-      else if (width < 768) screenSize = 'medium';
-      else if (width < 1280) screenSize = 'large';
-      else screenSize = 'xlarge';
+      let screenSize: &apos;small&apos; | &apos;medium&apos; | &apos;large&apos; | &apos;xlarge&apos;;
+      if (width < 480) screenSize = &apos;small&apos;;
+      else if (width < 768) screenSize = &apos;medium&apos;;
+      else if (width < 1280) screenSize = &apos;large&apos;;
+      else screenSize = &apos;xlarge&apos;;
       
       // Notch detection (iOS safe area)
       const hasNotch = isIOS && (
-        CSS.supports('padding: env(safe-area-inset-top)') ||
-        CSS.supports('padding: constant(safe-area-inset-top)')
+        CSS.supports(&apos;padding: env(safe-area-inset-top)&apos;) ||
+        CSS.supports(&apos;padding: constant(safe-area-inset-top)&apos;)
       );
       
       // Hover support detection
-      const supportsHover = window.matchMedia('(hover: hover)').matches;
+      const supportsHover = window.matchMedia(&apos;(hover: hover)&apos;).matches;
       
       setDetection({
+}
         isMobile,
         isTablet,
         isDesktop,
@@ -100,7 +106,7 @@ export const useMobileDetection = (): MobileDetection => {
         viewportWidth: width,
         viewportHeight: height,
         hasNotch,
-        supportsHover
+//         supportsHover
       });
     };
 
@@ -108,16 +114,17 @@ export const useMobileDetection = (): MobileDetection => {
     updateDetection();
     
     // Listen for changes
-    window.addEventListener('resize', updateDetection);
-    window.addEventListener('orientationchange', updateDetection);
+    window.addEventListener(&apos;resize&apos;, updateDetection);
+    window.addEventListener(&apos;orientationchange&apos;, updateDetection);
     
     // Listen for PWA installation
-    window.addEventListener('appinstalled', updateDetection);
+    window.addEventListener(&apos;appinstalled&apos;, updateDetection);
     
     return () => {
-      window.removeEventListener('resize', updateDetection);
-      window.removeEventListener('orientationchange', updateDetection);
-      window.removeEventListener('appinstalled', updateDetection);
+}
+      window.removeEventListener(&apos;resize&apos;, updateDetection);
+      window.removeEventListener(&apos;orientationchange&apos;, updateDetection);
+      window.removeEventListener(&apos;appinstalled&apos;, updateDetection);
     };
   }, []);
 
@@ -126,23 +133,26 @@ export const useMobileDetection = (): MobileDetection => {
 
 // Enhanced media query hook with mobile-specific breakpoints
 export const useResponsiveBreakpoint = () => {
-  const [breakpoint, setBreakpoint] = useState<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('lg');
+}
+  const [breakpoint, setBreakpoint] = useState<&apos;xs&apos; | &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos; | &apos;xl&apos;>(&apos;lg&apos;);
 
   useEffect(() => {
+}
     const updateBreakpoint = () => {
+}
       const width = window.innerWidth;
       
-      if (width < 480) setBreakpoint('xs');      // Extra small phones
-      else if (width < 640) setBreakpoint('sm'); // Small phones
-      else if (width < 768) setBreakpoint('md'); // Large phones / small tablets
-      else if (width < 1024) setBreakpoint('lg'); // Tablets / small laptops
-      else setBreakpoint('xl');                   // Desktops
+      if (width < 480) setBreakpoint(&apos;xs&apos;);      // Extra small phones
+      else if (width < 640) setBreakpoint(&apos;sm&apos;); // Small phones
+      else if (width < 768) setBreakpoint(&apos;md&apos;); // Large phones / small tablets
+      else if (width < 1024) setBreakpoint(&apos;lg&apos;); // Tablets / small laptops
+      else setBreakpoint(&apos;xl&apos;);                   // Desktops
     };
 
     updateBreakpoint();
-    window.addEventListener('resize', updateBreakpoint);
+    window.addEventListener(&apos;resize&apos;, updateBreakpoint);
     
-    return () => window.removeEventListener('resize', updateBreakpoint);
+    return () => window.removeEventListener(&apos;resize&apos;, updateBreakpoint);
   }, []);
 
   return breakpoint;
@@ -150,16 +160,19 @@ export const useResponsiveBreakpoint = () => {
 
 // Mobile gesture detection hook
 export const useMobileGestures = () => {
+}
   const [isSwipeEnabled, setIsSwipeEnabled] = useState(false);
   const [isPullToRefreshEnabled, setIsPullToRefreshEnabled] = useState(false);
   const detection = useMobileDetection();
 
   useEffect(() => {
+}
     setIsSwipeEnabled(detection.isTouchDevice);
     setIsPullToRefreshEnabled(detection.isMobile && detection.isTouchDevice);
   }, [detection.isTouchDevice, detection.isMobile]);
 
   return {
+}
     isSwipeEnabled,
     isPullToRefreshEnabled,
     isTouchDevice: detection.isTouchDevice
@@ -168,11 +181,14 @@ export const useMobileGestures = () => {
 
 // Virtual keyboard detection hook
 export const useVirtualKeyboard = () => {
+}
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
+}
     const handleResize = () => {
+}
       const windowHeight = window.innerHeight;
       const screenHeight = window.screen.height;
       const threshold = screenHeight * 0.75;
@@ -181,14 +197,18 @@ export const useVirtualKeyboard = () => {
       setIsKeyboardOpen(keyboardOpen);
       
       if (keyboardOpen) {
+}
         setKeyboardHeight(screenHeight - windowHeight);
       } else {
+}
         setKeyboardHeight(0);
       }
     };
 
     const handleVisualViewport = () => {
-      if ('visualViewport' in window && window.visualViewport) {
+}
+      if (&apos;visualViewport&apos; in window && window.visualViewport) {
+}
         const viewport = window.visualViewport;
         const initialHeight = window.screen.height;
         
@@ -198,15 +218,18 @@ export const useVirtualKeyboard = () => {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    if ('visualViewport' in window && window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleVisualViewport);
+    window.addEventListener(&apos;resize&apos;, handleResize);
+    if (&apos;visualViewport&apos; in window && window.visualViewport) {
+}
+      window.visualViewport.addEventListener(&apos;resize&apos;, handleVisualViewport);
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      if ('visualViewport' in window && window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleVisualViewport);
+}
+      window.removeEventListener(&apos;resize&apos;, handleResize);
+      if (&apos;visualViewport&apos; in window && window.visualViewport) {
+}
+        window.visualViewport.removeEventListener(&apos;resize&apos;, handleVisualViewport);
       }
     };
   }, []);
@@ -216,30 +239,35 @@ export const useVirtualKeyboard = () => {
 
 // Network detection for PWA offline support
 export const useNetworkStatus = () => {
+}
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [connectionType, setConnectionType] = useState<string>('unknown');
+  const [connectionType, setConnectionType] = useState<string>(&apos;unknown&apos;);
 
   useEffect(() => {
+}
     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
     
     const updateConnectionType = () => {
+}
       const connection = (navigator as any).connection || 
                         (navigator as any).mozConnection || 
                         (navigator as any).webkitConnection;
       
       if (connection) {
-        setConnectionType(connection.effectiveType || connection.type || 'unknown');
+}
+        setConnectionType(connection.effectiveType || connection.type || &apos;unknown&apos;);
       }
     };
 
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+    window.addEventListener(&apos;online&apos;, updateOnlineStatus);
+    window.addEventListener(&apos;offline&apos;, updateOnlineStatus);
     
     updateConnectionType();
     
     return () => {
-      window.removeEventListener('online', updateOnlineStatus);
-      window.removeEventListener('offline', updateOnlineStatus);
+}
+      window.removeEventListener(&apos;online&apos;, updateOnlineStatus);
+      window.removeEventListener(&apos;offline&apos;, updateOnlineStatus);
     };
   }, []);
 

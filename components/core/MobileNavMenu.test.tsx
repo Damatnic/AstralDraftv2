@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import MobileNavMenu from './MobileNavMenu';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import MobileNavMenu from &apos;./MobileNavMenu&apos;;
 
-describe('MobileNavMenu', () => {
-  it('renders without crashing', () => {
+describe(&apos;MobileNavMenu&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<MobileNavMenu />);
-    expect(screen.getByTestId('mobilenavmenu')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;mobilenavmenu&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<MobileNavMenu />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<MobileNavMenu />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

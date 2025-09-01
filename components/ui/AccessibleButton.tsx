@@ -3,18 +3,19 @@
  * Enhanced with proper ARIA attributes, keyboard navigation, and mobile touch targets
  */
 
-import { ErrorBoundary } from './ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { getButtonA11yProps, useAnnouncer } from '../../utils/accessibility';
+import { ErrorBoundary } from &apos;./ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { getButtonA11yProps, useAnnouncer } from &apos;../../utils/accessibility&apos;;
 
 export interface AccessibleButtonProps {
+}
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
+  type?: &apos;button&apos; | &apos;submit&apos; | &apos;reset&apos;;
+  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;danger&apos; | &apos;ghost&apos;;
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
   className?: string;
   ariaLabel?: string;
   ariaDescribedBy?: string;
@@ -33,59 +34,70 @@ export interface AccessibleButtonProps {
 }
 
 const variantClasses = {
-  primary: 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700',
-  secondary: 'bg-gray-600 hover:bg-gray-700 text-white border-gray-600 hover:border-gray-700',
-  danger: 'bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700',
-  ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 border-transparent hover:border-gray-300'
+}
+  primary: &apos;bg-blue-600 hover:bg-blue-700 text-white border-blue-600 hover:border-blue-700&apos;,
+  secondary: &apos;bg-gray-600 hover:bg-gray-700 text-white border-gray-600 hover:border-gray-700&apos;,
+  danger: &apos;bg-red-600 hover:bg-red-700 text-white border-red-600 hover:border-red-700&apos;,
+  ghost: &apos;bg-transparent hover:bg-gray-100 text-gray-700 border-transparent hover:border-gray-300&apos;
 };
 
 const sizeClasses = {
-  sm: 'px-3 py-1.5 text-sm',
-  md: 'px-4 py-2 text-base',
-  lg: 'px-6 py-3 text-lg'
+}
+  sm: &apos;px-3 py-1.5 text-sm&apos;,
+  md: &apos;px-4 py-2 text-base&apos;,
+  lg: &apos;px-6 py-3 text-lg&apos;
 };
 
-const disabledClasses = 'opacity-50 cursor-not-allowed pointer-events-none';
+const disabledClasses = &apos;opacity-50 cursor-not-allowed pointer-events-none&apos;;
 
 export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
+}
   children,
   onClick,
   disabled = false,
-  type = 'button',
-  variant = 'primary',
-  size = 'md',
-  className = '',
+  type = &apos;button&apos;,
+  variant = &apos;primary&apos;,
+  size = &apos;md&apos;,
+  className = &apos;&apos;,
   ariaLabel,
   ariaDescribedBy,
   isLoading = false,
-  loadingText = 'Loading...',
+  loadingText = &apos;Loading...&apos;,
   startIcon,
   endIcon,
   pressed,
   expanded,
   announceOnClick,
-  announceOnDisabled
+//   announceOnDisabled
 }: any) => {
+}
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
+}
     if (disabled || isLoading) {
+}
       if (announceOnDisabled) {
-        announce(announceOnDisabled, 'polite');
+}
+        announce(announceOnDisabled, &apos;polite&apos;);
 
       return;
 
     if (onClick) {
+}
       onClick();
 
     if (announceOnClick) {
-      announce(announceOnClick, 'polite');
+}
+      announce(announceOnClick, &apos;polite&apos;);
 
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+}
     // Handle Enter and Space key activation
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === &apos;Enter&apos; || e.key === &apos; &apos;) {
+}
       e.preventDefault();
       handleClick();
 
@@ -105,10 +117,10 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
   );
 
   const a11yProps = getButtonA11yProps(
-    ariaLabel || (typeof children === 'string' ? children : ''),
+    ariaLabel || (typeof children === &apos;string&apos; ? children : &apos;&apos;),
     disabled || isLoading,
     pressed,
-    expanded
+//     expanded
   );
 
   return (
@@ -118,12 +130,13 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
       onKeyDown={handleKeyDown}
       disabled={disabled || isLoading}
       className={`
+}
         mobile-touch-target inline-flex items-center justify-center
         font-medium rounded-lg border transition-all duration-200
         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
         ${variantClasses[variant]}
         ${sizeClasses[size]}
-        ${disabled || isLoading ? disabledClasses : ''}
+        ${disabled || isLoading ? disabledClasses : &apos;&apos;}
         ${className}
       `}
       whileHover={disabled || isLoading ? {} : { scale: 1.02 }}
@@ -140,13 +153,14 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
  * Icon Button - optimized for mobile touch targets
  */
 export interface AccessibleIconButtonProps {
+}
   icon: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   ariaLabel: string; // Required for icon buttons
   ariaDescribedBy?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
+  variant?: &apos;primary&apos; | &apos;secondary&apos; | &apos;danger&apos; | &apos;ghost&apos;;
   className?: string;
   isLoading?: boolean;
   pressed?: boolean;
@@ -156,42 +170,49 @@ export interface AccessibleIconButtonProps {
 }
 
 export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
+}
   icon,
   onClick,
   disabled = false,
   ariaLabel,
   ariaDescribedBy,
-  size = 'md',
-  variant = 'ghost',
-  className = '',
+  size = &apos;md&apos;,
+  variant = &apos;ghost&apos;,
+  className = &apos;&apos;,
   isLoading = false,
   pressed,
   expanded,
-  announceOnClick
+//   announceOnClick
 }: any) => {
+}
   const { announce } = useAnnouncer();
 
   const handleClick = () => {
+}
     if (disabled || isLoading) return;
 
     if (onClick) {
+}
       onClick();
 
     if (announceOnClick) {
-      announce(announceOnClick, 'polite');
+}
+      announce(announceOnClick, &apos;polite&apos;);
 
   };
 
   const iconSizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-5 h-5', 
-    lg: 'w-6 h-6'
+}
+    sm: &apos;w-4 h-4&apos;,
+    md: &apos;w-5 h-5&apos;, 
+    lg: &apos;w-6 h-6&apos;
   };
 
   const buttonSizeClasses = {
-    sm: 'p-1.5',
-    md: 'p-2',
-    lg: 'p-3'
+}
+    sm: &apos;p-1.5&apos;,
+    md: &apos;p-2&apos;,
+    lg: &apos;p-3&apos;
   };
 
   const a11yProps = getButtonA11yProps(ariaLabel, disabled || isLoading, pressed, expanded);
@@ -201,12 +222,13 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
       onClick={handleClick}
       disabled={disabled || isLoading}
       className={`
+}
         mobile-touch-target inline-flex items-center justify-center
         rounded-full transition-all duration-200
         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
         ${variantClasses[variant]}
         ${buttonSizeClasses[size]}
-        ${disabled || isLoading ? disabledClasses : ''}
+        ${disabled || isLoading ? disabledClasses : &apos;&apos;}
         ${className}
       `}
       whileHover={disabled || isLoading ? {} : { scale: 1.05 }}
@@ -215,6 +237,7 @@ export const AccessibleIconButton: React.FC<AccessibleIconButtonProps> = ({
       {...a11yProps}
     >
       {isLoading ? (
+}
         <div className={`animate-spin border-2 border-current border-t-transparent rounded-full ${iconSizeClasses[size]}`} />
       ) : (
         <span className={iconSizeClasses[size]}>{icon}</span>

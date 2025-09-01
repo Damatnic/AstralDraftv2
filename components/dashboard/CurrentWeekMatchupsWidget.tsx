@@ -1,19 +1,20 @@
 /**
  * Current Week Matchups Widget
- * Displays the current week's fantasy matchups with live scores
+ * Displays the current week&apos;s fantasy matchups with live scores
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion } from 'framer-motion';
-import { useAppState } from '../../contexts/AppContext';
-import { useLeague } from '../../hooks/useLeague';
-import { Widget } from '../ui/Widget';
-import { TrophyIcon } from '../icons/TrophyIcon';
-import { Avatar } from '../ui/Avatar';
-import type { Matchup, Team } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { TrophyIcon } from &apos;../icons/TrophyIcon&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
+import type { Matchup, Team } from &apos;../../types&apos;;
 
 interface MatchupCardProps {
+}
   matchup: Matchup;
   teams: Team[];
   currentUserId?: string;
@@ -22,6 +23,7 @@ interface MatchupCardProps {
 }
 
 const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId, onViewMatchup }: any) => {
+}
   const teamA = teams.find((t: any) => t.id === matchup.teamA.teamId);
   const teamB = teams.find((t: any) => t.id === matchup.teamB.teamId);
   
@@ -37,9 +39,10 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
       className={`p-4 rounded-lg cursor-pointer transition-all ${
-        isUserMatchup 
-          ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30' 
-          : 'bg-white/5 hover:bg-white/10'
+}
+//         isUserMatchup 
+          ? &apos;bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30&apos; 
+          : &apos;bg-white/5 hover:bg-white/10&apos;
       }`}
       onClick={onViewMatchup}
     >
@@ -51,6 +54,7 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
             <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">
               {teamA.name}
               {teamAWinning && !matchup.isComplete && (
+}
                 <span className="ml-2 text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">LEADING</span>
               )}
             </div>
@@ -60,11 +64,11 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
         
         {/* Scores */}
         <div className="flex items-center gap-4 px-4 sm:px-4 md:px-6 lg:px-8">
-          <div className={`text-2xl font-bold ${teamAWinning ? 'text-green-400' : 'text-gray-400'}`}>
+          <div className={`text-2xl font-bold ${teamAWinning ? &apos;text-green-400&apos; : &apos;text-gray-400&apos;}`}>
             {matchup.teamA.score.toFixed(1)}
           </div>
           <div className="text-gray-500 sm:px-4 md:px-6 lg:px-8">-</div>
-          <div className={`text-2xl font-bold ${teamBWinning ? 'text-green-400' : 'text-gray-400'}`}>
+          <div className={`text-2xl font-bold ${teamBWinning ? &apos;text-green-400&apos; : &apos;text-gray-400&apos;}`}>
             {matchup.teamB.score.toFixed(1)}
           </div>
         </div>
@@ -75,6 +79,7 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
             <div className="font-semibold text-white sm:px-4 md:px-6 lg:px-8">
               {teamB.name}
               {teamBWinning && !matchup.isComplete && (
+}
                 <span className="ml-2 text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">LEADING</span>
               )}
             </div>
@@ -87,11 +92,12 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
       {/* Match Status */}
       <div className="mt-3 flex justify-center sm:px-4 md:px-6 lg:px-8">
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+}
           matchup.isComplete 
-            ? 'bg-gray-500/20 text-gray-400' 
-            : 'bg-yellow-500/20 text-yellow-400 animate-pulse'
+            ? &apos;bg-gray-500/20 text-gray-400&apos; 
+            : &apos;bg-yellow-500/20 text-yellow-400 animate-pulse&apos;
         }`}>
-          {matchup.isComplete ? 'FINAL' : 'LIVE'}
+          {matchup.isComplete ? &apos;FINAL&apos; : &apos;LIVE&apos;}
         </span>
       </div>
     </motion.div>
@@ -99,23 +105,26 @@ const MatchupCard: React.FC<MatchupCardProps> = ({ matchup, teams, currentUserId
 };
 
 const CurrentWeekMatchupsWidget: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const { league } = useLeague();
   
-  if (!league || league.status === 'PRE_DRAFT' || league.status === 'DRAFTING') {
+  if (!league || league.status === &apos;PRE_DRAFT&apos; || league.status === &apos;DRAFTING&apos;) {
+}
     return null;
 
   const currentWeekMatchups = league.schedule.filter((m: any) => m.week === league.currentWeek);
   const isPlayoffs = league.currentWeek > league.settings.regularSeasonWeeks;
   
   const handleViewMatchup = (matchup: Matchup) => {
+}
     // Navigate to matchup view
-    dispatch({ type: 'SET_VIEW', payload: 'MATCHUP' });
+    dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MATCHUP&apos; });
   };
   
   return (
-    <Widget 
-      title={`Week ${league.currentWeek} ${isPlayoffs ? 'Playoffs' : 'Matchups'}`} 
+    <Widget>
+      title={`Week ${league.currentWeek} ${isPlayoffs ? &apos;Playoffs&apos; : &apos;Matchups&apos;}`} 
       icon={<TrophyIcon className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />}
       className="col-span-2 sm:px-4 md:px-6 lg:px-8"
     >
@@ -124,14 +133,14 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
         <div className="mb-4 flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
           <div>
             <h3 className="text-lg font-bold text-white sm:px-4 md:px-6 lg:px-8">
-              {isPlayoffs ? 'Playoff Round' : `Regular Season`}
+              {isPlayoffs ? &apos;Playoff Round&apos; : `Regular Season`}
             </h3>
             <p className="text-xs text-gray-400 sm:px-4 md:px-6 lg:px-8">
               Games in progress · Live scoring updates
             </p>
           </div>
           <button
-            onClick={() => dispatch({ type: 'SET_VIEW', payload: 'MATCHUP' }}
+            onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;MATCHUP&apos; }}
             className="px-3 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg text-sm font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
           >
             View All Scores
@@ -141,8 +150,9 @@ const CurrentWeekMatchupsWidget: React.FC = () => {
         {/* Matchups List */}
         <div className="space-y-3 max-h-96 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {currentWeekMatchups.length > 0 ? (
+}
             currentWeekMatchups.map((matchup, index) => (
-              <MatchupCard
+              <MatchupCard>
                 key={matchup.id || index}
                 matchup={matchup}
                 teams={league.teams}

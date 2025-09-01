@@ -3,22 +3,26 @@
  * Displays sophisticated ensemble machine learning predictions with detailed analysis
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect } from &apos;react&apos;;
 import oracleEnsembleMachineLearningService, { 
+}
     EnsemblePredictionDetail,
-    FeatureVector 
-} from '../../services/oracleEnsembleMachineLearningService';
+//     FeatureVector 
+} from &apos;../../services/oracleEnsembleMachineLearningService&apos;;
 
 interface Props {
+}
     playerId?: string;
     onPredictionGenerated?: (prediction: EnsemblePredictionDetail) => void;
 
 }
 
 const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId, 
-    onPredictionGenerated 
+}
+//     onPredictionGenerated 
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const [prediction, setPrediction] = useState<EnsemblePredictionDetail | null>(null);
     const [loading, setLoading] = useState(false);
@@ -26,6 +30,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
 
     // Sample feature vector for demonstration
     const sampleFeatures: FeatureVector = {
+}
         playerRecentPerformance: [18.5, 16.2, 20.1, 14.8, 19.3],
         playerPositionRank: 8,
         playerInjuryRisk: 0.15,
@@ -43,42 +48,50 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
         seasonalTrends: [0.15],
         venuePerformance: [0.1],
         timeOfSeason: 0.65,
-        weekType: 'REGULAR',
+        weekType: &apos;REGULAR&apos;,
         marketConfidence: 0.85
     };
 
     useEffect(() => {
+}
         if (playerId) {
+}
             generatePrediction();
     }
   }, [playerId]);
 
     const generatePrediction = async () => {
+}
         setLoading(true);
         setError(null);
         
         try {
+}
 
             const features = sampleFeatures;
             const result = await oracleEnsembleMachineLearningService
-                .generateEnsemblePrediction(features, 'fantasy_points');
+                .generateEnsemblePrediction(features, &apos;fantasy_points&apos;);
             
             setPrediction(result);
             onPredictionGenerated?.(result);
         
     } catch (error) {
-            setError('Failed to generate ensemble prediction');
+}
+            setError(&apos;Failed to generate ensemble prediction&apos;);
         } finally {
+}
             setLoading(false);
 
     };
 
     const renderModelPredictions = () => {
+}
         if (!prediction) return null;
 
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 {prediction.modelPredictions.map((model: any) => (
+}
                     <div key={model.modelId} className="bg-gray-50 rounded-lg p-4 sm:px-4 md:px-6 lg:px-8">
                         <div className="flex justify-between items-center mb-2 sm:px-4 md:px-6 lg:px-8">
                             <h4 className="font-semibold text-gray-800 sm:px-4 md:px-6 lg:px-8">{model.modelName}</h4>
@@ -107,6 +120,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     };
 
     const renderConsensusMetrics = () => {
+}
         if (!prediction) return null;
 
         const { consensusMetrics } = prediction;
@@ -148,6 +162,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     };
 
     const renderFeatureContributions = () => {
+}
         if (!prediction) return null;
 
         const topFeatures = prediction.featureContributions.slice(0, 8);
@@ -159,13 +174,15 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                 </h3>
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     {topFeatures.map((feature: any) => (
+}
                         <div key={feature.feature} className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                             <div className="flex items-center space-x-3 sm:px-4 md:px-6 lg:px-8">
                                 <span className={`w-3 h-3 rounded-full ${
-                                    feature.direction === 'POSITIVE' ? 'bg-green-500' : 'bg-red-500'
+}
+                                    feature.direction === &apos;POSITIVE&apos; ? &apos;bg-green-500&apos; : &apos;bg-red-500&apos;
                                 }`}></span>
                                 <span className="text-sm font-medium capitalize sm:px-4 md:px-6 lg:px-8">
-                                    {feature.feature.replace(/([A-Z])/g, ' $1').trim()}
+                                    {feature.feature.replace(/([A-Z])/g, &apos; $1&apos;).trim()}
                                 </span>
                             </div>
                             <div className="text-right sm:px-4 md:px-6 lg:px-8">
@@ -184,6 +201,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     };
 
     const renderUncertaintyMetrics = () => {
+}
         if (!prediction) return null;
 
         const { uncertaintyMetrics } = prediction;
@@ -221,6 +239,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
     };
 
     const renderExplanation = () => {
+}
         if (!prediction) return null;
 
         const { explanability } = prediction;
@@ -236,6 +255,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                         <h4 className="font-medium text-purple-700 mb-2 sm:px-4 md:px-6 lg:px-8">Primary Drivers</h4>
                         <ul className="text-sm text-gray-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {explanability.primaryDrivers.map((driver: any) => (
+}
                                 <li key={driver} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-green-500 sm:px-4 md:px-6 lg:px-8">✓</span>
                                     <span className="capitalize sm:px-4 md:px-6 lg:px-8">{driver}</span>
@@ -248,6 +268,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                         <h4 className="font-medium text-purple-700 mb-2 sm:px-4 md:px-6 lg:px-8">Risk Factors</h4>
                         <ul className="text-sm text-gray-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {explanability.riskFactors.map((risk: any) => (
+}
                                 <li key={risk} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-red-500 sm:px-4 md:px-6 lg:px-8">⚠</span>
                                     <span>{risk}</span>
@@ -260,6 +281,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                         <h4 className="font-medium text-purple-700 mb-2 sm:px-4 md:px-6 lg:px-8">Confidence Reasons</h4>
                         <ul className="text-sm text-gray-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {explanability.confidenceReasons.map((reason: any) => (
+}
                                 <li key={reason} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-blue-500 sm:px-4 md:px-6 lg:px-8">ℹ</span>
                                     <span>{reason}</span>
@@ -272,6 +294,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                         <h4 className="font-medium text-purple-700 mb-2 sm:px-4 md:px-6 lg:px-8">Important Caveats</h4>
                         <ul className="text-sm text-gray-700 space-y-1 sm:px-4 md:px-6 lg:px-8">
                             {explanability.caveats.map((caveat: any) => (
+}
                                 <li key={caveat} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                                     <span className="text-gray-500 sm:px-4 md:px-6 lg:px-8">•</span>
                                     <span>{caveat}</span>
@@ -300,17 +323,19 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
                     disabled={loading}
                     className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-6 py-2 rounded-lg font-medium transition-colors sm:px-4 md:px-6 lg:px-8"
                  aria-label="Action button">
-                    {loading ? 'Generating...' : 'Generate Prediction'}
+                    {loading ? &apos;Generating...&apos; : &apos;Generate Prediction&apos;}
                 </button>
             </div>
 
             {error && (
+}
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 sm:px-4 md:px-6 lg:px-8">
                     <div className="text-red-800 sm:px-4 md:px-6 lg:px-8">❌ {error}</div>
                 </div>
             )}
 
             {prediction && (
+}
                 <div>
                     {/* Main Prediction Display */}
                     <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-white mb-6 sm:px-4 md:px-6 lg:px-8">
@@ -353,6 +378,7 @@ const AdvancedEnsembleMLDashboard: React.FC<Props> = ({ playerId,
             )}
 
             {loading && (
+}
                 <div className="flex items-center justify-center py-12 sm:px-4 md:px-6 lg:px-8">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
                     <span className="ml-3 text-gray-600 sm:px-4 md:px-6 lg:px-8">Training ensemble models...</span>

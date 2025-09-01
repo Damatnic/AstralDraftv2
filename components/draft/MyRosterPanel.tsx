@@ -1,18 +1,21 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { Team, PlayerPosition } from '../../types';
-import { UserIcon } from '../icons/UserIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { Team, PlayerPosition } from &apos;../../types&apos;;
+import { UserIcon } from &apos;../icons/UserIcon&apos;;
 
 interface MyRosterPanelProps {
+}
     team: Team | undefined;}
 
-const positionOrder: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
+const positionOrder: PlayerPosition[] = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
 
 }
 
 const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
+}
     if (!team) {
+}
         return (
             <div className="h-full flex flex-col items-center justify-center text-center p-4 sm:px-4 md:px-6 lg:px-8">
                 <p className="text-sm text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">Your team information is not available.</p>
@@ -20,6 +23,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
         );
 
     const rosterByPosition = positionOrder.map((pos: any) => ({
+}
         position: pos,
         players: team.roster.filter((p: any) => p.position === pos)
     }));
@@ -39,6 +43,7 @@ const MyRosterPanel: React.FC<MyRosterPanelProps> = ({ team }: any) => {
                         <h4 className="font-bold text-xs sm:text-sm text-cyan-300 px-1 mb-1">{position} ({players.length})</h4>
                         <div className="space-y-0.5 sm:space-y-1">
                             {players.length > 0 ? (
+}
                                 players.map((player: any) => (
                                     <div key={player.id} className="text-[10px] sm:text-xs p-1 sm:p-1.5 bg-white/5 rounded-md">
                                         {player.name}

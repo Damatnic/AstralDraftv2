@@ -3,15 +3,16 @@
  * Handles live updates and notifications for Oracle predictions
  */
 
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from &apos;socket.io-client&apos;;
 
 export interface RealtimeNotification {
+}
   id: string;
-  type: 'prediction' | 'result' | 'challenge' | 'achievement' | 'system';
+  type: &apos;prediction&apos; | &apos;result&apos; | &apos;challenge&apos; | &apos;achievement&apos; | &apos;system&apos;;
   title: string;
   message: string;
   timestamp: Date;
-  priority: 'low' | 'medium' | 'high';
+  priority: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
   actionUrl?: string;
   metadata?: Record<string, any>;
 }
@@ -20,14 +21,17 @@ export interface RealtimeNotification {
 type NotificationData = RealtimeNotification;
 
 interface PushSubscription {
+}
   endpoint: string;
   keys: {
+}
     p256dh: string;
     auth: string;
   };
 }
 
 interface NotificationPreferences {
+}
   predictions: boolean;
   result: boolean;
   results: boolean;
@@ -39,10 +43,11 @@ interface NotificationPreferences {
   prediction: boolean;
   soundEnabled: boolean;
   vibrationEnabled: boolean;
-  emailDigest: 'none' | 'daily' | 'weekly';
+  emailDigest: &apos;none&apos; | &apos;daily&apos; | &apos;weekly&apos;;
 }
 
 class RealtimeNotificationService {
+}
   private static instance: RealtimeNotificationService;
   private socket: Socket | null = null;
   private notifications: NotificationData[] = [];
@@ -54,6 +59,7 @@ class RealtimeNotificationService {
   private isConnected: boolean = false;
   private userId: string | null = null;
   private preferences: NotificationPreferences = {
+}
     predictions: true,
     result: true,
     results: true,
@@ -65,14 +71,16 @@ class RealtimeNotificationService {
     system: true,
     soundEnabled: true,
     vibrationEnabled: true,
-    emailDigest: 'daily'
+    emailDigest: &apos;daily&apos;
   };
   private pushSubscriptions: Map<string, PushSubscription> = new Map();
   private serviceWorkerRegistration: ServiceWorkerRegistration | null = null;
 
   private constructor() {
-    // Check if we're in a browser environment before accessing localStorage
-    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+}
+    // Check if we&apos;re in a browser environment before accessing localStorage
+    if (typeof window !== &apos;undefined&apos; && typeof window.localStorage !== &apos;undefined&apos;) {
+}
       this.loadPreferences();
       this.loadNotificationHistory();
       this.initializeNotificationSystem();
@@ -80,7 +88,9 @@ class RealtimeNotificationService {
   }
 
   public static getInstance(): RealtimeNotificationService {
+}
     if (!RealtimeNotificationService.instance) {
+}
       RealtimeNotificationService.instance = new RealtimeNotificationService();
     }
     return RealtimeNotificationService.instance;
@@ -90,24 +100,30 @@ class RealtimeNotificationService {
    * Initialize notification system
    */
   private async initializeNotificationSystem(): Promise<void> {
+}
     // Only run in browser environment
-    if (typeof window === 'undefined') {
+    if (typeof window === &apos;undefined&apos;) {
+}
       return;
     }
 
     // Request notification permission
-    if ('Notification' in window && Notification.permission === 'default') {
+    if (&apos;Notification&apos; in window && Notification.permission === &apos;default&apos;) {
+}
       await Notification.requestPermission();
     }
 
     // Initialize service worker for push notifications
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
+    if (&apos;serviceWorker&apos; in navigator && &apos;PushManager&apos; in window) {
+}
       try {
+}
         const registration = await navigator.serviceWorker.ready;
         this.serviceWorkerRegistration = registration;
         await this.subscribeToPushNotifications();
       } catch (error) {
-        console.error('Failed to initialize push notifications:', error);
+}
+        console.error(&apos;Failed to initialize push notifications:&apos;, error);
       }
     }
 
@@ -119,23 +135,27 @@ class RealtimeNotificationService {
    * Connect to notification server
    */
   public connect(userId: string): void {
+}
     if (this.socket?.connected) {
-      console.log('Already connected to notification service');
+}
+      console.log(&apos;Already connected to notification service&apos;);
       return;
     }
 
     this.userId = userId;
     
     // Get WebSocket URL from environment or use default
-    const wsUrl = process.env.REACT_APP_WS_URL || 'ws://localhost:3001';
+    const wsUrl = process.env.REACT_APP_WS_URL || &apos;ws://localhost:3001&apos;;
     
     this.socket = io(wsUrl, {
-      transports: ['websocket'],
+}
+      transports: [&apos;websocket&apos;],
       reconnection: true,
       reconnectionAttempts: this.maxRetries,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       auth: {
+}
         userId: this.userId
       }
     });
@@ -147,84 +167,98 @@ class RealtimeNotificationService {
    * Setup socket event listeners
    */
   private setupSocketListeners(): void {
+}
     if (!this.socket) return;
 
-    this.socket.on('connect', () => {
-      console.log('Connected to notification service');
+    this.socket.on(&apos;connect&apos;, () => {
+}
+      console.log(&apos;Connected to notification service&apos;);
       this.isConnected = true;
       this.connectionRetries = 0;
       
-      // Subscribe to user's notification channels
-      this.socket?.emit('subscribe', {
+      // Subscribe to user&apos;s notification channels
+      this.socket?.emit(&apos;subscribe&apos;, {
+}
         userId: this.userId,
-        channels: ['predictions', 'results', 'challenges', 'achievements']
+        channels: [&apos;predictions&apos;, &apos;results&apos;, &apos;challenges&apos;, &apos;achievements&apos;]
       });
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('Disconnected from notification service');
+    this.socket.on(&apos;disconnect&apos;, () => {
+}
+      console.log(&apos;Disconnected from notification service&apos;);
       this.isConnected = false;
       this.scheduleReconnect();
     });
 
-    this.socket.on('notification', (data: NotificationData) => {
+    this.socket.on(&apos;notification&apos;, (data: NotificationData) => {
+}
       this.handleNotification(data);
     });
 
-    this.socket.on('prediction:new', (data: any) => {
+    this.socket.on(&apos;prediction:new&apos;, (data: any) => {
+}
       this.handleNotification({
+}
         id: `pred-${Date.now()}`,
-        type: 'prediction',
-        title: 'New Oracle Prediction',
-        message: data.title || 'A new prediction is available!',
+        type: &apos;prediction&apos;,
+        title: &apos;New Oracle Prediction&apos;,
+        message: data.title || &apos;A new prediction is available!&apos;,
         timestamp: new Date(),
-        priority: 'medium',
+        priority: &apos;medium&apos;,
         actionUrl: `/oracle/prediction/${data.predictionId}`,
         metadata: data
       });
     });
 
-    this.socket.on('prediction:resolved', (data: any) => {
+    this.socket.on(&apos;prediction:resolved&apos;, (data: any) => {
+}
       this.handleNotification({
+}
         id: `result-${Date.now()}`,
-        type: 'result',
-        title: 'Prediction Resolved',
+        type: &apos;result&apos;,
+        title: &apos;Prediction Resolved&apos;,
         message: `The Oracle prediction "${data.title}" has been resolved!`,
         timestamp: new Date(),
-        priority: 'high',
+        priority: &apos;high&apos;,
         actionUrl: `/oracle/prediction/${data.predictionId}`,
         metadata: data
       });
     });
 
-    this.socket.on('challenge:received', (data: any) => {
+    this.socket.on(&apos;challenge:received&apos;, (data: any) => {
+}
       this.handleNotification({
+}
         id: `challenge-${Date.now()}`,
-        type: 'challenge',
-        title: 'Challenge Received!',
+        type: &apos;challenge&apos;,
+        title: &apos;Challenge Received!&apos;,
         message: `${data.challengerName} has challenged your prediction!`,
         timestamp: new Date(),
-        priority: 'high',
+        priority: &apos;high&apos;,
         actionUrl: `/oracle/challenges`,
         metadata: data
       });
     });
 
-    this.socket.on('achievement:unlocked', (data: any) => {
+    this.socket.on(&apos;achievement:unlocked&apos;, (data: any) => {
+}
       this.handleNotification({
+}
         id: `achievement-${Date.now()}`,
-        type: 'achievement',
-        title: 'Achievement Unlocked!',
-        message: data.achievementName || 'You\'ve earned a new achievement!',
+        type: &apos;achievement&apos;,
+        title: &apos;Achievement Unlocked!&apos;,
+        message: data.achievementName || &apos;You\&apos;ve earned a new achievement!&apos;,
         timestamp: new Date(),
-        priority: 'medium',
-        actionUrl: '/profile/achievements',
+        priority: &apos;medium&apos;,
+        actionUrl: &apos;/profile/achievements&apos;,
         metadata: data
       });
     });
 
-    this.socket.on('error', (error: any) => {
-      console.error('Socket error:', error);
+    this.socket.on(&apos;error&apos;, (error: any) => {
+}
+      console.error(&apos;Socket error:&apos;, error);
     });
   }
 
@@ -232,14 +266,16 @@ class RealtimeNotificationService {
    * Handle incoming notification
    */
   private handleNotification(notification: NotificationData): void {
+}
     // Check if notification type is enabled in preferences
-    const typeKey = notification.type === 'prediction' ? 'predictions' : 
-                   notification.type === 'result' ? 'results' :
-                   notification.type === 'challenge' ? 'challenges' :
-                   notification.type === 'achievement' ? 'achievements' :
-                   'system';
+    const typeKey = notification.type === &apos;prediction&apos; ? &apos;predictions&apos; : 
+                   notification.type === &apos;result&apos; ? &apos;results&apos; :
+                   notification.type === &apos;challenge&apos; ? &apos;challenges&apos; :
+                   notification.type === &apos;achievement&apos; ? &apos;achievements&apos; :
+                   &apos;system&apos;;
     
     if (!this.preferences[typeKey as keyof NotificationPreferences]) {
+}
       return;
     }
 
@@ -249,6 +285,7 @@ class RealtimeNotificationService {
     
     // Limit stored notifications
     if (this.notifications.length > 100) {
+}
       this.notifications = this.notifications.slice(0, 100);
     }
 
@@ -263,11 +300,13 @@ class RealtimeNotificationService {
 
     // Play sound if enabled
     if (this.preferences.soundEnabled) {
+}
       this.playNotificationSound();
     }
 
     // Vibrate if enabled and supported
-    if (this.preferences.vibrationEnabled && 'vibrate' in navigator) {
+    if (this.preferences.vibrationEnabled && &apos;vibrate&apos; in navigator) {
+}
       navigator.vibrate(200);
     }
   }
@@ -276,37 +315,46 @@ class RealtimeNotificationService {
    * Show browser notification
    */
   private async showBrowserNotification(notification: NotificationData): Promise<void> {
-    if (typeof window === 'undefined' || !('Notification' in window)) {
+}
+    if (typeof window === &apos;undefined&apos; || !(&apos;Notification&apos; in window)) {
+}
       return;
     }
 
-    if (Notification.permission !== 'granted') {
+    if (Notification.permission !== &apos;granted&apos;) {
+}
       return;
     }
 
     const options: NotificationOptions = {
+}
       body: notification.message,
-      icon: '/icons/oracle-icon-192.png',
-      badge: '/icons/oracle-badge-72.png',
+      icon: &apos;/icons/oracle-icon-192.png&apos;,
+      badge: &apos;/icons/oracle-badge-72.png&apos;,
       tag: notification.id,
-      requireInteraction: notification.priority === 'high',
+      requireInteraction: notification.priority === &apos;high&apos;,
       data: {
+}
         url: notification.actionUrl,
         notificationId: notification.id
       }
     };
 
     try {
+}
       if (this.serviceWorkerRegistration) {
+}
         await this.serviceWorkerRegistration.showNotification(
           notification.title,
-          options
+//           options
         );
       } else {
+}
         new Notification(notification.title, options);
       }
     } catch (error) {
-      console.error('Failed to show notification:', error);
+}
+      console.error(&apos;Failed to show notification:&apos;, error);
     }
   }
 
@@ -314,16 +362,20 @@ class RealtimeNotificationService {
    * Play notification sound
    */
   private playNotificationSound(): void {
-    if (typeof window === 'undefined') return;
+}
+    if (typeof window === &apos;undefined&apos;) return;
 
     try {
-      const audio = new Audio('/sounds/notification.mp3');
+}
+      const audio = new Audio(&apos;/sounds/notification.mp3&apos;);
       audio.volume = 0.5;
       audio.play().catch(error => {
-        console.warn('Could not play notification sound:', error);
+}
+        console.warn(&apos;Could not play notification sound:&apos;, error);
       });
     } catch (error) {
-      console.warn('Audio playback not supported:', error);
+}
+      console.warn(&apos;Audio playback not supported:&apos;, error);
     }
   }
 
@@ -331,8 +383,10 @@ class RealtimeNotificationService {
    * Schedule reconnection attempt
    */
   private scheduleReconnect(): void {
+}
     if (this.connectionRetries >= this.maxRetries) {
-      console.error('Max reconnection attempts reached');
+}
+      console.error(&apos;Max reconnection attempts reached&apos;);
       return;
     }
 
@@ -340,8 +394,10 @@ class RealtimeNotificationService {
     this.connectionRetries++;
 
     this.reconnectTimeout = setTimeout(() => {
+}
       console.log(`Attempting to reconnect (${this.connectionRetries}/${this.maxRetries})...`);
       if (this.userId) {
+}
         this.connect(this.userId);
       }
     }, delay);
@@ -351,20 +407,24 @@ class RealtimeNotificationService {
    * Subscribe to push notifications
    */
   private async subscribeToPushNotifications(): Promise<void> {
+}
     if (!this.serviceWorkerRegistration) return;
 
     try {
+}
       const subscription = await this.serviceWorkerRegistration.pushManager.subscribe({
+}
         userVisibleOnly: true,
         applicationServerKey: this.urlBase64ToUint8Array(
-          process.env.REACT_APP_VAPID_PUBLIC_KEY || ''
+          process.env.REACT_APP_VAPID_PUBLIC_KEY || &apos;&apos;
         ) as BufferSource
       });
 
       // Send subscription to server
       await this.sendSubscriptionToServer(subscription);
     } catch (error) {
-      console.error('Failed to subscribe to push notifications:', error);
+}
+      console.error(&apos;Failed to subscribe to push notifications:&apos;, error);
     }
   }
 
@@ -372,26 +432,33 @@ class RealtimeNotificationService {
    * Send push subscription to server
    */
   private async sendSubscriptionToServer(subscription: PushSubscriptionJSON): Promise<void> {
+}
     if (!subscription.endpoint) return;
 
     try {
-      const response = await fetch('/api/notifications/subscribe', {
-        method: 'POST',
+}
+      const response = await fetch(&apos;/api/notifications/subscribe&apos;, {
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
+          &apos;Authorization&apos;: `Bearer ${localStorage.getItem(&apos;accessToken&apos;)}`
         },
         body: JSON.stringify({
+}
           subscription,
           userId: this.userId
         })
       });
 
       if (response.ok) {
-        console.log('Push subscription sent to server');
+}
+        console.log(&apos;Push subscription sent to server&apos;);
       }
     } catch (error) {
-      console.error('Failed to send subscription to server:', error);
+}
+      console.error(&apos;Failed to send subscription to server:&apos;, error);
     }
   }
 
@@ -399,15 +466,17 @@ class RealtimeNotificationService {
    * Convert VAPID key
    */
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+}
+    const padding = &apos;=&apos;.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+      .replace(/-/g, &apos;+&apos;)
+      .replace(/_/g, &apos;/&apos;);
 
     const rawData = window.atob(base64);
     const outputArray = new Uint8Array(rawData.length);
 
     for (let i = 0; i < rawData.length; ++i) {
+}
       outputArray[i] = rawData.charCodeAt(i);
     }
     return outputArray;
@@ -417,6 +486,7 @@ class RealtimeNotificationService {
    * Get all notifications
    */
   public getNotifications(): NotificationData[] {
+}
     return this.notifications;
   }
 
@@ -424,6 +494,7 @@ class RealtimeNotificationService {
    * Get unread count
    */
   public getUnreadCount(): number {
+}
     return this.unreadCount;
   }
 
@@ -431,8 +502,10 @@ class RealtimeNotificationService {
    * Mark notification as read
    */
   public markAsRead(notificationId: string): void {
+}
     const notification = this.notifications.find((n: any) => n.id === notificationId);
     if (notification) {
+}
       this.unreadCount = Math.max(0, this.unreadCount - 1);
       this.saveNotificationHistory();
     }
@@ -442,6 +515,7 @@ class RealtimeNotificationService {
    * Mark all as read
    */
   public markAllAsRead(): void {
+}
     this.unreadCount = 0;
     this.saveNotificationHistory();
   }
@@ -450,6 +524,7 @@ class RealtimeNotificationService {
    * Clear all notifications
    */
   public clearAll(): void {
+}
     this.notifications = [];
     this.unreadCount = 0;
     this.saveNotificationHistory();
@@ -459,6 +534,7 @@ class RealtimeNotificationService {
    * Add notification listener
    */
   public addListener(callback: (notification: NotificationData) => void): () => void {
+}
     this.listeners.add(callback);
     return () => this.listeners.delete(callback);
   }
@@ -467,7 +543,9 @@ class RealtimeNotificationService {
    * Alias for addListener (for compatibility)
    */
   public on(event: string, callback: (notification: NotificationData) => void): void {
-    if (event === 'notification') {
+}
+    if (event === &apos;notification&apos;) {
+}
       this.listeners.add(callback);
     }
   }
@@ -476,7 +554,9 @@ class RealtimeNotificationService {
    * Remove notification listener (for compatibility)
    */
   public off(event: string, callback: (notification: NotificationData) => void): void {
-    if (event === 'notification') {
+}
+    if (event === &apos;notification&apos;) {
+}
       this.listeners.delete(callback);
     }
   }
@@ -485,12 +565,15 @@ class RealtimeNotificationService {
    * Update preferences
    */
   public updatePreferences(preferences: Partial<NotificationPreferences>): void {
+}
     this.preferences = { ...this.preferences, ...preferences };
     this.savePreferences();
     
     // Update server preferences
     if (this.socket?.connected) {
-      this.socket.emit('updatePreferences', {
+}
+      this.socket.emit(&apos;updatePreferences&apos;, {
+}
         userId: this.userId,
         preferences: this.preferences
       });
@@ -501,6 +584,7 @@ class RealtimeNotificationService {
    * Get preferences
    */
   public getPreferences(): NotificationPreferences {
+}
     return this.preferences;
   }
 
@@ -508,14 +592,18 @@ class RealtimeNotificationService {
    * Load preferences from storage
    */
   private loadPreferences(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
-    const stored = localStorage.getItem('notification_preferences');
+    const stored = localStorage.getItem(&apos;notification_preferences&apos;);
     if (stored) {
+}
       try {
+}
         this.preferences = JSON.parse(stored);
       } catch (error) {
-        console.error('Failed to load notification preferences:', error);
+}
+        console.error(&apos;Failed to load notification preferences:&apos;, error);
       }
     }
   }
@@ -524,12 +612,15 @@ class RealtimeNotificationService {
    * Save preferences to storage
    */
   private savePreferences(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
     try {
-      localStorage.setItem('notification_preferences', JSON.stringify(this.preferences));
+}
+      localStorage.setItem(&apos;notification_preferences&apos;, JSON.stringify(this.preferences));
     } catch (error) {
-      console.error('Failed to save notification preferences:', error);
+}
+      console.error(&apos;Failed to save notification preferences:&apos;, error);
     }
   }
 
@@ -537,16 +628,20 @@ class RealtimeNotificationService {
    * Load notification history
    */
   private loadNotificationHistory(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
-    const stored = localStorage.getItem('notification_history');
+    const stored = localStorage.getItem(&apos;notification_history&apos;);
     if (stored) {
+}
       try {
+}
         const data = JSON.parse(stored);
         this.notifications = data.notifications || [];
         this.unreadCount = data.unreadCount || 0;
       } catch (error) {
-        console.error('Failed to load notification history:', error);
+}
+        console.error(&apos;Failed to load notification history:&apos;, error);
       }
     }
   }
@@ -555,15 +650,19 @@ class RealtimeNotificationService {
    * Save notification history
    */
   private saveNotificationHistory(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
     try {
-      localStorage.setItem('notification_history', JSON.stringify({
+}
+      localStorage.setItem(&apos;notification_history&apos;, JSON.stringify({
+}
         notifications: this.notifications.slice(0, 50), // Keep last 50
         unreadCount: this.unreadCount
       }));
     } catch (error) {
-      console.error('Failed to save notification history:', error);
+}
+      console.error(&apos;Failed to save notification history:&apos;, error);
     }
   }
 
@@ -571,18 +670,23 @@ class RealtimeNotificationService {
    * Load push subscriptions
    */
   private loadPushSubscriptions(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
     // Load from storage - simplified for now
-    const stored = localStorage.getItem('push_subscriptions');
+    const stored = localStorage.getItem(&apos;push_subscriptions&apos;);
     if (stored) {
+}
       try {
+}
         const subscriptions = JSON.parse(stored);
         Object.entries(subscriptions).forEach(([id, sub]) => {
+}
           this.pushSubscriptions.set(id, sub as PushSubscription);
         });
       } catch (error) {
-        console.error('Failed to load push subscriptions:', error);
+}
+        console.error(&apos;Failed to load push subscriptions:&apos;, error);
       }
     }
   }
@@ -591,16 +695,20 @@ class RealtimeNotificationService {
    * Save push subscriptions
    */
   private savePushSubscriptions(): void {
-    if (typeof window === 'undefined' || !window.localStorage) return;
+}
+    if (typeof window === &apos;undefined&apos; || !window.localStorage) return;
 
     try {
+}
       const subscriptions: Record<string, PushSubscription> = {};
       this.pushSubscriptions.forEach((sub, id) => {
+}
         subscriptions[id] = sub;
       });
-      localStorage.setItem('push_subscriptions', JSON.stringify(subscriptions));
+      localStorage.setItem(&apos;push_subscriptions&apos;, JSON.stringify(subscriptions));
     } catch (error) {
-      console.error('Failed to save push subscriptions:', error);
+}
+      console.error(&apos;Failed to save push subscriptions:&apos;, error);
     }
   }
 
@@ -608,13 +716,15 @@ class RealtimeNotificationService {
    * Send test notification
    */
   public sendTestNotification(): void {
+}
     const testNotification: NotificationData = {
+}
       id: `test-${Date.now()}`,
-      type: 'system',
-      title: 'Test Notification',
-      message: 'This is a test notification to verify your settings.',
+      type: &apos;system&apos;,
+      title: &apos;Test Notification&apos;,
+      message: &apos;This is a test notification to verify your settings.&apos;,
       timestamp: new Date(),
-      priority: 'low'
+      priority: &apos;low&apos;
     };
     
     this.handleNotification(testNotification);
@@ -624,12 +734,15 @@ class RealtimeNotificationService {
    * Disconnect from notification service
    */
   public disconnect(): void {
+}
     if (this.reconnectTimeout) {
+}
       clearTimeout(this.reconnectTimeout);
       this.reconnectTimeout = null;
     }
     
     if (this.socket) {
+}
       this.socket.disconnect();
       this.socket = null;
     }
@@ -642,6 +755,7 @@ class RealtimeNotificationService {
    * Check connection status
    */
   public isConnectedToService(): boolean {
+}
     return this.isConnected;
   }
 
@@ -649,11 +763,14 @@ class RealtimeNotificationService {
    * Get connection status details
    */
   public getConnectionStatus(): {
+}
     connected: boolean;
     retries: number;
     maxRetries: number;
   } {
+}
     return {
+}
       connected: this.isConnected,
       retries: this.connectionRetries,
       maxRetries: this.maxRetries

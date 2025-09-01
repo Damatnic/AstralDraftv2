@@ -1,13 +1,14 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback } from 'react';
-import { motion } from 'framer-motion';
-import type { Team } from '../../types';
-import { Modal } from '../ui/Modal';
-import { CloseIcon } from '../icons/CloseIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback } from &apos;react&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import type { Team } from &apos;../../types&apos;;
+import { Modal } from &apos;../ui/Modal&apos;;
+import { CloseIcon } from &apos;../icons/CloseIcon&apos;;
 
 interface ManageTradeBlockModalProps {
+}
     team: Team;
     leagueId: string;
     dispatch: React.Dispatch<any>;
@@ -16,15 +17,20 @@ interface ManageTradeBlockModalProps {
 }
 
 const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, leagueId, dispatch, onClose }: any) => {
+}
     const originalBlockedIds = React.useMemo(() => new Set(team.tradeBlock || []), [team.tradeBlock]);
     const [selectedIds, setSelectedIds] = React.useState<Set<number>>(originalBlockedIds);
 
     const handleTogglePlayer = (playerId: number) => {
+}
         setSelectedIds(prev => {
+}
             const newSet = new Set(prev);
             if (newSet.has(playerId)) {
+}
                 newSet.delete(playerId);
             } else {
+}
                 newSet.add(playerId);
 
             return newSet;
@@ -32,19 +38,24 @@ const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, lea
     };
 
     const handleSaveChanges = () => {
+}
         // Find players to add
         selectedIds.forEach((id: any) => {
+}
             if (!originalBlockedIds.has(id)) {
-                dispatch({ type: 'ADD_TO_TRADE_BLOCK', payload: { leagueId, teamId: team.id, playerId: id } });
+}
+                dispatch({ type: &apos;ADD_TO_TRADE_BLOCK&apos;, payload: { leagueId, teamId: team.id, playerId: id } });
 
         });
         // Find players to remove
         originalBlockedIds.forEach((id: any) => {
+}
             if (!selectedIds.has(id)) {
-                dispatch({ type: 'REMOVE_FROM_TRADE_BLOCK', payload: { leagueId, teamId: team.id, playerId: id } });
+}
+                dispatch({ type: &apos;REMOVE_FROM_TRADE_BLOCK&apos;, payload: { leagueId, teamId: team.id, playerId: id } });
 
         });
-        dispatch({ type: 'ADD_NOTIFICATION', payload: { message: 'Trade block updated!', type: 'SYSTEM' } });
+        dispatch({ type: &apos;ADD_NOTIFICATION&apos;, payload: { message: &apos;Trade block updated!&apos;, type: &apos;SYSTEM&apos; } });
         onClose();
     };
 
@@ -70,6 +81,7 @@ const ManageTradeBlockModal: React.FC<ManageTradeBlockModalProps> = ({ team, lea
                 <main className="p-4 overflow-y-auto space-y-2 sm:px-4 md:px-6 lg:px-8">
                     <p className="text-xs text-gray-400 pb-2 sm:px-4 md:px-6 lg:px-8">Select players from your roster to make them available for trades.</p>
                     {team.roster.map((player: any) => (
+}
                         <label key={player.id} className="flex items-center gap-3 p-2 bg-black/10 rounded-md cursor-pointer hover:bg-black/20 sm:px-4 md:px-6 lg:px-8">
                             <input 
                                 type="checkbox"

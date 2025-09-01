@@ -1,13 +1,14 @@
 /**
  * Oracle Architecture Overview Component
- * Educational section explaining Oracle's prediction architecture and system design
+ * Educational section explaining Oracle&apos;s prediction architecture and system design
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
-import './OracleArchitectureOverview.css';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useEffect } from &apos;react&apos;;
+import &apos;./OracleArchitectureOverview.css&apos;;
 
 interface ArchitectureLayer {
+}
     id: string;
     name: string;
     description: string;
@@ -18,6 +19,7 @@ interface ArchitectureLayer {
 }
 
 interface SystemComponent {
+}
     id: string;
     name: string;
     purpose: string;
@@ -26,6 +28,7 @@ interface SystemComponent {
     technology: string;
 
 interface DataFlowStep {
+}
     id: string;
     step: number;
     title: string;
@@ -36,8 +39,9 @@ interface DataFlowStep {
 }
 
 const OracleArchitectureOverview: React.FC = () => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
-    const [activeLayer, setActiveLayer] = useState<string>('data-layer');
+    const [activeLayer, setActiveLayer] = useState<string>(&apos;data-layer&apos;);
     const [selectedComponent, setSelectedComponent] = useState<string | null>(null);
     const [showDataFlow, setShowDataFlow] = useState<boolean>(false);
     const [progress, setProgress] = useState<number>(0);
@@ -45,186 +49,206 @@ const OracleArchitectureOverview: React.FC = () => {
     // Architecture layers definition
     const architectureLayers: ArchitectureLayer[] = [
         {
-            id: 'data-layer',
-            name: 'Data Ingestion Layer',
-            description: 'Real-time sports data collection and validation from multiple sources',
-            components: ['SportsIO API', 'Live Data Feeds', 'Data Validators', 'Cache Management'],
-            dataFlow: 'External APIs → Data Validation → Real-time Processing → Storage',
+}
+            id: &apos;data-layer&apos;,
+            name: &apos;Data Ingestion Layer&apos;,
+            description: &apos;Real-time sports data collection and validation from multiple sources&apos;,
+            components: [&apos;SportsIO API&apos;, &apos;Live Data Feeds&apos;, &apos;Data Validators&apos;, &apos;Cache Management&apos;],
+            dataFlow: &apos;External APIs → Data Validation → Real-time Processing → Storage&apos;,
             examples: [
-                'Player statistics updates every 30 seconds during games',
-                'Injury reports processed within minutes of announcement',
-                'Weather data refreshed hourly for all game locations',
-                'Team roster changes tracked in real-time'
+                &apos;Player statistics updates every 30 seconds during games&apos;,
+                &apos;Injury reports processed within minutes of announcement&apos;,
+                &apos;Weather data refreshed hourly for all game locations&apos;,
+                &apos;Team roster changes tracked in real-time&apos;
 
         },
         {
-            id: 'processing-layer',
-            name: 'Data Processing Layer',
-            description: 'Feature extraction and data transformation for machine learning models',
-            components: ['Feature Extractors', 'Data Preprocessors', 'Statistical Calculators', 'Trend Analyzers'],
-            dataFlow: 'Raw Data → Feature Extraction → Normalization → Model Input',
+}
+            id: &apos;processing-layer&apos;,
+            name: &apos;Data Processing Layer&apos;,
+            description: &apos;Feature extraction and data transformation for machine learning models&apos;,
+            components: [&apos;Feature Extractors&apos;, &apos;Data Preprocessors&apos;, &apos;Statistical Calculators&apos;, &apos;Trend Analyzers&apos;],
+            dataFlow: &apos;Raw Data → Feature Extraction → Normalization → Model Input&apos;,
             examples: [
-                'Convert player stats into 18-dimensional feature vectors',
-                'Calculate Player Efficiency Ratings (PER) from raw statistics',
-                'Extract team chemistry scores from performance patterns',
-                'Generate matchup difficulty ratings based on historical data'
+                &apos;Convert player stats into 18-dimensional feature vectors&apos;,
+                &apos;Calculate Player Efficiency Ratings (PER) from raw statistics&apos;,
+                &apos;Extract team chemistry scores from performance patterns&apos;,
+                &apos;Generate matchup difficulty ratings based on historical data&apos;
 
         },
         {
-            id: 'ai-layer',
-            name: 'AI Intelligence Layer',
-            description: 'Gemini AI integration for natural language processing and intelligent analysis',
-            components: ['Gemini AI Engine', 'NLP Processors', 'Context Analyzers', 'Reasoning Generators'],
-            dataFlow: 'Structured Data → AI Analysis → Natural Language Reasoning → Confidence Scoring',
+}
+            id: &apos;ai-layer&apos;,
+            name: &apos;AI Intelligence Layer&apos;,
+            description: &apos;Gemini AI integration for natural language processing and intelligent analysis&apos;,
+            components: [&apos;Gemini AI Engine&apos;, &apos;NLP Processors&apos;, &apos;Context Analyzers&apos;, &apos;Reasoning Generators&apos;],
+            dataFlow: &apos;Structured Data → AI Analysis → Natural Language Reasoning → Confidence Scoring&apos;,
             examples: [
-                'Generate human-readable explanations for predictions',
-                'Analyze complex scenario interactions using natural language',
-                'Provide contextual reasoning for prediction confidence',
-                'Adapt communication style based on user expertise level'
+                &apos;Generate human-readable explanations for predictions&apos;,
+                &apos;Analyze complex scenario interactions using natural language&apos;,
+                &apos;Provide contextual reasoning for prediction confidence&apos;,
+                &apos;Adapt communication style based on user expertise level&apos;
 
         },
         {
-            id: 'ml-layer',
-            name: 'Machine Learning Layer',
-            description: 'Advanced statistical modeling and ensemble prediction algorithms',
-            components: ['Ensemble Models', 'Confidence Calibrators', 'Pattern Detectors', 'Accuracy Optimizers'],
-            dataFlow: 'Feature Vectors → Model Training → Ensemble Prediction → Confidence Calibration',
+}
+            id: &apos;ml-layer&apos;,
+            name: &apos;Machine Learning Layer&apos;,
+            description: &apos;Advanced statistical modeling and ensemble prediction algorithms&apos;,
+            components: [&apos;Ensemble Models&apos;, &apos;Confidence Calibrators&apos;, &apos;Pattern Detectors&apos;, &apos;Accuracy Optimizers&apos;],
+            dataFlow: &apos;Feature Vectors → Model Training → Ensemble Prediction → Confidence Calibration&apos;,
             examples: [
-                'Combine multiple prediction models for consensus accuracy',
-                'Calibrate confidence scores based on historical performance',
-                'Detect seasonal patterns and trend shifts automatically',
-                'Continuously learn from prediction outcomes'
+                &apos;Combine multiple prediction models for consensus accuracy&apos;,
+                &apos;Calibrate confidence scores based on historical performance&apos;,
+                &apos;Detect seasonal patterns and trend shifts automatically&apos;,
+                &apos;Continuously learn from prediction outcomes&apos;
 
         },
         {
-            id: 'prediction-layer',
-            name: 'Prediction Generation Layer',
-            description: 'Final prediction synthesis and output formatting',
-            components: ['Prediction Synthesizers', 'Probability Calculators', 'Risk Assessors', 'Output Formatters'],
-            dataFlow: 'Model Outputs → Synthesis → Probability Assignment → User Interface',
+}
+            id: &apos;prediction-layer&apos;,
+            name: &apos;Prediction Generation Layer&apos;,
+            description: &apos;Final prediction synthesis and output formatting&apos;,
+            components: [&apos;Prediction Synthesizers&apos;, &apos;Probability Calculators&apos;, &apos;Risk Assessors&apos;, &apos;Output Formatters&apos;],
+            dataFlow: &apos;Model Outputs → Synthesis → Probability Assignment → User Interface&apos;,
             examples: [
-                'Generate 5 types of predictions: Player, Game, Scoring, Weather, Injury',
-                'Calculate precise probability distributions for all options',
-                'Assess prediction risk and uncertainty levels',
-                'Format predictions for optimal user comprehension'
+                &apos;Generate 5 types of predictions: Player, Game, Scoring, Weather, Injury&apos;,
+                &apos;Calculate precise probability distributions for all options&apos;,
+                &apos;Assess prediction risk and uncertainty levels&apos;,
+                &apos;Format predictions for optimal user comprehension&apos;
 
     ];
 
     // System components definition
     const systemComponents: SystemComponent[] = [
         {
-            id: 'oracle-prediction-service',
-            name: 'Oracle Prediction Service',
-            purpose: 'Central orchestrator for all prediction generation and management',
-            inputs: ['Live sports data', 'Historical trends', 'User preferences'],
-            outputs: ['Structured predictions', 'Confidence scores', 'Supporting data'],
-            technology: 'TypeScript/React with advanced analytics integration'
+}
+            id: &apos;oracle-prediction-service&apos;,
+            name: &apos;Oracle Prediction Service&apos;,
+            purpose: &apos;Central orchestrator for all prediction generation and management&apos;,
+            inputs: [&apos;Live sports data&apos;, &apos;Historical trends&apos;, &apos;User preferences&apos;],
+            outputs: [&apos;Structured predictions&apos;, &apos;Confidence scores&apos;, &apos;Supporting data&apos;],
+            technology: &apos;TypeScript/React with advanced analytics integration&apos;
         },
         {
-            id: 'gemini-ai-engine',
-            name: 'Gemini AI Engine',
-            purpose: 'Natural language processing and intelligent reasoning generation',
-            inputs: ['Structured prediction data', 'Context prompts', 'Analysis requirements'],
-            outputs: ['Human-readable reasoning', 'Contextual explanations', 'Confidence assessments'],
-            technology: 'Google Gemini AI with fantasy football optimization'
+}
+            id: &apos;gemini-ai-engine&apos;,
+            name: &apos;Gemini AI Engine&apos;,
+            purpose: &apos;Natural language processing and intelligent reasoning generation&apos;,
+            inputs: [&apos;Structured prediction data&apos;, &apos;Context prompts&apos;, &apos;Analysis requirements&apos;],
+            outputs: [&apos;Human-readable reasoning&apos;, &apos;Contextual explanations&apos;, &apos;Confidence assessments&apos;],
+            technology: &apos;Google Gemini AI with fantasy football optimization&apos;
         },
         {
-            id: 'ml-learning-service',
-            name: 'Machine Learning Service',
-            purpose: 'Continuous model improvement and accuracy optimization',
-            inputs: ['Historical predictions', 'Actual outcomes', 'Feature vectors'],
-            outputs: ['Model updates', 'Accuracy metrics', 'Performance insights'],
-            technology: 'Advanced ML algorithms with ensemble modeling'
+}
+            id: &apos;ml-learning-service&apos;,
+            name: &apos;Machine Learning Service&apos;,
+            purpose: &apos;Continuous model improvement and accuracy optimization&apos;,
+            inputs: [&apos;Historical predictions&apos;, &apos;Actual outcomes&apos;, &apos;Feature vectors&apos;],
+            outputs: [&apos;Model updates&apos;, &apos;Accuracy metrics&apos;, &apos;Performance insights&apos;],
+            technology: &apos;Advanced ML algorithms with ensemble modeling&apos;
         },
         {
-            id: 'advanced-analytics',
-            name: 'Advanced Analytics Service',
-            purpose: 'Complex statistical modeling and advanced metric calculation',
-            inputs: ['Player statistics', 'Team data', 'Market information'],
-            outputs: ['PER ratings', 'Chemistry scores', 'Market sentiment'],
-            technology: 'Statistical modeling with real-time calculation'
+}
+            id: &apos;advanced-analytics&apos;,
+            name: &apos;Advanced Analytics Service&apos;,
+            purpose: &apos;Complex statistical modeling and advanced metric calculation&apos;,
+            inputs: [&apos;Player statistics&apos;, &apos;Team data&apos;, &apos;Market information&apos;],
+            outputs: [&apos;PER ratings&apos;, &apos;Chemistry scores&apos;, &apos;Market sentiment&apos;],
+            technology: &apos;Statistical modeling with real-time calculation&apos;
         },
         {
-            id: 'real-time-processor',
-            name: 'Real-time Data Processor',
-            purpose: 'Live data monitoring and dynamic prediction updates',
-            inputs: ['Live game feeds', 'Breaking news', 'Roster changes'],
-            outputs: ['Real-time updates', 'Dynamic adjustments', 'Alert notifications'],
-            technology: 'Event-driven architecture with WebSocket connections'
+}
+            id: &apos;real-time-processor&apos;,
+            name: &apos;Real-time Data Processor&apos;,
+            purpose: &apos;Live data monitoring and dynamic prediction updates&apos;,
+            inputs: [&apos;Live game feeds&apos;, &apos;Breaking news&apos;, &apos;Roster changes&apos;],
+            outputs: [&apos;Real-time updates&apos;, &apos;Dynamic adjustments&apos;, &apos;Alert notifications&apos;],
+            technology: &apos;Event-driven architecture with WebSocket connections&apos;
 
     ];
 
     // Data flow steps
     const dataFlowSteps: DataFlowStep[] = [
         {
-            id: 'data-collection',
+}
+            id: &apos;data-collection&apos;,
             step: 1,
-            title: 'Data Collection',
-            description: 'Gather live sports data from multiple sources including SportsIO API, injury reports, and weather services',
-            duration: '30-second intervals',
+            title: &apos;Data Collection&apos;,
+            description: &apos;Gather live sports data from multiple sources including SportsIO API, injury reports, and weather services&apos;,
+            duration: &apos;30-second intervals&apos;,
             dependencies: []
         },
         {
-            id: 'data-validation',
+}
+            id: &apos;data-validation&apos;,
             step: 2,
-            title: 'Data Validation',
-            description: 'Validate incoming data for accuracy, completeness, and consistency using automated quality checks',
-            duration: '< 5 seconds',
-            dependencies: ['data-collection']
+            title: &apos;Data Validation&apos;,
+            description: &apos;Validate incoming data for accuracy, completeness, and consistency using automated quality checks&apos;,
+            duration: &apos;< 5 seconds&apos;,
+            dependencies: [&apos;data-collection&apos;]
         },
         {
-            id: 'feature-extraction',
+}
+            id: &apos;feature-extraction&apos;,
             step: 3,
-            title: 'Feature Extraction',
-            description: 'Convert raw data into structured feature vectors for machine learning models',
-            duration: '10-15 seconds',
-            dependencies: ['data-validation']
+            title: &apos;Feature Extraction&apos;,
+            description: &apos;Convert raw data into structured feature vectors for machine learning models&apos;,
+            duration: &apos;10-15 seconds&apos;,
+            dependencies: [&apos;data-validation&apos;]
         },
         {
-            id: 'advanced-analytics',
+}
+            id: &apos;advanced-analytics&apos;,
             step: 4,
-            title: 'Advanced Analytics',
-            description: 'Calculate Player Efficiency Ratings, team chemistry scores, and market sentiment analysis',
-            duration: '15-20 seconds',
-            dependencies: ['feature-extraction']
+            title: &apos;Advanced Analytics&apos;,
+            description: &apos;Calculate Player Efficiency Ratings, team chemistry scores, and market sentiment analysis&apos;,
+            duration: &apos;15-20 seconds&apos;,
+            dependencies: [&apos;feature-extraction&apos;]
         },
         {
-            id: 'ml-processing',
+}
+            id: &apos;ml-processing&apos;,
             step: 5,
-            title: 'ML Processing',
-            description: 'Run ensemble models and generate preliminary predictions with confidence scoring',
-            duration: '20-30 seconds',
-            dependencies: ['advanced-analytics']
+            title: &apos;ML Processing&apos;,
+            description: &apos;Run ensemble models and generate preliminary predictions with confidence scoring&apos;,
+            duration: &apos;20-30 seconds&apos;,
+            dependencies: [&apos;advanced-analytics&apos;]
         },
         {
-            id: 'ai-analysis',
+}
+            id: &apos;ai-analysis&apos;,
             step: 6,
-            title: 'AI Analysis',
-            description: 'Gemini AI processes structured data and generates human-readable reasoning',
-            duration: '10-15 seconds',
-            dependencies: ['ml-processing']
+            title: &apos;AI Analysis&apos;,
+            description: &apos;Gemini AI processes structured data and generates human-readable reasoning&apos;,
+            duration: &apos;10-15 seconds&apos;,
+            dependencies: [&apos;ml-processing&apos;]
         },
         {
-            id: 'prediction-synthesis',
+}
+            id: &apos;prediction-synthesis&apos;,
             step: 7,
-            title: 'Prediction Synthesis',
-            description: 'Combine all analysis layers into final predictions with supporting evidence',
-            duration: '5-10 seconds',
-            dependencies: ['ai-analysis']
+            title: &apos;Prediction Synthesis&apos;,
+            description: &apos;Combine all analysis layers into final predictions with supporting evidence&apos;,
+            duration: &apos;5-10 seconds&apos;,
+            dependencies: [&apos;ai-analysis&apos;]
         },
         {
-            id: 'output-generation',
+}
+            id: &apos;output-generation&apos;,
             step: 8,
-            title: 'Output Generation',
-            description: 'Format predictions for user interface with interactive elements and explanations',
-            duration: '< 5 seconds',
-            dependencies: ['prediction-synthesis']
+            title: &apos;Output Generation&apos;,
+            description: &apos;Format predictions for user interface with interactive elements and explanations&apos;,
+            duration: &apos;< 5 seconds&apos;,
+            dependencies: [&apos;prediction-synthesis&apos;]
 
     ];
 
     // Progress tracking
     useEffect(() => {
+}
     const interval = setInterval(() => {
+}
             setProgress(prev => prev < 100 ? prev + 1 : 0);
     , 100);
 
@@ -235,31 +259,35 @@ const OracleArchitectureOverview: React.FC = () => {
     // Helper functions
     const getLayerIcon = (layerId: string): string 
 } {
+}
         const icons: Record<string, string> = {
-            'data-layer': '📡',
-            'processing-layer': '⚙️',
-            'ai-layer': '🤖',
-            'ml-layer': '🧠',
-            'prediction-layer': '🎯'
+}
+            &apos;data-layer&apos;: &apos;📡&apos;,
+            &apos;processing-layer&apos;: &apos;⚙️&apos;,
+            &apos;ai-layer&apos;: &apos;🤖&apos;,
+            &apos;ml-layer&apos;: &apos;🧠&apos;,
+            &apos;prediction-layer&apos;: &apos;🎯&apos;
         };
-        return icons[layerId] || '📊';
+        return icons[layerId] || &apos;📊&apos;;
     };
 
     const getComponentStatusColor = (componentId: string): string => {
+}
         const colors: Record<string, string> = {
-            'oracle-prediction-service': '#2196F3',
-            'gemini-ai-engine': '#4CAF50',
-            'ml-learning-service': '#FF9800',
-            'advanced-analytics': '#9C27B0',
-            'real-time-processor': '#F44336'
+}
+            &apos;oracle-prediction-service&apos;: &apos;#2196F3&apos;,
+            &apos;gemini-ai-engine&apos;: &apos;#4CAF50&apos;,
+            &apos;ml-learning-service&apos;: &apos;#FF9800&apos;,
+            &apos;advanced-analytics&apos;: &apos;#9C27B0&apos;,
+            &apos;real-time-processor&apos;: &apos;#F44336&apos;
         };
-        return colors[componentId] || '#757575';
+        return colors[componentId] || &apos;#757575&apos;;
     };
 
     const renderArchitectureLayer = (layer: ArchitectureLayer) => (
         <button
             key={layer.id}
-            className={`architecture-layer ${activeLayer === layer.id ? 'active' : ''}`}
+            className={`architecture-layer ${activeLayer === layer.id ? &apos;active&apos; : &apos;&apos;}`}
             onClick={() => setActiveLayer(layer.id)}
             type="button"
             aria-expanded={activeLayer === layer.id}
@@ -277,6 +305,7 @@ const OracleArchitectureOverview: React.FC = () => {
                     <h4>Key Components:</h4>
                     <ul>
                         {layer.components.map((component, index) => (
+}
                             <li key={`${layer.id}-component-${index}`}>{component}</li>
                         ))}
                     </ul>
@@ -285,7 +314,8 @@ const OracleArchitectureOverview: React.FC = () => {
                 <div className="data-flow sm:px-4 md:px-6 lg:px-8">
                     <h4>Data Flow:</h4>
                     <div className="flow-diagram sm:px-4 md:px-6 lg:px-8">
-                        {layer.dataFlow.split(' → ').map((step, index, array) => (
+                        {layer.dataFlow.split(&apos; → &apos;).map((step, index, array) => (
+}
                             <React.Fragment key={`${layer.id}-flow-${index}`}>
                                 <span className="flow-step sm:px-4 md:px-6 lg:px-8">{step}</span>
                                 {index < array.length - 1 && <span className="flow-arrow sm:px-4 md:px-6 lg:px-8">→</span>}
@@ -298,6 +328,7 @@ const OracleArchitectureOverview: React.FC = () => {
                     <h4>Examples:</h4>
                     <ul>
                         {layer.examples.map((example, index) => (
+}
                             <li key={`${layer.id}-example-${index}`}>{example}</li>
                         ))}
                     </ul>
@@ -309,7 +340,7 @@ const OracleArchitectureOverview: React.FC = () => {
     const renderSystemComponent = (component: SystemComponent) => (
         <button
             key={component.id}
-            className={`system-component ${selectedComponent === component.id ? 'selected' : ''}`}
+            className={`system-component ${selectedComponent === component.id ? &apos;selected&apos; : &apos;&apos;}`}
             onClick={() => setSelectedComponent(selectedComponent === component.id ? null : component.id)}
             style={{ borderColor: getComponentStatusColor(component.id) }}
             type="button"
@@ -325,6 +356,7 @@ const OracleArchitectureOverview: React.FC = () => {
             </div>
             
             {selectedComponent === component.id && (
+}
                 <div className="component-details sm:px-4 md:px-6 lg:px-8" id={`component-details-${component.id}`}>
                     <p className="component-purpose sm:px-4 md:px-6 lg:px-8">{component.purpose}</p>
                     
@@ -333,6 +365,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             <h5>Inputs:</h5>
                             <ul>
                                 {component.inputs.map((input, index) => (
+}
                                     <li key={`${component.id}-input-${index}`}>{input}</li>
                                 ))}
                             </ul>
@@ -342,6 +375,7 @@ const OracleArchitectureOverview: React.FC = () => {
                             <h5>Outputs:</h5>
                             <ul>
                                 {component.outputs.map((output, index) => (
+}
                                     <li key={`${component.id}-output-${index}`}>{output}</li>
                                 ))}
                             </ul>
@@ -366,8 +400,9 @@ const OracleArchitectureOverview: React.FC = () => {
                 <div className="step-meta sm:px-4 md:px-6 lg:px-8">
                     <span className="step-duration sm:px-4 md:px-6 lg:px-8">⏱️ {step.duration}</span>
                     {step.dependencies.length > 0 && (
+}
                         <span className="step-dependencies sm:px-4 md:px-6 lg:px-8">
-                            🔗 Depends on: {step.dependencies.join(', ')}
+                            🔗 Depends on: {step.dependencies.join(&apos;, &apos;)}
                         </span>
                     )}
                 </div>
@@ -380,7 +415,7 @@ const OracleArchitectureOverview: React.FC = () => {
             <div className="overview-header sm:px-4 md:px-6 lg:px-8">
                 <h2>🏗️ Oracle Prediction Architecture</h2>
                 <p className="overview-description sm:px-4 md:px-6 lg:px-8">
-                    Discover how Oracle's sophisticated AI-driven prediction system processes millions of data points 
+                    Discover how Oracle&apos;s sophisticated AI-driven prediction system processes millions of data points 
                     to generate accurate fantasy football predictions. This multi-layered architecture combines 
                     real-time data processing, advanced machine learning, and natural language AI to deliver 
                     insights that consistently outperform traditional analysis methods.
@@ -425,9 +460,10 @@ const OracleArchitectureOverview: React.FC = () => {
                             
                             <div className="pipeline-visualization sm:px-4 md:px-6 lg:px-8">
                                 {architectureLayers.map((layer, index) => (
+}
                                     <button 
                                         key={layer.id} 
-                                        className={`pipeline-layer ${activeLayer === layer.id ? 'active' : ''}`}
+                                        className={`pipeline-layer ${activeLayer === layer.id ? &apos;active&apos; : &apos;&apos;}`}
                                         onClick={() => setActiveLayer(layer.id)}
                                         type="button"
                                         aria-label={`Select ${layer.name}`}
@@ -435,6 +471,7 @@ const OracleArchitectureOverview: React.FC = () => {
                                         <div className="pipeline-icon sm:px-4 md:px-6 lg:px-8">{getLayerIcon(layer.id)}</div>
                                         <div className="pipeline-name sm:px-4 md:px-6 lg:px-8">{layer.name}</div>
                                         {index < architectureLayers.length - 1 && (
+}
                                             <div className="pipeline-connector sm:px-4 md:px-6 lg:px-8">↓</div>
                                         )}
                                     </button>
@@ -448,7 +485,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 <section className="architecture-section sm:px-4 md:px-6 lg:px-8">
                     <h3>🏗️ Architecture Layers</h3>
                     <p className="section-description sm:px-4 md:px-6 lg:px-8">
-                        Oracle's prediction system is built on five interconnected layers, each responsible 
+                        Oracle&apos;s prediction system is built on five interconnected layers, each responsible 
                         for specific aspects of data processing and analysis. Click on each layer to explore 
                         its components and data flow.
                     </p>
@@ -476,14 +513,15 @@ const OracleArchitectureOverview: React.FC = () => {
                     <h3>🔄 Data Flow Process</h3>
                     <div className="section-controls sm:px-4 md:px-6 lg:px-8">
                         <button
-                            className={`control-button ${showDataFlow ? 'active' : ''}`}
+                            className={`control-button ${showDataFlow ? &apos;active&apos; : &apos;&apos;}`}
                             onClick={() => setShowDataFlow(!showDataFlow)}
                         >
-                            {showDataFlow ? 'Hide' : 'Show'} Detailed Flow
+                            {showDataFlow ? &apos;Hide&apos; : &apos;Show&apos;} Detailed Flow
                         </button>
                     </div>
                     
                     {showDataFlow && (
+}
                         <div className="data-flow-visualization sm:px-4 md:px-6 lg:px-8">
                             <p className="flow-description sm:px-4 md:px-6 lg:px-8">
                                 Follow the complete journey of data from collection to final prediction output. 
@@ -608,7 +646,7 @@ const OracleArchitectureOverview: React.FC = () => {
                 <div className="next-steps sm:px-4 md:px-6 lg:px-8">
                     <h4>🎓 Continue Learning</h4>
                     <p>
-                        Now that you understand Oracle's architecture, explore how each component works in detail:
+                        Now that you understand Oracle&apos;s architecture, explore how each component works in detail:
                     </p>
                     <div className="next-step-buttons sm:px-4 md:px-6 lg:px-8">
                         <button className="next-step-btn sm:px-4 md:px-6 lg:px-8">

@@ -3,13 +3,13 @@
  * Tests critical draft functionality and user interactions
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '../src/test-utils';
-import { createMockUser, createMockPlayer, mockFetchSuccess } from '../src/test-utils';
-import EnhancedDraftRoomView from './EnhancedDraftRoomView';
+import { render, screen, fireEvent, waitFor } from &apos;../src/test-utils&apos;;
+import { createMockUser, createMockPlayer, mockFetchSuccess } from &apos;../src/test-utils&apos;;
+import EnhancedDraftRoomView from &apos;./EnhancedDraftRoomView&apos;;
 
 // Mock draft service
 const mockDraftService = {
+}
   getCurrentDraft: jest.fn(),
   makeDraftPick: jest.fn(),
   getDraftBoard: jest.fn(),
@@ -17,48 +17,54 @@ const mockDraftService = {
   pauseDraft: jest.fn(),
 };
 
-jest.mock('../services/draftService', () => mockDraftService);
+jest.mock(&apos;../services/draftService&apos;, () => mockDraftService);
 
 // Mock WebSocket service
 const mockWebSocketService = {
+}
   connect: jest.fn(),
   disconnect: jest.fn(),
   subscribe: jest.fn(),
   send: jest.fn(),
 };
 
-jest.mock('../services/enhancedWebSocketService', () => ({
+jest.mock(&apos;../services/enhancedWebSocketService&apos;, () => ({
+}
   enhancedWebSocketService: mockWebSocketService,
 }));
 
 const mockDraftState = {
+}
   isActive: true,
   currentPick: 1,
   currentTeamId: 1,
   picks: [],
   timePerPick: 90,
-  draftType: 'snake' as const,
+  draftType: &apos;snake&apos; as const,
   totalRounds: 16,
   leagueId: 1,
 };
 
 const mockDraftBoard = {
+}
   availablePlayers: [
-    createMockPlayer({ id: 1, name: 'Josh Allen', position: 'QB', tier: 1 }),
-    createMockPlayer({ id: 2, name: 'Christian McCaffrey', position: 'RB', tier: 1 }),
-    createMockPlayer({ id: 3, name: 'Cooper Kupp', position: 'WR', tier: 1 }),
+    createMockPlayer({ id: 1, name: &apos;Josh Allen&apos;, position: &apos;QB&apos;, tier: 1 }),
+    createMockPlayer({ id: 2, name: &apos;Christian McCaffrey&apos;, position: &apos;RB&apos;, tier: 1 }),
+    createMockPlayer({ id: 3, name: &apos;Cooper Kupp&apos;, position: &apos;WR&apos;, tier: 1 }),
   ],
   draftedPlayers: [],
   myTeam: {
+}
     id: 1,
-    name: 'Test Team',
-    owner: 'Test User',
+    name: &apos;Test Team&apos;,
+    owner: &apos;Test User&apos;,
     roster: [],
     record: { wins: 0, losses: 0, ties: 0 },
     totalPoints: 0,
   },
   allTeams: [],
   currentPick: {
+}
     pick: 1,
     round: 1,
     teamId: 1,
@@ -66,29 +72,36 @@ const mockDraftBoard = {
   upcomingPicks: [],
 };
 
-describe('EnhancedDraftRoomView', () => {
+describe(&apos;EnhancedDraftRoomView&apos;, () => {
+}
   beforeEach(() => {
+}
     jest.clearAllMocks();
     
     mockDraftService.getCurrentDraft.mockResolvedValue({
+}
       success: true,
       data: mockDraftState,
     });
     
     mockDraftService.getDraftBoard.mockResolvedValue({
+}
       success: true,
       data: mockDraftBoard,
     });
   });
 
-  test('should display draft status when active', async () => {
+  test(&apos;should display draft status when active&apos;, async () => {
+}
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
+}
       expect(screen.getByText(/draft in progress/i)).toBeInTheDocument();
     });
 
@@ -96,84 +109,101 @@ describe('EnhancedDraftRoomView', () => {
     expect(screen.getByText(/pick 1/i)).toBeInTheDocument();
   });
 
-  test('should display available players', async () => {
+  test(&apos;should display available players&apos;, async () => {
+}
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
-      expect(screen.getByText('Christian McCaffrey')).toBeInTheDocument();
-      expect(screen.getByText('Cooper Kupp')).toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
+      expect(screen.getByText(&apos;Christian McCaffrey&apos;)).toBeInTheDocument();
+      expect(screen.getByText(&apos;Cooper Kupp&apos;)).toBeInTheDocument();
     });
   });
 
-  test('should allow player selection when user turn', async () => {
+  test(&apos;should allow player selection when user turn&apos;, async () => {
+}
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
     });
 
-    const playerCard = screen.getByTestId('player-1');
+    const playerCard = screen.getByTestId(&apos;player-1&apos;);
     fireEvent.click(playerCard);
 
     await waitFor(() => {
+}
       expect(screen.getByText(/confirm selection/i)).toBeInTheDocument();
     });
   });
 
-  test('should prevent selection when not user turn', async () => {
+  test(&apos;should prevent selection when not user turn&apos;, async () => {
+}
     const modifiedDraftState = {
+}
       ...mockDraftState,
-      currentTeamId: 2, // Different team's turn
+      currentTeamId: 2, // Different team&apos;s turn
     };
     
     mockDraftService.getCurrentDraft.mockResolvedValue({
+}
       success: true,
       data: modifiedDraftState,
     });
 
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
+}
       expect(screen.getByText(/waiting for/i)).toBeInTheDocument();
     });
 
     const playerCards = screen.getAllByTestId(/player-/);
     playerCards.forEach((card: any) => {
-      expect(card).toHaveAttribute('aria-disabled', 'true');
+}
+      expect(card).toHaveAttribute(&apos;aria-disabled&apos;, &apos;true&apos;);
     });
   });
 
-  test('should handle draft pick submission', async () => {
+  test(&apos;should handle draft pick submission&apos;, async () => {
+}
     mockDraftService.makeDraftPick.mockResolvedValue({
+}
       success: true,
       data: { ...mockDraftState, currentPick: 2 },
     });
 
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
     });
 
     // Select player
-    const playerCard = screen.getByTestId('player-1');
+    const playerCard = screen.getByTestId(&apos;player-1&apos;);
     fireEvent.click(playerCard);
 
     // Confirm selection
@@ -181,7 +211,9 @@ describe('EnhancedDraftRoomView', () => {
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
+}
       expect(mockDraftService.makeDraftPick).toHaveBeenCalledWith({
+}
         playerId: 1,
         teamId: 1,
         pick: 1,
@@ -190,33 +222,40 @@ describe('EnhancedDraftRoomView', () => {
     });
   });
 
-  test('should display draft timer', async () => {
+  test(&apos;should display draft timer&apos;, async () => {
+}
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
+}
       expect(screen.getByText(/1:30/i)).toBeInTheDocument(); // 90 seconds
     });
   });
 
-  test('should handle auto-pick when timer expires', async () => {
+  test(&apos;should handle auto-pick when timer expires&apos;, async () => {
+}
     jest.useFakeTimers();
     
     mockDraftService.makeDraftPick.mockResolvedValue({
+}
       success: true,
       data: mockDraftState,
     });
 
     const initialState = {
-      user: createMockUser({ id: 1, teamName: 'Test Team' }),
+}
+      user: createMockUser({ id: 1, teamName: &apos;Test Team&apos; }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
+}
       expect(screen.getByText(/1:30/i)).toBeInTheDocument();
     });
 
@@ -224,8 +263,10 @@ describe('EnhancedDraftRoomView', () => {
     jest.advanceTimersByTime(90000); // 90 seconds
 
     await waitFor(() => {
+}
       expect(mockDraftService.makeDraftPick).toHaveBeenCalledWith(
         expect.objectContaining({
+}
           playerId: expect.any(Number),
           isAutoPick: true,
         })
@@ -235,72 +276,87 @@ describe('EnhancedDraftRoomView', () => {
     jest.useRealTimers();
   });
 
-  test('should filter players by position', async () => {
+  test(&apos;should filter players by position&apos;, async () => {
+}
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
     });
 
     // Filter by RB
-    const rbFilter = screen.getByRole('button', { name: /running back/i });
+    const rbFilter = screen.getByRole(&apos;button&apos;, { name: /running back/i });
     fireEvent.click(rbFilter);
 
     await waitFor(() => {
-      expect(screen.getByText('Christian McCaffrey')).toBeInTheDocument();
-      expect(screen.queryByText('Josh Allen')).not.toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Christian McCaffrey&apos;)).toBeInTheDocument();
+      expect(screen.queryByText(&apos;Josh Allen&apos;)).not.toBeInTheDocument();
     });
   });
 
-  test('should search players by name', async () => {
+  test(&apos;should search players by name&apos;, async () => {
+}
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
     });
 
     const searchInput = screen.getByPlaceholderText(/search players/i);
-    fireEvent.change(searchInput, { target: { value: 'Josh' } });
+    fireEvent.change(searchInput, { target: { value: &apos;Josh&apos; } });
 
     await waitFor(() => {
-      expect(screen.getByText('Josh Allen')).toBeInTheDocument();
-      expect(screen.queryByText('Christian McCaffrey')).not.toBeInTheDocument();
+}
+      expect(screen.getByText(&apos;Josh Allen&apos;)).toBeInTheDocument();
+      expect(screen.queryByText(&apos;Christian McCaffrey&apos;)).not.toBeInTheDocument();
     });
   });
 
-  test('should display my roster', async () => {
+  test(&apos;should display my roster&apos;, async () => {
+}
     const teamWithRoster = {
+}
       ...mockDraftBoard.myTeam,
-      roster: [createMockPlayer({ name: 'Drafted Player' })],
+      roster: [createMockPlayer({ name: &apos;Drafted Player&apos; })],
     };
 
     mockDraftService.getDraftBoard.mockResolvedValue({
+}
       success: true,
       data: { ...mockDraftBoard, myTeam: teamWithRoster },
     });
 
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
+}
       expect(screen.getByText(/my roster/i)).toBeInTheDocument();
-      expect(screen.getByText('Drafted Player')).toBeInTheDocument();
+      expect(screen.getByText(&apos;Drafted Player&apos;)).toBeInTheDocument();
     });
   });
 
-  test('should handle WebSocket draft updates', async () => {
+  test(&apos;should handle WebSocket draft updates&apos;, async () => {
+}
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
@@ -308,9 +364,12 @@ describe('EnhancedDraftRoomView', () => {
 
     // Simulate WebSocket message for new pick
     const mockWebSocketMessage = {
-      type: 'draft_pick',
+}
+      type: &apos;draft_pick&apos;,
       payload: {
+}
         pick: {
+}
           pick: 2,
           round: 1,
           teamId: 2,
@@ -324,35 +383,42 @@ describe('EnhancedDraftRoomView', () => {
     subscriptionCallback(mockWebSocketMessage);
 
     await waitFor(() => {
+}
       expect(screen.getByText(/pick 2/i)).toBeInTheDocument();
     });
   });
 
-  test('should handle errors gracefully', async () => {
+  test(&apos;should handle errors gracefully&apos;, async () => {
+}
     mockDraftService.getCurrentDraft.mockResolvedValue({
+}
       success: false,
-      error: 'Draft not found',
+      error: &apos;Draft not found&apos;,
     });
 
     render(<EnhancedDraftRoomView />);
 
     await waitFor(() => {
+}
       expect(screen.getByText(/error loading draft/i)).toBeInTheDocument();
     });
   });
 
-  test('should be accessible for screen readers', async () => {
+  test(&apos;should be accessible for screen readers&apos;, async () => {
+}
     const initialState = {
+}
       user: createMockUser({ id: 1 }),
     };
     
     render(<EnhancedDraftRoomView />, { initialAppState: initialState });
 
     await waitFor(() => {
-      expect(screen.getByRole('main')).toBeInTheDocument();
+}
+      expect(screen.getByRole(&apos;main&apos;)).toBeInTheDocument();
     });
 
-    expect(screen.getByRole('button', { name: /confirm selection/i })).toHaveAttribute('aria-describedby');
-    expect(screen.getByText(/draft timer/i)).toHaveAttribute('aria-live', 'polite');
+    expect(screen.getByRole(&apos;button&apos;, { name: /confirm selection/i })).toHaveAttribute(&apos;aria-describedby&apos;);
+    expect(screen.getByText(/draft timer/i)).toHaveAttribute(&apos;aria-live&apos;, &apos;polite&apos;);
   });
 });

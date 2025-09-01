@@ -3,23 +3,27 @@
  * Critical API layer testing with proper mocking
  */
 
-import { playerService } from './playerService';
-import { createMockPlayer, createMockApiResponse, mockFetchSuccess, mockFetchError } from '../src/test-utils';
-import type { Player } from '../src/types';
+import { playerService } from &apos;./playerService&apos;;
+import { createMockPlayer, createMockApiResponse, mockFetchSuccess, mockFetchError } from &apos;../src/test-utils&apos;;
+import type { Player } from &apos;../src/types&apos;;
 
 // Mock global fetch
 global.fetch = jest.fn();
 
-describe('PlayerService', () => {
+describe(&apos;PlayerService&apos;, () => {
+}
   beforeEach(() => {
+}
     jest.clearAllMocks();
   });
 
-  describe('getPlayers', () => {
-    test('should fetch players successfully', async () => {
+  describe(&apos;getPlayers&apos;, () => {
+}
+    test(&apos;should fetch players successfully&apos;, async () => {
+}
       const mockPlayers: Player[] = [
-        createMockPlayer({ id: 1, name: 'Josh Allen', position: 'QB' }),
-        createMockPlayer({ id: 2, name: 'Christian McCaffrey', position: 'RB' }),
+        createMockPlayer({ id: 1, name: &apos;Josh Allen&apos;, position: &apos;QB&apos; }),
+        createMockPlayer({ id: 2, name: &apos;Christian McCaffrey&apos;, position: &apos;RB&apos; }),
       ];
 
       mockFetchSuccess(mockPlayers);
@@ -28,139 +32,157 @@ describe('PlayerService', () => {
 
       expect(result.success).toBe(true);
       expect(result.data).toHaveLength(2);
-      expect(result.data[0].name).toBe('Josh Allen');
+      expect(result.data[0].name).toBe(&apos;Josh Allen&apos;);
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/players'),
+        expect.stringContaining(&apos;/players&apos;),
         expect.objectContaining({
-          method: 'GET',
+}
+          method: &apos;GET&apos;,
         })
       );
     });
 
-    test('should handle API errors gracefully', async () => {
-      mockFetchError('Server error', 500);
+    test(&apos;should handle API errors gracefully&apos;, async () => {
+}
+      mockFetchError(&apos;Server error&apos;, 500);
 
       const result = await playerService.getPlayers();
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Server error');
+      expect(result.error).toBe(&apos;Server error&apos;);
     });
 
-    test('should handle network errors', async () => {
-      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
+    test(&apos;should handle network errors&apos;, async () => {
+}
+      (global.fetch as jest.Mock).mockRejectedValueOnce(new Error(&apos;Network error&apos;));
 
       const result = await playerService.getPlayers();
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Network error');
+      expect(result.error).toContain(&apos;Network error&apos;);
     });
   });
 
-  describe('getPlayerById', () => {
-    test('should fetch single player successfully', async () => {
-      const mockPlayer = createMockPlayer({ id: 1, name: 'Josh Allen' });
+  describe(&apos;getPlayerById&apos;, () => {
+}
+    test(&apos;should fetch single player successfully&apos;, async () => {
+}
+      const mockPlayer = createMockPlayer({ id: 1, name: &apos;Josh Allen&apos; });
       mockFetchSuccess(mockPlayer);
 
       const result = await playerService.getPlayerById(1);
 
       expect(result.success).toBe(true);
-      expect(result.data.name).toBe('Josh Allen');
+      expect(result.data.name).toBe(&apos;Josh Allen&apos;);
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/players/1'),
-        expect.objectContaining({ method: 'GET' })
+        expect.stringContaining(&apos;/players/1&apos;),
+        expect.objectContaining({ method: &apos;GET&apos; })
       );
     });
 
-    test('should handle player not found', async () => {
-      mockFetchError('Player not found', 404);
+    test(&apos;should handle player not found&apos;, async () => {
+}
+      mockFetchError(&apos;Player not found&apos;, 404);
 
       const result = await playerService.getPlayerById(999);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Player not found');
+      expect(result.error).toBe(&apos;Player not found&apos;);
     });
 
-    test('should validate player ID parameter', async () => {
+    test(&apos;should validate player ID parameter&apos;, async () => {
+}
       const result = await playerService.getPlayerById(-1);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid player ID');
+      expect(result.error).toBe(&apos;Invalid player ID&apos;);
     });
   });
 
-  describe('searchPlayers', () => {
-    test('should search players by name', async () => {
+  describe(&apos;searchPlayers&apos;, () => {
+}
+    test(&apos;should search players by name&apos;, async () => {
+}
       const mockPlayers = [
-        createMockPlayer({ name: 'Josh Allen' }),
-        createMockPlayer({ name: 'Josh Jacobs' }),
+        createMockPlayer({ name: &apos;Josh Allen&apos; }),
+        createMockPlayer({ name: &apos;Josh Jacobs&apos; }),
       ];
       mockFetchSuccess(mockPlayers);
 
-      const result = await playerService.searchPlayers('Josh');
+      const result = await playerService.searchPlayers(&apos;Josh&apos;);
 
       expect(result.success).toBe(true);
       expect(result.data).toHaveLength(2);
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('search=Josh'),
+        expect.stringContaining(&apos;search=Josh&apos;),
         expect.any(Object)
       );
     });
 
-    test('should handle empty search results', async () => {
+    test(&apos;should handle empty search results&apos;, async () => {
+}
       mockFetchSuccess([]);
 
-      const result = await playerService.searchPlayers('NonexistentPlayer');
+      const result = await playerService.searchPlayers(&apos;NonexistentPlayer&apos;);
 
       expect(result.success).toBe(true);
       expect(result.data).toHaveLength(0);
     });
 
-    test('should sanitize search query', async () => {
-      const maliciousQuery = '<script>alert("XSS")</script>';
+    test(&apos;should sanitize search query&apos;, async () => {
+}
+      const maliciousQuery = &apos;<script>alert("XSS")</script>&apos;;
       mockFetchSuccess([]);
 
       await playerService.searchPlayers(maliciousQuery);
 
       const fetchCall = (global.fetch as jest.Mock).mock.calls[0];
       const url = fetchCall[0];
-      expect(url).not.toContain('<script>');
-      expect(url).not.toContain('alert');
+      expect(url).not.toContain(&apos;<script>&apos;);
+      expect(url).not.toContain(&apos;alert&apos;);
     });
 
-    test('should handle minimum query length', async () => {
-      const result = await playerService.searchPlayers('a');
+    test(&apos;should handle minimum query length&apos;, async () => {
+}
+      const result = await playerService.searchPlayers(&apos;a&apos;);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Search query must be at least 2 characters');
+      expect(result.error).toBe(&apos;Search query must be at least 2 characters&apos;);
     });
   });
 
-  describe('getPlayersByPosition', () => {
-    test('should fetch players by position', async () => {
+  describe(&apos;getPlayersByPosition&apos;, () => {
+}
+    test(&apos;should fetch players by position&apos;, async () => {
+}
       const mockQBs = [
-        createMockPlayer({ position: 'QB', name: 'Josh Allen' }),
-        createMockPlayer({ position: 'QB', name: 'Patrick Mahomes' }),
+        createMockPlayer({ position: &apos;QB&apos;, name: &apos;Josh Allen&apos; }),
+        createMockPlayer({ position: &apos;QB&apos;, name: &apos;Patrick Mahomes&apos; }),
       ];
       mockFetchSuccess(mockQBs);
 
-      const result = await playerService.getPlayersByPosition('QB');
+      const result = await playerService.getPlayersByPosition(&apos;QB&apos;);
 
       expect(result.success).toBe(true);
       expect(result.data).toHaveLength(2);
-      expect(result.data.every((player: any) => player.position === 'QB')).toBe(true);
+      expect(result.data.every((player: any) => player.position === &apos;QB&apos;)).toBe(true);
     });
 
-    test('should validate position parameter', async () => {
-      const result = await playerService.getPlayersByPosition('INVALID');
+    test(&apos;should validate position parameter&apos;, async () => {
+}
+      const result = await playerService.getPlayersByPosition(&apos;INVALID&apos;);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid position');
+      expect(result.error).toBe(&apos;Invalid position&apos;);
     });
   });
 
-  describe('getPlayerStats', () => {
-    test('should fetch player statistics', async () => {
+  describe(&apos;getPlayerStats&apos;, () => {
+}
+    test(&apos;should fetch player statistics&apos;, async () => {
+}
       const mockStats = {
+}
         passingYards: 4544,
         passingTouchdowns: 37,
         interceptions: 15,
@@ -172,23 +194,26 @@ describe('PlayerService', () => {
       expect(result.success).toBe(true);
       expect(result.data.passingYards).toBe(4544);
       expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining('/players/1/stats/2025'),
+        expect.stringContaining(&apos;/players/1/stats/2025&apos;),
         expect.any(Object)
       );
     });
 
-    test('should handle missing stats', async () => {
-      mockFetchError('Stats not found', 404);
+    test(&apos;should handle missing stats&apos;, async () => {
+}
+      mockFetchError(&apos;Stats not found&apos;, 404);
 
       const result = await playerService.getPlayerStats(1, 2023);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Stats not found');
+      expect(result.error).toBe(&apos;Stats not found&apos;);
     });
   });
 
-  describe('caching', () => {
-    test('should cache player data', async () => {
+  describe(&apos;caching&apos;, () => {
+}
+    test(&apos;should cache player data&apos;, async () => {
+}
       const mockPlayer = createMockPlayer();
       mockFetchSuccess(mockPlayer);
 
@@ -201,7 +226,8 @@ describe('PlayerService', () => {
       expect(global.fetch).toHaveBeenCalledTimes(1);
     });
 
-    test('should invalidate cache after timeout', async () => {
+    test(&apos;should invalidate cache after timeout&apos;, async () => {
+}
       jest.useFakeTimers();
       
       const mockPlayer = createMockPlayer();
@@ -224,30 +250,34 @@ describe('PlayerService', () => {
     });
   });
 
-  describe('error handling', () => {
-    test('should handle malformed JSON responses', async () => {
+  describe(&apos;error handling&apos;, () => {
+}
+    test(&apos;should handle malformed JSON responses&apos;, async () => {
+}
       (global.fetch as jest.Mock).mockResolvedValueOnce({
+}
         ok: true,
-        json: () => Promise.reject(new Error('Invalid JSON')),
+        json: () => Promise.reject(new Error(&apos;Invalid JSON&apos;)),
       });
 
       const result = await playerService.getPlayers();
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Invalid JSON');
+      expect(result.error).toContain(&apos;Invalid JSON&apos;);
     });
 
-    test('should handle timeout errors', async () => {
+    test(&apos;should handle timeout errors&apos;, async () => {
+}
       (global.fetch as jest.Mock).mockImplementationOnce(
         () => new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Timeout')), 100)
+          setTimeout(() => reject(new Error(&apos;Timeout&apos;)), 100)
         )
       );
 
       const result = await playerService.getPlayers();
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('Timeout');
+      expect(result.error).toContain(&apos;Timeout&apos;);
     });
   });
 });

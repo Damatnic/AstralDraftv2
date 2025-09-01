@@ -1,15 +1,15 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { useAppState } from '../../contexts/AppContext';
-import { useLeague } from '../../hooks/useLeague';
-import { Widget } from '../ui/Widget';
-import { SwordIcon } from '../icons/SwordIcon';
-import { detectTopRivalry } from '../../services/geminiService';
-import { Avatar } from '../ui/Avatar';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { useAppState } from &apos;../../contexts/AppContext&apos;;
+import { useLeague } from &apos;../../hooks/useLeague&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { SwordIcon } from &apos;../icons/SwordIcon&apos;;
+import { detectTopRivalry } from &apos;../../services/geminiService&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
+import LoadingSpinner from &apos;../ui/LoadingSpinner&apos;;
 
 const RivalryWidget: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
     const { league } = useLeague();
     const [isLoading, setIsLoading] = React.useState(false);
@@ -17,17 +17,24 @@ const RivalryWidget: React.FC = () => {
     const rivalry = league?.topRivalry;
 
     React.useEffect(() => {
-        if (league && !rivalry && (league?.status === 'IN_SEASON' || league?.status === 'PLAYOFFS' || league?.status === 'COMPLETE')) {
+}
+        if (league && !rivalry && (league?.status === &apos;IN_SEASON&apos; || league?.status === &apos;PLAYOFFS&apos; || league?.status === &apos;COMPLETE&apos;)) {
+}
             const fetchRivalry = async () => {
+}
                 try {
+}
                     setIsLoading(true);
                     const result = await detectTopRivalry(league);
                     if (result) {
-                        dispatch({ type: 'SET_TOP_RIVALRY', payload: { leagueId: league.id, rivalry: result } });
+}
+                        dispatch({ type: &apos;SET_TOP_RIVALRY&apos;, payload: { leagueId: league.id, rivalry: result } });
                     }
                 } catch (error) {
-                    console.error('Error in fetchRivalry:', error);
+}
+                    console.error(&apos;Error in fetchRivalry:&apos;, error);
                 } finally {
+}
                     setIsLoading(false);
                 }
             };
@@ -35,7 +42,8 @@ const RivalryWidget: React.FC = () => {
         }
     }, [league, rivalry, dispatch]);
 
-    if (!league || !(league?.status === 'IN_SEASON' || league?.status === 'PLAYOFFS' || league?.status === 'COMPLETE')) {
+    if (!league || !(league?.status === &apos;IN_SEASON&apos; || league?.status === &apos;PLAYOFFS&apos; || league?.status === &apos;COMPLETE&apos;)) {
+}
         return null;
     }
 
@@ -46,6 +54,7 @@ const RivalryWidget: React.FC = () => {
         <Widget title="Top Rivalry" icon={<SwordIcon />}>
             <div className="p-3 sm:px-4 md:px-6 lg:px-8">
                 {isLoading ? <LoadingSpinner size="sm" text="Detecting rivalries..." /> :
+}
                  rivalry && teamA && teamB ? (
                     <div>
                         <div className="flex items-center justify-center gap-4 mb-2 sm:px-4 md:px-6 lg:px-8">

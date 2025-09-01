@@ -4,6 +4,7 @@
 
 // Player Types
 export interface Player {
+}
   id: string;
   name: string;
   position: string;
@@ -15,7 +16,7 @@ export interface Player {
   weight?: number;
   college?: string;
   imageUrl?: string;
-  injuryStatus?: 'Healthy' | 'Questionable' | 'Doubtful' | 'Out' | 'IR';
+  injuryStatus?: &apos;Healthy&apos; | &apos;Questionable&apos; | &apos;Doubtful&apos; | &apos;Out&apos; | &apos;IR&apos;;
   isSuspended?: boolean;
   byeWeek?: number;
   
@@ -31,6 +32,7 @@ export interface Player {
 }
 
 export interface PlayerStats {
+}
   gamesPlayed: number;
   gamesStarted: number;
   fantasyPoints: number;
@@ -62,6 +64,7 @@ export interface PlayerStats {
 
 // Team Types
 export interface Team {
+}
   id: string;
   ownerId: string;
   name: string;
@@ -80,6 +83,7 @@ export interface Team {
 }
 
 export interface Roster {
+}
   starters: Player[];
   bench: Player[];
   injured?: Player[];
@@ -89,6 +93,7 @@ export interface Roster {
 
 // League Types
 export interface League {
+}
   id: string;
   name: string;
   commissionerId: string;
@@ -102,10 +107,11 @@ export interface League {
   season: number;
   currentWeek: number;
   isActive: boolean;
-  leagueType: 'redraft' | 'keeper' | 'dynasty';
+  leagueType: &apos;redraft&apos; | &apos;keeper&apos; | &apos;dynasty&apos;;
 }
 
 export interface ScoringSettings {
+}
   // Passing
   passingYards: number;
   passingTD: number;
@@ -146,6 +152,7 @@ export interface ScoringSettings {
 }
 
 export interface RosterSettings {
+}
   qb: number;
   rb: number;
   wr: number;
@@ -160,7 +167,8 @@ export interface RosterSettings {
 }
 
 export interface DraftSettings {
-  type: 'snake' | 'auction' | 'linear';
+}
+  type: &apos;snake&apos; | &apos;auction&apos; | &apos;linear&apos;;
   rounds: number;
   timePerPick: number;
   auctionBudget?: number;
@@ -169,7 +177,8 @@ export interface DraftSettings {
 }
 
 export interface WaiverSettings {
-  type: 'priority' | 'faab' | 'continuous';
+}
+  type: &apos;priority&apos; | &apos;faab&apos; | &apos;continuous&apos;;
   waiverPeriod: number; // days
   faabBudget?: number;
   waiverDay?: string;
@@ -177,6 +186,7 @@ export interface WaiverSettings {
 }
 
 export interface TradeSettings {
+}
   reviewPeriod: number; // hours
   votesRequired?: number;
   vetoVotes?: number;
@@ -185,6 +195,7 @@ export interface TradeSettings {
 }
 
 export interface PlayoffSettings {
+}
   playoffTeams: number;
   playoffWeeks: number[];
   twoWeekMatchups?: boolean;
@@ -193,6 +204,7 @@ export interface PlayoffSettings {
 
 // Lineup Types
 export interface LineupSlot {
+}
   position: string;
   player?: Player;
   isLocked: boolean;
@@ -201,6 +213,7 @@ export interface LineupSlot {
 }
 
 export interface Lineup {
+}
   teamId: string;
   week: number;
   slots: LineupSlot[];
@@ -212,6 +225,7 @@ export interface Lineup {
 
 // Draft Types
 export interface DraftPick {
+}
   pickNumber: number;
   round: number;
   teamId: string;
@@ -223,9 +237,10 @@ export interface DraftPick {
 }
 
 export interface Draft {
+}
   id: string;
   leagueId: string;
-  status: 'pre_draft' | 'in_progress' | 'completed';
+  status: &apos;pre_draft&apos; | &apos;in_progress&apos; | &apos;completed&apos;;
   currentPick?: number;
   picks: DraftPick[];
   startTime?: Date;
@@ -234,6 +249,7 @@ export interface Draft {
 
 // Trade Types
 export interface Trade {
+}
   id: string;
   proposingTeamId: string;
   receivingTeamId: string;
@@ -241,7 +257,7 @@ export interface Trade {
   receivingPlayers: Player[];
   proposingPicks?: DraftPick[];
   receivingPicks?: DraftPick[];
-  status: 'pending' | 'accepted' | 'rejected' | 'vetoed' | 'expired';
+  status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;vetoed&apos; | &apos;expired&apos;;
   proposedDate: Date;
   responseDate?: Date;
   notes?: string;
@@ -249,18 +265,20 @@ export interface Trade {
 
 // Waiver Types
 export interface WaiverClaim {
+}
   id: string;
   teamId: string;
   playerId: string;
   dropPlayerId?: string;
   priority: number;
   bidAmount?: number; // For FAAB
-  status: 'pending' | 'successful' | 'failed';
+  status: &apos;pending&apos; | &apos;successful&apos; | &apos;failed&apos;;
   processDate?: Date;
 }
 
 // Game/Matchup Types
 export interface Matchup {
+}
   id: string;
   week: number;
   homeTeamId: string;
@@ -273,6 +291,7 @@ export interface Matchup {
 }
 
 export interface NFLGame {
+}
   id: string;
   week: number;
   homeTeam: string;
@@ -287,17 +306,19 @@ export interface NFLGame {
 }
 
 export interface WeatherConditions {
+}
   temperature: number;
   windSpeed: number;
   precipitation: number;
-  condition: 'clear' | 'cloudy' | 'rain' | 'snow' | 'dome';
+  condition: &apos;clear&apos; | &apos;cloudy&apos; | &apos;rain&apos; | &apos;snow&apos; | &apos;dome&apos;;
 }
 
 // Notification Types
 export interface Notification {
+}
   id: string;
   userId: string;
-  type: 'trade' | 'waiver' | 'injury' | 'lineup' | 'score' | 'news';
+  type: &apos;trade&apos; | &apos;waiver&apos; | &apos;injury&apos; | &apos;lineup&apos; | &apos;score&apos; | &apos;news&apos;;
   title: string;
   message: string;
   timestamp: Date;
@@ -307,6 +328,7 @@ export interface Notification {
 
 // User Types
 export interface User {
+}
   id: string;
   email: string;
   username: string;
@@ -319,17 +341,19 @@ export interface User {
 }
 
 export interface UserPreferences {
+}
   emailNotifications: boolean;
   pushNotifications: boolean;
   tradeNotifications: boolean;
   injuryNotifications: boolean;
   lineupReminders: boolean;
-  theme: 'light' | 'dark' | 'auto';
+  theme: &apos;light&apos; | &apos;dark&apos; | &apos;auto&apos;;
   timezone: string;
 }
 
 // Analytics Types
 export interface PlayerProjection {
+}
   playerId: string;
   week: number;
   projectedPoints: number;
@@ -341,6 +365,7 @@ export interface PlayerProjection {
 }
 
 export interface TeamAnalytics {
+}
   teamId: string;
   powerRanking: number;
   playoffProbability: number;
@@ -353,6 +378,7 @@ export interface TeamAnalytics {
 
 // News/Update Types
 export interface NewsItem {
+}
   id: string;
   playerId?: string;
   teamId?: string;
@@ -360,9 +386,9 @@ export interface NewsItem {
   content: string;
   source: string;
   publishedAt: Date;
-  impact: 'positive' | 'negative' | 'neutral';
+  impact: &apos;positive&apos; | &apos;negative&apos; | &apos;neutral&apos;;
   tags: string[];
 }
 
 // Export all types
-export * from './viewTypes';
+export * from &apos;./viewTypes&apos;;

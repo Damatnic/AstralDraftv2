@@ -4,16 +4,17 @@
  * statistical analysis, and strategic roster construction
  */
 
-import { lineupOptimizer } from './lineupOptimizerEngine';
-import { playerResearchService } from './playerResearchService';
-import { waiverWireAnalyzer } from './waiverWireAnalyzer';
-import { machineLearningPlayerPredictionService } from './machineLearningPlayerPredictionService';
-import { productionSportsDataService } from './productionSportsDataService';
-import { tradeAnalysisEngine } from './tradeAnalysisEngine';
-import { injuryTrackingService } from './injuryTrackingService';
+import { lineupOptimizer } from &apos;./lineupOptimizerEngine&apos;;
+import { playerResearchService } from &apos;./playerResearchService&apos;;
+import { waiverWireAnalyzer } from &apos;./waiverWireAnalyzer&apos;;
+import { machineLearningPlayerPredictionService } from &apos;./machineLearningPlayerPredictionService&apos;;
+import { productionSportsDataService } from &apos;./productionSportsDataService&apos;;
+import { tradeAnalysisEngine } from &apos;./tradeAnalysisEngine&apos;;
+import { injuryTrackingService } from &apos;./injuryTrackingService&apos;;
 
 // Core types and interfaces
 export interface OptimizedTeam {
+}
   roster: RosterConstruction;
   weeklyLineup: WeeklyLineupStrategy;
   seasonStrategy: SeasonLongStrategy;
@@ -25,6 +26,7 @@ export interface OptimizedTeam {
 }
 
 export interface RosterConstruction {
+}
   starters: PlayerAllocation[];
   bench: PlayerAllocation[];
   injured: PlayerAllocation[];
@@ -36,8 +38,9 @@ export interface RosterConstruction {
 }
 
 export interface PlayerAllocation {
+}
   player: EnhancedPlayer;
-  role: 'starter' | 'flex' | 'depth' | 'handcuff' | 'stash';
+  role: &apos;starter&apos; | &apos;flex&apos; | &apos;depth&apos; | &apos;handcuff&apos; | &apos;stash&apos;;
   value: PlayerValue;
   projectedPoints: number;
   replacementLevel: number;
@@ -45,6 +48,7 @@ export interface PlayerAllocation {
 }
 
 export interface EnhancedPlayer {
+}
   id: string;
   name: string;
   position: string;
@@ -58,6 +62,7 @@ export interface EnhancedPlayer {
 }
 
 export interface PlayerStatistics {
+}
   seasonTotal: number;
   average: number;
   lastFive: number[];
@@ -69,6 +74,7 @@ export interface PlayerStatistics {
 }
 
 export interface PlayerProjections {
+}
   weekly: number;
   remainingSeason: number;
   playoffs: number;
@@ -78,6 +84,7 @@ export interface PlayerProjections {
 }
 
 export interface ProjectionFactor {
+}
   name: string;
   impact: number;
   weight: number;
@@ -85,6 +92,7 @@ export interface ProjectionFactor {
 }
 
 export interface ConsistencyMetrics {
+}
   score: number; // 0-100
   volatility: number;
   weekToWeekVariance: number;
@@ -93,6 +101,7 @@ export interface ConsistencyMetrics {
 }
 
 export interface MatchupAnalysis {
+}
   currentWeek: SingleMatchup;
   upcomingSchedule: SingleMatchup[];
   playoffSchedule: SingleMatchup[];
@@ -102,17 +111,19 @@ export interface MatchupAnalysis {
 }
 
 export interface SingleMatchup {
+}
   week: number;
   opponent: string;
   difficulty: number;
   projectedPoints: number;
-  gameScript: 'favorable' | 'neutral' | 'unfavorable';
+  gameScript: &apos;favorable&apos; | &apos;neutral&apos; | &apos;unfavorable&apos;;
   weatherImpact: number;
-  venue: 'home' | 'away';
+  venue: &apos;home&apos; | &apos;away&apos;;
 }
 
 export interface InjuryProfile {
-  status: 'healthy' | 'questionable' | 'doubtful' | 'out' | 'ir';
+}
+  status: &apos;healthy&apos; | &apos;questionable&apos; | &apos;doubtful&apos; | &apos;out&apos; | &apos;ir&apos;;
   risk: number; // 0-1
   expectedReturn: number; // weeks
   history: InjuryHistory[];
@@ -120,13 +131,15 @@ export interface InjuryProfile {
 }
 
 export interface InjuryHistory {
+}
   date: Date;
   type: string;
-  severity: 'minor' | 'moderate' | 'major';
+  severity: &apos;minor&apos; | &apos;moderate&apos; | &apos;major&apos;;
   missedGames: number;
 }
 
 export interface ValueMetrics {
+}
   tradeValue: number;
   waiverValue: number;
   keeperValue: number;
@@ -136,6 +149,7 @@ export interface ValueMetrics {
 }
 
 export interface PlayerValue {
+}
   raw: number;
   positionalAdjusted: number;
   scarcityAdjusted: number;
@@ -143,6 +157,7 @@ export interface PlayerValue {
 }
 
 export interface RosterComposition {
+}
   positionCounts: Map<string, number>;
   ageDistribution: AgeProfile;
   riskProfile: RiskProfile;
@@ -150,6 +165,7 @@ export interface RosterComposition {
 }
 
 export interface AgeProfile {
+}
   average: number;
   youngestCore: number;
   oldestCore: number;
@@ -157,6 +173,7 @@ export interface AgeProfile {
 }
 
 export interface RiskProfile {
+}
   overall: number;
   injury: number;
   consistency: number;
@@ -164,6 +181,7 @@ export interface RiskProfile {
 }
 
 export interface UpsideProfile {
+}
   weeklyUpside: number;
   seasonUpside: number;
   breakoutPotential: number;
@@ -171,6 +189,7 @@ export interface UpsideProfile {
 }
 
 export interface RosterBalance {
+}
   floorCeilingRatio: number;
   consistencyScore: number;
   positionalBalance: number;
@@ -179,6 +198,7 @@ export interface RosterBalance {
 }
 
 export interface WeeklyLineupStrategy {
+}
   optimal: LineupConfiguration;
   alternatives: LineupConfiguration[];
   flexStrategy: FlexStrategy;
@@ -188,15 +208,17 @@ export interface WeeklyLineupStrategy {
 }
 
 export interface LineupConfiguration {
+}
   players: Map<string, EnhancedPlayer>;
   projectedPoints: number;
   floor: number;
   ceiling: number;
   stackCorrelation: number;
-  strategy: 'balanced' | 'upside' | 'floor' | 'contrarian';
+  strategy: &apos;balanced&apos; | &apos;upside&apos; | &apos;floor&apos; | &apos;contrarian&apos;;
 }
 
 export interface FlexStrategy {
+}
   primaryOption: EnhancedPlayer;
   alternatives: EnhancedPlayer[];
   reasoning: string;
@@ -204,30 +226,34 @@ export interface FlexStrategy {
 }
 
 export interface StreamingOption {
+}
   position: string;
   currentPlayer: EnhancedPlayer;
   streamOptions: EnhancedPlayer[];
-  recommendation: 'hold' | 'stream';
+  recommendation: &apos;hold&apos; | &apos;stream&apos;;
   reasoning: string;
 }
 
 export interface StartSitDecision {
+}
   player: EnhancedPlayer;
-  decision: 'start' | 'sit' | 'flex';
+  decision: &apos;start&apos; | &apos;sit&apos; | &apos;flex&apos;;
   confidence: number;
   reasoning: string;
   alternatives: EnhancedPlayer[];
 }
 
 export interface SeasonLongStrategy {
-  currentPhase: 'early' | 'mid' | 'late' | 'playoff_push' | 'playoffs';
-  approach: 'win_now' | 'balanced' | 'future_focused';
+}
+  currentPhase: &apos;early&apos; | &apos;mid&apos; | &apos;late&apos; | &apos;playoff_push&apos; | &apos;playoffs&apos;;
+  approach: &apos;win_now&apos; | &apos;balanced&apos; | &apos;future_focused&apos;;
   priorities: StrategyPriority[];
   milestones: SeasonMilestone[];
   adjustments: StrategyAdjustment[];
 }
 
 export interface StrategyPriority {
+}
   priority: string;
   importance: number;
   actions: string[];
@@ -235,6 +261,7 @@ export interface StrategyPriority {
 }
 
 export interface SeasonMilestone {
+}
   week: number;
   goal: string;
   metric: string;
@@ -243,15 +270,17 @@ export interface SeasonMilestone {
 }
 
 export interface StrategyAdjustment {
+}
   trigger: string;
   condition: string;
   action: string;
-  urgency: 'low' | 'medium' | 'high';
+  urgency: &apos;low&apos; | &apos;medium&apos; | &apos;high&apos;;
 }
 
 export interface TradeTarget {
+}
   player: EnhancedPlayer;
-  targetType: 'buy_low' | 'buy_high' | 'sell_high' | 'sell_low';
+  targetType: &apos;buy_low&apos; | &apos;buy_high&apos; | &apos;sell_high&apos; | &apos;sell_low&apos;;
   fairValue: number;
   targetPrice: number;
   packages: TradePackage[];
@@ -260,6 +289,7 @@ export interface TradeTarget {
 }
 
 export interface TradePackage {
+}
   give: EnhancedPlayer[];
   receive: EnhancedPlayer[];
   valueBalance: number;
@@ -268,6 +298,7 @@ export interface TradePackage {
 }
 
 export interface WaiverTarget {
+}
   player: EnhancedPlayer;
   priority: number;
   faabBid: number;
@@ -277,6 +308,7 @@ export interface WaiverTarget {
 }
 
 export interface ProjectedOutcome {
+}
   weeklyProjection: number;
   seasonProjection: number;
   playoffProbability: number;
@@ -286,8 +318,9 @@ export interface ProjectedOutcome {
 }
 
 export interface OptimizationOptions {
-  strategy: 'win_now' | 'balanced' | 'rebuild';
-  scoringSystem: 'standard' | 'ppr' | 'half_ppr' | 'superflex';
+}
+  strategy: &apos;win_now&apos; | &apos;balanced&apos; | &apos;rebuild&apos;;
+  scoringSystem: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;superflex&apos;;
   leagueSize: number;
   currentWeek: number;
   playoffWeeks: number[];
@@ -296,6 +329,7 @@ export interface OptimizationOptions {
 }
 
 export interface RosterRequirements {
+}
   qb: { min: number; max: number };
   rb: { min: number; max: number };
   wr: { min: number; max: number };
@@ -308,7 +342,8 @@ export interface RosterRequirements {
 }
 
 export interface OptimizationConstraints {
-  mustKeep?: string[]; // Player IDs that can't be dropped
+}
+  mustKeep?: string[]; // Player IDs that can&apos;t be dropped
   mustStart?: string[]; // Player IDs that must start
   maxRisk?: number; // Maximum risk tolerance
   minFloor?: number; // Minimum acceptable floor
@@ -319,7 +354,9 @@ export interface OptimizationConstraints {
  * Advanced Team Optimizer Service
  */
 export class AdvancedTeamOptimizer {
+}
   private readonly POSITION_VALUES = {
+}
     QB: { scarcity: 0.3, replaceability: 0.7 },
     RB: { scarcity: 0.8, replaceability: 0.3 },
     WR: { scarcity: 0.5, replaceability: 0.5 },
@@ -329,6 +366,7 @@ export class AdvancedTeamOptimizer {
   };
 
   private readonly STRATEGY_WEIGHTS = {
+}
     win_now: { ceiling: 0.7, floor: 0.3, consistency: 0.4 },
     balanced: { ceiling: 0.5, floor: 0.5, consistency: 0.6 },
     rebuild: { ceiling: 0.4, floor: 0.6, consistency: 0.7 }
@@ -341,6 +379,7 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     options: OptimizationOptions
   ): Promise<OptimizedTeam> {
+}
     // Analyze current roster construction
     const rosterAnalysis = await this.analyzeRosterConstruction(roster, options);
     
@@ -348,44 +387,45 @@ export class AdvancedTeamOptimizer {
     const weeklyLineup = await this.optimizeWeeklyLineup(
       roster,
       options.currentWeek,
-      options
+//       options
     );
     
     // Develop season-long strategy
     const seasonStrategy = this.developSeasonStrategy(
       rosterAnalysis,
-      options
+//       options
     );
     
     // Identify trade targets
     const tradeTargets = await this.identifyTradeTargets(
       roster,
       rosterAnalysis,
-      options
+//       options
     );
     
     // Find waiver wire targets
     const waiverTargets = await this.findWaiverTargets(
       roster,
       rosterAnalysis,
-      options
+//       options
     );
     
     // Project season outcomes
     const projectedOutcome = await this.projectOutcomes(
       roster,
       weeklyLineup,
-      options
+//       options
     );
     
     // Calculate optimization score
     const optimizationScore = this.calculateOptimizationScore(
       rosterAnalysis,
       weeklyLineup,
-      projectedOutcome
+//       projectedOutcome
     );
     
     return {
+}
       roster: rosterAnalysis,
       weeklyLineup,
       seasonStrategy,
@@ -404,6 +444,7 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     options: OptimizationOptions
   ): Promise<RosterConstruction> {
+}
     // Categorize players by role
     const allocations = await this.allocatePlayers(roster, options);
     
@@ -420,25 +461,26 @@ export class AdvancedTeamOptimizer {
     const weaknesses = this.identifyWeaknesses(
       roster,
       strengthsByPosition,
-      options
+//       options
     );
     
     // Generate recommendations
     const recommendations = this.generateRosterRecommendations(
       weaknesses,
       balance,
-      options
+//       options
     );
     
     return {
-      starters: allocations.filter((a: any) => a.role === 'starter'),
-      bench: allocations.filter((a: any) => a.role === 'depth' || a.role === 'handcuff'),
-      injured: allocations.filter((a: any) => a.player.injury.status !== 'healthy'),
+}
+      starters: allocations.filter((a: any) => a.role === &apos;starter&apos;),
+      bench: allocations.filter((a: any) => a.role === &apos;depth&apos; || a.role === &apos;handcuff&apos;),
+      injured: allocations.filter((a: any) => a.player.injury.status !== &apos;healthy&apos;),
       composition,
       balance,
       strengthsByPosition,
       weaknesses,
-      recommendations
+//       recommendations
     };
   }
 
@@ -450,6 +492,7 @@ export class AdvancedTeamOptimizer {
     week: number,
     options: OptimizationOptions
   ): Promise<WeeklyLineupStrategy> {
+}
     // Generate optimal lineup
     const optimal = await this.generateOptimalLineup(roster, week, options);
     
@@ -457,7 +500,7 @@ export class AdvancedTeamOptimizer {
     const alternatives = await this.generateAlternativeLineups(
       roster,
       week,
-      options
+//       options
     );
     
     // Develop flex strategy
@@ -467,29 +510,30 @@ export class AdvancedTeamOptimizer {
     const streamingOptions = await this.identifyStreamingOptions(
       roster,
       week,
-      options
+//       options
     );
     
     // Make start/sit decisions
     const startSitDecisions = await this.makeStartSitDecisions(
       roster,
       optimal,
-      week
+//       week
     );
     
     // Calculate confidence
     const confidenceScore = this.calculateLineupConfidence(
       optimal,
-      alternatives
+//       alternatives
     );
     
     return {
+}
       optimal,
       alternatives,
       flexStrategy,
       streamingOptions,
       startSitDecisions,
-      confidenceScore
+//       confidenceScore
     };
   }
 
@@ -501,12 +545,14 @@ export class AdvancedTeamOptimizer {
     week: number,
     options: OptimizationOptions
   ): Promise<LineupConfiguration> {
+}
     const weights = this.STRATEGY_WEIGHTS[options.strategy];
     const players = new Map<string, EnhancedPlayer>();
     
     // Score each player for the week
     const scoredPlayers = await Promise.all(
       roster.map(async player => {
+}
         const weekProjection = await this.projectPlayerWeek(player, week);
         const score = 
           weekProjection.projection * weights.ceiling +
@@ -526,15 +572,17 @@ export class AdvancedTeamOptimizer {
     
     // Fill each position with best available
     for (const [position, req] of Object.entries(requirements)) {
-      if (position === 'bench' || position === 'ir') continue;
+}
+      if (position === &apos;bench&apos; || position === &apos;ir&apos;) continue;
       
       const eligible = scoredPlayers.filter((sp: any) => 
         !filled.has(sp.player.id) &&
         this.isEligibleForPosition(sp.player, position, req)
       );
       
-      const needed = position === 'flex' ? req.min : req.min;
+      const needed = position === &apos;flex&apos; ? req.min : req.min;
       for (let i = 0; i < needed && i < eligible.length; i++) {
+}
         players.set(`${position}${i + 1}`, eligible[i].player);
         filled.add(eligible[i].player.id);
       }
@@ -543,26 +591,27 @@ export class AdvancedTeamOptimizer {
     // Calculate projections
     const projectedPoints = Array.from(players.values()).reduce(
       (sum, p) => sum + p.projections.weekly,
-      0
+//       0
     );
     
     const floor = Array.from(players.values()).reduce(
       (sum, p) => sum + p.stats.floor,
-      0
+//       0
     );
     
     const ceiling = Array.from(players.values()).reduce(
       (sum, p) => sum + p.stats.ceiling,
-      0
+//       0
     );
     
     return {
+}
       players,
       projectedPoints,
       floor,
       ceiling,
       stackCorrelation: this.calculateStackCorrelation(players),
-      strategy: options.strategy === 'win_now' ? 'upside' : 'balanced'
+      strategy: options.strategy === &apos;win_now&apos; ? &apos;upside&apos; : &apos;balanced&apos;
     };
   }
 
@@ -574,6 +623,7 @@ export class AdvancedTeamOptimizer {
     rosterAnalysis: RosterConstruction,
     options: OptimizationOptions
   ): Promise<TradeTarget[]> {
+}
     const targets: TradeTarget[] = [];
     
     // Identify positions of need
@@ -581,10 +631,12 @@ export class AdvancedTeamOptimizer {
     
     // Find buy-low candidates
     for (const position of needs) {
+}
       const candidates = await this.findBuyLowCandidates(position);
       targets.push(...candidates.map((player: any) => ({
+}
         player,
-        targetType: 'buy_low' as const,
+        targetType: &apos;buy_low&apos; as const,
         fairValue: player.value.tradeValue,
         targetPrice: player.value.tradeValue * 0.8,
         packages: this.generateTradePackages(roster, [player]),
@@ -599,9 +651,11 @@ export class AdvancedTeamOptimizer {
     );
     
     for (const player of sellHighCandidates) {
+}
       targets.push({
+}
         player,
-        targetType: 'sell_high',
+        targetType: &apos;sell_high&apos;,
         fairValue: player.value.tradeValue,
         targetPrice: player.value.tradeValue * 1.2,
         packages: this.generateTradePackages(roster, [], player),
@@ -621,21 +675,23 @@ export class AdvancedTeamOptimizer {
     rosterAnalysis: RosterConstruction,
     options: OptimizationOptions
   ): Promise<WaiverTarget[]> {
+}
     const targets: WaiverTarget[] = [];
     
     // Get available players from waiver wire
     const waiverSettings = {
+}
       leagueSize: options.leagueSize,
       scoringFormat: options.scoringSystem as any,
       benchSize: options.rosterRequirements.bench,
-      waiverType: 'faab' as const,
+      waiverType: &apos;faab&apos; as const,
       playoffWeeks: options.playoffWeeks,
       currentWeek: options.currentWeek,
       season: 2024
     };
     
     const candidates = await waiverWireAnalyzer.getWaiverWireCandidates(
-      waiverSettings
+//       waiverSettings
     );
     
     // Find drop candidates
@@ -643,18 +699,20 @@ export class AdvancedTeamOptimizer {
     
     // Match waiver candidates with drops
     for (const candidate of candidates.slice(0, 5)) {
+}
       const dropCandidate = dropCandidates[0];
       if (!dropCandidate) continue;
       
       const enhancedPlayer = await this.enhancePlayer(candidate.player);
       
       targets.push({
+}
         player: enhancedPlayer,
         priority: candidates.indexOf(candidate) + 1,
         faabBid: this.calculateFAABBid(candidate, options),
         dropCandidate,
         expectedImpact: candidate.projectedRemainingValue,
-        reasoning: candidate.recommendations.reasoning[0] || 'High upside pickup'
+        reasoning: candidate.recommendations.reasoning[0] || &apos;High upside pickup&apos;
       });
     }
     
@@ -669,6 +727,7 @@ export class AdvancedTeamOptimizer {
     weeklyLineup: WeeklyLineupStrategy,
     options: OptimizationOptions
   ): Promise<ProjectedOutcome> {
+}
     const currentWeek = options.currentWeek;
     const remainingWeeks = 17 - currentWeek;
     
@@ -687,7 +746,7 @@ export class AdvancedTeamOptimizer {
     // Calculate championship probability
     const championshipProbability = this.calculateChampionshipProbability(
       roster,
-      playoffProbability
+//       playoffProbability
     );
     
     // Calculate expected finish
@@ -704,12 +763,13 @@ export class AdvancedTeamOptimizer {
     ];
     
     return {
+}
       weeklyProjection,
       seasonProjection,
       playoffProbability,
       championshipProbability,
       expectedFinish,
-      confidenceInterval
+//       confidenceInterval
     };
   }
 
@@ -719,7 +779,9 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     options: OptimizationOptions
   ): Promise<PlayerAllocation[]> {
+}
     return roster.map((player: any) => ({
+}
       player,
       role: this.determinePlayerRole(player, roster),
       value: this.calculatePlayerValue(player),
@@ -732,23 +794,25 @@ export class AdvancedTeamOptimizer {
   private determinePlayerRole(
     player: EnhancedPlayer,
     roster: EnhancedPlayer[]
-  ): PlayerAllocation['role'] {
+  ): PlayerAllocation[&apos;role&apos;] {
+}
     const positionPlayers = roster.filter((p: any) => p.position === player.position);
     const rank = positionPlayers.indexOf(player) + 1;
     
-    if (rank === 1) return 'starter';
-    if (player.position === 'RB' && rank <= 4) return 'flex';
-    if (player.position === 'WR' && rank <= 4) return 'flex';
-    if (this.isHandcuff(player, roster)) return 'handcuff';
-    if (player.injury.status !== 'healthy') return 'stash';
-    return 'depth';
+    if (rank === 1) return &apos;starter&apos;;
+    if (player.position === &apos;RB&apos; && rank <= 4) return &apos;flex&apos;;
+    if (player.position === &apos;WR&apos; && rank <= 4) return &apos;flex&apos;;
+    if (this.isHandcuff(player, roster)) return &apos;handcuff&apos;;
+    if (player.injury.status !== &apos;healthy&apos;) return &apos;stash&apos;;
+    return &apos;depth&apos;;
   }
 
   private isHandcuff(player: EnhancedPlayer, roster: EnhancedPlayer[]): boolean {
-    if (player.position !== 'RB') return false;
+}
+    if (player.position !== &apos;RB&apos;) return false;
     
     const teamRBs = roster.filter((p: any) => 
-      p.position === 'RB' && 
+      p.position === &apos;RB&apos; && 
       p.team === player.team
     );
     
@@ -756,10 +820,12 @@ export class AdvancedTeamOptimizer {
   }
 
   private calculatePlayerValue(player: EnhancedPlayer): PlayerValue {
+}
     const raw = player.projections.remainingSeason;
     const positionValue = this.POSITION_VALUES[player.position];
     
     return {
+}
       raw,
       positionalAdjusted: raw * (1 + positionValue.scarcity),
       scarcityAdjusted: raw * (1 + positionValue.scarcity * 0.5),
@@ -768,7 +834,9 @@ export class AdvancedTeamOptimizer {
   }
 
   private getReplacementLevel(position: string): number {
+}
     const levels = {
+}
       QB: 12,
       RB: 8,
       WR: 7,
@@ -780,15 +848,18 @@ export class AdvancedTeamOptimizer {
   }
 
   private analyzeComposition(roster: EnhancedPlayer[]): RosterComposition {
+}
     const positionCounts = new Map<string, number>();
     
     for (const player of roster) {
+}
       const count = positionCounts.get(player.position) || 0;
       positionCounts.set(player.position, count + 1);
     }
     
     const ages = roster.map((p: any) => this.estimateAge(p));
     const ageDistribution: AgeProfile = {
+}
       average: ages.reduce((a, b) => a + b, 0) / ages.length,
       youngestCore: Math.min(...ages.slice(0, 10)),
       oldestCore: Math.max(...ages.slice(0, 10)),
@@ -796,6 +867,7 @@ export class AdvancedTeamOptimizer {
     };
     
     const riskProfile: RiskProfile = {
+}
       overall: this.calculateOverallRisk(roster),
       injury: this.calculateInjuryRisk(roster),
       consistency: this.calculateConsistencyRisk(roster),
@@ -803,6 +875,7 @@ export class AdvancedTeamOptimizer {
     };
     
     const upsideProfile: UpsideProfile = {
+}
       weeklyUpside: this.calculateWeeklyUpside(roster),
       seasonUpside: this.calculateSeasonUpside(roster),
       breakoutPotential: this.calculateBreakoutPotential(roster),
@@ -810,10 +883,11 @@ export class AdvancedTeamOptimizer {
     };
     
     return {
+}
       positionCounts,
       ageDistribution,
       riskProfile,
-      upsideProfile
+//       upsideProfile
     };
   }
 
@@ -821,15 +895,18 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     allocations: PlayerAllocation[]
   ): RosterBalance {
-    const starters = allocations.filter((a: any) => a.role === 'starter');
+}
+    const starters = allocations.filter((a: any) => a.role === &apos;starter&apos;);
     
     const totalFloor = starters.reduce((sum, a) => sum + a.player.stats.floor, 0);
     const totalCeiling = starters.reduce((sum, a) => sum + a.player.stats.ceiling, 0);
     
     const byeWeekCoverage = new Map<number, string[]>();
     for (const player of roster) {
+}
       const byeWeek = this.getByeWeek(player);
       if (byeWeek) {
+}
         const coverage = byeWeekCoverage.get(byeWeek) || [];
         coverage.push(player.position);
         byeWeekCoverage.set(byeWeek, coverage);
@@ -837,6 +914,7 @@ export class AdvancedTeamOptimizer {
     }
     
     return {
+}
       floorCeilingRatio: totalFloor / totalCeiling,
       consistencyScore: this.calculateTeamConsistency(roster),
       positionalBalance: this.calculatePositionalBalance(allocations),
@@ -848,10 +926,12 @@ export class AdvancedTeamOptimizer {
   private async assessPositionalStrengths(
     roster: EnhancedPlayer[]
   ): Promise<Map<string, number>> {
+}
     const strengths = new Map<string, number>();
-    const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF'];
+    const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DEF&apos;];
     
     for (const position of positions) {
+}
       const players = roster.filter((p: any) => p.position === position);
       const strength = await this.calculatePositionStrength(players);
       strengths.set(position, strength);
@@ -861,12 +941,13 @@ export class AdvancedTeamOptimizer {
   }
 
   private async calculatePositionStrength(players: EnhancedPlayer[]): Promise<number> {
+}
     if (players.length === 0) return 0;
     
     const topPlayers = players.slice(0, 2);
     const avgProjection = topPlayers.reduce(
       (sum, p) => sum + p.projections.weekly,
-      0
+//       0
     ) / topPlayers.length;
     
     const leagueAverage = this.getLeagueAverage(players[0].position);
@@ -874,7 +955,9 @@ export class AdvancedTeamOptimizer {
   }
 
   private getLeagueAverage(position: string): number {
+}
     const averages = {
+}
       QB: 18,
       RB: 12,
       WR: 10,
@@ -890,10 +973,13 @@ export class AdvancedTeamOptimizer {
     strengthsByPosition: Map<string, number>,
     options: OptimizationOptions
   ): string[] {
+}
     const weaknesses: string[] = [];
     
     for (const [position, strength] of strengthsByPosition.entries()) {
+}
       if (strength < 0.9) {
+}
         weaknesses.push(position);
       }
     }
@@ -901,15 +987,18 @@ export class AdvancedTeamOptimizer {
     // Check depth
     const positionCounts = new Map<string, number>();
     for (const player of roster) {
+}
       const count = positionCounts.get(player.position) || 0;
       positionCounts.set(player.position, count + 1);
     }
     
     const requirements = options.rosterRequirements;
     for (const [position, req] of Object.entries(requirements)) {
-      if (position === 'bench' || position === 'ir') continue;
+}
+      if (position === &apos;bench&apos; || position === &apos;ir&apos;) continue;
       const count = positionCounts.get(position.toUpperCase()) || 0;
       if (count < req.min + 1) {
+}
         weaknesses.push(`${position}_depth`);
       }
     }
@@ -922,22 +1011,28 @@ export class AdvancedTeamOptimizer {
     balance: RosterBalance,
     options: OptimizationOptions
   ): string[] {
+}
     const recommendations: string[] = [];
     
     for (const weakness of weaknesses) {
-      if (weakness.includes('depth')) {
-        recommendations.push(`Add depth at ${weakness.replace('_depth', '')}`);
+}
+      if (weakness.includes(&apos;depth&apos;)) {
+}
+        recommendations.push(`Add depth at ${weakness.replace(&apos;_depth&apos;, &apos;&apos;)}`);
       } else {
+}
         recommendations.push(`Upgrade starting ${weakness} position`);
       }
     }
     
     if (balance.floorCeilingRatio < 0.5) {
-      recommendations.push('Add more consistent, high-floor players');
+}
+      recommendations.push(&apos;Add more consistent, high-floor players&apos;);
     }
     
     if (balance.handcuffCoverage < 0.5) {
-      recommendations.push('Consider adding handcuffs for key RBs');
+}
+      recommendations.push(&apos;Consider adding handcuffs for key RBs&apos;);
     }
     
     return recommendations;
@@ -947,39 +1042,43 @@ export class AdvancedTeamOptimizer {
     rosterAnalysis: RosterConstruction,
     options: OptimizationOptions
   ): SeasonLongStrategy {
+}
     const currentWeek = options.currentWeek;
     const playoffStart = Math.min(...options.playoffWeeks);
     
-    let currentPhase: SeasonLongStrategy['currentPhase'];
-    if (currentWeek <= 4) currentPhase = 'early';
-    else if (currentWeek <= 8) currentPhase = 'mid';
-    else if (currentWeek <= 12) currentPhase = 'late';
-    else if (currentWeek < playoffStart) currentPhase = 'playoff_push';
-    else currentPhase = 'playoffs';
+    let currentPhase: SeasonLongStrategy[&apos;currentPhase&apos;];
+    if (currentWeek <= 4) currentPhase = &apos;early&apos;;
+    else if (currentWeek <= 8) currentPhase = &apos;mid&apos;;
+    else if (currentWeek <= 12) currentPhase = &apos;late&apos;;
+    else if (currentWeek < playoffStart) currentPhase = &apos;playoff_push&apos;;
+    else currentPhase = &apos;playoffs&apos;;
     
-    const approach = options.strategy === 'win_now' ? 'win_now' :
-                    options.strategy === 'rebuild' ? 'future_focused' : 'balanced';
+    const approach = options.strategy === &apos;win_now&apos; ? &apos;win_now&apos; :
+                    options.strategy === &apos;rebuild&apos; ? &apos;future_focused&apos; : &apos;balanced&apos;;
     
     const priorities: StrategyPriority[] = [
       {
-        priority: 'Optimize weekly lineups',
+}
+        priority: &apos;Optimize weekly lineups&apos;,
         importance: 0.9,
-        actions: ['Review matchups', 'Set optimal lineup', 'Monitor injuries'],
-        timeline: 'weekly'
+        actions: [&apos;Review matchups&apos;, &apos;Set optimal lineup&apos;, &apos;Monitor injuries&apos;],
+        timeline: &apos;weekly&apos;
       },
       {
-        priority: 'Improve roster weaknesses',
+}
+        priority: &apos;Improve roster weaknesses&apos;,
         importance: 0.8,
         actions: rosterAnalysis.recommendations,
-        timeline: 'ongoing'
+        timeline: &apos;ongoing&apos;
       }
     ];
     
     const milestones: SeasonMilestone[] = [
       {
+}
         week: playoffStart,
-        goal: 'Make playoffs',
-        metric: 'wins',
+        goal: &apos;Make playoffs&apos;,
+        metric: &apos;wins&apos;,
         target: 7,
         current: 0
       }
@@ -987,19 +1086,21 @@ export class AdvancedTeamOptimizer {
     
     const adjustments: StrategyAdjustment[] = [
       {
-        trigger: 'Losing streak',
-        condition: '3+ losses in a row',
-        action: 'Aggressive waiver claims and trades',
-        urgency: 'high'
+}
+        trigger: &apos;Losing streak&apos;,
+        condition: &apos;3+ losses in a row&apos;,
+        action: &apos;Aggressive waiver claims and trades&apos;,
+        urgency: &apos;high&apos;
       }
     ];
     
     return {
+}
       currentPhase,
       approach,
       priorities,
       milestones,
-      adjustments
+//       adjustments
     };
   }
 
@@ -1008,6 +1109,7 @@ export class AdvancedTeamOptimizer {
     weeklyLineup: WeeklyLineupStrategy,
     projectedOutcome: ProjectedOutcome
   ): number {
+}
     const rosterScore = 1 - (rosterAnalysis.weaknesses.length * 0.1);
     const lineupScore = weeklyLineup.confidenceScore;
     const outcomeScore = projectedOutcome.playoffProbability;
@@ -1019,6 +1121,7 @@ export class AdvancedTeamOptimizer {
     rosterAnalysis: RosterConstruction,
     projectedOutcome: ProjectedOutcome
   ): number {
+}
     const strengthScore = Array.from(rosterAnalysis.strengthsByPosition.values())
       .reduce((sum, s) => sum + s, 0) / rosterAnalysis.strengthsByPosition.size;
     
@@ -1031,13 +1134,16 @@ export class AdvancedTeamOptimizer {
   // Additional helper methods for completeness
 
   private async enhancePlayer(basePlayer: any): Promise<EnhancedPlayer> {
+}
     // Enhanced player creation with all metrics
     return {
+}
       id: basePlayer.id,
       name: basePlayer.name,
       position: basePlayer.position,
       team: basePlayer.team,
       stats: {
+}
         seasonTotal: basePlayer.fantasyPoints || 0,
         average: basePlayer.fantasyPointsPerGame || 0,
         lastFive: [],
@@ -1048,6 +1154,7 @@ export class AdvancedTeamOptimizer {
         bustRate: 0
       },
       projections: {
+}
         weekly: 0,
         remainingSeason: 0,
         playoffs: 0,
@@ -1056,6 +1163,7 @@ export class AdvancedTeamOptimizer {
         factors: []
       },
       consistency: {
+}
         score: 0,
         volatility: 0,
         weekToWeekVariance: 0,
@@ -1063,14 +1171,16 @@ export class AdvancedTeamOptimizer {
         ceilingFrequency: 0
       },
       matchupData: {
+}
         currentWeek: {
+}
           week: 1,
-          opponent: '',
+          opponent: &apos;&apos;,
           difficulty: 0,
           projectedPoints: 0,
-          gameScript: 'neutral',
+          gameScript: &apos;neutral&apos;,
           weatherImpact: 0,
-          venue: 'home'
+          venue: &apos;home&apos;
         },
         upcomingSchedule: [],
         playoffSchedule: [],
@@ -1079,13 +1189,15 @@ export class AdvancedTeamOptimizer {
         difficultWeeks: []
       },
       injury: {
-        status: 'healthy',
+}
+        status: &apos;healthy&apos;,
         risk: 0,
         expectedReturn: 0,
         history: [],
         impactOnPerformance: 0
       },
       value: {
+}
         tradeValue: 0,
         waiverValue: 0,
         keeperValue: 0,
@@ -1101,20 +1213,24 @@ export class AdvancedTeamOptimizer {
     position: string,
     requirements: any
   ): boolean {
-    if (position === 'flex') {
+}
+    if (position === &apos;flex&apos;) {
+}
       return requirements.eligible.includes(scoredPlayer.player.position);
     }
     return scoredPlayer.player.position === position.toUpperCase();
   }
 
   private calculateStackCorrelation(players: Map<string, EnhancedPlayer>): number {
+}
     // Check for QB-WR/TE stacks
     let correlation = 0;
-    const qb = Array.from(players.values()).find((p: any) => p.position === 'QB');
+    const qb = Array.from(players.values()).find((p: any) => p.position === &apos;QB&apos;);
     
     if (qb) {
+}
       const teammates = Array.from(players.values()).filter((p: any) => 
-        p.team === qb.team && ['WR', 'TE'].includes(p.position)
+        p.team === qb.team && [&apos;WR&apos;, &apos;TE&apos;].includes(p.position)
       );
       correlation = teammates.length * 0.1;
     }
@@ -1123,7 +1239,9 @@ export class AdvancedTeamOptimizer {
   }
 
   private async projectPlayerWeek(player: EnhancedPlayer, week: number): Promise<any> {
+}
     return {
+}
       projection: player.projections.weekly,
       floor: player.stats.floor,
       ceiling: player.stats.ceiling
@@ -1135,16 +1253,18 @@ export class AdvancedTeamOptimizer {
     week: number,
     options: OptimizationOptions
   ): FlexStrategy {
+}
     const flexEligible = roster.filter((p: any) => 
-      ['RB', 'WR', 'TE'].includes(p.position)
+      [&apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;].includes(p.position)
     );
     
     flexEligible.sort((a, b) => b.projections.weekly - a.projections.weekly);
     
     return {
+}
       primaryOption: flexEligible[0],
       alternatives: flexEligible.slice(1, 4),
-      reasoning: 'Highest projected points with good floor',
+      reasoning: &apos;Highest projected points with good floor&apos;,
       matchupDependency: false
     };
   }
@@ -1154,18 +1274,22 @@ export class AdvancedTeamOptimizer {
     week: number,
     options: OptimizationOptions
   ): Promise<StreamingOption[]> {
-    const streamPositions = ['K', 'DEF'];
+}
+    const streamPositions = [&apos;K&apos;, &apos;DEF&apos;];
     const options_list: StreamingOption[] = [];
     
     for (const position of streamPositions) {
+}
       const current = roster.find((p: any) => p.position === position);
       if (current) {
+}
         options_list.push({
+}
           position,
           currentPlayer: current,
           streamOptions: [],
-          recommendation: 'hold',
-          reasoning: 'Current option is optimal'
+          recommendation: &apos;hold&apos;,
+          reasoning: &apos;Current option is optimal&apos;
         });
       }
     }
@@ -1178,16 +1302,19 @@ export class AdvancedTeamOptimizer {
     optimal: LineupConfiguration,
     week: number
   ): Promise<StartSitDecision[]> {
+}
     const decisions: StartSitDecision[] = [];
     const starters = Array.from(optimal.players.values());
     
     for (const player of roster) {
+}
       const isStarting = starters.includes(player);
       decisions.push({
+}
         player,
-        decision: isStarting ? 'start' : 'sit',
+        decision: isStarting ? &apos;start&apos; : &apos;sit&apos;,
         confidence: isStarting ? 0.8 : 0.7,
-        reasoning: isStarting ? 'Optimal projection' : 'Better options available',
+        reasoning: isStarting ? &apos;Optimal projection&apos; : &apos;Better options available&apos;,
         alternatives: []
       });
     }
@@ -1199,6 +1326,7 @@ export class AdvancedTeamOptimizer {
     optimal: LineupConfiguration,
     alternatives: LineupConfiguration[]
   ): number {
+}
     if (alternatives.length === 0) return 0.9;
     
     const bestAlt = alternatives[0];
@@ -1213,11 +1341,13 @@ export class AdvancedTeamOptimizer {
     week: number,
     options: OptimizationOptions
   ): Promise<LineupConfiguration[]> {
+}
     // Generate floor and ceiling lineups
     return Promise.resolve([]);
   }
 
   private async findBuyLowCandidates(position: string): Promise<EnhancedPlayer[]> {
+}
     // Find undervalued players at position
     return [];
   }
@@ -1227,6 +1357,7 @@ export class AdvancedTeamOptimizer {
     targets: EnhancedPlayer[] = [],
     givePlayer?: EnhancedPlayer
   ): TradePackage[] {
+}
     // Generate fair trade packages
     return [];
   }
@@ -1235,6 +1366,7 @@ export class AdvancedTeamOptimizer {
     position: string,
     rosterAnalysis: RosterConstruction
   ): number {
+}
     const strength = rosterAnalysis.strengthsByPosition.get(position) || 1;
     return Math.max(0, 1 - strength);
   }
@@ -1243,6 +1375,7 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     rosterAnalysis: RosterConstruction
   ): EnhancedPlayer[] {
+}
     // Find worst performers with low upside
     return roster
       .filter((p: any) => p.value.overReplacement < 0)
@@ -1250,8 +1383,9 @@ export class AdvancedTeamOptimizer {
   }
 
   private calculateFAABBid(candidate: any, options: OptimizationOptions): number {
+}
     const baseValue = candidate.projectedRemainingValue;
-    const urgency = candidate.pickupPriority === 'immediate' ? 1.5 : 1;
+    const urgency = candidate.pickupPriority === &apos;immediate&apos; ? 1.5 : 1;
     return Math.round(baseValue * urgency);
   }
 
@@ -1259,6 +1393,7 @@ export class AdvancedTeamOptimizer {
     projectedPoints: number,
     leagueSize: number
   ): number {
+}
     const playoffSpots = Math.ceil(leagueSize / 2);
     const pointsPerTeam = projectedPoints / leagueSize;
     return Math.min(0.95, Math.max(0.05, playoffSpots / leagueSize + (pointsPerTeam / 1000)));
@@ -1268,6 +1403,7 @@ export class AdvancedTeamOptimizer {
     roster: EnhancedPlayer[],
     playoffProb: number
   ): number {
+}
     const rosterStrength = roster.reduce((sum, p) => sum + p.value.raw, 0) / roster.length;
     return playoffProb * Math.min(0.3, rosterStrength / 100);
   }
@@ -1276,70 +1412,86 @@ export class AdvancedTeamOptimizer {
     projectedPoints: number,
     leagueSize: number
   ): number {
+}
     const avgPoints = 1500;
     const percentile = projectedPoints / avgPoints;
     return Math.max(1, Math.min(leagueSize, Math.round(leagueSize * (1 - percentile))));
   }
 
   private estimateAge(player: EnhancedPlayer): number {
+}
     // Estimate based on experience
     return 25;
   }
 
   private calculateOverallRisk(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + (1 - p.consistency.score / 100), 0) / roster.length;
   }
 
   private calculateInjuryRisk(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + p.injury.risk, 0) / roster.length;
   }
 
   private calculateConsistencyRisk(roster: EnhancedPlayer[]): number {
+}
     return 1 - (roster.reduce((sum, p) => sum + p.consistency.score, 0) / (roster.length * 100));
   }
 
   private calculateMatchupRisk(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + (p.matchupData.strengthOfSchedule / 10), 0) / roster.length;
   }
 
   private calculateWeeklyUpside(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + p.stats.ceiling, 0);
   }
 
   private calculateSeasonUpside(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + p.projections.remainingSeason, 0);
   }
 
   private calculateBreakoutPotential(roster: EnhancedPlayer[]): number {
+}
     return roster.filter((p: any) => p.stats.boomRate > 0.3).length / roster.length;
   }
 
   private calculateChampionshipUpside(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + p.projections.playoffs, 0);
   }
 
   private getByeWeek(player: EnhancedPlayer): number | null {
-    // Get bye week for player's team
+}
+    // Get bye week for player&apos;s team
     return null;
   }
 
   private calculateTeamConsistency(roster: EnhancedPlayer[]): number {
+}
     return roster.reduce((sum, p) => sum + p.consistency.score, 0) / roster.length;
   }
 
   private calculatePositionalBalance(allocations: PlayerAllocation[]): number {
-    const positions = ['QB', 'RB', 'WR', 'TE'];
+}
+    const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
     const counts = new Map<string, number>();
     
     for (const alloc of allocations) {
-      if (alloc.role === 'starter') {
+}
+      if (alloc.role === &apos;starter&apos;) {
+}
         const count = counts.get(alloc.player.position) || 0;
         counts.set(alloc.player.position, count + 1);
       }
     }
     
     const variance = Array.from(counts.values()).reduce((sum, c) => {
-      const avg = allocations.filter((a: any) => a.role === 'starter').length / positions.length;
+}
+      const avg = allocations.filter((a: any) => a.role === &apos;starter&apos;).length / positions.length;
       return sum + Math.pow(c - avg, 2);
     }, 0) / positions.length;
     
@@ -1347,9 +1499,10 @@ export class AdvancedTeamOptimizer {
   }
 
   private calculateHandcuffCoverage(allocations: PlayerAllocation[]): number {
-    const handcuffs = allocations.filter((a: any) => a.role === 'handcuff').length;
+}
+    const handcuffs = allocations.filter((a: any) => a.role === &apos;handcuff&apos;).length;
     const starterRBs = allocations.filter((a: any) => 
-      a.role === 'starter' && a.player.position === 'RB'
+      a.role === &apos;starter&apos; && a.player.position === &apos;RB&apos;
     ).length;
     
     return starterRBs > 0 ? handcuffs / starterRBs : 0;

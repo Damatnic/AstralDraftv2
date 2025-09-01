@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import SecureInputDemo from './SecureInputDemo';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import SecureInputDemo from &apos;./SecureInputDemo&apos;;
 
-describe('SecureInputDemo', () => {
-  it('renders without crashing', () => {
+describe(&apos;SecureInputDemo&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<SecureInputDemo />);
-    expect(screen.getByTestId('secureinputdemo')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;secureinputdemo&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<SecureInputDemo />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<SecureInputDemo />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

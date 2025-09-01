@@ -1,29 +1,34 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ReactionPicker from './ReactionPicker';
+import { render, screen } from &apos;@testing-library/react&apos;;
+import &apos;@testing-library/jest-dom&apos;;
+import ReactionPicker from &apos;./ReactionPicker&apos;;
 
-describe('ReactionPicker', () => {
-  it('renders without crashing', () => {
+describe(&apos;ReactionPicker&apos;, () => {
+}
+  it(&apos;renders without crashing&apos;, () => {
+}
     render(<ReactionPicker />);
-    expect(screen.getByTestId('reactionpicker')).toBeInTheDocument();
+    expect(screen.getByTestId(&apos;reactionpicker&apos;)).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  it(&apos;has proper accessibility attributes&apos;, () => {
+}
     render(<ReactionPicker />);
     // Add specific accessibility tests here
   });
 
-  it('handles loading states correctly', () => {
+  it(&apos;handles loading states correctly&apos;, () => {
+}
     render(<ReactionPicker />);
     // Add loading state tests here
   });
 
-  it('works on mobile devices', () => {
+  it(&apos;works on mobile devices&apos;, () => {
+}
     // Add mobile-specific tests here
   });
 
-  it('handles error states gracefully', () => {
+  it(&apos;handles error states gracefully&apos;, () => {
+}
     // Add error handling tests here
   });
 });

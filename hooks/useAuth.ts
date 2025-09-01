@@ -3,27 +3,30 @@
  * Manages user authentication state with robust error handling
  */
 
-import React from 'react';
-import { useAppState } from './useAppState';
+import React from &apos;react&apos;;
+import { useAppState } from &apos;./useAppState&apos;;
 
 interface AuthUser {
+}
   id: string;
   email: string;
   name: string;
   avatar?: string;
-  role?: 'user' | 'commissioner' | 'admin';
+  role?: &apos;user&apos; | &apos;commissioner&apos; | &apos;admin&apos;;
   leagueIds?: string[];
   createdAt?: string;
   lastLogin?: string;
 }
 
 interface AuthError {
+}
   code: string;
   message: string;
   details?: any;
 }
 
 interface UseAuthReturn {
+}
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -39,11 +42,13 @@ interface UseAuthReturn {
 
 // Simulated JWT token functions
 const generateToken = (user: AuthUser): string => {
+}
   const payload = {
+}
     sub: user.id,
     email: user.email,
     name: user.name,
-    role: user.role || 'user',
+    role: user.role || &apos;user&apos;,
     iat: Date.now(),
     exp: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
   };
@@ -51,14 +56,18 @@ const generateToken = (user: AuthUser): string => {
 };
 
 const decodeToken = (token: string): any => {
+}
   try {
+}
     return JSON.parse(atob(token));
   } catch {
+}
     return null;
   }
 };
 
 const isTokenValid = (token: string): boolean => {
+}
   const decoded = decodeToken(token);
   if (!decoded) return false;
   return decoded.exp > Date.now();
@@ -67,74 +76,87 @@ const isTokenValid = (token: string): boolean => {
 // Default test users with enhanced profiles
 const DEFAULT_TEST_USERS = [
   {
-    id: '1',
-    email: 'commissioner@astraldraft.com',
-    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
-    name: 'Commissioner Mike',
-    avatar: '👨‍💼',
-    role: 'commissioner' as const,
-    leagueIds: ['league-1'],
-    createdAt: '2024-01-01T00:00:00Z'
+}
+    id: &apos;1&apos;,
+    email: &apos;commissioner@astraldraft.com&apos;,
+    password: process.env.VITE_TEST_USER_PASSWORD || &apos;test-password-placeholder&apos;,
+    name: &apos;Commissioner Mike&apos;,
+    avatar: &apos;👨‍💼&apos;,
+    role: &apos;commissioner&apos; as const,
+    leagueIds: [&apos;league-1&apos;],
+    createdAt: &apos;2024-01-01T00:00:00Z&apos;
   },
   {
-    id: '2',
-    email: 'player@astraldraft.com',
-    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
-    name: 'John Football',
-    avatar: '🏈',
-    role: 'user' as const,
-    leagueIds: ['league-1'],
-    createdAt: '2024-02-01T00:00:00Z'
+}
+    id: &apos;2&apos;,
+    email: &apos;player@astraldraft.com&apos;,
+    password: process.env.VITE_TEST_USER_PASSWORD || &apos;test-password-placeholder&apos;,
+    name: &apos;John Football&apos;,
+    avatar: &apos;🏈&apos;,
+    role: &apos;user&apos; as const,
+    leagueIds: [&apos;league-1&apos;],
+    createdAt: &apos;2024-02-01T00:00:00Z&apos;
   },
   {
-    id: '3',
-    email: 'demo@astraldraft.com',
-    password: process.env.VITE_TEST_USER_PASSWORD || 'test-password-placeholder',
-    name: 'Demo User',
-    avatar: '🎮',
-    role: 'user' as const,
-    leagueIds: ['league-1'],
-    createdAt: '2024-03-01T00:00:00Z'
+}
+    id: &apos;3&apos;,
+    email: &apos;demo@astraldraft.com&apos;,
+    password: process.env.VITE_TEST_USER_PASSWORD || &apos;test-password-placeholder&apos;,
+    name: &apos;Demo User&apos;,
+    avatar: &apos;🎮&apos;,
+    role: &apos;user&apos; as const,
+    leagueIds: [&apos;league-1&apos;],
+    createdAt: &apos;2024-03-01T00:00:00Z&apos;
   }
 ];
 
 export const useAuth = (): UseAuthReturn => {
+}
   const { state, dispatch } = useAppState();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<AuthError | null>(null);
   
   // Initialize test users on first load
   React.useEffect(() => {
-    const existingUsers = localStorage.getItem('testUsers');
+}
+    const existingUsers = localStorage.getItem(&apos;testUsers&apos;);
     if (!existingUsers) {
-      localStorage.setItem('testUsers', JSON.stringify(DEFAULT_TEST_USERS));
+}
+      localStorage.setItem(&apos;testUsers&apos;, JSON.stringify(DEFAULT_TEST_USERS));
     }
   }, []);
   
   // Check for existing session on mount with token validation
   React.useEffect(() => {
+}
     const checkSession = async () => {
+}
       setIsLoading(true);
       try {
-        const storedUser = localStorage.getItem('currentUser');
-        const authToken = localStorage.getItem('authToken');
+}
+        const storedUser = localStorage.getItem(&apos;currentUser&apos;);
+        const authToken = localStorage.getItem(&apos;authToken&apos;);
         
         if (storedUser && authToken && isTokenValid(authToken)) {
+}
           const user = JSON.parse(storedUser);
           // Update last login
           user.lastLogin = new Date().toISOString();
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          dispatch({ type: 'SET_USER', payload: user });
+          localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(user));
+          dispatch({ type: &apos;SET_USER&apos;, payload: user });
         } else {
+}
           // Clear invalid session
-          localStorage.removeItem('currentUser');
-          localStorage.removeItem('authToken');
+          localStorage.removeItem(&apos;currentUser&apos;);
+          localStorage.removeItem(&apos;authToken&apos;);
         }
       } catch (err) {
-        console.error('Session check failed:', err);
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('authToken');
+}
+        console.error(&apos;Session check failed:&apos;, err);
+        localStorage.removeItem(&apos;currentUser&apos;);
+        localStorage.removeItem(&apos;authToken&apos;);
       } finally {
+}
         setIsLoading(false);
       }
     };
@@ -143,45 +165,52 @@ export const useAuth = (): UseAuthReturn => {
   }, [dispatch]);
   
   const login = async (email: string, password: string) => {
+}
     setIsLoading(true);
     setError(null);
     
     try {
+}
       // Validate input
       if (!email || !password) {
-        throw new Error('Email and password are required');
+}
+        throw new Error(&apos;Email and password are required&apos;);
       }
       
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        throw new Error('Invalid email format');
+}
+        throw new Error(&apos;Invalid email format&apos;);
       }
       
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 500));
       
       // Get test users
-      const testUsers = JSON.parse(localStorage.getItem('testUsers') || '[]');
+      const testUsers = JSON.parse(localStorage.getItem(&apos;testUsers&apos;) || &apos;[]&apos;);
       const userRecord = testUsers.find((u: any) => 
         u.email.toLowerCase() === email.toLowerCase()
       );
       
       if (!userRecord) {
-        throw new Error('User not found');
+}
+        throw new Error(&apos;User not found&apos;);
       }
       
       if (userRecord.password !== password) {
-        throw new Error('Invalid password');
+}
+        throw new Error(&apos;Invalid password&apos;);
       }
       
       // Create user object without password
       const user: AuthUser = {
+}
         id: userRecord.id,
         email: userRecord.email,
         name: userRecord.name,
         avatar: userRecord.avatar,
-        role: userRecord.role || 'user',
+        role: userRecord.role || &apos;user&apos;,
         leagueIds: userRecord.leagueIds || [],
         createdAt: userRecord.createdAt,
         lastLogin: new Date().toISOString()
@@ -189,88 +218,101 @@ export const useAuth = (): UseAuthReturn => {
       
       // Generate and store token
       const token = generateToken(user);
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      localStorage.setItem('authToken', token);
+      localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(user));
+      localStorage.setItem(&apos;authToken&apos;, token);
       
       // Update app state
-      dispatch({ type: 'SET_USER', payload: user });
+      dispatch({ type: &apos;SET_USER&apos;, payload: user });
       
       // Track login event
-      console.log('User logged in successfully:', user.email);
+      console.log(&apos;User logged in successfully:&apos;, user.email);
       
     } catch (err: any) {
+}
       const authError: AuthError = {
-        code: 'AUTH_LOGIN_FAILED',
-        message: err.message || 'Login failed',
+}
+        code: &apos;AUTH_LOGIN_FAILED&apos;,
+        message: err.message || &apos;Login failed&apos;,
         details: { email }
       };
       setError(authError);
       throw authError;
     } finally {
+}
       setIsLoading(false);
     }
   };
 
   const logout = () => {
+}
     try {
+}
       // Clear all auth data
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('authToken');
+      localStorage.removeItem(&apos;currentUser&apos;);
+      localStorage.removeItem(&apos;authToken&apos;);
       sessionStorage.clear();
       
       // Reset app state
-      dispatch({ type: 'LOGOUT' });
+      dispatch({ type: &apos;LOGOUT&apos; });
       
       // Clear error
       setError(null);
       
-      console.log('User logged out successfully');
+      console.log(&apos;User logged out successfully&apos;);
     } catch (err) {
-      console.error('Logout error:', err);
+}
+      console.error(&apos;Logout error:&apos;, err);
     }
   };
 
   const signup = async (email: string, password: string, name: string) => {
+}
     setIsLoading(true);
     setError(null);
     
     try {
+}
       // Validate input
       if (!email || !password || !name) {
-        throw new Error('All fields are required');
+}
+        throw new Error(&apos;All fields are required&apos;);
       }
       
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
-        throw new Error('Invalid email format');
+}
+        throw new Error(&apos;Invalid email format&apos;);
       }
       
       // Validate password strength
       if (password.length < 6) {
-        throw new Error('Password must be at least 6 characters');
+}
+        throw new Error(&apos;Password must be at least 6 characters&apos;);
       }
       
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 500));
       
       // Check if user already exists
-      const testUsers = JSON.parse(localStorage.getItem('testUsers') || '[]');
+      const testUsers = JSON.parse(localStorage.getItem(&apos;testUsers&apos;) || &apos;[]&apos;);
       const existingUser = testUsers.find((u: any) => 
         u.email.toLowerCase() === email.toLowerCase()
       );
       
       if (existingUser) {
-        throw new Error('User with this email already exists');
+}
+        throw new Error(&apos;User with this email already exists&apos;);
       }
       
       // Create new user
       const newUser: AuthUser = {
+}
         id: `user-${Date.now()}`,
         email,
         name,
-        avatar: '🏈',
-        role: 'user',
+        avatar: &apos;🏈&apos;,
+        role: &apos;user&apos;,
         leagueIds: [],
         createdAt: new Date().toISOString(),
         lastLogin: new Date().toISOString()
@@ -278,125 +320,149 @@ export const useAuth = (): UseAuthReturn => {
 
       // Save to storage
       testUsers.push({ ...newUser, password });
-      localStorage.setItem('testUsers', JSON.stringify(testUsers));
+      localStorage.setItem(&apos;testUsers&apos;, JSON.stringify(testUsers));
 
       // Auto-login the new user
       const token = generateToken(newUser);
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      localStorage.setItem('authToken', token);
+      localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(newUser));
+      localStorage.setItem(&apos;authToken&apos;, token);
       
       // Update app state
-      dispatch({ type: 'SET_USER', payload: newUser });
+      dispatch({ type: &apos;SET_USER&apos;, payload: newUser });
       
-      console.log('User signed up successfully:', newUser.email);
+      console.log(&apos;User signed up successfully:&apos;, newUser.email);
       
     } catch (err: any) {
+}
       const authError: AuthError = {
-        code: 'AUTH_SIGNUP_FAILED',
-        message: err.message || 'Signup failed',
+}
+        code: &apos;AUTH_SIGNUP_FAILED&apos;,
+        message: err.message || &apos;Signup failed&apos;,
         details: { email }
       };
       setError(authError);
       throw authError;
     } finally {
+}
       setIsLoading(false);
     }
   };
   
   const refreshToken = async () => {
+}
     setIsLoading(true);
     try {
-      const currentToken = localStorage.getItem('authToken');
-      const currentUser = localStorage.getItem('currentUser');
+}
+      const currentToken = localStorage.getItem(&apos;authToken&apos;);
+      const currentUser = localStorage.getItem(&apos;currentUser&apos;);
       
       if (!currentToken || !currentUser) {
-        throw new Error('No active session');
+}
+        throw new Error(&apos;No active session&apos;);
       }
       
       const user = JSON.parse(currentUser);
       
       // Generate new token
       const newToken = generateToken(user);
-      localStorage.setItem('authToken', newToken);
+      localStorage.setItem(&apos;authToken&apos;, newToken);
       
-      console.log('Token refreshed successfully');
+      console.log(&apos;Token refreshed successfully&apos;);
     } catch (err: any) {
+}
       setError({
-        code: 'AUTH_REFRESH_FAILED',
-        message: err.message || 'Token refresh failed'
+}
+        code: &apos;AUTH_REFRESH_FAILED&apos;,
+        message: err.message || &apos;Token refresh failed&apos;
       });
       throw err;
     } finally {
+}
       setIsLoading(false);
     }
   };
   
   const updateProfile = async (updates: Partial<AuthUser>) => {
+}
     setIsLoading(true);
     try {
-      const currentUser = localStorage.getItem('currentUser');
+}
+      const currentUser = localStorage.getItem(&apos;currentUser&apos;);
       if (!currentUser) {
-        throw new Error('No authenticated user');
+}
+        throw new Error(&apos;No authenticated user&apos;);
       }
       
       const user = JSON.parse(currentUser);
       const updatedUser = { ...user, ...updates };
       
       // Save updated user
-      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      localStorage.setItem(&apos;currentUser&apos;, JSON.stringify(updatedUser));
       
       // Update in test users if needed
-      const testUsers = JSON.parse(localStorage.getItem('testUsers') || '[]');
+      const testUsers = JSON.parse(localStorage.getItem(&apos;testUsers&apos;) || &apos;[]&apos;);
       const userIndex = testUsers.findIndex((u: any) => u.id === user.id);
       if (userIndex !== -1) {
+}
         testUsers[userIndex] = { ...testUsers[userIndex], ...updates };
-        localStorage.setItem('testUsers', JSON.stringify(testUsers));
+        localStorage.setItem(&apos;testUsers&apos;, JSON.stringify(testUsers));
       }
       
       // Update app state
-      dispatch({ type: 'SET_USER', payload: updatedUser });
+      dispatch({ type: &apos;SET_USER&apos;, payload: updatedUser });
       
-      console.log('Profile updated successfully');
+      console.log(&apos;Profile updated successfully&apos;);
     } catch (err: any) {
+}
       setError({
-        code: 'AUTH_UPDATE_FAILED',
-        message: err.message || 'Profile update failed'
+}
+        code: &apos;AUTH_UPDATE_FAILED&apos;,
+        message: err.message || &apos;Profile update failed&apos;
       });
       throw err;
     } finally {
+}
       setIsLoading(false);
     }
   };
   
   const resetPassword = async (email: string) => {
+}
     setIsLoading(true);
     try {
+}
       // Validate email
       if (!email) {
-        throw new Error('Email is required');
+}
+        throw new Error(&apos;Email is required&apos;);
       }
       
       // Simulate sending reset email
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('Password reset email sent to:', email);
+      console.log(&apos;Password reset email sent to:&apos;, email);
     } catch (err: any) {
+}
       setError({
-        code: 'AUTH_RESET_FAILED',
-        message: err.message || 'Password reset failed'
+}
+        code: &apos;AUTH_RESET_FAILED&apos;,
+        message: err.message || &apos;Password reset failed&apos;
       });
       throw err;
     } finally {
+}
       setIsLoading(false);
     }
   };
   
   const verifyToken = (): boolean => {
-    const token = localStorage.getItem('authToken');
+}
+    const token = localStorage.getItem(&apos;authToken&apos;);
     return token ? isTokenValid(token) : false;
   };
   
   return {
+}
     user: state.user as AuthUser | null,
     isAuthenticated: !!state.user && verifyToken(),
     isLoading,
@@ -406,7 +472,7 @@ export const useAuth = (): UseAuthReturn => {
     signup,
     refreshToken,
     updateProfile,
-    resetPassword,
+    resetPassword,// 
     verifyToken
   };
 };

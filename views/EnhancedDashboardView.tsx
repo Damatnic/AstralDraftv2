@@ -3,13 +3,13 @@
  * Mobile-responsive dashboard with touch-friendly components
  */
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { useMediaQuery } from '../hooks/useMediaQuery';
-import { motion } from 'framer-motion';
-import { View } from '../types';
-import MobilePullToRefresh from '../components/mobile/MobilePullToRefresh';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { useMediaQuery } from &apos;../hooks/useMediaQuery&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { View } from &apos;../types&apos;;
+import MobilePullToRefresh from &apos;../components/mobile/MobilePullToRefresh&apos;;
 import { 
+}
     TrophyIcon,
     BarChart3Icon,
     UsersIcon,
@@ -17,34 +17,39 @@ import {
     TrendingUpIcon,
     BellIcon,
     PlusIcon,
-    SearchIcon
-} from 'lucide-react';
+//     SearchIcon
+} from &apos;lucide-react&apos;;
 
 interface MobileDashboardWidgetProps {
+}
     title: string;
     icon: React.ReactNode;
     value: string | number;
     subtitle?: string;
-    trend?: 'up' | 'down' | 'stable';
+    trend?: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;;
     color: string;
     onClick?: () => void;
 
 }
 
 const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
+}
     title,
     icon,
     value,
     subtitle,
     trend,
     color,
-    onClick
+//     onClick
 }: any) => {
-    const getTrendColor = (trendType: 'up' | 'down' | 'stable') => {
+}
+    const getTrendColor = (trendType: &apos;up&apos; | &apos;down&apos; | &apos;stable&apos;) => {
+}
         switch (trendType) {
-            case 'up': return 'text-green-400';
-            case 'down': return 'text-red-400';
-            default: return 'text-gray-400';
+}
+            case &apos;up&apos;: return &apos;text-green-400&apos;;
+            case &apos;down&apos;: return &apos;text-red-400&apos;;
+            default: return &apos;text-gray-400&apos;;
 
     };
 
@@ -58,8 +63,9 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
                     {icon}
                 </div>
                 {trend && (
+}
                     <div className={`text-xs ${getTrendColor(trend)}`}>
-                        <TrendingUpIcon className={`w-3 h-3 ${trend === 'down' ? 'rotate-180' : ''}`} />
+                        <TrendingUpIcon className={`w-3 h-3 ${trend === &apos;down&apos; ? &apos;rotate-180&apos; : &apos;&apos;}`} />
                     </div>
                 )}
             </div>
@@ -73,6 +79,7 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
             </div>
             
             {subtitle && (
+}
                 <div className="text-xs text-[var(--text-tertiary)] mt-1">
                     {subtitle}
                 </div>
@@ -82,6 +89,7 @@ const MobileDashboardWidget: React.FC<MobileDashboardWidgetProps> = ({
 };
 
 interface QuickActionProps {
+}
     icon: React.ReactNode;
     label: string;
     color: string;
@@ -104,29 +112,34 @@ const QuickAction: React.FC<QuickActionProps> = ({ icon, label, color, onClick }
 );
 
 const EnhancedDashboardView: React.FC = () => {
+}
     const { state, dispatch } = useAppState();
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const isMobile = useMediaQuery(&apos;(max-width: 768px)&apos;);
     const activeLeague = state.leagues.find((l: any) => l.id === state.activeLeagueId);
 
     const handleRefresh = async () => {
+}
         // Simulate data refresh
         await new Promise(resolve => setTimeout(resolve, 1500));
         // Here you would typically trigger actual data fetching
     };
 
     const handleViewChange = (view: View) => {
-        dispatch({ type: 'SET_VIEW', payload: view });
+}
+        dispatch({ type: &apos;SET_VIEW&apos;, payload: view });
     };
 
     const mockData = {
-        totalPoints: '1,247.6',
-        weeklyRank: '3rd',
+}
+        totalPoints: &apos;1,247.6&apos;,
+        weeklyRank: &apos;3rd&apos;,
         leagueCount: state.leagues.length,
         activeMatchups: 2,
         notifications: 5
     };
 
     if (isMobile) {
+}
         return (
             <div className="h-full bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5">
                 <MobilePullToRefresh onRefresh={handleRefresh}>
@@ -135,10 +148,10 @@ const EnhancedDashboardView: React.FC = () => {
                         <div className="flex items-center justify-between">
                             <div>
                                 <h1 className="text-2xl font-bold text-[var(--text-primary)]">
-                                    Dashboard
+//                                     Dashboard
                                 </h1>
                                 <p className="text-sm text-[var(--text-secondary)]">
-                                    Welcome back, {state.user?.name || 'User'}
+                                    Welcome back, {state.user?.name || &apos;User&apos;}
                                 </p>
                             </div>
                             <div className="flex items-center gap-2">
@@ -148,6 +161,7 @@ const EnhancedDashboardView: React.FC = () => {
                                 <button className="relative p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
                                     <BellIcon className="w-5 h-5" />
                                     {mockData.notifications > 0 && (
+}
                                         <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                             {mockData.notifications}
                                         </span>
@@ -158,39 +172,39 @@ const EnhancedDashboardView: React.FC = () => {
 
                         {/* Quick Stats Grid */}
                         <div className="grid grid-cols-2 gap-3">
-                            <MobileDashboardWidget
+                            <MobileDashboardWidget>
                                 title="Total Points"
                                 icon={<TrophyIcon className="w-5 h-5 text-white" />}
                                 value={mockData.totalPoints}
                                 subtitle="Season total"
                                 trend="up"
                                 color="bg-blue-500"
-                                onClick={() => handleViewChange('ANALYTICS_HUB')}
+                                onClick={() => handleViewChange(&apos;ANALYTICS_HUB&apos;)}
                             
-                            <MobileDashboardWidget
+                            <MobileDashboardWidget>
                                 title="Weekly Rank"
                                 icon={<BarChart3Icon className="w-5 h-5 text-white" />}
                                 value={mockData.weeklyRank}
                                 subtitle="This week"
                                 trend="stable"
                                 color="bg-green-500"
-                                onClick={() => handleViewChange('LEAGUE_STANDINGS')}
+                                onClick={() => handleViewChange(&apos;LEAGUE_STANDINGS&apos;)}
                             
-                            <MobileDashboardWidget
+                            <MobileDashboardWidget>
                                 title="My Leagues"
                                 icon={<UsersIcon className="w-5 h-5 text-white" />}
                                 value={mockData.leagueCount}
                                 subtitle="Active leagues"
                                 color="bg-purple-500"
-                                onClick={() => handleViewChange('LEAGUE_HUB')}
+                                onClick={() => handleViewChange(&apos;LEAGUE_HUB&apos;)}
                             
-                            <MobileDashboardWidget
+                            <MobileDashboardWidget>
                                 title="Matchups"
                                 icon={<CalendarIcon className="w-5 h-5 text-white" />}
                                 value={mockData.activeMatchups}
                                 subtitle="This week"
                                 color="bg-orange-500"
-                                onClick={() => handleViewChange('MATCHUP')}
+                                onClick={() => handleViewChange(&apos;MATCHUP&apos;)}
                         </div>
 
                         {/* Quick Actions */}
@@ -199,41 +213,42 @@ const EnhancedDashboardView: React.FC = () => {
                                 Quick Actions
                             </h2>
                             <div className="grid grid-cols-4 gap-3">
-                                <QuickAction
+                                <QuickAction>
                                     icon={<PlusIcon className="w-5 h-5 text-blue-400" />}
                                     label="Create League"
                                     color="bg-blue-500/10"
-                                    onClick={() => handleViewChange('CREATE_LEAGUE')}
+                                    onClick={() => handleViewChange(&apos;CREATE_LEAGUE&apos;)}
                                 
-                                <QuickAction
+                                <QuickAction>
                                     icon={<TrophyIcon className="w-5 h-5 text-green-400" />}
                                     label="Draft Room"
                                     color="bg-green-500/10"
-                                    onClick={() => handleViewChange('DRAFT_ROOM')}
+                                    onClick={() => handleViewChange(&apos;DRAFT_ROOM&apos;)}
                                 
-                                <QuickAction
+                                <QuickAction>
                                     icon={<BarChart3Icon className="w-5 h-5 text-purple-400" />}
                                     label="Analytics"
                                     color="bg-purple-500/10"
-                                    onClick={() => handleViewChange('ANALYTICS_HUB')}
+                                    onClick={() => handleViewChange(&apos;ANALYTICS_HUB&apos;)}
                                 
-                                <QuickAction
+                                <QuickAction>
                                     icon={<UsersIcon className="w-5 h-5 text-orange-400" />}
                                     label="Teams"
                                     color="bg-orange-500/10"
-                                    onClick={() => handleViewChange('TEAM_HUB')}
+                                    onClick={() => handleViewChange(&apos;TEAM_HUB&apos;)}
                             </div>
                         </div>
 
                         {/* Active League Summary */}
                         {activeLeague && (
+}
                             <div>
                                 <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
                                     Current League
                                 </h2>
                                 <motion.div
                                     whileTap={{ scale: 0.98 }}
-                                    onClick={() => handleViewChange('LEAGUE_HUB')}
+                                    onClick={() => handleViewChange(&apos;LEAGUE_HUB&apos;)}
                                 >
                                     <div className="flex items-center justify-between mb-2">
                                         <h3 className="font-medium text-[var(--text-primary)]">
@@ -250,7 +265,7 @@ const EnhancedDashboardView: React.FC = () => {
                                                 {activeLeague.teams.length}
                                             </div>
                                             <div className="text-xs text-[var(--text-secondary)]">
-                                                Teams
+//                                                 Teams
                                             </div>
                                         </div>
                                         
@@ -259,7 +274,7 @@ const EnhancedDashboardView: React.FC = () => {
                                                 {activeLeague.schedule?.filter((m: any) => m.week === activeLeague.currentWeek).length || 0}
                                             </div>
                                             <div className="text-xs text-[var(--text-secondary)]">
-                                                Matchups
+//                                                 Matchups
                                             </div>
                                         </div>
                                         
@@ -268,7 +283,7 @@ const EnhancedDashboardView: React.FC = () => {
                                                 $200
                                             </div>
                                             <div className="text-xs text-[var(--text-secondary)]">
-                                                Budget
+//                                                 Budget
                                             </div>
                                         </div>
                                     </div>
@@ -283,6 +298,7 @@ const EnhancedDashboardView: React.FC = () => {
                             </h2>
                             <div className="space-y-2">
                                 {[
+}
                                     { text: "John drafted Patrick Mahomes", time: "2 minutes ago", type: "draft" },
                                     { text: "Trade proposal received", time: "1 hour ago", type: "trade" },
                                     { text: "Waiver claim processed", time: "3 hours ago", type: "waiver" }
@@ -312,7 +328,7 @@ const EnhancedDashboardView: React.FC = () => {
     return (
         <div className="p-6 bg-gradient-to-br from-[var(--color-primary)]/5 via-transparent to-[var(--color-secondary)]/5 min-h-screen">
             <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-6">
-                Dashboard
+//                 Dashboard
             </h1>
             <p className="text-[var(--text-secondary)]">
                 This is the desktop version of the dashboard.

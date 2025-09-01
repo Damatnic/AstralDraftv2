@@ -2,12 +2,12 @@
  * Enhanced Trades View - Complete trade management interface
  */
 
-import React from 'react';
-import { useAppState } from '../contexts/AppContext';
-import { motion } from 'framer-motion';
-import TradingSystem from '../components/season/TradingSystem';
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import TradingSystem from &apos;../components/season/TradingSystem&apos;;
 
 const TradesView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const league = state.leagues[0];
 
@@ -18,7 +18,7 @@ const TradesView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
               className="back-btn"
             >
               ← Back to Dashboard

@@ -3,14 +3,16 @@
  * Specialized error boundary for catching and handling deployment-specific issues
  */
 
-import React, { Component, ReactNode } from 'react';
+import React, { Component, ReactNode } from &apos;react&apos;;
 
 interface Props {
+}
   children: ReactNode;
   fallback?: ReactNode;
 }
 
 interface State {
+}
   hasError: boolean;
   error?: Error;
   errorInfo?: React.ErrorInfo;
@@ -18,38 +20,49 @@ interface State {
 }
 
 class DeploymentErrorBoundary extends Component<Props, State> {
+}
   private retryTimeouts: NodeJS.Timeout[] = [];
 
   constructor(props: Props) {
+}
     super(props);
     this.state = {
+}
       hasError: false,
       retryCount: 0,
     };
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
+}
     return {
+}
       hasError: true,
       error,
     };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Deployment Error Boundary caught an error:', error, errorInfo);
+}
+    console.error(&apos;Deployment Error Boundary caught an error:&apos;, error, errorInfo);
     
     this.setState({
+}
       error,
       errorInfo,
     });
 
     // Track deployment errors
-    if (typeof window !== 'undefined' && window.errorTrackingService) {
+    if (typeof window !== &apos;undefined&apos; && window.errorTrackingService) {
+}
       try {
+}
         window.errorTrackingService.captureError(error, {
-          component: 'deployment-error-boundary',
-          severity: 'critical',
+}
+          component: &apos;deployment-error-boundary&apos;,
+          severity: &apos;critical&apos;,
           context: {
+}
             ...errorInfo,
             retryCount: this.state.retryCount,
             userAgent: navigator.userAgent,
@@ -57,25 +70,31 @@ class DeploymentErrorBoundary extends Component<Props, State> {
           },
         });
       } catch (trackingError) {
-        console.warn('Failed to track deployment error:', trackingError);
+}
+        console.warn(&apos;Failed to track deployment error:&apos;, trackingError);
       }
     }
   }
 
   componentWillUnmount() {
+}
     // Clear any pending retry timeouts
     this.retryTimeouts.forEach((timeout: any) => clearTimeout(timeout));
   }
 
   handleRetry = () => {
+}
     const { retryCount } = this.state;
     
     // Allow up to 3 retries with exponential backoff
     if (retryCount < 3) {
+}
       const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
       
       const timeout = setTimeout(() => {
+}
         this.setState({
+}
           hasError: false,
           error: undefined,
           errorInfo: undefined,
@@ -88,13 +107,17 @@ class DeploymentErrorBoundary extends Component<Props, State> {
   };
 
   handleReload = () => {
+}
     window.location.reload();
   };
 
   render() {
+}
     if (this.state.hasError) {
+}
       // Use custom fallback if provided
       if (this.props.fallback) {
+}
         return this.props.fallback;
       }
 
@@ -109,11 +132,12 @@ class DeploymentErrorBoundary extends Component<Props, State> {
                 Deployment Issue Detected
               </h1>
               <p className="text-slate-300">
-                We're experiencing a temporary issue with the application startup.
+                We&apos;re experiencing a temporary issue with the application startup.
               </p>
             </div>
 
             {this.state.error && (
+}
               <div className="bg-slate-900/50 rounded-lg p-4 text-left">
                 <h3 className="text-sm font-medium text-slate-200 mb-2">Error Details:</h3>
                 <p className="text-xs text-red-400 font-mono break-all">
@@ -125,12 +149,13 @@ class DeploymentErrorBoundary extends Component<Props, State> {
             <div className="space-y-3">
               <div className="flex gap-3 justify-center">
                 {this.state.retryCount < 3 && (
+}
                   <button
                     onClick={this.handleRetry}
                     className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
                     disabled={this.retryTimeouts.length > 0}
                   >
-                    {this.retryTimeouts.length > 0 ? 'Retrying...' : `Retry (${3 - this.state.retryCount} left)`}
+                    {this.retryTimeouts.length > 0 ? &apos;Retrying...&apos; : `Retry (${3 - this.state.retryCount} left)`}
                   </button>
                 )}
                 
@@ -150,6 +175,7 @@ class DeploymentErrorBoundary extends Component<Props, State> {
 
             {/* Environment info for debugging */}
             {import.meta.env.DEV && this.state.error?.stack && (
+}
               <details className="text-left">
                 <summary className="text-xs text-slate-400 cursor-pointer hover:text-slate-300">
                   Stack Trace (Development)

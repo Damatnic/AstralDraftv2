@@ -3,12 +3,13 @@
  * Rich narrative creation tools for team stories and experiences
  */
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { Player, Team, User } from '../../types';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { Player, Team, User } from &apos;../../types&apos;;
 import { 
+}
     PenToolIcon, 
     ImageIcon, 
     VideoIcon, 
@@ -26,10 +27,11 @@ import {
     UploadIcon,
     TypeIcon,
     LayoutIcon,
-    PaletteIcon
-} from 'lucide-react';
+//     PaletteIcon
+} from &apos;lucide-react&apos;;
 
 export interface TeamStory {
+}
     id: string;
     teamId: number;
     authorId: string;
@@ -37,7 +39,7 @@ export interface TeamStory {
     title: string;
     content: StoryContent;
     coverImage?: string;
-    status: 'draft' | 'published' | 'archived';
+    status: &apos;draft&apos; | &apos;published&apos; | &apos;archived&apos;;
     category: StoryCategory;
     tags: string[];
     createdAt: Date;
@@ -52,29 +54,31 @@ export interface TeamStory {
     season: number;
 
 export type StoryCategory = 
-    | 'draft_recap' 
-    | 'trade_story' 
-    | 'weekly_recap' 
-    | 'season_journey' 
-    | 'player_spotlight' 
-    | 'rivalry' 
-    | 'championship' 
-    | 'heartbreak' 
-    | 'comeback' 
-    | 'analysis';
+    | &apos;draft_recap&apos; 
+    | &apos;trade_story&apos; 
+    | &apos;weekly_recap&apos; 
+    | &apos;season_journey&apos; 
+    | &apos;player_spotlight&apos; 
+    | &apos;rivalry&apos; 
+    | &apos;championship&apos; 
+    | &apos;heartbreak&apos; 
+    | &apos;comeback&apos; 
+    | &apos;analysis&apos;;
 
 }
 
 export interface StoryContent {
+}
     sections: StorySection[];
     theme: StoryTheme;
-    layout: 'article' | 'timeline' | 'gallery' | 'mixed';
+    layout: &apos;article&apos; | &apos;timeline&apos; | &apos;gallery&apos; | &apos;mixed&apos;;
 
 }
 
 export interface StorySection {
+}
     id: string;
-    type: 'text' | 'image' | 'video' | 'audio' | 'stats' | 'player_card' | 'quote' | 'poll';
+    type: &apos;text&apos; | &apos;image&apos; | &apos;video&apos; | &apos;audio&apos; | &apos;stats&apos; | &apos;player_card&apos; | &apos;quote&apos; | &apos;poll&apos;;
     content: any;
     order: number;
     styling?: SectionStyling;
@@ -82,26 +86,29 @@ export interface StorySection {
 }
 
 export interface SectionStyling {
+}
     backgroundColor?: string;
     textColor?: string;
-    fontSize?: 'small' | 'medium' | 'large' | 'xlarge';
-    alignment?: 'left' | 'center' | 'right';
-    padding?: 'none' | 'small' | 'medium' | 'large';
-    animation?: 'none' | 'fade-in' | 'slide-up' | 'bounce';
+    fontSize?: &apos;small&apos; | &apos;medium&apos; | &apos;large&apos; | &apos;xlarge&apos;;
+    alignment?: &apos;left&apos; | &apos;center&apos; | &apos;right&apos;;
+    padding?: &apos;none&apos; | &apos;small&apos; | &apos;medium&apos; | &apos;large&apos;;
+    animation?: &apos;none&apos; | &apos;fade-in&apos; | &apos;slide-up&apos; | &apos;bounce&apos;;
 
 }
 
 export interface StoryTheme {
+}
     name: string;
     primaryColor: string;
     secondaryColor: string;
     backgroundColor: string;
     fontFamily: string;
-    headerStyle: 'bold' | 'elegant' | 'playful' | 'modern';
+    headerStyle: &apos;bold&apos; | &apos;elegant&apos; | &apos;playful&apos; | &apos;modern&apos;;
 
 }
 
 export interface StoryComment {
+}
     id: string;
     authorId: string;
     authorName: string;
@@ -114,18 +121,20 @@ export interface StoryComment {
 }
 
 export interface StoryTemplate {
+}
     id: string;
     name: string;
     description: string;
     category: StoryCategory;
     thumbnail: string;
-    sections: Omit<StorySection, 'id' | 'content'>[];
+    sections: Omit<StorySection, &apos;id&apos; | &apos;content&apos;>[];
     theme: StoryTheme;
     popularityScore: number;
 
 }
 
 interface TeamStoryBuilderProps {
+}
     team: Team;
     story?: TeamStory;
     templates: StoryTemplate[];
@@ -137,6 +146,7 @@ interface TeamStoryBuilderProps {
     className?: string;}
 
 const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
+}
     team,
     story,
     templates,
@@ -145,20 +155,23 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     onPublish,
     onPreview,
     isLoading = false,
-    className = ''
+    className = &apos;&apos;
 }: any) => {
+}
     const [currentStory, setCurrentStory] = React.useState<Partial<TeamStory>>(
         story || {
+}
             teamId: team.id,
-            title: '',
+            title: &apos;&apos;,
             content: {
+}
                 sections: [],
                 theme: getDefaultTheme(),
-                layout: 'article'
+                layout: &apos;article&apos;
             },
-            category: 'weekly_recap',
+            category: &apos;weekly_recap&apos;,
             tags: [],
-            status: 'draft',
+            status: &apos;draft&apos;,
             isPublic: false,
             featuredPlayers: [],
             season: new Date().getFullYear()
@@ -169,63 +182,73 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     const [activeSection, setActiveSection] = React.useState<string | null>(null);
     const [showTemplates, setShowTemplates] = React.useState(!story);
     const [showPreview, setShowPreview] = React.useState(false);
-    const [editorMode, setEditorMode] = React.useState<'write' | 'design' | 'media'>('write');
+    const [editorMode, setEditorMode] = React.useState<&apos;write&apos; | &apos;design&apos; | &apos;media&apos;>(&apos;write&apos;);
 
     const predefinedThemes: StoryTheme[] = [
         {
-            name: 'Classic',
-            primaryColor: '#3b82f6',
-            secondaryColor: '#64748b',
-            backgroundColor: '#ffffff',
-            fontFamily: 'Inter',
-            headerStyle: 'bold'
+}
+            name: &apos;Classic&apos;,
+            primaryColor: &apos;#3b82f6&apos;,
+            secondaryColor: &apos;#64748b&apos;,
+            backgroundColor: &apos;#ffffff&apos;,
+            fontFamily: &apos;Inter&apos;,
+            headerStyle: &apos;bold&apos;
         },
         {
-            name: 'Championship',
-            primaryColor: '#fbbf24',
-            secondaryColor: '#92400e',
-            backgroundColor: '#fef3c7',
-            fontFamily: 'Georgia',
-            headerStyle: 'elegant'
+}
+            name: &apos;Championship&apos;,
+            primaryColor: &apos;#fbbf24&apos;,
+            secondaryColor: &apos;#92400e&apos;,
+            backgroundColor: &apos;#fef3c7&apos;,
+            fontFamily: &apos;Georgia&apos;,
+            headerStyle: &apos;elegant&apos;
         },
         {
-            name: 'Dark Mode',
-            primaryColor: '#8b5cf6',
-            secondaryColor: '#a78bfa',
-            backgroundColor: '#1f2937',
-            fontFamily: 'Inter',
-            headerStyle: 'modern'
+}
+            name: &apos;Dark Mode&apos;,
+            primaryColor: &apos;#8b5cf6&apos;,
+            secondaryColor: &apos;#a78bfa&apos;,
+            backgroundColor: &apos;#1f2937&apos;,
+            fontFamily: &apos;Inter&apos;,
+            headerStyle: &apos;modern&apos;
         },
         {
-            name: 'Playful',
-            primaryColor: '#ef4444',
-            secondaryColor: '#f97316',
-            backgroundColor: '#fef2f2',
-            fontFamily: 'Comic Sans MS',
-            headerStyle: 'playful'
+}
+            name: &apos;Playful&apos;,
+            primaryColor: &apos;#ef4444&apos;,
+            secondaryColor: &apos;#f97316&apos;,
+            backgroundColor: &apos;#fef2f2&apos;,
+            fontFamily: &apos;Comic Sans MS&apos;,
+            headerStyle: &apos;playful&apos;
 
     ];
 
     function getDefaultTheme(): StoryTheme {
+}
         return predefinedThemes[0];
 
-    const addSection = (type: StorySection['type']) => {
+    const addSection = (type: StorySection[&apos;type&apos;]) => {
+}
         const newSection: StorySection = {
+}
             id: `section-${Date.now()}`,
             type,
             content: getDefaultContent(type),
             order: currentStory.content?.sections.length || 0,
             styling: {
-                fontSize: 'medium',
-                alignment: 'left',
-                padding: 'medium',
-                animation: 'none'
+}
+                fontSize: &apos;medium&apos;,
+                alignment: &apos;left&apos;,
+                padding: &apos;medium&apos;,
+                animation: &apos;none&apos;
 
         };
 
         setCurrentStory(prev => ({
+}
             ...prev,
             content: {
+}
                 ...prev.content!,
                 sections: [...(prev.content?.sections || []), newSection]
 
@@ -234,33 +257,38 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
         setActiveSection(newSection.id);
     };
 
-    const getDefaultContent = (type: StorySection['type']) => {
+    const getDefaultContent = (type: StorySection[&apos;type&apos;]) => {
+}
         switch (type) {
-            case 'text':
-                return { text: 'Start writing your story...' };
-            case 'image':
-                return { url: '', caption: '', alt: '' };
-            case 'video':
-                return { url: '', caption: '', autoplay: false };
-            case 'audio':
-                return { url: '', title: '', duration: 0 };
-            case 'quote':
-                return { text: 'Your inspiring quote here...', author: 'Author Name' };
-            case 'stats':
-                return { playerId: null, statType: 'fantasy_points', week: null };
-            case 'player_card':
-                return { playerId: null, highlight: 'performance' };
-            case 'poll':
-                return { question: 'What do you think?', options: ['Option 1', 'Option 2'] };
+}
+            case &apos;text&apos;:
+                return { text: &apos;Start writing your story...&apos; };
+            case &apos;image&apos;:
+                return { url: &apos;&apos;, caption: &apos;&apos;, alt: &apos;&apos; };
+            case &apos;video&apos;:
+                return { url: &apos;&apos;, caption: &apos;&apos;, autoplay: false };
+            case &apos;audio&apos;:
+                return { url: &apos;&apos;, title: &apos;&apos;, duration: 0 };
+            case &apos;quote&apos;:
+                return { text: &apos;Your inspiring quote here...&apos;, author: &apos;Author Name&apos; };
+            case &apos;stats&apos;:
+                return { playerId: null, statType: &apos;fantasy_points&apos;, week: null };
+            case &apos;player_card&apos;:
+                return { playerId: null, highlight: &apos;performance&apos; };
+            case &apos;poll&apos;:
+                return { question: &apos;What do you think?&apos;, options: [&apos;Option 1&apos;, &apos;Option 2&apos;] };
             default:
                 return {};
 
     };
 
     const updateSection = (sectionId: string, updates: Partial<StorySection>) => {
+}
         setCurrentStory(prev => ({
+}
             ...prev,
             content: {
+}
                 ...prev.content!,
                 sections: prev.content!.sections.map((section: any) =>
                     section.id === sectionId ? { ...section, ...updates } : section
@@ -270,20 +298,26 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     };
 
     const removeSection = (sectionId: string) => {
+}
         setCurrentStory(prev => ({
+}
             ...prev,
             content: {
+}
                 ...prev.content!,
                 sections: prev.content!.sections.filter((section: any) => section.id !== sectionId)
 
         }));
         if (activeSection === sectionId) {
+}
             setActiveSection(null);
 
     };
 
     const applyTemplate = (template: StoryTemplate) => {
+}
         const templatedSections: StorySection[] = template.sections.map((sectionTemplate, index) => ({
+}
             id: `section-${Date.now()}-${index}`,
             ...sectionTemplate,
             content: getDefaultContent(sectionTemplate.type),
@@ -291,11 +325,13 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
         }));
 
         setCurrentStory(prev => ({
+}
             ...prev,
             content: {
+}
                 sections: templatedSections,
                 theme: template.theme,
-                layout: 'article'
+                layout: &apos;article&apos;
             },
             category: template.category,
             title: `${template.name} Story`
@@ -306,23 +342,29 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     };
 
     const handleSave = () => {
+}
         onSave(currentStory);
     };
 
     const handlePublish = () => {
+}
         if (currentStory.id) {
+}
             onPublish(currentStory.id);
     }
   };
 
     const handlePreview = () => {
+}
         if (currentStory.content) {
+}
             onPreview(currentStory.content);
             setShowPreview(true);
     }
   };
 
     const renderSectionEditor = (section: StorySection) => {
+}
         const isActive = activeSection === section.id;
 
         return (
@@ -331,19 +373,21 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                    isActive 
-                        ? 'border-blue-400 bg-blue-500/10' 
-                        : 'border-[var(--panel-border)] bg-[var(--panel-bg)] hover:border-blue-400/50'
+}
+//                     isActive 
+                        ? &apos;border-blue-400 bg-blue-500/10&apos; 
+                        : &apos;border-[var(--panel-border)] bg-[var(--panel-bg)] hover:border-blue-400/50&apos;
                 }`}
                 onClick={() => setActiveSection(section.id)}
             >
                 <div className="flex items-center justify-between mb-3 sm:px-4 md:px-6 lg:px-8">
                     <div className="flex items-center gap-2 sm:px-4 md:px-6 lg:px-8">
                         {getSectionIcon(section.type)}
-                        <span className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{section.type.replace('_', ' ')}</span>
+                        <span className="font-medium capitalize sm:px-4 md:px-6 lg:px-8">{section.type.replace(&apos;_&apos;, &apos; &apos;)}</span>
                     </div>
                     <button
                         onClick={(e: any) = aria-label="Action button"> {
+}
                             e.stopPropagation();
                             removeSection(section.id);
                         }}
@@ -354,9 +398,10 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                 </div>
 
                 {isActive && (
+}
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
+                        animate={{ opacity: 1, height: &apos;auto&apos; }}
                         exit={{ opacity: 0, height: 0 }}
                         className="space-y-3 sm:px-4 md:px-6 lg:px-8"
                     >
@@ -368,23 +413,25 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
         );
     };
 
-    const getSectionIcon = (type: StorySection['type']) => {
+    const getSectionIcon = (type: StorySection[&apos;type&apos;]) => {
+}
         switch (type) {
-            case 'text':
+}
+            case &apos;text&apos;:
                 return <TypeIcon className="w-5 h-5 text-blue-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'image':
+            case &apos;image&apos;:
                 return <ImageIcon className="w-5 h-5 text-green-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'video':
+            case &apos;video&apos;:
                 return <VideoIcon className="w-5 h-5 text-red-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'audio':
+            case &apos;audio&apos;:
                 return <MicIcon className="w-5 h-5 text-purple-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'quote':
+            case &apos;quote&apos;:
                 return <BookIcon className="w-5 h-5 text-yellow-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'stats':
+            case &apos;stats&apos;:
                 return <TrophyIcon className="w-5 h-5 text-orange-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'player_card':
+            case &apos;player_card&apos;:
                 return <UsersIcon className="w-5 h-5 text-pink-400 sm:px-4 md:px-6 lg:px-8" />;
-            case 'poll':
+            case &apos;poll&apos;:
                 return <StarIcon className="w-5 h-5 text-indigo-400 sm:px-4 md:px-6 lg:px-8" />;
             default:
                 return <PenToolIcon className="w-5 h-5 text-gray-400 sm:px-4 md:px-6 lg:px-8" />;
@@ -392,68 +439,77 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
     };
 
     const renderSectionContent = (section: StorySection) => {
+}
         switch (section.type) {
-            case 'text':
+}
+            case &apos;text&apos;:
                 return (
                     <textarea
-                        value={section.content.text || ''}
+                        value={section.content.text || &apos;&apos;}
                         onChange={(e: any) => updateSection(section.id, {
+}
                             content: { ...section.content, text: e.target.value }})}
                         placeholder="Write your story content..."
                         className="w-full h-32 p-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] resize-none sm:px-4 md:px-6 lg:px-8"
                     />
                 );
-            case 'image':
+            case &apos;image&apos;:
                 return (
                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                         <input
                             type="url"
-                            value={section.content.url || ''}
+                            value={section.content.url || &apos;&apos;}
                             onChange={(e: any) => updateSection(section.id, {
+}
                                 content: { ...section.content, url: e.target.value }})}
                             placeholder="Image URL"
                             className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                         />
                         <input
                             type="text"
-                            value={section.content.caption || ''}
+                            value={section.content.caption || &apos;&apos;}
                             onChange={(e: any) => updateSection(section.id, {
+}
                                 content: { ...section.content, caption: e.target.value }})}
                             placeholder="Caption"
                             className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
                 );
-            case 'quote':
+            case &apos;quote&apos;:
                 return (
                     <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                         <textarea
-                            value={section.content.text || ''}
+                            value={section.content.text || &apos;&apos;}
                             onChange={(e: any) => updateSection(section.id, {
+}
                                 content: { ...section.content, text: e.target.value }})}
                             placeholder="Quote text"
                             className="w-full h-20 p-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] resize-none sm:px-4 md:px-6 lg:px-8"
                         />
                         <input
                             type="text"
-                            value={section.content.author || ''}
+                            value={section.content.author || &apos;&apos;}
                             onChange={(e: any) => updateSection(section.id, {
+}
                                 content: { ...section.content, author: e.target.value }})}
                             placeholder="Quote author"
                             className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                         />
                     </div>
                 );
-            case 'player_card':
+            case &apos;player_card&apos;:
                 return (
                     <select
-                        value={section.content.playerId || ''}
+                        value={section.content.playerId || &apos;&apos;}
                         onChange={(e: any) => updateSection(section.id, {
+}
                             content: { ...section.content, playerId: parseInt(e.target.value) }})}
                         className="w-full p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                     >
                         <option value="">Select a player</option>
                         {availablePlayers.map((player: any) => (
+}
                             <option key={player.id} value={player.id}>
                                 {player.name} ({player.position})
                             </option>
@@ -474,8 +530,9 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             <h4 className="text-sm font-medium text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">Styling</h4>
             <div className="grid grid-cols-2 gap-2 sm:px-4 md:px-6 lg:px-8">
                 <select
-                    value={section.styling?.fontSize || 'medium'}
+                    value={section.styling?.fontSize || &apos;medium&apos;}
                     onChange={(e: any) => updateSection(section.id, {
+}
                         styling: { ...section.styling, fontSize: e.target.value as any }})}
                     className="p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-sm sm:px-4 md:px-6 lg:px-8"
                 >
@@ -485,8 +542,9 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                     <option value="xlarge">X-Large</option>
                 </select>
                 <select
-                    value={section.styling?.alignment || 'left'}
+                    value={section.styling?.alignment || &apos;left&apos;}
                     onChange={(e: any) => updateSection(section.id, {
+}
                         styling: { ...section.styling, alignment: e.target.value as any }})}
                     className="p-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-sm sm:px-4 md:px-6 lg:px-8"
                 >
@@ -508,14 +566,14 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                         <button
                             onClick={() => setShowTemplates(true)}
                         >
-                            Templates
+//                             Templates
                         </button>
                         <button
                             onClick={handlePreview}
                             className="flex items-center gap-2 px-3 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-sm sm:px-4 md:px-6 lg:px-8"
                          aria-label="Action button">
                             <EyeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            Preview
+//                             Preview
                         </button>
                         <button
                             onClick={handleSave}
@@ -523,16 +581,17 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                             className="flex items-center gap-2 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:opacity-50 transition-colors text-sm sm:px-4 md:px-6 lg:px-8"
                          aria-label="Action button">
                             <SaveIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                            Save
+//                             Save
                         </button>
-                        {currentStory?.status === 'draft' && (
+                        {currentStory?.status === &apos;draft&apos; && (
+}
                             <button
                                 onClick={handlePublish}
                                 disabled={isLoading}
                                 className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors text-sm sm:px-4 md:px-6 lg:px-8"
                              aria-label="Action button">
                                 <ShareIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" />
-                                Publish
+//                                 Publish
                             </button>
                         )}
                     </div>
@@ -542,7 +601,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                 <div className="space-y-3 sm:px-4 md:px-6 lg:px-8">
                     <input
                         type="text"
-                        value={currentStory.title || ''}
+                        value={currentStory.title || &apos;&apos;}
                         onChange={(e: any) => setCurrentStory(prev => ({ ...prev, title: e.target.value }}
                         placeholder="Story title..."
                         className="w-full p-3 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-xl font-bold text-[var(--text-primary)] placeholder-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8"
@@ -550,7 +609,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                     
                     <div className="flex gap-3 sm:px-4 md:px-6 lg:px-8">
                         <select
-                            value={currentStory.category || 'weekly_recap'}
+                            value={currentStory.category || &apos;weekly_recap&apos;}
                             onChange={(e: any) => setCurrentStory(prev => ({ ...prev, category: e.target.value as StoryCategory }}
                             className="px-3 py-2 bg-[var(--input-bg)] border border-[var(--input-border)] rounded text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8"
                         >
@@ -583,9 +642,10 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             <div className="flex-shrink-0 border-b border-[var(--panel-border)] sm:px-4 md:px-6 lg:px-8">
                 <div className="flex sm:px-4 md:px-6 lg:px-8">
                     {[
-                        { id: 'write', label: 'Write', icon: <PenToolIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: 'design', label: 'Design', icon: <PaletteIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                        { id: 'media', label: 'Media', icon: <ImageIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+}
+                        { id: &apos;write&apos;, label: &apos;Write&apos;, icon: <PenToolIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: &apos;design&apos;, label: &apos;Design&apos;, icon: <PaletteIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                        { id: &apos;media&apos;, label: &apos;Media&apos;, icon: <ImageIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
                     ].map((mode: any) => (
                         <button
                             key={mode.id}
@@ -602,22 +662,24 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             <div className="flex-1 overflow-hidden flex sm:px-4 md:px-6 lg:px-8">
                 {/* Left Panel - Content/Design/Media */}
                 <div className="flex-1 p-4 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
-                    {editorMode === 'write' && (
+                    {editorMode === &apos;write&apos; && (
+}
                         <div className="space-y-4 sm:px-4 md:px-6 lg:px-8">
                             {/* Add Section Buttons */}
                             <div className="flex flex-wrap gap-2 p-3 bg-gray-500/10 rounded-lg sm:px-4 md:px-6 lg:px-8">
                                 <span className="text-sm font-medium text-[var(--text-secondary)] mr-2 sm:px-4 md:px-6 lg:px-8">Add:</span>
                                 {[
-                                    { type: 'text', label: 'Text', icon: <TypeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                                    { type: 'image', label: 'Image', icon: <ImageIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                                    { type: 'video', label: 'Video', icon: <VideoIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                                    { type: 'quote', label: 'Quote', icon: <BookIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                                    { type: 'player_card', label: 'Player', icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
-                                    { type: 'stats', label: 'Stats', icon: <TrophyIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
+}
+                                    { type: &apos;text&apos;, label: &apos;Text&apos;, icon: <TypeIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                                    { type: &apos;image&apos;, label: &apos;Image&apos;, icon: <ImageIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                                    { type: &apos;video&apos;, label: &apos;Video&apos;, icon: <VideoIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                                    { type: &apos;quote&apos;, label: &apos;Quote&apos;, icon: <BookIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                                    { type: &apos;player_card&apos;, label: &apos;Player&apos;, icon: <UsersIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> },
+                                    { type: &apos;stats&apos;, label: &apos;Stats&apos;, icon: <TrophyIcon className="w-4 h-4 sm:px-4 md:px-6 lg:px-8" /> }
                                 ].map((button: any) => (
                                     <button
                                         key={button.type}
-                                        onClick={() => addSection(button.type as StorySection['type'])}
+                                        onClick={() => addSection(button.type as StorySection[&apos;type&apos;])}
                                     >
                                         {button.icon}
                                         {button.label}
@@ -633,6 +695,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                             </div>
 
                             {currentStory.content?.sections.length === 0 && (
+}
                                 <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                     <BookIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
                                     <p className="text-lg font-medium mb-2 sm:px-4 md:px-6 lg:px-8">Start your story</p>
@@ -642,22 +705,26 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                         </div>
                     )}
 
-                    {editorMode === 'design' && (
+                    {editorMode === &apos;design&apos; && (
+}
                         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                             <div>
                                 <h3 className="text-lg font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Theme</h3>
                                 <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {predefinedThemes.map((theme: any) => (
+}
                                         <button
                                             key={theme.name}
                                             onClick={() = aria-label="Action button"> setCurrentStory(prev => ({
+}
                                                 ...prev,
                                                 content: { ...prev.content!, theme }
                                             }))}
                                             className={`p-4 rounded-lg border transition-all ${
+}
                                                 currentStory.content?.theme.name === theme.name
-                                                    ? 'border-blue-400 bg-blue-500/10'
-                                                    : 'border-[var(--panel-border)] hover:border-blue-400/50'
+                                                    ? &apos;border-blue-400 bg-blue-500/10&apos;
+                                                    : &apos;border-[var(--panel-border)] hover:border-blue-400/50&apos;
                                             }`}
                                         >
                                             <div className="font-medium text-[var(--text-primary)] sm:px-4 md:px-6 lg:px-8">{theme.name}</div>
@@ -680,21 +747,24 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                                 <h3 className="text-lg font-medium text-[var(--text-primary)] mb-4 sm:px-4 md:px-6 lg:px-8">Layout</h3>
                                 <div className="grid grid-cols-2 gap-3 sm:px-4 md:px-6 lg:px-8">
                                     {[
-                                        { id: 'article', label: 'Article', icon: <LayoutIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
-                                        { id: 'timeline', label: 'Timeline', icon: <CalendarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
-                                        { id: 'gallery', label: 'Gallery', icon: <ImageIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
-                                        { id: 'mixed', label: 'Mixed', icon: <StarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> }
+}
+                                        { id: &apos;article&apos;, label: &apos;Article&apos;, icon: <LayoutIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
+                                        { id: &apos;timeline&apos;, label: &apos;Timeline&apos;, icon: <CalendarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
+                                        { id: &apos;gallery&apos;, label: &apos;Gallery&apos;, icon: <ImageIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> },
+                                        { id: &apos;mixed&apos;, label: &apos;Mixed&apos;, icon: <StarIcon className="w-6 h-6 sm:px-4 md:px-6 lg:px-8" /> }
                                     ].map((layout: any) => (
                                         <button
                                             key={layout.id}
                                             onClick={() = aria-label="Action button"> setCurrentStory(prev => ({
+}
                                                 ...prev,
                                                 content: { ...prev.content!, layout: layout.id as any }
                                             }))}
                                             className={`flex items-center gap-3 p-4 rounded-lg border transition-all ${
+}
                                                 currentStory.content?.layout === layout.id
-                                                    ? 'border-blue-400 bg-blue-500/10'
-                                                    : 'border-[var(--panel-border)] hover:border-blue-400/50'
+                                                    ? &apos;border-blue-400 bg-blue-500/10&apos;
+                                                    : &apos;border-[var(--panel-border)] hover:border-blue-400/50&apos;
                                             }`}
                                         >
                                             {layout.icon}
@@ -706,7 +776,8 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                         </div>
                     )}
 
-                    {editorMode === 'media' && (
+                    {editorMode === &apos;media&apos; && (
+}
                         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
                             <div className="text-center py-12 text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                 <UploadIcon className="w-16 h-16 mx-auto mb-4 opacity-50 sm:px-4 md:px-6 lg:px-8" />
@@ -724,6 +795,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
             {/* Templates Modal */}
             <AnimatePresence>
                 {showTemplates && (
+}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -750,6 +822,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {templates.map((template: any) => (
+}
                                         <motion.button
                                             key={template.id}
                                             whileHover={{ scale: 1.02 }}
@@ -764,7 +837,7 @@ const TeamStoryBuilder: React.FC<TeamStoryBuilderProps> = ({
                                             <p className="text-sm text-[var(--text-secondary)] mb-2 sm:px-4 md:px-6 lg:px-8">{template.description}</p>
                                             <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
                                                 <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded sm:px-4 md:px-6 lg:px-8">
-                                                    {template.category.replace('_', ' ')}
+                                                    {template.category.replace(&apos;_&apos;, &apos; &apos;)}
                                                 </span>
                                                 <div className="flex items-center gap-1 text-xs text-[var(--text-secondary)] sm:px-4 md:px-6 lg:px-8">
                                                     <StarIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />

@@ -1,25 +1,30 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useRef } from 'react';
-import { useAdvancedTouchGestures } from '../../hooks/useAdvancedTouchGestures';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo, useState, useRef } from &apos;react&apos;;
+import { useAdvancedTouchGestures } from &apos;../../hooks/useAdvancedTouchGestures&apos;;
 
 interface GestureExampleComponentProps {
+}
   className?: string;
 
 }
 
 export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = ({ 
-  className = '' 
+}
+  className = &apos;&apos; 
 }: any) => {
+}
   const [gestureLog, setGestureLog] = useState<string[]>([]);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
   const addToLog = (message: string) => {
+}
     setGestureLog(prev => [...prev.slice(-4), `${new Date().toLocaleTimeString()}: ${message}`]);
   };
 
   const {
+}
     onSwipeLeft,
     onSwipeRight,
     onSwipeUp,
@@ -29,23 +34,28 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
     onPinch,
     touchHandlers,
     isGestureActive,
-    gestureState
+//     gestureState
   } = useAdvancedTouchGestures({
+}
     swipe: {
+}
       threshold: 30,
       velocityThreshold: 0.3,
-      direction: 'all',
+      direction: &apos;all&apos;,
       preventScroll: true
     },
     longPress: {
+}
       threshold: 10,
       duration: 800
     },
     doubleTap: {
+}
       threshold: 30,
       delay: 300
     },
     pinch: {
+}
       threshold: 1.1,
       preventZoom: true
 
@@ -53,44 +63,53 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
 
   // Set up gesture callbacks
   React.useEffect(() => {
+}
     onSwipeLeft(() => {
-      addToLog('Swiped Left');
+}
+      addToLog(&apos;Swiped Left&apos;);
       setPosition(prev => ({ ...prev, x: prev.x - 50 }));
     });
 
     onSwipeRight(() => {
-      addToLog('Swiped Right');
+}
+      addToLog(&apos;Swiped Right&apos;);
       setPosition(prev => ({ ...prev, x: prev.x + 50 }));
     });
 
     onSwipeUp(() => {
-      addToLog('Swiped Up');
+}
+      addToLog(&apos;Swiped Up&apos;);
       setPosition(prev => ({ ...prev, y: prev.y - 50 }));
     });
 
     onSwipeDown(() => {
-      addToLog('Swiped Down');
+}
+      addToLog(&apos;Swiped Down&apos;);
       setPosition(prev => ({ ...prev, y: prev.y + 50 }));
     });
 
     onLongPress((point: any) => {
+}
       addToLog(`Long Press at (${Math.round(point.x)}, ${Math.round(point.y)})`);
       setPosition({ x: 0, y: 0 });
       setScale(1);
     });
 
     onDoubleTap((point: any) => {
+}
       addToLog(`Double Tap at (${Math.round(point.x)}, ${Math.round(point.y)})`);
       setScale(prev => prev === 1 ? 1.5 : 1);
     });
 
     onPinch((newScale, center) => {
+}
       addToLog(`Pinch Scale: ${newScale.toFixed(2)}`);
       setScale(newScale);
     });
   }, [onSwipeLeft, onSwipeRight, onSwipeUp, onSwipeDown, onLongPress, onDoubleTap, onPinch]);
 
   if (isLoading) {
+}
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
@@ -113,13 +132,14 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
       <div className="gesture-status mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg sm:px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-between sm:px-4 md:px-6 lg:px-8">
           <span className="text-sm font-medium sm:px-4 md:px-6 lg:px-8">
-            Status: {isGestureActive ? '🤏 Active' : '⚪ Idle'}
+            Status: {isGestureActive ? &apos;🤏 Active&apos; : &apos;⚪ Idle&apos;}
           </span>
           <span className="text-sm sm:px-4 md:px-6 lg:px-8">
             Distance: {Math.round(gestureState.distance)}px
           </span>
         </div>
         {gestureState.direction && (
+}
           <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
             Direction: {gestureState.direction} | 
             Velocity: {gestureState.velocity.toFixed(2)}px/ms
@@ -135,9 +155,10 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
                    border-2 border-dashed border-blue-300 dark:border-blue-600 rounded-xl 
                    h-64 overflow-hidden touch-none select-none sm:px-4 md:px-6 lg:px-8"
         style={{
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          touchAction: 'none'
+}
+          userSelect: &apos;none&apos;,
+          WebkitUserSelect: &apos;none&apos;,
+          touchAction: &apos;none&apos;
         }}
       >
         {/* Moveable Element */}
@@ -146,6 +167,7 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
                      flex items-center justify-center text-white font-bold 
                      transition-transform duration-200 shadow-lg sm:px-4 md:px-6 lg:px-8"
           style={{
+}
             transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px)) scale(${scale})`
           }}
         >
@@ -168,12 +190,14 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
         </h4>
         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3 min-h-[80px] max-h-[120px] overflow-y-auto sm:px-4 md:px-6 lg:px-8">
           {gestureLog.length === 0 ? (
+}
             <p className="text-gray-500 dark:text-gray-400 text-sm italic sm:px-4 md:px-6 lg:px-8">
               Perform gestures to see activity...
             </p>
           ) : (
             <div className="space-y-1 sm:px-4 md:px-6 lg:px-8">
               {gestureLog.map((entry, index) => (
+}
                 <div key={`${entry}-${index}`} className="text-xs font-mono text-gray-600 dark:text-gray-400 sm:px-4 md:px-6 lg:px-8">
                   {entry}
                 </div>
@@ -186,10 +210,11 @@ export const GestureExampleComponent: React.FC<GestureExampleComponentProps> = (
       {/* Reset Button */}
       <button
         onClick={() = aria-label="Action button"> {
+}
           setPosition({ x: 0, y: 0 });
           setScale(1);
           setGestureLog([]);
-          addToLog('Reset');
+          addToLog(&apos;Reset&apos;);
         }}
         className="mt-4 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium 
                    rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 

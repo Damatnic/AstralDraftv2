@@ -3,10 +3,11 @@
  * Supports Google, Discord, and GitHub OAuth providers with secure token management
  */
 
-import { authService } from './authService';
+import { authService } from &apos;./authService&apos;;
 
 export interface OAuthProvider {
-  id: 'google' | 'discord' | 'github';
+}
+  id: &apos;google&apos; | &apos;discord&apos; | &apos;github&apos;;
   name: string;
   clientId: string;
   redirectUri: string;
@@ -15,6 +16,7 @@ export interface OAuthProvider {
 }
 
 export interface OAuthUser {
+}
   provider: string;
   providerId: string;
   email: string;
@@ -24,6 +26,7 @@ export interface OAuthUser {
 }
 
 export interface OAuthResponse {
+}
   success: boolean;
   user?: OAuthUser;
   sessionToken?: string;
@@ -31,36 +34,42 @@ export interface OAuthResponse {
 }
 
 class OAuthService {
+}
   private readonly providers: Record<string, OAuthProvider>;
   private readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001';
+}
+    this.baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || &apos;http://localhost:3001&apos;;
     
     this.providers = {
+}
       google: {
-        id: 'google',
-        name: 'Google',
-        clientId: (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID || '',
+}
+        id: &apos;google&apos;,
+        name: &apos;Google&apos;,
+        clientId: (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID || &apos;&apos;,
         redirectUri: `${window.location.origin}/auth/callback/google`,
-        scope: 'openid email profile',
-        authUrl: 'https://accounts.google.com/o/oauth2/v2/auth'
+        scope: &apos;openid email profile&apos;,
+        authUrl: &apos;https://accounts.google.com/o/oauth2/v2/auth&apos;
       },
       discord: {
-        id: 'discord',
-        name: 'Discord',
-        clientId: (import.meta as any).env?.VITE_DISCORD_CLIENT_ID || '',
+}
+        id: &apos;discord&apos;,
+        name: &apos;Discord&apos;,
+        clientId: (import.meta as any).env?.VITE_DISCORD_CLIENT_ID || &apos;&apos;,
         redirectUri: `${window.location.origin}/auth/callback/discord`,
-        scope: 'identify email',
-        authUrl: 'https://discord.com/api/oauth2/authorize'
+        scope: &apos;identify email&apos;,
+        authUrl: &apos;https://discord.com/api/oauth2/authorize&apos;
       },
       github: {
-        id: 'github',
-        name: 'GitHub',
-        clientId: (import.meta as any).env?.VITE_GITHUB_CLIENT_ID || '',
+}
+        id: &apos;github&apos;,
+        name: &apos;GitHub&apos;,
+        clientId: (import.meta as any).env?.VITE_GITHUB_CLIENT_ID || &apos;&apos;,
         redirectUri: `${window.location.origin}/auth/callback/github`,
-        scope: 'user:email',
-        authUrl: 'https://github.com/login/oauth/authorize'
+        scope: &apos;user:email&apos;,
+        authUrl: &apos;https://github.com/login/oauth/authorize&apos;
       }
     };
   }
@@ -69,6 +78,7 @@ class OAuthService {
    * Get OAuth provider configuration
    */
   getProvider(providerId: string): OAuthProvider | null {
+}
     return this.providers[providerId] || null;
   }
 
@@ -76,6 +86,7 @@ class OAuthService {
    * Get all available OAuth providers
    */
   getAvailableProviders(): OAuthProvider[] {
+}
     return Object.values(this.providers).filter((provider: any) => provider.clientId);
   }
 
@@ -83,9 +94,11 @@ class OAuthService {
    * Generate OAuth authorization URL with PKCE support
    */
   async generateAuthUrl(providerId: string, state?: string): Promise<string | null> {
+}
     const provider = this.getProvider(providerId);
     if (!provider) {
-      console.error(`OAuth provider '${providerId}' not found`);
+}
+      console.error(`OAuth provider &apos;${providerId}&apos; not found`);
       return null;
     }
 
@@ -97,19 +110,21 @@ class OAuthService {
     sessionStorage.setItem(`oauth_verifier_${providerId}`, codeVerifier);
     
     const params = new URLSearchParams({
+}
       client_id: provider.clientId,
       redirect_uri: provider.redirectUri,
       scope: provider.scope,
-      response_type: 'code',
+      response_type: &apos;code&apos;,
       state: state || this.generateState(),
       code_challenge: codeChallenge,
-      code_challenge_method: 'S256'
+      code_challenge_method: &apos;S256&apos;
     });
 
     // Provider-specific parameters
-    if (providerId === 'google') {
-      params.append('access_type', 'offline');
-      params.append('prompt', 'consent');
+    if (providerId === &apos;google&apos;) {
+}
+      params.append(&apos;access_type&apos;, &apos;offline&apos;);
+      params.append(&apos;prompt&apos;, &apos;consent&apos;);
     }
 
     return `${provider.authUrl}?${params.toString()}`;
@@ -119,28 +134,35 @@ class OAuthService {
    * Handle OAuth callback and exchange code for tokens
    */
   async handleCallback(providerId: string, code: string, state: string): Promise<OAuthResponse> {
+}
     try {
+}
       const codeVerifier = sessionStorage.getItem(`oauth_verifier_${providerId}`);
       if (!codeVerifier) {
-        throw new Error('OAuth code verifier not found');
+}
+        throw new Error(&apos;OAuth code verifier not found&apos;);
       }
 
       const response = await fetch(`${this.baseUrl}/api/auth/oauth/callback`, {
-        method: 'POST',
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json'
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;
         },
         body: JSON.stringify({
+}
           provider: providerId,
           code,
           codeVerifier,
-          state
+//           state
         })
       });
 
       const data = await response.json();
 
       if (data.success && data.user && data.sessionToken) {
+}
         // Clean up stored verifier
         sessionStorage.removeItem(`oauth_verifier_${providerId}`);
         
@@ -148,6 +170,7 @@ class OAuthService {
         await authService.setSession(data.user, data.sessionToken);
         
         return {
+}
           success: true,
           user: data.user,
           sessionToken: data.sessionToken
@@ -155,14 +178,17 @@ class OAuthService {
       }
 
       return {
+}
         success: false,
-        error: data.error || 'OAuth authentication failed'
+        error: data.error || &apos;OAuth authentication failed&apos;
       };
     } catch (error) {
-      console.error('OAuth callback error:', error);
+}
+      console.error(&apos;OAuth callback error:&apos;, error);
       return {
+}
         success: false,
-        error: 'OAuth authentication failed'
+        error: &apos;OAuth authentication failed&apos;
       };
     }
   }
@@ -171,24 +197,30 @@ class OAuthService {
    * Link OAuth account to existing user
    */
   async linkAccount(providerId: string, code: string): Promise<OAuthResponse> {
+}
     try {
+}
       const codeVerifier = sessionStorage.getItem(`oauth_verifier_${providerId}`);
       const sessionToken = authService.getSessionToken();
 
       if (!codeVerifier || !sessionToken) {
-        throw new Error('Missing required authentication data');
+}
+        throw new Error(&apos;Missing required authentication data&apos;);
       }
 
       const response = await fetch(`${this.baseUrl}/api/auth/oauth/link`, {
-        method: 'POST',
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionToken}`
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
+          &apos;Authorization&apos;: `Bearer ${sessionToken}`
         },
         body: JSON.stringify({
+}
           provider: providerId,
           code,
-          codeVerifier
+//           codeVerifier
         })
       });
 
@@ -199,10 +231,12 @@ class OAuthService {
       
       return data;
     } catch (error) {
-      console.error('OAuth account linking error:', error);
+}
+      console.error(&apos;OAuth account linking error:&apos;, error);
       return {
+}
         success: false,
-        error: 'Failed to link OAuth account'
+        error: &apos;Failed to link OAuth account&apos;
       };
     }
   }
@@ -211,53 +245,67 @@ class OAuthService {
    * Unlink OAuth account
    */
   async unlinkAccount(providerId: string): Promise<{ success: boolean; error?: string }> {
+}
     try {
+}
       const sessionToken = authService.getSessionToken();
       if (!sessionToken) {
-        throw new Error('No active session');
+}
+        throw new Error(&apos;No active session&apos;);
       }
 
       const response = await fetch(`${this.baseUrl}/api/auth/oauth/unlink`, {
-        method: 'POST',
+}
+        method: &apos;POST&apos;,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionToken}`
+}
+          &apos;Content-Type&apos;: &apos;application/json&apos;,
+          &apos;Authorization&apos;: `Bearer ${sessionToken}`
         },
         body: JSON.stringify({ provider: providerId })
       });
 
       return await response.json();
     } catch (error) {
-      console.error('OAuth account unlinking error:', error);
+}
+      console.error(&apos;OAuth account unlinking error:&apos;, error);
       return {
+}
         success: false,
-        error: 'Failed to unlink OAuth account'
+        error: &apos;Failed to unlink OAuth account&apos;
       };
     }
   }
 
   /**
-   * Get user's linked OAuth accounts
+   * Get user&apos;s linked OAuth accounts
    */
   async getLinkedAccounts(): Promise<{ success: boolean; accounts?: any[]; error?: string }> {
+}
     try {
+}
       const sessionToken = authService.getSessionToken();
       if (!sessionToken) {
-        throw new Error('No active session');
+}
+        throw new Error(&apos;No active session&apos;);
       }
 
       const response = await fetch(`${this.baseUrl}/api/auth/oauth/accounts`, {
+}
         headers: {
-          'Authorization': `Bearer ${sessionToken}`
+}
+          &apos;Authorization&apos;: `Bearer ${sessionToken}`
         }
       });
 
       return await response.json();
     } catch (error) {
-      console.error('Error fetching linked accounts:', error);
+}
+      console.error(&apos;Error fetching linked accounts:&apos;, error);
       return {
+}
         success: false,
-        error: 'Failed to fetch linked accounts'
+        error: &apos;Failed to fetch linked accounts&apos;
       };
     }
   }
@@ -266,12 +314,15 @@ class OAuthService {
    * Initiate OAuth login flow
    */
   async initiateLogin(providerId: string): Promise<void> {
+}
     const authUrl = await this.generateAuthUrl(providerId);
     if (authUrl) {
+}
       // Store the current page for redirect after auth
-      sessionStorage.setItem('oauth_redirect_after_auth', window.location.pathname);
+      sessionStorage.setItem(&apos;oauth_redirect_after_auth&apos;, window.location.pathname);
       window.location.href = authUrl;
     } else {
+}
       throw new Error(`Failed to generate OAuth URL for ${providerId}`);
     }
   }
@@ -280,6 +331,7 @@ class OAuthService {
    * Generate cryptographically secure random string for PKCE
    */
   private generateCodeVerifier(): string {
+}
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
     return this.base64URLEncode(array);
@@ -289,9 +341,10 @@ class OAuthService {
    * Generate code challenge from verifier using SHA256
    */
   private async generateCodeChallenge(verifier: string): Promise<string> {
+}
     const encoder = new TextEncoder();
     const data = encoder.encode(verifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
+    const digest = await crypto.subtle.digest(&apos;SHA-256&apos;, data);
     return this.base64URLEncode(new Uint8Array(digest));
   }
 
@@ -299,6 +352,7 @@ class OAuthService {
    * Generate state parameter for CSRF protection
    */
   private generateState(): string {
+}
     const array = new Uint8Array(16);
     crypto.getRandomValues(array);
     return this.base64URLEncode(array);
@@ -308,10 +362,11 @@ class OAuthService {
    * Base64 URL encode (RFC 7636)
    */
   private base64URLEncode(array: Uint8Array): string {
+}
     return btoa(String.fromCharCode(...array))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+      .replace(/\+/g, &apos;-&apos;)
+      .replace(/\//g, &apos;_&apos;)
+      .replace(/=/g, &apos;&apos;);
   }
 }
 

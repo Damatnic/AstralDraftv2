@@ -1,54 +1,61 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo } from 'react';
-import type { Player, Team, GroundingChunk } from '../../types';
-import { streamOracleResponse } from '../../services/geminiService';
-import ReactMarkdown from 'react-markdown';
-import GroundingCitations from '../ui/GroundingCitations';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useCallback, useMemo } from &apos;react&apos;;
+import type { Player, Team, GroundingChunk } from &apos;../../types&apos;;
+import { streamOracleResponse } from &apos;../../services/geminiService&apos;;
+import ReactMarkdown from &apos;react-markdown&apos;;
+import GroundingCitations from &apos;../ui/GroundingCitations&apos;;
 
 interface Message {
+}
     id: number;
-    sender: 'user' | 'ai';
+    sender: &apos;user&apos; | &apos;ai&apos;;
     text: string;
     isLoading?: boolean;
     groundingChunks?: GroundingChunk[];
 }
 
 interface ConversationalOracleProps {
+}
     myTeam: Team | undefined;
     availablePlayers: Player[];
 }
 
 const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }: any) => {
+}
     const [messages, setMessages] = React.useState<Message[]>([
-        { id: 1, sender: 'ai', text: "Welcome to the Oracle. Ask me anything about your draft strategy." }
+        { id: 1, sender: &apos;ai&apos;, text: "Welcome to the Oracle. Ask me anything about your draft strategy." }
     ]);
-    const [input, setInput] = React.useState('');
+    const [input, setInput] = React.useState(&apos;&apos;);
     const [isSending, setIsSending] = React.useState(false);
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
+}
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
     React.useEffect(() => {
+}
         // A slight delay to allow the new message to render before scrolling
         setTimeout(scrollToBottom, 100);
     }, [messages]);
 
     const handleSend = async () => {
-        if (input.trim() === '' || isSending) return;
+}
+        if (input.trim() === &apos;&apos; || isSending) return;
         
-        const userMessage: Message = { id: Date.now(), sender: 'user', text: input };
-        const aiMessagePlaceholder: Message = { id: Date.now() + 1, sender: 'ai', text: '', isLoading: true, groundingChunks: [] };
+        const userMessage: Message = { id: Date.now(), sender: &apos;user&apos;, text: input };
+        const aiMessagePlaceholder: Message = { id: Date.now() + 1, sender: &apos;ai&apos;, text: &apos;&apos;, isLoading: true, groundingChunks: [] };
 
         const currentMessages = [...messages, userMessage];
         setMessages([...currentMessages, aiMessagePlaceholder]);
-        setInput('');
+        setInput(&apos;&apos;);
         setIsSending(true);
 
         try {
+}
             // Prepare history for the API call, excluding the initial welcome message
             const historyForApi = currentMessages.slice(1).map((m: any) => ({ sender: m.sender, text: m.text }));
 
@@ -56,9 +63,11 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
             let fullText = "";
             const collectedChunks: GroundingChunk[] = [];
             for await (const chunk of stream) {
+}
                 fullText += chunk.text;
                 const newChunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
                 if (newChunks) {
+}
                     collectedChunks.push(...newChunks);
                 }
 
@@ -73,12 +82,14 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
                 msg.id === aiMessagePlaceholder.id ? { ...msg, isLoading: false, groundingChunks: uniqueChunks } : msg
             ));
         } catch (error) {
+}
             setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id 
-                ? { ...msg, text: "My apologies, I'm having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
+                ? { ...msg, text: "My apologies, I&apos;m having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
                 : msg
             ));
         } finally {
+}
             setIsSending(false);
         }
     };
@@ -90,14 +101,16 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
             </div>
             <div className="flex-grow p-2 space-y-4 overflow-y-auto sm:px-4 md:px-6 lg:px-8">
                  {messages.map((msg: any) => (
-                    <div key={msg.id} className={`flex gap-2.5 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        {msg.sender === 'ai' && <span className="text-lg mt-1 self-start flex-shrink-0 sm:px-4 md:px-6 lg:px-8">🔮</span>}
-                        <div className={`max-w-[85%] p-2.5 rounded-lg text-sm leading-relaxed ${msg.sender === 'user' ? 'bg-cyan-600' : 'bg-black/20'}`}>
+}
+                    <div key={msg.id} className={`flex gap-2.5 ${msg.sender === &apos;user&apos; ? &apos;justify-end&apos; : &apos;justify-start&apos;}`}>
+                        {msg.sender === &apos;ai&apos; && <span className="text-lg mt-1 self-start flex-shrink-0 sm:px-4 md:px-6 lg:px-8">🔮</span>}
+                        <div className={`max-w-[85%] p-2.5 rounded-lg text-sm leading-relaxed ${msg.sender === &apos;user&apos; ? &apos;bg-cyan-600&apos; : &apos;bg-black/20&apos;}`}>
                             {msg.isLoading ? (
+}
                                 <div className="flex items-center gap-1.5 p-1 sm:px-4 md:px-6 lg:px-8">
-                                    <span style={{ animationDelay: '0ms' }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
-                                    <span style={{ animationDelay: '150ms' }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
-                                    <span style={{ animationDelay: '300ms' }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
+                                    <span style={{ animationDelay: &apos;0ms&apos; }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
+                                    <span style={{ animationDelay: &apos;150ms&apos; }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
+                                    <span style={{ animationDelay: &apos;300ms&apos; }} className="animate-pulse bg-white/50 rounded-full h-1.5 w-1.5 sm:px-4 md:px-6 lg:px-8"></span>
                                 </div>
                             ) : (
                                 <>
@@ -105,6 +118,7 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
                                         <ReactMarkdown>{msg.text}</ReactMarkdown>
                                     </div>
                                     {msg.groundingChunks && msg.groundingChunks.length > 0 && (
+}
                                         <GroundingCitations chunks={msg.groundingChunks} />
                                     )}
                                 </>

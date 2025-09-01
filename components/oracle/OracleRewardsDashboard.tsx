@@ -1,11 +1,11 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Widget } from '../ui/Widget';
-import { ZapIcon } from '../icons/ZapIcon';
-import { oracleRewardsService, type UserRewards, type Achievement, type Badge } from '../../services/oracleRewardsService';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { Widget } from &apos;../ui/Widget&apos;;
+import { ZapIcon } from &apos;../icons/ZapIcon&apos;;
+import { oracleRewardsService, type UserRewards, type Achievement, type Badge } from &apos;../../services/oracleRewardsService&apos;;
 
 interface ProgressBarProps {
+}
     current: number;
     max: number;
     color?: string;
@@ -14,10 +14,12 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ current, 
+}
     max, 
-    color = 'bg-blue-500',
+    color = &apos;bg-blue-500&apos;,
     showLabel = true 
  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
     const percentage = Math.min((current / max) * 100, 100);
     
@@ -31,6 +33,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ current,
                 />
             </div>
             {showLabel && (
+}
                 <div className="flex justify-between text-xs text-gray-400 mt-1 sm:px-4 md:px-6 lg:px-8">
                     <span>{current}</span>
                     <span>{max}</span>
@@ -41,45 +44,51 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ current,
 };
 
 interface AchievementCardProps {
+}
     achievement: Achievement;
     isUnlocked: boolean;
 
 }
 
 const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlocked }: any) => {
-    const getDifficultyColor = (difficulty: Achievement['difficulty']) => {
+}
+    const getDifficultyColor = (difficulty: Achievement[&apos;difficulty&apos;]) => {
+}
         switch (difficulty) {
-            case 'BRONZE':
-                return 'border-amber-600 bg-amber-600/10';
-            case 'SILVER':
-                return 'border-gray-400 bg-gray-400/10';
-            case 'GOLD':
-                return 'border-yellow-500 bg-yellow-500/10';
-            case 'PLATINUM':
-                return 'border-purple-500 bg-purple-500/10';
-            case 'LEGENDARY':
-                return 'border-red-500 bg-red-500/10';
+}
+            case &apos;BRONZE&apos;:
+                return &apos;border-amber-600 bg-amber-600/10&apos;;
+            case &apos;SILVER&apos;:
+                return &apos;border-gray-400 bg-gray-400/10&apos;;
+            case &apos;GOLD&apos;:
+                return &apos;border-yellow-500 bg-yellow-500/10&apos;;
+            case &apos;PLATINUM&apos;:
+                return &apos;border-purple-500 bg-purple-500/10&apos;;
+            case &apos;LEGENDARY&apos;:
+                return &apos;border-red-500 bg-red-500/10&apos;;
             default:
-                return 'border-gray-500 bg-gray-500/10';
+                return &apos;border-gray-500 bg-gray-500/10&apos;;
 
     };
 
-    const getCategoryIcon = (category: Achievement['category']) => {
+    const getCategoryIcon = (category: Achievement[&apos;category&apos;]) => {
+}
         switch (category) {
-            case 'PREDICTION':
-                return '🎯';
-            case 'STREAK':
-                return '🔥';
-            case 'ACCURACY':
-                return '📊';
-            case 'PARTICIPATION':
-                return '🏃';
-            case 'SEASONAL':
-                return '🏆';
-            case 'MILESTONE':
-                return '💎';
+}
+            case &apos;PREDICTION&apos;:
+                return &apos;🎯&apos;;
+            case &apos;STREAK&apos;:
+                return &apos;🔥&apos;;
+            case &apos;ACCURACY&apos;:
+                return &apos;📊&apos;;
+            case &apos;PARTICIPATION&apos;:
+                return &apos;🏃&apos;;
+            case &apos;SEASONAL&apos;:
+                return &apos;🏆&apos;;
+            case &apos;MILESTONE&apos;:
+                return &apos;💎&apos;;
             default:
-                return '⭐';
+                return &apos;⭐&apos;;
 
     };
 
@@ -88,7 +97,8 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className={`border rounded-lg p-4 ${getDifficultyColor(achievement.difficulty)} ${
-                isUnlocked ? '' : 'opacity-50 grayscale'
+}
+                isUnlocked ? &apos;&apos; : &apos;opacity-50 grayscale&apos;
             }`}
         >
             <div className="flex items-start justify-between mb-2 sm:px-4 md:px-6 lg:px-8">
@@ -112,9 +122,11 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
                 {achievement.description}
             </p>
             {isUnlocked ? (
+}
                 <div className="text-xs text-green-400 sm:px-4 md:px-6 lg:px-8">
                     ✅ Unlocked {achievement.unlockedAt ? 
-                        new Date(achievement.unlockedAt).toLocaleDateString() : 'Recently'
+}
+                        new Date(achievement.unlockedAt).toLocaleDateString() : &apos;Recently&apos;
 
                 </div>
             ) : (
@@ -127,33 +139,39 @@ const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, isUnlock
 };
 
 interface BadgeDisplayProps {
+}
     badge: Badge;
-    size?: 'sm' | 'md' | 'lg';
+    size?: &apos;sm&apos; | &apos;md&apos; | &apos;lg&apos;;
 
 }
 
-const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) => {
+const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = &apos;md&apos; }: any) => {
+}
     const getSizeClasses = () => {
+}
         switch (size) {
-            case 'sm':
-                return 'w-8 h-8 text-xs';
-            case 'lg':
-                return 'w-16 h-16 text-2xl';
+}
+            case &apos;sm&apos;:
+                return &apos;w-8 h-8 text-xs&apos;;
+            case &apos;lg&apos;:
+                return &apos;w-16 h-16 text-2xl&apos;;
             default:
-                return 'w-12 h-12 text-lg';
+                return &apos;w-12 h-12 text-lg&apos;;
 
     };
 
-    const getRarityGlow = (rarity: Badge['rarity']) => {
+    const getRarityGlow = (rarity: Badge[&apos;rarity&apos;]) => {
+}
         switch (rarity) {
-            case 'LEGENDARY':
-                return 'shadow-lg shadow-yellow-500/50 animate-pulse';
-            case 'EPIC':
-                return 'shadow-lg shadow-purple-500/30';
-            case 'RARE':
-                return 'shadow-lg shadow-blue-500/20';
+}
+            case &apos;LEGENDARY&apos;:
+                return &apos;shadow-lg shadow-yellow-500/50 animate-pulse&apos;;
+            case &apos;EPIC&apos;:
+                return &apos;shadow-lg shadow-purple-500/30&apos;;
+            case &apos;RARE&apos;:
+                return &apos;shadow-lg shadow-blue-500/20&apos;;
             default:
-                return '';
+                return &apos;&apos;;
 
     };
 
@@ -170,6 +188,7 @@ const BadgeDisplay: React.FC<BadgeDisplayProps> = ({ badge, size = 'md' }: any) 
 };
 
 interface LevelDisplayProps {
+}
     level: number;
     currentPoints: number;
     nextLevelPoints: number;
@@ -177,6 +196,7 @@ interface LevelDisplayProps {
 }
 
 const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextLevelPoints }: any) => {
+}
     const pointsInCurrentLevel = currentPoints % 500;
     
     return (
@@ -191,7 +211,8 @@ const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextL
                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     className="absolute inset-0 w-20 h-20 border-4 border-transparent border-t-yellow-400 rounded-full mx-auto sm:px-4 md:px-6 lg:px-8"
                     style={{
-                        borderTopColor: nextLevelPoints < 50 ? '#fbbf24' : 'transparent'
+}
+                        borderTopColor: nextLevelPoints < 50 ? &apos;#fbbf24&apos; : &apos;transparent&apos;
                     }}
                 />
             </div>
@@ -200,7 +221,7 @@ const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextL
                 {nextLevelPoints} points to level {level + 1}
             </div>
             <div className="mt-2 sm:px-4 md:px-6 lg:px-8">
-                <ProgressBar
+                <ProgressBar>
                     current={pointsInCurrentLevel}
                     max={500}
                     color="bg-gradient-to-r from-blue-500 to-purple-500"
@@ -212,7 +233,9 @@ const LevelDisplay: React.FC<LevelDisplayProps> = ({ level, currentPoints, nextL
 };
 
 interface RewardNotificationProps {
+}
     rewards: {
+}
         points: number;
         newAchievements: Achievement[];
         newBadges: Badge[];
@@ -221,7 +244,9 @@ interface RewardNotificationProps {
     onClose: () => void;
 
 const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClose }: any) => {
+}
     React.useEffect(() => {
+}
         const timer = setTimeout(onClose, 5000); // Auto-close after 5 seconds
         return () => clearTimeout(timer);
     }, [onClose]);
@@ -245,6 +270,7 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
             
             <div className="space-y-2 sm:px-4 md:px-6 lg:px-8">
                 {rewards.points > 0 && (
+}
                     <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-yellow-400 sm:px-4 md:px-6 lg:px-8">💰</span>
                         <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">+{rewards.points} points</span>
@@ -252,6 +278,7 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
                 )}
                 
                 {rewards.levelUp && (
+}
                     <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-purple-400 sm:px-4 md:px-6 lg:px-8">⬆️</span>
                         <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">Level up!</span>
@@ -259,6 +286,7 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
                 )}
                 
                 {rewards.newAchievements.map((achievement: any) => (
+}
                     <div key={achievement.id} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <span className="text-2xl sm:px-4 md:px-6 lg:px-8">{achievement.icon}</span>
                         <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{achievement.title}</span>
@@ -266,6 +294,7 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
                 ))}
                 
                 {rewards.newBadges.map((badge: any) => (
+}
                     <div key={badge.id} className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
                         <BadgeDisplay badge={badge} size="sm" />
                         <span className="text-sm text-white sm:px-4 md:px-6 lg:px-8">{badge.name}</span>
@@ -277,14 +306,18 @@ const RewardNotification: React.FC<RewardNotificationProps> = ({ rewards, onClos
 };
 
 export const OracleRewardsDashboard: React.FC = () => {
+}
     const [userRewards, setUserRewards] = React.useState<UserRewards | null>(null);
     const [allAchievements, setAllAchievements] = React.useState<Achievement[]>([]);
     const [loading, setLoading] = React.useState(true);
-    const [selectedCategory, setSelectedCategory] = React.useState<'ALL' | Achievement['category']>('ALL');
+    const [selectedCategory, setSelectedCategory] = React.useState<&apos;ALL&apos; | Achievement[&apos;category&apos;]>(&apos;ALL&apos;);
 
     React.useEffect(() => {
+}
         const loadRewards = async () => {
+}
             try {
+}
 
                 setLoading(true);
                 const rewards = await oracleRewardsService.getUserRewards();
@@ -292,16 +325,18 @@ export const OracleRewardsDashboard: React.FC = () => {
                 
                 setUserRewards(rewards);
                 setAllAchievements(achievements);
-            finally {
+  } finally {
+}
                 setLoading(false);
 
     `px-3 py-1 rounded-md text-sm font-medium transition-all ${
+}
                                     selectedCategory === category
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                        ? &apos;bg-blue-500 text-white&apos;
+                                        : &apos;bg-gray-700 text-gray-300 hover:bg-gray-600&apos;
                                 }`}
                             >
-                                {category === 'ALL' ? 'All' : category.charAt(0) + category.slice(1).toLowerCase()}
+                                {category === &apos;ALL&apos; ? &apos;All&apos; : category.charAt(0) + category.slice(1).toLowerCase()}
                             </button>
                         ))}
                     </div>
@@ -309,9 +344,10 @@ export const OracleRewardsDashboard: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredAchievements.map((achievement: any) => {
+}
                         const isUnlocked = unlockedAchievements.some((ua: any) => ua.id === achievement.id);
                         return (
-                            <AchievementCard
+                            <AchievementCard>
                                 key={achievement.id}
                                 achievement={achievement}
                                 isUnlocked={isUnlocked}

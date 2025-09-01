@@ -3,28 +3,32 @@
  * Implements Core Web Vitals monitoring, performance budgets, and automated optimization
  */
 
-import React, { useState, useEffect, useCallback, useRef, FC, MouseEvent } from 'react';
-import { performanceOptimizer, webVitalsMonitor } from '../../utils/performanceOptimizer';
+import React, { useState, useEffect, useCallback, useRef, FC, MouseEvent } from &apos;react&apos;;
+import { performanceOptimizer, webVitalsMonitor } from &apos;../../utils/performanceOptimizer&apos;;
 
 interface PerformanceMetric {
+}
   name: string;
   value: number;
   timestamp: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos;;
   threshold: {
+}
     good: number;
     poor: number;
   };
 }
 
 interface PerformanceBudget {
+}
   metric: string;
   budget: number;
   current: number;
-  status: 'within-budget' | 'approaching-limit' | 'over-budget';
+  status: &apos;within-budget&apos; | &apos;approaching-limit&apos; | &apos;over-budget&apos;;
 }
 
 interface PerformanceReport {
+}
   score: number;
   metrics: PerformanceMetric[];
   budgets: PerformanceBudget[];
@@ -33,6 +37,7 @@ interface PerformanceReport {
 }
 
 const PERFORMANCE_THRESHOLDS = {
+}
   FCP: { good: 1800, poor: 3000 }, // First Contentful Paint
   LCP: { good: 2500, poor: 4000 }, // Largest Contentful Paint
   FID: { good: 100, poor: 300 },   // First Input Delay
@@ -41,24 +46,27 @@ const PERFORMANCE_THRESHOLDS = {
 };
 
 const PERFORMANCE_BUDGETS = [
-  { metric: 'Bundle Size', budget: 500 * 1024, type: 'bytes' }, // 500KB
-  { metric: 'Images Size', budget: 1000 * 1024, type: 'bytes' }, // 1MB
-  { metric: 'API Response Time', budget: 1000, type: 'ms' }, // 1s
-  { metric: 'Memory Usage', budget: 50 * 1024 * 1024, type: 'bytes' }, // 50MB
-  { metric: 'DOM Nodes', budget: 1500, type: 'count' }
+  { metric: &apos;Bundle Size&apos;, budget: 500 * 1024, type: &apos;bytes&apos; }, // 500KB
+  { metric: &apos;Images Size&apos;, budget: 1000 * 1024, type: &apos;bytes&apos; }, // 1MB
+  { metric: &apos;API Response Time&apos;, budget: 1000, type: &apos;ms&apos; }, // 1s
+  { metric: &apos;Memory Usage&apos;, budget: 50 * 1024 * 1024, type: &apos;bytes&apos; }, // 50MB
+  { metric: &apos;DOM Nodes&apos;, budget: 1500, type: &apos;count&apos; }
 ];
 
 interface PerformanceMonitorProps {
+}
   enabled?: boolean;
   showWidget?: boolean;
   onPerformanceIssue?: (issue: PerformanceMetric) => void;
 }
 
 export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
+}
   enabled = true,
   showWidget = import.meta.env.DEV,
-  onPerformanceIssue
+//   onPerformanceIssue
 }: any) => {
+}
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [budgets, setBudgets] = useState<PerformanceBudget[]>([]);
   const [score, setScore] = useState<number>(100);
@@ -66,33 +74,39 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   const [autoOptimize, setAutoOptimize] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout>();
 
-  const calculateRating = useCallback((metric: string, value: number): 'good' | 'needs-improvement' | 'poor' => {
+  const calculateRating = useCallback((metric: string, value: number): &apos;good&apos; | &apos;needs-improvement&apos; | &apos;poor&apos; => {
+}
     const threshold = PERFORMANCE_THRESHOLDS[metric as keyof typeof PERFORMANCE_THRESHOLDS];
-    if (!threshold) return 'good';
+    if (!threshold) return &apos;good&apos;;
     
-    if (value <= threshold.good) return 'good';
-    if (value <= threshold.poor) return 'needs-improvement';
-    return 'poor';
+    if (value <= threshold.good) return &apos;good&apos;;
+    if (value <= threshold.poor) return &apos;needs-improvement&apos;;
+    return &apos;poor&apos;;
   }, []);
 
   const collectWebVitals = useCallback(() => {
+}
     const vitalsMetrics = webVitalsMonitor.getMetrics();
     const newMetrics: PerformanceMetric[] = [];
 
     vitalsMetrics.forEach((value, name) => {
+}
       const threshold = PERFORMANCE_THRESHOLDS[name as keyof typeof PERFORMANCE_THRESHOLDS];
       if (threshold) {
+}
         const metric: PerformanceMetric = {
+}
           name,
           value,
           timestamp: Date.now(),
           rating: calculateRating(name, value),
-          threshold
+//           threshold
         };
         newMetrics.push(metric);
 
         // Trigger callback for performance issues
-        if (metric.rating === 'poor' && onPerformanceIssue) {
+        if (metric.rating === &apos;poor&apos; && onPerformanceIssue) {
+}
           onPerformanceIssue(metric);
         }
       }
@@ -102,42 +116,48 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [calculateRating, onPerformanceIssue]);
 
   const collectCustomMetrics = useCallback(() => {
+}
     const customMetrics: PerformanceMetric[] = [];
 
     // Memory usage
-    if ('memory' in performance) {
+    if (&apos;memory&apos; in performance) {
+}
       const memory = (performance as any).memory;
       customMetrics.push({
-        name: 'Memory Usage',
+}
+        name: &apos;Memory Usage&apos;,
         value: memory.usedJSHeapSize,
         timestamp: Date.now(),
-        rating: memory.usedJSHeapSize > 50 * 1024 * 1024 ? 'poor' : 'good',
+        rating: memory.usedJSHeapSize > 50 * 1024 * 1024 ? &apos;poor&apos; : &apos;good&apos;,
         threshold: { good: 25 * 1024 * 1024, poor: 50 * 1024 * 1024 }
       });
     }
 
     // DOM complexity
-    const domNodes = document.querySelectorAll('*').length;
+    const domNodes = document.querySelectorAll(&apos;*&apos;).length;
     customMetrics.push({
-      name: 'DOM Nodes',
+}
+      name: &apos;DOM Nodes&apos;,
       value: domNodes,
       timestamp: Date.now(),
-      rating: domNodes > 1500 ? 'poor' : domNodes > 800 ? 'needs-improvement' : 'good',
+      rating: domNodes > 1500 ? &apos;poor&apos; : domNodes > 800 ? &apos;needs-improvement&apos; : &apos;good&apos;,
       threshold: { good: 800, poor: 1500 }
     });
 
     // Bundle size estimation
-    const resourceEntries = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+    const resourceEntries = performance.getEntriesByType(&apos;resource&apos;) as PerformanceResourceTiming[];
     const jsSize = resourceEntries
-      .filter((entry: any) => entry.name.includes('.js'))
+      .filter((entry: any) => entry.name.includes(&apos;.js&apos;))
       .reduce((sum, entry) => sum + (entry.transferSize || 0), 0);
 
     if (jsSize > 0) {
+}
       customMetrics.push({
-        name: 'Bundle Size',
+}
+        name: &apos;Bundle Size&apos;,
         value: jsSize,
         timestamp: Date.now(),
-        rating: jsSize > 500 * 1024 ? 'poor' : jsSize > 250 * 1024 ? 'needs-improvement' : 'good',
+        rating: jsSize > 500 * 1024 ? &apos;poor&apos; : jsSize > 250 * 1024 ? &apos;needs-improvement&apos; : &apos;good&apos;,
         threshold: { good: 250 * 1024, poor: 500 * 1024 }
       });
     }
@@ -146,27 +166,33 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, []);
 
   const calculateBudgetStatus = useCallback(() => {
+}
     const currentMetrics = [...metrics];
     const budgetStatus: PerformanceBudget[] = [];
 
     PERFORMANCE_BUDGETS.forEach((budget: any) => {
+}
       const metric = currentMetrics.find((m: any) => m.name === budget.metric);
       const currentValue = metric?.value || 0;
       
-      let status: 'within-budget' | 'approaching-limit' | 'over-budget';
+      let status: &apos;within-budget&apos; | &apos;approaching-limit&apos; | &apos;over-budget&apos;;
       if (currentValue > budget.budget) {
-        status = 'over-budget';
+}
+        status = &apos;over-budget&apos;;
       } else if (currentValue > budget.budget * 0.8) {
-        status = 'approaching-limit';
+}
+        status = &apos;approaching-limit&apos;;
       } else {
-        status = 'within-budget';
+}
+        status = &apos;within-budget&apos;;
       }
 
       budgetStatus.push({
+}
         metric: budget.metric,
         budget: budget.budget,
         current: currentValue,
-        status
+//         status
       });
     });
 
@@ -174,13 +200,16 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [metrics]);
 
   const calculatePerformanceScore = useCallback(() => {
+}
     if (metrics.length === 0) return 100;
 
     const scores = metrics.map((metric: any) => {
+}
       switch (metric.rating) {
-        case 'good': return 100;
-        case 'needs-improvement': return 70;
-        case 'poor': return 30;
+}
+        case &apos;good&apos;: return 100;
+        case &apos;needs-improvement&apos;: return 70;
+        case &apos;poor&apos;: return 30;
         default: return 100;
       }
     });
@@ -189,6 +218,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [metrics]);
 
   const updateMetrics = useCallback(() => {
+}
     if (!enabled) return;
 
     const webVitals = collectWebVitals();
@@ -201,33 +231,41 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
 
     // Auto-optimization
     if (autoOptimize) {
+}
       performAutoOptimizations(allMetrics);
     }
   }, [enabled, collectWebVitals, collectCustomMetrics, calculateBudgetStatus, calculatePerformanceScore, autoOptimize]);
 
   const performAutoOptimizations = useCallback((currentMetrics: PerformanceMetric[]) => {
+}
     currentMetrics.forEach((metric: any) => {
-      if (metric.rating === 'poor') {
+}
+      if (metric.rating === &apos;poor&apos;) {
+}
         switch (metric.name) {
-          case 'LCP':
+}
+          case &apos;LCP&apos;:
             // Optimize images and preload critical resources
             performanceOptimizer.optimizeForMobile();
-            console.log('🚀 Auto-optimization: Optimizing for LCP');
+            console.log(&apos;🚀 Auto-optimization: Optimizing for LCP&apos;);
             break;
-          case 'CLS':
+          case &apos;CLS&apos;:
             // Add size attributes to images
-            document.querySelectorAll('img:not([width]):not([height])').forEach((img: any) => {
+            document.querySelectorAll(&apos;img:not([width]):not([height])&apos;).forEach((img: any) => {
+}
               if (img instanceof HTMLImageElement) {
-                img.style.aspectRatio = '16/9'; // Prevent layout shift
+}
+                img.style.aspectRatio = &apos;16/9&apos;; // Prevent layout shift
               }
             });
-            console.log('🚀 Auto-optimization: Preventing layout shift');
+            console.log(&apos;🚀 Auto-optimization: Preventing layout shift&apos;);
             break;
-          case 'Memory Usage':
+          case &apos;Memory Usage&apos;:
             // Clear caches if memory usage is high
-            if ('memory' in performance && (performance as any).memory.usedJSHeapSize > 100 * 1024 * 1024) {
+            if (&apos;memory&apos; in performance && (performance as any).memory.usedJSHeapSize > 100 * 1024 * 1024) {
+}
               performanceOptimizer.updateConfig({ enableMemoryOptimization: true });
-              console.log('🚀 Auto-optimization: Clearing memory caches');
+              console.log(&apos;🚀 Auto-optimization: Clearing memory caches&apos;);
             }
             break;
         }
@@ -236,44 +274,55 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, []);
 
   const formatMetricValue = useCallback((metric: PerformanceMetric) => {
-    if (metric.name.includes('Size') || metric.name.includes('Memory')) {
+}
+    if (metric.name.includes(&apos;Size&apos;) || metric.name.includes(&apos;Memory&apos;)) {
+}
       return `${(metric.value / 1024 / 1024).toFixed(2)} MB`;
     }
-    if (metric.name === 'DOM Nodes') {
+    if (metric.name === &apos;DOM Nodes&apos;) {
+}
       return metric.value.toString();
     }
-    if (metric.name === 'CLS') {
+    if (metric.name === &apos;CLS&apos;) {
+}
       return metric.value.toFixed(3);
     }
     return `${Math.round(metric.value)} ms`;
   }, []);
 
   const getScoreColor = useCallback((score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+}
+    if (score >= 90) return &apos;text-green-600&apos;;
+    if (score >= 70) return &apos;text-yellow-600&apos;;
+    return &apos;text-red-600&apos;;
   }, []);
 
   const getRatingColor = useCallback((rating: string) => {
+}
     switch (rating) {
-      case 'good': return 'text-green-600';
-      case 'needs-improvement': return 'text-yellow-600';
-      case 'poor': return 'text-red-600';
-      default: return 'text-gray-600';
+}
+      case &apos;good&apos;: return &apos;text-green-600&apos;;
+      case &apos;needs-improvement&apos;: return &apos;text-yellow-600&apos;;
+      case &apos;poor&apos;: return &apos;text-red-600&apos;;
+      default: return &apos;text-gray-600&apos;;
     }
   }, []);
 
   const getBudgetColor = useCallback((status: string) => {
+}
     switch (status) {
-      case 'within-budget': return 'text-green-600';
-      case 'approaching-limit': return 'text-yellow-600';
-      case 'over-budget': return 'text-red-600';
-      default: return 'text-gray-600';
+}
+      case &apos;within-budget&apos;: return &apos;text-green-600&apos;;
+      case &apos;approaching-limit&apos;: return &apos;text-yellow-600&apos;;
+      case &apos;over-budget&apos;: return &apos;text-red-600&apos;;
+      default: return &apos;text-gray-600&apos;;
     }
   }, []);
 
   const exportReport = useCallback(() => {
+}
     const report: PerformanceReport = {
+}
       score,
       metrics,
       budgets,
@@ -281,9 +330,9 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
       timestamp: Date.now()
     };
 
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: &apos;application/json&apos; });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement(&apos;a&apos;);
     a.href = url;
     a.download = `performance-report-${new Date().toISOString()}.json`;
     a.click();
@@ -291,35 +340,39 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [score, metrics, budgets]);
 
   const generateRecommendations = useCallback(() => {
+}
     const recommendations: string[] = [];
 
     metrics.forEach((metric: any) => {
-      if (metric.rating === 'poor') {
+}
+      if (metric.rating === &apos;poor&apos;) {
+}
         switch (metric.name) {
-          case 'LCP':
-            recommendations.push('Optimize images and use modern formats (WebP/AVIF)');
-            recommendations.push('Preload critical resources');
-            recommendations.push('Optimize server response times');
+}
+          case &apos;LCP&apos;:
+            recommendations.push(&apos;Optimize images and use modern formats (WebP/AVIF)&apos;);
+            recommendations.push(&apos;Preload critical resources&apos;);
+            recommendations.push(&apos;Optimize server response times&apos;);
             break;
-          case 'FCP':
-            recommendations.push('Reduce render-blocking resources');
-            recommendations.push('Minimize CSS and JavaScript');
+          case &apos;FCP&apos;:
+            recommendations.push(&apos;Reduce render-blocking resources&apos;);
+            recommendations.push(&apos;Minimize CSS and JavaScript&apos;);
             break;
-          case 'CLS':
-            recommendations.push('Add explicit dimensions to images and embeds');
-            recommendations.push('Reserve space for dynamic content');
+          case &apos;CLS&apos;:
+            recommendations.push(&apos;Add explicit dimensions to images and embeds&apos;);
+            recommendations.push(&apos;Reserve space for dynamic content&apos;);
             break;
-          case 'FID':
-            recommendations.push('Reduce JavaScript execution time');
-            recommendations.push('Use web workers for heavy computations');
+          case &apos;FID&apos;:
+            recommendations.push(&apos;Reduce JavaScript execution time&apos;);
+            recommendations.push(&apos;Use web workers for heavy computations&apos;);
             break;
-          case 'Bundle Size':
-            recommendations.push('Implement code splitting and lazy loading');
-            recommendations.push('Remove unused dependencies');
+          case &apos;Bundle Size&apos;:
+            recommendations.push(&apos;Implement code splitting and lazy loading&apos;);
+            recommendations.push(&apos;Remove unused dependencies&apos;);
             break;
-          case 'Memory Usage':
-            recommendations.push('Implement virtual scrolling for large lists');
-            recommendations.push('Clean up event listeners and timers');
+          case &apos;Memory Usage&apos;:
+            recommendations.push(&apos;Implement virtual scrolling for large lists&apos;);
+            recommendations.push(&apos;Clean up event listeners and timers&apos;);
             break;
         }
       }
@@ -329,6 +382,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   }, [metrics]);
 
   useEffect(() => {
+}
     if (!enabled) return;
 
     // Initial measurement
@@ -338,19 +392,22 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
     intervalRef.current = setInterval(updateMetrics, 5000); // Every 5 seconds
 
     return () => {
+}
       if (intervalRef.current) {
+}
         clearInterval(intervalRef.current);
       }
     };
   }, [enabled, updateMetrics]);
 
   if (!showWidget || !enabled) {
+}
     return null;
   }
 
   return (
     <div className="fixed bottom-4 right-4 z-[9999] max-w-sm">
-      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 ${isCollapsed ? 'w-16 h-16' : 'w-80'}`}>
+      <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 transition-all duration-300 ${isCollapsed ? &apos;w-16 h-16&apos; : &apos;w-80&apos;}`}>
         
         {/* Header / Collapsed State */}
         <div 
@@ -358,11 +415,12 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
           <div className="flex items-center space-x-3">
-            <div className={`w-3 h-3 rounded-full ${score >= 90 ? 'bg-green-500' : score >= 70 ? 'bg-yellow-500' : 'bg-red-500'}`} />
+            <div className={`w-3 h-3 rounded-full ${score >= 90 ? &apos;bg-green-500&apos; : score >= 70 ? &apos;bg-yellow-500&apos; : &apos;bg-red-500&apos;}`} />
             {!isCollapsed && (
+}
               <div>
                 <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
-                  Performance
+//                   Performance
                 </h3>
                 <p className={`text-xs ${getScoreColor(score)}`}>
                   Score: {score}/100
@@ -372,13 +430,15 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
           </div>
           
           {!isCollapsed && (
+}
             <div className="flex space-x-2">
               <button
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
+}
                   e.stopPropagation();
                   setAutoOptimize(!autoOptimize);
                 }}
-                className={`p-1 rounded ${autoOptimize ? 'bg-blue-100 text-blue-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-1 rounded ${autoOptimize ? &apos;bg-blue-100 text-blue-600&apos; : &apos;text-gray-400 hover:text-gray-600&apos;}`}
                 title="Auto-optimize"
               >
                 ⚡
@@ -386,6 +446,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
               
               <button
                 onClick={(e: MouseEvent<HTMLButtonElement>) => {
+}
                   e.stopPropagation();
                   exportReport();
                 }}
@@ -400,6 +461,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
 
         {/* Expanded Content */}
         {!isCollapsed && (
+}
           <div className="px-4 pb-4 space-y-4 max-h-96 overflow-y-auto">
             
             {/* Core Web Vitals */}
@@ -408,7 +470,8 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                 Core Web Vitals
               </h4>
               <div className="space-y-2">
-                {metrics.filter((m: any) => ['FCP', 'LCP', 'FID', 'CLS'].includes(m.name)).map((metric: any) => (
+                {metrics.filter((m: any) => [&apos;FCP&apos;, &apos;LCP&apos;, &apos;FID&apos;, &apos;CLS&apos;].includes(m.name)).map((metric: any) => (
+}
                   <div key={metric.name} className="flex items-center justify-between text-xs">
                     <span className="text-gray-600 dark:text-gray-400">{metric.name}</span>
                     <div className="flex items-center space-x-2">
@@ -416,8 +479,9 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                         {formatMetricValue(metric)}
                       </span>
                       <div className={`w-2 h-2 rounded-full ${
-                        metric.rating === 'good' ? 'bg-green-500' :
-                        metric.rating === 'needs-improvement' ? 'bg-yellow-500' : 'bg-red-500'
+}
+                        metric.rating === &apos;good&apos; ? &apos;bg-green-500&apos; :
+                        metric.rating === &apos;needs-improvement&apos; ? &apos;bg-yellow-500&apos; : &apos;bg-red-500&apos;
                       }`} />
                     </div>
                   </div>
@@ -432,6 +496,7 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
               </h4>
               <div className="space-y-2">
                 {budgets.map((budget: any) => (
+}
                   <div key={budget.metric} className="text-xs">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 dark:text-gray-400">{budget.metric}</span>
@@ -442,8 +507,9 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                     <div className="mt-1 bg-gray-200 dark:bg-gray-700 rounded-full h-1">
                       <div 
                         className={`h-1 rounded-full ${
-                          budget.status === 'within-budget' ? 'bg-green-500' :
-                          budget.status === 'approaching-limit' ? 'bg-yellow-500' : 'bg-red-500'
+}
+                          budget.status === &apos;within-budget&apos; ? &apos;bg-green-500&apos; :
+                          budget.status === &apos;approaching-limit&apos; ? &apos;bg-yellow-500&apos; : &apos;bg-red-500&apos;
                         }`}
                         style={{ width: `${Math.min(100, (budget.current / budget.budget) * 100)}%` }}
                       />
@@ -459,13 +525,13 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
                 onClick={updateMetrics}
                 className="flex-1 px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs hover:bg-blue-200"
               >
-                Refresh
+//                 Refresh
               </button>
               <button
                 onClick={() => performanceOptimizer.optimizeForMobile()}
                 className="flex-1 px-2 py-1 bg-green-100 text-green-700 rounded text-xs hover:bg-green-200"
               >
-                Optimize
+//                 Optimize
               </button>
             </div>
 
@@ -478,23 +544,28 @@ export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
 
 // Hook for performance monitoring
 export const usePerformanceMonitoring = () => {
+}
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [score, setScore] = useState<number>(100);
 
   const measurePerformance = useCallback(() => {
+}
     const vitalsMetrics = webVitalsMonitor.getMetrics();
     const performanceMetrics: PerformanceMetric[] = [];
 
     vitalsMetrics.forEach((value, name) => {
+}
       const threshold = PERFORMANCE_THRESHOLDS[name as keyof typeof PERFORMANCE_THRESHOLDS];
       if (threshold) {
+}
         performanceMetrics.push({
+}
           name,
           value,
           timestamp: Date.now(),
-          rating: value <= threshold.good ? 'good' : 
-                  value <= threshold.poor ? 'needs-improvement' : 'poor',
-          threshold
+          rating: value <= threshold.good ? &apos;good&apos; : 
+                  value <= threshold.poor ? &apos;needs-improvement&apos; : &apos;poor&apos;,
+//           threshold
         });
       }
     });
@@ -503,7 +574,7 @@ export const usePerformanceMonitoring = () => {
     
     const avgScore = performanceMetrics.length > 0 
       ? performanceMetrics.reduce((sum, metric) => 
-          sum + (metric.rating === 'good' ? 100 : metric.rating === 'needs-improvement' ? 70 : 30), 0
+          sum + (metric.rating === &apos;good&apos; ? 100 : metric.rating === &apos;needs-improvement&apos; ? 70 : 30), 0
         ) / performanceMetrics.length
       : 100;
     
@@ -513,9 +584,10 @@ export const usePerformanceMonitoring = () => {
   }, []);
 
   return {
+}
     metrics,
     score,
-    measurePerformance
+//     measurePerformance
   };
 };
 

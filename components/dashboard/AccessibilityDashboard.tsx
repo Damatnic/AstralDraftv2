@@ -1,7 +1,8 @@
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useState, useEffect, useMemo } from 'react';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useState, useEffect, useMemo } from &apos;react&apos;;
+import { Line, Bar, Doughnut } from &apos;react-chartjs-2&apos;;
 import {
+}
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
@@ -12,15 +13,16 @@ import {
   Title,
   Tooltip,
   Legend,
-  TimeScale
-} from 'chart.js';
-import 'chartjs-adapter-date-fns';
+//   TimeScale
+} from &apos;chart.js&apos;;
+import &apos;chartjs-adapter-date-fns&apos;;
 import { 
+}
   accessibilityMonitoringService, 
   AccessibilityMetrics, 
   ViolationTrend,
-  ComponentAccessibilityMetric 
-} from '../../services/accessibilityMonitoringService';
+//   ComponentAccessibilityMetric 
+} from &apos;../../services/accessibilityMonitoringService&apos;;
 
 // Register Chart.js components
 ChartJS.register(
@@ -33,55 +35,66 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  TimeScale
+//   TimeScale
 );
 
 interface AccessibilityDashboardProps {
+}
   className?: string;
 
 }
 
-export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = ''  }: any) => {
+export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ className = &apos;&apos;  }: any) => {
+}
   const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<AccessibilityMetrics | null>(null);
   const [history, setHistory] = useState<AccessibilityMetrics[]>([]);
   const [selectedTimeRange, setSelectedTimeRange] = useState<7 | 30 | 90>(30);
-  const [selectedComponent, setSelectedComponent] = useState<string>('all');
+  const [selectedComponent, setSelectedComponent] = useState<string>(&apos;all&apos;);
   const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [lastUpdated, setLastUpdated] = useState<string>(&apos;&apos;);
 
   useEffect(() => {
+}
     loadDashboardData();
     setLastUpdated(new Date().toLocaleString());
   }, [selectedTimeRange]);
 
   const loadDashboardData = async () => {
+}
     setLoading(true);
     try {
+}
 
       // In a real implementation, this would fetch from your testing service
       const historyData = accessibilityMonitoringService.getMetricsHistory();
       setHistory(historyData);
       
       if (historyData.length > 0) {
+}
         setMetrics(historyData[0]); // Most recent metrics
 
     } catch (error) {
+}
     } finally {
+}
       setLoading(false);
 
   };
 
   const trendData = useMemo(() => {
+}
     return accessibilityMonitoringService.getTrendData(selectedTimeRange);
   }, [history, selectedTimeRange]);
 
   const componentTrendData = useMemo(() => {
-    if (selectedComponent === 'all') return trendData;
+}
+    if (selectedComponent === &apos;all&apos;) return trendData;
     return accessibilityMonitoringService.getComponentTrends(selectedComponent, selectedTimeRange);
   }, [trendData, selectedComponent, selectedTimeRange]);
 
   const overallScore = useMemo(() => {
+}
     if (!metrics) return 0;
     const { violationsByLevel, wcagCompliance } = metrics;
     const violationPenalty = 
@@ -93,15 +106,17 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
   }, [metrics]);
 
   const trendDirection = useMemo(() => {
-    if (trendData.length < 2) return 'stable';
+}
+    if (trendData.length < 2) return &apos;stable&apos;;
     const recent = trendData[trendData.length - 1];
     const previous = trendData[trendData.length - 2];
-    if (recent.total < previous.total) return 'improving';
-    if (recent.total > previous.total) return 'declining';
-    return 'stable';
+    if (recent.total < previous.total) return &apos;improving&apos;;
+    if (recent.total > previous.total) return &apos;declining&apos;;
+    return &apos;stable&apos;;
   }, [trendData]);
 
   if (loading) {
+}
     return (
       <div className={`accessibility-dashboard ${className}`}>
         <div className="loading-state sm:px-4 md:px-6 lg:px-8">
@@ -114,6 +129,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
     );
 
   if (!metrics) {
+}
     return (
       <div className={`accessibility-dashboard ${className}`}>
         <div className="empty-state sm:px-4 md:px-6 lg:px-8">
@@ -151,6 +167,7 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
                 onChange={(e: any) => setSelectedComponent(e.target.value)}
                 <option value="all">All Components</option>
                 {metrics.componentMetrics.map((component: any) => (
+}
                   <option key={component.componentName} value={component.componentName}>
                     {component.componentName}
                   </option>
@@ -170,32 +187,32 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
       <div className="dashboard-grid sm:px-4 md:px-6 lg:px-8">
         {/* Key Metrics Cards */}
         <div className="metrics-cards sm:px-4 md:px-6 lg:px-8">
-          <MetricCard
+          <MetricCard>
             title="Overall Score"
             value={overallScore}
             unit="%"
             trend={trendDirection}
-            color={overallScore >= 90 ? 'success' : overallScore >= 70 ? 'warning' : 'danger'}
+            color={overallScore >= 90 ? &apos;success&apos; : overallScore >= 70 ? &apos;warning&apos; : &apos;danger&apos;}
           />
-          <MetricCard
+          <MetricCard>
             title="Total Violations"
             value={metrics.totalViolations}
             trend={trendDirection}
-            color={metrics.totalViolations === 0 ? 'success' : metrics.totalViolations <= 5 ? 'warning' : 'danger'}
+            color={metrics.totalViolations === 0 ? &apos;success&apos; : metrics.totalViolations <= 5 ? &apos;warning&apos; : &apos;danger&apos;}
           />
-          <MetricCard
+          <MetricCard>
             title="WCAG AA Compliance"
             value={Math.round(metrics.wcagCompliance.levelAA)}
             unit="%"
             trend={trendDirection}
-            color={metrics.wcagCompliance.levelAA >= 95 ? 'success' : metrics.wcagCompliance.levelAA >= 80 ? 'warning' : 'danger'}
+            color={metrics.wcagCompliance.levelAA >= 95 ? &apos;success&apos; : metrics.wcagCompliance.levelAA >= 80 ? &apos;warning&apos; : &apos;danger&apos;}
           />
-          <MetricCard
+          <MetricCard>
             title="Test Coverage"
             value={Math.round(metrics.testCoverage.coveragePercentage)}
             unit="%"
             trend="stable"
-            color={metrics.testCoverage.coveragePercentage >= 90 ? 'success' : metrics.testCoverage.coveragePercentage >= 70 ? 'warning' : 'danger'}
+            color={metrics.testCoverage.coveragePercentage >= 90 ? &apos;success&apos; : metrics.testCoverage.coveragePercentage >= 70 ? &apos;warning&apos; : &apos;danger&apos;}
           />
         </div>
 
@@ -247,28 +264,34 @@ export const AccessibilityDashboard: React.FC<AccessibilityDashboardProps> = ({ 
 };
 
 interface MetricCardProps {
+}
   title: string;
   value: number;
   unit?: string;
-  trend: 'improving' | 'declining' | 'stable';
-  color: 'success' | 'warning' | 'danger';
+  trend: &apos;improving&apos; | &apos;declining&apos; | &apos;stable&apos;;
+  color: &apos;success&apos; | &apos;warning&apos; | &apos;danger&apos;;
 
 }
 
-const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend, color }: any) => {
+const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = &apos;&apos;, trend, color }: any) => {
+}
   const getTrendIcon = () => {
+}
     switch (trend) {
-      case 'improving': return '📈';
-      case 'declining': return '📉';
-      default: return '➡️';
+}
+      case &apos;improving&apos;: return &apos;📈&apos;;
+      case &apos;declining&apos;: return &apos;📉&apos;;
+      default: return &apos;➡️&apos;;
 
   };
 
   const getTrendText = () => {
+}
     switch (trend) {
-      case 'improving': return 'Improving';
-      case 'declining': return 'Declining';
-      default: return 'Stable';
+}
+      case &apos;improving&apos;: return &apos;Improving&apos;;
+      case &apos;declining&apos;: return &apos;Declining&apos;;
+      default: return &apos;Stable&apos;;
 
   };
 
@@ -292,58 +315,72 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, unit = '', trend,
 };
 
 interface ViolationTrendChartProps {
+}
   data: ViolationTrend[];
 
 }
 
 const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) => {
+}
   const chartData = {
+}
     labels: data.map((d: any) => d.date),
     datasets: [
       {
-        label: 'Critical',
+}
+        label: &apos;Critical&apos;,
         data: data.map((d: any) => d.critical),
-        borderColor: '#dc3545',
-        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+        borderColor: &apos;#dc3545&apos;,
+        backgroundColor: &apos;rgba(220, 53, 69, 0.1)&apos;,
         tension: 0.1
       },
       {
-        label: 'Serious',
+}
+        label: &apos;Serious&apos;,
         data: data.map((d: any) => d.serious),
-        borderColor: '#fd7e14',
-        backgroundColor: 'rgba(253, 126, 20, 0.1)',
+        borderColor: &apos;#fd7e14&apos;,
+        backgroundColor: &apos;rgba(253, 126, 20, 0.1)&apos;,
         tension: 0.1
       },
       {
-        label: 'Moderate',
+}
+        label: &apos;Moderate&apos;,
         data: data.map((d: any) => d.moderate),
-        borderColor: '#ffc107',
-        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+        borderColor: &apos;#ffc107&apos;,
+        backgroundColor: &apos;rgba(255, 193, 7, 0.1)&apos;,
         tension: 0.1
       },
       {
-        label: 'Minor',
+}
+        label: &apos;Minor&apos;,
         data: data.map((d: any) => d.minor),
-        borderColor: '#28a745',
-        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+        borderColor: &apos;#28a745&apos;,
+        backgroundColor: &apos;rgba(40, 167, 69, 0.1)&apos;,
         tension: 0.1
 
   };
 
   const options = {
+}
     responsive: true,
     plugins: {
+}
       legend: {
-        position: 'top' as const,
+}
+        position: &apos;top&apos; as const,
       },
       title: {
+}
         display: false,
       },
     },
     scales: {
+}
       y: {
+}
         beginAtZero: true,
         ticks: {
+}
           stepSize: 1
 
 
@@ -354,14 +391,18 @@ const ViolationTrendChart: React.FC<ViolationTrendChartProps> = ({ data }: any) 
 };
 
 interface ViolationDistributionChartProps {
-  violationsByLevel: AccessibilityMetrics['violationsByLevel'];
+}
+  violationsByLevel: AccessibilityMetrics[&apos;violationsByLevel&apos;];
 
 }
 
 const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({ violationsByLevel }: any) => {
+}
   const chartData = {
-    labels: ['Critical', 'Serious', 'Moderate', 'Minor'],
+}
+    labels: [&apos;Critical&apos;, &apos;Serious&apos;, &apos;Moderate&apos;, &apos;Minor&apos;],
     datasets: [{
+}
       data: [
         violationsByLevel.critical,
         violationsByLevel.serious,
@@ -369,29 +410,35 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
         violationsByLevel.minor
       ],
       backgroundColor: [
-        '#dc3545', // Critical - Red
-        '#fd7e14', // Serious - Orange
-        '#ffc107', // Moderate - Yellow
-        '#28a745'  // Minor - Green
+        &apos;#dc3545&apos;, // Critical - Red
+        &apos;#fd7e14&apos;, // Serious - Orange
+        &apos;#ffc107&apos;, // Moderate - Yellow
+        &apos;#28a745&apos;  // Minor - Green
       ],
       borderWidth: 2,
-      borderColor: '#fff'
+      borderColor: &apos;#fff&apos;
     }]
   };
 
   const options = {
+}
     responsive: true,
     plugins: {
+}
       legend: {
-        position: 'bottom' as const,
+}
+        position: &apos;bottom&apos; as const,
       },
       tooltip: {
+}
         callbacks: {
+}
           label: (context: any) => {
-            const label = context.label || '';
+}
+            const label = context.label || &apos;&apos;;
             const value = context.parsed || 0;
             const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
-            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : &apos;0&apos;;
             return `${label}: ${value} (${percentage}%)`;
 
 
@@ -403,26 +450,32 @@ const ViolationDistributionChart: React.FC<ViolationDistributionChartProps> = ({
 };
 
 interface ComponentStatusTableProps {
+}
   components: ComponentAccessibilityMetric[];
 
 }
 
 const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components }: any) => {
-  const getStatusIcon = (status: ComponentAccessibilityMetric['status']) => {
+}
+  const getStatusIcon = (status: ComponentAccessibilityMetric[&apos;status&apos;]) => {
+}
     switch (status) {
-      case 'passing': return '✅';
-      case 'warning': return '⚠️';
-      case 'failing': return '❌';
-      default: return '❓';
+}
+      case &apos;passing&apos;: return &apos;✅&apos;;
+      case &apos;warning&apos;: return &apos;⚠️&apos;;
+      case &apos;failing&apos;: return &apos;❌&apos;;
+      default: return &apos;❓&apos;;
 
   };
 
-  const getStatusText = (status: ComponentAccessibilityMetric['status']) => {
+  const getStatusText = (status: ComponentAccessibilityMetric[&apos;status&apos;]) => {
+}
     switch (status) {
-      case 'passing': return 'Passing';
-      case 'warning': return 'Warning';
-      case 'failing': return 'Failing';
-      default: return 'Unknown';
+}
+      case &apos;passing&apos;: return &apos;Passing&apos;;
+      case &apos;warning&apos;: return &apos;Warning&apos;;
+      case &apos;failing&apos;: return &apos;Failing&apos;;
+      default: return &apos;Unknown&apos;;
 
   };
 
@@ -440,6 +493,7 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
         </thead>
         <tbody>
           {components.map((component: any) => (
+}
             <tr key={component.componentName} className={`status-${component?.status}`}>
               <td className="component-name sm:px-4 md:px-6 lg:px-8">{component.componentName}</td>
               <td className="status-cell sm:px-4 md:px-6 lg:px-8">
@@ -454,9 +508,10 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
                   <div 
                     className="score-bar sm:px-4 md:px-6 lg:px-8" 
                     style={{ 
+}
                       width: `${component.wcagScore}%`,
-                      backgroundColor: component.wcagScore >= 90 ? '#28a745' : 
-                                     component.wcagScore >= 70 ? '#ffc107' : '#dc3545'
+                      backgroundColor: component.wcagScore >= 90 ? &apos;#28a745&apos; : 
+                                     component.wcagScore >= 70 ? &apos;#ffc107&apos; : &apos;#dc3545&apos;
                     }}
                   ></div>
                   <span className="score-text sm:px-4 md:px-6 lg:px-8">{component.wcagScore}%</span>
@@ -466,23 +521,28 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
                 <div className="violations-breakdown sm:px-4 md:px-6 lg:px-8">
                   <span className="total sm:px-4 md:px-6 lg:px-8">{component.violationCount}</span>
                   {component.violationCount > 0 && (
+}
                     <div className="violations-detail sm:px-4 md:px-6 lg:px-8">
                       {component.violationsByLevel.critical > 0 && (
+}
                         <span className="critical sm:px-4 md:px-6 lg:px-8" title="Critical violations">
                           🔴 {component.violationsByLevel.critical}
                         </span>
                       )}
                       {component.violationsByLevel.serious > 0 && (
+}
                         <span className="serious sm:px-4 md:px-6 lg:px-8" title="Serious violations">
                           🟠 {component.violationsByLevel.serious}
                         </span>
                       )}
                       {component.violationsByLevel.moderate > 0 && (
+}
                         <span className="moderate sm:px-4 md:px-6 lg:px-8" title="Moderate violations">
                           🟡 {component.violationsByLevel.moderate}
                         </span>
                       )}
                       {component.violationsByLevel.minor > 0 && (
+}
                         <span className="minor sm:px-4 md:px-6 lg:px-8" title="Minor violations">
                           🟢 {component.violationsByLevel.minor}
                         </span>
@@ -503,44 +563,55 @@ const ComponentStatusTable: React.FC<ComponentStatusTableProps> = ({ components 
 };
 
 interface WCAGComplianceChartProps {
-  wcagCompliance: AccessibilityMetrics['wcagCompliance'];
+}
+  wcagCompliance: AccessibilityMetrics[&apos;wcagCompliance&apos;];
 
 }
 
 const WCAGComplianceChart: React.FC<WCAGComplianceChartProps> = ({ wcagCompliance }: any) => {
+}
   const chartData = {
-    labels: ['Level A', 'Level AA', 'Level AAA'],
+}
+    labels: [&apos;Level A&apos;, &apos;Level AA&apos;, &apos;Level AAA&apos;],
     datasets: [{
-      label: 'WCAG Compliance',
+}
+      label: &apos;WCAG Compliance&apos;,
       data: [
         wcagCompliance.levelA,
         wcagCompliance.levelAA,
         wcagCompliance.levelAAA
       ],
       backgroundColor: [
-        wcagCompliance.levelA >= 95 ? '#28a745' : wcagCompliance.levelA >= 80 ? '#ffc107' : '#dc3545',
-        wcagCompliance.levelAA >= 95 ? '#28a745' : wcagCompliance.levelAA >= 80 ? '#ffc107' : '#dc3545',
-        wcagCompliance.levelAAA >= 95 ? '#28a745' : wcagCompliance.levelAAA >= 80 ? '#ffc107' : '#dc3545'
+        wcagCompliance.levelA >= 95 ? &apos;#28a745&apos; : wcagCompliance.levelA >= 80 ? &apos;#ffc107&apos; : &apos;#dc3545&apos;,
+        wcagCompliance.levelAA >= 95 ? &apos;#28a745&apos; : wcagCompliance.levelAA >= 80 ? &apos;#ffc107&apos; : &apos;#dc3545&apos;,
+        wcagCompliance.levelAAA >= 95 ? &apos;#28a745&apos; : wcagCompliance.levelAAA >= 80 ? &apos;#ffc107&apos; : &apos;#dc3545&apos;
       ],
       borderWidth: 1,
-      borderColor: '#fff'
+      borderColor: &apos;#fff&apos;
     }]
   };
 
   const options = {
+}
     responsive: true,
     plugins: {
+}
       legend: {
+}
         display: false
 
     },
     scales: {
+}
       y: {
+}
         beginAtZero: true,
         max: 100,
         ticks: {
+}
           callback: function(value: any) {
-            return value + '%';
+}
+            return value + &apos;%&apos;;
 
 
 

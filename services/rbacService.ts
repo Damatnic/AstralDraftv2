@@ -4,58 +4,61 @@
  */
 
 export enum UserRole {
-  GUEST = 'guest',
-  USER = 'user',
-  LEAGUE_MANAGER = 'league_manager',
-  ORACLE_SUBSCRIBER = 'oracle_subscriber',
-  ORACLE_ADMIN = 'oracle_admin',
-  ADMIN = 'admin',
-  SUPER_ADMIN = 'super_admin'
+}
+  GUEST = &apos;guest&apos;,
+  USER = &apos;user&apos;,
+  LEAGUE_MANAGER = &apos;league_manager&apos;,
+  ORACLE_SUBSCRIBER = &apos;oracle_subscriber&apos;,
+  ORACLE_ADMIN = &apos;oracle_admin&apos;,
+  ADMIN = &apos;admin&apos;,
+  SUPER_ADMIN = &apos;super_admin&apos;
 }
 
 export enum Permission {
+}
   // User permissions
-  VIEW_DASHBOARD = 'view_dashboard',
-  VIEW_PROFILE = 'view_profile',
-  EDIT_PROFILE = 'edit_profile',
+  VIEW_DASHBOARD = &apos;view_dashboard&apos;,
+  VIEW_PROFILE = &apos;view_profile&apos;,
+  EDIT_PROFILE = &apos;edit_profile&apos;,
   
   // League permissions
-  VIEW_LEAGUES = 'view_leagues',
-  JOIN_LEAGUE = 'join_league',
-  CREATE_LEAGUE = 'create_league',
-  MANAGE_LEAGUE = 'manage_league',
-  DELETE_LEAGUE = 'delete_league',
+  VIEW_LEAGUES = &apos;view_leagues&apos;,
+  JOIN_LEAGUE = &apos;join_league&apos;,
+  CREATE_LEAGUE = &apos;create_league&apos;,
+  MANAGE_LEAGUE = &apos;manage_league&apos;,
+  DELETE_LEAGUE = &apos;delete_league&apos;,
   
   // Draft permissions
-  PARTICIPATE_DRAFT = 'participate_draft',
-  VIEW_DRAFT_HISTORY = 'view_draft_history',
+  PARTICIPATE_DRAFT = &apos;participate_draft&apos;,
+  VIEW_DRAFT_HISTORY = &apos;view_draft_history&apos;,
   
   // Oracle permissions
-  VIEW_ORACLE_PREDICTIONS = 'view_oracle_predictions',
-  SUBMIT_ORACLE_PREDICTIONS = 'submit_oracle_predictions',
-  VIEW_ORACLE_ANALYTICS = 'view_oracle_analytics',
-  ACCESS_PREMIUM_ORACLE = 'access_premium_oracle',
-  MANAGE_ORACLE_SYSTEM = 'manage_oracle_system',
+  VIEW_ORACLE_PREDICTIONS = &apos;view_oracle_predictions&apos;,
+  SUBMIT_ORACLE_PREDICTIONS = &apos;submit_oracle_predictions&apos;,
+  VIEW_ORACLE_ANALYTICS = &apos;view_oracle_analytics&apos;,
+  ACCESS_PREMIUM_ORACLE = &apos;access_premium_oracle&apos;,
+  MANAGE_ORACLE_SYSTEM = &apos;manage_oracle_system&apos;,
   
   // Analytics permissions
-  VIEW_BASIC_ANALYTICS = 'view_basic_analytics',
-  VIEW_ADVANCED_ANALYTICS = 'view_advanced_analytics',
-  EXPORT_ANALYTICS = 'export_analytics',
+  VIEW_BASIC_ANALYTICS = &apos;view_basic_analytics&apos;,
+  VIEW_ADVANCED_ANALYTICS = &apos;view_advanced_analytics&apos;,
+  EXPORT_ANALYTICS = &apos;export_analytics&apos;,
   
   // Social permissions
-  CREATE_POSTS = 'create_posts',
-  COMMENT_ON_POSTS = 'comment_on_posts',
-  MODERATE_CONTENT = 'moderate_content',
+  CREATE_POSTS = &apos;create_posts&apos;,
+  COMMENT_ON_POSTS = &apos;comment_on_posts&apos;,
+  MODERATE_CONTENT = &apos;moderate_content&apos;,
   
   // Admin permissions
-  MANAGE_USERS = 'manage_users',
-  VIEW_SYSTEM_LOGS = 'view_system_logs',
-  MANAGE_SYSTEM_SETTINGS = 'manage_system_settings',
-  SUPER_ADMIN_ACCESS = 'super_admin_access'
+  MANAGE_USERS = &apos;manage_users&apos;,
+  VIEW_SYSTEM_LOGS = &apos;view_system_logs&apos;,
+  MANAGE_SYSTEM_SETTINGS = &apos;manage_system_settings&apos;,
+  SUPER_ADMIN_ACCESS = &apos;super_admin_access&apos;
 }
 
 // Role-Permission mapping
 const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+}
   [UserRole.GUEST]: [
     Permission.VIEW_DASHBOARD,
     Permission.VIEW_LEAGUES
@@ -115,6 +118,7 @@ ROLE_PERMISSIONS[UserRole.SUPER_ADMIN] = [
 ];
 
 interface RoleConfig {
+}
   name: string;
   description: string;
   color: string;
@@ -123,58 +127,67 @@ interface RoleConfig {
 }
 
 const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
+}
   [UserRole.GUEST]: {
-    name: 'Guest',
-    description: 'Limited access to public features',
-    color: '#6B7280',
-    icon: '👤',
+}
+    name: &apos;Guest&apos;,
+    description: &apos;Limited access to public features&apos;,
+    color: &apos;#6B7280&apos;,
+    icon: &apos;👤&apos;,
     priority: 0
   },
   [UserRole.USER]: {
-    name: 'User',
-    description: 'Standard user with basic features',
-    color: '#3B82F6',
-    icon: '🏈',
+}
+    name: &apos;User&apos;,
+    description: &apos;Standard user with basic features&apos;,
+    color: &apos;#3B82F6&apos;,
+    icon: &apos;🏈&apos;,
     priority: 1
   },
   [UserRole.LEAGUE_MANAGER]: {
-    name: 'League Manager',
-    description: 'Can create and manage leagues',
-    color: '#10B981',
-    icon: '⭐',
+}
+    name: &apos;League Manager&apos;,
+    description: &apos;Can create and manage leagues&apos;,
+    color: &apos;#10B981&apos;,
+    icon: &apos;⭐&apos;,
     priority: 2
   },
   [UserRole.ORACLE_SUBSCRIBER]: {
-    name: 'Oracle Subscriber',
-    description: 'Access to Oracle predictions and analytics',
-    color: '#8B5CF6',
-    icon: '🔮',
+}
+    name: &apos;Oracle Subscriber&apos;,
+    description: &apos;Access to Oracle predictions and analytics&apos;,
+    color: &apos;#8B5CF6&apos;,
+    icon: &apos;🔮&apos;,
     priority: 3
   },
   [UserRole.ORACLE_ADMIN]: {
-    name: 'Oracle Admin',
-    description: 'Manages Oracle prediction system',
-    color: '#7C3AED',
-    icon: '🧙‍♂️',
+}
+    name: &apos;Oracle Admin&apos;,
+    description: &apos;Manages Oracle prediction system&apos;,
+    color: &apos;#7C3AED&apos;,
+    icon: &apos;🧙‍♂️&apos;,
     priority: 4
   },
   [UserRole.ADMIN]: {
-    name: 'Administrator',
-    description: 'Full system administration access',
-    color: '#EF4444',
-    icon: '👑',
+}
+    name: &apos;Administrator&apos;,
+    description: &apos;Full system administration access&apos;,
+    color: &apos;#EF4444&apos;,
+    icon: &apos;👑&apos;,
     priority: 5
   },
   [UserRole.SUPER_ADMIN]: {
-    name: 'Super Admin',
-    description: 'Ultimate system control',
-    color: '#DC2626',
-    icon: '⚡',
+}
+    name: &apos;Super Admin&apos;,
+    description: &apos;Ultimate system control&apos;,
+    color: &apos;#DC2626&apos;,
+    icon: &apos;⚡&apos;,
     priority: 6
   }
 };
 
 export interface UserWithRoles {
+}
   id: number;
   username: string;
   email: string;
@@ -184,15 +197,18 @@ export interface UserWithRoles {
 }
 
 class RBACService {
+}
   /**
    * Check if user has specific permission
    */
   hasPermission(user: UserWithRoles | null, permission: Permission): boolean {
+}
     if (!user || !user.roles || user.roles.length === 0) {
+}
       return ROLE_PERMISSIONS[UserRole.GUEST].includes(permission);
     }
 
-    // Check if any of the user's roles has the permission
+    // Check if any of the user&apos;s roles has the permission
     return user.roles.some((role: any) => 
       ROLE_PERMISSIONS[role]?.includes(permission)
     );
@@ -202,6 +218,7 @@ class RBACService {
    * Check if user has any of the specified permissions
    */
   hasAnyPermission(user: UserWithRoles | null, permissions: Permission[]): boolean {
+}
     return permissions.some((permission: any) => this.hasPermission(user, permission));
   }
 
@@ -209,6 +226,7 @@ class RBACService {
    * Check if user has all specified permissions
    */
   hasAllPermissions(user: UserWithRoles | null, permissions: Permission[]): boolean {
+}
     return permissions.every((permission: any) => this.hasPermission(user, permission));
   }
 
@@ -216,7 +234,9 @@ class RBACService {
    * Check if user has specific role
    */
   hasRole(user: UserWithRoles | null, role: UserRole): boolean {
+}
     if (!user || !user.roles) {
+}
       return role === UserRole.GUEST;
     }
     return user.roles.includes(role);
@@ -226,7 +246,9 @@ class RBACService {
    * Check if user has role with equal or higher priority
    */
   hasMinimumRole(user: UserWithRoles | null, minimumRole: UserRole): boolean {
+}
     if (!user || !user.roles || user.roles.length === 0) {
+}
       return ROLE_CONFIGS[minimumRole].priority <= ROLE_CONFIGS[UserRole.GUEST].priority;
     }
 
@@ -241,14 +263,18 @@ class RBACService {
    * Get all permissions for user
    */
   getUserPermissions(user: UserWithRoles | null): Permission[] {
+}
     if (!user || !user.roles || user.roles.length === 0) {
+}
       return ROLE_PERMISSIONS[UserRole.GUEST];
     }
 
     const permissions = new Set<Permission>();
     
     user.roles.forEach((role: any) => {
+}
       ROLE_PERMISSIONS[role]?.forEach((permission: any) => {
+}
         permissions.add(permission);
       });
     });
@@ -257,10 +283,12 @@ class RBACService {
   }
 
   /**
-   * Get user's highest priority role
+   * Get user&apos;s highest priority role
    */
   getHighestRole(user: UserWithRoles | null): UserRole {
+}
     if (!user || !user.roles || user.roles.length === 0) {
+}
       return UserRole.GUEST;
     }
 
@@ -273,6 +301,7 @@ class RBACService {
    * Get role configuration
    */
   getRoleConfig(role: UserRole): RoleConfig {
+}
     return ROLE_CONFIGS[role];
   }
 
@@ -280,6 +309,7 @@ class RBACService {
    * Get all available roles
    */
   getAllRoles(): UserRole[] {
+}
     return Object.values(UserRole);
   }
 
@@ -287,6 +317,7 @@ class RBACService {
    * Get assignable roles (excluding guest)
    */
   getAssignableRoles(): UserRole[] {
+}
     return Object.values(UserRole).filter((role: any) => role !== UserRole.GUEST);
   }
 
@@ -294,6 +325,7 @@ class RBACService {
    * Check if user can assign specific role (must have higher priority)
    */
   canAssignRole(assigner: UserWithRoles | null, targetRole: UserRole): boolean {
+}
     const assignerRole = this.getHighestRole(assigner);
     return ROLE_CONFIGS[assignerRole].priority > ROLE_CONFIGS[targetRole].priority;
   }
@@ -302,7 +334,9 @@ class RBACService {
    * Get permissions required for specific feature
    */
   getFeaturePermissions(): Record<string, Permission[]> {
+}
     return {
+}
       dashboard: [Permission.VIEW_DASHBOARD],
       profile: [Permission.VIEW_PROFILE],
       leagues: [Permission.VIEW_LEAGUES],
@@ -326,7 +360,9 @@ class RBACService {
     resources: Array<T & { requiredPermission?: Permission }>,
     defaultPermission?: Permission
   ): T[] {
+}
     return resources.filter((resource: any) => {
+}
       const permission = resource.requiredPermission || defaultPermission;
       return !permission || this.hasPermission(user, permission);
     });
@@ -336,7 +372,9 @@ class RBACService {
    * Create role guard for components
    */
   createRoleGuard(requiredRole: UserRole) {
+}
     return (user: UserWithRoles | null): boolean => {
+}
       return this.hasMinimumRole(user, requiredRole);
     };
   }
@@ -345,7 +383,9 @@ class RBACService {
    * Create permission guard for components
    */
   createPermissionGuard(requiredPermissions: Permission | Permission[]) {
+}
     return (user: UserWithRoles | null): boolean => {
+}
       const permissions = Array.isArray(requiredPermissions) 
         ? requiredPermissions 
         : [requiredPermissions];

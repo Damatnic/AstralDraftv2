@@ -1,14 +1,15 @@
 
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { ChatMessage, League, Player, DraftPickAsset } from '../../types';
-import { players } from '../../data/players';
-import { ArrowRightLeftIcon } from '../icons/ArrowRightLeftIcon';
-import ReactionPicker from './ReactionPicker';
-import { SparklesIcon } from '../icons/SparklesIcon';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { ChatMessage, League, Player, DraftPickAsset } from &apos;../../types&apos;;
+import { players } from &apos;../../data/players&apos;;
+import { ArrowRightLeftIcon } from &apos;../icons/ArrowRightLeftIcon&apos;;
+import ReactionPicker from &apos;./ReactionPicker&apos;;
+import { SparklesIcon } from &apos;../icons/SparklesIcon&apos;;
 
 interface TradeEventMessageProps {
+}
     message: ChatMessage;
     league: League;
     onReact: (messageId: string, emoji: string) => void;
@@ -16,6 +17,7 @@ interface TradeEventMessageProps {
 }
 
 const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, onReact }: any) => {
+}
     const { tradeEvent, aiHotTake, reactions } = message;
 
     if (!tradeEvent) return null;
@@ -32,7 +34,7 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
     const requestedPicks = tradeEvent.draftPicksRequested || [];
 
     const AssetChip: React.FC<{ children: React.ReactNode, isPick?: boolean }> = ({ children, isPick }: any) => (
-        <div className={`px-1.5 py-0.5 rounded text-xs ${isPick ? 'bg-cyan-900/80' : 'bg-black/20'}`}>{children}</div>
+        <div className={`px-1.5 py-0.5 rounded text-xs ${isPick ? &apos;bg-cyan-900/80&apos; : &apos;bg-black/20&apos;}`}>{children}</div>
     );
 
     return (
@@ -61,18 +63,21 @@ const TradeEventMessage: React.FC<TradeEventMessageProps> = ({ message, league, 
             </div>
 
             {aiHotTake && (
+}
                 <div className="mt-2 pt-2 border-t border-white/10 text-center sm:px-4 md:px-6 lg:px-8">
                     <p className="text-xs text-cyan-300/80 font-semibold flex items-center justify-center gap-1 sm:px-4 md:px-6 lg:px-8">
                         <SparklesIcon className="w-3 h-3 sm:px-4 md:px-6 lg:px-8" />
-                        Oracle's Take
+                        Oracle&apos;s Take
                     </p>
                     <p className="text-xs italic text-gray-300 sm:px-4 md:px-6 lg:px-8">"{aiHotTake}"</p>
                 </div>
             )}
             
             {reactions && Object.keys(reactions).length > 0 && (
+}
                 <div className="flex gap-1 mt-2 justify-center sm:px-4 md:px-6 lg:px-8">
                     {Object.entries(reactions).map(([emoji, userIds]) => (
+}
                         <div key={emoji} className="px-1.5 py-0.5 bg-black/30 rounded-full text-xs flex items-center gap-1 sm:px-4 md:px-6 lg:px-8">
                             <span>{emoji}</span>
                             <span className="text-gray-300 sm:px-4 md:px-6 lg:px-8">{userIds.length}</span>

@@ -3,9 +3,10 @@
  * Centralized WebSocket connection management with automatic cleanup
  */
 
-import { memoryManager } from '../utils/memoryCleanup';
+import { memoryManager } from &apos;../utils/memoryCleanup&apos;;
 
 interface WebSocketConfig {
+}
   url: string;
   protocols?: string | string[];
   reconnect?: boolean;
@@ -16,6 +17,7 @@ interface WebSocketConfig {
 }
 
 interface WebSocketConnection {
+}
   id: string;
   ws: WebSocket | null;
   config: WebSocketConfig;
@@ -29,6 +31,7 @@ interface WebSocketConnection {
 }
 
 class WebSocketManager {
+}
   private connections: Map<string, WebSocketConnection> = new Map();
   private globalListeners: Map<string, Set<Function>> = new Map();
   private monitoringInterval?: NodeJS.Timeout;
@@ -37,6 +40,7 @@ class WebSocketManager {
   private readonly IDLE_TIMEOUT = 300000; // 5 minutes
 
   constructor() {
+}
     this.startConnectionMonitoring();
     this.setupCleanupHandlers();
   }
@@ -45,11 +49,15 @@ class WebSocketManager {
    * Create or get a WebSocket connection
    */
   connect(id: string, config: WebSocketConfig): Promise<WebSocket> {
+}
     return new Promise((resolve, reject) => {
+}
       // Check if connection already exists
       if (this.connections.has(id)) {
+}
         const existing = this.connections.get(id)!;
         if (existing.ws?.readyState === WebSocket.OPEN) {
+}
           resolve(existing.ws);
           return;
         }
@@ -57,8 +65,10 @@ class WebSocketManager {
 
       // Check connection limit
       if (this.connections.size >= this.MAX_CONNECTIONS) {
+}
         this.cleanupIdleConnections();
         if (this.connections.size >= this.MAX_CONNECTIONS) {
+}
           reject(new Error(`Maximum WebSocket connections (${this.MAX_CONNECTIONS}) reached`));
           return;
         }
@@ -66,6 +76,7 @@ class WebSocketManager {
 
       // Create new connection
       const connection: WebSocketConnection = {
+}
         id,
         ws: null,
         config,
@@ -77,25 +88,30 @@ class WebSocketManager {
       };
 
       try {
+}
         const ws = new WebSocket(config.url, config.protocols);
         connection.ws = ws;
 
         // Set connection timeout
         const connectTimeout = memoryManager.registerTimer(() => {
+}
           if (ws.readyState === WebSocket.CONNECTING) {
+}
             ws.close();
-            reject(new Error('WebSocket connection timeout'));
+            reject(new Error(&apos;WebSocket connection timeout&apos;));
           }
         }, this.CONNECTION_TIMEOUT);
 
         // Setup event handlers
         ws.onopen = () => {
+}
           memoryManager.clearTimer(connectTimeout);
           console.log(`[WebSocket] Connected: ${id}`);
           connection.lastActivity = Date.now();
           
           // Start heartbeat if configured
           if (config.heartbeatInterval) {
+}
             this.startHeartbeat(connection);
           }
 
@@ -103,41 +119,49 @@ class WebSocketManager {
           this.processMessageQueue(connection);
 
           // Emit open event
-          this.emit(id, 'open', { id });
+          this.emit(id, &apos;open&apos;, { id });
           
           resolve(ws);
         };
 
         ws.onmessage = (event: any) => {
+}
           connection.lastActivity = Date.now();
           
           try {
+}
             const data = JSON.parse(event.data);
-            this.emit(id, 'message', data);
+            this.emit(id, &apos;message&apos;, data);
             
             // Handle specific message types
-            if (data.type === 'pong') {
-              this.emit(id, 'pong', data);
+            if (data.type === &apos;pong&apos;) {
+}
+              this.emit(id, &apos;pong&apos;, data);
             }
           } catch (error) {
+}
             console.error(`[WebSocket] Parse error for ${id}:`, error);
-            this.emit(id, 'error', { type: 'parse', error });
+            this.emit(id, &apos;error&apos;, { type: &apos;parse&apos;, error });
           }
         };
 
         ws.onerror = (error: any) => {
+}
           console.error(`[WebSocket] Error for ${id}:`, error);
-          this.emit(id, 'error', error);
+          this.emit(id, &apos;error&apos;, error);
           
           if (ws.readyState === WebSocket.CONNECTING) {
+}
             memoryManager.clearTimer(connectTimeout);
             reject(error);
           }
         };
 
         ws.onclose = (event: any) => {
+}
           memoryManager.clearTimer(connectTimeout);
           console.log(`[WebSocket] Closed: ${id}`, {
+}
             code: event.code,
             reason: event.reason,
             wasClean: event.wasClean
@@ -145,18 +169,21 @@ class WebSocketManager {
 
           // Stop heartbeat
           if (connection.heartbeatTimer) {
+}
             memoryManager.clearInterval(connection.heartbeatTimer);
             connection.heartbeatTimer = undefined;
           }
 
-          this.emit(id, 'close', event);
+          this.emit(id, &apos;close&apos;, event);
 
           // Handle reconnection
           if (!connection.isClosing && 
               config.reconnect && 
               connection.reconnectAttempts < (config.maxReconnectAttempts || 5)) {
+}
             this.scheduleReconnect(connection);
           } else {
+}
             this.removeConnection(id);
           }
         };
@@ -164,6 +191,7 @@ class WebSocketManager {
         this.connections.set(id, connection);
 
       } catch (error) {
+}
         console.error(`[WebSocket] Failed to create connection ${id}:`, error);
         reject(error);
       }
@@ -174,28 +202,35 @@ class WebSocketManager {
    * Send a message through a WebSocket connection
    */
   send(id: string, data: any): boolean {
+}
     const connection = this.connections.get(id);
     if (!connection) {
+}
       console.warn(`[WebSocket] Connection not found: ${id}`);
       return false;
     }
 
-    const message = typeof data === 'string' ? data : JSON.stringify(data);
+    const message = typeof data === &apos;string&apos; ? data : JSON.stringify(data);
 
     if (connection.ws?.readyState === WebSocket.OPEN) {
+}
       try {
+}
         connection.ws.send(message);
         connection.lastActivity = Date.now();
         return true;
       } catch (error) {
+}
         console.error(`[WebSocket] Send error for ${id}:`, error);
-        this.emit(id, 'error', { type: 'send', error });
+        this.emit(id, &apos;error&apos;, { type: &apos;send&apos;, error });
         return false;
       }
     } else {
+}
       // Queue message if configured
       if (connection.config.messageQueueSize && 
           connection.messageQueue.length < connection.config.messageQueueSize) {
+}
         connection.messageQueue.push(message);
         console.log(`[WebSocket] Message queued for ${id}`);
       }
@@ -207,6 +242,7 @@ class WebSocketManager {
    * Close a WebSocket connection
    */
   close(id: string, code?: number, reason?: string): void {
+}
     const connection = this.connections.get(id);
     if (!connection) return;
 
@@ -214,18 +250,22 @@ class WebSocketManager {
 
     // Clear timers
     if (connection.reconnectTimer) {
+}
       memoryManager.clearTimer(connection.reconnectTimer);
       connection.reconnectTimer = undefined;
     }
     if (connection.heartbeatTimer) {
+}
       memoryManager.clearInterval(connection.heartbeatTimer);
       connection.heartbeatTimer = undefined;
     }
 
     // Close WebSocket
     if (connection.ws) {
+}
       if (connection.ws.readyState === WebSocket.OPEN || 
           connection.ws.readyState === WebSocket.CONNECTING) {
+}
         connection.ws.close(code, reason);
       }
       connection.ws = null;
@@ -244,9 +284,11 @@ class WebSocketManager {
    * Close all WebSocket connections
    */
   closeAll(): void {
-    console.log('[WebSocket] Closing all connections...');
+}
+    console.log(&apos;[WebSocket] Closing all connections...&apos;);
     
     for (const id of this.connections.keys()) {
+}
       this.close(id);
     }
     
@@ -254,6 +296,7 @@ class WebSocketManager {
     this.globalListeners.clear();
     
     if (this.monitoringInterval) {
+}
       memoryManager.clearInterval(this.monitoringInterval);
       this.monitoringInterval = undefined;
     }
@@ -263,20 +306,23 @@ class WebSocketManager {
    * Add an event listener for a connection
    */
   on(id: string, event: string, callback: Function): () => void {
+}
     const connection = this.connections.get(id);
     if (!connection) {
+}
       console.warn(`[WebSocket] Cannot add listener - connection not found: ${id}`);
       return () => {};
     }
 
     if (!connection.listeners.has(event)) {
+}
       connection.listeners.set(event, new Set());
     }
     
     connection.listeners.get(event)!.add(callback);
 
-    // Return cleanup function
-    return () => {
+    // Return cleanup function return() => {
+}
       this.off(id, event, callback);
     };
   }
@@ -285,13 +331,16 @@ class WebSocketManager {
    * Remove an event listener
    */
   off(id: string, event: string, callback: Function): void {
+}
     const connection = this.connections.get(id);
     if (!connection) return;
 
     const listeners = connection.listeners.get(event);
     if (listeners) {
+}
       listeners.delete(callback);
       if (listeners.size === 0) {
+}
         connection.listeners.delete(event);
       }
     }
@@ -301,13 +350,16 @@ class WebSocketManager {
    * Add a global event listener
    */
   onGlobal(event: string, callback: Function): () => void {
+}
     if (!this.globalListeners.has(event)) {
+}
       this.globalListeners.set(event, new Set());
     }
     
     this.globalListeners.get(event)!.add(callback);
 
     return () => {
+}
       this.offGlobal(event, callback);
     };
   }
@@ -316,10 +368,13 @@ class WebSocketManager {
    * Remove a global event listener
    */
   offGlobal(event: string, callback: Function): void {
+}
     const listeners = this.globalListeners.get(event);
     if (listeners) {
+}
       listeners.delete(callback);
       if (listeners.size === 0) {
+}
         this.globalListeners.delete(event);
       }
     }
@@ -329,15 +384,21 @@ class WebSocketManager {
    * Emit an event
    */
   private emit(id: string, event: string, data?: any): void {
+}
     // Connection-specific listeners
     const connection = this.connections.get(id);
     if (connection) {
+}
       const listeners = connection.listeners.get(event);
       if (listeners) {
+}
         listeners.forEach((callback: any) => {
+}
           try {
+}
             callback(data);
           } catch (error) {
+}
             console.error(`[WebSocket] Listener error for ${id}/${event}:`, error);
           }
         });
@@ -347,10 +408,14 @@ class WebSocketManager {
     // Global listeners
     const globalListeners = this.globalListeners.get(event);
     if (globalListeners) {
+}
       globalListeners.forEach((callback: any) => {
+}
         try {
+}
           callback({ connectionId: id, ...data });
         } catch (error) {
+}
           console.error(`[WebSocket] Global listener error for ${event}:`, error);
         }
       });
@@ -361,13 +426,17 @@ class WebSocketManager {
    * Start heartbeat for a connection
    */
   private startHeartbeat(connection: WebSocketConnection): void {
+}
     if (connection.heartbeatTimer) {
+}
       memoryManager.clearInterval(connection.heartbeatTimer);
     }
 
     connection.heartbeatTimer = memoryManager.registerInterval(() => {
+}
       if (connection.ws?.readyState === WebSocket.OPEN) {
-        this.send(connection.id, { type: 'ping', timestamp: Date.now() });
+}
+        this.send(connection.id, { type: &apos;ping&apos;, timestamp: Date.now() });
       }
     }, connection.config.heartbeatInterval!);
   }
@@ -376,6 +445,7 @@ class WebSocketManager {
    * Schedule reconnection
    */
   private scheduleReconnect(connection: WebSocketConnection): void {
+}
     connection.reconnectAttempts++;
     
     const delay = Math.min(
@@ -386,15 +456,19 @@ class WebSocketManager {
     console.log(`[WebSocket] Scheduling reconnect for ${connection.id} in ${delay}ms (attempt ${connection.reconnectAttempts})`);
 
     connection.reconnectTimer = memoryManager.registerTimer(() => {
+}
       connection.reconnectTimer = undefined;
       
       if (this.connections.has(connection.id)) {
+}
         this.connect(connection.id, connection.config)
           .then(() => {
+}
             connection.reconnectAttempts = 0;
             console.log(`[WebSocket] Reconnected: ${connection.id}`);
           })
           .catch(error => {
+}
             console.error(`[WebSocket] Reconnection failed for ${connection.id}:`, error);
           });
       }
@@ -405,16 +479,20 @@ class WebSocketManager {
    * Process queued messages
    */
   private processMessageQueue(connection: WebSocketConnection): void {
+}
     if (connection.messageQueue.length === 0) return;
 
     console.log(`[WebSocket] Processing ${connection.messageQueue.length} queued messages for ${connection.id}`);
     
     while (connection.messageQueue.length > 0 && 
            connection.ws?.readyState === WebSocket.OPEN) {
+}
       const message = connection.messageQueue.shift();
       try {
+}
         connection.ws.send(message);
       } catch (error) {
+}
         console.error(`[WebSocket] Failed to send queued message for ${connection.id}:`, error);
         break;
       }
@@ -425,14 +503,17 @@ class WebSocketManager {
    * Remove a connection
    */
   private removeConnection(id: string): void {
+}
     const connection = this.connections.get(id);
     if (!connection) return;
 
     // Clear all timers
     if (connection.reconnectTimer) {
+}
       memoryManager.clearTimer(connection.reconnectTimer);
     }
     if (connection.heartbeatTimer) {
+}
       memoryManager.clearInterval(connection.heartbeatTimer);
     }
 
@@ -449,18 +530,22 @@ class WebSocketManager {
    * Clean up idle connections
    */
   private cleanupIdleConnections(): void {
+}
     const now = Date.now();
     const idsToRemove: string[] = [];
 
     for (const [id, connection] of this.connections) {
+}
       if (now - connection.lastActivity > this.IDLE_TIMEOUT) {
+}
         idsToRemove.push(id);
       }
     }
 
     for (const id of idsToRemove) {
+}
       console.log(`[WebSocket] Cleaning up idle connection: ${id}`);
-      this.close(id, 1000, 'Idle timeout');
+      this.close(id, 1000, &apos;Idle timeout&apos;);
     }
   }
 
@@ -468,18 +553,22 @@ class WebSocketManager {
    * Start connection monitoring
    */
   private startConnectionMonitoring(): void {
+}
     this.monitoringInterval = memoryManager.registerInterval(() => {
+}
       // Clean up idle connections
       this.cleanupIdleConnections();
 
       // Log connection stats
       const stats = this.getConnectionStats();
       if (stats.total > 0) {
-        console.log('[WebSocket] Connection stats:', stats);
+}
+        console.log(&apos;[WebSocket] Connection stats:&apos;, stats);
       }
 
       // Check for memory issues
       if (stats.total > this.MAX_CONNECTIONS * 0.8) {
+}
         console.warn(`[WebSocket] High connection count: ${stats.total}/${this.MAX_CONNECTIONS}`);
       }
     }, 60000); // Every minute
@@ -489,33 +578,44 @@ class WebSocketManager {
    * Setup cleanup handlers
    */
   private setupCleanupHandlers(): void {
+}
     // Clean up on page unload
-    if (typeof window !== 'undefined') {
-      memoryManager.addEventListener(window, 'beforeunload', () => {
+    if (typeof window !== &apos;undefined&apos;) {
+}
+      memoryManager.addEventListener(window, &apos;beforeunload&apos;, () => {
+}
         this.closeAll();
       });
 
       // Clean up on visibility change
-      memoryManager.addEventListener(document, 'visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
+      memoryManager.addEventListener(document, &apos;visibilitychange&apos;, () => {
+}
+        if (document.visibilityState === &apos;hidden&apos;) {
+}
           // Close non-critical connections when going to background
           for (const [id, connection] of this.connections) {
+}
             if (!connection.config.reconnect) {
-              this.close(id, 1000, 'Page hidden');
+}
+              this.close(id, 1000, &apos;Page hidden&apos;);
             }
           }
         }
       });
 
       // Handle memory pressure
-      memoryManager.addEventListener(window, 'memory-pressure', (event: any) => {
-        if (event.detail.level === 'critical') {
-          console.warn('[WebSocket] Memory pressure detected, closing non-essential connections');
+      memoryManager.addEventListener(window, &apos;memory-pressure&apos;, (event: any) => {
+}
+        if (event.detail.level === &apos;critical&apos;) {
+}
+          console.warn(&apos;[WebSocket] Memory pressure detected, closing non-essential connections&apos;);
           
           // Close connections without reconnect enabled
           for (const [id, connection] of this.connections) {
+}
             if (!connection.config.reconnect) {
-              this.close(id, 1000, 'Memory pressure');
+}
+              this.close(id, 1000, &apos;Memory pressure&apos;);
             }
           }
         }
@@ -527,6 +627,7 @@ class WebSocketManager {
    * Get connection statistics
    */
   getConnectionStats(): {
+}
     total: number;
     open: number;
     connecting: number;
@@ -535,6 +636,7 @@ class WebSocketManager {
     totalListeners: number;
     totalQueuedMessages: number;
   } {
+}
     let open = 0;
     let connecting = 0;
     let closing = 0;
@@ -543,10 +645,14 @@ class WebSocketManager {
     let totalQueuedMessages = 0;
 
     for (const connection of this.connections.values()) {
+}
       if (!connection.ws) {
+}
         closed++;
       } else {
+}
         switch (connection.ws.readyState) {
+}
           case WebSocket.CONNECTING:
             connecting++;
             break;
@@ -563,6 +669,7 @@ class WebSocketManager {
       }
 
       for (const listeners of connection.listeners.values()) {
+}
         totalListeners += listeners.size;
       }
 
@@ -570,13 +677,14 @@ class WebSocketManager {
     }
 
     return {
+}
       total: this.connections.size,
       open,
       connecting,
       closing,
       closed,
       totalListeners,
-      totalQueuedMessages
+//       totalQueuedMessages
     };
   }
 
@@ -584,6 +692,7 @@ class WebSocketManager {
    * Check if a connection exists and is open
    */
   isConnected(id: string): boolean {
+}
     const connection = this.connections.get(id);
     return connection?.ws?.readyState === WebSocket.OPEN || false;
   }
@@ -592,15 +701,17 @@ class WebSocketManager {
    * Get connection state
    */
   getConnectionState(id: string): string | null {
+}
     const connection = this.connections.get(id);
     if (!connection || !connection.ws) return null;
 
     switch (connection.ws.readyState) {
-      case WebSocket.CONNECTING: return 'connecting';
-      case WebSocket.OPEN: return 'open';
-      case WebSocket.CLOSING: return 'closing';
-      case WebSocket.CLOSED: return 'closed';
-      default: return 'unknown';
+}
+      case WebSocket.CONNECTING: return &apos;connecting&apos;;
+      case WebSocket.OPEN: return &apos;open&apos;;
+      case WebSocket.CLOSING: return &apos;closing&apos;;
+      case WebSocket.CLOSED: return &apos;closed&apos;;
+      default: return &apos;unknown&apos;;
     }
   }
 }

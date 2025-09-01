@@ -2,17 +2,19 @@
  * League Dashboard - Main view for the fantasy football league
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from '../data/leagueData';
+import React, { useState, useEffect } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import { getDaysUntilNextWeek, getUserTeam, SEASON_DATES_2025 } from &apos;../data/leagueData&apos;;
 
 const LeagueDashboard: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Update time every minute
   useEffect(() => {
+}
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
@@ -29,12 +31,12 @@ const LeagueDashboard: React.FC = () => {
 
   // Navigation items
   const navItems = [
-    { label: 'My Team', icon: '🏈', view: 'TEAM_HUB', color: 'bg-blue-600' },
-    { label: 'League', icon: '🏆', view: 'LEAGUE_HUB', color: 'bg-green-600' },
-    { label: 'Players', icon: '👥', view: 'WAIVER_WIRE', color: 'bg-purple-600' },
-    { label: 'Draft Prep', icon: '📋', view: 'DRAFT_PREP_CENTER', color: 'bg-orange-600' },
-    { label: 'Standings', icon: '📊', view: 'LEAGUE_STANDINGS', color: 'bg-red-600' },
-    { label: 'Messages', icon: '💬', view: 'MESSAGES', color: 'bg-indigo-600' },
+    { label: &apos;My Team&apos;, icon: &apos;🏈&apos;, view: &apos;TEAM_HUB&apos;, color: &apos;bg-blue-600&apos; },
+    { label: &apos;League&apos;, icon: &apos;🏆&apos;, view: &apos;LEAGUE_HUB&apos;, color: &apos;bg-green-600&apos; },
+    { label: &apos;Players&apos;, icon: &apos;👥&apos;, view: &apos;WAIVER_WIRE&apos;, color: &apos;bg-purple-600&apos; },
+    { label: &apos;Draft Prep&apos;, icon: &apos;📋&apos;, view: &apos;DRAFT_PREP_CENTER&apos;, color: &apos;bg-orange-600&apos; },
+    { label: &apos;Standings&apos;, icon: &apos;📊&apos;, view: &apos;LEAGUE_STANDINGS&apos;, color: &apos;bg-red-600&apos; },
+    { label: &apos;Messages&apos;, icon: &apos;💬&apos;, view: &apos;MESSAGES&apos;, color: &apos;bg-indigo-600&apos; },
   ];
 
   return (
@@ -57,10 +59,10 @@ const LeagueDashboard: React.FC = () => {
                 <p className="text-sm text-slate-400">{userTeam?.name}</p>
               </div>
               <button
-                onClick={() => dispatch({ type: 'LOGOUT' })}
+                onClick={() => dispatch({ type: &apos;LOGOUT&apos; })}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
               >
-                Logout
+//                 Logout
               </button>
             </div>
           </div>
@@ -98,12 +100,13 @@ const LeagueDashboard: React.FC = () => {
         {/* Quick Navigation Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-8">
           {navItems.map((item, index) => (
+}
             <motion.button
               key={item.label}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: item.view as any })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: item.view as any })}
               className={`${item.color} hover:opacity-90 rounded-xl p-6 text-white transition-all transform hover:scale-105`}
             >
               <div className="text-4xl mb-2">{item.icon}</div>
@@ -124,6 +127,7 @@ const LeagueDashboard: React.FC = () => {
             <h3 className="text-xl font-bold text-white mb-4">League Members</h3>
             <div className="space-y-3">
               {league.teams.map((team, index) => (
+}
                 <div
                   key={team.id}
                   className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg"
@@ -185,6 +189,7 @@ const LeagueDashboard: React.FC = () => {
               <h4 className="text-lg font-semibold text-white mb-3">Roster Format</h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 {Object.entries(league.settings.rosterFormat).map(([position, count]) => (
+}
                   <div key={position} className="flex justify-between">
                     <span className="text-slate-400">{position}</span>
                     <span className="text-white">{count}</span>

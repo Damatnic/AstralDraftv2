@@ -1,16 +1,18 @@
 
-import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo } from 'react';
-import type { LeagueHistoryEntry, Team } from '../../types';
-import { Avatar } from '../ui/Avatar';
+import { ErrorBoundary } from &apos;../ui/ErrorBoundary&apos;;
+import React, { useMemo } from &apos;react&apos;;
+import type { LeagueHistoryEntry, Team } from &apos;../../types&apos;;
+import { Avatar } from &apos;../ui/Avatar&apos;;
 
 interface FinalStandingsTableProps {
-    standings: LeagueHistoryEntry['finalStandings'];
+}
+    standings: LeagueHistoryEntry[&apos;finalStandings&apos;];
     teams: Team[];
 
 }
 
 const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, teams }: any) => {
+}
     return (
         <div className="p-2 sm:px-4 md:px-6 lg:px-8">
             <table className="w-full text-sm text-left sm:px-4 md:px-6 lg:px-8">
@@ -23,6 +25,7 @@ const FinalStandingsTable: React.FC<FinalStandingsTableProps> = ({ standings, te
                 </thead>
                 <tbody>
                     {standings.map((entry: any) => {
+}
                         const team = teams.find((t: any) => t.id === entry.teamId);
                         if (!team) return null;
 

@@ -3,12 +3,13 @@
  * Complete standings with playoff scenarios and statistics
  */
 
-import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAppState } from '../contexts/AppContext';
-import ScheduleGenerator from '../components/season/ScheduleGenerator';
+import React, { useState, useMemo } from &apos;react&apos;;
+import { motion, AnimatePresence } from &apos;framer-motion&apos;;
+import { useAppState } from &apos;../contexts/AppContext&apos;;
+import ScheduleGenerator from &apos;../components/season/ScheduleGenerator&apos;;
 
 interface TeamStanding {
+}
   team: any;
   wins: number;
   losses: number;
@@ -17,13 +18,14 @@ interface TeamStanding {
   pointsAgainst: number;
   winPercentage: number;
   playoffPosition: number;
-  playoffStatus: 'clinched' | 'contending' | 'eliminated';
+  playoffStatus: &apos;clinched&apos; | &apos;contending&apos; | &apos;eliminated&apos;;
 
 }
 
 const EnhancedLeagueStandingsView: React.FC = () => {
+}
   const { state, dispatch } = useAppState();
-  const [activeTab, setActiveTab] = useState<'standings' | 'schedule' | 'playoffs' | 'stats'>('standings');
+  const [activeTab, setActiveTab] = useState<&apos;standings&apos; | &apos;schedule&apos; | &apos;playoffs&apos; | &apos;stats&apos;>(&apos;standings&apos;);
   const [currentWeek] = useState(8); // Simulated current week
 
   const league = state.leagues[0];
@@ -31,9 +33,11 @@ const EnhancedLeagueStandingsView: React.FC = () => {
 
   // Calculate standings with simulated data
   const standings = useMemo((): TeamStanding[] => {
+}
     if (!league?.teams) return [];
 
     return league.teams.map((team, index) => {
+}
       // Simulate season progress with realistic records
       const simulatedWins = Math.floor(Math.random() * 6) + 2; // 2-7 wins
       const simulatedLosses = currentWeek - 1 - simulatedWins;
@@ -41,6 +45,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
       const simulatedPointsAgainst = Math.floor(Math.random() * 200) + 750; // 750-950 points
       
       return {
+}
         team,
         wins: simulatedWins,
         losses: Math.max(0, simulatedLosses),
@@ -49,50 +54,59 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         pointsAgainst: simulatedPointsAgainst,
         winPercentage: simulatedWins / (simulatedWins + Math.max(0, simulatedLosses)),
         playoffPosition: index + 1,
-        playoffStatus: index < 6 ? 'contending' : 'eliminated'
+        playoffStatus: index < 6 ? &apos;contending&apos; : &apos;eliminated&apos;
       };
     }).sort((a, b) => {
+}
       // Sort by win percentage, then by points for
       if (b.winPercentage !== a.winPercentage) {
+}
         return b.winPercentage - a.winPercentage;
       }
 
       return b.pointsFor - a.pointsFor;
     }).map((standing, index) => ({
+}
       ...standing,
       playoffPosition: index + 1,
-      playoffStatus: index < 6 ? (index < 2 ? 'clinched' : 'contending') : 'eliminated'
+      playoffStatus: index < 6 ? (index < 2 ? &apos;clinched&apos; : &apos;contending&apos;) : &apos;eliminated&apos;
     }));
   }, [league?.teams, currentWeek]);
 
   const tabs = [
-    { id: 'standings', label: 'Standings', icon: '📊' },
-    { id: 'schedule', label: 'Schedule', icon: '📅' },
-    { id: 'playoffs', label: 'Playoff Picture', icon: '🏆' },
-    { id: 'stats', label: 'League Stats', icon: '📈' }
+    { id: &apos;standings&apos;, label: &apos;Standings&apos;, icon: &apos;📊&apos; },
+    { id: &apos;schedule&apos;, label: &apos;Schedule&apos;, icon: &apos;📅&apos; },
+    { id: &apos;playoffs&apos;, label: &apos;Playoff Picture&apos;, icon: &apos;🏆&apos; },
+    { id: &apos;stats&apos;, label: &apos;League Stats&apos;, icon: &apos;📈&apos; }
   ];
 
   const getPlayoffStatusColor = (status: string) => {
+}
     switch (status) {
-      case 'clinched': return 'text-green-400';
-      case 'contending': return 'text-yellow-400';
-      case 'eliminated': return 'text-red-400';
-      default: return 'text-slate-400';
+}
+      case &apos;clinched&apos;: return &apos;text-green-400&apos;;
+      case &apos;contending&apos;: return &apos;text-yellow-400&apos;;
+      case &apos;eliminated&apos;: return &apos;text-red-400&apos;;
+      default: return &apos;text-slate-400&apos;;
 
   }
 
   const getPlayoffStatusText = (status: string, position: number) => {
+}
     switch (status) {
-      case 'clinched': return position <= 2 ? 'Playoff Bye' : 'Clinched Playoff';
-      case 'contending': return 'In Hunt';
-      case 'eliminated': return 'Eliminated';
-      default: return '';
+}
+      case &apos;clinched&apos;: return position <= 2 ? &apos;Playoff Bye&apos; : &apos;Clinched Playoff&apos;;
+      case &apos;contending&apos;: return &apos;In Hunt&apos;;
+      case &apos;eliminated&apos;: return &apos;Eliminated&apos;;
+      default: return &apos;&apos;;
 
   }
 
   const renderTabContent = () => {
+}
     switch (activeTab) {
-      case 'standings':
+}
+      case &apos;standings&apos;:
         return (
           <div className="space-y-6">
             {/* Current Week Info */}
@@ -127,22 +141,25 @@ const EnhancedLeagueStandingsView: React.FC = () => {
                   </thead>
                   <tbody>
                     {standings.map((standing, index) => (
+}
                       <motion.tr
                         key={standing.team.id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05 }}
                         className={`border-t border-slate-600 hover:bg-slate-700/30 transition-colors ${
-                          standing.playoffPosition <= 6 ? 'bg-blue-900/10' : ''
+}
+                          standing.playoffPosition <= 6 ? &apos;bg-blue-900/10&apos; : &apos;&apos;
                         }`}
                       >
                         <td className="p-4">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+}
                             standing.playoffPosition <= 2 
-                              ? 'bg-green-600 text-white' 
+                              ? &apos;bg-green-600 text-white&apos; 
                               : standing.playoffPosition <= 6 
-                              ? 'bg-blue-600 text-white' 
-                              : 'bg-slate-600 text-slate-300'
+                              ? &apos;bg-blue-600 text-white&apos; 
+                              : &apos;bg-slate-600 text-slate-300&apos;
                           }`}>
                             {standing.playoffPosition}
                           </div>
@@ -175,11 +192,12 @@ const EnhancedLeagueStandingsView: React.FC = () => {
                         </td>
                         <td className="p-4 text-center">
                           <span className={`font-semibold ${
+}
                             standing.pointsFor - standing.pointsAgainst > 0 
-                              ? 'text-green-400' 
-                              : 'text-red-400'
+                              ? &apos;text-green-400&apos; 
+                              : &apos;text-red-400&apos;
                           }`}>
-                            {standing.pointsFor - standing.pointsAgainst > 0 ? '+' : ''}
+                            {standing.pointsFor - standing.pointsAgainst > 0 ? &apos;+&apos; : &apos;&apos;}
                             {standing.pointsFor - standing.pointsAgainst}
                           </span>
                         </td>
@@ -216,16 +234,17 @@ const EnhancedLeagueStandingsView: React.FC = () => {
           </div>
         );
 
-      case 'schedule':
+      case &apos;schedule&apos;:
         return (
-          <ScheduleGenerator 
+          <ScheduleGenerator>
             isCommissioner={isCommissioner}
             onScheduleGenerated={(schedule: any) => {
+}
             }}
           />
         );
 
-      case 'playoffs':
+      case &apos;playoffs&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -243,6 +262,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
                   <h5 className="text-green-400 font-semibold mb-3">🏆 First Round Bye</h5>
                   <div className="space-y-2">
                     {standings.slice(0, 2).map((standing, index) => (
+}
                       <div key={standing.team.id} className="flex items-center gap-3 p-3 bg-green-900/20 rounded-lg border border-green-600/30">
                         <span className="w-6 h-6 bg-green-600 text-white text-sm font-bold rounded flex items-center justify-center">
                           {index + 1}
@@ -264,6 +284,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
                   <h5 className="text-blue-400 font-semibold mb-3">🏈 Wild Card Round</h5>
                   <div className="space-y-2">
                     {standings.slice(2, 6).map((standing, index) => (
+}
                       <div key={standing.team.id} className="flex items-center gap-3 p-3 bg-blue-900/20 rounded-lg border border-blue-600/30">
                         <span className="w-6 h-6 bg-blue-600 text-white text-sm font-bold rounded flex items-center justify-center">
                           {index + 3}
@@ -306,7 +327,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
           </div>
         );
 
-      case 'stats':
+      case &apos;stats&apos;:
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -370,6 +391,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
               <h4 className="font-semibold text-white mb-4">🏆 Weekly High Scores</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {Array.from({ length: Math.min(6, currentWeek - 1) }, (_, i) => {
+}
                   const week = i + 1;
                   const randomTeam = standings[Math.floor(Math.random() * standings.length)];
                   const randomScore = Math.floor(Math.random() * 50) + 120; // 120-170 points
@@ -402,7 +424,7 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => dispatch({ type: 'SET_VIEW', payload: 'DASHBOARD' })}
+              onClick={() => dispatch({ type: &apos;SET_VIEW&apos;, payload: &apos;DASHBOARD&apos; })}
               className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
             >
               ← Back to Dashboard
@@ -429,13 +451,15 @@ const EnhancedLeagueStandingsView: React.FC = () => {
         <div className="mb-8">
           <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 overflow-x-auto">
             {tabs.map((tab: any) => (
+}
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${
+}
                   activeTab === tab.id
-                    ? 'bg-primary-600 text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-slate-700'
+                    ? &apos;bg-primary-600 text-white&apos;
+                    : &apos;text-gray-300 hover:text-white hover:bg-slate-700&apos;
                 }`}
               >
                 <span>{tab.icon}</span>

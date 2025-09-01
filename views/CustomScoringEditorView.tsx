@@ -1,14 +1,15 @@
-import React from 'react';
-import { useLeague } from '../hooks/useLeague';
-import { Widget } from '../components/ui/Widget';
-import ErrorDisplay from '../components/core/ErrorDisplay';
-import { motion } from 'framer-motion';
-import { SettingsIcon } from '../components/icons/SettingsIcon';
+import { useLeague } from &apos;../hooks/useLeague&apos;;
+import { Widget } from &apos;../components/ui/Widget&apos;;
+import ErrorDisplay from &apos;../components/core/ErrorDisplay&apos;;
+import { motion } from &apos;framer-motion&apos;;
+import { SettingsIcon } from &apos;../components/icons/SettingsIcon&apos;;
 
 const CustomScoringEditorView: React.FC = () => {
+}
     const { league } = useLeague();
 
     if (!league) {
+}
         return <ErrorDisplay message="No league selected" />;
 
     return (
@@ -19,7 +20,7 @@ const CustomScoringEditorView: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Widget
+                <Widget>
                     title="Scoring Settings"
                     icon={<SettingsIcon />}
                     className="lg:col-span-2"
@@ -58,7 +59,7 @@ const CustomScoringEditorView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget
+                <Widget>
                     title="Position Settings"
                     icon={<SettingsIcon />}
                 >
@@ -71,7 +72,7 @@ const CustomScoringEditorView: React.FC = () => {
                     </div>
                 </Widget>
 
-                <Widget
+                <Widget>
                     title="Bonus Rules"
                     icon={<SettingsIcon />}
                 >

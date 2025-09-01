@@ -3,9 +3,10 @@
  * Comprehensive trade evaluation with fairness analysis, future value projection, and negotiation insights
  */
 
-import { Player } from '../types';
+import { Player } from &apos;../types&apos;;
 
 export interface TradeProposal {
+}
     id: string;
     fromTeamId: string;
     toTeamId: string;
@@ -15,11 +16,12 @@ export interface TradeProposal {
     toDraftPicks?: DraftPick[];
     proposedAt: Date;
     expiresAt: Date;
-    status: 'pending' | 'accepted' | 'rejected' | 'expired' | 'countered';
+    status: &apos;pending&apos; | &apos;accepted&apos; | &apos;rejected&apos; | &apos;expired&apos; | &apos;countered&apos;;
     message?: string;
 }
 
 export interface DraftPick {
+}
     season: number;
     round: number;
     originalTeamId: string;
@@ -27,14 +29,16 @@ export interface DraftPick {
 }
 
 export interface TradeAnalysis {
-    overallGrade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
+}
+    overallGrade: &apos;A+&apos; | &apos;A&apos; | &apos;B+&apos; | &apos;B&apos; | &apos;C+&apos; | &apos;C&apos; | &apos;D&apos; | &apos;F&apos;;
     fairnessScore: number; // 0-100, 50 is perfectly fair
-    recommendation: 'accept' | 'reject' | 'counter' | 'negotiate';
+    recommendation: &apos;accept&apos; | &apos;reject&apos; | &apos;counter&apos; | &apos;negotiate&apos;;
     
     // Value Analysis
     currentValueDifference: number;
     projectedValueDifference: number;
     valueBreakdown: {
+}
         fromTeamValue: number;
         toTeamValue: number;
         fromTeamProjected: number;
@@ -61,6 +65,7 @@ export interface TradeAnalysis {
 }
 
 export interface TeamImpact {
+}
     teamId: string;
     overallRatingChange: number;
     strengthChanges: PositionStrengthChange[];
@@ -71,6 +76,7 @@ export interface TeamImpact {
 }
 
 export interface PositionStrengthChange {
+}
     position: string;
     currentStrength: number;
     newStrength: number;
@@ -79,6 +85,7 @@ export interface PositionStrengthChange {
 }
 
 export interface LineupImpact {
+}
     weeklyProjectionChange: number;
     consistencyChange: number;
     upside: number;
@@ -86,14 +93,16 @@ export interface LineupImpact {
 }
 
 export interface PositionalImpact {
+}
     position: string;
     scarcityFactor: number;
     marketValue: number;
-    futureOutlook: 'improving' | 'stable' | 'declining';
+    futureOutlook: &apos;improving&apos; | &apos;stable&apos; | &apos;declining&apos;;
     replacementLevel: number;
 }
 
 export interface ScheduleImpact {
+}
     byeWeekConflicts: number;
     strengthOfSchedule: number;
     playoffScheduleImpact: number;
@@ -101,6 +110,7 @@ export interface ScheduleImpact {
 }
 
 export interface InjuryRiskAnalysis {
+}
     overallRiskChange: number;
     playerRisks: PlayerRiskProfile[];
     ageFactors: number;
@@ -108,6 +118,7 @@ export interface InjuryRiskAnalysis {
 }
 
 export interface PlayerRiskProfile {
+}
     playerId: string;
     injuryProbability: number;
     durabilityScore: number;
@@ -115,13 +126,15 @@ export interface PlayerRiskProfile {
 }
 
 export interface NegotiationSuggestion {
-    type: 'add_player' | 'add_pick' | 'remove_player' | 'swap_player';
+}
+    type: &apos;add_player&apos; | &apos;add_pick&apos; | &apos;remove_player&apos; | &apos;swap_player&apos;;
     description: string;
     impact: number;
     reasoning: string;
 }
 
 export interface AlternativeOffer {
+}
     players: Player[];
     draftPicks?: DraftPick[];
     fairnessScore: number;
@@ -129,6 +142,7 @@ export interface AlternativeOffer {
 }
 
 export interface LeagueContext {
+}
     scoringSystem: string;
     rosterSize: number;
     startingPositions: Record<string, number>;
@@ -138,7 +152,8 @@ export interface LeagueContext {
 }
 
 export interface ValueCalculationParams {
-    scoringSystem: 'standard' | 'ppr' | 'half_ppr' | 'superflex';
+}
+    scoringSystem: &apos;standard&apos; | &apos;ppr&apos; | &apos;half_ppr&apos; | &apos;superflex&apos;;
     leagueSize: number;
     rosterComposition: Record<string, number>;
     seasonLength: number;
@@ -146,12 +161,14 @@ export interface ValueCalculationParams {
 }
 
 class TradeAnalysisEngine {
+}
     private readonly playerDatabase: Map<string, Player> = new Map();
     private readonly leagueSettings: LeagueContext;
     private readonly positionalScarcity: Map<string, number> = new Map();
     private readonly valueCalculationParams: ValueCalculationParams;
 
     constructor(leagueSettings: LeagueContext, players: Player[]) {
+}
         this.leagueSettings = leagueSettings;
         this.initializePlayerDatabase(players);
         this.calculatePositionalScarcity();
@@ -162,6 +179,7 @@ class TradeAnalysisEngine {
      * Comprehensive trade analysis
      */
     async analyzeTradeProposal(proposal: TradeProposal): Promise<TradeAnalysis> {
+}
         console.log(`🔍 Analyzing trade proposal: ${proposal.id}`);
 
         // Calculate base values
@@ -202,12 +220,14 @@ class TradeAnalysisEngine {
         const warnings = this.generateWarnings(proposal, injuryRiskAssessment);
 
         return {
+}
             overallGrade,
             fairnessScore,
             recommendation,
             currentValueDifference: currentValues.difference,
             projectedValueDifference: projectedValues.difference,
             valueBreakdown: {
+}
                 fromTeamValue: currentValues.fromTeamValue,
                 toTeamValue: currentValues.toTeamValue,
                 fromTeamProjected: projectedValues.fromTeamValue,
@@ -222,7 +242,7 @@ class TradeAnalysisEngine {
             alternativeOffers,
             leagueContext: this.leagueSettings,
             reasoning,
-            warnings
+//             warnings
         };
     }
 
@@ -230,10 +250,12 @@ class TradeAnalysisEngine {
      * Calculate current player values
      */
     private calculateCurrentValues(proposal: TradeProposal) {
+}
         const fromTeamValue = this.calculateTeamTradeValue(proposal.fromPlayers, proposal.fromDraftPicks);
         const toTeamValue = this.calculateTeamTradeValue(proposal.toPlayers, proposal.toDraftPicks);
         
         return {
+}
             fromTeamValue,
             toTeamValue,
             difference: Math.abs(fromTeamValue - toTeamValue)
@@ -244,10 +266,12 @@ class TradeAnalysisEngine {
      * Calculate projected future values (rest of season + next season)
      */
     private calculateProjectedValues(proposal: TradeProposal) {
+}
         const fromTeamValue = this.calculateProjectedTeamValue(proposal.fromPlayers, proposal.fromDraftPicks);
         const toTeamValue = this.calculateProjectedTeamValue(proposal.toPlayers, proposal.toDraftPicks);
         
         return {
+}
             fromTeamValue,
             toTeamValue,
             difference: Math.abs(fromTeamValue - toTeamValue)
@@ -258,16 +282,20 @@ class TradeAnalysisEngine {
      * Calculate team trade value including players and picks
      */
     private calculateTeamTradeValue(players: Player[], draftPicks?: DraftPick[]): number {
+}
         let totalValue = 0;
 
         // Player values
         for (const player of players) {
+}
             totalValue += this.calculatePlayerValue(player);
         }
 
         // Draft pick values
         if (draftPicks) {
+}
             for (const pick of draftPicks) {
+}
                 totalValue += this.calculateDraftPickValue(pick);
             }
         }
@@ -279,6 +307,7 @@ class TradeAnalysisEngine {
      * Calculate individual player value using multiple factors
      */
     private calculatePlayerValue(player: Player): number {
+}
         const baseValue = this.getBasePlayerValue(player);
         const positionalMultiplier = this.getPositionalValueMultiplier(player.position);
         const scarcityBonus = this.getScarcityBonus(player);
@@ -293,6 +322,7 @@ class TradeAnalysisEngine {
      * Get base player value from projected points and consistency
      */
     private getBasePlayerValue(player: Player): number {
+}
         // Use existing player properties or provide defaults
         const projectedPoints = (player as any).projectedPoints || 150;
         const consistency = (player as any).consistency || 0.8;
@@ -307,13 +337,15 @@ class TradeAnalysisEngine {
      * Position-specific value multipliers
      */
     private getPositionalValueMultiplier(position: string): number {
+}
         const multipliers: Record<string, number> = {
-            'QB': this.valueCalculationParams.scoringSystem === 'superflex' ? 1.2 : 0.9,
-            'RB': 1.1,
-            'WR': this.valueCalculationParams.scoringSystem.includes('ppr') ? 1.05 : 1.0,
-            'TE': this.valueCalculationParams.scoringSystem.includes('ppr') ? 1.02 : 0.95,
-            'K': 0.3,
-            'DST': 0.4
+}
+            &apos;QB&apos;: this.valueCalculationParams.scoringSystem === &apos;superflex&apos; ? 1.2 : 0.9,
+            &apos;RB&apos;: 1.1,
+            &apos;WR&apos;: this.valueCalculationParams.scoringSystem.includes(&apos;ppr&apos;) ? 1.05 : 1.0,
+            &apos;TE&apos;: this.valueCalculationParams.scoringSystem.includes(&apos;ppr&apos;) ? 1.02 : 0.95,
+            &apos;K&apos;: 0.3,
+            &apos;DST&apos;: 0.4
         };
         
         return multipliers[position] || 1.0;
@@ -323,6 +355,7 @@ class TradeAnalysisEngine {
      * Scarcity bonus based on positional depth
      */
     private getScarcityBonus(player: Player): number {
+}
         const scarcity = this.positionalScarcity.get(player.position) || 1.0;
         return 1.0 + (scarcity - 1.0) * 0.2; // 20% impact from scarcity
     }
@@ -331,6 +364,7 @@ class TradeAnalysisEngine {
      * Age-based value adjustment
      */
     private getAgeAdjustment(player: Player): number {
+}
         const age = player.age || 26;
         
         if (age <= 24) return 1.05; // Young upside
@@ -344,16 +378,18 @@ class TradeAnalysisEngine {
      * Injury history discount
      */
     private getInjuryDiscount(player: Player): number {
+}
         // Handle injuryHistory as string (minimal | moderate | extensive) instead of array
-        const injuryHistory = player.injuryHistory || 'minimal';
+        const injuryHistory = player.injuryHistory || &apos;minimal&apos;;
         
         // Apply discount based on injury history severity
         switch (injuryHistory) {
-            case 'extensive':
+}
+            case &apos;extensive&apos;:
                 return 0.85; // 15% discount for extensive injury history
-            case 'moderate':
+            case &apos;moderate&apos;:
                 return 0.92; // 8% discount for moderate injury history
-            case 'minimal':
+            case &apos;minimal&apos;:
             default:
                 return 0.98; // 2% discount for minimal injury history
         }
@@ -363,6 +399,7 @@ class TradeAnalysisEngine {
      * Schedule strength adjustment
      */
     private getScheduleAdjustment(player: Player): number {
+}
         // Mock schedule data - in real implementation, would analyze opponent defenses
         const scheduleStrength = Math.random() * 0.2 + 0.9; // 0.9 to 1.1
         return scheduleStrength;
@@ -372,6 +409,7 @@ class TradeAnalysisEngine {
      * Calculate draft pick value
      */
     private calculateDraftPickValue(pick: DraftPick): number {
+}
         const currentYear = new Date().getFullYear();
         const yearOffset = pick.season - currentYear;
         
@@ -392,10 +430,12 @@ class TradeAnalysisEngine {
      * Calculate projected future team value
      */
     private calculateProjectedTeamValue(players: Player[], draftPicks?: DraftPick[]): number {
+}
         let totalValue = 0;
 
         // Player future values (considering age, contract, etc.)
         for (const player of players) {
+}
             const currentValue = this.calculatePlayerValue(player);
             const futureMultiplier = this.getFutureValueMultiplier(player);
             totalValue += currentValue * futureMultiplier;
@@ -403,7 +443,9 @@ class TradeAnalysisEngine {
 
         // Draft picks maintain their value
         if (draftPicks) {
+}
             for (const pick of draftPicks) {
+}
                 totalValue += this.calculateDraftPickValue(pick);
             }
         }
@@ -415,8 +457,9 @@ class TradeAnalysisEngine {
      * Future value multiplier based on player trajectory
      */
     private getFutureValueMultiplier(player: Player): number {
+}
         const age = player.age || 26;
-        const trend = (player as any).trend || 'stable';
+        const trend = (player as any).trend || &apos;stable&apos;;
         
         let multiplier = 1.0;
         
@@ -426,8 +469,9 @@ class TradeAnalysisEngine {
         
         // Trend factor
         switch (trend) {
-            case 'improving': multiplier *= 1.05; break;
-            case 'declining': multiplier *= 0.95; break;
+}
+            case &apos;improving&apos;: multiplier *= 1.05; break;
+            case &apos;declining&apos;: multiplier *= 0.95; break;
         }
         
         return multiplier;
@@ -443,12 +487,14 @@ class TradeAnalysisEngine {
         picksOut?: DraftPick[],
         picksIn?: DraftPick[]
     ): Promise<TeamImpact> {
+}
         // Mock team data - in real implementation, would fetch from database
         const currentRoster = await this.getTeamRoster(teamId);
         const strengthChanges = this.calculateStrengthChanges(currentRoster, playersOut, playersIn);
         const lineupImpact = this.calculateLineupImpact(currentRoster, playersOut, playersIn);
         
         return {
+}
             teamId,
             overallRatingChange: this.calculateOverallRatingChange(strengthChanges),
             strengthChanges,
@@ -467,10 +513,12 @@ class TradeAnalysisEngine {
         playersOut: Player[], 
         playersIn: Player[]
     ): PositionStrengthChange[] {
-        const positions = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
+}
+        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;, &apos;K&apos;, &apos;DST&apos;];
         const changes: PositionStrengthChange[] = [];
 
         for (const position of positions) {
+}
             const currentStrength = this.calculatePositionalStrength(currentRoster, position);
             
             // Apply trade changes
@@ -482,6 +530,7 @@ class TradeAnalysisEngine {
             const newStrength = this.calculatePositionalStrength(rosterAfterTrade, position);
             
             changes.push({
+}
                 position,
                 currentStrength,
                 newStrength,
@@ -497,6 +546,7 @@ class TradeAnalysisEngine {
      * Calculate positional strength for a roster
      */
     private calculatePositionalStrength(roster: Player[], position: string): number {
+}
         const positionPlayers = roster.filter((p: any) => p.position === position);
         if (positionPlayers.length === 0) return 0;
 
@@ -522,6 +572,7 @@ class TradeAnalysisEngine {
         fromTeamImpact: TeamImpact, 
         toTeamImpact: TeamImpact
     ): number {
+}
         const valueDifference = Math.abs(currentValues.fromTeamValue - currentValues.toTeamValue);
         const maxValue = Math.max(currentValues.fromTeamValue, currentValues.toTeamValue);
         const valueRatio = maxValue > 0 ? valueDifference / maxValue : 0;
@@ -539,10 +590,12 @@ class TradeAnalysisEngine {
      * Calculate contextual adjustment for team needs
      */
     private calculateContextualAdjustment(fromTeamImpact: TeamImpact, toTeamImpact: TeamImpact): number {
+}
         let adjustment = 0;
 
-        // If both teams improve, it's more fair
+        // If both teams improve, it&apos;s more fair
         if (fromTeamImpact.overallRatingChange > 0 && toTeamImpact.overallRatingChange > 0) {
+}
             adjustment += 10;
         }
 
@@ -560,28 +613,31 @@ class TradeAnalysisEngine {
         fairnessScore: number, 
         fromTeamImpact: TeamImpact, 
         toTeamImpact: TeamImpact
-    ): TradeAnalysis['overallGrade'] {
+    ): TradeAnalysis[&apos;overallGrade&apos;] {
+}
         let score = fairnessScore;
 
         // Bonus for mutual benefit
         if (fromTeamImpact.overallRatingChange > 0 && toTeamImpact.overallRatingChange > 0) {
+}
             score += 10;
         }
 
         // Penalty for lopsided trades
         const impactDifference = Math.abs(fromTeamImpact.overallRatingChange - toTeamImpact.overallRatingChange);
         if (impactDifference > 15) {
+}
             score -= 10;
         }
 
-        if (score >= 90) return 'A+';
-        if (score >= 85) return 'A';
-        if (score >= 80) return 'B+';
-        if (score >= 75) return 'B';
-        if (score >= 70) return 'C+';
-        if (score >= 65) return 'C';
-        if (score >= 60) return 'D';
-        return 'F';
+        if (score >= 90) return &apos;A+&apos;;
+        if (score >= 85) return &apos;A&apos;;
+        if (score >= 80) return &apos;B+&apos;;
+        if (score >= 75) return &apos;B&apos;;
+        if (score >= 70) return &apos;C+&apos;;
+        if (score >= 65) return &apos;C&apos;;
+        if (score >= 60) return &apos;D&apos;;
+        return &apos;F&apos;;
     }
 
     /**
@@ -591,43 +647,52 @@ class TradeAnalysisEngine {
         fairnessScore: number, 
         fromTeamImpact: TeamImpact, 
         toTeamImpact: TeamImpact
-    ): TradeAnalysis['recommendation'] {
+    ): TradeAnalysis[&apos;recommendation&apos;] {
+}
         if (fairnessScore >= 75 && fromTeamImpact.overallRatingChange > 0) {
-            return 'accept';
+}
+            return &apos;accept&apos;;
         }
         
         if (fairnessScore >= 65 && fromTeamImpact.overallRatingChange >= -2) {
-            return 'negotiate';
+}
+            return &apos;negotiate&apos;;
         }
         
         if (fairnessScore >= 55) {
-            return 'counter';
+}
+            return &apos;counter&apos;;
         }
         
-        return 'reject';
+        return &apos;reject&apos;;
     }
 
     /**
      * Initialize helper methods and data structures
      */
     private initializePlayerDatabase(players: Player[]) {
+}
         for (const player of players) {
+}
             this.playerDatabase.set(player.id.toString(), player);
         }
     }
 
     private calculatePositionalScarcity() {
+}
         // Mock scarcity calculation - would analyze league-wide positional depth
-        this.positionalScarcity.set('QB', 1.2);
-        this.positionalScarcity.set('RB', 1.4);
-        this.positionalScarcity.set('WR', 1.1);
-        this.positionalScarcity.set('TE', 1.3);
-        this.positionalScarcity.set('K', 0.8);
-        this.positionalScarcity.set('DST', 0.8);
+        this.positionalScarcity.set(&apos;QB&apos;, 1.2);
+        this.positionalScarcity.set(&apos;RB&apos;, 1.4);
+        this.positionalScarcity.set(&apos;WR&apos;, 1.1);
+        this.positionalScarcity.set(&apos;TE&apos;, 1.3);
+        this.positionalScarcity.set(&apos;K&apos;, 0.8);
+        this.positionalScarcity.set(&apos;DST&apos;, 0.8);
     }
 
     private deriveValueParams(): ValueCalculationParams {
+}
         return {
+}
             scoringSystem: this.leagueSettings.scoringSystem as any,
             leagueSize: 12, // Mock
             rosterComposition: this.leagueSettings.startingPositions,
@@ -638,12 +703,15 @@ class TradeAnalysisEngine {
 
     // Mock implementation methods - would be replaced with real data access
     private async getTeamRoster(teamId: string): Promise<Player[]> {
+}
         // Mock roster data
         return Array.from(this.playerDatabase.values()).slice(0, 16);
     }
 
     private calculateLineupImpact(roster: Player[], playersOut: Player[], playersIn: Player[]): LineupImpact {
+}
         return {
+}
             weeklyProjectionChange: Math.random() * 20 - 10,
             consistencyChange: Math.random() * 10 - 5,
             upside: Math.random() * 15,
@@ -652,38 +720,47 @@ class TradeAnalysisEngine {
     }
 
     private calculateOverallRatingChange(changes: PositionStrengthChange[]): number {
+}
         return changes.reduce((sum, change) => sum + change.change, 0) / changes.length;
     }
 
     private calculateBenchDepthImpact(roster: Player[], playersOut: Player[], playersIn: Player[]): number {
+}
         return Math.random() * 20 - 10; // Mock implementation
     }
 
     private calculatePlayoffProjectionChange(teamId: string, changes: PositionStrengthChange[]): number {
+}
         return Math.random() * 15 - 7.5; // Mock implementation
     }
 
     private calculateRosterBalance(roster: Player[], playersOut: Player[], playersIn: Player[]): number {
+}
         return Math.random() * 10 - 5; // Mock implementation
     }
 
     private getPositionalRanking(strength: number, position: string): number {
+}
         return Math.floor(Math.random() * 12) + 1; // Mock ranking
     }
 
     private analyzePositionalImpact(proposal: TradeProposal): PositionalImpact[] {
-        const positions = ['QB', 'RB', 'WR', 'TE'];
+}
+        const positions = [&apos;QB&apos;, &apos;RB&apos;, &apos;WR&apos;, &apos;TE&apos;];
         return positions.map((position: any) => ({
+}
             position,
             scarcityFactor: this.positionalScarcity.get(position) || 1.0,
             marketValue: Math.random() * 100 + 50,
-            futureOutlook: ['improving', 'stable', 'declining'][Math.floor(Math.random() * 3)] as any,
+            futureOutlook: [&apos;improving&apos;, &apos;stable&apos;, &apos;declining&apos;][Math.floor(Math.random() * 3)] as any,
             replacementLevel: Math.random() * 50 + 25
         }));
     }
 
     private analyzeScheduleImpact(proposal: TradeProposal): ScheduleImpact {
+}
         return {
+}
             byeWeekConflicts: Math.floor(Math.random() * 3),
             strengthOfSchedule: Math.random() * 20 - 10,
             playoffScheduleImpact: Math.random() * 15 - 7.5,
@@ -692,11 +769,14 @@ class TradeAnalysisEngine {
     }
 
     private analyzeInjuryRisk(proposal: TradeProposal): InjuryRiskAnalysis {
+}
         const allPlayers = [...proposal.fromPlayers, ...proposal.toPlayers];
         
         return {
+}
             overallRiskChange: Math.random() * 10 - 5,
             playerRisks: allPlayers.map((player: any) => ({
+}
                 playerId: player.id.toString(),
                 injuryProbability: Math.random() * 0.3 + 0.1,
                 durabilityScore: Math.random() * 40 + 60,
@@ -708,6 +788,7 @@ class TradeAnalysisEngine {
     }
 
     private calculateAgeRisk(age: number): number {
+}
         if (age <= 25) return 1;
         if (age <= 28) return 2;
         if (age <= 31) return 4;
@@ -715,21 +796,25 @@ class TradeAnalysisEngine {
     }
 
     private generateNegotiationSuggestions(proposal: TradeProposal, fairnessScore: number): NegotiationSuggestion[] {
+}
         const suggestions: NegotiationSuggestion[] = [];
 
         if (fairnessScore < 65) {
+}
             suggestions.push({
-                type: 'add_pick',
-                description: 'Request a 2nd round pick to balance the trade',
+}
+                type: &apos;add_pick&apos;,
+                description: &apos;Request a 2nd round pick to balance the trade&apos;,
                 impact: 10,
-                reasoning: 'Additional draft capital would improve trade fairness'
+                reasoning: &apos;Additional draft capital would improve trade fairness&apos;
             });
 
             suggestions.push({
-                type: 'add_player',
-                description: 'Include a bench player to sweeten the deal',
+}
+                type: &apos;add_player&apos;,
+                description: &apos;Include a bench player to sweeten the deal&apos;,
                 impact: 8,
-                reasoning: 'Adding depth player would provide better value balance'
+                reasoning: &apos;Adding depth player would provide better value balance&apos;
             });
         }
 
@@ -737,55 +822,67 @@ class TradeAnalysisEngine {
     }
 
     private generateAlternativeOffers(proposal: TradeProposal): AlternativeOffer[] {
+}
         // Mock alternative offers - would use AI to generate realistic alternatives
         return [
             {
+}
                 players: proposal.fromPlayers.slice(0, 1),
                 draftPicks: [{ season: 2025, round: 2, originalTeamId: proposal.fromTeamId }],
                 fairnessScore: 72,
-                description: 'Simplified trade with draft pick compensation'
+                description: &apos;Simplified trade with draft pick compensation&apos;
             }
         ];
     }
 
     private generateReasoning(fairnessScore: number, fromTeamImpact: TeamImpact, toTeamImpact: TeamImpact): string[] {
+}
         const reasoning: string[] = [];
 
         if (fairnessScore >= 75) {
-            reasoning.push('Trade value is well-balanced between both teams');
+}
+            reasoning.push(&apos;Trade value is well-balanced between both teams&apos;);
         } else if (fairnessScore >= 60) {
-            reasoning.push('Trade is somewhat lopsided but may work based on team needs');
+}
+            reasoning.push(&apos;Trade is somewhat lopsided but may work based on team needs&apos;);
         } else {
-            reasoning.push('Significant value imbalance favoring one side');
+}
+            reasoning.push(&apos;Significant value imbalance favoring one side&apos;);
         }
 
         if (fromTeamImpact.overallRatingChange > 5) {
-            reasoning.push('Receiving team gets substantial upgrade to starting lineup');
+}
+            reasoning.push(&apos;Receiving team gets substantial upgrade to starting lineup&apos;);
         }
 
         if (Math.abs(fromTeamImpact.rosterBalance) > 3) {
-            reasoning.push('Trade addresses roster construction imbalances');
+}
+            reasoning.push(&apos;Trade addresses roster construction imbalances&apos;);
         }
 
         return reasoning;
     }
 
     private generateWarnings(proposal: TradeProposal, riskAnalysis: InjuryRiskAnalysis): string[] {
+}
         const warnings: string[] = [];
 
         if (riskAnalysis.overallRiskChange > 5) {
-            warnings.push('Trade significantly increases injury risk');
+}
+            warnings.push(&apos;Trade significantly increases injury risk&apos;);
         }
 
         const highRiskPlayers = riskAnalysis.playerRisks.filter((p: any) => p.injuryProbability > 0.25);
         if (highRiskPlayers.length > 0) {
+}
             warnings.push(`${highRiskPlayers.length} players have elevated injury risk`);
         }
 
         // Check for trading deadline proximity
         const daysToDeadline = Math.floor((this.leagueSettings.tradingDeadline.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
         if (daysToDeadline < 7) {
-            warnings.push('Trade deadline approaching - limited time for counter-offers');
+}
+            warnings.push(&apos;Trade deadline approaching - limited time for counter-offers&apos;);
         }
 
         return warnings;
