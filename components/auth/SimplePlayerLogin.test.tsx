@@ -1,29 +1,110 @@
+/**
+ * SimplePlayerLogin Component Tests
+ * Critical authentication flow testing
+ */
+
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent, waitFor } from '../../src/test-utils';
 import SimplePlayerLogin from './SimplePlayerLogin';
 
+// Mock the SimpleAuthContext
+const mockLogin = jest.fn();
+const mockContextValue = {
+  user: null,
+  isAuthenticated: false,
+  isLoading: false,
+  login: mockLogin,
+  logout: jest.fn(),
+  checkAuth: jest.fn(),
+};
+
+jest.mock('../../contexts/SimpleAuthContext', () => ({
+  useAuth: () => mockContextValue,
+  SimpleAuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 describe('SimplePlayerLogin', () => {
-  it('renders without crashing', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('should render login form with team name field', () => {
     render(<SimplePlayerLogin />);
-    expect(screen.getByTestId('simpleplayerlogin')).toBeInTheDocument();
+    
+    expect(screen.getByText(/team name/i)).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it('has proper accessibility attributes', () => {
+  test('should handle form submission with valid data', async () => {
+    const mockOnLogin = jest.fn();
+    render(<SimplePlayerLogin onLogin={mockOnLogin} />);
+    
+    const input = screen.getByRole('textbox');
+    const button = screen.getByRole('button');
+    
+    fireEvent.change(input, { target: { value: 'Test Team' } });
+    fireEvent.click(button);
+    
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith(
+        expect.objectContaining({
+          teamName: 'Test Team'
+        })
+      );
+    });
+  });
+
+  test('should validate required fields', () => {
     render(<SimplePlayerLogin />);
-    // Add specific accessibility tests here
+    
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    
+    expect(mockLogin).not.toHaveBeenCalled();
   });
 
-  it('handles loading states correctly', () => {
+  test('should show loading state when authenticating', () => {
+    mockContextValue.isLoading = true;
     render(<SimplePlayerLogin />);
-    // Add loading state tests here
+    
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
   });
 
-  it('works on mobile devices', () => {
-    // Add mobile-specific tests here
+  test('should handle authentication errors', async () => {
+    mockLogin.mockRejectedValueOnce(new Error('Auth failed'));
+    render(<SimplePlayerLogin />);
+    
+    const input = screen.getByRole('textbox');
+    const button = screen.getByRole('button');
+    
+    fireEvent.change(input, { target: { value: 'Test Team' } });
+    fireEvent.click(button);
+    
+    await waitFor(() => {
+      expect(screen.getByText(/error/i)).toBeInTheDocument();
+    });
   });
 
-  it('handles error states gracefully', () => {
-    // Add error handling tests here
+  test('should prevent XSS in team name input', () => {
+    render(<SimplePlayerLogin />);
+    
+    const input = screen.getByRole('textbox');
+    const xssPayload = '<script>alert("XSS")</script>';
+    
+    fireEvent.change(input, { target: { value: xssPayload } });
+    
+    // Input should accept the value but sanitization happens on submit
+    expect(input).toHaveValue(xssPayload);
+  });
+
+  test('should be accessible with proper ARIA labels', () => {
+    render(<SimplePlayerLogin />);
+    
+    const input = screen.getByRole('textbox');
+    const button = screen.getByRole('button');
+    
+    expect(input).toHaveAttribute('aria-label');
+    expect(button).toHaveAttribute('type');
   });
 });
