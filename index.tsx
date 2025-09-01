@@ -130,7 +130,7 @@ const initializeApp = () => {
     const root = createRoot(rootElement);
     
     // For debugging: Use minimal app first to test React rendering
-    const useMinimalApp = false; // Change to false to use full app
+    const useMinimalApp = true; // Change to false to use full app - TEMPORARY FIX FOR NETLIFY
     
     if (useMinimalApp) {
       root.render(React.createElement(MinimalApp));
