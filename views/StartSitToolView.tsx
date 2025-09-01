@@ -17,10 +17,10 @@ const PlayerList: React.FC<{
     onSelect: (id: number) => void;
     selectedId: number | null;
     disabledId: number | null;
-}> = ({ roster, onSelect, selectedId, disabledId }: any) => {
+}> = ({ roster, onSelect, selectedId, disabledId }) => {
     return (
         <div className="space-y-2 h-96 overflow-y-auto pr-2">
-            {roster.map((p: any) => (
+            {roster.map((p: Player) => (
                 <button
                     key={p.id}
                     onClick={() => onSelect(p.id)}
@@ -40,7 +40,7 @@ const PlayerList: React.FC<{
     );
 };
 
-const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () => void; label: string; weeklyProjection: number | undefined }> = ({ player, onClear, label, weeklyProjection }: any) => (
+const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () => void; label: string; weeklyProjection: number | undefined }> = ({ player, onClear, label, weeklyProjection }) => (
      <div className="glass-pane rounded-xl p-4 flex flex-col items-center justify-center h-48">
         {player ? (
             <div className="text-center relative w-full h-full flex flex-col items-center justify-center">
@@ -63,7 +63,7 @@ const PlayerSelectionSlot: React.FC<{ player: Player | undefined; onClear: () =>
     </div>
 );
 
-const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; weeklyProjection: number | undefined; }> = ({ player, isRecommended, weeklyProjection }: any) => (
+const RecommendedPlayerCard: React.FC<{ player: Player; isRecommended: boolean; weeklyProjection: number | undefined; }> = ({ player, isRecommended, weeklyProjection }) => (
     <div className={`relative p-4 rounded-xl border-2 transition-all duration-300 ${isRecommended ? 'border-green-400 bg-green-500/10 shadow-lg shadow-green-500/20' : 'border-gray-600/50 opacity-60'}`}>
         {isRecommended && <div className="absolute top-2 right-2 px-2 py-0.5 text-xs font-bold bg-green-400 text-black rounded-full">RECOMMENDED</div>}
         <div className="flex flex-col items-center text-center">
@@ -83,7 +83,7 @@ const AdviceDisplay: React.FC<{
     playerB: Player;
     playerAProj: number | undefined;
     playerBProj: number | undefined;
-}> = ({ advice, playerA, playerB, playerAProj, playerBProj }: any) => {
+}> = ({ advice, playerA, playerB, playerAProj, playerBProj }) => {
     const { isMobile } = useResponsiveBreakpoint();
     const isPlayerARecommended = advice.recommendedPlayerId === playerA.id;
     
@@ -114,7 +114,7 @@ const AdviceDisplay: React.FC<{
     );
 };
 
-const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }: any) => {
+const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: React.Dispatch<any> }> = ({ league, myTeam, dispatch }) => {
     const { isMobile } = useResponsiveBreakpoint();
     const [playerAId, setPlayerAId] = React.useState<number | null>(null);
     const [playerBId, setPlayerBId] = React.useState<number | null>(null);
@@ -123,8 +123,8 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
 
     const handleGetAdvice = async () => {
         if (!playerAId || !playerBId) return;
-        const playerA = myTeam.roster.find((p: any) => p.id === playerAId);
-        const playerB = myTeam.roster.find((p: any) => p.id === playerBId);
+        const playerA = myTeam.roster.find((p: Player) => p.id === playerAId);
+        const playerB = myTeam.roster.find((p: Player) => p.id === playerBId);
         if (!playerA || !playerB) return;
 
         setIsLoading(true);
@@ -139,8 +139,8 @@ const StartSitToolContent: React.FC<{ league: League; myTeam: Team; dispatch: Re
         }
     };
 
-    const playerA = playerAId ? myTeam.roster.find((p: any) => p.id === playerAId) : undefined;
-    const playerB = playerBId ? myTeam.roster.find((p: any) => p.id === playerBId) : undefined;
+    const playerA = playerAId ? myTeam.roster.find((p: Player) => p.id === playerAId) : undefined;
+    const playerB = playerBId ? myTeam.roster.find((p: Player) => p.id === playerBId) : undefined;
     const playerAProj = playerA?.weeklyProjection;
     const playerBProj = playerB?.weeklyProjection;
 

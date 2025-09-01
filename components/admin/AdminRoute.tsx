@@ -4,7 +4,7 @@
  */
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { adminService, AdminUser } from '../../services/adminService';
 import AdminDashboard from './AdminDashboard';
 
@@ -13,7 +13,6 @@ interface AdminLoginProps {
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }: any) => {
-  const [isLoading, setIsLoading] = React.useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

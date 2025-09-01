@@ -52,7 +52,7 @@ interface TeamManagementViewProps {
   onBack?: () => void;
 }
 
-const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) => {
+const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }) => {
   // State management
   const [activeTab, setActiveTab] = useState<TabType>('roster');
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
@@ -66,7 +66,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
 
   // Get selected team
   const selectedTeam = selectedTeamId 
-    ? league.teams.find((team: any) => team.id === selectedTeamId)
+    ? league.teams.find((team: Team) => team.id === selectedTeamId)
     : league.teams[0];
 
   // Mock data generation
@@ -154,7 +154,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
         <h3 className="text-xl font-bold text-white mb-4">Starting Lineup</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {selectedTeam?.roster.filter((player: any) => player.isStarting).map((player: any) => (
+          {selectedTeam?.roster.filter((player: Player) => player.isStarting).map((player: Player) => (
             <div key={player.id} className="bg-gray-700/50 rounded-lg p-4">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-white font-medium">{player.name}</h4>
@@ -180,7 +180,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
         <h3 className="text-xl font-bold text-white mb-4">Bench Players</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {selectedTeam?.roster.filter((player: any) => !player.isStarting).map((player: any) => (
+          {selectedTeam?.roster.filter((player: Player) => !player.isStarting).map((player: Player) => (
             <div key={player.id} className="bg-gray-700/50 rounded-lg p-3">
               <div className="text-white font-medium text-sm">{player.name}</div>
               <div className="text-xs text-gray-300">{player.position} - {player.team}</div>
@@ -213,7 +213,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
             <h4 className="text-white font-medium mb-2">Current Projected Points</h4>
             <div className="text-2xl font-bold text-white">
               {selectedTeam?.roster
-                .filter((p: any) => p.isStarting)
+                .filter((p: Player) => p.isStarting)
                 .reduce((sum, p) => sum + p.projectedPoints, 0)
                 .toFixed(1)}
             </div>
@@ -242,7 +242,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
     >
       <h3 className="text-xl font-bold text-white mb-4">Recent Transactions</h3>
       <div className="space-y-3">
-        {generateMockTransactions().map((transaction: any) => (
+        {generateMockTransactions().map((transaction) => (
           <div key={transaction.id} className="flex items-center justify-between p-3 bg-gray-700/50 rounded-lg">
             <div>
               <div className="text-white font-medium">{transaction.description}</div>
@@ -296,8 +296,8 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
         <h3 className="text-xl font-bold text-white mb-4">Position Strength</h3>
         <div className="space-y-3">
-          {['QB', 'RB', 'WR', 'TE'].map((position: any) => {
-            const positionPlayers = selectedTeam?.roster.filter((p: any) => p.position === position) || [];
+          {['QB', 'RB', 'WR', 'TE'].map((position: string) => {
+            const positionPlayers = selectedTeam?.roster.filter((p: Player) => p.position === position) || [];
             const avgPoints = positionPlayers.reduce((sum, p) => sum + p.averagePoints, 0) / positionPlayers.length || 0;
             
             return (
@@ -388,9 +388,9 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
             {/* Team Selector */}
             <select
               value={selectedTeamId || league.teams[0]?.id || ''}
-              onChange={(e: any) => handleTeamSelect(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleTeamSelect(e.target.value)}
             >
-              {league.teams.map((team: any) => (
+              {league.teams.map((team: Team) => (
                 <option key={team.id} value={team.id}>
                   {team.name} ({team.owner})
                 </option>
@@ -400,7 +400,7 @@ const TeamManagementView: React.FC<TeamManagementViewProps> = ({ onBack }: any) 
 
           {/* Navigation Tabs */}
           <div className="flex space-x-1 bg-gray-800/50 p-1 rounded-xl">
-            {tabs.map((tab: any) => {
+            {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
                 <button

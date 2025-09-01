@@ -4,7 +4,7 @@
  */
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   adminService,
   AdminDashboardData,
@@ -17,7 +17,7 @@ import {
 const DashboardOverview: React.FC<{
   data: AdminDashboardData['overview'] 
 }> = ({ data }: any) => {
-  const [isLoading, setIsLoading] = React.useState(false);
+  // const [isLoading, setIsLoading] = React.useState(false); // TODO: Implement loading state
   const getHealthColor = (status: string) => {
     switch (status) {
       case 'healthy': return 'text-green-600';
