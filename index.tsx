@@ -16,7 +16,7 @@ import { createRoot } from 'react-dom/client';
 
 // Browser polyfills for older browsers
 if (typeof globalThis === 'undefined') {
-  (window as any).globalThis = window;
+  (window as typeof globalThis).globalThis = window;
 }
 
 // Polyfill for requestIdleCallback
@@ -75,7 +75,7 @@ const reportInitializationError = (error: unknown, phase: string) => {
 };
 
 // Graceful fallback UI
-const createFallbackUI = (error: any, phase: string) => {
+const createFallbackUI = (error: unknown, phase: string) => {
   const isReactError = error instanceof Error && (
     error.message.includes('React') ||
     error.message.includes('createElement') ||

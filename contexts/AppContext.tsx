@@ -28,7 +28,7 @@ type Action =
     | { type: 'SET_LINEUP'; payload: { teamId: number, starters: number[], bench: number[] } }
     | { type: 'SET_SEASON_REVIEW_YEAR'; payload: number }
     | { type: 'EDIT_MATCHUPS'; payload: { leagueId: string } }
-    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: any } }
+    | { type: 'SET_WEEKLY_RECAP_SCRIPT'; payload: { key: string, value: unknown } }
     | { type: 'UPDATE_LEAGUE_PLAYERS'; payload: { leagueId: string, players: Player[] } };
     
 const AppContext = React.createContext<{ state: AppState; dispatch: React.Dispatch<Action> } | undefined>(undefined);
@@ -89,7 +89,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
         case 'LOGIN': {
             const user = action.payload;
             // Check if user is part of the league
-            const isLeagueMember = LEAGUE_MEMBERS.some((member: any) => 
+            const isLeagueMember = LEAGUE_MEMBERS.some((member: User) => 
                 member.name === user.name || member.id === user.id
             );
             

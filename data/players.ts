@@ -13,20 +13,20 @@ export const players: Player[] = nflPlayers2025;
 // Helper functions
 export const getPlayerById = (id: number | string): Player | undefined => {
   const playerId = typeof id === 'string' ? parseInt(id) : id;
-  return players.find((p: any) => p.id === playerId);
+  return players.find((p: Player) => p.id === playerId);
 };
 
 export const getPlayersByPosition = (position: string): Player[] => {
-  return players.filter((p: any) => p.position === position);
+  return players.filter((p: Player) => p.position === position);
 };
 
 export const getPlayersByTier = (tier: number): Player[] => {
-  return players.filter((p: any) => p.tier === tier);
+  return players.filter((p: Player) => p.tier === tier);
 };
 
 export const searchPlayers = (query: string): Player[] => {
   const lowerQuery = query.toLowerCase();
-  return players.filter((p: any) => 
+  return players.filter((p: Player) => 
     p.name.toLowerCase().includes(lowerQuery) ||
     p.team.toLowerCase().includes(lowerQuery) ||
     p.position.toLowerCase().includes(lowerQuery)

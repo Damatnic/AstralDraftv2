@@ -255,7 +255,7 @@ const AppContent: React.FC = () => {
         };
         
         // NUCLEAR-LEVEL console override with bulletproof safety
-        const safeJoinArgs = (argsList: any): string => {
+        const safeJoinArgs = (argsList: unknown[]): string => {
             try {
                 if (!argsList) return '';
                 if (!Array.isArray(argsList) && typeof argsList.length !== 'number') return String(argsList || '');
@@ -364,7 +364,7 @@ const AppContent: React.FC = () => {
                 const connectWebSocket = async () => {
                     try {
                         return await enhancedWebSocketService.connect();
-                    } catch (wsError: any) {
+                    } catch (wsError: unknown) {
                         // Suppress WebSocket errors that don't affect functionality
                         const wsMessage = wsError?.message?.toLowerCase() || '';
                         if (wsMessage.includes('websocket') || wsMessage.includes('connection failed')) {
@@ -396,7 +396,7 @@ const AppContent: React.FC = () => {
                     console.log('ℹ️ Continuing with offline mode - all features remain functional');
                 }
                 
-            } catch (error: any) {
+            } catch (error: unknown) {
                 // Complete error suppression for WebSocket failures
                 const errorMessage = error?.message?.toLowerCase() || '';
                 const isWebSocketError = errorMessage.includes('websocket') || 
@@ -663,7 +663,7 @@ const NuclearErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ childre
   const [errorCount, setErrorCount] = React.useState(0);
 
   React.useEffect(() => {
-    const handleError = (error: Error, errorInfo?: any) => {
+    const handleError = (error: Error, errorInfo?: React.ErrorInfo) => {
       setErrorCount(prev => prev + 1);
       if (errorCount < 5) { // Allow up to 5 retries
         setTimeout(() => setHasError(false), 1000);

@@ -597,16 +597,16 @@ export const NFL_PLAYERS_2024: Player[] = [
 
 // Helper functions
 export function getPlayersByPosition(position: string): Player[] {
-  return NFL_PLAYERS_2024.filter((player: any) => player.position === position);
+  return NFL_PLAYERS_2024.filter((player: Player) => player.position === position);
 }
 
 export function getPlayersByTeam(team: string): Player[] {
-  return NFL_PLAYERS_2024.filter((player: any) => player.team === team);
+  return NFL_PLAYERS_2024.filter((player: Player) => player.team === team);
 }
 
 export function searchPlayers(query: string): Player[] {
   const searchTerm = query.toLowerCase();
-  return NFL_PLAYERS_2024.filter((player: any) => 
+  return NFL_PLAYERS_2024.filter((player: Player) => 
     player.name.toLowerCase().includes(searchTerm) ||
     player.team.toLowerCase().includes(searchTerm) ||
     player.position.toLowerCase().includes(searchTerm)
@@ -620,7 +620,7 @@ export function getTopPlayersByPosition(position: string, count: number = 10): P
 }
 
 export function getPlayerById(id: number): Player | undefined {
-  return NFL_PLAYERS_2024.find((player: any) => player.id === id);
+  return NFL_PLAYERS_2024.find((player: Player) => player.id === id);
 }
 
 // Position groups for roster management
