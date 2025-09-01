@@ -27,13 +27,13 @@ interface SecurityEvent {
   description: string;
   location?: string;
   resolved: boolean;
+}
 
 interface SecurityThreat {
   type: string;
   count: number;
   lastSeen: string;
   severity: string;
-
 }
 
 interface SystemStatus {
@@ -41,7 +41,8 @@ interface SystemStatus {
   database: 'healthy' | 'degraded' | 'down';
   authentication: 'healthy' | 'degraded' | 'down';
   monitoring: 'healthy' | 'degraded' | 'down';
-  backups: 'healthy' | 'degraded' | 'down';}
+  backups: 'healthy' | 'degraded' | 'down';
+}
 
 const SecurityDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -70,6 +71,7 @@ const SecurityDashboard: React.FC = () => {
       
       if (metricsResponse.ok) {
         setMetrics(await metricsResponse.json());
+      }
 
       // Load recent security events
       const eventsResponse = await fetch(`/api/admin/security/events?limit=20&timeRange=${timeRange}`, {
@@ -78,6 +80,7 @@ const SecurityDashboard: React.FC = () => {
       
       if (eventsResponse.ok) {
         setRecentEvents(await eventsResponse.json());
+      }
 
       // Load top threats
       const threatsResponse = await fetch(`/api/admin/security/threats?timeRange=${timeRange}`, {
@@ -94,11 +97,13 @@ const SecurityDashboard: React.FC = () => {
       
       if (statusResponse.ok) {
         setSystemStatus(await statusResponse.json());
-
-    finally {
+      }
+    } catch (error) {
+      console.error('Failed to load security data:', error);
+    } finally {
       setLoading(false);
       setRefreshing(false);
-
+    }
   };
 
   const blockIP = async (ip: string) => {
@@ -114,7 +119,10 @@ const SecurityDashboard: React.FC = () => {
       
       // Refresh data after blocking
       await loadSecurityData();
-    };
+    } catch (error) {
+      console.error('Failed to block IP:', error);
+    }
+  };
 
   const generateSecurityReport = async () => {
     try {

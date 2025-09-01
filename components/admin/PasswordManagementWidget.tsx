@@ -70,7 +70,7 @@ const PasswordManagementWidget: React.FC = () => {
           success: false, 
           message: result.errors?.join(', ') || 'Failed to update passwords' 
         });
-
+      }
     } catch (error) {
       setUpdateResult({ 
         success: false, 
@@ -79,7 +79,7 @@ const PasswordManagementWidget: React.FC = () => {
     } finally {
       setIsLoading(false);
       setShowConfirmation(false);
-
+    }
   };
 
   const getSecurityStatusIcon = (isSecure: boolean) => {

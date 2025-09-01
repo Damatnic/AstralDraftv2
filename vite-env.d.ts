@@ -27,3 +27,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+declare global {
+  interface Window {
+    loggingService?: {
+      error: (message: string, data?: any, category?: string) => void;
+    };
+  }
+}

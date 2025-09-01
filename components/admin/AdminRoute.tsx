@@ -31,12 +31,12 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
         onLogin(admin);
       } else {
         setError('Invalid credentials. Please try again.');
-
+      }
     } catch (error) {
       setError('Authentication failed. Please try again.');
     } finally {
       setLoading(false);
-
+    }
   };
 
   return (
@@ -47,7 +47,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
           <p className="mt-2 text-gray-600 sm:px-4 md:px-6 lg:px-8">Sign in to access the admin dashboard</p>
         </div>
 
-        <form onSubmit={handleSubmit}
+        <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700 sm:px-4 md:px-6 lg:px-8">
               Username
@@ -57,7 +57,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
               type="text"
               required
               value={credentials.username}
-              onChange={(e: any) => setCredentials(prev => ({ ...prev, username: e.target.value }}
+              onChange={(e: any) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:px-4 md:px-6 lg:px-8"
               placeholder="Enter your username"
             />
@@ -72,7 +72,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
               type="password"
               required
               value={credentials.password}
-              onChange={(e: any) => setCredentials(prev => ({ ...prev, password: e.target.value }}
+              onChange={(e: any) => setCredentials(prev => ({ ...prev, password: e.target.value }))}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:px-4 md:px-6 lg:px-8"
               placeholder="Enter your password"
             />
@@ -106,7 +106,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin  }) => {
 
         <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
           <p className="text-xs text-gray-500 sm:px-4 md:px-6 lg:px-8">
-            For demo purposes: username: admin, password: admin123
+            Access requires valid credentials
           </p>
         </div>
       </div>
@@ -126,11 +126,10 @@ const AdminRoute: React.FC = () => {
 
         const admin = JSON.parse(savedAdmin);
         setCurrentAdmin(admin);
-
-    } catch (error) {
+      } catch (error) {
         localStorage.removeItem('astral_admin');
-
-
+      }
+    }
     setLoading(false);
   }, []);
 
@@ -152,9 +151,11 @@ const AdminRoute: React.FC = () => {
         </div>
       </div>
     );
+  }
 
   if (!currentAdmin) {
     return <AdminLogin onLogin={handleLogin} />;
+  }
 
   return (
     <div>

@@ -501,16 +501,20 @@ The AI features in Astral Draft are designed to give you an edge, but remember -
   };
 
   const formatContent = (content: string) => {
-    // Simple markdown-like formatting
-    return content
+    // Escape HTML to prevent XSS attacks
+    const escapeHtml = (text: string) => {
+      const element = document.createElement('div');
+      element.textContent = text;
+      return element.innerHTML;
+    };
+
+    // Safe markdown-like formatting - escape first, then apply formatting
+    const escaped = escapeHtml(content);
+    return escaped
       .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold text-white mb-4">$1</h1>')
       .replace(/^## (.*$)/gm, '<h2 class="text-xl font-semibold text-white mb-3 mt-6">$1</h2>')
       .replace(/^### (.*$)/gm, '<h3 class="text-lg font-medium text-white mb-2 mt-4">$1</h3>')
-      .replace(/^\*\*(.*?)\*\*/gm, '<strong class="text-white font-semibold">$1</strong>')
-      .replace(/^\*(.*?)$/gm, '<li class="text-slate-300 ml-4">$1</li>')
-      .replace(/^(\d+)\. (.*?)$/gm, '<li class="text-slate-300 ml-4">$2</li>')
-      .replace(/✅ (.*?)$/gm, '<div class="flex items-center gap-2 text-green-400 mb-2"><span>✅</span><span>$1</span></div>')
-      .replace(/❌ (.*?)$/gm, '<div class="flex items-center gap-2 text-red-400 mb-2"><span>❌</span><span>$1</span></div>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white font-semibold">$1</strong>')
       .replace(/\n\n/g, '</p><p class="text-slate-300 mb-4">')
       .replace(/\n/g, '<br>');
   };

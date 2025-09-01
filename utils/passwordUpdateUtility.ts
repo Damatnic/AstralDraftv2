@@ -47,7 +47,7 @@ export class PasswordUpdateUtility {
         }
       };
       
-    `🔐 Generated ${count} sample secure passwords`);
+      console.log(`🔐 Generated ${count} sample secure passwords`);
       passwords.forEach((password, index) => {
         const validation = SecurePasswordGenerator.validatePasswordStrength(password);
         console.log(`  ${index + 1}. ${password} - Strength: ${validation.strength}`);
@@ -86,10 +86,8 @@ export class PasswordUpdateUtility {
       localStorage.setItem('test', 'test');
       localStorage.removeItem('test');
       localStorageAvailable = true;
-    
-    } catch (error) {
-        console.error(error);
     } catch (e) {
+      console.error('localStorage error:', e);
       localStorageAvailable = false;
       issues.push('localStorage not available - session management may fail');
     }

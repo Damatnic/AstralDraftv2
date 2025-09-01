@@ -829,10 +829,11 @@ const OracleBeginnerTutorial: React.FC = () => {
                     <h2>{currentTutorialStep.title}</h2>
                 </div>
                 
-                <div 
-                    className="step-content sm:px-4 md:px-6 lg:px-8"
-                    dangerouslySetInnerHTML={{ __html: currentTutorialStep.content }}
-                />
+                <div className="step-content sm:px-4 md:px-6 lg:px-8">
+                  {currentTutorialStep.content.split('\n').map((line: string, index: number) => (
+                    <p key={index} className="mb-2">{line}</p>
+                  ))}
+                </div>
                 
                 {/* Quiz Section */}
                 {currentTutorialStep.quiz && (
