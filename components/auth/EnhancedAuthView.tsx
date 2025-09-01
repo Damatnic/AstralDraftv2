@@ -442,7 +442,7 @@ const EnhancedAuthView: React.FC = () => {
                   onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
                 >
                   {mode === 'login' 
-                    ? "Don't have an account? Sign up" 
+                    ? "Don&apos;t have an account? Sign up" 
                     : "Already have an account? Sign in"
 
                 </button>

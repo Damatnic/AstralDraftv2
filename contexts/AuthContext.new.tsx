@@ -2,7 +2,7 @@
  * Authentication Context for Astral Draft
  * Integrates with secure backend authentication system
  */
-import React, { createContext, useContext, useReducer, useEffect, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, ReactNode, useMemo, FC } from 'react';
 import { authService } from '../services/authService';
 
 // Types for authentication state (matching backend User interface)
@@ -148,7 +148,11 @@ const AuthContext = createContext<AuthContextType | null>(null);
 // Provider component
 }
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
     // Initialize auth state on mount

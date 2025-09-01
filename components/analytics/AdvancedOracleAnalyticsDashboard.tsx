@@ -60,6 +60,7 @@ interface AdvancedAnalyticsMetrics {
         marketInefficiencies: Array<{ area: string; opportunity: number; description: string }>;
         predictionPatterns: Array<{ pattern: string; frequency: number; successRate: number }>;
     };
+}
 
 interface ReportFilters {
     timeframe: 'week' | 'month' | 'season' | 'all';
@@ -113,40 +114,38 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             setMetrics(generateMockAdvancedMetrics());
         } finally {
             setLoading(false);
-
+        }
     };
 
     const fetchOraclePerformanceData = async () => {
-    try {
+        try {
 
-        const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season
-    `);
-        return response.json();
-    
-    } catch (error) {
-        console.error(error);
+            const response = await fetch(`/api/oracle/analytics/performance?season=${_filters.season}`);
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     };
 
     const fetchUserPerformanceData = async () => {
-    try {
-
-        const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season
-    `);
-        return response.json();
-    
-    } catch (error) {
-        console.error(error);
+        try {
+            const response = await fetch(`/api/oracle/analytics/users?season=${_filters.season}`);
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     };
 
     const fetchComparativeAnalytics = async () => {
-    try {
-
-        const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season
-    `);
-        return response.json();
-    
-    } catch (error) {
-        console.error(error);
+        try {
+            const response = await fetch(`/api/oracle/analytics/comparative?season=${_filters.season}`);
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     };
 
     const generateAdvancedInsights = (oracle: any, users: any, comparative: any) => {
@@ -237,7 +236,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { user: 'Player 8', accuracy: 79, oracleBeats: 9 },
                     { user: 'Player 1', accuracy: 77, oracleBeats: 8 },
                     { user: 'Player 7', accuracy: 75, oracleBeats: 7 }
-
+                ]
             },
             comparative: {
                 weeklyComparison: weeks.map((week: any) => ({
@@ -257,7 +256,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { confidenceRange: '80-89%', oracleAccuracy: 83, userAccuracy: 67, oracleVolume: 28, userVolume: 28 },
                     { confidenceRange: '70-79%', oracleAccuracy: 76, userAccuracy: 71, oracleVolume: 32, userVolume: 45 },
                     { confidenceRange: '60-69%', oracleAccuracy: 68, userAccuracy: 65, oracleVolume: 25, userVolume: 38 }
-
+                ]
             },
             insights: {
                 performanceGaps: [
@@ -279,7 +278,8 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                     { pattern: 'High Confidence + Low Accuracy', frequency: 23, successRate: 45 },
                     { pattern: 'Conservative Betting', frequency: 67, successRate: 72 },
                     { pattern: 'Contrarian Picks', frequency: 12, successRate: 58 }
-
+                ]
+            }
         };
     };
 
@@ -303,10 +303,28 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
             a.download = `oracle-analytics-report-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-        finally {
+        } catch (error) {
+            console.error('Failed to generate report:', error);
+        } finally {
             setReportGenerating(false);
+        }
+    };
 
-    `text-xl font-bold ${color}`}>{value}</span>
+    const MetricCard: React.FC<{
+        title: string;
+        value: string;
+        subtitle?: string;
+        trend?: 'up' | 'down' | 'stable';
+        icon: React.ReactNode;
+        color: string;
+    }> = ({ title, value, subtitle, trend, icon, color }) => (
+        <Card className="bg-gray-800/50 border-gray-700">
+            <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                        <p className="text-sm text-gray-400">{title}</p>
+                        <div className="flex items-center space-x-2">
+                            <span className={`text-xl font-bold ${color}`}>{value}</span>
                             {trend && (
                                 <div className="flex items-center sm:px-4 md:px-6 lg:px-8">
                                     {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-400 sm:px-4 md:px-6 lg:px-8" />}
@@ -352,6 +370,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
                 </Widget>
             </div>
         );
+    }
 
     return (
         <div className="space-y-6 sm:px-4 md:px-6 lg:px-8">
@@ -628,7 +647,7 @@ const AdvancedOracleAnalyticsDashboard: React.FC = () => {
     );
 };
 
-const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC = (props) => (
+const AdvancedOracleAnalyticsDashboardWithErrorBoundary: React.FC<any> = (props) => (
   <ErrorBoundary>
     <AdvancedOracleAnalyticsDashboard {...props} />
   </ErrorBoundary>

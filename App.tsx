@@ -18,19 +18,22 @@ if (import.meta.env.PROD) {
   };
 }
 
-import React, { useEffect } from 'react';
+import React, { useEffect, FC, ReactNode } from 'react';
 import { AppProvider, useAppState } from './contexts/AppContext';
 import { ModalProvider } from './contexts/ModalContext';
 import './styles/globals.css';
 import SimplePlayerLogin from './components/auth/SimplePlayerLogin';
 import LeagueDashboard from './views/LeagueDashboard';
 // Dynamic import for framer-motion - will be loaded when needed
-// import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useMediaQuery } from './hooks/useMediaQuery';
 import { enhancedWebSocketService } from './services/enhancedWebSocketService';
 import { realtimeNotificationServiceV2 } from './services/realtimeNotificationServiceV2';
 import { performanceMonitor } from './services/performanceMonitor';
 import { logger as loggingService } from './services/loggingService';
+// Error tracking service available globally via window object
+import { performanceService } from './src/services/performanceService';
+import { PERFORMANCE_CONSTANTS, ERROR_CONSTANTS, WEBSOCKET_CONSTANTS } from './src/config/constants';
 import { mobilePerformanceOptimizer } from './utils/mobilePerformanceOptimizer';
 import { touchEnhancer } from './utils/mobileTouchEnhancer';
 import { productionOptimizer } from './utils/productionOptimizer';
@@ -72,7 +75,11 @@ const MockDraftView = React.lazy(() => import('./views/MockDraftView'));
 // const PlayerComparisonTool = React.lazy(() => import('./components/comparison/PlayerComparisonTool'));
 
 // Enhanced loading component with better visuals and performance
-const SimpleLoader: React.FC<{ message?: string }> = ({ message = "Loading..." }) => (
+interface SimpleLoaderProps {
+  message?: string;
+}
+
+const SimpleLoader: FC<SimpleLoaderProps> = ({ message = "Loading..." }) => (
   <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900">
     <div className="text-center space-y-6">
       <div className="relative inline-flex">
@@ -149,7 +156,7 @@ const GLOBAL_SUPPRESSED_ERROR_PATTERNS = [
     'lastError'
 ];
 
-const AppContent: React.FC = () => {
+const AppContent: FC = () => {
     const { state, dispatch } = useAppState();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
@@ -159,7 +166,7 @@ const AppContent: React.FC = () => {
     // Initialize performance monitoring and error handling
     useEffect(() => {
         // Activate Zero-Error Monitor for complete error suppression
-        zeroErrorMonitor; // Initialize monitor
+        zeroErrorMonitor.validateZeroErrorState(); // Initialize monitor
         
         // Start performance monitoring (safe for all environments)
         performanceMonitor.recordMetric('app_start', performance.now());
@@ -231,25 +238,12 @@ const AppContent: React.FC = () => {
             const lowerMessage = message.toLowerCase();
             
             // Specific browser extension signatures
-            const extensionSignatures = [
-                'unchecked runtime.lasterror',
-                'could not establish connection',
-                'receiving end does not exist', 
-                'message port closed',
-                'tab no longer exists',
-                'no tab with id',
-                'extension context',
-                'background.js',
-                '[sign in with]',
-                'chrome-extension',
-                'moz-extension',
-                'safari-extension'
-            ];
+            const extensionSignatures = ERROR_CONSTANTS.EXTENSION_ERROR_PATTERNS;
             
             try {
                 return extensionSignatures.some(sig => lowerMessage.includes(sig)) ||
                        (GLOBAL_SUPPRESSED_ERROR_PATTERNS && GLOBAL_SUPPRESSED_ERROR_PATTERNS.some(pattern => lowerMessage.includes(pattern.toLowerCase())));
-            } catch (e) {
+            } catch {
                 return false;
             }
         };
@@ -272,12 +266,12 @@ const AppContent: React.FC = () => {
                         } else {
                             safeArgs.push(String(arg));
                         }
-                    } catch (innerE) {
+                    } catch {
                         safeArgs.push('[unparseable]');
                     }
                 }
                 return safeArgs.join(' ');
-            } catch (e) {
+            } catch {
                 return String(argsList || '[error]');
             }
         };
@@ -288,10 +282,10 @@ const AppContent: React.FC = () => {
                 if (!isExtensionNoise(message)) {
                     originalConsoleError.apply(console, args || []);
                 }
-            } catch (e) {
+            } catch {
                 try {
                     originalConsoleError.apply(console, args || []);
-                } catch (fallbackError) {
+                } catch {
                     // Complete silence if everything fails
                 }
             }
@@ -303,10 +297,10 @@ const AppContent: React.FC = () => {
                 if (!isExtensionNoise(message)) {
                     originalConsoleWarn.apply(console, args || []);
                 }
-            } catch (e) {
+            } catch {
                 try {
                     originalConsoleWarn.apply(console, args || []);
-                } catch (fallbackError) {
+                } catch {
                     // Complete silence if everything fails
                 }
             }
@@ -318,10 +312,10 @@ const AppContent: React.FC = () => {
                 if (!isExtensionNoise(message)) {
                     originalConsoleLog.apply(console, args || []);
                 }
-            } catch (e) {
+            } catch {
                 try {
                     originalConsoleLog.apply(console, args || []);
-                } catch (fallbackError) {
+                } catch {
                     // Complete silence if everything fails
                 }
             }
@@ -340,7 +334,7 @@ const AppContent: React.FC = () => {
             // Validate zero-error state before cleanup
             if (import.meta.env.DEV) {
                 const isZeroError = zeroErrorMonitor.validateZeroErrorState();
-                console.log(isZeroError ? '✅ Zero-error state maintained!' : '⚠️ Errors detected during session');
+                performanceService.recordMetric('zero_error_state', isZeroError ? 1 : 0);
             }
         };
     }, []);
@@ -350,14 +344,16 @@ const AppContent: React.FC = () => {
         const initializeRealTimeServices = async () => {
             // Skip WebSocket initialization if no backend server configured
             if (!import.meta.env.VITE_WS_URL) {
-                console.log('ℹ️ Real-time services disabled - backend server not configured');
+                if (import.meta.env.DEV) {
+                    performanceService.recordMetric('realtime_services_disabled', 1, { reason: 'no_backend_server' });
+                }
                 return;
             }
             
             try {
                 // Enhanced WebSocket connection with comprehensive error handling
                 const connectionTimeout = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('WebSocket connection timeout')), 3000)
+                    setTimeout(() => reject(new Error('WebSocket connection timeout')), WEBSOCKET_CONSTANTS.CONNECTION_TIMEOUT)
                 );
                 
                 // Wrap WebSocket connection in error boundary
@@ -368,7 +364,9 @@ const AppContent: React.FC = () => {
                         // Suppress WebSocket errors that don't affect functionality
                         const wsMessage = wsError?.message?.toLowerCase() || '';
                         if (wsMessage.includes('websocket') || wsMessage.includes('connection failed')) {
-                            console.log('ℹ️ WebSocket unavailable - graceful degradation active');
+                            if (import.meta.env.DEV) {
+                                performanceService.recordMetric('websocket_graceful_degradation', 1, { reason: wsMessage });
+                            }
                             return null; // Graceful degradation
                         }
                         throw wsError; // Re-throw non-WebSocket errors
@@ -391,9 +389,13 @@ const AppContent: React.FC = () => {
                         dispatch({ type: 'ADD_NOTIFICATION', payload: notification });
                     });
                     
-                    console.log('✅ Real-time services connected successfully');
+                    if (import.meta.env.DEV) {
+                        performanceService.recordMetric('realtime_services_connected', 1);
+                    }
                 } else {
-                    console.log('ℹ️ Continuing with offline mode - all features remain functional');
+                    if (import.meta.env.DEV) {
+                        performanceService.recordMetric('offline_mode_active', 1);
+                    }
                 }
                 
             } catch (error: unknown) {
@@ -405,9 +407,11 @@ const AppContent: React.FC = () => {
                 
                 if (isWebSocketError) {
                     // Silent handling - don't log WebSocket errors
-                    console.log('ℹ️ Real-time features unavailable - app remains fully functional');
+                    if (import.meta.env.DEV) {
+                        performanceService.recordMetric('realtime_features_unavailable', 1, { reason: 'websocket_error' });
+                    }
                 } else if (import.meta.env.DEV) {
-                    console.log('ℹ️ Real-time service initialization issue:', errorMessage);
+                    performanceService.recordMetric('realtime_service_init_issue', 1, { error: errorMessage });
                 }
             }
             
@@ -428,7 +432,8 @@ const AppContent: React.FC = () => {
             
             // Initialize production optimizations
             try {
-                const envInfo = productionOptimizer.getEnvironmentInfo();
+                // Get environment information for production optimizations
+                productionOptimizer.getEnvironmentInfo();
                 
                 
                 // Track app initialization performance
@@ -439,7 +444,7 @@ const AppContent: React.FC = () => {
                     
                 };
                 
-                requestIdleCallback(initComplete, { timeout: 1000 });
+                requestIdleCallback(initComplete, { timeout: PERFORMANCE_CONSTANTS.IDLE_CALLBACK_TIMEOUT });
                 
             } catch (error) {
                 loggingService.error('Production optimizer initialization failed', error, 'production-init');
@@ -658,12 +663,16 @@ const AppContent: React.FC = () => {
 };
 
 // NUCLEAR-LEVEL Error Prevention Component
-const NuclearErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface NuclearErrorBoundaryProps {
+  children: ReactNode;
+}
+
+const NuclearErrorBoundary: FC<NuclearErrorBoundaryProps> = ({ children }) => {
   const [hasError, setHasError] = React.useState(false);
   const [errorCount, setErrorCount] = React.useState(0);
 
   React.useEffect(() => {
-    const handleError = (error: Error, errorInfo?: React.ErrorInfo) => {
+    const handleError = (_error: Error, _errorInfo?: React.ErrorInfo) => {
       setErrorCount(prev => prev + 1);
       if (errorCount < 5) { // Allow up to 5 retries
         setTimeout(() => setHasError(false), 1000);
@@ -713,13 +722,13 @@ const NuclearErrorBoundary: React.FC<{ children: React.ReactNode }> = ({ childre
 
   try {
     return <>{children}</>;
-  } catch (error) {
+  } catch {
     setHasError(true);
     return null;
   }
 };
 
-const App: React.FC = () => {
+const App: FC = () => {
   return (
     <NuclearErrorBoundary>
       <AppProvider>

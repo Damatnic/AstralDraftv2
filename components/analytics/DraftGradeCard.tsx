@@ -29,10 +29,10 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
                 .then(fetchedGrade => {
                     if (fetchedGrade) {
                         setGrade(fetchedGrade);
-
+                    }
                 })
                 .finally(() => setIsLoading(false));
-
+        }
     }, [team, league]);
 
     if (isLoading) {
@@ -41,6 +41,7 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
                 <LoadingSpinner size="sm" text="Grading..." />
             </div>
         );
+    }
 
     if (!grade) {
         return (
@@ -48,6 +49,7 @@ const DraftGradeCard: React.FC<DraftGradeCardProps> = ({ team, league }) => {
                 <p>Could not load draft grade.</p>
             </div>
         );
+    }
 
     return (
         <div className="glass-pane p-4 rounded-xl flex flex-col gap-3 sm:px-4 md:px-6 lg:px-8">

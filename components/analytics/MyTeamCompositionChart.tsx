@@ -5,11 +5,10 @@ import type { Team } from '../../types';
 import { Tooltip } from '../ui/Tooltip';
 
 interface MyTeamCompositionChartProps {
-    team: Team;}
+    team: Team;
+}
 
 const positionOrder = ['QB', 'RB', 'WR', 'TE', 'K', 'DST'];
-
-}
 
 const positionColors: { [key: string]: string } = {
     QB: 'from-red-500 to-red-700',
@@ -26,7 +25,7 @@ const MyTeamCompositionChart: React.FC<MyTeamCompositionChartProps> = ({ team })
         team.roster.forEach((player: any) => {
             if (counts[player.position] !== undefined) {
                 counts[player.position]++;
-
+            }
         });
         return positionOrder.map((pos: any) => ({
             position: pos,

@@ -40,7 +40,7 @@ const ChampionshipOddsPreview: React.FC<ChampionshipOddsPreviewProps> = ({ leagu
                     </div>
                 ))}
                  <button
-                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'CHAMPIONSHIP_ODDS' }}
+                    onClick={() => dispatch({ type: 'SET_VIEW', payload: 'CHAMPIONSHIP_ODDS' })}
                     className="w-full mt-2 py-1.5 text-xs font-bold bg-cyan-500/10 text-cyan-300 rounded-md hover:bg-cyan-500/20 sm:px-4 md:px-6 lg:px-8"
                 >
                     View Full Odds Chart

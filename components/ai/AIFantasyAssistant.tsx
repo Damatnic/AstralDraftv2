@@ -15,7 +15,6 @@ interface ChatMessage {
   timestamp: Date;
   suggestions?: string[];
   data?: any;
-
 }
 
 interface AIResponse {
@@ -327,6 +326,7 @@ const AIFantasyAssistant: React.FC = () => {
                   type="text"
                   value={inputMessage}
                   onChange={(e: any) => setInputMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about fantasy football..."
                   className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-sm focus:border-blue-500 focus:outline-none sm:px-4 md:px-6 lg:px-8"
                   disabled={isTyping}
@@ -335,7 +335,8 @@ const AIFantasyAssistant: React.FC = () => {
                   onClick={handleSendMessage}
                   disabled={!inputMessage.trim() || isTyping}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white rounded-lg transition-colors sm:px-4 md:px-6 lg:px-8"
-                 aria-label="Action button">
+                  aria-label="Send message"
+                >
                   <span className="text-sm sm:px-4 md:px-6 lg:px-8">Send</span>
                 </button>
               </div>
@@ -346,6 +347,7 @@ const AIFantasyAssistant: React.FC = () => {
                   <button
                     key={action}
                     onClick={() => handleSuggestionClick(action)}
+                    className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
                   >
                     {action}
                   </button>
@@ -359,7 +361,7 @@ const AIFantasyAssistant: React.FC = () => {
   );
 };
 
-const AIFantasyAssistantWithErrorBoundary: React.FC = (props) => (
+const AIFantasyAssistantWithErrorBoundary: React.FC<any> = (props) => (
   <ErrorBoundary>
     <AIFantasyAssistant {...props} />
   </ErrorBoundary>

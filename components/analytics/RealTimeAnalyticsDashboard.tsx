@@ -18,8 +18,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { enhancedAnalyticsService, type RealTimeMetrics, type PredictiveInsight } from '../../services/enhancedAnalyticsService';
 
 // WebSocket hook with basic implementation for demo
-const useWebSocket = (url: string, options: any = {
-  const [isLoading, setIsLoading] = React.useState(false);}) => {
+const useWebSocket = (url: string, options: any = {}) => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isConnected, setIsConnected] = React.useState(false);
   const [lastMessage, setLastMessage] = React.useState<string | null>(null);
   
@@ -111,8 +111,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
 
     const interval = setInterval(() => {
       loadAnalyticsData();
-    }
-  }, state.refreshInterval);
+    }, state.refreshInterval);
 
     return () => clearInterval(interval);
   }, [state.autoRefresh, state.refreshInterval]);
@@ -121,16 +120,16 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
   useEffect(() => {
     if (lastMessage && state.isRealTime) {
       try {
-
         const data = JSON.parse(lastMessage);
         if (data.type === 'metrics_update') {
           updateMetrics(data.payload);
         } else if (data.type === 'insight_generated') {
           addNewInsight(data.payload);
-
-    } catch (error) {
-
-
+        }
+      } catch (error) {
+        console.error('Failed to process WebSocket message:', error);
+      }
+    }
   }, [lastMessage, state.isRealTime]);
 
   const loadAnalyticsData = useCallback(async () => {
@@ -155,7 +154,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       setPredictiveInsights(generateMockPredictiveInsights());
     } finally {
       setLoading(false);
-
+    }
   }, [state.selectedTimeframe]);
 
   useEffect(() => {
@@ -187,8 +186,15 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    
-    `${23 - index}h ago`,
+    } catch (error) {
+      console.error('Error generating report:', error);
+    }
+  };
+
+  const recentPredictionsForChart = useMemo(() => {
+    if (!metrics) return [];
+    return metrics.predictions.recent.map((pred, index) => ({
+      time: `${23 - index}h ago`,
       accuracy: pred.accuracy,
       confidence: pred.confidence
     }));
@@ -224,7 +230,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         change: -5,
         trend: 'up' as const,
         color: metrics.performance.responseTime < 200 ? COLORS.success : COLORS.warning
-
+      }
     ];
   }, [metrics]);
 
@@ -279,8 +285,9 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         confidence: 92,
         impact: 'medium',
         actionable: false
-
-  });
+      }
+    ];
+  };
 
   const generateMockPredictiveInsights = (): PredictiveInsight[] => [
     {
@@ -304,8 +311,8 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
           value: 78.5 + (i * 0.6) + (Math.random() - 0.5) * 2,
           confidence: 84 - i * 2
         }))
-
-
+      }
+    }
   ];
 
   if (loading && !metrics) {
@@ -317,6 +324,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         </div>
       </div>
     );
+  }
 
   return (
     <div className="space-y-6 p-6 bg-gray-50 min-h-screen sm:px-4 md:px-6 lg:px-8">
@@ -335,7 +343,7 @@ const RealTimeAnalyticsDashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2 sm:px-4 md:px-6 lg:px-8">
           <select
             value={state.selectedTimeframe}
-            onChange={(e: any) => handleStateChange({ selectedTimeframe: e.target.value as any }}
+            onChange={(e: any) => handleStateChange({ selectedTimeframe: e.target.value as any })}
             className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:px-4 md:px-6 lg:px-8"
           >
             <option value="1h">Last Hour</option>

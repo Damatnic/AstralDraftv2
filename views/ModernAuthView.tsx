@@ -335,7 +335,7 @@ const ModernAuthView: React.FC = () => {
           {/* Toggle Auth Mode */}
           <div className="mt-6 text-center">
             <p className="text-sm text-[var(--text-secondary)]">
-              {isLogin ? "Don't have an account?" : 'Already have an account?'}
+              {isLogin ? "Don&apos;t have an account?" : 'Already have an account?'}
               <button
                 onClick={() => {
                   setIsLogin(!isLogin);

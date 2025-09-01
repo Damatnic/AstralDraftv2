@@ -4,7 +4,7 @@
  */
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, FC, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppState } from '../../contexts/AppContext';
 import { searchPlayers, getPlayersByPosition, NFL_TEAMS } from '../../data/nflPlayers';
@@ -18,7 +18,7 @@ interface PlayerSearchProps {
 
 }
 
-const PlayerSearch: React.FC<PlayerSearchProps> = ({
+const PlayerSearch: FC<PlayerSearchProps> = ({
   onPlayerSelect,
   showAddButton = false,
   filterPosition,
@@ -160,7 +160,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.02 }}
-              onClick={(e) => { e.preventDefault(); handlePlayerClick(player); }}
+              onClick={(e: MouseEvent<HTMLDivElement>) => { e.preventDefault(); handlePlayerClick(player); }}
               className={`player-card ${player.position.toLowerCase()} cursor-pointer group`}
             >
               <div className="player-header sm:px-4 md:px-6 lg:px-8">

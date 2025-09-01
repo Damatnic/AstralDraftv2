@@ -25,7 +25,8 @@ interface SecurityReport {
   securePasswords: number;
   weakPasswords: number;
   mainUsersProtected: boolean;
-  recommendations: string[];}
+  recommendations: string[];
+}
 
 const PasswordManagementWidget: React.FC = () => {
   const [passwordStatus, setPasswordStatus] = useState<PasswordStatus[]>([]);
@@ -51,7 +52,7 @@ const PasswordManagementWidget: React.FC = () => {
 
     } catch (error) {
       console.error('Failed to load password data:', error);
-
+    }
   };
 
   const handleGeneratePasswords = async () => {

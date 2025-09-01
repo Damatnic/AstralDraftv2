@@ -412,7 +412,7 @@ const ProductionLoginInterface: React.FC = () => {
       </button>
 
       <div className="text-center sm:px-4 md:px-6 lg:px-8">
-        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Don't have an account? </span>
+        <span className="text-gray-400 sm:px-4 md:px-6 lg:px-8">Don&apos;t have an account? </span>
         <button
           type="button"
           onClick={() => setCurrentView('register')}

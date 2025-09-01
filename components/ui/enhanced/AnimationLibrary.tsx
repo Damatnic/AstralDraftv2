@@ -4,7 +4,7 @@
  */
 
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, ReactNode, useRef, useEffect } from 'react';
+import React, { useCallback, useMemo, ReactNode, useRef, useEffect, FC } from 'react';
 import { motion, AnimatePresence, useAnimation, useInView, Variants } from 'framer-motion';
 
 // =========================================
@@ -12,7 +12,6 @@ import { motion, AnimatePresence, useAnimation, useInView, Variants } from 'fram
 // =========================================
 
 export const animationPresets = {
-  const [isLoading, setIsLoading] = React.useState(false);
   // Entrance Animations
   fadeIn: {
     initial: { opacity: 0 },
@@ -178,7 +177,7 @@ export const AnimatedElement: React.FC<AnimatedElementProps> = ({
   viewThreshold = 0.1,
   repeatOnView = false
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { 
     threshold: viewThreshold,
     once: !repeatOnView 
@@ -286,7 +285,7 @@ export const CountUp: React.FC<CountUpProps> = ({
   suffix = '',
   className = ''
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, threshold: 0.3 });
   const [count, setCount] = React.useState(start);
 

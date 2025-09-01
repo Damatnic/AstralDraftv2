@@ -1,313 +1,341 @@
 /**
- * Core Type Definitions for Astral Draft
- * Comprehensive type system to replace 110+ 'any' types
+ * Astral Draft Type System - Main Barrel Export
+ * Comprehensive type system for the fantasy football platform
+ * 
+ * This file serves as the main entry point for all type definitions in the Astral Draft application.
+ * It provides organized exports and convenient aliases for frequently used types.
+ * 
+ * Usage:
+ * ```typescript
+ * import { Player, League, DraftState, ApiResponse } from '@/types';
+ * import type { PlayerCardProps, TradeEventHandlers } from '@/types';
+ * ```
  */
 
-// ==================== PLAYER AND TEAM TYPES ====================
+// ==================== MODELS ====================
+// Core business logic types for fantasy football entities
 
-export interface Player {
-  id: number;
-  name: string;
-  position: 'QB' | 'RB' | 'WR' | 'TE' | 'K' | 'DEF';
-  team: string;
-  projectedPoints: number;
-  averageDraftPosition: number;
-  tier: number;
-  byeWeek: number;
-  injury?: {
-    status: 'healthy' | 'questionable' | 'doubtful' | 'out';
-    description?: string;
-  };
-  stats?: PlayerStats;
-  isRookie?: boolean;
-  age?: number;
-  height?: string;
-  weight?: number;
-}
+export * from './models';
+export type {
+  // Player types
+  Player,
+  PlayerStats,
+  PlayerProjections,
+  NFLTeam,
+  PlayerPosition,
+  InjuryStatus,
+  AdvancedMetrics,
+  PlayerFilter,
+  PlayerComparison,
+  
+  // User types
+  User,
+  UserProfile,
+  UserPreferences,
+  UserStats,
+  Achievement,
+  Badge,
+  Subscription,
+  AuthSession,
+  AuthState,
+  
+  // League types
+  League,
+  Team,
+  Matchup,
+  LeagueSettings,
+  ScoringSettings,
+  RosterSettings,
+  Standings,
+  PlayoffBracket,
+  LeagueStatus,
+  LeagueType,
+  
+  // Draft types
+  DraftState,
+  DraftPick,
+  DraftBoard,
+  DraftSettings,
+  DraftGrade,
+  DraftAnalytics,
+  DraftEvent,
+  DraftFormat,
+  AuctionState,
+  MockDraft,
+  DraftPrep
+} from './models';
 
-export interface PlayerStats {
-  passingYards?: number;
-  passingTDs?: number;
-  interceptions?: number;
-  rushingYards?: number;
-  rushingTDs?: number;
-  receptions?: number;
-  receivingYards?: number;
-  receivingTDs?: number;
-  fumbles?: number;
-  fieldGoalsMade?: number;
-  fieldGoalsAttempted?: number;
-  extraPointsMade?: number;
-  defensiveTDs?: number;
-  sacks?: number;
-  safeties?: number;
-}
+// ==================== API ====================
+// Type-safe API layer with requests, responses, and endpoints
 
-export interface Team {
-  id: number;
-  name: string;
-  owner: string;
-  roster: Player[];
-  record: {
-    wins: number;
-    losses: number;
-    ties: number;
-  };
-  totalPoints: number;
-  projectedPoints?: number;
-  waiversUsed?: number;
-  tradesCompleted?: number;
-}
+export * from './api';
+export type {
+  // Core API types
+  ApiResponse,
+  ErrorResponse,
+  PaginatedResponse,
+  PaginationMeta,
+  
+  // Authentication
+  LoginRequest,
+  RegisterRequest,
+  LoginResponse,
+  RefreshTokenResponse,
+  
+  // Common request patterns
+  BaseRequest,
+  PaginatedRequest,
+  CreateResponse,
+  UpdateResponse,
+  DeleteResponse,
+  
+  // Domain-specific API types
+  UserProfileResponse,
+  LeagueDetailResponse,
+  PlayerListResponse,
+  DraftStateResponse,
+  TradeListResponse,
+  WaiverListResponse
+} from './api';
 
-// ==================== DRAFT TYPES ====================
+// Export endpoint definitions
+export {
+  AuthEndpoints,
+  UserEndpoints,
+  LeagueEndpoints,
+  DraftEndpoints,
+  PlayerEndpoints,
+  TradeEndpoints,
+  WaiverEndpoints,
+  AnalyticsEndpoints,
+  AllEndpoints
+} from './api';
 
-export interface DraftPick {
-  pick: number;
-  round: number;
-  teamId: number;
-  playerId?: number;
-  timeSelected?: Date;
-  timeRemaining?: number;
-  isAutoPick?: boolean;
-}
+// ==================== COMPONENTS ====================
+// React component props and event handler types
 
-export interface DraftState {
-  isActive: boolean;
-  currentPick: number;
-  currentTeamId: number;
-  picks: DraftPick[];
-  timePerPick: number;
-  draftType: 'snake' | 'linear' | 'auction';
-  startTime?: Date;
-  pausedAt?: Date;
-  totalRounds: number;
-  leagueId: number;
-}
+export * from './components';
+export type {
+  // Base component types
+  BaseComponentProps,
+  InteractiveProps,
+  
+  // Common props
+  ButtonProps,
+  InputProps,
+  SelectProps,
+  ModalProps,
+  
+  // Fantasy-specific component props
+  PlayerCardProps,
+  TeamRosterProps,
+  DraftBoardProps,
+  MatchupCardProps,
+  TradeBuilderProps,
+  WaiverWireProps,
+  
+  // Event handlers
+  PlayerEventHandlers,
+  DraftEventHandlers,
+  TradeEventHandlers,
+  WebSocketEventHandlers,
+  
+  // WebSocket events
+  DraftWebSocketEvent,
+  LeagueWebSocketEvent,
+  ScoringWebSocketEvent,
+  AnyWebSocketEvent
+} from './components';
 
-export interface DraftBoard {
-  availablePlayers: Player[];
-  draftedPlayers: Player[];
-  myTeam: Team;
-  allTeams: Team[];
-  currentPick: DraftPick;
-  upcomingPicks: DraftPick[];
-}
+// ==================== UTILITIES ====================
+// Common utility types, validation, and formatting
 
-// ==================== API RESPONSE TYPES ====================
+export * from './utils';
+export type {
+  // Common utilities
+  Nullable,
+  Optional,
+  Maybe,
+  DeepPartial,
+  DeepRequired,
+  LoadingState,
+  Result,
+  AsyncResult,
+  
+  // Branded types for type safety
+  UserId,
+  LeagueId,
+  PlayerId,
+  TeamId,
+  DraftId,
+  
+  // Pagination and sorting
+  PaginationInfo,
+  PaginatedData,
+  SortConfig,
+  FilterConfig,
+  
+  // Validation
+  ValidationResult,
+  ValidationError,
+  ValidationSchema,
+  UserValidationSchema,
+  LeagueValidationSchema,
+  
+  // Formatting
+  PlayerDisplayConfig,
+  TeamDisplayConfig,
+  LeagueDisplayConfig,
+  FormatOptions,
+  NumberFormatOptions,
+  DateFormatOptions
+} from './utils';
 
-export interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  error?: string;
-  timestamp: string;
-  status?: number;
-}
+// ==================== CONVENIENT TYPE ALIASES ====================
+// Frequently used type combinations and shortcuts
 
-export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
+// API Response shortcuts
+export type PlayerResponse = ApiResponse<Player>;
+export type PlayersResponse = PaginatedResponse<Player>;
+export type LeagueResponse = ApiResponse<League>;
+export type LeaguesResponse = PaginatedResponse<League>;
+export type TeamResponse = ApiResponse<Team>;
+export type DraftResponse = ApiResponse<DraftState>;
 
-// ==================== USER AND AUTH TYPES ====================
+// Common ID types
+export type EntityId = string;
+export type TimestampString = string;
+export type ISODateString = string;
 
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-  teamName: string;
-  avatar: string;
-  isCommissioner: boolean;
-  isAuthenticated: boolean;
-  preferences: UserPreferences;
-  createdAt: Date;
-  lastLoginAt?: Date;
-}
+// Component prop shortcuts
+export type PlayerProps = PlayerCardProps;
+export type TeamProps = TeamRosterProps;
+export type LeagueProps = LeagueSettingsProps;
+export type DraftProps = DraftBoardProps;
 
-export interface UserPreferences {
-  theme: 'light' | 'dark' | 'system';
-  notifications: boolean;
-  autoRefresh: boolean;
-  draftReminders: boolean;
-  emailUpdates: boolean;
-  soundEffects: boolean;
-}
+// Event handler shortcuts  
+export type PlayerHandler = (player: Player) => void;
+export type TeamHandler = (team: Team) => void;
+export type LeagueHandler = (league: League) => void;
+export type ErrorHandler = (error: Error) => void;
 
-export interface AuthState {
-  user: User | null;
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  token?: string;
-}
+// ==================== GLOBAL CONSTANTS ====================
+// Re-export useful constants from globals
 
-// ==================== LEAGUE TYPES ====================
+export type {
+  AstralDraftError,
+  ValidationErrorDetail,
+  APIConfig,
+  WebSocketConfig,
+  ThemeConfig
+} from './globals';
 
-export interface League {
-  id: number;
-  name: string;
-  commissioner: User;
-  teams: Team[];
-  settings: LeagueSettings;
-  season: number;
-  isActive: boolean;
-  draftCompleted: boolean;
-  currentWeek: number;
-}
+// ==================== TYPE GUARDS ====================
+// Utility functions for runtime type checking
 
-export interface LeagueSettings {
-  teamCount: number;
-  rosterSize: number;
-  benchSize: number;
-  tradingEnabled: boolean;
-  waiverPeriod: number;
-  playoffWeeks: number;
-  scoringSystem: ScoringSystem;
-  draftSettings: DraftSettings;
-}
+export const isPlayer = (obj: any): obj is Player => {
+  return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && obj.position;
+};
 
-export interface ScoringSystem {
-  passingTD: number;
-  passingYard: number;
-  rushingTD: number;
-  rushingYard: number;
-  receivingTD: number;
-  receivingYard: number;
-  reception: number;
-  interception: number;
-  fumble: number;
-  fieldGoal: number;
-  extraPoint: number;
-  safety: number;
-  defensiveTD: number;
-}
+export const isUser = (obj: any): obj is User => {
+  return obj && typeof obj.id === 'string' && typeof obj.username === 'string' && obj.profile;
+};
 
-export interface DraftSettings {
-  type: 'snake' | 'linear' | 'auction';
-  timePerPick: number;
-  rounds: number;
-  scheduledStart?: Date;
-  allowAutoDraft: boolean;
-}
+export const isLeague = (obj: any): obj is League => {
+  return obj && typeof obj.id === 'string' && typeof obj.name === 'string' && obj.teams && obj.settings;
+};
 
-// ==================== NOTIFICATION TYPES ====================
+export const isDraftState = (obj: any): obj is DraftState => {
+  return obj && typeof obj.id === 'string' && obj.status && obj.picks && obj.draftOrder;
+};
 
-export interface Notification {
-  id: string;
-  type: 'info' | 'success' | 'warning' | 'error';
-  title: string;
-  message: string;
-  timestamp: Date;
-  read: boolean;
-  actions?: NotificationAction[];
-}
+export const isApiResponse = <T>(obj: any): obj is ApiResponse<T> => {
+  return obj && typeof obj.success === 'boolean' && obj.data !== undefined;
+};
 
-export interface NotificationAction {
-  label: string;
-  action: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
-}
+export const isErrorResponse = (obj: any): obj is ErrorResponse => {
+  return obj && obj.success === false && obj.error;
+};
 
-// ==================== VIEW AND UI TYPES ====================
+// ==================== UTILITY FUNCTIONS ====================
+// Helper functions for working with types
 
-export type ViewType = 
-  | 'dashboard' 
-  | 'draft-room' 
-  | 'team-hub' 
-  | 'players' 
-  | 'trades' 
-  | 'waivers' 
-  | 'standings' 
-  | 'messages' 
-  | 'admin';
+/**
+ * Creates a type-safe key extractor function
+ */
+export const createKeyExtractor = <T, K extends keyof T>(key: K) => {
+  return (item: T): T[K] => item[key];
+};
 
-export interface ViewState {
-  currentView: ViewType;
-  previousView?: ViewType;
-  viewData?: Record<string, unknown>;
-}
+/**
+ * Creates a type-safe property selector function
+ */
+export const createSelector = <T, R>(selector: (item: T) => R) => {
+  return (item: T): R => selector(item);
+};
 
-export interface ModalState {
-  isOpen: boolean;
-  type?: string;
-  data?: Record<string, unknown>;
-  onClose?: () => void;
-}
+/**
+ * Type-safe object keys function
+ */
+export const getTypedKeys = <T extends Record<string, any>>(obj: T): (keyof T)[] => {
+  return Object.keys(obj) as (keyof T)[];
+};
 
-// ==================== ERROR TYPES ====================
+/**
+ * Type-safe object entries function
+ */
+export const getTypedEntries = <T extends Record<string, any>>(obj: T): [keyof T, T[keyof T]][] => {
+  return Object.entries(obj) as [keyof T, T[keyof T]][];
+};
 
-export interface AppError {
-  code: string;
-  message: string;
-  details?: Record<string, unknown>;
-  timestamp: Date;
-  userId?: number;
-}
+// ==================== DOCUMENTATION ====================
 
-export interface ValidationError {
-  field: string;
-  message: string;
-  code: string;
-}
+/**
+ * @fileoverview Astral Draft Type System
+ * 
+ * This comprehensive type system provides:
+ * 
+ * 1. **Models** - Core business entities (Player, User, League, Draft, Team, etc.)
+ * 2. **API** - Request/response types and endpoint definitions
+ * 3. **Components** - React component props and event handlers  
+ * 4. **Utils** - Common utilities, validation, and formatting types
+ * 5. **Global** - Global type definitions and module declarations
+ * 
+ * The type system is organized to:
+ * - Eliminate 'any' types throughout the codebase
+ * - Provide compile-time safety for API calls
+ * - Standardize component interfaces
+ * - Enable proper IntelliSense and autocompletion
+ * - Support runtime type checking with type guards
+ * - Facilitate refactoring and maintenance
+ * 
+ * Key Features:
+ * - Branded types for ID safety (UserId, PlayerId, etc.)
+ * - Discriminated unions for state management
+ * - Generic types for reusability
+ * - Comprehensive validation schemas
+ * - WebSocket event type safety
+ * - Responsive and accessibility type support
+ * - Internationalization type support
+ * 
+ * Usage Patterns:
+ * ```typescript
+ * // Import specific types
+ * import type { Player, League } from '@/types';
+ * 
+ * // Import component props
+ * import type { PlayerCardProps } from '@/types';
+ * 
+ * // Import API types
+ * import type { ApiResponse, PlayerListResponse } from '@/types';
+ * 
+ * // Import utilities
+ * import type { Nullable, LoadingState } from '@/types';
+ * 
+ * // Import endpoints
+ * import { PlayerEndpoints } from '@/types';
+ * ```
+ */
 
-// ==================== ANALYTICS TYPES ====================
-
-export interface PredictionFactors {
-  playerForm: number;
-  matchupDifficulty: number;
-  weatherImpact: number;
-  injuryRisk: number;
-  teamOffense: number;
-  recentPerformance: number[];
-}
-
-export interface CompositeScore {
-  overall: number;
-  confidence: number;
-  factors: PredictionFactors;
-  recommendation: 'start' | 'bench' | 'flex';
-}
-
-// ==================== WEBSOCKET TYPES ====================
-
-export interface WebSocketMessage {
-  type: string;
-  payload: Record<string, unknown>;
-  timestamp: Date;
-  userId?: number;
-}
-
-export interface DraftUpdate extends WebSocketMessage {
-  type: 'draft_pick' | 'draft_pause' | 'draft_resume' | 'time_update';
-  payload: {
-    pick?: DraftPick;
-    timeRemaining?: number;
-    currentTeamId?: number;
-  };
-}
-
-// ==================== UTILITY TYPES ====================
-
-export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
-
-export type SortDirection = 'asc' | 'desc';
-
-export interface SortConfig {
-  field: string;
-  direction: SortDirection;
-}
-
-export interface FilterConfig {
-  field: string;
-  value: unknown;
-  operator: 'equals' | 'contains' | 'greater' | 'less' | 'in';
-}
-
-// ==================== EVENT HANDLER TYPES ====================
-
-export type FormChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-export type FormSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => void;
-export type ButtonClickHandler = (event: React.MouseEvent<HTMLButtonElement>) => void;
-export type GenericClickHandler = (event: React.MouseEvent) => void;
+// Export statement to make this a module
+export {};

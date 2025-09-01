@@ -1,5 +1,5 @@
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useCallback, useMemo, useState, useEffect, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useRef, FC, MouseEvent } from 'react';
 import { useDraftRoom } from '../../hooks/useDraftRoom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,7 +21,7 @@ interface Player {
   tier: number;
 }
 
-const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
+const DraftRoom: FC<DraftRoomProps> = ({ leagueId,
   userId,
   teamId,
   onExitDraft
@@ -136,7 +136,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
           <div className="flex space-x-4">
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); connect(); }}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); connect(); }}
               className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors min-h-[44px]"
               aria-label="Retry connection to draft room"
             >
@@ -145,7 +145,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             {onExitDraft && (
               <button
                 type="button"
-                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); onExitDraft(); }}
                 className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors min-h-[44px]"
                 aria-label="Exit draft room"
               >
@@ -195,7 +195,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             {/* Timer controls */}
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleTimer(); }}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); toggleTimer(); }}
               className="bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label={isPaused ? 'Resume draft timer' : 'Pause draft timer'}
             >
@@ -205,7 +205,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             {onExitDraft && (
               <button
                 type="button"
-                onClick={(e) => { e.preventDefault(); onExitDraft(); }}
+                onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); onExitDraft(); }}
                 className="bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                 aria-label="Exit draft room"
               >
@@ -228,7 +228,7 @@ const DraftRoom: React.FC<DraftRoomProps> = ({ leagueId,
             <span>{error}</span>
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); clearError(); }}
+              onClick={(e: MouseEvent<HTMLButtonElement>) => { e.preventDefault(); clearError(); }}
               className="ml-4 underline hover:no-underline min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Dismiss error message"
             >

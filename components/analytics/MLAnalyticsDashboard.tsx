@@ -25,7 +25,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
     useEffect(() => {
         if (isActive) {
             loadMLAnalytics();
-    }
+        }
   }, [isActive]);
 
     const loadMLAnalytics = async () => {
@@ -46,10 +46,11 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
             setPatterns(detectedPatterns);
             setInsights(mlInsights);
         
-    } catch (error) {
+        } catch (error) {
+            console.error('Error loading ML analytics:', error);
         } finally {
             setLoading(false);
-
+        }
     };
 
     const getSeverityColor = (severity: string) => {
@@ -59,7 +60,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
             case 'MEDIUM': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
             case 'LOW': return 'bg-blue-100 text-blue-800 border-blue-200';
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
-
+        }
     };
 
     const getPerformanceColor = (value: number) => {
@@ -73,7 +74,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
             case 'INCREASING': return 'text-green-600';
             case 'DECREASING': return 'text-red-600';
             default: return 'text-gray-500';
-
+        }
     };
 
     const getTrendIcon = (trend: string) => {
@@ -81,7 +82,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
             case 'INCREASING': return '↗';
             case 'DECREASING': return '↘';
             default: return '→';
-
+        }
     };
 
     const renderPerformanceTab = () => (
@@ -400,16 +401,18 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
                 </div>
             </div>
         );
+    }
 
-  if (isLoading) {
+    if (loading) {
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
         <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
       </div>
     );
+    }
 
-  return (
+    return (
         <div className="max-w-7xl mx-auto sm:px-4 md:px-6 lg:px-8">
             {/* Header */}
             <div className="mb-8 sm:px-4 md:px-6 lg:px-8">
@@ -444,7 +447,7 @@ const MLAnalyticsDashboard: React.FC<MLAnalyticsDashboardProps> = ({ isActive })
                     ].map((tab: any) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id as any)}`}
+                            onClick={() => setActiveTab(tab.id as any)}
                         >
                             <span>{tab.icon}</span>
                             <span>{tab.label}</span>

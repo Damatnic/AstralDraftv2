@@ -66,9 +66,11 @@ const DraftRecap: React.FC<DraftRecapProps> = ({ league, dispatch }) => {
     
     if (isLoading) {
         return <div className="p-4 sm:p-6"><LoadingSpinner text="The Oracle is writing your draft story..." /></div>;
+    }
 
     if (error || !recap) {
         return <div className="p-4 sm:p-6 text-center text-red-400 text-sm sm:text-base">{error || "No recap data available."}</div>;
+    }
 
     return (
         <div className="p-3 sm:p-4 md:p-6">

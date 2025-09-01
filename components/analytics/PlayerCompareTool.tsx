@@ -90,7 +90,7 @@ const PlayerCompareTool: React.FC<PlayerCompareToolProps> = ({ players, onClose 
                     </table>
                 </div>
                  <div className="mt-6 text-center sm:px-4 md:px-6 lg:px-8">
-                    <button type="button" onClick={(e) = aria-label="Action button"> { e.preventDefault(); onClose(); }} className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md min-h-[44px] min-w-[88px] flex items-center justify-center mx-auto sm:px-4 md:px-6 lg:px-8">
+                    <button type="button" onClick={(e) => { e.preventDefault(); onClose(); }} aria-label="Close comparison" className="px-6 py-2 bg-cyan-500 text-black font-bold text-sm rounded-md min-h-[44px] min-w-[88px] flex items-center justify-center mx-auto sm:px-4 md:px-6 lg:px-8">
                         Done
                     </button>
                 </div>

@@ -58,23 +58,42 @@ export default defineConfig(({ mode }: { mode: string }) => {
         rollupOptions: {
           output: {
             manualChunks(id) {
-              // Vendor chunks
+              // Core vendor chunks
               if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
                 return 'vendor-react';
               }
               if (id.includes('node_modules/framer-motion') || id.includes('node_modules/lucide-react')) {
                 return 'vendor-ui';
               }
-              if (id.includes('node_modules/lodash') || id.includes('node_modules/axios')) {
+              if (id.includes('node_modules/lodash') || id.includes('node_modules/axios') || id.includes('node_modules/crypto-browserify')) {
                 return 'vendor-utils';
               }
               
-              // Feature chunks
-              if (id.includes('views/') && id.includes('DraftRoom')) {
+              // AI and analytics vendors (heavy dependencies)
+              if (id.includes('node_modules/@google/generative-ai') || id.includes('openai') || id.includes('recharts')) {
+                return 'vendor-ai-analytics';
+              }
+              
+              // Feature-based chunks for code splitting
+              if (id.includes('views/') && (id.includes('DraftRoom') || id.includes('Draft'))) {
                 return 'draft-features';
               }
-              if (id.includes('components/admin/')) {
+              if (id.includes('components/admin/') || id.includes('views/') && id.includes('Commissioner')) {
                 return 'admin-features';
+              }
+              if (id.includes('components/ai/') || id.includes('Oracle') || id.includes('AI')) {
+                return 'ai-features';
+              }
+              if (id.includes('components/analytics/') || id.includes('Analytics') || id.includes('metrics')) {
+                return 'analytics-features';
+              }
+              if (id.includes('components/player/') || id.includes('Player') || id.includes('views/') && id.includes('Players')) {
+                return 'player-features';
+              }
+              
+              // UI component chunks
+              if (id.includes('components/ui/') || id.includes('components/common/')) {
+                return 'ui-components';
               }
             },
             entryFileNames: 'assets/[name]-[hash].js',
@@ -91,7 +110,19 @@ export default defineConfig(({ mode }: { mode: string }) => {
         },
         emptyOutDir: true,
         chunkSizeWarningLimit: 100, // Warn at 100KB instead of 500KB to encourage smaller chunks
-        cssCodeSplit: true // Enable CSS code splitting
+        cssCodeSplit: true, // Enable CSS code splitting
+        // Advanced performance settings
+        reportCompressedSize: isProduction,
+        terserOptions: isProduction ? {
+          compress: {
+            drop_console: true, // Remove console.logs in production
+            drop_debugger: true,
+            pure_funcs: ['console.log', 'console.info', 'console.debug'],
+          },
+          mangle: {
+            safari10: true,
+          },
+        } : undefined
       },
       optimizeDeps: {
         include: [

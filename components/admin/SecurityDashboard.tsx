@@ -1,5 +1,5 @@
 import { ErrorBoundary } from '../ui/ErrorBoundary';
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, FC, ChangeEvent } from 'react';
 import { 
   Shield, AlertTriangle, Users, Activity, Lock, 
   Globe, Ban, Eye, Download, RefreshCw, TrendingUp,
@@ -15,7 +15,6 @@ interface SecurityMetrics {
   totalUsers: number;
   uptime: string;
   lastSecurityScan: string;
-
 }
 
 interface SecurityEvent {
@@ -44,7 +43,7 @@ interface SystemStatus {
   backups: 'healthy' | 'degraded' | 'down';
 }
 
-const SecurityDashboard: React.FC = () => {
+const SecurityDashboard: FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [metrics, setMetrics] = useState<SecurityMetrics | null>(null);
   const [recentEvents, setRecentEvents] = useState<SecurityEvent[]>([]);
@@ -89,6 +88,7 @@ const SecurityDashboard: React.FC = () => {
       
       if (threatsResponse.ok) {
         setTopThreats(await threatsResponse.json());
+      }
 
       // Load system status
       const statusResponse = await fetch('/api/admin/security/status', {
@@ -141,8 +141,11 @@ const SecurityDashboard: React.FC = () => {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
-    };
+      }
+    } catch (error) {
+      console.error('Failed to generate security report:', error);
+    }
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -151,7 +154,7 @@ const SecurityDashboard: React.FC = () => {
       case 'MEDIUM': return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20';
       case 'LOW': return 'text-blue-600 bg-blue-100 dark:bg-blue-900/20';
       default: return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20';
-
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -160,7 +163,7 @@ const SecurityDashboard: React.FC = () => {
       case 'degraded': return 'text-yellow-600';
       case 'down': return 'text-red-600';
       default: return 'text-gray-600';
-
+    }
   };
 
   const getStatusIcon = (status: string) => {
@@ -169,7 +172,7 @@ const SecurityDashboard: React.FC = () => {
       case 'degraded': return <AlertTriangle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
       case 'down': return <XCircle className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
       default: return <Clock className="w-5 h-5 sm:px-4 md:px-6 lg:px-8" />;
-
+    }
   };
 
   if (loading) {
@@ -178,6 +181,7 @@ const SecurityDashboard: React.FC = () => {
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 sm:px-4 md:px-6 lg:px-8"></div>
       </div>
     );
+  }
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6 sm:px-4 md:px-6 lg:px-8">
@@ -198,7 +202,7 @@ const SecurityDashboard: React.FC = () => {
         <div className="flex items-center gap-3 sm:px-4 md:px-6 lg:px-8">
           <select
             value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value as any)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setTimeRange(e.target.value)}
           >
             <option value="1h">Last Hour</option>
             <option value="24h">Last 24 Hours</option>

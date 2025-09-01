@@ -11,8 +11,6 @@ interface PositionalScarcityChartProps {
 const positions: PlayerPosition[] = ['QB', 'RB', 'WR', 'TE'];
 const ELITE_TIER_THRESHOLD = 3;
 
-}
-
 const PositionalScarcityChart: React.FC<PositionalScarcityChartProps> = ({ availablePlayers }) => {
 
     const scarcityData = React.useMemo(() => {

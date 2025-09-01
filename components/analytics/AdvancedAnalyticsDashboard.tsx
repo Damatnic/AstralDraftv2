@@ -6,6 +6,32 @@
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 import React, { useState, useEffect, useMemo } from 'react';
 import { loadRecharts } from '../../utils/dynamicImports';
+
+// Import Recharts components (these will be dynamically imported)
+let ResponsiveContainer: any, BarChart: any, CartesianGrid: any, XAxis: any, YAxis: any, Tooltip: any, Bar: any;
+let RadarChart: any, PolarGrid: any, PolarAngleAxis: any, PolarRadiusAxis: any, Radar: any, Cell: any;
+
+// Dynamic import of Recharts components
+(async () => {
+    try {
+        const recharts = await loadRecharts();
+        ResponsiveContainer = recharts.ResponsiveContainer;
+        BarChart = recharts.BarChart;
+        CartesianGrid = recharts.CartesianGrid;
+        XAxis = recharts.XAxis;
+        YAxis = recharts.YAxis;
+        Tooltip = recharts.Tooltip;
+        Bar = recharts.Bar;
+        RadarChart = recharts.RadarChart;
+        PolarGrid = recharts.PolarGrid;
+        PolarAngleAxis = recharts.PolarAngleAxis;
+        PolarRadiusAxis = recharts.PolarRadiusAxis;
+        Radar = recharts.Radar;
+        Cell = recharts.Cell;
+    } catch (error) {
+        console.error('Failed to load Recharts:', error);
+    }
+})();
 import { TrendingUp, TrendingDown, Target, Brain, Activity, Users, Cloud, MapPin } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/ShadcnTabs';
@@ -22,7 +48,6 @@ interface AdvancedAnalyticsDashboardProps {
     week: number;
     predictionFactors: PredictionFactors | null;
     onRefresh: () => void;
-
 }
 
 const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
@@ -43,20 +68,20 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
 
                 const score = await oracleAdvancedAnalyticsService.calculateAdvancedCompositeScore(predictionFactors);
                 setCompositeScore(score);
-            
-    } catch (error) {
+            } catch (error) {
                 if (process.env.NODE_ENV === 'development') {
-
+                    console.error('Failed to calculate composite score:', error);
+                }
             } finally {
                 setIsLoading(false);
-
+            }
         };
     }, [predictionFactors]);
 
     useEffect(() => {
         if (predictionFactors) {
             calculateCompositeScore();
-    }
+        }
   }, [predictionFactors, calculateCompositeScore]);
 
     // Prepare chart data
@@ -150,6 +175,7 @@ const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProps> = ({
                 </CardContent>
             </Card>
         );
+    }
 
     return (
         <div className="w-full space-y-6 sm:px-4 md:px-6 lg:px-8">

@@ -39,13 +39,13 @@ interface PerformanceMetric {
   format: 'percentage' | 'number' | 'currency' | 'time';
   color: string;
   description?: string;
+}
 
 interface ChartConfig {
   type: 'line' | 'area' | 'bar' | 'pie' | 'radar' | 'scatter';
   title: string;
   data: any[];
   config: any;
-
 }
 
 const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
@@ -79,7 +79,9 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
 
     } catch (error) {
       console.error('Error in refreshData:', error);
-
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const exportAnalytics = async () => {
@@ -99,8 +101,11 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
-    };
+      }
+    } catch (error) {
+      console.error('Error in exportAnalytics:', error);
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -114,6 +119,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         </Card>
       </div>
     );
+  }
 
   if (error) {
     return (
@@ -133,8 +139,9 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         </Card>
       </div>
     );
+  }
 
-  if (!isAuthenticated) {
+  if (loading) {
     return (
       <div className={`enhanced-analytics-dashboard ${className}`}>
         <Card>
@@ -146,14 +153,16 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
         </Card>
       </div>
     );
+  }
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center p-4 sm:px-4 md:px-6 lg:px-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 sm:px-4 md:px-6 lg:px-8"></div>
         <span className="ml-2 sm:px-4 md:px-6 lg:px-8">Loading...</span>
       </div>
     );
+  }
 
   return (
     <div className={`enhanced-analytics-dashboard space-y-6 ${className}`}>
@@ -285,7 +294,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                   format: 'number',
                   color: '#EF4444',
                   description: 'Your ranking compared to other users'
-
+                }
               ].map((metric: any) => (
                 <motion.div
                   key={metric.id}
@@ -312,7 +321,7 @@ const EnhancedAnalyticsDashboard: React.FC<EnhancedAnalyticsDashboardProps> = ({
                           {metric.format === 'percentage' ? 
                             `${metric.value.toFixed(1)}%` : 
                             metric.value.toLocaleString()
-
+                          }
                         </span>
                       </div>
 

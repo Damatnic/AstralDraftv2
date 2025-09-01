@@ -217,7 +217,7 @@ const EnhancedDraftPrepView: React.FC = () => {
                   <li>• Avoid QB early unless elite tier (Mahomes, Allen)</li>
                   <li>• Target consistent, high-volume players</li>
                   <li>• Consider positional scarcity</li>
-                  <li>• Don't reach for your favorite team's players</li>
+                  <li>• Don&apos;t reach for your favorite team&apos;s players</li>
                 </ul>
               </div>
 

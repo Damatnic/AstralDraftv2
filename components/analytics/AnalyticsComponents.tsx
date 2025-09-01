@@ -107,6 +107,7 @@ export function StatCard({
         changeColorClass = 'text-green-600';
     } else if (changeType === 'negative') {
         changeColorClass = 'text-red-600';
+    }
 
     return (
         <motion.div
@@ -133,6 +134,7 @@ export function StatCard({
             )}
         </motion.div>
     );
+}
 
 // Simple Progress Bar
 interface ProgressBarProps {
@@ -154,6 +156,7 @@ export function ProgressBar({ value, max, color = "bg-purple-600", height = "h-2
             />
         </div>
     );
+}
 
 // Simple Trend Indicator
 interface TrendIndicatorProps {
@@ -172,6 +175,7 @@ export function TrendIndicator({ value, label, showIcon = true }: Readonly<Trend
         textColorClass = 'text-green-600';
     } else if (isNegative) {
         textColorClass = 'text-red-600';
+    }
 
     return (
         <div className="flex items-center space-x-2 sm:px-4 md:px-6 lg:px-8">
@@ -188,12 +192,14 @@ export function TrendIndicator({ value, label, showIcon = true }: Readonly<Trend
             <span className="text-sm text-gray-600 sm:px-4 md:px-6 lg:px-8">{label}</span>
         </div>
     );
+}
 
 // Simple Line Chart (SVG-based)
 interface SimpleLineChartProps {
     data: { period: string; value: number }[];
     height?: number;
     color?: string;
+}
 
 export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Readonly<SimpleLineChartProps>) {
     if (!data || data.length === 0) {
@@ -202,6 +208,7 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
                 No data available
             </div>
         );
+    }
 
     const maxValue = Math.max(...data.map((d: any) => d.value));
     const minValue = Math.min(...data.map((d: any) => d.value));
@@ -272,11 +279,13 @@ export function SimpleLineChart({ data, height = 200, color = "#8B5CF6" }: Reado
             </svg>
         </div>
     );
+}
 
 // Simple Bar Chart
 interface SimpleBarChartProps {
     data: { label: string; value: number; color?: string }[];
     height?: number;
+}
 
 export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartProps>) {
     if (!data || data.length === 0) {
@@ -285,6 +294,7 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
                 No data available
             </div>
         );
+    }
 
     const maxValue = Math.max(...data.map((d: any) => d.value));
     
@@ -314,12 +324,14 @@ export function SimpleBarChart({ data, height = 200 }: Readonly<SimpleBarChartPr
             ))}
         </div>
     );
+}
 
 // Loading Spinner
 export function LoadingSpinner({ size = "h-8 w-8" }: Readonly<{ size?: string }>) {
     return (
         <div className={`animate-spin rounded-full ${size} border-b-2 border-purple-600`} />
     );
+}
 
 // Error Display
 interface ErrorDisplayProps {
@@ -346,3 +358,4 @@ export function ErrorDisplay({ error, onRetry }: Readonly<ErrorDisplayProps>) {
             )}
         </div>
     );
+}

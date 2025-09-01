@@ -13,12 +13,12 @@ interface Message {
     text: string;
     isLoading?: boolean;
     groundingChunks?: GroundingChunk[];
-
 }
 
 interface ConversationalOracleProps {
     myTeam: Team | undefined;
-    availablePlayers: Player[];}
+    availablePlayers: Player[];
+}
 
 const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, availablePlayers }) => {
     const [messages, setMessages] = React.useState<Message[]>([
@@ -38,17 +38,9 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
     }, [messages]);
 
     const handleSend = async () => {
-    try {
-
         if (input.trim() === '' || isSending) return;
         
-        const userMessage: Message = { id: Date.now(), sender: 'user', text: input 
-    } catch (error) {
-      console.error('Error in handleSend:', error);
-
-    } catch (error) {
-        console.error(error);
-    };
+        const userMessage: Message = { id: Date.now(), sender: 'user', text: input };
         const aiMessagePlaceholder: Message = { id: Date.now() + 1, sender: 'ai', text: '', isLoading: true, groundingChunks: [] };
 
         const currentMessages = [...messages, userMessage];
@@ -68,17 +60,19 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
                 const newChunks = chunk.candidates?.[0]?.groundingMetadata?.groundingChunks;
                 if (newChunks) {
                     collectedChunks.push(...newChunks);
+                }
 
                 setMessages(prev => prev.map((msg: any) => 
                     msg.id === aiMessagePlaceholder.id ? { ...msg, text: fullText } : msg
                 ));
+            }
 
             const uniqueChunks = Array.from(new Map(collectedChunks.filter((c: any) => c.web && c.web.uri).map((item: any) => [item.web!.uri!, item])).values());
 
             setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id ? { ...msg, isLoading: false, groundingChunks: uniqueChunks } : msg
             ));
-    } catch (error) {
+        } catch (error) {
             setMessages(prev => prev.map((msg: any) => 
                 msg.id === aiMessagePlaceholder.id 
                 ? { ...msg, text: "My apologies, I'm having trouble connecting to the cosmos. Please try again shortly.", isLoading: false }
@@ -86,7 +80,7 @@ const ConversationalOracle: React.FC<ConversationalOracleProps> = ({ myTeam, ava
             ));
         } finally {
             setIsSending(false);
-
+        }
     };
     
     return (

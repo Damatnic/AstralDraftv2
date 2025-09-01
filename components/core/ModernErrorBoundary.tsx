@@ -86,7 +86,7 @@ class ModernErrorBoundary extends Component<Props, State> {
                   <div>
                     <h1 className="text-2xl font-bold text-white sm:px-4 md:px-6 lg:px-8">Oops! Something went wrong</h1>
                     <p className="text-gray-300 mt-1 sm:px-4 md:px-6 lg:px-8">
-                      Don't worry, our team has been notified and is working on it.
+                      Don&apos;t worry, our team has been notified and is working on it.
                     </p>
                   </div>
                 </div>

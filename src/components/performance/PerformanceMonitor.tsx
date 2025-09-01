@@ -3,7 +3,7 @@
  * Implements Core Web Vitals monitoring, performance budgets, and automated optimization
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, FC, MouseEvent } from 'react';
 import { performanceOptimizer, webVitalsMonitor } from '../../utils/performanceOptimizer';
 
 interface PerformanceMetric {
@@ -48,11 +48,13 @@ const PERFORMANCE_BUDGETS = [
   { metric: 'DOM Nodes', budget: 1500, type: 'count' }
 ];
 
-export const PerformanceMonitor: React.FC<{
+interface PerformanceMonitorProps {
   enabled?: boolean;
   showWidget?: boolean;
   onPerformanceIssue?: (issue: PerformanceMetric) => void;
-}> = ({
+}
+
+export const PerformanceMonitor: FC<PerformanceMonitorProps> = ({
   enabled = true,
   showWidget = import.meta.env.DEV,
   onPerformanceIssue
@@ -372,7 +374,7 @@ export const PerformanceMonitor: React.FC<{
           {!isCollapsed && (
             <div className="flex space-x-2">
               <button
-                onClick={(e) => {
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
                   setAutoOptimize(!autoOptimize);
                 }}
@@ -383,7 +385,7 @@ export const PerformanceMonitor: React.FC<{
               </button>
               
               <button
-                onClick={(e) => {
+                onClick={(e: MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
                   exportReport();
                 }}
